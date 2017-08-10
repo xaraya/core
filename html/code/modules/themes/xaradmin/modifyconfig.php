@@ -155,11 +155,11 @@ function themes_admin_modifyconfig()
             return true;
             break;
         case 'flush':
+            // Flush the cache directories
             sys::import('modules.dynamicdata.class.properties.master');
             $caches = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
             $caches->checkInput('flushcaches');
             xarModVars::set('themes','flushcaches', $caches->value);
-            
             // Flush the caches
             $cachestoflush = $caches->getValue();
             $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
@@ -175,6 +175,18 @@ function themes_admin_modifyconfig()
                     $name = $dir->getFileName();
                     if(strpos($name, '.') !== (int) 0)
                     unlink($picker->initialization_basedirectory . "/" . $name);
+                }
+            }
+            
+            // Empty the cache_data table in the database
+            $caches->checkInput('flushdbcaches');
+            xarModVars::set('themes','flushdbcaches', $caches->value);
+            $cachestoflush = $caches->getValue();
+            sys::import('xaraya.structures.query');
+            foreach ($cachestoflush as $cachetoflush) {
+                if ($cachetoflush == 'dynamicdata') {
+                    $q = new Query('DELETE', xarDB::getPrefix() . '_cache_data');
+                    $q->run();
                 }
             }
             break;
