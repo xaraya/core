@@ -79,18 +79,21 @@ class xarAutoload extends Object
             // Check that we have a valid file
             $filepath = sys::code() . 'modules/' . $modInfo['osdirectory'] . '/class/autoload.php';
             // If not, move on to the next module
-            if (!is_file($filepath)) continue;
-            // Load this valid file; this automatically registers the autoload function for the module's classes
-            sys::import('modules.' . $modInfo['osdirectory'] . '.class.autoload');
+            if (is_file($filepath)) {
+                // Load this valid file; this automatically registers the autoload function for the module's classes
+                sys::import('modules.' . $modInfo['osdirectory'] . '.class.autoload');
+                $loaded[] = $modInfo['osdirectory'] . '.class.autoload';
+            }
             
             // Get the autoload functions for the module's dataproperties
             // Check that we have a valid file
             $filepath = sys::code() . 'modules/' . $modInfo['osdirectory'] . '/xarproperties/autoload.php';
             // If not, move on to the next module
-            if (!is_file($filepath)) continue;
-            // Load this valid file; this automatically registers the autoload function for the module's properties
-            sys::import('modules.' . $modInfo['osdirectory'] . '.xarproperties.autoload');
-            $loaded[] = $modInfo['osdirectory'];
+            if (is_file($filepath)) {
+                // Load this valid file; this automatically registers the autoload function for the module's properties
+                sys::import('modules.' . $modInfo['osdirectory'] . '.xarproperties.autoload');
+                $loaded[] = $modInfo['osdirectory'] . '.xarproperties.autoload';
+            }
         }
 
         // Load autoload functions for standalone properties
