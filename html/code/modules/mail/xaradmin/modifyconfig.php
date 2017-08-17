@@ -130,6 +130,7 @@ function mail_admin_modifyconfig()
                     if (!xarVarFetch('wordwrap', 'int:1:', $wordwrap, '50')) return;
                     if (!xarVarFetch('priority', 'str:1:', $priority, 'normal')) return;
                     if (!xarVarFetch('encoding', 'str:1:', $encoding)) return;
+                    if (!xarVarFetch('embed_images', 'checkbox', $embed_images, false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('server', 'str:1:', $server, 'mail')) return;
                     if (!xarVarFetch('smtpHost', 'str:1:', $smtpHost, '', XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('smtpPort', 'int:1:', $smtpPort, '25', XARVAR_NOT_REQUIRED)) return;
@@ -155,6 +156,7 @@ function mail_admin_modifyconfig()
                     xarModVars::set('mail', 'textfooter', $textfooter);
                     xarModVars::set('mail', 'priority', $priority);
                     xarModVars::set('mail', 'encoding', $encoding);
+                    xarModVars::set('mail', 'embed_images', $embed_images);
                     xarModVars::set('mail', 'wordwrap', $wordwrap);
                     xarModVars::set('mail', 'server', $server);
                     xarModVars::set('mail', 'smtpHost', $smtpHost);
