@@ -136,7 +136,7 @@
                             <div class="xar-col">
                                 <xar:var name="label">Send mail with through an external PHPMailer library in the lib directory</xar:var>
                                 <label for="use_external_lib" title="#$label#" class="xar-form-label">
-                                    Use a newer version of PHPMaier
+                                    Use a newer version of PHPMailer
                                 </label>
                             </div>
                             <div class="xar-col">
@@ -144,7 +144,7 @@
                                     <xar:var scope="module" module="mail" name="use_external_lib"/>
                                 </xar:set>
                                 <xar:data-input name="use_external_lib" value="$value" type="checkbox"/>
-                                &#160;The PHPMailer library must be present in the lib directory
+                                &#160;(the PHPMailer library must be present in the lib directory)
                             </div>
                         </div>
                     </fieldset>
