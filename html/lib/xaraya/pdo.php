@@ -18,7 +18,7 @@
  *
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
-class xarDB
+class xarDB extends Object
 {
     public static $count = 0;
 
@@ -334,14 +334,18 @@ class xarPDOStatement extends PDOStatement
     protected function __construct($pdo)
     {
         $this->pdo = $pdo;
+        return true;
     }
+    
     public function setPDO($pdo)
     {
         $this->pdo = $pdo;
+        return true;
     }
+    
     public function executeQuery($bindvars=array(), $flag=0)
     {
-        xarLog::message("DB: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        xarLog::message("DB: Executing " . $this->queryString, xarLog::LEVEL_INFO);
         if (empty($flag)) $flag = PDO::FETCH_NUM;
 
         $index = 0;
@@ -357,7 +361,7 @@ class xarPDOStatement extends PDOStatement
         }
 
         // This only works for MySQL !!
-        if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT") {
+        if (substr(strtoupper($this->queryString),0,6) == "SELECT") {
             $index++;
             $limit = empty($this->limit) ? 1000000 : $this->limit;
             $this->bindValue($index, $limit, PDO::PARAM_INT);
@@ -369,10 +373,10 @@ class xarPDOStatement extends PDOStatement
         // Run the query
         $d = parent::execute();
         
-        if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
+        if (substr(strtoupper($this->queryString),0,6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
         }
-        
+
         // Create a result set for the results
         $result = new ResultSet($this, $flag);
         // Save the bindvras
@@ -383,7 +387,7 @@ class xarPDOStatement extends PDOStatement
     /* Be insistent and enforce types here */
     public function executeUpdate($bindvars=array(), $flag=0)
     {
-        xarLog::message("DB: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        xarLog::message("DB: Executing " . $this->queryString, xarLog::LEVEL_INFO);
         $index = 0;
         foreach ($bindvars as $bindvar) {
             $index++;
@@ -398,7 +402,7 @@ class xarPDOStatement extends PDOStatement
         // Run the query
         parent::execute();
 
-        if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
+        if (substr(strtoupper($this->queryString),0,6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
         }
         
