@@ -263,8 +263,18 @@ class xarAutoload extends Object
             'xarversion'             => 'xaraya.version',
 
             // Database classes
-            'xardb_creole'           => 'xaraya.creole',
-            'xardb_pdo'              => 'xaraya.pdo',
+            if ($xarSystemVars::get(sys::CONFIG, 'DB.Middleware' == 'PDO')) {
+                'xardb'              => 'xaraya.pdo',
+                'xarpdo'             => 'xaraya.pdo',
+                'xarpdostatement'    => 'xaraya.pdo',
+                'databaseinfo'       => 'xaraya.pdo',
+                'pdotable'           => 'xaraya.pdo',
+                'pdocolumn'          => 'xaraya.pdo',
+                'resultset'          => 'xaraya.pdo',
+            } else {
+                'xardb'              => 'xaraya.creole',
+            }
+            
 
             // MLSBackends directory
             'variablestream'                        => 'xaraya.mlsbackends.php',
@@ -299,3 +309,4 @@ class xarAutoload extends Object
         return false;
     }
 }
+?>
