@@ -262,20 +262,6 @@ class xarAutoload extends Object
             'badversionexception'    => 'xaraya.version',
             'xarversion'             => 'xaraya.version',
 
-            // Database classes
-            if ($xarSystemVars::get(sys::CONFIG, 'DB.Middleware' == 'PDO')) {
-                'xardb'              => 'xaraya.pdo',
-                'xarpdo'             => 'xaraya.pdo',
-                'xarpdostatement'    => 'xaraya.pdo',
-                'databaseinfo'       => 'xaraya.pdo',
-                'pdotable'           => 'xaraya.pdo',
-                'pdocolumn'          => 'xaraya.pdo',
-                'resultset'          => 'xaraya.pdo',
-            } else {
-                'xardb'              => 'xaraya.creole',
-            }
-            
-
             // MLSBackends directory
             'variablestream'                        => 'xaraya.mlsbackends.php',
             'itranslationsbackend'                  => 'xaraya.mlsbackends.reference',
@@ -285,11 +271,32 @@ class xarAutoload extends Object
             'phpbackendgenerator'                   => 'xaraya.mlsbackends.xml2php',
         );
     
+        // Define the database classes
+        if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
+            $database_class_array = array(
+
+                'xardb'              => 'xaraya.pdo',
+                'xarpdo'             => 'xaraya.pdo',
+                'xarpdostatement'    => 'xaraya.pdo',
+                'databaseinfo'       => 'xaraya.pdo',
+                'pdotable'           => 'xaraya.pdo',
+                'pdocolumn'          => 'xaraya.pdo',
+                'resultset'          => 'xaraya.pdo',
+            );
+        } else {
+            $database_class_array = array(
+                'xardb'              => 'xaraya.creole',
+            );
+        }
+
         if (isset($class_array[$class])) {
             sys::import($class_array[$class]);
             return true;
         }
 
+        // Add the database classes to the class array
+        $class_array = array_merge($class_array, $database_class_array);
+        
         return false;
 
 
