@@ -289,14 +289,14 @@ class xarAutoload extends Object
             );
         }
 
+        // Add the database classes to the class array
+        $class_array = array_merge($class_array, $database_class_array);
+        
         if (isset($class_array[$class])) {
             sys::import($class_array[$class]);
             return true;
         }
 
-        // Add the database classes to the class array
-        $class_array = array_merge($class_array, $database_class_array);
-        
         return false;
 
 
