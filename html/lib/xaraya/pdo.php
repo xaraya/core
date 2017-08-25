@@ -195,6 +195,8 @@ class xarPDO extends PDO
         $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('xarPDOStatement', array($this)));
         // Don't force PDO to prepare statements if the driver can
         $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+$this->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
     }
 
     public function getDatabaseInfo()
@@ -366,24 +368,31 @@ class xarPDOStatement extends PDOStatement
         if (substr(strtoupper($this->queryString),0,6) == "SELECT") {
             $index++;
             $limit = empty($this->limit) ? 1000000 : $this->limit;
-            $this->bindValue($index, $limit, PDO::PARAM_INT);
+            $this->bindValue($index, (int)$limit, PDO::PARAM_INT);
             $index++;
             $offset = empty($this->offset) ? 0 : $this->offset;
-            $this->bindValue($index, $offset, PDO::PARAM_INT);
+            $this->bindValue($index, (int)$offset, PDO::PARAM_INT);
         }
         
         // Run the query
         $d = parent::execute();
         
+        // If this is an INSERT, get the last inserted ID and return
         if (substr(strtoupper($this->queryString),0,6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
+            return true;
         }
 
-        // Create a result set for the results
-        $result = new ResultSet($this, $flag);
-        // Save the bindvras
-        $this->bindvars = $bindvars;
-        return $result;
+        // If this is a SELECT, create a result set for the results
+        if (substr(strtoupper($this->queryString),0,6) == "SELECT") {
+            $result = new ResultSet($this, $flag);
+            // Save the bindvars
+            $this->bindvars = $bindvars;
+            return $result;
+        }
+        
+        // Anything else: just return for now
+        return true;
     }
     
     /* Be insistent and enforce types here */
@@ -408,7 +417,7 @@ class xarPDOStatement extends PDOStatement
             $this->pdo->last_id = $this->pdo->lastInsertId();
         }
         
-        // Save the bindvras
+        // Save the bindvars
         $this->bindvars = $bindvars;
     }
     public function setLimit($limit)
