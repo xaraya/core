@@ -193,10 +193,12 @@ class xarPDO extends PDO
         }
         // Define a custom class for the prepared statements
         $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('xarPDOStatement', array($this)));
-        // Don't force PDO to prepare statements if the driver can
-        $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-$this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
-$this->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+        // Force PDO to prepare statements
+        // CHECKME: setting this to false gives an error with some INSERT statements
+        // (missing modules in modules_adminapi_regenerate)
+        $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
+        // Show errors
+        $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
     }
 
     public function getDatabaseInfo()
