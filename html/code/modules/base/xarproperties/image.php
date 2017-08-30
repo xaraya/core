@@ -23,7 +23,7 @@ class ImageProperty extends TextBoxProperty
     public $name       = 'image';
     public $desc       = 'Image';
 
-    public $imagetext  = 'no image';
+    public $imagetext  = 'No image';
     public $imagealt   = 'Image';
 
     public $initialization_image_source  = 'url';
