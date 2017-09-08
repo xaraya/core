@@ -128,11 +128,11 @@ class xarDB extends Object
       if (count(self::$connections) <= $index && isset(self::$firstDSN) && isset(self::$firstFlags)) {
           self::getConnection(self::$firstDSN, self::$firstFlags);
       }
-      // CHECKME: I've spent almost a day debuggin this when not assigning
-      //          it first to a temporary variable before returning. 
-      // The observed effect was that an exception did not occur when $index
-      // whas 0 (the default case) in $connections and it didn't exist.
-      // I believe this to be a PHP bug
+      // CHECKME:
+      // We need to force throwing an exception here
+      // Without this the next line halts execution with an error message
+      if (!isset(self::$connections[$index])) throw new Exception;
+
       $conn = self::$connections[$index]; 
       return $conn;
     }
