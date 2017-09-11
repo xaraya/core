@@ -1,6 +1,6 @@
 <?php
 /**
- * PDO wrapper class
+ * PDO wrapper classes
  *
  * The idea here is to mimic all the Xaraya DB calls and their Creole friendly syntax
  * For starters we'll need three classes:
@@ -128,11 +128,11 @@ class xarDB extends Object
       if (count(self::$connections) <= $index && isset(self::$firstDSN) && isset(self::$firstFlags)) {
           self::getConnection(self::$firstDSN, self::$firstFlags);
       }
-      // CHECKME:
-      // We need to force throwing an exception here
-      // Without this the next line halts execution with an error message
-      if (!isset(self::$connections[$index])) throw new Exception;
-
+      // CHECKME: I've spent almost a day debuggin this when not assigning
+      //          it first to a temporary variable before returning. 
+      // The observed effect was that an exception did not occur when $index
+      // whas 0 (the default case) in $connections and it didn't exist.
+      // I believe this to be a PHP bug
       $conn = self::$connections[$index]; 
       return $conn;
     }
@@ -191,8 +191,6 @@ class xarPDO extends PDO
         } catch (Exception $e) {
             var_dump($e->getMessage());exit;
         }
-        // Define a custom class for the prepared statements
-        $this->setAttribute(PDO::ATTR_STATEMENT_CLASS, array('xarPDOStatement', array($this)));
         // Force PDO to prepare statements
         // CHECKME: setting this to false gives an error with some INSERT statements
         // (missing modules in modules_adminapi_regenerate)
@@ -226,13 +224,8 @@ class xarPDO extends PDO
 
     public function prepareStatement($string='')
     {
-        if (substr(strtoupper($string),0,6) == "SELECT") {
-            // This only works for MySQL !!
-            $string .= " LIMIT ? OFFSET ?";
-        }
-        
         $this->queryString = $string;
-        return parent::prepare($string);
+        return new xarPDOStatement($this);
     }
     
     public function qstr($string)
@@ -254,20 +247,28 @@ class xarPDO extends PDO
     {
         xarLog::message("DB: Executing $string", xarLog::LEVEL_INFO);
         if (empty($flag)) $flag = PDO::FETCH_NUM;
-        
+                   
         if (is_array($bindvars) && !empty($bindvars)) {
-            $stmt = self::prepare($string);
-            $stmt->setPDO($this);
+            // Prepare a SQL statement
+            $this->queryString = $string;
+            $stmt = new xarPDOStatement($this);
             $result = $stmt->executeQuery($bindvars, $flag);
-        } else {
-            $stmt = $this->query($string, $flag);
+            return $result;
+        } elseif (substr(strtoupper($string),0,6) == "SELECT") {
+            $stmt = $this->query($string, $flag);//echo "<pre>";var_dump($stmt);
+            $this->row_count = $stmt->rowCount();
             $result = new ResultSet($stmt, $flag);
+            return $result;
+        } else {
+            $rows_affected = $this->exec($string);//echo "<pre>";var_dump($stmt);
+            $this->row_count = $rows_affected;
+            if (substr(strtoupper($string),0,6) == "INSERT") {
+                $this->last_id = $this->lastInsertId();
+            }
+            // Create an empty result set
+            $result = new ResultSet();
+            return $result;
         }
-        if (substr(strtoupper($string),0,6) == "INSERT") {
-            $this->last_id = $this->lastInsertId();
-        }
-        $this->row_count = $stmt->rowCount();
-        return $result;
     }
 
     public function ExecuteQuery($string='', $flag=0)
@@ -289,32 +290,33 @@ class xarPDO extends PDO
         $limit = empty($limit) ? 1000000 : $limit;
         
         // Only allow positive integers (for now)
-        $limit = $limit < 0 ? 0 : $limit;
-        $offset = $offset < 0 ? 0 : $offset;
+        // TODO: better type testing?
+        $limit = $limit < 0 ? 0 : (int)$limit;
+        $offset = $offset < 0 ? 0 : (int)$offset;
 
         // Lets try this the easy way
         // This only works for MySQL !!
         if (substr(strtoupper($string),0,6) == "SELECT") {
-            $string .= " LIMIT $limit OFFSET $offset";
+            $string .= " LIMIT ? OFFSET ?";
+            $bindvars[] = $limit;
+            $bindvars[] = $offset;
         }
         if (empty($bindvars)) {
             $stmt = $this->query($string, $flag);
             $result = new ResultSet($stmt, $flag);
         } else {
             // Prepare a SQL statement
-            $stmt = self::prepare($string);
+            $this->queryString = $string;
+            $stmt = new xarPDOStatement($this);
             
-            // Pass this PDO object to the statement created
-            $stmt->setPDO($this);
+            // Tell it we alrready added limit and offset
+            $stmt->haslimits(true);
             
             // Execute the SQL statment and create a result set
             $result = $stmt->executeQuery($bindvars, $flag);
         }
         // Save the number of rows
         $this->row_count = $stmt->rowCount();
-        // Save the limit and offset for future use
-        $stmt->setLimit($limit);
-        $stmt->setOffset($offset);
         
         return $result;
     }
@@ -330,98 +332,26 @@ class xarPDO extends PDO
     }
 }
 
-class xarPDOStatement extends PDOStatement
+class xarPDOStatement extends Object
 {
     private $pdo;
-    private $limit    = 0;
-    private $offset   = 0;
-    private $bindvars = array();
-    
-    protected function __construct($pdo)
+    private $pdostmt;
+    private $limit     = 0;
+    private $offset    = 0;
+    private $haslimits = false;
+
+    public function __construct($pdo)
     {
         $this->pdo = $pdo;
         return true;
     }
     
-    public function setPDO($pdo)
+    public function haslimits($haslimits)
     {
-        $this->pdo = $pdo;
+        $this->haslimits = $haslimits;
         return true;
     }
-    
-    public function executeQuery($bindvars=array(), $flag=0)
-    {
-        xarLog::message("DB: Executing " . $this->queryString, xarLog::LEVEL_INFO);
-        if (empty($flag)) $flag = PDO::FETCH_NUM;
 
-        $index = 0;
-        foreach ($bindvars as $bindvar) {
-            $index++;
-            if (is_int($bindvar)) {
-                $this->bindValue($index, $bindvar, PDO::PARAM_INT);
-            } elseif (is_bool($bindvar)) {
-                $this->bindValue($index, $bindvar, PDO::PARAM_BOOL);
-            } else {
-                $this->bindValue($index, $bindvar, PDO::PARAM_STR);
-            }
-        }
-
-        // This only works for MySQL !!
-        if (substr(strtoupper($this->queryString),0,6) == "SELECT") {
-            $index++;
-            $limit = empty($this->limit) ? 1000000 : $this->limit;
-            $this->bindValue($index, (int)$limit, PDO::PARAM_INT);
-            $index++;
-            $offset = empty($this->offset) ? 0 : $this->offset;
-            $this->bindValue($index, (int)$offset, PDO::PARAM_INT);
-        }
-        
-        // Run the query
-        $d = parent::execute();
-        
-        // If this is an INSERT, get the last inserted ID and return
-        if (substr(strtoupper($this->queryString),0,6) == "INSERT") {
-            $this->pdo->last_id = $this->pdo->lastInsertId();
-            return true;
-        }
-
-        // If this is a SELECT, create a result set for the results
-        if (substr(strtoupper($this->queryString),0,6) == "SELECT") {
-            $result = new ResultSet($this, $flag);
-            // Save the bindvars
-            $this->bindvars = $bindvars;
-            return $result;
-        }
-        
-        // Anything else: just return for now
-        return true;
-    }
-    
-    /* Be insistent and enforce types here */
-    public function executeUpdate($bindvars=array(), $flag=0)
-    {
-        xarLog::message("DB: Executing " . $this->queryString, xarLog::LEVEL_INFO);
-        $index = 0;
-        foreach ($bindvars as $bindvar) {
-            $index++;
-            if (is_int($bindvar)) {
-                $this->bindValue($index, $bindvar, PDO::PARAM_INT);
-            } elseif (is_bool($bindvar)) {
-                $this->bindValue($index, $bindvar, PDO::PARAM_BOOL);
-            } else {
-                $this->bindValue($index, $bindvar, PDO::PARAM_STR);
-            }
-        }
-        // Run the query
-        parent::execute();
-
-        if (substr(strtoupper($this->queryString),0,6) == "INSERT") {
-            $this->pdo->last_id = $this->pdo->lastInsertId();
-        }
-        
-        // Save the bindvars
-        $this->bindvars = $bindvars;
-    }
     public function setLimit($limit)
     {
         $this->limit = $limit;
@@ -432,6 +362,128 @@ class xarPDOStatement extends PDOStatement
         $this->offset = $offset;
         return true;
     }
+
+    private function prepare($string)
+    {
+        $this->stmt = $this->pdo->prepare($string);
+        return $this->stmt;
+    }
+
+    public function executeQuery($bindvars=array(), $flag=0)
+    {
+        xarLog::message("DB: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        if (empty($flag)) $flag = PDO::FETCH_NUM;
+
+        // We need to check whether we still have to add limit and offset
+        // This only works for MySQL !!
+        if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT" && ($this->limit > 0 || $this->offset > 0) && !$this->haslimits) {
+            $this->applyLimit($this->pdo->queryString, $this->offset, $this->limit);
+        }
+        
+        // Get the prepared statement
+        $stmt = $this->prepare($this->pdo->queryString);
+        
+        // Add the bindvars
+        $index = 0;
+        foreach ($bindvars as $bindvar) {
+            $index++;
+            if (is_int($bindvar)) {
+                $stmt->bindValue($index, $bindvar, PDO::PARAM_INT);
+            } elseif (is_bool($bindvar)) {
+                $stmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
+            } else {
+                $stmt->bindValue($index, $bindvar, PDO::PARAM_STR);
+            }
+        }
+
+        // Run the query
+        xarLog::message("DB: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        $d = $stmt->execute();       
+        
+        // If this is a SELECT, create a result set for the results
+        if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT") {
+            $result = new ResultSet($this, $flag);
+            // Save the bindvars
+            $this->bindvars = $bindvars;
+            return $result;
+        }
+        
+        // If this is an INSERT, get the last inserted ID and return
+        if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
+            $this->pdo->last_id = $this->pdo->lastInsertId();
+            return true;
+        }
+
+        // Anything else: just return for now
+        return true;
+    }
+
+    /* Be insistent and enforce types here */
+    public function executeUpdate($bindvars=array(), $flag=0)
+    {
+        xarLog::message("DB: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+
+        // Get the prepared statement
+        $stmt = $this->prepare($this->pdo->queryString);
+        
+        // Add the bindvars
+        $index = 0;
+        foreach ($bindvars as $bindvar) {
+            $index++;
+            if (is_int($bindvar)) {
+                $stmt->bindValue($index, $bindvar, PDO::PARAM_INT);
+            } elseif (is_bool($bindvar)) {
+                $stmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
+            } else {
+                $stmt->bindValue($index, $bindvar, PDO::PARAM_STR);
+            }
+        }
+//        echo "<pre>";var_dump($this->pdo->queryString);var_dump($stmt);//exit;
+        // Run the query
+//        var_dump($bindvars);
+        xarLog::message("DB: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        $stmt->execute();
+//        var_dump($stmt);var_dump($stmt->errorInfo());//exit;
+
+        if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
+            $this->pdo->last_id = $this->pdo->lastInsertId();
+        }
+        
+        // Save the bindvars
+        $this->bindvars = $bindvars;
+    }
+
+   // Wrappers for the PDOStatement methods
+    public function fetchAll($flags)
+    {
+        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
+        return $this->stmt->fetchAll($flags);
+    }
+    public function fetch($flags)
+    {
+        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
+        return $this->stmt->fetch($flags);
+    }
+    public function rowCount()
+    {
+        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
+        return $this->stmt->rowCount();
+    }
+    public function columnCount()
+    {
+        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
+        return $this->stmt->columnCount();
+    }
+
+    private function applyLimit(&$sql, $offset, $limit)
+    {
+        if ( $limit > 0 ) {
+            $sql .= " LIMIT " . ($offset > 0 ? $offset . ", " : "") . $limit;
+        } else if ( $offset > 0 ) {
+            $sql .= " LIMIT " . $offset . ", 18446744073709551615";
+        }
+    }
+
 }
 
 /**
@@ -572,8 +624,11 @@ class ResultSet extends Object
     public $cursor  = -1;
     public $fields  = array();
     
-    public function __construct($pdostatement, $flag=0,$dork=0)
+    public function __construct($pdostatement=null, $flag=0)
     {
+        // We may not have a PDOSTatment
+        if ($pdostatement==null) return $this;
+
         $this->fetchflag = empty($flag) ? self::FETCHMODE_NUM : $flag;
         $this->pdostatement = $pdostatement;
         $this->array = $this->pdostatement->fetchAll($this->fetchflag);
