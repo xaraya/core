@@ -19,6 +19,8 @@
  */
 class PropertyRegistration extends DataContainer
 {
+    private $stmt;                               // Prepared SqL statement for reuse
+    
     public $id         = 0;                      // id of the property, hardcoded to make things easier
     public $name       = 'propertyType';         // what type of property are we dealing with
     public $desc       = 'Property Description'; // description of this type
@@ -107,14 +109,15 @@ class PropertyRegistration extends DataContainer
             }
         }
         
-        $sql = "INSERT INTO $propdefTable
-                (id, name, label,
-                 filepath, class,
-                 format, configuration, source,
-                 reqfiles, modid, args, aliases)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
-        if(!isset($stmt))
-            $stmt = $dbconn->prepareStatement($sql);
+        if ($this->stmt == null) {
+            $sql = "INSERT INTO $propdefTable
+                    (id, name, label,
+                     filepath, class,
+                     format, configuration, source,
+                     reqfiles, modid, args, aliases)
+                    VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+            $this->stmt = $dbconn->prepareStatement($sql);
+        }
 
         $bindvars = array(
             (int) $this->id, $this->name, $this->desc,
@@ -125,7 +128,7 @@ class PropertyRegistration extends DataContainer
 
         // Ignore if we already have this dataproperty
         if (!in_array($this->id, $types)) {
-            $res = $stmt->executeUpdate($bindvars);
+            $res = $this->stmt->executeUpdate($bindvars);
             $types[] = $this->id;
         } else {
             $res = true;
