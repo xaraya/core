@@ -398,7 +398,7 @@ class xarPDOStatement extends Object
 
         // Run the query
         xarLog::message("DB: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        $d = $stmt->execute();       
+        $success = $stmt->execute();       
         
         // If this is a SELECT, create a result set for the results
         if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT") {
