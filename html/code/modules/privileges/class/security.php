@@ -111,7 +111,9 @@ class xarSecurity extends Object
     {
         self::initialize();
         $userID = xarSession::getVar('role_id');
+        
         xarLog::message("xarSecurity::check: Testing user $userID against mask $mask", xarLog::LEVEL_INFO);
+        
         if ($userID == XARUSER_LAST_RESORT) return true;
 
         // mask-based security check for the group(s) of the current user (optional)
