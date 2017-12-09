@@ -215,7 +215,7 @@ class xarPDO extends PDO
     // Note that commit() and rollback() are the same as in Creole
     public function begin()
     {
-        xarLog::message("DB: starting transaction", xarLog::LEVEL_INFO);
+        xarLog::message("xarPDO::begin: starting transaction", xarLog::LEVEL_INFO);
         // Only start a transaction of we need to
         if (!PDO::inTransaction())
             parent::beginTransaction();
@@ -233,19 +233,40 @@ class xarPDO extends PDO
         return "'".str_replace("'","\\'",$string)."'";
     }
     
+    /**
+     * Executes a SQL update and resturns the rows affected
+     * 
+     * @param string $string The query string
+     * 
+     * @return int $affected_rows the rows inserted, changed, dropped
+     */
     public function executeUpdate($string='')
     {
-        xarLog::message("DB: Executing $string", xarLog::LEVEL_INFO);
-        $stmt = $this->exec($string);
+        xarLog::message("xarPDO::executeUpdate: Executing $string", xarLog::LEVEL_INFO);
+        $affected_rows = $this->exec($string);
         if (substr(strtoupper($string),0,6) == "INSERT") {
             $this->last_id = $this->lastInsertId();
         }
-        return $stmt;
+        return $affected_rows;
     }
     
+    /**
+     * Executes a SQL query or update and resturn
+     * 
+     * @param string $string the query string
+     * @param array $binvars the parameters to be inserted into the query
+     * @param int $flag indicates the fetch mode for the results
+     * 
+     * @return object $resultset an object containing the results of the operation
+     * 
+     * Note:
+     * - if bindvars are passed we generate a PDO statement and run that
+     * - if no bindvars are passed but this is a SELECT, we run PDO's query method and return a PDO statement
+     * - Otherwise (no bindvars and not a SELECT, we run PDO's exec method and generate an empty resultset
+     */
     public function Execute($string, $bindvars=array(), $flag=0)
     {
-        xarLog::message("DB: Executing $string", xarLog::LEVEL_INFO);
+        xarLog::message("xarPDO::Execute: Executing $string", xarLog::LEVEL_INFO);
         if (empty($flag)) $flag = PDO::FETCH_NUM;
                    
         if (is_array($bindvars) && !empty($bindvars)) {
@@ -255,7 +276,7 @@ class xarPDO extends PDO
             $result = $stmt->executeQuery($bindvars, $flag);
             return $result;
         } elseif (substr(strtoupper($string),0,6) == "SELECT") {
-            $stmt = $this->query($string, $flag);//echo "<pre>";var_dump($stmt);
+            $stmt = $this->query($string, $flag);
             $this->row_count = $stmt->rowCount();
             $result = new ResultSet($stmt, $flag);
             return $result;
@@ -271,9 +292,18 @@ class xarPDO extends PDO
         }
     }
 
+    /**
+     * Executes a SQL query
+     * Should be a SELECT, but we are supporting updates and inserts, too
+     * 
+     * @param string $string The query string
+     * @param int $flag indicates the fetch mode for the results
+     * 
+     * @return object $resultset an object containing the results of the operation
+     */
     public function ExecuteQuery($string='', $flag=0)
     {
-        xarLog::message("DB: Executing $string", xarLog::LEVEL_INFO);
+        xarLog::message("xarPDO::executeQuery: Executing $string", xarLog::LEVEL_INFO);
         if (empty($flag)) $flag = PDO::FETCH_NUM;
 
         $stmt = $this->query($string);
@@ -371,7 +401,7 @@ class xarPDOStatement extends Object
 
     public function executeQuery($bindvars=array(), $flag=0)
     {
-        xarLog::message("DB: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        xarLog::message("xarPDOStatement::executeQuery: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
         if (empty($flag)) $flag = PDO::FETCH_NUM;
 
         // We need to check whether we still have to add limit and offset
@@ -397,7 +427,7 @@ class xarPDOStatement extends Object
         }
 
         // Run the query
-        xarLog::message("DB: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        xarLog::message("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
         $success = $stmt->execute();       
         
         // If this is a SELECT, create a result set for the results
@@ -418,10 +448,18 @@ class xarPDOStatement extends Object
         return true;
     }
 
+    /**
+     * Prepares and executes a SQL update (INSERT, UPDATE, or DELETE) and resturns the rows affected
+     * 
+     * @param array $binvars the parameters to be inserted into the query
+     * @param int $flag indicates the fetch mode for the results
+     * 
+     * @return int $affected_rows the rows inserted, changed, dropped
+     */
     /* Be insistent and enforce types here */
     public function executeUpdate($bindvars=array(), $flag=0)
     {
-        xarLog::message("DB: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        xarLog::message("xarPDOStatement::executeUpdate: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
 
         // Get the prepared statement
         $stmt = $this->prepare($this->pdo->queryString);
@@ -438,12 +476,10 @@ class xarPDOStatement extends Object
                 $stmt->bindValue($index, $bindvar, PDO::PARAM_STR);
             }
         }
-//        echo "<pre>";var_dump($this->pdo->queryString);var_dump($stmt);//exit;
-        // Run the query
-//        var_dump($bindvars);
-        xarLog::message("DB: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        $stmt->execute();
-//        var_dump($stmt);var_dump($stmt->errorInfo());//exit;
+
+        xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        
+        $success = $stmt->execute();
 
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
@@ -451,6 +487,13 @@ class xarPDOStatement extends Object
         
         // Save the bindvars
         $this->bindvars = $bindvars;
+
+        try {
+            $rows_affected = (int) $stmt->rowCount();
+        } catch( PDOException $e ) {
+            throw new SQLException('Could not get update count', $e->getMessage(), $this->pdo->queryString);
+        }
+        return $rows_affected;
     }
 
    // Wrappers for the PDOStatement methods
