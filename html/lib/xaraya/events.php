@@ -281,7 +281,7 @@ class xarEvents extends Object implements ixarEvents
                   itemtype,
                   scope
                   )
-                  VALUES (?,?,?,?,?,?,?,?)";
+                  VALUES (?,?,?,?,?,?,?)";
 
         $bindvars = array();
         $bindvars[] = $event;
