@@ -64,6 +64,9 @@ class xarCSS extends Object
     private $combined   = true;
     private $compressed = true;
 
+    // keep track of last run for caching
+    public $last_run = 0;
+
     // avoid refreshing on each unserialize
     public  $refreshed  = false;
     private $expires    = 86400; // One day
