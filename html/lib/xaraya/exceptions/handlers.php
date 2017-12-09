@@ -172,10 +172,11 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
 
         // Show variables only if this configvar is set in the themes backend
         // Default is no
+        $show = false;
         if (class_exists('xarConfigVars')) {
-            $show = xarConfigVars::get(null, 'Site.BL.ExceptionDisplay');
-        } else {
-            $show = false;
+            try {
+                $show = xarConfigVars::get(null, 'Site.BL.ExceptionDisplay');
+            } catch (Exception $e) {}
         }
         if ($show) {
             $msg.= "Variables: ";
