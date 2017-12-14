@@ -329,17 +329,17 @@ class CelkoPositionProperty extends DataProperty
               $between_string = $point_of_insertion." AND ".($thisItem['left_id'] - 1);
           }
 
-          // TODO: besided portability, also check performance here
+          // TODO: besides portability, also check performance here
           $SQLquery = "UPDATE " . $this->initialization_celkotable . " SET
                        " . $this->initialization_celkoleft_id . " = CASE
-                        WHEN " . $this->initialization_celkoright_id . " BETWEEN ".$thisItem['left_id']." AND ".$thisItem['right_id']."
+                        WHEN " . $this->initialization_celkoleft_id . " BETWEEN " . $thisItem['left_id'] . " AND " . $thisItem['right_id'] . "
                            THEN " . $this->initialization_celkoleft_id . " + ($distance)
                         WHEN " . $this->initialization_celkoleft_id . " BETWEEN $between_string
                            THEN " . $this->initialization_celkoleft_id . " + ($deslocation_outside)
                         ELSE " . $this->initialization_celkoleft_id . "
                         END,
                       " . $this->initialization_celkoright_id . " = CASE
-                        WHEN " . $this->initialization_celkoright_id . " BETWEEN ".$thisItem['left_id']." AND ".$thisItem['right_id']."
+                        WHEN " . $this->initialization_celkoright_id . " BETWEEN " . $thisItem['left_id'] . " AND " . $thisItem['right_id'] . "
                            THEN " . $this->initialization_celkoright_id . " + ($distance)
                         WHEN " . $this->initialization_celkoright_id . " BETWEEN $between_string
                            THEN " . $this->initialization_celkoright_id . " + ($deslocation_outside)
@@ -668,12 +668,18 @@ class CelkoPositionProperty extends DataProperty
 
         $indexby = 'default';
 
+        // If the name has more than one field, get all its fields as an array
+        $nameparts = explode(',', $this->initialization_celkoname);
+        $select_fields = '';
+        foreach ($nameparts as $part) {
+            $select_fields .= "P1." . $part . ",";
+        }
         $bindvars = array();
         $SQLquery = "SELECT
                             COUNT(P2.id) AS indent,
-                            P1.id,
-                            P1." . $this->initialization_celkoname . ",
-                            P1." . $this->initialization_celkoparent_id . ",
+                            P1.id,"
+                            . $select_fields .
+                            "P1." . $this->initialization_celkoparent_id . ",
                             P1." . $this->initialization_celkoleft_id . ",
                             P1." . $this->initialization_celkoright_id . 
                        " FROM " . $this->initialization_celkotable . " P1, " .
@@ -700,7 +706,7 @@ class CelkoPositionProperty extends DataProperty
             $SQLquery .= " AND " . $this->initialization_celkofilter;
         
         // Have to specify all selected attributes in GROUP BY
-        $SQLquery .= " GROUP BY P1.id, P1." . $this->initialization_celkoname . ", P1." . $this->initialization_celkoparent_id . ", P1." . $this->initialization_celkoleft_id . ", P1." . $this->initialization_celkoright_id . " ";
+        $SQLquery .= " GROUP BY P1.id, " . $select_fields . " P1." . $this->initialization_celkoparent_id . ", P1." . $this->initialization_celkoleft_id . ", P1." . $this->initialization_celkoright_id . " ";
         $SQLquery .= " ORDER BY P1." . $this->initialization_celkoleft_id;
 
     // cfr. xarcachemanager - this approach might change later
