@@ -71,7 +71,7 @@ function categories_admin_delete()
 
     sys::import('modules.categories.class.worker');
     $worker = new CategoryWorker();
-    $children = $worker->delete($data['itemid']);
+    $result = $worker->delete($data['itemid']);
 
     xarController::redirect(xarModURL('categories','admin','view', array()));
     return true;
