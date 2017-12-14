@@ -447,14 +447,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (!empty($args['getvirtuals'])) {
             // Get the values of properties with virtual datastore and add them to the items array
             foreach ($this->getFieldList() as $fieldname) {
-//                if (empty($this->properties[$fieldname]->source)) {
+                if (empty($this->properties[$fieldname]->source) || !empty($this->properties[$fieldname]->is_virtual)) {
 //                    if (method_exists($this->properties[$fieldname],'getItemValue')) {echo "<pre>";echo $fieldname;var_dump($this->items);//exit;
-                    if (!empty($this->properties[$fieldname]->is_virtual)) {
-                        foreach ($this->items as $key => $value) {
-                            $this->items[$key][$fieldname] = $this->properties[$fieldname]->getItemValue($key);
-                        }
+                    foreach ($this->items as $key => $value) {
+                        $this->items[$key][$fieldname] = $this->properties[$fieldname]->getItemValue($key);
                     }
 //                }
+                }
             }
         }
         
