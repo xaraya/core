@@ -16,8 +16,6 @@ sys::import('modules.base.xarproperties.textarea');
  * @author mikespub <mikespub@xaraya.com>
  */
 
-
-
 /**
  * This property holds the configuration of a dataproperty
  */

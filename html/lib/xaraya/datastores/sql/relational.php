@@ -56,7 +56,7 @@ class RelationalDataStore extends SQLDataStore
         // Get the itemid from the params or from the object definition
         $itemid = isset($args['itemid']) ? $args['itemid'] : $this->object->itemid;
 
-        //Make sure we have a primary field
+        // Make sure we have a primary field
         if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
 
         $q = $this->object->dataquery;

@@ -136,7 +136,7 @@
                             <div class="xar-col">
                                 <xar:var name="label">Send mail with through an external PHPMailer library in the lib directory</xar:var>
                                 <label for="use_external_lib" title="#$label#" class="xar-form-label">
-                                    Use a newer version of PHPMaier
+                                    Use a newer version of PHPMailer
                                 </label>
                             </div>
                             <div class="xar-col">
@@ -144,7 +144,7 @@
                                     <xar:var scope="module" module="mail" name="use_external_lib"/>
                                 </xar:set>
                                 <xar:data-input name="use_external_lib" value="$value" type="checkbox"/>
-                                &#160;The PHPMailer library must be present in the lib directory
+                                &#160;(the PHPMailer library must be present in the lib directory)
                             </div>
                         </div>
                     </fieldset>
@@ -313,6 +313,23 @@
                     </xar:if>
                 </fieldset>
                 <fieldset>
+                    <legend>Other display options</legend>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Checking this box changes URLs of images to embedded images</xar:var>
+                            <label for="html" title="#$label#" class="xar-form-label">
+                                Embed images
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="embed_images">
+                                <xar:var scope="module" module="mail" name="embed_images"/>
+                            </xar:set>
+                            <xar:data-input type="checkbox" name="embed_images" checked="$embed_images"/>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
                     <legend>Sending server options</legend>
                     <div class="xar-row">
                         <div class="xar-col">
@@ -438,7 +455,7 @@
                                     </xar:set>
                                     <xar:set name="options">
                                         array(
-                                            array('id' => '', 'name' => xarML('None')),
+                                            array('id' => '',    'name' => xarML('None')),
                                             array('id' => 'ssl', 'name' => xarML('ssl')),
                                             array('id' => 'tls', 'name' => xarML('tls'))
                                         )

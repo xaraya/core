@@ -22,7 +22,15 @@
  */
 function dynamicdata_user_main(Array $args=array())
 {
-    return array();
+    $redirect = xarModVars::get('dynamicdata','frontend_page');
+    if (!empty($redirect)) {
+        $truecurrenturl = xarServer::getCurrentURL(array(), false);
+        $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=> $redirect,'truecurrenturl'=>$truecurrenturl));
+        xarController::redirect($urldata['redirecturl']);
+        return true;
+    } else {
+        return array();
+    }
 }
 
 ?>

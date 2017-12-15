@@ -14,7 +14,6 @@ sys::import('modules.base.xarproperties.dropdown');
  * @author mikespub <mikespub@xaraya.com>
  */
 
-
 /**
  * This property displays a dropdown of time zones
  */

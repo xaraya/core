@@ -30,6 +30,7 @@ function dynamicdata_admin_updateprop()
     if(!xarVarFetch('dd_type',           'isset', $dd_type,           NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_default',        'isset', $dd_defaultvalue,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_seq',            'isset', $dd_seq,            NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVarFetch('dd_translatable',   'isset', $dd_translatable,   NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('dd_source',         'isset', $dd_source,         NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
     if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
@@ -115,15 +116,19 @@ function dynamicdata_admin_updateprop()
                 $input_dd_status[$id] = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
             }
             $dd_status[$id] = $display_dd_status[$id] + $input_dd_status[$id];
+            if (!isset($dd_translatable[$id])) {
+                $dd_translatable[$id] = 0;
+            }
             if (!xarMod::apiFunc('dynamicdata','admin','updateprop',
-                              array('id' => $id,
-                                    'name' => $dd_name[$id],
-                                    'label' => $dd_label[$id],
-                                    'type' => $dd_type[$id],
-                                    'defaultvalue' => $dd_defaultvalue[$id],
-                                    'seq' => $dd_seq[$id],
-                                    'source' => $dd_source[$id],
-                                    'status' => $dd_status[$id],
+                              array('id'            => $id,
+                                    'name'          => $dd_name[$id],
+                                    'label'         => $dd_label[$id],
+                                    'type'          => $dd_type[$id],
+                                    'defaultvalue'  => $dd_defaultvalue[$id],
+                                    'seq'           => $dd_seq[$id],
+                                    'translatable'  => $dd_translatable[$id],
+                                    'source'        => $dd_source[$id],
+                                    'status'        => $dd_status[$id],
                                     'configuration' => $dd_configuration[$id]))) {
                 return;
             }

@@ -66,13 +66,13 @@
  * | LOG            | nothing                     |        |
  * | SYSTEMVARS     | nothing                     |        |
  * | DATABASE       | SYSTEMVARS                  |    1   |
- * | AUTOLOAD       | nothing                     |        |
  * | EVENTS         | DATABASE                    |        |
  * | CONFIGURATION  | DATABASE                    |    2   |
  * | LEGACY         | CONFIGURATION               |        |
- * | MLS            | CONFIGURATION               |        |
  * | MODULES        | CONFIGURATION               |    4   |
  * | SERVER         | MODULES                     |        |
+ * | MLS            | CONFIGURATION               |        |
+ * | AUTOLOAD       | nothing                     |        |
  * | TEMPLATE       | SERVER                      |    8   |
  * | SESSION        | TEMPLATE                    |   16   |
  * | USER           | SESSION                     |   32   |
@@ -307,15 +307,7 @@ class xarCore extends xarCoreCache
                                 'persistent'      => $persistent,
                                 'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
 
-            try {
-                if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
-                    sys::import('xaraya.database_pdo');
-                } else {
-                    sys::import('xaraya.database');
-                }
-            } catch (Exception $e) {
-                sys::import('xaraya.database');
-            }
+            sys::import('xaraya.database');
 
             // Connect to database
             try {
@@ -338,25 +330,14 @@ class xarCore extends xarCoreCache
         sys::import('xaraya.caching');
         xarCache::init();
 
-        // check that the database was installed before we activate variable caching (we don't need to load it yet)
+        // Check that the database was installed before we activate variable caching (we don't need to load it yet)
         if (xarSystemVars::get(sys::CONFIG, 'DB.Installation') != 3) {
             xarCache::$variableCacheIsEnabled = false;
         }
 
         if (xarCache::$variableCacheIsEnabled) {
             sys::import('xaraya.caching.variable');
-            sys::import('xaraya.autoload');
-            xarAutoload::initialize();
         }
-    /*
-    // Testing of autoload + second-level cache storage - please do not use on live sites
-        sys::import('xaraya.caching.storage');
-        $cache = xarCache_Storage::getCacheStorage(array('storage' => 'xcache', 'type' => 'core'));
-        xarCoreCache::setCacheStorage($cache);
-        // For bulk load, we might have to do this after loading the modules, otherwise
-        // unserialize + autoload might trigger a function that complains about xarMod:: etc.
-        //xarCoreCache::setCacheStorage($cache,0,1);
-    */
 
         /**
          * Start Events Subsystem
@@ -446,6 +427,25 @@ class xarCore extends xarCoreCache
                             'defaultTimeOffset'   => xarConfigVars::get(null, 'Site.MLS.DefaultTimeOffset'),
                             );
         xarMLS::init($systemArgs);
+
+    /*
+    // Testing of autoload + second-level cache storage - please do not use on live sites
+        sys::import('xaraya.caching.storage');
+        $cache = xarCache_Storage::getCacheStorage(array('storage' => 'xcache', 'type' => 'core'));
+        xarCoreCache::setCacheStorage($cache);
+        // unserialize + autoload might trigger a function that complains about xarMod:: etc.
+        //xarCoreCache::setCacheStorage($cache,0,1);
+    */
+
+        /**
+         * Assemble the autoload functions
+         *
+         * @todo <mfl> eventually remove the caching condition
+         */
+        if (xarCache::$variableCacheIsEnabled) {
+            sys::import('xaraya.autoload');
+            xarAutoload::initialize();
+        }
 
         /**
          * We've got basically all we want, start the interface
@@ -675,4 +675,4 @@ class xarDebug extends Object
     public static $sqlCalls  = 0; // Should be in flags imo
     public static $startTime = 0; // Should not be here at all
 }
-
+?>

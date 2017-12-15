@@ -125,6 +125,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
     public function checkInput(Array $args = array())
     {
+        xarLog::message("DataObjectList::checkInput: Checking items of object " . $this->name, xarLog::LEVEL_INFO);
+
         // First get the itemids
         if (!xarVarFetch($this->primary, 'array', $data['id'], array(), XARVAR_NOT_REQUIRED)) return;
         if (empty($data['id'])) return true;
@@ -159,6 +161,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
     public function updateItems(Array $args = array())
     {
+        xarLog::message("DataObjectList::updateItems: Updating items of object " . $this->name, xarLog::LEVEL_INFO);
+
         // Get the items to be updated
         if (isset($args['items'])) {
             $items_to_update = $args['items'];
@@ -415,6 +419,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function &getItems(Array $args = array())
     {
+        xarLog::message("DataObjectList::getItems: Retrieving items of object " . $this->name, xarLog::LEVEL_INFO);
+
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
@@ -441,14 +447,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (!empty($args['getvirtuals'])) {
             // Get the values of properties with virtual datastore and add them to the items array
             foreach ($this->getFieldList() as $fieldname) {
-//                if (empty($this->properties[$fieldname]->source)) {
+                if (empty($this->properties[$fieldname]->source) || !empty($this->properties[$fieldname]->is_virtual)) {
 //                    if (method_exists($this->properties[$fieldname],'getItemValue')) {echo "<pre>";echo $fieldname;var_dump($this->items);//exit;
-                    if (!empty($this->properties[$fieldname]->is_virtual)) {
-                        foreach ($this->items as $key => $value) {
-                            $this->items[$key][$fieldname] = $this->properties[$fieldname]->getItemValue($key);
-                        }
+                    foreach ($this->items as $key => $value) {
+                        $this->items[$key][$fieldname] = $this->properties[$fieldname]->getItemValue($key);
                     }
 //                }
+                }
             }
         }
         
@@ -478,6 +483,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function showView(Array $args = array())
     {
+        xarLog::message("DataObjectList::showView: Listing items of object " . $this->name, xarLog::LEVEL_INFO);
+
         $args = $this->toArray($args);
         // Note: we do NOT retrieve the items again here
         //$this->getItems($args);

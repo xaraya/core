@@ -40,8 +40,9 @@ function dynamicdata_admin_modifyconfig()
             if (!xarSecConfirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
-            if (!xarVarFetch('debugmode',    'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('debugmode',  'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
+//            if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('caching',    'checkbox', $caching, xarModVars::get('dynamicdata', 'caching'), XARVAR_NOT_REQUIRED)) return;
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
@@ -50,6 +51,7 @@ function dynamicdata_admin_modifyconfig()
                 $itemid = $data['module_settings']->updateItem();
             }
 
+/*
             $admins = explode(',',$administrators);
             $validadmins = array();
             foreach ($admins as $admin) {
@@ -58,7 +60,9 @@ function dynamicdata_admin_modifyconfig()
                 if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
             }
             xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
+*/
             xarModVars::set('dynamicdata', 'debugmode', $debugmode);
+            xarModVars::set('dynamicdata', 'caching', $caching);
             break;
     }
     return $data;

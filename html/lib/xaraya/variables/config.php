@@ -82,6 +82,9 @@ class xarConfigVars extends xarVars implements IxarVars
         if(!self::$preloaded)
             self::preload();
 
+        if(!self::$preloaded)
+            throw new VariableNotFoundException($name, "Variable #(1) not found");
+        
         // Configvars which are not in the database (either in config file or in code defines)
         switch($name)
         {
@@ -171,6 +174,7 @@ class xarConfigVars extends xarVars implements IxarVars
         try {
           $dbconn = xarDB::getConn();
           $tables = xarDB::getTables();
+          if (!isset($tables['config_vars'])) return false;
           $varstable = $tables['config_vars'];
         } catch (Exception $e) {
           return false;

@@ -333,7 +333,7 @@ function xarLog__shutdown_handler()
      if (class_exists('xarAutoload')) {
          xarAutoload::$shutdown = true;
      }
-     xarLog::message("xarLog shutdown handler");
+     xarLog::message("xarLog shutdown handler", xarLog::LEVEL_INFO);
      if (!method_exists('xarSession', 'getId') || !method_exists('xarUser', 'getVar')) {
          xarLog::message("Leaving session unexpectedly before session and user was defined", xarLog::LEVEL_WARNING);
      } else{

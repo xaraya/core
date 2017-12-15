@@ -44,6 +44,8 @@ class DataObject extends DataObjectMaster implements iDataObject
     **/
     public function getItem(Array $args = array())
     {
+        xarLog::message("DataObject::getItem: Retrieving an item of object " . $this->name, xarLog::LEVEL_INFO);
+
         if(!empty($args['itemid']))
         {
             if($args['itemid'] != $this->itemid) {
@@ -124,6 +126,8 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function checkInput(Array $args = array(), $suppress=0, $priority='dd')
     {
+        xarLog::message("DataObject::checkInput: Checking an item of object " . $this->name, xarLog::LEVEL_INFO);
+
         if(!empty($args['itemid']) && $args['itemid'] != $this->itemid) {
             $this->itemid = $args['itemid'];
             $this->getItem($args);
@@ -146,8 +150,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         } else {
             $fields = !empty($this->fieldlist) ? $this->fieldlist : $this->getFieldList();
         }
-
-        xarLog::message("DataObject::checkInput: Checking object " . $this->name, xarLog::LEVEL_INFO);
 
         $this->missingfields = array();
         $badnames = array();
@@ -233,6 +235,8 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function showForm(Array $args = array())
     {
+        xarLog::message("DataObject::showForm: Form for object " . $this->name, xarLog::LEVEL_INFO);
+
         $args = $args + $this->getPublicProperties();
         $this->setFieldPrefix($args['fieldprefix']);
 
@@ -277,6 +281,8 @@ class DataObject extends DataObjectMaster implements iDataObject
      */
     public function showDisplay(Array $args = array())
     {
+        xarLog::message("DataObject::showDisplay: Display an item of object " . $this->name, xarLog::LEVEL_INFO);
+
         $args = $this->toArray($args);
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();
@@ -346,6 +352,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function createItem(Array $args = array())
     {
+        xarLog::message("DataObject::createItem: Creating an item of object " . $this->name, xarLog::LEVEL_INFO);
+
         // Sanity check: do we have a primary field?
         if (empty($this->primary)) {
             $msg = xarML('The object #(1) has no primary key', $this->name);
@@ -414,6 +422,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function updateItem(Array $args = array())
     {
+        xarLog::message("DataObject::updateItem: Updating an item of object " . $this->name, xarLog::LEVEL_INFO);
+
         if(count($args) > 0) {
             if(!empty($args['itemid']))
                 $this->itemid = $args['itemid'];
@@ -459,6 +469,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function deleteItem(Array $args = array())
     {
+        xarLog::message("DataObject::deleteItem: Deleting an item of object " . $this->name, xarLog::LEVEL_INFO);
+
         if(!empty($args['itemid']))
             $this->itemid = $args['itemid'];
 

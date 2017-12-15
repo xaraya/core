@@ -195,32 +195,32 @@ class CategoryWorker extends Object
     /**
      * Delete a category and its children
      * 
-     * @param int $id ID of the parent category
+     * @param int $id ID of the category to be deleted (along with its children
      * @param boolean $myself
      * @return array|null Data array containing descendents of the given category, null if no children were found
      */
     public function delete($id=0)
     {
         // Get this category's information
-        $parent = $this->getInfo($id);
+        $this_category = $this->getInfo($id);
         
         // Something went wrong
-        if (empty($parent)) return false;
+        if (empty($this_category)) return false;
 
         // Cannot delete the root category
-        if (empty($parent[$this->parent]) || ($parent['id'] == 1)) return false;
+        if (empty($this_category[$this->parent]) || ($this_category['id'] == 1) || ($this_category[$this->left] == 1)) return false;
 
         // Get the gap in indices that will be created by deleting
-        $difference = $parent[$this->right] - $parent[$this->left] +1;
-        
+        $difference = $this_category[$this->right] - $this_category[$this->left] +1;
+
         // Get all the categories to the right of the one(s) to be deleted
         $q = new Query('SELECT', $this->table);
         $q->addfield('id');
         $q->addfield($this->left);
         $q->addfield($this->right);
-        $q->gt($this->left, (int)$parent[$this->right]);
+        $q->gt($this->left, (int)$this_category[$this->right]);
         $q->run();
-
+        
         // Adjust their left and right indices
         $q1 = new Query('UPDATE', $this->table);
         
@@ -237,26 +237,20 @@ class CategoryWorker extends Object
         // Now get the right index of the root category
         $q = new Query('SELECT', $this->table);
         $q->addfield($this->right);
-        $q->eq('id', 1);
+        $q->eq($this->left, 1);
         $q->run();
         $result = $q->row();
 
         // Update it
         $q = new Query('UPDATE', $this->table);
-        $q->eq('id', 1);
+        $q->eq($this->left, 1);
         $q->addfield($this->right, (int)$result[$this->right] - $difference);
         $q->run();
         
-        $q = new Query('SELECT', $this->table);
-        $q->addfield($this->right);
-        $q->eq('id', 1);
-        $q->run();
-        $result = $q->row();
-
-        // Finally, delete this category enty and its descendents
+        // Finally, delete this category enty and its descendents as entries of the table
         $q = new Query('DELETE', $this->table);
-        $q->ge($this->left, (int)$parent[$this->left]);
-        $q->le($this->right, (int)$parent[$this->right]);
+        $q->ge($this->left, (int)$this_category[$this->left]);
+        $q->le($this->right, (int)$this_category[$this->right]);
         $q->run();
         
         // All done

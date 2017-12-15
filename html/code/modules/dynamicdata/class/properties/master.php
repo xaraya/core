@@ -54,7 +54,7 @@ class DataPropertyMaster extends Object
         $bindvars = array();
         $query = "SELECT name, label, type,
                          id, defaultvalue, source,
-                         status, seq, configuration,
+                         status, translatable, seq, configuration,
                          object_id FROM $dynamicprop ";
         if(empty($args['objectid']))
         {
@@ -79,7 +79,7 @@ class DataPropertyMaster extends Object
         $properties = array();
         while ($result->next()) {
             list(
-                $name, $label, $type, $id, $defaultvalue, $source, $status,
+                $name, $label, $type, $id, $defaultvalue, $source, $status, $translatable,
                 $seq, $configuration, $_objectid
                 ) = $result->fields;
             $property = array(
@@ -90,6 +90,7 @@ class DataPropertyMaster extends Object
                 'defaultvalue'  => $defaultvalue,
                 'source'        => $source,
                 'status'        => $status,
+                'translatable'  => $translatable,
                 'seq'           => $seq,
                 'configuration' => $configuration,
                 // some internal variables
@@ -125,6 +126,8 @@ class DataPropertyMaster extends Object
         if(!isset($objectref) || empty($args['name']) || empty($args['type']))
             return;
 
+        xarLog::message("DataPropertyMaster::addProperty: Adding a new property " . $args['name'], xarLog::LEVEL_INFO);
+        
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.
         if(!isset($args['label']) && !empty($args['name']))
@@ -154,6 +157,8 @@ class DataPropertyMaster extends Object
 
         // if the property involves upload, tell its object
         if(isset($property->upload)) $objectref->upload = true;
+        
+        return true;
     }
 
     /**
@@ -193,7 +198,7 @@ class DataPropertyMaster extends Object
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['class'];
 
-            xarLog::message("DataPropertyMaster::getProperty: Getting a new property $propertyClass", xarLog::LEVEL_INFO);
+            xarLog::message("DataPropertyMaster::getProperty: Getting a new property " . $propertyClass, xarLog::LEVEL_INFO);
 
             // If we don't have the class yet, get it now
             if (!class_exists($propertyClass)) {
@@ -207,7 +212,7 @@ class DataPropertyMaster extends Object
                 sys::import($dp);
                 
                 // Load the translations for this file
-                $loaded = xarMLSLoadTranslations($propertyfile);
+                $loaded = xarMLS::loadTranslations($propertyfile);
                 if (!$loaded) xarLog::message("Property translations for $propertyClass NOT loaded", xarLog::LEVEL_WARNING);
             }
 
@@ -224,7 +229,6 @@ class DataPropertyMaster extends Object
 
         return $property;
     }
-
     static function createProperty(Array $args=array())
     {
         $object = DataObjectMaster::getObject(

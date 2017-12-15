@@ -322,51 +322,55 @@ function mail_adminapi__sendmail_new(Array $args=array())
         } else {
             $mail->Body = $htmlmessage;
         }
-        //TODO:Handle the code for embedding images in the mail.
-        //Parse a html body for getting the no of images used in the body.
-        $html_images = array();
-        $image_types = array(
-                    'gif'  => 'image/gif',
-                    'jpg'  => 'image/jpeg',
-                    'jpeg'  => 'image/jpeg',
-                    'jpe'  => 'image/jpeg',
-                    'bmp'  => 'image/bmp',
-                    'png'  => 'image/png',
-                    'tif'  => 'image/tiff',
-                    'tiff'  => 'image/tiff',
-                    'swf'  => 'application/x-shockwave-flash'
-                    );
- 
-        while(list($key,) = each($image_types)){
-            $extensions[] = $key;
-        }
-        preg_match_all('/"([^"]+\.('.implode('|', $extensions).'))"/Ui', $mail->Body, $images);
 
-        for($i = 0; $i < count($images[1]); $i++) {
-            if(@is_file($images[1][$i]) && @fopen($images[1][$i], "rb"))
-            {
-                $html_images[] = $images[1][$i];
-                $mail->Body = str_replace($images[1][$i], basename($images[1][$i]), $mail->Body);
+        $embed_images = xarModVars::get('mail', 'embed_images');
+        if (!empty($embed_images)) {
+            //TODO:Handle the code for embedding images in the mail.
+            //Parse a html body for getting the no of images used in the body.
+            $html_images = array();
+            $image_types = array(
+                        'gif'  => 'image/gif',
+                        'jpg'  => 'image/jpeg',
+                        'jpeg' => 'image/jpeg',
+                        'jpe'  => 'image/jpeg',
+                        'bmp'  => 'image/bmp',
+                        'png'  => 'image/png',
+                        'tif'  => 'image/tiff',
+                        'tiff' => 'image/tiff',
+                        'swf'  => 'application/x-shockwave-flash'
+                        );
+ 
+            while(list($key,) = each($image_types)){
+                $extensions[] = $key;
             }
-        }
-        if(!empty($html_images)){
-            $html_images = array_unique($html_images);
-            sort($html_images);
-            for($i = 0; $i < count($html_images); $i++){
-                $cid = md5(uniqid(time()));
-                //It will only work with the local path of images.
-                $path = sys::root() . "./html/" . $html_images[$i];
-                $mail->AddEmbeddedImage($path, $cid, basename($path));
-                $mail->Body = str_replace(basename($path), "cid:$cid", $mail->Body);
+            preg_match_all('/"([^"]+\.('.implode('|', $extensions).'))"/Ui', $mail->Body, $images);
+
+            for($i = 0; $i < count($images[1]); $i++) {
+                if(@is_file($images[1][$i]) && @fopen($images[1][$i], "rb"))
+                {
+                    $html_images[] = $images[1][$i];
+                    $mail->Body = str_replace($images[1][$i], basename($images[1][$i]), $mail->Body);
+                }
+            }
+            if(!empty($html_images)){
+                $html_images = array_unique($html_images);
+                sort($html_images);
+                for($i = 0; $i < count($html_images); $i++){
+                    $cid = md5(uniqid(time()));
+                    //It will only work with the local path of images.
+                    $path = sys::root() . "./html/" . $html_images[$i];
+                    $mail->AddEmbeddedImage($path, $cid, basename($path));
+                    $mail->Body = str_replace(basename($path), "cid:$cid", $mail->Body);
+                }
             }
         }
     } else {
         if ($usetemplates) {
             $mail->Body = xarTpl::module('mail',
-                                       'admin',
-                                       'sendmail',
-                                       array('message'=>$message),
-                                       'text');
+                                        'admin',
+                                        'sendmail',
+                                        array('message'=>$message),
+                                        'text');
         } else {
             $mail->Body = $message;
         }

@@ -84,7 +84,7 @@ function modules_adminapi_regenerate()
                 (bool)$modinfo['admin_capable'],
                 (bool)$modinfo['user_capable']
             );
-            $result =& $dbconn->Execute($sql, $params);
+            $result = $dbconn->Execute($sql, $params);
 
             $set = xarMod::apiFunc('modules', 'admin', 'setstate',
                                  array(

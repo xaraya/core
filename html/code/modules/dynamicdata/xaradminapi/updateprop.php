@@ -72,6 +72,10 @@ function dynamicdata_adminapi_updateprop(Array $args=array())
         $sql .= ", seq = ?";
         $bindvars[] = $seq;
     }
+    if (isset($translatable) && is_string($translatable)) {
+        $sql .= ", translatable = ?";
+        $bindvars[] = $translatable;
+    }
     // TODO: verify that the data source exists
     if (isset($source) && is_string($source)) {
         $sql .= ", source = ?";

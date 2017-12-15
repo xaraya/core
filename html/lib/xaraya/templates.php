@@ -141,7 +141,12 @@ class xarTpl extends Object
 **/
     public static function getBaseDir()
     {
-        return sys::web() . xarConfigVars::get(null, 'Site.BL.ThemesDirectory', 'themes');
+        try {
+            $themesdir = sys::web() . xarConfigVars::get(null, 'Site.BL.ThemesDirectory', 'themes');
+        } catch (Exception $e) {
+            $themesdir = 'themes';
+        }
+        return $themesdir;
     }
 
 /**

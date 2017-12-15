@@ -35,10 +35,10 @@ class xarCache extends Object
         }
         self::$cacheDir = $cacheDir;
 
-        // load the caching configuration
+        // Load the caching configuration
         $config = self::getConfig();
 
-        // enable output caching
+        // Enable output caching
         if (file_exists(self::$cacheDir . '/output/cache.touch')) {
             if (!empty($config)) {
                 // initialize the output cache
@@ -52,13 +52,13 @@ class xarCache extends Object
             }
         }
 
-        // enable core caching
+        // Enable core caching
         sys::import('xaraya.caching.core');
         self::$coreCacheIsEnabled = xarCoreCache::init($config);
 
-        // enable template caching ? Too early in the process here, cfr. xaraya/templates.php
+        // Enable template caching ? Too early in the process here, cfr. xaraya/templates.php
 
-        // enable variable caching (requires activating autoload for serialized objects et al.)
+        // Enable variable caching (requires activating autoload for serialized objects et al.)
         if (!empty($config['Variable.CacheIsEnabled'])) {
             sys::import('xaraya.caching.variable');
             self::$variableCacheIsEnabled = xarVariableCache::init($config);

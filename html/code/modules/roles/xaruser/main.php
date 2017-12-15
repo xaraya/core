@@ -20,7 +20,6 @@
 */
 function roles_user_main()
 {
-
     // Get the default authentication data - this supplies default auth module and corrected login and logout module
     $defaultauthdata=xarMod::apiFunc('roles','user','getdefaultauthdata');
 

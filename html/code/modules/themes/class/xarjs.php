@@ -65,7 +65,7 @@ class xarJS extends Object
 
     // avoid refreshing on each unserialize
     public  $refreshed  = false;
-    private $expires    = 24*60*60;
+    private $expires    = 86400; // One day
 
 /**
  * Magic methods to make this object persistent

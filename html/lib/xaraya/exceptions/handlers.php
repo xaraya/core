@@ -170,9 +170,15 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
         $msg.= "Code     : $errorRaised\n";
         $msg.= "Message  : ".str_replace("\n","\n$spacer",wordwrap($errorString,75,"\n"))."\n";
 
-        // Show variables only if this vonfigvar is set in the themes backend
+        // Show variables only if this configvar is set in the themes backend
         // Default is no
-        if (xarConfigVars::get(null, 'Site.BL.ExceptionDisplay')) {
+        $show = false;
+        if (class_exists('xarConfigVars')) {
+            try {
+                $show = xarConfigVars::get(null, 'Site.BL.ExceptionDisplay');
+            } catch (Exception $e) {}
+        }
+        if ($show) {
             $msg.= "Variables: ";
             foreach($errorContext as $varName => $varValue) {
                 $msg .= "\$$varName:\n$spacer  ". str_replace("\n","\n$spacer  ",htmlspecialchars(print_r($varValue,true)))."\n$spacer";

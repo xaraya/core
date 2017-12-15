@@ -426,21 +426,39 @@
                         <div class="xar-col">
                             <xar:var name="label">Remove all the cached templates</xar:var>
                             <label for="flushcaches" title="#$label#" class="xar-form-label">
-                                Flush caches:
+                                Flush file caches:
                             </label>
                         </div>
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
                                     array('id' => 'templates', 'name' => xarML('Templates')),
-                                    array('id' => 'rss', 'name' => xarML('RSS')),
-                                    array('id' => 'database', 'name' => xarML('Database')),
-                                    array('id' => 'css', 'name' => xarML('CSS')),
+                                    array('id' => 'rss',       'name' => xarML('RSS')),
+                                    array('id' => 'database',  'name' => xarML('Database')),
+                                    array('id' => 'css',       'name' => xarML('CSS')),
                                     // array('id' => 'output', 'name' => xarML('Output')),
                                 )
                             </xar:set>
                             <xar:set name="value">xarModVars::get('themes','flushcaches')</xar:set>
                             <xar:data-input type="checkboxlist" name="flushcaches" value="$value" options="$options"/>
+                        </div>
+                    </div>
+                    <p class="xar-alert">Empties the cache tables in the database, forcing their repopulation</p>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Empty the cache table in the database</xar:var>
+                            <label for="flushdbcaches" title="#$label#" class="xar-form-label">
+                                Flush database caches:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="options">
+                                array(
+                                    array('id' => 'dynamicdata',  'name' => xarML('Dynamicdata')),
+                                )
+                            </xar:set>
+                            <xar:set name="value">xarModVars::get('themes','flushdbcaches')</xar:set>
+                            <xar:data-input type="checkboxlist" name="flushdbcaches" value="$value" options="$options"/>
                         </div>
                     </div>
                 </fieldset>

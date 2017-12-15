@@ -20,8 +20,8 @@
         </div>
         <div class="xar-mod-page-body">
         <!-- Begin Site Display Options -->
-        <xar:if condition="$tab eq 'display'">
-            <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+        <xar:if condition="$tab eq 'setup'">
+            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Version Information</legend>
                     <div class="xar-row">
@@ -84,6 +84,33 @@
                             #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
                         </div>
                     </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">The software layer between Xaraya and its database</xar:var>
+                            <label title="#$label#" class="xar-form-label">                            
+                                Database Middleware:                            
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:set name="options">
+                                array( 
+                                    array('id' => 'Creole', 'name' => 'Creole'), 
+                                    array('id' => 'PDO', 'name' => 'PDO'), 
+                                )
+                            </xar:set>
+                            <xar:set name="value">xarSystemVars::get(sys::CONFIG, 'DB.Middleware')</xar:set>
+                            <xar:data-input type="dropdown" name="middleware" id="middleware" options="$options" value="$value"/>
+                        </div>
+                    </div>
+                </fieldset>
+                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                <xar:template file="update-button" module="base" />
+            </form>
+        <xar:elseif condition="$tab eq 'display'"/>
+            <form action="#xarServer::getCurrentURL()#" method="post" onsubmit="return xar_base_formCheck(this, base_fieldRequired, base_fieldDescription);" enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>General Options</legend>
+                    <xar:data-form object="$module_settings"/>
                 </fieldset>
                 <fieldset>
                     <legend>Site Default Front Page Settings</legend>
@@ -145,7 +172,10 @@
                        </div>
                        <div class="xar-col">
 	                        <xar:set name="options">
-	                            array( array('id' =&gt; 'admin', 'name' =&gt; 'admin'), array('id' =&gt; 'user', 'name' =&gt; 'user'), )
+	                            array( 
+	                                array('id' =&gt; 'admin', 'name' =&gt; 'admin'), 
+	                                array('id' =&gt; 'user', 'name' =&gt; 'user'), 
+	                            )
 	                        </xar:set>
 	                        <xar:set name="value">
 	                            <xar:var scope="module" module="modules" name="defaultmoduletype"/>
@@ -189,16 +219,16 @@
                     </div>
                </fieldset>
                -->
-               <fieldset>
-                    <legend>General Display Options</legend>
+                <fieldset>
+                    <legend>URL Scheme</legend>
                     <div class="xar-row">
-                    	<div class="xar-col">
+                        <div class="xar-col">
                             <xar:var name="label">Enable short url support throughout Xaraya.</xar:var>
                             <label for="shorturl" title="#$label#" class="xar-form-label">
                                 Default Route
                             </label>
                         </div>
-                    	<div class="xar-col">
+                        <div class="xar-col">
                             <xar:set name="value">
                                 <xar:var scope="config" name="Site.Core.EnableShortURLsSupport"/>
                             </xar:set>
@@ -217,35 +247,34 @@
                         </div>
                     </div>
                     <div class="xar-row">
-                    	<div class="xar-col">
-	                        <xar:var name="label">The web server allows forwards slashes in URLs</xar:var>
-	                        <label for="allowsslashes" title="#$label#" class="xar-form-label">
-	                            Web server allows slashes
-	                        </label>
+                        <div class="xar-col">
+                            <xar:var name="label">The web server allows forwards slashes in URLs</xar:var>
+                            <label for="allowsslashes" title="#$label#" class="xar-form-label">
+                                Web server allows slashes
+                            </label>
                         </div>
-                    	<div class="xar-col">
-	                        <xar:set name="checked">
-	                            <xar:var scope="config" name="Site.Core.WebserverAllowsSlashes"/>
-	                        </xar:set>
-	                        <xar:data-input type="checkbox" name="allowsslashes" id="allowsslashes" checked="$checked"/>
+                        <div class="xar-col">
+                            <xar:set name="checked">
+                                <xar:var scope="config" name="Site.Core.WebserverAllowsSlashes"/>
+                            </xar:set>
+                            <xar:data-input type="checkbox" name="allowsslashes" id="allowsslashes" checked="$checked"/>
                         </div>
                     </div>
                     <div class="xar-row">
-                    	<div class="xar-col">
-	                        <xar:var name="label">Change HTML Entities to readible entities.</xar:var>
-	                        <label for="htmlentites" title="#$label#" class="xar-form-label">
-	                            HTML Entities
-	                        </label>
+                        <div class="xar-col">
+                            <xar:var name="label">Change HTML Entities to readible entities.</xar:var>
+                            <label for="htmlentites" title="#$label#" class="xar-form-label">
+                                HTML Entities
+                            </label>
                         </div>
-                    	<div class="xar-col">
-	                        <xar:set name="checked">
-	                            <xar:var scope="config" name="Site.Core.FixHTMLEntities"/>
-	                        </xar:set>
-	                        <xar:data-input type="checkbox" name="htmlentites" id="htmlentites" checked="$checked"/> Fix HTML Entities
+                        <div class="xar-col">
+                            <xar:set name="checked">
+                                <xar:var scope="config" name="Site.Core.FixHTMLEntities"/>
+                            </xar:set>
+                            <xar:data-input type="checkbox" name="htmlentites" id="htmlentites" checked="$checked"/> Fix HTML Entities
                         </div>
                     </div>
                 </fieldset>
-                <xar:data-form object="$module_settings"/>
                 <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                 <xar:template file="update-button" module="base" />
             </form>
@@ -483,7 +512,91 @@
                     <input type="hidden" name="tab" id="tab" value="#$tab#"/>
                     <xar:template file="update-button" module="base" />
                 </form>
-            <!-- Begin Logging Options -->
+            <!-- Begin caching Options -->
+            <xar:elseif condition="$tab eq 'caching'"/>
+                <div style="padding: 5px">
+                    These options are set in var/cache/config.caching.php
+                </div>
+                <xar:set name="cache_config_file">sys::varpath() . '/cache/config.caching.php'</xar:set>
+                <xar:if condition="file_exists($cache_config_file)">
+                   <fieldset>
+                        <legend>Persistent Caching</legend>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Enable persistent caching</xar:var>
+                                <label for="shorturl" title="#$label#" class="xar-form-label">
+                                    Enable Persistent Caching
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">$cache_settings['Variable.CacheIsEnabled']</xar:set>
+                                <xar:data-output type="checkbox" name="persistent_isenabled" value="$value"/>
+                            </div>
+                        </div>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">Storage type</xar:var>
+                                <label for="shorturl" title="#$label#" class="xar-form-label">
+                                    Storage Type
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="options">
+                                    array( 
+                                        array('id' => 'files', 'name' => 'File System'), 
+                                        array('id' => 'database', 'name' => 'Database'), 
+                                    )
+                                </xar:set>
+                                <xar:set name="value">$cache_settings['Variable.CacheStorage']</xar:set>
+                                <xar:data-output type="dropdown" name="persistent_storagetype" value="$value" options="$options"/>
+                            </div>
+                        </div>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">The length of time before the content in cache is deleted</xar:var>
+                                <label for="shorturl" title="#$label#" class="xar-form-label">
+                                    Expires after
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">$cache_settings['Variable.TimeExpiration']</xar:set>
+                                <xar:data-output type="integerbox" name="persistent_timeexpiration" value="$value"/>
+                                seconds
+                            </div>
+                        </div>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">The maximum size a single item to be cached can have</xar:var>
+                                <label for="shorturl" title="#$label#" class="xar-form-label">
+                                    Cache size
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">$cache_settings['Variable.SizeLimit']</xar:set>
+                                <xar:data-output type="integerbox" name="persistent_sizelimit" value="$value"/>
+                                bytes
+                            </div>
+                        </div>
+                        <div class="xar-row">
+                            <div class="xar-col">
+                                <xar:var name="label">The name of the file to write to for persistent caching</xar:var>
+                                <label for="shorturl" title="#$label#" class="xar-form-label">
+                                    Log File
+                                </label>
+                            </div>
+                            <div class="xar-col">
+                                <xar:set name="value">$cache_settings['Variable.LogFile']</xar:set>
+                                <xar:data-output type="textbox" name="persistent_logfile" value="$value"/>
+                                (if logging is enabled)
+                            </div>
+                        </div>
+                    </fieldset>
+                <xar:else/>
+                    <div style="padding: 5px">
+                        The file var/cache/config.caching.php does not exist. Please copy it from var/cache/config.caching.php.dist
+                    </div>
+                </xar:if>
+            <!-- Begin logging Options -->
             <xar:elseif condition="$tab eq 'logging'"/>
                 <xar:set name="writable">is_writeable(sys::varpath() . 'logs')</xar:set>
                 <xar:if condition="$writable">

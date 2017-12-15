@@ -111,6 +111,12 @@ function base_admin_modifyconfig()
             switch ($data['tab']) {
                 case 'security':
                 break;
+                case 'caching':
+                    $data['cache_settings'] = xarCache::getConfig();
+                    if (empty($data['cache_settings']['Variable.CacheStorage']))
+                        $data['cache_settings']['Variable.CacheStorage'] = 'database';
+//                    var_dump($data['cache_settings']);
+                break;
                 case 'logging':
                     // Delete the log file and create a new, empty one
                     if (!xarVarFetch('clear','isset',$clear,NULL,XARVAR_NOT_REQUIRED)) return;
@@ -133,6 +139,12 @@ function base_admin_modifyconfig()
             break;
         case 'update':
             switch ($data['tab']) {
+                case 'setup':
+                    if (!xarVarFetch('middleware', 'str', $middleware, 'Creole' ,XARVAR_NOT_REQUIRED)) return;
+                    $variables = array('DB.Middleware' => $middleware);
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'setup')));
+                    break;
                 case 'display':
                     if (!xarVarFetch('alternatepagetemplate','checkbox',$alternatePageTemplate,false, XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('alternatepagetemplatename','str',$alternatePageTemplateName,'',XARVAR_NOT_REQUIRED)) return;
@@ -245,6 +257,8 @@ function base_admin_modifyconfig()
                     xarModVars::set('roles', 'locale', $defaultLocale);
 
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
+                    break;
+                case 'caching':                    
                     break;
                 case 'logging':                    
                     if (!xarVarFetch('logenabled','int',$logenabled,0,XARVAR_NOT_REQUIRED)) return;

@@ -181,7 +181,6 @@ function xarMain()
         xarLog::message('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_INFO);
         xarController::dispatch($request);
 
-
         // Retrieve the output to send to the browser
         xarLog::message('Processing request ' . $request->getModule() . "_"  . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_INFO);
         $mainModuleOutput = xarController::$response->getOutput();

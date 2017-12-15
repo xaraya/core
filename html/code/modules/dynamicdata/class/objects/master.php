@@ -187,6 +187,8 @@ class DataObjectMaster extends Object
         try{
             $this->access_rules = unserialize($this->access);            
         } catch (Exception $e) {}
+        
+        return true;
     }
 
     private function propertysource($sourcestring, $object, $prefix=false)
@@ -791,10 +793,10 @@ class DataObjectMaster extends Object
             unset($args['itemid']);
         }
         if (empty($args)) {
-            xarLog::message('DataObjectMaster::getVariableCacheKey: ' . $scope . '(' . $name . ')');
+            xarLog::message('DataObjectMaster::getVariableCacheKey: ' . $scope . '(' . $name . ')', xarLog::LEVEL_INFO);
             $cacheKey = xarCache::getVariableKey($scope, $name);
         } else {
-            xarLog::message('DataObjectMaster::getVariableCacheKey: TODO ' . $scope . '(' . $name . ') with ' . json_encode($args));
+            xarLog::message('DataObjectMaster::getVariableCacheKey: TODO ' . $scope . '(' . $name . ') with ' . json_encode($args), xarLog::LEVEL_INFO);
             // TODO: any remaining arguments should *not* affect the object creation itself if we rehydrate correctly afterwards, but we'll play it safe for now...
             //$hash = md5(serialize($args));
             //$name .= '-' . $hash;
@@ -817,6 +819,19 @@ class DataObjectMaster extends Object
     **/
     public static function getObject(Array $args=array())
     {
+        // Once autoload is enabled this block can be moved beyond the cache retrieval code
+        $info = self::_getObjectInfo($args);
+        // If we have no such object, just return false for now
+        if (empty($info)) return false;
+        // The info method calls an entry for each of the object's properties. We only need one
+        $current = current($info);
+        foreach ($current as $key => $value) 
+            if (strpos($key, 'object_') === 0) $data[substr($key,7)] = $value;
+        $data = array_merge($args,$data);
+        // Make sure the class for this object is loaded
+        if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
+        else sys::import('modules.dynamicdata.class.objects.base');
+
         /* with autoload and variable caching activated */
         // CHECKME: that actually checked if we can do output caching in object ui handlers etc.
         // Identify the variable by its arguments here
@@ -824,95 +839,29 @@ class DataObjectMaster extends Object
         // Get a cache key for this variable if it's suitable for variable caching
         //$cacheKey = xarCache::getObjectKey('DataObject', $hash);
         // CHECKME: this is supposed to be about caching a DataObject variable before we do getItem() etc.
-        $cacheKey = self::getVariableCacheKey('DataObject', $args);
-        // Check if the variable is cached
-        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
-            // Return the cached variable
-            $object = xarVariableCache::getCached($cacheKey);
-            if (!empty($args['itemid'])) {
-                $object->itemid = $args['itemid'];
+        
+        // Do we allow caching?
+        if (xarModVars::get('dynamicdata', 'caching')) {
+            $cacheKey = self::getVariableCacheKey('DataObject', $args);
+            // Check if the variable is cached
+            if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+                // Return the cached variable
+                $object = xarVariableCache::getCached($cacheKey);
+                if (!empty($args['itemid'])) {
+                    $object->itemid = $args['itemid'];
+                }
+                return $object;
             }
-            return $object;
         }
 
-        $info = self::_getObjectInfo($args);
-        
-        // If we have no such object, just return false for now
-        if (empty($info)) return false;
-        /*{
-            if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
-            if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
-            throw new Exception(xarML('Unable to get an object where #(1)', $identifier));
-        }*/
-        
-        $current = current($info);
-        foreach ($current as $key => $value) 
-            if (strpos($key, 'object_') === 0) $data[substr($key,7)] = $value;
-        $data = array_merge($args,$data);
         $data['propertyargs'] =& $info;
         
         // Create the object if it was not in cache
         xarLog::message("DataObjectMaster::getObject: Getting a new object " . $data['class'], xarLog::LEVEL_INFO);
 
-        if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
-        else sys::import('modules.dynamicdata.class.objects.base');
         $descriptor = new DataObjectDescriptor($data);
         $object = new $data['class']($descriptor);
         
-        /* with autoload and variable caching activated */
-        // Set the variable in cache
-        if (!empty($cacheKey)) {
-            xarVariableCache::setCached($cacheKey, $object);
-        }
-        return $object;
-    }
-    
-    public static function getfObject(Array $args=array())
-    {
-        /* with autoload and variable caching activated */
-        // Identify the variable by its arguments here
-        $hash = md5(serialize($args));
-        // Get a cache key for this variable if it's suitable for variable caching
-        $cacheKey = xarCache::getVariableKey('DataObject', $hash);
-        // Check if the variable is cached
-        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
-            // Return the cached variable
-            $object = xarVariableCache::getCached($cacheKey);
-            return $object;
-        }
-        if(!isset($args['itemid'])) $args['itemid'] = null;
-
-// FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
-        // Complete the info if this is a known object
-        $info = self::_getObjectInfo($args);
-
-        if ($info != null) $args = array_merge($args,$info);
-        else return $info;
-
-        // TODO: Try to get the object from the cache ?
-//        if (!empty($args['objectid']) && xarCoreCache::isCached('DDObject', $args['objectid'])) {
-//            // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
-//            $object = unserialize(xarCoreCache::getCached('DDObject', $args['objectid']));
-//            return $object;
-//        }
-
-        if(!empty($args['filepath']) && ($args['filepath'] != 'auto')) include_once(sys::code() . $args['filepath']);
-        else sys::import('modules.dynamicdata.class.objects.base');
-        if (!empty($args['class'])) {
-            if(!class_exists($args['class'])) {
-                throw new ClassNotFoundException($args['class']);
-            }
-        } else {
-            //CHECKME: remove this later. only here for backward compatibility
-            $args['class'] = 'DataObject';
-        }
-        // here we can use our own classes to retrieve this
-        $descriptor = new DataObjectDescriptor($args);
-
-        $object = new $args['class']($descriptor);
-        // serialize is better here - shallow cloning is not enough for array of properties, datastores etc. and with deep cloning internal references are lost
-//        xarCoreCache::setCached('DDObject', $args['objectid'], serialize($object));
-
         /* with autoload and variable caching activated */
         // Set the variable in cache
         if (!empty($cacheKey)) {
@@ -936,21 +885,7 @@ class DataObjectMaster extends Object
     **/
     public static function getObjectList(Array $args=array())
     {
-        /* with autoload and variable caching activated */
-        // CHECKME: that actually checked if we can do output caching in object ui handlers etc.
-        // Identify the variable by its arguments here
-        //$hash = md5(serialize($args));
-        // Get a cache key for this variable if it's suitable for variable caching
-        //$cacheKey = xarCache::getObjectKey('DataObjectList', $hash);
-        // CHECKME: this is supposed to be about caching a DataObjectList variable before we do getItems() etc.
-        $cacheKey = self::getVariableCacheKey('DataObjectList', $args);
-        // Check if the variable is cached
-        if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
-            // Return the cached variable
-            $object = xarVariableCache::getCached($cacheKey);
-            return $object;
-        }
-// FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
+        // Once autoload is enabled this block can be moved beyond the cache retrieval code
         // Complete the info if this is a known object
         $info = self::_getObjectInfo($args);
         if (empty($info)) {
@@ -958,15 +893,37 @@ class DataObjectMaster extends Object
             if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
             throw new Exception(xarML('Unable to create an object where #(1)', $identifier));
         }
+        // The info method calls an entry for each of the object's properties. We only need one
         $current = current($info);
         foreach ($current as $key => $value) 
             if (strpos($key, 'object_') === 0) $data[substr($key,7)] = $value;
-        $data = $args + $data;        
-        $data['propertyargs'] =& $info;
-
+        $data = $args + $data;
+        // Make sure the class for this object is loaded
         sys::import('modules.dynamicdata.class.objects.list');
         $class = 'DataObjectList';
         if(!empty($data['filepath']) && ($data['filepath'] != 'auto')) include_once(sys::code() . $data['filepath']);
+        
+        /* with autoload and variable caching activated */
+        // CHECKME: that actually checked if we can do output caching in object ui handlers etc.
+        // Identify the variable by its arguments here
+        //$hash = md5(serialize($args));
+        // Get a cache key for this variable if it's suitable for variable caching
+        //$cacheKey = xarCache::getObjectKey('DataObjectList', $hash);
+        // CHECKME: this is supposed to be about caching a DataObjectList variable before we do getItems() etc.
+
+        // Do we allow caching?
+        if (xarModVars::get('dynamicdata', 'caching')) {
+            $cacheKey = self::getVariableCacheKey('DataObjectList', $args);
+            // Check if the variable is cached
+            if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
+                // Return the cached variable
+                $object = xarVariableCache::getCached($cacheKey);
+                return $object;
+            }
+        }
+// FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
+        $data['propertyargs'] =& $info;
+
         if(!empty($data['class']))
         {
             if(class_exists($data['class'] . 'List'))
@@ -1076,6 +1033,7 @@ class DataObjectMaster extends Object
         // Update specific part
         $itemid = $object->getItem(array('itemid' => $args['objectid']));
         if(empty($itemid)) return;
+        xarLog::message("Updating an object " . $object->name . ". Objectid: " . $itemid, xarLog::LEVEL_INFO);
         $itemid = $object->updateItem($args);
         unset($object);
         return $itemid;
@@ -1099,6 +1057,8 @@ class DataObjectMaster extends Object
 
         sys::import('xaraya.structures.query');
         // TODO: delete all the (dynamic ?) data for this object
+
+        xarLog::message("Deleting an object with ID " . $args['objectid'], xarLog::LEVEL_INFO);
 
         // Delete all the properties of this object
         $q = new Query('DELETE', $tables['dynamic_properties']);

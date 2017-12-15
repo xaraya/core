@@ -64,9 +64,12 @@ class xarCSS extends Object
     private $combined   = true;
     private $compressed = true;
 
+    // keep track of last run for caching
+    public $last_run = 0;
+
     // avoid refreshing on each unserialize
     public  $refreshed  = false;
-    private $expires    = 24*60*60;
+    private $expires    = 86400; // One day
 
 /**
  * object constructor
@@ -192,7 +195,7 @@ class xarCSS extends Object
     public static function getInstance()
     {
         if (!isset(self::$instance)) {
-            xarLog::message('xarCSS::getInstance: loading modvars');
+            xarLog::message('xarCSS::getInstance: loading modvars', xarLog::LEVEL_INFO);
             // try unserializing the stored modvar
             self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE));
             // fall back to new instance (first run)
@@ -202,7 +205,7 @@ class xarCSS extends Object
                 self::$instance = new $c;
             }
         } else {
-            //xarLog::message('xarCSS::getInstance: NOT loading modvars');
+            xarLog::message('xarCSS::getInstance: modvars already loaded', xarLog::LEVEL_INFO);
         }
         self::$instance->combined   = xarModVars::get('themes', 'css.combined');
         self::$instance->compressed = xarModVars::get('themes', 'css.compressed');
