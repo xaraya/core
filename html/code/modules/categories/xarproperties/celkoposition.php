@@ -674,6 +674,11 @@ class CelkoPositionProperty extends DataProperty
         foreach ($nameparts as $part) {
             $select_fields .= "P1." . $part . ",";
         }
+        /*
+            The first WHERE conditions select for each category from P1, the categories in P2 that contain it (i.e. the parents).
+            These are reurned as COUNT(P1...)
+            The second WHERE conditions below selects all categories in P1 except the current category and its descendents.
+        */
         $bindvars = array();
         $SQLquery = "SELECT
                             COUNT(P2.id) AS indent,
