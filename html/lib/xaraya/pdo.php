@@ -18,7 +18,7 @@
  *
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
-class xarDB extends Object
+class xarDB_PDO extends Object
 {
     public static $count = 0;
 

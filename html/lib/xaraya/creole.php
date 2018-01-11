@@ -16,7 +16,8 @@
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
 sys::import('creole.Creole');
-class xarDB extends Creole
+
+class xarDB_Creole extends Creole
 {
     public static $count = 0;
 

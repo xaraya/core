@@ -16,9 +16,11 @@
 $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
 
 if ($middleware == 'Creole') {
+
     // Import our db abstraction layer
     // Theoretically any adodb like layer could come in here.
     sys::import('xaraya.creole');
+    class xarDB extends xarDB_Creole {}
 
     /**
      * Initializes the database connection.
@@ -76,6 +78,7 @@ if ($middleware == 'Creole') {
     // Import our db abstraction layer
     // Theoretically any adodb like layer could come in here.
     sys::import('xaraya.pdo');
+    class xarDB extends xarDB_PDO {}
 
     /**
      * Initializes the database connection.
