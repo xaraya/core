@@ -651,7 +651,7 @@ class PDOColumn extends Object
  * PDO does not have result sets, so we have to roll our own here
  *
  */
-class ResultSet extends Object
+class PDOResultSet extends Object
 {
     const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
     const FETCHMODE_NUM   = PDO::FETCH_NUM;
