@@ -10,7 +10,7 @@
             <form method="get" action="#xarServer::getBaseURL()#index.php">
                 <input type="hidden" name="module" id="module" value="themes"/>
                 <input type="hidden" name="type" id="type" value="admin"/>
-                <input type="hidden" name="func" id="func" value="list"/>
+                <input type="hidden" name="func" id="func" value="view"/>
                 <table class="xar-table">
                     <thead>
                         <tr>

@@ -43,7 +43,7 @@ function themes_admin_deactivate()
     $minfo=xarThemeGetInfo($id);
     $target=$minfo['name'];
     if (empty($return_url))
-        $return_url = xarModURL('themes', 'admin', 'list', array('state' => XARTHEME_STATE_ANY), NULL, $target);
+        $return_url = xarModURL('themes', 'admin', 'view', array('state' => XARTHEME_STATE_ANY), NULL, $target);
 
     // See if we have lost any modules since last generation
     sys::import('modules.modules.class.installer');
