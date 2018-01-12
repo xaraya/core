@@ -1,17 +1,18 @@
 <?php
 /**
- * Site Tools Template Cache Management
+ * Modify the configuration settings of this module
  *
- * @package modules
- * @copyright (C) 2002-2005 The Digital Development Foundation
+ * @package modules\themes
+ * @subpackage themes
+ * @copyright see the html/credits.html file in this release
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.0
+ * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.com
- *
- * @subpackage Sitetools Module
- * @link http://xaraya.com/index.php/release/887.html
- * @author Jo Dalle Nogare <jojodee@xaraya.com>
+ * @link http://xaraya.info/index.php/release/70.html
  */
 /**
+ * @author Jo Dalle Nogare <jojodee@xaraya.com>
  *
  * @ View Cache Files
  * @param  $ 'action' action taken on cache file
@@ -20,10 +21,10 @@
 function themes_admin_cacheview($args)
 {
     /* Get parameters from whatever input we need. */
-    if (!xarVarFetch('action', 'str:1', $action, false, XARVAR_NOT_REQUIRED)) return;
-     if (!xarVarFetch('confirm', 'str:1:', $confirm, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('hashn', 'str:1:', $hashn, false, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('templn', 'str:1:', $templn, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('action',  'str:1',  $action,  false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('confirm', 'str:1:', $confirm, '',    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('hashn',   'str:1:', $hashn,   false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('templn',  'str:1:', $templn,  false, XARVAR_NOT_REQUIRED)) return;
 
     /* Security check - important to do this as early as possible */
     if (!xarSecurityCheck('AdminSiteTools')) {
