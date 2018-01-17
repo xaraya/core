@@ -107,7 +107,6 @@ class CelkoPositionProperty extends DataProperty
         if (!xarVarFetch($name . '_position', 'enum:1:2:3:4', $position)) return;
         switch (intval($position)) {
             case 1: // before - same level
-            default:
                 $this->rightorleft = 'left';
                 $this->inorout = 'out';
                 break;
