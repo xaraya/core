@@ -27,13 +27,13 @@ function themes_admin_cacheview($args)
     if (!xarVarFetch('templn',  'str:1:', $templn,  false, XARVAR_NOT_REQUIRED)) return;
 
     /* Security check - important to do this as early as possible */
-    if (!xarSecurityCheck('AdminSiteTools')) {
+    if (!xarSecurityCheck('AdminThemes')) {
         return;
     }
 
-    $cachedir  = xarModVars::get('sitetools','templcachepath');
-    $cachefile = xarModVars::get('sitetools','templcachepath').'/CACHEKEYS';
-    $scriptcache=xarModVars::get('sitetools','templcachepath').'/d4609360b2e77516aabf27c1f468ee33.php';
+    $cachedir  = xarModVars::get('themes','templcachepath');
+    $cachefile = xarModVars::get('themes','templcachepath').'/CACHEKEYS';
+    $scriptcache=xarModVars::get('themes','templcachepath').'/d4609360b2e77516aabf27c1f468ee33.php';
     $data=array();
           $data['popup']=false;
     /* Check for confirmation. */
