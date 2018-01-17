@@ -254,7 +254,7 @@ class XsltCallbacks extends Object
                 break;
             // &xar-var;
             case 'var':
-                return "#\$$entityParts[2]#";
+                return "#\${$entityParts[2]}#";
             // &xar-currenturl;
             case 'currenturl':
                 return '#xarServer::getCurrentURL()#';
