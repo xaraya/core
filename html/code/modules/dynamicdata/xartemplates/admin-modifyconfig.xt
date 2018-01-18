@@ -21,9 +21,9 @@
                     </fieldset>
                     <fieldset>
                         <legend>                    
-                            Defaults                    
+                            Debugging                    
                         </legend>
-                        <xar:template file="config_defaults"/>
+                        <xar:template file="config_debug"/>
                     </fieldset>
                     <fieldset>
                         <legend>                    

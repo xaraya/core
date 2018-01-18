@@ -41,6 +41,7 @@ function dynamicdata_admin_modifyconfig()
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
             if (!xarVarFetch('debugmode',  'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVarFetch('show_queries',  'checkbox', $show_queries, xarConfigVars::get(null, 'Site.BL.ShowQueries'), XARVAR_NOT_REQUIRED)) return;
 //            if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
             if (!xarVarFetch('caching',    'checkbox', $caching, xarModVars::get('dynamicdata', 'caching'), XARVAR_NOT_REQUIRED)) return;
 
@@ -62,6 +63,7 @@ function dynamicdata_admin_modifyconfig()
             xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
 */
             xarModVars::set('dynamicdata', 'debugmode', $debugmode);
+            xarConfigVars::set(null, 'Site.BL.ShowQueries', $show_queries);
             xarModVars::set('dynamicdata', 'caching', $caching);
             break;
     }
