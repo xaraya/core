@@ -13,7 +13,7 @@
             <includes>
                 <includeitem>list</includeitem>
             </includes>
-            <target>list</target>
+            <target>view</target>
             <title>View installed themes on the system</title>
             <label>View Themes</label>
         </menuitem>
