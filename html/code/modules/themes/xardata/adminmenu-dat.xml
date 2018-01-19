@@ -11,7 +11,7 @@
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
-                <includeitem>list</includeitem>
+                <includeitem>view</includeitem>
             </includes>
             <target>view</target>
             <title>View installed themes on the system</title>
