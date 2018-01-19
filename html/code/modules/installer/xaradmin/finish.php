@@ -38,6 +38,9 @@ function installer_admin_finish()
     // Display variable values in exceptions?
     xarConfigVars::set(null, 'Site.BL.ExceptionDisplay', false);
 
+    // Display query strings for debugging?
+    xarConfigVars::set(null, 'Site.BL.ShowQueries', false);
+
     // Declare the installation a success
     $variables = array('DB.Installation' => 3);
     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
