@@ -47,7 +47,7 @@
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
-                <includeitem>modifyconfig</includeitem>
+                <includeitem>cacheview</includeitem>
             </includes>
             <target>cacheview</target>
             <title>Modify Themes configuration values</title>
