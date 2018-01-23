@@ -181,6 +181,7 @@ function installer_admin_phase5()
         $dbinfo = $dbconn->getDatabaseInfo();
         try {
             $dbconn->begin();
+
             foreach($dbinfo->getTables() as $tbl) {
                 $table = $tbl->getName();
                 if(strpos($table,'_') && (substr($table,0,strpos($table,'_')) == $dbPrefix)) {
@@ -196,6 +197,31 @@ function installer_admin_phase5()
                     }
                 }
             }
+
+        if (!empty($dbinfo->getTables())) {
+            foreach ($dbinfo->getTables() as $tbl) {
+                // check middleware
+                $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+                if ($middleware == 'Creole') {
+                    $table = $tbl->getName();
+                } else if ($middleware == 'PDO') {
+                    $table = $tbl;
+                }
+                if (strpos($table, '_') && (substr($table, 0, strpos($table, '_')) == $dbPrefix)) {
+                    // we have the same prefix.
+                    try {
+                        $sql = xarDBDropTable($table, $dbType);
+                        $dbconn->Execute($sql);
+                    } catch (SQLException $dropfail) {
+                        // retry with drop view
+                        // TODO: this should be transparent in the API
+                        $ddl = "DROP VIEW $table";
+                        $dbconn->Execute($ddl);
+                    }
+                }
+            }
+        }
+
             $dbconn->commit();
         } catch (Exception $e) {
             // All other exceptions but the ones we already handled
@@ -225,6 +251,8 @@ function installer_admin_phase5()
     xarConfigVars::set(null, 'System.ModuleAliases',array());
     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
     xarConfigVars::set(null, 'Site.BL.DocType', 'xhtml1-strict');
+    // Display query strings for debugging?
+    xarConfigVars::set(null, 'Site.BL.ShowQueries', false);
     
     // 3. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();
