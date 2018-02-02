@@ -203,7 +203,7 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.Session.RefererCheck', $refererCheck);
                     xarConfigVars::set(null, 'Site.Core.EnableSecureServer', $secureServer);
                     xarConfigVars::set(null, 'Site.Core.SecureServerPort', $sslport);
-                    xarConfigVars::set(null, 'Site.Core.CookieTimeout', $cookietimeout);
+                    xarConfigVars::set(null, 'Site.Session.CookieTimeout', $cookietimeout);
 
                     // Authentication modules
                     if (!empty($orderselect->order)) {
