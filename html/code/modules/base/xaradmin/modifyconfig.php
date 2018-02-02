@@ -187,7 +187,7 @@ function base_admin_modifyconfig()
                     if (!xarVarFetch('referercheck','str:1:',$refererCheck,'',XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('secureserver','checkbox',$secureServer,true,XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('sslport','int',$sslport,443,XARVAR_NOT_REQUIRED)) return;
-
+                    if (!xarVarFetch('cookietimeout','int:1:',$cookietimeout,'',XARVAR_NOT_REQUIRED)) return;
                     sys::import('modules.dynamicdata.class.properties.master');
                     $orderselect = DataPropertyMaster::getProperty(array('name' => 'orderselect'));
                     $orderselect->checkInput('authmodules');
@@ -203,6 +203,7 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.Session.RefererCheck', $refererCheck);
                     xarConfigVars::set(null, 'Site.Core.EnableSecureServer', $secureServer);
                     xarConfigVars::set(null, 'Site.Core.SecureServerPort', $sslport);
+                    xarConfigVars::set(null, 'Site.Core.CookieTimeout', $cookietimeout);
 
                     // Authentication modules
                     if (!empty($orderselect->order)) {
