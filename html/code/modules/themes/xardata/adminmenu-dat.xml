@@ -50,7 +50,7 @@
                 <includeitem>cacheview</includeitem>
             </includes>
             <target>cacheview</target>
-            <title>Modify Themes configuration values</title>
+            <title>View the files in the template cache</title>
             <label>View Cache files</label>
         </menuitem>
         <menuitem>
