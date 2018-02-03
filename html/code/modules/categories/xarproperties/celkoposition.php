@@ -578,7 +578,7 @@ class CelkoPositionProperty extends DataProperty
     }
 
 	/*
-	 * Used to build tree of categories
+	 * Used to build a tree of categories
 	 *
 	 * @param int $parent_id Parent ID of the tree
 	 * @param int $left_id Left ID of the first level categories
@@ -586,7 +586,7 @@ class CelkoPositionProperty extends DataProperty
 	*/
     function build_tree($parent_id, $left_id=1)
     {       
-        // We need tohe left ID in case there are other top level categories, and we need to know where this tree starts
+        // We need the left ID in case there are other top level categories, and we need to know where this tree starts
         // the right value of this node is the left value + 1  
         $right_id = $left_id+1;  
     
