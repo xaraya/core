@@ -1,1 +1,0 @@
-rename to cache.blocklevel to enable output block caching - see config.caching.php

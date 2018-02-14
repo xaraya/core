@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:template file="user-mod-head"/>
-    <div class="xar-mod-body">
-        <h2>Roles Tree</h2>
-        <div>#$chart#</div>
-    </div>
-</xar:template>

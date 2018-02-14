@@ -1,1 +1,0 @@
-rename to cache.touch to activate output caching in general - see config.caching.php
