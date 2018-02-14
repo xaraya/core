@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <xar:if condition="$type['type_state'] eq xarBlock::TYPE_STATE_MISSING or $type['type_state'] eq xarBlock::TYPE_STATE_MOD_UNAVAILABLE">
+            <h2>Delete Block Type</h2>
+            <form method="post" action="#xarModURL('blocks', 'admin', 'delete_type')#">
+                <fieldset>
+                    <legend>Confirm deleting this block type</legend>
+                    <div class="xar-row">
+                        <div class="xar-col">Type ID:</div>
+                        <div class="xar-col">#$type['type_id']#</div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">Type</div>
+                        <div class="xar-col">#$type['type']#</div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">Module</div>
+                        <div class="xar-col">
+                        <xar:if condition="!empty($type['module'])">
+                            #$type['module']#
+                         <xar:else/>
+                            [none]
+                         </xar:if>
+                         </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">Version</div>
+                        <div class="xar-col">
+                        <xar:if condition="!empty($type['xarversion'])">
+                            #$type['xarversion']#
+                        <xar:else/>
+                            [unknown]
+                        </xar:if>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">Status</div>
+                        <div class="xar-col">
+                            <xar:if condition="$type['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                                <a href="#xarServer::getCurrentURL(array('tab' => 'status'))#">#$type_states[$type['type_state']]['name']#        </a>
+                            <xar:else/>
+                        #$type_states[$type['type_state']]['name']#
+                            </xar:if>
+                        </div>
+                    </div>
+                    <xar:if condition="!empty($type_instances)">
+                    <div class="xar-row">
+                        <div class="xar-col">Type Instances:</div>
+                        <div class="xar-col">
+                            <p class="xar-note">The following block instances will also be removed</p>
+                            <xar:loop name="$type_instances">
+                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <xar:if condition="$loop:index lt count($type_instances)">,&#160;</xar:if>
+                            </xar:loop>
+                        </div>
+                    </div>
+                    </xar:if>
+                </fieldset>
+                <fieldset>
+                    <div class="xar-form-actions xar-align-center">
+                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="confirm" id="confirm" value="true"/>
+                    <input type="hidden" name="type_id" id="type_id" value="#$type['type_id']#"/>
+                    <xar:var name="label">Delete Block Type</xar:var>
+                    <xar:button type="submit" label="$label"/>
+                    <xar:var name="label">Cancel</xar:var>
+                    <xar:button type="cancel" label="$label"/>
+                    </div>
+                </fieldset>
+            </form>
+        <xar:else/>
+            <h2>Block Type Cannot Be Removed</h2>
+            <p class="xar-info">This block type cannot be removed in its current state</p>
+            <fieldset>
+                <legend>Unable to delete this block type</legend>
+                <div class="xar-row">
+                    <div class="xar-col">Type ID:</div>
+                    <div class="xar-col">#$type['type_id']#</div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">Type</div>
+                    <div class="xar-col">#$type['type']#</div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">Module</div>
+                    <div class="xar-col">
+                    <xar:if condition="!empty($type['module'])">
+                            #$type['module']#
+                     <xar:else/>
+                            [none]
+                     </xar:if>
+                     </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">Version</div>
+                    <div class="xar-col">
+                    <xar:if condition="!empty($type['xarversion'])">
+                            #$type['xarversion']#
+                    <xar:else/>
+                            [unknown]
+                    </xar:if>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">Status</div>
+                    <div class="xar-col">
+                        <xar:if condition="$type['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                            <a href="#xarServer::getCurrentURL(array('tab' => 'status'))#">#$type_states[$type['type_state']]['name']#    </a>
+                        <xar:else/>
+                        #$type_states[$type['type_state']]['name']#
+                        </xar:if>
+                    </div>
+                </div>
+            </fieldset>
+            <p class="xar-info">
+                If you really want to remove this block type, 
+                you must first delete its files from the file system.
+            </p>                
+            <fieldset>
+                <div class="xar-form-actions xar-align-center">
+                <xar:var name="label">Cancel</xar:var>
+                <xar:button type="cancel" label="$label"/>
+                </div>
+            </fieldset>
+        </xar:if>
+    </div>
+</xar:template>

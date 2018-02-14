@@ -1,0 +1,102 @@
+<items>
+  <dynamic_object_links itemid="2">
+    <id>2</id>
+    <source>properties</source>
+    <from_prop>objectid</from_prop>
+    <target>objects</target>
+    <to_prop>objectid</to_prop>
+    <link_type>parents</link_type>
+    <direction>bi</direction>
+    <extra></extra>
+  </dynamic_object_links>
+  <dynamic_object_links itemid="3">
+    <id>3</id>
+    <source>objects</source>
+    <from_prop>objectid</from_prop>
+    <target>properties</target>
+    <to_prop>objectid</to_prop>
+    <link_type>children</link_type>
+    <direction>bi</direction>
+    <extra></extra>
+  </dynamic_object_links>
+  <dynamic_object_links itemid="4">
+    <id>4</id>
+    <source>objects</source>
+    <from_prop>module_id</from_prop>
+    <target>modules</target>
+    <to_prop>regid</to_prop>
+    <link_type>parents</link_type>
+    <direction>bi</direction>
+    <extra></extra>
+  </dynamic_object_links>
+  <dynamic_object_links itemid="7">
+    <id>7</id>
+    <source>modules</source>
+    <from_prop>regid</from_prop>
+    <target>objects</target>
+    <to_prop>module_id</to_prop>
+    <link_type>children</link_type>
+    <direction>bi</direction>
+    <extra></extra>
+  </dynamic_object_links>
+  <dynamic_object_links itemid="9">
+    <id>9</id>
+    <source>modules</source>
+    <from_prop>id</from_prop>
+    <target>modules_hooks</target>
+    <to_prop>subject_module</to_prop>
+    <link_type>children</link_type>
+    <direction>info</direction>
+    <extra></extra>
+  </dynamic_object_links>
+  <dynamic_object_links itemid="12">
+    <id>12</id>
+    <source>modules_hooks</source>
+    <from_prop>subject_module</from_prop>
+    <target>modules</target>
+    <to_prop>id</to_prop>
+    <link_type>parents</link_type>
+    <direction>uni</direction>
+    <extra></extra>
+  </dynamic_object_links>
+  <dynamic_object_links itemid="16">
+    <id>16</id>
+    <source>modules_hooks</source>
+    <from_prop>observer_module</from_prop>
+    <target>modules</target>
+    <to_prop>id</to_prop>
+    <link_type>parents</link_type>
+    <direction>uni</direction>
+    <extra></extra>
+  </dynamic_object_links>
+  <dynamic_object_links itemid="17">
+    <id>17</id>
+    <source>modules</source>
+    <from_prop>id</from_prop>
+    <target>modules_hooks</target>
+    <to_prop>observer_module</to_prop>
+    <link_type>children</link_type>
+    <direction>info</direction>
+    <extra></extra>
+  </dynamic_object_links>
+  <dynamic_object_links itemid="20">
+    <id>20</id>
+    <source>roles_users</source>
+    <from_prop>id</from_prop>
+    <target>roles_roles</target>
+    <to_prop>id</to_prop>
+    <link_type>extended</link_type>
+    <direction>bi</direction>
+    <extra></extra>
+  </dynamic_object_links>
+  <dynamic_object_links itemid="21">
+    <id>21</id>
+    <source>roles_roles</source>
+    <from_prop>id</from_prop>
+    <target>roles_users</target>
+    <to_prop>id</to_prop>
+    <link_type>extensions</link_type>
+    <direction>bi</direction>
+    <extra></extra>
+  </dynamic_object_links>
+</items>

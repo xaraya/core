@@ -1,0 +1,16 @@
+# Ignore everything in this directory
+*
+# Except these files and directories
+!.gitignore
+!what_is_this.txt
+!authsystem/
+!base/
+!blocks/
+!categories/
+!dynamicdata/
+!installer/
+!mail/
+!modules/
+!privileges/
+!roles/
+!themes/

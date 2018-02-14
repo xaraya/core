@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+
+    <xar:javascript scope="theme" filename="orderitem.js" position="head"/>
+    <script type="text/javascript">
+        xar_base_reorder_warn = '#xarML('You must select an option to move.')#';
+    </script>
+
+    <xar:if condition="count($options) gt 10">
+        <xar:set name="size">10</xar:set>
+    <xar:else />
+        <xar:set name="size">count($options)</xar:set>
+    </xar:if>
+
+    <xar:if condition="count($options) gt 0">
+        <div class="xar-floatleft">
+            <div class="xar-floatleft">
+                <xar:var name="label">Move Up</xar:var>
+                <button id="#$id#_up" onclick="return xar_base_reorder('#$id#', true, '#$id#_order');" title="#$label#" class="xar-displayblock xar-margin-thickbottom">
+                    <xar:var name="label">Up Arrow</xar:var>
+                    <xar:img scope="module" module="base" file="up.gif" alt="$label" class="xar-icon"/>
+                </button>
+                <xar:var name="label">Move Down</xar:var>
+                <button id="#$id#_down" onclick="return xar_base_reorder('#$id#', false, '#$id#_order');" title="#$label#" class="xar-displayblock xar-margin-thicktop">
+                    <xar:var name="label">Down Arrow</xar:var>
+                    <xar:img scope="module" module="base" file="down.gif" alt="$label" class="xar-icon"/>
+                </button>
+            </div>
+            <xar:data-input type="multiselect" name="$name" size="$size" options="$options" tabindex="$tabindex" class="xar-margin-thickleft"/>
+            <input type="hidden" name="#$name#_order" id="#$id#_order" value="#$order#"/>
+        </div>
+    <xar:else />
+        <xar:mlstring>No options specified</xar:mlstring>
+    </xar:if>
+    <div style="clear: both"></div>
+
+    <xar:if condition="!empty($invalid)">
+        <span class="xar-error">#$invalid#</span>
+    </xar:if>
+</xar:template>

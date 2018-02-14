@@ -1,0 +1,14 @@
+<menu>
+    <menutitle>
+        <label>Configure</label>
+        <title>Choose a set of configuration options to modify</title>
+        <variable>tab</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>general</value>
+            <target>modifyconfig</target>
+            <label>General</label>
+        </menuitem>
+    </menuitems>
+</menu>

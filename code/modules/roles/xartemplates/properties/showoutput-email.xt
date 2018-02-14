@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--<xar:if condition="!empty($link)">
+        <a href="mailto:#$value#"><xar:var name="value"/></a>
+    <xar:else />
+        <xar:var name="value"/>
+    </xar:if>
+    -->
+    <a href="mailto:#$value#">
+        <xar:var name="value"/>
+    </a>
+</xar:template>

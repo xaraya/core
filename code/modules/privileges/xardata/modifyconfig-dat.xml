@@ -1,0 +1,42 @@
+<menu>
+    <menutitle>
+        <label>Configure</label>
+        <title>Choose a set of configuration options to modify</title>
+        <variable>tab</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>general</value>
+            <target>modifyconfig</target>
+            <label>General</label>
+        </menuitem>
+        <menuitem>
+            <value>realms</value>
+            <target>modifyconfig</target>
+            <label>Realms</label>
+        </menuitem>
+        <menuitem>
+            <value>lastresort</value>
+            <target>modifyconfig</target>
+            <condition>xarModVars::get('privileges','lastresort')</condition>
+            <label>Last Resort</label>
+        </menuitem>
+<!--
+        <menuitem>
+            <value>masks</value>
+            <target>modifyconfig</target>
+            <label>Masks</label>
+        </menuitem>
+        <menuitem>
+            <value>maskbased</value>
+            <target>modifyconfig</target>
+            <label>Basic Access</label>
+        </menuitem>
+-->
+        <menuitem>
+            <value>testing</value>
+            <target>modifyconfig</target>
+            <label>Testing</label>
+        </menuitem>
+    </menuitems>
+</menu>

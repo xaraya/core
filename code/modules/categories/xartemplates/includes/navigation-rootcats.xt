@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <p>
+        #$cattitle# : [ 
+        <xar:loop name="$catitems">
+            #$loop:item['catjoin']# 
+            <xar:if condition="empty($loop:item['catlink'])">
+                #$loop:item['catlabel']# 
+                <xar:else />
+                <a href="#$loop:item['catlink']#">
+                    #$loop:item['catlabel']#
+                </a>
+            </xar:if>
+        </xar:loop>
+        ] 
+    </p>
+</xar:template>

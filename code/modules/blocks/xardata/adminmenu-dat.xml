@@ -1,0 +1,52 @@
+<menu>
+    <menuitems>
+        <menuitem>
+            <includes>
+                <includeitem>main</includeitem>
+                <includeitem>overview</includeitem>
+            </includes>
+            <target>main</target>
+            <label>Overview</label>
+        </menuitem>
+        <menuitem>
+            <mask>ManageBlocks</mask>
+            <includes>
+                <includeitem>view_instances</includeitem>
+                <includeitem>modify_instance</includeitem>
+                <includeitem>delete_instance</includeitem>
+            </includes>
+            <target>view_instances</target>
+            <title>View or edit all block instances</title>
+            <label>View Blocks</label>
+        </menuitem>
+        <menuitem>
+            <mask>ManageBlocks</mask>
+            <includes>
+                <includeitem>new_instance</includeitem>
+            </includes>
+            <target>new_instance</target>
+            <title>Add a new block instance</title>
+            <label>New Block</label>
+        </menuitem>
+        <menuitem>
+            <mask>ManageBlocks</mask>
+            <includes>
+                <includeitem>view_types</includeitem>
+                <includeitem>modify_type</includeitem>
+                <includeitem>refresh_types</includeitem>
+            </includes>
+            <target>view_types</target>
+            <title>View Block Types</title>
+            <label>View Types</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminBlocks</mask>
+            <includes>
+                <includeitem>modifyconfig</includeitem>
+            </includes>
+            <target>modifyconfig</target>
+            <title>Modify Blocks configuration values</title>
+            <label>Modify Configuration</label>
+        </menuitem>
+    </menuitems>
+</menu>

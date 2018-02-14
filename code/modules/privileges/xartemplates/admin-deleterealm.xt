@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <xar:template type="module" file="admin-realms"/>
+        <form action="#xarModURL('privileges','admin','deleteealm')#" method="post" enctype="application/x-www-form-urlencoded">
+            <div class="xar-form-actions">
+                <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                <input type="hidden" name="id" id="id" value="#$id#"/>
+                <input type="hidden" name="confirmed" id="confirmed" value="1"/>
+                <p>
+                    <span class="xar-title">Confirm the deletion of all instances of the realm
+                    '#$name#'</span>
+                </p>
+                <br />
+                <xar:var name="label">Confirm</xar:var>
+                <xar:button type="submit" label="$label" tabindex="1"/>
+                <br />
+                <p>
+                    <a href="#xarModURL('privileges','admin','viewrealms')#">Cancel the deletion</a>
+                </p>
+            </div>
+        </form>
+    </div>
+    <!-- mod body -->
+</xar:template>

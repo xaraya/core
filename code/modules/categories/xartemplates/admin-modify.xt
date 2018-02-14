@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>
+            Modify Category
+        </h2>
+        <form action="#xarModURL('categories','admin','update',array())#" method="post" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+            <fieldset class="xar-norm">
+                <legend>
+                    <strong>
+                    Category</strong>
+                </legend>
+                <xar:data-form object="$object"/>
+            </fieldset>
+            <fieldset class="xar-norm">
+                <div class="xar-row">
+                    <div class="xar-col">
+                    </div>
+                    <div class="xar-col">
+                        <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
+                        <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
+                        <input type="hidden" name="itemtype" value="#$itemtype#"/>
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                        <input type="hidden" name="creating" id="creating" value="false"/>
+                        <!--
+                            <input type="reset" value="#xarML('Reset')#"/>
+                        -->
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

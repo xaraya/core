@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="user-mod-head"/>
+    <div class="xar-mod-body">
+        <xar:if condition="!empty($object)">
+            <xar:if condition="$object:name eq 'objects' and $object:linktype eq 'object'">
+            	<div class="xar-mod-object-head">
+                	<h2>View #$object:label#</h2>
+                </div>
+                <!-- show the list of main objects -->
+                <div class="xar-mod-object-body">
+                	<xar:template type="module" file="main_objects"/>
+                </div>
+            <xar:else/>
+            	<div class="xar-mod-object-head">
+	                <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
+	                <xar:if condition="!empty($object:primary) and $object:checkAccess('create')">
+	                    <xar:set name="newlink">xarObject::getActionURL($object, 'new')</xar:set>
+	                </xar:if>
+	                <h2>
+	                    View #$object:label#&#160;
+	                    <a href="#$searchlink#" title="Search #$object:label#">
+	                        <xar:img scope="theme" file="icons/system-search.png" class="xar-icon" alt="search"/>
+	                    </a>
+	                    <xar:if condition="!empty($newlink)">
+	                        &#160;<a href="#$newlink#" title="Create New #$object:label#">
+	                            <xar:img scope="theme" file="icons/add.png" class="xar-icon" alt="new"/>
+	                        </a>
+	                    </xar:if>
+	                </h2>
+               </div> 
+                <!-- don't show a newlink here -->
+                <div class="xar-mod-page-body">
+                	<xar:data-view object="$object" newlink=""/>
+                 </div>
+            </xar:if>
+        <xar:else />
+            <div>
+                <a href="#xarModURL('dynamicdata','object','main')#">Please select one of the available objects</a>
+            </div>
+        </xar:if>
+    </div>
+</xar:template>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" module="base" file="navtabs"/>
+
+    <xar:set name="urlinfo">xarController::$request->getInfo()</xar:set>
+    <div>
+        <ul class="xar-tabs xar-alt xar-norm-outline">
+            <xar:if condition="$layout eq 'toplevel'">
+                <xar:foreach in="$tabs" value="$tab">
+                    <xar:set name="condition">$tab['id'] == $activetab</xar:set>
+                    <xar:if condition="$condition">
+                        <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                        <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                    <xar:else />
+                        <xar:set name="tabclass">'xar-tab'</xar:set>
+                        <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                    </xar:if>
+                    <li class="#$tabclass#">
+                        <a href="#xarServer::getCurrentURL(array('activetab' => $tab['id']))#" class="#$linkclass#">
+                            #$tab['name']#
+                        </a>
+                    </li>
+                </xar:foreach>
+            <xar:else />
+                <xar:foreach in="$tabs" value="$tab">
+                    <xar:set name="iterator">$tab->getIterator()</xar:set>
+                    <xar:set name="currentcategory">$iterator->current()</xar:set>
+                    <xar:set name="mask">isset($currentcategory->mask) ? $currentcategory->mask : ""</xar:set>
+                    <xar:set name="id">$currentcategory->id</xar:set>
+
+                    <xar:set name="condition">$id == $activetab</xar:set>
+                    <xar:if condition="!empty($mask)">
+                        <xar:set name="mask">$tab['mask']</xar:set>
+                        <xar:sec mask="$mask" catch="false">
+                            <xar:if condition="$condition">
+                                <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                                <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                            <xar:else />
+                                <xar:set name="tabclass">'xar-tab'</xar:set>
+                                <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                            </xar:if>
+                            <li class="#$tabclass#">
+                                <a href="#xarModURL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
+                                    #$tab['label']#
+                                </a>
+                            </li>
+                        </xar:sec>            
+                    <xar:else />
+                        <xar:if condition="$condition">
+                            <xar:set name="tabclass">'xar-tab-active'</xar:set>
+                            <xar:set name="linkclass">'xar-accent xar-accent-outline'</xar:set>
+                        <xar:else />
+                            <xar:set name="tabclass">'xar-tab'</xar:set>
+                            <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
+                        </xar:if>
+                        <dd class="#$tabclass#">
+                            <xar:set name="name">$currentcategory->name</xar:set>
+                            <xar:set name="url">isset($currentcategory->url) ? $currentcategory->url : xarServer::getCurrentURL(array('activetab' => $id))</xar:set>
+                            <a href="#$url#" class="#$linkclass#">
+                                #$name#
+                            </a>
+                        </dd>
+                    </xar:if>
+                </xar:foreach>
+            </xar:if>
+        </ul>
+    </div>
+</xar:template>

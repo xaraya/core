@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($itemid)">
+        <h2>Configuration for DataProperty #$itemid#</h2>
+        <xar:if condition="!empty($isupload)">
+            <xar:set name="enc_type">'multipart/form-data'</xar:set>
+        <xar:else />
+            <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
+        </xar:if>
+        <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#" enctype="#$enc_type#">
+            <fieldset>
+                <legend>Property summary</legend>
+                <xar:set name="fieldlist">
+                    array('name','label','objectid','type')
+                </xar:set>
+                <xar:data-display object="$object" fieldlist="$fieldlist"/>
+            </fieldset>
+            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+            <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
+            <!-- This is the main part of the page -->
+            #$showval# 
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <xar:var name="label">Update</xar:var>
+                        <xar:button type="submit" label="$label" name="confirm"/>&#160;
+                        <xar:var name="label">Update and Exit</xar:var>
+                        <xar:button type="submit" label="$label" name="exit"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    <xar:elseif condition="!empty($proptype)"/>
+        <xar:set name="propname">$propertytype->name</xar:set>
+        <h2>Sample Configuration for DataProperty Type #$propname#</h2>
+        <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#">
+            <fieldset class="xar-form-actions">
+                <legend>Select Property Type</legend>
+                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="$propname"/>&#160;
+                <xar:var name="label">Select</xar:var>
+                <xar:button type="submit" label="$label"/>
+            </fieldset>
+        </form>
+        <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#">
+            <fieldset>
+                <legend>Property Type Summary</legend>
+                <table class="xar-table xar-fullwidth">
+                    <tr>
+                        <td>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label class="xar-form-label" for="#$proptype#_desc" title="" style="">
+                                        Property Type
+                                    </label>
+                            </div>
+                            <div class="xar-col">
+                                    [#$propinfo:type#] #$propinfo:desc#
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="xar-row">
+                                <div class="xar-col">
+                                    <label class="xar-form-label" for="#$proptype#_config" title="" style="">
+                                        Configuration
+                                    </label>
+                                </div>
+                                <div class="xar-col">
+                                    <textarea name="#$proptype#_config" id="#$proptype#_config" rows="4" cols="50" readonly="readonly">#$propinfo:configuration#</textarea>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+            <input type="hidden" name="proptype" value="#$proptype#"/>
+            #$showval#
+            <div class="xar-row">
+                <div class="xar-col">
+                </div>
+                <div class="xar-col">
+                    <xar:var name="label">Preview</xar:var>
+                    <xar:button type="submit" label="$label" name="preview"/>
+                </div>
+            </div>
+<!-- See CHECKME in showpropval
+                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled"/>
+-->
+        </form>
+
+    <xar:else/>
+        <h2>Sample Configuration for DataProperty Types</h2>
+        <form method="post" action="#xarModURL('dynamicdata','admin','showpropval')#">
+            <fieldset class="xar-form-actions">
+                <legend>Select Property Type</legend>
+                <xar:data-input name="proptype" type="fieldtype" store_prop="name" value="textbox"/>
+                <xar:var name="label">Select</xar:var>
+                <xar:button type="submit" label="$label"/>
+            </fieldset>
+        </form>
+    </xar:if>
+</xar:template>

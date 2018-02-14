@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <form method="post" action="#xarModURL('dynamicdata','user','filtertag')#">
+        <xar:set name="multiple">count($properties) > 1</xar:set>
+        <xar:data-filterform object="$object" fieldlist="$fieldlist" valuelist="$valuelist" oplist="$oplist"/>
+        <input type="hidden" name="return_url" value="#$return_url#"/>
+        <xar:if condition="!$multiple">
+            <xar:button type="submit" label="$button" />
+        </xar:if>
+        <xar:if condition="$multiple">
+            <div class="xar-row">
+                <div class="xar-col">
+                </div>
+                <div class="xar-col">
+                    <xar:button type="submit" label="$button" />
+                </div>
+            </div>
+        </xar:if>
+        <input type="hidden" name="objectname" value="#$objectname#"/>
+        <input type="hidden" name="filtername" value="#$filtername#"/>
+        <input type="hidden" name="filter_submitted" value="1"/>
+    </form>
+</xar:template>

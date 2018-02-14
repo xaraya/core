@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <h4>Component - #$component#</h4>
+    <p>The Theme CSS tools deal with the styles defined and included by the user themes.</p>
+    <xar:if condition="!$configurable">
+        <h4>#$unmanagednote#</h4>
+    </xar:if>
+</xar:template>

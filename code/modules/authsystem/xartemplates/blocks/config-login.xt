@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="sl">'showlogout'</xar:set>
+    <xar:set name="lt">'logouttitle'</xar:set>
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">When a user has logged in, you can display a search form and logout link for the user by checking this box.</xar:var>
+            <label for="#$sl#" title="#$label#">Show Logout Box When Logged In</label>
+        </div>
+        <div class="xar-col">
+            <xar:data-input type="checkbox" name="showlogout" id="$sl" value="$showlogout" checked="$showlogout"/>
+        </div>
+    </div>
+    <xar:if condition="$showlogout eq true">
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">When the logout block is shown, you can change the display title with this value.</xar:var>
+                <label for="#$lt#" title="#$label#" class="xar-form-label">Logout Title :</label>
+            </div>
+            <div class="xar-col">
+                <xar:data-input type="textbox" name="logouttitle" id="$lt" value="$logouttitle" maxlength="25" class="xar-form-textlong"/>
+            </div>
+        </div>
+    </xar:if>
+</xar:template>

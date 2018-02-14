@@ -1,0 +1,24 @@
+<menu>
+    <menutitle>
+        <label>Stylesheet Type</label>
+        <title>Choose the type of stylesheets to be shown</title>
+        <variable>tab</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>auto</value>
+            <target>view_csslibs</target>
+            <label>Loaded Stylesheets</label>
+        </menuitem>
+        <menuitem>
+            <value>local</value>
+            <target>view_csslibs</target>
+            <label>Local Stylesheets</label>
+        </menuitem>
+        <menuitem>
+            <value>remote</value>
+            <target>view_csslibs</target>
+            <label>Remote Stylesheets</label>
+        </menuitem>
+    </menuitems>
+</menu>

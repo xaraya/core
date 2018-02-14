@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <div class="xar-mod-page-head">
+            <h2>View Modules</h2>
+        </div>
+        <div class="xar-mod-page-body">
+
+            <form method="get" action="#xarServer::getBaseURL()#index.php">
+                <input type="hidden" name="module" id="module" value="modules"/>
+                <input type="hidden" name="type" id="type" value="admin"/>
+                <input type="hidden" name="func" id="func" value="list"/>
+                <table class="xar-table xar-items-controls">
+                    <thead>
+                        <tr>
+                            <th><label for="state">State</label></th>
+                            <th><label for="modtype">Type</label></th>
+                            <noscript>
+                            <th><label for="apply">Action</label></th>
+                            </noscript>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <xar:data-input type="dropdown" name="state" id="state" value="$state" options="$states" onchange="this.form.submit();return false;"/>
+                            </td>
+                            <td>
+                                <xar:data-input type="dropdown" name="modtype" id="modtype" value="$modtype" options="$modtypes" onchange="this.form.submit();return false;"/>
+                            </td>
+                            <noscript>
+                            <td>
+                                <xar:var name="applyLabel">Apply Filter</xar:var>
+                                <xar:button type="submit" name="apply" id="apply" label="$applyLabel"/>
+                            </td>
+                            </noscript>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+
+            <xar:var name="admintitle">View administration options for this module</xar:var>
+
+            <xar:var name="infotitle">View detail information about this module</xar:var>
+            <xar:var name="infolabel">Info</xar:var>
+
+            <xar:var name="inittitle">Initialize this module</xar:var>
+            <xar:var name="initlabel">Initialize</xar:var>
+
+            <xar:var name="activatetitle">Activate this module</xar:var>
+            <xar:var name="activatelabel">Activate</xar:var>
+
+            <xar:var name="deactivatetitle">Deactivate this module</xar:var>
+            <xar:var name="deactivatelabel">Deactivate</xar:var>
+
+            <xar:var name="upgradetitle">Upgrade this module</xar:var>
+            <xar:var name="upgradelabel">Upgrade</xar:var>
+
+            <xar:var name="nonetitle">Option not available</xar:var>
+            <xar:var name="nonelabel">n/a</xar:var>
+
+            <xar:var name="errortitle">Module version error</xar:var>
+            <xar:var name="errorlabel">Error</xar:var>
+
+            <xar:var name="removetitle">Remove this module</xar:var>
+            <xar:var name="removelabel">Remove</xar:var>
+
+            <xar:var name="hookstitle">Manage hooks to this module</xar:var>
+            <xar:var name="hookslabel">Hooks</xar:var>
+
+            <xar:if condition="!empty($useicons)">
+                <xar:set name="infoicon">xarTpl::getImage('icons/info.png','theme')</xar:set>
+                <xar:set name="initicon">xarTpl::getImage('icons/initialize.png','theme')</xar:set>
+                <xar:set name="activateicon">xarTpl::getImage('icons/activate.png','theme')</xar:set>
+                <xar:set name="deactivateicon">xarTpl::getImage('icons/deactivate.png','theme')</xar:set>
+                <xar:set name="upgradeicon">xarTpl::getImage('icons/software-upgrade.png','theme')</xar:set>
+                <xar:set name="noneicon">xarTpl::getImage('icons/none.png','theme')</xar:set>
+                <xar:set name="erroricon">xarTpl::getImage('icons/dialog-error.png','theme')</xar:set>
+                <xar:set name="removeicon">xarTpl::getImage('icons/remove.png','theme')</xar:set>
+                <xar:set name="hooksicon">xarTpl::getImage('icons/hooks.png','theme')</xar:set>
+            </xar:if>
+
+            <xar:if condition="$sort eq 'ASC'">
+                <xar:set name="sorturl">xarServer::getCurrentURL(array('sort' => 'DESC'))</xar:set>
+                <xar:set name="sortimg">xarTpl::getImage('arrow_down.gif', 'module', 'base')</xar:set>
+                <xar:var name="sortlbl">Sort by name descending</xar:var>
+            <xar:else/>
+                <xar:set name="sorturl">xarServer::getCurrentURL(array('sort' => 'ASC'))</xar:set>
+                <xar:set name="sortimg">xarTpl::getImage('arrow_up.gif', 'module', 'base')</xar:set>
+                <xar:var name="sortlbl">Sort by name ascending</xar:var>
+            </xar:if>
+
+            <div class="xar-align-center">
+                <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
+            </div>
+            <table class="xar-table xar-items">
+                <thead>
+                    <tr>
+                        <th>
+                            <a href="#$sorturl#" title="#$sortlbl#">Name</a>
+                            <a href="#$sorturl#" title="#$sortlbl#"><img src="#$sortimg#" class="xar-icon" alt="#$sort#"/></a>
+                        </th>
+                        <th>Display Name</th>
+                        <th>Version</th>
+                        <th>Status</th>
+                        <th class="xar-align-right">Actions</th>
+                    </tr>
+                </thead>
+                <xar:if condition="!empty($searched)">
+                    <tfoot>
+                        <tr>
+                            <td colspan="5" class="xar-align-center"><xar:var name="searched"/></td>
+                        </tr>
+                    </tfoot>
+                </xar:if>
+                <tbody>
+                    <xar:if condition="!empty($items)">
+                        <xar:foreach in="$items" value="$item">
+                            <tr id="#$item['name']#">
+                                <td>
+                                    <xar:if condition="!empty($item['admin_url'])">
+                                        <a href="#$item['admin_url']#" title="#$admintitle#">#$item['name']#</a>
+                                    <xar:else/>
+                                        #$item['name']#
+                                    </xar:if>
+                                </td>
+                                <td>#$item['displayname']#</td>
+                                <td>#$item['version']#</td>
+                                <td>
+                                    <xar:if condition="!empty($item['error_url'])">
+                                        <a href="#$item['error_url']#">#$states[$item['state']]['name']#</a>
+                                    <xar:else/>
+                                        #$states[$item['state']]['name']#
+                                    </xar:if>
+                                </td>
+                                <td class="xar-align-right">
+                                    <xar:if condition="!empty($useicons)">
+                                        <a href="#$item['info_url']#" title="#$infotitle#" class="xar-icon"><img src="#$infoicon#" class="xar-icon" alt="#$infolabel#"/></a>&#160;
+                                        <xar:if condition="!empty($item['hooks_url'])">
+                                            <a href="#$item['hooks_url']#" title="#$hookstitle#" class="xar-icon"><img src="#$hooksicon#" class="xar-icon" alt="#$hookslabel#"/></a>
+                                        <xar:else/>
+                                            <img src="#$hooksicon#" class="xar-icon-disabled" alt="#$hookslabel#"/>
+                                        </xar:if>&#160;
+                                        <xar:if condition="$item['iscore']">
+                                            <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
+                                        <xar:elseif condition="!empty($item['init_url'])"/>
+                                            <a href="#$item['init_url']#" class="xar-icon" title="#$inittitle#"><img src="#$initicon#" class="xar-icon" alt="#$initlabel#"/></a>
+                                        <xar:elseif condition="!empty($item['activate_url'])"/>
+                                            <a href="#$item['activate_url']#" class="xar-icon" title="#$activatetitle#"><img src="#$activateicon#" class="xar-icon" alt="#$activatelabel#"/></a>
+                                        <xar:elseif condition="!empty($item['deactivate_url'])"/>
+                                            <a href="#$item['deactivate_url']#" class="xar-icon" title="#$deactivatetitle#"><img src="#$deactivateicon#" class="xar-icon" alt="#$deactivatelabel#"/></a>
+                                        <xar:elseif condition="!empty($item['upgrade_url'])"/>
+                                            <a href="#$item['upgrade_url']#" class="xar-icon" title="#$upgradetitle#"><img src="#$upgradeicon#" class="xar-icon" alt="#$upgradelabel#"/></a>
+                                        <xar:elseif condition="!empty($item['error_url'])"/>
+                                            <a href="#$item['error_url']#"><img src="#$erroricon#" class="xar-icon" alt="#$errorlabel#" title="#$errortitle#"/></a>
+                                        <xar:else/>
+                                            <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
+                                        </xar:if>
+                                        &#160;
+                                        <xar:if condition="$item['iscore']">
+                                            <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
+                                        <xar:elseif condition="!empty($item['remove_url'])"/>
+                                            <a href="#$item['remove_url']#" class="xar-icon" title="#$removetitle#"><img src="#$removeicon#" class="xar-icon" alt="#$removelabel#"/></a>
+                                        <xar:elseif condition="$item['state'] eq XARMOD_STATE_ACTIVE"/>
+                                            <img src="#$removeicon#" class="xar-icon-disabled" alt="#$removelabel#" title="#$removetitle#"/>
+                                        <xar:else/>
+                                            <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
+                                        </xar:if>
+                                    <xar:else/>
+                                        <a href="#$item['info_url']#" title="#$infotitle#">#$infolabel#</a>&#160;
+                                        <xar:if condition="!empty($item['hooks_url'])">
+                                            <a href="#$item['hooks_url']#" title="#$hookstitle#" class="xar-icon">#$hookslabel#</a>
+                                        <xar:else/>
+                                            #$nonelabel#
+                                        </xar:if>&#160;
+                                        <xar:if condition="$item['iscore']">
+                                            #$nonelabel#
+                                        <xar:elseif condition="!empty($item['init_url'])"/>
+                                            <a href="#$item['init_url']#" class="xar-icon" title="#$inittitle#">#$initlabel#</a>
+                                        <xar:elseif condition="!empty($item['activate_url'])"/>
+                                            <a href="#$item['activate_url']#" class="xar-icon" title="#$activatetitle#">#$activatelabel#</a>
+                                        <xar:elseif condition="!empty($item['deactivate_url'])"/>
+                                            <a href="#$item['deactivate_url']#" class="xar-icon" title="#$deactivatetitle#">#$deactivatelabel#</a>
+                                        <xar:elseif condition="!empty($item['upgrade_url'])"/>
+                                            <a href="#$item['upgrade_url']#" class="xar-icon" title="#$upgradetitle#">#$upgradelabel#</a>
+                                        <xar:elseif condition="!empty($item['error_url'])"/>
+                                            <a href="#$item['error_url']#">#$errorlabel#</a>
+                                        <xar:else/>
+                                            #$nonelabel#
+                                        </xar:if>
+                                        &#160;
+                                        <xar:if condition="$item['iscore']">
+                                            #$nonelabel#
+                                        <xar:elseif condition="!empty($item['remove_url'])"/>
+                                            <a href="#$item['remove_url']#" class="xar-icon" title="#$removetitle#">#$removelabel#</a>
+                                        <xar:elseif condition="$item['state'] eq XARMOD_STATE_ACTIVE"/>
+                                            #$nonelabel#
+                                        <xar:else/>
+                                            #$nonelabel#
+                                        </xar:if>
+                                    </xar:if>
+
+                                </td>
+                            </tr>
+                        </xar:foreach>
+                    <xar:else/>
+                        <td colspan="5">
+                            <p class="xar-info">No modules found matching selection</p>
+                        </td>
+                    </xar:if>
+                </tbody>
+            </table>
+            <div class="xar-align-center">
+                <xar:pager startnum="$startnum" itemsperpage="$items_per_page" total="$total"/>
+            </div>
+        </div>
+    </div>
+    <xar:if condition="!empty($useicons)">
+        <div class="xar-mod-foot">
+            <dl class="xar-legend">
+                <dt>Legend</dt>
+                <dd><img src="#$infoicon#" class="xar-icon" alt="#$infolabel#"/>
+                #$infolabel#</dd>
+                <dd><img src="#$initicon#" class="xar-icon" alt="#$initlabel#"/>
+                #$initlabel#</dd>
+                <dd><img src="#$activateicon#" class="xar-icon" alt="#$activatelabel#"/>
+                #$activatelabel#</dd>
+                <dd><img src="#$deactivateicon#" class="xar-icon" alt="#$deactivatelabel#"/>
+                #$deactivatelabel#</dd>
+                <dd><img src="#$upgradeicon#" class="xar-icon" alt="#$upgradelabel#"/>
+                #$upgradelabel#</dd>
+                <dd><img src="#$removeicon#" class="xar-icon" alt="#$removelabel#"/>
+                #$removelabel#</dd>
+                <dd><img src="#$erroricon#" class="xar-icon" alt="#$errorlabel#"/>
+                #$errorlabel#</dd>
+            </dl>
+        </div>
+    </xar:if>
+
+</xar:template>

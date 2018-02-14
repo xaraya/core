@@ -1,0 +1,82 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+<xar:comment> License: GPL http://www.gnu.org/copyleft/gpl.html </xar:comment>
+<div class="xar-mod-head">
+    <span class="xar-mod-title">
+        <xar:mlstring>SiteTools Administration</xar:mlstring>
+    </span>
+</div>
+<div class="xar-mod-body">
+    <xar:template type="module" file="admin-menu" />
+    <h2>
+        <xar:mlstring>View Template Cache Files</xar:mlstring>
+    </h2>
+    <xar:set name="goback"><xar:mlstring>Go back</xar:mlstring></xar:set>
+    <xar:set name="cacheurltxt"><xar:mlstring>Click to browse this file</xar:mlstring></xar:set>
+
+    <xar:if condition="$showfiles eq false">
+        <table width="98%" border="1" cellspacing="0" cellpadding="4">
+            <tr>
+                <th><xar:mlstring>Cache File</xar:mlstring></th>
+                <th><xar:mlstring>Template Name</xar:mlstring></th>
+            </tr>
+            <xar:if condition="empty($items)">
+                <tr>
+                    <td colspan="2">
+                        <xar:mlstring>NO CACHE FILES TO DISPLAY</xar:mlstring>
+                    </td>
+                 </tr>
+            <xar:else />
+                 <xar:foreach in="$items" key="$key" value="$name">
+                 <tr>
+                     <td style="text-align:left">
+                     <xar:if condition="$popup eq true">
+                         <span class="help" title="#$cacheurltxt#">
+                             <a name ="cacheurl" href="#$name.fullnurl#" onclick="window.open(this.href, 'popupwindow', 'width=640,height=300,scrollbars,resizable'); return false;">#$name['hashn']#</a>
+                         </span>
+                     <xar:else />
+                         <span class="help" title="#$cacheurltxt#">
+                              <a name="cacheurl" href="#$name.fullnurl#">#$name.hashn#</a>
+                         </span>
+                     </xar:if>
+                     </td>
+                     <td style="text-align:left">#$name.templn#</td>
+                </tr>
+                </xar:foreach>
+            </xar:if>
+        </table>
+    <xar:elseif condition="$showfiles eq true" />
+        <div style="margin-left: 1em; margin-right: 1em; text-align:left;">
+        <xar:if condition="$popup eq false">
+            <p><a href="javascript:history.back(-1)">#$goback#</a></p>
+        </xar:if>
+        </div>
+        <table width="100%" border="0" cellspacing="2" cellpadding="0" valign="top">
+            <tr>
+                <td colspan="2" style="font-weight:bold;"><xar:mlstring>Browsing:&#160;</xar:mlstring>#$hashfile#
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="font-weight:bold;"><xar:mlstring>Cache file for:&#160;</xar:mlstring>#$templn#
+                </td>
+            </tr>
+            <xar:foreach in="$items" key="$key" value="$line">
+            <tr>
+                <td valign="top" style="text-align:left; font-size:smaller; color:red">
+                    #$line.lineno#:&#160;&#160;
+                </td>
+                <td valign="top" style="text-align:left; font-size:smaller">
+                   #$line.linetxt#
+                </td>
+            </tr>
+            </xar:foreach>
+        </table>
+        <fieldset>
+            <div class="xar-form-input-wrapper-after">
+            <xar:if condition="$popup eq false">
+                <a href="javascript:history.back(-1)">#$goback#</a>
+            </xar:if>
+           </div>
+        </fieldset>
+    </xar:if>
+</div>
+</xar:template>

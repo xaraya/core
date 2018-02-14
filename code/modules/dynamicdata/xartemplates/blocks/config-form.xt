@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">Select the dynamic object for which you want to create a form.</xar:var>
+            <label class="help xar-form-label" title="#$label#" for="objectid#$_bl_block_id#">DataObject</label>
+        </div>
+        <div class="xar-col">
+            <xar:set name="id">'objectid'.$_bl_block_id</xar:set>
+            <xar:data-input type="object" name="objectid" id="$id" value="$objectid"/>
+        </div>
+    </div>
+</xar:template>

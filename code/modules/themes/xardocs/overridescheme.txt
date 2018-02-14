@@ -1,0 +1,47 @@
+CASE 1 - ORIGINAL STYLESHEET OF A MODULE
+
+    (a) Default - No Parameters
+        modules/<modname>/xarstyles/<modname.css>
+
+    (b) With Parameters
+        modules/<modname>/xarstyles/<filename.fileext>
+
+    CASE 2 - MODULE STYLESHEET OVERRIDDEN IN THEME
+
+    (a) Default - No Parameters
+        <themesdir>/<themename>/modules/<modname>/xarstyles/<modname.css>
+
+    (b) With Parameters
+        <themesdir>/<themename>/modules/<modname>/xarstyles/<filename.fileext>
+
+    CASE 3 - MODULE STYLESHEET OVERRIDDEN IN THEME WITH ALTERNATIVE FOLDER (?)
+
+    (a) Default - No Parameters
+        <themesdir>/<themename>/<altdir>/<modname.css>
+
+    (b) With Parameters
+        <themesdir>/<themename>/<altdir>/<filename.fileext>
+
+    CASE 4 - THEME STYLESHEETS (no overrides required)
+
+        <themesdir>/<themename>/style/<filename.fileext>
+
+    CASE 5 - CORE STYLESHEETS (overrides similar to modules)
+
+        modules/themes/xarstyles/core.css
+
+        or its dynamic equivalent
+
+        modules/themes/xarstyles/corecss.php
+
+    CASE 6 - GENERATED STYLESHEETS (new concept? TODO)
+
+        var/css/modules/<modname>/xarstyles/<modname.css>
+        var/css/themes/<themename>/modules/<modname>/xarstyles/<modname.css>
+        var/css/core/<filename.fileext>
+
+    SEARCH FALLBACK SEQUENCE (component dependent)
+
+    generated -> alternative -> overridden -> original
+
+    existence of original should be guaranteed to continue processing

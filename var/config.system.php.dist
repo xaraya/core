@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * Database Configuration File
+ *
+ * @package core
+ * @subpackage core
+ * @category Xaraya Web Applications Framework
+ * @version 2.3.0
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ */
+
+// Database Middleware: the middleware Xaraya will use to connect ot the dataase
+// Choices are 'Creole' or 'PDO'
+$systemConfiguration['DB.Middleware'] = 'Creole';
+// Database Username: the username that will be used to connect to the database.
+$systemConfiguration['DB.UserName'] = '';
+// Database Password: the password that will be used to connect to the database.
+$systemConfiguration['DB.Password'] = '';
+// Database Host: the host name where the database server is located.
+// A different port can also be specified, e.g. 'localhost:12345'
+// Note that on Vista systems you should use the localhost IP, e.g. '127.0.0.1:12345'
+$systemConfiguration['DB.Host'] = 'localhost';
+// Database Name: the name of the database to connect to.
+$systemConfiguration['DB.Name'] = 'Xaraya';
+// Database Type: the type of the database server.
+$systemConfiguration['DB.Type'] = 'mysql';
+// Database Charset: the charset of the database.
+$systemConfiguration['DB.Charset'] = 'utf8';
+// Database TablePrefix: a string that will be prefixed to every database tables that are part of the core.
+//                       Those tables are shared across multi-sites.
+$systemConfiguration['DB.TablePrefix'] = 'xar';
+// Database username and password encoding
+// 0 = not encoded
+// 1 = encoded
+// TODO: check if this works, havent heard from anyone using it.
+$systemConfiguration['DB.Encoded'] = '0';
+// Persistent database connections - do NOT use this on shared servers, and
+// do NOT use it on your own servers unless your sysadmin + dba teams agree !
+$systemConfiguration['DB.Persistent'] = false;
+
+/* For Logging:
+ * These options enable a simple logging system to a text file
+ * For more advanced logging options use the logconfig module
+ */
+$systemConfiguration['Log.Enabled']  = '0';
+$systemConfiguration['Log.Level'] = 's:7:"1,2,4,8";';
+$systemConfiguration['Log.Filename'] = 'xarayalog.txt';
+
+/* System Time Zone
+ * This is the local time zone of your host machine. This time is used by the logging subsystem
+ */
+ $systemConfiguration['SystemTimeZone'] = 'UTC';
+
+/*
+ * Global error level, optional
+ * If set it is passed directly into the error_reporting() function of PHP
+ * Normally you want this to be set to E_ALL during development and something a bit lower
+ * for a production system.
+ * NOTE: Also set this option if you suffer from the changes wrt references
+ *       in php4.4 and php5.x versions or the bug in the zend optimizer
+ */
+ $systemConfiguration['Exception.ErrorLevel'] = E_ALL;
+
+/* Database Installation Status
+ * This tracks the installer's progress
+ * 0 = not installed
+ * 1 = incomplete
+ * 3 = complete
+ */
+ $systemConfiguration['DB.Installation'] = '0';
+?>

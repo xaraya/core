@@ -1,0 +1,187 @@
+/* XARAYA REQUIRED CLASSES */
+body { 
+      background-color: #FFF;
+    font-size:12px;
+    font-family : Arial, Helvetica, sans-serif;
+}
+
+A {
+   text-decoration: none;
+   color: #000000;
+   font-weight: bold;
+}
+
+a:hover {
+    color: #000; 
+    text-decoration: overline underline;
+}
+
+#main {
+    margin-top: 40px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    width: 90%;
+    border:1px solid #000; 
+    background: #fff;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+BLOCKQUOTE {
+   color: #000000;
+   font-size: 9.5pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   margin: 2em;
+}
+BODY {
+   color: #000000;
+   font-size: 9.5pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   background-color: #FFFFFF;
+}
+CODE {
+   color: #000000;
+   font-size: 9.5pt;
+   font-family: Courier,fixed-width;
+}
+H1 {
+   color: #000000;
+   font-size: 14pt;
+   font-weight: bolder;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+H2 {
+   color: #000000;
+   font-size: 12.5pt;
+   font-weight: bolder;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   border-bottom: 1px solid #000000;
+   line-height: 170%;
+}
+H3 {
+   color: #000000;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   line-height: 100%;
+}
+H4 {
+   color: #000000;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   border-bottom: 1px solid #000000;
+   line-height: 170%;
+}
+TH {
+   color: #000000;
+   font-size: 11pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-weight: bolder;
+   background-color:#CDD5F8;
+}
+TD {
+   color: #000000;
+   font-size: 9.5pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+TABLE {
+    border: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+THEAD {}
+TBODY {}
+TFOOT {
+   color: #000000;
+   font-size: 11pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   font-weight: bolder;
+   background-color:#CDD5F8;
+}
+P {
+   color: #000000;
+   font-size: 9.5pt;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+PRE {
+   color: #000000;
+   font-size: 8pt;
+   font-family: Courier,fixed-width;
+}
+IMG {
+   border: 0px;
+}
+LI {
+   color: #000000;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   line-height: 150%;
+   margin-bottom: 10px;
+}
+UL {
+   color: #000000;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   line-height: 150%;
+   margin-bottom: 10px;
+}
+OL {
+   color: #000000;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+   line-height: 150%;
+   margin-bottom: 10px;
+}
+SUP {
+   font-size: 6.5pt;
+}
+SUB {
+   font-size: 6.5pt;
+}
+
+
+/*  THEME SPECIFIC CLASSES */
+H5, H6 {
+   color: #000000;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+HR {
+   width:100%;
+   color:#C0C0C0;
+}
+
+
+/*  XARAYA REQUIRED INDIVIDUAL CLASSES */
+TD.xar-norm {}
+TD.xar-alt {}
+
+.xar-mod-head {
+   border: 2px solid #a0a0a0;
+   background-color: #CDD5F8;
+   padding: 3px;
+   text-align: center;
+   font-weight: bold;
+   font-size: 11pt;
+   display: none;
+}
+.xar-mod-title {
+   color: #000000;
+   font-size: 11pt;
+   font-weight: bold;
+   font-family: Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+.xar-mod-body {
+    padding: 3px;
+    padding-bottom: 20px;
+}
+.xar-mod-foot {}
+.xar-alt {background-color: #E47C55; }
+.xar-accent {background-color: #CCE6FF; }
+.xar-alt-outline {border: 1px solid #E47C55; }
+.xar-accent-outline {border: 1px solid #CCE6FF; }
+.xar-norm-outline {border: 1px solid #c0c0c0; }
+.xar-norm {background-color: #FFFFFF; }
+.xar-sub {font-size: smaller;}
+.xar-error {
+   color: #FF0000;
+}

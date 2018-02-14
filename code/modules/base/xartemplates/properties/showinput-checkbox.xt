@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!--  License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!isset($style)">
+      <xar:set name="style">''</xar:set>
+    </xar:if>
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+     <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
+    <xar:if condition="isset($disabled)">
+        <xar:if condition="$checked">
+          <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" checked="checked" disabled="disabled" style="#$style#"/>
+        <xar:else/>
+          <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" disabled="disabled" style="#$style#"/>
+        </xar:if>
+    <xar:else/>
+        <xar:if condition="$checked">
+          <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" checked="checked" style="#$style#"/>
+        <xar:else/>
+          <input type="checkbox" onchange="#$evt_change#" name="#$name#" value="1" id="#$id#" tabindex="#$tabindex#" style="#$style#"/>
+        </xar:if>
+    </xar:if>
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>

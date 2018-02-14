@@ -1,0 +1,107 @@
+<object name="privileges_privileges">
+  <objectid>8</objectid>
+  <label>Privileges</label>
+  <module_id>1098</module_id>
+  <itemtype>2</itemtype>
+  <class>DataObject</class>
+  <filepath>auto</filepath>
+  <urlparam>itemid</urlparam>
+  <maxid>0</maxid>
+  <datastore>relational</datastore>
+  <sources>a:1:{s:10:"privileges";a:2:{i:0;s:14:"xar_privileges";i:1;s:8:"internal";}}</sources>
+  <access>a:4:{s:14:"display_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"200";s:7:"failure";s:1:"0";}s:13:"modify_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:13:"delete_access";a:3:{s:5:"group";s:1:"0";s:5:"level";s:3:"800";s:7:"failure";s:1:"0";}s:6:"access";s:174:"a:5:{s:7:"display";a:5:{i:0;i:5;i:1;i:2;i:2;i:1;i:3;i:3;i:4;i:4;}s:6:"update";a:1:{i:0;i:2;}s:6:"create";a:1:{i:0;i:2;}s:6:"delete";a:1:{i:0;i:2;}s:6:"config";a:1:{i:0;i:2;}}";}</access>
+  <config></config>
+  <isalias>true</isalias>
+  <properties>
+    <property name="id">
+      <id>49</id>
+      <label>ID</label>
+      <type>itemid</type>
+      <defaultvalue></defaultvalue>
+      <source>privileges.id</source>
+      <status>65</status>
+      <seq>1</seq>
+      <configuration></configuration>
+    </property>
+    <property name="name">
+      <id>50</id>
+      <label>Name</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>privileges.name</source>
+      <status>33</status>
+      <seq>2</seq>
+      <configuration></configuration>
+    </property>
+    <property name="realm">
+      <id>51</id>
+      <label>Realm</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>privileges.realm_id</source>
+      <status>33</status>
+      <seq>3</seq>
+      <configuration></configuration>
+    </property>
+    <property name="module">
+      <id>52</id>
+      <label>Module</label>
+      <type>module</type>
+      <defaultvalue></defaultvalue>
+      <source>privileges.module_id</source>
+      <status>33</status>
+      <seq>4</seq>
+      <configuration>a:2:{s:10:&quot;validation&quot;;s:8:&quot;systemid&quot;;s:8:&quot;override&quot;;s:1:&quot;1&quot;;}</configuration>
+    </property>
+    <property name="component">
+      <id>53</id>
+      <label>Component</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>privileges.component</source>
+      <status>33</status>
+      <seq>5</seq>
+      <configuration></configuration>
+    </property>
+    <property name="instance">
+      <id>54</id>
+      <label>Instance</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>privileges.instance</source>
+      <status>33</status>
+      <seq>6</seq>
+      <configuration></configuration>
+    </property>
+    <property name="level">
+      <id>55</id>
+      <label>Level</label>
+      <type>dropdown</type>
+      <defaultvalue></defaultvalue>
+      <source>privileges.level</source>
+      <status>33</status>
+      <seq>7</seq>
+      <configuration>0,No Access;100,Overview;200,Read;300,Comment;400,Moderate;500,Edit;600,Add;700,Delete;800,Adminster;-1,Invalid</configuration>
+    </property>
+    <property name="description">
+      <id>56</id>
+      <label>Description</label>
+      <type>textbox</type>
+      <defaultvalue></defaultvalue>
+      <source>privileges.description</source>
+      <status>65</status>
+      <seq>8</seq>
+      <configuration></configuration>
+    </property>
+    <property name="priv_type">
+      <id>57</id>
+      <label>Type</label>
+      <type>dropdown</type>
+      <defaultvalue>2</defaultvalue>
+      <source>privileges.itemtype</source>
+      <status>65</status>
+      <seq>8</seq>
+      <configuration>0,Base;1,Privilege;3,Mask</configuration>
+    </property>
+  </properties>
+</object>

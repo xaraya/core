@@ -1,0 +1,19 @@
+<menu>
+    <menutitle>
+        <label>Operation</label>
+        <title>Choose an operation to perform</title>
+        <variable>operation</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>recall</value>
+            <target>purge</target>
+            <label>Recall Groups and Users</label>
+        </menuitem>
+        <menuitem>
+            <value>purge</value>
+            <target>purge</target>
+            <label>Purge Users</label>
+        </menuitem>
+    </menuitems>
+</menu>

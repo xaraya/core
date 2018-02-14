@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+	    <div class="xar-mod-page-head">
+	        <h2>Detailed Module Information</h2>
+	        <!-- Icon -->
+	                <h3>#$moddispname#</h3>
+	            <div style="display: none;">
+	                <xar:set name="modiconurl">xarTpl::getImage($modname . '.png', 'module', $modname)</xar:set>
+	                <xar:if condition="empty($modiconurl)">
+	                    <xar:set name="modiconurl">xarTpl::getImage($modname . '.png', 'theme')</xar:set>
+	                    <xar:if condition="empty($modiconurl)">
+	                        <xar:set name="modiconurl">xarTpl::getImage('module-generic.png', 'theme')</xar:set>
+	                    </xar:if>
+	                </xar:if>
+	                <xar:var name="imagetext">#$moddispname#</xar:var>
+	                <xar:set name="imagealt">$imagetext</xar:set>
+	                <xar:data-output type="image" value="$modiconurl" imagetext="$imagetext" imagealt="$imagealt"/>
+	            </div>
+	    </div>
+	    <div class="xar-mod-page-body">
+        <fieldset>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Module ID
+	                </label>
+                </div>
+                <div class="xar-col">
+	                #$modid#
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Name
+	                </label>
+                </div>
+                <div class="xar-col">
+	                <a href="http://www.xaraya.com/index.php/release/#$modid#.html">#$modname#</a>
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Display Name
+	                </label>
+                </div>
+                <div class="xar-col">
+	                #$moddispname#
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Version
+	                </label>
+                </div>
+                <div class="xar-col">
+	                #$modver#
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Alias(es)
+	                </label>
+                </div>
+                <div class="xar-col">
+	                <a href="#xarModURL('modules','admin','aliases',array('name' => $modname))#">
+	                    <xar:var name="imagealt">[set aliases]</xar:var>
+	                    <xar:set name="iconurl">xarTpl::getImage('icons/modify.png', 'theme')</xar:set>
+	                    <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>
+	                </a>
+	                #$aliases#
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Description
+	                </label>
+                </div>
+                <div class="xar-col">
+	                #$moddispdesc#
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Directory
+	                </label>
+	            </div>
+                <div class="xar-col">
+	                #$moddir#
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Class
+	                </label>
+                </div>
+                <div class="xar-col">
+	                #$modclass#
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Category
+	                </label>
+                </div>
+                <div class="xar-col">
+	                #$modcat#
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label>
+	                    Author(s)
+	                </label>
+                </div>
+                <div class="xar-col">
+	                #$modauthor#
+                </div>
+            </div>
+            <div class="xar-row">
+            	<div class="xar-col">
+	                <label class="xar-form-label">
+	                    Contact(s)
+	                </label>
+                </div>
+                <div class="xar-col">
+	                #$modcontact#
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+	                <label class="xar-form-label">
+	                    Dependencies
+	                </label>
+                </div>
+                <div class="xar-col">
+	                #$moddependencies#
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+	                <label class="xar-form-label">
+	                    Hook Observers
+	                </label>
+                </div>
+                <div class="xar-col">
+	                <xar:if condition="!empty($hookobservers)">
+	                    <ul>                    
+	                        <xar:foreach in="$hookobservers" key="$event" value="$info">
+	                            <li>#$event#</li>
+	                        </xar:foreach>
+	                    </ul>
+	                <xar:else/>
+	                    None
+	                </xar:if>
+                </div>
+            </div>
+        </fieldset>
+        <div class="xar-form-actions">
+            <div class="xar-row">
+                <div class="xar-col"></div>
+                <div class="xar-col">
+                    <xar:var name="label">Go Back</xar:var>
+                    <xar:button type="cancel" label="$label"/>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</xar:template>

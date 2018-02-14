@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="!empty($nodes)">
+        <xar:set name="deleteicon">xarTpl::getImage('icons/delete.png', 'theme')</xar:set>
+        <xar:set name="usersicon">xarTpl::getImage('icons/system-users.png','theme')</xar:set>
+        <xar:set name="mailicon">xarTpl::getImage('icons/mail-message-new.png','theme')</xar:set>
+        <xar:set name="privsicon">xarTpl::getImage('icons/privileges.png','theme')</xar:set>
+        <xar:set name="testicon">xarTpl::getImage('icons/test.png','theme')</xar:set>
+        <xar:set name="blankicon">xarTpl::getImage('icons/blank.png','theme')</xar:set>
+
+        <ul class="xar-tree">
+            <xar:set name="nodecount">count($nodes)</xar:set>
+            <xar:foreach in="$nodes" value="$node">
+                <xar:set name="children">$node-&gt;children</xar:set>
+                <xar:set name="level">$node-&gt;getLevel()</xar:set>
+                <xar:set name="users">$node-&gt;users</xar:set>
+                <xar:set name="id">$node-&gt;id</xar:set>
+                <xar:set name="drawchildren">true</xar:set>
+                <xar:set name="seccheck">xarSecurityCheck('ManageRoles',0,'Roles',$node-&gt;name)</xar:set>
+
+                <li class="leaf">
+                    <div class="leaf-actions">
+                        <xar:var name="label">Delete</xar:var>
+                        <xar:if condition="($seccheck eq false) or ($users gt 0) or ($drawchildren eq false)">
+                            <img src="#$blankicon#" alt="#$label#"/>
+                        <xar:else />
+                            <xar:var name="label1">Delete this Group</xar:var>
+                            <a href="#xarModURL('roles', 'admin', 'delete', array('id' =&gt; $id))#" title="#$label1#">
+                                <img src="#$deleteicon#" alt="#$label#"/>
+                            </a>
+                        </xar:if>
+                        <xar:var name="label">Users</xar:var>
+                        <xar:if condition="($users gt 0) and ($drawchildren)">
+                            <xar:var name="label1">Show the Users in this Group</xar:var>
+                            <a href="#xarModURL('roles', 'admin', 'showusers', array('id' =&gt; $id, 'reload' =&gt; 1))#" title="#$label1#">
+                                <img src="#$usersicon#" alt="#$label#"/>
+                            </a>
+                        <xar:else />
+                            <img src="#$blankicon#" alt="#$label#"/>
+                        </xar:if>
+                        <xar:var name="label">Mail</xar:var>
+                        <xar:if condition="($users gt 0) and ($drawchildren)">
+                            <img src="#$blankicon#" alt="#$label#"/>
+                        <xar:else />
+                            <xar:var name="label1">Email the Users in this Group</xar:var>
+                            <a href="#xarModURL('roles', 'admin', 'createmail', array('id' =&gt; $id))#" title="#$label1#">
+                                <img src="#$mailicon#" alt="#$label#"/>
+                            </a>
+                        </xar:if>
+                        <xar:var name="label">Privileges</xar:var>
+                        <xar:if condition="$drawchildren">
+                            <xar:var name="label1">Show the Privileges assigned to this Group</xar:var>
+                            <a href="#xarModURL('roles', 'admin', 'showprivileges', array('id' =&gt; $id))#" title="#$label1#">
+                                <img src="#$privsicon#" alt="#$label#"/>
+                            </a>
+                        <xar:else />
+                            <img src="#$blankicon#" alt="#$label#"/>
+                        </xar:if>
+                        <xar:var name="label">Test</xar:var>
+                        <xar:if condition="$drawchildren">
+                            <xar:var name="label1">Test this Groups's Privileges</xar:var>
+                            <a href="#xarModURL('roles', 'admin', 'testprivileges', array('id' =&gt; $id))#" title="#$label1#">
+                                <img src="#$testicon#" alt="#$label#"/>
+                            </a>
+                        <xar:else />
+                            <img src="#$blankicon#" alt="#$label#"/>
+                        </xar:if>
+                    </div>
+                    <xar:set name="indent">$level * 1.5</xar:set>
+                    <div class="leaf-body" style="padding-left: #$indent#em;">
+                        <xar:if condition="$drawchildren eq false">
+                            #$node-&gt;name# <strong>see the entry above</strong>
+                        <xar:else />
+                            <xar:set name="numofsubgroups">count($children)</xar:set>
+                            <xar:set name="subgroups">$numofsubgroups == 1 ? xarML('subgroup') : xarML('subgroups')</xar:set>
+                            <xar:set name="numofusers">$users == 1 ? xarML('user') : xarML('users')</xar:set>
+                            <xar:set name="description">$numofsubgroups . " " . $subgroups . ' | ' . $users . " " . $numofusers</xar:set>
+                            <xar:var name="label">Modify this Group</xar:var>
+                            <a href="#xarModURL('roles', 'admin', 'modify', array('id' =&gt; $id))#" title="#$label#">
+                                #$node-&gt;name#
+                            </a>
+                            #$description#
+                        </xar:if>
+                    </div>
+                </li>
+            </xar:foreach>
+        </ul>
+        </xar:if>
+</xar:template>

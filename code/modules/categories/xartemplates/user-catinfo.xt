@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="!empty($cats)">
+        <xar:loop name="$cats">
+            <xar:if condition="$loop:index ne 0">, </xar:if>
+            #$loop:item.name#
+        </xar:loop>
+    <xar:else/>
+        <xar:if condition ="!empty($ifempty)">
+            #xarML($ifempty)#
+        </xar:if>
+    </xar:if>
+</xar:template>

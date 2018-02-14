@@ -1,0 +1,127 @@
+When parsing a mail message, the structure returns looks something like this:
+This is the one corresponding to msg_1.txt in this directory.
+
+
+object(stdClass)#13 (5) {
+  ["headers"]=>
+  array(14) {
+    ["return-path"] => string(18) "<marcel@hsdev.com>"
+    ["x-sieve"]     => string(13) "cmu-sieve 2.0"
+    ["received"]=>
+    array(2) {
+      [0]=> string(152) "from powerbook.local (router2.hsdev.com [212.61.102.6]) by knuth.hsdev.com (8.12.3/8.12.3) with ESMTP id j9OENisQ018658; Mon, 24 Oct 2005 16:23:44 +0200"
+      [1]=> string(135) "from [127.0.0.1] (localhost [127.0.0.1]) by powerbook.local (Postfix) with ESMTP id 14761DA1F6C; Mon, 24 Oct 2005 16:24:28 +0200 (CEST)"
+    }
+    ["mime-version"]   => string(34) "1.0 (Apple Message framework v734)"
+    ["content-type"]   => string(103) "multipart/signed; micalg=sha1; boundary=Apple-Mail-2--614678079; protocol="application/pkcs7-signature""
+    ["message-id"]     => string(48) "<4EC0D41D-EEF1-4338-8911-A9512D3843D1@hsdev.com>"
+    ["cc"]             => string(13) "mrb@hsdev.com"
+    ["reply-to"]       => string(13) "mrb@hsdev.com"
+    ["from"]           => string(38) "Marcel van der Boom <marcel@hsdev.com>"
+    ["subject"]        => string(49) "mail-in scenario test #1 : signed plus attachment"
+    ["date"]           => string(31) "Mon, 24 Oct 2005 16:24:19 +0200"
+    ["to"]             => string(38) "Marcel van der Boom <marcel@hsdev.com>"
+    ["x-mailer"]       => string(18) "Apple Mail (2.734)"
+    ["x-greylist"]     => string(130) "Sender IP whitelisted, not delayed by milter-greylist-1.4 (knuth.hsdev.com [212.61.102.5]); Mon, 24 Oct 2005 16:23:44 +0200 (CEST)"
+  }
+  ["ctype_primary"]    =>  string(9) "multipart"
+  ["ctype_secondary"]  =>  string(6) "signed"
+  ["ctype_parameters"] =>
+  array(3) {
+    ["micalg"]         => string(4) "sha1"
+    ["boundary"]       => string(23) "Apple-Mail-2--614678079"
+    ["protocol"]       => string(27) "application/pkcs7-signature"
+  }
+  ["parts"]=>
+  array(2) {
+    [0]=>
+    object(stdClass)#14 (5) {
+      ["headers"]=>
+      array(1) {
+        ["content-type"]  => string(49) "multipart/mixed; boundary=Apple-Mail-1--614679253"
+      }
+      ["ctype_primary"]    => string(9) "multipart"
+      ["ctype_secondary"]  => string(5) "mixed"
+      ["ctype_parameters"] =>
+      array(1) {
+        ["boundary"] => string(23) "Apple-Mail-1--614679253"
+      }
+      ["parts"]=>
+      array(3) {
+        [0]=>
+        object(stdClass)#15 (4) {
+          ["headers"]=>
+          array(2) {
+            ["content-transfer-encoding"] => string(4) "7bit"
+            ["content-type"]              => string(54) "text/plain; charset=US-ASCII; delsp=yes; format=flowed"
+          }
+          ["ctype_primary"]    => string(4) "text"
+          ["ctype_secondary"]  => string(5) "plain"
+          ["ctype_parameters"] =>
+          array(3) {
+            ["charset"] => string(8) "US-ASCII"
+            ["delsp"]   => string(3) "yes"
+            ["format"]  => string(6) "flowed"
+          }
+        }
+        [1]=>
+        object(stdClass)#16 (6) {
+          ["headers"]=>
+          array(3) {
+            ["content-transfer-encoding"] => string(4) "7bit"
+            ["content-type"]              => string(75) "text/plain; x-unix-mode=0644; x-mac-creator=454D4178; name="textattach.txt""
+            ["content-disposition"]       => string(35) "attachment; filename=textattach.txt"
+          }
+          ["ctype_primary"]    => string(4) "text"
+          ["ctype_secondary"]  => string(5) "plain"
+          ["ctype_parameters"] =>
+          array(3) {
+            ["x-unix-mode"]   => string(4) "0644"
+            ["x-mac-creator"] => string(8) "454D4178"
+            ["name"]          => string(14) "textattach.txt"
+          }
+          ["disposition"]  => string(10) "attachment"
+          ["d_parameters"] =>
+          array(1) {
+            ["filename"] => string(14) "textattach.txt"
+          }
+        }
+        [2]=>
+        object(stdClass)#17 (4) {
+          ["headers"]=>
+          array(2) {
+            ["content-transfer-encoding"] => string(4) "7bit"
+            ["content-type"]              => string(43) "text/plain; charset=US-ASCII; format=flowed"
+          }
+          ["ctype_primary"]    => string(4) "text"
+          ["ctype_secondary"]  => string(5) "plain"
+          ["ctype_parameters"] =>
+          array(2) {
+            ["charset"] => string(8) "US-ASCII"
+            ["format"]  => string(6) "flowed"
+          }
+        }
+      }
+    }
+    [1]=>
+    object(stdClass)#18 (6) {
+      ["headers"]=>
+      array(3) {
+        ["content-transfer-encoding"] => string(6) "base64"
+        ["content-type"]              => string(43) "application/pkcs7-signature; name=smime.p7s"
+        ["content-disposition"]       => string(30) "attachment; filename=smime.p7s"
+      }
+      ["ctype_primary"]    => string(11) "application"
+      ["ctype_secondary"]  => string(15) "pkcs7-signature"
+      ["ctype_parameters"] =>
+      array(1) {
+        ["name"] => string(9) "smime.p7s"
+      }
+      ["disposition"]  => string(10) "attachment"
+      ["d_parameters"] =>
+      array(1) {
+        ["filename"] => string(9) "smime.p7s"
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="isset($onchange)">
+      <xar:set name="evt_change">$onchange</xar:set>
+    <xar:else/>
+      <xar:set name="evt_change">'return true;'</xar:set>
+    </xar:if>
+    <xar:if condition="!isset($style)">
+        <xar:set name="style">''</xar:set>
+    </xar:if>
+    <xar:if condition="!empty($firstline)">
+        <xar:foreach in="$items" value="$item">
+            <xar:set name="cidname">$name."[" . $item['num'] . "]"</xar:set>
+            <xar:data-input type="categories" name="$cidname" basecid="$item['category_id']" value="$item['value']" firstline="$firstline" onchange="$evt_change" style="$style"/>
+        </xar:foreach>
+    <xar:else/>
+        <xar:foreach in="$items" value="$item">
+            <xar:set name="cidname">$name."[" . $item['num'] . "]"</xar:set>
+            <xar:data-input type="categories" name="$cidname" basecid="$item['category_id']" value="$item['value']" onchange="$evt_change" style="$style"/>
+        </xar:foreach>
+    </xar:if>
+</xar:template>

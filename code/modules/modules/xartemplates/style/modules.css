@@ -1,0 +1,67 @@
+/* in the effort to eliminate numerous inline style for the modules module, this stylesheet was born */
+/* first we should try here to consolidate the table-based layouts, 
+   if successful, some of these rule may migrate to corecss class list */
+table.xar-modules-list {
+    table-layout: auto;
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid;
+    margin: 2px 0;
+}
+
+table.xar-modules-list tr.odd { background-color: #f9f9f9; }
+
+table.xar-modules-list tr.odd th {
+    background-color: #f3f3f3;
+    color: #7f7f7f;
+}
+
+table.xar-modules-list tr.even { background-color: #f5f5f5; }
+
+table.xar-modules-list tr.even th {
+    background-color: #f0f0f0;
+    color: #7f7f7f;
+}
+
+table.xar-modules-list tr.last { border-bottom: 1px solid #cccccc; }
+
+table.xar-modules-list th,
+table.xar-modules-list td {
+    text-align: left;
+    padding: 0 .5em;
+    line-height: 1.3em;
+}
+
+table.xar-modules-list th {
+    text-align: right;
+    width: 6em;
+    padding: 0 .5em;
+    border-left: 1px solid #cccccc;
+}
+
+table.xar-modules-list th.caption {
+    width: auto;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+    line-height: 1.7em;
+    border-color: inherit;
+}
+
+table.xar-modules-list td.modname {
+    width: 14em;
+    border-right: 1px solid #cccccc;
+}
+
+table.xar-modules-list td.displayname {
+    text-align: right;
+    border-right: 1px solid #cccccc;
+}
+
+table.xar-modules-list td.action { text-align: right; }
+
+table.xar-modules-list td.info {
+    width: 4em;
+    border-left: 1px solid #cccccc;
+    text-align: center;
+}

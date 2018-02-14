@@ -1,0 +1,19 @@
+<menu>
+    <menutitle>
+        <label>Show Privileges</label>
+        <title>Choose the privileges to display</title>
+        <variable>show</variable>
+    </menutitle>
+    <menuitems>
+        <menuitem>
+            <value>assigned</value>
+            <target>viewprivileges</target>
+            <label>Assigned</label>
+        </menuitem>
+        <menuitem>
+            <value>unassigned</value>
+            <target>viewprivileges</target>
+            <label>Unassigned</label>
+        </menuitem>
+    </menuitems>
+</menu>

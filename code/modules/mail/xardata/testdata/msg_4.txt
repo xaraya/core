@@ -1,0 +1,36 @@
+Return-Path: <marcel@hsdev.com>
+X-Sieve: cmu-sieve 2.0
+Received: from powerbook.local (router2.hsdev.com [212.61.102.6])
+	by knuth.hsdev.com (8.12.3/8.12.3) with ESMTP id j9OESasQ018732
+	for <marcel@hsdev.com>; Mon, 24 Oct 2005 16:28:36 +0200
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	by powerbook.local (Postfix) with ESMTP id 81D3EDA203E
+	for <marcel@hsdev.com>; Mon, 24 Oct 2005 16:29:23 +0200 (CEST)
+Mime-Version: 1.0 (Apple Message framework v734)
+Content-Type: application/pkcs7-mime; name=smime.p7m; smime-type=enveloped-data
+Message-Id: <5F01DC06-3031-47C8-806C-780940F2F4AF@hsdev.com>
+Content-Disposition: attachment; filename=smime.p7m
+Content-Transfer-Encoding: base64
+From: Marcel van der Boom <marcel@hsdev.com>
+Subject: mail-in scenario test #4 : encrypted
+Date: Mon, 24 Oct 2005 16:29:22 +0200
+To: Marcel van der Boom <marcel@hsdev.com>
+X-Mailer: Apple Mail (2.734)
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-1.4 (knuth.hsdev.com [212.61.102.5]); Mon, 24 Oct 2005 16:28:36 +0200 (CEST)
+
+MIAGCSqGSIb3DQEHA6CAMIACAQAxggGFMIIBgQIBADBpMGIxCzAJBgNVBAYTAlpBMSUwIwYDVQQK
+ExxUaGF3dGUgQ29uc3VsdGluZyAoUHR5KSBMdGQuMSwwKgYDVQQDEyNUaGF3dGUgUGVyc29uYWwg
+RnJlZW1haWwgSXNzdWluZyBDQQIDDuKeMA0GCSqGSIb3DQEBAQUABIIBACbnAh5qd2qiy8MqzeCo
+taMM0rflpxVQe6CXfmt0/e05rD+21UWaI9K2BsjsTLXImetPGxTQDYvm/TBrTGTG7H1Vvx5kPCeN
+8xoFEaAgIGSOV9ghzK6IOW9noUcFNpEAw5c2FGZaHf43EVq8Yl6ooXIysOcsgKtXYqiUe1vHxOJO
+nknRiz/caxIcos0eoGQfV2v0LrqWhWyfapSPa9zh2uAu9Pp8LNHAOVbT7clmV7YwMYs0FTWe8h0u
+1GRcGsh45MJl/QIbn+B290qZVZpjUSNTk88A8YNVL9oLlY2ojOLuc3E6kI1cBVPZTYBJSDolHOeS
+wtlrSrKF7NVw0NM1cIMwgAYJKoZIhvcNAQcBMBQGCCqGSIb3DQMHBAjgEqL+aAq2tqCABBgaE1Z8
+TRfvPjcyQVVAnaZmGShdyjHShK0ECGw0LruGZhRCBBhe4+0rRY5SlB2S2HCBZpIaV5yRhnMLiHEE
+EFppuaMtaFoL4FIkwJPiMlsECOy6Ggr778r3BAiELZQsS70gGwQQyyQTyRlQ9QNJrc4TWiFvggRI
+GMranjXS+UBPvr8xnxQZZeECpIenhA8q+APHxYe4fYHS96N3XBeQ93oDQ9lt5etnOnf+kPkna/mM
+D1IimMvaRp6Td1GCaW6jBBh/qAZaehOqnR3o4CbCcjwSx944xX+IV68ECHTJjr4cwJ+vBCh/BX4O
+LGv5ZPkjrExvI4XiKIwuw6HJYPUrB2usBt2IFpkdygsp0MGoBAjYtFHUGGR/wAQQ/0+FlMvqsAi2
+hS1Tw+kaPARAGICn7eqWESpWT8Pp3MqzKcnP9WPOel0tLfS8LpTeDu+9n1ioxJ8kovrZM7QYCKVo
+MriB/CY/O3YZ5nfviSDFeQQ4jkfMCTKpKdNfjhDmPT/FzamTo1biQbUJ9AEMNGyj3woXm15j+sK7
+ZDkRUZDmT+UbGbiQeT7DKZAECJZxp0S0tRR5BAhrpfPW5By1owAAAAAAAAAAAAA=

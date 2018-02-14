@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:foreach in="$map" value="$mapitem">
+        <xar:if condition="$mapitem == 'o_connector'">
+            <img style="vertical-align: top; border: 0" height="21" src="modules/categories/xarimages/n_nosub.gif" alt="0" width="9"/>
+        <xar:elseif condition="$mapitem == 'p_connector'"/>
+            <img style="vertical-align: top; border: 0" height="21" src="modules/categories/xarimages/n_sub.gif" alt="P" width="9"/>
+        <xar:elseif condition="$mapitem == 't_connector'"/>
+            <img style="vertical-align: top; border: 0" height="21" src="modules/categories/xarimages/n_sub_branch_t.gif" alt="t" width="12"/>
+        <xar:elseif condition="$mapitem == 'l_connector'"/>
+            <img style="vertical-align: top; border: 0" height="21" src="modules/categories/xarimages/n_sub_branch_l.gif" alt="L" width="12"/>
+        <xar:elseif condition="$mapitem == 'i_connector'"/>
+            <img style="vertical-align: top; border: 0" height="21" src="modules/categories/xarimages/n_sub_line.gif" alt="|" width="12"/>
+        <xar:elseif condition="$mapitem == 'blank_connector'"/>
+            <img style="vertical-align: top; border: 0" height="21" src="modules/categories/xarimages/n_spacer.gif" alt="&#160;" width="12"  />
+        <xar:elseif condition="$mapitem == 'dash_connector'"/>
+            <img style="vertical-align: top; border: 0" height="21" src="modules/categories/xarimages/n_sub_end.gif" alt="_" width="9"/>
+        <xar:elseif condition="$mapitem == 'cutoff_connector'"/>
+            <img style="vertical-align: top; border: 0" height="21" src="modules/categories/xarimages/n_sub_cutoff.gif" alt="--&gt;" width="9"/>
+        <xar:else />
+        </xar:if>
+    </xar:foreach>
+</xar:template>

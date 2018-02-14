@@ -1,0 +1,54 @@
+<menu>
+    <menutitle>
+        <label>Utilities</label>
+        <title>Choose a utility function</title>
+    </menutitle>
+    <menuitems>
+<!--
+        <menuitem>
+            <mask>EditDynamicData</mask>
+            <value>query</value>
+            <target>query</target>
+            <label>Query</label>
+        </menuitem>
+-->
+        <menuitem>
+            <mask>EditDynamicData</mask>
+            <value>import</value>
+            <target>import</target>
+            <label>Import Object</label>
+        </menuitem>
+        <menuitem>
+            <mask>EditDynamicData</mask>
+            <value>export</value>
+            <target>export</target>
+            <label>Export Object</label>
+        </menuitem>
+        <menuitem>
+            <mask>EditDynamicData</mask>
+            <value>view_static</value>
+            <target>view_static</target>
+            <label>Manage Tables</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminDynamicData</mask>
+            <value>meta</value>
+            <target>meta</target>
+            <label>Table Browser</label>
+        </menuitem>
+<!--
+        <menuitem>
+            <mask>AdminDynamicData</mask>
+            <value>relations</value>
+            <target>relations</target>
+            <label>Object Mapping</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminDynamicData</mask>
+            <value>migrate</value>
+            <target>migrate</target>
+            <label>Migrate Items</label>
+        </menuitem>
+-->
+    </menuitems>
+</menu>

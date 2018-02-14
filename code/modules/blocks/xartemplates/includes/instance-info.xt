@@ -1,0 +1,73 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="!empty($block)">
+        <!-- show basic information about this instance -->
+        <fieldset>
+            <legend>Block Instance</legend>
+            <div class="xar-row">
+                <div class="xar-col">Block ID:</div>
+                <div class="xar-col">#$block['block_id']#</div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">Block Type:</div>
+                <div class="xar-col">#$block['type']#</div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">Parent Module:</div>
+                <div class="xar-col">
+                    <xar:if condition="!empty($block['module'])">
+                        #$block['module']#
+                   <xar:else/>
+                        [ none ]
+                    </xar:if>
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">Name:</div>
+                <div class="xar-col">#$block['name']#</div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">Title:</div>
+                <div class="xar-col">#$block['title']#</div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">Status:</div>
+                <div class="xar-col">
+                    <xar:if condition="$block['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
+                        <a href="#xarServer::getCurrentURL(array('interface' => 'display', 'block_method' => 'status'))#">#$type_states[$block['type_state']]['name']#</a>
+                    <xar:else/>
+                        #$instance_states[$block['state']]['name']#
+                    </xar:if>
+                </div>
+            </div>
+            <xar:if condition="$block['type_category'] ne 'group'">
+                <div class="xar-row">
+                    <div class="xar-col">Instance Groups:</div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($instance_groups)">
+                            <xar:loop name="$instance_groups">
+                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <xar:if condition="$loop:index lt count($instance_groups)">,&#160;</xar:if>
+                            </xar:loop>
+                        <xar:else/>
+                            [ none ]
+                        </xar:if>
+                    </div>
+                </div>
+            <xar:else/>
+                <div class="xar-row">
+                    <div class="xar-col">Group Instances:</div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($group_instances)">
+                            <xar:loop name="$group_instances">
+                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <xar:if condition="$loop:index lt count($group_instances)">,&#160;</xar:if>
+                            </xar:loop>
+                        <xar:else/>
+                            [ none ]
+                        </xar:if>
+                    </div>
+                </div>
+            </xar:if>
+        </fieldset>
+    </xar:if>
+</xar:template>

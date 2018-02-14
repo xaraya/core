@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-mod-head">
+        <span class="xar-mod-title">
+            <xar:if condition="xarModVars::get('mail','use_module_alias')">
+                <xar:var scope="module" module="mail" name="module_alias_name"/>
+            <xar:else />
+                Mail Administration
+            </xar:if>
+        </span>
+        <xar:template type="module" file="admin-menu"/>
+    </div>
+</xar:template>

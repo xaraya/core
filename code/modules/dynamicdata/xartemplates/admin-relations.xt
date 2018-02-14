@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+    	<div class="xar-mod-page-head">
+        <xar:if condition="!empty($objectid)">
+            <h2>Utilities - Links for Object #$object:label#</h2>
+        <xar:elseif condition="!empty($table)"/>
+            <h2>Utilities - Links for Table #$table#</h2>
+        <xar:elseif condition="!empty($module_id)"/>
+            <h2>Utilities - Links for Module #$module#</h2>
+        <xar:else/>
+            <h2>Utilities - Links between Objects or Tables</h2>
+        </xar:if>
+        <xar:template type="module" file="utility-menu"/>
+       </div><!--/xar-mod-page-head-->
+		<div class="xar-mod-page-body">
+        <xar:set name="authid">#xarSecGenAuthKey()#</xar:set>
+
+        <form method="get" action="#xarServer::getBaseURL()#">
+            <fieldset>
+                <input type="hidden" name="module" value="dynamicdata"/>
+                <input type="hidden" name="type" value="admin"/>
+                <input type="hidden" name="func" value="relations"/>
+                <legend>Links between Objects</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="objectid" class="xar-form-label">Object:</label>
+                    </div>
+                    <div class="xar-col">
+                        <select name="objectid" id="objectid" onchange="javascript:submit();">
+                            <option value=""></option>
+                            <xar:foreach in="$objects" key="$id" value="$objectinfo">
+                                <xar:if condition="!empty($objectid) and $objectid eq $id">
+                                    <option value="#$id#" selected="selected">
+                                    #$objectinfo['label']#</option>
+                                <xar:else />
+                                    <option value="#$id#">#$objectinfo['label']#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                        &#160;
+                        <xar:var name="label">Select</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <xar:if condition="!empty($objectid)">
+            <xar:template type="module" file="link-objects"/>
+        </xar:if>
+
+        <form method="get" action="#xarServer::getBaseURL()#">
+            <fieldset>
+                <input type="hidden" name="module" value="dynamicdata"/>
+                <input type="hidden" name="type" value="admin"/>
+                <input type="hidden" name="func" value="relations"/>
+                <legend>Links between Tables</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="table" class="xar-form-label">Table:</label>
+                    </div>
+                    <div class="xar-col">
+                        <select name="table" id="table" onchange="javascript:submit();">
+                            <option value=""></option>
+                            <xar:foreach in="$tables" value="$tblInfo">
+                                <xar:if condition="!empty($table) and $table eq $tblInfo:getName()">
+                                    <option value="#$tblInfo:getName()#" selected="selected">
+                                    #$tblInfo:getName()#</option>
+                                    <xar:else />
+                                    <option value="#$tblInfo:getName()#">#$tblInfo:getName()#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                        &#160;
+                        <xar:var name="label">Select</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <xar:if condition="!empty($table)">
+            <xar:template type="module" file="link-tables"/>
+
+            <xar:template type="module" file="link-foreignkeys"/>
+        </xar:if>
+
+        <xar:if condition="empty($objectid) and empty($table) and empty($module_id)">
+            <xar:template type="module" file="link-mapping"/>
+        </xar:if>
+
+<!-- TODO: re-examine module links
+
+        <form method="get" action="#xarServer::getBaseURL()#">
+            <fieldset>
+                <input type="hidden" name="module" value="dynamicdata"/>
+                <input type="hidden" name="type" value="admin"/>
+                <input type="hidden" name="func" value="relations"/>
+                <legend>Links between Modules</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="module_id" class="xar-form-label">Module:</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="module" name="module_id" value="$module_id" firstline=" " onchange="javascript:submit();"/>
+                        &#160;
+                        <xar:var name="label">Select</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+
+        <xar:if condition="!empty($module_id)">
+            <xar:template type="module" file="link-modules"/>
+        </xar:if>
+
+-->
+	</div><!--xar-mod-page-body-->
+    </div><!--xar-mod-body-->
+</xar:template>

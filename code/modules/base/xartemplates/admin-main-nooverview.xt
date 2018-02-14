@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <xar:var name="label">official icon</xar:var>
+        <xar:img scope="theme" file="admin.gif" alt="$label" width="96" height="96" class="xar-module-icon"/>
+        <h2>Help File Not Found</h2>
+        <p>There is no help information for this Xaraya extension.</p>
+        <p>
+            The Xaraya help system is not fully implemented at this stage. Most links display an existing extension Overview. This link will be replaced in the near future by a global Help system.
+        </p>
+        <p>
+            You can report a missing Overview file by lodging a bug report at <a href="http://bugs.xaraya.com">http://bugs.xaraya.com</a>If you are interested in helping to write an Overview for a module see <strong>modules/example/xartemplates/admin-main.xd</strong>as an example.
+        </p>
+        <p class="xar-sub">
+            <strong>&#160;Xaraya Help System</strong>
+            <br />&#160;Version 1.0.0&#160; 2006-02-26
+        </p>
+    </div>
+</xar:template>

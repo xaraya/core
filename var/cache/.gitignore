@@ -1,0 +1,12 @@
+# Ignore everything in this directory
+*
+# Except these files
+!.gitignore
+!what_is_this.txt
+!config.caching.php.dist
+!css/
+!database/
+!output/
+!rss/
+!templates/
+!variables/

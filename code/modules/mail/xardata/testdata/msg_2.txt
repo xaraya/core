@@ -1,0 +1,91 @@
+Return-Path: <marcel@hsdev.com>
+X-Sieve: cmu-sieve 2.0
+Received: from powerbook.local (router2.hsdev.com [212.61.102.6])
+	by knuth.hsdev.com (8.12.3/8.12.3) with ESMTP id j9OEQRsQ018701;
+	Mon, 24 Oct 2005 16:26:27 +0200
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+	by powerbook.local (Postfix) with ESMTP id 8F367DA1FB1;
+	Mon, 24 Oct 2005 16:27:14 +0200 (CEST)
+Mime-Version: 1.0 (Apple Message framework v734)
+Content-Type: multipart/signed; micalg=sha1; boundary=Apple-Mail-3--614505452; protocol="application/pkcs7-signature"
+Message-Id: <2B13D8AF-5D8E-486C-A30C-424645EF6E6C@hsdev.com>
+Cc: mrb@hsdev.com
+Reply-To: mrb@hsdev.com
+From: Marcel van der Boom <marcel@hsdev.com>
+Subject: mail-in scenario test #2 : signed, no attachment
+Date: Mon, 24 Oct 2005 16:27:12 +0200
+To: Marcel van der Boom <marcel@hsdev.com>
+X-Mailer: Apple Mail (2.734)
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-1.4 (knuth.hsdev.com [212.61.102.5]); Mon, 24 Oct 2005 16:26:28 +0200 (CEST)
+
+
+--Apple-Mail-3--614505452
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+	charset=US-ASCII;
+	delsp=yes;
+	format=flowed
+
+This is the contents of a test mail for the mail-in scenario, this  
+mail test situation #2:
+
+<signed, no attachment, with this content changed *after* sending (does it matter?)>
+
+-- 
+Marcel van der Boom
+HS-Development BV               --   http://www.hsdev.com
+So! webapplicatie framework  --   http://make-it-so.info
+
+
+
+--Apple-Mail-3--614505452
+Content-Transfer-Encoding: base64
+Content-Type: application/pkcs7-signature;
+	name=smime.p7s
+Content-Disposition: attachment;
+	filename=smime.p7s
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExCzAJBgUrDgMCGgUAMIAGCSqGSIb3DQEHAQAAoIIGFDCCAs0w
+ggI2oAMCAQICAw7injANBgkqhkiG9w0BAQQFADBiMQswCQYDVQQGEwJaQTElMCMGA1UEChMcVGhh
+d3RlIENvbnN1bHRpbmcgKFB0eSkgTHRkLjEsMCoGA1UEAxMjVGhhd3RlIFBlcnNvbmFsIEZyZWVt
+YWlsIElzc3VpbmcgQ0EwHhcNMDUwNjA4MTY1NDMwWhcNMDYwNjA4MTY1NDMwWjBCMR8wHQYDVQQD
+ExZUaGF3dGUgRnJlZW1haWwgTWVtYmVyMR8wHQYJKoZIhvcNAQkBFhBtYXJjZWxAaHNkZXYuY29t
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqYBAEEo04HPMaYbb5RDqKHYJA/Grsvqm
+vAgWxtPfuJKmzi+96gTcnCwKMoy2O6IJ10zNLBvnw9Kg/7HFnKE6slwYpIRxE3h110bskOjM+4Lx
+HvF4xD1UoViWiED7+bXaRSrDdadCNB4p9jZ2O/dCS5YnUZq6cLfflAap0m1jHfTxRAQc+XtDpDWo
+KPxRNi1jTPbrBhT3Y8x2UYUQVWmz76DsaXZ2KoVsjHNlE3QwH5rzNvwwUZVRXhtafc1BZ+H9m6CQ
+y+cmrlHWjOptpbCRb7ZjH5F1oFEzr0I3AG1Mi8UHsmk5UvN3XEm6ZNPis4VYSssCavemdi3GmegA
+QLXMFQIDAQABoy0wKzAbBgNVHREEFDASgRBtYXJjZWxAaHNkZXYuY29tMAwGA1UdEwEB/wQCMAAw
+DQYJKoZIhvcNAQEEBQADgYEAmSbAB7290IK3D/BBeH3Xff0xQwF2cjEx1DpQoUk0Acw+Mh2S429k
+bVGspnIbn7WzKsODJhvlBS0eSYTXa0xTMla5VJBmA2t3gx3kqb02vrJwqVMQfdwpDz00+TMS0ay6
+suuTTjr6R+4k+xpu6uqs6bOAN8wccY0PhmvX3LddV+gwggM/MIICqKADAgECAgENMA0GCSqGSIb3
+DQEBBQUAMIHRMQswCQYDVQQGEwJaQTEVMBMGA1UECBMMV2VzdGVybiBDYXBlMRIwEAYDVQQHEwlD
+YXBlIFRvd24xGjAYBgNVBAoTEVRoYXd0ZSBDb25zdWx0aW5nMSgwJgYDVQQLEx9DZXJ0aWZpY2F0
+aW9uIFNlcnZpY2VzIERpdmlzaW9uMSQwIgYDVQQDExtUaGF3dGUgUGVyc29uYWwgRnJlZW1haWwg
+Q0ExKzApBgkqhkiG9w0BCQEWHHBlcnNvbmFsLWZyZWVtYWlsQHRoYXd0ZS5jb20wHhcNMDMwNzE3
+MDAwMDAwWhcNMTMwNzE2MjM1OTU5WjBiMQswCQYDVQQGEwJaQTElMCMGA1UEChMcVGhhd3RlIENv
+bnN1bHRpbmcgKFB0eSkgTHRkLjEsMCoGA1UEAxMjVGhhd3RlIFBlcnNvbmFsIEZyZWVtYWlsIElz
+c3VpbmcgQ0EwgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMSmPFVzVftOucqZWh5owHUEcJ3f
+6f+jHuy9zfVb8hp2vX8MOmHyv1HOAdTlUAow1wJjWiyJFXCO3cnwK4Vaqj9xVsuvPAsH5/EfkTYk
+KhPPK9Xzgnc9A74r/rsYPge/QIACZNenprufZdHFKlSFD0gEf6e20TxhBEAeZBlyYLf7AgMBAAGj
+gZQwgZEwEgYDVR0TAQH/BAgwBgEB/wIBADBDBgNVHR8EPDA6MDigNqA0hjJodHRwOi8vY3JsLnRo
+YXd0ZS5jb20vVGhhd3RlUGVyc29uYWxGcmVlbWFpbENBLmNybDALBgNVHQ8EBAMCAQYwKQYDVR0R
+BCIwIKQeMBwxGjAYBgNVBAMTEVByaXZhdGVMYWJlbDItMTM4MA0GCSqGSIb3DQEBBQUAA4GBAEiM
+0VCD6gsuzA2jZqxnD3+vrL7CF6FDlpSdf0whuPg2H6otnzYvwPQcUCCTcDz9reFhYsPZOhl+hLGZ
+GwDFGguCdJ4lUJRix9sncVcljd2pnDmOjCBPZV+V2vf3h9bGCE6u9uo05RAaWzVNd+NWIXiC3CEZ
+Nd4ksdMdRv9dX2VPMYIC5zCCAuMCAQEwaTBiMQswCQYDVQQGEwJaQTElMCMGA1UEChMcVGhhd3Rl
+IENvbnN1bHRpbmcgKFB0eSkgTHRkLjEsMCoGA1UEAxMjVGhhd3RlIFBlcnNvbmFsIEZyZWVtYWls
+IElzc3VpbmcgQ0ECAw7injAJBgUrDgMCGgUAoIIBUzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0wNTEwMjQxNDI3MTNaMCMGCSqGSIb3DQEJBDEWBBR6QWerFyunroTh
+1IIc8nSWmUC92DB4BgkrBgEEAYI3EAQxazBpMGIxCzAJBgNVBAYTAlpBMSUwIwYDVQQKExxUaGF3
+dGUgQ29uc3VsdGluZyAoUHR5KSBMdGQuMSwwKgYDVQQDEyNUaGF3dGUgUGVyc29uYWwgRnJlZW1h
+aWwgSXNzdWluZyBDQQIDDuKeMHoGCyqGSIb3DQEJEAILMWugaTBiMQswCQYDVQQGEwJaQTElMCMG
+A1UEChMcVGhhd3RlIENvbnN1bHRpbmcgKFB0eSkgTHRkLjEsMCoGA1UEAxMjVGhhd3RlIFBlcnNv
+bmFsIEZyZWVtYWlsIElzc3VpbmcgQ0ECAw7injANBgkqhkiG9w0BAQEFAASCAQBISxbq4vG/AZnp
+N8zVzt2QKkz+qMOL6qybLNqhfIb5G5MYGZ3/ZJknx2e4mGQzu9nPC26omWP9EqHGqdM5YvzN/tt7
+OV9RKbOP2GAe7SbFdfAbeCXpEYGPBLj7M8zEmR3H23YgEVtIniY4H74lO4PTegoadhkPhRmrzebj
+5AEQsNuqPGNLFQDFGe37UKDPdqYKg3NztJj8QO6J8hmgoMBVUJ63kpqh/cDYoQ2NaeW4Joi8XFD1
+4pDePJYA7zrwme3Pef6BcVsyMLi0eGXZTpeVHzSaORqA/EevOtmlSJLX8viXkysvpRelwBrb1qKE
+sd4fjz0ySXyYNkgx6QllxzQ2AAAAAAAA
+
+--Apple-Mail-3--614505452--

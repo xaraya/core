@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <div class="xar-mod-page-head">
+            <h2>            
+                Modify DynamicData Configuration            
+            </h2>
+            <xar:set name="xmldata">'modifyconfig'</xar:set>
+            <xar:template type="module" module="base" file="admin-menu-skel"/>
+        </div>
+        <div class="xar-mod-page-body">
+
+            <!-- General tab -->
+            <xar:if condition="$tab eq 'general'">
+                <form method="post" action="#xarServer::getCurrentURL()#" enctype="application/x-www-form-urlencoded">
+                    <fieldset>
+                        <legend>General options</legend>
+                        <xar:data-form object="$module_settings"/>
+                    </fieldset>
+                    <fieldset>
+                        <legend>                    
+                            Defaults                    
+                        </legend>
+                        <xar:template file="config_defaults"/>
+                    </fieldset>
+                    <fieldset>
+                        <legend>                    
+                            Caching                    
+                        </legend>
+                        <xar:template file="config_caching"/>
+                    </fieldset>
+                    <!--
+                    <fieldset>
+                        <legend>                    
+                            Display                    
+                        </legend>
+                        <xar:template file="config_display"/>
+                    </fieldset>
+                    -->
+                    <xar:template file="update-button" module="base" />
+                </form>
+            <xar:elseif condition="$tab eq 'managehooks'"/>
+                <!-- Hooks tab -->
+                <fieldset>
+                    <legend>
+                        Configure Dynamicdata Hooks
+                    </legend>
+                    <xar:set name="url">#xarModURL('dynamicdata','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                    <xar:module main="false" module="modules" type="admin" func="hooks" curhook="dynamicdata" return_url="$url"/>
+                </fieldset>
+            </xar:if>
+        </div><!--/xar-mod-page-body-->
+    </div>
+</xar:template>

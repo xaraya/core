@@ -1,0 +1,1 @@
+rename to cache.modulelevel to enable output module caching - see config.caching.php

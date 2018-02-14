@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:javascript position="head" scope="theme" filename="formcheck.js"/>
+    <script type="text/javascript">
+    <xar:comment>
+        // Enter name of mandatory fields
+        var mail_fieldRequired = Array("subject", "message");
+        // Enter field description to appear in the dialog box
+        var mail_fieldDescription = Array("Subject", "Message");
+    // </xar:comment>
+    </script>
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>Compose Message</h2>
+        <div><span style="color: red">#$message#</span></div>
+        <form action="#xarModURL('mail','admin','sendtest')#" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>Message Details</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Recipient Name</xar:var>
+                        <label for="name" title="#$label#" class="xar-form-label">
+                            Recipient Name:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="name" name="name" value="#$name#" maxlength="100" class="xar-form-textlong"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Recipient Email Address</xar:var>
+                        <label for="email" title="#$label#" class="xar-form-label">
+                            Recipient Email:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="email" name="email" value="#$email#" maxlength="255" class="xar-form-textlong"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Recipient CC</xar:var>
+                        <label for="emailcc" title="#$label#" class="xar-form-label">
+                            CC:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="emailcc" name="emailcc" value="" maxlength="255" class="xar-form-textlong"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">CC Name</xar:var>
+                        <label for="namecc" title="#$label#" class="xar-form-label">CC
+                            Name:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="namecc" name="namecc" value="" maxlength="100" class="xar-form-textlong"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Recipient BCC</xar:var>
+                        <label for="emailbcc" title="#$label#" class="xar-form-label">
+                            BCC:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="emailbcc" name="emailbcc" value="" maxlength="255" class="xar-form-textlong"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">BCC Name</xar:var>
+                        <label for="namebcc" title="#$label#" class="xar-form-label">BCC
+                            Name:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="namebcc" name="namebcc" value="" maxlength="100" class="xar-form-textlong"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Message Subject</xar:var>
+                        <label for="subject" title="#$label#" class="xar-form-label">
+                            Subject:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="subject" name="subject" value="" maxlength="100" class="xar-form-textlong"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <xar:var name="label">Message Body</xar:var>
+                        <label for="message" title="#$label#" class="xar-form-label">
+                            Message:
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="textarea" name="message" id="message" class="xar-form-textarealarge"/>
+                    </div>
+                </div>
+                <xar:if condition="xarModIsAvailable('scheduler')">
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <xar:var name="label">Test scheduled mails</xar:var>
+                            <label for="when_input" title="#$label#" class="xar-form-label">
+                                No Earlier Than:
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:data-input name="when" type="calendar" value=""/>
+                        </div>
+                    </div>
+                </xar:if>
+            </fieldset>
+            <div class="xar-form-actions">
+                <div class="xar-row">
+                    <div class="xar-col"></div>
+                    <div class="xar-col">
+                        <input type="hidden" name="confirm" id="confirm" value="1"/>
+                        <input type="hidden" name="authid" id="authid" value="#$authid#"/>
+                        <xar:var name="label">Send Message</xar:var>
+                        <xar:button type="submit" label="$label"/>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</xar:template>

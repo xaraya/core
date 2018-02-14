@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xar type="page" ?>
+<!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 2.0 Strict//EN" "http://xaraya.com/bl2/DTD/bl2-strict.dtd">
+<xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
+    <html xml:lang="en" lang="en">
+        <!-- Call blocks early so any css and js from them is included -->
+        <xar:set name="leftgroup"><xar:blockgroup name="left" id="left"/></xar:set>
+        <xar:set name="topnavgroup"><xar:blockgroup name="topnav" id="topnav"/></xar:set>
+        <xar:set name="centergroup"><xar:blockgroup name="center" id="center"/></xar:set> 
+        <head>
+            <xar:blockgroup name="header" id="header"/>
+            <title>
+                <xar:var name="tpl:pageTitle"/>
+            </title>
+            <base href="#xarServer::getBaseURL()#index.php"/>
+            <link rel='icon' href="favicon.ico"/>
+            <xar:style scope="common"/>
+            <xar:style scope="theme" file="style" title="Xaraya Default Stylesheet"/>
+            <xar:place-css />
+            <xar:place-javascript position="head"/>
+        </head>
+        <body>
+            <div id="user-wrapper">
+                <div id="user-main">
+                    <div id="logo">
+                        <a href="index.php" title="home">
+                            <xar:img scope="theme" file="xarLogo2.png" width="90" height="90" alt="Xaraya Logo" title="home"/>
+                        </a>
+                        <p>
+                            <xar:var name="SiteSlogan" scope="module" module="themes"/>
+                        </p>
+                    </div>
+                    <xar:module id="modulespace"/>
+                </div>
+                <div id="sideInfo1" class="sideInfo">
+                    #$leftgroup#
+                </div>
+                #$topnavgroup#
+                #$centergroup#                
+            </div>
+            <xar:place-javascript position="body"/>
+        </body>
+    </html>
+</xar:blocklayout>

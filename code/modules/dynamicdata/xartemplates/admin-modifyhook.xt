@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!-- You can use different admin-modifyhook-[objectname].xd templates for different objects -->
+    <!-- Contrary to admin-newhook.xd, it is not recommended to use preset="yes" here -->
+    <xar:foreach in="$properties" key="$name">
+        <xar:if condition="$properties[$name]:getDisplayStatus() ne DataPropertyMaster::DD_DISPLAYSTATE_DISABLED">
+
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:data-label property="$properties[$name]" for="id"/>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input property="$properties[$name]"/>
+                </div>
+            </div>
+        </xar:if>
+    </xar:foreach>
+</xar:template>

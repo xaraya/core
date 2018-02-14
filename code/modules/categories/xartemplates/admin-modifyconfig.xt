@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>
+            Modify Categories Configuration
+        </h2>
+        <xar:set name="xmldata">'modifyconfig'</xar:set>
+        <xar:template type="module" module="base" file="admin-menu-skel"/>
+
+        <xar:if condition="$tab eq 'general'">
+            <form method="post" action="&xar-modurl-categories-admin-modifyconfig;" enctype="application/x-www-form-urlencoded">
+                <fieldset>
+                    <legend>General options</legend>
+                    <xar:data-form object="$module_settings"/>
+                </fieldset>
+                <fieldset>
+                    <legend>
+                        Defaults
+                    </legend>
+                    <xar:template file="defaults"/>
+                </fieldset>
+                <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                <input type="hidden" name="tabmodule" id="tabmodule" value="#$tabmodule#"/>
+                <xar:template file="update-button" module="base" />
+            </form>
+        <xar:elseif condition="$tab eq 'managehooks'"/>
+            <fieldset>
+                <legend>
+                    Configure Categories Hooks
+                </legend>
+                <xar:set name="url">#xarModURL('categories','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                <xar:module main="false" module="modules" type="admin" func="hooks" curhook="categories" return_url="$url"/>
+            </fieldset>
+        </xar:if>
+    </div>
+</xar:template>

@@ -1,0 +1,18 @@
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <!--
+        Override this template by creating custom options and/or firstline, such as
+        <xar:set name="options">
+            array(
+                ...
+            )
+        </xar:set>
+
+        <xar:var name="firstline">Choose a state</xar:var>
+        <xar:set name="firstline">array('id'=>0,'name'=>$firstline)</xar:set>
+
+        <xar:data-input type="dropdown" options="$options" name="$name" value="$value" firstline="$firstline"/>
+    -->
+    
+    <xar:data-input type="dropdown" name="$name" options="$options" value="$value"/>
+</xar:template>

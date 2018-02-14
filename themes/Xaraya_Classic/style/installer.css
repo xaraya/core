@@ -1,0 +1,266 @@
+body {
+    background-color: #fff;
+    color: #000;
+    font-family: "Trebuchet MS", Arial, Helvetica, Tahoma, sans-serif;
+    font-size: 18px;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+#wrapper {
+    margin-top: 2%;
+    width: 760px;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #ffffff;
+    background-image: url(../modules/installer/images/installerbg.png);
+    background-repeat: no-repeat;
+}
+
+#main {
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 30px 0 95px 0;
+}
+
+#install { padding: 0 0 0 20px; }
+
+#status {
+    font-weight: bold;
+    float: right;
+    border-style: solid;
+    border-width: 2px;
+    border-color: #D7D7DD;
+    width: 225px;
+    padding: 5px;
+    margin: 0px 20px 0px 10px;
+    text-align: left;
+    display:inline;
+}
+
+h1,h2,h3,h4 {
+    font-family: Arial, Helvetica, Tahoma, sans-serif;
+    font-weight: bold;
+    color: #000;
+    line-height: 1.2em;
+    text-align: center;
+    padding: 0 0 .4em 0;
+    margin: 0;
+    width: 460px;
+    text-shadow: -1px 3px 3px silver;
+}
+
+h1 { font-size: 1.4em; }
+h2 { font-size: 1.2em; }
+h3 { font-size: 1em; }
+h4 { font-size: .82em; }
+
+p, ul, ol {
+    font-size: .80em;
+    text-align: left;
+    line-height: 1.5em;
+}
+
+form p.center { text-align: center; }
+
+form label {
+    font-weight: bold;
+    margin: 0 .5em;
+    color: gray;
+}
+
+textarea#license, select#configuration {
+    background-color: #fff;
+    border-color: #D7D7DD;
+    border-width: 1px;
+    font-size: 12px;
+    color: #000;
+    width: 440px;
+
+}
+
+label.block {
+    padding: .5em 0;
+}
+
+div.configuration {
+    width: 460px;
+}
+
+div.simpleform {
+    float: left;
+    width: 460px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    border: 1px solid #B6A4BB;
+}
+
+div.simpleform p {
+    width: 460px;
+    padding: .35em 0;
+    margin: 0 auto;
+    text-align: left;
+    border-bottom: #ffffff;
+    border-width: 0 0 1px 0;
+    border-style: none none solid none;
+    background-color: #f0f0f0;
+}
+
+div.simpleform label {
+    width: 30%;
+    float: left;
+    padding: 0 .5em;
+    margin: 0;
+}
+
+div.simpleform input {
+    width: 30%;
+    float: left;
+    padding: 0;
+    margin: 0 .25em;
+}
+
+div.scroller {
+    padding: 5px;
+    margin-bottom: .5em;
+    width:440px;
+    overflow: auto;
+    height: 150px;
+    border: 1px solid black;
+}
+div.scroller p, div.scroller input {
+    line-height: 1em;
+    padding: .25em 0;
+    margin: 0;
+}
+
+p.complete, p.active, p.greyed {
+    padding: 0 0 0 30px;
+    font-size: .8em;
+    line-height: 30px;
+    text-indent: 20px;
+    background-repeat: no-repeat;
+    background-position: 0 .35em;
+}
+
+.complete {
+    color: #B0B0B0;
+    text-decoration: line-through;
+    background-image: url(../modules/installer/images/completed.gif);
+}
+
+.active {
+    color: #000;
+    background-image: url(../modules/installer/images/active.gif);
+}
+
+.greyed {
+    color: #B0B0B0;
+    background-image: url(../modules/installer/images/greyed.gif);
+}
+
+.xar-normal {
+    color: #000000;
+    font-size: .75em;
+}
+
+.xar-normal a:link {
+    color: #000;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.xar-normal a:visited {
+    color: #000;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.xar-normal a:hover {
+    color: #B0B0B0;
+    font-weight: bold;
+    text-decoration: overline underline;
+}
+
+.xar-normal a:active {
+    color: #B0B0B0;
+    font-weight: bold;
+    text-decoration: overline underline;
+}
+
+.xar-title p strong {
+    color: #B0B0B0;
+    font-weight: bold;
+}
+
+.xar-title p { text-align: left; }
+
+#status p {
+    padding: 0;
+    margin: 0;
+}
+
+.xar-sub { font-size: .7em; }
+.clear { clear: both; height:0px; }
+
+
+#navlist li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+
+#navlist li a {
+    color: #B0B0B0;
+    font-size: .75em;
+}
+
+#navlist li a:hover {
+    color: #000;
+    font-size: .75em;
+}
+
+h3 { text-align: left; }
+
+ul li.success { list-style: none; padding-bottom:4px; line-height:1.4em;}
+ul li.failure { list-style: none;padding-bottom:4px;line-height:1.4em;}
+ul li.warning { list-style: none;padding-bottom:4px;line-height:1.4em;}
+
+.failure:before {
+    content: "\2717";
+    color: red;
+    font-size: large;
+    font-weight: bold;
+}
+.success:before {
+    content: "\2713";
+    color: green;
+    font-size: large;
+    font-weight: bold;
+}
+.warning:before {
+    content: "\2621";
+    color: orange;
+    font-size: large;
+    font-weight: bold;
+}
+
+.failure:first-letter {
+    color: red;
+    font-size: large;
+    font-weight: bold;
+}
+.success:first-letter {
+
+    color: green;
+    font-size: large;
+    font-weight: bold;
+}
+.warning:first-letter {
+
+    color: orange;
+    font-size: large;
+    font-weight: bold;
+}
