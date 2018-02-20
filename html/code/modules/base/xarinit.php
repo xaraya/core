@@ -210,7 +210,7 @@ function base_init()
     xarConfigVars::set(null, 'Site.Session.SecurityLevel', 'Medium');
     xarConfigVars::set(null, 'Site.Session.Duration', 7);
     xarConfigVars::set(null, 'Site.Session.InactivityTimeout', 90);
-    xarConfigVars::set(null, 'Site.Session.CookieTimeout', 100);
+    xarConfigVars::set(null, 'Site.Session.CookieTimeout', 30);
     // use current defaults in includes/xarSession.php
     xarConfigVars::set(null, 'Site.Session.CookieName', '');
     xarConfigVars::set(null, 'Site.Session.CookiePath', '');
