@@ -615,6 +615,7 @@ class xarMod extends Object implements IxarMod
                   FROM   $table items
                   WHERE  items.name = ? OR items.directory = ?";
         }
+        
         $bindvars = array($modName, $modName);
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);

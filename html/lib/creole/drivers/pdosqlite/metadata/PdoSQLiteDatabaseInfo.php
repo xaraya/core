@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: SQLiteDatabaseInfo.php,v 1.3 2004/03/20 04:16:50 hlellelid Exp $
  *
@@ -18,49 +19,50 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/metadata/DatabaseInfo.php';
 
 /**
  * PdoSQLite implementation of DatabaseInfo.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.3 $
  * @package   creole.drivers.sqlite.metadata
- */ 
-class PdoSQLiteDatabaseInfo extends DatabaseInfo {
-    
+ */
+class PdoSQLiteDatabaseInfo extends DatabaseInfo
+{
+
     /**
      * @throws SQLException
      * @return void
      */
     protected function initTables()
     {
-        include_once 'creole/drivers/pdosqlite/metadata/PdoSQLiteTableInfo.php';        
-        
+        include_once 'creole/drivers/pdosqlite/metadata/PdoSQLiteTableInfo.php';
+
         $sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
-        
+
         try {
             $statement = $this->dblink->prepare($sql);
             $statement->execute();
-        } catch( PDOException $e ) {
+        } catch (PDOException $e) {
             throw new SQLException('Could not list tables', $e->getMessage(), $sql);
         }
-        
+
         while ($row = $statement->fetch()) {
             $this->tables[strtoupper($row[0])] = new PdoSQLiteTableInfo($this, $row[0]);
         }
     }
-    
+
     /**
      * SQLite does not support sequences.
      *
-     * @return void 
+     * @return void
      * @throws SQLException
      */
     protected function initSequences()
     {
         // throw new SQLException("MySQL does not support sequences natively.");
     }
-        
+
 }
