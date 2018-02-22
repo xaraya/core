@@ -407,7 +407,6 @@ function xarVarGetCached($scope, $name)         { return xarCoreCache::getCached
 function xarVarSetCached($scope, $name, $value) { return xarCoreCache::setCached($scope, $name, $value);}
 function xarVarDelCached($scope, $name)         { return xarCoreCache::delCached($scope, $name);        }
 function xarVarFlushCached($scope)              { return xarCoreCache::flushCached($scope);             }
-/**@-*/
 
 /*
     ---------------------------------------------------------------------
