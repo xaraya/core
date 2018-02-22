@@ -36,6 +36,15 @@
             <label>Upgrade</label>
         </menuitem>
         -->
+         <menuitem>
+            <mask>AdminBase</mask>
+            <includes>
+                <includeitem>modifyconfig1</includeitem>
+            </includes>
+            <target>cacheview</target>
+            <title>Modify Base configuration values</title>
+            <label>View Cache Files</label>
+        </menuitem>
         <menuitem>
             <mask>AdminBase</mask>
             <includes>
@@ -45,5 +54,6 @@
             <title>Modify Base configuration values</title>
             <label>Modify Configuration</label>
         </menuitem>
+        
     </menuitems>
 </menu>

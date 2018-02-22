@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Module initialization functions
  *
@@ -12,6 +13,7 @@
  */
 // Load Table Maintainance API
 sys::import('xaraya.tableddl');
+
 /**
  * Initialise the modules module
  *
@@ -22,7 +24,7 @@ function modules_init()
 {
     // Get database information
     $dbconn = xarDB::getConn();
-    $tables =& xarDB::getTables();
+    $tables = & xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
 
@@ -60,17 +62,17 @@ function modules_init()
          * )
          */
         $fields = array(
-                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'name' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        'regid' => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
-                        'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        'version' => array('type' => 'varchar', 'size' => 10, 'null' => false, 'charset' => $charset),
-                        'class' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        'category' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        'admin_capable' => array('type' => 'boolean', 'default' => false),
-                        'user_capable' => array('type' => 'boolean', 'default' => false),
-                        'state' => array('type' => 'integer', 'size' => 'tiny','unsigned'=>true, 'null' => false, 'default' => '1')
-                        );
+            'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+            'name' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+            'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
+            'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+            'version' => array('type' => 'varchar', 'size' => 10, 'null' => false, 'charset' => $charset),
+            'class' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+            'category' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+            'admin_capable' => array('type' => 'boolean', 'default' => 0),
+            'user_capable' => array('type' => 'boolean', 'default' => 0),
+            'state' => array('type' => 'integer', 'size' => 'tiny', 'unsigned' => true, 'null' => false, 'default' => '1')
+        );
 
         // Create the modules table
         $query = xarDBCreateTable($tables['modules'], $fields);
@@ -83,22 +85,26 @@ function modules_init()
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $modInfo = xarMod_getFileInfo('modules');
-        if (!isset($modInfo)) return; // throw back
-        // Use version, since that's the only info likely to change
+        if (!isset($modInfo))
+            return; // throw back
+
+
+
+// Use version, since that's the only info likely to change
         $modVersion = $modInfo['version'];
-        $bindvars = array('modules',1,'modules',(string) $modVersion,'Core Admin','System',true,false,3);
-        $dbconn->Execute($query,$bindvars);
+        $bindvars = array('modules', 1, 'modules', (string) $modVersion, 'Core Admin', 'System', true, false, 3);
+        $dbconn->Execute($query, $bindvars);
 
         $modInfo = xarMod_getFileInfo('base');
-        if (!isset($modInfo)) return; // throw back
-        // Use version, since that's the only info likely to change
+        if (!isset($modInfo))
+            return; // throw back
+// Use version, since that's the only info likely to change
         $modVersion = $modInfo['version'];
 
-        $bindvars = array('base',68,'base',(string) $modVersion,'Core Admin','System',true,true,3);
-        $dbconn->Execute($query,$bindvars);
+        $bindvars = array('base', 68, 'base', (string) $modVersion, 'Core Admin', 'System', true, true, 3);
+        $dbconn->Execute($query, $bindvars);
 
         /** Module vars table is created earlier now (base mod, where config_vars table was created */
-
         /**
          * CREATE TABLE module_itemvars (
          *   module_var_id    integer unsigned NOT NULL,
@@ -108,10 +114,10 @@ function modules_init()
          * )
          */
         $fields = array(
-                        'module_var_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'primary_key' => true),
-                        'item_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'unsigned' => true, 'primary_key' => true),
-                        'value' => array('type' => 'text', 'size' => 'long', 'charset' => $charset)
-                        );
+            'module_var_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'primary_key' => true),
+            'item_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'unsigned' => true, 'primary_key' => true),
+            'value' => array('type' => 'text', 'size' => 'long', 'charset' => $charset)
+        );
 
         // Create the module itemvars table
         $query = xarDBCreateTable($tables['module_itemvars'], $fields);
@@ -133,21 +139,21 @@ function modules_init()
          *   PRIMARY KEY (id)
          * )
          *
-        $fields = array(
-                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'object'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        'action'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        's_module_id' => array('type' => 'integer', 'unsigned' => true, 'null' => true, 'default' => null),
-                        // TODO: switch to integer for itemtype (see also xarMod.php)
-                        's_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        't_area'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        't_module_id'  => array('type' => 'integer','unsigned' => true, 'null' => false),
-                        't_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        't_func'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        't_file'      => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
-                        'priority'       => array('type' => 'integer', 'size' => 'tiny', 'unsigned' => true, 'null' => false, 'default' => '0')
-                   );
-        */
+          $fields = array(
+          'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+          'object'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+          'action'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+          's_module_id' => array('type' => 'integer', 'unsigned' => true, 'null' => true, 'default' => null),
+          // TODO: switch to integer for itemtype (see also xarMod.php)
+          's_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+          't_area'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+          't_module_id'  => array('type' => 'integer','unsigned' => true, 'null' => false),
+          't_type'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+          't_func'      => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+          't_file'      => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
+          'priority'       => array('type' => 'integer', 'size' => 'tiny', 'unsigned' => true, 'null' => false, 'default' => '0')
+          );
+         */
         // TODO: no indexes?
 
 
@@ -156,16 +162,16 @@ function modules_init()
          *   observer   integer unsigned NOT NULL,
          *   subject    integer unsigned NOT NULL,
          *   itemtype   integer unsigned NOT NULL
-        **/
+         * */
         $fields = array(
-            'observer' => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
-            'subject'  => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
-            'itemtype' => array('type' => 'integer', 'unsigned'=>true, 'null' => false),
-            'scope'    => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
+            'observer' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
+            'subject' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
+            'itemtype' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
+            'scope' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
         );
         // each entry should be unique
         $index = array(
-            'name'   => 'i_'.$prefix.'_hooks',
+            'name' => 'i_' . $prefix . '_hooks',
             'fields' => array('observer', 'subject', 'itemtype', 'scope'),
             'unique' => true
         );
@@ -178,42 +184,51 @@ function modules_init()
          * at this stage of installer mod vars cannot be set, so we use DB calls
          * prolly need to move this closer to installer, not sure yet
          */
-
         $sql = "INSERT INTO " . $tables['module_vars'] . " (module_id, name, value)
                 VALUES (?,?,?)";
-        $stmt = $dbconn->prepareStatement($sql);
-
+        $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+        if ($middleware == 'Creole') {
+             $stmt = $dbconn->prepareStatement($sql);
+        } else if ($middleware == 'PDO') {
+            $stmt = $dbconn->prepare($sql);
+        }
+                    
         $modulesmodid = xarMod::getID('modules');
         $modvars = array(
-                         // default show-hide core modules
-                         array($modulesmodid,'hidecore','0'),
-                         // default regenerate command
-                         array($modulesmodid,'regen','0'),
-                         // default style of module list
-                         array($modulesmodid,'selstyle','plain'),
-                         // default filtering based on module states
-                         array($modulesmodid,'selfilter', '0'),
-                         // default modules list sorting order
-                         array($modulesmodid,'selsort','nameasc'),
-                         // default show-hide modules statistics
-                         array($modulesmodid,'hidestats','0'),
-                         // default maximum number of modules listed per page
-                         array($modulesmodid,'selmax','all'),
-                         // default start page
-                         array($modulesmodid,'startpage','overview'),
-                         // disable overviews
-                         array($modulesmodid,'disableoverview',false),
-                         // expertlist
-                         array($modulesmodid,'expertlist','0'),
-                         // the configuration settings pertaining to modules for the base module
-                         array($modulesmodid,'defaultmoduletype','user'),
-                         array($modulesmodid,'defaultmodule','base'),
-                         array($modulesmodid,'defaultmodulefunction','main'),
-                         array($modulesmodid,'defaultdatapath','lib/'));
-
-        foreach($modvars as &$modvar) {
-            $stmt->executeUpdate($modvar);
-        }
+            // default show-hide core modules
+            array($modulesmodid, 'hidecore', '0'),
+             //default regenerate command
+            array($modulesmodid, 'regen', '0'),
+            // default style of module list
+            array($modulesmodid, 'selstyle', 'plain'),
+            // default filtering based on module states
+            array($modulesmodid, 'selfilter', '0'),
+            // default modules list sorting order
+            array($modulesmodid, 'selsort', 'nameasc'),
+            // default show-hide modules statistics
+            array($modulesmodid, 'hidestats', '0'),
+            // default maximum number of modules listed per page
+            array($modulesmodid, 'selmax', 'all'),
+            // default start page
+            array($modulesmodid, 'startpage', 'overview'),
+            // disable overviews
+            array($modulesmodid, 'disableoverview', false),
+            // expertlist
+            array($modulesmodid, 'expertlist', '0'),
+            // the configuration settings pertaining to modules for the base module
+            array($modulesmodid, 'defaultmoduletype', 'user'),
+            array($modulesmodid, 'defaultmodule', 'base'),
+            array($modulesmodid, 'defaultmodulefunction', 'main'),
+            array($modulesmodid, 'defaultdatapath', 'lib/')
+            );
+        
+        foreach ($modvars as &$modvar) {
+            if ($middleware == 'Creole') {
+                $stmt->executeUpdate($modvar);
+            } else if ($middleware == 'PDO') {
+                $stmt->execute($modvar);
+            }
+        }   
         // We're done, thanks, commit the thingie
         $dbconn->commit();
     } catch (Exception $e) {
@@ -238,15 +253,17 @@ function modules_activate()
     $selstyle = xarModVars::get('modules', 'selstyle');
     $selstyle = xarModVars::get('modules', 'selfilter');
     $selstyle = xarModVars::get('modules', 'selsort');
-    if (empty($hidecore)) xarModVars::set('modules', 'hidecore', 0);
-    if (empty($selstyle)) xarModVars::set('modules', 'selstyle', 'plain');
-    if (empty($selfilter)) xarModVars::set('modules', 'selfilter', XARMOD_STATE_ANY);
-    if (empty($selsort)) xarModVars::set('modules', 'selsort', 'nameasc');
-
-
+    if (empty($hidecore))
+        xarModVars::set('modules', 'hidecore', 0);
+    if (empty($selstyle))
+        xarModVars::set('modules', 'selstyle', 'plain');
+    if (empty($selfilter))
+        xarModVars::set('modules', 'selfilter', XARMOD_STATE_ANY);
+    if (empty($selsort))
+        xarModVars::set('modules', 'selsort', 'nameasc');
 
     // New in 1.1.x series but not used
-    xarModVars::set('modules', 'disableoverview',0);
+    xarModVars::set('modules', 'disableoverview', 0);
 
     return true;
 }
@@ -264,7 +281,7 @@ function modules_upgrade($oldversion)
         case '2.0.0':
             // Get database information
             $dbconn = xarDB::getConn();
-            $xartable =& xarDB::getTables();
+            $xartable = & xarDB::getTables();
 
             //Load Table Maintainance API
             sys::import('xaraya.tableddl');
@@ -273,17 +290,18 @@ function modules_upgrade($oldversion)
             $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
 
             $fieldargs = array('command' => 'add', 'field' => 't_file', 'type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset);
-            $query = xarDBAlterTable($hookstable,$fieldargs);
-            $result =& $dbconn->Execute($query);
-            if (!$result) return;
+            $query = xarDBAlterTable($hookstable, $fieldargs);
+            $result = & $dbconn->Execute($query);
+            if (!$result)
+                return;
 
         case '2.0.1':
             /**
              * Create Event System table
              * NOTE: we do this here, not in base, because the event system depends on the module system
-            **/
+             * */
             $dbconn = xarDB::getConn();
-            $tables =& xarDB::getTables();
+            $tables = & xarDB::getTables();
 
             $prefix = xarDB::getPrefix();
 
@@ -304,11 +322,11 @@ function modules_upgrade($oldversion)
                  *   PRIMARY KEY (id)
                  * )
                  */
-
+                
                 $fields = array(
                     'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                     'event' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
-                    'module_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),            
+                    'module_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),
                     'itemtype' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),
                     'area' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
                     'type' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
@@ -321,11 +339,11 @@ function modules_upgrade($oldversion)
                 $dbconn->Execute($query);
 
                 // each entry should be unique
-                $index = array('name'   => 'i_'.$prefix.'_eventsystem',
-                       'fields' => array('event', 'module_id', 'itemtype'),
-                       'unique' => true);
+                $index = array('name' => 'i_' . $prefix . '_eventsystem',
+                    'fields' => array('event', 'module_id', 'itemtype'),
+                    'unique' => true);
 
-                $query = xarDBCreateIndex($tables['eventsystem'],$index);
+                $query = xarDBCreateIndex($tables['eventsystem'], $index);
                 $dbconn->Execute($query);
                 /**
                  * CREATE TABLE xar_index (
@@ -336,29 +354,28 @@ function modules_upgrade($oldversion)
                  *   PRIMARY KEY (id)
                  * )
                  */
-                /* @TODO: index subsystem 
-                $fields = array(
-                    'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                    'module_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),            
-                    'itemtype' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),
-                    'item_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0')
-                );
+                /* @TODO: index subsystem
+                  $fields = array(
+                  'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
+                  'module_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),
+                  'itemtype' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0'),
+                  'item_id' => array('type' => 'integer', 'size' => 11, 'unsigned' => true, 'null' => false, 'default' => '0')
+                  );
 
-                // Create the eventsystem table
-                $query = xarDBCreateTable($tables['index'], $fields);
-                $dbconn->Execute($query);
+                  // Create the eventsystem table
+                  $query = xarDBCreateTable($tables['index'], $fields);
+                  $dbconn->Execute($query);
 
-                // each entry should be unique
-                $index = array('name'   => 'i_'.$prefix.'_index',
-                       'fields' => array('module_id', 'itemtype', 'item_id'),
-                       'unique' => true);
+                  // each entry should be unique
+                  $index = array('name'   => 'i_'.$prefix.'_index',
+                  'fields' => array('module_id', 'itemtype', 'item_id'),
+                  'unique' => true);
 
-                $query = xarDBCreateIndex($tables['index'],$index);
-                $dbconn->Execute($query);
-                */
+                  $query = xarDBCreateIndex($tables['index'],$index);
+                  $dbconn->Execute($query);
+                 */
                 // Let's commit this, since we're gonna do some other stuff
                 $dbconn->commit();
-
             } catch (Exception $e) {
                 $dbconn->rollback();
                 throw $e;
@@ -369,7 +386,7 @@ function modules_upgrade($oldversion)
             xarEvents::registerSubject('Event', 'event', 'base');
             xarEvents::registerSubject('ServerRequest', 'server', 'base');
             xarEvents::registerSubject('SessionCreate', 'session', 'base');
-    
+
             // Register base module event observers
             xarEvents::registerObserver('Event', 'base');
 
@@ -378,7 +395,7 @@ function modules_upgrade($oldversion)
             xarEvents::registerSubject('ModApiLoad', 'module', 'modules');
 
             /* Hook Events */
-            // Register modules module hook subjects 
+            // Register modules module hook subjects
             xarHooks::registerSubject('ModuleModifyconfig', 'module', 'modules');
             xarHooks::registerSubject('ModuleUpdateconfig', 'module', 'modules');
             xarHooks::registerSubject('ModuleRemove', 'module', 'modules');
@@ -392,18 +409,18 @@ function modules_upgrade($oldversion)
             xarHooks::registerSubject('ItemtypeDelete', 'itemtype', 'modules');
             xarHooks::registerSubject('ItemtypeView', 'itemtype', 'modules');
 
-            // Module item hook subjects (@TODO: these should no longer apply to roles) 
+            // Module item hook subjects (@TODO: these should no longer apply to roles)
             xarHooks::registerSubject('ItemNew', 'item', 'modules');
             xarHooks::registerSubject('ItemCreate', 'item', 'modules');
-            xarHooks::registerSubject('ItemModify', 'item', 'modules'); 
+            xarHooks::registerSubject('ItemModify', 'item', 'modules');
             xarHooks::registerSubject('ItemUpdate', 'item', 'modules');
             xarHooks::registerSubject('ItemDisplay', 'item', 'modules');
             xarHooks::registerSubject('ItemDelete', 'item', 'modules');
-            xarHooks::registerSubject('ItemSubmit', 'item', 'modules');            
+            xarHooks::registerSubject('ItemSubmit', 'item', 'modules');
             // Transform hooks
             // @TODO: these really need to go away...
             xarHooks::registerSubject('ItemTransform', 'item', 'modules');
-            xarHooks::registerSubject('ItemTransforminput', 'item', 'modules');           
+            xarHooks::registerSubject('ItemTransforminput', 'item', 'modules');
 
             // @TODO: these need evaluating
             xarHooks::registerSubject('ItemFormheader', 'item', 'modules');
@@ -411,12 +428,12 @@ function modules_upgrade($oldversion)
             xarHooks::registerSubject('ItemFormdisplay', 'item', 'modules');
             xarHooks::registerSubject('ItemFormarea', 'item', 'modules');
 
-            // Register base module hook subjects 
-            xarHooks::registerSubject('ItemWaitingcontent', 'item', 'base'); 
-            
-            // NOTE: UserLogin and UserLogout are registered by authsystem module
-            // NOTE: ItemSearch is registered by search module 
-            // @TODO: Roles module to register User* and Group* event subjects            
+            // Register base module hook subjects
+            xarHooks::registerSubject('ItemWaitingcontent', 'item', 'base');
+
+        // NOTE: UserLogin and UserLogout are registered by authsystem module
+        // NOTE: ItemSearch is registered by search module
+        // @TODO: Roles module to register User* and Group* event subjects
         case '2.2.0':
             // Register modules module event subjects
             xarEvents::registerSubject('ModInitialise', 'module', 'modules');
@@ -431,7 +448,7 @@ function modules_upgrade($oldversion)
             xarEvents::registerObserver('ModRemove', 'modules');
 
         case '2.3.0':
-        
+
             break;
     }
     return true;

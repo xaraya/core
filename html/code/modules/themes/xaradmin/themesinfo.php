@@ -60,7 +60,7 @@ function themes_admin_themesinfo()
             
             // Jump to the next page
             if ($exit) {
-                xarController::redirect(xarModURL('themes','admin','view'));
+                xarController::redirect(xarModURL('themes','admin','list'));
             } else {
                 xarController::redirect(xarModURL('themes','admin','themesinfo',array('id' => $themeid)));
             }
@@ -71,7 +71,7 @@ function themes_admin_themesinfo()
     $data['themename']            = xarVarPrepForDisplay($info['name']);
     $data['themedescr']           = xarVarPrepForDisplay($info['description']);
     //$data['themedispname']        = xarVarPrepForDisplay($themeinfo['displayname']);
-    $data['themelisturl']         = xarModURL('themes', 'admin', 'view');
+    $data['themelisturl']         = xarModURL('themes', 'admin', 'list');
 
     $data['themedir']             = xarVarPrepForDisplay($info['directory']);
     $data['themeclass']           = xarVarPrepForDisplay($info['class']);

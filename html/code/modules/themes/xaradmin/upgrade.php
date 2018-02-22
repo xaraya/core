@@ -43,7 +43,7 @@ function themes_admin_upgrade()
     if(!isset($upgraded)) return;
     
     if (empty($return_url))
-        $return_url = xarModURL('themes', 'admin', 'view');
+        $return_url = xarModURL('themes', 'admin', 'list');
     xarController::redirect($return_url);
     return true;
 }

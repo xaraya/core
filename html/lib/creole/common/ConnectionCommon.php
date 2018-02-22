@@ -1,4 +1,5 @@
 <?php
+
 /*
  *  $Id: ConnectionCommon.php,v 1.5 2005/10/17 19:03:51 dlawson_mi Exp $
  *
@@ -30,7 +31,6 @@
  * @package   creole.common
  */
 abstract class ConnectionCommon {
-
     // Constants that define transaction isolation levels.
     // [We don't have any code using these yet, so there's no need
     // to initialize these values at this point.]
@@ -40,7 +40,7 @@ abstract class ConnectionCommon {
     // const TRANSACTION_REPEATABLE_READ = 3;
     // const TRANSACTION_SERIALIZABLE = 4;
 
-       /**
+    /**
      * The depth level of current transaction.
      * @var int
      */
@@ -51,7 +51,7 @@ abstract class ConnectionCommon {
      * @var array
      */
     protected $nestedTransactionSavepoints = array();
-    
+
     /**
      * DB connection resource id.
      * @var resource
@@ -73,6 +73,7 @@ abstract class ConnectionCommon {
     /* XARAYA MODIFICATION */
     // Adodb has a method on a connection(!!) for affected rows
     protected $affected_rows = 0;
+
     /* END XARAYA MODIFICATION */
 
     /**
@@ -102,8 +103,7 @@ abstract class ConnectionCommon {
      * @see DriverManager::getConnection()
      * @see DatabaseInfo::__sleep()
      */
-    public function __sleep()
-    {
+    public function __sleep() {
         return array('dsn', 'flags');
     }
 
@@ -113,16 +113,15 @@ abstract class ConnectionCommon {
      * stored using the __sleep() method.
      * @see __sleep()
      */
-    public function __wakeup()
-    {
+    public function __wakeup() {
         $this->connect($this->dsn, $this->flags);
     }
 
     /**
      * @see Connection::getResource()
      */
-    public function getResource()
-    {
+    public function getResource() {
+
         return $this->dblink;
     }
 
@@ -136,8 +135,7 @@ abstract class ConnectionCommon {
     /**
      * @see Connection::getFlags()
      */
-    public function getFlags()
-    {
+    public function getFlags() {
         return $this->flags;
     }
 
@@ -147,8 +145,7 @@ abstract class ConnectionCommon {
      * @param string $sql
      * @return CallableStatement
      */
-    public function prepareCall($sql)
-    {
+    public function prepareCall($sql) {
         throw new SQLException("Current driver does not support stored procedures using CallableStatement.");
     }
 
@@ -157,40 +154,37 @@ abstract class ConnectionCommon {
      *
      * @return boolean
      */
-    public function supportsNestedTrans()
-    {
+    public function supportsNestedTrans() {
         return false;
     }
 
     /**
      * Begins a transaction (if supported).
      */
-    public function begin()
-    {
+    public function begin() {
         if ($this->transactionOpcount === 0 || $this->supportsNestedTrans()) {
             $this->beginTrans();
         } elseif ($this->supportsSavepoints()) {
-        	$savepointIdentifier = "creole_savepoint_".count($this->nestedTransactionSavepoints);
-        	$this->nestedTransactionSavepoints[] = $savepointIdentifier;
-        	$this->setSavepoint( $savepointIdentifier );
+            $savepointIdentifier = "creole_savepoint_" . count($this->nestedTransactionSavepoints);
+            $this->nestedTransactionSavepoints[] = $savepointIdentifier;
+            $this->setSavepoint($savepointIdentifier);
         }
         $this->transactionOpcount++;
-        xarLog::message("DB: starting transaction [".$this->transactionOpcount."]", xarLog::LEVEL_INFO);
+        xarLog::message("DB: starting transaction [" . $this->transactionOpcount . "]", xarLog::LEVEL_INFO);
     }
 
     /**
      * Commits statements in a transaction.
      */
-    public function commit()
-    {
+    public function commit() {
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->commitTrans();
-				xarLog::message("DB: committed transaction [".$this->transactionOpcount."]", xarLog::LEVEL_INFO);
+                xarLog::message("DB: committed transaction [" . $this->transactionOpcount . "]", xarLog::LEVEL_INFO);
             } elseif ($this->supportsSavepoints()) {
-            	$savepointIdentifier = array_pop( $this->nestedTransactionSavepoints );
-            	$this->releaseSavepoint( $savepointIdentifier );
-			    xarLog::message("DB: releasing savepoint of transaction [".$this->transactionOpcount."]", xarLog::LEVEL_WARNING);
+                $savepointIdentifier = array_pop($this->nestedTransactionSavepoints);
+                $this->releaseSavepoint($savepointIdentifier);
+                xarLog::message("DB: releasing savepoint of transaction [" . $this->transactionOpcount . "]", xarLog::LEVEL_WARNING);
             }
             $this->transactionOpcount--;
         }
@@ -199,15 +193,14 @@ abstract class ConnectionCommon {
     /**
      * Rollback changes in a transaction.
      */
-    public function rollback()
-    {
+    public function rollback() {
         if ($this->transactionOpcount > 0) {
             if ($this->transactionOpcount == 1 || $this->supportsNestedTrans()) {
                 $this->rollbackTrans();
             } elseif ($this->supportsSavepoints()) {
-            	$savepointIdentifier = array_pop( $this->nestedTransactionSavepoints );
-            	$this->rollbackToSavepoint( $savepointIdentifier );
-				xarLog::message("DB: Rolled back transaction [".$this->transactionOpcount."]", xarLog::LEVEL_WARNING);
+                $savepointIdentifier = array_pop($this->nestedTransactionSavepoints);
+                $this->rollbackToSavepoint($savepointIdentifier);
+                xarLog::message("DB: Rolled back transaction [" . $this->transactionOpcount . "]", xarLog::LEVEL_WARNING);
             }
             $this->transactionOpcount--;
         }
@@ -215,46 +208,42 @@ abstract class ConnectionCommon {
 
     /**
      * Checks if the current connection supports savepoints
-     * 
+     *
      * Driver classes should override this if they support savepoints.
-     * 
+     *
      * @return bool Does the connection support savepoints
      */
-    protected function supportsSavepoints()
-    {
-    	return false;
-    }    
+    protected function supportsSavepoints() {
+        return false;
+    }
 
     /**
      * Creates a new savepoint
      *
      * @param string $identifier Name of the savepoint to create
      */
-    protected function setSavepoint( $identifier )
-    {
-    	throw new SQLException('This database driver doesn\'t support savepoints');
+    protected function setSavepoint($identifier) {
+        throw new SQLException('This database driver doesn\'t support savepoints');
     }
-    
+
     /**
      * Releases a savepoint
      *
      * @param string $identifier Name of the savepoint to release
      */
-    protected function releaseSavepoint( $identifier )
-    {
-    	throw new SQLException('This database driver doesn\'t support savepoints');
+    protected function releaseSavepoint($identifier) {
+        throw new SQLException('This database driver doesn\'t support savepoints');
     }
-    
+
     /**
      * Rollback changes to a savepoint
      *
      * @param string $identifier Name of the savepoint to rollback to
      */
-    protected function rollbackToSavepoint( $identifier )
-    {
-    	throw new SQLException('This database driver doesn\'t support savepoints');
+    protected function rollbackToSavepoint($identifier) {
+        throw new SQLException('This database driver doesn\'t support savepoints');
     }
-    
+
     /**
      * Enable/disable automatic commits.
      *
@@ -266,16 +255,14 @@ abstract class ConnectionCommon {
      * @param boolean $bit New value for auto commit.
      * @return void
      */
-    public function setAutoCommit($bit)
-    {
+    public function setAutoCommit($bit) {
         if ($this->transactionOpcount > 0) {
             trigger_error("Changing autocommit in mid-transaction; committing " . $this->transactionOpcount . " uncommitted statements.", E_USER_WARNING);
         }
 
         if (!$bit) {
             $this->begin();
-        }
-        else {
+        } else {
             $this->commit();
         }
     }
@@ -285,8 +272,7 @@ abstract class ConnectionCommon {
      *
      * @return boolean
      */
-    public function getAutoCommit()
-    {
+    public function getAutoCommit() {
         return ($this->transactionOpcount == 0);
     }
 
@@ -294,40 +280,39 @@ abstract class ConnectionCommon {
      * Begin new transaction.
      * Driver classes should override this method if they support transactions.
      */
-    protected function beginTrans()
-    {
+    protected function beginTrans() {
+
     }
 
     /**
      * Commit the current transaction.
      * Driver classes should override this method if they support transactions.
      */
-    protected function commitTrans()
-    {
+    protected function commitTrans() {
+
     }
 
     /**
      * Roll back (undo) the current transaction.
      * Driver classes should override this method if they support transactions.
      */
-    protected function rollbackTrans()
-    {
+    protected function rollbackTrans() {
+
     }
 
     // XARAYA MODIFICATION
     // to prevent changing all execute statements
-    public function &Execute($sql,$bindvars = array(), $fetchmode = null)
-    {
+    public function &Execute($sql, $bindvars = array(), $fetchmode = null) {
         xarLog::message("DB: Executing $sql", xarLog::LEVEL_INFO);
         $stmt = $this->prepareStatement($sql);
-        if($stmt) {
-            if($this->isSelect($sql)) {
+        if ($stmt) {
+            if ($this->isSelect($sql)) {
                 try {
-                    $res = $stmt->executeQuery($bindvars,$fetchmode);
+                    $res = $stmt->executeQuery($bindvars, $fetchmode);
                 } catch (Exception $e) {
                     throw new SQLException("CREOLE: SELECT query $sql failed to execute");
                 }
-                if($res) {
+                if ($res) {
                     // ADODB used to set the resultset on the first, doh!
                     $res->first();
                 }
@@ -339,17 +324,17 @@ abstract class ConnectionCommon {
                 }
                 // Save it, for adodb compat for the the method Affected_Rows
                 $this->affected_rows = $res;
-                if($res == 0 ) $res=true;
+                if ($res == 0)
+                    $res = true;
             }
-            if(!$res) {
+            if (!$res) {
                 throw new SQLException("CREOLE: query $sql failed to execute");
             }
             return $res;
         }
     }
 
-    public function &SelectLimit($sql,$limit=0 ,$offset=0 , $bindvars = array(),$fetchmode = null)
-    {
+    public function &SelectLimit($sql, $limit = 0, $offset = 0, $bindvars = array(), $fetchmode = null) {
         xarLog::message("DB: Executing $sql", xarLog::LEVEL_INFO);
         $stmt = $this->prepareStatement($sql);
         $stmt->setLimit($limit);
@@ -357,11 +342,9 @@ abstract class ConnectionCommon {
         $result = $stmt->executeQuery($bindvars, $fetchmode);
         $result->first();
         return $result;
-
     }
 
-    private function isSelect($sql)
-    {
+    private function isSelect($sql) {
         // is first word is SELECT, then return true, unless it's SELECT INTO ...
         // this doesn't, however, take comments into account ...
         $sql = trim($sql);
@@ -369,21 +352,19 @@ abstract class ConnectionCommon {
     }
 
     /* Create convenience wrappers, so the id's can be had on the connection directly */
-    public function getNextId($tableName)
-    {
+
+    public function getNextId($tableName) {
         $idgen = $this->getIdGenerator();
         return $idgen->getNextId($tableName);
     }
 
-    public function getLastId($tableName)
-    {
+    public function getLastId($tableName) {
         $idgen = $this->getIdGenerator();
         return $idgen->getLastId($tableName);
     }
 
-    function __get($propname)
-    {
-        switch($propname) {
+    function __get($propname) {
+        switch ($propname) {
             // return the database type
             case 'databaseType':
                 // This has no realistic equivalent in creole, probably leave it in
@@ -399,14 +380,13 @@ abstract class ConnectionCommon {
         }
     }
 
-    function __call($method, $args)
-    {
-        switch(strtolower($method)) {
+    function __call($method, $args) {
+        switch (strtolower($method)) {
             case 'qstr':
                 // Used in a couple of places where bind variable replacement is less than trivial
                 // (roles and dd only)
                 // DOH! we dont want this
-                return  "'".str_replace("'","\\'",$args[0])."'";
+                return "'" . str_replace("'", "\\'", $args[0]) . "'";
                 break;
             case 'starttrans':
                 return $this->begin();
@@ -430,12 +410,11 @@ abstract class ConnectionCommon {
         }
     }
 
-    function &MetaTables($ttype=false,$showSchema=false,$mask=false)
-    {
+    function &MetaTables($ttype = false, $showSchema = false, $mask = false) {
         $dbinfo = $this->getDatabaseInfo();
         $tables = $dbinfo->getTables();
         foreach ($tables as $table) {
-            $tmp[$table->getName()]= $table->getName();
+            $tmp[$table->getName()] = $table->getName();
         }
         return $tmp;
     }
@@ -447,15 +426,19 @@ abstract class ConnectionCommon {
      * Since we throw exceptions if we have an error, this just return 0
      * @todo remove when we can, only seen in modules
      */
-    function ErrorNo() { return 0;  }
+
+    function ErrorNo() {
+        return 0;
+    }
+
     // END XARAYA MODIFICATION
 
     /**
      * Returns false if connection is closed.
      * @return boolean
      */
-    public function isConnected()
-    {
+    public function isConnected() {
         return !empty($this->dblink);
     }
+
 }
