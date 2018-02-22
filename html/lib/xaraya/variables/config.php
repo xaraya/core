@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Configuration variable handling
  *
@@ -12,24 +13,23 @@
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
- 
 /**
  * ConfigVars class
  *
  * @todo if core was module 0 this could be a whole lot simpler by derivation (or if all config variables were moved to a module)
  */
-
 sys::import('xaraya.variables');
 
 class xarConfigVars extends xarVars implements IxarVars
 {
+
     private static $KEY = 'Config.Variables'; // const cannot be private :-(
     private static $preloaded = false;
 
     /**
      * Sets a configuration variable.
      *
-     * 
+     *
      * @param  string $name the name of the variable
      * @param  mixed  $value (array,integer or string) the value of the variable
      * @return boolean true on success, or false if you're trying to set unallowed variables
@@ -44,7 +44,7 @@ class xarConfigVars extends xarVars implements IxarVars
         // 2. Getting a new id (for some backends)
         // 3. inserting it.
         // Question is wether we want to invent new configvars on the fly or not
-        self::delete(null,$name);
+        self::delete(null, $name);
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -76,18 +76,17 @@ class xarConfigVars extends xarVars implements IxarVars
      * @todo the vars which are not in the database should probably be systemvars, not configvars
      * @todo bench the preloading
      */
-    public static function get($scope, $name, $value=null)
+    public static function get($scope, $name, $value = null)
     {
         // Preload the config vars once
-        if(!self::$preloaded)
+        if (!self::$preloaded)
             self::preload();
 
-        if(!self::$preloaded)
+        if (!self::$preloaded)
             throw new VariableNotFoundException($name, "Variable #(1) not found");
-        
+
         // Configvars which are not in the database (either in config file or in code defines)
-        switch($name)
-        {
+        switch ($name) {
             case 'Site.DB.TablePrefix':
                 return xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
                 break;
@@ -110,30 +109,30 @@ class xarConfigVars extends xarVars implements IxarVars
         }
 
         // From the cache
-        if(xarCoreCache::isCached(self::$KEY, $name))
-        {
+        if (xarCoreCache::isCached(self::$KEY, $name)) {
             $value = xarCoreCache::getCached(self::$KEY, $name);
             return $value;
         }
 
         // Need to retrieve it
         // @todo checkme What should we do here? preload again, or just fetch the one?
-        try  {
-          $dbconn = xarDB::getConn();
-          $tables = xarDB::getTables();
-          $varstable = $tables['config_vars'];
+        try {
+            $dbconn = xarDB::getConn();
+            $tables = xarDB::getTables();
+            $varstable = $tables['config_vars'];
         } catch (Exception $e) {
-          // No tables, probably installing
-          if($value == null) throw new VariableNotFoundException($name, "Variable #(1) not found (no tables found, in fact)");
-          return $value;
-        } 
+            // No tables, probably installing
+            if ($value == null)
+                throw new VariableNotFoundException($name, "Variable #(1) not found (no tables found, in fact)");
+            return $value;
+        }
 
         $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($name),ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array($name), ResultSet::FETCHMODE_NUM);
 
-        if($result->next()) {
+        if ($result->next()) {
             // Found it, retrieve and cache it
             $value = $result->get(2);
             $value = unserialize($value);
@@ -142,7 +141,8 @@ class xarConfigVars extends xarVars implements IxarVars
             return $value;
         }
         // @todo: We found nothing, return the default if we had one
-        if($value !== null) return $value;        
+        if ($value !== null)
+            return $value;
         throw new VariableNotFoundException($name, "Variable #(1) not found");
     }
 
@@ -164,7 +164,7 @@ class xarConfigVars extends xarVars implements IxarVars
     /**
      * Pre-load site configuration variables
      *
-     * 
+     *
      * @return boolean true on success, or void on database error
      * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
      * @todo look into removing the serialisation, creole does this when needed, automatically (well, almost)
@@ -172,20 +172,20 @@ class xarConfigVars extends xarVars implements IxarVars
     private static function preload()
     {
         try {
-          $dbconn = xarDB::getConn();
-          $tables = xarDB::getTables();
-          if (!isset($tables['config_vars'])) return false;
-          $varstable = $tables['config_vars'];
+            $dbconn = xarDB::getConn();
+            $tables = xarDB::getTables();
+            if (!isset($tables['config_vars']))
+                return false;
+            $varstable = $tables['config_vars'];
         } catch (Exception $e) {
-          return false;
+            return false;
         }
-        
+
         $query = "SELECT name, value FROM $varstable WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_ASSOC);
 
-        while ($result->next())
-        {
+        while ($result->next()) {
             $newval = unserialize($result->getString('value'));
             xarCoreCache::setCached(self::$KEY, $result->getString('name'), $newval);
         }
@@ -194,5 +194,7 @@ class xarConfigVars extends xarVars implements IxarVars
         self::$preloaded = true;
         return true;
     }
+
 }
+
 ?>

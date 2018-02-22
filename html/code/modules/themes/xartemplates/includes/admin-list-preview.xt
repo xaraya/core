@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
 <xar:if condition="!empty($themes)">
-    <form method="post" action="#xarModURL('themes', 'admin', 'view')#">
+    <form method="post" action="#xarModURL('themes', 'admin', 'list')#">
         <table class="xar-table xar-fullwidth">
             <xar:foreach in="$themes" value="$theme">
                 <tr id="#$theme['name']#">

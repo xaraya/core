@@ -23,8 +23,8 @@
                     <li class="xar-tabs-label">#$tabs.label#</li>
                 </xar:if>
                 <!-- Get the value of the variable if it exists -->
-                <xar:if condition="isset($tabs['variable']) AND isset(${$tabs['variable']})">
-                    <xar:set name="variable">${$tabs['variable']}</xar:set>
+                <xar:if condition="isset($tabs['variable']) AND isset($$tabs['variable'])">
+                    <xar:set name="variable">$$tabs['variable']</xar:set>
                 </xar:if>
                 
                 <xar:foreach in="$tabs['menulinks']" value="$tab">

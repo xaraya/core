@@ -41,7 +41,7 @@ function themes_admin_initialise()
 
     if (!isset($initialised)) return;
 
-    xarController::redirect(xarModURL('themes', 'admin', 'view'));
+    xarController::redirect(xarModURL('themes', 'admin', 'list'));
     return true;
 } 
 

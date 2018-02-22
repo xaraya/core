@@ -107,6 +107,7 @@ class CelkoPositionProperty extends DataProperty
         if (!xarVarFetch($name . '_position', 'enum:1:2:3:4', $position)) return;
         switch (intval($position)) {
             case 1: // before - same level
+            default:
                 $this->rightorleft = 'left';
                 $this->inorout = 'out';
                 break;
@@ -578,7 +579,7 @@ class CelkoPositionProperty extends DataProperty
     }
 
 	/*
-	 * Used to build a tree of categories
+	 * Used to build tree of categories
 	 *
 	 * @param int $parent_id Parent ID of the tree
 	 * @param int $left_id Left ID of the first level categories
@@ -586,7 +587,7 @@ class CelkoPositionProperty extends DataProperty
 	*/
     function build_tree($parent_id, $left_id=1)
     {       
-        // We need the left ID in case there are other top level categories, and we need to know where this tree starts
+        // We need tohe left ID in case there are other top level categories, and we need to know where this tree starts
         // the right value of this node is the left value + 1  
         $right_id = $left_id+1;  
     
@@ -673,11 +674,6 @@ class CelkoPositionProperty extends DataProperty
         foreach ($nameparts as $part) {
             $select_fields .= "P1." . $part . ",";
         }
-        /*
-            The first WHERE conditions select for each category from P1, the categories in P2 that contain it (i.e. the parents).
-            These are reurned as COUNT(P1...)
-            The second WHERE conditions below selects all categories in P1 except the current category and its descendents.
-        */
         $bindvars = array();
         $SQLquery = "SELECT
                             COUNT(P2.id) AS indent,

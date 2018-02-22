@@ -1,18 +1,17 @@
 <?php
 /**
- * Modify the configuration settings of this module
+ * Site Tools Template Cache Management
  *
- * @package modules\themes
- * @subpackage themes
- * @copyright see the html/credits.html file in this release
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
+ * @package modules
+ * @copyright (C) 2002-2005 The Digital Development Foundation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://xaraya.info/index.php/release/70.html
+ * @link http://www.xaraya.com
+ *
+ * @subpackage Sitetools Module
+ * @link http://xaraya.com/index.php/release/887.html
+ * @author Jo Dalle Nogare <jojodee@xaraya.com>
  */
 /**
- * @author Jo Dalle Nogare <jojodee@xaraya.com>
  *
  * @ View Cache Files
  * @param  $ 'action' action taken on cache file
@@ -21,19 +20,19 @@
 function themes_admin_cacheview($args)
 {
     /* Get parameters from whatever input we need. */
-    if (!xarVarFetch('action',  'str:1',  $action,  false, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirm', 'str:1:', $confirm, '',    XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('hashn',   'str:1:', $hashn,   false, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('templn',  'str:1:', $templn,  false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('action', 'str:1', $action, false, XARVAR_NOT_REQUIRED)) return;
+     if (!xarVarFetch('confirm', 'str:1:', $confirm, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('hashn', 'str:1:', $hashn, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('templn', 'str:1:', $templn, false, XARVAR_NOT_REQUIRED)) return;
 
     /* Security check - important to do this as early as possible */
-    if (!xarSecurityCheck('AdminThemes')) {
+    if (!xarSecurityCheck('AdminSiteTools')) {
         return;
     }
 
-    $cachedir  = xarModVars::get('themes','templcachepath');
-    $cachefile = xarModVars::get('themes','templcachepath').'/CACHEKEYS';
-    $scriptcache=xarModVars::get('themes','templcachepath').'/d4609360b2e77516aabf27c1f468ee33.php';
+    $cachedir  = xarModVars::get('sitetools','templcachepath');
+    $cachefile = xarModVars::get('sitetools','templcachepath').'/CACHEKEYS';
+    $scriptcache=xarModVars::get('sitetools','templcachepath').'/d4609360b2e77516aabf27c1f468ee33.php';
     $data=array();
           $data['popup']=false;
     /* Check for confirmation. */

@@ -33,7 +33,7 @@ function themes_admin_settings()
     if (!xarModUserVars::set('themes', 'selclass', $selclass)) return;
     if (!xarModUserVars::set('themes', 'useicons', $useicons)) return;
 
-    xarController::redirect(xarModURL('themes', 'admin', 'view', array('regen' => $regen = 1)));
+    xarController::redirect(xarModURL('themes', 'admin', 'list', array('regen' => $regen = 1)));
     return true;
 }
 

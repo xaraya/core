@@ -11,9 +11,9 @@
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
-                <includeitem>view</includeitem>
+                <includeitem>list</includeitem>
             </includes>
-            <target>view</target>
+            <target>list</target>
             <title>View installed themes on the system</title>
             <label>View Themes</label>
         </menuitem>
@@ -47,10 +47,10 @@
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
-                <includeitem>cacheview</includeitem>
+                <includeitem>modifyconfig</includeitem>
             </includes>
             <target>cacheview</target>
-            <title>View the files in the template cache</title>
+            <title>Modify Themes configuration values</title>
             <label>View Cache files</label>
         </menuitem>
         <menuitem>

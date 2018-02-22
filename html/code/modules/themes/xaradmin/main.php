@@ -34,7 +34,7 @@ function themes_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('themes','admin','overview');
     } else {
-        xarController::redirect(xarModURL('themes', 'admin', 'view'));
+        xarController::redirect(xarModURL('themes', 'admin', 'list'));
         return true;
     }
 }

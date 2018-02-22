@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\themes
  * @subpackage themes
@@ -8,7 +9,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
  */
-
 // Load Table Maintainance API
 sys::import('xaraya.tableddl');
 
@@ -22,10 +22,10 @@ function themes_init()
 {
     // Get database information
     $dbconn = xarDB::getConn();
-    $tables =& xarDB::getTables();
+    $tables = & xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
-    $tables['themes']     = $prefix . '_themes';
+    $tables['themes'] = $prefix . '_themes';
 
     // Create tables
     /**
@@ -53,13 +53,13 @@ function themes_init()
         'regid' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
         'directory' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
         'version' => array('type' => 'varchar', 'size' => 10, 'null' => false, 'charset' => $charset),
-        'configuration' => array('type' => 'text', 'size' => 'medium', 'null' => false, 'charset' => $charset),
-        'state' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=> true, 'null' => false, 'default' => '1'),
-        'class' => array('type' => 'integer', 'size' => 'tiny', 'unsigned'=> true, 'null' => false, 'default' => '0')
-        );
+        'configuration' => array('type' => 'text', 'size' => 'medium', 'null' => true, 'charset' => $charset),
+        'state' => array('type' => 'integer', 'size' => 'tiny', 'unsigned' => true, 'null' => false, 'default' => '1'),
+        'class' => array('type' => 'integer', 'size' => 'tiny', 'unsigned' => true, 'null' => false, 'default' => '0')
+    );
 
     $query = xarDBCreateTable($tables['themes'], $fields);
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
 
     // Create the table to hold configurations
     $fields = array(
@@ -69,21 +69,24 @@ function themes_init()
         'description' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset),
         'property_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
         'label' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'default' => '', 'charset' => $charset),
-        'configuration' => array('type' => 'text', 'size' => 'medium', 'null' => false, 'charset' => $charset)
-        );
+        'configuration' => array('type' => 'text', 'size' => 'medium', 'null' => true, 'charset' => $charset)
+    );
 
     $query = xarDBCreateTable($tables['themes_configurations'], $fields);
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
 
     xarModVars::set('themes', 'default_theme', 'default');
     xarModVars::set('themes', 'selsort', 'nameasc');
 
     // Make sure we dont miss empty variables (which were not passed thru)
     // FIXME: how would these values ever be passed in?
-    if (empty($selstyle)) $selstyle = 'plain';
+    if (empty($selstyle))
+        $selstyle = 'plain';
     // TODO: this is themes, not mods
-    if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
-    if (empty($hidecore)) $hidecore = 0;
+    if (empty($selfilter))
+        $selfilter = XARMOD_STATE_ANY;
+    if (empty($hidecore))
+        $hidecore = 0;
 
     xarModVars::set('themes', 'hidecore', $hidecore);
     xarModVars::set('themes', 'selstyle', $selstyle);
@@ -107,17 +110,15 @@ function themes_init()
     xarModVars::set('themes', 'adminpagemenu', true);
     xarModVars::set('themes', 'userpagemenu', true);
 
-    xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
-    xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');
-    xarRegisterMask('AddThemes','All','themes','All','All','ACCESS_ADD');
-    xarRegisterMask('ManageThemes','All','themes','All','All','ACCESS_DELETE');
-    xarRegisterMask('AdminThemes','All','themes','All','All','ACCESS_ADMIN');
+    xarRegisterMask('ViewThemes', 'All', 'themes', 'All', 'All', 'ACCESS_OVERVIEW');
+    xarRegisterMask('EditThemes', 'All', 'themes', 'All', 'All', 'ACCESS_EDIT');
+    xarRegisterMask('AddThemes', 'All', 'themes', 'All', 'All', 'ACCESS_ADD');
+    xarRegisterMask('ManageThemes', 'All', 'themes', 'All', 'All', 'ACCESS_DELETE');
+    xarRegisterMask('AdminThemes', 'All', 'themes', 'All', 'All', 'ACCESS_ADMIN');
 
     xarModVars::set('themes', 'selclass', 'all');
     xarModVars::set('themes', 'useicons', false);
-    xarModVars::set('themes','flushcaches', '');
-
-    xarModVars::set('themes', 'templcachepath', sys::varpath()."/cache/templates");
+    xarModVars::set('themes', 'flushcaches', '');
 
     // Installation complete; check for upgrades
     return themes_upgrade('2.0.0');
@@ -134,7 +135,7 @@ function themes_upgrade($oldversion)
     // Upgrade dependent on old version number
     switch ($oldversion) {
         default:
-      break;
+            break;
     }
     return true;
 }

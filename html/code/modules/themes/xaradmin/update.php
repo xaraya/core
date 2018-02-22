@@ -102,7 +102,7 @@ function themes_admin_update()
     if ($return) {
         xarController::redirect(xarModURL('themes', 'admin', 'modify', array('id' => $regId)));
     } else {
-        xarController::redirect(xarModURL('themes', 'admin', 'view'));
+        xarController::redirect(xarModURL('themes', 'admin', 'list'));
     } 
     return true;
 } 
