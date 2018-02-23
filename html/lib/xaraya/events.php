@@ -461,7 +461,7 @@ class xarEvents extends Object implements ixarEvents
         // remove event item
         $query = "DELETE FROM $emstable WHERE event = ? AND module_id = ? AND itemtype = ?";
         $bindvars = array($event, $module_id, $itemtype);
-        $result = &$dbconn->Execute($query,$bindvars);
+        $result = $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
         return true;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Functions that manage installation, upgrade and deinstallation of the module
  *
@@ -22,28 +23,29 @@
  * @author John Cox
  * @author Gregor Rothfuss
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
- * 
+ *
  * @param void N/A
  * @return boolean True on success, false on failure
  */
 function authsystem_init()
 {
     //Set the default authmodule if not already set
-    $isdefaultauth = xarModVars::get('roles','defaultauthmodule');
+    $isdefaultauth = xarModVars::get('roles', 'defaultauthmodule');
     if (empty($isdefaultauth)) {
-       xarModVars::get('roles', 'defaultauthmodule', 'authsystem');
+        xarModVars::get('roles', 'defaultauthmodule', 'authsystem');
     }
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
-    $modulesTable = xarDB::getPrefix() .'_modules';
+    $xartable = & xarDB::getTables();
+    $modulesTable = xarDB::getPrefix() . '_modules';
     $modid = xarModGetIDFromName('authsystem');
     // update the modversion class and admin capable
     $query = "UPDATE $modulesTable SET class=?, admin_capable=?
              WHERE regid = ?";
-    $bindvars = array('Authentication',true,$modid);
-    $result = $dbconn->Execute($query,$bindvars);
-    if (!$result) return;
+    $bindvars = array('Authentication', true, $modid);
+    $result = $dbconn->Execute($query, $bindvars);
+    if (!$result)
+        return;
 
     // Installation complete; check for upgrades
     return authsystem_upgrade('2.0.0');
@@ -51,26 +53,26 @@ function authsystem_init()
 
 /**
  * Activate the module. This function is called when the module is changed from installed to active state.
- * 
+ *
  * @author Jan Schrage
  * @author John Cox
  * @author Gregor Rothfuss
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
- * 
+ *
  * @param void N/A
  * @return boolean True on success, false on failure
  */
 function authsystem_activate()
 {
-    xarRegisterPrivilege('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
-    xarRegisterPrivilege('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
+    xarRegisterPrivilege('AdminAuthsystem', 'All', 'authsystem', 'All', 'All', 'ACCESS_ADMIN');
+    xarRegisterPrivilege('ViewAuthsystem', 'All', 'authsystem', 'All', 'All', 'ACCESS_OVERVIEW');
 
-    xarRegisterMask('ViewLogin','All','authsystem','Block','login:Login:All','ACCESS_OVERVIEW');
-    xarRegisterMask('ViewAuthsystemBlocks','All','authsystem','Block','All','ACCESS_OVERVIEW');
-    xarRegisterMask('ViewAuthsystem','All','authsystem','All','All','ACCESS_OVERVIEW');
-    xarRegisterMask('EditAuthsystem','All','authsystem','All','All','ACCESS_EDIT');
-    xarRegisterMask('ManageAuthsystem','All','authsystem','All','All','ACCESS_DELETE');
-    xarRegisterMask('AdminAuthsystem','All','authsystem','All','All','ACCESS_ADMIN');
+    xarRegisterMask('ViewLogin', 'All', 'authsystem', 'Block', 'login:Login:All', 'ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystemBlocks', 'All', 'authsystem', 'Block', 'All', 'ACCESS_OVERVIEW');
+    xarRegisterMask('ViewAuthsystem', 'All', 'authsystem', 'All', 'All', 'ACCESS_OVERVIEW');
+    xarRegisterMask('EditAuthsystem', 'All', 'authsystem', 'All', 'All', 'ACCESS_EDIT');
+    xarRegisterMask('ManageAuthsystem', 'All', 'authsystem', 'All', 'All', 'ACCESS_DELETE');
+    xarRegisterMask('AdminAuthsystem', 'All', 'authsystem', 'All', 'All', 'ACCESS_ADMIN');
 
     /* Define Module vars */
     xarModVars::set('authsystem', 'lockouttime', 15);
@@ -88,7 +90,7 @@ function authsystem_activate()
  * @author John Cox
  * @author Gregor Rothfuss
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
- * 
+ *
  * @param string $oldversion The three digit version number of the currently installed (old) version
  * @return boolean True on success, false on failure
  */
@@ -100,7 +102,7 @@ function authsystem_upgrade($oldversion)
             // Register event subjects
             xarEvents::registerSubject('UserLogin', 'user', 'authsystem');
             xarEvents::registerSubject('UserLogout', 'user', 'authsystem');
-      break;
+            break;
     }
     return true;
 }
@@ -114,13 +116,13 @@ function authsystem_upgrade($oldversion)
  * @author Gregor Rothfuss
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
  *
- * @param void N/A 
+ * @param void N/A
  * @return boolean Function always returns false. It cannot be deleted.
  */
 function authsystem_delete()
 {
-  //this module cannot be removed
-  return false;
+    //this module cannot be removed
+    return false;
 }
 
 ?>

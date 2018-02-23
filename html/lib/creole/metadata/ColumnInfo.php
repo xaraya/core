@@ -27,12 +27,12 @@
  * @version   $Revision: 1.13 $
  * @package   creole.metadata
  */
-class ColumnInfo {
-
-     // FIXME
-     //    - Currently all member attributes are public.  This should be fixed
-     // when PHP's magic __sleep() and __wakeup() functions & serialization support
-     // handles protected/private members. (if ever)
+class ColumnInfo
+{
+// FIXME
+//    - Currently all member attributes are public.  This should be fixed
+// when PHP's magic __sleep() and __wakeup() functions & serialization support
+// handles protected/private members. (if ever)
 
     /** Column name */
     public $name;
@@ -84,18 +84,10 @@ class ColumnInfo {
      * @param boolean $is_auto_increment Whether col is of autoIncrement type.
      */
     function __construct(TableInfo
-                         $table,
-                         $name,
-                         $type = null,
-                         $nativeType = null,
-                         $size = null,
-                         $precision=null,
-                         $scale = null,
-                         $is_nullable = null,
-                         $default = null,
-                         $is_auto_increment = null,
-                         $vendorInfo = array())
+    $table, $name, $type = null, $nativeType = null, $size = null, $precision = null, $scale = null, $is_nullable = null, $default = null, $is_auto_increment = null, $vendorInfo = array())
     {
+
+
         $this->table = $table;
         $this->name = $name;
         $this->type = $type;
@@ -228,12 +220,12 @@ class ColumnInfo {
     {
         return $this->table;
     }
-    
-    // XARAYA modification
-    // emulate some stuff
-    function __get($propname) 
+
+// XARAYA modification
+// emulate some stuff
+    function __get($propname)
     {
-        switch($propname) {
+        switch ($propname) {
             case 'max_length':
                 return $this->size;
                 break;
@@ -241,13 +233,14 @@ class ColumnInfo {
                 throw new Exception("Unknown  property accessed for columninfo");
         }
     }
-    
-    function __call($method, $args) 
+
+    function __call($method, $args)
     {
-        switch($method) {
+        switch ($method) {
             default:
                 throw new Exception("Unknown method calls for columninfo");
         }
     }
-    // END XARAYA modification
+
+// END XARAYA modification
 }

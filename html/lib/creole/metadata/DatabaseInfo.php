@@ -30,7 +30,6 @@
 abstract class DatabaseInfo {
 
     protected $tables = array();
-
     protected $sequences = array();
 
     /** have tables been loaded */
@@ -60,8 +59,7 @@ abstract class DatabaseInfo {
     /**
      * @param Connection $dbh
      */
-    public function __construct(Connection $conn, $vendorInfo = array())
-    {
+    public function __construct(Connection $conn, $vendorInfo = array()) {
         $this->conn = $conn;
         $this->dblink = $conn->getResource();
         $dsn = $conn->getDSN();
@@ -73,8 +71,7 @@ abstract class DatabaseInfo {
      * Get name of database.
      * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->dbname;
     }
 
@@ -84,23 +81,21 @@ abstract class DatabaseInfo {
      * the serialization and unserialization of this object.
      * @return array The class variables that should be serialized (all must be public!).
      */
-    function __sleep()
-    {
-        return array('tables','sequences','conn');
+    function __sleep() {
+        return array('tables', 'sequences', 'conn');
     }
 
     /**
      * This method is invoked upon unserialize().
      * This method re-hydrates the object and restores the recursive hierarchy.
      */
-    function __wakeup()
-    {
+    function __wakeup() {
         // Re-init vars from serialized connection
         $this->dbname = $conn->database;
         $this->dblink = $conn->connection;
 
         // restore chaining
-        foreach($this->tables as $tbl) {
+        foreach ($this->tables as $tbl) {
             $tbl->database = $this;
             $tbl->dbname = $this->dbname;
             $tbl->dblink = $this->dblink;
@@ -112,8 +107,7 @@ abstract class DatabaseInfo {
      * Returns Connection being used.
      * @return Connection
      */
-    public function getConnection()
-    {
+    public function getConnection() {
         return $this->conn;
     }
 
@@ -123,33 +117,33 @@ abstract class DatabaseInfo {
      * @return TableInfo
      * @throws SQLException - if table does not exist in this db.
      */
-    public function getTable($name)
-    {
-        if(!$this->tablesLoaded) $this->initTables();
+    public function getTable($name) {
+        if (!$this->tablesLoaded)
+            $this->initTables();
         if (!isset($this->tables[strtoupper($name)])) {
-            throw new SQLException("Database `".$this->dbname."` has no table `".$name."`");
+            throw new SQLException("Database `" . $this->dbname . "` has no table `" . $name . "`");
         }
-        return $this->tables[ strtoupper($name) ];
+        return $this->tables[strtoupper($name)];
     }
 
-  /**
-   * Return whether database contains specified table.
-   * @param string $name The table name.
-   * @return boolean
-   */
-  public function hasTable($name)
-  {
-    if(!$this->tablesLoaded) $this->initTables();
-    return isset($this->tables[strtoupper($name)]);
-  }
+    /**
+     * Return whether database contains specified table.
+     * @param string $name The table name.
+     * @return boolean
+     */
+    public function hasTable($name) {
+        if (!$this->tablesLoaded)
+            $this->initTables();
+        return isset($this->tables[strtoupper($name)]);
+    }
 
     /**
      * Gets array of TableInfo objects.
      * @return array TableInfo[]
      */
-    public function getTables()
-    {
-        if(!$this->tablesLoaded) $this->initTables();
+    public function getTables() {
+        if (!$this->tablesLoaded)
+            $this->initTables();
         return array_values($this->tables); //re-key [numerically]
     }
 
@@ -158,8 +152,7 @@ abstract class DatabaseInfo {
      * Table name is case-insensitive.
      * @param TableInfo $table
      */
-    public function addTable(TableInfo $table)
-    {
+    public function addTable(TableInfo $table) {
         $this->tables[strtoupper($table->getName())] = $table;
     }
 
@@ -179,19 +172,19 @@ abstract class DatabaseInfo {
      * @return boolean
      * @throws SQLException
      */
-    public function isSequence($key)
-    {
-        if(!$this->seqsLoaded) $this->initSequences();
-        return isset($this->sequences[ strtoupper($key) ]);
+    public function isSequence($key) {
+        if (!$this->seqsLoaded)
+            $this->initSequences();
+        return isset($this->sequences[strtoupper($key)]);
     }
 
     /**
      * Gets array of ? objects.
      * @return array ?[]
      */
-    public function getSequences()
-    {
-        if(!$this->seqsLoaded) $this->initSequences();
+    public function getSequences() {
+        if (!$this->seqsLoaded)
+            $this->initSequences();
         return array_values($this->sequences); //re-key [numerically]
     }
 
@@ -199,9 +192,8 @@ abstract class DatabaseInfo {
      * Get vendor specific optional information for this primary key.
      * @return array vendorSpecificInfo[]
      */
-    public function getVendorSpecificInfo()
-    {
+    public function getVendorSpecificInfo() {
         return $this->vendorSpecificInfo;
     }
-}
 
+}

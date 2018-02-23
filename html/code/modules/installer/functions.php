@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Call an installer function
  *
@@ -10,12 +11,13 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/200.html
  */
+
 /**
  * Call an installer function.
  *
  * @author John Robeson
  * @author Marcel van der Boom <marcel@hsdev.com>
- * This function is similar to xarMod::guiFunc but simplified. 
+ * This function is similar to xarMod::guiFunc but simplified.
  * We need this because during install we cant have the module
  * subsystem online directly, so we need a direct way of calling
  * the admin functions of the installer. The actual functions
@@ -28,8 +30,7 @@
  * @return string output display string
  * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
  */
-function xarInstallFunc($funcName = 'main', $args = array())
-{
+function xarInstallFunc($funcName = 'main', $args = array()) {
     $modName = 'installer';
     $modType = 'admin';
 
@@ -38,12 +39,14 @@ function xarInstallFunc($funcName = 'main', $args = array())
     if (!function_exists($modFunc)) {
         // try to load it
         xarInstallLoad($funcName);
-        if(!function_exists($modFunc)) throw new FunctionNotFoundException($modFunc);
+        if (!function_exists($modFunc))
+            throw new FunctionNotFoundException($modFunc);
     }
 
     // Load the translations file
-    $file = sys::code() . 'modules/'.$modName.'/xar'.$modType.'/'.strtolower($funcName).'.php';
-    if (!xarMLSLoadTranslations($file)) return;
+    $file = sys::code() . 'modules/' . $modName . '/xar' . $modType . '/' . strtolower($funcName) . '.php';
+    if (!xarMLSLoadTranslations($file))
+        return;
 
     $tplData = $modFunc($args);
     if (!is_array($tplData)) {
@@ -59,10 +62,10 @@ function xarInstallFunc($funcName = 'main', $args = array())
     return xarTpl::module($modName, $modType, $funcName, $tplData, $templateName);
 }
 
-function xarInstallAPIFunc($funcName = 'main', $args = array())
-{
+function xarInstallAPIFunc($funcName = 'main', $args = array()) {
     $modName = 'installer';
     $modType = 'admin';
+
 
     // Build function name and call function
     $modAPIFunc = "{$modName}_{$modType}api_{$funcName}";
@@ -70,12 +73,15 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
         // attempt to load the install api
         xarInstallAPILoad();
         // let's check for the function again to be sure
-        if (!function_exists($modAPIFunc)) throw new FunctionNotFoundException($modAPIFunc);
+        if (!function_exists($modAPIFunc))
+            throw new FunctionNotFoundException($modAPIFunc);
     }
 
     // Load the translations file
-    $file = sys::code() . 'modules/'.$modName.'/xar'.$modType.'api/'.strtolower($funcName).'.php';
-    if (!xarMLSLoadTranslations($file)) return;
+    $file = sys::code() . 'modules/' . $modName . '/xar' . $modType . 'api/' . strtolower($funcName) . '.php';
+
+    if (!xarMLSLoadTranslations($file))
+        return;
 
     return $modAPIFunc($args);
 }
@@ -89,13 +95,12 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function xarInstallAPILoad()
-{
+function xarInstallAPILoad() {
     static $loadedAPICache = array();
 
-    $modName    = 'installer';
-    $modOsDir   = 'installer';
-    $modType  = 'admin';
+    $modName = 'installer';
+    $modOsDir = 'installer';
+    $modType = 'admin';
 
     if (isset($loadedAPICache[strtolower("$modName$modType")])) {
         // Already loaded from somewhere else
@@ -103,9 +108,9 @@ function xarInstallAPILoad()
     }
 
     $modOsType = xarVarPrepForOS($modType);
-
     $osfile = sys::code() . "modules/$modOsDir/xar{$modOsType}api.php";
-    if (!file_exists($osfile)) throw new FileNotFoundException($osfile);
+    if (!file_exists($osfile))
+        throw new FileNotFoundException($osfile);
 
 
     // Load the file
@@ -122,26 +127,27 @@ function xarInstallAPILoad()
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
  */
-function xarInstallLoad($func)
-{
+function xarInstallLoad($func) {
     static $loadedModuleCache = array();
 
     $modName = 'installer';
     $modType = 'admin';
 
-    if (empty($modName)) throw new EmptyParameterException('modName');
+    if (empty($modName))
+        throw new EmptyParameterException('modName');
 
     if (isset($loadedModuleCache[strtolower("$modName$modType")])) {
         // Already loaded from somewhere else
         return true;
     }
-   
+
     // Load the module files
     $modOsType = xarVarPrepForOS($modType);
     $modOsDir = 'installer';
 
     $osfile = sys::code() . "modules/$modOsDir/xar$modOsType/$func.php";
-    if (!file_exists($osfile)) throw new FileNotFoundException($osfile);
+    if (!file_exists($osfile))
+        throw new FileNotFoundException($osfile);
 
     // Load file
     include $osfile;

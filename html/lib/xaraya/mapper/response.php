@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Response class
  *
@@ -11,17 +12,20 @@
  * @link http://www.xaraya.info
  *
  * @author Marc Lutolf <mfl@netspan.ch>
-**/
-
+ * */
 class xarResponse extends Object
 {
+
     public $output;
-    
+
     /**
      * initialize
      *
      */
-    static function init(Array $args=array()) { }
+    static function init(Array $args = array())
+    {
+
+    }
 
 // CHECKME: Should we support this kind of high-level user response in module GUI functions ?
 //          And should some of the existing exceptions (to be defined) call those methods too ?
@@ -37,13 +41,14 @@ class xarResponse extends Object
      *    }
      *    ...
      *
-     * 
+     *
      * @param msg string the message
      * @param ... string template overrides, cfr. xarTpl::module (optional)
      * @return string output display string
      */
     static public function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
     {
+
         xarCache::noCache();
         if (!headers_sent()) {
             header('HTTP/1.0 404 Not Found');
@@ -65,7 +70,7 @@ class xarResponse extends Object
      *    }
      *    ...
      *
-     * 
+     *
      * @param msg string the message
      * @param ... string template overrides, cfr. xarTpl::module (optional)
      * @return string output display string
@@ -90,9 +95,16 @@ class xarResponse extends Object
      */
     static public function Redirect($url = '')
     {
+
         return xarController::redirect($url);
     }
 
-    function getOutput() { return $this->output; }
+    function getOutput()
+    {
+
+        return $this->output;
+    }
+
 }
+
 ?>
