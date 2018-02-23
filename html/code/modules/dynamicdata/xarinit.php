@@ -455,7 +455,6 @@ function dynamicdata_init()
                 'type'        => 'integer',
                 'unsigned'     => true,
                 'null'        => false,
-                'default'     => '0',
                 'increment'   => true,
                 'primary_key' => true
             ),

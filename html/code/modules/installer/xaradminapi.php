@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Modify the system configuration File
  * @package modules\installer\installer
@@ -23,7 +24,7 @@
  *        string   $args['dbType']
  * @return boolean
  */
-function installer_adminapi_modifyconfig(Array $args=array())
+function installer_adminapi_modifyconfig(Array $args = array())
 {
     extract($args);
 
@@ -45,9 +46,9 @@ function installer_adminapi_modifyconfig(Array $args=array())
     $config_php = preg_replace('/\[\'DB.Charset\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Charset'] = '$dbCharset';", $config_php);
     //$config_php = preg_replace('/\[\'DB.Encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Encoded'] = '1';", $config_php);
 
-    $fp = fopen ($systemConfigFile, 'wb');
-    fwrite ($fp, $config_php);
-    fclose ($fp);
+    $fp = fopen($systemConfigFile, 'wb');
+    fwrite($fp, $config_php);
+    fclose($fp);
 
     return true;
 }
@@ -60,24 +61,26 @@ function installer_adminapi_modifyconfig(Array $args=array())
  * @param string args['variables'] = array($name => $value,...)
  * @return boolean
  */
-
-function installer_adminapi_modifysystemvars(Array $args=array())
+function installer_adminapi_modifysystemvars(Array $args = array())
 {
-    if (!isset($args['variables'])) throw new BadParameterException('variables');
+    if (!isset($args['variables']))
+        throw new BadParameterException('variables');
     $configfile = sys::varpath() . '/config.system.php';
-    if (isset($args['filepath'])) $configfile = $args['filepath'];
-    try {
+    if (isset($args['filepath']))
+        $configfile = $args['filepath'];
+    try
+    {
         $config_php = join('', file($configfile));
         foreach ($args['variables'] as $name => $value) {
-            $config_php = preg_replace('/\[\''.$name.'\'\]\s*=\s*(\'|\")(.*)\\1;/', "['".$name."'] = '$value';", $config_php);
+            $config_php = preg_replace('/\[\'' . $name . '\'\]\s*=\s*(\'|\")(.*)\\1;/', "['" . $name . "'] = '$value';", $config_php);
         }
 
-        $fp = fopen ($configfile, 'wb');
-        fwrite ($fp, $config_php);
-        fclose ($fp);
+        $fp = fopen($configfile, 'wb');
+        fwrite($fp, $config_php);
+        fclose($fp);
         return true;
-
-    } catch (Exception $e) {
+    } catch (Exception $e)
+    {
         throw new FileNotFoundException($configfile);
     }
 }
@@ -92,25 +95,24 @@ function installer_adminapi_modifysystemvars(Array $args=array())
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
  */
-function installer_adminapi_initialise(Array $args=array())
+function installer_adminapi_initialise(Array $args = array())
 {
     extract($args);
-
-
     if (empty($directory) || empty($initfunc)) {
         throw new EmptyParameterException('directory or initfunc');
     }
 
     $osDirectory = xarVarPrepForOS($directory);
-    $modInitFile = sys::code() . 'modules/'. $osDirectory. '/xarinit.php';
+    $modInitFile = sys::code() . 'modules/' . $osDirectory . '/xarinit.php';
 
 
-    if(!file_exists($modInitFile)) throw new FileNotFoundException($modInitFile);
-    sys::import('modules.'.$osDirectory.'.xarinit');
+    if (!file_exists($modInitFile))
+        throw new FileNotFoundException($modInitFile);
+    sys::import('modules.' . $osDirectory . '.xarinit');
 
     // Run the function, check for existence
 
-    $initFunc = $osDirectory.'_'.$initfunc;
+    $initFunc = $osDirectory . '_' . $initfunc;
     if (function_exists($initFunc)) {
         $res = $initFunc();
 
@@ -136,29 +138,28 @@ function installer_adminapi_initialise(Array $args=array())
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, DATABASE_ERROR
  */
-function installer_adminapi_createdb(Array $args=array())
+function installer_adminapi_createdb(Array $args = array())
 {
     extract($args);
     // Load in Table Maintainance API
     sys::import('xaraya.xarTableDDL');
 
     // Start connection, but use the configured connection db
-   $createArgs = array(
-                       'userName' => $dbUname,
-                       'password' => $dbPass,
-                       'databaseHost' => $dbHost,
-                       'databaseType' => $dbType,
-                       'databaseName' => $dbName,
-                       'systemTablePrefix' => $dbPrefix,
-                       'siteTablePrefix' => $dbPrefix);
-   $dbconn = xarDB::newConn($createArgs);
+    $createArgs = array(
+        'userName' => $dbUname,
+        'password' => $dbPass,
+        'databaseHost' => $dbHost,
+        'databaseType' => $dbType,
+        'databaseName' => $dbName,
+        'systemTablePrefix' => $dbPrefix,
+        'siteTablePrefix' => $dbPrefix);
+    $dbconn = xarDB::newConn($createArgs);
 
-   $dbCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
-   $query = xarDBCreateDatabase($dbName,$dbType,$dbCharset);
-   $result =& $dbconn->Execute($query);
-   return true;
+    $dbCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+    $query = xarDBCreateDatabase($dbName, $dbType, $dbCharset);
+    $result = & $dbconn->Execute($query);
+    return true;
 }
-
 
 /**
  * CheckForField
@@ -171,7 +172,7 @@ function installer_adminapi_createdb(Array $args=array())
  * @author Sean Finkle
  * @author John Cox
  */
-function installer_adminapi_CheckForField(Array $args=array())
+function installer_adminapi_CheckForField(Array $args = array())
 {
     extract($args);
 
@@ -182,14 +183,14 @@ function installer_adminapi_CheckForField(Array $args=array())
     }
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = & xarDB::getTables();
 
     // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
-    $result =& $dbconn->executeQuery($query);
+    $result = & $dbconn->executeQuery($query);
 
 
-    while($result->next()) {
+    while ($result->next()) {
         if ($result[Field] == $field_name) {
             return true;
         }
@@ -209,7 +210,7 @@ function installer_adminapi_CheckForField(Array $args=array())
  * @author Sean Finkle
  * @author John Cox
  */
-function installer_adminapi_GetFieldType(Array $args=array())
+function installer_adminapi_GetFieldType(Array $args = array())
 {
     extract($args);
 
@@ -225,7 +226,7 @@ function installer_adminapi_GetFieldType(Array $args=array())
     $query = "desc $table_name";
     $result = $dbconn->executeQuery($query);
 
-    while($result->next()) {
+    while ($result->next()) {
         if ($result[Field] == $field_name) {
             return ($row[Type]);
         }
@@ -243,13 +244,14 @@ function installer_adminapi_GetFieldType(Array $args=array())
  * @author Sean Finkle
  * @author John Cox
  */
-function installer_adminapi_CheckTableExists(Array $args=array())
+function installer_adminapi_CheckTableExists(Array $args = array())
 {
     extract($args);
 
     // Argument check - make sure that all required arguments are present,
     // if not then set an appropriate error message and return
-    if (!isset($table_name)) throw new EmptyParameterException('table_name');
+    if (!isset($table_name))
+        throw new EmptyParameterException('table_name');
 
     $dbconn = xarDB::getConn();
     $dbInfo = $dbconn->getDatabaseInfo();

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @package modules\dynamicdata
  * @subpackage dynamicdata
@@ -8,25 +9,27 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
  */
-
 sys::import('xaraya.structures.descriptor');
 
 /*
  * generate the variables necessary to instantiate a DataObject or DataProperty class
-*/
+ */
+
 class DataObjectDescriptor extends ObjectDescriptor
 {
-    function __construct(Array $args=array())
+
+    function __construct(Array $args = array())
     {
         $args = self::getObjectID($args);
         parent::__construct($args);
     }
 
-    static function getModID(Array $args=array())
+    static function getModID(Array $args = array())
     {
         foreach ($args as $key => &$value) {
-            if (in_array($key, array('module','modid','module','moduleid'))) {
-                if (empty($value)) $value = xarMod::getRegID(xarMod::getName());
+            if (in_array($key, array('module', 'modid', 'module', 'moduleid'))) {
+                if (empty($value))
+                    $value = xarMod::getRegID(xarMod::getName());
                 if (is_numeric($value) || is_integer($value)) {
                     $args['moduleid'] = $value;
                 } else {
@@ -46,7 +49,8 @@ class DataObjectDescriptor extends ObjectDescriptor
             //$info = xarMod::getInfo(xarMod::getRegID($args['fallbackmodule']));
             $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']);
         }
-        if (!isset($args['itemtype'])) $args['itemtype'] = 0;
+        if (!isset($args['itemtype']))
+            $args['itemtype'] = 0;
         return $args;
     }
 
@@ -55,10 +59,10 @@ class DataObjectDescriptor extends ObjectDescriptor
      *
      * @return array all parts necessary to describe a DataObject
      */
-    static function getObjectID(Array $args=array())
+    static function getObjectID(Array $args = array())
     {
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartable =& xarDB::getTables();
+        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        $xartable = & xarDB::getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $query = "SELECT id,
@@ -82,6 +86,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             $bindvars[] = (int) $args['itemtype'];
         }
 
+
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
@@ -93,22 +98,25 @@ class DataObjectDescriptor extends ObjectDescriptor
         $result->close();
 
         if (empty($row) || count($row) < 1) {
-            $args['moduleid'] = isset($args['moduleid']) ? (int)$args['moduleid'] : null;
-            $args['itemtype'] = isset($args['itemtype']) ? (int)$args['itemtype'] : null;
-            $args['objectid'] = isset($args['objectid']) ? (int)$args['objectid'] : null;
+            $args['moduleid'] = isset($args['moduleid']) ? (int) $args['moduleid'] : null;
+            $args['itemtype'] = isset($args['itemtype']) ? (int) $args['itemtype'] : null;
+            $args['objectid'] = isset($args['objectid']) ? (int) $args['objectid'] : null;
             $args['name'] = isset($args['name']) ? $args['name'] : null;
         } else {
-            $args['moduleid'] = (int)$row['module_id'];
-            $args['itemtype'] = (int)$row['itemtype'];
-            $args['objectid'] = (int)$row['id'];
+            $args['moduleid'] = (int) $row['module_id'];
+            $args['itemtype'] = (int) $row['itemtype'];
+            $args['objectid'] = (int) $row['id'];
             $args['name'] = $row['name'];
         }
         // object property is called module_id now instead of moduleid for whatever reason !?
         $args['module_id'] = $args['moduleid'];
-        if (empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']);
-        if (empty($args['template'])) $args['template'] = $args['name'];
+        if (empty($args['tplmodule']))
+            $args['tplmodule'] = xarMod::getName($args['moduleid']);
+        if (empty($args['template']))
+            $args['template'] = $args['name'];
         return $args;
     }
+
 }
 
 ?>

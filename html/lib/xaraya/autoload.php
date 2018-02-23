@@ -248,7 +248,7 @@ class xarAutoload extends Object
             'stack'                  => 'xaraya.structures.sequences.blocks.stack',
             'arraysequence'          => 'xaraya.structures.sequences.adapters.array_sequence',
             'dynamicdatasequence'    => 'xaraya.structures.sequences.adapters.dd_sequence',
-            'sequenceadapter'        => 'xaraya.structures.sequences.adapters.sequence_adapter',
+            'sequenceadapter'        => 'xaraya.structures.sequences.adapters.sequenceadapeter',
 
             'basiccollection'        => 'xaraya.structures.sets.collection',
             'basicset'               => 'xaraya.structures.sets.collection',

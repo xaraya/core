@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Main Controller class
  *
@@ -11,10 +12,10 @@
  * @link http://www.xaraya.info
  *
  * @author Marc Lutolf <mfl@netspan.ch>
-**/
-
+ * */
 class xarController extends Object
 {
+
     public static $allowShortURLs = true;
     public static $shortURLVariables;
     public static $delimiter = '?';    // This character divides the URL into action part and parameters
@@ -23,22 +24,21 @@ class xarController extends Object
     public static $request;
     public static $response;
     public static $router;
-
     public static $moduleKey = 'module';
-    public static $typeKey   = 'type';
-    public static $funcKey   = 'func';
-    public static $module    = 'base';
-    public static $type      = 'user';
-    public static $func      = 'main';
-    public static $object    = 'objects';
-    public static $method    = 'view';
+    public static $typeKey = 'type';
+    public static $funcKey = 'func';
+    public static $module = 'base';
+    public static $type = 'user';
+    public static $func = 'main';
+    public static $object = 'objects';
+    public static $method = 'view';
     public static $entryPoint;
-    
+
     /**
      * Initialize
      *
      */
-    static function init(Array $args=array())
+    static function init(Array $args = array())
     {
         if (isset($args['enableShortURLsSupport']))
             self::$allowShortURLs = $args['enableShortURLsSupport'];
@@ -46,9 +46,11 @@ class xarController extends Object
         // The following allows you to modify the BaseModURL from the config file
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseModURL = '' in config.system.php
-        try {
+        try
+        {
             self::$entryPoint = xarSystemVars::get(sys::LAYOUT, 'BaseModURL');
-        } catch(Exception $e) {
+        } catch (Exception $e)
+        {
             self::$entryPoint = 'index.php';
         }
     }
@@ -56,7 +58,7 @@ class xarController extends Object
     /**
      * Get request variable
      *
-     * 
+     *
      * @param name string
      * @param allowOnlyMethod string
      * @return mixed
@@ -66,10 +68,10 @@ class xarController extends Object
     static function getVar($name, $allowOnlyMethod = NULL)
     {
         if (strpos($name, '[') === false) {
-            $poststring = '$_POST["' . $name . '"]';            
+            $poststring = '$_POST["' . $name . '"]';
         } else {
             $position = strpos($name, '[');
-            $poststring = '$_POST["' . substr($name,0,$position) . '"]' . substr($name,$position);            
+            $poststring = '$_POST["' . substr($name, 0, $position) . '"]' . substr($name, $position);
         }
         $isset = false;
         // For now, die silently if this fails
@@ -125,58 +127,75 @@ class xarController extends Object
 
     static function __stripslashes($value)
     {
-        $value = is_array($value) ? array_map(array('self','__stripslashes'), $value) : stripslashes($value);
+        $value = is_array($value) ? array_map(array('self', '__stripslashes'), $value) : stripslashes($value);
         return $value;
     }
 
-    static function setRequest($url=null)
+    static function setRequest($url = null)
     {
         sys::import('xaraya.mapper.request');
         self::$request = new xarRequest($url);
     }
 
-    static function getRequest($url=null)
+    static function getRequest($url = null)
     {
-        if (empty(self::$request) || !empty($url)) self::setRequest($url);
+        if (empty(self::$request) || !empty($url))
+            self::setRequest($url);
         return self::$request;
     }
 
     // Find the route for this request
-    static function normalizeRequest($request=null)
+    static function normalizeRequest($request = null)
     {
-        if (!empty($request)) self::$request = $request;
+        if (!empty($request))
+            self::$request = $request;
         $router = self::getRouter();
-        try {
+        try
+        {
             $router->route(self::$request);
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             throw $e;
         }
     }
-    
-    static function dispatch($request=null)
+
+    static function dispatch($request = null)
     {
         sys::import('xaraya.mapper.response');
+
         self::$response = new xarResponse();
-        try {
+        print_r(self::$response);
+        try
+        {
             do {
                 self::$request->setDispatched(true);
-                if (!self::$request->isDispatched()) continue;
+                if (!self::$request->isDispatched())
+                    continue;
+
+                echo "searching bug...";
+                die;
+
+                echo self::$request;
+                echo "<br/>";
+                echo self::$response;
+                die;
                 self::$dispatcher->dispatch(self::$request, self::$response);
             } while (!self::$request->isDispatched());
-        } catch (Exception $e) {
+        } catch (Exception $e)
+        {
             throw $e;
         }
     }
-    
+
     /**
      * Check to see if this is a local referral
      *
-     * 
+     *
      * @return boolean true if locally referred, false if not
      */
     static function isLocalReferer()
     {
-        $server  = xarServer::getHost();
+        $server = xarServer::getHost();
         $referer = xarServer::getVar('HTTP_REFERER');
 
         if (!empty($referer) && preg_match("!^https?://$server(:\d+|)/!", $referer)) {
@@ -189,14 +208,15 @@ class xarController extends Object
     /**
      * Carry out a redirect
      *
-     * 
+     *
      * @param redirectURL string the URL to redirect to
      */
-    static function redirect($url, $httpResponse=NULL)
+    static function redirect($url, $httpResponse = NULL)
     {
         xarCache::noCache();
         $redirectURL = urldecode($url); // this is safe if called multiple times.
-        if (headers_sent() == true) return false;
+        if (headers_sent() == true)
+            return false;
 
         // Remove &amp; entities to prevent redirect breakage
         $redirectURL = str_replace('&amp;', '&', $redirectURL);
@@ -208,15 +228,14 @@ class xarController extends Object
             // Get base URL
             $baseurl = xarServer::getBaseURL();
 
-            $redirectURL = $baseurl.$redirectURL;
+            $redirectURL = $baseurl . $redirectURL;
         }
 
-        if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE')) ) {
+        if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE'))) {
             $header = "Refresh: 0; URL=$redirectURL";
         } else {
             $header = "Location: $redirectURL";
         }// if
-
         // default response is temp redirect
         if (!preg_match('/^301|302|303|307/', $httpResponse)) {
             $httpResponse = 302;
@@ -235,6 +254,7 @@ class xarController extends Object
     {
         self::$router = $router;
     }
+
     public static function getRouter()
     {
         if (null == self::$router) {
@@ -243,6 +263,7 @@ class xarController extends Object
         }
         return self::$router;
     }
+
     public static function getDispatcher()
     {
         if (!self::$dispatcher instanceof xarDispatcher) {
@@ -255,7 +276,7 @@ class xarController extends Object
     /**
      * Generates an URL that references a module function.
      *
-     * 
+     *
      * @param modName string registered name of module
      * @param modType string type of function
      * @param funcName string module function
@@ -265,13 +286,14 @@ class xarController extends Object
      * @return mixed absolute URL for call, or false on failure
      * @todo allow for an alternative entry point (e.g. stream.php) without affecting the other parameters
      */
-    static function URL($modName=NULL, $modType='user', $funcName='main', $args=array(), $generateXMLURL=NULL, $fragment=NULL, $entrypoint=array(), $route=NULL)
+    static function URL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array(), $route = NULL)
     {
         // (Re)initialize the controller
         self::init();
-        
+
         // No module specified - just jump to the home page.
-        if (empty($modName)) return xarServer::getBaseURL() . self::$entryPoint;
+        if (empty($modName))
+            return xarServer::getBaseURL() . self::$entryPoint;
 
         // If an entry point has been set, then modify the URL entry point and modType.
         if (!empty($entrypoint)) {
@@ -291,23 +313,23 @@ class xarController extends Object
         // <chris/> wrt to the problem of xaraya not obeying a particular route
         // when the main entry point, sans params, is accessed...
         // Here's an example using the shorturls setting in base module
-        // It's hardly a leap to imagine storing the name of the route to use in a 
+        // It's hardly a leap to imagine storing the name of the route to use in a
         // similar config var and being able to set that in base module instead (IMO)
         // assuming multiple routes aren't in use, of course, although we could perhaps
         // deprecate the per module shorturl setting in favour of a dropdown of routes too :-?
         /*
-        if (xarMod::$genShortUrls) {
-            $request->setRoute('short');
-        } else {
-            $router = self::getRouter();
-            $request->setRoute($router->getRoute());
-        } 
-        */       
+          if (xarMod::$genShortUrls) {
+          $request->setRoute('short');
+          } else {
+          $router = self::getRouter();
+          $request->setRoute($router->getRoute());
+          }
+         */
 
         // If we are passed a route, then use it
         if (empty($route)) {
             // No route passed: use the default
-            $route = xarConfigVars::get(null,'Site.Core.EnableShortURLsSupport');
+            $route = xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport');
         }
         // Define the route
         if (!empty($route)) {
@@ -315,45 +337,54 @@ class xarController extends Object
         } else {
             $router = self::getRouter();
             $request->setRoute($router->getRoute());
-        } 
+        }
 
         // Get the appropriate action controller for this request
         $dispatcher = self::getDispatcher();
         $controller = $dispatcher->findController($request);
         $path = $controller->encode($request);
 
-         // Use Xaraya default (index.php) or BaseModURL if provided in config.system.php
+        // Use Xaraya default (index.php) or BaseModURL if provided in config.system.php
         $path = self::$entryPoint . $path;
 
         // Remove the leading / from the path (if any).
         $path = preg_replace('/^\//', '', $path);
 
         // Add the fragment if required.
-        if (isset($fragment)) $path .= '#' . urlencode($fragment);
+        if (isset($fragment))
+            $path .= '#' . urlencode($fragment);
 
         // Encode the URL if an XML-compatible format is required.
         // Take the global setting for XML format generation, if not specified.
-        if (!isset($generateXMLURL)) $generateXMLURL = xarMod::$genXmlUrls;
-        if ($generateXMLURL) $path = htmlspecialchars($path);
+        if (!isset($generateXMLURL))
+            $generateXMLURL = xarMod::$genXmlUrls;
+        if ($generateXMLURL)
+            $path = htmlspecialchars($path);
 
         // Return the URL.
         return xarServer::getBaseURL() . $path;
     }
-    
-    public static function parseQuery($url='') 
+
+    public static function parseQuery($url = '')
     {
         $params = array();
-        if (empty($url)) return $params;
+        if (empty($url))
+            return $params;
         $decomposed = parse_url($url);
         if (isset($decomposed['query'])) {
             $pairs = explode('&', $decomposed['query']);
-            try {
-                foreach($pairs as $pair) {
-                    if (trim($pair) == '') continue;
+            try
+            {
+                foreach ($pairs as $pair) {
+                    if (trim($pair) == '')
+                        continue;
                     list($key, $value) = explode('=', $pair);
                     $params[$key] = urldecode($value);
                 }
-            } catch(Exception $e) {}
+            } catch (Exception $e)
+            {
+
+            }
         }
         return $params;
     }
