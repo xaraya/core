@@ -14,7 +14,8 @@
 
 class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public $dir = '';
+    public $dir = '';                   // Directory where the cached files are stored
+    public $ext = 'php';                // Extension for the cached files
     public $blksize = 0;
     public $bsknown = false;
 
@@ -336,7 +337,6 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
         }
         return $list;
     }
-
 }
 
 ?>

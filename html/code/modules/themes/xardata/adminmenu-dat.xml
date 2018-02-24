@@ -11,9 +11,9 @@
         <menuitem>
             <mask>AdminThemes</mask>
             <includes>
-                <includeitem>list</includeitem>
+                <includeitem>view</includeitem>
             </includes>
-            <target>list</target>
+            <target>view</target>
             <title>View installed themes on the system</title>
             <label>View Themes</label>
         </menuitem>
@@ -43,6 +43,15 @@
             <target>view_jslibs</target>
             <title>Manage external Javascript libraries</title>
             <label>Javascript</label>
+        </menuitem>
+        <menuitem>
+            <mask>AdminThemes</mask>
+            <includes>
+                <includeitem>cacheview</includeitem>
+            </includes>
+            <target>cacheview</target>
+            <title>View the files in the template cache</title>
+            <label>View Cache files</label>
         </menuitem>
         <menuitem>
             <mask>AdminThemes</mask>

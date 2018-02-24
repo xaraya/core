@@ -72,6 +72,11 @@ class Query
 //---------------------------------------------------------
     public function __construct($type='SELECT',$tables='',$fields='')
     {
+        // Set the debugflag
+        if (xarConfigVars::get(null,'Site.BL.ShowQueries') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            $this->debugflag = true;
+        }
+
         if (in_array($type,array("SELECT","INSERT","UPDATE","DELETE","DROP"))) $this->type = $type;
         else {
             throw new ForbiddenOperationException($type,'This operation is not supported yet. "#(1)"');

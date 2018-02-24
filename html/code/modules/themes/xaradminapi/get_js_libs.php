@@ -21,7 +21,7 @@ function themes_adminapi_get_js_libs(Array $args=array())
     }
     
     // Retrieve the libraries of the chosen scope: local or remote
-    $libs = $instance->$args['scope'];
+    $libs = $instance->{$args['scope']};
     
     // If we have a specific lib we are looking for, then filter
     if (!empty($args['lib'])) {

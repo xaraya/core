@@ -82,10 +82,14 @@ function themes_adminapi_regenerate()
             // New theme
 
             $sql = "INSERT INTO $xartable[themes]
-                      (name, regid, directory, version, class)
-                    VALUES (?,?,?,?,?)";
-            $bindvars = array($themeInfo['name'],$themeInfo['regid'],
-                              $themeInfo['directory'], $themeInfo['version'], $themeInfo['class']);
+                      (name, regid, directory, version, class, configuration)
+                    VALUES (?,?,?,?,?,?)";
+                    
+            // Force a default value on the configuration
+            if (!isset($themeInfo['configuration'])) $themeInfo['configuration'] = '';
+            
+            $bindvars = array($themeInfo['name'], $themeInfo['regid'],
+                              $themeInfo['directory'], $themeInfo['version'], (int)$themeInfo['class'], $themeInfo['configuration']);
             $result = $dbconn->Execute($sql,$bindvars);
 
             $set = xarMod::apiFunc('themes',

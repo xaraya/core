@@ -25,6 +25,6 @@ $themeinfo = array(
     'version'       => '0.1.0',
     'xar_version'   => '2.0',
     'bl_version'    => '2.0',
-    'class'         => '2',
+    'class'         => 2,
 );
 ?>

@@ -203,6 +203,7 @@ function installer_admin_phase5()
             throw $e;
         }
     }
+
     // install the security stuff here, but disable the registerMask and
     // and xarSecurityCheck functions until we've finished the installation process
     sys::import('xaraya.security');
@@ -225,6 +226,8 @@ function installer_admin_phase5()
     xarConfigVars::set(null, 'System.ModuleAliases',array());
     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
     xarConfigVars::set(null, 'Site.BL.DocType', 'xhtml1-strict');
+    // Display query strings for debugging?
+    xarConfigVars::set(null, 'Site.BL.ShowQueries', false);
     
     // 3. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();
