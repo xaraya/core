@@ -415,8 +415,8 @@ class xarPDOStatement extends Object
 
     private function prepare($string)
     {
-        $this->stmt = $this->pdo->prepare($string);
-        return $this->stmt;
+        $this->pdostmt = $this->pdo->prepare($string);
+        return $this->pdostmt;
     }
 
     public function executeQuery($bindvars=array(), $flag=0)
@@ -431,24 +431,24 @@ class xarPDOStatement extends Object
         }
         
         // Get the prepared statement
-        $stmt = $this->prepare($this->pdo->queryString);
+        $pdostmt = $this->prepare($this->pdo->queryString);
         
         // Add the bindvars
         $index = 0;
         foreach ($bindvars as $bindvar) {
             $index++;
             if (is_int($bindvar)) {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_INT);
+                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_INT);
             } elseif (is_bool($bindvar)) {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
+                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
             } else {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_STR);
+                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_STR);
             }
         }
 
         // Run the query
         xarLog::message("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        $success = $stmt->execute();       
+        $success = $pdostmt->execute();       
         
         // If this is a SELECT, create a result set for the results
         if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT") {
@@ -482,24 +482,24 @@ class xarPDOStatement extends Object
         xarLog::message("xarPDOStatement::executeUpdate: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
 
         // Get the prepared statement
-        $stmt = $this->prepare($this->pdo->queryString);
-        
+        $pdostmt = $this->prepare($this->pdo->queryString);
+
         // Add the bindvars
         $index = 0;
         foreach ($bindvars as $bindvar) {
             $index++;
             if (is_int($bindvar)) {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_INT);
+                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_INT);
             } elseif (is_bool($bindvar)) {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
+                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
             } else {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_STR);
+                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_STR);
             }
         }
 
         xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        
-        $success = $stmt->execute();
+        var_dump($bindvars);
+        $success = $pdostmt->execute();
 
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
@@ -509,7 +509,7 @@ class xarPDOStatement extends Object
         $this->bindvars = $bindvars;
 
         try {
-            $rows_affected = (int) $stmt->rowCount();
+            $rows_affected = (int) $pdostmt->rowCount();
         } catch( PDOException $e ) {
             throw new SQLException('Could not get update count', $e->getMessage(), $this->pdo->queryString);
         }
@@ -519,23 +519,23 @@ class xarPDOStatement extends Object
    // Wrappers for the PDOStatement methods
     public function fetchAll($flags)
     {
-        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
-        return $this->stmt->fetchAll($flags);
+        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        return $this->pdostmt->fetchAll($flags);
     }
     public function fetch($flags)
     {
-        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
-        return $this->stmt->fetch($flags);
+        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        return $this->pdostmt->fetch($flags);
     }
     public function rowCount()
     {
-        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
-        return $this->stmt->rowCount();
+        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        return $this->pdostmt->rowCount();
     }
     public function columnCount()
     {
-        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
-        return $this->stmt->columnCount();
+        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        return $this->pdostmt->columnCount();
     }
 
     private function applyLimit(&$sql, $offset, $limit)
