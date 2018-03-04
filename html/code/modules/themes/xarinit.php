@@ -25,6 +25,7 @@ function themes_init()
     $tables =& xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
+    $tables['themes']     = $prefix . '_themes';
 
     // Create tables
     /**

@@ -28,6 +28,8 @@ function roles_init()
     $tables =& xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
+    $tables['roles'] = $prefix . '_roles';
+    $tables['rolemembers'] = $prefix . '_rolemembers';
 
     // Create tables inside a transaction
     try {
