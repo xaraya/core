@@ -202,7 +202,6 @@ function xarInstallLoader()
                         'generateXMLURLs'        => false);
     xarTpl::init($systemArgs);
 
-
     // Get the install language everytime we request install.php
     // We need the var to be able to initialize MLS, but we need MLS to get the var
     // So we need something temporarily set, so we can continue
