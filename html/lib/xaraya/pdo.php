@@ -498,7 +498,6 @@ class xarPDOStatement extends Object
         }
 
         xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        var_dump($bindvars);
         $success = $pdostmt->execute();
 
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
