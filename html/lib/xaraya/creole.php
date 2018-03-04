@@ -22,11 +22,11 @@ class xarDB_Creole extends Creole
     public static $count = 0;
 
     // Instead of the globals, we save our db info here.
-    private static $firstDSN = null;
-    private static $firstFlags = null;
+    private static $firstDSN    = null;
+    private static $firstFlags  = null;
     private static $connections = array();
-    private static $tables = array();
-    private static $prefix = '';
+    private static $tables      = array();
+    private static $prefix      = '';
 
     public static function getPrefix() { return self::$prefix;}
     public static function setPrefix($prefix) { self::$prefix =  $prefix; }
@@ -130,6 +130,7 @@ public static function newConn(array $args = null)
       // CHECKME:
       // We need to force throwing an exception here
       // Without this the next line halts execution with an error message
+      // This happens while installing, before the DB connection has been defined
       if (!isset(self::$connections[$index])) throw new Exception;
 
       $conn = self::$connections[$index]; 
