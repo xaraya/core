@@ -73,7 +73,7 @@ function themes_init()
         );
 
     $query = xarDBCreateTable($tables['themes_configurations'], $fields);
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
 
     xarModVars::set('themes', 'default_theme', 'default');
     xarModVars::set('themes', 'selsort', 'nameasc');

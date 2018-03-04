@@ -52,7 +52,7 @@ function categories_init()
     );
     $query = xarDBCreateTable($xartable['categories'],$fields);
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $index = array('name'      => 'i_' . $prefix . '_left_id',
@@ -61,7 +61,7 @@ function categories_init()
 
     $query = xarDBCreateIndex($xartable['categories'],$index);
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $index = array('name'      => 'i_' . $prefix . '_right_id',
@@ -70,7 +70,7 @@ function categories_init()
 
     $query = xarDBCreateIndex($xartable['categories'],$index);
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $index = array('name'      => 'i_' . $prefix . '_parent_id',
@@ -79,7 +79,7 @@ function categories_init()
 
     $query = xarDBCreateIndex($xartable['categories'],$index);
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $fields = array(
@@ -95,7 +95,7 @@ function categories_init()
     );
     $query = xarDBCreateTable($xartable['categories_linkage'],$fields);
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $index = array('name'      => 'i_' . $prefix . '_cat_linkage_1',
@@ -104,7 +104,7 @@ function categories_init()
 
     $query = xarDBCreateIndex($xartable['categories_linkage'],$index);
 
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
     if (!$result) return;
 
     $q = new Query();
