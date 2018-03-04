@@ -239,7 +239,8 @@ class xarPDO extends PDO
     public function prepareStatement($string='')
     {
         $this->queryString = $string;
-        return new xarPDOStatement($this);
+        $pdostmt = new xarPDOStatement($this);
+        return $pdostmt;
     }
     
     public function qstr($string)
@@ -379,7 +380,6 @@ class xarPDO extends PDO
     {
         return $this->last_id;
     }
-
 }
 
 class xarPDOStatement extends Object
@@ -393,6 +393,7 @@ class xarPDOStatement extends Object
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
+        $this->prepare($this->pdo->queryString);
         return true;
     }
     
@@ -413,7 +414,7 @@ class xarPDOStatement extends Object
         return true;
     }
 
-    private function prepare($string)
+    public function prepare($string)
     {
         $this->pdostmt = $this->pdo->prepare($string);
         return $this->pdostmt;
@@ -430,25 +431,22 @@ class xarPDOStatement extends Object
             $this->applyLimit($this->pdo->queryString, $this->offset, $this->limit);
         }
         
-        // Get the prepared statement
-        $pdostmt = $this->prepare($this->pdo->queryString);
-        
-        // Add the bindvars
+        // Add the bindvars to the prepared statement
         $index = 0;
         foreach ($bindvars as $bindvar) {
             $index++;
             if (is_int($bindvar)) {
-                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_INT);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_INT);
             } elseif (is_bool($bindvar)) {
-                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
             } else {
-                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_STR);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_STR);
             }
         }
 
         // Run the query
         xarLog::message("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        $success = $pdostmt->execute();       
+        $success = $this->pdostmt->execute();       
         
         // If this is a SELECT, create a result set for the results
         if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT") {
@@ -481,24 +479,21 @@ class xarPDOStatement extends Object
     {
         xarLog::message("xarPDOStatement::executeUpdate: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
 
-        // Get the prepared statement
-        $pdostmt = $this->prepare($this->pdo->queryString);
-
-        // Add the bindvars
+        // Add the bindvars to the prepared statement
         $index = 0;
         foreach ($bindvars as $bindvar) {
             $index++;
             if (is_int($bindvar)) {
-                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_INT);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_INT);
             } elseif (is_bool($bindvar)) {
-                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
             } else {
-                $pdostmt->bindValue($index, $bindvar, PDO::PARAM_STR);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_STR);
             }
         }
 
         xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        $success = $pdostmt->execute();
+        $success = $this->pdostmt->execute();
 
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
@@ -508,7 +503,7 @@ class xarPDOStatement extends Object
         $this->bindvars = $bindvars;
 
         try {
-            $rows_affected = (int) $pdostmt->rowCount();
+            $rows_affected = (int) $this->pdostmt->rowCount();
         } catch( PDOException $e ) {
             throw new SQLException('Could not get update count', $e->getMessage(), $this->pdo->queryString);
         }
@@ -545,7 +540,6 @@ class xarPDOStatement extends Object
             $sql .= " LIMIT " . $offset . ", 18446744073709551615";
         }
     }
-
 }
 
 /**
@@ -622,7 +616,6 @@ class DatabaseInfo extends Object
             $this->tables[strtoupper($row[0])] = $row[0];
         }
     }
-
 }
 
 /**
