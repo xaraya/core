@@ -23,11 +23,11 @@ class xarDB_PDO extends Object
     public static $count = 0;
 
     // Instead of the globals, we save our db info here.
-    private static $firstDSN = null;
-    private static $firstFlags = null;
+    private static $firstDSN    = null;
+    private static $firstFlags  = null;
     private static $connections = array();
-    private static $tables = array();
-    private static $prefix = '';
+    private static $tables      = array();
+    private static $prefix      = '';
 
     public static function getPrefix() { return self::$prefix;}
     public static function setPrefix($prefix) { self::$prefix =  $prefix; }
@@ -128,6 +128,12 @@ class xarDB_PDO extends Object
       if (count(self::$connections) <= $index && isset(self::$firstDSN) && isset(self::$firstFlags)) {
           self::getConnection(self::$firstDSN, self::$firstFlags);
       }
+      // CHECKME:
+      // We need to force throwing an exception here
+      // Without this the next line halts execution with an error message
+      // This happens while installing, before the DB connection has been defined
+      if (!isset(self::$connections[$index])) throw new Exception;
+
       // CHECKME: I've spent almost a day debuggin this when not assigning
       //          it first to a temporary variable before returning. 
       // The observed effect was that an exception did not occur when $index
