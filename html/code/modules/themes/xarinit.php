@@ -59,7 +59,7 @@ function themes_init()
         );
 
     $query = xarDBCreateTable($tables['themes'], $fields);
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
 
     // Create the table to hold configurations
     $fields = array(

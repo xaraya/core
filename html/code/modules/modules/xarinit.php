@@ -180,11 +180,12 @@ function modules_init()
          * prolly need to move this closer to installer, not sure yet
          */
 
+        $modulesmodid = xarMod::getID('modules');
+
         $sql = "INSERT INTO " . $tables['module_vars'] . " (module_id, name, value)
                 VALUES (?,?,?)";
         $stmt = $dbconn->prepareStatement($sql);
 
-        $modulesmodid = xarMod::getID('modules');
         $modvars = array(
                          // default show-hide core modules
                          array($modulesmodid,'hidecore','0'),
