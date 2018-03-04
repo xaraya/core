@@ -137,7 +137,22 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
         case 'integer':
             if (empty($parameters['size']))  $parameters['size'] = 'int';
             // Let's always use integer instead of int, so when it gets set as primary key, we get the autoinc behaviour for free
-            $this_field['type'] = 'INTEGER'; 
+            switch ($parameters['size']) {
+                case 'tiny':
+                    $this_field['type'] = 'TINYINT';
+                    break;
+                case 'small':
+                    $this_field['type'] = 'SMALLINT';
+                    break;
+                case 'medium':
+                    $this_field['type'] = 'MEDIUMINT';
+                    break;
+                case 'big':
+                    $this_field['type'] = 'BIGINT';
+                    break;
+                default:
+            $this_field['type'] = 'INTEGER';
+            } // switch ($parameters['size'])
             break;
         case 'char':
             if (empty($parameters['size'])) return false;
@@ -156,7 +171,11 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
             $this_field['type'] = 'BLOB';
             break;
         case 'boolean':
-            $this_field['type'] = "BOOL";
+            $this_field['type'] = "BOOLEAN";
+            if (isset($parameters['default'])) {
+                // default values are numbers, not strings
+                $parameters['default'] = $parameters['default'] ? 1 : 0;
+            }
             break;
         case 'datetime':
             $this_field['type'] = "DATETIME";
@@ -250,16 +269,18 @@ function xarDB__sqliteColumnDefinition($field_name, $parameters)
                         : '';
 
     // Test for DEFAULTS
-    $this_field['default'] = (isset($parameters['default']))
-                           ? (($parameters['default'] == 'NULL')
-                                    ? 'DEFAULT NULL'
-                                    : "DEFAULT '".$parameters['default']."'")
-                           : '';
+    $this_field['default'] = '';
+    if (isset($parameters['default']))
+        if ($parameters['default'] == 'NULL')
+            $this_field['default'] = "DEFAULT NULL";
+        else
+        if (is_string($parameters['default']))
+            $this_field['default'] = "DEFAULT '" . $parameters['default'] . "'";
+        else
+            $this_field['default'] = "DEFAULT " . $parameters['default'];
 
     // Test for AUTO_INCREMENT
-    $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true)
-                                  ? ''
-                                  : '';
+    $this_field['auto_increment'] = (isset($parameters['increment']) && $parameters['increment'] == true) ? 'AUTO_INCREMENT' : '';
 
     // Test for PRIMARY KEY
     $this_field['primary_key'] = (isset($parameters['primary_key']) && $parameters['primary_key'] == true)

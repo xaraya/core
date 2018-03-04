@@ -109,7 +109,10 @@ function installer_admin_phase5()
     }
 
     if ($dbType == 'mysqli') {
-        $tokens = explode('.',mysqli_get_server_info($dbconn->getResource()));
+
+        // changed mysqli_get_server_info($dbconn->getResource()) to $dbconn->getResource(); to get the mysql version
+        $source = $dbconn->getResource();
+        $tokens = explode('.', $source->server_info);
         $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
         $data['required_version'] = MYSQL_REQUIRED_VERSION;
         $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
@@ -181,18 +184,26 @@ function installer_admin_phase5()
         $dbinfo = $dbconn->getDatabaseInfo();
         try {
             $dbconn->begin();
-            foreach($dbinfo->getTables() as $tbl) {
-                $table = $tbl->getName();
-                if(strpos($table,'_') && (substr($table,0,strpos($table,'_')) == $dbPrefix)) {
-                    // we have the same prefix.
-                    try {
-                        $sql = xarDBDropTable($table,$dbType);
-                        $dbconn->Execute($sql);
-                    } catch(SQLException $dropfail) {
-                        // retry with drop view
-                        // TODO: this should be transparent in the API
-                        $ddl = "DROP VIEW $table";
-                        $dbconn->Execute($ddl);
+            if (!empty($dbinfo->getTables())) {
+                foreach ($dbinfo->getTables() as $tbl) {
+                    // check middleware
+                    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+                    if ($middleware == 'Creole') {
+                        $table = $tbl->getName();
+                    } else if ($middleware == 'PDO') {
+                        $table = $tbl;
+                    }
+                    if (strpos($table, '_') && (substr($table, 0, strpos($table, '_')) == $dbPrefix)) {
+                        // we have the same prefix.
+                        try {
+                            $sql = xarDBDropTable($table, $dbType);
+                            $dbconn->Execute($sql);
+                        } catch (SQLException $dropfail) {
+                            // retry with drop view
+                            // TODO: this should be transparent in the API
+                            $ddl = "DROP VIEW $table";
+                            $dbconn->Execute($ddl);
+                        }
                     }
                 }
             }

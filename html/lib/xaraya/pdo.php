@@ -183,7 +183,8 @@ class xarPDO extends PDO
     public $queryString   = '';
     public $row_count     = 0; 
     public $last_id       = null; 
-       
+    public $dblink        = null;
+
     public function __construct($dsn, $username, $password, $options)
     {
         try {
@@ -197,6 +198,13 @@ class xarPDO extends PDO
         $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
         // Show errors
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+    }
+
+    // New function defined to get the Mysql version
+    public function getResource()
+    {
+        $mysql_version = $this->query('select version() as server_info')->fetchObject();
+        return $mysql_version;
     }
 
     public function getDatabaseInfo()
@@ -360,6 +368,12 @@ class xarPDO extends PDO
     {   
         return $this->last_id;
     }
+
+    public function getLastId($table = null)
+    {
+        return $this->last_id;
+    }
+
 }
 
 class xarPDOStatement extends Object
@@ -540,6 +554,9 @@ class DatabaseInfo extends Object
     private $pdo;
     private $tables;
 
+    /** have tables been loaded */
+    protected $tablesLoaded = false;
+
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
@@ -569,6 +586,38 @@ class DatabaseInfo extends Object
     {
         return $this->pdo;
     }
+
+    /**
+     * Gets array of TableInfo objects.
+     * @return array
+     */
+    public function getTables()
+    {
+        if (!$this->tablesLoaded)
+            $this->initTables();
+        return $this->tables;
+    }
+
+    /**
+     * @return void
+     * @throws SQLException
+     */
+    protected function initTables()
+    {
+
+        //$sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
+        // get the list of all tables
+        $sql = "SHOW TABLES";
+        try {
+            $statement = $this->pdo->query($sql);
+        } catch (PDOException $e) {
+            throw new SQLException('Could not list tables', $e->getMessage(), $sql);
+        }
+        while ($row = $statement->fetch()) {
+            $this->tables[strtoupper($row[0])] = $row[0];
+        }
+    }
+
 }
 
 /**

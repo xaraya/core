@@ -108,6 +108,11 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
         $databaseType = xarDB::getType();
     }
     if (empty($charset)) $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
+    }
 
     // Select the correct database type
     switch($databaseType) {
@@ -172,6 +177,11 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = xarDB::getType();
     }
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
+    }
 
     // Select the correct database type
     switch($databaseType) {
@@ -222,6 +232,11 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = xarDB::getType();
     }
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
+    }
 
     switch($databaseType) {
         case 'postgres':
@@ -271,6 +286,11 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 
     if (empty($databaseType)) {
         $databaseType = xarDB::getType();
+    }
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
     }
 
     // Select the correct database type
@@ -331,6 +351,11 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         $databaseType = xarDB::getType();
     }
 
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
+    }
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':

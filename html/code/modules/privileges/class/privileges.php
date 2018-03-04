@@ -521,10 +521,18 @@ class xarPrivileges extends xarMasks
         parent::initialize();
         $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
         LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.itemtype = ? AND p.name = ?";
-        if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
 
-        //Execute the query, bail if an exception was thrown
-        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $name));
+        $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+        if ($middleware == 'Creole') {
+            $stmt = parent::$dbconn->prepareStatement($query);
+            //Execute the query, bail if an exception was thrown
+            $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $name));
+        } else if ($middleware == 'PDO') {
+
+            $stmt = parent::$dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $name), ResultSet::FETCHMODE_NUM);
+            //print_r($result);
+        }
 
         if ($result->first()) {
             list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$module) = $result->fields;
