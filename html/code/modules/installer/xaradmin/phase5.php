@@ -109,8 +109,6 @@ function installer_admin_phase5()
     }
 
     if ($dbType == 'mysqli') {
-
-        // changed mysqli_get_server_info($dbconn->getResource()) to $dbconn->getResource(); to get the mysql version
         $source = $dbconn->getResource();
         $tokens = explode('.', $source->server_info);
         $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
