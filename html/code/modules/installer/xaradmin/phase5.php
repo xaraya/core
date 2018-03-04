@@ -97,29 +97,27 @@ function installer_admin_phase5()
       }
     }
 
-    if ($dbType == 'mysql') {
-        $tokens = explode('.',mysql_get_server_info());
-        $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
-        $data['required_version'] = MYSQL_REQUIRED_VERSION;
-        $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
-        if (!$mysql_version_ok) {
-            $data['layout'] = 'bad_version';
-            return xarTpl::module('installer','admin','check_database',$data);
-        }
+    switch ($dbType) {
+        case 'mysql':
+            $tokens = explode('.',mysql_get_server_info());
+            $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+            $data['required_version'] = MYSQL_REQUIRED_VERSION;
+            $version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        break;
+        case 'mysqli':
+            $source = $dbconn->getResource();
+            $tokens = explode('.', $source->server_info);
+            $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+            $data['required_version'] = MYSQL_REQUIRED_VERSION;
+            $version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        break;
     }
 
-    if ($dbType == 'mysqli') {
-        $source = $dbconn->getResource();
-        $tokens = explode('.', $source->server_info);
-        $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
-        $data['required_version'] = MYSQL_REQUIRED_VERSION;
-        $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
-        if (!$mysql_version_ok) {
-            $data['layout'] = 'bad_version';
-            return xarTpl::module('installer','admin','check_database',$data);
-        }
+    if (!$version_ok) {
+        $data['layout'] = 'bad_version';
+        return xarTpl::module('installer','admin','check_database',$data);
     }
-
+        
     if (!$createDB && !$dbExists) {
         $data['dbName'] = $dbName;
         $data['layout'] = 'not_found';
