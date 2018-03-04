@@ -26,11 +26,6 @@ function modules_init()
 
     $prefix = xarDB::getPrefix();
 
-    $tables['modules'] = $prefix . '_modules';
-    $tables['module_vars'] = $prefix . '_module_vars';
-    $tables['module_itemvars'] = $prefix . '_module_itemvars';
-    $tables['hooks'] = $prefix . '_hooks';
-    $tables['eventsystem'] = $prefix . '_eventsystem';
     // Create tables
     // This should either go, or fail competely
     try {
