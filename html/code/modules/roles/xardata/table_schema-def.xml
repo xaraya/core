@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE schema PUBLIC "-//XAR//DTD DDL 1.0 Strict//EN" "http://xaraya.com/schema/DTD/ddl-strict.dtd">
+<schema name="xaraya">
+  <table name="roles">
+    <column id="roles.id" name="id" required="true" auto="true">
+      <number size="11" />
+    </column>
+    <column id="roles.name" name="name" required="true" >
+      <text size="255" default=""/>
+    </column>
+    <column id="roles.itemtype" name="itemtype" required="true" >
+      <number size="11" default="0" />
+    </column>
+    <column id="roles.users" name="users" required="true" >
+      <number size="11" default="0" />
+    </column>
+    <column id="roles.uname" name="uname" required="true" >
+      <text size="255" default=""/>
+    </column>
+    <column id="roles.email" name="email" required="true" >
+      <text size="255" default=""/>
+    </column>
+    <column id="roles.pass" name="pass" required="true" >
+      <text size="100" default=""/>
+    </column>
+    <column id="roles.date_reg" name="date_reg" required="true" >
+      <number size="11" default="0" />
+    </column>
+    <column id="roles.valcode" name="valcode" required="true" >
+      <text size="35" default=""/>
+    </column>
+    <column id="roles.state" name="state" required="true" >
+      <number size="11" default="3" />
+    </column>
+    <column id="roles.auth_module_id" name="auth_module_id" required="true" >
+      <number size="11" default="0" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="roles.id"/>
+      </primary>
+      <unique name="i_roles_uname">
+        <column ref="roles.uname"/>
+      </unique>
+      <index name="i_roles_itemtype">
+        <column ref="roles.itemtype"/>
+      </index>
+      <index name="i_roles_name">
+        <column ref="roles.name"/>
+      </index>
+      <index name="i_roles_email">
+        <column ref="roles.email"/>
+      </index>
+      <index name="i_roles_state">
+        <column ref="roles.state"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="rolemembers">
+    <column id="rolemembers.role_id" name="role_id"  >
+      <number size="11" />
+    </column>
+    <column id="rolemembers.parent_id" name="parent_id"  >
+      <number size="11" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="rolemembers.role_id"/>
+        <column ref="rolemembers.parent_id"/>
+      </primary>
+      <index name="i_rolememb_id">
+        <column ref="rolemembers.role_id"/>
+      </index>
+      <index name="i_rolememb_parent_id">
+        <column ref="rolemembers.parent_id"/>
+      </index>
+    </constraints>
+  </table>
+</schema>

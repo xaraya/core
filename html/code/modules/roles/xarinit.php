@@ -24,7 +24,22 @@
  */
 function roles_init()
 {
+    // Create tables inside a transaction
     $dbconn = xarDB::getConn();
+    try {
+        $dbconn->begin();
+
+        sys::import('xaraya.tableddl');
+        xarXMLInstaller::createTable('table_schema-def', 'roles');
+
+        // We're done, commit
+        $dbconn->commit();
+    } catch (Exception $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
+    
+/*
     $tables =& xarDB::getTables();
 
     $prefix = xarDB::getPrefix();
@@ -119,7 +134,7 @@ function roles_init()
         $dbconn->rollback();
         throw $e;
     }
-
+*/
     // --------------------------------------------------------
     //
     // Create some modvars
@@ -210,7 +225,7 @@ function roles_activate()
     $user = DataObjectMaster::getObject(array('name' => 'roles_users'));
     $rolefields['role_type'] = xarRoles::ROLES_USERTYPE;
 
-        // The Anonymous user
+    // The Anonymous user
     $rolefields['name'] = 'Anonymous';
     $rolefields['uname'] = 'anonymous';
     $rolefields['parentid'] = $topid;
