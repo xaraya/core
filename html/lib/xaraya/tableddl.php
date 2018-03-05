@@ -393,14 +393,14 @@ class xarXMLInstaller extends Object
         $tableprefix = xarDB::getPrefix();
         
         if (!isset($xmlFile))
-            throw new BadParameterException('No file to transform!');
+            throw new BadParameterException(xarML('No file to transform!'));
         if (!isset($xslFile))
-            $xslFile = sys::root() . '/lib/xaraya/xslt/xml2ddl-'. $dbName . '.xsl';
+            $xslFile = sys::lib() . '/xaraya/tableddl/xml2ddl-'. $dbName . '.xsl';
         if (!file_exists($xslFile)) {
             $msg = xarML('The file #(1) was not found', $xslFile);
             throw new BadParameterException($msg);
         }
-        sys::import('xaraya.xslprocessor');
+        sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
         $xslProc->setParameter('', 'tableprefix', $tableprefix);
@@ -408,25 +408,24 @@ class xarXMLInstaller extends Object
         return $xslProc->transform($xslProc->xmlFile);
     }
     
-    static public function createTable($table, $module)
+    static public function createTable($tablefile, $module)
     {
-        if (empty($module)) $module = 'base';
         if (empty($module))
-            throw new BadParameterException('Missing a module name to create');
-        if (empty($table))
-            throw new BadParameterException('Missing a table name to create');
+            throw new BadParameterException('Missing a module name to create for');
+        if (empty($tablefile))
+            throw new BadParameterException('Missing a XML file to create from');
             
-        $fullName = sys::root() . '/html/modules/' . $module . '/schema.xml';
-        if (!file_exists($fullName)) {
-            $msg = xarML('Could not find the file #(1) to create a table from', $fullName);
+        $xmlfile = sys::code() . 'modules/' . $module . '/xardata/' . $tablefile . '.xml';
+        if (!file_exists($xmlfile)) {
+            $msg = xarML('Could not find the file #(1) to create tables from', $xmlfile);
             throw new BadParameterException($msg);
         }
-        $sqlCode = self::transform($fullName, 'create');
+        $sqlCode = self::transform($xmlfile, 'create');
         $queries = explode(';',$sqlCode);
         array_pop($queries);
         $dbconn = xarDB::getConn();
         foreach ($queries as $q) {
-            xarLog::message(xarML('Executing SQL: #(1)', $q), );
+            xarLog::message(xarML('Executing SQL: #(1)', $q), xarLog::LEVEL_INFO);
             $dbconn->Execute($q);
         }
         return true;
