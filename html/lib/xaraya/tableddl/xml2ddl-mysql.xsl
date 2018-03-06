@@ -115,9 +115,28 @@
       </xsl:otherwise>
     </xsl:choose>
     <xsl:if test="*[@size != '']">(<xsl:value-of select="*/@size"/>)</xsl:if>
+    <xsl:if test="*[@unsigned = 'true']">
+        <xsl:text> UNSIGNED</xsl:text>
+    </xsl:if>
+    <xsl:if test="*[@charset]">
+        <xsl:text> CHARACTER SET</xsl:text>
+        <xsl:value-of select="*/@charset"/>
+    </xsl:if>
     <xsl:if test="@required = 'true'"> NOT NULL</xsl:if>
     <!--  @todo this won't work with  the current exported ddl -->
-    <xsl:if test="*[@default]"> DEFAULT '<xsl:value-of select="*/@default"/>'</xsl:if>
+    <xsl:if test="*[@default]">
+        <xsl:text> DEFAULT</xsl:text>
+        <xsl:choose>
+          <xsl:when test="*/@default = 'null'">
+            <xsl:text> NULL</xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text> '</xsl:text>
+            <xsl:value-of select="*/@default"/>
+            <xsl:text>'</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+    </xsl:if>
     <xsl:if test="$ignoreauto = 'false'">
       <xsl:if test="@auto ='true'"> AUTO_INCREMENT</xsl:if>
     </xsl:if>
