@@ -3,37 +3,37 @@
 <schema name="xaraya">
   <table name="roles">
     <column id="roles.id" name="id" required="true" auto="true">
-      <number size="11" />
+      <number size="10" unsigned="true" />
     </column>
     <column id="roles.name" name="name" required="true" >
-      <text size="255" default=""/>
+      <text size="255" charset="utf8"/>
     </column>
     <column id="roles.itemtype" name="itemtype" required="true" >
-      <number size="11" default="0" />
+      <number size="10" unsigned="true" />
     </column>
     <column id="roles.users" name="users" required="true" >
       <number size="11" default="0" />
     </column>
     <column id="roles.uname" name="uname" required="true" >
-      <text size="255" default=""/>
+      <text size="255" charset="utf8"/>
     </column>
-    <column id="roles.email" name="email" required="true" >
-      <text size="255" default=""/>
+    <column id="roles.email" name="email" >
+      <text size="255" default="NULL" charset="utf8"/>
     </column>
-    <column id="roles.pass" name="pass" required="true" >
-      <text size="100" default=""/>
+    <column id="roles.pass" name="pass" >
+      <text size="255" default="NULL" charset="utf8"/>
     </column>
     <column id="roles.date_reg" name="date_reg" required="true" >
-      <number size="11" default="0" />
+      <number size="10" default="0" unsigned="true" />
     </column>
     <column id="roles.valcode" name="valcode" required="true" >
-      <text size="35" default=""/>
+      <text size="64" charset="utf8"/>
     </column>
     <column id="roles.state" name="state" required="true" >
-      <number size="11" default="3" />
+      <number size="3" default="3" unsigned="true" />
     </column>
     <column id="roles.auth_module_id" name="auth_module_id" required="true" >
-      <number size="11" default="0" />
+      <number size="10" unsigned="true" />
     </column>
     <constraints>
       <primary name="id">
@@ -58,10 +58,10 @@
   </table>
   <table name="rolemembers">
     <column id="rolemembers.role_id" name="role_id"  >
-      <number size="11" />
+      <number size="10" unsigned="true" />
     </column>
     <column id="rolemembers.parent_id" name="parent_id"  >
-      <number size="11" />
+      <number size="10" unsigned="true"/>
     </column>
     <constraints>
       <primary name="id">
