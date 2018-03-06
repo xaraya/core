@@ -58,7 +58,7 @@ class XarayaXSLProcessor extends Object
     static function phpexpression($expr)
     {
         $res = ExpressionTransformer::transformPHPExpression($expr);
-        xarLogMessage("BL: '$expr' resolved to '$res'");
+        xarLog::message(xarML("BL: '#(1)' resolved to '#(2)'", $expr, $res), xarLog::LEVEL_INFO);
         return $res;
     }
 
