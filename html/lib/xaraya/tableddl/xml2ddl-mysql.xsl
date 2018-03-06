@@ -92,7 +92,21 @@
     <!-- @todo move the specific types into their own templates -->
     <xsl:choose>
       <xsl:when test="number">
-        <xsl:text>INTEGER</xsl:text>
+        <xsl:choose>
+          <xsl:when test="*[@size != '']">
+            <xsl:choose>
+              <xsl:when test="*[@size > 3]">
+                <xsl:text>INTEGER</xsl:text>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:text>TINYINT</xsl:text>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>INTEGER</xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
       </xsl:when>
       <xsl:when test="text">
         <xsl:choose>
