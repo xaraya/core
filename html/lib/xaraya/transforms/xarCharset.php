@@ -156,7 +156,7 @@ define ("CONVERT_TABLES_DIR", sys::lib() . 'transforms/convtables/');
  * @author Mikolaj Jedrzejak <mikolajj@op.pl>
  * @author Vladimirs Metenchuks <voll@xaraya.com>
 **/
-class xarCharset extends Object
+class xarCharset extends xarObject
 {
     public $lastConversion = ''; // Last used conversion
     public $conversionTable;     // Last conversion table

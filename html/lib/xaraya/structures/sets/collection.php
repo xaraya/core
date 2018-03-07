@@ -17,7 +17,7 @@ class BasicCollection extends DataContainer implements Collection
     {
         $this->elements = array();
     }
-    public function add(Object $element)
+    public function add(xarObject $element)
     {
         $this->elements[$element->hash()] = $element;
     }
@@ -33,7 +33,7 @@ class BasicCollection extends DataContainer implements Collection
     {
         return count($this->elements) == 0;
     }
-    public function remove(Object $element)
+    public function remove(xarObject $element)
     {
         unset($this->elements[$element->hash()]);
     }
@@ -82,11 +82,11 @@ class BasicSet extends BasicCollection implements IteratorAggregate
  */
 interface Collection
 {
-    public function add(Object $element);
+    public function add(xarObject $element);
     public function addAll(BasicCollection $collection);
     public function clear();
     public function isEmpty();
-    public function remove(Object $element);
+    public function remove(xarObject $element);
     public function removeAll(BasicCollection $collection);
     public function size();
     public function toArray();

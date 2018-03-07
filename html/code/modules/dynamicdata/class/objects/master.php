@@ -19,7 +19,7 @@
 
 sys::import('modules.dynamicdata.class.objects.descriptor');
 
-class DataObjectMaster extends Object
+class DataObjectMaster extends xarObject
 {
 /**
  * These constants are added for convenience. They are currently not being used

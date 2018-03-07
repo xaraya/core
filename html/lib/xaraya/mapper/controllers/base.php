@@ -15,7 +15,7 @@
 
 sys::import('xaraya.mapper.controllers.interfaces');
 
-class BaseActionController extends Object
+class BaseActionController extends xarObject
 {
     private $controller;
     private $request;

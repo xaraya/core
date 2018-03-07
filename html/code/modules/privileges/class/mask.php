@@ -16,7 +16,7 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
 */
-class xarMask extends Object
+class xarMask extends xarObject
 {
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;

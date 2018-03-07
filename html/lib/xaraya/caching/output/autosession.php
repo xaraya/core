@@ -14,7 +14,7 @@
  * @author jsb
 **/
 
-class xarAutoSessionCache extends Object
+class xarAutoSessionCache extends xarObject
 {
     /**
      * Log the HIT / MISS status of URLs requested by first-time visitors

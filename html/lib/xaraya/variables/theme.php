@@ -28,7 +28,7 @@ interface IxarThemeVars
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
-class xarThemeVars extends Object implements IxarThemeVars
+class xarThemeVars extends xarObject implements IxarThemeVars
 {
     /**
      * get a theme variable

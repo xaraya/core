@@ -13,7 +13,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-class xarDispatcher extends Object
+class xarDispatcher extends xarObject
 {
     protected $controller;
     protected $request;

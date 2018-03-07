@@ -17,7 +17,7 @@
 /**
  * Core caching in memory for frequently-used values (within a single HTTP request)
  */
-class xarCoreCache extends Object
+class xarCoreCache extends xarObject
 {
     private static $cacheCollection = array();
     private static $cacheStorage = null;

@@ -18,7 +18,7 @@ sys::import('xaraya.objects');
  * Dynamic Object User Interface Handler
  *
  */
-class DataObjectDefaultHandler extends Object
+class DataObjectDefaultHandler extends xarObject
 {
     public $method = 'overridden in child classes';
 

@@ -381,7 +381,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
     return $sql;
 }
 
-class xarXMLInstaller extends Object
+class xarXMLInstaller extends xarObject
 {
     public $tableprefix = '';
     

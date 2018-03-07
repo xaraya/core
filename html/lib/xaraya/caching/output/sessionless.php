@@ -14,7 +14,7 @@
  * @author jsb
 **/
 
-class xarSessionLessCache extends Object
+class xarSessionLessCache extends xarObject
 {
     /**
      * Check if this page is suitable for session-less page caching

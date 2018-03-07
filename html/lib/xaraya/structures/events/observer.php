@@ -15,7 +15,7 @@
  * This serves as the template from which all other event observers should inherit
  * All subjects must implement ixarEventSubject interface
 **/
-class EventObserver extends Object implements ixarEventObserver
+class EventObserver extends xarObject implements ixarEventObserver
 {
     public function notify(ixarEventSubject $subject)
     {

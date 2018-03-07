@@ -18,7 +18,7 @@
  *
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
-class xarDB_PDO extends Object
+class xarDB_PDO extends xarObject
 {
     public static $count = 0;
 
@@ -382,7 +382,7 @@ class xarPDO extends PDO
     }
 }
 
-class xarPDOStatement extends Object
+class xarPDOStatement extends xarObject
 {
     private $pdo;
     private $pdostmt;
@@ -548,7 +548,7 @@ class xarPDOStatement extends Object
  * PDO does not have much metadata, so we have to roll our own here
  *
  */
-class DatabaseInfo extends Object
+class DatabaseInfo extends xarObject
 {
     private $pdo;
     private $tables;
@@ -624,7 +624,7 @@ class DatabaseInfo extends Object
  * PDO does not have much metadata, so we have to roll our own here
  *
  */
-class PDOTable extends Object
+class PDOTable extends xarObject
 {
     private $table;
 
@@ -651,7 +651,7 @@ class PDOTable extends Object
  * PDO does not have much metadata, so we have to roll our own here
  *
  */
-class PDOColumn extends Object
+class PDOColumn extends xarObject
 {
     private $column;
 
@@ -698,7 +698,7 @@ class PDOColumn extends Object
  * PDO does not have result sets, so we have to roll our own here
  *
  */
-class PDOResultSet extends Object
+class PDOResultSet extends xarObject
 {
     const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
     const FETCHMODE_NUM   = PDO::FETCH_NUM;

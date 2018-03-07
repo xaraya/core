@@ -29,7 +29,7 @@
  * error. SMTP also provides some utility methods for sending mail
  * to an SMTP server.
  */
-class SMTP extends Object
+class SMTP extends xarObject
 {
     /**
      *  SMTP server port

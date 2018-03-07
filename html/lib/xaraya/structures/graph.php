@@ -13,7 +13,7 @@
  * http://pear.php.net/package/Structures_Graph/docs/latest/li_Structures_Graph.html
  */
  
-class GraphNode extends Object implements IGraphNode
+class GraphNode extends xarObject implements IGraphNode
 {
     private $data = null;           // The data of this node
     private $metadata = array();    // The metadata of this node
@@ -111,7 +111,7 @@ class GraphNode extends Object implements IGraphNode
     }
 }
 
-class Graph extends Object implements IGraph
+class Graph extends xarObject implements IGraph
 {
     private $nodes = array();   // References to the nodes of this graph
     private $directed = false;  // Whether thiis a directed graph or not
@@ -158,7 +158,7 @@ class Graph extends Object implements IGraph
     }
 }
 
-class TopologicalSorter extends Object implements ITopologicalSorter
+class TopologicalSorter extends xarObject implements ITopologicalSorter
 {
     static function _nonVisitedInDegree(GraphNode $node) 
     {
@@ -225,7 +225,7 @@ class TopologicalSorter extends Object implements ITopologicalSorter
     }
 }
 
-class AcyclicTest extends Object implements IAcyclicTest
+class AcyclicTest extends xarObject implements IAcyclicTest
 {
     static function _nonVisitedInDegree(GraphNode $node) 
     {

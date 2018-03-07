@@ -47,7 +47,7 @@ interface ixarBlock
  * @author Paul Rosania
  * @author Chris Powis
  */
-class xarBlock extends Object implements ixarBlock
+class xarBlock extends xarObject implements ixarBlock
 {
     
     private function __construct()

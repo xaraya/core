@@ -14,7 +14,7 @@ sys::import('modules.dynamicdata.class.objects.master');
 /**
  * DataObjectLinks class
  */
-class DataObjectLinks extends Object
+class DataObjectLinks extends xarObject
 {
     static $linktypes = array(
         'children'   => 'is parent of (one-to-many)',

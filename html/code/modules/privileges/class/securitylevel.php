@@ -13,7 +13,7 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo  this is here as replacement for what we used to have in a table, but wrapping levels are a bit high for getting to this info
  **/
-final class SecurityLevel extends Object
+final class SecurityLevel extends xarObject
 {
     const INVALID =   -1;
     const NONE    =    0;

@@ -15,7 +15,7 @@
 
 sys::import('blocklayout.compiler');
 
-class BlockLayoutXSLTProcessor extends Object
+class BlockLayoutXSLTProcessor extends xarObject
 {
     protected $xslProc = null;    // Object representing the processor.
     protected $xslDoc  = null;    // Object representing the stylesheet.
@@ -187,7 +187,7 @@ class BlockLayoutXSLTProcessor extends Object
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
 **/
-class XsltCallbacks extends Object
+class XsltCallbacks extends xarObject
 {
     static function mlsplaceholders($matches)
     {

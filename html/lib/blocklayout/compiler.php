@@ -41,7 +41,7 @@ interface IxarBLCompiler
  * @package blocklayout
  * @access public
  */
-class xarBLCompiler extends Object implements IxarBLCompiler
+class xarBLCompiler extends xarObject implements IxarBLCompiler
 {
     public static $instance  = null;
     private $lastFile        = null;
@@ -213,7 +213,7 @@ class xarBLCompiler extends Object implements IxarBLCompiler
  * @todo   make protected, should only be called from tag handler no?
  * @todo   split up in PHP and BL parts with one interface method (transform)
  */
-class ExpressionTransformer extends Object
+class ExpressionTransformer extends xarObject
 {
     const XAR_TOKEN_VAR_START = '$';
     const XAR_TOKEN_CI_DELIM  = '#';

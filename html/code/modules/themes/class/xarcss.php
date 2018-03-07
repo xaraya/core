@@ -14,7 +14,7 @@
 /**
  * Base CSS class
 **/
-class xarCSS extends Object
+class xarCSS extends xarObject
 {
 /**
  * Defines for this library
@@ -868,7 +868,7 @@ class xarCSS extends Object
  *
  * This object models a CSS Framework
 **/
-class xarCSSLib extends Object
+class xarCSSLib extends xarObject
 {
     // required meta data, filled in when the object is created
     public $name;

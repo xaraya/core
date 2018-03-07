@@ -13,7 +13,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-class Installer extends Object
+class Installer extends xarObject
 {
     private $extType                  = 'modules';
     private $dependencieschecked      = false;

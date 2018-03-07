@@ -13,7 +13,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-class xarController extends Object
+class xarController extends xarObject
 {
     public static $allowShortURLs = true;
     public static $shortURLVariables;

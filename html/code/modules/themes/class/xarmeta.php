@@ -14,7 +14,7 @@
 /**
  * Base Meta class
 **/
-class xarMeta extends Object
+class xarMeta extends xarObject
 {
     private static $instance;
     private static $meta;

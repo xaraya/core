@@ -13,7 +13,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-class xarRouter extends Object
+class xarRouter extends xarObject
 {
     protected $routes       = array();
     protected $currentRoute = 'default';

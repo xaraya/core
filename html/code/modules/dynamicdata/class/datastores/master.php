@@ -14,7 +14,7 @@ sys::import('xaraya.datastores.interface');
 /**
  * Base class for DD objects
  */
-class DDObject extends Object implements IDDObject
+class DDObject extends xarObject implements IDDObject
 {
 
     public $name;
@@ -94,7 +94,7 @@ class DDObject extends Object implements IDDObject
  * @todo this factory should go into core once we use datastores in more broad ways.
  * @todo the classnames could use a bit of a clean up (shorter, lowercasing)
  */
-class DataStoreFactory extends Object
+class DataStoreFactory extends xarObject
 {
     /**
      * Class method to get a new dynamic data store (of the right type)

@@ -58,7 +58,7 @@ class DuplicateEventRegistrationException extends EventRegistrationException
  * @link http://www.xaraya.info
  *
 **/
-class xarEvents extends Object implements ixarEvents
+class xarEvents extends xarObject implements ixarEvents
 {
     // Event system itemtypes 
     const SUBJECT_TYPE       = 1;   // System event subjects, handles OBSERVER_TYPE events

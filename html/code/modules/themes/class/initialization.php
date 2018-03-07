@@ -18,7 +18,7 @@
  * This corresponds directly to the db info we register for a property.
  *
  */
-class ThemeInitialization extends Object
+class ThemeInitialization extends xarObject
 {
     static public function clearCache()
     {

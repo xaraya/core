@@ -29,7 +29,7 @@
  * @return  void
  * @todo    nice handling of protocols other than http.
  */
-class xarCurl extends Object
+class xarCurl extends xarObject
 {
     // The curl object.
     // Extra methods and properties can be accessed through this property.

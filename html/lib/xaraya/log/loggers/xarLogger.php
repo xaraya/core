@@ -35,7 +35,7 @@
  *
  * @author  Flavio Botelho <nuncanada@ig.com.br>
  */
-class xarLogger extends Object
+class xarLogger extends xarObject
 {
     /**
     * The level of logging.

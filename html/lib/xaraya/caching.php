@@ -14,7 +14,7 @@
  * @author jsb
  */
 
-class xarCache extends Object
+class xarCache extends xarObject
 {
     public static $outputCacheIsEnabled    = false;
     public static $coreCacheIsEnabled      = true;

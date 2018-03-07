@@ -17,7 +17,7 @@
 /**
  * Variable caching in cache storage to keep values for longer than the current HTTP request
  */
-class xarVariableCache extends Object
+class xarVariableCache extends xarObject
 {
     public static $cacheTime      = 7200;
     public static $cacheSizeLimit = 2097152;

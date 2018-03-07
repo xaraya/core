@@ -31,7 +31,7 @@ interface IExceptionHandlers
  * @link http://www.xaraya.info
  *
 **/
-class ExceptionHandlers extends Object implements IExceptionHandlers
+class ExceptionHandlers extends xarObject implements IExceptionHandlers
 {
     private static $data = array();
 

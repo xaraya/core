@@ -10,7 +10,7 @@
  */
 
 // FIXME: this is unmaintainable, dont hardcode it, determine once what is available, then store somewhere
-class xarComponents extends Object
+class xarComponents extends xarObject
 {
 public static $core = array(
               array('name' => '', 'fullname' => 'BlockLayout', 'description' => 'Templating engine'),

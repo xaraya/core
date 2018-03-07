@@ -22,7 +22,7 @@
  * @todo save the list of registered functions and class methods somewhere ?
  * @todo re-use the list of saved functions and class methods in initialize() ?
 **/
-class xarAutoload extends Object
+class xarAutoload extends xarObject
 {
     private static $registerlist = array();
     private static $classpathlist = array();

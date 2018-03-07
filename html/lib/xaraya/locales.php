@@ -770,7 +770,7 @@ function xarMLS_strftime($format=null,$timestamp=null)
  *
  * @throws  XMLParseException
  */
-class xarMLS__LocaleDataLoader extends Object
+class xarMLS__LocaleDataLoader extends xarObject
 {
     public $curData;
     public $curPath;

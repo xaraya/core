@@ -1,6 +1,6 @@
 <?php
 
-class XarayaXSLProcessor extends Object
+class XarayaXSLProcessor extends xarObject
 {
     private $xslProc = null;    // Object representing the processor.
     private $xslDoc  = null;    // Object representing the stylesheet.

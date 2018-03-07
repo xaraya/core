@@ -14,7 +14,7 @@
  * @author jsb
  */
 
-class xarOutputCache extends Object
+class xarOutputCache extends xarObject
 {
     public static $cacheDir             = 'var/cache/output';
     public static $cacheTheme           = '';

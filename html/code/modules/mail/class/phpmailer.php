@@ -28,7 +28,7 @@
  * @author Brent R. Matzelle
  * @copyright 2001 - 2003 Brent R. Matzelle
  */
-class PHPMailer extends Object
+class PHPMailer extends xarObject
 {
     /////////////////////////////////////////////////
     // PUBLIC VARIABLES

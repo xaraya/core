@@ -14,7 +14,7 @@
  * @author jsb
 **/
 
-class xarObjectCache extends Object
+class xarObjectCache extends xarObject
 {
     public static $cacheTime      = 7200;
     public static $cacheSizeLimit = 2097152;
