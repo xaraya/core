@@ -106,13 +106,14 @@ function xarInstallLoader()
 {
     $xmlextension = extension_loaded('xml');
     $xslextension = extension_loaded('xsl');
+    $mbsextension = extension_loaded('mbstring');
 
     if (function_exists('version_compare')) {
         if (version_compare(PHP_VERSION,PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
     } else {
         $metRequiredPHPVersion = false;
     }
-    if (!$metRequiredPHPVersion || !$xmlextension || !$xslextension) {
+    if (!$metRequiredPHPVersion || !$xmlextension || !$xslextension || !$mbsextension) {
         header('Location: requirements.html');
         exit;
     }
