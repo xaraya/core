@@ -37,7 +37,7 @@ function xarDB__datadictCreateTable($tableName, $fields)
 {
     $sql_fields = array();
 
-    while (list($field_name, $parameters) = each($fields)) {
+    foreach ($fields as $field_name => $parameters) {
         $this_field = xarDB__datadictColumnDefinition($field_name, $parameters);
         if (empty($this_field)) continue;
 

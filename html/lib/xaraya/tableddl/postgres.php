@@ -39,7 +39,7 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
     $primary_key = array();
     $epilogue ='';
 
-    while (list($field_name, $parameters) = each($fields)) {
+    foreach ($fields as $field_name => $parameters) {
         $parameters['command'] = 'create';
         $this_field = xarDB__postgresColumnDefinition($field_name, $parameters);
 

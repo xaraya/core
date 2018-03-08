@@ -389,7 +389,7 @@ class xarPrivilege extends xarMask
         $parents = $this->getParents();
 
         //Get the parent field for each parent
-        while (list($key, $parent) = each($parents)) {
+        foreach ($parents as $key => $parent) {
             $ancestors = $parent->getParents();
             foreach ($ancestors as $ancestor) {
                 $parents[] = $ancestor;

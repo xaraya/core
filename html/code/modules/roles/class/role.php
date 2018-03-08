@@ -444,7 +444,7 @@ class Role extends DataObject
         $inherited = array();
         foreach ($ancestors as $ancestor) {
             $perms = $ancestor->getAssignedPrivileges();
-            while (list($key, $perm) = each($perms)) {
+            foreach ($perms as $key => $perm) {
                 array_push($inherited, $perm);
             }
         }
