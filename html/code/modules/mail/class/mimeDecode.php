@@ -276,7 +276,6 @@ class Mail_mimeDecode extends PEAR
                     $return->disposition   = $content_disposition['value'];
                     if (isset($content_disposition['other'])) {
                         foreach ($content_disposition['other'] as $p_name => $p_value) {
-                        while (list($p_name, $p_value) = each($content_disposition['other'])) {
                             $return->d_parameters[$p_name] = $p_value;
                         }
                     }
