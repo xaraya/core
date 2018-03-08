@@ -8,7 +8,7 @@
  * @link http://xaraya.info/index.php/release/68.html
  */
 
-class xarTplPager Extends Object
+class xarTplPager extends xarObject
 {
     /**
      * Creates pager information with no assumptions to output format.
