@@ -476,7 +476,7 @@ class xarPrivilege extends xarMask
         $children = $this->getChildren();
 
         //Get the child field for each child
-        while (list($key, $child) = each($children)) {
+        foreach ($children as $key => $child) {
             $descendants = $child->getChildren();
             foreach ($descendants as $descendant) {
                 $children[] =$descendant;
