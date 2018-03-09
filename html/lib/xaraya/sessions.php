@@ -202,9 +202,6 @@ class xarSession extends xarObject implements IsessionHandler
             // Stop adding SID to URLs
             ini_set('session.use_trans_sid', 0);
 
-            // User-defined save handler
-            ini_set('session.save_handler', 'user');
-
             // How to store data
             ini_set('session.serialize_handler', 'php');
 
