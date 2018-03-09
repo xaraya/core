@@ -174,7 +174,7 @@ class Query
         if (!$result) return;
         $this->result =& $result;
 
-        if ($result->fields === false)
+        if ( empty($result->fields))
             $numfields = 0;
         else
             $numfields = count($result->fields); // Better than the private var, fields should still be protected
