@@ -82,7 +82,7 @@ abstract class ResultSetCommon {
      */
     // XARAYA MODIFICATION
     //protected $fields;
-    public $fields = array();
+    public $fields;
     // END XARAYA MODIFICATION
 
     /**
