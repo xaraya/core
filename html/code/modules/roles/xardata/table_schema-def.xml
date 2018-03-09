@@ -6,7 +6,7 @@
       <number size="10" unsigned="true" />
     </column>
     <column id="roles.name" name="name" required="true" >
-      <text size="255" charset=" utf8"/>
+      <text size="255" charset="utf8"/>
     </column>
     <column id="roles.itemtype" name="itemtype" required="true" >
       <number size="11" unsigned="true" />
@@ -15,19 +15,19 @@
       <number size="11" default="0" />
     </column>
     <column id="roles.uname" name="uname" required="true" >
-      <text size="255" charset=" utf8"/>
+      <text size="255" charset="utf8"/>
     </column>
     <column id="roles.email" name="email"  >
-      <text size="255" default="NULL" charset=" utf8"/>
+      <text size="255" default="NULL" charset="utf8"/>
     </column>
     <column id="roles.pass" name="pass"  >
-      <text size="255" default="NULL" charset=" utf8"/>
+      <text size="255" default="NULL" charset="utf8"/>
     </column>
     <column id="roles.date_reg" name="date_reg" required="true" >
       <number size="10" default="0" unsigned="true" />
     </column>
     <column id="roles.valcode" name="valcode" required="true" >
-      <text size="64" charset=" utf8"/>
+      <text size="64" charset="utf8"/>
     </column>
     <column id="roles.state" name="state" required="true" >
       <number size="3" default="3" unsigned="true"  />

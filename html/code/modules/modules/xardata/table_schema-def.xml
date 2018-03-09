@@ -6,22 +6,22 @@
       <number size="10" unsigned="true" />
     </column>
     <column id="modules.name" name="name" required="true" >
-      <text size="64" charset=" utf8"/>
+      <text size="64" charset="utf8"/>
     </column>
     <column id="modules.regid" name="regid" required="true" >
       <number size="10" unsigned="true" />
     </column>
     <column id="modules.directory" name="directory" required="true" >
-      <text size="64" charset=" utf8"/>
+      <text size="64" charset="utf8"/>
     </column>
     <column id="modules.version" name="version" required="true" >
-      <text size="10" charset=" utf8"/>
+      <text size="10" charset="utf8"/>
     </column>
     <column id="modules.class" name="class" required="true" >
-      <text size="64" charset=" utf8"/>
+      <text size="64" charset="utf8"/>
     </column>
     <column id="modules.category" name="category" required="true" >
-      <text size="64" charset=" utf8" />
+      <text size="64" charset="utf8" />
     </column>
     <column id="modules.admin_capable" name="admin_capable" >
       <number size="1"  />
@@ -47,7 +47,7 @@
       <number size="10" unsigned="true"/>
     </column>
     <column id="module_itemvars.value" name="value" >
-      <long charset=" utf8"/>
+      <long charset="utf8"/>
     </column>
     <constraints>
       <primary name="id">
@@ -56,32 +56,6 @@
       </primary>
     </constraints>
   </table>
-  <!--<table name="module_vars">
-    <column id="module_vars.id" name="id" auto="true"  >
-      <number size="10" unsigned="true"  />
-    </column>
-    <column id="module_vars.module_id" name="module_id"  >
-      <number size="10" unsigned="true" />
-    </column>
-    <column id="module_vars.name" name="name" >
-      <text size="64" charset=" utf8" />
-    </column>
-    <column id="module_vars.value" name="value" >
-      <text size="" charset=" utf8" />
-    </column>
-    <constraints>
-      <primary name="id">
-        <column ref="module_vars.id"/>
-      </primary>
-      <index name="i_module_vars_module_id">
-        <column ref="module_vars.module_id"/>
-      </index>
-      <index name="i_module_vars_name">
-        <column ref="module_vars.name"/>
-      </index>
-    </constraints>
-  </table>-->
-
    <table name="hooks">
     <column id="hooks.observer" name="observer" required="true" >
       <number size="10" unsigned="true" />
@@ -93,7 +67,7 @@
       <number size="10" unsigned="true" />
     </column>
     <column id="hooks.scope" name="scope" required="true" >
-      <text size="64" charset=" utf8" />
+      <text size="64" charset="utf8" />
     </column>
   </table>
   <table name="eventsystem">
@@ -101,7 +75,7 @@
       <number size="10" unsigned="true"/>
     </column>
     <column id="eventsystem.event" name="event" required="true">
-      <text size="255" charset=" utf8"/>
+      <text size="255" charset="utf8"/>
     </column>
     <column id="eventsystem.module_id" name="module_id" required="true">
       <number size="10" unsigned="true" default="0" />
@@ -110,16 +84,16 @@
       <number size="10" unsigned="true" default="0" />
     </column>
     <column id="eventsystem.area" name="area" required="true" >
-      <text size="64" charset=" utf8"/>
+      <text size="64" charset="utf8"/>
     </column>
      <column id="eventsystem.type" name="type" required="true" >
-      <text size="64" charset=" utf8"/>
+      <text size="64" charset="utf8"/>
     </column>
      <column id="eventsystem.func" name="func" required="true" >
-      <text size="64" charset=" utf8"/>
+      <text size="64" charset="utf8"/>
     </column>
      <column id="eventsystem.scope" name="scope" required="true" >
-      <text size="64" charset=" utf8"/>
+      <text size="64" charset="utf8"/>
     </column>
     <constraints>
       <primary name="id">
@@ -130,16 +104,6 @@
         <column ref="eventsystem.module_id"/>
         <column ref="eventsystem.itemtype"/>
       </unique>  
-      <!--<index name="i_eventsystem">
-        <column ref="eventsystem.event"/>
-      </index>
-      <index name="i_eventsystem">
-        <column ref="eventsystem.module_id"/>
-      </index>
-      <index name="i_eventsystem">
-        <column ref="eventsystem.itemtype"/>
-      </index>-->
-      
     </constraints>
   </table>
 </schema>
