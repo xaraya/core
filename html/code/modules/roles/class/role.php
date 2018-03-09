@@ -694,7 +694,7 @@ class Role extends DataObject
         //Reset the array pointer - else in some cases we may miss getting all ancestors
         reset($parents);
         // Get the parent field for each parent
-        while (list($key, $parent) = each ($parents)) {
+        foreach ($parents as $key => $parent) {
             $plevel = $parent->getLevel() + 1;
             $ancestors = $parent->getParents();
             foreach ($ancestors as $key1 => $ancestor) {
