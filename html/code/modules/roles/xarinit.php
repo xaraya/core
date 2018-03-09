@@ -15,6 +15,7 @@
  * @author John Cox
  */
 
+
 /**
  * Initialise the roles module
  *
@@ -230,7 +231,7 @@ function roles_activate()
     $rolefields['name'] = 'Anonymous';
     $rolefields['uname'] = 'anonymous';
     $rolefields['parentid'] = $topid;
-    $anonid = $user->createItem($rolefields);
+    $anonid = $group->createItem($rolefields);
     xarConfigVars::set(null, 'Site.User.AnonymousUID', $anonid);
 
     // The Administrator
@@ -238,7 +239,7 @@ function roles_activate()
     $rolefields['uname'] = 'admin';
     $rolefields['email'] = 'none@none.com';
     $rolefields['parentid'] = $admingroup;
-    $adminid = $user->createItem($rolefields);
+    $adminid = $group->createItem($rolefields);
     xarModVars::set('roles', 'admin', $adminid);
 
     // The SiteManager
@@ -246,7 +247,8 @@ function roles_activate()
     $rolefields['uname'] = 'manager';
     $rolefields['email'] = 'none@none.com';
     $rolefields['parentid'] = $mgrgroup;
-    $mgrid = $user->createItem($rolefields);
+    $mgrid = $group->createItem($rolefields);
+     xarModVars::set('roles', 'manager', $mgrid);
 
     // Installation complete; check for upgrades
     return roles_upgrade('2.0.0');

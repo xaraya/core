@@ -118,6 +118,9 @@
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
+      <xsl:when test="long">
+        <xsl:text>LONGTEXT</xsl:text>
+      </xsl:when>
       <xsl:when test="binary">
         <xsl:text>BLOB</xsl:text>
       </xsl:when>
