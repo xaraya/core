@@ -133,7 +133,7 @@
         <xsl:text> UNSIGNED</xsl:text>
     </xsl:if>
     <xsl:if test="*[@charset]">
-        <xsl:text> CHARACTER SET</xsl:text>
+        <xsl:text> CHARACTER SET </xsl:text>
         <xsl:value-of select="*/@charset"/>
     </xsl:if>
     <xsl:if test="@required = 'true'"> NOT NULL</xsl:if>
