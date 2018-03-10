@@ -14,7 +14,6 @@
  * @author Gregor Rothfuss
  * @author John Cox
  */
-
 /**
  * Initialise the roles module
  *
@@ -28,120 +27,16 @@ function roles_init()
     $dbconn = xarDB::getConn();
     try {
         $dbconn->begin();
-
         sys::import('xaraya.tableddl');
         xarXMLInstaller::createTable('table_schema-def', 'roles');
-
         // We're done, commit
         $dbconn->commit();
     } catch (Exception $e) {
         $dbconn->rollback();
         throw $e;
     }
-    
-/*
-    $dbconn = xarDB::getConn();
-    $tables =& xarDB::getTables();
-
-    $prefix = xarDB::getPrefix();
-    $tables['roles'] = $prefix . '_roles';
-    $tables['rolemembers'] = $prefix . '_rolemembers';
-
-    // Create tables inside a transaction
-    try {
-        $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
-        $dbconn->begin();
-
-        $fields = array(
-                        'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
-                        'name' => array('type' => 'varchar','size' => 254,'null' => false, 'charset' => $charset),
-                        'itemtype' => array('type' => 'integer', 'unsigned' => true, 'null' => false),
-                        'users' => array('type' => 'integer', 'null' => false, 'default' => '0'),
-                        'uname' => array('type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset),
-                        'email' => array('type' => 'varchar', 'size' => 254,'null' => true, 'charset' => $charset),
-                        'pass' => array('type' => 'varchar',  'size' => 254, 'null' => true, 'charset' => $charset),
-                        'date_reg' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'default' => '0'),
-                        'valcode' => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
-                        'state' => array('type' => 'integer', 'unsigned' => true, 'size' => 'tiny', 'null' => false,'default' => '3'),
-                        'auth_module_id' => array('type' => 'integer', 'unsigned' => true, 'unsigned' => true, 'null' => false));
-        $query = xarDBCreateTable($tables['roles'],$fields);
-        $dbconn->Execute($query);
-
-        // role type is used in all group look-ups (e.g. security checks)
-        $index = array('name' => $prefix . '_roles_itemtype',
-                       'fields' => array('itemtype')
-                       );
-        $query = xarDBCreateIndex($tables['roles'], $index);
-        $dbconn->Execute($query);
-
-        // username must be unique (for login) + don't allow groupname to be the same either
-        $index = array('name' => $prefix . '_roles_uname',
-                       'fields' => array('uname'),
-                       'unique' => true
-                       );
-        $query = xarDBCreateIndex($tables['roles'], $index);
-        $dbconn->Execute($query);
-
-        // allow identical "real names" here
-        $index = array('name' => $prefix . '_roles_name',
-                       'fields' => array('name'),
-                       'unique' => false
-                       );
-        $query = xarDBCreateIndex($tables['roles'], $index);
-        $dbconn->Execute($query);
-
-        // allow identical e-mail here (???) + is empty for groups !
-        $index = array('name' => $prefix . '_roles_email',
-                       'fields' => array('email'),
-                       'unique' => false
-                       );
-        $query = xarDBCreateIndex($tables['roles'], $index);
-        $dbconn->Execute($query);
-
-        // role state is used in many user lookups
-        $index = array('name' => $prefix . '_roles_state',
-                       'fields' => array('state'),
-                       'unique' => false
-                       );
-        $query = xarDBCreateIndex($tables['roles'], $index);
-        $dbconn->Execute($query);
-
-        $query = xarDBCreateTable($tables['rolemembers'],
-                            array('role_id' => array('type'        => 'integer',
-                                                'unsigned'     => true,
-                                                'null'        => true,
-                                                'primary_key' => true),
-                                        'parent_id' => array('type'        => 'integer',
-                                                            'unsigned'     => true,
-                                                            'null'        => true,
-                                                            'primary_key' => true)));
-        $dbconn->Execute($query);
-
-        $index = array('name' => $prefix . '_rolememb_id',
-                       'fields' => array('role_id'),
-                       'unique' => false);
-        $query = xarDBCreateIndex($tables['rolemembers'], $index);
-        $dbconn->Execute($query);
-
-        $index = array('name' => $prefix . '_rolememb_parentid',
-                       'fields' => array('parent_id'),
-                       'unique' => false);
-        $query = xarDBCreateIndex($tables['rolemembers'], $index);
-        $dbconn->Execute($query);
-
-        // We're done, commit
-        $dbconn->commit();
-    } catch (Exception $e) {
-        $dbconn->rollback();
-        throw $e;
-    }
-*/
-    // --------------------------------------------------------
-    //
     // Create some modvars
-    //
     xarConfigVars::set(null, 'Site.User.DebugAdmins', array('admin'));
-
     xarModVars::set('roles', 'defaultauthmodule', 'authsystem');
     xarModVars::set('roles', 'defaultregmodule', '');
     xarModVars::set('roles', 'rolesdisplay', 'tabbed');
@@ -160,22 +55,15 @@ function roles_init()
     xarModVars::set('roles', 'searchbyemail', false);
     xarModVars::set('roles', 'allowemail', false);
     xarModVars::set('roles', 'requirevalidation', true);
-    
     //Database Initialisation successful
     return true;
 }
-
 function roles_activate()
 {
-
     // Register hooks here, init is too soon
     xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');
     xarModRegisterHook('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
-
-    // --------------------------------------------------------
-    //
     // Enter some default groups and users and put them in a hierarchy
-    //
     $rolefields = array(
                     'itemid' => 0,  // make this explicit, because we are going to reuse the roles we define
                     'users' => 0,
@@ -187,7 +75,6 @@ function roles_activate()
     $group = DataObjectMaster::getObject(array('name' => 'roles_groups'));
     $rolefields['role_type'] = xarRoles::ROLES_GROUPTYPE;
     xarModVars::set('roles', 'defaultgroup', 0);
-
     // The top level group Everybody
     $rolefields['name'] = 'Everybody';
     $rolefields['uname'] = 'everybody';
@@ -196,7 +83,6 @@ function roles_activate()
     xarModVars::set('roles', 'everybody', $topid);
     xarModVars::set('roles', 'primaryparent', $topid);
     xarModUserVars::set('roles', 'userhome', '[base]',$topid);
-
     // The Administrators group
     $rolefields['name'] = 'Administrators';
     $rolefields['uname'] = 'administrators';
@@ -209,30 +95,25 @@ function roles_activate()
                                               'locked' => 0,
                                               'notifymsg' => '');
     xarModVars::set('roles', 'lockdata', serialize($lockdata));
-
     // The SiteManagers group
     $rolefields['name'] = 'SiteManagers';
     $rolefields['uname'] = 'sitemanagers';
     $rolefields['parentid'] = $topid;
     $mgrgroup = $group->createItem($rolefields);
-
     // The Users group
     $rolefields['name'] = 'Users';
     $rolefields['uname'] = 'users';
     $rolefields['parentid'] = $topid;
     $usergroup = $group->createItem($rolefields);
     xarModVars::set('roles', 'defaultgroup', $usergroup);
-
     $user = DataObjectMaster::getObject(array('name' => 'roles_users'));
     $rolefields['role_type'] = xarRoles::ROLES_USERTYPE;
-
     // The Anonymous user
     $rolefields['name'] = 'Anonymous';
     $rolefields['uname'] = 'anonymous';
     $rolefields['parentid'] = $topid;
     $anonid = $user->createItem($rolefields);
     xarConfigVars::set(null, 'Site.User.AnonymousUID', $anonid);
-
     // The Administrator
     $rolefields['name'] = 'Administrator';
     $rolefields['uname'] = 'admin';
@@ -240,18 +121,16 @@ function roles_activate()
     $rolefields['parentid'] = $admingroup;
     $adminid = $user->createItem($rolefields);
     xarModVars::set('roles', 'admin', $adminid);
-
     // The SiteManager
     $rolefields['name'] = 'SiteManager';
     $rolefields['uname'] = 'manager';
     $rolefields['email'] = 'none@none.com';
     $rolefields['parentid'] = $mgrgroup;
     $mgrid = $user->createItem($rolefields);
-
+    xarModVars::set('roles', 'manager', $mgrid);
     // Installation complete; check for upgrades
     return roles_upgrade('2.0.0');
 }
-
 /**
  * Upgrade this module from an old version
  *
@@ -267,7 +146,6 @@ function roles_upgrade($oldversion)
     }
     return true;
 }
-
 /**
  * Delete this module
  *
