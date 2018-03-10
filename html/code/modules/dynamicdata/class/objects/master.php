@@ -1217,7 +1217,7 @@ class DataObjectMaster extends xarObject
         }
 
         // get URL for this object and action
-        $url = xarObject::getActionURL($this, $action, $itemid, $extra);
+        $url = xarDDObject::getActionURL($this, $action, $itemid, $extra);
 
         // cache the URL if the itemid is in there
         if (!empty($itemid) && empty($extra) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {
