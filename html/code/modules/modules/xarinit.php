@@ -23,6 +23,7 @@ function modules_init()
     // Create tables inside a transaction
     $dbconn = xarDB::getConn();
     $prefix = xarDB::getPrefix();
+    
     try {
         $dbconn->begin();
         sys::import('xaraya.tableddl');
@@ -33,6 +34,7 @@ function modules_init()
         $dbconn->rollback();
         throw $e;
     }
+    
     // Get database information
     $tables =& xarDB::getTables();
     $tables['eventsystem'] = $prefix . '_eventsystem';
