@@ -37,7 +37,6 @@ function modules_init()
     
     // Get database information
     $tables =& xarDB::getTables();
-    $tables['eventsystem'] = $prefix . '_eventsystem';
     try {
         // Manually Insert the Base and Modules module into modules table
         $query = "INSERT INTO " . $tables['modules'] . "
