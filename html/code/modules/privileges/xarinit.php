@@ -23,40 +23,29 @@ sys::import('xaraya.tableddl');
 function privileges_init()
 {
     $dbconn = xarDB::getConn();
-    $tables =& xarDB::getTables();
-
+    try {
+        $dbconn->begin();
+        sys::import('xaraya.tableddl');
+        xarXMLInstaller::createTable('table_schema-def', 'privileges');
+        // We're done, commit
+        $dbconn->commit();
+    } catch (Exception $e) {
+        $dbconn->rollback();
+        throw $e;
+    }
+   /* $tables =& xarDB::getTables();
     $prefix = xarDB::getPrefix();
     $tables['privileges']           = $prefix . '_privileges';
     $tables['privmembers']          = $prefix . '_privmembers';
     $tables['security_acl']         = $prefix . '_security_acl';
     $tables['security_instances']   = $prefix . '_security_instances';
     $tables['security_realms']      = $prefix . '_security_realms';
-    $tables['security_privsets']    = $prefix . '_security_privsets';
+    $tables['security_privsets']    = $prefix . '_security_privsets';*/
 
     // All or nothing
-    try {
+    /*try {
         $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
         $dbconn->begin();
-
-        // Create tables
-        /*********************************************************************
-         * Here we create all the tables for the privileges module
-         *
-         * prefix_privileges       - holds privileges info
-         * prefix_privmembers      - holds info on privileges group membership
-         * prefix_security_acl     - holds info on privileges assignments to roles
-         * prefix_security_masks   - holds info on masks for security checks
-         * prefix_security_instances       - holds module instance definitions
-         * prefix_security_realms  - holds realsm info
-         ********************************************************************/
-
-        /*********************************************************************
-         * CREATE TABLE xar_security_realms (
-         *  id int(11) NOT NULL auto_increment,
-         *  name varchar(254) NOT NULL,
-         *  PRIMARY KEY  (id)
-         * )
-         *********************************************************************/
         $fields = array('id'  => array('type'        => 'integer','null'        => false,
                                             'unsigned'     => true,      'increment'   => true,
                                             'primary_key' => true),
@@ -65,23 +54,6 @@ function privileges_init()
                                             'charset' => $charset));
         $query = xarDBCreateTable($tables['security_realms'],$fields);
         $dbconn->Execute($query);
-
-
-        /*********************************************************************
-         * CREATE TABLE xar_privileges (
-         *   id int(11) NOT NULL auto_increment,
-         *   name varchar(100) NOT NULL,
-         *   realm_id integer unsigned default NULL,
-         *   module_id integer unsigned NOT NULL,
-         *   component varchar(100) NOT NULL,
-         *   instance varchar(100) NOT NULL,
-         *   level int(11) NOT NULL default '0',
-         *   description varchar(254) NOT NULL,
-         *   itemtype integer unsigned NOT NULL,
-         *   PRIMARY KEY  (id)
-         * )
-         *********************************************************************/
-
         $fields = array(
                         'id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'increment' => true, 'primary_key' => true),
                         'name'  => array('type' => 'varchar', 'size' => 64, 'null' => false, 'charset' => $charset),
@@ -120,14 +92,6 @@ function privileges_init()
         $dbconn->Execute($query);
 
         xarDB::importTables(array('privileges' => $prefix . '_privileges'));
-
-        /*********************************************************************
-         * CREATE TABLE xar_privmembers (
-         *   privilege_id integer unsigned NOT NULL default '0',
-         *   parent_id integer unsigned NOT NULL default '0',
-         *   PRIMARY KEY (privilege_id,parent_id)
-         * )
-         *********************************************************************/
          $fields = array(
                 'privilege_id' => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'primary_key' => true),
                 'parent_id'    => array('type' => 'integer', 'unsigned' => true, 'null' => false, 'primary_key' => true)
@@ -146,16 +110,6 @@ function privileges_init()
                         'unique'    => false);
          $query = xarDBCreateIndex($tables['privmembers'],$index);
          $dbconn->Execute($query);
-
-
-        /*********************************************************************
-         * CREATE TABLE xar_security_acl (
-         *   role_id integer NOT NULL,
-         *   privilege_id integer NOT NULL,
-         *   PRIMARY KEY (role_id,privilege_id)
-         * )
-         *********************************************************************/
-
         $query = xarDBCreateTable($tables['security_acl'],
                                   array('role_id'       => array('type'  => 'integer',
                                                                     'unsigned'    => true,
@@ -180,23 +134,6 @@ function privileges_init()
         $dbconn->Execute($query);
 
         xarDB::importTables(array('security_acl' => $prefix . '_security_acl'));
-
-        /*********************************************************************
-         * CREATE TABLE xar_security_instances (
-         *   id int(11) NOT NULL default '0',
-         *   name varchar(100) NOT NULL,
-         *   module varchar(100) NOT NULL,
-         *   type varchar(100) NOT NULL,
-         *   instancevaluefield1 varchar(100) NOT NULL,
-         *   instancedisplayfield1 varchar(100) NOT NULL,
-         *   instanceapplication int(11) NOT NULL default '0',
-         *   instancevaluefield2 varchar(100) NOT NULL,
-         *   instancedisplayfield2 varchar(100) NOT NULL,
-         *   description varchar(254) NOT NULL,
-         *   PRIMARY KEY  (sid)
-         * )
-         *********************************************************************/
-
         $query = xarDBCreateTable($tables['security_instances'],
                                   array('id'  => array('type'       => 'integer',
                                                             'unsigned'     => true,
@@ -238,7 +175,7 @@ function privileges_init()
     } catch (Exception $e) {
         $dbconn->rollback();
         throw $e;
-    }
+    }*/
 
     // Installation complete; check for upgrades
     return privileges_upgrade('2.0.0');
