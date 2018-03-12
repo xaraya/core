@@ -17,10 +17,10 @@
     <column id="roles.uname" name="uname" required="true" >
       <text size="255" charset="utf8"/>
     </column>
-    <column id="roles.email" name="email"  >
+    <column id="roles.email" name="email" >
       <text size="255" default="NULL" charset="utf8"/>
     </column>
-    <column id="roles.pass" name="pass"  >
+    <column id="roles.pass" name="pass" >
       <text size="255" default="NULL" charset="utf8"/>
     </column>
     <column id="roles.date_reg" name="date_reg" required="true" >
@@ -30,7 +30,7 @@
       <text size="64" charset="utf8"/>
     </column>
     <column id="roles.state" name="state" required="true" >
-      <number size="3" default="3" unsigned="true"  />
+      <number size="3" default="3" unsigned="true" />
     </column>
     <column id="roles.auth_module_id" name="auth_module_id" required="true" >
       <number size="10" unsigned="true" />
@@ -58,10 +58,10 @@
   </table>
   <table name="rolemembers">
     <column id="rolemembers.role_id" name="role_id"  >
-      <number size="11" />
+      <number size="10" unsigned="true" />
     </column>
     <column id="rolemembers.parent_id" name="parent_id"  >
-      <number size="11" />
+      <number size="10" unsigned="true" />
     </column>
     <constraints>
       <primary name="id">
