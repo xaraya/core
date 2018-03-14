@@ -11,7 +11,6 @@
  * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/13.html
  */
-sys::import('xaraya.tableddl');
 /**
  * Initialise the blocks module
  * 
