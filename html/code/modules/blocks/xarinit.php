@@ -11,9 +11,7 @@
  * @link http://www.xaraya.info
  * @link http://xaraya.info/index.php/release/13.html
  */
-
 sys::import('xaraya.tableddl');
-
 /**
  * Initialise the blocks module
  * 
@@ -24,149 +22,21 @@ sys::import('xaraya.tableddl');
  */
 function blocks_init()
 {
-
     // Get database information
     $dbconn = xarDB::getConn();
-    $tables =& xarDB::getTables();
-    $prefix = xarDB::getPrefix();
-    $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
-    
-    $types_table = $tables['block_types'];
-    $instances_table = $tables['block_instances'];    
-
     try {
         $dbconn->begin();
-        
-        // block types
-        
-        $fields = array(
-            'id' => array(
-                'type' => 'integer', 
-                'unsigned' => true, 
-                'null' => false, 
-                'increment' => true,
-                'primary_key' => true,
-            ),        
-            'module_id' => array(
-                'type' => 'integer',
-                'unsigned' => true,
-                'null' => true,
-            ),
-            'state' => array(
-                'type' => 'integer',
-                'size' => 'tiny',
-                'unsigned' => true,
-                'null' => false,
-                'default' => 1,  //xarBlock::TYPE_UNINITIALISED,
-            ),
-            'type' => array(
-                'type' => 'varchar',
-                'size' => 64,
-                'null' => false,
-                'default' => null,
-                'charset' => $charset,
-            ),
-            'category' => array(
-                'type' => 'varchar',
-                'size' => 64,
-                'null' => false,
-                'default' => null,
-                'charset' => $charset,
-            ),
-            'info' => array(
-                'type' => 'text',
-                'null' => true,
-                'charset' => $charset,
-            ),
-        );
-        $query = xarDBCreateTable($types_table, $fields); 
-        $dbconn->Execute($query);
-
-        $index = array(
-            'name' => 'i_' . $types_table . '_types',
-            'fields' => array('type', 'module_id', 'state'),
-            'unique' => true,
-        );
-        $query = xarDBCreateIndex($types_table, $index);
-        $dbconn->Execute($query);
-
-        $index = array(
-            'name' => 'i_' . $types_table . '_category',
-            'fields' => array('category'),
-            'unique' => false,
-        );
-        $query = xarDBCreateIndex($types_table, $index);
-        $dbconn->Execute($query);
-        
-        // block instances
-
-        $fields = array(
-            'id' => array(
-                'type' => 'integer', 
-                'unsigned' => true, 
-                'null' => false, 
-                'increment' => true,
-                'primary_key' => true,
-            ),
-            'type_id' => array(
-                'type' => 'integer',
-                'unsigned' => true,
-                'null' => false,
-            ),
-            'name' => array(
-                'type' => 'varchar',
-                'size' => 64,
-                'null' => false,
-                'default' => null,
-                'charset' => $charset,
-            ),
-            'title' => array(
-                'type' => 'varchar',
-                'size' => 254,
-                'null' => true,
-                'default' => null,
-                'charset' => $charset,
-            ),
-            'content' => array(
-                'type' => 'text',
-                'null' => true,
-                'charset' => $charset,
-            ),
-            'state' => array(
-                'type' => 'integer',
-                'size' => 'tiny',
-                'unsigned' => true,
-                'null' => false,
-                'default' => xarBlock::BLOCK_STATE_VISIBLE,
-            ),
-        );
-        $query = xarDBCreateTable($instances_table, $fields); 
-        $dbconn->Execute($query);
-        
-        $index = array(
-            'name' => 'i_' . $instances_table . '_instances',
-            'fields' => array('name', 'state'),
-            'unique' => true,
-        );
-        $query = xarDBCreateIndex($instances_table, $index);
-        $dbconn->Execute($query);
-
-        $index = array(
-            'name' => 'i_' . $instances_table . '_type_id',
-            'fields' => array('type_id'),
-            'unique' => false,
-        );
-        $query = xarDBCreateIndex($instances_table, $index);
-        $dbconn->Execute($query);
-        
-        // block cache (todo)
-
-        $dbconn->commit();        
+        sys::import('xaraya.tableddl');
+        xarXMLInstaller::createTable('table_schema-def', 'blocks');
+        // We're done, commit
+        $dbconn->commit();
     } catch (Exception $e) {
         $dbconn->rollback();
         throw $e;
     }
-
+    $prefix = xarDB::getPrefix();
+    $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+    
     xarModVars::set('blocks', 'selstyle', 'plain');
     xarModVars::set('blocks', 'noexceptions', 1);
 
@@ -217,9 +87,7 @@ function blocks_init()
 
     // Installation complete; check for upgrades
     return blocks_upgrade('2.2.0');
-
 }
-
 /**
  * Upgrade this module from an old version
  * 
@@ -240,7 +108,6 @@ function blocks_upgrade($oldversion)
     }
     return true;
 }
-
 /**
  * Delete this module
  *
@@ -251,5 +118,4 @@ function blocks_delete()
   //this module cannot be removed
   return false;
 }
-
 ?>
