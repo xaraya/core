@@ -10,7 +10,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/1098.html
  */
-sys::import('xaraya.tableddl');
  /**
  * Initialise the privileges module
  * @author Marc Lutolf <marcinmilan@xaraya.com>
