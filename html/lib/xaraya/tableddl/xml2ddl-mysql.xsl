@@ -122,10 +122,7 @@
         <xsl:text>LONGTEXT</xsl:text>
       </xsl:when>
       <xsl:when test="medium">
-        <xsl:text>mediumtext</xsl:text>
-      </xsl:when>
-      <xsl:when test="blob">
-        <xsl:text>blob</xsl:text>
+        <xsl:text>MEDIUMTEXT</xsl:text>
       </xsl:when>
       <xsl:when test="binary">
         <xsl:text>BLOB</xsl:text>
