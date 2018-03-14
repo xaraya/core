@@ -32,7 +32,6 @@
     <column id="modules.state" name="state" required="true" >
       <number size="3" default="1" unsigned="true" />
     </column>
-   
     <constraints>
       <primary name="id">
         <column ref="modules.id"/>
