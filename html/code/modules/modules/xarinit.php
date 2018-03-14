@@ -10,8 +10,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/1.html
  */
-// Load Table Maintainance API
-sys::import('xaraya.tableddl');
 /**
  * Initialise the modules module
  *
@@ -22,7 +20,6 @@ function modules_init()
 {
     // Create tables inside a transaction
     $dbconn = xarDB::getConn();
-    $prefix = xarDB::getPrefix();
     
     try {
         $dbconn->begin();
@@ -103,10 +100,10 @@ function modules_activate()
     $selstyle = xarModVars::get('modules', 'selstyle');
     $selstyle = xarModVars::get('modules', 'selfilter');
     $selstyle = xarModVars::get('modules', 'selsort');
-    if (empty($hidecore)) xarModVars::set('modules', 'hidecore', 0);
-    if (empty($selstyle)) xarModVars::set('modules', 'selstyle', 'plain');
+    if (empty($hidecore))  xarModVars::set('modules', 'hidecore', 0);
+    if (empty($selstyle))  xarModVars::set('modules', 'selstyle', 'plain');
     if (empty($selfilter)) xarModVars::set('modules', 'selfilter', XARMOD_STATE_ANY);
-    if (empty($selsort)) xarModVars::set('modules', 'selsort', 'nameasc');
+    if (empty($selsort))   xarModVars::set('modules', 'selsort', 'nameasc');
     // New in 1.1.x series but not used
     xarModVars::set('modules', 'disableoverview',0);
     return true;
@@ -127,6 +124,8 @@ function modules_upgrade($oldversion)
             if (!$result) return;
         case '2.0.1':
             $dbconn = xarDB::getConn();
+            $tables = array('eventsystem' => xarDB::getPrefix() . '_eventsystem');
+            xarDB::importTables($tables);
             $tables =& xarDB::getTables();
             $prefix = xarDB::getPrefix();
             // Creating the first part inside a transaction
