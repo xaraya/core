@@ -18,10 +18,10 @@
       <number size="10" unsigned="true"/>
     </column>
      <column id="session_info.vars" name="vars" >
-      <blob default="null"/>
+      <binary default="null"/>
     </column>
     <column id="session_info.remember" name="remember" >
-      <number size="1" default="null"  />
+      <number size="1" default="null" />
     </column>
     <constraints>
       <primary name="id">
@@ -58,7 +58,7 @@
       <number size="1" default="null"  />
     </column>
     <column id="cache_data.data" name="data" >
-      <blob default="null"/>
+      <binary default="null"/>
     </column>
     <constraints>
       <primary name="id">

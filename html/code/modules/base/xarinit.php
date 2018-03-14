@@ -11,12 +11,6 @@
  *
  * @author Marcel van der Boom
  */
-
-/**
- * Load Table Maintainance API
- */
-sys::import('xaraya.tableddl');
-
 /**
  * Initialize the base module
  * 
