@@ -10,7 +10,6 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
  */
-sys::import('xaraya.tableddl');
 /**
  * Initialise the dynamicdata module
  *

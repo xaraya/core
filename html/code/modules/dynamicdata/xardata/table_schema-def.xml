@@ -137,16 +137,16 @@
       <number size="10" unsigned="true"/>
     </column>
     <column id="dynamic_configurations.name" name="name" required="true">
-      <text size="255" charset="utf8"/>
+      <text size="255" charset="utf8" default=''/>
     </column>
     <column id="dynamic_configurations.description" name="description" required="true">
-      <text size="255" charset="utf8"/>
+      <text size="255" charset="utf8" default=''/>
     </column>
     <column id="dynamic_configurations.property_id" name="property_id" required="true">
       <number size="10" unsigned="true" default="0"/>
     </column>
     <column id="dynamic_configurations.label" name="label" required="true">
-      <text size="255" charset="utf8"/>
+      <text size="255" charset="utf8" default=''/>
     </column>
      <column id="dynamic_configurations.ignore_empty" name="ignore_empty" >
       <number size="1" default="null"/>
