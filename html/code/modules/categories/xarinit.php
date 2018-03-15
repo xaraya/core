@@ -14,8 +14,6 @@
  */
 
 //Load Table Maintainance API
-sys::import('xaraya.tableddl');
-sys::import('xaraya.structures.query');
 
 /**
  * * Initialise the categories module
