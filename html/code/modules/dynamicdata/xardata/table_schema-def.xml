@@ -85,11 +85,11 @@
      <column id="dynamic_properties.source" name="source" required="true" >
       <text size="255" charset="utf8" default="dynamic_data"/>
     </column>
-     <column id="dynamic_properties.status" name="status" required="true" >
-      <number size="3" default="33" unsigned="true" />
-    </column> 
     <column id="dynamic_properties.translatable" name="translatable" required="true" >
       <number size="3" default="0" unsigned="true" />
+    </column> 
+     <column id="dynamic_properties.status" name="status" required="true" >
+      <number size="3" default="33" unsigned="true" />
     </column> 
     <column id="dynamic_properties.seq" name="seq" required="true" >
       <number size="3" unsigned="true" />
