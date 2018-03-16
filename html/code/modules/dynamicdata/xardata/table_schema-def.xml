@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE schema PUBLIC "-//XAR//DTD DDL 1.0 Strict//EN" "http://xaraya.com/schema/DTD/ddl-strict.dtd">
+<schema name="xaraya">
+  <table name="dynamic_objects">
+    <column id="dynamic_objects.id" name="id" required="true" auto="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="dynamic_objects.name" name="name" required="true" >
+      <text size="64" charset="utf8"/>
+    </column>
+    <column id="dynamic_objects.label" name="label" required="true" >
+      <text size="255" charset="utf8"/>
+    </column>
+    <column id="dynamic_objects.module_id" name="module_id" required="true" >
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="dynamic_objects.itemtype" name="itemtype" required="true" >
+      <number size="10" unsigned="true" default="0" />
+    </column>
+     <column id="dynamic_objects.class" name="class" required="true" >
+      <text size="255" charset="utf8" default="DataObject"/>
+    </column>
+    <column id="dynamic_objects.filepath" name="filepath" required="true" >
+      <text size="255" charset="utf8" default="modules/dynamicdata/class/objects/base.php "/>
+    </column>
+    <column id="dynamic_objects.urlparam" name="urlparam" required="true" >
+      <text size="64" charset="utf8" default="itemid"/>
+    </column>
+    <column id="dynamic_objects.maxid" name="maxid" required="true" >
+      <number size="10" unsigned="true" default="0" />
+    </column>
+    <column id="dynamic_objects.datastore" name="datastore" required="true" >
+      <text size="64" charset="utf8" default="dynamicdata"/>
+    </column>
+    <column id="dynamic_objects.access" name="access" >
+      <text size="" charset="utf8" default="null"/>
+    </column>
+    <column id="dynamic_objects.config" name="config" >
+      <text size="" charset="utf8" default="null"/>
+    </column>
+    <column id="dynamic_objects.sources" name="sources" >
+      <text size="" default="null"/>
+    </column>
+    <column id="dynamic_objects.relations" name="relations" >
+      <text size="" default="null"/>
+    </column>
+    <column id="dynamic_objects.objects" name="objects" >
+      <text size="" default="null"/>
+    </column>
+    <column id="dynamic_objects.isalias" name="isalias" >
+      <number size="1" default="1" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="dynamic_objects.id"/>
+      </primary>
+      <unique name="i_dynobjects_combo">
+        <column ref="dynamic_objects.module_id"/>
+        <column ref="dynamic_objects.itemtype"/>
+      </unique>
+      <unique name="i_dynobjects_name">
+        <column ref="dynamic_objects.name"/>
+      </unique>  
+    </constraints>
+  </table>
+  <table name="dynamic_properties">
+    <column id="dynamic_properties.id" name="id" auto="true" required="true">
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="dynamic_properties.name" name="name" required="true">
+      <text size="64" charset="utf8"/>
+    </column>
+    <column id="dynamic_properties.label" name="label" required="true">
+      <text size="255" charset="utf8"/>
+    </column>
+    <column id="dynamic_properties.object_id" name="object_id" required="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="dynamic_properties.type" name="type" required="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="dynamic_properties.defaultvalue" name="defaultvalue" >
+      <text size="255" charset="utf8" default="null"/>
+    </column>
+     <column id="dynamic_properties.source" name="source" required="true" >
+      <text size="255" charset="utf8" default="dynamic_data"/>
+    </column>
+     <column id="dynamic_properties.status" name="status" required="true" >
+      <number size="3" default="33" unsigned="true" />
+    </column> 
+    <column id="dynamic_properties.translatable" name="translatable" required="true" >
+      <number size="3" default="0" unsigned="true" />
+    </column> 
+    <column id="dynamic_properties.seq" name="seq" required="true" >
+      <number size="3" unsigned="true" />
+    </column>
+    <column id="dynamic_properties.configuration" name="configuration" >
+      <text size="" charset="utf8" default="null"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="dynamic_properties.id"/>
+      </primary>
+      <unique name="i_dynprops_combo">
+        <column ref="dynamic_properties.object_id"/>
+        <column ref="dynamic_properties.name"/>
+      </unique>  
+    </constraints>
+  </table>
+  <table name="dynamic_data">
+    <column id="dynamic_data.id" name="id" auto="true" required="true">
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="dynamic_data.property_id" name="property_id" required="true">
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="dynamic_data.item_id" name="item_id" required="true">
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="dynamic_data.value" name="value" >
+      <medium charset="utf8" default="null"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="dynamic_data.id"/>
+      </primary>
+      <index name="i_dyndata_property_id">
+        <column ref="dynamic_data.property_id"/>
+      </index>
+      <index name="i_dyndata_item_id">  
+        <column ref="dynamic_data.item_id"/>
+      </index>  
+    </constraints>
+  </table>
+  <table name="dynamic_configurations">
+    <column id="dynamic_configurations.id" name="id" auto="true" required="true">
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="dynamic_configurations.name" name="name" required="true">
+      <text size="255" charset="utf8" default=''/>
+    </column>
+    <column id="dynamic_configurations.description" name="description" required="true">
+      <text size="255" charset="utf8" default=''/>
+    </column>
+    <column id="dynamic_configurations.property_id" name="property_id" required="true">
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+    <column id="dynamic_configurations.label" name="label" required="true">
+      <text size="255" charset="utf8" default=''/>
+    </column>
+     <column id="dynamic_configurations.ignore_empty" name="ignore_empty" >
+      <number size="1" default="null"/>
+    </column>
+    <column id="dynamic_configurations.configuration" name="configuration" >
+      <medium charset="utf8" default="null"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="dynamic_configurations.id"/>
+      </primary>
+    </constraints>
+  </table>
+    <table name="dynamic_properties_def">
+    <column id="dynamic_properties_def.id" name="id" required="true" auto="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="dynamic_properties_def.name" name="name">
+      <text size="64" charset="utf8" default="null"/>
+    </column>
+    <column id="dynamic_properties_def.label" name="label">
+      <text size="255" charset="utf8" default="null"/>
+    </column>
+     <column id="dynamic_properties_def.filepath" name="filepath">
+      <text size="255" charset="utf8" default="null"/>
+    </column>
+    <column id="dynamic_properties_def.class" name="class">
+      <text size="255" charset="utf8" default="null"/>
+    </column>
+    <column id="dynamic_properties_def.configuration" name="configuration">
+      <text size="255" charset="utf8" default="null"/>
+    </column>
+    <column id="dynamic_properties_def.source" name="source">
+      <text size="255" charset="utf8" default="null"/>
+    </column>
+     <column id="dynamic_properties_def.reqfiles" name="reqfiles">
+      <text size="255" charset="utf8" default="null"/>
+    </column>
+    <column id="dynamic_properties_def.modid" name="modid" required="true">
+      <number size="10" unsigned="true" default="0" />
+    </column>
+     <column id="dynamic_properties_def.args" name="args" required="true" >
+      <medium charset="utf8" />
+    </column>
+    <column id="dynamic_properties_def.aliases" name="aliases">
+      <text size="255" charset="utf8" default="null"/>
+    </column>
+    <column id="dynamic_properties_def.format" name="format" >
+      <number size="10" default="0" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="dynamic_properties_def.id"/>
+      </primary>
+      <index name="i_dynpropdef_modid">
+        <column ref="dynamic_properties_def.modid"/>
+      </index>
+    </constraints>
+  </table>
+</schema>
