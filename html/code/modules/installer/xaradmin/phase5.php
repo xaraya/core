@@ -156,23 +156,28 @@ function installer_admin_phase5()
           $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
           throw new Exception($msg);
         }
+        
+        // Re-init with the new values and connect
+        $systemArgs = array('userName'           => $dbUname,
+                            'password'           => $dbPass,
+                            'databaseHost'       => $dbHost,
+                            'databaseType'       => $dbType,
+                            'databaseName'       => $dbName,
+                            'databaseCharset'    => $dbCharset,
+                            'prefix'             => $dbPrefix,
+                            'doConnect'          => true);
+        // Connect to database
+        xarDB_init($systemArgs);
+        
+        // CHECKME: Need to solve this at the level ofg connections, not run a query
+        $q = "use $dbName";
+        $dbconn->execute($q);
     } else {
         $removetables = true;
     }
 
-    // Re-init with the new values and connect
-    $systemArgs = array('userName'           => $dbUname,
-                        'password'           => $dbPass,
-                        'databaseHost'       => $dbHost,
-                        'databaseType'       => $dbType,
-                        'databaseName'       => $dbName,
-                        'databaseCharset'    => $dbCharset,
-                        'prefix'             => $dbPrefix);
-    // Connect to database
-    xarDB_init($systemArgs);
-
-    // drop all the tables that have this prefix
-    //TODO: in the future need to replace this with a check further down the road
+    // Drop all the tables that have this prefix
+    // TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
 
     if (isset($removetables) && $removetables) {
