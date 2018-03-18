@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE schema PUBLIC "-//XAR//DTD DDL 1.0 Strict//EN" "http://xaraya.com/schema/DTD/ddl-strict.dtd">
+<schema name="xaraya">
+  <table name="block_instances">
+    <column id="block_instances.id" name="id" required="true" auto="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="block_instances.type_id" name="type_id" required="true" >
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="block_instances.name" name="name" required="true" >
+      <text size="64" charset="utf8"/>
+    </column>
+    <column id="block_instances.title" name="title" >
+      <text size="255" default="null" charset="utf8"/>
+    </column>
+     <column id="block_instances.content" name="content" >
+      <text size="" charset="utf8"  />
+    </column>
+    <column id="block_instances.state" name="state" required="true" >
+      <number size="3" default="2" unsigned="true"  />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="block_instances.id"/>
+      </primary>
+      <unique name="i_block_instances_instances">
+        <column ref="block_instances.name"/>
+        <column ref="block_instances.state"/>
+      </unique>
+      <index name="i_block_instances_type_id">
+        <column ref="block_instances.type_id"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="block_types">
+    <column id="block_types.id" name="id" auto="true" required="true" >
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="block_types.module_id" name="module_id">
+      <number size="10" unsigned="true" default="null" />
+    </column>
+    <column id="block_types.state" name="state" required="true" >
+      <number size="3" default="1" unsigned="true" />
+    </column>
+    <column id="block_types.type" name="type" required="true" >
+      <text size="64" charset="utf8"/>
+    </column>
+    <column id="block_types.category" name="category" required="true" >
+      <text size="64" charset="utf8"/>
+    </column>
+     <column id="block_types.info" name="info" >
+      <text size="" charset="utf8" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="block_types.id"/>
+      </primary>
+      <unique name="i_block_types_types">
+        <column ref="block_types.type"/>
+        <column ref="block_types.module_id"/>
+        <column ref="block_types.state"/>
+      </unique>
+      <index name="i_block_types_category">
+        <column ref="block_types.category"/>
+      </index>
+    </constraints>
+  </table>
+</schema>

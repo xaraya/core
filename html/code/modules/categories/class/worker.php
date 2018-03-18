@@ -13,7 +13,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-class CategoryWorker extends Object
+class CategoryWorker extends xarObject
 {
     protected $cattable;
     protected $basetable;

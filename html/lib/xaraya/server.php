@@ -18,7 +18,7 @@
  * Convenience classes
  *
 **/
-class xarURL extends Object
+class xarURL extends xarObject
 {
     /**
      * Encode parts of a URL.
@@ -129,7 +129,7 @@ class xarURL extends Object
     }
 }
 
-class xarServer extends Object
+class xarServer extends xarObject
 {
     const PROTOCOL_HTTP  = 'http';
     const PROTOCOL_HTTPS = 'https';

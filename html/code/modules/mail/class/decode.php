@@ -15,7 +15,7 @@
  *
  */
 if(!class_exists('PEAR')) {
-    class PEAR extends Object
+    class PEAR extends xarObject
     {
         /**
          * Re-implement raiseError method which normally would be in PEAR

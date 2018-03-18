@@ -463,7 +463,6 @@ class xarPrivileges extends xarMasks
     public static function getPrivilege($id)
     {
         parent::initialize();
-        static $stmt = null;  // Statement only needs to be prepared once.
 
         $cacheKey = 'Privilege.ByPid';
         if(xarCoreCache::isCached($cacheKey,$id)) {
@@ -477,7 +476,7 @@ class xarPrivileges extends xarMasks
         if(is_numeric($id)) $query .= " AND p.id = ?";
         else  $query .= " AND p.name = ?";
 
-        if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
+        $stmt = parent::$dbconn->prepareStatement($query);
         //Execute the query, bail if an exception was thrown
         $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE,$id),ResultSet::FETCHMODE_NUM);
 
@@ -516,14 +515,11 @@ class xarPrivileges extends xarMasks
     */
     public static function findPrivilege($name)
     {
-        static $stmt = null;
-
         parent::initialize();
+
         $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
         LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.itemtype = ? AND p.name = ?";
-        if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
-
-        //Execute the query, bail if an exception was thrown
+        $stmt = parent::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $name));
 
         if ($result->first()) {

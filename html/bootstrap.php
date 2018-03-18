@@ -7,7 +7,7 @@
  * things which *absolutely* need to be available, which should be very little.
  *
  * So far:
- *  - Declaration of the Object   class of which all other classes are derived
+ *  - Declaration of the xarObject   class of which all other classes are derived
  *  - Declaration of the Class_   class which Metamodels a PHP class.
  *  - Declaration of the Property class which Metamodels a PHP property
  *  - Definition of the sys class which contains methods to steer php in the right direction
@@ -33,7 +33,7 @@ function xarBoot_getPublicObjectProperties($obj)
 }
 
 /**
- * The Object class from which all other classes should be derived.
+ * The xarObject class from which all other classes should be derived.
  *
  * This is basically a placeholder extending from stdClass so we have a
  * place to put things in our root class. There are severe limitations to what
@@ -43,7 +43,7 @@ function xarBoot_getPublicObjectProperties($obj)
  *
  * @package core
 **/
-class Object extends stdClass
+class xarObject extends stdClass
 {
     /**
      * Convert an object to a string representation
@@ -91,7 +91,7 @@ class Object extends stdClass
      * Note: $this === $object is the same here, but this way just overriding
      * hashCode allows for equality specialisation.
     **/
-    public function equals(Object $object)
+    public function equals(xarObject $object)
     {
         return $this->hashCode() === $object->hashCode();
     }
@@ -126,7 +126,7 @@ class Object extends stdClass
  *
  * @package core
 **/
-abstract class Reflectable extends Object
+abstract class Reflectable extends xarObject
 {
     protected $reflect = null;
 
@@ -140,11 +140,11 @@ abstract class Reflectable extends Object
  * A class to model a class in PHP (no longer used above)
  *
  * The purpose of this class is mainly to support the getClass() method
- * of the Object class above, but i can see it grow a bit further later on.
+ * of the xarObject class above, but i can see it grow a bit further later on.
  * The class is final, there's only one definition of a class, it can not be
  * specialized in any way. Furthermore the constructor is made protected.
  * In combination with the final keyword, this makes this class only instantiable
- * by its ancestors, which only is the Object class and is exactly what we want.
+ * by its ancestors, which only is the xarObject class and is exactly what we want.
  *
  * @package core
  * @todo can we come up with a better name without the underscore?
@@ -155,9 +155,9 @@ final class Class_ extends Reflectable
     /**
      * Create a Class_ object based on an instance object
      *
-     * @param Object $object any object
+     * @param xarObject $object any object
     **/
-    protected function __construct(Object $object)
+    protected function __construct(xarObject $object)
     {
         $this->reflect = new ReflectionClass($object);
     }
@@ -192,7 +192,7 @@ final class Class_ extends Reflectable
  * A class to model a property in PHP
  *
  * The purpose of this class i mainly to support the getProperty_() method
- * in the Object class above, but i can see it grow a bit futher later on.
+ * in the xarObject class above, but i can see it grow a bit futher later on.
  * The class is final, there's only one definition of a property, it can not be
  * specialized in any way. The constructor is public here because of the getProperty
  * method in the Class_ class.
@@ -217,7 +217,7 @@ final class Property extends Reflectable
         return $this->reflect->isPublic();
     }
 
-    public function getValue(Object $object)
+    public function getValue(xarObject $object)
     {
         return $this->reflect->getValue($object);
     }
@@ -234,7 +234,7 @@ final class Property extends Reflectable
  *
  * @package core
 **/
-final class sys extends Object
+final class sys extends xarObject
 {
     const CONFIG = 'config.system.php';     // Default system configuration file
     const LAYOUT = 'layout.system.php';     // Default layout configuration file
@@ -415,7 +415,7 @@ final class sys extends Object
  *
  * @package core
 **/
-class DataContainer extends Object
+class DataContainer extends xarObject
 {
     /**
      *  @todo protected members cannot be gotten?

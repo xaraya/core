@@ -15,7 +15,7 @@
  *
  * @author Chris Powis <crisp@xaraya.com>
 **/
-abstract class xarVariableObject extends Object
+abstract class xarVariableObject extends xarObject
 {
     // classes overloading this object must supply the following static properties
     protected static $instance;

@@ -365,7 +365,7 @@ function xarMLS__iswritable($directory=NULL)
  * @link http://www.xaraya.info
  *
 **/
-class xarMLS extends Object
+class xarMLS extends xarObject
 {
     const SINGLE_LANGUAGE_MODE          = 'SINGLE';
     const BOXED_MULTI_LANGUAGE_MODE     = 'BOXED';
@@ -1093,7 +1093,7 @@ class xarMLS extends Object
  * @link http://www.xaraya.info
  *
 **/
-class xarMLSContext extends Object
+class xarMLSContext extends xarObject
 {
     static private $domains = array(
                 xarMLS::DNTYPE_CORE     => array('context_type_prefix' => 'xaraya',     'context_type_text' => 'core'),

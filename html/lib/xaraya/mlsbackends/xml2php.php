@@ -238,7 +238,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
  *
  * @author Marco Canini <marco@xaraya.com>
  */
-class PHPBackendGenerator extends Object
+class PHPBackendGenerator extends xarObject
 {
 
     public $locale;

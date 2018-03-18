@@ -17,7 +17,7 @@
 
 interface IExceptionHandlers
 {
-    public static function defaulthandler(Exception $e);
+    public static function defaulthandler($e);
     public static function phperrors($errorType, $errorString, $file, $line, array $errorContext=array());
 }
 
@@ -31,7 +31,7 @@ interface IExceptionHandlers
  * @link http://www.xaraya.info
  *
 **/
-class ExceptionHandlers extends Object implements IExceptionHandlers
+class ExceptionHandlers extends xarObject implements IExceptionHandlers
 {
     private static $data = array();
 
@@ -50,7 +50,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
      * @return void
      */
     // Handler for displaying default
-    public static function defaulthandler(Exception $e)
+    public static function defaulthandler($e)
     {
         // Make an attempt to render the page, hoping we have everything in place still
         // CHECKME: Hmm, is this a problem, as we're already in a handler?
@@ -91,7 +91,7 @@ class ExceptionHandlers extends Object implements IExceptionHandlers
     }
 
     // Handler with more information, for instance for the designated site admin
-    public static function debughandler(Exception $e)
+    public static function debughandler($e)
     {
         $trace = str_replace(sys::root(),'',$e->getTraceAsString());
         self::$data = array_merge( self::$data,

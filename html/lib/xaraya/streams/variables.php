@@ -26,7 +26,7 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
  **/
 
-class VariableStream extends Object
+class VariableStream extends xarObject
 {
     public $position;
     public $varname;

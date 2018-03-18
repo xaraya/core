@@ -53,7 +53,7 @@
  * }
  *
  */
-class DataObjectUserInterface extends Object
+class DataObjectUserInterface extends xarObject
 {
     // application framework we're working with
     public $framework = 'xaraya';

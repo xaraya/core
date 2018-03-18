@@ -13,7 +13,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-class xarRequest extends Object
+class xarRequest extends xarObject
 {
     protected $url;
     protected $actionstring;

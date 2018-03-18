@@ -11,7 +11,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
  */
-class Configurations extends Object
+class Configurations extends xarObject
 {
     private $reader;
 

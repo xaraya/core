@@ -15,7 +15,7 @@
 
 sys::import('xaraya.mapper.routers.routes.interfaces');
 
-class xarRoute extends Object implements iRoute
+class xarRoute extends xarObject implements iRoute
 {
     protected $delimiter = "/";
     protected $request;

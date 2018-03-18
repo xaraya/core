@@ -66,7 +66,7 @@ function xarUpgradeLoader()
  *  Please add any special notes for a special upgrade in admin-upgrade3.xd in installer.<br/>
  *  TODO: cleanup and consolidate the upgrade functions in installer
  */
-class Upgrader extends Object
+class Upgrader extends xarObject
 {
 /**
  * Constants for current upgrade phases

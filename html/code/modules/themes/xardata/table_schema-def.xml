@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE schema PUBLIC "-//XAR//DTD DDL 1.0 Strict//EN" "http://xaraya.com/schema/DTD/ddl-strict.dtd">
+<schema name="xaraya">
+  <table name="themes">
+    <column id="themes.id" name="id" required="true" auto="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="themes.name" name="name" required="true" >
+      <text size="64" charset="utf8"/>
+    </column>
+    <column id="themes.regid" name="regid" required="true" >
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="themes.directory" name="directory" required="true" >
+      <text size="64" charset="utf8"/>
+    </column>
+    <column id="themes.version" name="version" required="true"  >
+      <text size="10" charset="utf8"/>
+    </column>
+    <column id="themes.configuration" name="configuration" required="true"  >
+      <medium charset="utf8"/>
+    </column>
+    <column id="themes.state" name="state" required="true" >
+      <number size="3" default="1" unsigned="true"  />
+    </column>
+     <column id="themes.class" name="class" required="true" >
+      <number size="3" default="0" unsigned="true"  />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="themes.id"/>
+      </primary>
+    </constraints>
+  </table>
+  <table name="themes_configurations">
+    <column id="themes_configurations.id" name="id" required="true" auto="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="themes_configurations.theme_id" name="theme_id" required="true">
+      <number size="10" unsigned="true" default="0" />
+    </column>
+    <column id="themes_configurations.name" name="name" required="true" >
+      <text size="64" charset="utf8" default=""/>
+    </column>
+     <column id="themes_configurations.description" name="description" required="true" >
+      <text size="255" charset="utf8" default=""/>
+    </column>
+    <column id="themes_configurations.property_id" name="property_id" required="true" >
+      <number size="10" unsigned="true" default="0" />
+    </column>
+    <column id="themes_configurations.label" name="label" required="true" >
+      <text size="255" charset="utf8" default=""/>
+    </column>
+    <column id="themes_configurations.configuration" name="configuration" required="true"  >
+      <medium charset="utf8"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="themes_configurations.id"/>
+      </primary>
+    </constraints>
+  </table>
+</schema>

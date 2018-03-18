@@ -63,7 +63,6 @@ class Category extends DataObject
             if (isset($args['relative_position'])) {
                 switch ((int)$args['relative_position']) {
                     case 1: // before - same level
-                    default:
                         $this->properties['position']->rightorleft = 'left';
                         $this->properties['position']->inorout = 'out';
                         break;

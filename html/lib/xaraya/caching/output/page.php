@@ -14,7 +14,7 @@
  * @author jsb
 **/
 
-class xarPageCache extends Object
+class xarPageCache extends xarObject
 {
     public static $cacheTime         = 1800;
     public static $cacheDisplay      = 0;

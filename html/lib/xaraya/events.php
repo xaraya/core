@@ -58,7 +58,7 @@ class DuplicateEventRegistrationException extends EventRegistrationException
  * @link http://www.xaraya.info
  *
 **/
-class xarEvents extends Object implements ixarEvents
+class xarEvents extends xarObject implements ixarEvents
 {
     // Event system itemtypes 
     const SUBJECT_TYPE       = 1;   // System event subjects, handles OBSERVER_TYPE events
@@ -461,7 +461,7 @@ class xarEvents extends Object implements ixarEvents
         // remove event item
         $query = "DELETE FROM $emstable WHERE event = ? AND module_id = ? AND itemtype = ?";
         $bindvars = array($event, $module_id, $itemtype);
-        $result = &$dbconn->Execute($query,$bindvars);
+        $result = $dbconn->Execute($query,$bindvars);
         if (!$result) return;
 
         return true;

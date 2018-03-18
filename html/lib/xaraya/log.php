@@ -142,7 +142,7 @@ function xarLogVariable($name, $var, $level = '')
  * @todo  When xarMail is done do email logger
 **/
 
-class xarLog extends Object
+class xarLog extends xarObject
 {
     const LEVEL_EMERGENCY  = 1;
     const LEVEL_ALERT      = 2;

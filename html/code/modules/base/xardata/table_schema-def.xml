@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE schema PUBLIC "-//XAR//DTD DDL 1.0 Strict//EN" "http://xaraya.com/schema/DTD/ddl-strict.dtd">
+<schema name="xaraya">
+  <table name="session_info">
+    <column id="session_info.id" name="id" required="true">
+      <text size="64" charset="utf8" />
+    </column>
+    <column id="session_info.ip_addr" name="ip_addr" required="true" >
+      <text size="64" charset="utf8" />
+    </column>
+    <column id="session_info.first_use" name="first_use" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+    <column id="session_info.last_use" name="last_use" required="true" >
+      <number size="10" default="0" unsigned="true"/>
+    </column>
+    <column id="session_info.role_id" name="role_id" required="true" >
+      <number size="10" unsigned="true"/>
+    </column>
+     <column id="session_info.vars" name="vars" >
+      <binary default="null"/>
+    </column>
+    <column id="session_info.remember" name="remember" >
+      <number size="1" default="null" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="session_info.id"/>
+      </primary>
+      <index name="i_session_role_id">
+        <column ref="session_info.role_id"/>
+      </index>
+      <index name="i_session_last_use">
+        <column ref="session_info.last_use"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="cache_data">
+    <column id="cache_data.id" name="id" auto="true" required="true" >
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="cache_data.type" name="type" required="true">
+      <text size="64"  charset="utf8"  />
+    </column>
+    <column id="cache_data.cache_key" name="cache_key" required="true">
+      <text size="64"  charset="utf8"  />
+    </column>
+    <column id="cache_data.code" name="code" required="true" >
+      <text size="64" charset="utf8"/>
+    </column>
+     <column id="cache_data.time" name="time" required="true" >
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="cache_data.size" name="size" required="true" >
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="cache_data.cache_check" name="cache_check" >
+      <number size="1" default="null"  />
+    </column>
+    <column id="cache_data.data" name="data" >
+      <binary default="null"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="cache_data.id"/>
+      </primary>
+      <index name="i_cache_id">
+        <column ref="cache_data.id"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="module_vars">
+    <column id="module_vars.id" name="id" auto="true" required="true"  >
+      <number size="10" unsigned="true"  />
+    </column>
+    <column id="module_vars.module_id" name="module_id"  >
+      <number size="10" unsigned="true" default="null" />
+    </column>
+    <column id="module_vars.name" name="name" required="true" >
+      <text size="64" charset="utf8" />
+    </column>
+    <column id="module_vars.value" name="value" >
+      <long charset="utf8" default="null" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="module_vars.id"/>
+      </primary>
+      <unique name="i_config_name">
+        <column ref="module_vars.name"/>
+        <column ref="module_vars.module_id"/>
+      </unique>
+      <index name="i_module_vars_module_id">
+        <column ref="module_vars.module_id"/>
+      </index>
+      <index name="i_module_vars_name">
+        <column ref="module_vars.name"/>
+      </index>
+    </constraints>
+  </table>
+</schema>

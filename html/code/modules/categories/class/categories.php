@@ -15,7 +15,7 @@
 
 sys::import('xaraya.structures.tree');
 
-class Categories extends Object
+class Categories extends xarObject
 {
     /**
      * Fetches CategoryTreeNode object from database

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE schema PUBLIC "-//XAR//DTD DDL 1.0 Strict//EN" "http://xaraya.com/schema/DTD/ddl-strict.dtd">
+<schema name="xaraya">
+  <table name="categories">
+    <column id="categories.id" name="id" required="true" auto="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="categories.name" name="name" required="true" >
+      <text size="64" />
+    </column>
+    <column id="categories.description" name="description" required="true" >
+      <text size="255" />
+    </column>
+    <column id="categories.image" name="image" required="true" >
+      <text size="255" />
+    </column>
+    <column id="categories.template" name="template" required="true" >
+      <text size="255" />
+    </column>
+    <column id="categories.parent_id" name="parent_id" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+    <column id="categories.left_id" name="left_id" >
+      <number size="10" default="0" unsigned="true"/>
+    </column>
+    <column id="categories.right_id" name="right_id" >
+      <number size="10" default="0" unsigned="true"/>
+    </column>
+     <column id="categories.child_object" name="child_object" required="true" >
+      <text size="255" />
+    </column>
+    <column id="categories.links" name="links" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+    <column id="categories.state" name="state" required="true" >
+      <number size="10" default="3"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="categories.id"/>
+      </primary>
+      <index name="i_left_id">
+        <column ref="categories.left_id"/>
+      </index>
+       <index name="i_right_id">
+        <column ref="categories.right_id"/>
+      </index>
+      <index name="i_parent_id">
+        <column ref="categories.parent_id"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="categories_linkage">
+    <column id="categories_linkage.id" name="id" auto="true" required="true" >
+      <number size="10" unsigned="true" />
+    </column>
+     <column id="categories_linkage.category_id" name="category_id" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+     <column id="categories_linkage.child_category_id" name="child_category_id" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+     <column id="categories_linkage.item_id" name="item_id" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+     <column id="categories_linkage.module_id" name="module_id" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+     <column id="categories_linkage.itemtype" name="itemtype" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+     <column id="categories_linkage.property_id" name="property_id" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+     <column id="categories_linkage.tree_id" name="tree_id" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+     <column id="categories_linkage.basecategory" name="basecategory" required="true" >
+      <number size="10" unsigned="true" default="0"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="categories_linkage.id"/>
+      </primary>
+      <index name="i_cat_linkage_1">
+        <column ref="categories_linkage.category_id"/>
+      </index>
+    </constraints>
+  </table>
+ <table name="categories_basecategories">
+    <column id="categories_basecategories.id" name="id" required="true" auto="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="categories_basecategories.category_id" name="category_id" required="true" >
+      <number size="10" default="1"/>
+    </column>
+    <column id="categories_basecategories.module_id" name="module_id" >
+      <number size="10" default="null"/>
+    </column>
+    <column id="categories_basecategories.itemtype" name="itemtype" >
+      <number size="10" default="null"/>
+    </column>
+     <column id="categories_basecategories.name" name="name" required="true" >
+      <text size="64" />
+    </column>
+    <column id="categories_basecategories.selectable" name="selectable" required="true" >
+      <number size="1" default="1"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="categories_basecategories.id"/>
+      </primary>
+    </constraints>
+  </table>
+</schema>

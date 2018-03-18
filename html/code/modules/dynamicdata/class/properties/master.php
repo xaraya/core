@@ -16,7 +16,7 @@ sys::import('modules.dynamicdata.class.objects.descriptor');
  * Utility Class to manage Dynamic Properties
  *
  */
-class DataPropertyMaster extends Object
+class DataPropertyMaster extends xarObject
 {
     const DD_DISPLAYSTATE_DISABLED = 0;
     const DD_DISPLAYSTATE_ACTIVE = 1;

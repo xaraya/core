@@ -84,7 +84,7 @@ interface IxarVars
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
-class xarVars extends Object
+class xarVars extends xarObject
 {
 
 }

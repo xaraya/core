@@ -12,7 +12,7 @@
  *
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
-class xarEncryptor extends Object
+class xarEncryptor extends xarObject
 {
     private static $instance  = null;
     public $initvector;

@@ -10,7 +10,7 @@
  */
 sys::import('xaraya.structures.sets.collection');
 
-class TreeNode extends Object implements ITreeNode
+class TreeNode extends xarObject implements ITreeNode
 {
     public $id;
     public $tree;
@@ -103,7 +103,7 @@ class TreeNode extends Object implements ITreeNode
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
-class Tree extends Object implements ITree
+class Tree extends xarObject implements ITree
 {
     public $root;
     public $asksallowschildren;

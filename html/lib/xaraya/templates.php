@@ -53,7 +53,7 @@ class BLException extends xarExceptions
 
 sys::import('xaraya.variables.config');
 
-class xarTpl extends Object
+class xarTpl extends xarObject
 {
     // statics to replace $GLOBALS[xarTpl_*]
     protected static $themeName;

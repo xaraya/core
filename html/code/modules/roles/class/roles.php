@@ -19,7 +19,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
  */
-class xarRoles extends Object
+class xarRoles extends xarObject
 {
     const ROLES_STATE_DELETED = 0;
     const ROLES_STATE_INACTIVE = 1;

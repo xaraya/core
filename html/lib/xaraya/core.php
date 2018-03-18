@@ -669,7 +669,7 @@ class xarCore extends xarCoreCache
  *
  * @todo this is close to exceptions or logging than core, see also notes earlier
 **/
-class xarDebug extends Object
+class xarDebug extends xarObject
 {
     public static $flags     = 0; // default off?
     public static $sqlCalls  = 0; // Should be in flags imo

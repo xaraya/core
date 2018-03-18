@@ -13,7 +13,7 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-class xarResponse extends Object
+class xarResponse extends xarObject
 {
     public $output;
     

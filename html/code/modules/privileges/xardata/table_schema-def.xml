@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE schema PUBLIC "-//XAR//DTD DDL 1.0 Strict//EN" "http://xaraya.com/schema/DTD/ddl-strict.dtd">
+<schema name="xaraya">
+  <table name="privileges">
+    <column id="privileges.id" name="id" required="true" auto="true">
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="privileges.name" name="name" required="true" >
+      <text size="64" charset="utf8"/>
+    </column>
+    <column id="privileges.realm_id" name="realm_id"  >
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="privileges.module_id" name="module_id" >
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="privileges.component" name="component" required="true" >
+      <text size="64" charset="utf8"/>
+    </column>
+    <column id="privileges.instance" name="instance" required="true" >
+      <text size="255" charset="utf8"/>
+    </column>
+    <column id="privileges.level" name="level" required="true" >
+      <number size="10" unsigned="true" default="0" />
+    </column>
+    <column id="privileges.description" name="description" required="true" >
+      <text size="255" charset="utf8"  />
+    </column>
+    <column id="privileges.itemtype" name="itemtype" required="true" >
+      <number size="10" unsigned="true" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="privileges.id"/>
+      </primary>
+      <unique name="i_privileges_name">
+        <column ref="privileges.name"/>
+        <column ref="privileges.module_id"/>
+        <column ref="privileges.itemtype"/>
+      </unique>
+      <index name="i_privileges_realm_id">
+        <column ref="privileges.realm_id"/>
+      </index>
+      <index name="i_privileges_module">
+        <column ref="privileges.module_id"/>
+      </index>
+      <index name="i_privileges_level">
+        <column ref="privileges.level"/>
+      </index>
+     </constraints>
+  </table>
+   <table name="privmembers">
+    <column id="privmembers.privilege_id" name="privilege_id"  >
+      <number size="10" unsigned="true" />
+    </column>
+    <column id="privmembers.parent_id" name="parent_id"  >
+      <number size="10" unsigned="true"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="privmembers.privilege_id"/>
+        <column ref="privmembers.parent_id"/>
+      </primary>
+      <index name="i_privmembers_pid">
+        <column ref="privmembers.privilege_id"/>
+      </index>
+      <index name="i_privmembers_parent_id">
+        <column ref="privmembers.parent_id"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="security_acl">
+    <column id="security_acl.role_id" name="role_id"  >
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="security_acl.privilege_id" name="privilege_id"  >
+      <number size="10" unsigned="true" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="security_acl.role_id"/>
+        <column ref="security_acl.privilege_id"/>
+      </primary>
+      <index name="i_security_acl_role_id">
+        <column ref="security_acl.role_id"/>
+      </index>
+      <index name="i_security_acl_privilege_id">
+        <column ref="security_acl.privilege_id"/>
+      </index>
+    </constraints>
+  </table>
+  <table name="security_instances">
+    <column id="security_instances.id" name="id" auto="true">
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="security_instances.module_id" name="module_id">
+       <number size="10" unsigned="true"/>
+    </column>
+    <column id="security_instances.component" name="component" required="true">
+      <text size="255" charset="utf8" />
+    </column>
+    <column id="security_instances.header" name="header" required="true" >
+      <text size="255" charset="utf8"/>
+    </column>
+     <column id="security_instances.query" name="query" required="true" >
+      <text size="255" charset="utf8"/>
+    </column>
+     <column id="security_instances.ddlimit" name="ddlimit" required="true" >
+      <number size="10" unsigned="true" default="0" />
+    </column>
+     <column id="security_instances.description" name="description" required="true" >
+      <text size="255" charset="utf8"/>
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="security_instances.id"/>
+      </primary>
+    </constraints>
+  </table>
+  <table name="security_realms">
+    <column id="security_realms.id" name="id" auto="true">
+      <number size="10" unsigned="true"/>
+    </column>
+    <column id="security_realms.name" name="name" required="true">
+      <text size="255" charset="utf8" />
+    </column>
+    <constraints>
+      <primary name="id">
+        <column ref="security_realms.id"/>
+      </primary>
+    </constraints>
+  </table>
+</schema>

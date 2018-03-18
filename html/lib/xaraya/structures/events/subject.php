@@ -15,7 +15,7 @@
  * This serves as the template from which all other event subjects should inherit
  * All subjects must implement ixarEventSubject interface
 **/
-abstract class EventSubject extends Object implements ixarEventSubject
+abstract class EventSubject extends xarObject implements ixarEventSubject
 {
     protected $args;                // args passed from caller when event is raised
     protected $observers = array(); // xarEvents::notify is responsible for populating this array

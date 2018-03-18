@@ -108,6 +108,11 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
         $databaseType = xarDB::getType();
     }
     if (empty($charset)) $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
+    }
 
     // Select the correct database type
     switch($databaseType) {
@@ -172,6 +177,11 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = xarDB::getType();
     }
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
+    }
 
     // Select the correct database type
     switch($databaseType) {
@@ -222,6 +232,11 @@ function xarDBDropTable($tableName, $databaseType = NULL)
     if (empty($databaseType)) {
         $databaseType = xarDB::getType();
     }
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
+    }
 
     switch($databaseType) {
         case 'postgres':
@@ -271,6 +286,11 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 
     if (empty($databaseType)) {
         $databaseType = xarDB::getType();
+    }
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
     }
 
     // Select the correct database type
@@ -331,6 +351,11 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         $databaseType = xarDB::getType();
     }
 
+    // set Dbtype to pdosqlite
+    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+    if ($middleware == 'PDO') {
+        $databaseType = 'pdosqlite';
+    }
     // Select the correct database type
     switch($databaseType) {
         case 'mysql':
@@ -354,6 +379,57 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
             throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
     }
     return $sql;
+}
+
+class xarXMLInstaller extends xarObject
+{
+    public $tableprefix = '';
+    
+    // No constructor yet. maybe later
+    
+    static private function transform($xmlFile, $xslAction='display', $dbName='mysql', $xslFile=null)
+    {
+        // Park this here for now
+        $tableprefix = xarDB::getPrefix();
+        
+        if (!isset($xmlFile))
+            throw new BadParameterException(xarML('No file to transform!'));
+        if (!isset($xslFile))
+            $xslFile = sys::lib() . '/xaraya/tableddl/xml2ddl-'. $dbName . '.xsl';
+        if (!file_exists($xslFile)) {
+            $msg = xarML('The file #(1) was not found', $xslFile);
+            throw new BadParameterException($msg);
+        }
+        sys::import('xaraya.tableddl.xslprocessor');
+        $xslProc = new XarayaXSLProcessor($xslFile);
+        $xslProc->setParameter('', 'action', $xslAction);
+        $xslProc->setParameter('', 'tableprefix', $tableprefix);
+        $xslProc->xmlFile = $xmlFile;
+        return $xslProc->transform($xslProc->xmlFile);
+    }
+    
+    static public function createTable($tablefile, $module)
+    {
+        if (empty($module))
+            throw new BadParameterException('Missing a module name to create for');
+        if (empty($tablefile))
+            throw new BadParameterException('Missing a XML file to create from');
+            
+        $xmlfile = sys::code() . 'modules/' . $module . '/xardata/' . $tablefile . '.xml';
+        if (!file_exists($xmlfile)) {
+            $msg = xarML('Could not find the file #(1) to create tables from', $xmlfile);
+            throw new BadParameterException($msg);
+        }
+        $sqlCode = self::transform($xmlfile, 'create');
+        $queries = explode(';',$sqlCode);
+        array_pop($queries);
+        $dbconn = xarDB::getConn();
+        foreach ($queries as $q) {
+            xarLog::message(xarML('Executing SQL: #(1)', $q), xarLog::LEVEL_INFO);
+            $dbconn->Execute($q);
+        }
+        return true;
+    }
 }
 
 ?>

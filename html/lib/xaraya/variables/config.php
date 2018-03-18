@@ -79,8 +79,7 @@ class xarConfigVars extends xarVars implements IxarVars
     public static function get($scope, $name, $value=null)
     {
         // Preload the config vars once
-        if(!self::$preloaded)
-            self::preload();
+        if(!self::$preloaded) self::preload();
 
         if(!self::$preloaded)
             throw new VariableNotFoundException($name, "Variable #(1) not found");

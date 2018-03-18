@@ -47,7 +47,7 @@ interface ixarBlock
  * @author Paul Rosania
  * @author Chris Powis
  */
-class xarBlock extends Object implements ixarBlock
+class xarBlock extends xarObject implements ixarBlock
 {
     
     private function __construct()
@@ -375,7 +375,16 @@ class xarBlock extends Object implements ixarBlock
         try {
             $blockinfo = xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args);
             return self::render($blockinfo);
-        } catch (Exception $e) { return ''; }
+        } catch (Exception $e) {
+            if ((bool) xarModVars::get('blocks', 'noexceptions') || 
+                !in_array(xarUser::getVar('id'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
+                if (!empty($cacheKey))
+                    xarBlockCache::setCached($cacheKey, '');
+                return '';
+            } else {
+                throw($e); 
+            }
+        }
     }
 /**
  * Renders a block group

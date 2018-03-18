@@ -55,7 +55,7 @@ function roles_admin_sendmail()
         $parentgroup = xarRoles::get($id);
         $descendants = $parentgroup->getDescendants($state);
 
-        while (list($key, $user) = each($descendants)) {
+        foreach ($descendants as $key => $user) {
             $users[$user->getID()] = array('id' => $user->getID(),
                 'name'     => $user->getName(),
                 'email'    => $user->getEmail(),

@@ -97,7 +97,7 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
     return xarUser::comparePasswords($givenPassword, $realPassword, $userName, $cryptSalt); 
 }
 
-class xarUser extends Object
+class xarUser extends xarObject
 {
     private static $objectRef;
     public static $authenticationModules;

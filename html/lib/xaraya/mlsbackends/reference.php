@@ -57,7 +57,7 @@ interface ITranslationsBackend {
  *
  * @throws Exception, BadParameterException
  */
-abstract class xarMLS__ReferencesBackend  extends Object implements ITranslationsBackend
+abstract class xarMLS__ReferencesBackend  extends xarObject implements ITranslationsBackend
 {
     public $locales;
     public $locale;

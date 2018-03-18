@@ -14,7 +14,7 @@
 
 sys::import('xaraya.caching.interfaces');
 
-class xarCache_Storage extends Object
+class xarCache_Storage extends xarObject
 {
     public $storage    = '';        // filesystem, database, memcached, ...
     public $cachedir   = 'var/cache/output';

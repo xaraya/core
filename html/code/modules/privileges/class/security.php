@@ -22,7 +22,7 @@
  * @access  public
  * @todo    evaluate scoping
 */
-class xarSecurity extends Object
+class xarSecurity extends xarObject
 {
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;

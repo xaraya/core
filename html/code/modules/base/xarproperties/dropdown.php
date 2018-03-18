@@ -28,7 +28,7 @@ class SelectProperty extends DataProperty
     public $basetype   = 'dropdown';
 
     public $transform  = true;                         // transform $this->value in getValue() or not
-    public $options;
+    public $options    = array();
     public $old_config = array();
     public $itemfunc;   // CHECKME: how is this best implemented?
 

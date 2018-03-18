@@ -16,7 +16,7 @@
  */
 sys::import('xaraya.structures.sequences.interfaces');
 
-class ArraySequence extends Object implements iSequence, iSequenceAdapter
+class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
 {
     // An array holds our sequence items
     protected $items = array();

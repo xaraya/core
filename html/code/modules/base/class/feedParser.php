@@ -28,7 +28,7 @@
  *
  * http://revjim.net/code/feedParser/
  */
-class feedParser extends Object
+class feedParser extends xarObject
 {
 
     public $version = "0.5";

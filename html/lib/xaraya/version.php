@@ -35,7 +35,7 @@ class BadVersionException extends xarExceptions
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
-class xarVersion extends Object
+class xarVersion extends xarObject
 {
 /**
  * Parse a version number into an associative array of components

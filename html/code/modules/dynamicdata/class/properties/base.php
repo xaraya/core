@@ -17,7 +17,7 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
  *
  * @todo the visibility of most of the attributes can probably be protected
  */
-class DataProperty extends Object implements iDataProperty
+class DataProperty extends xarObject implements iDataProperty
 {
     // Attributes for registration
     public $id             = 0;

@@ -27,13 +27,13 @@ class ObjectDescriptor extends DataContainer
         return $this->args;
     }
 
-    public function refresh(Object $object)
+    public function refresh(xarObject $object)
     {
         $publicproperties = $object->getPublicProperties();
         foreach ($this->args as $key => $value) if (in_array($key,$publicproperties)) $object->$key = $value;
     }
 
-    public function store(Object $object)
+    public function store(xarObject $object)
     {
         $publicproperties = $object->getPublicProperties();
         foreach ($publicproperties as $key => $value) $this->args[$key] = $value;

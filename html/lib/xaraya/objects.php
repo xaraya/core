@@ -28,7 +28,7 @@ interface IxarObject
  * Preliminary class to model xarObject interface
  *
  */
-class xarObject extends Object implements IxarObject
+class xarDDObject extends xarObject implements IxarObject
 {
     /**
      * Initialize

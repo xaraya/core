@@ -131,7 +131,7 @@ function roles_admin_createmail()
             $parentgroup = xarRoles::get($id);
             $descendants = $parentgroup->getDescendants($state);
 
-            while (list($key, $user) = each($descendants)) {
+            foreach ($descendants as $key => $user) {
                 if (xarSecurityCheck('EditRoles',0,'Roles',$user->getName())) {
                     if (in_array($state, array($user->getState(),xarRoles::ROLES_STATE_ALL))) {
                         $data['users'][$user->getID()] =

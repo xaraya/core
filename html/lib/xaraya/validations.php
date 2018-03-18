@@ -27,7 +27,7 @@ interface IValidation
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
-class ValueValidations extends Object implements IValidation
+class ValueValidations extends xarObject implements IValidation
 {
 
     static public function &get($type)

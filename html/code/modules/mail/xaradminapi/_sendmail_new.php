@@ -340,7 +340,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
                         'swf'  => 'application/x-shockwave-flash'
                         );
  
-            while(list($key,) = each($image_types)){
+            foreach ($image_types as $key => $value) {
                 $extensions[] = $key;
             }
             preg_match_all('/"([^"]+\.('.implode('|', $extensions).'))"/Ui', $mail->Body, $images);

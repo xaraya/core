@@ -18,16 +18,16 @@
  *
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
-class xarDB_PDO extends Object
+class xarDB_PDO extends xarObject
 {
     public static $count = 0;
 
     // Instead of the globals, we save our db info here.
-    private static $firstDSN = null;
-    private static $firstFlags = null;
+    private static $firstDSN    = null;
+    private static $firstFlags  = null;
     private static $connections = array();
-    private static $tables = array();
-    private static $prefix = '';
+    private static $tables      = array();
+    private static $prefix      = '';
 
     public static function getPrefix() { return self::$prefix;}
     public static function setPrefix($prefix) { self::$prefix =  $prefix; }
@@ -128,6 +128,12 @@ class xarDB_PDO extends Object
       if (count(self::$connections) <= $index && isset(self::$firstDSN) && isset(self::$firstFlags)) {
           self::getConnection(self::$firstDSN, self::$firstFlags);
       }
+      // CHECKME:
+      // We need to force throwing an exception here
+      // Without this the next line halts execution with an error message
+      // This happens while installing, before the DB connection has been defined
+      if (!isset(self::$connections[$index])) throw new Exception;
+
       // CHECKME: I've spent almost a day debuggin this when not assigning
       //          it first to a temporary variable before returning. 
       // The observed effect was that an exception did not occur when $index
@@ -183,7 +189,8 @@ class xarPDO extends PDO
     public $queryString   = '';
     public $row_count     = 0; 
     public $last_id       = null; 
-       
+    public $dblink        = null;
+
     public function __construct($dsn, $username, $password, $options)
     {
         try {
@@ -197,6 +204,13 @@ class xarPDO extends PDO
         $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
         // Show errors
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+    }
+
+    // New function defined to get the Mysql version
+    public function getResource()
+    {
+        $mysql_version = $this->query('select version() as server_info')->fetchObject();
+        return $mysql_version;
     }
 
     public function getDatabaseInfo()
@@ -225,7 +239,8 @@ class xarPDO extends PDO
     public function prepareStatement($string='')
     {
         $this->queryString = $string;
-        return new xarPDOStatement($this);
+        $pdostmt = new xarPDOStatement($this);
+        return $pdostmt;
     }
     
     public function qstr($string)
@@ -360,9 +375,14 @@ class xarPDO extends PDO
     {   
         return $this->last_id;
     }
+
+    public function getLastId($table = null)
+    {
+        return $this->last_id;
+    }
 }
 
-class xarPDOStatement extends Object
+class xarPDOStatement extends xarObject
 {
     private $pdo;
     private $pdostmt;
@@ -373,6 +393,7 @@ class xarPDOStatement extends Object
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
+        $this->prepare($this->pdo->queryString);
         return true;
     }
     
@@ -393,10 +414,10 @@ class xarPDOStatement extends Object
         return true;
     }
 
-    private function prepare($string)
+    public function prepare($string)
     {
-        $this->stmt = $this->pdo->prepare($string);
-        return $this->stmt;
+        $this->pdostmt = $this->pdo->prepare($string);
+        return $this->pdostmt;
     }
 
     public function executeQuery($bindvars=array(), $flag=0)
@@ -410,25 +431,22 @@ class xarPDOStatement extends Object
             $this->applyLimit($this->pdo->queryString, $this->offset, $this->limit);
         }
         
-        // Get the prepared statement
-        $stmt = $this->prepare($this->pdo->queryString);
-        
-        // Add the bindvars
+        // Add the bindvars to the prepared statement
         $index = 0;
         foreach ($bindvars as $bindvar) {
             $index++;
             if (is_int($bindvar)) {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_INT);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_INT);
             } elseif (is_bool($bindvar)) {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
             } else {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_STR);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_STR);
             }
         }
 
         // Run the query
         xarLog::message("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        $success = $stmt->execute();       
+        $success = $this->pdostmt->execute();       
         
         // If this is a SELECT, create a result set for the results
         if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT") {
@@ -461,25 +479,21 @@ class xarPDOStatement extends Object
     {
         xarLog::message("xarPDOStatement::executeUpdate: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
 
-        // Get the prepared statement
-        $stmt = $this->prepare($this->pdo->queryString);
-        
-        // Add the bindvars
+        // Add the bindvars to the prepared statement
         $index = 0;
         foreach ($bindvars as $bindvar) {
             $index++;
             if (is_int($bindvar)) {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_INT);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_INT);
             } elseif (is_bool($bindvar)) {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_BOOL);
             } else {
-                $stmt->bindValue($index, $bindvar, PDO::PARAM_STR);
+                $this->pdostmt->bindValue($index, $bindvar, PDO::PARAM_STR);
             }
         }
 
         xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        
-        $success = $stmt->execute();
+        $success = $this->pdostmt->execute();
 
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
@@ -489,7 +503,7 @@ class xarPDOStatement extends Object
         $this->bindvars = $bindvars;
 
         try {
-            $rows_affected = (int) $stmt->rowCount();
+            $rows_affected = (int) $this->pdostmt->rowCount();
         } catch( PDOException $e ) {
             throw new SQLException('Could not get update count', $e->getMessage(), $this->pdo->queryString);
         }
@@ -499,23 +513,23 @@ class xarPDOStatement extends Object
    // Wrappers for the PDOStatement methods
     public function fetchAll($flags)
     {
-        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
-        return $this->stmt->fetchAll($flags);
+        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        return $this->pdostmt->fetchAll($flags);
     }
     public function fetch($flags)
     {
-        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
-        return $this->stmt->fetch($flags);
+        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        return $this->pdostmt->fetch($flags);
     }
     public function rowCount()
     {
-        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
-        return $this->stmt->rowCount();
+        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        return $this->pdostmt->rowCount();
     }
     public function columnCount()
     {
-        if ($this->stmt == null) throw new SQLException('No PDOStatement object');
-        return $this->stmt->columnCount();
+        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        return $this->pdostmt->columnCount();
     }
 
     private function applyLimit(&$sql, $offset, $limit)
@@ -526,7 +540,6 @@ class xarPDOStatement extends Object
             $sql .= " LIMIT " . $offset . ", 18446744073709551615";
         }
     }
-
 }
 
 /**
@@ -535,10 +548,13 @@ class xarPDOStatement extends Object
  * PDO does not have much metadata, so we have to roll our own here
  *
  */
-class DatabaseInfo extends Object
+class DatabaseInfo extends xarObject
 {
     private $pdo;
     private $tables;
+
+    /** have tables been loaded */
+    protected $tablesLoaded = false;
 
     public function __construct($pdo)
     {
@@ -569,6 +585,37 @@ class DatabaseInfo extends Object
     {
         return $this->pdo;
     }
+
+    /**
+     * Gets array of TableInfo objects.
+     * @return array
+     */
+    public function getTables()
+    {
+        if (!$this->tablesLoaded)
+            $this->initTables();
+        return $this->tables;
+    }
+
+    /**
+     * @return void
+     * @throws SQLException
+     */
+    protected function initTables()
+    {
+
+        //$sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
+        // get the list of all tables
+        $sql = "SHOW TABLES";
+        try {
+            $statement = $this->pdo->query($sql);
+        } catch (PDOException $e) {
+            throw new SQLException('Could not list tables', $e->getMessage(), $sql);
+        }
+        while ($row = $statement->fetch()) {
+            $this->tables[strtoupper($row[0])] = $row[0];
+        }
+    }
 }
 
 /**
@@ -577,7 +624,7 @@ class DatabaseInfo extends Object
  * PDO does not have much metadata, so we have to roll our own here
  *
  */
-class PDOTable extends Object
+class PDOTable extends xarObject
 {
     private $table;
 
@@ -604,7 +651,7 @@ class PDOTable extends Object
  * PDO does not have much metadata, so we have to roll our own here
  *
  */
-class PDOColumn extends Object
+class PDOColumn extends xarObject
 {
     private $column;
 
@@ -651,7 +698,7 @@ class PDOColumn extends Object
  * PDO does not have result sets, so we have to roll our own here
  *
  */
-class PDOResultSet extends Object
+class PDOResultSet extends xarObject
 {
     const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
     const FETCHMODE_NUM   = PDO::FETCH_NUM;

@@ -19,7 +19,7 @@
 
 sys::import('modules.dynamicdata.class.objects.descriptor');
 
-class DataObjectMaster extends Object
+class DataObjectMaster extends xarObject
 {
 /**
  * These constants are added for convenience. They are currently not being used
@@ -1217,7 +1217,7 @@ class DataObjectMaster extends Object
         }
 
         // get URL for this object and action
-        $url = xarObject::getActionURL($this, $action, $itemid, $extra);
+        $url = xarDDObject::getActionURL($this, $action, $itemid, $extra);
 
         // cache the URL if the itemid is in there
         if (!empty($itemid) && empty($extra) && strpos($url, $this->urlparam . '=' . $itemid) !== false) {

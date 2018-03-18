@@ -97,28 +97,27 @@ function installer_admin_phase5()
       }
     }
 
-    if ($dbType == 'mysql') {
-        $tokens = explode('.',mysql_get_server_info());
-        $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
-        $data['required_version'] = MYSQL_REQUIRED_VERSION;
-        $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
-        if (!$mysql_version_ok) {
-            $data['layout'] = 'bad_version';
-            return xarTpl::module('installer','admin','check_database',$data);
-        }
+    switch ($dbType) {
+        case 'mysql':
+            $tokens = explode('.',mysql_get_server_info());
+            $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+            $data['required_version'] = MYSQL_REQUIRED_VERSION;
+            $version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        break;
+        case 'mysqli':
+            $source = $dbconn->getResource();
+            $tokens = explode('.', $source->server_info);
+            $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+            $data['required_version'] = MYSQL_REQUIRED_VERSION;
+            $version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        break;
     }
 
-    if ($dbType == 'mysqli') {
-        $tokens = explode('.',mysqli_get_server_info($dbconn->getResource()));
-        $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
-        $data['required_version'] = MYSQL_REQUIRED_VERSION;
-        $mysql_version_ok = version_compare($data['version'],$data['required_version'],'ge');
-        if (!$mysql_version_ok) {
-            $data['layout'] = 'bad_version';
-            return xarTpl::module('installer','admin','check_database',$data);
-        }
+    if (!$version_ok) {
+        $data['layout'] = 'bad_version';
+        return xarTpl::module('installer','admin','check_database',$data);
     }
-
+        
     if (!$createDB && !$dbExists) {
         $data['dbName'] = $dbName;
         $data['layout'] = 'not_found';
@@ -157,23 +156,28 @@ function installer_admin_phase5()
           $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
           throw new Exception($msg);
         }
+        
+        // Re-init with the new values and connect
+        $systemArgs = array('userName'           => $dbUname,
+                            'password'           => $dbPass,
+                            'databaseHost'       => $dbHost,
+                            'databaseType'       => $dbType,
+                            'databaseName'       => $dbName,
+                            'databaseCharset'    => $dbCharset,
+                            'prefix'             => $dbPrefix,
+                            'doConnect'          => true);
+        // Connect to database
+        xarDB_init($systemArgs);
+        
+        // CHECKME: Need to solve this at the level ofg connections, not run a query
+        $q = "use $dbName";
+        $dbconn->execute($q);
     } else {
         $removetables = true;
     }
 
-    // Re-init with the new values and connect
-    $systemArgs = array('userName'           => $dbUname,
-                        'password'           => $dbPass,
-                        'databaseHost'       => $dbHost,
-                        'databaseType'       => $dbType,
-                        'databaseName'       => $dbName,
-                        'databaseCharset'    => $dbCharset,
-                        'prefix'             => $dbPrefix);
-    // Connect to database
-    xarDB_init($systemArgs);
-
-    // drop all the tables that have this prefix
-    //TODO: in the future need to replace this with a check further down the road
+    // Drop all the tables that have this prefix
+    // TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
 
     if (isset($removetables) && $removetables) {
@@ -181,18 +185,26 @@ function installer_admin_phase5()
         $dbinfo = $dbconn->getDatabaseInfo();
         try {
             $dbconn->begin();
-            foreach($dbinfo->getTables() as $tbl) {
-                $table = $tbl->getName();
-                if(strpos($table,'_') && (substr($table,0,strpos($table,'_')) == $dbPrefix)) {
-                    // we have the same prefix.
-                    try {
-                        $sql = xarDBDropTable($table,$dbType);
-                        $dbconn->Execute($sql);
-                    } catch(SQLException $dropfail) {
-                        // retry with drop view
-                        // TODO: this should be transparent in the API
-                        $ddl = "DROP VIEW $table";
-                        $dbconn->Execute($ddl);
+            if (!empty($dbinfo->getTables())) {
+                foreach ($dbinfo->getTables() as $tbl) {
+                    // check middleware
+                    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+                    if ($middleware == 'Creole') {
+                        $table = $tbl->getName();
+                    } else if ($middleware == 'PDO') {
+                        $table = $tbl;
+                    }
+                    if (strpos($table, '_') && (substr($table, 0, strpos($table, '_')) == $dbPrefix)) {
+                        // we have the same prefix.
+                        try {
+                            $sql = xarDBDropTable($table, $dbType);
+                            $dbconn->Execute($sql);
+                        } catch (SQLException $dropfail) {
+                            // retry with drop view
+                            // TODO: this should be transparent in the API
+                            $ddl = "DROP VIEW $table";
+                            $dbconn->Execute($ddl);
+                        }
                     }
                 }
             }

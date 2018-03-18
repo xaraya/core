@@ -22,7 +22,7 @@
  * So rather than storing and accessing such information in the database,
  * we can get it by simply instantiating this object.
 **/
-class xarJS extends Object
+class xarJS extends xarObject
 {
     // the name of the module and the modvar to use for storing this object
     const STORAGE_MODULE           = 'themes';
@@ -1045,7 +1045,7 @@ class xarJS extends Object
  *
  * This object models a JS Library
 **/
-class xarJSLib extends Object
+class xarJSLib extends xarObject
 {
     // required meta data, filled in when the object is created
     public $name;
