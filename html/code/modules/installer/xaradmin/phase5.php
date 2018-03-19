@@ -97,6 +97,7 @@ function installer_admin_phase5()
       }
     }
 
+    $version_ok = false;
     switch ($dbType) {
         case 'mysql':
             $tokens = explode('.',mysql_get_server_info());
@@ -110,6 +111,12 @@ function installer_admin_phase5()
             $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
             $data['required_version'] = MYSQL_REQUIRED_VERSION;
             $version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        break;
+        case 'sqlite':
+            $version_ok = version_compare(PHP_VERSION,'5.4.0','lt');
+        break;
+        case 'sqlite3':
+            $version_ok = version_compare(PHP_VERSION,'5.4.0','ge');
         break;
     }
 
