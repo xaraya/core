@@ -56,6 +56,42 @@ function installer_admin_phase5()
     if (!preg_match('/^\w*$/',$dbPrefix)) {
         return xarTpl::module('installer','admin','errors',array('layout' => 'bad_character'));
     }
+    
+    // Check versions
+    $version_ok = false;
+    switch ($dbType) {
+        case 'mysql':
+            $tokens = explode('.',mysql_get_server_info());
+            $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+            $data['required_version'] = MYSQL_REQUIRED_VERSION;
+            $version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        break;
+        case 'mysqli':
+            $source = $dbconn->getResource();
+            $tokens = explode('.', $source->server_info);
+            $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
+            $data['required_version'] = MYSQL_REQUIRED_VERSION;
+            $version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        break;
+        case 'sqlite':
+            $version_ok = version_compare(PHP_VERSION,'5.4.0','lt');
+        break;
+        case 'sqlite3':
+            $version_ok = version_compare(PHP_VERSION,'5.4.0','ge');
+            if ($version_ok) {
+                // Create the database in the directory we want, otherwise it will be created below
+                @mkdir(sys::varpath() . '/sqlite', 0700);
+                try {
+                    $dbpath = sys::varpath() . '/sqlite/';
+                    $db = new SQLite3($dbpath . $dbName); 
+                } catch(Exception $e){
+                     echo $e->getMessage(); 
+                     exit;
+                }
+            }
+        break;
+    }
+
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
                          'dbName'    => $dbName,
@@ -95,29 +131,6 @@ function installer_admin_phase5()
         // It failed without dbname too
         return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
       }
-    }
-
-    $version_ok = false;
-    switch ($dbType) {
-        case 'mysql':
-            $tokens = explode('.',mysql_get_server_info());
-            $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
-            $data['required_version'] = MYSQL_REQUIRED_VERSION;
-            $version_ok = version_compare($data['version'],$data['required_version'],'ge');
-        break;
-        case 'mysqli':
-            $source = $dbconn->getResource();
-            $tokens = explode('.', $source->server_info);
-            $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
-            $data['required_version'] = MYSQL_REQUIRED_VERSION;
-            $version_ok = version_compare($data['version'],$data['required_version'],'ge');
-        break;
-        case 'sqlite':
-            $version_ok = version_compare(PHP_VERSION,'5.4.0','lt');
-        break;
-        case 'sqlite3':
-            $version_ok = version_compare(PHP_VERSION,'5.4.0','ge');
-        break;
     }
 
     if (!$version_ok) {
