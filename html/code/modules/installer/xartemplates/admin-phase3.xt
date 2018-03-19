@@ -208,7 +208,12 @@
                 <xar:if condition="$sqliteextension">
                     <li class="success">SUCCESS: The SQLite Extension is loaded.</li>
                 <xar:else />
-                    <li class="warning">WARNING: SQLITE as database will not be available</li>
+                    <li class="warning">WARNING: SQLite as database will not be available</li>
+                </xar:if>
+                <xar:if condition="$sqlite3extension">
+                    <li class="success">SUCCESS: The SQLite3 Extension is loaded.</li>
+                <xar:else />
+                    <li class="warning">WARNING: SQLite3 as database will not be available</li>
                 </xar:if>
                 <xar:if condition="$pdosqliteextension">
                     <li class="success">
@@ -216,7 +221,7 @@
                     </li>
                 <xar:else />
                    <li class="warning">
-                       WARNING: PDO SQLITE as database will not be available
+                       WARNING: PDO SQLite as database will not be available
                    </li>
                 </xar:if>
             </ul>
