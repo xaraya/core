@@ -80,7 +80,7 @@ function installer_admin_phase5()
             $version_ok = version_compare(PHP_VERSION,'5.4.0','ge');
             if ($version_ok) {
                 // Create the database in the directory we want, otherwise it will be created below
-                @mkdir(sys::varpath() . '/sqlite', 0700);
+                @mkdir(sys::varpath() . '/sqlite', 0755);
                 try {
                     $dbpath = sys::varpath() . '/sqlite/';
                     $db = new SQLite3($dbpath . $dbName); 
