@@ -40,9 +40,9 @@ function installer_admin_phase4()
     // Supported  Databases:
     $data['database_types']      = array('mysqli'       => array('name' => 'MySQL'   , 'available' => extension_loaded('mysqli')),
                                          //'mysqli'      => array('name' => 'MySQLi' , 'available' => extension_loaded('mysqli')),
-                                         'postgres'    => array('name' => 'Postgres', 'available' => extension_loaded('pgsql')),
-                                         'sqlite'      => array('name' => 'SQLite (not supported)'  , 'available' => extension_loaded('sqlite')),
-                                         'sqlite3'      => array('name' => 'SQLite3 (not supported)'  , 'available' => extension_loaded('sqlite3')),
+                                         'postgres'    => array('name' => 'Postgres (not supported in this version)', 'available' => extension_loaded('pgsql')),
+                                         'sqlite'      => array('name' => 'SQLite (not supported in this version)'  , 'available' => extension_loaded('sqlite')),
+                                         'sqlite3'      => array('name' => 'SQLite3 (not supported in this version)'  , 'available' => extension_loaded('sqlite3')),
                                          //'pdosqlite'   => array('name' => 'PDO SQLite'  , 'available' => extension_loaded('pdo_sqlite')),
                                          // use portable version of OCI8 driver to support ? bind variables
                                          'oci8po'      => array('name' => 'Oracle 9+ (not supported)'  , 'available' => extension_loaded('oci8')),
