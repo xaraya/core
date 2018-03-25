@@ -353,19 +353,18 @@ class CelkoPositionProperty extends DataProperty
             $result = $dbconn->Execute($SQLquery);
             if (!$result) return;
 
-          /* Find the right parent for this item */
-          if (strtolower($this->inorout) == 'in') {
-              $parent_id = $this->reference_id;
-          } else {
-              $parent_id = $refcat['parent_id'];
-          }
-          // Update parent id
-          $SQLquery = "UPDATE " . $this->initialization_celkotable .
-                       " SET " . $this->initialization_celkoparent_id . " = ?
+            /* Find the right parent for this item */
+            if (strtolower($this->inorout) == 'in') {
+                $parent_id = $this->reference_id;
+            } else {
+                $parent_id = $refcat['parent_id'];
+            }
+            // Update parent id
+            $SQLquery = "UPDATE " . $this->initialization_celkotable .
+                         " SET " . $this->initialization_celkoparent_id . " = ?
                        WHERE id = ?";
-        $result = $dbconn->Execute($SQLquery,array($parent_id, $itemid));
-        if (!$result) return;
-
+          $result = $dbconn->Execute($SQLquery,array($parent_id, $itemid));
+          if (!$result) return;
        } 
     }
 
