@@ -189,7 +189,7 @@ class CelkoPositionProperty extends DataProperty
                         }
                     }
                 }
-            
+
             } else {
                 if (empty($this->reference_id)) {
                     $point_of_insertion = 1;
@@ -221,8 +221,6 @@ class CelkoPositionProperty extends DataProperty
                     $parent_id = $parentItem['parent_id'];
                 }
                 $itemid = $this->updateposition($itemid, $parent_id, $point_of_insertion);
-                $this->updateValue($itemid);
-            }
         } else {
 # --------------------------------------------------------
 #
@@ -266,8 +264,7 @@ class CelkoPositionProperty extends DataProperty
             } else {
                 $parent_id = (int)$parentItem['parent_id'];
             }
-            $itemid = $this->updateposition($itemid,$parent_id,$point_of_insertion);
-        }
+            $itemid = $this->updateposition($itemid, $parent_id, $point_of_insertion);
         return true;
     }
 
@@ -499,7 +496,7 @@ class CelkoPositionProperty extends DataProperty
                         " SET " . $this->initialization_celkoleft_id . " = " . $this->initialization_celkoleft_id . " + 2
                         WHERE " . $this->initialization_celkoleft_id . ">= ?";
         $bindvars[2][] = $point_of_insertion;
-        // Both can be transformed into just one SQL-statement, but i dont know if every database is SQL-92 compliant(?)
+        // Both can be transformed into just one SQL-statement, but I dont know if every database is SQL-92 compliant(?)
 
         $SQLquery[3] = "UPDATE " . $this->initialization_celkotable . " SET " .
                                     $this->initialization_celkoparent_id . " = ?," .
