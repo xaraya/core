@@ -221,6 +221,7 @@ class CelkoPositionProperty extends DataProperty
                     $parent_id = $parentItem['parent_id'];
                 }
                 $itemid = $this->updateposition($itemid, $parent_id, $point_of_insertion);
+            }
         } else {
 # --------------------------------------------------------
 #
