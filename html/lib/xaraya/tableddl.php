@@ -242,6 +242,8 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         case 'postgres':
         case 'mysql':
         case 'mysqli':
+            $sql = 'DROP TABLE IF EXISTS '.$tableName;
+            break;
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
