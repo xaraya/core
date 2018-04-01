@@ -233,11 +233,12 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         $databaseType = xarDB::getType();
     }
     // set Dbtype to pdosqlite
+/*
     $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
     if ($middleware == 'PDO') {
         $databaseType = 'pdosqlite';
     }
-
+*/
     switch($databaseType) {
         case 'postgres':
         case 'mysql':
