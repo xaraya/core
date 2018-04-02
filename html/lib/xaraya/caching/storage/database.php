@@ -150,7 +150,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         if ($this->compressed) {
             $check = crc32($value);
         } else {
-            $check = '';
+            $check = 0;
         }
 
         $table = $this->getTable();
