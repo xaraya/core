@@ -565,19 +565,19 @@ class DatabaseInfo extends xarObject
     {
         $pdotable = new PDOTable();
         
-        // Table name is upper case by convention
-        $name = strtoupper($name);
+        // Table name in ghe tables array is upper case by convention
+        $name = strtoupper($uppername);
         
         // If we don't yet have this table's information, then get it
-        if (!isset($this->tables[$name])) {
+        if (!isset($this->tables[$uppername])) {
             $pdostatement = $this->pdo->query("SELECT * FROM $name LIMIT 1");
             for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
                 $column = $pdostatement->getColumnMeta($i);
-                $this->tables[$name][$column['name']] = $column;
+                $this->tables[$uppername][$column['name']] = $column;
             }
         }
         
-        $pdotable->setTable($this->tables[$name]);
+        $pdotable->setTable($this->tables[$uppername]);
         return $pdotable;
     }
 
