@@ -633,11 +633,29 @@ class PDOTable extends xarObject
         $columne = array();
         foreach ($this->table as $column) {
             $col = new PDOColumn($column);
-            $columns[] = $col;
+            $columns[$column['name']] = $col;
         }
         return $columns;
     }
 
+    public function getPrimaryKey()
+    {
+        $columns = $this->getColumns();
+        $key_column = '';
+        foreach ($columns as $name => $column) {
+            // Maybe this is not necessary, but PDO documentation is not very clear
+            $flags = $column->getFlags();
+            foreach ($flags as $flag) {
+                if ($flag == 'primary_key') {
+                    $key_column = $column;
+                    break;
+                }
+            }
+        }
+        if (!empty($key_column)) return $key_column;
+        return false;
+    }
+    
     public function setTable($tableinfo)
     {
         $this->table = $tableinfo;
