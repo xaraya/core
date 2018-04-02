@@ -566,7 +566,7 @@ class DatabaseInfo extends xarObject
         $pdotable = new PDOTable();
         
         // Table name in ghe tables array is upper case by convention
-        $name = strtoupper($uppername);
+        $uppername = strtoupper($name);
         
         // If we don't yet have this table's information, then get it
         if (!isset($this->tables[$uppername])) {
