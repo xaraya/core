@@ -1347,6 +1347,7 @@ class DataObjectMaster extends xarObject
                             $value = $table[0];
                         } else {
                             $tabletype = 'internal';
+                            $value = $table;
                         }
 
                         // Remove any spaces and similar chars
@@ -1368,7 +1369,7 @@ class DataObjectMaster extends xarObject
                 }
             } catch (Exception $e) {
                 echo xarML('Found sources: ');var_dump($sources);
-                echo xarML('Error reading object sources');
+                echo xarML('<br/>Error reading object sources');
             }
         }
 
