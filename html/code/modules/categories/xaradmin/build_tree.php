@@ -533,7 +533,7 @@ function categories_admin_build_tree()
         for ($i=1;$i<=$id_count;$i++) {
             $index++;
             if (!isset($keys[$i])) {
-                $data['message_error'][] = xarML('Did not find an index value #(1)', $i);
+                $data['message_error'][] = xarML('Did not find a left/right value #(1)', $i);
                 $no_errors = false;
             }
         }

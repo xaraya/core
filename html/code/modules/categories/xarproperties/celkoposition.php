@@ -699,7 +699,7 @@ class CelkoPositionProperty extends DataProperty
            }
            //$SQLquery .= " AND P1.left_id
            //               NOT BETWEEN ? AND ? ";
-           $SQLquery .= " AND (P1." . $this->initialization_celkoleft_id . " < ? OR P1." . $this->initialization_celkoleft_id . "> ?)";
+           $SQLquery .= " AND (P1." . $this->initialization_celkoleft_id . " < ? OR P1." . $this->initialization_celkoleft_id . " > ?)";
            $bindvars[] = $ecat['left_id']; $bindvars[] = $ecat['right_id'];
         }
 
@@ -725,6 +725,7 @@ class CelkoPositionProperty extends DataProperty
         $items = array();
 
         $index = -1;
+        $result->first();
         while (!$result->EOF) {
             list($indentation,
                     $id,
@@ -733,7 +734,7 @@ class CelkoPositionProperty extends DataProperty
                     $left,
                     $right
                    ) = $result->fields;
-            $result->MoveNext();
+            $result->next();
 
             if ($indexby == 'cid') {
                 $index = $id;
