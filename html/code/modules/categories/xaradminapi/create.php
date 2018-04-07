@@ -20,7 +20,7 @@ function categories_adminapi_create($args)
 {
     // Make sure we have all the required values
     if (empty($args['name'])) $args['name'] = xarML('New Category');
-    // This makes the root category to be the parent of this one
+    // This makes the root category to be the parent of this new one
     if (empty($args['parent_id'])) $args['parent_id'] = 1;
     // This makes the relative position of this category the last child of the parent
     if (empty($args['relative_position'])) $args['relative_position'] = 3;
