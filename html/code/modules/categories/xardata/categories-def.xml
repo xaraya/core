@@ -90,7 +90,7 @@
       <id>8420</id>
       <label>Links</label>
       <type>integerbox</type>
-      <defaultvalue></defaultvalue>
+      <defaultvalue>0</defaultvalue>
       <source>categories.links</source>
       <status>33</status>
       <seq>8</seq>
