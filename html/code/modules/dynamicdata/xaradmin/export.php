@@ -106,8 +106,13 @@ function dynamicdata_admin_export(Array $args=array())
         // Export all properties that are not disabled
         foreach ($mylist->properties as $name => $property) {
             $status = $property->getDisplayStatus();
-            if ($status == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) continue;
-            $mylist->properties[$name]->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
+            if ($status == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
+                // Remove this property if it is disabled
+                unset($mylist->properties[$name]);
+            } else {
+                // Anything else: set to active
+                $mylist->properties[$name]->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
+            }
         }
         $mylist->getItems(array('getvirtuals' => 1));
 
