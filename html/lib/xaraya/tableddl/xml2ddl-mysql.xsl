@@ -130,6 +130,9 @@
       <xsl:when test="boolean">
         <xsl:text>BOOLEAN</xsl:text>
       </xsl:when>
+      <xsl:when test="decimal">
+        <xsl:text>DECIMAL</xsl:text>
+      </xsl:when>
       <!-- @todo add support for time --> 
       <xsl:otherwise>
       </xsl:otherwise>
