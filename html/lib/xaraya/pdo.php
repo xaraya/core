@@ -613,7 +613,9 @@ class DatabaseInfo extends xarObject
             throw new SQLException('Could not list tables', $e->getMessage(), $sql);
         }
         while ($row = $statement->fetch()) {
-            $this->tables[strtoupper($row[0])] = $row[0];
+            $pdotable = new PDOTable();
+            $pdotable->setTable($row[0]);
+            $this->tables[strtoupper($row[0])] = $pdotable;
         }
     }
 }
@@ -627,6 +629,12 @@ class DatabaseInfo extends xarObject
 class PDOTable extends xarObject
 {
     private $table;
+    private $name;
+
+    public function getName()
+    {
+        return $this->name;
+    }
 
     public function getColumns()
     {
