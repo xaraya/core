@@ -385,9 +385,9 @@ class CelkoPositionProperty extends DataProperty
             $SQLquery = "UPDATE " . $this->initialization_celkotable .
                          " SET " . $this->initialization_celkoparent_id . " = ?
                        WHERE id = ?";
-          $result = $dbconn->Execute($SQLquery,array($parent_id, $itemid));
-          if (!$result) return;
-       } 
+            $result = $dbconn->Execute($SQLquery,array($parent_id, $itemid));
+            if (!$result) return;
+        } 
     }
 
 	/**
@@ -642,7 +642,7 @@ class CelkoPositionProperty extends DataProperty
         $inorout = strtolower ($inorout);
 
         switch($rightorleft) {
-           case "right":
+            case "right":
                $point_of_insertion = $right;
 
                switch($inorout) {
@@ -657,9 +657,8 @@ class CelkoPositionProperty extends DataProperty
                     $msg = xarML('Valid values: IN or OUT');
                     throw new BadParameterException(null, $msg);
                }
-
-           break;
-           case "left":
+            break;
+            case "left":
                $point_of_insertion = $left;
                switch($inorout) {
                   case "out":
@@ -673,8 +672,8 @@ class CelkoPositionProperty extends DataProperty
                     $msg = xarML('Valid values: IN or OUT');
                     throw new BadParameterException(null, $msg);
                }
-           break;
-           default:
+            break;
+            default:
             $msg = xarML('Valid values: RIGHT or LEFT');
             throw new BadParameterException(null, $msg);
         }
