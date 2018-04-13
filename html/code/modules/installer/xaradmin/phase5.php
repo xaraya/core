@@ -219,13 +219,7 @@ function installer_admin_phase5()
             $dbconn->begin();
             if (!empty($dbinfo->getTables())) {
                 foreach ($dbinfo->getTables() as $tbl) {
-                    // check middleware
-                    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
-                    if ($middleware == 'Creole') {
-                        $table = $tbl->getName();
-                    } else if ($middleware == 'PDO') {
-                        $table = $tbl;
-                    }
+                    $table = $tbl->getName();
                     if (strpos($table, '_') && (substr($table, 0, strpos($table, '_')) == $dbPrefix)) {
                         // we have the same prefix.
                         try {

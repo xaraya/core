@@ -603,7 +603,6 @@ class DatabaseInfo extends xarObject
      */
     protected function initTables()
     {
-
         //$sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
         // get the list of all tables
         $sql = "SHOW TABLES";
@@ -614,7 +613,7 @@ class DatabaseInfo extends xarObject
         }
         while ($row = $statement->fetch()) {
             $pdotable = new PDOTable();
-            $pdotable->setTable($row[0]);
+            $pdotable->setTableName($row[0]);
             $this->tables[strtoupper($row[0])] = $pdotable;
         }
     }
@@ -628,7 +627,6 @@ class DatabaseInfo extends xarObject
  */
 class PDOTable extends xarObject
 {
-    private $table;
     private $name;
 
     public function getName()
@@ -664,9 +662,9 @@ class PDOTable extends xarObject
         return false;
     }
     
-    public function setTable($tableinfo)
+    public function setTableName($name)
     {
-        $this->table = $tableinfo;
+        $this->name = $name;
         return true;
     }
 }
