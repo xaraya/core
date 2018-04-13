@@ -577,7 +577,7 @@ class DatabaseInfo extends xarObject
             }
         }
         
-        $pdotable->setTable($this->tables[$uppername]);
+        $pdotable->setTableName($this->tables[$uppername]);
         return $pdotable;
     }
 
