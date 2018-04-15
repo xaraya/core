@@ -700,10 +700,11 @@ class PDOTable extends xarObject
      */
     protected function initColumns()
     {
+        $sql = 'SELECT * FROM ' . $this->name . ' LIMIT 0,1';
         try {
-            $pdostatement = $this->pdo->query('SELECT * FROM ' . $this->name . ' LIMIT 0,1');
+            $pdostatement = $this->pdo->query($sql);
         } catch (PDOException $e) {
-            throw new PDOException('Could not initialize table columns');
+            throw new PDOException(xarML('Could not initialize table columns with: #(1)', $sql));
         }
         $columnarray = array();
         for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
