@@ -571,14 +571,17 @@ class DatabaseInfo extends xarObject
         // If we don't yet have this table's information, then get it
         if (!isset($this->tables[$uppername])) {
             $pdostatement = $this->pdo->query("SELECT * FROM $name LIMIT 1");
+            $columnarray = array();
             for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
                 $column = $pdostatement->getColumnMeta($i);
-                $this->tables[$uppername][$column['name']] = $column;
+                $columnarray[[$column['name']] = $column;
             }
+            $this->tables[$uppername] = $pdotable;
+            $pdotable->setTableName($uppername);
+            $pdotable->setTablecolumns($columnarray);
         }
         
-        $pdotable->setTableName($uppername);
-        return $pdotable;
+        return true;
     }
 
     public function getPDO()
@@ -672,9 +675,15 @@ class PDOTable extends xarObject
         return false;
     }
     
-    public function setTableName($name)
+    public function setTableName($name='')
     {
         $this->name = $name;
+        return true;
+    }
+
+    public function setTableColumns($columns=array())
+    {
+        $this->columns = $columns;
         return true;
     }
 
