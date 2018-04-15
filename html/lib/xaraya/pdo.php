@@ -778,17 +778,22 @@ class PDOColumn extends xarObject
     }
     public function getDefaultValue()
     {
-        try {
-            $pdostatement = $this->pdo->query("SELECT DEFAULT(" . $this->getName() . ") FROM " . $this->getTable() . " LIMIT 0,1");
-//            $pdostatement = $this->pdo->query("SELECT DEFAULT(" . $this->getName() . ") FROM (SELECT 1) AS dummy LEFT JOIN " . $this->getTable() . " ON True LIMIT 0,1 ;");
-        } catch (PDOException $e) {
-            throw new PDOException(xarML('Could not get default value for column #(1)', $this->getName()));
+        if (!isset($this->columndata['default_value'])) {
+            try {
+                $sql = "SELECT DEFAULT(" . $this->getName() . ") FROM (SELECT 1) AS dummy LEFT JOIN " . $this->getTable() . " ON True LIMIT 0,1";
+                $pdostatement = $this->pdo->query($sql);
+            } catch (PDOException $e) {
+                // No default value. Return a descriptive string for now
+                return 'No value';
+                throw new PDOException(xarML('Could not get default value for column #(1) with #(2)', $this->getName(), $sql));
+            }
+            $value = null;
+            while ($row = $pdostatement->fetch()) {
+                $value = $row[0];
+            }
+            $this->columndata['default_value'] = $value;
         }
-        $value = null;
-        while ($row = $pdostatement->fetch()) {
-            $value = $row[0];
-        }
-        return $value;
+        return $this->columndata['default_value'];
     }
 }
 
