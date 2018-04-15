@@ -561,7 +561,7 @@ class DatabaseInfo extends xarObject
         $this->pdo = $pdo;
     }
 
-    public function getTable($name)
+    private function loadTable($name)
     {
         $pdotable = new PDOTable();
         
@@ -577,7 +577,7 @@ class DatabaseInfo extends xarObject
             }
         }
         
-        $pdotable->setTableName($this->tables[$uppername]);
+        $pdotable->setTableName($uppername);
         return $pdotable;
     }
 
@@ -597,6 +597,16 @@ class DatabaseInfo extends xarObject
         return $this->tables;
     }
 
+    public function getTable($name)
+    {
+        if (!$this->tablesLoaded)
+            $this->initTables();
+        
+        $uppername = strtoupper($name);
+        if (!isset($this->tables[$uppername])) return null;
+        return $this->tables[$uppername];
+    }
+
     /**
      * @return void
      * @throws SQLException
@@ -612,9 +622,8 @@ class DatabaseInfo extends xarObject
             throw new SQLException('Could not list tables', $e->getMessage(), $sql);
         }
         while ($row = $statement->fetch()) {
-            $pdotable = new PDOTable();
-            $pdotable->setTableName($row[0]);
-            $this->tables[strtoupper($row[0])] = $pdotable;
+            $thistable = $htis->getTable($row[0]);
+            $this->tables[strtoupper($row[0])] = $thistable;
         }
     }
 }
@@ -628,6 +637,7 @@ class DatabaseInfo extends xarObject
 class PDOTable extends xarObject
 {
     private $name;
+    private $columns;
 
     public function getName()
     {
@@ -666,6 +676,28 @@ class PDOTable extends xarObject
     {
         $this->name = $name;
         return true;
+    }
+
+    /**
+     * @return void
+     * @throws SQLException
+     */
+    protected function initColumns()
+    {
+        // Only works for MySQL
+        // Get the information of all columns
+        $sql = $DB->query('SELECT * FROM ' . $this->name . ' LIMIT 0,1');
+        try {
+            $statement = $this->pdo->query($sql);
+        } catch (PDOException $e) {
+            throw new SQLException('Could not list columns', $e->getMessage(), $sql);
+        }
+        while ($row = $statement->fetch()) {
+            $pdocolumn = new PDOColumn();
+            $this->columns[strtoupper($row[0])] = $pdocolumn;
+        }
+        $select = $DB->query('SELECT COUNT(*) FROM fruit');
+        $meta = $select->getColumnMeta(0);
     }
 }
 
