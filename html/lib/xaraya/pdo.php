@@ -561,7 +561,7 @@ class DatabaseInfo extends xarObject
         $this->pdo = $pdo;
     }
 
-    private function loadTable($name)
+    private function initTable($name)
     {
         $pdotable = new PDOTable();
         
@@ -581,7 +581,7 @@ class DatabaseInfo extends xarObject
             $pdotable->setTablecolumns($columnarray);
         }
         
-        return true;
+        return $pdotable;
     }
 
     public function getPDO()
@@ -625,7 +625,7 @@ class DatabaseInfo extends xarObject
             throw new SQLException('Could not list tables', $e->getMessage(), $sql);
         }
         while ($row = $statement->fetch()) {
-            $thistable = $this->loadTable($row[0]);
+            $thistable = $this->initTable($row[0]);
             $this->tables[strtoupper($row[0])] = $thistable;
         }
     }
