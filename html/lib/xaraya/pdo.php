@@ -624,7 +624,7 @@ class DatabaseInfo extends xarObject
                 $column = $pdostatement->getColumnMeta($i);
                 $columnarray[$column['name']] = $column;
             }
-            $pdotable->setTableName($uppername);
+            $pdotable->setTableName($column['name']);
             $pdotable->setTablecolumns($columnarray);
         }
         return $pdotable;
@@ -700,7 +700,7 @@ class PDOTable extends xarObject
      */
     protected function initColumns()
     {
-        $sql = 'SELECT * FROM ' . $this->name . ' LIMIT 0,1';
+        $sql = 'SELECT * FROM ' . $this->getName() . ' LIMIT 0,1';
         try {
             $pdostatement = $this->pdo->query($sql);
         } catch (PDOException $e) {
