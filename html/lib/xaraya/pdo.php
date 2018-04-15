@@ -625,7 +625,7 @@ class DatabaseInfo extends xarObject
             throw new SQLException('Could not list tables', $e->getMessage(), $sql);
         }
         while ($row = $statement->fetch()) {
-            $thistable = $htis->getTable($row[0]);
+            $thistable = $this->getTable($row[0]);
             $this->tables[strtoupper($row[0])] = $thistable;
         }
     }
