@@ -574,7 +574,7 @@ class DatabaseInfo extends xarObject
             $columnarray = array();
             for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
                 $column = $pdostatement->getColumnMeta($i);
-                $columnarray[[$column['name']] = $column;
+                $columnarray[$column['name']] = $column;
             }
             $this->tables[$uppername] = $pdotable;
             $pdotable->setTableName($uppername);
