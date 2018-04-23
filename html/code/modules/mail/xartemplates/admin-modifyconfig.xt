@@ -537,14 +537,17 @@
                         <div class="xar-col">
                             <xar:var name="label">Redirect Address is the email address that all emails are sent to in debugging mode.</xar:var>
                             <label for="redirectaddress" title="#$label#" class="xar-form-label">
-                                Redirect address:
+                                Redirect addresses:
                             </label>
                         </div>
-                        <div class="xar-col">
+                        <div class="xar-col" style="vertical-align: top">
                             <xar:set name="value">
                                 <xar:var scope="module" module="mail" name="redirectaddress"/>
                             </xar:set>
+                            Enter one or more email addresses separated by commas<br/>
                             <xar:data-input type="textarea" name="redirectaddress" value="$value" rows="5" cols="20"/>
+                        </div>
+                        <div class="xar-col">
                         </div>
                     </div>
                     <div class="xar-row">
