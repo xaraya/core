@@ -62,11 +62,6 @@ function categories_admin_build_tree()
     // Security Check
     if (!xarSecurityCheck('AdminCategories')) return;
 
-    // Load the user's daemon
-    sys::import('modules.ledgerba.class.daemon');
-    $daemon = LedgerDaemon::getInstance();
-    $data = $daemon->checkInput();
-
     $verbose = false;
     
     if(!xarVarFetch('table',     'str',  $data['table'],      'xar_categories', XARVAR_NOT_REQUIRED)) {return;}
