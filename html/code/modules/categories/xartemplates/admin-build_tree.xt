@@ -5,10 +5,10 @@
         <h2>
             Build Tree
         </h2>
-    <xar:template file="alert_info" module="banks"/>
-    <xar:template file="alert_error" module="banks"/>
-    <xar:template file="alert_success" module="banks"/>
-    <xar:template file="alert_warning" module="banks"/>
+        <xar:template file="alert_info"/>
+        <xar:template file="alert_error"/>
+        <xar:template file="alert_success"/>
+        <xar:template file="alert_warning"/>
         <form action="#xarModURL('categories','admin','build_tree')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset class="xar-norm">
                 <legend>
