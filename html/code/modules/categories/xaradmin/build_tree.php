@@ -596,13 +596,8 @@ function categories_admin_build_tree()
                 $q->run();
                 $q->clearconditions();
             }
-
         }
     }
-
-    // Flag this as the current list view
-    xarSession::setVar('ledger_current_user_listview', xarServer::getCurrentURL());
-    
     return $data;
 }
 
