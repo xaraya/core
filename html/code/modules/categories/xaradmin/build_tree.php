@@ -130,26 +130,26 @@ function categories_admin_build_tree()
         foreach ($all_rows as $key => $row) {
             // Rearrange the ids in a single array
             // Pick out any null values here
-            if ($row['left_id'] == null) {
+            if ($row[$data['left_id']] == null) {
                 $left_nulls++;
             } else {
-                $ids[] = (int)$row['left_id'];
+                $ids[] = (int)$row[$data['left_id']];
             }
-            if ($row['right_id'] == null) {
+            if ($row[$data['right_id']] == null) {
                 $right_nulls++;
             } else {
-                $ids[] = (int)$row['right_id'];
+                $ids[] = (int)$row[$data['right_id']];
             }
-            if ($row['parent_id'] == null) {
+            if ($row[$data['parent_id']] == null) {
                 $parent_nulls++;
             } else {
-                $parent_ids[] = (int)$row['parent_id'];
+                $parent_ids[] = (int)$row[$data['parent_id']];
             }
 
             // Find the top level
-            if ((int)$row['left_id'] == 1) {
-                if (isset($row['name'])) {
-                    $data['message_info'][] = xarML('The top level is #(1) (ID #(2))', $row['name'], $row['id']);
+            if ((int)$row[$data['left_id']] == 1) {
+                if (isset($row[$data['name']])) {
+                    $data['message_info'][] = xarML('The top level is #(1) (ID #(2))', $row[$data['name']], $row['id']);
                 } else {
                     $data['message_info'][] = xarML('The top level is ID #(1)', $row['id']);
                 }
@@ -367,7 +367,7 @@ function categories_admin_build_tree()
         $root_entry = array();
         $root_key = 0;
         foreach($all_rows as $key => $row) {
-            if ($row['name'] == $data['root_name']) {
+            if ($row[$data['name']] == $data['root_name']) {
                 $found = true;
                 $root_entry = $row;
                 $root_key = $key;
