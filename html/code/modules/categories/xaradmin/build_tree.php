@@ -347,8 +347,7 @@ function categories_admin_build_tree()
         $data['message_success'][] = xarML('Number of indices: #(1)', $id_count);
         if (empty($data['message_error'])) $data['message_success'][] = xarML('The Celko indices are correct');
 
-    } elseif (isset($data['build'])) {
-        
+    } elseif (isset($data['build'])) {       
         
 # --------------------------------------------------------
 #
@@ -478,6 +477,7 @@ function categories_admin_build_tree()
                 unset($right_stack[$k]);
             }
         }
+        
 # --------------------------------------------------------
 #
 # Deal with bad right IDs by swapping them
