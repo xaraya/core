@@ -138,16 +138,6 @@ class CelkoPositionProperty extends DataProperty
     {
         if (!parent::validateValue($value)) return false;
 
-        // Obtain current information on the item
-        $current_id = $this->objectref->properties[$this->objectref->primary]->value;
-        $this->current_entry = $this->getItem($current_id);
-
-        if ($this->current_entry == false) {
-            $this->invalid = xarML('This entry you are moving does not exist');
-            $this->value = null;
-            return false;
-        }
-
         // Obtain current information on the reference item
         $this->reference_entry = $this->getItem($this->reference_id);
 
@@ -157,8 +147,12 @@ class CelkoPositionProperty extends DataProperty
             return false;
         }
 
+        // Obtain current information on the item
+        $current_id = $this->objectref->properties[$this->objectref->primary]->value;
+        $this->current_entry = $this->getItem($current_id);
+
         // Checking if the reference ID is of a child or itself
-        if (
+        if (!($this->current_entry == false) &&
            ($this->reference_entry[$this->initialization_celkoleft_id] >= $this->current_entry[$this->initialization_celkoleft_id])  &&
            ($this->reference_entry[$this->initialization_celkoleft_id] <= $this->current_entry[$this->initialization_celkoright_id])
           )
@@ -173,8 +167,7 @@ class CelkoPositionProperty extends DataProperty
         if ($isroot && ($this->inorout == 'out')) {
             $this->invalid = xarML('Cannot move an entry to before or after the root entry');
             $this->value = null;
-        return false;
-        var_dump($isroot);exit;
+            return false;
         }
         $this->setValue($value);
         return true;
@@ -327,6 +320,14 @@ class CelkoPositionProperty extends DataProperty
      */
     public function updateValue($itemid=0)
     {
+        // Check the current item
+        $current_entry = $this->getItem($itemid);
+
+        if ($current_entry == false) {
+            xarSession::setVar('errormsg', xarML('The entry you are updating does not exist'));
+            return false;
+        }
+
        // Find the needed variables for moving things...
        $point_of_insertion =
                    $this->find_point_of_insertion($this->inorout, 
