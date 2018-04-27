@@ -69,7 +69,7 @@ class TColorPickerProperty extends DataProperty
         $data['baseuri']  = xarServer::getBaseURI();
         $data['size']     = $this->size;
         $data['maxlength']= $this->maxlength;
-        $data['value']    = isset($value) ? xarVarPrepForDisplay($value) : xarVarPrepForDisplay($this->value);
+        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
 
         return parent::showInput($data);
     }
