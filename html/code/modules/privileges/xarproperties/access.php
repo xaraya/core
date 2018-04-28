@@ -322,12 +322,11 @@ class AccessProperty extends DataProperty
         foreach ($this->allallowed as $allowed) {
             if (xarIsParent($allowed, xarUser::getVar('uname'))) return true;        
         }
-        
+
         if (isset($data['exclusive'])) $exclusive = $data['exclusive'];
         
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
-            $disabled = false;
             $groups = array();
             if (isset($data['group'])) {
                 $groupsarray = explode(',', $data['group']);
@@ -343,12 +342,14 @@ class AccessProperty extends DataProperty
             }
 
             if ($exclusive) {
-                // We check the level only if group access is disabled
+                // We check the level only if group access is disabled, or there are no groups
+                // CHECKME: review this
+                $disabled = false;
                 if (!$disabled) {
                     if (isset($data['group'])) {
                         return $this->checkGroup($groups);
                     } else {
-                        return false;
+                        return $this->checkLevel($data);
                     }
                 } else {
                     return $this->checkLevel($data);
