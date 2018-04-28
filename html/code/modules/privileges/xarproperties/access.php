@@ -412,7 +412,7 @@ class AccessProperty extends DataProperty
         if (count($groups) > 1) {
             $this->initialization_group_multiselect = true;
         }
-        $access = $this->checkGroupArray($groups)
+        $access = $this->checkGroupArray($groups);
         return $access;
     }
 	
