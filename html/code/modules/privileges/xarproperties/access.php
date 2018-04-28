@@ -329,15 +329,19 @@ class AccessProperty extends DataProperty
         if ($this->checkRealm($data)) {
             $groups = array();
             if (isset($data['group'])) {
-                $groupsarray = explode(',', $data['group']);
-                $groupsdata = xarGetGroups();
-                foreach ($groupsarray as $group) {
-                    foreach ($groupsdata as $groupdata) {
-                        if ($groupdata['name'] == $group) {
-                            $groups[] = $groupdata['id'];
-                            break;
+                if (!is_array($data['group'])) {
+                    $groupsarray = explode(',', $data['group']);
+                    $groupsdata = xarGetGroups();
+                    foreach ($groupsarray as $group) {
+                        foreach ($groupsdata as $groupdata) {
+                            if ($groupdata['name'] == $group) {
+                                $groups[] = $groupdata['id'];
+                                break;
+                            }
                         }
                     }
+                } else {
+                    $groups = $data['group'];
                 }
             }
 
