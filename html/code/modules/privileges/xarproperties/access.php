@@ -327,11 +327,11 @@ class AccessProperty extends DataProperty
         
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
+            $disabled = false;
+            $groups = array();
             if (isset($data['group'])) {
                 $groupsarray = explode(',', $data['group']);
-                $disabled = false;
                 $groupsdata = xarGetGroups();
-                $groups = array();
                 foreach ($groupsarray as $group) {
                     foreach ($groupsdata as $groupdata) {
                         if ($groupdata['name'] == $group) {
@@ -341,7 +341,7 @@ class AccessProperty extends DataProperty
                     }
                 }
             }
-            
+
             if ($exclusive) {
                 // We check the level only if group access is disabled
                 if (!$disabled) {
