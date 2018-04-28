@@ -270,39 +270,39 @@ class AccessProperty extends DataProperty
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if (xarIsParent($allowed, xarUserGetVar('uname'))) return true;        
+            if (xarIsParent($allowed, xarUser::getVar('uname'))) return true;        
         }
         
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
             $disabled = false;
             try {
-                if (isset($data['group'])) $group = unserialize($data['group']);
-                else $group = $this->group;
+                if (isset($data['group'])) $groups = unserialize($data['group']);
+                else $groups = $this->group;
             } catch (Exception $e) {
-                $group = $data['group'];
+                $groups = $data['group'];
             }
-            if (is_array($group)){
+            if (is_array($groups)){
                 // This is a multiselect
                 $this->initialization_group_multiselect = true;
-                if (in_array(0,$group)) $disabled = true;
+                if (in_array(0,$groups)) $disabled = true;
             } else {
                 // This is a dropdown
                 $this->initialization_group_multiselect = false;
-                if ((int)$group == 0) $disabled = true;
-                $group = array($group);
+                if ((int)$groups == 0) $disabled = true;
+                $groups = array($groups);
             }
 
             if ($exclusive) {
                 // We check the level only if group access is disabled
                 if (!$disabled) {
-                    return $this->checkGroup($group);
+                    return $this->checkGroup($groups);
                 } else {
                     return $this->checkLevel($data);
                 }
             } else {
                 // Both group access and level must be satisfied
-                return $this->checkGroup($group) && $this->checkLevel($data);
+                return $this->checkGroup($groups) && $this->checkLevel($data);
             }
         } else {
             return false;
@@ -355,29 +355,25 @@ class AccessProperty extends DataProperty
 	 */	    
     public function checkGroup(Array $groups=array())
     {
+        if (count($groups) > 1) {
+            $this->initialization_group_multiselect = true;
+        }
+        $access = $this->checkGroupArray($groups)
+        return $access;
+    }
+	
+	/**
+	 * Check an array of groups IDs
+	 * 
+	 * @param  array groups An array of input parameters (integers)
+	 * @return bool   Returns true or false 
+	 */	    
+    private function checkGroupArray(Array $groups=array())
+    {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $access = false;
-        if (is_array($groups)) $this->initialization_group_multiselect = true;
-        if ($this->initialization_group_multiselect) {
-            foreach ($groups as $group) {
-                $group = (int)$group;
-                if ($group == $this->myself) {
-                    $access = true;
-                } elseif ($group == $anonID) {
-                    if (!xarUserIsLoggedIn()) $access = true;
-                } elseif ($group == -$anonID) {
-                    if (xarUserIsLoggedIn()) $access = true;
-                } elseif ($group) {
-                    $rolesgroup = xarRoles::getRole($group);
-                    $thisuser = xarCurrentRole();
-                    if (is_object($rolesgroup)) {
-                        if ($thisuser->isAncestor($rolesgroup)) $access = true;
-                    } 
-                }
-                if ($access) break;
-            }
-        } else {
-            $group = (int)$groups;
+        foreach ($groups as $group) {
+            $group = (int)$group;
             if ($group == $this->myself) {
                 $access = true;
             } elseif ($group == $anonID) {
@@ -391,10 +387,11 @@ class AccessProperty extends DataProperty
                     if ($thisuser->isAncestor($rolesgroup)) $access = true;
                 } 
             }
+            if ($access) break;
         }
         return $access;
     }
-	
+
 	/**
 	 * Used to show the hidden data
 	 * 
