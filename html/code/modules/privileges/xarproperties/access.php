@@ -327,7 +327,7 @@ class AccessProperty extends DataProperty
         
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
-            if (isset($data['group']) {
+            if (isset($data['group'])) {
                 $groupsarray = explode(',', $data['group']);
                 $disabled = false;
                 $groupsdata = xarGetGroups();
