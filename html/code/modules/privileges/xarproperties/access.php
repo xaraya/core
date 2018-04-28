@@ -260,7 +260,7 @@ class AccessProperty extends DataProperty
     }
 	
 	/**
-	 * Check the group is multiselect or dropdown
+	 * Check access from the access property
 	 * 
 	 * @param  array data An array of input parameters
 	 * @param  int exclusive 
@@ -303,6 +303,60 @@ class AccessProperty extends DataProperty
             } else {
                 // Both group access and level must be satisfied
                 return $this->checkGroup($groups) && $this->checkLevel($data);
+            }
+        } else {
+            return false;
+        }
+    }
+    
+	/**
+	 * Check access (from the access tag
+	 * 
+	 * @param  array data An array of input parameters
+	 * @param  int exclusive 
+	 * @return bool   Returns access(For group or level) if exclusive, otherwise returns false 
+	 */
+    public function checkAccessTag(Array $data=array(), $exclusive=1)
+    {
+        // Some groups always have access
+        foreach ($this->allallowed as $allowed) {
+            if (xarIsParent($allowed, xarUser::getVar('uname'))) return true;        
+        }
+        
+        if (isset($data['exclusive'])) $exclusive = $data['exclusive'];
+        
+        // We need to be in the correct realm
+        if ($this->checkRealm($data)) {
+            if (isset($data['group']) {
+                $groupsarray = explode(',', $data['group']);
+                $disabled = false;
+                $groupsdata = xarGetGroups();
+                $groups = array();
+                foreach ($groupsarray as $group) {
+                    foreach ($groupsdata as $groupdata) {
+                        if ($groupdata['name'] == $group) {
+                            $groups[] = $groupdata['id'];
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if ($exclusive) {
+                // We check the level only if group access is disabled
+                if (!$disabled) {
+                    if (isset($data['group'])) {
+                        return $this->checkGroup($groups);
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return $this->checkLevel($data);
+                }
+            } else {
+                // Both group access and level must be satisfied
+                if (isset($data['group'])) return $this->checkGroup($groups) && $this->checkLevel($data);
+                return false;
             }
         } else {
             return false;

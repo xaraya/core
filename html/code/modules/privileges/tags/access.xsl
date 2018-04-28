@@ -12,7 +12,7 @@
   <xsl:processing-instruction name="php">
     <xsl:text>sys::import('modules.dynamicdata.class.properties.master');</xsl:text>
     <xsl:text>$_access=DataPropertyMaster::getProperty(array('type'=>'access'));</xsl:text>
-    <xsl:text>if ($_access->check(</xsl:text>
+    <xsl:text>if ($_access->checkAccessTag(</xsl:text>
       <xsl:call-template name="atts2args">
         <xsl:with-param name="nodeset" select="@*"/>
       </xsl:call-template>
