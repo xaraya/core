@@ -333,6 +333,7 @@ class AccessProperty extends DataProperty
                     $groupsarray = explode(',', $data['group']);
                     $groupsdata = xarGetGroups();
                     foreach ($groupsarray as $group) {
+                        $group = trim($group);
                         foreach ($groupsdata as $groupdata) {
                             if ($groupdata['name'] == $group) {
                                 $groups[] = $groupdata['id'];
@@ -503,7 +504,6 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
  */
 class AccessPropertyInstall extends AccessProperty implements iDataPropertyInstall
 {
-
 	/**
 	 * Give access to install property
 	 * 
@@ -521,6 +521,5 @@ class AccessPropertyInstall extends AccessProperty implements iDataPropertyInsta
         }
         return true;
     }
-    
 }
 ?>
