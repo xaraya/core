@@ -89,6 +89,7 @@ class CheckboxListProperty extends SelectProperty
     {
         if (isset($data['value'])) $this->value = $data['value'];
         $data['value'] = $this->getValue();
+        if (isset($data['options']))  $this->options = $data['options'];
         $data['options'] = $this->getOptions();
         return parent::showOutput($data);
     }
