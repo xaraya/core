@@ -88,6 +88,7 @@ function installer_admin_phase3()
     $data['mysqliextension']          = extension_loaded('mysqli');
     $data['pgsqlextension']           = extension_loaded('pgsql');
     $data['sqliteextension']          = extension_loaded('sqlite');
+    $data['sqlite3extension']         = extension_loaded('sqlite3');
     $data['pdosqliteextension']       = extension_loaded('pdo_sqlite');
 
     $data['metRequiredPHPVersion']      = $metRequiredPHPVersion;

@@ -25,7 +25,6 @@ class xarURL extends xarObject
      * This will encode the path parts, the and GET parameter names
      * and data. It cannot encode a complete URL yet.
      *
-     * 
      * @param data string the data to be encoded (see todo)
      * @param type string the type of string to be encoded ('getname', 'getvalue', 'path', 'url', 'domain')
      * @return string the encoded URL parts
@@ -76,7 +75,6 @@ class xarURL extends xarObject
      * Format GET parameters formed by nested arrays, to support xarModURL().
      * This function will recurse for each level to the arrays.
      *
-     * 
      * @param args array the array to be expanded as a GET parameter
      * @param prefix string the prefix for the GET parameter
      * @return string the expanded GET parameter(s)
@@ -97,7 +95,6 @@ class xarURL extends xarObject
     /**
      * Add further parameters to the path, ensuring each value is encoded correctly.
      *
-     * 
      * @param args array the array to be encoded
      * @param path string the current path to append parameters to
      * @param psep string the path seperator to use
@@ -134,6 +131,7 @@ class xarServer extends xarObject
     const PROTOCOL_HTTP  = 'http';
     const PROTOCOL_HTTPS = 'https';
 
+    public static $baseurl;
     public static $allowShortURLs = true;
     public static $generateXMLURLs = true;
 
@@ -276,26 +274,23 @@ class xarServer extends xarObject
     /**
      * get base URL for Xaraya
      *
-     * 
      * @return string base URL for Xaraya
      */
     static function getBaseURL()
     {
-        static $baseurl = null;
-        if (isset($baseurl))  return $baseurl;
-
+        if (self::$baseurl != null) return self::$baseurl;
+        
         $server   = self::getHost();
         $protocol = self::getProtocol();
         $path     = self::getBaseURI();
 
-        $baseurl = "$protocol://$server$path/";
-        return $baseurl;
+        self::$baseurl = "$protocol://$server$path/";
+        return self::$baseurl;
     }
 
     /**
      * get the elapsed time since this page started
      *
-     * 
      * @return seconds and microseconds elapsed since the page started
      */
     static function getPageTime()
@@ -306,7 +301,6 @@ class xarServer extends xarObject
     /**
      * Get current URL (and optionally add/replace some parameters)
      *
-     * 
      * @param args array additional parameters to be added to/replaced in the URL (e.g. theme, ...)
      * @param generateXMLURL boolean over-ride Server default setting for generating XML URLs (true/false/NULL)
      * @param target string add a 'target' component to the URL

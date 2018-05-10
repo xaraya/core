@@ -35,6 +35,7 @@ function modules_init()
     // Get database information
     $tables =& xarDB::getTables();
     try {
+        $dbconn->begin();
         // Manually Insert the Base and Modules module into modules table
         $query = "INSERT INTO " . $tables['modules'] . "
               (name, regid, directory, version,

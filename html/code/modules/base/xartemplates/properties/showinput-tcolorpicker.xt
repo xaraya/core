@@ -6,9 +6,9 @@
         var TCP_picker_pixel = "#sys::code()#modules/base/xartemplates/includes/img/tcolorpicker_pixel.gif";
     </script>
     <xar:javascript scope="module" module="base" filename="tcolorpicker.js"/>
-    <xar:var name="alttext">Click Here to select a color</xar:var>
+    <xar:var name="alttext">Click to select a color</xar:var>
 
-    <input type="text" name="#$name#" id="#$id#" value="#$value#" size="#$size#" maxlength="#$maxlength#"/>
+    <input type="text" name="#$name#" id="#$id#" value="#$value#" size="#$size#" maxlength="#$maxlength#" style="background-color:#$value#"/>
 
     <a href="javascript:TCP.popup(document.getElementById('#$id#'), 1)">
         <xar:img scope="module" module="base" file="tcolorpicker.gif" class="xar-icon" alt="$alttext"/>

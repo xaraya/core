@@ -15,20 +15,27 @@
                 </div>                    
             <xar:elseif condition="$layout eq 'bad_author'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
-                    The operation you are attempting is not allowed in the current situation
+                    The operation you are attempting is not allowed in the current situation.
                 </div>
             <xar:elseif condition="$layout eq 'no_privileges'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
-                    You don't have the correct privileges for this operation
+                    You don't have the correct privileges for this operation.
                     <br />
                     Contact the system administrator if you think this is an error.
                 </div>
                 <xar:if condition="isset($redirecturl)">
                     <input type="hidden" name="redirecturl" id="returnurl" value="#$redirecturl#"/>
                 </xar:if>
+                <xar:if condition="!xarUser::isLoggedIn()">
+                    <div style="margin-top: 20px; margin-left: 20px">
+                        <xar:var name="label">Log in</xar:var>
+                        <xar:set name="link">xarModURL('authsystem', 'user', 'showloginform')</xar:set>
+                        <xar:button type="link" target="$link" label="$label"/>
+                    </div>
+                </xar:if>
             <xar:elseif condition="$layout eq 'no_block_privileges'" />
                 <div style="margin-top: 20px; margin-left: 20px">
-                    You don't have the correct privileges to view this block
+                    You don't have the correct privileges to view this block.
                     <br />
                     Contact the system administrator if you think this is an error.
                 </div>

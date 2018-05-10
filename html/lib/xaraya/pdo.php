@@ -505,7 +505,7 @@ class xarPDOStatement extends xarObject
         try {
             $rows_affected = (int) $this->pdostmt->rowCount();
         } catch( PDOException $e ) {
-            throw new SQLException('Could not get update count', $e->getMessage(), $this->pdo->queryString);
+            throw new PDOException('Could not get update count', $e->getMessage(), $this->pdo->queryString);
         }
         return $rows_affected;
     }
@@ -513,22 +513,22 @@ class xarPDOStatement extends xarObject
    // Wrappers for the PDOStatement methods
     public function fetchAll($flags)
     {
-        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        if ($this->pdostmt == null) throw new PDOException('No PDOStatement object');
         return $this->pdostmt->fetchAll($flags);
     }
     public function fetch($flags)
     {
-        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        if ($this->pdostmt == null) throw new PDOException('No PDOStatement object');
         return $this->pdostmt->fetch($flags);
     }
     public function rowCount()
     {
-        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        if ($this->pdostmt == null) throw new PDOException('No PDOStatement object');
         return $this->pdostmt->rowCount();
     }
     public function columnCount()
     {
-        if ($this->pdostmt == null) throw new SQLException('No PDOStatement object');
+        if ($this->pdostmt == null) throw new PDOException('No PDOStatement object');
         return $this->pdostmt->columnCount();
     }
 
@@ -561,26 +561,6 @@ class DatabaseInfo extends xarObject
         $this->pdo = $pdo;
     }
 
-    public function getTable($name)
-    {
-        $pdotable = new PDOTable();
-        
-        // Table name is upper case by convention
-        $name = strtoupper($name);
-        
-        // If we don't yet have this table's information, then get it
-        if (!isset($this->tables[$name])) {
-            $pdostatement = $this->pdo->query("SELECT * FROM $name LIMIT 1");
-            for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
-                $column = $pdostatement->getColumnMeta($i);
-                $this->tables[$name][$column['name']] = $column;
-            }
-        }
-        
-        $pdotable->setTable($this->tables[$name]);
-        return $pdotable;
-    }
-
     public function getPDO()
     {
         return $this->pdo;
@@ -597,25 +577,59 @@ class DatabaseInfo extends xarObject
         return $this->tables;
     }
 
+    public function getTable($name)
+    {
+        if (!$this->tablesLoaded)
+            $this->initTables();
+        
+        $uppername = strtoupper($name);
+        if (!isset($this->tables[$uppername])) return null;
+        return $this->tables[$uppername];
+    }
+
     /**
      * @return void
-     * @throws SQLException
+     * @throws PDOException
      */
-    protected function initTables()
+    private function initTables()
     {
-
         //$sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
         // get the list of all tables
         $sql = "SHOW TABLES";
         try {
-            $statement = $this->pdo->query($sql);
+            $pdostatement = $this->pdo->query($sql);
         } catch (PDOException $e) {
-            throw new SQLException('Could not list tables', $e->getMessage(), $sql);
+            throw new PDOException('Could not list tables', $e->getMessage(), $sql);
         }
-        while ($row = $statement->fetch()) {
-            $this->tables[strtoupper($row[0])] = $row[0];
+        while ($row = $pdostatement->fetch()) {
+            $thistable = $this->initTable($row[0]);
+            $this->tables[strtoupper($row[0])] = $thistable;
         }
+        $this->tablesLoaded = true;
+        return true;
     }
+    
+    private function initTable($name)
+    {
+        $pdotable = new PDOTable($this->pdo);
+        
+        // Table name in ghe tables array is upper case by convention
+        $uppername = strtoupper($name);
+        
+        // If we don't yet have this table's information, then get it
+        if (!isset($this->tables[$uppername])) {
+            $pdostatement = $this->pdo->query("SELECT * FROM $name LIMIT 0,1");
+            $columnarray = array();
+            for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
+                $column = $pdostatement->getColumnMeta($i);
+                $columnarray[$column['name']] = $column;
+            }
+            $pdotable->setTableName($name);
+            $pdotable->setTablecolumns($columnarray);
+        }
+        return $pdotable;
+    }
+
 }
 
 /**
@@ -626,21 +640,81 @@ class DatabaseInfo extends xarObject
  */
 class PDOTable extends xarObject
 {
-    private $table;
+    private $pdo;
+    private $name;
+    private $columns;
+
+    /** have clumns been loaded */
+    protected $columnsLoaded = false;
+
+    public function __construct($pdo)
+    {
+        $this->pdo = $pdo;
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
 
     public function getColumns()
     {
-        $columne = array();
-        foreach ($this->table as $column) {
-            $col = new PDOColumn($column);
-            $columns[] = $col;
-        }
-        return $columns;
+        if (!$this->columnsLoaded)
+            $this->initColumns();
+        return $this->columns;
     }
 
-    public function setTable($tableinfo)
+    public function getPrimaryKey()
     {
-        $this->table = $tableinfo;
+        $columns = $this->getColumns();
+        $key_column = '';
+        foreach ($columns as $name => $column) {
+            // Maybe this is not necessary, but PDO documentation is not very clear
+            $flags = $column->getFlags();
+            foreach ($flags as $flag) {
+                if ($flag == 'primary_key') {
+                    $key_column = $column;
+                    break;
+                }
+            }
+        }
+        if (!empty($key_column)) return $key_column;
+        return false;
+    }
+    
+    public function setTableName($name='')
+    {
+        $this->name = $name;
+        return true;
+    }
+
+    public function setTableColumns($columns=array())
+    {
+        $this->columns = $columns;
+        return true;
+    }
+
+    /**
+     * @return void
+     * @throws PDOException
+     */
+    protected function initColumns()
+    {
+        $sql = 'SELECT * FROM ' . $this->getName() . ' LIMIT 0,1';
+        try {
+            $pdostatement = $this->pdo->query($sql);
+        } catch (PDOException $e) {
+            throw new PDOException(xarML('Could not initialize table columns with: #(1)', $sql));
+        }
+        $columnarray = array();
+        for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
+            $columndata = $pdostatement->getColumnMeta($i);
+            $column = new PDOColumn($this->pdo);
+            $column->setData($columndata);
+            $columnarray[$column->getName()] = $column;
+        }
+        $this->columns = $columnarray;
+        $this->columnsLoaded = true;
         return true;
     }
 }
@@ -653,42 +727,74 @@ class PDOTable extends xarObject
  */
 class PDOColumn extends xarObject
 {
-    private $column;
+    private $pdo;
+    private $columndata = array();
 
-    public function __construct($column)
+    public function __construct($pdo)
     {
-        $this->column = $column;
+        $this->pdo = $pdo;
         return true;
     }
 
-
+    public function setData($columndata=array())
+    {
+        $this->columndata = $columndata;
+        return true;
+    }
     public function getType()
     {
-        return $this->column['native_type'];
+        return $this->getNativeType();
+    }
+    public function getNativeType()
+    {
+        return $this->columndata['native_type'];
     }
     public function getPDOType()
     {
-        return $this->column['pdo_type'];
+        return $this->columndata['pdo_type'];
     }
     public function getName()
     {
-        return $this->column['name'];
+        return $this->columndata['name'];
     }
     public function getFlags()
     {
-        return $this->column['flags'];
+        return $this->columndata['flags'];
     }
     public function getTable()
     {
-        return $this->column['table'];
+        return $this->columndata['table'];
     }
     public function getLength()
     {
-        return $this->column['len'];
+        return $this->getSize();
+    }
+    public function getSize()
+    {
+        return $this->columndata['len'];
     }
     public function getPrecision()
     {
-        return $this->column['precision'];
+        return $this->columndata['precision'];
+    }
+    public function getDefaultValue()
+    {
+        if (!isset($this->columndata['default_value'])) {
+            try {
+                $sql = "SELECT DEFAULT(" . $this->getName() . ") FROM (SELECT 1) AS dummy LEFT JOIN " . $this->getTable() . " ON True LIMIT 0,1";
+                $pdostatement = $this->pdo->query($sql);
+            } catch (PDOException $e) {
+                // No default value. Return a descriptive string for now
+                return 'No value';
+                throw new PDOException(xarML('Could not get default value for column #(1) with #(2)', $this->getName(), $sql));
+            }
+            $value = null;
+            while ($row = $pdostatement->fetch()) {
+                $value = $row[0];
+            }
+            $this->columndata['default_value'] = $value;
+        }
+        return $this->columndata['default_value'];
     }
 }
 

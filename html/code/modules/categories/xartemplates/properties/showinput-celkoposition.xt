@@ -79,5 +79,6 @@
 				<div style="clear: both;">&#160;</div>
 			</div>
 		</div>
+        <xar:template file="dataproperty_additions" module="base"/>
 	</xar:if>
 </xar:template>

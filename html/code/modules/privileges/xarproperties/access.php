@@ -260,7 +260,7 @@ class AccessProperty extends DataProperty
     }
 	
 	/**
-	 * Check the group is multiselect or dropdown
+	 * Check access from the access property
 	 * 
 	 * @param  array data An array of input parameters
 	 * @param  int exclusive 
@@ -270,39 +270,99 @@ class AccessProperty extends DataProperty
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if (xarIsParent($allowed, xarUserGetVar('uname'))) return true;        
+            if (xarIsParent($allowed, xarUser::getVar('uname'))) return true;        
         }
         
         // We need to be in the correct realm
         if ($this->checkRealm($data)) {
             $disabled = false;
             try {
-                if (isset($data['group'])) $group = unserialize($data['group']);
-                else $group = $this->group;
+                if (isset($data['group'])) $groups = unserialize($data['group']);
+                else $groups = $this->group;
             } catch (Exception $e) {
-                $group = $data['group'];
+                $groups = $data['group'];
             }
-            if (is_array($group)){
+            if (is_array($groups)){
                 // This is a multiselect
                 $this->initialization_group_multiselect = true;
-                if (in_array(0,$group)) $disabled = true;
+                if (in_array(0,$groups)) $disabled = true;
             } else {
                 // This is a dropdown
                 $this->initialization_group_multiselect = false;
-                if ((int)$group == 0) $disabled = true;
-                $group = array($group);
+                if ((int)$groups == 0) $disabled = true;
+                $groups = array($groups);
             }
 
             if ($exclusive) {
                 // We check the level only if group access is disabled
                 if (!$disabled) {
-                    return $this->checkGroup($group);
+                    return $this->checkGroup($groups);
                 } else {
                     return $this->checkLevel($data);
                 }
             } else {
                 // Both group access and level must be satisfied
-                return $this->checkGroup($group) && $this->checkLevel($data);
+                return $this->checkGroup($groups) && $this->checkLevel($data);
+            }
+        } else {
+            return false;
+        }
+    }
+    
+	/**
+	 * Check access (from the access tag
+	 * 
+	 * @param  array data An array of input parameters
+	 * @param  int exclusive 
+	 * @return bool   Returns access(For group or level) if exclusive, otherwise returns false 
+	 */
+    public function checkAccessTag(Array $data=array(), $exclusive=1)
+    {
+        // Some groups always have access
+        foreach ($this->allallowed as $allowed) {
+            if (xarIsParent($allowed, xarUser::getVar('uname'))) return true;        
+        }
+
+        if (isset($data['exclusive'])) $exclusive = $data['exclusive'];
+        
+        // We need to be in the correct realm
+        if ($this->checkRealm($data)) {
+            $groups = array();
+            if (isset($data['group'])) {
+                if (!is_array($data['group'])) {
+                    $groupsarray = explode(',', $data['group']);
+                    $groupsdata = xarGetGroups();
+                    foreach ($groupsarray as $group) {
+                        $group = trim($group);
+                        foreach ($groupsdata as $groupdata) {
+                            if ($groupdata['name'] == $group) {
+                                $groups[] = $groupdata['id'];
+                                break;
+                            }
+                        }
+                    }
+                } else {
+                    $groups = $data['group'];
+                }
+            }
+
+            if ($exclusive) {
+                // We check the level only if group access is disabled, or there are no groups
+                // CHECKME: review this
+                $disabled = false;
+                if (!$disabled) {
+                    if (isset($data['group'])) {
+                        return $this->checkGroup($groups);
+                    } else {
+                        return $this->checkLevel($data);
+                    }
+                } else {
+                    return $this->checkLevel($data);
+                }
+            } else {
+                // Both group access and level must be satisfied
+                if (isset($data['group'])) return $this->checkGroup($groups) && $this->checkLevel($data);
+                return false;
             }
         } else {
             return false;
@@ -355,29 +415,25 @@ class AccessProperty extends DataProperty
 	 */	    
     public function checkGroup(Array $groups=array())
     {
+        if (count($groups) > 1) {
+            $this->initialization_group_multiselect = true;
+        }
+        $access = $this->checkGroupArray($groups);
+        return $access;
+    }
+	
+	/**
+	 * Check an array of groups IDs
+	 * 
+	 * @param  array groups An array of input parameters (integers)
+	 * @return bool   Returns true or false 
+	 */	    
+    private function checkGroupArray(Array $groups=array())
+    {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
         $access = false;
-        if (is_array($groups)) $this->initialization_group_multiselect = true;
-        if ($this->initialization_group_multiselect) {
-            foreach ($groups as $group) {
-                $group = (int)$group;
-                if ($group == $this->myself) {
-                    $access = true;
-                } elseif ($group == $anonID) {
-                    if (!xarUserIsLoggedIn()) $access = true;
-                } elseif ($group == -$anonID) {
-                    if (xarUserIsLoggedIn()) $access = true;
-                } elseif ($group) {
-                    $rolesgroup = xarRoles::getRole($group);
-                    $thisuser = xarCurrentRole();
-                    if (is_object($rolesgroup)) {
-                        if ($thisuser->isAncestor($rolesgroup)) $access = true;
-                    } 
-                }
-                if ($access) break;
-            }
-        } else {
-            $group = (int)$groups;
+        foreach ($groups as $group) {
+            $group = (int)$group;
             if ($group == $this->myself) {
                 $access = true;
             } elseif ($group == $anonID) {
@@ -391,10 +447,11 @@ class AccessProperty extends DataProperty
                     if ($thisuser->isAncestor($rolesgroup)) $access = true;
                 } 
             }
+            if ($access) break;
         }
         return $access;
     }
-	
+
 	/**
 	 * Used to show the hidden data
 	 * 
@@ -447,7 +504,6 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
  */
 class AccessPropertyInstall extends AccessProperty implements iDataPropertyInstall
 {
-
 	/**
 	 * Give access to install property
 	 * 
@@ -465,6 +521,5 @@ class AccessPropertyInstall extends AccessProperty implements iDataPropertyInsta
         }
         return true;
     }
-    
 }
 ?>

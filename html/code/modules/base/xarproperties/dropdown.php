@@ -91,78 +91,35 @@ class SelectProperty extends DataProperty
     }
 
 /**
- * Display a Dropdown for input
+ * Display a dropdown for input
  * 
  * @param  array data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */	
     public function showInput(Array $data = array())
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
-
-        // If we have options passed, take them. Otherwise generate them
-        if (!isset($data['options'])) {
-
-        // Parse a configuration if one was passed
-            if(isset($data['configuration'])) {
-                $this->parseConfiguration($data['configuration']);
-                unset($data['configuration']);
-            // Legacy support: if the validation field is an array, we'll assume that this is an array of id => name
-            } elseif (!empty($data['validation']) && is_array($data['validation']) && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
-                sys::import('xaraya.legacy.validations');
-                $this->options = dropdown($data['validation']);
-            }
-
-        // Allow overriding by specific parameters
-            if (isset($data['function']))   $this->initialization_function = $data['function'];
-            if (isset($data['file']))       $this->initialization_file = $data['file'];
-            if (isset($data['collection'])) $this->initialization_collection = $data['collection'];
-
-        // Finally generate the options
-            $data['options'] = $this->getOptions();
-        }
-        
-        // If a firstline was defined add it in
-        if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
-        $data['options'] = array_merge($this->getFirstline(), $data['options']);
-        
-        // Make sure the options have the correct form
-        if (!is_array($data['options']))
-            throw new Exception(xarML('Dropdown options do not have the correct form'));
-        if (!is_array(current($data['options']))) {
-            $normalizedoptions = array();
-            foreach ($data['options'] as $key => $value)
-                $normalizedoptions[] = array('id' => $key, 'name' => $value);
-            $data['options'] = $normalizedoptions;
-        }
-
-        // check if we need to add the current value to the options
-        if (!empty($data['value']) && $this->validation_override) {
-            $found = false;
-            foreach ($data['options'] as $option) {
-                if ($option['id'] == $data['value']) {
-                    $found = true;
-                    break;
-                }
-            }
-            if (!$found) {
-                $data['options'][] = array('id' => $data['value'], 'name' => $data['value']);
-            }
-        }
-        // optionally add hidden previous_value field 
-        if (!isset($data['previousvalue'])) $data['previousvalue'] = false;
-        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
-        $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
-        if(isset($data['rows'])) $this->display_rows = $data['rows']; 
+        $data = $this->getTemplateData($data);
         return parent::showInput($data);
     }
     
-    /**
-     * Display a dropdown for output
-     * 
-     * @param  array data An array of input parameters
-     * @return string     HTML markup to display the property for output on a web page
-     */	
+/**
+ * Display a hidden dropdown
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for hidden input on a web page
+ */	
+    public function showHidden(Array $data = array())
+    {
+        $data = $this->getTemplateData($data);
+        return parent::showHidden($data);
+    }
+    
+/**
+ * Display a dropdown for output
+ * 
+ * @param  array data An array of input parameters
+ * @return string     HTML markup to display the property for output on a web page
+ */	
     public function showOutput(Array $data = array())
     {
         if (isset($data['option_link'])) $this->display_option_link = $data['option_link'];
@@ -183,30 +140,30 @@ class SelectProperty extends DataProperty
         return parent::showOutput($data);
     }
 
-    /**
-     * (re)define the list of options
-     * 
-     * @param options array of options
-     * 
-     * This array should have the form:
-     * array (
-     *     array('id' => [some_id], 'name' => [some_name]),
-     *     ....
-     * )
-     */
+/**
+ * (re)define the list of options
+ * 
+ * @param options array of options
+ * 
+ * This array should have the form:
+ * array (
+ *     array('id' => [some_id], 'name' => [some_name]),
+ *     ....
+ * )
+ */
     public function setOptions($options=array())
     {
         $this->options = $options;
     }
 
-    /**
-     * Retrieve the list of options on demand
-     * 
-     * N.B. the code below is repetitive, but lets leave it clearly separated for 
-     * each type of input for the moment
-     * 
-     * @param void N/A
-     */
+/**
+ * Retrieve the list of options on demand
+ * 
+ * N.B. the code below is repetitive, but lets leave it clearly separated for 
+ * each type of input for the moment
+ * 
+ * @param void N/A
+ */
     public function getOptions()
     {
         if (count($this->options) > 0) {
@@ -303,12 +260,12 @@ class SelectProperty extends DataProperty
         return $options;
     }
 
-    /**
-     * Gets the saved first line and returns it as a proper array
-     * 
-     * @param void N/A
-     * @return array Array containing first line
-     */
+/**
+ * Gets the saved first line and returns it as a proper array
+ * 
+ * @param void N/A
+ * @return array Array containing first line
+ */
     public function getFirstline()
     {
         $firstline = $this->initialization_firstline;
@@ -335,17 +292,17 @@ class SelectProperty extends DataProperty
         return array($line);        
     }
 
-    /**
-     * Retrieve or check an individual option on demand
-     *
-     * @param  $check boolean
-     * @return if check == false:<br/>
-     *                - display value, if found, of an option whose store value is $this->value<br/>
-     *                - $this->value, if not found<br/>
-     *         if check == true:<br/>
-     *                - true, if an option exists whose store value is $this->value<br/>
-     *                - false, if no such option exists<br/>
-     */
+/**
+ * Retrieve or check an individual option on demand
+ *
+ * @param  $check boolean
+ * @return if check == false:<br/>
+ *                - display value, if found, of an option whose store value is $this->value<br/>
+ *                - $this->value, if not found<br/>
+ *         if check == true:<br/>
+ *                - true, if an option exists whose store value is $this->value<br/>
+ *                - false, if no such option exists<br/>
+ */
     public function getOption($check = false)
     {
         if (!$this->transform) return $this->value;
@@ -397,10 +354,10 @@ class SelectProperty extends DataProperty
         */
     }
 
-    /**
-     * Alias for the getOption method
-     * This make the property consistent with standard usage
-     */
+/**
+ * Alias for the getOption method
+ * This make the property consistent with standard usage
+ */
     public function getValue()
     {
         return $this->getOption(false);
@@ -409,16 +366,16 @@ class SelectProperty extends DataProperty
 // CHECKME: should we move this to properties/base.php, in case other "basic" property types want this ?
 // CHECKME: should we move remove this? It's not being used
 
-    /**
-     * Check if the configuration is the same as last time, e.g. to return saved options in getOptions()
-     * when we're dealing with an object list.
-     *
-     * Note: we typically only care about initialization here, since validation and display
-     * configurations don't (or shouldn't) impact the result of the getOptions() function...
-     *
-     * @param $type string the type of configuration you want to check (typically only initialization)
-     * @return boolean true if the configuration is the same as last time we checked, false otherwise
-     */
+/**
+ * Check if the configuration is the same as last time, e.g. to return saved options in getOptions()
+ * when we're dealing with an object list.
+ *
+ * Note: we typically only care about initialization here, since validation and display
+ * configurations don't (or shouldn't) impact the result of the getOptions() function...
+ *
+ * @param $type string the type of configuration you want to check (typically only initialization)
+ * @return boolean true if the configuration is the same as last time we checked, false otherwise
+ */
     public function isSameConfiguration($type = 'initialization')
     {
         if (empty($this->old_config)) {
@@ -445,6 +402,74 @@ class SelectProperty extends DataProperty
             }
         }
         return $same;
+    }
+    
+/**
+ * Helper function to get the data for a dropdwon display
+ * 
+ * @param  array data An array of input parameters
+ * @return array data An array of output parameters to be sent to the template
+ */	
+    private function getTemplateData(Array $data = array())
+    {
+        if (!isset($data['value'])) $data['value'] = $this->value;
+
+        // If we have options passed, take them. Otherwise generate them
+        if (!isset($data['options'])) {
+
+        // Parse a configuration if one was passed
+            if(isset($data['configuration'])) {
+                $this->parseConfiguration($data['configuration']);
+                unset($data['configuration']);
+            // Legacy support: if the validation field is an array, we'll assume that this is an array of id => name
+            } elseif (!empty($data['validation']) && is_array($data['validation']) && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+                sys::import('xaraya.legacy.validations');
+                $this->options = dropdown($data['validation']);
+            }
+
+        // Allow overriding by specific parameters
+            if (isset($data['function']))   $this->initialization_function = $data['function'];
+            if (isset($data['file']))       $this->initialization_file = $data['file'];
+            if (isset($data['collection'])) $this->initialization_collection = $data['collection'];
+
+        // Finally generate the options
+            $data['options'] = $this->getOptions();
+        }
+        
+        // If a firstline was defined add it in
+        if (isset($data['firstline']))  $this->initialization_firstline = $data['firstline'];
+        $data['options'] = array_merge($this->getFirstline(), $data['options']);
+        
+        // Make sure the options have the correct form
+        if (!is_array($data['options']))
+            throw new Exception(xarML('Dropdown options do not have the correct form'));
+        if (!is_array(current($data['options']))) {
+            $normalizedoptions = array();
+            foreach ($data['options'] as $key => $value)
+                $normalizedoptions[] = array('id' => $key, 'name' => $value);
+            $data['options'] = $normalizedoptions;
+        }
+
+        // check if we need to add the current value to the options
+        if (!empty($data['value']) && $this->validation_override) {
+            $found = false;
+            foreach ($data['options'] as $option) {
+                if ($option['id'] == $data['value']) {
+                    $found = true;
+                    break;
+                }
+            }
+            if (!$found) {
+                $data['options'][] = array('id' => $data['value'], 'name' => $data['value']);
+            }
+        }
+        // optionally add hidden previous_value field 
+        if (!isset($data['previousvalue'])) $data['previousvalue'] = false;
+        if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
+        $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
+        if(isset($data['rows'])) $this->display_rows = $data['rows'];
+        
+        return $data;
     }
 }
 

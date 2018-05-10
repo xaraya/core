@@ -233,15 +233,18 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         $databaseType = xarDB::getType();
     }
     // set Dbtype to pdosqlite
+/*
     $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
     if ($middleware == 'PDO') {
         $databaseType = 'pdosqlite';
     }
-
+*/
     switch($databaseType) {
         case 'postgres':
         case 'mysql':
         case 'mysqli':
+            $sql = 'DROP TABLE IF EXISTS '.$tableName;
+            break;
         case 'oci8':
         case 'oci8po':
         case 'sqlite':

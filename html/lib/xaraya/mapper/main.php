@@ -54,8 +54,7 @@ class xarController extends xarObject
     }
 
     /**
-     * Get request variable
-     *
+     * Get a request variable
      * 
      * @param name string
      * @param allowOnlyMethod string
@@ -188,7 +187,6 @@ class xarController extends xarObject
 
     /**
      * Carry out a redirect
-     *
      * 
      * @param redirectURL string the URL to redirect to
      */
@@ -253,8 +251,7 @@ class xarController extends xarObject
     }
 
     /**
-     * Generates an URL that references a module function.
-     *
+     * Generates a URL that references a module function.
      * 
      * @param modName string registered name of module
      * @param modType string type of function
@@ -357,7 +354,6 @@ class xarController extends xarObject
         }
         return $params;
     }
-
 }
 
 ?>

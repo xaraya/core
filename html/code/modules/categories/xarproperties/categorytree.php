@@ -69,7 +69,6 @@ class CategoryTreeProperty extends DataProperty
 
         return parent::showInput($data);
     }
-
 }
 
 ?>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>
+            Build Tree
+        </h2>
+        <xar:template file="alert_info"/>
+        <xar:template file="alert_error"/>
+        <xar:template file="alert_success"/>
+        <xar:template file="alert_warning"/>
+        <form action="#xarModURL('categories','admin','build_tree')#" method="post" enctype="application/x-www-form-urlencoded">
+            <fieldset class="xar-norm">
+                <legend>
+                    <strong>
+                    Tree</strong>
+                </legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Table
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input name="table" type="textbox" value="$table"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Parent ID field
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input name="parent_id" type="textbox" value="$parent_id"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Left ID field
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input name="left_id" type="textbox" value="$left_id"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Right ID field
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input name="right_id" type="textbox" value="$right_id"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Name field
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input name="name" type="textbox" value="$name"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        Root Name
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input name="root_name" type="textbox" value="$root_name"/>
+                    </div>
+                </div>
+            </fieldset>
+            <div class="xar-row">
+                <div class="xar-col">
+                </div>
+                <div class="xar-col">
+                    <xar:var name="label">Cancel</xar:var>
+                    <xar:button type="cancel" label="$label"/>
+                    <xar:var name="label">Check</xar:var>
+                    <xar:button type="submit" name="check" label="$label"/>
+                    <xar:var name="label">Build</xar:var>
+                    <xar:button type="submit" name="build" label="$label"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</xar:template>

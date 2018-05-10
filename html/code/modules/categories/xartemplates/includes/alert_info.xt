@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:if condition="!empty($message_info)">
+        <div class="alert alert-info" role="alert">
+            <xar:if condition="is_array($message_info)">
+                <xar:foreach in="$message_info" value="$message">
+                    <xar:if condition="empty($message)">
+                        <xar:continue/>
+                    </xar:if>
+                    #$message#
+                    <br/>
+                </xar:foreach>
+            <xar:else/>
+                #$message_info#
+            </xar:if>
+        </div>
+    </xar:if>
+</xar:template>

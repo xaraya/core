@@ -213,7 +213,34 @@ class CategoryWorker extends xarObject
         // Get the gap in indices that will be created by deleting
         $difference = $this_category[$this->right] - $this_category[$this->left] +1;
 
-        // Get all the categories to the right of the one(s) to be deleted
+        // Delete this category enty and its descendents as entries of the table
+        $q = new Query('DELETE', $this->table);
+        $q->ge($this->left, (int)$this_category[$this->left]);
+        $q->le($this->right, (int)$this_category[$this->right]);
+        $q->run();
+
+        // Get all the categories that contain the one(s) deleted
+        // Their rights IDs are bigger, but their left IDs are smaller
+        $q = new Query('SELECT', $this->table);
+        $q->addfield('id');
+        $q->addfield($this->right);
+        $q->gt($this->right, (int)$this_category[$this->right]);
+        $q->lt($this->left, (int)$this_category[$this->left]);
+        $q->run();
+        
+        // Adjust their right indices
+        $q1 = new Query('UPDATE', $this->table);
+        
+        foreach ($q->output() as $category) {
+            $q1->addfield($this->right, (int)$category[$this->right] - $difference);
+            $q1->eq('id', $category['id']);
+            $q1->run();
+            
+            $q1->clearconditions();
+            $q1->clearfields();
+        }
+
+        // Get all the categories to the right of the one(s) deleted
         $q = new Query('SELECT', $this->table);
         $q->addfield('id');
         $q->addfield($this->left);
@@ -233,26 +260,7 @@ class CategoryWorker extends xarObject
             $q1->clearconditions();
             $q1->clearfields();
         }
-        
-        // Now get the right index of the root category
-        $q = new Query('SELECT', $this->table);
-        $q->addfield($this->right);
-        $q->eq($this->left, 1);
-        $q->run();
-        $result = $q->row();
-
-        // Update it
-        $q = new Query('UPDATE', $this->table);
-        $q->eq($this->left, 1);
-        $q->addfield($this->right, (int)$result[$this->right] - $difference);
-        $q->run();
-        
-        // Finally, delete this category enty and its descendents as entries of the table
-        $q = new Query('DELETE', $this->table);
-        $q->ge($this->left, (int)$this_category[$this->left]);
-        $q->le($this->right, (int)$this_category[$this->right]);
-        $q->run();
-        
+                
         // All done
         return true;
     }

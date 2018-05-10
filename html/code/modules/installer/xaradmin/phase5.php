@@ -56,6 +56,36 @@ function installer_admin_phase5()
     if (!preg_match('/^\w*$/',$dbPrefix)) {
         return xarTpl::module('installer','admin','errors',array('layout' => 'bad_character'));
     }
+    
+    // Check versions
+    $version_ok = false;
+    
+    // Cater to SQLite before trying to connect
+    if (in_array($dbType, array('sqlite', 'sqlite3'))) {
+        switch ($dbType) {
+            case 'sqlite':
+                $version_ok = version_compare(PHP_VERSION,'5.4.0','lt');
+            break;
+            case 'sqlite3':
+                $version_ok = version_compare(PHP_VERSION,'5.4.0','ge');
+            break;
+        }
+        if ($version_ok) {
+            // Create the database in the directory we want, otherwise it will be created below
+            @mkdir(sys::varpath() . '/sqlite', 0755);
+            try {
+                $dbpath = sys::varpath() . '/sqlite/';
+                $db = new SQLite3($dbpath . $dbName); 
+            } catch(Exception $e){
+                 echo $e->getMessage(); 
+                 exit;
+            }
+        } else {
+            $data['layout'] = 'bad_version';
+            return xarTpl::module('installer','admin','check_database',$data);
+        }
+    }   
+
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
                          'dbName'    => $dbName,
@@ -97,6 +127,8 @@ function installer_admin_phase5()
       }
     }
 
+    // Check versions
+    // Check other database types
     switch ($dbType) {
         case 'mysql':
             $tokens = explode('.',mysql_get_server_info());
@@ -112,7 +144,7 @@ function installer_admin_phase5()
             $version_ok = version_compare($data['version'],$data['required_version'],'ge');
         break;
     }
-
+    
     if (!$version_ok) {
         $data['layout'] = 'bad_version';
         return xarTpl::module('installer','admin','check_database',$data);
@@ -187,13 +219,7 @@ function installer_admin_phase5()
             $dbconn->begin();
             if (!empty($dbinfo->getTables())) {
                 foreach ($dbinfo->getTables() as $tbl) {
-                    // check middleware
-                    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
-                    if ($middleware == 'Creole') {
-                        $table = $tbl->getName();
-                    } else if ($middleware == 'PDO') {
-                        $table = $tbl;
-                    }
+                    $table = $tbl->getName();
                     if (strpos($table, '_') && (substr($table, 0, strpos($table, '_')) == $dbPrefix)) {
                         // we have the same prefix.
                         try {

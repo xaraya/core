@@ -40,13 +40,6 @@ function base_init()
     $systemArgs = array();
     xarVar_init($systemArgs);
 
-    $allowableHTML = array (
-                            '!--'=>2, 'a'=>2, 'b'=>2, 'blockquote'=>2,'br'=>2, 'center'=>2,
-                            'div'=>2, 'em'=>2, 'font'=>0, 'hr'=>2, 'i'=>2, 'img'=>0, 'li'=>2,
-                            'marquee'=>0, 'ol'=>2, 'p'=>2, 'pre'=> 2, 'span'=>0,'strong'=>2,
-                            'tt'=>2, 'ul'=>2, 'table'=>2, 'td'=>2, 'th'=>2, 'tr'=> 2);
-
-    xarConfigVars::set(null, 'Site.Core.AllowableHTML',$allowableHTML);
     /****************************************************************
      * Set System Configuration Variables
      *****************************************************************/
@@ -58,6 +51,13 @@ function base_init()
     /*****************************************************************
      * Set site configuration variables
      ******************************************************************/
+    $allowableHTML = array (
+                            '!--'=>2, 'a'=>2, 'b'=>2, 'blockquote'=>2,'br'=>2, 'center'=>2,
+                            'div'=>2, 'em'=>2, 'font'=>0, 'hr'=>2, 'i'=>2, 'img'=>0, 'li'=>2,
+                            'marquee'=>0, 'ol'=>2, 'p'=>2, 'pre'=> 2, 'span'=>0,'strong'=>2,
+                            'tt'=>2, 'ul'=>2, 'table'=>2, 'td'=>2, 'th'=>2, 'tr'=> 2);
+
+    xarConfigVars::set(null, 'Site.Core.AllowableHTML',$allowableHTML);
     xarConfigVars::set(null, 'Site.BL.CacheTemplates',true);
     xarConfigVars::set(null, 'Site.BL.MemCacheTemplates',false);
     xarConfigVars::set(null, 'Site.BL.ThemesDirectory','themes');
