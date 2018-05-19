@@ -548,11 +548,6 @@ class CelkoPositionProperty extends DataProperty
         $q->eq('id',$id);
         if (!$q->run()) return;
         $result = $q->row();
-        if (empty($result)) return $result;
-        $result['name'] = $result[$this->initialization_celkoname];
-        $result['parent_id'] = $result[$this->initialization_celkoparent_id];
-        $result['left_id'] = $result[$this->initialization_celkoleft_id];
-        $result['right_id'] = $result[$this->initialization_celkoright_id];
         return $result;
     }
     
@@ -856,6 +851,7 @@ class CelkoPositionProperty extends DataProperty
     public function exportValue($itemid, $item)
     {
         $thisItem = $this->getItem($itemid);
+        if (empty($thisItem)) return serialize(array($itemid,0,0,0));
         $exportvalue = serialize(array((int)$itemid, (int)$thisItem[$this->initialization_celkoparent_id], (int)$thisItem[$this->initialization_celkoleft_id], (int)$thisItem[$this->initialization_celkoright_id]));
         return $exportvalue;
     }
