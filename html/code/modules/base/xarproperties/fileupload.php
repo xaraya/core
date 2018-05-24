@@ -216,7 +216,7 @@ class FileUploadProperty extends DataProperty
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
             if (!empty($_FILES[$name]['name'])) {
                 if (!$this->validateExtension($file['name'])) {
-                    $this->invalid = xarML('The file type is not allowed');
+                    $this->invalid = xarML('The file type is not allowed: #(1)', $file['name']);
                     $this->value = null;
                     return false;
                 }
@@ -266,7 +266,7 @@ class FileUploadProperty extends DataProperty
                     }
                 } elseif ($this->validation_allow_duplicates == 0 && file_exists($filepath)) {
                     // duplicate files are not allowed
-                    $this->invalid = xarML('This file already exists');
+                    $this->invalid = xarML('This file already exists: #(1)',$filepath);
                     $this->value = null;
                     return false;
                 }
@@ -308,7 +308,7 @@ class FileUploadProperty extends DataProperty
                 $this->value = null;
                 return false;
             } elseif (!file_exists($this->initialization_basedirectory . '/'. $value) || !is_file($this->initialization_basedirectory . '/'. $value)) {
-                $this->invalid = xarML('The file cannot be found');
+                $this->invalid = xarML('The file cannot be found: #(1)', $this->initialization_basedirectory . '/'. $value);
                 $this->value = null;
                 return false;
             }
