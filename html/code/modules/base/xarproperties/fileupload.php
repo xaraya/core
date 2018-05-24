@@ -266,7 +266,7 @@ class FileUploadProperty extends DataProperty
                     }
                 } elseif ($this->validation_allow_duplicates == 0 && file_exists($filepath)) {
                     // duplicate files are not allowed
-                    $this->invalid = xarML('This file already exists: #(1)',$filepath);
+                    $this->invalid = xarML('This file already exists: #(1)', $filepath);
                     $this->value = null;
                     return false;
                 }
@@ -275,7 +275,7 @@ class FileUploadProperty extends DataProperty
             try {
                 move_uploaded_file($file['tmp_name'], $filepath);
             } catch(Exception $e) {
-                $this->invalid = xarML('The file upload failed');
+                $this->invalid = xarML('The file upload failed to #(1)', $filepath);
                 $this->value = null;
                 return false;
             }
