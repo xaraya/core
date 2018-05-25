@@ -211,6 +211,9 @@ class FileUploadProperty extends DataProperty
             $file =& $_FILES[$name];
         } else {
             $file = array();
+            $this->invalid = xarML('Empty file: #(1)', $name);
+            $this->value = null;
+            return false;
         }
 
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
