@@ -58,7 +58,7 @@
       <number size="1" default="null"  />
     </column>
     <column id="cache_data.data" name="data" >
-      <binary default="null"/>
+      <binarylong default="null"/>
     </column>
     <constraints>
       <primary name="id">
