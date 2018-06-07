@@ -30,12 +30,20 @@ function themes_admin_cacheview($args)
     if (!xarSecurityCheck('AdminThemes')) {
         return;
     }
+    xarModVars::set('themes', 'templcachepath', sys::varpath()."/cache/templates");
 
     $cachedir  = xarModVars::get('themes','templcachepath');
+    if (!file_exists($cachedir)) {
+        $cachedir = sys::varpath() . "/cache/templates";
+    }
     $cachefile = xarModVars::get('themes','templcachepath').'/CACHEKEYS';
-    $scriptcache=xarModVars::get('themes','templcachepath').'/d4609360b2e77516aabf27c1f468ee33.php';
-    $data=array();
-          $data['popup']=false;
+    if (!file_exists($cachefile)) {
+        $cachefile = sys::varpath() . "/cache/templates/CACHEKEYS";
+    }
+
+    // CHECKME: what is this?
+    $data['popup'] = false;
+    
     /* Check for confirmation. */
     $data['authid'] = xarSecGenAuthKey();
     if (empty($action)) {
@@ -70,9 +78,6 @@ function themes_admin_cacheview($args)
                                    'fullnurl'=>$fullnurl);
             }
         }
-        /*      var=$scriptcache;
-               if ($var == true) unlink $scriptcache;
-        */
         asort($cachenames);
         $data['items']=$cachenames;
 
