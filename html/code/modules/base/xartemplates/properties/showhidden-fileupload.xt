@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <input type="hidden" name="#$name#" id="#$id#_hidden" value="#$value#"/>
+    <input type="hidden" name="MAX_FILE_SIZE" value="#$maxsize#"/>
+    <input type="file" name="#$name#" size="#$size#" id="#$id#"/>
+</xar:template>

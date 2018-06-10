@@ -424,7 +424,28 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    /**
+	/**
+	 * Display a hidcen file upload
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
+    public function showHidden(Array $data = array())
+    {
+        $data['name'] = empty($data['name']) ? $this->propertyprefix . $this->id : $data['name'];
+        
+        // Allow overriding by specific parameters
+            if (!isset($data['size']))   $data['size'] = $this->display_size;
+            if (!isset($data['maxsize']))   $data['maxsize'] = $this->validation_max_file_size;
+
+        // inform anyone that we're showing a file upload field, and that they need to use
+        // <form ... enctype="multipart/form-data" ... > in their input form
+        xarVarSetCached('Hooks.dynamicdata','withupload',1);
+
+        return parent::showHidden($data);
+    }
+    
+        /**
      * Set the list/regex of allowed file extensions, depending on the syntax used (cfr. image, webpage, ...)
      * 
      * @param string|string[] $file_extensions String or array of file extensions.
