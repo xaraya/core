@@ -394,6 +394,7 @@ class FileUploadProperty extends DataProperty
         extract($data);
 
         if (!isset($value)) $value = $this->value;
+        if (!isset($data['basedirectory'])) $data['basedirectory'] = $this->initialization_basedirectory;
 
         if ($this->UploadsModule_isHooked) {
             // @todo get rid of this one too
@@ -412,6 +413,7 @@ class FileUploadProperty extends DataProperty
                     return '';
                 }
                 // if the uploads module is hooked (to be verified and set by the calling module)
+                $value = $data['basedirectory'] . "/" . $value;
                 if (file_exists($value) && is_file($value)) {
                     $data['file_OK'] = true;
                 } else {
