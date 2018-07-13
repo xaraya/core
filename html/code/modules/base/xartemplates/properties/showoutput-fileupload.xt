@@ -6,11 +6,12 @@
             <xar:set name="target">'_self'</xar:set>
         </xar:if>
         <!-- TODO: convert basedir to base URL when necessary ? -->
+        <xar:set name="filepath">$basedirectory . "/" . xarVarPrepForDisplay($value)</xar:set>        
         <xar:if condition="!empty($label)">
-            <a href="#$value#" title="#$label#" target="#$target#">#$label#</a>
+            <a href="#$filepath#" title="#$label#" target="#$target#">#$label#</a>
         <xar:else/>
             <xar:var name="label">Download</xar:var>
-            <a href="#$value#" title="#$label#" target="#$target#">#$value#</a>
+            <a href="#$filepath#" title="#$label#" target="#$target#">#$value#</a>
         </xar:if>
     <xar:else/> 
         <!-- something went wrong here - the file doesn't exist -->

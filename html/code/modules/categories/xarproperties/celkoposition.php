@@ -31,6 +31,7 @@ sys::import('modules.dynamicdata.class.properties.base');
  *
  * - This property is used in creating hierarchical data using the nested set model
  * - This property always has a reference to the parent object
+ * - The top of the hierarchy is an entry with ID = 1, usually called "root"
  * - The default value for the celko table is xar_categories. Properties using other tables need to explicitly state the table.
  * - When exporting, we store itemid, parent_id, left_id, right_id in the value field of the property
  * - As a consequence, a non-empty $this-value when running the createValue method means we are in the process of importing from an XML file.
@@ -130,6 +131,10 @@ class CelkoPositionProperty extends DataProperty
                 $this->inorout = 'in';
                 break;
         }
+
+        // Avoid trying to go outside of the root entry
+        if ($reference_id == 1) $this->inorout = 'in';
+        
         $this->reference_id = $reference_id;
         return $this->validateValue($value);
     }
@@ -548,11 +553,6 @@ class CelkoPositionProperty extends DataProperty
         $q->eq('id',$id);
         if (!$q->run()) return;
         $result = $q->row();
-        if (empty($result)) return $result;
-        $result['name'] = $result[$this->initialization_celkoname];
-        $result['parent_id'] = $result[$this->initialization_celkoparent_id];
-        $result['left_id'] = $result[$this->initialization_celkoleft_id];
-        $result['right_id'] = $result[$this->initialization_celkoright_id];
         return $result;
     }
     
@@ -856,6 +856,7 @@ class CelkoPositionProperty extends DataProperty
     public function exportValue($itemid, $item)
     {
         $thisItem = $this->getItem($itemid);
+        if (empty($thisItem)) return serialize(array($itemid,0,0,0));
         $exportvalue = serialize(array((int)$itemid, (int)$thisItem[$this->initialization_celkoparent_id], (int)$thisItem[$this->initialization_celkoleft_id], (int)$thisItem[$this->initialization_celkoright_id]));
         return $exportvalue;
     }

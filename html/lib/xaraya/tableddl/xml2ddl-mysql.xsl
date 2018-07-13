@@ -127,6 +127,9 @@
       <xsl:when test="binary">
         <xsl:text>BLOB</xsl:text>
       </xsl:when>
+      <xsl:when test="binarylong">
+        <xsl:text>LONGBLOB</xsl:text>
+      </xsl:when>
       <xsl:when test="boolean">
         <xsl:text>BOOLEAN</xsl:text>
       </xsl:when>

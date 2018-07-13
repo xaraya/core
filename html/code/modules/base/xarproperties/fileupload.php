@@ -211,12 +211,15 @@ class FileUploadProperty extends DataProperty
             $file =& $_FILES[$name];
         } else {
             $file = array();
+            $this->invalid = xarML('Empty file: #(1)', $name);
+            $this->value = null;
+            return false;
         }
 
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
             if (!empty($_FILES[$name]['name'])) {
                 if (!$this->validateExtension($file['name'])) {
-                    $this->invalid = xarML('The file type is not allowed');
+                    $this->invalid = xarML('The file type is not allowed: #(1)', $file['name']);
                     $this->value = null;
                     return false;
                 }
@@ -266,7 +269,7 @@ class FileUploadProperty extends DataProperty
                     }
                 } elseif ($this->validation_allow_duplicates == 0 && file_exists($filepath)) {
                     // duplicate files are not allowed
-                    $this->invalid = xarML('This file already exists');
+                    $this->invalid = xarML('This file already exists: #(1)', $filepath);
                     $this->value = null;
                     return false;
                 }
@@ -275,7 +278,7 @@ class FileUploadProperty extends DataProperty
             try {
                 move_uploaded_file($file['tmp_name'], $filepath);
             } catch(Exception $e) {
-                $this->invalid = xarML('The file upload failed');
+                $this->invalid = xarML('The file upload failed to #(1). <br/>The message was #(2)', $filepath, $e->getMessage());
                 $this->value = null;
                 return false;
             }
@@ -308,7 +311,7 @@ class FileUploadProperty extends DataProperty
                 $this->value = null;
                 return false;
             } elseif (!file_exists($this->initialization_basedirectory . '/'. $value) || !is_file($this->initialization_basedirectory . '/'. $value)) {
-                $this->invalid = xarML('The file cannot be found');
+                $this->invalid = xarML('The file cannot be found: #(1)', $this->initialization_basedirectory . '/'. $value);
                 $this->value = null;
                 return false;
             }
@@ -391,6 +394,7 @@ class FileUploadProperty extends DataProperty
         extract($data);
 
         if (!isset($value)) $value = $this->value;
+        if (!isset($data['basedirectory'])) $data['basedirectory'] = $this->initialization_basedirectory;
 
         if ($this->UploadsModule_isHooked) {
             // @todo get rid of this one too
@@ -409,6 +413,7 @@ class FileUploadProperty extends DataProperty
                     return '';
                 }
                 // if the uploads module is hooked (to be verified and set by the calling module)
+                $value = $data['basedirectory'] . "/" . $value;
                 if (file_exists($value) && is_file($value)) {
                     $data['file_OK'] = true;
                 } else {
@@ -421,7 +426,28 @@ class FileUploadProperty extends DataProperty
         }
     }
 
-    /**
+	/**
+	 * Display a hidcen file upload
+	 * 
+	 * @param  array data An array of input parameters
+	 * @return string     HTML markup to display the property for input on a web page
+	 */
+    public function showHidden(Array $data = array())
+    {
+        $data['name'] = empty($data['name']) ? $this->propertyprefix . $this->id : $data['name'];
+        
+        // Allow overriding by specific parameters
+            if (!isset($data['size']))   $data['size'] = $this->display_size;
+            if (!isset($data['maxsize']))   $data['maxsize'] = $this->validation_max_file_size;
+
+        // inform anyone that we're showing a file upload field, and that they need to use
+        // <form ... enctype="multipart/form-data" ... > in their input form
+        xarVarSetCached('Hooks.dynamicdata','withupload',1);
+
+        return parent::showHidden($data);
+    }
+    
+        /**
      * Set the list/regex of allowed file extensions, depending on the syntax used (cfr. image, webpage, ...)
      * 
      * @param string|string[] $file_extensions String or array of file extensions.
