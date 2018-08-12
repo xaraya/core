@@ -211,7 +211,7 @@ class FileUploadProperty extends DataProperty
             $file =& $_FILES[$name];
         } else {
             $file = array();
-            if ($this->validation_allow_empty) {
+            if (!$this->validation_allowempty) {
                 // We must have a file
                 $this->invalid = xarML('Empty file: #(1)', $name);
                 $this->value = null;
