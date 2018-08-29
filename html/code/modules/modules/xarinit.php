@@ -121,7 +121,7 @@ function modules_upgrade($oldversion)
             $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
             $fieldargs = array('command' => 'add', 'field' => 't_file', 'type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset);
             $query = xarDBAlterTable($hookstable,$fieldargs);
-            $result =& $dbconn->Execute($query);
+            $result = $dbconn->Execute($query);
             if (!$result) return;
         case '2.0.1':
             $dbconn = xarDB::getConn();

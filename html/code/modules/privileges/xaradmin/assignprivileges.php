@@ -68,7 +68,7 @@
                     $xartable =& xarDB::getTables();
                     $query = "SELECT role_id FROM " . $xartable['security_acl'] . " WHERE role_id = ? AND privilege_id = ?";
                     $bindvars = array((int)$role_id,(int)$privilege_id);
-                    $result =& $dbconn->Execute($query,$bindvars);
+                    $result = $dbconn->Execute($query,$bindvars);
                     if (!$result) return;
 
                     $found = false;

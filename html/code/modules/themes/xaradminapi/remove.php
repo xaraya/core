@@ -45,7 +45,7 @@ function themes_adminapi_remove(Array $args=array())
     // has it set to their default theme
     $mvid = xarModVars::getId('themes','default_theme');
     $sql = "SELECT COUNT(*) FROM $tables[module_itemvars] WHERE module_var_id =? AND value = ?";
-    $result =& $dbconn->Execute($sql, array($mvid,$defaultTheme));
+    $result = $dbconn->Execute($sql, array($mvid,$defaultTheme));
 
     // count should be zero
     $count = $result->fields[0];

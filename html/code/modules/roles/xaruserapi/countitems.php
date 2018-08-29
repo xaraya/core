@@ -26,7 +26,7 @@ function roles_userapi_countitems()
     // Get user
     $query = "SELECT COUNT(1)
             FROM $rolestable";
-    $result =& $dbconn->Execute($query);
+    $result = $dbconn->Execute($query);
 
     // Obtain the number of users
     list($numroles) = $result->fields;
