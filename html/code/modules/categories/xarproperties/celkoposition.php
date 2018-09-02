@@ -459,6 +459,11 @@ class CelkoPositionProperty extends DataProperty
             $data['reference_id'] = (int)$items[$topkey]['id'];
         }
         
+        // Add position names for use in the template
+        $data['left_id'] = $this->initialization_celkoleft_id;
+        $data['right_id'] = $this->initialization_celkoright_id;
+        $data['parent_id'] = $this->initialization_celkoparent_id;
+        
         return parent::showInput($data);
 
     }
