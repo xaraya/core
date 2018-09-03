@@ -500,7 +500,14 @@ class xarPDOStatement extends xarObject
         }
 
         xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        $success = $this->pdostmt->execute();
+        try {
+            $success = $this->pdostmt->execute();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            echo "<br/>";
+            echo "Query: " . $this->pdo->queryString;
+            exit;
+        }      
 
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
