@@ -452,6 +452,7 @@ class xarPDOStatement extends xarObject
             echo $e->getMessage();
             echo "<br/>";
             echo "Query: " . $this->pdo->queryString;
+            exit;
         }      
         
         // If this is a SELECT, create a result set for the results
