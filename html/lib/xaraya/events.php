@@ -427,13 +427,27 @@ class xarEvents extends xarObject implements ixarEvents
     
     private static function unregister($event, $module, $itemtype)
     {
-        // validate input        
+        // Validate the input        
         $invalid = array();
         if (empty($event) || !is_string($event) || strlen($event) > 255)
             $invalid[] = 'event';
         if (empty($module) || (!is_string($module) && !is_numeric($module)) ) {
             $invalid[] = 'module';
-        } else {
+        }
+        if (empty($itemtype) || !is_numeric($itemtype)) {
+            $invalid[] = 'itemtype';
+        }
+        
+        // Assemble the query
+        sys::import('xaraya.structures.query');
+        $tables = xarDB::getTables();
+        $q = new Query('DELETE', $tables['eventsystem']);
+        $q->eq('itemtype', $itemtype);
+        if (strtoupper($event) != 'ALL') {
+            $q->eq('event', $event);
+        }
+        
+        if (strtoupper($module) != 'ALL') {
             if (is_numeric($module)) {
                 $module_id = $module;
             } else {
@@ -443,9 +457,7 @@ class xarEvents extends xarObject implements ixarEvents
                 $modinfo = xarMod::getInfo($module_id);
             if (empty($modinfo))
                 $invalid[] = 'module';
-        }
-        if (empty($itemtype) || !is_numeric($itemtype)) {
-            $invalid[] = 'itemtype';
+            $q->eq('module_id', $module_id);
         }
         if (!empty($invalid)) {
             $vars = array(join(', ', $invalid), 'register', 'xarEvent');
@@ -453,15 +465,8 @@ class xarEvents extends xarObject implements ixarEvents
             throw new BadParameterException($vars, $msg);
         }
                 
-        $dbconn = xarDB::getConn();
-        $tables = xarDB::getTables();
-        $bindvars = array();
-        $emstable = $tables['eventsystem'];
-                
-        // remove event item
-        $query = "DELETE FROM $emstable WHERE event = ? AND module_id = ? AND itemtype = ?";
-        $bindvars = array($event, $module_id, $itemtype);
-        $result = $dbconn->Execute($query,$bindvars);
+        // Remove the event item
+        $result = $q->run();
         if (!$result) return;
 
         return true;
