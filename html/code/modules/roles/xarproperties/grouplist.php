@@ -171,16 +171,17 @@ class GroupListProperty extends SelectProperty
         $value = 0;
         $basegroup = xarRoles::get($this->initialization_basegroup);
         if (!empty($basegroup)) {
-            $xartable =& xarDB::getTables();
-            $rolemembers = $xartable['rolemembers'];
+            xarMod::load('roles');
+            $xartables =& xarDB::getTables();
+            $rolemembers = $xartables['rolemembers'];
             $bindvars = array();
             $query = "SELECT parent_id FROM $rolemembers WHERE role_id = ?";
             $bindvars[] = $itemid;
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-            if(!$result) return;            
-            foreach ($result->next() as $row) {
+            if(!$result) return;echo $query;
+            foreach ($result->next() as $row) {var_dump($row);echo "X";
                 $candidate = xarRoles::get($row['parent_id']);
                 if ($candidate->isAncestor($basegroup) || ($candidate->getId() == $basegroup->getId())) {
                     $value = $row['parent_id'];
@@ -208,7 +209,8 @@ class GroupListProperty extends SelectProperty
 
         // If we are not standalone get the group value first 
         if ($this->_itemid) {
-            $data['value'] = $this->retrieveValue($this->_itemid);
+            $data['value'] = $this->value;
+//            $data['value'] = $this->retrieveValue($this->_itemid);
         }
         return parent::showInput($data);
     }
