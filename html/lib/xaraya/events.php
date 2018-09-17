@@ -95,7 +95,6 @@ class xarEvents extends xarObject implements ixarEvents
     **/
     public static function notify($event, $args=array())
     {
-
         // Attempt to load subject 
         try {
             // get info for specified event
