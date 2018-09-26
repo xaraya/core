@@ -743,6 +743,7 @@ class PDOColumn extends xarObject
 {
     private $pdo;
     private $columndata = array();
+    private $columns = array();
     
     public  $isAutoIncrement;
 
@@ -795,6 +796,10 @@ class PDOColumn extends xarObject
     public function isAutoIncrement()
     {
         return $this->isAutoIncrement === true;
+    }
+    public function getColumns()
+    {
+        return $this->columns;
     }
     public function getDefaultValue()
     {
