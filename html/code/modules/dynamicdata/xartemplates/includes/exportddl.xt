@@ -10,7 +10,9 @@
                     <xar:attribute name="required">
                         #!$column:isNullable()?'true':'false'#
                     </xar:attribute>
-                    <xar:attribute name="auto">#$value#</xar:attribute>
+                    <xar:attribute name="auto">
+                        #$value#
+                    </xar:attribute>
                     <xar:if condition="#$types[$column:getType()] == 'boolean'#">
                         <boolean>
                             <xar:attribute name="defaultvalue">
