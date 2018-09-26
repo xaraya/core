@@ -743,13 +743,14 @@ class PDOColumn extends xarObject
 {
     private $pdo;
     private $columndata = array();
+    
+    public  $isAutoIncrement;
 
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
         return true;
     }
-
     public function setData($columndata=array())
     {
         $this->columndata = $columndata;
@@ -790,6 +791,10 @@ class PDOColumn extends xarObject
     public function getPrecision()
     {
         return $this->columndata['precision'];
+    }
+    public function isAutoIncrement()
+    {
+        return $this->isAutoIncrement === true;
     }
     public function getDefaultValue()
     {
