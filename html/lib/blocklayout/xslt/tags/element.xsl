@@ -37,11 +37,11 @@
       </xsl:attribute>
     </xsl:when>
     <xsl:otherwise>
-  <xsl:processing-instruction name="php">
-      <xsl:attribute name="{@name}">
-        <xsl:value-of select="node()" />
-      </xsl:attribute>
-  </xsl:processing-instruction>
+      <xsl:processing-instruction name="php">
+        <xsl:attribute name="{@name}">
+          <xsl:value-of select="node()" />
+        </xsl:attribute>
+      </xsl:processing-instruction>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
