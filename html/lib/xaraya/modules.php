@@ -1033,7 +1033,7 @@ class xarMod extends xarObject implements IxarMod
         $modDir = $modBaseInfo['directory'];
         $fileName = sys::code() . 'modules/'.$modDir.'/xar'.$modType.'.php';
 
-        // Removed the exception.  Causing some wierd results with modules without an api.
+        // Removed the exception.  Causing some weird results with modules without an api.
         // <nuncanada> But now we wont know if something was loaded or not!
         // <nuncanada> We need some way to find it out.
         // Assume failure
