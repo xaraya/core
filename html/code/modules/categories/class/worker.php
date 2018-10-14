@@ -384,12 +384,16 @@ class CategoryWorker extends xarObject
         // Find the last top level category. We'll add the subtree after it
         sys::import('xaraya.structures.query');
         $q = new Query('SELECT', $this->table);
-        $q->addfield($this->right, 0);
         $q->eq($this->parent, 0);
         $q->setorder($this->right, 'DESC');
         if (!$q->run()) return;
         $result = $q->row();
         
+        // Sanity check: abort immediately if the tree has more than one root
+        if (count($result) > 1)
+            $msg = xarML('This tree has more than one root enty');
+            die($msg);
+            
         // Define the left ID of the new top level category to append
         $left_id = (int)$result[$this->right] + 1;
         
