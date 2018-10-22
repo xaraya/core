@@ -64,7 +64,7 @@ class DataObjectMaster extends xarObject
     public $status      = 65;           // inital status is active and can add/modify
     public $propertyprefix   = 'dd_';   // the prefix used for automatic designations of property names and IDs in templates
     public $anonymous   = 0;            // if true forces display of names of properties instead of dd_xx designations
-    public $where       = array();      // where clause for the object dataquery 
+    public $where       = '';           // where clause for the object dataquery 
 
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xt (defaults to the object name)
@@ -141,6 +141,7 @@ class DataObjectMaster extends xarObject
         $this->fieldlist = $this->setupFieldList($this->fieldlist,$this->status);
 
         // Set the configuration parameters
+        // CHECKME: is this needed?
         if ($descriptor->exists('config')) {
             try {
                 $configargs = unserialize($descriptor->get('config'));
@@ -165,6 +166,8 @@ class DataObjectMaster extends xarObject
         if (isset($this->configuration['where'])) {
             $conditions = $this->setWhere($this->configuration['where']);
             $this->dataquery->addconditions($conditions);
+            // Having added the conditions to the dataquery, remove them from the $where property
+            $this->where = '';
         }
         
         // Always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
