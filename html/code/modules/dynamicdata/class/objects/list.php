@@ -21,7 +21,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 {
     public $prelist  = true;           // Run preList methods or not
     public $itemids  = array();        // The list of item ids used in data stores
-    public $where    = array();
     public $sort     = array();
     public $groupby  = array();        // The list of property names to group by (if any) - see also isgrouped
     public $numitems = null;
@@ -222,6 +221,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // REMOVEME: secondary is now always false
         // add where clause if itemtype is one of the properties (e.g. articles)
+        /*
         if(isset($this->secondary) && !empty($this->itemtype) && $this->objectid > 2 && $this->filter) {
             if(empty($this->where)) {
                 $this->where = $this->secondary . ' eq ' . $this->itemtype;
@@ -229,7 +229,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->where .= ' and ' . $this->secondary . ' eq ' . $this->itemtype;
             }
         }
-
+        */
         // Make sure we don't have an empty datastore
         if (is_object($this->datastore)) {
             // Note: they can be empty here, which means overriding any previous criteria
@@ -240,9 +240,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // make sure we don't have some left-over group by fields
             $this->datastore->cleanGroupBy();
         }
-            if(isset($args['cache']))
-                // pass the cache value to the datastores
-                $this->datastore->cache = $args['cache'];
+        if(isset($args['cache']))
+            // pass the cache value to the datastores
+            $this->datastore->cache = $args['cache'];
         $this->setSort($this->sort);
         // add content filters before setWhere()
         $this->addFilters();
@@ -421,7 +421,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         xarLog::message("DataObjectList::getItems: Retrieving items of object " . $this->name, xarLog::LEVEL_INFO);
 
-        // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
+        // Set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
 // CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php

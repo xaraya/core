@@ -62,8 +62,9 @@ class DataObjectMaster extends xarObject
     public $fieldprefix = '';           // prefix to use in field names etc.
 // CHECKME: should be overridden by DataObjectList and DataObject to exclude DISPLAYONLY resp. VIEWONLY !?
     public $status      = 65;           // inital status is active and can add/modify
-    public $propertyprefix   = 'dd_';   // The prefix used for automatic designations of property names and IDs in templates
+    public $propertyprefix   = 'dd_';   // the prefix used for automatic designations of property names and IDs in templates
     public $anonymous   = 0;            // if true forces display of names of properties instead of dd_xx designations
+    public $where       = array();      // where clause for the object dataquery 
 
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xt (defaults to the object name)
