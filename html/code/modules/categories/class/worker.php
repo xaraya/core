@@ -384,18 +384,26 @@ class CategoryWorker extends xarObject
         // Find the last top level category. We'll add the subtree after it
         sys::import('xaraya.structures.query');
         $q = new Query('SELECT', $this->table);
-        $q->eq($this->parent, 0);
+        $q->eq($this->parent, 0);       // These two conditions define the root
+        $q->eq($this->left, 1);         // These two conditions define the root
         $q->setorder($this->right, 'DESC');
         if (!$q->run()) return;
-        $result = $q->row();
+        $result = $q->output();
         
         // Sanity check: abort immediately if the tree has more than one root
         if (count($result) > 1)
-            $msg = xarML('This tree has more than one root enty');
+            $msg = xarML('This tree has more than one root entry');
+            die($msg);
+        // Or if it has no root
+        if (count($result) < 1)
+            $msg = xarML('This tree has no root entry');
             die($msg);
             
+        // We have a single root (which is correct). Get it.
+        $result = $q->row();
+
         // Define the left ID of the new top level category to append
-        $left_id = (int)$result[$this->right] + 1;
+        $left_id = (int)$result[$this->right];
         
         // Get the rows which we want to append, which are the category to clone and all its descendents
         $descendents = $this->getdescendents($itemid, 1);
@@ -403,8 +411,8 @@ class CategoryWorker extends xarObject
         // Calculate the difference of the new top level category left ID to its old value
         $diff =  $left_id - $descendents[$itemid][$this->left];
         
-        // The parent of the new top level category is now zero
-        $descendents[$itemid][$this->parent] = 0;
+        // The parent of the new top level category is now a child of the root entry
+        $descendents[$itemid][$this->parent] = 1;
         
         // Set up an array with old and new itemids
         $oldnewids = array();
@@ -444,6 +452,14 @@ class CategoryWorker extends xarObject
             // Save the ID of the new top level category
             if ($child[$this->parent] == 0) $newtoplevel = $newid;
         }
+
+        // Update the root entry's right ID to accomodate
+        $q = new Query('UPDATE', $this->table);
+        $q->eq('id', $result['id']);
+        $q->addfield($this->left, $child[$this->right] + 1);
+        $q->run();
+        
+        // Return the top level of the appended tree
         return $newtoplevel;
     }
 
