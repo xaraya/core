@@ -409,7 +409,7 @@ class CategoryWorker extends xarObject
 
         // Get the rows which we want to append, which are the category to clone and all its descendents
         $descendents = $this->getdescendents($itemid, 1);
-var_dump($descendents);exit;
+
         // Calculate the difference of the new top level category left ID to its old value
         $diff = count($descendents) * 2;
 
