@@ -376,7 +376,7 @@ class CategoryWorker extends xarObject
     /**
      * Append a subtree to the tree
      * 
-     * @param itemid the ID of the toplevel node of the subtree to move
+     * @param itemid the ID of the toplevel node of the subtree to copy
      * @return true if successful
      */
     public function appendTree($itemid, $args)
@@ -391,26 +391,28 @@ class CategoryWorker extends xarObject
         $result = $q->output();
         
         // Sanity check: abort immediately if the tree has more than one root
-        if (count($result) > 1)
+        if (count($result) > 1) {
             $msg = xarML('This tree has more than one root entry');
             die($msg);
+        }
         // Or if it has no root
-        if (count($result) < 1)
+        if (count($result) < 1) {
             $msg = xarML('This tree has no root entry');
             die($msg);
-            
+        }
+          
         // We have a single root (which is correct). Get it.
         $result = $q->row();
 
         // Define the left ID of the new top level category to append
         $left_id = (int)$result[$this->right];
-        
+
         // Get the rows which we want to append, which are the category to clone and all its descendents
         $descendents = $this->getdescendents($itemid, 1);
-        
+var_dump($descendents);exit;
         // Calculate the difference of the new top level category left ID to its old value
-        $diff =  $left_id - $descendents[$itemid][$this->left];
-        
+        $diff = count($descendents) * 2;
+
         // The parent of the new top level category is now a child of the root entry
         $descendents[$itemid][$this->parent] = 1;
         
@@ -424,21 +426,21 @@ class CategoryWorker extends xarObject
             // Save the old ID and remove it as we will be creating an entry (ID needs to be empty)
             $oldid = $child['id'];
             unset($child['id']);
-            
+
             // Adjust left, right and parent fields
             $child[$this->left] += $diff;
             $child[$this->right] += $diff;
-            if ($child[$this->parent] != 0) $child[$this->parent] = $oldnewids[$child[$this->parent]];
-            
+            if ($child[$this->parent] != 1) $child[$this->parent] = $oldnewids[$child[$this->parent]];
+
             // If we passed any other args, overwrite the corresponding value if the $arg passed is a valid field
             foreach ($args as $key => $value) 
                 if(isset($child[$key])) $child[$key] = $value;
-            
+
             // Put the updated fields in to the proper format for adding to the query, and add them
             $fields = array();
             foreach ($child as $key => $value) $fields[] = array('name' => $key, 'value' => $value);
             $q->addfields($fields);
-            
+
             // Insert the new entry and get its ID
             $q->run();
             $newid = $q->lastid($this->table, 'id');
@@ -450,18 +452,17 @@ class CategoryWorker extends xarObject
             $q->clearfields();
             
             // Save the ID of the new top level category
-            if ($child[$this->parent] == 0) $newtoplevel = $newid;
+            if ($child[$this->parent] == 1) $newtoplevel = $newid;
         }
 
         // Update the root entry's right ID to accomodate
         $q = new Query('UPDATE', $this->table);
         $q->eq('id', $result['id']);
-        $q->addfield($this->left, $child[$this->right] + 1);
+        $q->addfield($this->right, (int)$result[$this->right] + $diff);
         $q->run();
         
         // Return the top level of the appended tree
         return $newtoplevel;
     }
-
 }
 ?>
