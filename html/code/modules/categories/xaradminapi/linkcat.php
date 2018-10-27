@@ -166,7 +166,7 @@ function categories_adminapi_linkcat($args)
                     )
                   VALUES(?,?,?,?,?,?)";
           $bindvars = array(, $ccid, $iid, $itemtype, $args['modid'], $basecid);
-          $result =& $dbconn->Execute($sql,$bindvars);
+          $result = $dbconn->Execute($sql,$bindvars);
           if (!$result) return;
           */
           $i++;
@@ -194,7 +194,7 @@ function categories_adminapi_linkcat($args)
                 links)
               VALUES(?,?,?,?,?)";
       $bindvars = array($cid, $iid, $itemtype, $args['modid'], 0);
-      $result =& $dbconn->Execute($sql,$bindvars);
+      $result = $dbconn->Execute($sql,$bindvars);
       if (!$result) return;
     }
     */

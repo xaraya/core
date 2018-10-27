@@ -10,17 +10,19 @@
                     <xar:attribute name="required">
                         #!$column:isNullable()?'true':'false'#
                     </xar:attribute>
-                    <xar:attribute name="auto">#$value#</xar:attribute>
-                    <xar:if condition="#$types[$column:getType()] == 'boolean'#">
+                    <xar:attribute name="auto">
+                        #$value#
+                    </xar:attribute>
+                    <xar:if condition="#strtolower($column:getType()) == 'boolean'#">
                         <boolean>
                             <xar:attribute name="defaultvalue">
                                 #$column:getDefaultValue()#
                             </xar:attribute>
                         </boolean>
-                    <xar:elseif condition="#$types[$column:getType()] == 'number'#"/>
+                    <xar:elseif condition="#strtolower($column:getType()) == 'number'#"/>
                         <xar:if condition="#$column:isAutoIncrement() OR ($column:getDefaultValue() eq '')#">
                             <number>
-                                <!-- Size should be easy, if creole has done it's job. No number without size -->
+                                <!-- Size should be easy, if Creole has done its job. No number without size -->
                                 <xar:attribute name="size">
                                     #$column:getSize()#
                                 </xar:attribute>
@@ -45,7 +47,7 @@
                                 </xar:attribute>
                             </number>
                         </xar:if>
-                    <xar:elseif condition="#$types[$column:getType()] == 'text'#"/>
+                    <xar:elseif condition="#strtolower($column:getType()) == 'text'#"/>
                         <xar:if condition="#$column:getSize() ne ''#">
                             <text>
                                 <xar:attribute name="size">
@@ -58,7 +60,7 @@
                         <xar:else />
                             <text></text>
                         </xar:if>
-                    <xar:elseif condition="#$types[$column:getType()] == 'time'#"/>
+                    <xar:elseif condition="#strtolower($column:getType()) == 'time'#"/>
                         <!-- well, yes, this originates from date, timestamp and other date related values -->
                         <!-- for now, we just copy the size attribute -->
                         <time>
@@ -66,7 +68,7 @@
                                 #$column:getSize()#
                             </xar:attribute>
                         </time>
-                    <xar:elseif condition="#$types[$column:getType()] == 'binary'#"/>
+                    <xar:elseif condition="#strtolower($column:getType()) == 'binary'#"/>
                         <binary />
                     </xar:if>
                 </column>

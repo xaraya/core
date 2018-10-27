@@ -155,7 +155,7 @@ function installer_adminapi_createdb(Array $args=array())
 
    $dbCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
    $query = xarDBCreateDatabase($dbName,$dbType,$dbCharset);
-   $result =& $dbconn->Execute($query);
+   $result = $dbconn->Execute($query);
    return true;
 }
 
@@ -186,7 +186,7 @@ function installer_adminapi_CheckForField(Array $args=array())
 
     // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
-    $result =& $dbconn->executeQuery($query);
+    $result = $dbconn->ExecuteQuery($query);
 
 
     while($result->next()) {

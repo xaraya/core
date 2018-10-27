@@ -27,15 +27,15 @@
 						<xar:for start="$i = 0" test="$i lt count($items)" iter="$i++">
 							<xar:if condition="$_position eq 0">
 								<!-- If no relation found yet -->
-								<xar:if condition="$items[$i]['left'] eq $item['left_id']-1">
+								<xar:if condition="$items[$i]['left'] eq $item[$left_id]-1">
 									<!--  The present item is the first child --> 
 									<xar:set name="_position">4</xar:set>
 									<option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option> 
-								<xar:elseif condition="$items[$i]['right'] eq $item['left_id']-1"/>
+								<xar:elseif condition="$items[$i]['right'] eq $item[$left_id]-1"/>
 									<!--  The present item is the previous sibling / hence I am right after this item --> 
 									<xar:set name="_position">2</xar:set>
 									<option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option> 
-								<xar:elseif condition="$items[$i]['left'] eq $item['right_id']+1"/>
+								<xar:elseif condition="$items[$i]['left'] eq $item[$right_id]+1"/>
 									<!--  The present item is the next sibling  / hence I am right before this item -->  
 									<xar:set name="_position">1</xar:set>
 									<option value="#$items[$i]['id']#" selected="selected">#$items[$i]['slash_separated']#</option> 

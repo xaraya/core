@@ -21,18 +21,18 @@ class FileUploadProperty extends DataProperty
     public $reqmodules = array('base');
 
     public $display_size                    = 40;
-    public $validation_max_file_size          = 1000000;
     public $initialization_basedirectory    = 'var/uploads';
     public $initialization_importdirectory  = null;
+    public $initialization_multiple         = TRUE;
+    public $validation_max_file_size        = 1000000;
     public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';
+    public $validation_allow_duplicates     = 2; // Overwrite the old instance
 //    public $initialization_basepath         = null;
     // TODO: support the different options in code below
-    public $initialization_multiple         = TRUE;
     public $methods = array('trusted'  => false,
                             'external' => false,
                             'upload'   => false,
                             'stored'   => false);
-    public $validation_allow_duplicates     = 2; // Overwrite the old instance
     public $obfuscate_filename              = false;
     // Note: if you use this, make sure you unlink($this->value) yourself once you're done with it
     public $use_temporary_file              = false;
@@ -211,9 +211,16 @@ class FileUploadProperty extends DataProperty
             $file =& $_FILES[$name];
         } else {
             $file = array();
-            $this->invalid = xarML('Empty file: #(1)', $name);
-            $this->value = null;
-            return false;
+            if (!$this->validation_allowempty) {
+                // We must have a file
+                $this->invalid = xarML('Empty file: #(1)', $name);
+                $this->value = null;
+                return false;
+            } else {
+                // We need not have a file: nothing to do, so exit here
+                $this->value = '';
+                return true;
+            }
         }
 
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {

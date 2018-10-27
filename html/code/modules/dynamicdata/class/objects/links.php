@@ -43,21 +43,24 @@ class DataObjectLinks extends xarObject
      */
     static function initLinks()
     {
-        $linklist = DataObjectMaster::getObjectList(array('name' => 'dynamic_object_links'));
-        if (empty($linklist) || empty($linklist->objectid)) {
-            $def_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-def.xml';
-            $dat_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-dat.xml';
-            if (file_exists($def_file)) {
-                $objectid = xarMod::apiFunc('dynamicdata','util','import',
-                                            array('file' => $def_file));
-                if (empty($objectid)) return;
-            }
-            if (file_exists($dat_file)) {
-                $objectid = xarMod::apiFunc('dynamicdata','util','import',
-                                            array('file' => $dat_file));
-                if (empty($objectid)) return;
-            }
+        try {
             $linklist = DataObjectMaster::getObjectList(array('name' => 'dynamic_object_links'));
+        } catch (Exception $e) {
+            if (empty($linklist) || empty($linklist->objectid)) {
+                $def_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-def.xml';
+                $dat_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-dat.xml';
+                if (file_exists($def_file)) {
+                    $objectid = xarMod::apiFunc('dynamicdata','util','import',
+                                                array('file' => $def_file));
+                    if (empty($objectid)) return;
+                }
+                if (file_exists($dat_file)) {
+                    $objectid = xarMod::apiFunc('dynamicdata','util','import',
+                                                array('file' => $dat_file));
+                    if (empty($objectid)) return;
+                }
+                $linklist = DataObjectMaster::getObjectList(array('name' => 'dynamic_object_links'));
+            }
         }
         return $linklist;
     }

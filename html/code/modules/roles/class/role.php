@@ -250,6 +250,7 @@ class Role extends DataObject
             // subtract 1 and update.
             $dynamicobjects = $this->rolestable;
             $value = $row['users']-1;
+            $bindvars = array();
             $query = "UPDATE  " . $dynamicobjects . " SET users = " . $value . " WHERE id = ?";
             $bindvars[] =  $this->getID();
 

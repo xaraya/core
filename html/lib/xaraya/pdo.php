@@ -446,7 +446,14 @@ class xarPDOStatement extends xarObject
 
         // Run the query
         xarLog::message("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        $success = $this->pdostmt->execute();       
+        try {
+            $success = $this->pdostmt->execute();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            echo "<br/>";
+            echo "Query: " . $this->pdo->queryString;
+            exit;
+        }      
         
         // If this is a SELECT, create a result set for the results
         if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT") {
@@ -469,7 +476,7 @@ class xarPDOStatement extends xarObject
     /**
      * Prepares and executes a SQL update (INSERT, UPDATE, or DELETE) and resturns the rows affected
      * 
-     * @param array $binvars the parameters to be inserted into the query
+     * @param array $bindvars the parameters to be inserted into the query
      * @param int $flag indicates the fetch mode for the results
      * 
      * @return int $affected_rows the rows inserted, changed, dropped
@@ -493,7 +500,14 @@ class xarPDOStatement extends xarObject
         }
 
         xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
-        $success = $this->pdostmt->execute();
+        try {
+            $success = $this->pdostmt->execute();
+        } catch (Exception $e) {
+            echo $e->getMessage();
+            echo "<br/>";
+            echo "Query: " . $this->pdo->queryString;
+            exit;
+        }      
 
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
@@ -729,13 +743,15 @@ class PDOColumn extends xarObject
 {
     private $pdo;
     private $columndata = array();
+    private $columns = array();
+    
+    public  $isAutoIncrement;
 
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
         return true;
     }
-
     public function setData($columndata=array())
     {
         $this->columndata = $columndata;
@@ -776,6 +792,14 @@ class PDOColumn extends xarObject
     public function getPrecision()
     {
         return $this->columndata['precision'];
+    }
+    public function isAutoIncrement()
+    {
+        return $this->isAutoIncrement === true;
+    }
+    public function getColumns()
+    {
+        return $this->columns;
     }
     public function getDefaultValue()
     {

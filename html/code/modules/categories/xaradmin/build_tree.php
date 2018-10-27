@@ -155,6 +155,9 @@ function categories_admin_build_tree()
                 }
             }
         }
+        $data['message_info'][] = xarML('Sanity checks OK');
+        $data['message_info'][] = '--------------------------------------------';
+        $data['message_info'][] = xarML('Checking uniqueness of values');
         $unique_values = count($ids);
         $data['message_info'][] = xarML('Found #(1) unique values', $unique_values);
     
