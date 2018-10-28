@@ -133,25 +133,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // Clean the itemids found
         foreach ($data['id'] as $k => $v) $data['id'][$k] = (int)$v;
         
-        // Get the properties we will be looking at
-        $propertynames = array_keys($this->properties);
-        foreach ($propertynames as $k => $name) {
-            // No DISABLED properies
-            if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
-                unset($propertynames[$key]);
-            }
-        }
-        
         // Get the data from the form
         $formitems = array();
         foreach ($data['id'] as $id) {
             $formitem = array();
-            foreach ($propertynames as $name) {
+            foreach ($this->properties as $name => $property) {
+                // Only active or list properties will be checked
+                if(!in_array($property->getDisplayStatus(),array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY))) {
+                    continue;
+                }
                 $isvalid = $this->properties[$name]->checkInput($name . "[" . $id . "]");
                 if ($isvalid) $formitem[$name] = $this->properties[$name]->value;
             }
             $formitems[$id] = $formitem;
-            
         }
         // Save the items for reuse
         $this->items = $formitems;
