@@ -181,6 +181,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // Check if the data changed
             $unchanged = true;
             foreach ($items_to_update[$key] as $field_key => $field_value) {
+                if (!isset($db_item[$field_key])) {
+                    $msg = xarML("The property '#(1)' could not be updated", $field_key);
+                    throw new Exception($msg);
+                }
                 if ($db_item[$field_key] != $field_value) {
                     $unchanged = false;
                     break;
