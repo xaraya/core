@@ -405,13 +405,13 @@ class CategoryWorker extends xarObject
         $result = $q->row();
 
         // Define the left ID of the new top level category to append
-        $left_id = (int)$result[$this->right];
+        $new_left_id = (int)$result[$this->right];
 
         // Get the rows which we want to append, which are the category to clone and all its descendents
         $descendents = $this->getdescendents($itemid, 1);
 
         // Calculate the difference of the new top level category left ID to its old value
-        $diff = count($descendents) * 2;
+        $diff = $new_left_id - $descendents[$itemid][$this->left];
 
         // The parent of the new top level category is now a child of the root entry
         $descendents[$itemid][$this->parent] = 1;
@@ -458,7 +458,7 @@ class CategoryWorker extends xarObject
         // Update the root entry's right ID to accomodate
         $q = new Query('UPDATE', $this->table);
         $q->eq('id', $result['id']);
-        $q->addfield($this->right, (int)$result[$this->right] + $diff);
+        $q->addfield($this->right, (int)$result[$this->right] + count($descendents) * 2);
         $q->run();
         
         // Return the top level of the appended tree
