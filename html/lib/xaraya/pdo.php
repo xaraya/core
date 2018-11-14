@@ -380,6 +380,15 @@ class xarPDO extends PDO
     {
         return $this->last_id;
     }
+    
+    public function getNextId($table = null)
+    {
+        return null;
+    }
+    public function GenId($table = null)
+    {
+        return null;
+    }
 }
 
 class xarPDOStatement extends xarObject
