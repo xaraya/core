@@ -60,7 +60,7 @@ class CelkoPositionProperty extends DataProperty
     public $desc         = 'Celko Position';
     public $reqmodules   = array('categories');
 
-    public $reference_id      = 0;        // The ID of the item relative to which we define the position of this item
+    public $reference_id;                 // The ID of the item relative to which we define the position of this item
     public $include_reference = 1;        // Get a reference to the parent object
     public $moving;
     public $position          = 2;        // By default the position of this item is after the previous item
@@ -617,7 +617,7 @@ class CelkoPositionProperty extends DataProperty
         // the right value of this node is the left value + 1  
         $right_id = $left_id+1;  
     
-        // get all children of this node
+        // Get all children of this node
         sys::import('modules.categories.class.worker');
         $worker = new CategoryWorker();
         $worker->setTable($this->initialization_celkotable);

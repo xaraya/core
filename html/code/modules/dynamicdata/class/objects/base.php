@@ -362,7 +362,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         
         //  The id of the item to be created is
         //  1. An itemid arg passed
-        //  2. An id arg passed ot the primary index
+        //  2. An id arg passed to the primary index
         //  3. 0
         
         // Reset the itemid
