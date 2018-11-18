@@ -13,7 +13,7 @@
                 <legend>Basic Logging</legend>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                        <label for="logenabled" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
                             Enable logging:                                
                         </label>
                     </div>
@@ -30,7 +30,7 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                        <label for="logfilename" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
                             Log file name:                                
                         </label>
                     </div>
@@ -43,7 +43,7 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                        <label for="loglevel" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
                             Log level:                                
                         </label>
                     </div>
