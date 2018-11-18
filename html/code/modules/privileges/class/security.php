@@ -219,7 +219,7 @@ class xarSecurity extends xarObject
                 break;
             case "group":
                 //get some info on the user
-                $thisname=xarUserGetVar('uname');
+                $thisname=xarUser::getVar('uname');
                 $role = xarUFindRole($thisname);
                 $parent='Everybody'; //set a default
                 //We now have primary parent implemented
@@ -262,7 +262,7 @@ class xarSecurity extends xarObject
         }
 
         // check if we already have the irreducible set of privileges for the current user
-        if (($rolename == '') || ($rolename == xarUserGetVar('uname'))) {
+        if (($rolename == '') || ($rolename == xarUser::getVar('uname'))) {
             // We are checking the privileges of the current user
             // See if we have something cached
             if (!xarVarIsCached('Security.Variables','privilegeset')) {
