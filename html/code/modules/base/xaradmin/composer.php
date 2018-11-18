@@ -12,84 +12,49 @@
 /**
  * View recent module releases via central repository
  *
- * @author John Cox
+ * @author Marc Lutolf
  * 
  * @param void N/A
- * @return array data for the template display
  */
-function base_admin_release()
+function base_admin_composer()
 {
-    /**
-     * Pending
-     * 
-     * @todo change feed url once release module is moved
-     */
     // Security
     if(!xarSecurityCheck('ManageBase')) return;
 
-    //number of releases to show
-    $releasenumber = (int)xarModVars::get('base','releasenumber');
-
-    if (!isset($releasenumber) || $releasenumber ==0) {
-         $releasenumber=10;
-    }
-
-    /* allow fopen - let getfile handle this 
-    if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
-    if (!ini_get('allow_url_fopen')) {
-        throw new ForbiddenOperationException('fopen to get RSS feeds','The current PHP configuration does not allow to use #(1) with an url');
-    }
-    */
-    // Require the feedParser class
-    sys::import('modules.base.class.feedParser');
-    // Check and see if a feed has been supplied to us.
-    // Need to change the url once release module is moved to
-    $feedfile = "http://xaraya.info/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
-
-    // Get the feed file (from cache or from the remote site)
-    $feeddata = xarMod::apiFunc('base', 'user', 'getfile',
-                              array('url' => $feedfile,
-                                    'cached' => true,
-                                    'cachedir' => 'cache/rss',
-                                    'refresh' => 604800,
-                                    'extension' => '.xml'));
-
-    if (!$feeddata) return;
-    // Create a need feedParser object
-    $p = new feedParser();
-    // Tell feedParser to parse the data
-    $info = $p->parseFeed($feeddata);
-    if (empty($info['warning'])){
-      foreach ($info as $content){
-        foreach ($content as $newline){
-          if(is_array($newline)) {
-            if (isset($newline['description'])){
-              $description = $newline['description'];
-            } else {
-              $description = '';
-            }
-            if (isset($newline['title'])){
-              $title = $newline['title'];
-            } else {
-              $title = '';
-            }
-            if (isset($newline['link'])){
-              $link = $newline['link'];
-            } else {
-              $link = '';
-            }
-            $feedcontent[$title] = array('title' => $title, 'link' => $link, 'description' => $description);
-          }
+    if (!xarVarFetch('setup', 'isset', $setup, NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install', 'isset', $install, NULL, XARVAR_NOT_REQUIRED)) return;
+    
+    $composerdir = 'composer';
+    $setup_path = $composerdir . '/composer-setup.php';
+    $phar_path = $composerdir . '/composer.phar';
+    
+    if ($setup) {
+        if (!is_dir($composerdir) && is_writable('./')) {
+            $old_umask = umask(0);
+            mkdir($composerdir, 0770);
+            umask($old_umask);
         }
-      }
-      $data['chantitle']  =   $info['channel']['title'];
-      $data['chanlink']   =   $info['channel']['link'];
-      $data['chandesc']   =   $info['channel']['description'];
-    } else {
-        throw new DataNotFoundException(null,'There is a problem with a feed.');
-    }
-    $data['releasenumber']=$releasenumber;
-    $data['feedcontent'] = $feedcontent;
+        if (!file_exists($phar_path)) {
+            $ch = curl_init();
+            $fh = fopen($setup_path, 'x');
+            curl_setopt_array($ch, array(
+                CURLOPT_URL => 'https://getcomposer.org/installer',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_FILE => $fh
+            ));
+            $output = curl_exec($ch);
+            curl_close($ch);
+            fclose($fh);
+
+            $output = shell_exec('php ' . $setup_path . ' --install-dir=' . $composerdir . ' --quiet');
+            $output = shell_exec('rm ' . $setup_path);
+        }
+    } 
+    
+    // Check if the installer has already been installed
+    $data['installed'] = file_exists('composer') && file_exists('composer/composer.phar');
+
     return $data;
 }
 ?>
