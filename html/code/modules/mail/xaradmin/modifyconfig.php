@@ -98,8 +98,8 @@ function mail_admin_modifyconfig()
 
                     if(isset($admin_outgoing)) xarModVars::set('mail','admin_outgoing',$admin_outgoing);
                     // set the modvars used by sendmail as default from name, address 
-                    $adminname = xarUserGetVar('name', $admin_outgoing);
-                    $adminmail = xarUserGetVar('email', $admin_outgoing);
+                    $adminname = xarUser::getVar('name', $admin_outgoing);
+                    $adminmail = xarUser::getVar('email', $admin_outgoing);
                     xarModVars::set('mail', 'adminname', $adminname);
                     xarModVars::set('mail', 'adminmail', $adminmail);
                     

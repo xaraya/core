@@ -96,7 +96,7 @@ class FileUploadProperty extends DataProperty
         // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
         if (!empty($this->initialization_basedirectory) && preg_match('/\{user\}/',$this->initialization_basedirectory)) {
             $uname = 'user';
-            $id = xarUserGetVar('id');
+            $id = xarUser::getVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
@@ -105,7 +105,7 @@ class FileUploadProperty extends DataProperty
         }
         if (!empty($this->initialization_importdirectory) && preg_match('/\{user\}/',$this->initialization_importdirectory)) {
             $uname = 'user';
-            $id = xarUserGetVar('id');
+            $id = xarUser::getVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...

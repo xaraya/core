@@ -83,7 +83,7 @@
                         <fieldset>
                         <legend>Basic User Variables</legend>
                         <p>Always available in a user role, and can be retrieved as
-                        <strong>xarUserGetVar('varname')</strong></p>
+                        <strong>xarUser::getVar('varname')</strong></p>
                             <table class="xar-table">
                                 <tr>
                                     <th>Name</th>

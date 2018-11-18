@@ -92,8 +92,8 @@ function roles_user_email(Array $args=array())
             // fetch them from the current user now.
             if (!isset($fname) || !iseet($femail)) {
                 // Get details of the sender.
-                $fname = xarUserGetVar('name');
-                $femail = xarUserGetVar('email');
+                $fname = xarUser::getVar('name');
+                $femail = xarUser::getVar('email');
             }
 
             list($message) = xarModCallHooks('item', 'transform', $id, array($message));

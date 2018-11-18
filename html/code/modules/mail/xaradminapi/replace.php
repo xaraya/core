@@ -25,8 +25,8 @@ function mail_adminapi_replace(Array $args=array())
     $siteadmin  = xarModVars::get('mail', 'adminname');
     $siteurl    = xarServer::getBaseURL();
 
-    $name = xarUserGetVar('name');
-    $id = xarUserGetVar('id');
+    $name = xarUser::getVar('name');
+    $id = xarUser::getVar('id');
 
     $search = array('/%%name%%/',
                     '/%%sitename%%/',

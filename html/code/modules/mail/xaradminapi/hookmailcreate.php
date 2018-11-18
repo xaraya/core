@@ -85,9 +85,9 @@ function mail_adminapi_hookmailcreate(Array $args=array())
         'siteadmin'  => xarModVars::get('mail', 'adminname'),
         'adminmail'  => xarModVars::get('mail', 'adminmail'),
         'siteurl'    => xarServer::getBaseURL(),
-        'myname'     => xarUserGetVar('name'),
-        'myuname'    => xarUserGetVar('uname'),
-        'myuid'      => xarUserGetVar('id'),
+        'myname'     => xarUser::getVar('name'),
+        'myuname'    => xarUser::getVar('uname'),
+        'myuid'      => xarUser::getVar('id'),
     );
 
 // Substitute the dynamic vars in the template

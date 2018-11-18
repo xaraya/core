@@ -33,7 +33,7 @@ function roles_user_getvalidation()
     //We are going to send them to their account.
     if (xarUser::isLoggedIn()) {
        xarController::redirect(xarModURL('roles', 'user', 'account',
-                                      array('id' => xarUserGetVar('id'))));
+                                      array('id' => xarUser::getVar('id'))));
        return true;
     }
 

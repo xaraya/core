@@ -45,7 +45,7 @@ function roles_userapi_usermenu(Array $args=array())
         $phase = 'showform';
 
     if (empty($id) || !is_numeric($id))
-        $id = xarUserGetVar('id');
+        $id = xarUser::getVar('id');
 
     if (!isset($object)) {
         $object = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => 'roles', 'itemid' => $id));
