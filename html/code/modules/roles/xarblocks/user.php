@@ -34,7 +34,7 @@ class Roles_UserBlock extends BasicBlock
      */
     function display(Array $data=array())
     {
-        if (!xarUserIsLoggedIn()) return;
+        if (!xarUser::isLoggedIn()) return;
         $data['name'] = xarUserGetVar('name');
         return $data;
     }

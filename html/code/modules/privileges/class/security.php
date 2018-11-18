@@ -318,7 +318,7 @@ class xarSecurity extends xarObject
 
         if ($catch && !$pass) {
             $requrl = xarServer::getCurrentURL(array(),false);
-            if (self::$exceptionredirect && !xarUserIsLoggedIn()) {
+            if (self::$exceptionredirect && !xarUser::isLoggedIn()) {
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
                 $redirectURL = xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false);

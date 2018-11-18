@@ -31,7 +31,7 @@ function roles_user_getvalidation()
 
     //If a user is already logged in, no reason to see this.
     //We are going to send them to their account.
-    if (xarUserIsLoggedIn()) {
+    if (xarUser::isLoggedIn()) {
        xarController::redirect(xarModURL('roles', 'user', 'account',
                                       array('id' => xarUserGetVar('id'))));
        return true;

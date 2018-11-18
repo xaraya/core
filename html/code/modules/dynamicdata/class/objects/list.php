@@ -301,7 +301,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             return;
         }
 
-        if (xarUserIsLoggedIn()) {
+        if (xarUser::isLoggedIn()) {
             // get the direct parents of the current user (no ancestors)
             $grouplist = xarCache::getParents();
         } else {
@@ -672,7 +672,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $is_user = 1;
 /*
 // CHECKME: further optimise for anonymous access by assuming they can't delete (or edit) ?
-        if (xarUserIsLoggedIn()) {
+        if (xarUser::isLoggedIn()) {
             $is_user = 1;
         } else {
             $is_user = 0;

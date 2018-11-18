@@ -28,7 +28,7 @@ function roles_user_usermenu(Array $args=array())
     $defaultloginmodname  = $defaultauthdata['defaultloginmodname'];
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
-    if (!xarUserIsLoggedIn()){
+    if (!xarUser::isLoggedIn()){
         xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform'));
     }
 
@@ -160,7 +160,7 @@ function roles_user_usermenu(Array $args=array())
 
                 if (xarModVars::get('roles','setuserlastlogin')) {
                     //only display it for current user or admin
-                    if (xarUserIsLoggedIn() && xarUserGetVar('id')==$id) { //they should be but ..
+                    if (xarUser::isLoggedIn() && xarUserGetVar('id')==$id) { //they should be but ..
                         $userlastlogin = xarSession::getVar('roles_thislastlogin');
                         $usercurrentlogin = xarModUserVars::get('roles','userlastlogin',$id);
                     }elseif (xarSecurityCheck('AdminRoles',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){

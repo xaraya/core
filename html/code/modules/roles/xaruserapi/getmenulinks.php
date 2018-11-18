@@ -30,7 +30,7 @@ function roles_userapi_getmenulinks()
                 'active' => array('view'),
                 );
     }
-    if (xarUserIsLoggedIn()){
+    if (xarUser::isLoggedIn()){
         $menulinks[] = array(
             'url'   => xarModURL('roles','user','account'),
             'title' => xarML('Your Custom Configuration'),

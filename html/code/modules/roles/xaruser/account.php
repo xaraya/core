@@ -29,7 +29,7 @@ function roles_user_account()
     $defaultloginmodname  = $defaultauthdata['defaultloginmodname'];
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
-    if (!xarUserIsLoggedIn()){
+    if (!xarUser::isLoggedIn()){
         // bring the user back here after login :)
         $redirecturl = xarModURL('roles', 'user', 'account');
         xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => urlencode($redirecturl))));
@@ -130,7 +130,7 @@ function roles_user_account()
                 // set up the roles_user object for edit
                 if (xarModVars::get('roles','setuserlastlogin')) {
                     //only display it for current user or admin
-                    if (xarUserIsLoggedIn() && xarUserGetVar('id')==$id) { //they should be but ..
+                    if (xarUser::isLoggedIn() && xarUserGetVar('id')==$id) { //they should be but ..
                         $userlastlogin = xarSession::getVar('roles_thislastlogin');
                         $usercurrentlogin = xarModUserVars::get('roles','userlastlogin',$id);
                     }elseif (xarSecurityCheck('AdminRoles',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){

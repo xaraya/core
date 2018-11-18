@@ -1570,7 +1570,7 @@ class DataObjectMaster extends xarObject
         // DD specific access scheme 
         // check if we have specific access rules for this level
         if (!empty($access_rules) && is_array($access_rules) && !empty($access_rules[$level])) {
-            if (empty($roleid) && xarUserIsLoggedIn()) {
+            if (empty($roleid) && xarUser::isLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
                 $grouplist = xarCache::getParents();
             } elseif (!empty($roleid) && $roleid != _XAR_ID_UNREGISTERED) {

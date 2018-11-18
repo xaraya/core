@@ -29,7 +29,7 @@ class Themes_SkinBlockDisplay extends Themes_SkinBlock implements iBlock
     function display(Array $data=array())
     {
         
-        if (!xarUserIsLoggedIn() ||
+        if (!xarUser::isLoggedIn() ||
             (bool) xarModVars::get('themes', 'enable_user_menu') == false) return;
         
         $data = $this->getContent();

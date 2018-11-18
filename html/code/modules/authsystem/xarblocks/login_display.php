@@ -35,7 +35,7 @@ class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlo
     function display()
     {
         $data = $this->getContent();
-        if (xarUserIsLoggedIn()) {    
+        if (xarUser::isLoggedIn()) {    
             if (!empty($this->showlogout)) {
                 $data['name'] = xarUserGetVar('name');
                 $this->setTemplateBase('logout');

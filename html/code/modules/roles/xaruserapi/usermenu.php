@@ -24,7 +24,7 @@
 function roles_userapi_usermenu(Array $args=array())
 {
     // not logged in?
-    if (!xarUserIsLoggedIn()){
+    if (!xarUser::isLoggedIn()){
         // redirect user to their account page after login
         $redirecturl = xarModURL('roles', 'user', 'account');
         xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => $redirecturl)));

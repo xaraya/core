@@ -23,7 +23,7 @@
 function roles_user_email(Array $args=array())
 {
     // we can only send emails to other members if we are logged in
-    if(!xarUserIsLoggedIn())
+    if(!xarUser::isLoggedIn())
     {
         throw new ForbiddenOperationException(null,'You are not logged in, sending emails is not allowed');
     }
