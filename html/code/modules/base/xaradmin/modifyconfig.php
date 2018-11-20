@@ -133,7 +133,11 @@ function base_admin_modifyconfig()
                         rename($filepath, $newname);
                         touch($filepath);
                     }
-                    $data['log_data'] = trim(xarMod::apiFunc('base', 'admin', 'read_file', array('file' => $filepath)));
+                    if (xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) {
+                        $data['log_data'] = trim(xarMod::apiFunc('base', 'admin', 'read_file', array('file' => $filepath)));
+                    } else {
+                        $data['log_data'] = '';
+                    }
                 break;
             }
             break;

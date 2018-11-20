@@ -78,7 +78,7 @@
             <input type="hidden" name="tab" id="tab" value="#$tab#"/>
             <xar:template file="update-button" module="base" />
         </form>
-        <xar:set name="enabled">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
+
         <xar:if condition="!empty($log_data)">
             <fieldset>
                 <legend>
