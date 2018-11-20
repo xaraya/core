@@ -24,8 +24,8 @@
                                 array('id' => 1, 'name' => xarML('Yes')),
                             )
                         </xar:set>
-                        <xar:set name="checked">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
-                        <xar:data-input type="radio" name="logenabled" value="$checked" options="$options"/>
+                        <xar:set name="log_enabled">xarSystemVars::get(sys::CONFIG, 'Log.Enabled')</xar:set>
+                        <xar:data-input type="radio" name="logenabled" value="$log_enabled" options="$options"/>
                     </div>
                 </div>
                 <div class="xar-row">
@@ -79,26 +79,36 @@
             <xar:template file="update-button" module="base" />
         </form>
 
-        <xar:if condition="!empty($log_data)">
-            <fieldset>
-                <legend>
-                    View Log
-                </legend>
-                <xar:data-input type="textarea" style="width: 95%; height: 1000px" name="logfile" value="$log_data"/>
-            </fieldset>
-            <div class="xar-row">
-                <div class="xar-col">
+        <xar:if condition="$log_enabled">
+            <xar:if condition="!empty($log_data)">
+                <fieldset>
+                    <legend>
+                        View Log
+                    </legend>
+                    <xar:data-input type="textarea" style="width: 95%; height: 1000px" name="logfile" value="$log_data"/>
+                </fieldset>
+                <div class="xar-row">
+                    <div class="xar-col">
+                    </div>
+                    <div class="xar-col">
+                        <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+                            <xar:var name="label">Clear Log</xar:var>
+                            <xar:button type="submit" name="clear" label="$label"/>
+                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
+                            <xar:var name="label">Save and Clear Log</xar:var>
+                            <xar:button type="submit" name="clearsave" label="$label"/>
+                        </form>
+                    </div>
                 </div>
-                <div class="xar-col">
-                    <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
-                        <xar:var name="label">Clear Log</xar:var>
-                        <xar:button type="submit" name="clear" label="$label"/>
-                        <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                        <xar:var name="label">Save and Clear Log</xar:var>
-                        <xar:button type="submit" name="clearsave" label="$label"/>
-                    </form>
+            <xar:else/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                    </div>
+                    <div class="xar-col">
+                        The log is empty
+                    </div>
                 </div>
-            </div>
+            </xar:if>
         </xar:if>
     </xar:if>
 </xar:template>
