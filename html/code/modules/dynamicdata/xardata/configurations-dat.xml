@@ -771,4 +771,13 @@
     <ignore_empty>1</ignore_empty>
     <configuration>a:5:{s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:0:"";s:20:"validation_notequals";s:0:"";s:17:"validation_equals";s:0:"";s:25:"initialization_other_rule";s:0:"";}</configuration>
   </configurations>
+  <configurations itemid="89">
+    <id>88</id>
+    <name>validation_sanitize_filename</name>
+    <label>Sanitize File Name</label>
+    <description>Whether to remove unwanted characters from a filename</description>
+    <property_id>14</property_id>
+    <ignore_empty>1</ignore_empty>
+    <configuration></configuration>
+  </configurations>
 </items>

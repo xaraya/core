@@ -27,6 +27,7 @@ class FileUploadProperty extends DataProperty
     public $validation_max_file_size        = 1000000;
     public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';
     public $validation_allow_duplicates     = 2; // Overwrite the old instance
+    public $validation_sanitize_filename    = false; // Remove or change unacceptable characters in the name
 //    public $initialization_basepath         = null;
     // TODO: support the different options in code below
     public $methods = array('trusted'  => false,
