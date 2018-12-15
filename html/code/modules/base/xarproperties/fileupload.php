@@ -21,12 +21,12 @@ class FileUploadProperty extends DataProperty
     public $reqmodules = array('base');
 
     public $display_size                    = 40;
-    public $initialization_basedirectory    = 'var/uploads';
+    public $initialization_basedirectory    = 'var/uploads';    // The directory the files are uploaded to
     public $initialization_importdirectory  = null;
-    public $initialization_multiple         = TRUE;
-    public $validation_max_file_size        = 1000000;
-    public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';
-    public $validation_allow_duplicates     = 2; // Overwrite the old instance
+    public $initialization_multiple         = TRUE;     // Can we upload multiple files with the same name?
+    public $validation_max_file_size        = 1000000;  // Tha maximum file size that can be uploaded (in bytes)
+    public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';   // Only these file extensions are allowed
+    public $validation_allow_duplicates     = 2;     // Overwrite the old instance
     public $validation_sanitize_filename    = false; // Remove or change unacceptable characters in the name
 //    public $initialization_basepath         = null;
     // TODO: support the different options in code below
