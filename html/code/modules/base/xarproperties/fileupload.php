@@ -154,7 +154,7 @@ class FileUploadProperty extends DataProperty
             return true;
         }
 
-        // if the uploads module is hooked in, use it's functionality instead
+        // if the uploads module is hooked in, use its functionality instead
         if ($this->UploadsModule_isHooked == TRUE) {
             // set override for the upload/import paths if necessary
             if (!empty($this->initialization_basedirectory) || !empty($this->initialization_importdirectory)) {
@@ -206,10 +206,11 @@ class FileUploadProperty extends DataProperty
             }
         }
 
-//        $upname = $name .'_upload';
-
+/**
+ * Validation check that we have a file 
+ */
         if (isset($_FILES[$name])) {
-            $file =& $_FILES[$name];
+            $file = $_FILES[$name];
         } else {
             $file = array();
             if (!$this->validation_allowempty) {
@@ -224,13 +225,22 @@ class FileUploadProperty extends DataProperty
             }
         }
 
+/**
+ * Validation checks on the name and extension 
+ */
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
-            if (!empty($_FILES[$name]['name'])) {
+            if (!empty($file['name'])) {
                 if (!$this->validateExtension($file['name'])) {
                     $this->invalid = xarML('The file type is not allowed: #(1)', $file['name']);
                     $this->value = null;
                     return false;
                 }
+
+                // Run the file name through the sanitize filter if asked to
+                if ($this->validation_sanitize_filename) {
+                    $file['name'] = xarMod::apiFunc('base', 'admin', 'sanitize_filename', array('filename' => $file['name']));
+                }
+        
                 $filename = $file['name'];
             } else {
             // TODO: assign random name + figure out mime type to add the right extension ?
