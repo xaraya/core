@@ -33,7 +33,7 @@ function base_adminapi_sanitize_filename($args)
      'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ö'=>'oe', 'ø'=>'o', 'ù'=>'u',
      'ü'=>'ue','ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'ƒ'=>'f'
      );
-     $f = strtr($f, $replace_chars);
+     $f = str_replace($f, $replace_chars);
      // convert & to "and", @ to "at", and # to "number"
      $f = preg_replace(array('/[\&]/', '/[\@]/', '/[\#]/'), array('-and-', '-at-', '-number-'), $f);
      $f = preg_replace('/[^(\x20-\x7F)]*/','', $f); // removes any special chars we missed
