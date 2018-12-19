@@ -28,7 +28,7 @@
 </xsl:template>
 
 <!--
-  If xar:set has a text node, do a poor mans resolving for now
+  If xar:set has a text node, do a poor man's resolving for now
 -->
 <xsl:template match="xar:set/text()">
     <xsl:choose>
