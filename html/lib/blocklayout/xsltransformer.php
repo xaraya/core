@@ -164,7 +164,7 @@ class BlockLayoutXSLTProcessor extends xarObject
         $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML);
         
         // Special handling for xar:attribute, where the tag is created at runtime
-        $this->postXML = str_replace('xyzzy','<?php echo $',$this->postXML);        
+        $this->postXML = str_replace('xyzzy','<?php echo ',$this->postXML);        
         $this->postXML = str_replace('yzzyx',';?>',$this->postXML);        
     }
 

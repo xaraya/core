@@ -21,6 +21,12 @@
 <xsl:template match="xar:attribute">
   <!--
     This tag allows a name attribute that is either a string or a $var
+    The value is considered a PHP expression. Similar to the <xar:set> tag, the node between beginning and end tag is PHP space.
+    So, if the value is a string, for instance, it needs to be enclosed in single quotes (double quotes are not allowed).
+    If the value expression is enclosed in #..#, the # are removed.
+    Both the name and the value of the attribute to be created are considered PHP expressions. 
+    However, because the XSL transform can only create XML, we need to simply add the PHP during compilation, but add
+    the PHP open and close tags at run time through the postProcess method of the BlockLayoutXSLTProcessor object
   -->
   <xsl:choose>
     <xsl:when test="substring(@name,1,1) = '$'">
@@ -28,7 +34,7 @@
         <xsl:call-template name="replace">
           <xsl:with-param name="source" select="@name" />
           <xsl:with-param name="from" select="'$'" />
-          <xsl:with-param name="to" select="'xyzzy'" />
+          <xsl:with-param name="to" select="'xyzzy$'" />
         </xsl:call-template>
       </xsl:variable>
       
@@ -37,11 +43,20 @@
       </xsl:attribute>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:processing-instruction name="php">
         <xsl:attribute name="{@name}">
-          <xsl:value-of select="node()" />
+          <xsl:text>xyzzy</xsl:text>
+          <xsl:choose>
+            <xsl:when test="substring(normalize-space(.),1,1) = '#'">
+              <!-- The string starts with #, so we remove that -->
+              <xsl:value-of select="substring(normalize-space(.),2,string-length()-1)"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <!-- No start with #, just get the value -->
+              <xsl:value-of select="normalize-space(.)" />
+            </xsl:otherwise>
+          </xsl:choose>
+          <xsl:text>yzzyx</xsl:text>
         </xsl:attribute>
-      </xsl:processing-instruction>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
