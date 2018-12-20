@@ -10,8 +10,8 @@
 
   <xsl:template match="xar:blocklayout">
     <xsl:processing-instruction name="php">
-      <xsl:text>$_bl_locale  = xarMLSGetCurrentLocale();&nl;</xsl:text>
-      <xsl:text>$_bl_charset = xarMLSGetCharsetFromLocale($_bl_locale);&nl;</xsl:text>
+      <xsl:text>$_bl_locale  = xarMLS::getCurrentLocale();&nl;</xsl:text>
+      <xsl:text>$_bl_charset = xarMLS::getCharsetFromLocale($_bl_locale);&nl;</xsl:text>
       <xsl:text>header("Content-Type:</xsl:text>
       <xsl:value-of select="@content"/>
       <xsl:text>; charset = $_bl_charset");&nl;</xsl:text>

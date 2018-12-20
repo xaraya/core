@@ -104,11 +104,11 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         $this->curData = '';
 
         if (!isset($this->locale)) {
-            $locale = xarMLSGetCurrentLocale();
+            $locale = xarMLS::getCurrentLocale();
         }
 
         // Patch from Camille Perinel
-        $charset = xarMLSGetCharsetFromLocale($this->locale);
+        $charset = xarMLS::getCharsetFromLocale($this->locale);
 
         $this->parser = xml_parser_create('utf-8');
         if ($charset == 'utf-8') {
@@ -126,7 +126,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
             return true;
         }
 
-        $currentcharset = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
+        $currentcharset = xarMLS::getCharsetFromLocale(xarMLS::getCurrentLocale());
 
         $fp = fopen($fileName, 'r');
 
