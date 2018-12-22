@@ -157,17 +157,18 @@ function categories_admin_build_tree()
         }
         $data['message_info'][] = xarML('Sanity checks OK');
         $data['message_info'][] = '--------------------------------------------';
-        $data['message_info'][] = xarML('Checking uniqueness of values');
+        $data['message_info'][] = xarML('Checking uniqueness of left and right values');
         $unique_values = count($ids);
-        $data['message_info'][] = xarML('Found #(1) unique values', $unique_values);
+        $data['message_info'][] = xarML('Found #(1) left and right values in #(2) rows', $unique_values, count($all_rows));
     
         // Display duplicate values
         $duplicates = $left_nulls + $right_nulls;
+        sort($ids);
         $counts = array_count_values($ids);
 
         foreach ($counts as $key => $value) {
             if ($value != 1) {
-                $data['message_error'][] = xarML('Found #(1) instances of left ID #(2) ', $value, $key);
+                $data['message_error'][] = xarML('Found #(1) instances of left or right ID #(2) ', $value, $key);
                 $duplicates += $value - 1;
             }
         }
@@ -175,14 +176,13 @@ function categories_admin_build_tree()
         if ($right_nulls != 0) $data['message_error'][] = xarML('Found #(1) instances of right ID NULL ', $right_nulls);
         if ($parent_nulls != 0) $data['message_error'][] = xarML('Found #(1) instances of parent ID NULL ', $parent_nulls);
     
-        sort($ids);
         $keys = array_flip($ids);
         $index = 0;
         $id_count = count($ids) + $left_nulls + $right_nulls;
         for ($i=1;$i<=$id_count;$i++) {
             $index++;
             if (!isset($keys[$i])) {
-                $data['message_error'][] = xarML('Did not find an index value #(1)', $i);
+                $data['message_error'][] = xarML('Did not find a left or right ID value #(1)', $i);
             }
         }
 
@@ -249,7 +249,7 @@ function categories_admin_build_tree()
             }
             // Check for bad right IDs
             if (($right_sequence_stack->peek() != null) && ($this_right_id > $right_sequence_stack->peek())) {
-                $data['message_error'][] = xarML('    Bad Right ID at enty ID #(3): #(1) when looking for #(2)', $this_right_id, $right_sequence_stack->peek(), $this_id);
+                $data['message_error'][] = xarML('    Bad Right ID at entry ID #(3): #(1) when looking for #(2)', $this_right_id, $right_sequence_stack->peek(), $this_id);
             }
             
             // This entry has children, add its right ID to the list for checking
