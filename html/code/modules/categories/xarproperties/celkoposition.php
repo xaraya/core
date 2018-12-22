@@ -82,7 +82,7 @@ class CelkoPositionProperty extends DataProperty
     public $initialization_celkobasecategory = array(array('Celko Dropdown',array(array(1)),false,1));
 
     public $position_options = array();
-    public $atomic_value     = array();    // The atomic calues of this property are lrft, right and parent
+    public $atomic_value     = array();    // The atomic values of this property are left, right and parent
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -91,8 +91,8 @@ class CelkoPositionProperty extends DataProperty
         $this->filepath  = 'modules/categories/xarproperties';
 
         $this->position_options = array(
-					array('id' => '1', 'name' => xarML('Right before, in the same level')),
-					array('id' => '2', 'name' => xarML('Right after, in the same level')),
+					array('id' => '1', 'name' => xarML('Right before, at the same level')),
+					array('id' => '2', 'name' => xarML('Right after, at the same level')),
 					array('id' => '4', 'name' => xarML('The first child item')),
 					array('id' => '3', 'name' => xarML('The last child item')),
 					);
