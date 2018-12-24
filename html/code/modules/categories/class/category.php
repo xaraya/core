@@ -59,8 +59,12 @@ class Category extends DataObject
             // The dataobject may already contain all the information it needs
             // This would be when we are coming from a page submit
             // or we may not have a complete position for the new category but only a parent ID to hang it from
-            // We then have to complete the information for the new caegory
+            // We then have to complete the information for the new category
+            
+            // First add anything passed to the object. This always takes precedence
+            // It is up to the caller passing the values to ensure they are compatible
             if (isset($args['relative_position'])) {
+                // Apply the position passed
                 switch ((int)$args['relative_position']) {
                     case 1: // before - same level
                         $this->properties['position']->rightorleft = 'left';
@@ -83,19 +87,33 @@ class Category extends DataObject
                         $this->properties['position']->inorout = 'in';
                         break;
                 }
-            } else {
-                $this->properties['position']->rightorleft = 'right';
-                $this->properties['position']->inorout = 'in';
             }
             if (isset($args['parent_id'])) {
-                // Add the reference to the parent category
-                $this->properties['position']->reference_id = $args['parent_id'];
+                $this->properties['position']->reference_id = (int)$args['parent_id'];
+            }
+            
+            // Now check if we have a position in the object
+            if (!empty($this->properties['position']->rightorleft) && 
+                !empty($this->properties['position']->inorout) &&
+                isset($this->properties['position']->reference_id)) {
+                // No position was passed, but checkInput or the code above or something else already loaded one into the object
+                // No need to do anything
             } else {
-                // Make the new category the last child of the root category
-                $this->properties['position']->reference_id = 0;
+                // Nothing was passed or found in the object: define a default position
+                // As default we will make this new category a child of the top level
                 $this->properties['position']->rightorleft = 'right';
                 $this->properties['position']->inorout = 'in';
+                
+                // Get top level nodes (there should only be one)
+                sys::import('modules.categories.class.worker');
+                $worker = new CategoryWorker();
+                $worker->setTable($this->properties['position']->initialization_celkotable);
+                $toplevels = $worker->gettoplevel();
+                // Take the first one
+                $toplevel = reset($toplevels);
+                $this->properties['position']->reference_id = (int)$toplevel['id'];
             }
+
             // Now that we have all the information, run the create
             $id = parent::createItem($args);
             return $id;

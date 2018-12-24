@@ -105,7 +105,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         if ($bindResult) {
             if (!isset($this->gen)) return false;
             //            if (!isset($this->gen)) {
-            //                $this->gen = new PHPBackendGenerator(xarMLSGetCurrentLocale());
+            //                $this->gen = new PHPBackendGenerator(xarMLS::getCurrentLocale());
             //                if (!isset($this->gen)) return false;
             //            }
 
@@ -183,7 +183,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         }
 
         if ($needGeneration) {
-            //$gen = new PHPBackendGenerator(xarMLSGetCurrentLocale());
+            //$gen = new PHPBackendGenerator(xarMLS::getCurrentLocale());
             //if (!isset($gen)) return false;
             //if (!$gen->bindDomain($dnType, $dnName)) return false;
             //if (parent::bindDomain($dnType, $dnName)) return true;

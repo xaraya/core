@@ -23,7 +23,7 @@
 function roles_user_email(Array $args=array())
 {
     // we can only send emails to other members if we are logged in
-    if(!xarUserIsLoggedIn())
+    if(!xarUser::isLoggedIn())
     {
         throw new ForbiddenOperationException(null,'You are not logged in, sending emails is not allowed');
     }
@@ -92,8 +92,8 @@ function roles_user_email(Array $args=array())
             // fetch them from the current user now.
             if (!isset($fname) || !iseet($femail)) {
                 // Get details of the sender.
-                $fname = xarUserGetVar('name');
-                $femail = xarUserGetVar('email');
+                $fname = xarUser::getVar('name');
+                $femail = xarUser::getVar('email');
             }
 
             list($message) = xarModCallHooks('item', 'transform', $id, array($message));

@@ -46,7 +46,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
 {
     static $loaded = array(); // keep track of files we have loaded
     if (!isset($locale)) {
-        $locale = xarMLSGetCurrentLocale();
+        $locale = xarMLS::getCurrentLocale();
     }
 
     // rraymond : move the check for the loaded locale before processing as
@@ -803,7 +803,7 @@ class xarMLS__LocaleDataLoader extends xarObject
         // TRICK: <marco> Since this xml parser sucks, we obviously use utf-8 for utf-8 charset
         // and iso-8859-1 for other charsets, even if they're not single byte.
         // The only important thing here is to split utf-8 from other charsets.
-        $charset = xarMLSGetCharsetFromLocale($locale);
+        $charset = xarMLS::getCharsetFromLocale($locale);
         // FIXME: <marco> try, re-try and re-re-try this!
         if ($charset == 'utf-8') {
             $this->parser = xml_parser_create('utf-8');

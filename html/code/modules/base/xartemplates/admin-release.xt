@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <h3>Where to find Xaraya</h3>
+        <h2>Where to find Xaraya</h2>
             <p>
                 Please note we no longer support package bundles (core, base, full). Instead you can get all you need and more at the repositories below.
             </p>

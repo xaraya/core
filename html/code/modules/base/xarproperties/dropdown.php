@@ -280,6 +280,9 @@ class SelectProperty extends DataProperty
                 $line = array('id' => $firstline['id'], 'name' => $firstline['id']);
             }
         } else {
+            // Remove any final ; from the line
+            $firstline = trim($firstline, ';');
+            // split the line up into before and after the comma
             $firstline = explode(',',$firstline);
             if (isset($firstline[1])) {
                 if (strpos($firstline[1],'xar') === 0) @eval('$firstline[1] = ' . $firstline[1] .';');

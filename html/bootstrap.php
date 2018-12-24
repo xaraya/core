@@ -316,6 +316,8 @@ final class sys extends xarObject
         $dp = str_replace('.','/',$dp);
         if((0===strpos($dp,'modules/')) || (0===strpos($dp,'properties/')) || (0===strpos($dp,'blocks/'))) {
             return self::once(self::code() . $dp, $offset);
+        } elseif(0===strpos($dp,'composer/')) {
+            return self::once($dp, $offset);
         }
         return self::once(self::lib() . $dp, $offset);
     }

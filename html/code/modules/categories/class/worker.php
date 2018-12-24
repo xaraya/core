@@ -402,19 +402,19 @@ class CategoryWorker extends xarObject
         }
           
         // We have a single root (which is correct). Get it.
-        $result = $q->row();
+        $root = $q->row();
 
         // Define the left ID of the new top level category to append
-        $left_id = (int)$result[$this->right];
+        $new_left_id = (int)$root[$this->right];
 
         // Get the rows which we want to append, which are the category to clone and all its descendents
         $descendents = $this->getdescendents($itemid, 1);
 
         // Calculate the difference of the new top level category left ID to its old value
-        $diff = count($descendents) * 2;
+        $diff = $new_left_id - $descendents[$itemid][$this->left];
 
         // The parent of the new top level category is now a child of the root entry
-        $descendents[$itemid][$this->parent] = 1;
+        $descendents[$itemid][$this->parent] = $root['id'];
         
         // Set up an array with old and new itemids
         $oldnewids = array();
@@ -430,7 +430,7 @@ class CategoryWorker extends xarObject
             // Adjust left, right and parent fields
             $child[$this->left] += $diff;
             $child[$this->right] += $diff;
-            if ($child[$this->parent] != 1) $child[$this->parent] = $oldnewids[$child[$this->parent]];
+            if ($child[$this->parent] != (int)$root['id']) $child[$this->parent] = $oldnewids[$child[$this->parent]];
 
             // If we passed any other args, overwrite the corresponding value if the $arg passed is a valid field
             foreach ($args as $key => $value) 
@@ -452,13 +452,13 @@ class CategoryWorker extends xarObject
             $q->clearfields();
             
             // Save the ID of the new top level category
-            if ($child[$this->parent] == 1) $newtoplevel = $newid;
+            if ($child[$this->parent] == (int)$root['id']) $newtoplevel = $newid;
         }
 
         // Update the root entry's right ID to accomodate
         $q = new Query('UPDATE', $this->table);
-        $q->eq('id', $result['id']);
-        $q->addfield($this->right, (int)$result[$this->right] + $diff);
+        $q->eq('id', (int)$root['id']);
+        $q->addfield($this->right, (int)$root[$this->right] + count($descendents) * 2);
         $q->run();
         
         // Return the top level of the appended tree

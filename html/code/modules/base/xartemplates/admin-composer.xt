@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>Install Packages with Composer</h2>
+        <p>
+            You can find information on Composer <a href="https://getcomposer.org" target="_blank">here</a>.
+        </p>
+        <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+            <fieldset>
+                <legend>
+                    Composer Installer
+                </legend>
+                <xar:if condition="!$installed">
+                    The installer is not present. Install it by clicking on this button:
+                    <xar:var name="value">Install</xar:var>
+                    <xar:button type="submit" name="setup" value="$value"/>
+                <xar:else/>
+                    The composer installer is present. You can install packages with it.
+                </xar:if>
+            </fieldset>
+            <xar:if condition="$installed">
+                <fieldset>
+                    <legend>
+                        Install a package
+                    </legend>
+                    <!--
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="install_dir" title="#xarML('The directory where the package will be installed')#" class="xar-form-label">                                
+                                Install directory                                
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:data-input type="textbox" name="install_dir" value="$install_dir"/>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="package_dir" title="#xarML('The package directory name')#" class="xar-form-label">                                
+                                Package directory                  
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:data-input type="textbox" name="package_dir" value="$package_dir"/>
+                        </div>
+                    </div>
+                    -->
+                    <div class="xar-row">
+                        <div class="xar-col">
+                            <label for="install_com" title="#xarML('The command to install the package')#" class="xar-form-label">                                
+                                Install command                                
+                            </label>
+                        </div>
+                        <div class="xar-col">
+                            <xar:data-input type="textbox" name="install_com" value="$install_com"/>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                        </div>
+                        <div class="xar-col">
+                            <xar:if condition="!empty($message) AND ($message ne 'success')">
+                                <span style="color: red">#$message#</span>
+                            </xar:if>
+                            <xar:if condition="$message eq 'success'">
+                                <span style="color: green">Installation was successful</span>
+                            </xar:if>
+                        </div>
+                    </div>
+                    <div class="xar-row">
+                        <div class="xar-col">
+                        </div>
+                        <div class="xar-col">
+                            <xar:var name="value">Install</xar:var>
+                            <xar:button name="install" value="$value"/>
+                        </div>
+                    </div>
+                </fieldset>
+                <p>
+                    Notes:
+                    <ul>
+                        <li>The composer files and installed packages can be found in the composer directory at the top level of the directory tree.</li>
+                        <li>When calling a package you must require the Composer autoload. This is done by adding the following line to your code:<br/>
+                            <code>sys::import('composer.vendor.autoload');</code>
+                        </li>
+                    </ul>
+                </p>
+            </xar:if>
+        </form>
+    </div>
+</xar:template>

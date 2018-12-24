@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <fieldset>
+        <legend>Sessions and Security</legend>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Security options for sessions</xar:var>
+                <label for="securitylevel" title="#$label#" class="xar-form-label">
+                    Security Level:
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="options">
+                    array(
+                        array('id' => 'High', 'name' => xarML('High')),
+                        array('id' => 'Medium', 'name' => xarML('Medium')),
+                        array('id' => 'Low', 'name' => xarML('Low')),
+                    )
+                </xar:set>
+                <xar:set name="value">
+                    xarConfigVars::get(null,'Site.Session.SecurityLevel')
+                </xar:set>
+                <xar:data-input type="dropdown" name="securitylevel" options="$options" value="$value"/>
+            </div>
+        </div>
+        <xar:if condition="xarConfigVars::get(null,'Site.Session.SecurityLevel') eq 'Medium'">
+
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">How long to allow the session to last in days</xar:var>
+                    <label for="sessionduration" title="#$label#" class="xar-form-label">Session Duration (In Days):</label>
+                </div>
+                <div class="xar-col">
+                    <xar:set name="value">
+                        <xar:var scope="config" name="Site.Session.Duration"/>
+                    </xar:set>
+                    <input type="text" id="sessionduration" name="sessionduration" value="#$value#" maxlength="3" class="xar-form-textshort"/>
+                </div>
+            </div>
+        </xar:if>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Session times out in minutes</xar:var>
+                <label for="sessiontimeout" title="#$label#" class="xar-form-label">Session Inactivity Time Out:</label>
+                    <xar:set name="value">
+                        <xar:var scope="config" name="Site.Session.InactivityTimeout"/>
+                    </xar:set>
+            </div>
+            <div class="xar-col">
+                <input type="text" id="sessiontimeout" name="sessiontimeout" value="#$value#" maxlength="3" class="xar-form-textshort"/>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:set name="authmodules">
+                    <xar:var scope="config" name="Site.User.AuthenticationModules"/>
+                </xar:set>
+                <xar:var name="label">Change the order of authentication</xar:var>
+                <label for="authmodules" title="#$label#" class="xar-form-label">Authentication Modules:</label>
+            </div>
+            <div class="xar-col">
+                <xar:if condition="!empty($authmodules) and count($authmodules) gt 1">
+                    <xar:set name="size">count($authmodules)</xar:set>
+                    <xar:data-input type="orderselect" name="authmodules" order="$authmodules" size="$size"/>
+                <xar:else />
+                    #$authmodules[0]#
+                </xar:if>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Override the default cookie name</xar:var>
+                <label for="cookiename" title="#$label##" class="xar-form-label">
+                    Cookie Name:
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">
+                    <xar:var scope="config" name="Site.Session.CookieName"/>
+                </xar:set>
+                <input type="text" id="cookiename" name="cookiename" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
+                &#160;Default: XARAYASID
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Override the default cookie path</xar:var>
+                <label for="cookiepath" title="#$label#" class="xar-form-label">
+                    Cookie Path:
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">
+                    <xar:var scope="config" name="Site.Session.CookiePath"/>
+                </xar:set>
+                <input type="text" id="cookiepath" name="cookiepath" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
+                <span>
+                    &#160;Default: #xarServer::getBaseURI()# (limited to the Xaraya directory)
+                </span>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Override the default cookie domain</xar:var>
+                <label for="cookiedomain" title="#$label#" class="xar-form-label">
+                    Cookie Domain:
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">
+                    <xar:var scope="config" name="Site.Session.CookieDomain"/>
+                </xar:set>
+                <input type="text" id="cookiedomain" name="cookiedomain" value="#$value#" maxlength="20" class="xar-form-textmedium"/>
+                &#160;Default: none (not shared across hosts)
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Cookie Timeout Settings</xar:var>
+                <label for="cookietimeout" title="#$label#" class="xar-form-label">
+                    Cookie Timeout: (In Days)
+                </label>
+            </div>
+            <div class="xar-col">
+            <xar:set name="value" catch="false" >xarConfigVars::get(null,'Site.Session.CookieTimeout')</xar:set>
+                <input type="text" id="cookietimeout" name="cookietimeout" value="#$value#" maxlength="40" class="xar-form-textmedium"/>
+                <span>
+                </span>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Override the default referer check</xar:var>
+                <label for="referercheck" title="#$label#" class="xar-form-label">
+                    Referer Check:
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">
+                    <xar:var scope="config" name="Site.Session.RefererCheck"/>
+                </xar:set>
+                <input type="text" id="referercheck" name="referercheck" value="#$value#" maxlength="40" class="xar-form-textmedium"/>
+                <span>
+                    &#160;Default: #xarServer::getVar('HTTP_HOST')# for security level 'High'
+                </span>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>SSL Support</legend>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Configure to run on a secure server.</xar:var>
+                <label for="secureserver" title="#$label#" class="xar-form-label">
+                    Configure for secure server
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="checked">
+                    <xar:var scope="config" name="Site.Core.EnableSecureServer"/>
+                </xar:set>
+                <xar:data-input type="checkbox" name="secureserver" id="secureserver" checked="$checked"/>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">SSL port</xar:var>
+                <label for="sslport" title="#$label#" class="xar-form-label">SSL port</label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">
+                    <xar:var scope="config" name="Site.Core.SecureServerPort"/>
+                </xar:set>
+                <input type="text" id="sslport" name="sslport" value="#$value#" class="xar-form-textshort"/>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Encryption</legend>
+        <xar:if condition="extension_loaded('mcrypt')">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label for="bar" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                        Cipher Employed:                                
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input type="dropdown" name="cipher" options="$ciphers" value="$encryption['cipher']"/>
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label for="bar" title="#xarML('The cipher mode we are using')#" class="xar-form-label">                                
+                        Cipher Mode:                                
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input type="dropdown" name="mode" options="$modes" value="$encryption['mode']"/>
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label for="bar" title="#xarML('The key used in encryption and decryption')#" class="xar-form-label">                                
+                        Key:                                
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input type="password" name="key" value="$encryption['key']"/>
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label for="bar" title="#xarML('A hint for remembering the key used in encryption and decryption')#" class="xar-form-label">                                
+                        Hint:                                
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input type="textbox" name="hint" value="$encryption['hint']" size="80"/>
+                </div>
+            </div>
+            <!--
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label for="bar" title="#xarML('The initialization vector used in encryption and decryption')#" class="xar-form-label">
+                        Initialization Vector:
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:data-input type="textbox" name="initvector" value="$encryption['initvector']" size="10" maxlength="8"/>&#160;
+                    must be exactly 8 characters long
+                </div>
+            </div>
+            -->
+        <xar:else/>
+            You need to install the PHP mcrypt extension to access encryption functionality
+        </xar:if>
+    </fieldset>
+</xar:template>

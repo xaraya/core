@@ -334,17 +334,20 @@ class xarPDO extends PDO
         if (empty($flag)) $flag = PDO::FETCH_NUM;
         $limit = empty($limit) ? 1000000 : $limit;
         
-        // Only allow positive integers (for now)
         // TODO: better type testing?
-        $limit = $limit < 0 ? 0 : (int)$limit;
+        $limit = $limit < 0 ? -1 : (int)$limit;
         $offset = $offset < 0 ? 0 : (int)$offset;
 
         // Lets try this the easy way
         // This only works for MySQL !!
         if (substr(strtoupper($string),0,6) == "SELECT") {
-            $string .= " LIMIT ? OFFSET ?";
-            $bindvars[] = $limit;
-            $bindvars[] = $offset;
+            // Only dd limit and offset if limit is positive
+            if ($limit > 0) {
+                $string .= " LIMIT ?";
+                $bindvars[] = $limit;
+                $string .= " OFFSET ?";
+                $bindvars[] = $offset;
+            }
         }
         if (empty($bindvars)) {
             $stmt = $this->query($string, $flag);
@@ -379,6 +382,15 @@ class xarPDO extends PDO
     public function getLastId($table = null)
     {
         return $this->last_id;
+    }
+    
+    public function getNextId($table = null)
+    {
+        return null;
+    }
+    public function GenId($table = null)
+    {
+        return null;
     }
 }
 

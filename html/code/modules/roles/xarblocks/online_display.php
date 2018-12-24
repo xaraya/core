@@ -85,7 +85,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
                 'messagesurl' => ''
             );
 
-            if ($thisuser['name'] == xarUserGetVar('name')) {
+            if ($thisuser['name'] == xarUser::getVar('name')) {
                 if (xarMod::isAvailable('messages')) {
                     $data['activeusers'][$key]['total'] = xarMod::apiFunc(
                         'messages', 'user', 'count_total',

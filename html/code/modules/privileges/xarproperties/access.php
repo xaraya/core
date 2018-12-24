@@ -437,9 +437,9 @@ class AccessProperty extends DataProperty
             if ($group == $this->myself) {
                 $access = true;
             } elseif ($group == $anonID) {
-                if (!xarUserIsLoggedIn()) $access = true;
+                if (!xarUser::isLoggedIn()) $access = true;
             } elseif ($group == -$anonID) {
-                if (xarUserIsLoggedIn()) $access = true;
+                if (xarUser::isLoggedIn()) $access = true;
             } elseif ($group) {
                 $rolesgroup = xarRoles::getRole($group);
                 $thisuser = xarCurrentRole();

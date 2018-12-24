@@ -29,13 +29,13 @@ function roles_user_account()
     $defaultloginmodname  = $defaultauthdata['defaultloginmodname'];
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
-    if (!xarUserIsLoggedIn()){
+    if (!xarUser::isLoggedIn()){
         // bring the user back here after login :)
         $redirecturl = xarModURL('roles', 'user', 'account');
         xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => urlencode($redirecturl))));
     }
 
-    $id = xarUserGetVar('id');
+    $id = xarUser::getVar('id');
 
     if ($id == XARUSER_LAST_RESORT) {
         $message = xarML('You are logged in as the last resort administrator.');
@@ -130,7 +130,7 @@ function roles_user_account()
                 // set up the roles_user object for edit
                 if (xarModVars::get('roles','setuserlastlogin')) {
                     //only display it for current user or admin
-                    if (xarUserIsLoggedIn() && xarUserGetVar('id')==$id) { //they should be but ..
+                    if (xarUser::isLoggedIn() && xarUser::getVar('id')==$id) { //they should be but ..
                         $userlastlogin = xarSession::getVar('roles_thislastlogin');
                         $usercurrentlogin = xarModUserVars::get('roles','userlastlogin',$id);
                     }elseif (xarSecurityCheck('AdminRoles',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
@@ -194,8 +194,8 @@ function roles_user_account()
         $data['menutabs'] = $menutabs;
         
     }
-    $data['id']           = xarUserGetVar('id');
-    $data['name']         = xarUserGetVar('name');
+    $data['id']           = xarUser::getVar('id');
+    $data['name']         = xarUser::getVar('name');
     $data['logoutmodule'] = $defaultlogoutmodname;
     $data['loginmodule']  = $defaultloginmodname;
     $data['authmodule']   = $defaultauthmodname;

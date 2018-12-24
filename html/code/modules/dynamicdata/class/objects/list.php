@@ -133,25 +133,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // Clean the itemids found
         foreach ($data['id'] as $k => $v) $data['id'][$k] = (int)$v;
         
-        // Get the properties we will be looking at
-        $propertynames = array_keys($this->properties);
-        foreach ($propertynames as $k => $name) {
-            // No DISABLED properies
-            if($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
-                unset($propertynames[$key]);
-            }
-        }
-        
         // Get the data from the form
         $formitems = array();
         foreach ($data['id'] as $id) {
             $formitem = array();
-            foreach ($propertynames as $name) {
+            foreach ($this->properties as $name => $property) {
+                // Only active or list properties will be checked
+                if(!in_array($property->getDisplayStatus(),array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY))) {
+                    continue;
+                }
                 $isvalid = $this->properties[$name]->checkInput($name . "[" . $id . "]");
                 if ($isvalid) $formitem[$name] = $this->properties[$name]->value;
             }
             $formitems[$id] = $formitem;
-            
         }
         // Save the items for reuse
         $this->items = $formitems;
@@ -181,6 +175,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // Check if the data changed
             $unchanged = true;
             foreach ($items_to_update[$key] as $field_key => $field_value) {
+                if (!isset($db_item[$field_key])) {
+                    $msg = xarML("The property '#(1)' could not be updated", $field_key);
+                    throw new Exception($msg);
+                }
                 if ($db_item[$field_key] != $field_value) {
                     $unchanged = false;
                     break;
@@ -303,7 +301,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             return;
         }
 
-        if (xarUserIsLoggedIn()) {
+        if (xarUser::isLoggedIn()) {
             // get the direct parents of the current user (no ancestors)
             $grouplist = xarCache::getParents();
         } else {
@@ -674,7 +672,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $is_user = 1;
 /*
 // CHECKME: further optimise for anonymous access by assuming they can't delete (or edit) ?
-        if (xarUserIsLoggedIn()) {
+        if (xarUser::isLoggedIn()) {
             $is_user = 1;
         } else {
             $is_user = 0;

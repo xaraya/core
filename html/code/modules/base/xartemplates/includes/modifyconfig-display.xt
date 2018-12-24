@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <fieldset>
+        <legend>General Options</legend>
+        <xar:data-form object="$module_settings"/>
+    </fieldset>
+    <fieldset>
+        <legend>Site Default Front Page Settings</legend>
+        <p class="xar-note">
+            The Default Module supplies the main entry (front) page to your site. The Default Module Function below provides the template for this frontpage. You can customize and override this template in your theme.</p>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">The default module to be loaded on your base url.</xar:var>
+                <label for="defaultmodule" title="#$label#" class="xar-form-label">Default Module:</label>
+            </div>
+            <div class="xar-col">
+                <xar:if condition="xarModVars::get('modules', 'defaultmoduletype') == 'admin'">
+                    <xar:set name="filter">array('AdminCapable' =&gt; 1)</xar:set>
+                <xar:else />
+                    <xar:set name="filter">array('UserCapable' =&gt; 1)</xar:set>
+                </xar:if>
+                <xar:set name="value">
+                    <xar:var scope="module" module="modules" name="defaultmodule"/>
+                </xar:set>
+                <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" store_prop="name"/>
+            </div>
+        </div>
+        <xar:if condition="(int)xarModVars::get('modules', 'defaultmodule') eq (int)xarMod::getID('base')">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">Use an alternate default page template.</xar:var>
+                    <label for="alternatepagetemplate" title="#$label#" class="xar-form-label">
+                        Use Alternate Page Template
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:set name="checked">
+                        <xar:var scope="module" module="base" name="UseAlternatePageTemplate"/>
+                    </xar:set>
+                    <xar:data-input type="checkbox" name="alternatepagetemplate" id="alternatepagetemplate" checked="$checked"/>
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">The name of the alternate page template to use.</xar:var>
+                    <label for="alternatepagetemplatename" title="#$label#" class="xar-form-label">
+                        Alt. Page Template Name:
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:set name="value">
+                        <xar:var scope="module" module="base" name="AlternatePageTemplateName"/>
+                    </xar:set>
+                    <input type="text" id="alternatepagetemplatename" name="alternatepagetemplatename" value="#$value#" class="xar-form-textlong"/>
+                </div>
+            </div>
+        </xar:if>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">The default type of module to be loaded.</xar:var>
+                <label for="defaulttype" title="#$label#" class="xar-form-label">
+                    Default Module Type:
+                </label>
+           </div>
+           <div class="xar-col">
+                <xar:set name="options">
+                    array( 
+                        array('id' =&gt; 'admin', 'name' =&gt; 'admin'), 
+                        array('id' =&gt; 'user', 'name' =&gt; 'user'), 
+                    )
+                </xar:set>
+                <xar:set name="value">
+                    <xar:var scope="module" module="modules" name="defaultmoduletype"/>
+                </xar:set>
+                <xar:data-input type="dropdown" name="defaulttype" id="defaulttype" options="$options" value="$value"/>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">The default function of module to be loaded.</xar:var>
+                <label for="defaultfunction" title="#$label#" class="xar-form-label">
+                    Default Module Function:
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">
+                    <xar:var scope="module" module="modules" name="defaultmodulefunction"/>
+                </xar:set>
+                <input type="text" id="defaultfunction" name="defaultfunction" value="#$value#" maxlength="100" class="xar-form-textlong"/>
+            </div>
+        </div>
+    </fieldset>
+    <!-- General place to put extra module data and code. Hide it for now as it's not used
+    <fieldset>
+        <legend>
+            Module Data Path
+        </legend>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">The path to the library where the module's data is held.</xar:var>
+                <label for="defaultdatapath" title="#$label#" class="xar-form-label">
+                    Path to Module Data:
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">
+                    <xar:var scope="module" module="modules" name="defaultdatapath"/>
+                </xar:set>
+                <input type="text" id="defaultdatapath" name="defaultdatapath" value="#$value#" maxlength="100" class="xar-form-textlong"/>
+            </div>
+        </div>
+   </fieldset>
+   -->
+    <fieldset>
+        <legend>URL Scheme</legend>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Enable short url support throughout Xaraya.</xar:var>
+                <label for="shorturl" title="#$label#" class="xar-form-label">
+                    Default Route
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">
+                    <xar:var scope="config" name="Site.Core.EnableShortURLsSupport"/>
+                </xar:set>
+                <xar:var name="firstline">Automatic</xar:var>
+                <xar:set name="firstline">"'',$firstline"</xar:set>
+                <xar:set name="options">
+                    array(
+                        array('id' => '', 'name' => xarML('Automatic')),
+                        array('id' => 'default', 'name' => xarML('Xaraya URLs')),
+                        array('id' => 'short', 'name' => xarML('Short URLs')),
+                    )
+                </xar:set>
+                <xar:data-input type="dropdown" name="shorturl" id="shorturl" value="$value" options="$options"/>
+                &#160;
+                <a href="#xarModURL('base','admin','htaccess')#">Edit the htaccess file</a>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">The web server allows forwards slashes in URLs</xar:var>
+                <label for="allowsslashes" title="#$label#" class="xar-form-label">
+                    Web server allows slashes
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="checked">
+                    <xar:var scope="config" name="Site.Core.WebserverAllowsSlashes"/>
+                </xar:set>
+                <xar:data-input type="checkbox" name="allowsslashes" id="allowsslashes" checked="$checked"/>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Change HTML Entities to readible entities.</xar:var>
+                <label for="htmlentites" title="#$label#" class="xar-form-label">
+                    HTML Entities
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="checked">
+                    <xar:var scope="config" name="Site.Core.FixHTMLEntities"/>
+                </xar:set>
+                <xar:data-input type="checkbox" name="htmlentites" id="htmlentites" checked="$checked"/> Fix HTML Entities
+            </div>
+        </div>
+    </fieldset>
+</xar:template>

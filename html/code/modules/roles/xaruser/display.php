@@ -21,7 +21,7 @@ function roles_user_display(Array $args=array())
 {
     extract($args);
 
-    if (!xarVarFetch('id','id',$id, xarUserGetVar('id'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('id','id',$id, xarUser::getVar('id'), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
     if (!xarVarFetch('itemtype', 'int', $itemtype, 1, XARVAR_NOT_REQUIRED)) return;
     if(!xarVarFetch('tplmodule', 'str', $args['tplmodule'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
@@ -37,7 +37,7 @@ function roles_user_display(Array $args=array())
 
         if (!$role) return;
 
-        $currentid = xarUserGetVar('id');
+        $currentid = xarUser::getVar('id');
         if ($currentid == $id) {
             xarController::redirect(xarModURL('roles', 'user', 'account'));
         }

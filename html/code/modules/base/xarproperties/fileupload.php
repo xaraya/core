@@ -21,12 +21,13 @@ class FileUploadProperty extends DataProperty
     public $reqmodules = array('base');
 
     public $display_size                    = 40;
-    public $initialization_basedirectory    = 'var/uploads';
+    public $initialization_basedirectory    = 'var/uploads';    // The directory the files are uploaded to
     public $initialization_importdirectory  = null;
-    public $initialization_multiple         = TRUE;
-    public $validation_max_file_size        = 1000000;
-    public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';
-    public $validation_allow_duplicates     = 2; // Overwrite the old instance
+    public $initialization_multiple         = TRUE;     // Can we upload multiple files with the same name?
+    public $validation_max_file_size        = 1000000;  // Tha maximum file size that can be uploaded (in bytes)
+    public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';   // Only these file extensions are allowed
+    public $validation_allow_duplicates     = 2;     // Overwrite the old instance
+    public $validation_sanitize_filename    = false; // Remove or change unacceptable characters in the name
 //    public $initialization_basepath         = null;
     // TODO: support the different options in code below
     public $methods = array('trusted'  => false,
@@ -96,7 +97,7 @@ class FileUploadProperty extends DataProperty
         // Note : {user} will be replaced by the current user uploading the file - e.g. var/uploads/{user} -&gt; var/uploads/myusername_123
         if (!empty($this->initialization_basedirectory) && preg_match('/\{user\}/',$this->initialization_basedirectory)) {
             $uname = 'user';
-            $id = xarUserGetVar('id');
+            $id = xarUser::getVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
@@ -105,7 +106,7 @@ class FileUploadProperty extends DataProperty
         }
         if (!empty($this->initialization_importdirectory) && preg_match('/\{user\}/',$this->initialization_importdirectory)) {
             $uname = 'user';
-            $id = xarUserGetVar('id');
+            $id = xarUser::getVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
             // out unwanted characters through xarVarPrepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
@@ -153,7 +154,7 @@ class FileUploadProperty extends DataProperty
             return true;
         }
 
-        // if the uploads module is hooked in, use it's functionality instead
+        // if the uploads module is hooked in, use its functionality instead
         if ($this->UploadsModule_isHooked == TRUE) {
             // set override for the upload/import paths if necessary
             if (!empty($this->initialization_basedirectory) || !empty($this->initialization_importdirectory)) {
@@ -205,10 +206,11 @@ class FileUploadProperty extends DataProperty
             }
         }
 
-//        $upname = $name .'_upload';
-
+/**
+ * Validation check that we have a file 
+ */
         if (isset($_FILES[$name])) {
-            $file =& $_FILES[$name];
+            $file = $_FILES[$name];
         } else {
             $file = array();
             if (!$this->validation_allowempty) {
@@ -223,13 +225,22 @@ class FileUploadProperty extends DataProperty
             }
         }
 
+/**
+ * Validation checks on the name and extension 
+ */
         if (isset($file['tmp_name']) && is_uploaded_file($file['tmp_name']) && $file['size'] > 0 && $file['size'] < $this->validation_max_file_size) {
-            if (!empty($_FILES[$name]['name'])) {
+            if (!empty($file['name'])) {
                 if (!$this->validateExtension($file['name'])) {
                     $this->invalid = xarML('The file type is not allowed: #(1)', $file['name']);
                     $this->value = null;
                     return false;
                 }
+
+                // Run the file name through the sanitize filter if asked to
+                if ($this->validation_sanitize_filename) {
+                    $file['name'] = xarMod::apiFunc('base', 'admin', 'sanitize_filename', array('filename' => $file['name']));
+                }
+        
                 $filename = $file['name'];
             } else {
             // TODO: assign random name + figure out mime type to add the right extension ?
