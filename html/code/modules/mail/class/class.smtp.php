@@ -62,7 +62,7 @@ class SMTP extends xarObject
      * @access public
      * @return void
      */
-    function SMTP()
+    function __construct()
     {
         $this->smtp_conn = 0;
         $this->error = null;
