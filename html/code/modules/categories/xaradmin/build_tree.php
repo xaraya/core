@@ -240,7 +240,7 @@ function categories_admin_build_tree()
             }
             //Sanity check for each entry
             if ($this_left_id > $this_right_id) {
-                $data['message_error'][] = xarML('    Bad IDs at enty ID #(3): Left (#(1)) is greater than right ID (#(2))', $this_right_id, $this_right_id, $this_id);
+                $data['message_error'][] = xarML('    Bad IDs at entry ID #(3): Left (#(1)) is greater than right ID (#(2))', $this_right_id, $this_right_id, $this_id);
             }
             
             // We're already past this bad right ID, throw it away

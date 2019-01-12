@@ -213,7 +213,7 @@ class CategoryWorker extends xarObject
         // Get the gap in indices that will be created by deleting
         $difference = $this_category[$this->right] - $this_category[$this->left] +1;
 
-        // Delete this category enty and its descendents as entries of the table
+        // Delete this category entry and its descendents as entries of the table
         $q = new Query('DELETE', $this->table);
         $q->ge($this->left, (int)$this_category[$this->left]);
         $q->le($this->right, (int)$this_category[$this->right]);
