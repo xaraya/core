@@ -1,0 +1,6 @@
+[remote "upstream"]
+	url = https://github.com/xaraya/core.git
+	fetch = +refs/heads/*:refs/remotes/upstream/*
+[branch "xaraya/com.xaraya.core.bermuda"]
+	remote = upstream
+	merge = refs/heads/com.xaraya.core.bermuda
