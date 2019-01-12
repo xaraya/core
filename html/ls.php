@@ -47,6 +47,13 @@ function xarLSLoader()
  * @todo: don't load the whole core
  */
     sys::import('xaraya.core');
+
+/**
+ * Set to the minimalist exception handler
+ */
+    sys::import('xaraya.exceptions');
+    set_exception_handler(array('ExceptionHandlers','bone'));
+
 /**
  * We need a (fake) ip address to run Xaraya
  */
@@ -99,11 +106,6 @@ function xarLocalServicesMain($argc, $argv)
         return 1;
     }
 }
-
-/**
- * Set to the minimalist exception handler
- */
-set_exception_handler(array('ExceptionHandlers','bone'));
 
 /**
  * Set up for local services
