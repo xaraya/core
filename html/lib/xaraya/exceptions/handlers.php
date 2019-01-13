@@ -108,7 +108,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
     // Lowest level handler, should always work, no assumptions whatsoever
     public static function bone(Throwable $e)
     {
-        if (is_subclass_of($e, 'Exception') {
+        if (is_subclass_of($e, 'Exception')) {
             // This is an exception: display it
             echo ExceptionHandlers::RenderRaw($e);
         } else {
