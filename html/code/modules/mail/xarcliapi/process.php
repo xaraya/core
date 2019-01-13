@@ -30,7 +30,7 @@ function mail_cliapi_process(Array $args=array())
     if(isset($argv[4]) && $argv[4]=='-p') $pass = $argv[5];
     if(!isset($user) or !isset($pass)) 
     {
-        echo "Usage: mail -u <user> -p<pass> [mailcontent]\n";
+        echo "Usage: mail -u <user> -p <pass> [mailcontent]\n";
         return 1;
     }
     if(!xarUserLogin($user,$pass)) {
