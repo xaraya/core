@@ -156,7 +156,7 @@ define('XARCORE_SYSTEM_ALL',             xarConst::BIT_ALL);
  * Sanity check that we are coming in through a normal entry point
  *
  */
-if(!class_exists('sys')) die("The Xaraya precore was not loaded");
+if(!class_exists('sys')) throw new Exception("The Xaraya precore was not loaded");
 
 /**
  * Now begin loading
@@ -266,7 +266,7 @@ class xarCore extends xarCoreCache
         try {
             date_default_timezone_set(xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
         } catch (Exception $e) {
-            die('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
+            throw new Exception('Your configuration file appears to be missing. This usually indicates Xaraya has not been installed. <br/>Please refer to point 4 of the installation instructions <a href="readme.html" target="_blank">here</a>');
         }
 
         /**
@@ -315,7 +315,7 @@ class xarCore extends xarCoreCache
             } catch (Exception $e) {
                 // Catch the error here rather than in the subsystem, because we might be connection to different databases
                 // and want to cater to possible errors in each
-                die("Connection error: a database connection could not be established");
+                throw new Exception("Connection error: a database connection could not be established");
             }
             $whatToLoad ^= self::BIT_DATABASE;
         }
