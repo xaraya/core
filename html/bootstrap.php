@@ -284,7 +284,7 @@ final class sys extends xarObject
     **/
     private static function once($dp, $offset='')
     {
-        // If we already have it get out of here asap
+        // If we already have it, get out of here asap
         if(!isset(self::$has[$dp]))
         {
             // set this *before* the include below
