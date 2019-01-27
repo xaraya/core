@@ -106,9 +106,15 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
     }
 
     // Lowest level handler, should always work, no assumptions whatsoever
-    public static function bone(Exception $e)
+    public static function bone(Throwable $e)
     {
-        echo ExceptionHandlers::RenderRaw($e);
+        if (is_subclass_of($e, 'Exception')) {
+            // This is an exception: display it
+            echo ExceptionHandlers::RenderRaw($e);
+        } else {
+            // This is an error (?): just do a primitive display for now
+            print_r($e);
+        }
     }
 
     /**

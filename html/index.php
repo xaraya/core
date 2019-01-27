@@ -224,7 +224,12 @@ function xarMain()
 /**
  * Set up for a web request
  */
-xarLoader();
+try {
+    xarLoader();
+} catch (Exception $e) {
+    print_r($e->getMessage());
+    exit;
+}
 /**
  * Process the web request
  */

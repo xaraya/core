@@ -325,6 +325,9 @@ class CelkoPositionProperty extends DataProperty
      */
     public function updateValue($itemid=0)
     {
+        // Sanity checks: this property may not need to be updated
+        if (empty($this->reference_entry) || empty($this->current_entry)) return true;
+        
         // Check the current item
         $current_entry = $this->getItem($itemid);
 

@@ -196,7 +196,7 @@ class xarPDO extends PDO
         try {
             parent::__construct($dsn, $username, $password, $options);
         } catch (Exception $e) {
-            var_dump($e->getMessage());exit;
+            throw $e;
         }
         // Force PDO to prepare statements
         // CHECKME: setting this to false gives an error with some INSERT statements
