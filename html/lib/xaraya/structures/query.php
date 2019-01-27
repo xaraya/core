@@ -73,7 +73,7 @@ class Query
     public function __construct($type='SELECT',$tables='',$fields='')
     {
         // Set the debugflag
-        if (xarConfigVars::get(null,'Site.BL.ShowQueries') && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        if (xarConfigVars::get(null,'Site.BL.ShowQueries',false) && in_array(xarUserGetVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             $this->debugflag = true;
         }
 

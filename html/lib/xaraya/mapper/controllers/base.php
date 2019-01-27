@@ -44,7 +44,7 @@ class BaseActionController extends xarObject
         // Now get the output
         if ($request->getModule() == 'object') {
             sys::import('xaraya.objects');
-            $response->output = xarObject::guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs());
+            $response->output = xarDDObject::guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs());
         } else {
             $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getFunctionArgs());
         }
