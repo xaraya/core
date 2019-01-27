@@ -207,9 +207,9 @@ class DataObjectDefaultHandler extends xarObject
         }
 
         if (isset($this->object->itemid)) {
-            $return_url = xarObject::getActionURL($this->object, $this->nextmethod, $this->object->itemid);
+            $return_url = xarDDObject::getActionURL($this->object, $this->nextmethod, $this->object->itemid);
         } else {
-            $return_url = xarObject::getActionURL($this->object, $this->nextmethod);
+            $return_url = xarDDObject::getActionURL($this->object, $this->nextmethod);
         }
 
         return $return_url;

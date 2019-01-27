@@ -3,9 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
-        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
-        <xar:set name="searchlink">xarObject::getActionURL($object, 'search')</xar:set>
-        <xar:set name="querylink">xarObject::getActionURL($object, 'query')</xar:set>
+        <xar:set name="viewlink">xarDDObject::getActionURL($object, 'view')</xar:set>
+        <xar:set name="searchlink">xarDDObject::getActionURL($object, 'search')</xar:set>
+        <xar:set name="querylink">xarDDObject::getActionURL($object, 'query')</xar:set>
         <h2>
             Search #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
@@ -41,7 +41,7 @@
                         <input type="text" name="q" id="q" value="#$search['q']#" size="20"/>
                         <xar:var name="label">Search</xar:var>
                         <xar:button type="submit" label="$label"/>
-                        &#160;<a href="#xarObject::getActionURL($object, 'query')#">Advanced</a>
+                        &#160;<a href="#xarDDObject::getActionURL($object, 'query')#">Advanced</a>
                     </div>
                 </div>
                 <div class="xar-row">

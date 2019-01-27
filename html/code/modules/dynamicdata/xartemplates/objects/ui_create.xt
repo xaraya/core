@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
-        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
+        <xar:set name="viewlink">xarDDObject::getActionURL($object, 'view')</xar:set>
         <h2>
             Create New Item in #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
@@ -28,7 +28,7 @@
             Trying to create this item here may break the module. Please proceed with caution.</h3>
         </xar:if>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <xar:set name="postlink">xarObject::getActionURL($object, 'create')</xar:set>
+        <xar:set name="postlink">xarDDObject::getActionURL($object, 'create')</xar:set>
         <form method="post" action="#$postlink#" enctype="#$enc_type#">
             <fieldset>
                 <legend>Item Details</legend>
