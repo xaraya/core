@@ -31,7 +31,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $this->loader($descriptor);
         unset($descriptor);
 
-        // Get a reference to each property's value and find the primarys index
+        // Get a reference to each property's value and find the primary's index
         if (!empty($args['config'])) {
         }
         foreach ($this->properties as $property) {
