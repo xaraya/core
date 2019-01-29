@@ -130,7 +130,11 @@ class DataObjectMaster extends xarObject
 
         // get the properties defined for this object
         sys::import('modules.dynamicdata.class.properties.master');
-        foreach ($this->propertyargs as $row) DataPropertyMaster::addProperty($row, $this);
+        foreach ($this->propertyargs as $row) {
+            // If this is a disabled property, then ignore
+            if (isset($row['status']) && ($row['status'] & DataPropertyMaster::DD_DISPLAYMASK) == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) continue;            
+            DataPropertyMaster::addProperty($row, $this);
+        }
         unset($this->propertyargs);
 
         // Make sure we have a primary key
