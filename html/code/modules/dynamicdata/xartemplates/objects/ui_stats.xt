@@ -3,9 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
-        <xar:set name="viewlink">xarObject::getActionURL($object, 'view')</xar:set>
-        <xar:set name="statslink">xarObject::getActionURL($object, 'stats')</xar:set>
-        <xar:set name="reportlink">xarObject::getActionURL($object, 'report')</xar:set>
+        <xar:set name="viewlink">xarDDObject::getActionURL($object, 'view')</xar:set>
+        <xar:set name="statslink">xarDDObject::getActionURL($object, 'stats')</xar:set>
+        <xar:set name="reportlink">xarDDObject::getActionURL($object, 'report')</xar:set>
         <h2>
             Statistics for #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">

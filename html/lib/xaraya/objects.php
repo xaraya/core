@@ -15,20 +15,20 @@
  */
 
 /**
- * Interface declaration for xarObject
+ * Interface declaration for xarDDObject
  *
  * @todo this is very likely to change, it was created as baseline for refactoring
  */
-interface IxarObject
+interface IxarDDObject
 {
 
 }
 
 /**
- * Preliminary class to model xarObject interface
+ * Preliminary class to model xarDDObject interface
  *
  */
-class xarDDObject extends xarObject implements IxarObject
+class xarDDObject extends xarObject implements IxarDDObject
 {
     /**
      * Initialize
@@ -322,7 +322,7 @@ class xarDDObject extends xarObject implements IxarObject
 
     /**
      * Generate Current URL for a specific action on an object
-     * e.g. use current URLs by putting #xarObject::guiMethod('sample', null, array('linktype' => 'current'))# in some page template
+     * e.g. use current URLs by putting #xarDDObject::guiMethod('sample', null, array('linktype' => 'current'))# in some page template
      */
     static function getCurrentURL($object, $action = '', $itemid = null)
     {
