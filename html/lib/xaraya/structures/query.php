@@ -67,6 +67,7 @@ class Query
     public $leoperator = '<=';
     public $andoperator = 'AND';
     public $oroperator = 'OR';
+    private $operatorarray = array();
 //---------------------------------------------------------
 // Constructor
 //---------------------------------------------------------
@@ -91,6 +92,14 @@ class Query
         
         // Create the ID for this query
         $this->id = $this->createID();
+        
+        // Move this into the declarations once PHP allows it
+        $this->operatorarray['eq'] = '=';
+        $this->operatorarray['ne'] = '!=';
+        $this->operatorarray['lt'] = '<';
+        $this->operatorarray['le'] = '<=';
+        $this->operatorarray['gt'] = '>';
+        $this->operatorarray['ge'] = '>=';
     }
 
     public function run($statement='',$display=1)
@@ -428,14 +437,18 @@ class Query
         $this->key++;
         $numargs = func_num_args();
         $link = func_get_arg(0);
+        
+        if (isset($this->operatorarray[$link['field3']])) $link['field3'] = $this->operatorarray[$link['field3']];
         if ($numargs == 2) {
             $this->tablelinks[$key]=array('field1' => $link['field1'],
-                                      'field2' => $link['field2'],
+                                          'field2' => $link['field2'],
+                                          'field3' => $link['field3'],
                                       'op' => $link['op']);
-        }
-        elseif ($numargs == 4) {
+        } elseif ($numargs == 4) {
+            // CHECKME: Remove this? It's not being used
             $this->tablelinks[$key]=array('field1' => func_get_arg(0) . "." . func_get_arg(1),
-                                      'field2' => func_get_arg(2) . "." . func_get_arg(3),
+                                          'field2' => func_get_arg(2) . "." . func_get_arg(3),
+                                          'field3' => '=',
                                       'op' => 'JOIN');
         }
 
@@ -457,23 +470,26 @@ class Query
         }
         return true;
     }
-    public function join($field1,$field2,$active=1)
+    public function join($field1,$field2,$field3='=',$active=1)
     {
         $op = $this->on_syntax ? 'INNER JOIN' : 'JOIN';
         return $this->addtablelink(array('field1' => $field1,
-                                  'field2' => $field2,
+                                         'field2' => $field2,
+                                         'field3' => $field3,
                                   'op' => $op),$active);
     }
-    public function leftjoin($field1,$field2,$active=1)
+    public function leftjoin($field1,$field2,$field3='=',$active=1)
     {
         return $this->addtablelink(array('field1' => $field1,
-                                  'field2' => $field2,
+                                         'field2' => $field2,
+                                         'field3' => $field3,
                                   'op' => 'LEFT JOIN'),$active);
     }
-    public function rightjoin($field1,$field2,$active=1)
+    public function rightjoin($field1,$field2,$field3='=',$active=1)
     {
         return $this->addtablelink(array('field1' => $field1,
-                                  'field2' => $field2,
+                                         'field2' => $field2,
+                                         'field3' => $field3,
                                   'op' => 'RIGHT JOIN'),$active);
     }
     public function having($expression, $conjunction='')
@@ -1035,13 +1051,13 @@ class Query
 
     private function assembledtablelinks()
     {
-//FIXME: bug if two joins are between the same tables
-        // We begin with no tables yet processed and an empty query string
+        // We begin with no tables or links yet processed and an empty query string
         $tablesdone = array();
+        $linksdone = array();
         $string = '';
         
         // Resort the links. 
-        // Each successive link needs to add exactly one new table to the query string
+        // Each successive link needs to add exactly zero or one new table to the query string
 
         // Create a stack and load it
         sys::import('xaraya.structures.sequences.stack');
@@ -1099,7 +1115,7 @@ class Query
         // Process each of the links in turn
         $tablesdone = array();
         $count = count($this->tablelinks);
-        for ($i=1;$i<$count;$i++) $string .= '(';
+//        for ($i=1;$i<$count;$i++) $string .= '(';
         $i = 1;
         foreach ($this->tablelinks as $link) {
         
@@ -1134,12 +1150,21 @@ class Query
                 // Add the table name to the list of tables processed
                 $tablesdone[$fullfield2['table']] = $name2;
             }
-            
+
             // Add the joined fields to the query string
-            $string .= "ON " . $link['field1'] . " = " . $link['field2'];
+            // Each distinct link only once
+            // Different links between the same tables are ANDs
+            if (isset($linksdone[$name1.$name2])) {
+                $string .= "AND " . $link['field1'] . " " . $link['field3'] . " " . $link['field2'];
+            } else {
+                $string .= "ON " . $link['field1'] . " " . $link['field3'] . " " . $link['field2'];
+            }
             // Add a closing parenthesis
-            if ($i < $count) $string .= ")";
+//            if ($i < $count) $string .= ")";
             $i++;
+            
+            // Add this link to those done
+            $linksdone[$name1.$name2] = $link['op'];
             
         }
         return $string ;
