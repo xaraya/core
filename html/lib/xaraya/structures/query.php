@@ -1165,7 +1165,7 @@ class Query
             // Add this link to those done
             $linksdone[$fullfield1['table'].':'.$fullfield2['table']] = $link['op'];
             
-        }unset($linksdone);
+        }
         return $string ;
     }
 
