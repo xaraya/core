@@ -1118,7 +1118,6 @@ class Query
 //        for ($i=1;$i<$count;$i++) $string .= '(';
         $i = 1;
         foreach ($this->tablelinks as $link) {
-        
             // Get the names of the fields on either side of the link
             $fullfield1 = $this->_deconstructfield($link['field1']);
             $fullfield2 = $this->_deconstructfield($link['field2']);
@@ -1154,7 +1153,7 @@ class Query
             // Add the joined fields to the query string
             // Each distinct link only once
             // Different links between the same tables are ANDs
-            if (isset($linksdone[$name1.$name2])) {
+            if (isset($linksdone[$fullfield1['table'].':'.$fullfield2['table']])) {
                 $string .= "AND " . $link['field1'] . " " . $link['field3'] . " " . $link['field2'];
             } else {
                 $string .= "ON " . $link['field1'] . " " . $link['field3'] . " " . $link['field2'];
@@ -1164,9 +1163,9 @@ class Query
             $i++;
             
             // Add this link to those done
-            $linksdone[$name1.$name2] = $link['op'];
+            $linksdone[$fullfield1['table'].':'.$fullfield2['table']] = $link['op'];
             
-        }
+        }unset($linksdone);
         return $string ;
     }
 
