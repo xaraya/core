@@ -309,13 +309,30 @@ class xarCore extends xarCoreCache
 
             sys::import('xaraya.database');
 
-            // Connect to database
-            try {
-                xarDB_init($systemArgs);
-            } catch (Exception $e) {
-                // Catch the error here rather than in the subsystem, because we might be connection to different databases
-                // and want to cater to possible errors in each
-                throw new Exception("Connection error: a database connection could not be established");
+            // Connect to the database
+            // Cater to different notations in the special case of localhost
+            $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+            $localhosts = array('localhost', '127.0.0.1');
+            if (in_array($host, $localhosts)) {
+                $connected = false;
+                foreach ($localhosts as $local) {
+                    $systemArgs['databaseHost'] = $local;
+                    try {
+                        xarDB_init($systemArgs);
+                        $connected = true;
+                    } catch (Exception $e) {}
+                    if ($connected) break;
+                }
+                if (!$connected)
+                    throw new Exception("Connection error: a database connection could not be established");
+            } else {
+                try {
+                    xarDB_init($systemArgs);
+                } catch (Exception $e) {
+                    // Catch the error here rather than in the subsystem, because we might be connecting to different databases
+                    // and want to cater to possible errors in each
+                    throw new Exception("Connection error: a database connection could not be established");
+                }
             }
             $whatToLoad ^= self::BIT_DATABASE;
         }
