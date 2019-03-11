@@ -86,16 +86,16 @@ class Creole {
      * @see registerDriver()
      * @var array Hash mapping phptype => driver class (in dot-path notation, e.g. 'mysql' => 'creole.drivers.mysql.MySQLConnection').
      */
-    private static $driverMap = array(  'mysql' => 'creole.drivers.mysql.MySQLConnection',
-                                        'mysqli' => 'creole.drivers.mysqli.MySQLiConnection',
-                                        'pgsql' => 'creole.drivers.pgsql.PgSQLConnection',
-                                        'sqlite' => 'creole.drivers.sqlite.SQLiteConnection',
-                                        'oracle' => 'creole.drivers.oracle.OCI8Connection',
-                                        'mssql' => 'creole.drivers.mssql.MSSQLConnection',
-                                        'odbc' => 'creole.drivers.odbc.ODBCConnection',
-                                        'pdosqlite' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+    private static $driverMap = array(  'mysql'      => 'creole.drivers.mysql.MySQLConnection',
+                                        'mysqli'     => 'creole.drivers.mysqli.MySQLiConnection',
+                                        'pgsql'      => 'creole.drivers.pgsql.PgSQLConnection',
+                                        'sqlite'     => 'creole.drivers.sqlite.SQLiteConnection',
+                                        'oracle'     => 'creole.drivers.oracle.OCI8Connection',
+                                        'mssql'      => 'creole.drivers.mssql.MSSQLConnection',
+                                        'odbc'       => 'creole.drivers.odbc.ODBCConnection',
+                                        'pdosqlite'  => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
                                         'pdosqlite2' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
-                                        'sqlite3' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+                                        'sqlite3'    => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
                                        );
 
     /**
