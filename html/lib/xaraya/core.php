@@ -328,8 +328,9 @@ class xarCore extends xarCoreCache
                     } catch (Exception $e) {}
                     if ($connected) break;
                 }
-                if (!$connected)
+                if (!$connected) {
                     throw new Exception("Connection error: a database connection could not be established");
+                }
             } else {
                 try {
                     xarDB_init($systemArgs);
