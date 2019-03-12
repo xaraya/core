@@ -301,8 +301,8 @@ class xarCore extends xarCoreCache
             $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
             $host_parts = explode(':', $host);
             $host = $host_parts[0];
-            $port = isset($host[1]) ? $host[1] : '';
-            
+            $port = isset($host_parts[1]) ? $host_parts[1] : '';
+
             // Optionals dealt with, do the rest inline
             $systemArgs = array('userName'        => $userName,
                                 'password'        => $password,

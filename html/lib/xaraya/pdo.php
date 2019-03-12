@@ -43,6 +43,7 @@ class xarDB_PDO extends xarObject
         // Get database parameters
         $dsn = array('phptype'   => $args['databaseType'],
                      'hostspec'  => $args['databaseHost'],
+                     'port'      => $args['databasePort'],
                      'username'  => $args['userName'],
                      'password'  => $args['password'],
                      'database'  => $args['databaseName'],
@@ -148,9 +149,10 @@ class xarDB_PDO extends xarObject
     $dsn['phptype'] = 'mysql';
         // CHECKME: What about ports?
         $dsnstring  = $dsn['phptype'] . ':host=' . $dsn['hostspec'] . ';';
+        if (!empty($dsn['port'])) $dsnstring .= 'port=' . $dsn['port'] . ";";
         $dsnstring .= 'dbname=' . $dsn['database'] . ";";
         $dsnstring .= 'charset=' . $dsn['encoding'] . ";";
-        
+
         try {
             $conn = new xarPDO($dsnstring, $dsn['username'], $dsn['password'], $flags);
         } catch (PDOException $e) {
