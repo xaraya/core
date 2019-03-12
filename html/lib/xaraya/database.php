@@ -32,6 +32,7 @@ if ($middleware == 'Creole') {
      * 
      * @param string args[databaseType] database type to use
      * @param string args[databaseHost] database hostname
+     * @param string args[databasePort] database port
      * @param string args[databaseName] database name
      * @param string args[userName] database username
      * @param string args[password] database password
@@ -91,6 +92,7 @@ if ($middleware == 'Creole') {
      * 
      * @param string args[databaseType] database type to use
      * @param string args[databaseHost] database hostname
+     * @param string args[databasePort] database port
      * @param string args[databaseName] database name
      * @param string args[userName] database username
      * @param string args[password] database password

@@ -297,10 +297,16 @@ class xarCore extends xarCoreCache
                 // doesnt matter, we assume not encoded
             }
 
+            // Hive off the pport of there is one added as part of the host
+            $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+            $host_parts = explode(':', $host);
+            $host = $host_parts[0];
+            $port = isset($host[1]) ? $host[1] : '';
+            
             // Optionals dealt with, do the rest inline
-            $systemArgs = array('userName' => $userName,
-                                'password' => $password,
-                                'databaseHost'    => xarSystemVars::get(sys::CONFIG, 'DB.Host'),
+            $systemArgs = array('userName'        => $userName,
+                                'password'        => $password,
+                                'databasePort'    => $port,
                                 'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
                                 'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
                                 'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
@@ -311,7 +317,6 @@ class xarCore extends xarCoreCache
 
             // Connect to the database
             // Cater to different notations in the special case of localhost
-            $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
             $localhosts = array('localhost', '127.0.0.1');
             if (in_array($host, $localhosts)) {
                 $connected = false;
