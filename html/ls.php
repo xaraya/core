@@ -12,7 +12,7 @@
  * @author Marcel van der Boom
  */
 
-function xarLSLoader()
+function xarLSLoader($argc, $argv)
 {
 /**
  * Load the layout file so we know where to find the Xaraya directories
@@ -23,13 +23,24 @@ function xarLSLoader()
     if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
     if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
     if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+    
+/**
+ * Correct the path to where we are executing from
+ */
+/*    $path_to_ls = dirname($argv[0], 1) . "/";
+    $path_above_ls = dirname($argv[0], 2) . "/";
+    foreach ($systemConfiguration as $k => $v) {
+        if ($v == '../') $systemConfiguration[$k] = $path_above_ls;
+        else $systemConfiguration[$k] = $path_to_ls . $systemConfiguration[$k];
+    }
+*/    
     $GLOBALS['systemConfiguration'] = $systemConfiguration;
     if (!empty($systemConfiguration['rootDir'])) {
         set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
     }
 
 /**
- * Load the bootstrap file for the minimal classes swe need
+ * Load the bootstrap file for the minimal classes we need
  */
     set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
     include 'bootstrap.php';
@@ -58,7 +69,12 @@ function xarLSLoader()
  * We need a (fake) ip address to run Xaraya
  */
     if(!isset($_SERVER['REMOTE_ADDR'])) putenv("REMOTE_ADDR=127.0.0.1");
-    xarCore::xarInit(xarCore::SYSTEM_ALL);
+    try {
+        xarCore::xarInit(xarCore::SYSTEM_ALL);
+    } catch (Exception $e) {
+        print_r($e->getMessage());
+        exit;
+    }
 }
 
 /**
@@ -96,7 +112,7 @@ function xarLocalServicesMain($argc, $argv)
 function usage()
 {
     fwrite(STDERR,"Usage for local services entry point:
-    php5 ./".basename(__FILE__)." <type> [-u <user>][-p <pass>] [args]
+    php ./".basename(__FILE__)." <type> [-u <user>][-p <pass>] [args]
 
     <type>   : required designator for request type (module name)
                Currently Supported:
@@ -116,7 +132,7 @@ function usage()
  * Set up for local services
  */
 try {
-    xarLSLoader();
+    xarLSLoader($argc, $argv);
 } catch (Exception $e) {
     return usage();
 }
