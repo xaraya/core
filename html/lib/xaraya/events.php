@@ -229,13 +229,13 @@ class xarEvents extends xarObject implements ixarEvents
     {
 
         $info = array(
-            'event' => $event,
-            'module' => $module,
-            'area' => $area,
-            'type' => $type,
-            'func' => $func,
+            'event'    => $event,
+            'module'   => $module,
+            'area'     => $area,
+            'type'     => $type,
+            'func'     => $func,
             'itemtype' => $itemtype,
-            'scope' => $scope,
+            'scope'    => $scope,
         );        
                       
         // file load takes care of validation, any invalid input throws an exception 
