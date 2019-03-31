@@ -15,6 +15,17 @@
             <h2>View #$label#&#160;</h2>
 
             <dl class="xar-legend" style="text-align: left">
+                <xar:if condition="$object:checkAccess('create')">
+                    <dd>
+                        <a class="xar-icon xar-icon-add" href="#$newlink#" title="Create New Item in #$label#">
+                            <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
+                                <img src="#xarTpl::getImage('icons/document-new.png','base')#" class="xar-icon" alt="Create New Item in #$label#"/>
+                            <xar:else/>
+                                Create New Item in #$label#
+                            </xar:if>
+                        </a>
+                    </dd>
+                </xar:if>
                 <xar:if condition="$object:checkAccess('config')">
                     <dd>
                         <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->objectid))</xar:set>
@@ -23,17 +34,6 @@
                                 <img src="#xarTpl::getImage('icons/modify-config.png','base')#" class="xar-icon" alt="Configure #$label#"/>
                             <xar:else/>
                                 Configure #$label#
-                            </xar:if>
-                        </a>
-                    </dd>
-                </xar:if>
-                <xar:if condition="$object:checkAccess('create')">
-                    <dd>
-                        <a class="xar-icon xar-icon-add" href="#$newlink#" title="Create New Item in #$label#">
-                            <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
-                                <img src="#xarTpl::getImage('icons/document-new.png','base')#" class="xar-icon" alt="Create New Item in #$label#"/>
-                            <xar:else/>
-                                Create New Item in #$label#
                             </xar:if>
                         </a>
                     </dd>
