@@ -82,7 +82,7 @@
                     Notes:
                     <ul>
                         <li>The composer files and installed packages can be found in the composer directory at the top level of the directory tree.</li>
-                        <li>When calling a package you must require the Composer autoload. This is done by adding the following line to your code:<br/>
+                        <li>When calling a package you must require the Composer autoload. This is done by adding the following line to your Xaraya code:<br/>
                             <code>sys::import('composer.vendor.autoload');</code>
                         </li>
                     </ul>
