@@ -23,6 +23,9 @@
         </form>
         <xar:if condition="$installed">
             <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+                <xar:template file="composer-file" module="base" type="module"/>
+            </form>
+            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>
                         Install a package
@@ -52,7 +55,7 @@
                     <div class="xar-row">
                         <div class="xar-col">
                             <label for="install_com" title="#xarML('The command to install the package')#" class="xar-form-label">                                
-                                Install command                                
+                                Command                                
                             </label>
                         </div>
                         <div class="xar-col">
@@ -75,19 +78,22 @@
                         <div class="xar-col">
                         </div>
                         <div class="xar-col">
-                            <xar:var name="value">Install</xar:var>
+                            <xar:var name="value">Run</xar:var>
                             <xar:button name="install" value="$value"/>
                         </div>
                     </div>
                 </fieldset>
             </form>
-            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
-                <xar:template file="composer-file" module="base" type="module"/>
-            </form>
             <p>
                 Notes:
                 <ul>
                     <li>The composer files and installed packages can be found in the composer directory at the top level of the directory tree.</li>
+                    <li>To install a package:
+                        <ol>
+                            <li>Update the composer.json file and save it</li>
+                            <li>Run the command "php composer.phar update"</li>
+                        </ol>
+                    </li>
                     <li>When calling a package you must require the Composer autoload. This is done by adding the following line to your Xaraya code:<br/>
                         <code>&#160;&#160;&#160;&#160;sys::import('composer.vendor.autoload');</code>
                     </li>

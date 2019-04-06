@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:set name="writable">file_exists('composer/composer.json') AND is_writeable('composer/composer.json')</xar:set>
+    <fieldset>
+        <legend>
+            Manage composer.json
+        </legend>
+        <xar:if condition="!$writable">
+            The file composer.json in the top level composer directory either does not exist or is not writable.
+        <xar:else/>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:data-input type="textarea" name="composer" value="$composer" cols="40" rows="10"/>
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                </div>
+                <div class="xar-col">
+                    <xar:if condition="!empty($message) AND ($message ne 'success')">
+                        <span style="color: red">#$message#</span>
+                    </xar:if>
+                    <xar:if condition="$message eq 'success'">
+                        <span style="color: green">The composer.json file was updated</span>
+                    </xar:if>
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                </div>
+                <div class="xar-col">
+                    <xar:var name="value">Save</xar:var>
+                    <xar:button name="update" value="$value"/>
+                </div>
+            </div>
+        </xar:if>
+    </fieldset>
+</xar:template>

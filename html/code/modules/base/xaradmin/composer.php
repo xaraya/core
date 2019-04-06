@@ -25,7 +25,7 @@ function base_admin_composer()
     if (!xarVarFetch('update',      'isset', $update,      NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_dir', 'str',   $data['install_dir'], sys::lib(), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('package_dir', 'str',   $data['package_dir'], 'vendor', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_com', 'str',   $data['install_com'], 'php composer.phar install ', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_com', 'str',   $data['install_com'], 'php composer.phar update ', XARVAR_NOT_REQUIRED)) return;
     
     // Check if the installer has already been installed
     $data['installed'] = file_exists('composer') && file_exists('composer/composer.phar');
