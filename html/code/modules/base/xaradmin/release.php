@@ -47,12 +47,16 @@ function base_admin_release()
     $feedfile = "http://xaraya.info/index.php?module=release&func=rssviewnotes&theme=rss&releaseno=$releasenumber";
 
     // Get the feed file (from cache or from the remote site)
-    $feeddata = xarMod::apiFunc('base', 'user', 'getfile',
-                              array('url' => $feedfile,
-                                    'cached' => true,
-                                    'cachedir' => 'cache/rss',
-                                    'refresh' => 604800,
-                                    'extension' => '.xml'));
+    try {
+        $feeddata = xarMod::apiFunc('base', 'user', 'getfile',
+                                  array('url' => $feedfile,
+                                        'cached' => true,
+                                        'cachedir' => 'cache/rss',
+                                        'refresh' => 604800,
+                                        'extension' => '.xml'));
+    } catch (Exception $e) {
+        return xarResponse::NotFound(xarML('No release feed is currently available'));
+    }
 
     if (!$feeddata) return;
     // Create a need feedParser object
