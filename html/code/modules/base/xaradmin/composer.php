@@ -1,16 +1,15 @@
 <?php
 /**
- *  View recent extension releases
+ * Manage third party libraries with composer
  *
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://xaraya.info/index.php/release/68.html
  */
 /**
- * View recent module releases via central repository
+ * Manage third party libraries with composer
  *
  * @author Marc Lutolf
  * 
@@ -23,6 +22,7 @@ function base_admin_composer()
 
     if (!xarVarFetch('setup',       'isset', $setup,       NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install',     'isset', $install,     NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('update',      'isset', $update,      NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_dir', 'str',   $data['install_dir'], sys::lib(), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('package_dir', 'str',   $data['package_dir'], 'vendor', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_com', 'str',   $data['install_com'], 'php composer.phar install ', XARVAR_NOT_REQUIRED)) return;
@@ -82,7 +82,12 @@ function base_admin_composer()
         $output = shell_exec($data['install_com']);
         chdir($base_directory);
         $data['message'] = 'success';
+    } elseif ($update) {
+        if (!xarVarFetch('composer',    'str',   $data['composer'],    '', XARVAR_NOT_REQUIRED)) return;
+        xarMod::apiFunc('base', 'admin', 'write_file', array('file' => 'composer/composer.json', 'data' => $data['composer']));
     }
+
+    $data['composer'] = trim(xarMod::apiFunc('base', 'admin', 'read_file', array('file' => 'composer/composer.json')));
 
     return $data;
 }

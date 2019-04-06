@@ -20,7 +20,9 @@
                     The composer installer is present. You can install packages with it.
                 </xar:if>
             </fieldset>
-            <xar:if condition="$installed">
+        </form>
+        <xar:if condition="$installed">
+            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>
                         Install a package
@@ -78,16 +80,19 @@
                         </div>
                     </div>
                 </fieldset>
-                <p>
-                    Notes:
-                    <ul>
-                        <li>The composer files and installed packages can be found in the composer directory at the top level of the directory tree.</li>
-                        <li>When calling a package you must require the Composer autoload. This is done by adding the following line to your Xaraya code:<br/>
-                            <code>sys::import('composer.vendor.autoload');</code>
-                        </li>
-                    </ul>
-                </p>
-            </xar:if>
-        </form>
+            </form>
+            <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+                <xar:template file="composer-file" module="base" type="module"/>
+            </form>
+            <p>
+                Notes:
+                <ul>
+                    <li>The composer files and installed packages can be found in the composer directory at the top level of the directory tree.</li>
+                    <li>When calling a package you must require the Composer autoload. This is done by adding the following line to your Xaraya code:<br/>
+                        <code>&#160;&#160;&#160;&#160;sys::import('composer.vendor.autoload');</code>
+                    </li>
+                </ul>
+            </p>
+        </xar:if>
     </div>
 </xar:template>
