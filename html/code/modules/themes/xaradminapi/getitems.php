@@ -105,7 +105,7 @@ function themes_adminapi_getitems(Array $args=array())
             // Shortcut for os prepared directory 
             $item['osdirectory'] = xarVarPrepForOS($item['directory']);
             
-            xarVarSetCached('Theme.BaseInfos', $item['name'], $item);                   
+            xarCoreCache::setCached('Theme.BaseInfos', $item['name'], $item);                   
 
             $fileinfo = xarTheme_getFileInfo($item['osdirectory']);
             if (isset($fileinfo)) {
