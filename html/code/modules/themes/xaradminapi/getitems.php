@@ -97,9 +97,9 @@ function themes_adminapi_getitems(Array $args=array())
         foreach (array_keys($select) as $field)
             $item[$field] = array_shift($result->fields);
 
-        if (xarVarIsCached('Theme.Infos', $item['regid'])) {
+        if (xarCoreCache::isCached('Theme.Infos', $item['regid'])) {
             // merge cached info with db info 
-            $item += xarVarGetCached('Theme.Infos', $item['regid']);
+            $item += xarCoreCache::getCached('Theme.Infos', $item['regid']);
         } else {
             $item['displayname'] = $item['name'];
             // Shortcut for os prepared directory 
@@ -110,7 +110,7 @@ function themes_adminapi_getitems(Array $args=array())
             $fileinfo = xarTheme_getFileInfo($item['osdirectory']);
             if (isset($fileinfo)) {
                 $item = array_merge($fileinfo, $item);
-                xarVarSetCached('Theme.Infos', $item['regid'], $item);
+                xarCoreCache::setCached('Theme.Infos', $item['regid'], $item);
                 switch ($item['state']) {
                 case XARTHEME_STATE_MISSING_FROM_UNINITIALISED:
                     $item['state'] = XARTHEME_STATE_UNINITIALISED;
