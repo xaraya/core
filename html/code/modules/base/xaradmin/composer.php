@@ -34,11 +34,11 @@ function base_admin_composer()
     $data['installed'] = file_exists('composer') && file_exists('composer/composer.phar');
 
     // Default message is none
-    $data['message'] = '';
+    $data['message'] = array();
 
     $composerdir = 'composer';
-    $setup_path = $composerdir . '/composer-setup.php';
-    $phar_path = $composerdir . '/composer.phar';
+    $setup_path  = $composerdir . '/composer-setup.php';
+    $phar_path   = $composerdir . '/composer.phar';
     
     if ($setup) {
         if (!is_dir($composerdir) && is_writable('./')) {
@@ -68,14 +68,18 @@ function base_admin_composer()
             if ($expected_signature == $actual_signature) {
                 // Good signature: run the installer
                 $output = shell_exec('php ' . $setup_path . ' --install-dir=' . $composerdir . ' --quiet');
+                if (!empty($output)) $data['message'][] = $output;
             }
             // Remove the setup file
             $output = shell_exec('rm ' . $setup_path);
-            xarController::redirect(xarServer::getCurrentURL());
+            if (!empty($output)) $data['message'][] = $output;
+            if (empty($data['message'])) {
+                xarController::redirect(xarServer::getCurrentURL());
+            }
         }
     } elseif ($install) {
         if (empty($data['install_com'])) {
-            $data['message'] = xarML('No install command entered');
+            $data['message'][] = xarML('No install command entered');
             return $data;
         }
             
@@ -84,7 +88,7 @@ function base_admin_composer()
         chdir($composerdir);
         $output = shell_exec($data['install_com']);
         chdir($base_directory);
-        $data['message'] = 'success';
+        $data['message'][] = 'success';
     } elseif ($update) {
         if (!xarVarFetch('composer',    'str',   $data['composer'],    '', XARVAR_NOT_REQUIRED)) return;
         xarMod::apiFunc('base', 'admin', 'write_file', array('file' => 'composer/composer.json', 'data' => $data['composer']));

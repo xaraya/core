@@ -7,6 +7,16 @@
         <p>
             You can find information on Composer <a href="https://getcomposer.org" target="_blank">here</a>.
         </p>
+        <p>
+            <div>
+                Message:
+            </div>
+            <xar:if condition="!empty($message)">
+                <xar:foreach in="$message" value="$msg">
+                    <div>#$msg#</div>
+                </xar:foreach>
+            </xar:if>
+        </p>
         
         <xar:if condition="!$libcurl">
             <div style="color: red">
@@ -72,6 +82,9 @@
                             <div class="xar-col">
                             </div>
                             <div class="xar-col">
+                                <xar:foreach in="$message" value="$msg">
+                                    #$msg#
+                                </xar:foreach>
                                 <xar:if condition="!empty($message) AND ($message ne 'success')">
                                     <span style="color: red">#$message#</span>
                                 </xar:if>
