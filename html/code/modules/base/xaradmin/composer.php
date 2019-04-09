@@ -27,6 +27,9 @@ function base_admin_composer()
     if (!xarVarFetch('package_dir', 'str',   $data['package_dir'], 'vendor', XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_com', 'str',   $data['install_com'], 'php composer.phar update ', XARVAR_NOT_REQUIRED)) return;
     
+    // Check that the libcurl extension is installed
+    $data['libcurl']             = extension_loaded('curl');
+
     // Check if the installer has already been installed
     $data['installed'] = file_exists('composer') && file_exists('composer/composer.phar');
 
