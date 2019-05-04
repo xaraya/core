@@ -101,8 +101,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 //            return;
             return true;
         }
-        // @todo do we need to wrap this into a try/catch construct?
-        include $fileName;
+        include_once $fileName;
 
         return true;
     }

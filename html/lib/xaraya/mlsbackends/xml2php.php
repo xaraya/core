@@ -202,7 +202,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         if (!$fileName = $this->findContext($contextType, $contextName)) {
             return true;
         }
-        include $fileName;
+        include_once $fileName;
 
         return true;
     }
