@@ -110,5 +110,4 @@ class DataObjectDescriptor extends ObjectDescriptor
         return $args;
     }
 }
-
 ?>

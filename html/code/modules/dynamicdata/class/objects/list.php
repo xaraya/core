@@ -277,9 +277,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $sortorder = 'ASC';
             }
 
-            // Make sure the field is added to the query 
-//            $this->dataquery->addfield($criteria);
-
             // Add the field's order clause
             $this->dataquery->addorder($this->properties[$criteria]->source, $sortorder);
         }
@@ -670,14 +667,6 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $options = array();
 
         $is_user = 1;
-/*
-// CHECKME: further optimise for anonymous access by assuming they can't delete (or edit) ?
-        if (xarUser::isLoggedIn()) {
-            $is_user = 1;
-        } else {
-            $is_user = 0;
-        }
-*/
 
         // Work with specific access rules for this object (= valid for all itemids)
         if (!empty($this->access)) {

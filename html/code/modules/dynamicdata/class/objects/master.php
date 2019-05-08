@@ -1202,7 +1202,6 @@ class DataObjectMaster extends xarObject
                                             'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
             }
         }
-
         return $types;
     }
 
