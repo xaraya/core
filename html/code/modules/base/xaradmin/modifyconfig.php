@@ -68,7 +68,7 @@ function base_admin_modifyconfig()
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, user_menu_link');
     $data['module_settings']->getItem();
 
-    if (extension_loaded('mcrypt')) {
+    if (extension_loaded('mcrypt') || 0) {
         // Don't use sys::import, the scope of the var would be wrong
         // Use include instead of include_once, in case we have loaded this var in another scope
         include(sys::lib()."xaraya/encryption.php");
