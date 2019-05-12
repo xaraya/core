@@ -214,6 +214,7 @@ function base_admin_modifyconfig()
                         xarConfigVars::set(null, 'Site.User.AuthenticationModules', $orderselect->order);
                     }
                     
+                    /*
                     // Encryption
                     if (!xarVarFetch('cipher','str:1',$cipher,'blowfish',XARVAR_NOT_REQUIRED)) return;
                     if (!xarVarFetch('mode','str:1',$mode,'cbc',XARVAR_NOT_REQUIRED)) return;
@@ -234,6 +235,7 @@ function base_admin_modifyconfig()
                         'hint' => $hint,
                         'initvector' => $initvector,
                     );
+                    */
                     xarMod::apiFunc('installer','admin','modifysystemvars', $args);
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security')));
                     break;
