@@ -235,8 +235,8 @@ function base_admin_modifyconfig()
                         'hint' => $hint,
                         'initvector' => $initvector,
                     );
-                    */
                     xarMod::apiFunc('installer','admin','modifysystemvars', $args);
+                    */
                     xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security')));
                     break;
                 case 'locales':
