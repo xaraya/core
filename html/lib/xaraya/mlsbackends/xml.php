@@ -79,7 +79,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
         $this->transKeyInd = 0;
     }
 
-    function bindDomain($dnType, $dnName='xaraya')
+    function bindDomain($dnType=xarMLS::DNTYPE_CORE, $dnName='xaraya')
     {
         if (parent::bindDomain($dnType, $dnName)) return true;
         else return false;
