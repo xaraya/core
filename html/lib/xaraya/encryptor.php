@@ -22,12 +22,14 @@ class xarEncryptor extends xarObject
     private function __construct()
     {
         // Use include instead of include_once, in case we have loaded this var in another scope
+        /*
         include(sys::lib()."xaraya/encryption.php");            
         $this->algorithm = mcrypt_module_open($encryption['cipher'], '', $encryption['mode'], '');
 //            $this->initvector = mcrypt_create_iv(mcrypt_enc_get_iv_size($this->algorithm), MCRYPT_RAND);
         $this->initvector = $encryption['initvector'];
         $keysize = mcrypt_enc_get_key_size($this->algorithm);
         $this->key = substr($encryption['key'], 0, $keysize);
+        */
     }
 
     public static function &instance()
