@@ -25,4 +25,17 @@
             <xar:data-input type="checkbox" name="show_queries"  checked="$checked"/>
         </div>
     </div>
+    <div class="xar-row">
+        <div class="xar-col">
+            <xar:var name="label">Suppress database updates</xar:var>
+            <label for="checked" title="#$label#" class="xar-form-label">            
+                Suppress database updates:            
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:set name="checked">xarModVars::get('dynamicdata', 'suppress_updates')</xar:set>
+            <xar:data-input type="checkbox" name="suppress_updates"  checked="$checked"/>
+            If this is checked, no data will be written to the database
+        </div>
+    </div>
 </xar:template>
