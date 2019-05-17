@@ -342,6 +342,7 @@ class PHPBackendGenerator extends xarObject
             xml_parser_free($xml_parser);
             $xmlFileExists = true;
         } else {
+            xarLog::message("Context Type: ".$ctxType." Context Name: ".$ctxName, xarLog::LEVEL_ERROR);
             xarLog::message("MLS Could not find XML input: ".$this->xmlFileName, xarLog::LEVEL_ERROR);
         }
 
