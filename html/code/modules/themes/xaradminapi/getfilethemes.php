@@ -31,11 +31,10 @@ function themes_adminapi_getfilethemes()
                 break;
             default:
                 if (is_dir($basedir ."/" . $themeOsDir)) {
-
                     // no xartheme.php, no theme
                     $themeFileInfo = xarTheme_getFileInfo($themeOsDir);
                     if (!isset($themeFileInfo)) {
-                        continue;
+                        continue 2;
                     }
 
                     // Found a directory
@@ -57,7 +56,7 @@ function themes_adminapi_getfilethemes()
                     // TODO: beautify :-)
                     if (!isset($regId)) {
                         xarSession::setVar('errormsg', "Theme '$name' doesn't seem to have a registered theme ID defined in xarversion.php - skipping...\nPlease register your theme at http://www.xaraya.com/index.php?module=release&func=addid if you haven't done so yet, and add \$themeversion['id'] = 'your ID'; in xarversion.php");
-                        continue;
+                        continue 2;
                     }
 
                     // TODO: beautify :-)
@@ -65,7 +64,7 @@ function themes_adminapi_getfilethemes()
                         xarSession::setVar('errormsg', 
                           "Theme '$name' exists in $basedir/$themeOsDir " .
                           "but should be in $basedir/$directory according to $basedir/$themeOsDir/xartheme.php... Skipping this theme until resolved.");
-                        continue;
+                        continue 2;
                     }
                     //Defaults
                     if (!isset($version)) {

@@ -175,6 +175,7 @@ function dynamicdata_init()
     xarModVars::set('dynamicdata', 'debugmode', 0);
     xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
     xarModVars::set('dynamicdata', 'caching', 0);
+    xarModVars::set('dynamicdata', 'suppress_updates', 0);
     /**
      * Register hooks
      */

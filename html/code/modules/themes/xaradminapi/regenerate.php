@@ -22,7 +22,7 @@ function themes_adminapi_regenerate()
 // Security Check
     if(!xarSecurityCheck('AdminThemes')) return;
 
-    //Finds and updates missing modules
+    //Finds and updates missing themes
     sys::import('modules.modules.class.installer');
     $installer = Installer::getInstance('themes');  
     if (!$installer->checkformissing()) {return;}

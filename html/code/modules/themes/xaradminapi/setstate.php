@@ -33,8 +33,8 @@ function themes_adminapi_setstate(Array $args=array())
     if(!xarSecurityCheck('AdminThemes')) return;
 
     // Clear cache to make sure we get newest values
-    if (xarVarIsCached('Theme.Infos', $regid)) {
-        xarVarDelCached('Theme.Infos', $regid);
+    if (xarCoreCache::isCached('Theme.Infos', $regid)) {
+        xarCoreCache::delCached('Theme.Infos', $regid);
     }
 
     //Get theme info

@@ -1,16 +1,15 @@
 <?php
 /**
- *  View recent extension releases
+ * Manage third party libraries with composer
  *
  * @package modules\base
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://xaraya.info/index.php/release/68.html
  */
 /**
- * View recent module releases via central repository
+ * Manage third party libraries with composer
  *
  * @author Marc Lutolf
  * 
@@ -23,19 +22,23 @@ function base_admin_composer()
 
     if (!xarVarFetch('setup',       'isset', $setup,       NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install',     'isset', $install,     NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('update',      'isset', $update,      NULL, XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('install_dir', 'str',   $data['install_dir'], sys::lib(), XARVAR_NOT_REQUIRED)) return;
     if (!xarVarFetch('package_dir', 'str',   $data['package_dir'], 'vendor', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_com', 'str',   $data['install_com'], 'php composer.phar install ', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVarFetch('install_com', 'str',   $data['install_com'], 'php composer.phar update ', XARVAR_NOT_REQUIRED)) return;
     
+    // Check that the libcurl extension is installed
+    $data['libcurl']             = extension_loaded('curl');
+
     // Check if the installer has already been installed
     $data['installed'] = file_exists('composer') && file_exists('composer/composer.phar');
 
     // Default message is none
-    $data['message'] = '';
+    $data['message'] = array();
 
     $composerdir = 'composer';
-    $setup_path = $composerdir . '/composer-setup.php';
-    $phar_path = $composerdir . '/composer.phar';
+    $setup_path  = $composerdir . '/composer-setup.php';
+    $phar_path   = $composerdir . '/composer.phar';
     
     if ($setup) {
         if (!is_dir($composerdir) && is_writable('./')) {
@@ -65,14 +68,18 @@ function base_admin_composer()
             if ($expected_signature == $actual_signature) {
                 // Good signature: run the installer
                 $output = shell_exec('php ' . $setup_path . ' --install-dir=' . $composerdir . ' --quiet');
+                if (!empty($output)) $data['message'][] = $output;
             }
             // Remove the setup file
             $output = shell_exec('rm ' . $setup_path);
-            xarController::redirect(xarServer::getCurrentURL());
+            if (!empty($output)) $data['message'][] = $output;
+            if (empty($data['message'])) {
+                xarController::redirect(xarServer::getCurrentURL());
+            }
         }
     } elseif ($install) {
         if (empty($data['install_com'])) {
-            $data['message'] = xarML('No install command entered');
+            $data['message'][] = xarML('No install command entered');
             return $data;
         }
             
@@ -81,8 +88,13 @@ function base_admin_composer()
         chdir($composerdir);
         $output = shell_exec($data['install_com']);
         chdir($base_directory);
-        $data['message'] = 'success';
+        $data['message'][] = 'success';
+    } elseif ($update) {
+        if (!xarVarFetch('composer',    'str',   $data['composer'],    '', XARVAR_NOT_REQUIRED)) return;
+        xarMod::apiFunc('base', 'admin', 'write_file', array('file' => 'composer/composer.json', 'data' => $data['composer']));
     }
+
+    $data['composer'] = trim(xarMod::apiFunc('base', 'admin', 'read_file', array('file' => 'composer/composer.json')));
 
     return $data;
 }

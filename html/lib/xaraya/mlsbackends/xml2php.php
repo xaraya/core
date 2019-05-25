@@ -202,7 +202,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         if (!$fileName = $this->findContext($contextType, $contextName)) {
             return true;
         }
-        include $fileName;
+        include_once $fileName;
 
         return true;
     }
@@ -342,6 +342,7 @@ class PHPBackendGenerator extends xarObject
             xml_parser_free($xml_parser);
             $xmlFileExists = true;
         } else {
+            xarLog::message("Context Type: ".$ctxType." Context Name: ".$ctxName, xarLog::LEVEL_ERROR);
             xarLog::message("MLS Could not find XML input: ".$this->xmlFileName, xarLog::LEVEL_ERROR);
         }
 

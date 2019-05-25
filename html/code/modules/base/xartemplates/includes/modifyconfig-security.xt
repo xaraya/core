@@ -175,6 +175,7 @@
             </div>
         </div>
     </fieldset>
+    <!--
     <fieldset>
         <legend>Encryption</legend>
         <xar:if condition="extension_loaded('mcrypt')">
@@ -218,7 +219,7 @@
                     <xar:data-input type="textbox" name="hint" value="$encryption['hint']" size="80"/>
                 </div>
             </div>
-            <!--
+            
             <div class="xar-row">
                 <div class="xar-col">
                     <label for="bar" title="#xarML('The initialization vector used in encryption and decryption')#" class="xar-form-label">
@@ -230,9 +231,10 @@
                     must be exactly 8 characters long
                 </div>
             </div>
-            -->
+            
         <xar:else/>
             You need to install the PHP mcrypt extension to access encryption functionality
         </xar:if>
     </fieldset>
+    -->
 </xar:template>

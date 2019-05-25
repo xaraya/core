@@ -42,6 +42,7 @@ public static function newConn(array $args = null)
     // Get database parameters
     $dsn = array('phptype'   => $args['databaseType'],
                  'hostspec'  => $args['databaseHost'],
+                 'port'      => $args['databasePort'],
                  'username'  => $args['userName'],
                  'password'  => $args['password'],
                  'database'  => $args['databaseName'],

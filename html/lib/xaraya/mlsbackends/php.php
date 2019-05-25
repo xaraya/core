@@ -63,7 +63,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
         $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
     }
 
-    function bindDomain($dnType, $dnName='xaraya')
+    function bindDomain($dnType=xarMLS::DNTYPE_CORE, $dnName='xaraya')
     {
         if (parent::bindDomain($dnType, $dnName)) return true;
         // FIXME: I should comment it because it creates infinite loop
@@ -101,8 +101,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 //            return;
             return true;
         }
-        // @todo do we need to wrap this into a try/catch construct?
-        include $fileName;
+        include_once $fileName;
 
         return true;
     }

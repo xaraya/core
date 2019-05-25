@@ -31,7 +31,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $this->loader($descriptor);
         unset($descriptor);
 
-        // Get a reference to each property's value and find the primarys index
+        // Get a reference to each property's value and find the primary's index
         if (!empty($args['config'])) {
         }
         foreach ($this->properties as $property) {
@@ -354,6 +354,12 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         xarLog::message("DataObject::createItem: Creating an item of object " . $this->name, xarLog::LEVEL_INFO);
 
+        $suppress = xarModVars::get('dynamicdata', 'suppress_updates');
+        if ($suppress) {
+            // We are testing/debugging: return a zero
+            return 0;
+        }
+        
         // Sanity check: do we have a primary field?
         if (empty($this->primary)) {
             $msg = xarML('The object #(1) has no primary key', $this->name);
@@ -436,6 +442,12 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->itemid = $this->properties[$this->primary]->getValue();
         }
 
+        $suppress = xarModVars::get('dynamicdata', 'suppress_updates');
+        if ($suppress) {
+            // We are testing/debugging: return the ID of this item
+            return $this->itemid;
+        }
+
         /* General sequence:
          * 1. Run the property-specific updateValue methods for properties using the current datastore
          * 2. Run the datastore's updateItem method
@@ -491,6 +503,15 @@ class DataObject extends DataObjectMaster implements iDataObject
         // delete the item in all the data stores
         $args = $this->getFieldValues();
         $args['itemid'] = $this->itemid;
+
+        $suppress = xarModVars::get('dynamicdata', 'suppress_updates');
+        if ($suppress) {
+            // Call delete hooks for this item
+            $this->callHooks('delete');
+
+            // We are testing/debugging: return the ID of this item
+            return $this->itemid;
+        }
 
         /* General sequence:
          * 1. Run the property-specific deleteValue methods for properties using the current datastore

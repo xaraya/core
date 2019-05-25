@@ -434,7 +434,7 @@ class RelationalDataStore extends SQLDataStore
         foreach ($result as $key => $row) {
             if ($args['row_output'] == 'associative') {
                 // If we want to display the results as a nested set, try using the primary field as a key
-                if (!empty($this->object->primary))  {
+                if (!empty($this->object->primary) && isset($row[$this->object->primary]))  {
                     // Get the value of the primary key
                     $itemid = $row[$this->object->primary];
                 } else {
