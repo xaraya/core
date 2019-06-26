@@ -392,7 +392,6 @@ class RelationalDataStore extends SQLDataStore
         $q = $this->object->dataquery;
         $fieldlist = $this->object->getFieldList();
         foreach ($fieldlist as $fieldname) {
-            if (!isset($this->object->properties[$fieldname])) continue;
             $field = $this->object->properties[$fieldname];
             
             // Check if we have a subitems property
