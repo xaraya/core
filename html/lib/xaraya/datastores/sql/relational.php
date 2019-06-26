@@ -385,13 +385,14 @@ class RelationalDataStore extends SQLDataStore
         // Bail if the object has no properties
         if (count($this->object->properties) < 1) return;
         
-        //Make sure we have a primary field
+        // Make sure we have a primary field
 //        if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
 
         // Complete the dataquery
         $q = $this->object->dataquery;
         $fieldlist = $this->object->getFieldList();
         foreach ($fieldlist as $fieldname) {
+            if (!isset($this->object->properties[$fieldname])) continue;
             $field = $this->object->properties[$fieldname];
             
             // Check if we have a subitems property
