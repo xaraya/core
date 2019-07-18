@@ -583,11 +583,23 @@ class xarTpl extends xarObject
                 $paths[] = "$basepath/$tplPart/$canTemplateName.xt";
         }
 
+        $debug = 0;
+        // Debug display
+        if ($debug) {
+            foreach ($paths as $path) {
+                echo xarML('Possible location: ') . $path . "<br/>";                
+            }
+        }
+
         $sourceFileName = '';
         if (!empty($paths)) {
             foreach ($paths as $file) {
                 if (!file_exists($file)) continue;
                 $sourceFileName = $file;
+                // Debug display
+                if ($debug) {
+                    echo "<b>" . xarML('Chosen: ') . $file . "</b><br/>";
+                }
                 break;
             }
         }
