@@ -31,7 +31,11 @@ class Deque extends SequenceAdapter implements iDeque
     public function &peek($whichEnd)
     {
         $position = $this->__get($whichEnd);
-        $item = parent::get($position);
+        if ($position < 0) {
+            $item = null;
+        } else {
+            $item = parent::get($position);
+        }
         return $item;
     }
 
