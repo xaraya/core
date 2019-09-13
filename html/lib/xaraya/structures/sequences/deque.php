@@ -42,9 +42,10 @@ class Deque extends SequenceAdapter implements iDeque
     // Pop an item off the Deque, head or tail
     public function &pop($whichEnd)
     {
-        $item = $this->peek($whichEnd);
-        if($item == null) return $item;
-        parent::delete($whichEnd);
+        $item = $this->peek($whichEnd);var_dump($whichEnd);
+        if ($item == null) return $item;
+        $position = $this->__get($whichEnd);
+        parent::delete($position);
         return $item;
     }
 
