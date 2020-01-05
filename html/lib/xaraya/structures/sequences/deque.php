@@ -27,13 +27,25 @@ class Deque extends SequenceAdapter implements iDeque
         return parent::insert($item,$position);
     }
 
+    // Peek at an item at the head or tail of the Deque
+    public function &peek($whichEnd)
+    {
+        $position = $this->__get($whichEnd);
+        if ($position < 0) {
+            $item = null;
+        } else {
+            $item = parent::get($position);
+        }
+        return $item;
+    }
+
     // Pop an item off the Deque, head or tail
     public function &pop($whichEnd)
     {
+        $item = $this->peek($whichEnd);
+        if ($item == null) return $item;
         $position = $this->__get($whichEnd);
-        $item = parent::get($position);
-        if($item == null) return $item;
-        parent::delete($whichEnd);
+        parent::delete($position);
         return $item;
     }
 
