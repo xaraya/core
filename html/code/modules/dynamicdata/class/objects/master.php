@@ -897,7 +897,7 @@ class DataObjectMaster extends xarObject
         // Complete the info if this is a known object
         $info = self::_getObjectInfo($args);
         if (empty($info)) {
-            if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
+            if (isset($args['name'])) $identifier = xarML("the name is '#(1)'",$args['name']);
             if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
             throw new Exception(xarML('Unable to create an object where #(1)', $identifier));
         }
