@@ -426,11 +426,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         if(empty($args['numitems'])) $args['numitems'] = $this->numitems;
         if(empty($args['startnum'])) $args['startnum'] = $this->startnum;
-        if(empty($args['fieldlist'])) $args['fieldlist'] = array();
 
         // Replace the fieldlist with the fields passed
-        $fields = $this->getFieldList();
-        $this->setFieldList($args['fieldlist']);
+        if(!empty($args['fieldlist'])) {
+            $fields = $this->getFieldList();
+            $this->setFieldList($args['fieldlist']);
+        }
 
         $this->items = array();
         $this->datastore->getItems($args);
@@ -452,7 +453,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         
         // Reinstate the original fieldlist
-        $this->setFieldList($fields);
+        if(!empty($args['fieldlist'])) $this->setFieldList($fields);
 
         return $this->items;
     }

@@ -42,7 +42,7 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
             break;
         default:
             $first = array_slice($this->items,0,$position-1);
-            $last  = array_slice($this->items,$position);
+            $last  = aray_slice($this->items,$position);
             $first[] = $item;
             $this->items = array_merge($first,$last);
         }
