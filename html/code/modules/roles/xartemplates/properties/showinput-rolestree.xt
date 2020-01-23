@@ -9,7 +9,7 @@
         <xar:set name="blankicon">xarTpl::getImage('icons/blank.png','theme')</xar:set>
 
         <ul class="xar-tree">
-            <xar:set name="nodecount">count($nodes)</xar:set>
+            <xar:set name="nodecount">$nodes->size()</xar:set>
             <xar:foreach in="$nodes" value="$node">
                 <xar:set name="children">$node-&gt;children</xar:set>
                 <xar:set name="level">$node-&gt;getLevel()</xar:set>
