@@ -53,17 +53,11 @@ function roles_user_getvalidation()
 
     // What module are we using for registration?
     $regmodule = xarModVars::get('roles','defaultregmodule');
-    $modinfo = xarModGetInfo($regmodule);
+    if (empty($regmodule) || !xarMod::isAvailable($regmodule)) {
+        return xarTpl::module('grader','user','errors',array('layout' => 'no_permission', 'message' => xarML('No registration module defined in the roles module')));
+    }
+    $modinfo = xarMod::getInfo($regmodule);
     $regmodule = $modinfo['name'];
-
-    if (empty($regmodule)){
-        //fallback to?  This is not a core module. Leave for now once until we are sure the default is set elsewhere.
-        $regmodule = 'registration';
-    }
-    if (!xarMod::isAvailable($regmodule)) {
-        //we have to provide an error, we can't really go on
-        throw new ModuleNotFoundException($regmodule);
-    }
 
     $defaultauthdata = xarMod::apiFunc('roles','user','getdefaultauthdata');
     $defaultloginmodname = $defaultauthdata['defaultloginmodname'];
