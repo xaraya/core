@@ -45,10 +45,10 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
         if($position > $this->tail) return false;
         switch($position) {
         case $this->head:
-            array_unshift($this->items,$item);
+            array_push($this->items, $item);
             break;
         case $this->tail:
-            array_push($this->items, $item);
+            array_unshift($this->items,$item);
             break;
         default:
             $first = array_slice($this->items,0,$position-1);
@@ -64,11 +64,11 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
         if($position > $this->tail or $this->empty) return false;
         switch($position) {
         case $this->tail:
-            $item = array_pop($this->items);
-            break;
-        case $this->head:
         case 0:
             $item = array_shift($this->items);
+            break;
+        case $this->head:
+            $item = array_pop($this->items);
             break;
         default:
             $first = array_slice($this->items,0,$position-1);
