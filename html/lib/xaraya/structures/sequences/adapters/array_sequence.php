@@ -19,14 +19,24 @@ sys::import('xaraya.structures.sequences.interfaces');
 class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
 {
     // An array holds our sequence items
-    protected $items = array();
+    public $items = array();
 
     // iSequence implementation
     // Get the item at the specified position
     public function &get($position)
     {
         $item = null;
-        $item = $this->items[$position];
+        if($position > $this->tail) return $item;
+        switch($position) {
+        case $this->head:
+            $item = end($this->items);
+            break;
+        case $this->tail:
+            $item = reset($this->items);
+            break;
+        default:
+        	break;
+        }
         return $item;
     }
     // Insert an item on the specified position
@@ -96,9 +106,9 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
         case 'empty':
             return count($this->items) == 0;
         case 'tail':
-            return count($this->items)-1;
-        case 'head':
             return empty($this->items)?-1:0;
+        case 'head':
+            return count($this->items)-1;
         default:
             throw new Exception("Property $name does not exist");
         }
