@@ -19,7 +19,7 @@
 class SequenceAdapter extends xarObject implements iAdapter, iSequenceAdapter 
 {
     // Who does the actual work?
-    public $implementor;
+    private $implementor;
     // iAdapter implementation
     // Our children have nothing to say, we do the construction
     
