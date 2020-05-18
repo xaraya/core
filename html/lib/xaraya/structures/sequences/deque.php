@@ -38,7 +38,7 @@ class Deque extends SequenceAdapter implements iDeque
         // Remove the item we added
         $this->__get('size');
         if ($this->size == 2) {
-        	$position = ($whichEnd == 'tail') ? 2 : 1;
+        	$position = ($whichEnd == 'tail') ? 1 : 2;
         	parent::delete($position);
         }
         return $pushed;
