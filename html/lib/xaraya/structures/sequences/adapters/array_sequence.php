@@ -26,23 +26,13 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
     public function &get($position)
     {
         $item = null;
-        if($position > $this->tail) return $item;
-        switch($position) {
-        case $this->head:
-            $item = end($this->items);
-            break;
-        case $this->tail:
-            $item = reset($this->items);
-            break;
-        default:
-        	break;
-        }
+		$item = $this->items[$position];
         return $item;
     }
     // Insert an item on the specified position
     public function insert($item, $position)
     {
-        if($position > $this->tail) return false;
+        if($position > $this->head) return false;
         switch($position) {
         case $this->head:
             array_push($this->items, $item);
@@ -61,7 +51,7 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
     // Delete an item from the specified position
     public function delete($position)
     {
-        if($position > $this->tail or $this->empty) return false;
+        if($position > $this->head or $this->empty) return false;
         switch($position) {
         case $this->tail:
         case 0:
