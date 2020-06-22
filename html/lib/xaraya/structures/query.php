@@ -1086,7 +1086,7 @@ class Query
            
             if (!empty($tablesdone) && !isset($tablesdone[$name1]) && !isset($tablesdone[$name2])) {
                 // Neither of the tables has been processed; put aside for now
-                $stack1->push($nextkey);
+                $stack1->push($nextlink);
             } else {
            
                 // At least one of the tables has been processed; accept this link
