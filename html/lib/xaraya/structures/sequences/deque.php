@@ -70,5 +70,10 @@ class Deque extends SequenceAdapter implements iDeque
     {
         return parent::clear();
     }
+    
+    public function load($seq)
+    {
+        return parent::load($seq);
+    }
 }
 ?>
