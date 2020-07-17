@@ -230,7 +230,7 @@ class Query
             $assembletime = $querystart - $this->starttime;
             $querytime = $loopstart - $querystart;
             $looptime = microtime(true) - $loopstart;
-            echo $this->qecho($statement);echo "<br />";
+            $this->qecho($statement);echo "<br />";
             echo "Assemble: " . $assembletime . "    Query: " . $querytime . "   Loops: " . $looptime . "<br />";
         }
         return true;
