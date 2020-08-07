@@ -260,7 +260,11 @@ class xarPDO extends PDO
     public function executeUpdate($string='')
     {
         xarLog::message("xarPDO::executeUpdate: Executing $string", xarLog::LEVEL_INFO);
-        $affected_rows = $this->exec($string);
+        try {
+	        $affected_rows = $this->exec($string);
+        } catch (Exception $e) {
+        	throw $e;
+        }
         if (substr(strtoupper($string),0,6) == "INSERT") {
             $this->last_id = $this->lastInsertId();
         }
@@ -284,28 +288,32 @@ class xarPDO extends PDO
     public function Execute($string, $bindvars=array(), $flag=0)
     {
         xarLog::message("xarPDO::Execute: Executing $string", xarLog::LEVEL_INFO);
-        if (empty($flag)) $flag = PDO::FETCH_NUM;
-                   
-        if (is_array($bindvars) && !empty($bindvars)) {
-            // Prepare a SQL statement
-            $this->queryString = $string;
-            $stmt = new xarPDOStatement($this);
-            $result = $stmt->executeQuery($bindvars, $flag);
-            return $result;
-        } elseif (substr(strtoupper($string),0,6) == "SELECT") {
-            $stmt = $this->query($string, $flag);
-            $this->row_count = $stmt->rowCount();
-            $result = new ResultSet($stmt, $flag);
-            return $result;
-        } else {
-            $rows_affected = $this->exec($string);//echo "<pre>";var_dump($stmt);
-            $this->row_count = $rows_affected;
-            if (substr(strtoupper($string),0,6) == "INSERT") {
-                $this->last_id = $this->lastInsertId();
-            }
-            // Create an empty result set
-            $result = new ResultSet();
-            return $result;
+        try {
+			if (empty($flag)) $flag = PDO::FETCH_NUM;
+				   
+			if (is_array($bindvars) && !empty($bindvars)) {
+				// Prepare a SQL statement
+				$this->queryString = $string;
+				$stmt = new xarPDOStatement($this);
+				$result = $stmt->executeQuery($bindvars, $flag);
+				return $result;
+			} elseif (substr(strtoupper($string),0,6) == "SELECT") {
+				$stmt = $this->query($string, $flag);
+				$this->row_count = $stmt->rowCount();
+				$result = new ResultSet($stmt, $flag);
+				return $result;
+			} else {
+				$rows_affected = $this->exec($string);
+				$this->row_count = $rows_affected;
+				if (substr(strtoupper($string),0,6) == "INSERT") {
+					$this->last_id = $this->lastInsertId();
+				}
+				// Create an empty result set
+				$result = new ResultSet();
+				return $result;
+			}
+        } catch (Exception $e) {
+        	throw $e;
         }
     }
 
@@ -321,14 +329,18 @@ class xarPDO extends PDO
     public function ExecuteQuery($string='', $flag=0)
     {
         xarLog::message("xarPDO::executeQuery: Executing $string", xarLog::LEVEL_INFO);
-        if (empty($flag)) $flag = PDO::FETCH_NUM;
+        try {
+			if (empty($flag)) $flag = PDO::FETCH_NUM;
 
-        $stmt = $this->query($string);
-        if (substr(strtoupper($string),0,6) == "INSERT") {
-            $this->last_id = $this->lastInsertId();
+			$stmt = $this->query($string);
+			if (substr(strtoupper($string),0,6) == "INSERT") {
+				$this->last_id = $this->lastInsertId();
+			}
+			$this->row_count = $stmt->rowCount();
+			return new ResultSet($stmt, $flag);
+        } catch (Exception $e) {
+        	throw $e;
         }
-        $this->row_count = $stmt->rowCount();
-        return new ResultSet($stmt, $flag);
     }
     
     public function SelectLimit($string='', $limit=0, $offset=0, $bindvars=array(), $flag=0)
@@ -351,8 +363,13 @@ class xarPDO extends PDO
                 $bindvars[] = $offset;
             }
         }
+        xarLog::message("xarPDO::SelectLimit: Executing $string", xarLog::LEVEL_INFO);
         if (empty($bindvars)) {
-            $stmt = $this->query($string, $flag);
+			try {
+	            $stmt = $this->query($string, $flag);
+			} catch (Exception $e) {
+				throw $e;
+			}
             $result = new ResultSet($stmt, $flag);
         } else {
             // Prepare a SQL statement
@@ -363,7 +380,11 @@ class xarPDO extends PDO
             $stmt->haslimits(true);
             
             // Execute the SQL statment and create a result set
-            $result = $stmt->executeQuery($bindvars, $flag);
+			try {
+	            $result = $stmt->executeQuery($bindvars, $flag);
+			} catch (Exception $e) {
+				throw $e;
+			}
         }
         // Save the number of rows
         $this->row_count = $stmt->rowCount();
@@ -463,11 +484,8 @@ class xarPDOStatement extends xarObject
         try {
             $success = $this->pdostmt->execute();
         } catch (Exception $e) {
-            echo $e->getMessage();
-            echo "<br/>";
-            echo "Query: " . $this->pdo->queryString;
-            exit;
-        }      
+        	throw $e;
+        }
         
         // If this is a SELECT, create a result set for the results
         if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT") {
@@ -517,10 +535,7 @@ class xarPDOStatement extends xarObject
         try {
             $success = $this->pdostmt->execute();
         } catch (Exception $e) {
-            echo $e->getMessage();
-            echo "<br/>";
-            echo "Query: " . $this->pdo->queryString;
-            exit;
+            throw $e;
         }      
 
         if (substr(strtoupper($this->pdo->queryString),0,6) == "INSERT") {
