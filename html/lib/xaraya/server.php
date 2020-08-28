@@ -129,7 +129,7 @@ class xarURL extends xarObject
 class xarServer extends xarObject
 {
     const PROTOCOL_HTTP  = 'http';
-    const PROTOCOL_HTTPS = substr('https',0,4);
+    const PROTOCOL_HTTPS = 'https';
 
     public static $baseurl;
     public static $allowShortURLs = true;
