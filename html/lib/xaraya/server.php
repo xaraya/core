@@ -238,7 +238,7 @@ class xarServer extends xarObject
             $server = self::getVar('SERVER_NAME');
             $port   = self::getVar('SERVER_PORT');
             $protocol = self::getProtocol();
-            if (!($protocol == self::PROTOCOL_HTTP && $port == 80) && !($protocol == (self::PROTOCOL_HTTPS && $port == 443)) {
+            if (!($protocol == self::PROTOCOL_HTTP && $port == 80) && !($protocol == self::PROTOCOL_HTTPS && $port == 443)) {
                 $server .= ":$port";
             }
         }
