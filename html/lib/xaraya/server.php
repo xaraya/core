@@ -128,8 +128,8 @@ class xarURL extends xarObject
 
 class xarServer extends xarObject
 {
-    const PROTOCOL_HTTP  = 'http';
-    const PROTOCOL_HTTPS = 'https';
+    const PROTOCOL_HTTP  = "http";
+    const PROTOCOL_HTTPS = "https";
 
     public static $baseurl;
     public static $allowShortURLs = true;
@@ -259,7 +259,7 @@ class xarServer extends xarObject
             try {
                 if (xarConfigVars::get(null, 'Site.Core.EnableSecureServer') == true) {
                     if (preg_match('/^http:/', self::getVar('REQUEST_URI'))) {
-                        return 'http';
+                        return self::PROTOCOL_HTTP;
                     }
                     $serverport = $_SERVER['SERVER_PORT'];
                     return ($serverport == xarConfigVars::get(null, 'Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
