@@ -128,8 +128,8 @@ class xarURL extends xarObject
 
 class xarServer extends xarObject
 {
-    const PROTOCOL_HTTP  = "http";
-    const PROTOCOL_HTTPS = "https";
+    const PROTOCOL_HTTP  = 'http';
+    const PROTOCOL_HTTPS = 'https';
 
     public static $baseurl;
     public static $allowShortURLs = true;
@@ -238,7 +238,7 @@ class xarServer extends xarObject
             $server = self::getVar('SERVER_NAME');
             $port   = self::getVar('SERVER_PORT');
             $protocol = self::getProtocol();
-            if (!($protocol == self::PROTOCOL_HTTP && $port == 80) && !($protocol == self::PROTOCOL_HTTPS && $port == 443)) {
+            if (!($protocol == self::PROTOCOL_HTTP && $port == 80) && !($protocol == substr(self::PROTOCOL_HTTPS,0,4) && $port == 443)) {
                 $server .= ":$port";
             }
         }
@@ -262,7 +262,7 @@ class xarServer extends xarObject
                         return self::PROTOCOL_HTTP;
                     }
                     $serverport = $_SERVER['SERVER_PORT'];
-                    return ($serverport == xarConfigVars::get(null, 'Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
+                    return ($serverport == xarConfigVars::get(null, 'Site.Core.SecureServerPort')) ? substr(self::PROTOCOL_HTTPS,0,4) : self::PROTOCOL_HTTP;
                 }
             } catch (Exception $e) {
                 return self::PROTOCOL_HTTP;
