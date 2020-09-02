@@ -581,7 +581,7 @@ class CategoriesProperty extends DataProperty
         $q->addTable($tables['categories_linkage'], $tableprefix . 'linkage');
         $q->leftjoin($primary_source, $tableprefix . 'linkage.item_id');
         $q->addTable($tables['categories'], $tableprefix . 'categories');
-        $q->leftjoin($tableprefix . 'categories.id', $tableprefix . 'linkage.category_id');
+        $q->leftjoin($tableprefix . 'linkage.category_id', $tableprefix . 'categories.id');
         
         // A zero means "all"
         // Itemtype & module ID = 0 means the objects listing

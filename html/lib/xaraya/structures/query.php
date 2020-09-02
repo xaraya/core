@@ -1089,7 +1089,7 @@ class Query
                 $stack1->push($nextlink);
             } else {
            
-                // At least one of the tables has been processed; accept this link
+                // At least one of the tables has been processed; add this link to the list of sorted links
                 $sortedlinks[] = $nextlink;
                 
                 // Move the previously rejected keys back to the stack
@@ -1131,9 +1131,16 @@ class Query
             if (isset($tablesdone[$fullfield1['table']])) {
                 $string .= " ";
             } else {
-                // Do not add the operation if we are just starting out
-                // In that cse te second table will add it
-                if ($i > 1) $string .= " " . $link['op'] . " ";
+                if ($i == 1) {
+					// Do not add the operation if we are just starting out
+					// In that case the second table will add it
+                } else {
+                	// If we get here it means that the second table has already been dealt with before the first
+                	// We therefore need to reverse the direction of an OUTER JOIN
+                	if ($link['op'] == 'LEFT JOIN') $link['op'] = 'RIGHT JOIN';
+                	elseif ($link['op'] == 'RIGHT JOIN') $link['op'] = 'LEFT JOIN';
+					$string .= " " . $link['op'] . " ";
+                }
                 // Add the table to the query string
                 $string .= $name1 . " " . $fullfield1['table'] . " ";
                 // Add the table name to the list of tables processed
