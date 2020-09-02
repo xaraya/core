@@ -94,6 +94,8 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function getInvalids(Array $args = array())
     {
+        xarLog::message("xarLog in getInvalids function", xarLog::LEVEL_INFO);
+        
         if (!empty($args['fields'])) $fields = $args['fields'];
         else $fields = $this->getFieldList();
 
@@ -102,7 +104,6 @@ class DataObject extends DataObjectMaster implements iDataObject
             if (!empty($this->properties[$name]->invalid))
                 $invalids[$name] = $this->properties[$name]->invalid;
         }
-        xarLog::message("xarLog in getInvalids functions", xarLog::LEVEL_INFO);
         xarLog::variable("printing invalids array in log file: ", $invalids);
 
         return $invalids;
@@ -110,12 +111,16 @@ class DataObject extends DataObjectMaster implements iDataObject
 
     public function displayInvalids(Array $args = array())
     {
+        xarLog::message("xarLog in displayInvalids function", xarLog::LEVEL_INFO);
+
         $invalids = $this->getInvalids($args);
         return xarTpl::module('dynamicdata', 'user', 'displayinvalids', array('invalids' => $invalids));
     }
 
     public function clearInvalids()
     {
+        xarLog::message("xarLog in clearInvalids function", xarLog::LEVEL_INFO);
+
         foreach(array_keys($this->properties) as $name)
             $this->properties[$name]->invalid = '';
         return true;
