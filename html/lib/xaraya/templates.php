@@ -117,7 +117,7 @@ class xarTpl extends xarObject
 **/    
     public static function setBaseDir($themesDir)
     {
-        assert($themesDir != "" && $themesDir{0} != "/");
+        assert($themesDir != "" && $themesDir[0] != "/");
         
         xarLog::message("xarTpl::setBaseDir: Setting the theme base dir to $themesDir", xarLog::LEVEL_INFO);
             
@@ -159,7 +159,7 @@ class xarTpl extends xarObject
  */
     public static function setThemeName($themeName)
     {
-        assert($themeName != "" && $themeName{0} != "/");
+        assert($themeName != "" && $themeName[0] != "/");
 
         xarLog::message("xarTpl::setThemeName: Setting the theme name to $themeName", xarLog::LEVEL_INFO);
 
@@ -183,7 +183,7 @@ class xarTpl extends xarObject
  */
     public static function setThemeDir($themeDir)
     {
-        assert($themeDir != "" && $themeDir{0} != "/");
+        assert($themeDir != "" && $themeDir[0] != "/");
 
         xarLog::message("xarTpl::setThemeDir: Setting the theme dir to $themeDir", xarLog::LEVEL_INFO);
 
@@ -235,7 +235,7 @@ class xarTpl extends xarObject
             if (!empty($themeName))
                 self::setThemeName($themeName);
         }
-        assert(isset(self::$themeName); /* Theme name could not be set properly */);
+        assert(isset(self::$themeName), '/* Theme name could not be set properly */');
         return self::$themeName;
     }
 
