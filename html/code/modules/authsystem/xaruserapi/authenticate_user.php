@@ -28,7 +28,7 @@ function authsystem_userapi_authenticate_user(Array $args=array())
     
     extract($args);
 
-    assert('!empty($uname) && isset($pass)');
+    assert(!empty($uname) && isset($pass));
 
     $dbconn = xarDB::getConn();
     $xartable =& xarDB::getTables();

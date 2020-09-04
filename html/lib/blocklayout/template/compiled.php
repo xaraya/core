@@ -37,8 +37,8 @@ class CompiledTemplate extends xarObject
 
     public function &execute(&$bindvars, $caching = 0)
     {
-        assert('isset($this->fileName); /* No source to execute from */');
-        assert('is_array($bindvars); /* Template data needs to be passed in as an array */');
+        assert(isset($this->fileName); /* No source to execute from */);
+        assert(is_array($bindvars), '/* Template data needs to be passed in as an array */');
 
         // Do we really need this?
         $bindvars['_bl_data'] =& $bindvars;

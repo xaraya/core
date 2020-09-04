@@ -71,7 +71,7 @@ class xarAutoload extends xarObject
         } else {
             return array();
         }
-        assert('!empty($activeMods)'); // this should never happen
+        assert(!empty($activeMods)); // this should never happen
 
         $loaded = array();
         foreach($activeMods as $modInfo) {

@@ -29,7 +29,7 @@ class XarayaSourceTemplate extends SourceTemplate
     **/
     public function &compile() 
     {
-        assert('isset($this->fileName); /* No source to compile from */');
+        assert(isset($this->fileName), '/* No source to compile from */');
         sys::import('xaraya.templating.compiler');
         $compiler = XarayaCompiler::instance();
         $templateCode = $compiler->compileFile($this->fileName);

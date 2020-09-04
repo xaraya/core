@@ -21,10 +21,10 @@ class HtmlValidation extends ValueValidations
 {
     function validate(&$subject, Array $parameters)
     {
-        assert('($parameters[0] == "restricted" ||
+        assert(($parameters[0] == "restricted" ||
                  $parameters[0] == "basic" ||
                  $parameters[0] == "enhanced" ||
-                 $parameters[0] == "admin")');
+                 $parameters[0] == "admin"));
 
         if ($parameters[0] == 'admin') {
             return true;

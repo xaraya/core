@@ -58,7 +58,7 @@ class ThemeInitialization extends xarObject
                 self::ClearCache();
 
                 $activeThemes = xarMod::apiFunc('themes','admin','getlist', array('filter' => array('State' => XARTHEME_STATE_ACTIVE)));
-                assert('!empty($activeThemes)'); // this should never happen
+                assert(!empty($activeThemes)); // this should never happen
 
                 foreach($activeThemes as $themeInfo) {
                     // FIXME: the themeInfo directory does NOT end with a /
