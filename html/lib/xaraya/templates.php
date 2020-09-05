@@ -235,7 +235,7 @@ class xarTpl extends xarObject
             if (!empty($themeName))
                 self::setThemeName($themeName);
         }
-        assert(isset(self::$themeName), '/* Theme name could not be set properly */');
+        assert(isset(self::$themeName));
         return self::$themeName;
     }
 
@@ -294,7 +294,7 @@ class xarTpl extends xarObject
  */
     public static function setDoctype($doctypeName)
     {
-        assert(is_string($doctypeName), '/* doctype should always be a string */');
+        assert(is_string($doctypeName));
 
         xarLog::message("xarTpl::setDoctype: Setting the doc type to $doctypeName", xarLog::LEVEL_INFO);
 
@@ -1294,8 +1294,8 @@ class xarTpl extends xarObject
  */
     private static function executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     {
-        assert(!empty($sourceFileName), '/* The source file for the template is empty in xarTpl::executeFromFile */');
-        assert(is_array($tplData), '/* Template data should always be passed in as array */');
+        assert(!empty($sourceFileName));
+        assert(is_array($tplData));
 
         // cache frequently-used cachedfilenames
         if (xarCoreCache::isCached('Templates.ExecuteFromFile', $sourceFileName)) {

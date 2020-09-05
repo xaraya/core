@@ -103,7 +103,7 @@ function themes_adminapi_regenerate()
             if ($dbThemes[$name]['version'] != $themeInfo['version'] && $dbThemes[$name]['state'] != XARTHEME_STATE_UNINITIALISED) {
                     $set = xarMod::apiFunc('themes','admin','setstate',
                                         array('regid' => $dbThemes[$name]['regid'], 'state' => XARTHEME_STATE_UPGRADED));
-                    assert(isset($set), '/* Setting the state of theme failed */');
+                    assert(isset($set));
                 }
         }
     }

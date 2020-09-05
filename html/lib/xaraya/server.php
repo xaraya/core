@@ -160,7 +160,7 @@ class xarServer extends xarObject
      */
     static function getVar($name)
     {
-        assert(version_compare("5.0",phpversion()) <= 0, '/* The minimum PHP version supported by Xaraya is 5.0 */');
+        assert(version_compare("7.2",phpversion()) <= 0);
         if (isset($_SERVER[$name])) return $_SERVER[$name];
         if($name == 'PATH_INFO')    return;
         if (isset($_ENV[$name]))    return $_ENV[$name];

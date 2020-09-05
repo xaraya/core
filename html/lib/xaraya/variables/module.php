@@ -137,7 +137,7 @@ class xarModVars extends xarVars implements IxarModVars
     {
         if (empty($scope)) throw new EmptyParameterException('modName');
         if (empty($name)) throw new EmptyParameterException('name');
-        assert(!is_null($value), '/* Not allowed to set a variable to NULL value */');
+        assert(!is_null($value));
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();

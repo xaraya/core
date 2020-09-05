@@ -31,7 +31,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     public function __construct(Array $args=array())
     {
         // TODO: check the object definition, it needs id, data and nextid
-        assert(isset($args["name"]), '/* To construct a dd sequence, an objectname must be passed in */');
+        assert(isset($args["name"]));
         $this->seqInfo = $args;
          // This fills $seqObject and $seq with most current data.
         $this->getSequence();
