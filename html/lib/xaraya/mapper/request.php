@@ -18,18 +18,18 @@ class xarRequest extends xarObject
     protected $url;
     protected $actionstring;
     protected $dispatched = false;
-    protected $modulekey = 'module';
-    protected $typekey   = 'type';
-    protected $funckey   = 'func';
-    protected $route     = 'default';
+    protected $modulekey  = 'module';
+    protected $typekey    = 'type';
+    protected $funckey    = 'func';
+    protected $route      = 'default';
 
-    public $module    = 'base';
-    public $modulealias = '';
-    public $type      = 'user';
-    public $func      = 'main';
-    public $funcargs  = array();
-    public $object    = 'objects';
-    public $method    = 'view';
+    public $module        = 'base';
+    public $modulealias   = '';
+    public $type          = 'user';
+    public $func          = 'main';
+    public $funcargs      = array();
+    public $object        = 'objects';
+    public $method        = 'view';
     
     public $defaultRequestInfo = array();
     public $isObjectURL        = false;
