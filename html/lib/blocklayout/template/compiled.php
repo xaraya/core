@@ -46,7 +46,10 @@ class CompiledTemplate extends xarObject
         // Make the bindvars known in the scope.
         extract($bindvars, EXTR_OVERWRITE);
 
-        if($this->type=='page') set_exception_handler(array('ExceptionHandlers','bone'));
+        if($this->type=='page') {
+			sys::import('xaraya.exceptions.handlers');
+			set_exception_handler('ExceptionHandlers::bone');
+        }
 
         // Executing means generating output, start a buffer for it
         ob_start();
