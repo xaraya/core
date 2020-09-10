@@ -156,8 +156,7 @@ class xarLog extends xarObject
         $xarLogConfig = array();
     
         // Check if we have a log configuration file in the var directory
-        if (self::configReadable())
-        {
+        if (self::configReadable()) {
             // CHECKME: do we need to wrap this?
             if (!include (self::configFile())) {
                 throw new LoggerException('xarLog_init: Log configuration file is invalid!');
