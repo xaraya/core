@@ -98,7 +98,7 @@ class xarLogger_javascript extends xarLogger
 
         $this->_buffer .= "if (debugWindow) {\n".
                 "    debugWindow.document.write('".$this->getTime().
-                ' - ('.$this->levelToString($level).')<br/>'.
+                ' - ('.$this->levels($level).')<br/>'.
                 addslashes(str_replace($strings, $replace, $message) ). "<br/><br/>');\n".
                 "    debugWindow.scrollBy(0,100000);\n".
                 "}\n";

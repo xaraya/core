@@ -152,7 +152,7 @@ class xarLog extends xarObject
         } catch (Exception $e) {
             return true;
         }
-        
+
         $xarLogConfig = array();
     
         // Check if we have a log configuration file in the var directory
@@ -259,10 +259,10 @@ class xarLog extends xarObject
      * @param string level. The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
      *
      */
-    static public function message($message, $level = '')
+    static public function message($message, $level = self::LEVEL_DEBUG)
     {
-        if (empty($level)) $level = self::LEVEL_DEBUG;
         if (($level == self::LEVEL_DEBUG) && !xarCore::isDebuggerActive()) return;
+
         // this makes a copy of the object, so the original $this->_buffer was never updated
         //foreach ($_xarLoggers as $logger) {
         foreach (array_keys(self::$loggers) as $id) {
