@@ -1332,7 +1332,7 @@ class xarTpl extends xarObject
         // Execute the compiled template from the cache file
         // @todo the tplType should be irrelevant
         sys::import('blocklayout.template.compiled');
-        $compiled = new CompiledTemplate($cachedFileName,$sourceFileName,$tplType);
+        $compiled = new CompiledTemplate($cachedFileName, $sourceFileName, $tplType);
         try {
             $caching = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
         } catch (Exception $e) {
