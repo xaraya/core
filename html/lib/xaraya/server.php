@@ -259,10 +259,11 @@ class xarServer extends xarObject
             try {
                 if (xarConfigVars::get(null, 'Site.Core.EnableSecureServer') == true) {
                     if (preg_match('/^http:/', self::getVar('REQUEST_URI'))) {
-                        return 'http';
+                        return self::PROTOCOL_HTTP;
                     }
                     $serverport = $_SERVER['SERVER_PORT'];
-                    return ($serverport == xarConfigVars::get(null, 'Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
+                    $protocol = ($serverport == xarConfigVars::get(null, 'Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
+                    return $protocol;
                 }
             } catch (Exception $e) {
                 return self::PROTOCOL_HTTP;

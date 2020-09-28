@@ -602,9 +602,10 @@ class Role extends DataObject
             $bindvars[] = $state;
         }
         $dbconn = xarDB::getConn();
-        if (isset($itemtype))
+        if (isset($itemtype)) {
             $query .= " AND r.itemtype = ? ";
             $bindvars[] = $itemtype;
+        }
         if (isset($selection)) {
             $query = $selection;
             $stmt = $dbconn->prepareStatement($query);

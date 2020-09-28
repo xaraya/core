@@ -38,5 +38,10 @@ class Queue extends SequenceAdapter implements iQueue
     {
         parent::clear();
     }
+
+    public function load($seq)
+    {
+        return parent::load($seq);
+    }
 }
 ?>

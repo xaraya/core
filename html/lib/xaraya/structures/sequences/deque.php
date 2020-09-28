@@ -23,8 +23,25 @@ class Deque extends SequenceAdapter implements iDeque
     // Push an item into the Deque, head or tail
     public function push($item, $whichEnd) 
     {
+        // Unfortunate kludge: when there is exactly 1 item in the deque the code cannot tell the difference between head and tail
+        // So we temporarily increase the size of the array to make the difference noticeable
+        // Since this is an issue specific to the deque, we cannot fix it at the level of the parent. We have do do something here,
+        // because the parent only understands position and knows nothing of head and tail
+        $this->__get('size');
+        if ($this->size == 1) {
+        	parent::insert('void',1);
+        }
+        
         $position = $this->__get($whichEnd);
-        return parent::insert($item,$position);
+        $pushed = parent::insert($item,$position);
+        
+        // Remove the item we added
+        $this->__get('size');
+        if ($this->size == 2) {
+        	$position = ($whichEnd == 'tail') ? 1 : 2;
+        	parent::delete($position);
+        }
+        return $pushed;
     }
 
     // Peek at an item at the head or tail of the Deque
@@ -52,6 +69,11 @@ class Deque extends SequenceAdapter implements iDeque
     public function clear()
     {
         return parent::clear();
+    }
+    
+    public function load($seq)
+    {
+        return parent::load($seq);
     }
 }
 ?>

@@ -897,7 +897,7 @@ class DataObjectMaster extends xarObject
         // Complete the info if this is a known object
         $info = self::_getObjectInfo($args);
         if (empty($info)) {
-            if (isset($args['name'])) $identifier = xarML('the name is #(1)',$args['name']);
+            if (isset($args['name'])) $identifier = xarML("the name is '#(1)'",$args['name']);
             if (isset($args['objectid'])) $identifier = xarML('the objectid is #(1)',$args['objectid']);
             throw new Exception(xarML('Unable to create an object where #(1)', $identifier));
         }
@@ -1644,7 +1644,7 @@ class DataObjectMaster extends xarObject
     }
 
     /**
-     * Transform property names to their source field names in a clause
+     * Transform property names to their source field names in a clause and replace '=' operator with 'eq' etc.
      *
      * @param mixed where string or array of name => value pairs
      * @return string representing a SQL where clause
@@ -1669,24 +1669,33 @@ class DataObjectMaster extends xarObject
 
         // Replace property names with source field names
         // Note this does not preclude (if the store is a single DB table) 
-        // that we have fields in the where clause with no corresponding no properties
+        // that we have fields in the where clause with no corresponding properties
         $findLogic    = array();
         $replaceLogic = array();
         foreach ($this->properties as $name => $property) {
+        	// If the source is empty (like virtual properties) then ignore
             if (empty($property->source)) continue;
-            $findLogic[] = '/\b' . $name . '\b/';
+            // Replace the property name unless it is in quotes (in which case it could be a value
+            $findLogic[] = "/['\"]" . $name . "['\"](*SKIP)(*FAIL)|\b" . $name . "\b/";
+            // Add the property's source name as its replacement
             $replaceLogic[] = $property->source;
         }
         $clause = preg_replace($findLogic, $replaceLogic, $clause);
         return $clause;
     }
     
+    /**
+     * Divide the clause into an array of parts
+     *
+     * @param string representing a SQL where clause
+     * @return array of operators and operands
+     */
     private function parseClause($clause)
     {   
         // Enclose the clause in parentheses
         $clause = '(' . $clause . ')';
         // Split the clause into its parts
-        $parts = preg_split('/(\(|\)|\bor\b|\band\b)/',$clause,-1,PREG_SPLIT_DELIM_CAPTURE);
+        $parts = preg_split('/(\(|\)|\bor\b|\band\b)/i', $clause, -1, PREG_SPLIT_DELIM_CAPTURE);
         
         $processed_parts = array();
         if (empty($parts)) return $processed_parts;
@@ -1697,8 +1706,10 @@ class DataObjectMaster extends xarObject
                 case "": break;
                 case "(": $processed_parts[] = array('type' => 'begin', 'value' => 1); break;
                 case ")": $processed_parts[] = array('type' => 'end', 'value' => 1); break;
-                case "or": $processed_parts[] = array('type' => 'operator', 'value' => $part); break;
-                case "and": $processed_parts[] = array('type' => 'operator', 'value' => $part); break;
+                case "or": $processed_parts[] = array('type' => 'operator', 'value' => strtoupper($part)); break;
+                case "OR": $processed_parts[] = array('type' => 'operator', 'value' => $part); break;
+                case "and": $processed_parts[] = array('type' => 'operator', 'value' => strtoupper($part)); break;
+                case "AND": $processed_parts[] = array('type' => 'operator', 'value' => $part); break;
                 default: $processed_parts[] = array('type' => 'operand', 'value' => $part); break;
             }
         }
@@ -1741,6 +1752,12 @@ class DataObjectMaster extends xarObject
         }
     }
     
+    /**
+     * Turn an operand into a query condition and add it to the dataquery
+     *
+     * @param string representing a SQL where clause
+     * @return array of operators and operands
+     */
     private function parseRelation($string)
     {   
         $parts = explode(' ', $string);

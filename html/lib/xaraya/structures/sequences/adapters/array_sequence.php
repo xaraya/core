@@ -26,19 +26,19 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
     public function &get($position)
     {
         $item = null;
-        $item = $this->items[$position];
+		$item = $this->items[$position];
         return $item;
     }
     // Insert an item on the specified position
     public function insert($item, $position)
     {
-        if($position > $this->tail) return false;
+        if($position > $this->head) return false;
         switch($position) {
         case $this->head:
-            array_unshift($this->items,$item);
+            array_push($this->items, $item);
             break;
         case $this->tail:
-            array_push($this->items, $item);
+            array_unshift($this->items,$item);
             break;
         default:
             $first = array_slice($this->items,0,$position-1);
@@ -51,14 +51,14 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
     // Delete an item from the specified position
     public function delete($position)
     {
-        if($position > $this->tail or $this->empty) return false;
+        if($position > $this->head or $this->empty) return false;
         switch($position) {
         case $this->tail:
-            $item = array_pop($this->items);
-            break;
-        case $this->head:
         case 0:
             $item = array_shift($this->items);
+            break;
+        case $this->head:
+            $item = array_pop($this->items);
             break;
         default:
             $first = array_slice($this->items,0,$position-1);
@@ -96,9 +96,9 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
         case 'empty':
             return count($this->items) == 0;
         case 'tail':
-            return count($this->items)-1;
-        case 'head':
             return empty($this->items)?-1:0;
+        case 'head':
+            return count($this->items)-1;
         default:
             throw new Exception("Property $name does not exist");
         }

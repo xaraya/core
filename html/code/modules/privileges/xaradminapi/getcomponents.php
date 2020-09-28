@@ -52,6 +52,7 @@
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($modid));
         $iter = $result->next();
+        if (null == $result->fields) $result->fields = array();
 
         $components = array();
         if(count($result->fields) == 0) {
