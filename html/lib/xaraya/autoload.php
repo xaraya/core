@@ -71,7 +71,7 @@ class xarAutoload extends xarObject
         } else {
             return array();
         }
-        assert('!empty($activeMods)'); // this should never happen
+        assert(!empty($activeMods)); // this should never happen
 
         $loaded = array();
         foreach($activeMods as $modInfo) {
@@ -160,9 +160,19 @@ class xarAutoload extends xarObject
             if (is_array($function)) {
                 $classname = $function[0];
                 $method = $function[1];
-                self::$registerlist[$classname.'::'.$method] = 1;
+                if (gettype($classname) === "string") {
+                    self::$registerlist[$classname.'::'.$method] = 1;
+                } else {
+                    //self::$registerlist[$classname.'::'.$method] = 1;
+                    xarLog::message("xarAutoload:refreshList: failed registering class " . get_class($classname) . " method $method", xarLog::LEVEL_DEBUG);
+                }
             } else {
-                self::$registerlist[$function] = 1;
+                if (gettype($function) === "string") {
+                    self::$registerlist[$function] = 1;
+                } else {
+                    //self::$registerlist[$function] = 1;
+                    xarLog::message("xarAutoload:refreshList: failed registering function " . get_class($function), xarLog::LEVEL_DEBUG);
+                }
             }
         }
     }
