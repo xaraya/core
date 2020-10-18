@@ -250,6 +250,24 @@ final class sys extends xarObject
     {} // no objects can be made out of this.
 
     /**
+     * Load the layout file so we know where to find the Xaraya directories (composer autoload)
+     */
+    public static function init()
+    {
+        if (!empty($GLOBALS['systemConfiguration'])) return;
+        $systemConfiguration = array();
+        include 'var/layout.system.php';
+        if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
+        if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
+        if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
+        if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+        $GLOBALS['systemConfiguration'] = $systemConfiguration;
+        if (!empty($systemConfiguration['rootDir'])) {
+            set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
+        }
+    }
+
+    /**
      * Import a xaraya component once, in the fastest way possible
      *
      * Little utility function which allows easy inclusion of xaraya core
@@ -442,4 +460,3 @@ class DataContainer extends xarObject
     }
 }
 
-?>

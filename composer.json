@@ -12,6 +12,13 @@
         "sort-packages": true
     },
     "autoload": {
-        "classmap": ["html/lib/", "html/code/"]
+        "classmap": [
+            "html/bootstrap.php",
+            "html/lib/",
+            "html/code/"
+        ],
+        "files": [
+            "html/var/layout.system.php"
+        ]
     }
 }
