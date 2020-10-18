@@ -1,0 +1,17 @@
+{
+    "name": "xaraya/core",
+    "description": "Xaraya Core web development framework",
+    "type": "project",
+    "require-dev": {
+        "phpstan/phpstan": "^0.12.50"
+    },
+    "license": "GPL-2.0-or-later",
+    "require": {},
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "autoload": {
+        "classmap": ["html/lib/", "html/code/"]
+    }
+}
