@@ -99,6 +99,10 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
 
 class xarUser extends xarObject
 {
+    const AUTH_FAILED = -1;
+    const AUTH_DENIED = -2;
+    const LAST_RESORT = -3;
+
     private static $objectRef;
     public static $authenticationModules;
     
@@ -162,7 +166,7 @@ class xarUser extends xarObject
         if (empty($userName)) throw new EmptyParameterException('userName');
         if (empty($password)) throw new EmptyParameterException('password');
     
-        $userId = XARUSER_AUTH_FAILED;
+        $userId = self::AUTH_FAILED;
         $args = array('uname' => $userName, 'pass' => $password);
     
         foreach(self::$authenticationModules as $authModName)
@@ -186,23 +190,23 @@ class xarUser extends xarObject
             $userId = xarMod::apiFunc($authModName, 'user', 'authenticate_user', $args);
             if (!isset($userId)) {
                 return; // throw back
-            } elseif ($userId != XARUSER_AUTH_FAILED) {
-                // Someone authenticated the user or passed XARUSER_AUTH_DENIED
+            } elseif ($userId != self::AUTH_FAILED) {
+                // Someone authenticated the user or passed self::AUTH_DENIED
                 break;
             }
         }
-        if ($userId == XARUSER_AUTH_FAILED || $userId == XARUSER_AUTH_DENIED)
+        if ($userId == self::AUTH_FAILED || $userId == self::AUTH_DENIED)
         {
             if (xarModVars::get('privileges','lastresort'))
             {
                 $secret = unserialize(xarModVars::get('privileges','lastresort'));
                 if ($secret['name'] == md5($userName) && $secret['password'] == md5($password))
                 {
-                    $userId = XARUSER_LAST_RESORT;
+                    $userId = self::LAST_RESORT;
                     $rememberMe = 0;
                 }
              }
-            if ($userId !=XARUSER_LAST_RESORT) {
+            if ($userId != self::LAST_RESORT) {
                 return false;
             }
         }
@@ -341,7 +345,7 @@ class xarUser extends xarObject
             $id = self::getVar('id');
             //last resort user is falling over on this uservar by setting multiple times
             //return true for last resort user - use default locale
-            if ($id == XARUSER_LAST_RESORT) return true;
+            if ($id == self::LAST_RESORT) return true;
     
             $locale = xarModUserVars::get('roles', 'locale');
             if (empty($locale)) {
@@ -419,7 +423,7 @@ class xarUser extends xarObject
         if (!xarCoreCache::isCached('User.Variables.'.$userId, $name)) {
     
             if ($name == 'name' || $name == 'uname' || $name == 'email') {
-                if ($userId == XARUSER_LAST_RESORT) {
+                if ($userId == self::LAST_RESORT) {
                     return xarML('No Information'); // better return null here
                 }
                 
