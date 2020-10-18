@@ -33,7 +33,7 @@ function mail_cliapi_process(Array $args=array())
         echo "Usage: mail -u <user> -p <pass> [mailcontent]\n";
         return 1;
     }
-    if(!xarUserLogin($user,$pass)) {
+    if(!xarUser::logIn($user,$pass)) {
         echo "Authentication failed\n";
         return 1;
     }

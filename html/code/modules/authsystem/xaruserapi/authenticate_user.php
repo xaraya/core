@@ -49,7 +49,7 @@ function authsystem_userapi_authenticate_user(Array $args=array())
     $result->close();
 
     // Confirm that passwords match
-    if (!xarUserComparePasswords($pass, $realpass, $uname, substr($realpass, 0, 2))) {
+    if (!xarUser::comparePasswords($pass, $realpass, $uname, substr($realpass, 0, 2))) {
         return XARUSER_AUTH_FAILED;
     }
 

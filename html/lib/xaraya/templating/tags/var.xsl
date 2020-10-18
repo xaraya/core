@@ -144,7 +144,7 @@
       </xsl:when>
       <!-- User vars -->
       <xsl:when test="@scope = 'user'">
-        <xsl:text>xarUserGetVar('</xsl:text>
+        <xsl:text>xarUser::getVar('</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>'</xsl:text>
         <xsl:if test="@user">

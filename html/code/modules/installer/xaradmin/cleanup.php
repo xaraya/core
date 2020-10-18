@@ -266,12 +266,12 @@ if (is_file("upgrade.php")) echo "<div>Please delete upgrade.php from your web r
  * End SoloBlocks
 **/
 
-    xarUserLogOut();
+    xarUser::logOut();
     // log in admin user
     $uname = xarModVars::get('roles','lastuser');
     $pass = xarModVars::get('roles','adminpass');
 
-    if (!xarUserLogIn($uname, $pass, 0)) {
+    if (!xarUser::logIn($uname, $pass, 0)) {
         $msg = xarML('Cannot log in the default administrator. Check your setup.');
         throw new Exception($msg);
     }

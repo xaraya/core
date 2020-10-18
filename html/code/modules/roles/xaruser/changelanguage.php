@@ -26,7 +26,7 @@ function roles_user_changelanguage()
     if (!in_array($locale, $locales)) {
         throw new LocaleNotFoundException($locale);
     }
-    if (xarUserSetNavigationLocale($locale) == false) {
+    if (xarUser::setNavigationLocale($locale) == false) {
         // Wrong MLS mode
         // FIXME: <marco> Show a custom error here or just throw an exception?
         // <paul> throw an exception. trap it later if we want it to look nice,
