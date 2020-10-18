@@ -96,10 +96,12 @@ function installer_admin_phase5()
                          'dbCharset' => $dbCharset);
     //  Write the config
     xarInstallAPIFunc('modifyconfig', $config_args);
+    $dbPort = '';
 
     $init_args =  array('userName'           => $dbUname,
                         'password'           => $dbPass,
                         'databaseHost'       => $dbHost,
+                        'databasePort'       => $dbPort,
                         'databaseType'       => $dbType,
                         'databaseName'       => $dbName,
                         'databaseCharset'    => $dbCharset,
