@@ -110,8 +110,32 @@ class xarCache_APC_Storage extends xarCache_Storage implements ixarCache_Storage
 
     public function getCachedList()
     {
-        return array();
+        $list = array();
+        // this is the info for the whole cache
+        $cacheinfo = apc_cache_info('user');
+        foreach ($cacheinfo['cache_list'] as $entry) {
+            // filter out the keys that don't start with the right type/namespace prefix
+            if (!empty($this->prefix) && strpos($entry['info'], $this->prefix) !== 0) continue;
+            // CHECKME: this assumes the code is always hashed
+            if (preg_match('/^(.*)-(\w*)$/',$entry['info'],$matches)) {
+                $key = $matches[1];
+                $code = $matches[2];
+            } else {
+                $key = $entry['info'];
+                $code = '';
+            }
+            $time = $entry['mtime'];
+            $size = $entry['mem_size'];
+            $check = $entry['ttl'];
+            // remove the prefix from the key
+            if (!empty($this->prefix)) $key = str_replace($this->prefix,'',$key);
+            $list[] = array('key'   => $key,
+                            'code'  => $code,
+                            'time'  => $time,
+                            'size'  => $size,
+                            'check' => $check);
+        }
+        return $list;
     }
 }
 
-?>
