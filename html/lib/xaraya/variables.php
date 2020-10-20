@@ -162,15 +162,15 @@ class xarVar extends xarObject
     /**
      * Fetches and validates in a Batch.
      *
-     *   if (!xarVarFetch('reassign', 'checkbox',  $reassign, false, XARVAR_NOT_REQUIRED)) return;
-     *   if (!xarVarFetch('repeat',   'int:1:100', $repeat,   1,     XARVAR_NOT_REQUIRED)) return;
+     *   if (!xarVar::fetch('reassign', 'checkbox',  $reassign, false, xarVar::NOT_REQUIRED)) return;
+     *   if (!xarVar::fetch('repeat',   'int:1:100', $repeat,   1,     xarVar::NOT_REQUIRED)) return;
      *
-     *  Can be done thru xarVarBatchFetch with:
+     *  Can be done thru xarVar::batchFetch with:
      *
-     *  $result = xarVarBatchFetch(array('reassign','checkbox', 'reassign', false, XARVAR_NOT_REQUIRED),
+     *  $result = xarVar::batchFetch(array('reassign','checkbox', 'reassign', false, xarVar::NOT_REQUIRED),
      *                             array('repeat', 'int:1:100', 'repeat'));
      *
-     * Notice that i didnt use XARVAR_NOT_REQUIRED because xarVarBatchFetch will trap the
+     * Notice that i didnt use xarVar::NOT_REQUIRED because xarVar::batchFetch will trap the
      * thrown exceptions for me in the result array, thus allowing me to get this easily
      * back to the GUI warning the user that the variable didn't validate and for what reason
      *
@@ -186,7 +186,7 @@ class xarVar extends xarObject
      *
      *
      * 
-     * @param arrays The arrays storing information equivalent to the xarVarFetch interface
+     * @param arrays The arrays storing information equivalent to the xarVar::fetch interface
      * @return array With the respective exceptions in case of failure
     **/
     public static function batchFetch()
@@ -200,7 +200,7 @@ class xarVar extends xarObject
         foreach ($batch as $line) {
             $result_array[$line[2]] = array();
             try {
-                $result = xarVarFetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3])?$line[3]:NULL, isset($line[4])?$line[4]:XARVAR_GET_OR_POST);
+                $result = self::fetch($line[0], $line[1], $result_array[$line[2]]['value'], isset($line[3])?$line[3]:NULL, isset($line[4])?$line[4]:self::GET_OR_POST);
                 $result_array[$line[2]]['error'] = '';
             } catch (ValidationExceptions $e) { // Only catch validation exceptions, the rest should be thrown
                 //Records the error presented in the given input variable
@@ -220,12 +220,12 @@ class xarVar extends xarObject
     /**
      * Fetches the $name variable from input variables and validates it by applying the $validation rules.
      *
-     * 1st try to use the variable provided, if this is not set (Or the XARVAR_DONT_REUSE flag is used)
+     * 1st try to use the variable provided, if this is not set (Or the xarVar::DONT_REUSE flag is used)
      * then try to get the variable from the input (POST/GET methods for now)
      *
-     * Then tries to validate the variable thru xarVarValidate.
+     * Then tries to validate the variable thru xarVar::validate.
      *
-     * See xarVarValidate for details about nature of $validation.
+     * See xarVar::validate for details about nature of $validation.
      * After the call the $value parameter passed by reference is set to the variable value converted to the proper type
      * according to the validation applied.
      *
@@ -233,28 +233,28 @@ class xarVar extends xarObject
      * correctly.
      *
      * The $flag parameter is a bitmask between the following constants:
-     * XARVAR_GET_OR_POST  - fetch from GET or POST variables
-     * XARVAR_GET_ONLY     - fetch from GET variables only
-     * XARVAR_POST_ONLY    - fetch from POST variables only
-     * XARVAR_NOT_REQUIRED - allow the variable to be empty/not set, dont raise exception if it is
-     * XARVAR_DONT_REUSE   - if there is an existing value, do not reuse it
-     * XARVAR_DONT_SET     - if there is an existing value, use it
+     * xarVar::GET_OR_POST  - fetch from GET or POST variables
+     * xarVar::GET_ONLY     - fetch from GET variables only
+     * xarVar::POST_ONLY    - fetch from POST variables only
+     * xarVar::NOT_REQUIRED - allow the variable to be empty/not set, dont raise exception if it is
+     * xarVar::DONT_REUSE   - if there is an existing value, do not reuse it
+     * xarVar::DONT_SET     - if there is an existing value, use it
      *
      * You can force to get the variable only from GET parameters or POST parameters by setting the $flag parameter
-     * to one of XARVAR_GET_ONLY or XARVAR_POST_ONLY.
+     * to one of xarVar::GET_ONLY or xarVar::POST_ONLY.
      *
-     * You can force xarVarFetch not to reuse the variable by setting
-     * the $flag parameter to XARVAR_DON_REUSE.
+     * You can force xarVar::fetch not to reuse the variable by setting
+     * the $flag parameter to xarVar::DON_REUSE.
      *
-     * By default $flag is XARVAR_GET_OR_POST which means tha xarVarFetch will lookup both GET and POST parameters and
+     * By default $flag is xarVar::GET_OR_POST which means tha xarVar::fetch will lookup both GET and POST parameters and
      * that if the variable is not present or doesn't validate correctly an exception will be raised.
      *
      * The $prep flag will prepare $value by passing it to one of the following:
-     *   XARVAR_PREP_FOR_NOTHING:    no prep (default)
-     *   XARVAR_PREP_FOR_DISPLAY:    xarVarPrepForDisplay($value)
-     *   XARVAR_PREP_FOR_HTML:       xarVarPrepHTMLDisplay($value)
-     *   XARVAR_PREP_FOR_STORE:      dbconn->qstr($value)
-     *   XARVAR_PREP_TRIM:           trim($value)
+     *   xarVar::PREP_FOR_NOTHING:    no prep (default)
+     *   xarVar::PREP_FOR_DISPLAY:    xarVarPrepForDisplay($value)
+     *   xarVar::PREP_FOR_HTML:       xarVarPrepHTMLDisplay($value)
+     *   xarVar::PREP_FOR_STORE:      dbconn->qstr($value)
+     *   xarVar::PREP_TRIM:           trim($value)
      *
      * 
      * @param name string the variable name
@@ -264,63 +264,63 @@ class xarVar extends xarObject
      * @param flags integer bitmask which modify the behaviour of function
      * @param prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
      * @return mixed
-     * @todo  get rid of the explicit value of XARVAR_GET_OR_POST, use the bitmas (i.e. GET_OR_POST = GET + POST)
+     * @todo  get rid of the explicit value of xarVar::GET_OR_POST, use the bitmas (i.e. GET_OR_POST = GET + POST)
      * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
      * @todo  re-evaluate the prepping, prepforstore is deprecated for example, prep for display and prep for html are partially exclusive
     **/
-    public static function fetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
+    public static function fetch($name, $validation, &$value, $defaultValue = NULL, $flags = self::GET_OR_POST, $prep = self::PREP_FOR_NOTHING)
     {
-        assert('is_int($flags); /* Flags passed to xarVarFetch need to be numeric */');
+        assert('is_int($flags); /* Flags passed to xarVar::fetch need to be numeric */');
         assert('empty($name) || preg_match("/^[a-zA-Z0-9_\[\]\"\x7f-\xff][a-zA-Z0-9_\[\]\"\x7f-\xff]*$/", $name); /* Variable ' . $name . ' is invalid */');
 
         $allowOnlyMethod = null;
-        if ($flags & XARVAR_GET_ONLY) $allowOnlyMethod = 'GET';
-        if ($flags & XARVAR_POST_ONLY) $allowOnlyMethod = 'POST';
+        if ($flags & self::GET_ONLY) $allowOnlyMethod = 'GET';
+        if ($flags & self::POST_ONLY) $allowOnlyMethod = 'POST';
 
-        // XARVAR_DONT_SET does not set $value, if there already is one
-        // This allows us to have a extract($args) before the xarVarFetch and still run
+        // xarVar::DONT_SET does not set $value, if there already is one
+        // This allows us to have a extract($args) before the xarVar::fetch and still run
         // the variables thru the tests here.
         $oldValue = null;
-        if (isset($value) && $flags & XARVAR_DONT_SET) $oldValue = $value;
+        if (isset($value) && $flags & self::DONT_SET) $oldValue = $value;
 
-        // XARVAR_DONT_REUSE fetches the variable, regardless
+        // xarVar::DONT_REUSE fetches the variable, regardless
         // FIXME: this flag doesn't seem to work !?
         // mrb: what doesn't work then? seems ok within the given workings
         // --------v  this is kinda confusing though, especially when dont_set is used as flag.
-        if (!isset($value) || ($flags & XARVAR_DONT_REUSE)) {
+        if (!isset($value) || ($flags & self::DONT_REUSE)) {
             $value = xarController::getVar($name, $allowOnlyMethod);
         }
 
         // Suppress validation warnings when dont_set, not_required or a default value is specified
-        $supress = (($flags & XARVAR_DONT_SET) || ($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue));
+        $supress = (($flags & self::DONT_SET) || ($flags & self::NOT_REQUIRED) || isset($defaultValue));
         // Validate the $value given
-        $validated = xarVarValidate($validation, $value, $supress, $name);
+        $validated = self::validate($validation, $value, $supress, $name);
 
         if (!$validated) {
             // The value does not validate
             $value = null; // we first make sure that this is what we expect to return
 
             // Perhaps the default or old can be returned?
-            if (($flags & XARVAR_NOT_REQUIRED) || isset($defaultValue)) {
-                // CHECKME:  even for the XARVAR_DONT_SET flag !?
+            if (($flags & self::NOT_REQUIRED) || isset($defaultValue)) {
+                // CHECKME:  even for the xarVar::DONT_SET flag !?
                 // if you set a non-null default value, assume you want to use it here
                 $value = $defaultValue;
-            } elseif (($flags & XARVAR_DONT_SET) && isset($oldValue) && xarVarValidate($validation, $oldValue, $supress)) {
-                // with XARVAR_DONT_SET, make sure we don't pass invalid old values back either
+            } elseif (($flags & self::DONT_SET) && isset($oldValue) && self::validate($validation, $oldValue, $supress)) {
+                // with xarVar::DONT_SET, make sure we don't pass invalid old values back either
                 $value = $oldValue;
             }
         } else {
             // Value is ok, handle preparation of that value
-            if ($prep & XARVAR_PREP_FOR_DISPLAY) $value = xarVarPrepForDisplay($value);
-            if ($prep & XARVAR_PREP_FOR_HTML)    $value = xarVarPrepHTMLDisplay($value);
+            if ($prep & self::PREP_FOR_DISPLAY) $value = xarVarPrepForDisplay($value);
+            if ($prep & self::PREP_FOR_HTML)    $value = xarVarPrepHTMLDisplay($value);
 
             // TODO: this is used nowhere, plus it introduces a db connection here which is of no use
-            if ($prep & XARVAR_PREP_FOR_STORE) {
+            if ($prep & self::PREP_FOR_STORE) {
                 $dbconn = xarDB::getConn();
                 $value = $dbconn->qstr($value);
             }
 
-            if ($prep & XARVAR_PREP_TRIM) $value = trim($value);
+            if ($prep & self::PREP_TRIM) $value = trim($value);
         }
         return true;
     }
@@ -354,10 +354,10 @@ class xarVar extends xarObject
      * 'list' validates if the subject is a list
      * 'list: *other validation*' validates if the subject is an array, and if every element of the array
      *                            validate in the *other validation*
-     *                          Example: xarVarValidate('list:str:1:20', $strings_array);
+     *                          Example: xarVar::validate('list:str:1:20', $strings_array);
      *
      * 'enum' validates if the subject is any of the parameters
-     *                  Example: xarVarValidate('enum:apple:orange:strawberry', $options);
+     *                  Example: xarVar::validate('enum:apple:orange:strawberry', $options);
      *
      * After the validation is performed, $convValue (passed by reference) is assigned to $subject converted the proper type.
      * Please note that conversions from string to integer or float are done by using the PHP built-in cast conversions,
@@ -398,6 +398,38 @@ class xarVar extends xarObject
             throw $e;
         }
     }
+
+    /**@+
+     * Wrapper functions for var caching as in Xaraya 1 API
+     * See the documentation of protected xarCoreCache::*Cached for details
+     *
+     * 
+     * @see xarCore
+     */
+    public static function isCached($scope, $name)
+    {
+        return xarCoreCache::isCached($scope, $name);
+    }
+
+    public static function getCached($scope, $name)
+    {
+        return xarCoreCache::getCached($scope, $name);
+    }
+
+    public static function setCached($scope, $name, $value)
+    {
+        return xarCoreCache::setCached($scope, $name, $value);
+    }
+
+    public static function delCached($scope, $name)
+    {
+        return xarCoreCache::delCached($scope, $name);
+    }
+
+    public static function flushCached($scope)
+    {
+        return xarCoreCache::flushCached($scope);
+    }
 }
 
 /**
@@ -413,7 +445,7 @@ function xarVarBatchFetch()
     return xarVar::batchFetch();
 }
 
-function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = XARVAR_GET_OR_POST, $prep = XARVAR_PREP_FOR_NOTHING)
+function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING)
 {
     return xarVar::fetch($name, $validation, $value, $defaultValue, $flags, $prep);
 }
@@ -696,3 +728,4 @@ function xarVarPrepForOS()
         return $args;
     }
 }
+

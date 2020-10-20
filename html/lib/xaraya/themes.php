@@ -96,4 +96,21 @@ function xarTheme_getVarsByTheme($themeName)
     return xarModVars::preload('themes');
 }
 
-?>
+class xarTheme extends xarObject
+{
+    public static function getIDFromName($themeName,$id='regid')
+    {
+        return xarThemeGetIDFromName($themeName, $id);
+    }
+
+    public static function getInfo($regId)
+    {
+        return xarThemeGetInfo($regId);
+    }
+
+    public static function isAvailable($themeName)
+    {
+        return xarThemeIsAvailable($themeName);
+    }
+}
+

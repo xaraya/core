@@ -92,20 +92,20 @@ function xarMain()
     xarLog::message('The installation is checked', xarLog::LEVEL_INFO);
 
     // Theme Override
-    xarVarFetch('theme','str:1:',$themeName,'',XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
+    xarVar::fetch('theme','str:1:',$themeName,'',xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
     if (!empty($themeName)) {
         $themeName = xarVarPrepForOS($themeName);
-        if (xarThemeIsAvailable($themeName)){
+        if (xarTheme::isAvailable($themeName)){
             xarTpl::setThemeName($themeName);
-            xarVarSetCached('Themes.name','CurrentTheme', $themeName);
+            xarVar::setCached('Themes.name','CurrentTheme', $themeName);
         }
     // Admin theme 
-    } elseif (xarUserIsLoggedIn() && $request->getType() == 'admin') {
+    } elseif (xarUser::isLoggedIn() && $request->getType() == 'admin') {
         $themeName = xarModVars::get('themes', 'admin_theme');
-        if (!empty($themeName) && xarThemeIsAvailable($themeName)) {
+        if (!empty($themeName) && xarTheme::isAvailable($themeName)) {
             $themeName = xarVarPrepForOS($themeName);
             xarTpl::setThemeName(strtolower($themeName));
-            xarVarSetCached('Themes.name','CurrentTheme', $themeName);
+            xarVar::setCached('Themes.name','CurrentTheme', $themeName);
         }            
     // User Override (configured in themes admin modifyconfig)
     } elseif ((bool) xarModVars::get('themes', 'enable_user_menu') == true) {
@@ -116,7 +116,7 @@ function xarMain()
         $user_themes = !empty($user_themes) ? explode(',',$user_themes) : array();
 
         // check we have a valid theme 
-        if (!empty($themeName) && xarThemeIsAvailable($themeName) && 
+        if (!empty($themeName) && xarTheme::isAvailable($themeName) && 
             !empty($user_themes) && in_array($themeName, $user_themes)) {
             $themeName = xarVarPrepForOS($themeName);
             xarTpl::setThemeName(strtolower($themeName));
@@ -148,13 +148,13 @@ function xarMain()
     if ($run) {
 
         // Set page template
-        if (xarUserIsLoggedIn() && ($request->getType() == 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
+        if (xarUser::isLoggedIn() && ($request->getType() == 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
             // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTpl::setPageTemplateName('admin-'.$request->getModule())) {
                 xarTpl::setPageTemplateName('admin');
             }
-        } elseif (!xarUserIsLoggedIn() && (xarTpl::getPageTemplateName() == 'default')) {
+        } elseif (!xarUser::isLoggedIn() && (xarTpl::getPageTemplateName() == 'default')) {
             // No need to reset anything here
             // Right now we do not allow for e.g. default-roles
         } elseif (($request->getType() != 'admin') && (xarTpl::getPageTemplateName() == 'default')) {
@@ -166,7 +166,7 @@ function xarMain()
         }
 
         // User override for the page template
-        xarVarFetch('pageName','str:1:', $pageName, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY);
+        xarVar::fetch('pageName','str:1:', $pageName, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
         if (!empty($pageName)){
             xarTpl::setPageTemplateName($pageName);
         }
@@ -235,4 +235,3 @@ try {
  */
 xarMain();
 // All done, the shutdown handlers take care of the rest
-?>

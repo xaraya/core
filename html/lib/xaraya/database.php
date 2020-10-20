@@ -123,4 +123,12 @@ if ($middleware == 'Creole') {
 } else {
     die("Invalid middleware definition: " . $middleware); 
 }
-?>
+
+class xarDatabase extends xarObject
+{
+    public static function init(array &$args)
+    {
+        return xarDB_init($args);
+    }
+}
+

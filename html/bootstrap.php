@@ -23,6 +23,8 @@
  * @link http://www.xaraya.info
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
+// test compatibility with composer autoload by disabling sys::import
+//require dirname(__DIR__).'/vendor/autoload.php';
 
 /**
  * Get the public properties of an object (this must be done outside the class)
@@ -331,6 +333,8 @@ final class sys extends xarObject
     **/
     public static function import($dp, $offset='')
     {
+        // test compatibility with composer autoload by disabling sys::import
+        //return true;
         $dp = str_replace('.','/',$dp);
         if((0===strpos($dp,'modules/')) || (0===strpos($dp,'properties/')) || (0===strpos($dp,'blocks/'))) {
             return self::once(self::code() . $dp, $offset);

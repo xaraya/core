@@ -39,7 +39,7 @@ class BaseActionController extends xarObject
         $args = $this->decode() + $request->getFunctionArgs();
         // Allocate those params we can to module/type/function and store the rest as FunctionArgs in the request
         $this->chargeRequest($request, $args);
-        // Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVarFetch
+        // Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVar::fetch
         $_GET = $_GET + $args;
         // Now get the output
         if ($request->getModule() == 'object') {
@@ -82,4 +82,4 @@ class BaseActionController extends xarObject
     }
     
 }
-?>
+

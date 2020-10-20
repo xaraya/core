@@ -323,7 +323,7 @@ class xarCore extends xarCoreCache
                 foreach ($localhosts as $local) {
                     $systemArgs['databaseHost'] = $local;
                     try {
-                        xarDB_init($systemArgs);
+                        xarDatabase::init($systemArgs);
                         $connected = true;
                     } catch (Exception $e) {}
                     if ($connected) break;
@@ -333,7 +333,7 @@ class xarCore extends xarCoreCache
                 }
             } else {
                 try {
-                    xarDB_init($systemArgs);
+                    xarDatabase::init($systemArgs);
                 } catch (Exception $e) {
                     // Catch the error here rather than in the subsystem, because we might be connecting to different databases
                     // and want to cater to possible errors in each
@@ -380,7 +380,7 @@ class xarCore extends xarCoreCache
         if ($whatToLoad & self::SYSTEM_CONFIGURATION) {
             // Start Variables utilities
             sys::import('xaraya.variables');
-	    xarVar::init($systemArgs);
+            xarVar::init($systemArgs);
             $whatToLoad ^= self::BIT_CONFIGURATION;
             // We're about done here - everything else requires configuration, at least to initialize them !?
         } else {

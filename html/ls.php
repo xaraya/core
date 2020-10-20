@@ -139,4 +139,4 @@ try {
  * Process the local request and shut down
  */
 exit(xarLocalServicesMain($argc, $argv));
-?>
+

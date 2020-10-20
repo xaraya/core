@@ -371,7 +371,7 @@ class xarUser extends xarObject
     static public function setNavigationLocale($locale)
     {
         xarLog::message("Changing the navigation locale from ". self::getNavigationLocale() . " to " . $locale, xarLog::LEVEL_INFO);
-        if (xarMLSGetMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
+        if (xarMLS::getMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
             xarSessionSetVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
                 xarModUserVars::set('roles', 'locale', $locale);
@@ -412,7 +412,7 @@ class xarUser extends xarObject
             // an exception of type NOT_LOGGED_IN is raised
             // CHECKME: if we're going the route of moditemvars, this doesn need to be the case
             if ($name == 'name' || $name == 'uname') {
-                return xarML('Anonymous');
+                return xarMLS::translate('Anonymous');
             }
             throw new NotLoggedInException();
         }
@@ -424,7 +424,7 @@ class xarUser extends xarObject
     
             if ($name == 'name' || $name == 'uname' || $name == 'email') {
                 if ($userId == self::LAST_RESORT) {
-                    return xarML('No Information'); // better return null here
+                    return xarMLS::translate('No Information'); // better return null here
                 }
                 
                 // Retrieve the item
@@ -482,7 +482,7 @@ class xarUser extends xarObject
                         //if ($name != 'locale' && $name != 'timezone') {
                         if (!in_array($name, $optionalvars)) {
                         // log unknown user variables to inform the site admin
-                            $msg = xarML('User variable #(1) was not correctly registered', $name);
+                            $msg = xarMLS::translate('User variable #(1) was not correctly registered', $name);
                             xarLog::message($msg, xarLog::LEVEL_ERROR);
                         }
                         return;

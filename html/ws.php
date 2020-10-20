@@ -87,8 +87,8 @@ function xarWebservicesMain()
  create an instance of that server and
  serve the request according the the servers protocol
 */
-    xarVarFetch('type','enum:rest:xmlrpc:trackback:soap:webdav:flashremoting:native',$type,'');
-    xarLogMessage("In webservices with type=$type");
+    xarVar::fetch('type','enum:rest:xmlrpc:trackback:soap:webdav:flashremoting:native',$type,'');
+    xarLog::message("In webservices with type=$type");
     $server=false;
     switch($type) {
 /**
@@ -100,11 +100,11 @@ function xarWebservicesMain()
                 $server = xarMod::apiFunc('xmlrpcserver','user','initxmlrpcserver');
             }
             if (!$server) {
-                xarLogMessage("Could not load XML-RPC server, giving up");
+                xarLog::message("Could not load XML-RPC server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarML('Could not load XML-RPC server');
+                echo xarMLS::translate('Could not load XML-RPC server');
             } else {
-                xarLogMessage("Created XMLRPC server");
+                xarLog::message("Created XMLRPC server");
             }
         break;
 /**
@@ -116,11 +116,11 @@ function xarWebservicesMain()
                 $server = xarMod::apiFunc('jsonrpcserver','user','initjsonrpcserver');
             }
             if (!$server) {
-                xarLogMessage("Could not load JSON-RPC server, giving up");
+                xarLog::message("Could not load JSON-RPC server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarML('Could not load JSON-RPC server');
+                echo xarMLS::translate('Could not load JSON-RPC server');
             } else {
-                xarLogMessage("Created JSONRPC server");
+                xarLog::message("Created JSONRPC server");
             }
         break;
 /**
@@ -132,20 +132,20 @@ function xarWebservicesMain()
         case  'trackback':
             if (xarMod::isAvailable('trackback')) {
                 $error = array();
-                if (!xarVarFetch('url', 'str:1:', $url)) {
+                if (!xarVar::fetch('url', 'str:1:', $url)) {
                     // Gots to return the proper error reply
-                    $error['errordata'] = xarML('No URL Supplied');
+                    $error['errordata'] = xarMLS::translate('No URL Supplied');
                 }
                 // These are the specifics ;-)
-                xarVarFetch('title', 'str:1', $title, '', XARVAR_NOT_REQUIRED);
-                xarVarFetch('blog_name', 'str:1', $blogname, '', XARVAR_NOT_REQUIRED);
-                if (!xarVarFetch('excerpt', 'str:1:255', $excerpt, '', XARVAR_NOT_REQUIRED)) {
+                xarVar::fetch('title', 'str:1', $title, '', xarVar::NOT_REQUIRED);
+                xarVar::fetch('blog_name', 'str:1', $blogname, '', xarVar::NOT_REQUIRED);
+                if (!xarVar::fetch('excerpt', 'str:1:255', $excerpt, '', xarVar::NOT_REQUIRED)) {
                     // Gots to return the proper error reply
-                    $error['errordata'] = xarML('Excerpt longer that 255 characters');
+                    $error['errordata'] = xarMLS::translate('Excerpt longer that 255 characters');
                 }
-                if (!xarVarFetch('id','str:1:',$id)){
+                if (!xarVar::fetch('id','str:1:',$id)){
                     // Gots to return the proper error reply
-                    $error['errordata'] = xarML('Bad TrackBack URL.');
+                    $error['errordata'] = xarMLS::translate('Bad TrackBack URL.');
                 }
 
                 $server = xarMod::apiFunc('trackback','user','receive',
@@ -157,11 +157,11 @@ function xarWebservicesMain()
                                               'error'   =>  $error));
             }
             if (!$server) {
-                xarLogMessage("Could not load trackback server, giving up");
+                xarLog::message("Could not load trackback server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarML('Could not load trackback server');
+                echo xarMLS::translate('Could not load trackback server');
             } else {
-                xarLogMessage("Created trackback server");
+                xarLog::message("Created trackback server");
             }
         break;
 /**
@@ -183,42 +183,42 @@ function xarWebservicesMain()
                 if ($server) $server::handle();
             }
             if (!$server) {
-                xarLogMessage("Could not load SOAP server, giving up");
+                xarLog::message("Could not load SOAP server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarML('Could not load SOAP server');
+                echo xarMLS::translate('Could not load SOAP server');
             } else {
-                xarLogMessage("Created SOAP server");
+                xarLog::message("Created SOAP server");
             }
         break;
 /**
  * Entry point for WebDAV web service
  */
         case 'webdav' :
-            xarLogMessage("WebDAV request");
+            xarLog::message("WebDAV request");
             if(xarMod::isAvailable('webdavserver')) {
                 $server = xarMod::apiFunc('webdavserver','user','initwebdavserver');
                 if(!$server) {
-                    xarLogMessage('Could not load webdav server, giving up');
+                    xarLog::message('Could not load webdav server, giving up');
                     // TODO: we need a specific handler for this
                     throw new Exception('Could not load webdav server');
                 } else {
-                    xarLogMessage("Created webdav server");
+                    xarLog::message("Created webdav server");
                 }
                 $server->ServeRequest();
             }
             if (!$server) {
-                xarLogMessage("Could not load webdav server, giving up");
+                xarLog::message("Could not load webdav server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarML('Could not load webdav server');
+                echo xarMLS::translate('Could not load webdav server');
             } else {
-                xarLogMessage("Created webdav server");
+                xarLog::message("Created webdav server");
             }
         break;
 /**
  * Entry point for Flashremoting web service
  */
         case 'flashremoting' :
-              xarLogMessage("FlashRemoting request");
+              xarLog::message("FlashRemoting request");
             if(xarMod::isAvailable('flashservices')) {
               $server = xarMod::apiFunc('flashservices','user','initflashservices');
               if (is_object($server)) {
@@ -230,11 +230,11 @@ function xarWebservicesMain()
               }
             }
             if (!$server) {
-                xarLogMessage("Could not load flashremoting server, giving up");
+                xarLog::message("Could not load flashremoting server, giving up");
                 // TODO: we need a specific handler for this
-                echo xarML('Could not load flashremoting server');
+                echo xarMLS::translate('Could not load flashremoting server');
             } else {
-                xarLogMessage("Created flashremoting server");
+                xarLog::message("Created flashremoting server");
             }
         break;
 /**
@@ -249,10 +249,10 @@ function xarWebservicesMain()
                 }
             }
             if (!$server) {
-                xarLogMessage("Could not load REST server, giving up");
-                echo xarML('Could not load REST server');
+                xarLog::message("Could not load REST server, giving up");
+                echo xarMLS::translate('Could not load REST server');
             } else {
-                xarLogMessage("Created REST server");
+                xarLog::message("Created REST server");
             }
         break;
 /**
@@ -264,13 +264,13 @@ function xarWebservicesMain()
  * All other parameters passed in the call get bundled together in an array and passed to the called Xaraya function
  */
         case 'native' :
-            xarVarFetch('module', 'str:1', $module, 'base',    XARVAR_NOT_REQUIRED);
-            xarVarFetch('func',   'str:1', $func,   'default', XARVAR_NOT_REQUIRED);
+            xarVar::fetch('module', 'str:1', $module, 'base',    xarVar::NOT_REQUIRED);
+            xarVar::fetch('func',   'str:1', $func,   'default', xarVar::NOT_REQUIRED);
             try {
                 $request = xarController::getRequest(xarServer::getCurrentURL());
                 $data = xarMod::apiFunc($module, 'ws', $func, $request->getFunctionArgs());
             } catch (Exception $e) {
-                $data = xarML('Unknown web service request');
+                $data = xarMLS::translate('Unknown web service request');
             }
             echo $data;
         break;
@@ -284,12 +284,12 @@ function xarWebservicesMain()
                 // consider making the webservices module a container for wsdl files (multiple?)
                 $wsdllocation = xarServer::getBaseURL() . 'modules/soapserver/xaraya.wsdl';
                 if (file_exists($wsdllocation)) {
-                    xarLogMessage("Moving to wsdl location");
+                    xarLog::message("Moving to wsdl location");
                     header('Location: ' . $$wsdllocation);
                 } else {
-                    xarLogMessage("No wsdl location available, giving up");
+                    xarLog::message("No wsdl location available, giving up");
                     // TODO: we need a specific handler for this
-                    echo xarML('Could not move to wsdl location. URL not found.');
+                    echo xarMLS::translate('Could not move to wsdl location. URL not found.');
                 }
             } else {
                 // TODO: show something nice(r) ?
@@ -313,4 +313,3 @@ xarWSLoader();
  */
 xarWebservicesMain();
 
-?>
