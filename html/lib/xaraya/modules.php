@@ -273,7 +273,7 @@ class xarMod extends xarObject implements IxarMod
             $modinfo = self::getInfo($regID);
             $modName = $modinfo['name'];
         }
-        assert('!empty($modName)');
+        assert(!empty($modName));
         return $modName;
     }
 
@@ -725,7 +725,7 @@ class xarMod extends xarObject implements IxarMod
         $version = array_merge($themeinfo, $modversion);
 
         // name and id are required, assert them, otherwise the module is invalid
-        assert('isset($version["name"]) && isset($version["id"]); /* Both name and id need to be present in xarversion.php */');
+        assert(isset($version["name"]) && isset($version["id"]));
         $FileInfo['name']           = $version['name'];
         $FileInfo['regid']          = (int) $version['id'];
         $FileInfo['displayname']    = isset($version['displayname'])    ? $version['displayname'] : $version['name'];
@@ -894,7 +894,7 @@ class xarMod extends xarObject implements IxarMod
      */
     private static function callFunc($modName,$modType,$funcName,$args,$funcType = '')
     {
-        assert('($funcType == "api" or $funcType==""); /* Wrong funcType argument in private callFunc method */');
+        assert(($funcType == "api" or $funcType==""));
 
         // Build function name
         $modFunc = "{$modName}_{$modType}{$funcType}_{$funcName}";

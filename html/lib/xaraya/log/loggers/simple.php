@@ -313,7 +313,7 @@ class xarLogger_simple extends xarLogger
     // 
     function _formatMessage($message, $level)
     {
-        return $this->getTime() . ' [' . $this->levelToString($level) . '] ' . $message . $this->EOL;
+        return $this->getTime() . ' [' . $this->levels[$level] . '] ' . $message . $this->EOL;
     }
 }
 

@@ -270,8 +270,8 @@ class xarVar extends xarObject
     **/
     public static function fetch($name, $validation, &$value, $defaultValue = NULL, $flags = self::GET_OR_POST, $prep = self::PREP_FOR_NOTHING)
     {
-        assert('is_int($flags); /* Flags passed to xarVar::fetch need to be numeric */');
-        assert('empty($name) || preg_match("/^[a-zA-Z0-9_\[\]\"\x7f-\xff][a-zA-Z0-9_\[\]\"\x7f-\xff]*$/", $name); /* Variable ' . $name . ' is invalid */');
+        assert(is_int($flags));
+        assert(empty($name) || preg_match("/^[a-zA-Z0-9_\[\]\"\x7f-\xff][a-zA-Z0-9_\[\]\"\x7f-\xff]*$/", $name));
 
         $allowOnlyMethod = null;
         if ($flags & self::GET_ONLY) $allowOnlyMethod = 'GET';

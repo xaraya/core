@@ -171,7 +171,7 @@ class BlockLayoutXSLTProcessor extends xarObject
     static function phpexpression($expr)
     {
         $res = ExpressionTransformer::transformPHPExpression($expr);
-        xarLog::message("BlockLayoutXSLTProcessor::phpexpression: '$expr' resolved to '$res'", xarLog::LEVEL_INFO);
+        xarLog::message(xarML("BlockLayoutXSLTProcessor::phpexpression: '#(1)' resolved to '#(2)'", $expr, $res), xarLog::LEVEL_INFO);
         return $res;
     }
 }

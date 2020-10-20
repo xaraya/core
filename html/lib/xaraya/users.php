@@ -327,7 +327,7 @@ class xarUser extends xarObject
      */
     static public function setNavigationThemeName($themeName)
     {
-        assert('$themeName != ""');
+        assert($themeName != "");
         // uservar system takes care of dealing with anynomous
         xarModUserVars::set('themes', 'default_theme', $themeName);
     }

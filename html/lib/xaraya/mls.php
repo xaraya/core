@@ -706,7 +706,6 @@ class xarMLS extends xarObject
         // again during user subsystem initialisation, we have to provide better defaults
         // if we really want this to run only once.
     
-        //assert('$called == 0; // Can only be called once during a page request');
         $called++;
     
         $mode = self::getMode();
@@ -730,7 +729,7 @@ class xarMLS extends xarObject
     
         $curCharset = self::getCharsetFromLocale($locale);
         if ($mode == xarMLS::UNBOXED_MULTI_LANGUAGE_MODE) {
-            assert('$curCharset == "utf-8"; // Resetting MLS Mode to BOXED');
+            assert($curCharset == "utf-8");
             // To be able to continue, we set the mode to BOXED
             if ($curCharset != "utf-8") {
                 xarLog::message("Resetting MLS mode to BOXED", xarLog::LEVEL_INFO);

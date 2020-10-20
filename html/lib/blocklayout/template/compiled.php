@@ -37,16 +37,19 @@ class CompiledTemplate extends xarObject
 
     public function &execute(&$bindvars, $caching = 0)
     {
-        assert('isset($this->fileName); /* No source to execute from */');
-        assert('is_array($bindvars); /* Template data needs to be passed in as an array */');
+        assert(isset($this->fileName));
+        assert(is_array($bindvars));
 
         // Do we really need this?
         $bindvars['_bl_data'] =& $bindvars;
 
         // Make the bindvars known in the scope.
-        extract($bindvars,EXTR_OVERWRITE);
+        extract($bindvars, EXTR_OVERWRITE);
 
-        if($this->type=='page') set_exception_handler(array('ExceptionHandlers','bone'));
+        if($this->type=='page') {
+			sys::import('xaraya.exceptions.handlers');
+			set_exception_handler('ExceptionHandlers::bone');
+        }
 
         // Executing means generating output, start a buffer for it
         ob_start();

@@ -61,7 +61,7 @@ function modules_adminapi_regenerate()
         }
 
         // If this is a new module, i.e. not in the db list, add it
-        assert('$modinfo["regid"] != 0; /* Reg id for the module is 0, something seriously wrong, probably corruption of files */');
+        assert($modinfo["regid"] != 0);
         if (empty($dbModules[$name])) {
             // New module
             $sql = "INSERT INTO $modules_table

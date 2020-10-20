@@ -313,8 +313,8 @@ class PHPBackendGenerator extends xarObject
 
     function create($ctxType, $ctxName)
     {
-        assert('!empty($this->baseDir)');
-        assert('!empty($this->baseXMLDir)');
+        assert(!empty($this->baseDir));
+        assert(!empty($this->baseXMLDir));
         $this->fileName = $this->baseDir;
         $this->xmlFileName = $this->baseXMLDir;
 

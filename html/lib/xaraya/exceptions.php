@@ -35,8 +35,8 @@ sys::import('xaraya.exceptions.handlers');
  *
  * @todo do we want this abstracted?
 **/
-set_exception_handler(array('ExceptionHandlers','debughandler'));
-set_error_handler(array('ExceptionHandlers','phperrors'));
+set_exception_handler('ExceptionHandlers::debughandler');
+set_error_handler('ExceptionHandlers::phperrors');
 
 /**
  * General exception to cater for situation where the called function should

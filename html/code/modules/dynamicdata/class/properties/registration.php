@@ -95,7 +95,7 @@ class PropertyRegistration extends DataContainer
         $propdefTable = $tables['dynamic_properties_def'];
 
         // Make sure the db is the same as in the old days
-        assert('count($this->reqmodules)<=1; /* The reqmodules registration should only contain the name of the owning module */');
+        assert(count($this->reqmodules)<=1);
         $module_id = empty($this->reqmodules) ? 0 : xarMod::getID($this->reqmodules[0]);
 
         if($this->format == 0) $this->format = $this->id;
@@ -245,7 +245,7 @@ class PropertyRegistration extends DataContainer
                 }
 
                 $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
-                assert('!empty($activeMods)'); // this should never happen
+                assert(!empty($activeMods)); // this should never happen
 
                 foreach($activeMods as $modInfo) {
                     // FIXME: the modinfo directory does NOT end with a /

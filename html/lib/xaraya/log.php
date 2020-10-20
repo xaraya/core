@@ -1,23 +1,5 @@
 <?php
 /**
- * Logging package defines
- */
-
-/*
-* @TODO: Remove this when we go to PHP 5.6
-
-define('XARLOG_LEVEL_EMERGENCY', 1);
-define('XARLOG_LEVEL_ALERT',     2);
-define('XARLOG_LEVEL_CRITICAL',  4);
-define('XARLOG_LEVEL_ERROR',     8);
-define('XARLOG_LEVEL_WARNING',   16);
-define('XARLOG_LEVEL_NOTICE',    32);
-define('XARLOG_LEVEL_INFO',      64);
-define('XARLOG_LEVEL_DEBUG',     128);
-// This is a special define that includes all the levels defined above
-define('XARLOG_LEVEL_ALL',       255);
-*/
-/**
  * Exceptions raised within the loggers
  *
  * @package core\exceptions
@@ -152,6 +134,7 @@ class xarLog extends xarObject
     const LEVEL_NOTICE     = 32;
     const LEVEL_INFO       = 64;
     const LEVEL_DEBUG      = 128;
+// This is a special define that includes all the levels defined above
     const LEVEL_ALL        = 255;
 
     static private $configFile;
@@ -169,12 +152,11 @@ class xarLog extends xarObject
         } catch (Exception $e) {
             return true;
         }
-        
+
         $xarLogConfig = array();
     
         // Check if we have a log configuration file in the var directory
-        if (self::configReadable())
-        {
+        if (self::configReadable()) {
             // CHECKME: do we need to wrap this?
             if (!include (self::configFile())) {
                 throw new LoggerException('xarLog_init: Log configuration file is invalid!');
@@ -276,10 +258,10 @@ class xarLog extends xarObject
      * @param string level. The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
      *
      */
-    static public function message($message, $level = '')
+    static public function message($message, $level = self::LEVEL_DEBUG)
     {
-        if (empty($level)) $level = self::LEVEL_DEBUG;
         if (($level == self::LEVEL_DEBUG) && !xarCore::isDebuggerActive()) return;
+
         // this makes a copy of the object, so the original $this->_buffer was never updated
         //foreach ($_xarLoggers as $logger) {
         foreach (array_keys(self::$loggers) as $id) {

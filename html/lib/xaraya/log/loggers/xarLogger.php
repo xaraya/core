@@ -38,6 +38,19 @@
 class xarLogger extends xarObject
 {
     /**
+    * The array of logging levels
+    */
+	public $levels = array(
+		xarLog::LEVEL_EMERGENCY => 'EMERGENCY',
+		xarLog::LEVEL_ALERT     => 'ALERT',
+		xarLog::LEVEL_CRITICAL  => 'CRITICAL',
+		xarLog::LEVEL_ERROR     => 'ERROR',
+		xarLog::LEVEL_WARNING   => 'WARNING',
+		xarLog::LEVEL_NOTICE    => 'NOTICE',
+		xarLog::LEVEL_INFO      => 'INFO',
+		xarLog::LEVEL_DEBUG     => 'DEBUG'
+	 );
+    /**
     * The level of logging.
     *
     * The level of the messages which will be logged.
@@ -106,33 +119,7 @@ class xarLogger extends xarObject
         if ($level & $this->logLevel) {
             return true;
         }
-
         return false;
-    }
-
-    /**
-     * Returns the string representation of a xarLog::$LEVEL_* integer constant.
-     *
-     * @param int $level        A xarLog::$LEVEL_* integer constant.
-     * @return string           The string representation of $level.
-     */
-/*
-* @TODO: Change this when we go to PHP 5.6
-*/
-    function levelToString($level)
-    {
-        static $levels = array(
-            xarLog::LEVEL_EMERGENCY => 'EMERGENCY',
-            xarLog::LEVEL_ALERT     => 'ALERT',
-            xarLog::LEVEL_CRITICAL  => 'CRITICAL',
-            xarLog::LEVEL_ERROR     => 'ERROR',
-            xarLog::LEVEL_WARNING   => 'WARNING',
-            xarLog::LEVEL_NOTICE    => 'NOTICE',
-            xarLog::LEVEL_INFO      => 'INFO',
-            xarLog::LEVEL_DEBUG     => 'DEBUG'
-         );
-
-        return $levels[$level];
     }
 
     function getTime()

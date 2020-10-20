@@ -20,7 +20,7 @@
     which imports THIS file has the same effect as having your own customisation
     file in one place, by inserting your templates in that file. :-) :-)
 
-    Nuf said, lets begin.
+    Nuff said, lets begin.
   -->
 
   <!--
@@ -38,7 +38,7 @@
 
     This include should by default be commented out.
   -->
-  <!-- <xsl:import href="default/debug"/> -->
+   <!-- <xsl:includedebug /> -->
 
   <!--
     We produce an UTF-8 encoded XML document as output. As we compile the

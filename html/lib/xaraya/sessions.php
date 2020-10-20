@@ -540,7 +540,7 @@ class xarSession extends xarObject implements IsessionHandler
      */
     static function setVar($name, $value)
     {
-        assert('!is_null($value); /* Not allowed to set variable to NULL value */');
+        assert(!is_null($value));
         // security checks : do not allow to set the id or mess with the session serialization
         if ($name == 'role_id' || strpos($name,'|') !== false) return false;
 

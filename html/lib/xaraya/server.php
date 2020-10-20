@@ -160,7 +160,7 @@ class xarServer extends xarObject
      */
     static function getVar($name)
     {
-        assert('version_compare("5.0",phpversion()) <= 0; /* The minimum PHP version supported by Xaraya is 5.0 */');
+        assert(version_compare("7.2",phpversion()) <= 0);
         if (isset($_SERVER[$name])) return $_SERVER[$name];
         if($name == 'PATH_INFO')    return;
         if (isset($_ENV[$name]))    return $_ENV[$name];
@@ -340,6 +340,9 @@ class xarServer extends xarObject
         }
 
 // TODO: re-use some common code (with in-line replacement here) or use parse_url + http_build_query ?
+
+        //$url_variables = parse_str($querystring);
+        //var_dump($url_variables);
 
         // add optional parameters
         if (count($args) > 0) {

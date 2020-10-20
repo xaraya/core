@@ -3,6 +3,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
   <xsl:param name="defaults"/> 
+  <xsl:param name="debug"/> 
   <xsl:param name="bltags"/> 
   <xsl:param name="clienttags"/> 
   <xsl:param name="legacytags"/> 
@@ -12,6 +13,12 @@
     <xsl:if test="$compresswhitespace = 1">
       <xsl:text disable-output-escaping="yes">&lt;</xsl:text>xsl:strip-space elements="*"/<xsl:text disable-output-escaping="yes">&gt;</xsl:text>
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template match="xsl:includedebug">
+    <xsl:call-template name="includefile">
+       <xsl:with-param name="string" select="$debug"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template match="xsl:includedefaults">

@@ -109,7 +109,7 @@ function mozConsole(msg, level)
         // it should be done with a signed script eventually, but this is rather complex
         // TODO: check on windows and browsers other than mozilla, to fall back gracefully
 
-        $logentry = $this->getTime(). " - (" .$this->levelToString($level).") ".$message;
+        $logentry = $this->getTime(). " - (" .$this->levels[$level].") ".$message;
 
         // Add \ for problematic chars and for each newline format unix, mac and windows
         $logentry = addslashes($logentry);

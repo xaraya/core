@@ -13,7 +13,8 @@ class XarayaXSLProcessor extends xarObject
         $this->xslProc->registerPHPFunctions();
 
         // Set up the stylesheet
-        set_exception_handler(array('ExceptionHandlers','bone'));
+		sys::import('xaraya.exceptions.handlers');
+		set_exception_handler('ExceptionHandlers::bone');
         $this->setStyleSheet($xslFile);
 
         // Set up the document to transform
@@ -30,7 +31,6 @@ class XarayaXSLProcessor extends xarObject
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
         $this->xslProc->importStyleSheet($this->xslDoc);
-
     }
 
     private function setSourceFile(&$xml)
@@ -48,9 +48,10 @@ class XarayaXSLProcessor extends xarObject
         // Set the source document to what we prepped
         $this->setSourceFile($xml);
 
-        // Transform it
-        set_exception_handler(array('ExceptionHandlers','defaulthandler'));
+		sys::import('xaraya.exceptions.handlers');
+		set_exception_handler('ExceptionHandlers::defaulthandler');
         // What should we initialize $result to?
+        // Transform it
         $this->postXML = $this->xslProc->transformToXML($this->xmlDoc);
         return $this->postXML;
     }

@@ -117,7 +117,7 @@ class xarTpl extends xarObject
 **/    
     public static function setBaseDir($themesDir)
     {
-        assert('$themesDir != "" && $themesDir{0} != "/"');
+        assert($themesDir != "" && $themesDir[0] != "/");
         
         xarLog::message("xarTpl::setBaseDir: Setting the theme base dir to $themesDir", xarLog::LEVEL_INFO);
             
@@ -159,7 +159,7 @@ class xarTpl extends xarObject
  */
     public static function setThemeName($themeName)
     {
-        assert('$themeName != "" && $themeName{0} != "/"');
+        assert($themeName != "" && $themeName[0] != "/");
 
         xarLog::message("xarTpl::setThemeName: Setting the theme name to $themeName", xarLog::LEVEL_INFO);
 
@@ -183,7 +183,7 @@ class xarTpl extends xarObject
  */
     public static function setThemeDir($themeDir)
     {
-        assert('$themeDir != "" && $themeDir{0} != "/"');
+        assert($themeDir != "" && $themeDir[0] != "/");
 
         xarLog::message("xarTpl::setThemeDir: Setting the theme dir to $themeDir", xarLog::LEVEL_INFO);
 
@@ -235,7 +235,7 @@ class xarTpl extends xarObject
             if (!empty($themeName))
                 self::setThemeName($themeName);
         }
-        assert('isset(self::$themeName); /* Theme name could not be set properly */');
+        assert(isset(self::$themeName));
         return self::$themeName;
     }
 
@@ -263,7 +263,7 @@ class xarTpl extends xarObject
  */
     public static function setPageTemplateName($templateName)
     {
-        assert('$templateName != ""');
+        assert($templateName != "");
 
         xarLog::message("xarTpl::setPageTemplateName: Setting the template name to $templateName", xarLog::LEVEL_INFO);
 
@@ -294,7 +294,7 @@ class xarTpl extends xarObject
  */
     public static function setDoctype($doctypeName)
     {
-        assert('is_string($doctypeName); /* doctype should always be a string */');
+        assert(is_string($doctypeName));
 
         xarLog::message("xarTpl::setDoctype: Setting the doc type to $doctypeName", xarLog::LEVEL_INFO);
 
@@ -583,11 +583,23 @@ class xarTpl extends xarObject
                 $paths[] = "$basepath/$tplPart/$canTemplateName.xt";
         }
 
+        $debug = 0;
+        // Debug display
+        if ($debug) {
+            foreach ($paths as $path) {
+                echo xarML('Possible location: ') . $path . "<br/>";                
+            }
+        }
+
         $sourceFileName = '';
         if (!empty($paths)) {
             foreach ($paths as $file) {
                 if (!file_exists($file)) continue;
                 $sourceFileName = $file;
+                // Debug display
+                if ($debug) {
+                    echo "<b>" . xarML('Chosen: ') . $file . "</b><br/>";
+                }
                 break;
             }
         }
@@ -1282,8 +1294,8 @@ class xarTpl extends xarObject
  */
     private static function executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     {
-        assert('!empty($sourceFileName); /* The source file for the template is empty in xarTpl::executeFromFile */');
-        assert('is_array($tplData); /* Template data should always be passed in as array */');
+        assert(!empty($sourceFileName));
+        assert(is_array($tplData));
 
         // cache frequently-used cachedfilenames
         if (xarCoreCache::isCached('Templates.ExecuteFromFile', $sourceFileName)) {
@@ -1320,7 +1332,7 @@ class xarTpl extends xarObject
         // Execute the compiled template from the cache file
         // @todo the tplType should be irrelevant
         sys::import('blocklayout.template.compiled');
-        $compiled = new CompiledTemplate($cachedFileName,$sourceFileName,$tplType);
+        $compiled = new CompiledTemplate($cachedFileName, $sourceFileName, $tplType);
         try {
             $caching = xarConfigVars::get(null, 'Site.BL.MemCacheTemplates');
         } catch (Exception $e) {

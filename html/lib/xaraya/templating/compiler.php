@@ -90,7 +90,7 @@ class XarayaCompiler extends xarBLCompiler
 
     public function compileFile($fileName)
     {
-        xarLog::message("BL: compiling $fileName", xarLog::LEVEL_INFO);
+        xarLog::message(xarML("Xar: compiling the file '#(1)'", $fileName), xarLog::LEVEL_INFO);
         $output = parent::compileFile($fileName);
         return $output;
     }
@@ -141,7 +141,7 @@ class XarayaCompiler extends xarBLCompiler
         } else {
             return array();
         }
-        assert('!empty($activeMods)'); // this should never happen
+        assert(!empty($activeMods)); // this should never happen
 
         $files = array();
         foreach($activeMods as $modInfo) {
@@ -205,7 +205,7 @@ class XarayaCompiler extends xarBLCompiler
         } else {
             return array();
         }
-//        assert('!empty($activeBlocks)'); // this should never happen
+//        assert(!empty($activeBlocks)); // this should never happen
 
         $files = array();
         foreach($activeBlocks as $blockInfo) {
