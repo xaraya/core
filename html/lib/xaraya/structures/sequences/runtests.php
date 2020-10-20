@@ -26,7 +26,7 @@ function m($msg,$level=0)
     echo "$prefix - $msg\n"; 
 }
 
-if(!xarUserLogin('Admin','12345')) {
+if(!xarUser::logIn('Admin','12345')) {
     throw new Exception("Authentication failed\n");
 } else {
     m('Authenticated');

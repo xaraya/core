@@ -141,7 +141,7 @@ function roles_user_usermenu(Array $args=array())
                         
                         // Step 4
                         // Log the user out. This needs to happen last
-                        xarUserLogOut();
+			xarUser::logOut();
 
                         //Step 5
                         //Show a nice message for the person about email validation

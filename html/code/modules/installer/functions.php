@@ -152,4 +152,26 @@ function xarInstallLoad($func)
     return true;
 }
 
-?>
+class xarInstall extends xarObject
+{
+    public static function func($funcName = 'main', $args = array())
+    {
+        return xarInstallFunc($funcName, $args);
+    }
+
+    public static function apiFunc($funcName = 'main', $args = array())
+    {
+        return xarInstallAPIFunc($funcName, $args);
+    }
+
+    public static function apiLoad()
+    {
+        return xarInstallAPILoad();
+    }
+
+    public static function load($func)
+    {
+        return xarInstallLoad($func);
+    }
+}
+

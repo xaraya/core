@@ -44,7 +44,7 @@ function authsystem_userapi_login(Array $args=array())
         throw new BadParameterException(null,xarML('Wrong arguments to authsystem_userapi_login.'));
     }
 
-    return xarUserLogIn($uname, $pass, $rememberme);
+    return xarUser::logIn($uname, $pass, $rememberme);
 }
 
 ?>

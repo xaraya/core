@@ -5,7 +5,7 @@
         <span class="xar-mod-title">Login to an existing account</span>
     </div>
     <div class="xar-mod-body">
-        <xar:if condition="xarUserIsLoggedIn()">
+        <xar:if condition="xarUser::isLoggedIn()">
             <fieldset>
                 <legend>Logged In</legend>
                     <div class="xar-row">

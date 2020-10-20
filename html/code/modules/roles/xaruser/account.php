@@ -37,7 +37,7 @@ function roles_user_account()
 
     $id = xarUser::getVar('id');
 
-    if ($id == XARUSER_LAST_RESORT) {
+    if ($id == xarUser::LAST_RESORT) {
         $message = xarML('You are logged in as the last resort administrator.');
     } else  {
 

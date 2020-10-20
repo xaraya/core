@@ -63,8 +63,8 @@ function xarValidationMain()
 /**
  * Get the user ID and the validation code
  */
-    if (!xarVarFetch('v', 'str:1', $v)) return;
-    if (!xarVarFetch('u', 'str:1', $u)) return;
+    if (!xarVar::fetch('v', 'str:1', $v)) return;
+    if (!xarVar::fetch('u', 'str:1', $u)) return;
 
 /**
  * Get the user information
@@ -93,4 +93,3 @@ xarValidationLoader();
  * Run the validation
  */
 xarValidationMain();    
-?>

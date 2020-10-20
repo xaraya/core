@@ -22,15 +22,15 @@ class DefaultActionController extends BaseActionController implements iControlle
 
     function decode(Array $data=array())
     {
-        xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $module, NULL, XARVAR_NOT_REQUIRED);
+        xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $module, NULL, xarVar::NOT_REQUIRED);
         if (null != $module) {
-            xarVarFetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['type'], xarController::$request->getType(), XARVAR_NOT_REQUIRED);
-            xarVarFetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['func'], xarController::$request->getFunction(), XARVAR_NOT_REQUIRED);
+            xarVar::fetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['type'], xarController::$request->getType(), xarVar::NOT_REQUIRED);
+            xarVar::fetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['func'], xarController::$request->getFunction(), xarVar::NOT_REQUIRED);
         }
-        xarVarFetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $object, NULL, XARVAR_NOT_REQUIRED);
+        xarVar::fetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $object, NULL, xarVar::NOT_REQUIRED);
         if (null != $object) {
             $data['object'] = $object;
-            xarVarFetch('method', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['method'], xarController::$request->getMethod(), XARVAR_NOT_REQUIRED);
+            xarVar::fetch('method', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['method'], xarController::$request->getMethod(), xarVar::NOT_REQUIRED);
 
             // No admin equivalent for objectURL for now
             if ((xarController::$request->getModule() == 'object') && xarController::$request->getType() == 'admin') {
@@ -68,4 +68,4 @@ class DefaultActionController extends BaseActionController implements iControlle
         return '';
     }           
 }
-?>
+

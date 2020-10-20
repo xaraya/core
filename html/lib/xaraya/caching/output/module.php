@@ -99,7 +99,7 @@ class xarModuleCache extends xarObject
         // add missing function params to $args
         foreach ($params as $param) {
             if (!isset($args[$param])) {
-                xarVarFetch($param, 'isset', $args[$param], NULL, XARVAR_NOT_REQUIRED);
+                xarVar::fetch($param, 'isset', $args[$param], NULL, xarVar::NOT_REQUIRED);
             }
         }
 
@@ -380,4 +380,4 @@ class xarModuleCache extends xarObject
         self::$scriptList[] = $args;
     }
 }
-?>
+

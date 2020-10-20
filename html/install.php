@@ -209,7 +209,7 @@ function xarInstallLoader()
     // We set a utf locale intially, otherwise the combo box wont be filled correctly
     // for language names which include utf characters
     $GLOBALS['xarMLS_mode'] = 'SINGLE';
-    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarVar::fetch('install_language','str::',$install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
 
     // Construct an array of the available locale folders
     $locale_dir = sys::varpath() . '/locales/';
@@ -254,15 +254,15 @@ function xarInstallLoader()
 function xarInstallMain()
 {
     // Let the system know that we are in the process of installing
-    xarVarSetCached('installer','installing',1);
+    xarVar::setCached('installer','installing',1);
 
     // Make sure we can render a page
-    xarTpl::setPageTitle(xarML('Xaraya installer'));
+    xarTpl::setPageTitle(xarMLS::translate('Xaraya installer'));
     if(!xarTpl::setThemeName('installer'))
         throw new Exception('You need the installer theme if you want to install Xaraya.');
 
     // Handle installation phase designation
-    xarVarFetch('install_phase','int:1:6',$phase,1,XARVAR_NOT_REQUIRED);
+    xarVar::fetch('install_phase','int:1:6',$phase,1,xarVar::NOT_REQUIRED);
 
     // Build function name from phase
     $funcName = 'phase' . $phase;
@@ -273,10 +273,10 @@ function xarInstallMain()
     }
 
     // Set the default page title before calling the module function
-    xarTpl::setPageTitle(xarML("Installing Xaraya"));
+    xarTpl::setPageTitle(xarMLS::translate("Installing Xaraya"));
 
     // Run installer function
-    $mainModuleOutput = xarInstallFunc($funcName);
+    $mainModuleOutput = xarInstall::func($funcName);
 
     if (xarCore::isDebuggerActive()) {
         if (ob_get_length() > 0) {
@@ -307,4 +307,4 @@ xarInstallLoader();
  * Run  the installer
  */
 xarInstallMain();
-?>
+

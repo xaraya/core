@@ -114,7 +114,7 @@ class xarPageCache extends xarObject
 
         // add user groups as a factor if necessary
         // Note : we don't share the cache between groups or with anonymous here
-        if (!empty(self::$cacheGroups) && xarUserIsLoggedIn()) {
+        if (!empty(self::$cacheGroups) && xarUser::isLoggedIn()) {
             $gidlist = xarCache::getParents();
             $factors .= join(';',$gidlist);
         }
@@ -421,7 +421,7 @@ class xarPageCache extends xarObject
 **/
 function xarPage_checkUserCaching($cacheGroups)
 {
-    if (!xarUserIsLoggedIn()) {
+    if (!xarUser::isLoggedIn()) {
         // always allow caching for anonymous users
         return true;
     } elseif (empty($cacheGroups)) {

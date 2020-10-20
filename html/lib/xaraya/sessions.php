@@ -25,58 +25,6 @@ class SessionException extends Exception
 {}
 
 /**
- * Initialise the Session Support
- *
- * @return boolean true
- */
-function xarSession_init(&$args)
-{
-    /* @todo: get rid of the global */
-    $GLOBALS['xarSession_systemArgs'] = $args;
-
-    // Register the SessionCreate event
-    // this is now registered during modules module init
-    // xarEvents::register('SessionCreate');
-
-    // Register tables this subsystem uses
-    $tables = array('session_info' => xarDB::getPrefix() . '_session_info');
-    xarDB::importTables($tables);
-
-    // Set up the session object
-    $session = new xarSession($args);
-
-    // Start the session, this will call xarSession:read, and
-    // it will tell us if we need to start a new session or just
-    // to continue the current session
-    $session->start();
-    $sessionId = $session->id();
-
-    // Get  client IP addr, so we can register or continue a session
-    $forwarded = xarServer::getVar('HTTP_X_FORWARDED_FOR');
-    if (!empty($forwarded)) {
-        $ipAddress = preg_replace('/,.*/', '', $forwarded);
-    } else {
-        $ipAddress = xarServer::getVar('REMOTE_ADDR');
-    }
-
-    // If it's new, register it, otherwise use the existing.
-    if ($session->isNew()) {
-        if($session->register($ipAddress)) {
-            // Congratulations. We have created a new session
-            //xarEvents::trigger('SessionCreate');
-            xarEvents::notify('SessionCreate');
-        } else {
-            // Registering failed, now what?
-        }
-    } else {
-        // Not all ISPs have a fixed IP or a reliable X_FORWARDED_FOR
-        // so we don't test for the IP-address session var
-        $session->current();
-    }
-    return true;
-}
-
-/**
  * Get the configured security level
  *
  * @todo Is this used anywhere outside the session class itself?
@@ -96,6 +44,7 @@ function xarSessionGetSecurityLevel()
  * The old interface as wrappers for the class methods are here, see xarSession class
  * for the implementation
  */
+function xarSession_init(&$args)         { return xarSession::init($args); }
 function xarSessionGetVar($name)         { return xarSession::getVar($name); }
 function xarSessionSetVar($name, $value) { return xarSession::setVar($name, $value); }
 function xarSessionDelVar($name)         { return xarSession::delVar($name); }
@@ -515,6 +464,58 @@ class xarSession extends xarObject implements IsessionHandler
     }
 
     /**
+     * Initialise the Session Support
+     *
+     * @return boolean true
+     */
+    public static function init(Array &$args)
+    {
+        /* @todo: get rid of the global */
+        $GLOBALS['xarSession_systemArgs'] = $args;
+
+        // Register the SessionCreate event
+        // this is now registered during modules module init
+        // xarEvents::register('SessionCreate');
+
+        // Register tables this subsystem uses
+        $tables = array('session_info' => xarDB::getPrefix() . '_session_info');
+        xarDB::importTables($tables);
+
+        // Set up the session object
+        $session = new xarSession($args);
+
+        // Start the session, this will call xarSession:read, and
+        // it will tell us if we need to start a new session or just
+        // to continue the current session
+        $session->start();
+        $sessionId = $session->id();
+
+        // Get  client IP addr, so we can register or continue a session
+        $forwarded = xarServer::getVar('HTTP_X_FORWARDED_FOR');
+        if (!empty($forwarded)) {
+            $ipAddress = preg_replace('/,.*/', '', $forwarded);
+        } else {
+            $ipAddress = xarServer::getVar('REMOTE_ADDR');
+        }
+
+        // If it's new, register it, otherwise use the existing.
+        if ($session->isNew()) {
+            if($session->register($ipAddress)) {
+                // Congratulations. We have created a new session
+                //xarEvents::trigger('SessionCreate');
+                xarEvents::notify('SessionCreate');
+            } else {
+                // Registering failed, now what?
+            }
+        } else {
+            // Not all ISPs have a fixed IP or a reliable X_FORWARDED_FOR
+            // so we don't test for the IP-address session var
+            $session->current();
+        }
+        return true;
+    }
+
+    /**
      * Get a session variable
      *
      * @param name name of the session variable to get
@@ -612,4 +613,3 @@ class xarSession extends xarObject implements IsessionHandler
         return $GLOBALS['xarSession_saveTime'];
     }
 }
-?>

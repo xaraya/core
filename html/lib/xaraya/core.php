@@ -323,7 +323,7 @@ class xarCore extends xarCoreCache
                 foreach ($localhosts as $local) {
                     $systemArgs['databaseHost'] = $local;
                     try {
-                        xarDB_init($systemArgs);
+                        xarDatabase::init($systemArgs);
                         $connected = true;
                     } catch (Exception $e) {}
                     if ($connected) break;
@@ -333,7 +333,7 @@ class xarCore extends xarCoreCache
                 }
             } else {
                 try {
-                    xarDB_init($systemArgs);
+                    xarDatabase::init($systemArgs);
                 } catch (Exception $e) {
                     // Catch the error here rather than in the subsystem, because we might be connecting to different databases
                     // and want to cater to possible errors in each
@@ -380,7 +380,7 @@ class xarCore extends xarCoreCache
         if ($whatToLoad & self::SYSTEM_CONFIGURATION) {
             // Start Variables utilities
             sys::import('xaraya.variables');
-            xarVar_init($systemArgs);
+            xarVar::init($systemArgs);
             $whatToLoad ^= self::BIT_CONFIGURATION;
             // We're about done here - everything else requires configuration, at least to initialize them !?
         } else {
@@ -514,7 +514,7 @@ class xarCore extends xarCoreCache
                 'cookiePath'        => xarConfigVars::get(null, 'Site.Session.CookiePath'),
                 'cookieDomain'      => xarConfigVars::get(null, 'Site.Session.CookieDomain'),
                 'refererCheck'      => xarConfigVars::get(null, 'Site.Session.RefererCheck'));
-            xarSession_init($systemArgs);
+            xarSession::init($systemArgs);
 
             $whatToLoad ^= self::BIT_SESSION;
             // We're about done here - everything else requires sessions !?
@@ -585,7 +585,7 @@ class xarCore extends xarCoreCache
          * Get the current git revision
          * This is displayed in the base module backend
          * Handy if we're running from a working copy, prolly comment out on distributing
-		     */
+         */
         $path = '../.git/refs/heads/com.xaraya.core.bermuda';
         if(@file_exists($path)) {
             $text = file($path);
@@ -698,4 +698,3 @@ class xarDebug extends xarObject
     public static $sqlCalls  = 0; // Should be in flags imo
     public static $startTime = 0; // Should not be here at all
 }
-?>

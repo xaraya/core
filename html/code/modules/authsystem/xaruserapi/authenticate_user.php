@@ -17,7 +17,7 @@
  * @param  string[] $args Array of optional parameters<br/>
  *         string   $args['uname'] user name of user<br/>
  *         string   $args['pass'] password of user
- * @return int Returns user id on successful authentication, XARUSER_AUTH_FAILED otherwise
+ * @return int Returns user id on successful authentication, xarUser::AUTH_FAILED otherwise
  */
 function authsystem_userapi_authenticate_user(Array $args=array())
 {
@@ -42,15 +42,15 @@ function authsystem_userapi_authenticate_user(Array $args=array())
 
     if (!$result->first()) {
         $result->close();
-        return XARUSER_AUTH_FAILED;
+        return xarUser::AUTH_FAILED;
     }
 
     list($id, $realpass) = $result->fields;
     $result->close();
 
     // Confirm that passwords match
-    if (!xarUserComparePasswords($pass, $realpass, $uname, substr($realpass, 0, 2))) {
-        return XARUSER_AUTH_FAILED;
+    if (!xarUser::comparePasswords($pass, $realpass, $uname, substr($realpass, 0, 2))) {
+        return xarUser::AUTH_FAILED;
     }
 
     return $id;

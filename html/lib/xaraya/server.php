@@ -341,9 +341,9 @@ class xarServer extends xarObject
 
 // TODO: re-use some common code (with in-line replacement here) or use parse_url + http_build_query ?
 
-		$url_variables = parse_str($querystring);
-		var_dump($url_variables);
-		
+        //$url_variables = parse_str($querystring);
+        //var_dump($url_variables);
+
         // add optional parameters
         if (count($args) > 0) {
             if (strpos($request,'?') === false)

@@ -99,7 +99,7 @@ class xarRequest extends xarObject
             $this->url = $url;
         
             // See if this is an object call; easiest to start like this 
-            xarVarFetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $objectName, NULL, XARVAR_NOT_REQUIRED);
+            xarVar::fetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $objectName, NULL, xarVar::NOT_REQUIRED);
             // Found a module object name
             if (null != $objectName) {
                 $this->setModule('object');
@@ -107,7 +107,7 @@ class xarRequest extends xarObject
                 $this->setFunction($this->method);
             } else {
                 // Try and get the module the traditional Xaraya way
-                xarVarFetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, XARVAR_NOT_REQUIRED);
+                xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, xarVar::NOT_REQUIRED);
 
                 // Else assume a form of short urls. The module name or the object keyword will be the first item
                 if (null == $modName) {
@@ -227,10 +227,10 @@ class xarRequest extends xarObject
             $requestInfo = array($modName, $modType, $funcName);
         } else {
             // Check if we have an object to work with for object URLs
-            xarVarFetch('object', 'regexp:/^[a-zA-Z0-9_-]+$/', $objectName, NULL, XARVAR_NOT_REQUIRED);
+            xarVar::fetch('object', 'regexp:/^[a-zA-Z0-9_-]+$/', $objectName, NULL, xarVar::NOT_REQUIRED);
             if (!empty($objectName)) {
                 // Check if we have a method to work with for object URLs
-                xarVarFetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, NULL, XARVAR_NOT_REQUIRED);
+                xarVar::fetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, NULL, xarVar::NOT_REQUIRED);
                 // Specify 'dynamicdata' as module for xarTpl_* functions etc.
                 $requestInfo = array('object', $objectName, $methodName);
                 if (empty($url)) {
@@ -340,4 +340,4 @@ class xarRequest extends xarObject
         }
     }
 }
-?>
+

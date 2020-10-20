@@ -96,10 +96,12 @@ function installer_admin_phase5()
                          'dbCharset' => $dbCharset);
     //  Write the config
     xarInstallAPIFunc('modifyconfig', $config_args);
+    $dbPort = '';
 
     $init_args =  array('userName'           => $dbUname,
                         'password'           => $dbPass,
                         'databaseHost'       => $dbHost,
+                        'databasePort'       => $dbPort,
                         'databaseType'       => $dbType,
                         'databaseName'       => $dbName,
                         'databaseCharset'    => $dbCharset,
@@ -107,7 +109,7 @@ function installer_admin_phase5()
                         'doConnect'          => false);
 
     sys::import('xaraya.database');
-    xarDB_Init($init_args);
+    xarDatabase::init($init_args);
 
     // Not all Database Servers support selecting the specific db *after* connecting
     // so let's try connecting with the dbname first, and then without if that fails
@@ -199,7 +201,7 @@ function installer_admin_phase5()
                             'prefix'             => $dbPrefix,
                             'doConnect'          => true);
         // Connect to database
-        xarDB_init($systemArgs);
+        xarDatabase::init($systemArgs);
         
         // CHECKME: Need to solve this at the level ofg connections, not run a query
         $q = "use $dbName";
