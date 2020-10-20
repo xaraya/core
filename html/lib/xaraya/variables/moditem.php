@@ -81,7 +81,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
 
     static function set($scope, $name, $value, $itemid = null)
     {
-        assert(!is_null($value); /* Not allowed to set a variable to NULL value */);
+        assert(!is_null($value)); /* Not allowed to set a variable to NULL value */
         if (empty($name)) throw new EmptyParameterException('name');
 
         $dbconn = xarDB::getConn();
