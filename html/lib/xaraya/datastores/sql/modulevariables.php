@@ -126,8 +126,6 @@ class ModuleVariablesDataStore extends RelationalDataStore
         if (count($properties) < 1) {
             return;
         }
-//                    var_dump(array_keys($this->fields));
-//                    var_dump($this->groupby);exit;
 
         $modvars = $this->getTable('module_vars');
         $moditemvars = $this->getTable('module_itemvars');
