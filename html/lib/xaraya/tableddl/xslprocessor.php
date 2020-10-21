@@ -30,7 +30,10 @@ class XarayaXSLProcessor extends xarObject
     {
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
-        $this->xslProc->importStyleSheet($this->xslDoc);
+		if (!$this->xslProc->importStyleSheet($this->xslDoc)) {
+			$halt = xarML('Could not load a stylesheet');
+			echo $halt; exit;
+		}
     }
 
     private function setSourceFile(&$xml)
