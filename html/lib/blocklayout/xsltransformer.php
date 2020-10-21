@@ -34,7 +34,8 @@ class BlockLayoutXSLTProcessor extends xarObject
         $this->xslProc->registerPHPFunctions();
 
         // Set up the stylesheet
-        set_exception_handler(array('ExceptionHandlers','bone'));
+        sys::import('xaraya.exceptions.handlers');
+        set_exception_handler('ExceptionHandlers::bone');
         if (isset($xslFile)) $this->setStyleSheet($xslFile);
 
         // Set up the document to transform
@@ -45,28 +46,29 @@ class BlockLayoutXSLTProcessor extends xarObject
         // $this->xmlDoc->validateOnParse = true;
     }
 
-    // This will become public once we have more pipes
-    protected function setStyleSheet($xslFile)
+    public function setStyleSheet($xslFile)
     {
         $this->xslDoc = new DOMDocument();
         $this->xslDoc->load($xslFile);
-        $this->xslProc->importStyleSheet($this->xslDoc);
-
+		$this->importStyleSheet($this->xslDoc);
     }
 
     protected function setSourceDocument(&$xml)
     {
+        xarLog::message(xarML("XSL: creating a DOM document for the template code"), xarLog::LEVEL_DEBUG);
         $this->xmlDoc = new DOMDocument();
-        // Setting this to false makes it 2 times faster, what do we loose?
+        // Setting this to false makes it 2 times faster, what do we lose?
         $this->xmlDoc->resolveExternals = false;
         // We're still a long way from validating
         // $this->xmlDoc->validateOnParse = true;
         $file = isset($this->xmlFile) ? $this->xmlFile : 'unknown';
+        xarLog::message(xarML("XSL: loading the template code"), xarLog::LEVEL_INFO);
         $this->xmlDoc->loadXML($xml);
 
         // Set up additional parameters related to the input
         // @todo wrong here.
         if(isset($this->xmlFile)) {
+        	xarLog::message(xarML("XSL: adding parameters to the processor"), xarLog::LEVEL_INFO);
             // Set up the parameters
             $this->xslProc->setParameter('','bl_filename',basename($this->xmlFile));
             $this->xslProc->setParameter('','bl_dirname',dirname($this->xmlFile));
@@ -93,7 +95,12 @@ class BlockLayoutXSLTProcessor extends xarObject
 
     public function importStyleSheet($xslDoc)
     {
-        $this->xslProc->importStyleSheet($xslDoc);
+        xarLog::message(xarML("XSL: importing the stylesheet"), xarLog::LEVEL_INFO);
+		if (!$this->xslProc->importStyleSheet($xslDoc)) {
+			$halt = xarML('Could not load the stylesheet #(1)',$xslDoc->saveXML());
+			echo $halt; exit;
+		}
+        xarLog::message(xarML("XSL: the stylesheet was successfully imported"), xarLog::LEVEL_DEBUG);
     }
     public function setParameter($space, $name, $value)
     {
@@ -101,10 +108,16 @@ class BlockLayoutXSLTProcessor extends xarObject
     }
     public function transformToXML($xmlString)
     {
-        return $this->xslProc->transformToXML($xmlString);
+        xarLog::message(xarML("XSL: running the transform to XML"), xarLog::LEVEL_INFO);
+        try {$transform = $this->xslProc->transformToXML($xmlString);
+        } catch (Exception $e) {
+        xarLog::message(xarML("XSL: huh?"), xarLog::LEVEL_INFO);
+        }
+        return $transform;
     }
     public function transformToDoc($xmlString)
     {
+        xarLog::message(xarML("XSL: running the transform to Doc"), xarLog::LEVEL_INFO);
         return $this->xslProc->transformToDoc($xmlString);
     }
 
@@ -113,12 +126,14 @@ class BlockLayoutXSLTProcessor extends xarObject
         // Save the original XML
         $this->origXml = $xml;
 
+        xarLog::message(xarML("XSL: running the preprocess code"), xarLog::LEVEL_INFO);
         // Preprocess it.
         $this->preProcess();
 
         // Legacy transforms for old 1x templates
         try {
-            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+            if (class_exists('xarConfigVars') && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+        		xarLog::message(xarML("XSL: running the legacy transform code"), xarLog::LEVEL_INFO);
                 sys::import('xaraya.legacy.templates');
                 $this->prepXml = fixLegacy($this->prepXml);
             }
@@ -128,11 +143,16 @@ class BlockLayoutXSLTProcessor extends xarObject
         $this->setSourceDocument($this->prepXml);
 
         // Transform it
+        xarLog::message(xarML("XSL: running the XML transform"), xarLog::LEVEL_INFO);
         set_exception_handler(array('ExceptionHandlers','defaulthandler'));
         // What should we initialize $result to?
-        $this->postXML = $this->transformToXML($this->xmlDoc);
+        try {
+        	$this->postXML = $this->transformToXML($this->xmlDoc);
+        } catch (Exception $e) {xarLog::message(xarML("XSL: rolling"), xarLog::LEVEL_INFO);
+        }
 
         // Postprocess it
+        xarLog::message(xarML("XSL: running the postprocess code"), xarLog::LEVEL_INFO);
         $this->postProcess();
         return $this->postXML;
     }
@@ -170,6 +190,7 @@ class BlockLayoutXSLTProcessor extends xarObject
 
     static function phpexpression($expr)
     {
+        xarLog::message(xarML("BlockLayoutXSLTProcessor::phpexpression: '#(1)'", $expr), xarLog::LEVEL_INFO);
         $res = ExpressionTransformer::transformPHPExpression($expr);
         xarLog::message(xarML("BlockLayoutXSLTProcessor::phpexpression: '#(1)' resolved to '#(2)'", $expr, $res), xarLog::LEVEL_INFO);
         return $res;
