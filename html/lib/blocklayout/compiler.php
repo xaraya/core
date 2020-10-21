@@ -73,6 +73,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
 
     public function compileFile($fileName)
     {
+        xarLog::message(xarML("BL: compiling the file '#(1)'", $fileName), xarLog::LEVEL_INFO);
         $this->lastFile = $fileName;
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
@@ -112,6 +113,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
     
     protected function getProcessor($xslFile='')
     {
+        xarLog::message(xarML("BL: creating a new XSLT processor"), xarLog::LEVEL_INFO);
         sys::import('blocklayout.xsltransformer');
         if (empty($xslFile)) {
             $xslProc = new BlockLayoutXSLTProcessor();
@@ -127,7 +129,9 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
     protected function boot($customDoc=null)
     {
         $xslFile = sys::lib() . 'blocklayout/xslt/booter.xsl';
-        $xslProc = $this->getProcessor($xslFile);
+        if (!isset($this->processor)) $this->processor = $this->getProcessor();
+        $this->processor->setStyleSheet($xslFile);
+
         $xmlFile = sys::lib() . 'blocklayout/xslt/xar2php.xsl';
         $doc = new DOMDocument();
         $doc->load($xmlFile);
@@ -135,20 +139,25 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         // Pass the default tags
         $baseDir = sys::lib() . 'blocklayout/xslt/defaults';
         $xslFiles = $this->getTagPaths($baseDir, 'defaults');
-        $xslProc->setParameter('', 'defaults', implode(',', $xslFiles));
+        $this->processor->setParameter('', 'defaults', implode(',', $xslFiles));
+
+        // Pass the debug tags
+        $baseDir = sys::lib() . 'blocklayout/xslt/debug';
+        $xslFiles = $this->getTagPaths($baseDir, 'debug');
+        $this->processor->setParameter('', 'debug', implode(',', $xslFiles));
 
         // Pass the Blocklayout tags
         $baseDir = sys::lib() . 'blocklayout/xslt/tags';
         $xslFiles = $this->getTagPaths($baseDir, 'tags');
-        $xslProc->setParameter('', 'bltags', implode(',', $xslFiles));
+        $this->processor->setParameter('', 'bltags', implode(',', $xslFiles));
         
         // Pass the custom tags of the client using Blocklayout
         $clienttags = $this->configure();
-        $xslProc->setParameter('', 'clienttags', implode(',', $clienttags));
+        $this->processor->setParameter('', 'clienttags', implode(',', $clienttags));
         
         // Pass any legacy tags if legacy support is turned on
         try {
-            if (xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
+            if (class_exists('xarConfigVars') && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
                 $baseDir = sys::lib() . 'xaraya/legacy/tags';
                 $baseDir = realpath($baseDir);
                 if (strpos($baseDir, '\\') != false) {
@@ -158,12 +167,12 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
                     $baseURI = 'file://' . $baseDir;
                 }
                 $xslFiles = $this->getTagPaths($baseDir, $baseURI);
-                $xslProc->setParameter('', 'legacytags', implode(',', $xslFiles));
+                $this->processor->setParameter('', 'legacytags', implode(',', $xslFiles));
             }
         } catch (Exception $e) {}        
-        
+       
         // Compress excess whitespace
-        $xslProc->setParameter('', 'compresswhitespace', $this->compresswhitespace);        
+        $this->processor->setParameter('', 'compresswhitespace', $this->compresswhitespace);        
         
         // Pass any custom markup. We expect this to be in the form of a stylesheet document
         // We do this by adding the nodes to the end of our stylesheet
@@ -180,25 +189,26 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         }
         
         // Compile the compiler
-        $outDoc = $xslProc->transformToXML($doc);
-
+        $outDoc = $this->processor->transformToXML($doc);
         return $outDoc;
     }
 
     protected function compile(&$templateSource)
     {
+        xarLog::message(xarML("BL: checking the XSLT processor"), xarLog::LEVEL_INFO);
         if (!isset($this->processor)) {
             $this->processor = $this->getProcessor();
             $xslDoc = new DOMDocument;
+        	xarLog::message(xarML("BL: creating the compiler as a stylesheet"), xarLog::LEVEL_INFO);
             $xslDoc->loadXML($this->boot());
             $this->processor->importStyleSheet($xslDoc);
         }
 
         // This is confusing, don't do this here.
         $this->processor->xmlFile = $this->lastFile;
-        
-        // This generates php code, the document tree is not visible here anymore
+        xarLog::message(xarML("BL: preparing the transform"), xarLog::LEVEL_DEBUG);
         $outDoc = $this->processor->transform($templateSource);
+        
         return $outDoc;
     }
 }
