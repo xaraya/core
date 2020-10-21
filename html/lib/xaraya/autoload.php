@@ -131,7 +131,6 @@ class xarAutoload extends xarObject
         }
 */
 
-//        var_dump($loaded);exit;
         return true;
     }
 

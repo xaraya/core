@@ -141,6 +141,5 @@ if(!true){
         echo fgets($fp);
     }
     fclose($fp);
-    var_dump($myvar);
 }
 ?>
