@@ -69,13 +69,14 @@ class xarEvents extends xarObject implements ixarEvents
     protected static $subjects;
     protected static $observers;
 
-    public static function init(&$args)
+    public static function init(array $args = array())
     {
         // Register tables this subsystem uses
         $tables = array('eventsystem' => xarDB::getPrefix() . '_eventsystem');
         xarDB::importTables($tables);
         return true;
     }
+
     public static function getSubjectType()
     {
         return xarEvents::SUBJECT_TYPE;
@@ -95,6 +96,7 @@ class xarEvents extends xarObject implements ixarEvents
     **/
     public static function notify($event, $args=array())
     {
+        $info = array();
         // Attempt to load subject 
         try {
             // get info for specified event
@@ -719,4 +721,3 @@ interface ixarEvents
     public static function fileLoad($info);
 }
 
-?>

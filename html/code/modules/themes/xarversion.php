@@ -25,9 +25,9 @@ $modversion = array(
     'name'               => 'Themes Administration',
     'id'                 => '70',
     'version'            => '2.4.0',
-    'displayname'        => xarML('Themes'),
+    'displayname'        => xarMLS::translate('Themes'),
     'description'        => 'Configure themes, change site appearance',
-    'displaydescription' => xarML('Configure themes, change site appearance'),
+    'displaydescription' => xarMLS::translate('Configure themes, change site appearance'),
     'credits'            => 'xardocs/credits.txt',
     'help'               => '',
     'changelog'          => 'xardocs/changelog.txt',
@@ -41,4 +41,3 @@ $modversion = array(
     'category'           => 'System',
 );
 
-?>

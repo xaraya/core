@@ -231,8 +231,11 @@ class xarMod extends xarObject implements IxarMod
      * Initialize
      *
      */
-    static function init(Array $args=array())
+    static function init(array $args = array())
     {
+        if (empty($args)) {
+            $args = self::getConfig();
+        }
         self::$genShortUrls = $args['enableShortURLsSupport'];
         self::$genXmlUrls   = $args['generateXMLURLs'];
 
@@ -253,6 +256,13 @@ class xarMod extends xarObject implements IxarMod
 
         xarDB::importTables($tables);
         return true;
+    }
+
+    static function getConfig()
+    {
+        $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
+                            'generateXMLURLs' => true);
+        return $systemArgs;
     }
 
     /**
@@ -1203,4 +1213,3 @@ class xarModAlias extends xarObject implements IxarModAlias
         return xarMod::apiFunc('modules', 'admin', 'delete_module_alias', $args);
     }
 }
-?>

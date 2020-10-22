@@ -22,9 +22,9 @@ $modversion = array(
     'name'               => 'Modules Administration',
     'id'                 => '1',
     'version'            => '2.4.0',
-    'displayname'        => xarML('Modules'),
+    'displayname'        => xarMLS::translate('Modules'),
     'description'        => 'Configure modules, view install/docs/credits.',
-    'displaydescription' => xarML('Configure modules, view install/docs/credits.'),
+    'displaydescription' => xarMLS::translate('Configure modules, view install/docs/credits.'),
     'credits'            => 'xardocs/credits.txt',
     'help'               => '',
     'changelog'          => 'xardocs/changelog.txt',
@@ -37,4 +37,3 @@ $modversion = array(
     'class'              => 'Core Admin',
     'category'           => 'System',
 );
-?>

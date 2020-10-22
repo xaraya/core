@@ -98,8 +98,11 @@ class xarTpl extends xarObject
  * @return boolean true
  * @todo remove the unnecessary generateXMLURLs arg and static var
 **/
-    public static function init(&$args)
+    public static function init(array $args = array())
     {
+        if (empty($args)) {
+            $args = self::getConfig();
+        }
         // This is the theme directory, solo (aka, themename)
         self::setThemeDir($args['defaultThemeDir']);
         
@@ -122,6 +125,17 @@ class xarTpl extends xarObject
         // This is wrong here as well, but it's better at least than in modules.php
         sys::import('xaraya.themes');
         return true;
+    }
+
+    public static function getConfig()
+    {
+        $systemArgs = array(
+            'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
+            'defaultThemeDir'        => xarModVars::get('themes', 'default_theme','default'),
+            'generateXMLURLs'        => true,
+            'defaultDocType'         => xarConfigVars::get(null, 'Site.BL.DocType'),
+        );
+        return $systemArgs;
     }
 
 /**
@@ -1795,4 +1809,3 @@ function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
     return xarTpl::modifyHeaderContent($sourceFileName, $tplOutput);
 }
 
-?>

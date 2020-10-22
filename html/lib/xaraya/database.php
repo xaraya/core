@@ -129,12 +129,12 @@ class xarDatabase extends xarObject
     public static function init(array $args = array())
     {
         if (empty($args)) {
-            $args = self::get_config();
+            $args = self::getConfig();
         }
         return self::connect($args);
     }
 
-    protected static function get_config()
+    protected static function getConfig()
     {
         // Decode encoded DB parameters
         // These need to be there
