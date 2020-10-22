@@ -38,8 +38,11 @@ class xarController extends xarObject
      * Initialize
      *
      */
-    static function init(Array $args=array())
+    static function init(array $args = array())
     {
+        if (empty($args)) {
+            $args = self::getConfig();
+        }
         if (isset($args['enableShortURLsSupport']))
             self::$allowShortURLs = $args['enableShortURLsSupport'];
 
@@ -51,6 +54,13 @@ class xarController extends xarObject
         } catch(Exception $e) {
             self::$entryPoint = 'index.php';
         }
+    }
+
+    static function getConfig()
+    {
+        $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
+                            'generateXMLURLs' => true);
+        return $systemArgs;
     }
 
     /**
@@ -356,4 +366,3 @@ class xarController extends xarObject
     }
 }
 
-?>

@@ -468,10 +468,17 @@ class xarSession extends xarObject implements IsessionHandler
      *
      * @return boolean true
      */
-    public static function init(Array &$args)
+    public static function init(array $args = array())
     {
+        if (empty($args)) {
+            $args = self::getConfig();
+        }
         /* @todo: get rid of the global */
         $GLOBALS['xarSession_systemArgs'] = $args;
+        if (!defined('_XAR_ID_UNREGISTERED')) {
+            $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
+            define('_XAR_ID_UNREGISTERED', $anonid);
+        }
 
         // Register the SessionCreate event
         // this is now registered during modules module init
@@ -513,6 +520,19 @@ class xarSession extends xarObject implements IsessionHandler
             $session->current();
         }
         return true;
+    }
+
+    static function getConfig()
+    {
+        $systemArgs = array(
+            'securityLevel'     => xarConfigVars::get(null, 'Site.Session.SecurityLevel'),
+            'duration'          => xarConfigVars::get(null, 'Site.Session.Duration'),
+            'inactivityTimeout' => xarConfigVars::get(null, 'Site.Session.InactivityTimeout'),
+            'cookieName'        => xarConfigVars::get(null, 'Site.Session.CookieName'),
+            'cookiePath'        => xarConfigVars::get(null, 'Site.Session.CookiePath'),
+            'cookieDomain'      => xarConfigVars::get(null, 'Site.Session.CookieDomain'),
+            'refererCheck'      => xarConfigVars::get(null, 'Site.Session.RefererCheck'));
+        return $systemArgs;
     }
 
     /**

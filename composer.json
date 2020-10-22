@@ -11,6 +11,7 @@
         "optimize-autoloader": true,
         "sort-packages": true
     },
+    "minimum-stability": "dev",
     "autoload": {
         "classmap": [
             "html/bootstrap.php",

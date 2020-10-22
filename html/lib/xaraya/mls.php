@@ -383,8 +383,11 @@ class xarMLS extends xarObject
      * @throws Exception
      * @return boolean true
      */
-    static public function init(&$args)
+    static public function init(array $args = array())
     {
+        if (empty($args)) {
+            $args = self::getConfig();
+        }
         switch ($args['MLSMode']) {
         case xarMLS::SINGLE_LANGUAGE_MODE:
         case xarMLS::BOXED_MULTI_LANGUAGE_MODE:
@@ -438,6 +441,20 @@ class xarMLS extends xarObject
         // in this file. We need to investigate this better after the MLS refactoring
         self::setCurrentLocale($args['defaultLocale']);
         return true;
+    }
+
+    static function getConfig()
+    {
+        // FIXME: Site.MLS.MLSMode is NULL during install
+        $systemArgs = array('MLSMode'             => xarConfigVars::get(null, 'Site.MLS.MLSMode'),
+    //                      'translationsBackend' => xarConfigVars::get(null, 'Site.MLS.TranslationsBackend'),
+                            'translationsBackend' => 'xml2php',
+                            'defaultLocale'       => xarConfigVars::get(null, 'Site.MLS.DefaultLocale'),
+                            'allowedLocales'      => xarConfigVars::get(null, 'Site.MLS.AllowedLocales'),
+                            'defaultTimeZone'     => xarConfigVars::get(null, 'Site.Core.TimeZone'),
+                            'defaultTimeOffset'   => xarConfigVars::get(null, 'Site.MLS.DefaultTimeOffset'),
+                            );
+        return $systemArgs;
     }
 
     /**
@@ -1110,7 +1127,7 @@ class xarMLSContext extends xarObject
      * @throws Exception
      * @return boolean true
      */
-    static public function init(&$args)
+    static public function init(array $args = array())
     {
         return true;
     }
@@ -1220,4 +1237,3 @@ class xarMLSContext extends xarObject
     }
 }
 
-?>

@@ -256,9 +256,8 @@ class xarCore extends xarCoreCache
         /*
          * Start the logging subsystem
          */
-        $systemArgs = array();
         sys::import('xaraya.log');
-        xarLog::init($systemArgs);
+        xarLog::init();
     
         /**
          * Make sure we can get time for logging
@@ -278,68 +277,8 @@ class xarCore extends xarCoreCache
          *
          */
         if ($whatToLoad & self::SYSTEM_DATABASE) { // yeah right, as if this is optional
-            // Decode encoded DB parameters
-            // These need to be there
-            $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
-            $password = xarSystemVars::get(sys::CONFIG, 'DB.Password');
-            $persistent = null;
-            try {
-                $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
-            } catch(VariableNotFoundException $e) {
-                $persistent = null;
-            }
-            try {
-                if (xarSystemVars::get(sys::CONFIG, 'DB.Encoded') == '1') {
-                    $userName = base64_decode($userName);
-                    $password  = base64_decode($password);
-                }
-            } catch(VariableNotFoundException $e) {
-                // doesnt matter, we assume not encoded
-            }
-
-            // Hive off the pport of there is one added as part of the host
-            $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
-            $host_parts = explode(':', $host);
-            $host = $host_parts[0];
-            $port = isset($host_parts[1]) ? $host_parts[1] : '';
-
-            // Optionals dealt with, do the rest inline
-            $systemArgs = array('userName'        => $userName,
-                                'password'        => $password,
-                                'databasePort'    => $port,
-                                'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
-                                'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
-                                'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
-                                'persistent'      => $persistent,
-                                'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
-
             sys::import('xaraya.database');
-
-            // Connect to the database
-            // Cater to different notations in the special case of localhost
-            $localhosts = array('localhost', '127.0.0.1');
-            if (in_array($host, $localhosts)) {
-                $connected = false;
-                foreach ($localhosts as $local) {
-                    $systemArgs['databaseHost'] = $local;
-                    try {
-                        xarDatabase::init($systemArgs);
-                        $connected = true;
-                    } catch (Exception $e) {}
-                    if ($connected) break;
-                }
-                if (!$connected) {
-                    throw new Exception("Connection error: a database connection could not be established");
-                }
-            } else {
-                try {
-                    xarDatabase::init($systemArgs);
-                } catch (Exception $e) {
-                    // Catch the error here rather than in the subsystem, because we might be connecting to different databases
-                    // and want to cater to possible errors in each
-                    throw new Exception("Connection error: a database connection could not be established");
-                }
-            }
+            xarDatabase::init();
             $whatToLoad ^= self::BIT_DATABASE;
         }
 
@@ -366,8 +305,7 @@ class xarCore extends xarCoreCache
          * Start Events Subsystem
         **/
         sys::import('xaraya.events');
-        $systemArgs = array();
-        xarEvents::init($systemArgs);
+        xarEvents::init();
 
         /**
          * Start Configuration System
@@ -380,7 +318,7 @@ class xarCore extends xarCoreCache
         if ($whatToLoad & self::SYSTEM_CONFIGURATION) {
             // Start Variables utilities
             sys::import('xaraya.variables');
-            xarVar::init($systemArgs);
+            xarVar::init();
             $whatToLoad ^= self::BIT_CONFIGURATION;
             // We're about done here - everything else requires configuration, at least to initialize them !?
         } else {
@@ -413,9 +351,7 @@ class xarCore extends xarCoreCache
         **/
         if ($whatToLoad & self::SYSTEM_MODULES) {
             sys::import('xaraya.modules');
-            $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
-                                'generateXMLURLs' => true);
-            xarMod::init($systemArgs);
+            xarMod::init();
             $whatToLoad ^= self::BIT_MODULES;
             // We're about done here - everything else requires modules !?
         } else {
@@ -429,11 +365,9 @@ class xarCore extends xarCoreCache
          *
          */
         sys::import('xaraya.server');
-        $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
-                            'generateXMLURLs' => true);
-        xarServer::init($systemArgs);
+        xarServer::init();
         sys::import('xaraya.mapper.main');
-        xarController::init($systemArgs);
+        xarController::init();
 
         /**
          * Bring Multi Language System online
@@ -441,15 +375,7 @@ class xarCore extends xarCoreCache
          */
         sys::import('xaraya.mls');
         // FIXME: Site.MLS.MLSMode is NULL during install
-        $systemArgs = array('MLSMode'             => xarConfigVars::get(null, 'Site.MLS.MLSMode'),
-    //                      'translationsBackend' => xarConfigVars::get(null, 'Site.MLS.TranslationsBackend'),
-                            'translationsBackend' => 'xml2php',
-                            'defaultLocale'       => xarConfigVars::get(null, 'Site.MLS.DefaultLocale'),
-                            'allowedLocales'      => xarConfigVars::get(null, 'Site.MLS.AllowedLocales'),
-                            'defaultTimeZone'     => xarConfigVars::get(null, 'Site.Core.TimeZone'),
-                            'defaultTimeOffset'   => xarConfigVars::get(null, 'Site.MLS.DefaultTimeOffset'),
-                            );
-        xarMLS::init($systemArgs);
+        xarMLS::init();
 
     /*
     // Testing of autoload + second-level cache storage - please do not use on live sites
@@ -477,45 +403,27 @@ class xarCore extends xarCoreCache
          */
         if ($whatToLoad & self::SYSTEM_TEMPLATES) { 
             sys::import('xaraya.templates');
-
-            $systemArgs = array(
-                'enableTemplatesCaching' => xarConfigVars::get(null, 'Site.BL.CacheTemplates'),
-                'defaultThemeDir'        => xarModVars::get('themes', 'default_theme','default'),
-                'generateXMLURLs'        => true,
-                'defaultDocType'         => xarConfigVars::get(null, 'Site.BL.DocType'),
-            );
-
-            xarTpl::init($systemArgs);
+            xarTpl::init();
             $whatToLoad ^= self::BIT_TEMPLATES;
             // We're about done here - everything else requires templates !?
         } else {
             // Make the current load level == the new load level
             $current_SYSTEM_level = $new_SYSTEM_level;
             return true;
-        }      
+        }
 
         /**
          * We deal with users through the sessions subsystem
          *
          */
-        // @todo Assuming a fixed 2 here needs to be reviewed, core is a too low level system to assume this.
-        $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID',2);
-        define('_XAR_ID_UNREGISTERED', $anonid);
+        // @todo Assuming a fixed 5 here needs to be reviewed, core is a too low level system to assume this.
+        //$anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
+        //define('_XAR_ID_UNREGISTERED', $anonid);
 
         if ($whatToLoad & self::SYSTEM_SESSION)
         {
             sys::import('xaraya.sessions');
-
-            $systemArgs = array(
-                'securityLevel'     => xarConfigVars::get(null, 'Site.Session.SecurityLevel'),
-                'duration'          => xarConfigVars::get(null, 'Site.Session.Duration'),
-                'inactivityTimeout' => xarConfigVars::get(null, 'Site.Session.InactivityTimeout'),
-                'cookieName'        => xarConfigVars::get(null, 'Site.Session.CookieName'),
-                'cookiePath'        => xarConfigVars::get(null, 'Site.Session.CookiePath'),
-                'cookieDomain'      => xarConfigVars::get(null, 'Site.Session.CookieDomain'),
-                'refererCheck'      => xarConfigVars::get(null, 'Site.Session.RefererCheck'));
-            xarSession::init($systemArgs);
-
+            xarSession::init();
             $whatToLoad ^= self::BIT_SESSION;
             // We're about done here - everything else requires sessions !?
         } else {
@@ -532,10 +440,8 @@ class xarCore extends xarCoreCache
         {
             sys::import('xaraya.users');
             sys::import('xaraya.security');
-
             // Start User System
-            $systemArgs = array('authenticationModules' => xarConfigVars::get(null, 'Site.User.AuthenticationModules'));
-            xarUser::init($systemArgs);
+            xarUser::init();
             $whatToLoad ^= self::BIT_USER;
             // We're about done here - everything else requires Users !?
         } else {
@@ -554,10 +460,8 @@ class xarCore extends xarCoreCache
         if ($whatToLoad & self::SYSTEM_BLOCKS)
         {
             sys::import('xaraya.blocks');
-
             // Start Blocks Support Sytem
-            $systemArgs = array();
-            xarBlock::init($systemArgs);
+            xarBlock::init();
             $whatToLoad ^= self::BIT_BLOCKS;
             // We're about done here - everything else requires templates !?
         } else {
@@ -571,8 +475,7 @@ class xarCore extends xarCoreCache
         **/
         if ($whatToLoad & self::SYSTEM_HOOKS) {
             sys::import('xaraya.hooks');
-            $systemArgs = array();
-            xarHooks::init($systemArgs);
+            xarHooks::init();
             $whatToLoad ^= self::BIT_HOOKS;
             // We're about done here - everything else requires hooks !?
         } /*else {

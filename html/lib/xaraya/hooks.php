@@ -587,4 +587,3 @@ function xarModUnregisterHook($hookScope, $hookAction, $hookArea,$hookModName, $
     return xarHooks::unregisterObserver($event, $hookModName);
 }
 
-?>

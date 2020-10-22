@@ -60,7 +60,7 @@ class xarBlock extends xarObject implements ixarBlock
  * @param  array args
  * @return boolean
  */
-    public static function init(&$args)
+    public static function init(array $args = array())
     {
         // Blocks Support Tables
         sys::import('modules.blocks.xartables');
@@ -417,4 +417,3 @@ class xarBlock extends xarObject implements ixarBlock
         return $block->checkAccess($action);
     }
 }
-?>

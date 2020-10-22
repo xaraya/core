@@ -142,7 +142,7 @@ class xarLog extends xarObject
     static public $loggers  = array();
     static public $config  = array();
     
-    static public function init(&$args)
+    static public function init(array $args = array())
     {
         $GLOBALS['xarLog_loggers'] = array();
         

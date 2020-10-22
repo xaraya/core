@@ -114,8 +114,11 @@ class xarUser extends xarObject
      * @param args[authenticationModules] array
      * @return boolean true on success
      */
-    static public function init(Array &$args)
+    static public function init(array $args = array())
     {
+        if (empty($args)) {
+            $args = self::getConfig();
+        }
         // User System and Security Service Tables
         $prefix = xarDB::getPrefix();
     
@@ -129,6 +132,10 @@ class xarUser extends xarObject
         xarDB::importTables($tables);
     
         self::$authenticationModules = $args['authenticationModules'];
+        if (!defined('_XAR_ID_UNREGISTERED')) {
+            $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
+            define('_XAR_ID_UNREGISTERED', $anonid);
+        }
     
         xarMLS::setCurrentLocale(self::getNavigationLocale());
         xarTpl::setThemeName(self::getNavigationThemeName());
@@ -143,6 +150,12 @@ class xarUser extends xarObject
         $GLOBALS['xarUser_authenticationModules'] =  self::$authenticationModules;
         
         return true;
+    }
+
+    static function getConfig()
+    {
+        $systemArgs = array('authenticationModules' => xarConfigVars::get(null, 'Site.User.AuthenticationModules'));
+        return $systemArgs;
     }
 
     /**
@@ -692,4 +705,3 @@ class xarUser extends xarObject
         return true;
     }
 }
-?>

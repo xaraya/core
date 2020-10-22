@@ -144,7 +144,7 @@ class xarVar extends xarObject
      * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
      * @todo revisit naming of config_vars table
     **/
-    public static function init(Array $args=array())
+    public static function init(array $args = array())
     {
         // Configuration init needs to be done first
         $tables = array('config_vars' => xarDB::getPrefix() . '_module_vars');

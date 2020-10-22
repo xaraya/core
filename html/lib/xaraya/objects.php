@@ -34,7 +34,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * Initialize
      *
      */
-    static function init(Array $args=array())
+    static function init(array $args=array())
     {
         // Nothing to do here
         return true;
@@ -386,4 +386,3 @@ class xarDDObject extends xarObject implements IxarDDObject
     }
 }
 
-?>
