@@ -126,9 +126,82 @@ if ($middleware == 'Creole') {
 
 class xarDatabase extends xarObject
 {
-    public static function init(array &$args)
+    public static function init(array $args = array())
     {
-        return xarDB_init($args);
+        if (empty($args)) {
+            $args = self::get_config();
+        }
+        return self::connect($args);
+    }
+
+    protected static function get_config()
+    {
+        // Decode encoded DB parameters
+        // These need to be there
+        $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
+        $password = xarSystemVars::get(sys::CONFIG, 'DB.Password');
+        $persistent = null;
+        try {
+            $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
+        } catch(VariableNotFoundException $e) {
+            $persistent = null;
+        }
+        try {
+            if (xarSystemVars::get(sys::CONFIG, 'DB.Encoded') == '1') {
+                $userName = base64_decode($userName);
+                $password  = base64_decode($password);
+            }
+        } catch(VariableNotFoundException $e) {
+            // doesnt matter, we assume not encoded
+        }
+
+        // Hive off the pport of there is one added as part of the host
+        $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+        $host_parts = explode(':', $host);
+        $host = $host_parts[0];
+        $port = isset($host_parts[1]) ? $host_parts[1] : '';
+
+        // Optionals dealt with, do the rest inline
+        $systemArgs = array('userName'        => $userName,
+                            'password'        => $password,
+                            'databaseHost'    => $host,
+                            'databasePort'    => $port,
+                            'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
+                            'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
+                            'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
+                            'persistent'      => $persistent,
+                            'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
+        return $systemArgs;
+    }
+
+    protected static function connect(array $systemArgs = array())
+    {
+        $host = $systemArgs['databaseHost'];
+        // Connect to the database
+        // Cater to different notations in the special case of localhost
+        $localhosts = array('localhost', '127.0.0.1');
+        if (in_array($host, $localhosts)) {
+            $connected = false;
+            foreach ($localhosts as $local) {
+                $systemArgs['databaseHost'] = $local;
+                try {
+                    return xarDB_init($systemArgs);
+                    $connected = true;
+                } catch (Exception $e) {}
+                if ($connected) break;
+            }
+            if (!$connected) {
+                throw new Exception("Connection error: a database connection could not be established");
+            }
+        } else {
+            try {
+                return xarDB_init($systemArgs);
+            } catch (Exception $e) {
+                // Catch the error here rather than in the subsystem, because we might be connecting to different databases
+                // and want to cater to possible errors in each
+                throw new Exception("Connection error: a database connection could not be established");
+            }
+        }
     }
 }
 
