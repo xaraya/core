@@ -254,7 +254,7 @@ class xarSecurity extends xarObject
             // mrb: again?
             $userID = xarSession::getVar('role_id');
             if (empty($userID)) {
-                $userID = _XAR_ID_UNREGISTERED;
+                $userID = xarSession::$anonId;
             }
             $role = xarRoles::get($userID);
         } else {

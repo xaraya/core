@@ -81,6 +81,7 @@ class xarSession extends xarObject implements IsessionHandler
 {
     const  PREFIX='XARSV';     // Reserved by us for our session vars
     const  COOKIE='XARAYASID'; // Our cookiename
+    public static $anonId;     // Replacement for _XAR_ID_UNREGISTERED
     private $db;               // We store sessioninfo in the database
     private $tbl;              // Container for the session info
     private $isNew = true;     // Flag signalling if we're dealing with a new session
@@ -282,7 +283,7 @@ class xarSession extends xarObject implements IsessionHandler
             $this->db->begin();
             $query = "INSERT INTO $this->tbl (id, ip_addr, role_id, first_use, last_use)
                       VALUES (?,?,?,?,?)";
-            $bindvars = array($this->sessionId, $ipAddress, _XAR_ID_UNREGISTERED, time(), time());
+            $bindvars = array($this->sessionId, $ipAddress, self::$anonId, time(), time());
             $stmt = $this->db->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
             $this->db->commit();
@@ -349,7 +350,7 @@ class xarSession extends xarObject implements IsessionHandler
                 $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
                 if ($lastused < $timeoutSetting) {
                     // force a reset of the userid (but use the same sessionid)
-                    $this->setUserInfo(_XAR_ID_UNREGISTERED, 0);
+                    $this->setUserInfo(self::$anonId, 0);
                     $this->ipAddress = '';
                     $vars = '';
                 }
@@ -357,7 +358,7 @@ class xarSession extends xarObject implements IsessionHandler
             // Keep track of when this session was last saved
             self::saveTime($lastused);
         } else {
-            $_SESSION[self::PREFIX.'role_id'] = _XAR_ID_UNREGISTERED;
+            $_SESSION[self::PREFIX.'role_id'] = self::$anonId;
 
             $this->ipAddress = '';
             $vars = '';
@@ -475,9 +476,10 @@ class xarSession extends xarObject implements IsessionHandler
         }
         /* @todo: get rid of the global */
         $GLOBALS['xarSession_systemArgs'] = $args;
+
+	self::$anonId = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
         if (!defined('_XAR_ID_UNREGISTERED')) {
-            $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
-            define('_XAR_ID_UNREGISTERED', $anonid);
+            define('_XAR_ID_UNREGISTERED', self::$anonId);
         }
 
         // Register the SessionCreate event
@@ -502,7 +504,7 @@ class xarSession extends xarObject implements IsessionHandler
         if (!empty($forwarded)) {
             $ipAddress = preg_replace('/,.*/', '', $forwarded);
         } else {
-            $ipAddress = xarServer::getVar('REMOTE_ADDR');
+            $ipAddress = xarServer::getVar('REMOTE_ADDR') || '-';
         }
 
         // If it's new, register it, otherwise use the existing.
@@ -548,7 +550,7 @@ class xarSession extends xarObject implements IsessionHandler
             return $_SESSION[$var];
         } elseif ($name == 'role_id') {
             // mrb: why is this again?
-            $_SESSION[$var] = _XAR_ID_UNREGISTERED;
+            $_SESSION[$var] = self::$anonId;
             return $_SESSION[$var];
         }
     }

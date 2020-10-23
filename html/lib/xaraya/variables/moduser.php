@@ -45,7 +45,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
         if ($itemid == NULL) $itemid = xarUser::getVar('id');
 
         // Anonymous user always uses the module default setting
-        if ($itemid == _XAR_ID_UNREGISTERED) return xarModVars::get($scope, $name);
+        if ($itemid == xarSession::$anonId) return xarModVars::get($scope, $name);
         return parent::get($scope, $name, $itemid);
     }
 
@@ -75,7 +75,7 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
 
         // For anonymous users no preference can be set
         // MrB: should we raise an exception here?
-        if ($itemid == _XAR_ID_UNREGISTERED) return false;
+        if ($itemid == xarSession::$anonId) return false;
 
         return parent::set($scope, $name, $value, $itemid);
     }
@@ -104,9 +104,8 @@ class xarModUserVars extends xarModItemVars implements IxarModItemVars
         // MrB: should we continue, can't harm either and we have
         //      a failsafe that records are deleted, bit dirty, but
         //      it would work.
-        if ($itemid == _XAR_ID_UNREGISTERED ) return true;
+        if ($itemid == xarSession::$anonId) return true;
 
         return parent::delete($scope, $name, $itemid);
     }
 }
-?>

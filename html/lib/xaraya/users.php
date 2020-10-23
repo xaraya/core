@@ -133,8 +133,7 @@ class xarUser extends xarObject
     
         self::$authenticationModules = $args['authenticationModules'];
         if (!defined('_XAR_ID_UNREGISTERED')) {
-            $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
-            define('_XAR_ID_UNREGISTERED', $anonid);
+            define('_XAR_ID_UNREGISTERED', xarSession::$anonId);
         }
     
         xarMLS::setCurrentLocale(self::getNavigationLocale());
@@ -283,7 +282,7 @@ class xarUser extends xarObject
         $userId = xarSession::getVar('id');
     
         // Reset user session information
-        $res = xarSession_setUserInfo(_XAR_ID_UNREGISTERED, false);
+        $res = xarSession_setUserInfo(xarSession::$anonId, false);
         if (!isset($res)) {
             return; // throw back
         }
@@ -308,7 +307,7 @@ class xarUser extends xarObject
     {
         // FIXME: restore "clean" code once id+session issues are resolved
         //return xarSession::getVar('role_id') != _XAR_ID_UNREGISTERED;
-        return (xarSession::getVar('role_id') != _XAR_ID_UNREGISTERED
+        return (xarSession::getVar('role_id') != xarSession::$anonId
                 && xarSession::getVar('role_id') != 0);
     }
 
@@ -420,7 +419,7 @@ class xarUser extends xarObject
         //LEGACY
         if ($name == 'id' || $name == 'uid') return $userId;
     
-        if ($userId == _XAR_ID_UNREGISTERED) {
+        if ($userId == xarSession::$anonId) {
             // Anonymous user => only id, name and uname allowed, for other variable names
             // an exception of type NOT_LOGGED_IN is raised
             // CHECKME: if we're going the route of moditemvars, this doesn need to be the case
@@ -559,7 +558,7 @@ class xarUser extends xarObject
         if (empty($userId)) {
             $userId = xarSession::getVar('role_id');
         }
-        if ($userId == _XAR_ID_UNREGISTERED) {
+        if ($userId == xarSession::$anonId) {
             // Anonymous user
             throw new NotLoggedInException();
         }

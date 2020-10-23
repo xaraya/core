@@ -116,8 +116,6 @@ class xarConst
     const BIT_ALL           = 255;
 
     const SYSTEM_NONE           = 0;
-/*
-* TODO: Adjust when we move to PHP 5.6.x
     const SYSTEM_DATABASE       = self::BIT_DATABASE;
     const SYSTEM_CONFIGURATION  = self::BIT_CONFIGURATION | self::SYSTEM_DATABASE ;
     const SYSTEM_MODULES        = self::BIT_MODULES | self::SYSTEM_CONFIGURATION ;
@@ -128,7 +126,6 @@ class xarConst
     const SYSTEM_HOOKS          = self::BIT_HOOKS | self::SYSTEM_USER ;
     const SYSTEM_ALL            = self::BIT_ALL ; 
 
-*/
     const DBG_ACTIVE            = 1; 
     const DBG_SQL               = 2; 
     const DBG_EXCEPTIONS        = 4; 
@@ -140,17 +137,6 @@ class xarConst
     const RSS_CACHEDIR     = '/cache/rss';
     const TPL_CACHEDIR     = '/cache/templates';
 }
-
-define('XARCORE_SYSTEM_NONE',            0);
-define('XARCORE_SYSTEM_DATABASE',        xarConst::BIT_DATABASE);
-define('XARCORE_SYSTEM_CONFIGURATION',   xarConst::BIT_CONFIGURATION | XARCORE_SYSTEM_DATABASE);
-define('XARCORE_SYSTEM_MODULES',         xarConst::BIT_MODULES | XARCORE_SYSTEM_CONFIGURATION);
-define('XARCORE_SYSTEM_TEMPLATES',       xarConst::BIT_TEMPLATES | XARCORE_SYSTEM_MODULES);
-define('XARCORE_SYSTEM_SESSION',         xarConst::BIT_SESSION | XARCORE_SYSTEM_TEMPLATES);
-define('XARCORE_SYSTEM_USER',            xarConst::BIT_USER | XARCORE_SYSTEM_SESSION);
-define('XARCORE_SYSTEM_BLOCKS',          xarConst::BIT_BLOCKS | XARCORE_SYSTEM_USER);
-define('XARCORE_SYSTEM_HOOKS',           xarConst::BIT_HOOKS | XARCORE_SYSTEM_USER);
-define('XARCORE_SYSTEM_ALL',             xarConst::BIT_ALL); 
 
 /**
  * Sanity check that we are coming in through a normal entry point
@@ -173,6 +159,7 @@ sys::import('xaraya.caching.core');
  * It is called with each page request and loads the functionality required to process the request.
  *
  * @todo change xarCore:: calls to xarCoreCache:: and put other core stuff here ?
+ * @todo clean up duplicate const between xarCore:: and xarConst::
 **/
 class xarCore extends xarCoreCache
 {
@@ -194,18 +181,19 @@ class xarCore extends xarCoreCache
     const BIT_HOOKS            = xarConst::BIT_HOOKS;
     const BIT_ALL              = xarConst::BIT_ALL;
     
-    const SYSTEM_NONE          = XARCORE_SYSTEM_NONE;
-    const SYSTEM_DATABASE      = XARCORE_SYSTEM_DATABASE;
-    const SYSTEM_CONFIGURATION = XARCORE_SYSTEM_CONFIGURATION;
-    const SYSTEM_MODULES       = XARCORE_SYSTEM_MODULES;
-    const SYSTEM_TEMPLATES     = XARCORE_SYSTEM_TEMPLATES;
-    const SYSTEM_SESSION       = XARCORE_SYSTEM_SESSION;
-    const SYSTEM_USER          = XARCORE_SYSTEM_USER;
-    const SYSTEM_BLOCKS        = XARCORE_SYSTEM_BLOCKS;
-    const SYSTEM_HOOKS         = XARCORE_SYSTEM_HOOKS;
-    const SYSTEM_ALL           = XARCORE_SYSTEM_ALL;   
+    const SYSTEM_NONE          = xarConst::SYSTEM_NONE;
+    const SYSTEM_DATABASE      = xarConst::SYSTEM_DATABASE;
+    const SYSTEM_CONFIGURATION = xarConst::SYSTEM_CONFIGURATION;
+    const SYSTEM_MODULES       = xarConst::SYSTEM_MODULES;
+    const SYSTEM_TEMPLATES     = xarConst::SYSTEM_TEMPLATES;
+    const SYSTEM_SESSION       = xarConst::SYSTEM_SESSION;
+    const SYSTEM_USER          = xarConst::SYSTEM_USER;
+    const SYSTEM_BLOCKS        = xarConst::SYSTEM_BLOCKS;
+    const SYSTEM_HOOKS         = xarConst::SYSTEM_HOOKS;
+    const SYSTEM_ALL           = xarConst::SYSTEM_ALL;
     
     public static $build       = 'unknown';
+    public static $runLevel    = self::SYSTEM_NONE;
 
     /**
      * Initializes the core engine
@@ -215,20 +203,19 @@ class xarCore extends xarCoreCache
     **/
     public static function xarInit($whatToLoad = self::SYSTEM_ALL)
     {
-        static $current_SYSTEM_level = self::SYSTEM_NONE;
         static $first_load = true;
 
         $new_SYSTEM_level = $whatToLoad;
     
         // Make sure it only loads the current load level (or less than the current load level) once.
-        if ($whatToLoad <= $current_SYSTEM_level) {
+        if ($whatToLoad <= self::$runLevel) {
             if (!$first_load) return true; // Does this ever happen? If so, we might consider an assert
             $first_load = false;
         } else {
             // if we are loading a load level higher than the
             // current one, make sure to XOR out everything
             // that we've already loaded
-            $whatToLoad ^= $current_SYSTEM_level;
+            $whatToLoad ^= self::$runLevel;
         }
         /**
          * At this point we should be able to catch all low level errors, so we can start the debugger
@@ -323,7 +310,7 @@ class xarCore extends xarCoreCache
             // We're about done here - everything else requires configuration, at least to initialize them !?
         } else {
             // Make the current load level == the new load level
-            $current_SYSTEM_level = $new_SYSTEM_level;
+            self::$runLevel = $new_SYSTEM_level;
             return true;
         }       
 
@@ -356,7 +343,7 @@ class xarCore extends xarCoreCache
             // We're about done here - everything else requires modules !?
         } else {
             // Make the current load level == the new load level
-            $current_SYSTEM_level = $new_SYSTEM_level;
+            self::$runLevel = $new_SYSTEM_level;
             return true;
         }
 
@@ -408,7 +395,7 @@ class xarCore extends xarCoreCache
             // We're about done here - everything else requires templates !?
         } else {
             // Make the current load level == the new load level
-            $current_SYSTEM_level = $new_SYSTEM_level;
+            self::$runLevel = $new_SYSTEM_level;
             return true;
         }
 
@@ -428,7 +415,7 @@ class xarCore extends xarCoreCache
             // We're about done here - everything else requires sessions !?
         } else {
             // Make the current load level == the new load level
-            $current_SYSTEM_level = $new_SYSTEM_level;
+            self::$runLevel = $new_SYSTEM_level;
             return true;
         }  
 
@@ -446,7 +433,7 @@ class xarCore extends xarCoreCache
             // We're about done here - everything else requires Users !?
         } else {
             // Make the current load level == the new load level
-            $current_SYSTEM_level = $new_SYSTEM_level;
+            self::$runLevel = $new_SYSTEM_level;
             return true;
         }
     
@@ -466,7 +453,7 @@ class xarCore extends xarCoreCache
             // We're about done here - everything else requires templates !?
         } else {
             // Make the current load level == the new load level
-            $current_SYSTEM_level = $new_SYSTEM_level;
+            self::$runLevel = $new_SYSTEM_level;
             return true;
         }
           
@@ -480,7 +467,7 @@ class xarCore extends xarCoreCache
             // We're about done here - everything else requires hooks !?
         } /*else {
             // Make the current load level == the new load level
-            $current_SYSTEM_level = $new_SYSTEM_level;
+            self::$runLevel = $new_SYSTEM_level;
             return true;
         }   */            
 
@@ -499,8 +486,18 @@ class xarCore extends xarCoreCache
         xarLog::message("The core is loaded", xarLog::LEVEL_INFO);
 
         // Make the current load level == the new load level
-        $current_SYSTEM_level = $new_SYSTEM_level;
+        self::$runLevel = $new_SYSTEM_level;
         return true;
+    }
+
+    /**
+     * Check if a particular subsystem is loaded based on the runLevel
+     *
+     * @return boolean true if the subsystem is loaded, false otherwise
+    **/
+    public static function isLoaded($checkLevel = self::SYSTEM_ALL)
+    {
+        return self::$runLevel & $checkLevel;
     }
 
     /**
