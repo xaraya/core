@@ -849,7 +849,7 @@ class DataObjectMaster extends xarObject
         // CHECKME: this is supposed to be about caching a DataObject variable before we do getItem() etc.
         
         // Do we allow caching?
-        if (xarModVars::get('dynamicdata', 'caching')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarModVars::get('dynamicdata', 'caching')) {
             $cacheKey = self::getVariableCacheKey('DataObject', $args);
             // Check if the variable is cached
             if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
@@ -920,7 +920,7 @@ class DataObjectMaster extends xarObject
         // CHECKME: this is supposed to be about caching a DataObjectList variable before we do getItems() etc.
 
         // Do we allow caching?
-        if (xarModVars::get('dynamicdata', 'caching')) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_MODULES) && xarModVars::get('dynamicdata', 'caching')) {
             $cacheKey = self::getVariableCacheKey('DataObjectList', $args);
             // Check if the variable is cached
             if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
@@ -1517,7 +1517,7 @@ class DataObjectMaster extends xarObject
         {
             case 'admin':
                 // require admin access to the module here
-                return xarSecurityCheck('AdminDynamicData',0);
+                return xarSecurity::check('AdminDynamicData',0);
 
             case 'config':
             case 'access':
@@ -1573,15 +1573,16 @@ class DataObjectMaster extends xarObject
         // DD specific access scheme 
         // check if we have specific access rules for this level
         if (!empty($access_rules) && is_array($access_rules) && !empty($access_rules[$level])) {
-            if (empty($roleid) && xarUser::isLoggedIn()) {
+            $anonid = xarConfigVars::get(null,'Site.User.AnonymousUID');
+            if (empty($roleid) && xarCore::isLoaded(xarCore::SYSTEM_USER) && xarUser::isLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
                 $grouplist = xarCache::getParents();
-            } elseif (!empty($roleid) && $roleid != _XAR_ID_UNREGISTERED) {
+            } elseif (!empty($roleid) && $roleid != $anonid) {
                 // get the direct parents of the specified user (no ancestors)
                 $grouplist = xarCache::getParents($roleid);
             } else {
                 // check anonymous visitors by themselves
-                $grouplist = array(_XAR_ID_UNREGISTERED);
+                $grouplist = array($anonid);
             }
             foreach ($grouplist as $groupid) {
                 // list of groups that have access at this level
@@ -1774,4 +1775,3 @@ class DataObjectMaster extends xarObject
     }
 }
 
-?>

@@ -156,7 +156,10 @@ class PropertyRegistration extends DataContainer
         }
         $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        // CHECKME: $tables[modules] is defined in xarMod::init()
+	// CHECKME: $tables[modules] is defined in xarMod::init()
+        if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
+            xarMod::loadDbInfo('modules','modules');
+        }
         $tables =& xarDB::getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
@@ -497,4 +500,3 @@ class PropertyRegistration extends DataContainer
         return $L;
     }
 }
-?>

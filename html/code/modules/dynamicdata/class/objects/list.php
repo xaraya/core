@@ -298,12 +298,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             return;
         }
 
-        if (xarUser::isLoggedIn()) {
+        if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xarUser::isLoggedIn()) {
             // get the direct parents of the current user (no ancestors)
             $grouplist = xarCache::getParents();
         } else {
             // check anonymous visitors by themselves
-            $grouplist = array(_XAR_ID_UNREGISTERED);
+            $anonid = xarConfigVars::get(null,'Site.User.AnonymousUID');
+            $grouplist = array($anonid);
         }
 
         foreach ($grouplist as $groupid) {
@@ -930,4 +931,3 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
     }
 }
-?>

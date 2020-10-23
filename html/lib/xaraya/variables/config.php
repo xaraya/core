@@ -173,8 +173,10 @@ class xarConfigVars extends xarVars implements IxarVars
         try {
           $dbconn = xarDB::getConn();
           $tables = xarDB::getTables();
-          if (!isset($tables['config_vars'])) return false;
-          $varstable = $tables['config_vars'];
+          //if (!isset($tables['config_vars'])) return false;
+          //$varstable = $tables['config_vars'];
+	  // @todo check impact on install.php first
+          $varstable = xarDB::getPrefix() . '_module_vars';
         } catch (Exception $e) {
           return false;
         }
@@ -194,4 +196,3 @@ class xarConfigVars extends xarVars implements IxarVars
         return true;
     }
 }
-?>
