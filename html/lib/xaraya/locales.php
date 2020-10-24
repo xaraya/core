@@ -942,4 +942,49 @@ class xarMLS__LocaleDataLoader extends xarObject
 
 }
 
-?>
+/**
+ * Move public static functions to class
+ */
+class xarLocale extends xarObject
+{
+    public static function parseCurrency($currency, $localeData = NULL)
+    {
+        return xarLocaleParseCurrency($currency, $localeData);
+    }
+    public static function parseNumber($number, $localeData = NULL, $isCurrency = false)
+    {
+        return xarLocaleParseNumber($number, $localeData, $isCurrency);
+    }
+    public static function formatCurrency($currency, $localeData = NULL)
+    {
+        return xarLocaleFormatCurrency($currency, $localeData);
+    }
+    public static function formatNumber($number, $localeData = NULL, $isCurrency = false)
+    {
+        return xarLocaleFormatNumber($number, $localeData, $isCurrency);
+    }
+    public static function getFormattedUTCDate($length = 'short', $timestamp = null, $addoffset = false)
+    {
+        return xarLocaleGetFormattedUTCDate($length, $timestamp, $addoffset);
+    }
+    public static function getFormattedDate($length = 'short', $timestamp = null, $addoffset = true)
+    {
+        return xarLocaleGetFormattedDate($length, $timestamp, $addoffset);
+    }
+    public static function getFormattedUTCTime($length = 'short',$timestamp = null, $addoffset = false)
+    {
+        return xarLocaleGetFormattedUTCTime($length,$timestamp, $addoffset);
+    }
+    public static function getFormattedTime($length = 'short',$timestamp = null, $addoffset = true)
+    {
+        return xarLocaleGetFormattedTime($length,$timestamp, $addoffset);
+    }
+    public static function formatUTCDate($format = null, $time = null, $addoffset = false)
+    {
+        return xarLocaleFormatUTCDate($format, $time, $addoffset);
+    }
+    public static function formatDate($format = null, $timestamp = null, $addoffset = true)
+    {
+        return xarLocaleFormatDate($format, $timestamp, $addoffset);
+    }
+}
