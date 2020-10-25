@@ -6,9 +6,9 @@
             <td>Store as</td>
             <td>
                 <select name="#$name#[dbformat]" id="#$id#_dbformat" tabindex="#$tabindex#">
-                    <xar:set name="timestamp">#xarMLS_userTime()#</xar:set>
-                    <xar:set name="datetime">#xarLocaleFormatDate('%Y-%m-%d %H:%M:%S')#</xar:set>
-                    <xar:set name="date">#xarLocaleFormatDate('%Y-%m-%d')#</xar:set>
+                    <xar:set name="timestamp">#xarMLS::userTime()#</xar:set>
+                    <xar:set name="datetime">#xarLocale::formatDate('%Y-%m-%d %H:%M:%S')#</xar:set>
+                    <xar:set name="date">#xarLocale::formatDate('%Y-%m-%d')#</xar:set>
                     <!--
               Note : timestamp is not an option for ExtendedDate
             -->
