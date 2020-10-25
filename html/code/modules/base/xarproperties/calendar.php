@@ -111,7 +111,7 @@ class CalendarProperty extends DataProperty
             }
         }
 
-        // $timeval = xarLocaleFormatDate($dateformat, $value);
+        // $timeval = xarLocale::formatDate($dateformat, $value);
         $data['baseuri']    = xarServer::getBaseURI();
         $data['dateformat'] = $dateformat;
         $data['jsID']       = str_replace(array('[', ']'), '_', $id);
@@ -153,7 +153,7 @@ class CalendarProperty extends DataProperty
 
         $data['dateformat'] = $dateformat;
         $data['value'] = $value;
-        // $data['returnvalue']= xarLocaleFormatDate($dateformat, $value);
+        // $data['returnvalue']= xarLocale::formatDate($dateformat, $value);
         return parent::showOutput($data);
     }
 	
@@ -225,4 +225,3 @@ class CalendarProperty extends DataProperty
         return true;
     }
 }
-?>

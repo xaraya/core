@@ -3,7 +3,8 @@
     "description": "Xaraya Core web development framework",
     "type": "project",
     "require-dev": {
-        "phpstan/phpstan": "^0.12.50"
+        "phpstan/phpstan": "^0.12.50",
+        "webonyx/graphql-php": "dev-master"
     },
     "license": "GPL-2.0-or-later",
     "require": {},

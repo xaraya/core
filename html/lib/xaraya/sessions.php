@@ -634,4 +634,9 @@ class xarSession extends xarObject implements IsessionHandler
         }
         return $GLOBALS['xarSession_saveTime'];
     }
+
+    public static function getSecurityLevel()
+    {
+        return xarSessionGetSecurityLevel();
+    }
 }

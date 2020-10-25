@@ -539,4 +539,52 @@ function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=fal
     else return false;
 }
 
-?>
+/**
+ * Move public static functions to class
+ *
+ * @todo current function names are a bit of a mess in here :-(
+ */
+class xarSec extends xarObject
+{
+    public static function makeRoleMemberByUname($childName, $parentName)
+    {
+        return xarMakeRoleMemberByUname($childName, $parentName);
+    }
+    public static function makeRoleMemberByID($childId, $parentId)
+    {
+        return xarMakeRoleMemberByID($childId, $parentId);
+    }
+    public static function removeRoleMemberByID($childId, $parentId)
+    {
+        return xarRemoveRoleMemberByID($childId, $parentId);
+    }
+    public static function removePrivileges($module)
+    {
+        return xarRemovePrivileges($module);
+    }
+    public static function isParent($name1, $name2)
+    {
+        return xarIsParent($name1, $name2);
+    }
+    public static function isAncestor($name1, $name2)
+    {
+        return xarIsAncestor($name1, $name2);
+    }
+    public static function privExists($name)
+    {
+        return xarPrivExists($name);
+    }
+    public static function maskExists($name,$module="All",$component="All")
+    {
+        return xarMaskExists($name,$module,$component);
+    }
+    public static function genAuthKey($modName = NULL)
+    {
+        return xarSecGenAuthKey($modName);
+    }
+    public static function confirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
+    {
+        return xarSecConfirmAuthKey($modName, $authIdVarName, $catch);
+    }
+}
+

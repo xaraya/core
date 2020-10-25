@@ -23,10 +23,10 @@
 $modversion = array(
     'name'               => 'Dynamic Data',
     'id'                 => '182',
-    'displayname'        => xarML('Dynamic Data'),
+    'displayname'        => xarMLS::translate('Dynamic Data'),
     'version'            => '2.4.0',
     'description'        => 'Dynamic Data Module',
-    'displaydescription' => xarML('Dynamic Data Module'),
+    'displaydescription' => xarMLS::translate('Dynamic Data Module'),
     'credits'            => 'xardocs/credits.txt',
     'help'               => 'xardocs/help.txt',
     'changelog'          => 'xardocs/changelog.txt',
@@ -39,4 +39,3 @@ $modversion = array(
     'class'              => 'Core Complete',
     'category'           => 'Content',
 );
-?>

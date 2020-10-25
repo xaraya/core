@@ -430,6 +430,30 @@ class xarVar extends xarObject
     {
         return xarCoreCache::flushCached($scope);
     }
+
+    public static function prepForDisplay(...$args)
+    {
+        // pass along the function arguments as is
+        return xarVarPrepForDisplay(...$args);
+    }
+
+    public static function prepHTMLDisplay(...$args)
+    {
+        // pass along the function arguments as is
+        return xarVarPrepHTMLDisplay(...$args);
+    }
+
+    public static function prepEmailDisplay(...$args)
+    {
+        // pass along the function arguments as is
+        return xarVarPrepEmailDisplay(...$args);
+    }
+
+    public static function prepForOS(...$args)
+    {
+        // pass along the function arguments as is
+        return xarVarPrepForOS(...$args);
+    }
 }
 
 /**

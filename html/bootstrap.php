@@ -263,6 +263,7 @@ final class sys extends xarObject
         if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
         if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
         if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+        if (empty($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = __DIR__ . '/';
         $GLOBALS['systemConfiguration'] = $systemConfiguration;
         if (!empty($systemConfiguration['rootDir'])) {
             set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
