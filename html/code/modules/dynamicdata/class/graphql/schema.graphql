@@ -1,0 +1,52 @@
+type Access {
+  keys: [String]
+  filters: String
+}
+
+type Object {
+  objectid: ID
+  keys: [String]
+  name: String
+  label: String
+  module_id: String
+  itemtype: Int
+  class: String
+  urlparam: String
+  access: Access
+  config: [String]
+  maxid: Int
+  isalias: Boolean
+  category: String
+  properties: [Property]
+}
+
+type Property {
+  id: ID
+  keys: [String]
+  name: String
+  label: String
+  objectid: String
+  type: Int
+  defaultvalue: String
+  source: String
+  status: Int
+  translatable: Boolean
+}
+
+type Query {
+  hello: String
+  echo(message: String): String
+  schema: String
+  samples: [Sample]
+  sample(id: ID!): Sample
+  objects: [Object]
+  object(id: ID!): Object
+  properties: [Property]
+  property(id: ID!): Property
+}
+
+type Sample {
+  id: ID
+  name: String
+  age: Int
+}
