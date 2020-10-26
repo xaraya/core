@@ -27,7 +27,7 @@ sys::init();
 xarDatabase::init();
 
 
-function xarGraphQLGetData($queryString = '{hello}', $variableValues = [])
+function xarGraphQLGetData($queryString = '{hello}', $variableValues = [], $operationName = null)
 {
     $schema = xarGraphQL::get_schema();
     if ($queryString == '{schema}') {
@@ -37,7 +37,6 @@ function xarGraphQLGetData($queryString = '{hello}', $variableValues = [])
     
     $rootValue = ['prefix' => 'You said: message='];
     $context = ['context' => true, 'object' => null];
-    $operationName = null;
     $fieldResolver = null;
     $validationRules = null;
     
@@ -78,9 +77,15 @@ if (!empty($rawInput)) {
     $input = json_decode($rawInput, true);
     $query = isset($input['query']) ? $input['query'] : '{schema}';
     $variables = isset($input['variables']) ? $input['variables'] : null;
+    $operationName = isset($input['operationName']) ? $input['operationName'] : null;
 } else {
     $query = isset($_REQUEST['query']) ? $_REQUEST['query'] : '{schema}';
     $variables = isset($_REQUEST['variables']) ? $_REQUEST['variables'] : null;
+    $operationName = isset($_REQUEST['operationName']) ? $_REQUEST['operationName'] : null;
+}
+// /gql.php?query=query($id:ID!){object(id:$id){name}}&variables={"id":"2"}
+if (!empty($variables) && is_string($variables)) {
+    $variables = json_decode($variables, true);
 }
 
 //$query = '{hello}';
@@ -89,6 +94,6 @@ if (!empty($rawInput)) {
 //$query = '{samples { name, age } }';
 //$query = '{sample(id: 0) { name, age } }';
 //$query = '{schema}';
-$data = xarGraphQLGetData($query, $variables);
+$data = xarGraphQLGetData($query, $variables, $operationName);
 
 xarGraphQLSendData($data);

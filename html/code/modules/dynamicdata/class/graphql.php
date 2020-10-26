@@ -29,6 +29,7 @@
 //sys::import('modules.dynamicdata.class.graphql.objecttype');
 //sys::import('modules.dynamicdata.class.graphql.propertytype');
 //sys::import('modules.dynamicdata.class.graphql.accesstype');
+//sys::import('modules.dynamicdata.class.graphql.keyvaltype');
 
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
@@ -44,6 +45,8 @@ class xarGraphQL extends xarObject
         'object'   => 'objecttype',
         'property' => 'propertytype',
         'access'   => 'accesstype',
+        'keyval'   => 'keyvaltype',
+        'multival' => 'multivaltype',
     ];
     public static $query_mapper = [
         'hello'      => 'dummytype',
@@ -114,6 +117,8 @@ class xarGraphQL extends xarObject
             'objecttype' => xarGraphQLObjectType,
             'propertytype' => xarGraphQLPropertyType,
             'accesstype' => xarGraphQLAccessType,
+            'keyvaltype' => xarGraphQLKeyValType,
+            'multivaltype' => xarGraphQLMultiValType,
         ];
         return $class_mapper[$type];
     }

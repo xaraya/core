@@ -25,6 +25,8 @@ class xarGraphQLAccessType extends ObjectType
             'fields' => [
                 'keys' => Type::listOf(Type::string()),
                 //'access' => Type::string(),
+                //'access' => Type::listOf(xarGraphQL::get_type("keyval")),
+                //'display_access' => Type::listOf(xarGraphQL::get_type("keyval")),
                 'filters' => Type::string(),
             ],
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
@@ -34,6 +36,28 @@ class xarGraphQLAccessType extends ObjectType
                 //print_r($object);
                 if ($info->fieldName == 'keys') {
                     return array_keys($object);
+                }
+                if ($info->fieldName == 'access' && !empty($object['access']) && is_string($object['access'])) {
+                    $values = @unserialize($object[$info->fieldName]);
+                    $access = array();
+                    foreach ($values as $key => $value) {
+                        if (is_array($value)) {
+                            $value = serialize($value);
+                        }
+                        $access[] = array('key' => $key, 'value' => $value);
+                    }
+                    return $access;
+                }
+                if ($info->fieldName == 'display_access' && !empty($object['display_access']) && is_array($object['display_access'])) {
+                    $values = $object[$info->fieldName];
+                    $access = array();
+                    foreach ($values as $key => $value) {
+                        if (is_array($value)) {
+                            $value = serialize($value);
+                        }
+                        $access[] = array('key' => $key, 'value' => $value);
+                    }
+                    return $access;
                 }
                 if (array_key_exists($info->fieldName, $object)) {
                     return $object[$info->fieldName];

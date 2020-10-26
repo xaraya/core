@@ -51,11 +51,56 @@ class xarGraphQLPropertyType extends ObjectType
                 'name' => Type::string(),
                 'label' => Type::string(),
                 'objectid' => Type::string(),
-                'type' => Type::int(),
+                'type' => Type::string(),
                 'defaultvalue' => Type::string(),
                 'source' => Type::string(),
                 'status' => Type::int(),
                 'translatable' => Type::boolean(),
+                'seq' => Type::int(),
+                //'configuration' => Type::string(),
+                'configuration' => [
+                    'type' => Type::listOf(xarGraphQL::get_type("keyval")),
+                    'resolve' => function ($property, $args, $context, ResolveInfo $info) {
+                        //print_r("property config resolve");
+                        if (is_array($property) && isset($property['configuration'])) {
+                            $values = @unserialize($property['configuration']);
+                            if (empty($values)) {
+                                return array();
+                            }
+                            if (!is_array($values)) {
+                                $values = array('' => $values);
+                            }
+                            $config = array();
+                            foreach ($values as $key => $value) {
+                                if (is_array($value)) {
+                                    $value = serialize($value);
+                                }
+                                $config[] = array('key' => $key, 'value' => $value);
+                            }
+                            return $config;
+                        }
+                        if (property_exists($property, 'configuration') && isset($property->configuration)) {
+                            $values = @unserialize($property->configuration);
+                            if (empty($values)) {
+                                return array();
+                            }
+                            if (!is_array($values)) {
+                                $values = array('' => $values);
+                            }
+                            $config = array();
+                            foreach ($values as $key => $value) {
+                                if (is_array($value)) {
+                                    $value = serialize($value);
+                                }
+                                $config[] = array('key' => $key, 'value' => $value);
+                            }
+                            return $config;
+                        }
+                        return null;
+                    }
+                ],
+                //'objectref' => xarGraphQL::get_type("object"),
+                'args' => Type::listOf(Type::string()),
             ],
         ];
         parent::__construct($config);
@@ -68,14 +113,19 @@ class xarGraphQLPropertyType extends ObjectType
                 'type' => Type::listOf(xarGraphQL::get_type(self::$_xar_type)),
                 'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
                     //print_r($rootValue);
-                    //$fields = $info->getFieldSelection(1);
+                    $fields = $info->getFieldSelection(1);
                     //print_r($fields);
                     //$queryPlan = $info->lookAhead();
                     //print_r($queryPlan->queryPlan());
                     //print_r($queryPlan->subFields('Property'));
-                    $args = array('name' => self::$_xar_object);
+                    $args = array('name' => self::$_xar_object, 'fieldlist' => array_keys($fields));
                     $objectlist = DataObjectMaster::getObjectList($args);
                     $items = $objectlist->getItems();
+                    //if (array_key_exists('name', $fields)) {
+                    //    foreach ($items as $key => $item) {
+                    //        $items[$key]['name'] = $objectlist->items[$key]['name'];
+                    //    }
+                    //}
                     return $items;
                 }
             ],
