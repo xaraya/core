@@ -29,7 +29,7 @@ class xarGraphQLPropertyType extends ObjectType
         $config = [
             'name' => self::$_xar_name,
             'fields' => [
-                'id' => Type::id(),
+                'id' => Type::nonNull(Type::id()),
                 //'keys' => Type::listOf(Type::string()),
                 'keys' => [
                     'type' => Type::listOf(Type::string()),
@@ -73,7 +73,7 @@ class xarGraphQLPropertyType extends ObjectType
                             $config = array();
                             foreach ($values as $key => $value) {
                                 if (is_array($value)) {
-                                    $value = serialize($value);
+                                    $value = json_encode($value);
                                 }
                                 $config[] = array('key' => $key, 'value' => $value);
                             }
@@ -90,7 +90,7 @@ class xarGraphQLPropertyType extends ObjectType
                             $config = array();
                             foreach ($values as $key => $value) {
                                 if (is_array($value)) {
-                                    $value = serialize($value);
+                                    $value = json_encode($value);
                                 }
                                 $config[] = array('key' => $key, 'value' => $value);
                             }

@@ -42,7 +42,7 @@ class xarGraphQLAccessType extends ObjectType
                     $access = array();
                     foreach ($values as $key => $value) {
                         if (is_array($value)) {
-                            $value = serialize($value);
+                            $value = json_encode($value);
                         }
                         $access[] = array('key' => $key, 'value' => $value);
                     }
@@ -53,7 +53,7 @@ class xarGraphQLAccessType extends ObjectType
                     $access = array();
                     foreach ($values as $key => $value) {
                         if (is_array($value)) {
-                            $value = serialize($value);
+                            $value = json_encode($value);
                         }
                         $access[] = array('key' => $key, 'value' => $value);
                     }

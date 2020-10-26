@@ -29,7 +29,7 @@ class xarGraphQLSampleType extends ObjectType
         $config = [
             'name' => self::$_xar_name,
             'fields' => [
-                'id' => Type::id(),
+                'id' => Type::nonNull(Type::id()),
                 'name' => Type::string(),
                 'age' => Type::int(),
             ],

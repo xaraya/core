@@ -27,9 +27,9 @@ sys::init();
 xarDatabase::init();
 
 
-function xarGraphQLGetData($queryString = '{hello}', $variableValues = [], $operationName = null)
+function xarGraphQLGetData($queryString = '{hello}', $variableValues = [], $operationName = null, $extraTypes = [])
 {
-    $schema = xarGraphQL::get_schema();
+    $schema = xarGraphQL::get_schema($extraTypes);
     if ($queryString == '{schema}') {
         return SchemaPrinter::doPrint($schema);
         //return SchemaPrinter::printIntrospectionSchema($schema);
@@ -94,6 +94,8 @@ if (!empty($variables) && is_string($variables)) {
 //$query = '{samples { name, age } }';
 //$query = '{sample(id: 0) { name, age } }';
 //$query = '{schema}';
-$data = xarGraphQLGetData($query, $variables, $operationName);
+//$data = xarGraphQLGetData($query, $variables, $operationName);
+$extraTypes = ['module', 'theme', 'category', 'configuration'];
+$data = xarGraphQLGetData($query, $variables, $operationName, $extraTypes);
 
 xarGraphQLSendData($data);

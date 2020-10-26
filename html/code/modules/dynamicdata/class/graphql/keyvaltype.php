@@ -29,6 +29,15 @@ class xarGraphQLKeyValType extends ObjectType
                 //'value' => xarGraphQL::get_type("multival"),
             ],
             /**
+            // see recurring and circular types at https://webonyx.github.io/graphql-php/type-system/object-types/
+            'fields' => function() {
+                return [
+                    'key' => Type::string(),
+                    'value' => xarGraphQL::get_type("multival"),
+                ];
+            }
+             */
+            /**
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
                 if (empty($object)) {
                     return null;
@@ -40,7 +49,7 @@ class xarGraphQLKeyValType extends ObjectType
                 //return $info->fieldName;
                 return null;
             }
-         */
+             */
         ];
         parent::__construct($config);
     }

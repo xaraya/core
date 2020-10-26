@@ -59,12 +59,16 @@ class xarGraphQL extends xarObject
         'properties' => 'propertytype',
         'property'   => 'propertytype',
     ];
+    public static $extra_types = [];
 
     /**
      * Get GraphQL Schema with Query type
      */
-    public static function get_schema($validate=false)
+    public static function get_schema($extraTypes = null, $validate = false)
     {
+        if (!empty($extraTypes)) {
+            self::$extra_types = $extraTypes;
+        }
         $queryType = self::get_type("query");
 
         $schema = new Schema([
@@ -89,6 +93,16 @@ class xarGraphQL extends xarObject
         if (isset(self::$type_cache[$name])) {
             return self::$type_cache[$name];
         }
+        // make Object Type from BuildType for extra dynamicdata object types
+        if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
+            $clazz = self::get_type_class("buildtype");
+            $type = $clazz::make_type($name);
+            if (!$type) {
+                throw new Exception("Unknown graphql type: " . $name);
+            }
+            self::$type_cache[$name] = $type;
+            return $type;
+        }
         if (!array_key_exists($name, self::$type_mapper)) {
             throw new Exception("Unknown graphql type: " . $name);
         }
@@ -111,14 +125,15 @@ class xarGraphQL extends xarObject
     public static function get_type_class($type)
     {
         static $class_mapper = [
-            'querytype' => xarGraphQLQueryType,
-            'dummytype' => xarGraphQLDummyType,
-            'sampletype' => xarGraphQLSampleType,
-            'objecttype' => xarGraphQLObjectType,
-            'propertytype' => xarGraphQLPropertyType,
-            'accesstype' => xarGraphQLAccessType,
-            'keyvaltype' => xarGraphQLKeyValType,
-            'multivaltype' => xarGraphQLMultiValType,
+            'querytype' => xarGraphQLQueryType::class,
+            'dummytype' => xarGraphQLDummyType::class,
+            'buildtype' => xarGraphQLBuildType::class,
+            'sampletype' => xarGraphQLSampleType::class,
+            'objecttype' => xarGraphQLObjectType::class,
+            'propertytype' => xarGraphQLPropertyType::class,
+            'accesstype' => xarGraphQLAccessType::class,
+            'keyvaltype' => xarGraphQLKeyValType::class,
+            'multivaltype' => xarGraphQLMultiValType::class,
         ];
         return $class_mapper[$type];
     }
@@ -132,23 +147,31 @@ class xarGraphQL extends xarObject
         foreach (self::$query_mapper as $name => $type) {
             $fields = array_merge($fields, self::add_query_field($name, $type));
         }
+        // @todo get query fields from BuildType for extra dynamicdata object types
+        if (!empty(self::$extra_types)) {
+            $clazz = self::get_type_class("buildtype");
+            foreach (self::$extra_types as $name) {
+                $fields = array_merge($fields, $clazz::get_query_fields($name));
+            }
+        }
         return $fields;
     }
 
     /**
-     * Add a root query field as defined in the GraphQL Type class
+     * Add a root query field as defined in the GraphQL Object Type class (list, item, other...)
      */
     public static function add_query_field($name, $type)
     {
-        return self::get_type_class($type)::_xar_get_query_field($name);
+        $clazz = self::get_type_class($type);
+        return $clazz::_xar_get_query_field($name);
     }
 
     /**
      * Utility function to execute a GraphQL query and return the data
      */
-    public static function get_data($queryString = '{hello}', $variableValues = [])
+    public static function get_data($queryString = '{hello}', $variableValues = [], $operationName = null, $extraTypes = [])
     {
-        $schema = self::get_schema();
+        $schema = self::get_schema($extraTypes);
         if ($queryString == '{schema}') {
             return SchemaPrinter::doPrint($schema);
             //return SchemaPrinter::printIntrospectionSchema($schema);
@@ -156,7 +179,6 @@ class xarGraphQL extends xarObject
         
         $rootValue = ['prefix' => 'You said: message='];
         $context = ['context' => true, 'object' => null];
-        $operationName = null;
         $fieldResolver = null;
         $validationRules = null;
         

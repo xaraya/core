@@ -3,8 +3,58 @@ type Access {
   filters: String
 }
 
+"""
+Category: generic category type for categories objects (categories, category)
+"""
+type Category {
+  id: ID!
+  name: String
+  keys: [String]
+  description: String
+  image: String
+  template: String
+  child_categories: String
+  position: String
+  links: Int
+  state: String
+}
+
+"""
+Configuration: generic configuration type for configurations objects (configurations, configuration)
+"""
+type Configuration {
+  id: ID!
+  name: String
+  keys: [String]
+  label: String
+  description: String
+  property_id: String
+  ignore_empty: String
+  configuration: String
+}
+
+type KeyVal {
+  key: String
+  value: String
+}
+
+"""Module: generic module type for modules objects (modules, module)"""
+type Module {
+  id: ID!
+  name: String
+  keys: [String]
+  regid: Int
+  directory: String
+  version: String
+  class: String
+  category: String
+  admin_capable: String
+  user_capable: String
+  state: String
+}
+
 type Object {
-  objectid: ID
+  objectid: ID!
   keys: [String]
   name: String
   label: String
@@ -21,16 +71,19 @@ type Object {
 }
 
 type Property {
-  id: ID
+  id: ID!
   keys: [String]
   name: String
   label: String
   objectid: String
-  type: Int
+  type: String
   defaultvalue: String
   source: String
   status: Int
   translatable: Boolean
+  seq: Int
+  configuration: [KeyVal]
+  args: [String]
 }
 
 type Query {
@@ -43,10 +96,30 @@ type Query {
   object(id: ID!): Object
   properties: [Property]
   property(id: ID!): Property
+  modules: [Module]
+  module(id: ID!): Module
+  themes: [Theme]
+  theme(id: ID!): Theme
+  categories: [Category]
+  category(id: ID!): Category
+  configurations: [Configuration]
+  configuration(id: ID!): Configuration
 }
 
 type Sample {
-  id: ID
+  id: ID!
   name: String
   age: Int
+}
+
+"""Theme: generic theme type for themes objects (themes, theme)"""
+type Theme {
+  id: ID!
+  name: String
+  keys: [String]
+  regid: Int
+  directory: String
+  version: String
+  configuration: String
+  state: String
 }

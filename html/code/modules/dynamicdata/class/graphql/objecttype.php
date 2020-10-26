@@ -29,7 +29,7 @@ class xarGraphQLObjectType extends ObjectType
         $config = [
             'name' => self::$_xar_name,
             'fields' => [
-                'objectid' => Type::id(),
+                'objectid' => Type::nonNull(Type::id()),
                 //'fieldlist' => Type::listOf(Type::string()),
                 //'keys' => Type::listOf(Type::string()),
                 'keys' => [
