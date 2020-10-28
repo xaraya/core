@@ -27,11 +27,15 @@ sys::init();
 xarDatabase::init();
 
 
-function xarGraphQLGetData($queryString = '{hello}', $variableValues = [], $operationName = null, $extraTypes = [])
+function xarGraphQLGetData($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [])
 {
     $schema = xarGraphQL::get_schema($extraTypes);
+    //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
+    //$schema = xarGraphQL::build_schema($schemaFile, $extraTypes);
+    //print_r($schema);
     if ($queryString == '{schema}') {
-        return SchemaPrinter::doPrint($schema);
+        $header = "schema {\n  query: Query\n}\n\n";
+        return $header . SchemaPrinter::doPrint($schema);
         //return SchemaPrinter::printIntrospectionSchema($schema);
     }
     

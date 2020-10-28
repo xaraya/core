@@ -34,6 +34,7 @@
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 use GraphQL\Error\DebugFlag;
+use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
 
 class xarGraphQL extends xarObject
@@ -62,7 +63,7 @@ class xarGraphQL extends xarObject
     public static $extra_types = [];
 
     /**
-     * Get GraphQL Schema with Query type
+     * Get GraphQL Schema with Query type and typeLoader
      */
     public static function get_schema($extraTypes = null, $validate = false)
     {
@@ -167,13 +168,51 @@ class xarGraphQL extends xarObject
     }
 
     /**
+     * Build GraphQL Schema based on schema.graphql file and type config decorator
+     */
+    public static function build_schema($schemaFile, $extraTypes = null, $validate = false)
+    {
+        $contents = file_get_contents($schemaFile);
+        $typeConfigDecorator = function ($typeConfig, $typeDefinitionNode) {
+            return self::type_config_decorator($typeConfig, $typeDefinitionNode);
+        };
+        $schema = BuildSchema::build($contents, $typeConfigDecorator);
+        return $schema;
+    }
+
+    /**
+     * Type config decorator for Query and Object types when using BuildSchema
+     */
+    public static function type_config_decorator($typeConfig, $typeDefinitionNode)
+    {
+        $name = $typeConfig['name'];
+        //var_dump($name);
+        //var_dump(implode(":", array_keys($typeConfig['fields'])));
+        //print_r($typeDefinitionNode);
+        // https://github.com/diasfs/graphql-php-resolvers/blob/master/src/FieldResolver.php
+        // $typeConfig['resolveField'] = function($value, $args, $ctx, $info) use ($resolver) {
+        //     return static::ResolveField($value, $args, $ctx, $info, $resolver);
+        // };
+        $clazz = self::get_type_class("buildtype");
+        if ($name == 'Query') {
+            $typeConfig['resolveField'] = $clazz::object_query_resolver($name);
+        } else {
+            $typeConfig['resolveField'] = $clazz::object_field_resolver($name);
+        }
+        return $typeConfig;
+    }
+
+    /**
      * Utility function to execute a GraphQL query and return the data
      */
-    public static function get_data($queryString = '{hello}', $variableValues = [], $operationName = null, $extraTypes = [])
+    public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [])
     {
         $schema = self::get_schema($extraTypes);
+        //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
+        //$schema = xarGraphQL::build_schema($schemaFile, $extraTypes);
         if ($queryString == '{schema}') {
-            return SchemaPrinter::doPrint($schema);
+            $header = "schema {\n  query: Query\n}\n\n";
+            return $header . SchemaPrinter::doPrint($schema);
             //return SchemaPrinter::printIntrospectionSchema($schema);
         }
         

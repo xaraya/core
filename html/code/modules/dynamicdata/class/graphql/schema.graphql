@@ -1,3 +1,7 @@
+schema {
+  query: Query
+}
+
 type Access {
   keys: [String]
   filters: String
