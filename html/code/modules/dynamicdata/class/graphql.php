@@ -48,6 +48,8 @@ class xarGraphQL extends xarObject
         'access'   => 'accesstype',
         'keyval'   => 'keyvaltype',
         'multival' => 'multivaltype',
+        'user'     => 'usertype',
+        'serial'   => 'serialtype',
     ];
     public static $query_mapper = [
         'hello'      => 'dummytype',
@@ -59,6 +61,7 @@ class xarGraphQL extends xarObject
         'object'     => 'objecttype',
         'properties' => 'propertytype',
         'property'   => 'propertytype',
+        //'user'       => 'usertype',  // disable querying user directly
     ];
     public static $extra_types = [];
 
@@ -129,13 +132,19 @@ class xarGraphQL extends xarObject
             'querytype' => xarGraphQLQueryType::class,
             'dummytype' => xarGraphQLDummyType::class,
             'buildtype' => xarGraphQLBuildType::class,
+            'basetype' => xarGraphQLBaseType::class,
             'sampletype' => xarGraphQLSampleType::class,
             'objecttype' => xarGraphQLObjectType::class,
             'propertytype' => xarGraphQLPropertyType::class,
             'accesstype' => xarGraphQLAccessType::class,
             'keyvaltype' => xarGraphQLKeyValType::class,
             'multivaltype' => xarGraphQLMultiValType::class,
+            'usertype' => xarGraphQLUserType::class,
+            'serialtype' => xarGraphQLSerialType::class,
         ];
+        if (!array_key_exists($type, $class_mapper) && array_key_exists($type, self::$type_mapper)) {
+            $type = self::$type_mapper[$type];
+        }
         return $class_mapper[$type];
     }
  
@@ -145,14 +154,21 @@ class xarGraphQL extends xarObject
     public static function get_query_fields()
     {
         $fields = array();
+        // @todo switch to get_list_query and get_item_query format
         foreach (self::$query_mapper as $name => $type) {
-            $fields = array_merge($fields, self::add_query_field($name, $type));
+            $add_fields = self::add_query_field($name, $type);
+            if (!empty($add_fields)) {
+                $fields = array_merge($fields, $add_fields);
+            }
         }
         // @todo get query fields from BuildType for extra dynamicdata object types
         if (!empty(self::$extra_types)) {
             $clazz = self::get_type_class("buildtype");
             foreach (self::$extra_types as $name) {
-                $fields = array_merge($fields, $clazz::get_query_fields($name));
+                $add_fields = $clazz::get_query_fields($name);
+                if (!empty($add_fields)) {
+                    $fields = array_merge($fields, $add_fields);
+                }
             }
         }
         return $fields;
@@ -164,6 +180,7 @@ class xarGraphQL extends xarObject
     public static function add_query_field($name, $type)
     {
         $clazz = self::get_type_class($type);
+        // @todo switch to get_list_query and get_item_query format
         return $clazz::_xar_get_query_field($name);
     }
 

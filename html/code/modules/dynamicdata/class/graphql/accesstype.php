@@ -27,7 +27,8 @@ class xarGraphQLAccessType extends ObjectType
                 //'access' => Type::string(),
                 //'access' => Type::listOf(xarGraphQL::get_type("keyval")),
                 //'display_access' => Type::listOf(xarGraphQL::get_type("keyval")),
-                'filters' => Type::string(),
+                //'filters' => Type::string(),
+                'filters' => xarGraphQL::get_type('serial'),
             ],
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
                 if (empty($object)) {

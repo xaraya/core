@@ -16,7 +16,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType and query fields for "sample" dynamicdata object type
  */
-class xarGraphQLSampleType extends ObjectType
+class xarGraphQLSampleType extends xarGraphQLBaseType
 {
     public static $_xar_name   = 'Sample';
     public static $_xar_type   = 'sample';
@@ -24,63 +24,31 @@ class xarGraphQLSampleType extends ObjectType
     public static $_xar_list   = 'samples';
     public static $_xar_item   = 'sample';
 
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    /**
     public function __construct()
     {
         $config = [
-            'name' => self::$_xar_name,
-            'fields' => [
-                'id' => Type::nonNull(Type::id()),
-                'name' => Type::string(),
-                'age' => Type::int(),
-            ],
+            'name' => static::$_xar_name,
+            'fields' => static::_xar_get_object_fields(static::$_xar_object),
         ];
+        // you need to pass the type config to the parent here, if you want to override the constructor
         parent::__construct($config);
     }
+     */
 
-    public static function _xar_get_query_field($name)
+    /**
+     * This method *should* be overridden for each specific object type
+     */
+    public static function _xar_get_object_fields($object)
     {
         $fields = [
-            self::$_xar_list => [
-                'type' => Type::listOf(xarGraphQL::get_type(self::$_xar_type)),
-                'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
-                    //print_r($rootValue);
-                    //$fields = $info->getFieldSelection(1);
-                    //print_r($fields);
-                    //$queryPlan = $info->lookAhead();
-                    //print_r($queryPlan->queryPlan());
-                    //print_r($queryPlan->subFields('Property'));
-                    $args = array('name' => self::$_xar_object);
-                    $objectlist = DataObjectMaster::getObjectList($args);
-                    $items = $objectlist->getItems();
-                    return $items;
-                }
-            ],
-            self::$_xar_item => [
-                'type' => xarGraphQL::get_type(self::$_xar_type),
-                'args' => [
-                    'id' => Type::nonNull(Type::id())
-                ],
-                'resolve' => function ($rootValue, $args, $context, ResolveInfo $info) {
-                    //print_r($rootValue);
-                    //$fields = $info->getFieldSelection(1);
-                    //print_r($fields);
-                    //$queryPlan = $info->lookAhead();
-                    //print_r($queryPlan->queryPlan());
-                    //print_r($queryPlan->subFields('Property'));
-                    if (empty($args['id'])) {
-                        throw new Exception('Unknown ' . self::$_xar_type);
-                    }
-                    $args = array('name' => self::$_xar_object, 'itemid' => $args['id']);
-                    $object = DataObjectMaster::getObject($args);
-                    $itemid = $object->getItem();
-                    if ($itemid != $args['itemid']) {
-                        throw new Exception('Unknown ' . self::$_xar_type);
-                    }
-                    $values = $object->getFieldValues();
-                    return $values;
-                }
-            ],
+            'id' => Type::nonNull(Type::id()),
+            'name' => Type::string(),
+            'age' => Type::int(),
         ];
-        return array($name => $fields[$name]);
+        return $fields;
     }
 }

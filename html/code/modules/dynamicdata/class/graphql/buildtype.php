@@ -12,6 +12,7 @@
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Deferred;
 
 /**
  * Build GraphQL ObjectType, query fields and resolvers for generic dynamicdata object type
@@ -19,26 +20,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 //class xarGraphQLBuildType extends ObjectType
 class xarGraphQLBuildType
 {
-    /**
-    public static $_xar_name   = 'Sample';
-    public static $_xar_type   = 'sample';
-    public static $_xar_object = 'sample';
-    public static $_xar_list   = 'samples';
-    public static $_xar_item   = 'sample';
-
-    public function __construct()
-    {
-        $config = [
-            'name' => self::$_xar_name,
-            'fields' => [
-                'id' => Type::id(),
-                'name' => Type::string(),
-                'age' => Type::int(),
-            ],
-        ];
-        parent::__construct($config);
-    }
-     */
+    public static $property_id = [];
 
     /**
      * Make a generic Object Type for a dynamicdata object type by name = "Module" for modules etc.
@@ -145,13 +127,49 @@ class xarGraphQLBuildType
             'dropdown' => Type::string(),  // @todo use EnumType here?
         ];
         // @todo add fields based on object descriptor?
+        $user_prop_id = self::get_property_id('username');
         foreach ($objectref->getProperties() as $key => $property) {
-            //print("        '" . $property->name . "' => Type::" . $property->basetype . "(),\n");
+            if ($property->type == $user_prop_id) {
+                $fields[$property->name] = self::get_deferred_field($property->name, 'user');
+                continue;
+            }
             if (!array_key_exists($property->name, $fields)) {
                 $fields[$property->name] = $basetypes[$property->basetype];
             }
         }
         return $fields;
+    }
+
+    public static function get_property_id($name)
+    {
+        if (empty(self::$property_id[$name])) {
+            $proptypes = DataPropertyMaster::getPropertyTypes();
+            foreach ($proptypes as $typeid => $proptype)
+            {
+                if($proptype['name'] == $name)
+                {
+                    self::$property_id[$name] = $typeid;
+                    break;
+                }
+            }
+        }
+        return self::$property_id[$name];
+    }
+
+    public static function get_deferred_field($name, $type)
+    {
+        return [
+            'name' => $name,
+            'type' => xarGraphQL::get_type($type),
+            'resolve' => self::deferred_field_resolver($type, $name),
+        ];
+    }
+
+    public static function deferred_field_resolver($type, $prop_name)
+    {
+        // we only need the type class here, not the type instance
+        $clazz = xarGraphQL::get_type_class($type);
+        return $clazz::_xar_deferred_field_resolver($prop_name);
     }
 
     /**
@@ -172,7 +190,7 @@ class xarGraphQLBuildType
                 }
                 if (array_key_exists($name, $values)) {
                     // see propertytype
-                    if ($name == 'configuration' && is_string($values[$name])) {
+                    if ($name == 'configuration' && is_string($values[$name]) && !empty($values[$name])) {
                         $result = @unserialize($values[$name]);
                         $config = array();
                         foreach ($result as $key => $value) {
@@ -249,6 +267,7 @@ class xarGraphQLBuildType
             //print_r($queryPlan->queryPlan());
             //print_r($queryPlan->subFields('Property'));
             $args = array('name' => $object);
+            //$args = array('name' => $object, 'fieldlist' => array_keys($fields));
             //print_r($args);
             $objectlist = DataObjectMaster::getObjectList($args);
             $items = $objectlist->getItems();
