@@ -50,6 +50,7 @@ class xarGraphQL extends xarObject
         'multival' => 'multivaltype',
         'user'     => 'usertype',
         'serial'   => 'serialtype',
+        'mixed'    => 'mixedtype',
     ];
     public static $query_mapper = [
         'hello'      => 'dummytype',
@@ -141,6 +142,7 @@ class xarGraphQL extends xarObject
             'multivaltype' => xarGraphQLMultiValType::class,
             'usertype' => xarGraphQLUserType::class,
             'serialtype' => xarGraphQLSerialType::class,
+            'mixedtype' => xarGraphQLMixedType::class,
         ];
         if (!array_key_exists($type, $class_mapper) && array_key_exists($type, self::$type_mapper)) {
             $type = self::$type_mapper[$type];

@@ -24,7 +24,8 @@ class xarGraphQLKeyValType extends ObjectType
             'name' => 'KeyVal',
             'fields' => [
                 'key' => Type::string(),
-                'value' => Type::string(),
+                //'value' => Type::string(),
+                'value' => xarGraphQL::get_type('mixed'),
                 // @checkme this causes memory problems!
                 //'value' => xarGraphQL::get_type("multival"),
             ],

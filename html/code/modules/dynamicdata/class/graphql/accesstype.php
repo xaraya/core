@@ -42,9 +42,9 @@ class xarGraphQLAccessType extends ObjectType
                     $values = @unserialize($object[$info->fieldName]);
                     $access = array();
                     foreach ($values as $key => $value) {
-                        if (is_array($value)) {
-                            $value = json_encode($value);
-                        }
+                        //if (is_array($value)) {
+                        //    $value = json_encode($value);
+                        //}
                         $access[] = array('key' => $key, 'value' => $value);
                     }
                     return $access;
@@ -53,9 +53,9 @@ class xarGraphQLAccessType extends ObjectType
                     $values = $object[$info->fieldName];
                     $access = array();
                     foreach ($values as $key => $value) {
-                        if (is_array($value)) {
-                            $value = json_encode($value);
-                        }
+                        //if (is_array($value)) {
+                        //    $value = json_encode($value);
+                        //}
                         $access[] = array('key' => $key, 'value' => $value);
                     }
                     return $access;

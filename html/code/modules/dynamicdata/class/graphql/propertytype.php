@@ -73,9 +73,9 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                         }
                         $config = array();
                         foreach ($values as $key => $value) {
-                            if (is_array($value)) {
-                                $value = json_encode($value);
-                            }
+                            //if (is_array($value)) {
+                            //    $value = json_encode($value);
+                            //}
                             $config[] = array('key' => $key, 'value' => $value);
                         }
                         return $config;
@@ -90,9 +90,9 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                         }
                         $config = array();
                         foreach ($values as $key => $value) {
-                            if (is_array($value)) {
-                                $value = json_encode($value);
-                            }
+                            //if (is_array($value)) {
+                            //    $value = json_encode($value);
+                            //}
                             $config[] = array('key' => $key, 'value' => $value);
                         }
                         return $config;
