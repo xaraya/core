@@ -44,6 +44,31 @@ class xarGraphQLBuildType
     }
 
     /**
+     * Make a generic Object Type with pagination
+     */
+    public static function make_page_type($name, $type = null, $object = null, $list = null, $item = null)
+    {
+        // name=Property, type=property, object=properties, list=properties, item=property
+        list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
+        $page = $name . '_Page';
+        $description = "$page: paginated list of $list for $object objects";
+        $fields = [
+            'sort' => Type::string(),
+            'offset' => Type::int(),
+            'limit' => Type::int(),
+            'count' => Type::int(),
+            $list => Type::listOf(xarGraphQL::get_type($type)),
+        ];
+        $newType = new ObjectType([
+            'name' => $page,
+            'description' => $description,
+            'fields' => $fields,
+            //'resolveField' => self::object_field_resolver($type, $object),
+        ]);
+        return $newType;
+    }
+
+    /**
      * Sanitize name, type, object, list and item based on given name, e.g.:
      * name=Object, type=object, object=objects, list=objects, item=object
      * name=Property, type=property, object=properties, list=properties, item=property
@@ -118,8 +143,8 @@ class xarGraphQLBuildType
         //$args = array('name' => $object, 'numitems' => 1);
         //$objectlist = DataObjectMaster::getObjectList($args);
         //print_r($objectlist->getItems());
-        $args = array('name' => $object);
-        $objectref = DataObjectMaster::getObject($args);
+        $params = array('name' => $object);
+        $objectref = DataObjectMaster::getObject($params);
         $basetypes = [
             'string' => Type::string(),
             'integer' => Type::int(),
@@ -131,6 +156,10 @@ class xarGraphQLBuildType
         foreach ($objectref->getProperties() as $key => $property) {
             if ($property->type == $user_prop_id) {
                 $fields[$property->name] = self::get_deferred_field($property->name, 'user');
+                continue;
+            }
+            if ($property->name == 'configuration') {
+                $fields[$property->name] = Type::listOf(xarGraphQL::get_type("keyval"));
                 continue;
             }
             if (!array_key_exists($property->name, $fields)) {
@@ -194,9 +223,9 @@ class xarGraphQLBuildType
                         $result = @unserialize($values[$name]);
                         $config = array();
                         foreach ($result as $key => $value) {
-                            if (is_array($value)) {
-                                $value = json_encode($value);
-                            }
+                            //if (is_array($value)) {
+                            //    $value = json_encode($value);
+                            //}
                             $config[] = array('key' => $key, 'value' => $value);
                         }
                         return $config;
@@ -232,10 +261,70 @@ class xarGraphQLBuildType
         // name=Property, type=property, object=properties, list=properties, item=property
         list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
         $fields = [
-            self::get_list_query($list, $type, $object),
+            self::get_page_query($list, $type, $object),
+            //self::get_list_query($list, $type, $object),
             self::get_item_query($item, $type, $object),
         ];
         return $fields;
+    }
+
+    /**
+     * Get paginated list query field for this object type - see also relay connection for cursor-based
+     */
+    public static function get_page_query($list, $type, $object)
+    {
+        return [
+            'name' => $list . '_page',
+            'type' => xarGraphQL::get_page_type($type),
+            'args' => [
+                'sort' => Type::string(),
+                'offset' => [
+                    'type' => Type::int(),
+                    'defaultValue' => 0,
+                ],
+                'limit' => [
+                    'type' => Type::int(),
+                    'defaultValue' => 20,
+                ],
+                //'filters' => Type::string(),
+            ],
+            'resolve' => self::page_query_resolver($type, $object),
+        ];
+    }
+
+    /**
+     * Get the paginated list query resolver for the object type
+     */
+    public static function page_query_resolver($type, $object = null)
+    {
+        // when using type config decorator and object_query_resolver
+        if (!isset($object)) {
+            list($name, $type, $object, $list, $item) = self::sanitize($type);
+        }
+        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php 
+            $allowed = array_flip(['sort', 'offset', 'limit', 'filters', 'count']);
+            $fields = $info->getFieldSelection(1);
+            $args = array_intersect_key($args, $allowed);
+            $todo = array_keys(array_diff_key($fields, $allowed));
+            //print_r($todo);
+            if (array_key_exists('count', $fields)) {
+                $params = array('name' => $object);
+                $objectlist = DataObjectMaster::getObjectList($params);
+                $args['count'] = $objectlist->countItems();
+                if (!empty($args['offset']) && !empty($args['count']) && $args['offset'] > $args['count']) {
+                    throw new Exception('Invalid offset ' . $args['offset']);
+                }
+            }
+            if (empty($todo)) {
+                return $args;
+            }
+            $list = $todo[0];
+            $list_resolver = self::list_query_resolver($type, $object);
+            $args[$list] = call_user_func($list_resolver, $rootValue, $args, $context, $info);
+            return $args;
+        };
+        return $resolver;
     }
 
     /**
@@ -246,6 +335,20 @@ class xarGraphQLBuildType
         return [
             'name' => $list,
             'type' => Type::listOf(xarGraphQL::get_type($type)),
+            /**
+            'args' => [
+                'sort' => Type::string(),
+                'offset' => [
+                    'type' => Type::int(),
+                    'defaultValue' => 0,
+                ],
+                'limit' => [
+                    'type' => Type::int(),
+                    'defaultValue' => 20,
+                ],
+                //'filters' => Type::string(),
+            ],
+             */
             'resolve' => self::list_query_resolver($type, $object),
         ];
     }
@@ -266,11 +369,37 @@ class xarGraphQLBuildType
             //$queryPlan = $info->lookAhead();
             //print_r($queryPlan->queryPlan());
             //print_r($queryPlan->subFields('Property'));
-            $args = array('name' => $object);
-            //$args = array('name' => $object, 'fieldlist' => array_keys($fields));
+            $params = array('name' => $object);
+            //$params = array('name' => $object, 'fieldlist' => array_keys($fields));
+            //print_r($params);
+            $objectlist = DataObjectMaster::getObjectList($params);
+            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php 
+            $allowed = array_flip(['sort', 'offset', 'limit', 'filters']);
+            $args = array_intersect_key($args, $allowed);
             //print_r($args);
-            $objectlist = DataObjectMaster::getObjectList($args);
-            $items = $objectlist->getItems();
+            $params = array();
+            if (!empty($args['sort'])) {
+                $params['sort'] = array();
+                $sorted = explode(',', $args['sort']);
+                foreach ($sorted as $sortme) {
+                    if (substr($sortme, 0, 1) === '-') {
+                        $params['sort'][] = substr($sortme, 1) . ' DESC';
+                        continue;
+                    }
+                    $params['sort'][] = $sortme;
+                }
+                //$params['sort'] = implode(',', $params['sort']);
+            }
+            if (!empty($args['offset'])) {
+                $params['startnum'] = $args['offset'] + 1;
+            }
+            if (!empty($args['limit'])) {
+                $params['numitems'] = $args['limit'];
+            }
+            //if (!empty($args['filters'])) {
+            //    $params['filters'] = $args['filters'];
+            //}
+            $items = $objectlist->getItems($params);
             return $items;
         };
         return $resolver;
@@ -310,11 +439,11 @@ class xarGraphQLBuildType
             if (empty($args['id'])) {
                 throw new Exception('Unknown ' . $type);
             }
-            $args = array('name' => $object, 'itemid' => $args['id']);
-            //print_r($args);
-            $objectitem = DataObjectMaster::getObject($args);
+            $params = array('name' => $object, 'itemid' => $args['id']);
+            //print_r($params);
+            $objectitem = DataObjectMaster::getObject($params);
             $itemid = $objectitem->getItem();
-            if ($itemid != $args['itemid']) {
+            if ($itemid != $params['itemid']) {
                 throw new Exception('Unknown ' . $type);
             }
             $values = $objectitem->getFieldValues();

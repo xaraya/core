@@ -80,7 +80,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                         }
                         return $config;
                     }
-                    if (property_exists($property, 'configuration') && isset($property->configuration)) {
+                    if (is_object($property) && property_exists($property, 'configuration') && isset($property->configuration)) {
                         $values = @unserialize($property->configuration);
                         if (empty($values)) {
                             return array();

@@ -52,18 +52,6 @@ class xarGraphQL extends xarObject
         'serial'   => 'serialtype',
         'mixed'    => 'mixedtype',
     ];
-    public static $query_mapper = [
-        'hello'      => 'dummytype',
-        'echo'       => 'dummytype',
-        'schema'     => 'dummytype',
-        'samples'    => 'sampletype',
-        'sample'     => 'sampletype',
-        'objects'    => 'objecttype',
-        'object'     => 'objecttype',
-        'properties' => 'propertytype',
-        'property'   => 'propertytype',
-        //'user'       => 'usertype',  // disable querying user directly
-    ];
     public static $extra_types = [];
 
     /**
@@ -98,6 +86,10 @@ class xarGraphQL extends xarObject
         if (isset(self::$type_cache[$name])) {
             return self::$type_cache[$name];
         }
+        $page_ext = '_page';
+        if (substr($name, -strlen($page_ext)) === $page_ext) {
+            return self::get_page_type(substr($name, 0, strlen($name) - strlen($page_ext)));
+        }
         // make Object Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
             $clazz = self::get_type_class("buildtype");
@@ -122,6 +114,29 @@ class xarGraphQL extends xarObject
         }
         self::$type_cache[$name] = $type;
         return $type;
+    }
+
+    /**
+     * Get GraphQL Type by name with pagination
+     */
+    public static function get_page_type($name)
+    {
+        $name = strtolower($name);
+        $page = $name . '_page';
+        if (isset(self::$type_cache[$page])) {
+            return self::$type_cache[$page];
+        }
+        // make Object Type from BuildType for extra dynamicdata object types
+        if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
+            $clazz = self::get_type_class("buildtype");
+            $type = $clazz::make_page_type($name);
+            if (!$type) {
+                throw new Exception("Unknown graphql type: " . $page);
+            }
+            self::$type_cache[$page] = $type;
+            return $type;
+        }
+        throw new Exception("Unknown graphql type: " . $page);
     }
 
     /**
@@ -151,47 +166,12 @@ class xarGraphQL extends xarObject
     }
  
     /**
-     * Get all root query fields for the GraphQL Query type from the query_mapper above
-     */
-    public static function get_query_fields()
-    {
-        $fields = array();
-        // @todo switch to get_list_query and get_item_query format
-        foreach (self::$query_mapper as $name => $type) {
-            $add_fields = self::add_query_field($name, $type);
-            if (!empty($add_fields)) {
-                $fields = array_merge($fields, $add_fields);
-            }
-        }
-        // @todo get query fields from BuildType for extra dynamicdata object types
-        if (!empty(self::$extra_types)) {
-            $clazz = self::get_type_class("buildtype");
-            foreach (self::$extra_types as $name) {
-                $add_fields = $clazz::get_query_fields($name);
-                if (!empty($add_fields)) {
-                    $fields = array_merge($fields, $add_fields);
-                }
-            }
-        }
-        return $fields;
-    }
-
-    /**
-     * Add a root query field as defined in the GraphQL Object Type class (list, item, other...)
-     */
-    public static function add_query_field($name, $type)
-    {
-        $clazz = self::get_type_class($type);
-        // @todo switch to get_list_query and get_item_query format
-        return $clazz::_xar_get_query_field($name);
-    }
-
-    /**
      * Build GraphQL Schema based on schema.graphql file and type config decorator
      */
     public static function build_schema($schemaFile, $extraTypes = null, $validate = false)
     {
         $contents = file_get_contents($schemaFile);
+        // @todo add extraTypes to schema contents if needed?
         $typeConfigDecorator = function ($typeConfig, $typeDefinitionNode) {
             return self::type_config_decorator($typeConfig, $typeDefinitionNode);
         };

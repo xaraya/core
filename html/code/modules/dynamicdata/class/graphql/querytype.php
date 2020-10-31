@@ -15,12 +15,64 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class xarGraphQLQueryType extends ObjectType
 {
+    public static $query_mapper = [
+        'hello'      => 'dummytype',
+        'echo'       => 'dummytype',
+        'schema'     => 'dummytype',
+        'whoami'     => 'dummytype',
+        'samples'    => 'sampletype',
+        'sample'     => 'sampletype',
+        'objects'    => 'objecttype',
+        'object'     => 'objecttype',
+        'properties' => 'propertytype',
+        'property'   => 'propertytype',
+        //'user'       => 'usertype',  // disable querying user directly
+    ];
+    //public static $extra_types = [];
+
     public function __construct()
     {
         $config = [
             'name' => 'Query',
-            'fields' => xarGraphQL::get_query_fields(),
+            'fields' => static::get_query_fields(),
         ];
         parent::__construct($config);
     }
+
+    /**
+     * Get all root query fields for the GraphQL Query type from the query_mapper above
+     */
+    public static function get_query_fields()
+    {
+        $fields = array();
+        // @todo switch to get_list_query and get_item_query format
+        foreach (static::$query_mapper as $name => $type) {
+            $add_fields = static::add_query_field($name, $type);
+            if (!empty($add_fields)) {
+                $fields = array_merge($fields, $add_fields);
+            }
+        }
+        // @todo get query fields from BuildType for extra dynamicdata object types
+        if (!empty(xarGraphQL::$extra_types)) {
+            $clazz = xarGraphQL::get_type_class("buildtype");
+            foreach (xarGraphQL::$extra_types as $name) {
+                $add_fields = $clazz::get_query_fields($name);
+                if (!empty($add_fields)) {
+                    $fields = array_merge($fields, $add_fields);
+                }
+            }
+        }
+        return $fields;
+    }
+
+    /**
+     * Add a root query field as defined in the GraphQL Object Type class (list, item, other...)
+     */
+    public static function add_query_field($name, $type)
+    {
+        $clazz = xarGraphQL::get_type_class($type);
+        // @todo switch to get_list_query and get_item_query format
+        return $clazz::_xar_get_query_field($name);
+    }
+
 }
