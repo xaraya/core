@@ -83,7 +83,7 @@ function xarMain()
 
     // Default Page Title
     $SiteSlogan = xarModVars::get('themes', 'SiteSlogan');
-    xarTpl::setPageTitle(xarVarPrepForDisplay($SiteSlogan));
+    xarTpl::setPageTitle(xarVar::prepForDisplay($SiteSlogan));
     xarLog::message('The page title is set: ' . xarTpl::getPageTitle(), xarLog::LEVEL_INFO);
     
     // Check the Installation
@@ -94,7 +94,7 @@ function xarMain()
     // Theme Override
     xarVar::fetch('theme','str:1:',$themeName,'',xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
     if (!empty($themeName)) {
-        $themeName = xarVarPrepForOS($themeName);
+        $themeName = xarVar::prepForOS($themeName);
         if (xarTheme::isAvailable($themeName)){
             xarTpl::setThemeName($themeName);
             xarVar::setCached('Themes.name','CurrentTheme', $themeName);
@@ -103,7 +103,7 @@ function xarMain()
     } elseif (xarUser::isLoggedIn() && $request->getType() == 'admin') {
         $themeName = xarModVars::get('themes', 'admin_theme');
         if (!empty($themeName) && xarTheme::isAvailable($themeName)) {
-            $themeName = xarVarPrepForOS($themeName);
+            $themeName = xarVar::prepForOS($themeName);
             xarTpl::setThemeName(strtolower($themeName));
             xarVar::setCached('Themes.name','CurrentTheme', $themeName);
         }            
@@ -118,9 +118,9 @@ function xarMain()
         // check we have a valid theme 
         if (!empty($themeName) && xarTheme::isAvailable($themeName) && 
             !empty($user_themes) && in_array($themeName, $user_themes)) {
-            $themeName = xarVarPrepForOS($themeName);
+            $themeName = xarVar::prepForOS($themeName);
             xarTpl::setThemeName(strtolower($themeName));
-            xarVarSetCached('Themes.name','CurrentTheme', $themeName);
+            xarVar::setCached('Themes.name','CurrentTheme', $themeName);
         }
     }    
     xarLog::message('The theme is set: ' . xarTpl::getThemeName(), xarLog::LEVEL_INFO);
