@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-<form method="post" action="#xarModURL('themes', 'admin', 'view')#">
+<form method="post" action="#xarController::URL('themes', 'admin', 'view')#">
     <table class="xar-table xar-items">
         <thead>
             <tr>
@@ -31,7 +31,7 @@
                         <td>#$theme['version']#</td>
                         <td>#$classes[$theme['class']]['name']#</td>
                         <td>#$states[$theme['state']]['name']#</td>
-                        <xar:if condition="$theme['class'] eq 2 and $theme['state'] eq XARTHEME_STATE_ACTIVE">
+                        <xar:if condition="$theme['class'] eq 2 and $theme['state'] eq xarTheme::STATE_ACTIVE">
                             <xar:set name="themename">strtolower($theme['name'])</xar:set>
                             <td>
                                 <xar:if condition="$themename eq $user_theme">
@@ -69,7 +69,7 @@
                                     <a href="#$theme['deactivate_url']#" title="#$deactivatetitle#">#$deactivatelabel#</a>
                                 <xar:elseif condition="!empty($theme['upgrade_url'])"/>
                                     <a href="#$theme['upgrade_url']#" title="#$upgradetitle#">#$upgradelabel#</a>
-                                <xar:elseif condition="$theme['state'] eq XARTHEME_STATE_ACTIVE"/>
+                                <xar:elseif condition="$theme['state'] eq xarTheme::STATE_ACTIVE"/>
                                     #$nonelabel#
                                 <xar:elseif condition="$theme['class'] eq 4"/>
                                     #$nonelabel#
@@ -78,7 +78,7 @@
                                 </xar:if>&#160;
                                 <xar:if condition="!empty($theme['remove_url'])">
                                     <a href="#$theme['remove_url']#" class="xar-icon" title="#$removetitle#">#$removelabel#</a> 
-                                <xar:elseif condition="$theme['state'] eq XARTHEME_STATE_ACTIVE"/>
+                                <xar:elseif condition="$theme['state'] eq xarTheme::STATE_ACTIVE"/>
                                     #$nonelabel#
                                 <xar:else/>
                                     #$nonelabel#
@@ -93,7 +93,7 @@
                                     <a href="#$theme['deactivate_url']#" class="xar-icon" title="#$deactivatetitle#"><img src="#$deactivateicon#" class="xar-icon" alt="#$deactivatelabel#"/></a>
                                 <xar:elseif condition="!empty($theme['upgrade_url'])"/>
                                     <a href="#$theme['upgrade_url']#" class="xar-icon" title="#$upgradetitle#"><img src="#$upgradeicon#" class="xar-icon" alt="#$upgradelabel#"/></a>
-                                <xar:elseif condition="$theme['state'] eq XARTHEME_STATE_ACTIVE"/>
+                                <xar:elseif condition="$theme['state'] eq xarTheme::STATE_ACTIVE"/>
                                     <img src="#$deactivateicon#" class="xar-icon-disabled" alt="#$deactivatelabel#" title="#$deactivatetitle#"/>
                                 <xar:elseif condition="$theme['class'] eq 4"/>
                                     <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
@@ -102,7 +102,7 @@
                                 </xar:if>&#160;
                                 <xar:if condition="!empty($theme['remove_url'])">
                                     <a href="#$theme['remove_url']#" class="xar-icon" title="#$removetitle#"><img src="#$removeicon#" class="xar-icon" alt="#$removelabel#"/></a> 
-                                <xar:elseif condition="$theme['state'] eq XARTHEME_STATE_ACTIVE"/>
+                                <xar:elseif condition="$theme['state'] eq xarTheme::STATE_ACTIVE"/>
                                     <img src="#$removeicon#" class="xar-icon-disabled" alt="#$removelabel#" title="#$removetitle#"/>
                                 <xar:else/>
                                     <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>

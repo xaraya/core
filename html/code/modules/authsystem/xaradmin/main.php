@@ -25,7 +25,7 @@
 function authsystem_admin_main()
 {
     // Security
-    if (!xarSecurityCheck('EditAuthsystem')) return;
+    if (!xarSecurity::check('EditAuthsystem')) return;
    
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
@@ -34,7 +34,7 @@ function authsystem_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('authsystem','admin','overview');
     } else {
-        xarController::redirect(xarModURL('authsystem', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('authsystem', 'admin', 'modifyconfig'));
         return true;
     }
 }

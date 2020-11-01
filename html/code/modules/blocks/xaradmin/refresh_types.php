@@ -19,7 +19,7 @@
  */
 function blocks_admin_refresh_types(Array $args=array())
 {
-    if (!xarSecurityCheck('AdminBlocks')) return;
+    if (!xarSecurity::check('AdminBlocks')) return;
 
     $data = array();
     

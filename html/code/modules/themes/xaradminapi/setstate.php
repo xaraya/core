@@ -30,7 +30,7 @@ function themes_adminapi_setstate(Array $args=array())
     if (!isset($state)) throw new EmptyParameterException('state');
 
     // Security Check
-    if(!xarSecurityCheck('AdminThemes')) return;
+    if(!xarSecurity::check('AdminThemes')) return;
 
     // Clear cache to make sure we get newest values
     if (xarCoreCache::isCached('Theme.Infos', $regid)) {
@@ -48,31 +48,31 @@ function themes_adminapi_setstate(Array $args=array())
     $oldState = $themeInfo['state'];
 
     switch ($state) {
-    case XARTHEME_STATE_UNINITIALISED:
+    case xarTheme::STATE_UNINITIALISED:
         // Are we always good here?
-        if ($oldState == XARTHEME_STATE_MISSING_FROM_UNINITIALISED) break;
-        if ($oldState != XARTHEME_STATE_INACTIVE)         break;
+        if ($oldState == xarTheme::STATE_MISSING_FROM_UNINITIALISED) break;
+        if ($oldState != xarTheme::STATE_INACTIVE)         break;
         break;
-    case XARTHEME_STATE_INACTIVE:
-        if (($oldState != XARTHEME_STATE_UNINITIALISED) &&
-            ($oldState != XARTHEME_STATE_ACTIVE) &&
-            ($oldState != XARTHEME_STATE_MISSING_FROM_INACTIVE) &&
-            ($oldState != XARTHEME_STATE_UPGRADED)) {
+    case xarTheme::STATE_INACTIVE:
+        if (($oldState != xarTheme::STATE_UNINITIALISED) &&
+            ($oldState != xarTheme::STATE_ACTIVE) &&
+            ($oldState != xarTheme::STATE_MISSING_FROM_INACTIVE) &&
+            ($oldState != xarTheme::STATE_UPGRADED)) {
             xarSession::setVar('errormsg', xarML('Invalid theme state transition'));
             return false;
         }
         break;
-    case XARTHEME_STATE_ACTIVE:
-        if (($oldState != XARTHEME_STATE_INACTIVE) &&
-            ($oldState != XARTHEME_STATE_MISSING_FROM_ACTIVE)) {
+    case xarTheme::STATE_ACTIVE:
+        if (($oldState != xarTheme::STATE_INACTIVE) &&
+            ($oldState != xarTheme::STATE_MISSING_FROM_ACTIVE)) {
             xarSession::setVar('errormsg', xarML('Invalid theme state transition'));
             return false;
         }
         break;
-    case XARTHEME_STATE_UPGRADED:
-        if (($oldState != XARTHEME_STATE_INACTIVE) &&
-            ($oldState != XARTHEME_STATE_ACTIVE) &&
-            $oldState != XARTHEME_STATE_MISSING_FROM_UPGRADED) {
+    case xarTheme::STATE_UPGRADED:
+        if (($oldState != xarTheme::STATE_INACTIVE) &&
+            ($oldState != xarTheme::STATE_ACTIVE) &&
+            $oldState != xarTheme::STATE_MISSING_FROM_UPGRADED) {
             xarSession::setVar('errormsg', xarML('Invalid theme state transition'));
             return false;
         }

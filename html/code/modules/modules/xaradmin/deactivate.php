@@ -24,26 +24,26 @@
 function modules_admin_deactivate ()
 {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
     // Security and sanity checks
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
-    if (!xarVarFetch('return_url', 'pre:trim:str:1:',
-        $return_url, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
+        $return_url, '', xarVar::NOT_REQUIRED)) return;
         
     //Checking if the user has already passed thru the GUI:
-    xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
+    xarVar::fetch('command', 'checkbox', $command, false, xarVar::NOT_REQUIRED);
 
     // set the target location (anchor) to go to within the page
     $minfo=xarMod::getInfo($id);
     $target=$minfo['name'];
     if (empty($return_url))
-        $return_url = xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
+        $return_url = xarController::URL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
 
     sys::import('modules.modules.class.installer');
     $installer = Installer::getInstance();    
@@ -58,7 +58,7 @@ function modules_admin_deactivate ()
             $data['id'] = $id;
             //They come in 2 arrays: active, initialised
             //Both have $name => $modInfo under them foreach
-            $data['authid']       = xarSecGenAuthKey();
+            $data['authid']       = xarSec::genAuthKey();
             $data['dependencies'] = $dependents;
             return $data;
         } else {
@@ -72,7 +72,7 @@ function modules_admin_deactivate ()
     if (!$installer->checkformissing()) { return; }
 
     //Bail if we've lost our module
-    if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_ACTIVE) {
+    if ($minfo['state'] != xarMod::STATE_MISSING_FROM_ACTIVE) {
         //Deactivate with dependents, first dependents
         //then the module itself
         if (!$installer->deactivatewithdependents($id)) {

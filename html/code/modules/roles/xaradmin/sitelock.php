@@ -20,9 +20,9 @@
 function roles_admin_sitelock(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('ManageRoles')) return;
+    if(!xarSecurity::check('ManageRoles')) return;
 
-    if (!xarVarFetch('cmd', 'isset', $cmd, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVar::fetch('cmd', 'isset', $cmd, NULL, xarVar::DONT_SET)) return;
 
     if(!isset($cmd)) {
     // Get parameters from the db
@@ -33,21 +33,21 @@ function roles_admin_sitelock(Array $args=array())
         $notifymsg = $lockvars['notifymsg'];
     } else {
     // Get parameters from input
-        if (!xarVarFetch('serialroles', 'str', $serialroles, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('serialroles', 'str', $serialroles, NULL, xarVar::NOT_REQUIRED)) return;
         if (!isset($serialroles)) {
             return xarTpl::module('roles', 'user', 'errors');
         }
         $roles = unserialize($serialroles);
         $rolesCount = count($roles);
-        if (!xarVarFetch('lockedoutmsg', 'str',   $lockedoutmsg, NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-        if (!xarVarFetch('notifymsg',    'str',   $notifymsg,    NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-        if (!xarVarFetch('toggle',       'str',   $toggle,       NULL, XARVAR_NOT_REQUIRED,XARVAR_PREP_FOR_DISPLAY)) return;
-        if (!xarVarFetch('notify',       'isset', $notify,       NULL, XARVAR_DONT_SET)) return;
+        if (!xarVar::fetch('lockedoutmsg', 'str',   $lockedoutmsg, NULL, xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;
+        if (!xarVar::fetch('notifymsg',    'str',   $notifymsg,    NULL, xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;
+        if (!xarVar::fetch('toggle',       'str',   $toggle,       NULL, xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;
+        if (!xarVar::fetch('notify',       'isset', $notify,       NULL, xarVar::DONT_SET)) return;
         if(!isset($notify)) $notify = array();
         for($i=0; $i<$rolesCount; $i++) $roles[$i]['notify'] = in_array($roles[$i]['id'],$notify);
 
         if ($cmd == 'delete') {
-            if (!xarVarFetch('id', 'int', $id, NULL, XARVAR_DONT_SET)) return;
+            if (!xarVar::fetch('id', 'int', $id, NULL, xarVar::DONT_SET)) return;
             if (isset($id)) {
                 for($i=0; $i < $rolesCount; $i++) {
                     if ($roles[$i]['id'] == $id) {
@@ -63,7 +63,7 @@ function roles_admin_sitelock(Array $args=array())
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
             }
         } elseif ($cmd == 'add') {
-            if (!xarVarFetch('newname', 'str', $newname, NULL, XARVAR_DONT_SET)) return;
+            if (!xarVar::fetch('newname', 'str', $newname, NULL, xarVar::DONT_SET)) return;
             if (isset($newname)) {
                 $r = xaruFindRole($newname);
                 if (!$r) $r = xarFindRole($newname);
@@ -90,7 +90,7 @@ function roles_admin_sitelock(Array $args=array())
                               'locked'    => $toggle,
                               'notifymsg' => $notifymsg);
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
-            xarController::redirect(xarModURL('roles', 'admin', 'sitelock'));
+            xarController::redirect(xarController::URL('roles', 'admin', 'sitelock'));
         } elseif ($cmd == 'toggle') {
 
             // turn the site on or off
@@ -155,7 +155,7 @@ function roles_admin_sitelock(Array $args=array())
 
 
     $data['roles']        = $roles;
-    $data['serialroles']  = xarVarPrepForDisplay(serialize($roles));
+    $data['serialroles']  = xarVar::prepForDisplay(serialize($roles));
     $data['lockedoutmsg'] = $lockedoutmsg;
     $data['notifymsg']    = $notifymsg;
     $data['toggle']       = $toggle;

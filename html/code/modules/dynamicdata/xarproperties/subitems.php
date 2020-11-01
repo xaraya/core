@@ -90,8 +90,8 @@ class SubItemsProperty extends DataProperty
         $newprefix = empty($oldprefix) ? $this->fieldprefix : $oldprefix . "_" . $this->fieldprefix;
         $this->prefixarray[] = $newprefix;
         // Get the list of item ids, both current and previous
-        if(!xarVarFetch('subitem_ids_' . $newprefix,          'str',   $itemids,          '', XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('subitem_previous_ids_' . $newprefix, 'str',   $previous_itemids, '', XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('subitem_ids_' . $newprefix,          'str',   $itemids,          '', xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('subitem_previous_ids_' . $newprefix, 'str',   $previous_itemids, '', xarVar::DONT_SET)) {return;}
         $itemids = ('' == $itemids) ? array() : explode(',',$itemids);
         $previous_itemids = ('' == $previous_itemids) ? array() : explode(',',$previous_itemids);
 
@@ -192,8 +192,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['localmodule'])) {
             $this->localmodule = $data['localmodule'];
         } else {
-            $info = xarController::$request->getInfo();
-            $this->localmodule = $info[0];
+            $this->localmodule = xarMod::getName();
             $data['localmodule'] = $this->localmodule;
         }
 
@@ -296,8 +295,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['localmodule'])) {
             $this->localmodule = $data['localmodule'];
         } else {
-            $info = xarController::$request->getInfo();
-            $this->localmodule = $info[0];
+            $this->localmodule = xarMod::getName();
             $data['localmodule'] = $this->localmodule;
         }
         
@@ -530,4 +528,3 @@ class SubItemsProperty extends DataProperty
         return true;
     }
 }
-?>

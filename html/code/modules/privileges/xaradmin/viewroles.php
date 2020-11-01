@@ -17,15 +17,15 @@
 function privileges_admin_viewroles()
 {
     // Security
-    if(!xarSecurityCheck('EditRoles')) return;
+    if(!xarSecurity::check('EditRoles')) return;
 
     $data = array();
 
-    if (!xarVarFetch('id',  'isset', $id,          NULL,       XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('show', 'isset', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('id',  'isset', $id,          NULL,       xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('show', 'isset', $data['show'], 'assigned', xarVar::NOT_REQUIRED)) {return;}
 
     // Clear Session Vars
-    xarSessionDelVar('privileges_statusmsg');
+    xarSession::delVar('privileges_statusmsg');
 
     //Call the Privileges class and get the privilege
     sys::import('modules.privileges.class.privileges');
@@ -51,7 +51,7 @@ function privileges_admin_viewroles()
     $data['pname'] = $priv->getName();
     $data['id'] = $id;
     $data['roles'] = $curroles;
-    $data['removeurl'] = xarModURL('privileges',
+    $data['removeurl'] = xarController::URL('privileges',
                              'admin',
                              'removerole',
                              array('id'=>$id));

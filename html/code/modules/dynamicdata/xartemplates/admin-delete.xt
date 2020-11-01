@@ -4,9 +4,9 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object:objectid)">
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
         <xar:else/>
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
         </xar:if>
         <h2>
             <xar:if condition="!empty($objectid) and $objectid eq 1">
@@ -33,15 +33,19 @@
         <h3 class="xar-align-center">Confirm Deleting This Item?</h3>
         <xar:data-display object="$object"/>
         <div style="clear:both">&#160;</div>
-        <form method="post" action="#xarModURL('dynamicdata','admin','delete')#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','delete')#">
             <div class="xar-row">
                 <div class="xar-col">
                 </div>
                 <div class="xar-col">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
-                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
-                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                    <xar:if condition="!empty($object:join)">
+                        <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                    </xar:if>
+                    <xar:if condition="!empty($object:table)">
+                        <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                    </xar:if>
                     <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
                     <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
                     <xar:if condition="!empty($return_url)">

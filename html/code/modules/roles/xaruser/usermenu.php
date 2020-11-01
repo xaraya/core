@@ -17,11 +17,11 @@
  */
 function roles_user_usermenu(Array $args=array())
 {
-    if (!xarSecurityCheck('ViewRoles')) return;
+    if (!xarSecurity::check('ViewRoles')) return;
     extract($args);
 
-    if (!xarVarFetch('moduleload', 'pre:trim:str:1', $moduleload, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('returnurl', 'pre:trim:str:1', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('moduleload', 'pre:trim:str:1', $moduleload, '', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('returnurl', 'pre:trim:str:1', $returnurl, '', xarVar::NOT_REQUIRED)) return;
     //let's make sure other modules that refer here get to a default and existing login or logout form
     $defaultauthdata      = xarMod::apiFunc('roles','user','getdefaultauthdata');
     $defaultauthmodname   = $defaultauthdata['defaultauthmodname'];
@@ -29,7 +29,7 @@ function roles_user_usermenu(Array $args=array())
     $defaultlogoutmodname = $defaultauthdata['defaultlogoutmodname'];
 
     if (!xarUser::isLoggedIn()){
-        xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform'));
+        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform'));
     }
 
     $id = xarUser::getVar('id');
@@ -88,7 +88,7 @@ function roles_user_usermenu(Array $args=array())
             }
 
             if ($isvalid) {
-                if (!xarSecConfirmAuthKey('roles')) {
+                if (!xarSec::confirmAuthKey('roles')) {
                     return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }
 
@@ -150,7 +150,7 @@ function roles_user_usermenu(Array $args=array())
                     }
                 }
                 if (empty($returnurl))
-                    $returnurl = xarModURL('roles', 'user', 'account', array('tab' => 'basic'));
+                    $returnurl = xarController::URL('roles', 'user', 'account', array('tab' => 'basic'));
                 return xarController::redirect($returnurl);
             } else {
                 // invalid, we need to show the form data again
@@ -163,7 +163,7 @@ function roles_user_usermenu(Array $args=array())
                     if (xarUser::isLoggedIn() && xarUser::getVar('id')==$id) { //they should be but ..
                         $userlastlogin = xarSession::getVar('roles_thislastlogin');
                         $usercurrentlogin = xarModUserVars::get('roles','userlastlogin',$id);
-                    }elseif (xarSecurityCheck('AdminRoles',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
+                    }elseif (xarSecurity::check('AdminRoles',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
                         $usercurrentlogin = '';
                         $userlastlogin = xarModUserVars::get('roles','userlastlogin',$id);
                     }else{
@@ -174,7 +174,7 @@ function roles_user_usermenu(Array $args=array())
                     $userlastlogin='';
                     $usercurrentlogin='';
                 }
-                $authid = xarSecGenAuthKey('roles');
+                $authid = xarSec::genAuthKey('roles');
 
                 $upasswordupdate = xarModUserVars::get('roles','passwordupdate');
                 $usertimezonedata = xarModUserVars::get('roles','usertimezone');
@@ -183,7 +183,7 @@ function roles_user_usermenu(Array $args=array())
                 $item['module'] = 'roles';
                 $item['itemtype'] = xarRoles::ROLES_USERTYPE;
 
-                $hooks = xarModCallHooks('item','modify',$id,$item);
+                $hooks = xarModHooks::call('item','modify',$id,$item);
                 if (isset($hooks['dynamicdata'])) {
                     unset($hooks['dynamicdata']);
                 }
@@ -201,20 +201,20 @@ function roles_user_usermenu(Array $args=array())
 
                 $data['formdata'] = $formdata;
                 $data['object'] = $object;
-                $data['formaction'] = xarModURL('roles', 'user', 'usermenu');
+                $data['formaction'] = xarController::URL('roles', 'user', 'usermenu');
                 $data['tplmodule'] = 'roles';
                 $data['template'] = 'account';
                 $menutabs = array();
                 $menutabs[] = array(
                     'label' => xarML('Display Profile'),
                     'title' => xarML('View your profile as it is seen by other site users'),
-                    'url' => xarModURL('roles', 'user', 'account', array('tab' => 'profile')),
+                    'url' => xarController::URL('roles', 'user', 'account', array('tab' => 'profile')),
                     'active' => false
                 );
 
                 $menumods = array();
                 // for now, roles must be hooked to roles in order for usermenus to be available
-                if (xarModIsHooked('roles', 'roles')) {
+                if (xarModHooks::isHooked('roles', 'roles')) {
                     // get a list of modules with user menu enabled
                     $allmods = xarMod::apiFunc('modules', 'admin', 'getlist');
                     foreach ($allmods as $modinfo) {
@@ -225,7 +225,7 @@ function roles_user_usermenu(Array $args=array())
                     $menutabs[] = array(
                         'label' => xarML('Edit Account'),
                         'title' => xarML('Edit your basic account information'),
-                        'url' => xarModURL('roles', 'user', 'account', array('tab' => 'basic')),
+                        'url' => xarController::URL('roles', 'user', 'account', array('tab' => 'basic')),
                         'active' => true
                     );
                 }
@@ -237,7 +237,7 @@ function roles_user_usermenu(Array $args=array())
                             $menutabs[] = array(
                                 'label' => $user_settings->label,
                                 'title' => $user_settings->label,
-                                'url' => xarModURL('roles', 'user', 'account', array('moduleload' => $modname)),
+                                'url' => xarController::URL('roles', 'user', 'account', array('moduleload' => $modname)),
                                 'active' => false
                             );
                         }
@@ -246,11 +246,11 @@ function roles_user_usermenu(Array $args=array())
                 $menutabs[] = array(
                     'label' => xarML('Logout'),
                     'title' => xarML('Logout from the site'),
-                    'url' => xarModURL($defaultlogoutmodname, 'user', 'logout'),
+                    'url' => xarController::URL($defaultlogoutmodname, 'user', 'logout'),
                     'active' => false
                 );
                 $data['menutabs'] = $menutabs;
-                $data['authid'] = xarSecGenAuthKey('roles');
+                $data['authid'] = xarSec::genAuthKey('roles');
                 $data['id']          = xarUser::getVar('id');
                 $data['name']         = xarUser::getVar('name');
                 $data['logoutmodule'] = $defaultlogoutmodname;
@@ -260,7 +260,7 @@ function roles_user_usermenu(Array $args=array())
                 $data['tab'] = 'basic';
                 if (empty($message)) $data['message'] = '';
                 if (empty($returnurl))
-                    $returnurl = xarModURL('roles', 'user', 'account', array('tab' => 'basic'));
+                    $returnurl = xarController::URL('roles', 'user', 'account', array('tab' => 'basic'));
                 $data['returnurl'] = $returnurl;
                 $data['submitlabel'] = xarML('Update Settings');
                 return xarTpl::module('roles','user','account', $data);
@@ -287,13 +287,13 @@ function roles_user_usermenu(Array $args=array())
                 try {
                     xarMod::apiFunc($moduleload, 'user', 'usermenu', array('phase' => 'updateitem', 'object' => $object));
                 } catch (Exception $e) {
-                    if (!xarSecConfirmAuthKey($moduleload)) {
+                    if (!xarSec::confirmAuthKey($moduleload)) {
                         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                     }
                     $object->updateItem();
                 }
                 if (empty($returnurl))
-                    $returnurl = xarModURL('roles', 'user', 'account', array('moduleload' => $moduleload));
+                    $returnurl = xarController::URL('roles', 'user', 'account', array('moduleload' => $moduleload));
                 return xarController::redirect($returnurl);
             }
 
@@ -302,7 +302,7 @@ function roles_user_usermenu(Array $args=array())
             $menutabs[] = array(
                 'label' => xarML('Display Profile'),
                 'title' => xarML('View your profile as it is seen by other site users'),
-                'url' => xarModURL('roles', 'user', 'account', array('tab' => 'profile')),
+                'url' => xarController::URL('roles', 'user', 'account', array('tab' => 'profile')),
                 'active' => false
             );
 
@@ -318,7 +318,7 @@ function roles_user_usermenu(Array $args=array())
                 $menutabs[] = array(
                     'label' => xarML('Edit Account'),
                     'title' => xarML('Edit your basic account information'),
-                    'url' => xarModURL('roles', 'user', 'account', array('tab' => 'basic')),
+                    'url' => xarController::URL('roles', 'user', 'account', array('tab' => 'basic')),
                     'active' => false
                 );
             }
@@ -331,7 +331,7 @@ function roles_user_usermenu(Array $args=array())
                         $menutabs[] = array(
                             'label' => $user_settings->label,
                             'title' => $user_settings->label,
-                            'url' => xarModURL('roles', 'user', 'account', array('moduleload' => $modname)),
+                            'url' => xarController::URL('roles', 'user', 'account', array('moduleload' => $modname)),
                             'active' => $isactive
                         );
                     }
@@ -340,7 +340,7 @@ function roles_user_usermenu(Array $args=array())
             $menutabs[] = array(
                 'label' => xarML('Logout'),
                 'title' => xarML('Logout from the site'),
-                'url' => xarModURL($defaultlogoutmodname, 'user', 'logout'),
+                'url' => xarController::URL($defaultlogoutmodname, 'user', 'logout'),
                 'active' => false
             );
 
@@ -365,12 +365,12 @@ function roles_user_usermenu(Array $args=array())
                 $data['object']->layout = '';
             }
             if (empty($data['authid'])) {
-                $data['authid'] = xarSecGenAuthKey($moduleload);
+                $data['authid'] = xarSec::genAuthKey($moduleload);
             }
 
             // and set some sensible defaults for common stuff
             if (empty($data['formaction'])) {
-                $data['formaction'] = xarModURL('roles', 'user', 'usermenu');
+                $data['formaction'] = xarController::URL('roles', 'user', 'usermenu');
             }
             if (empty($data['submitlabel'])) {
                 $data['submitlabel'] = xarML('Update Settings');

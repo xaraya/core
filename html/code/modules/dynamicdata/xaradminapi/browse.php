@@ -23,7 +23,7 @@ function dynamicdata_adminapi_browse(Array $args=array())
     if (empty($args['filetype'])) throw new EmptyParameterException('filetype');
 
     // Security check - we require OVERVIEW rights here for now...
-    if(!xarSecurityCheck('ViewDynamicData')) return;
+    if(!xarSecurity::check('ViewDynamicData')) return;
 
     // Get arguments from argument array
     extract($args);

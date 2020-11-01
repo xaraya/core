@@ -28,7 +28,7 @@ function categories_adminapi_unlink($args)
     extract($args);
 
     if (!empty($confirm)) {
-        if (!xarSecurityCheck('AdminCategories')) return;
+        if (!xarSecurity::check('AdminCategories')) return;
     } else {
         // Argument check
         if ((empty($modid)) || !is_numeric($modid) ||
@@ -66,7 +66,7 @@ function categories_adminapi_unlink($args)
     // Note : yes, edit is enough here (cfr. updatehook)
         $cids = array_keys($childiids);
         foreach ($cids as $cid) {
-            if(!xarSecurityCheck('EditCategoryLink',1,'Link',"$modid:$modtype:$iid:$cid")) return;
+            if(!xarSecurity::check('EditCategoryLink',1,'Link',"$modid:$modtype:$iid:$cid")) return;
         }
     }
 

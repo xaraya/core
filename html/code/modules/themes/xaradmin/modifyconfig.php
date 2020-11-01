@@ -23,46 +23,46 @@
 function themes_admin_modifyconfig()
 {
     // Security
-    if (!xarSecurityCheck('AdminThemes')) return;
+    if (!xarSecurity::check('AdminThemes')) return;
 
-    if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('sitename', 'str', $data['sitename'], xarModVars::get('themes', 'SiteName'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('separator', 'str:1:', $data['separator'], xarModVars::get('themes', 'SiteTitleSeparator'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('pagetitle', 'str:1:', $data['pagetitle'], 'default', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('showphpcbit', 'checkbox', $data['showphpcbit'], (bool)xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('showtemplates', 'checkbox', $data['showtemplates'], (bool)xarModVars::get('themes', 'ShowTemplates'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('cachetemplates', 'checkbox', $data['cachetemplates'], xarConfigVars::get(null, 'Site.BL.CacheTemplates'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('memcachetemplates', 'checkbox', $data['memcachetemplates'], xarConfigVars::get(null, 'Site.BL.MemCacheTemplates'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('variable_dump', 'checkbox', $data['variable_dump'], (bool)xarModVars::get('themes', 'variable_dump'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('slogan', 'str', $data['slogan'], xarModVars::get('themes', 'SiteSlogan'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('footer', 'str', $data['footer'], xarModVars::get('themes', 'SiteFooter'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('copyright', 'str', $data['copyright'], xarModVars::get('themes', 'SiteCopyRight'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('AtomTag', 'str:1:', $data['atomtag'], (bool)xarModVars::get('themes', 'AtomTag'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('compresswhitespace', 'int', $data['compresswhitespace'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('doctype', 'str:1', $data['doctype'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('debugmode', 'int', $data['debugmode'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('exceptionsdisplay', 'int', $data['exceptionsdisplay'], 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase',        'str:1:100', $phase,       'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+    if (!xarVar::fetch('sitename', 'str', $data['sitename'], xarModVars::get('themes', 'SiteName'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('separator', 'str:1:', $data['separator'], xarModVars::get('themes', 'SiteTitleSeparator'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('pagetitle', 'str:1:', $data['pagetitle'], 'default', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('showphpcbit', 'checkbox', $data['showphpcbit'], (bool)xarModVars::get('themes', 'ShowPHPCommentBlockInTemplates'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('showtemplates', 'checkbox', $data['showtemplates'], (bool)xarModVars::get('themes', 'ShowTemplates'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('cachetemplates', 'checkbox', $data['cachetemplates'], xarConfigVars::get(null, 'Site.BL.CacheTemplates'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('memcachetemplates', 'checkbox', $data['memcachetemplates'], xarConfigVars::get(null, 'Site.BL.MemCacheTemplates'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('variable_dump', 'checkbox', $data['variable_dump'], (bool)xarModVars::get('themes', 'variable_dump'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('slogan', 'str', $data['slogan'], xarModVars::get('themes', 'SiteSlogan'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('footer', 'str', $data['footer'], xarModVars::get('themes', 'SiteFooter'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('copyright', 'str', $data['copyright'], xarModVars::get('themes', 'SiteCopyRight'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('AtomTag', 'str:1:', $data['atomtag'], (bool)xarModVars::get('themes', 'AtomTag'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('compresswhitespace', 'int', $data['compresswhitespace'], 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('doctype', 'str:1', $data['doctype'], 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('debugmode', 'int', $data['debugmode'], 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('exceptionsdisplay', 'int', $data['exceptionsdisplay'], 0, xarVar::NOT_REQUIRED)) return;
 
-    if (!xarVarFetch('themedir','str:1:',$data['defaultThemeDir'],'themes',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], (bool)xarModVars::get('themes', 'adminpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('userpagemenu', 'checkbox', $data['userpagemenu'], (bool)xarModVars::get('themes', 'userpagemenu'), XARVAR_NOT_REQUIRED)) {return;}
-//    if (!xarVarFetch('usedashboard', 'checkbox', $data['usedashboard'], (bool)xarModVars::get('themes', 'usedashboard'), XARVAR_NOT_REQUIRED)) {return;}
-//    if (!xarVarFetch('dashtemplate', 'str:1:', $data['dashtemplate'], trim(xarModVars::get('themes', 'dashtemplate')), XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('themedir','str:1:',$data['defaultThemeDir'],'themes',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('adminpagemenu', 'checkbox', $data['adminpagemenu'], (bool)xarModVars::get('themes', 'adminpagemenu'), xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('userpagemenu', 'checkbox', $data['userpagemenu'], (bool)xarModVars::get('themes', 'userpagemenu'), xarVar::NOT_REQUIRED)) {return;}
+//    if (!xarVar::fetch('usedashboard', 'checkbox', $data['usedashboard'], (bool)xarModVars::get('themes', 'usedashboard'), xarVar::NOT_REQUIRED)) {return;}
+//    if (!xarVar::fetch('dashtemplate', 'str:1:', $data['dashtemplate'], trim(xarModVars::get('themes', 'dashtemplate')), xarVar::NOT_REQUIRED)) {return;}
 
-    if (!xarVarFetch('selsort','str:1:',$data['selsort'],'plain',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('selfilter','int',$data['selfilter'],XARMOD_STATE_ANY,XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('hidecore', 'checkbox', $data['hidecore'], false, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('selstyle','str:1:',$data['selstyle'],'plain',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('selsort','str:1:',$data['selsort'],'plain',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('selfilter','int',$data['selfilter'],xarMod::STATE_ANY,xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('hidecore', 'checkbox', $data['hidecore'], false, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('selstyle','str:1:',$data['selstyle'],'plain',xarVar::NOT_REQUIRED)) return;
     
     // experimental combine/compress css options
-    if (!xarVarFetch('combinecss', 'checkbox', $data['combinecss'], false, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('compresscss', 'checkbox', $data['compresscss'], false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('combinecss', 'checkbox', $data['combinecss'], false, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('compresscss', 'checkbox', $data['compresscss'], false, xarVar::NOT_REQUIRED)) return;
     // can't compress if not combined :)    
     if ($data['combinecss'] == false) $data['compresscss'] = false;
-    if (!xarVarFetch('allowajax', 'checkbox', $data['allowajax'], false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('allowajax', 'checkbox', $data['allowajax'], false, xarVar::NOT_REQUIRED)) return;
     
-    if (!xarVarFetch('enable_user_menu', 'checkbox',
-        $data['enable_user_menu'], xarModVars::get('themes', 'enable_user_menu'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('enable_user_menu', 'checkbox',
+        $data['enable_user_menu'], xarModVars::get('themes', 'enable_user_menu'), xarVar::NOT_REQUIRED)) return;
     
 
     // Dashboard
@@ -86,7 +86,7 @@ function themes_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             $isvalid = $data['module_settings']->checkInput();
@@ -151,7 +151,7 @@ function themes_admin_modifyconfig()
                 foreach ($files as $file) unlink($picker->initialization_basedirectory . "/" . $file['id']);
             }
             
-            xarController::redirect(xarModURL('themes', 'admin', 'modifyconfig'));
+            xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
             return true;
             break;
         case 'flush':

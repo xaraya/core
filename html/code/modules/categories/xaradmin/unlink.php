@@ -25,13 +25,13 @@
 function categories_admin_unlink()
 { 
     // Security Check
-    if(!xarSecurityCheck('AdminCategories')) return;
+    if(!xarSecurity::check('AdminCategories')) return;
 
-    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('confirm', 'str:1:', $confirm, '', XARVAR_NOT_REQUIRED)) return; 
+    if(!xarVar::fetch('modid',    'isset', $modid,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',   'isset', $itemid,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('catid',    'isset', $catid,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('confirm', 'str:1:', $confirm, '', xarVar::NOT_REQUIRED)) return; 
 
     // Check for confirmation.
     if (empty($confirm)) {
@@ -59,13 +59,13 @@ function categories_admin_unlink()
         }
         $data['confirmbutton'] = xarML('Confirm'); 
         // Generate a one-time authorisation code for this operation
-        $data['authid'] = xarSecGenAuthKey(); 
+        $data['authid'] = xarSec::genAuthKey(); 
         // Return the template variables defined in this function
         return $data;
     } 
 
-    if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    if (!xarSec::confirmAuthKey()) {
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // unlink API does not support deleting all category links for all modules
     if (!empty($modid)) {
@@ -79,7 +79,7 @@ function categories_admin_unlink()
         }
         // TODO: support deleting all links for a category too (cfr. checklinks)
     }
-    xarController::redirect(xarModURL('categories', 'admin', 'stats'));
+    xarController::redirect(xarController::URL('categories', 'admin', 'stats'));
     return true;
 }
 

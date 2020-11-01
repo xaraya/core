@@ -18,7 +18,7 @@
 </pre>
             </div>
         </xar:if>
-        <form method="post" action="#xarModURL('dynamicdata','admin','migrate')#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','migrate')#">
             <fieldset>
                 <legend>Mapping</legend>
                     <div class="xar-row">
@@ -173,7 +173,7 @@
             </fieldset>
             <fieldset class="xar-form-actions">
                 <input type="hidden" name="step" value="#$step#"/>
-                <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+                <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
                 <xar:var name="label">Back</xar:var>
                 <xar:if condition="$step gt 1">
                     <xar:button type="submit" label="$label" name="back"/>

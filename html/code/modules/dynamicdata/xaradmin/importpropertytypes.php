@@ -16,7 +16,7 @@
 function dynamicdata_admin_importpropertytypes (Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
     
     $args['flush'] = 'false';
     $success = xarMod::apiFunc('dynamicdata','admin','importpropertytypes', $args);

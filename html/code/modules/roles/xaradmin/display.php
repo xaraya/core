@@ -15,8 +15,8 @@
  */
 function roles_admin_display()
 {
-    if (!xarVarFetch('itemtype','id',$itemtype, 1, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemtype','id',$itemtype, 1, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
 
 
@@ -39,9 +39,9 @@ function roles_admin_display()
     $name = $role->getName();
 
     // Security
-    if (!xarSecurityCheck('EditRoles',1,'Roles',$name)) return;
+    if (!xarSecurity::check('EditRoles',1,'Roles',$name)) return;
     
-    $data['frozen'] = xarSecurityCheck('ViewRoles',0,'Roles',$name);
+    $data['frozen'] = xarSecurity::check('ViewRoles',0,'Roles',$name);
 
     $data['id'] = $id;
 
@@ -53,13 +53,13 @@ function roles_admin_display()
     $item['exclude_module'] = array('dynamicdata');
     $item['module'] = 'roles';
     $item['itemtype'] = $data['itemtype']; // handle groups differently someday ?
-    $item['returnurl'] = xarModURL('roles', 'user', 'display',
+    $item['returnurl'] = xarController::URL('roles', 'user', 'display',
                                    array('id' => $id));
     $hooks = array();
-    $hooks = xarModCallHooks('item', 'display', $id, $item);
+    $hooks = xarModHooks::call('item', 'display', $id, $item);
     $data['hooks'] = $hooks;
     $data['object'] = $role;
-    xarTpl::setPageTitle(xarVarPrepForDisplay($data['name']));
+    xarTpl::setPageTitle(xarVar::prepForDisplay($data['name']));
     return $data;
 }
 ?>

@@ -96,11 +96,11 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get current module
         if (empty($data['module'])) {
-            if (xarVarIsCached('Blocks.categories','module')) {
-               $modname = xarVarGetCached('Blocks.categories','module');
+            if (xarVar::isCached('Blocks.categories','module')) {
+               $modname = xarVar::getCached('Blocks.categories','module');
             }
             if (empty($modname)) {
-                $modname = xarModGetName();
+                $modname = xarMod::getName();
             }
         } else {
             $modname = $data['module'];
@@ -112,11 +112,11 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get current item type (if any)
         if (!isset($data['itemtype'])) {
-            if (xarVarIsCached('Blocks.categories','itemtype')) {
-                $data['itemtype'] = xarVarGetCached('Blocks.categories','itemtype');
+            if (xarVar::isCached('Blocks.categories','itemtype')) {
+                $data['itemtype'] = xarVar::getCached('Blocks.categories','itemtype');
             } else {
                 // try to get itemtype from input
-                xarVarFetch('itemtype', 'id', $data['itemtype'], NULL, XARVAR_DONT_SET);
+                xarVar::fetch('itemtype', 'id', $data['itemtype'], NULL, xarVar::DONT_SET);
             }
         }
         if (empty($data['itemtype'])) $data['itemtype'] = null;
@@ -124,11 +124,11 @@ class CategoryNavigationProperty extends SelectProperty
 
         // Get current item id (if any)
         if (!isset($data['itemid'])) {
-            if (xarVarIsCached('Blocks.categories','itemid')) {
-                $data['itemid'] = xarVarGetCached('Blocks.categories','itemid');
+            if (xarVar::isCached('Blocks.categories','itemid')) {
+                $data['itemid'] = xarVar::getCached('Blocks.categories','itemid');
             } else {
                 // try to get itemid from input
-                xarVarFetch('itemid', 'id', $data['itemid'], NULL, XARVAR_DONT_SET);
+                xarVar::fetch('itemid', 'id', $data['itemid'], NULL, xarVar::DONT_SET);
             }
         }
         if (empty($data['itemid'])) $data['itemid'] = null;
@@ -163,19 +163,19 @@ class CategoryNavigationProperty extends SelectProperty
         } elseif (empty($catcount)) {
             // A 'deep count' sums the totals at each node with the totals of all descendants.
             if ($data['showcatcount'] > 1 || empty($data['showempty'])) {
-                if (xarVarIsCached('Blocks.categories', 'deepcount')) {
-                    $deepcount = xarVarGetCached('Blocks.categories', 'deepcount');
+                if (xarVar::isCached('Blocks.categories', 'deepcount')) {
+                    $deepcount = xarVar::getCached('Blocks.categories', 'deepcount');
                 } else {
                     $deepcount = xarMod::apiFunc(
                         'categories', 'user', 'deepcount',
                         array('modid' => $modid, 'itemtype' => $data['itemtype'])
                     );
-                    xarVarSetCached('Blocks.categories','deepcount', $deepcount);
+                    xarVar::setCached('Blocks.categories','deepcount', $deepcount);
                 }
             }
 
-            if (xarVarIsCached('Blocks.categories', 'catcount')) {
-                $catcount = xarVarGetCached('Blocks.categories', 'catcount');
+            if (xarVar::isCached('Blocks.categories', 'catcount')) {
+                $catcount = xarVar::getCached('Blocks.categories', 'catcount');
             } else {
                 // Get number of items per category (for this module).
                 // If showcatcount == 2 then add in all descendants too.
@@ -191,61 +191,61 @@ class CategoryNavigationProperty extends SelectProperty
                     $catcount =& $deepcount;
                 }
 
-                xarVarSetCached('Blocks.categories', 'catcount', $catcount);
+                xarVar::setCached('Blocks.categories', 'catcount', $catcount);
             }
         }
 
-        // Specify type=... & func = ... arguments for xarModURL()
+        // Specify type=... & func = ... arguments for xarController::URL()
         if (empty($urltype)) {
-            if (xarVarIsCached('Blocks.categories','urltype')) {
-                $urltype = xarVarGetCached('Blocks.categories','urltype');
+            if (xarVar::isCached('Blocks.categories','urltype')) {
+                $urltype = xarVar::getCached('Blocks.categories','urltype');
             }
             if (empty($urltype)) {
                 $urltype = 'user';
             }
         }
         if (empty($urlfunc)) {
-            if (xarVarIsCached('Blocks.categories','urlfunc')) {
-                $urlfunc = xarVarGetCached('Blocks.categories','urlfunc');
+            if (xarVar::isCached('Blocks.categories','urlfunc')) {
+                $urlfunc = xarVar::getCached('Blocks.categories','urlfunc');
             }
             if (empty($urlfunc)) {
                 $urlfunc = 'view';
             }
         }
 
-        // Specify the module to use as argument for xarModURL()
+        // Specify the module to use as argument for xarController::URL()
         if (empty($urlmodule)) $urlmodule = $modname;
 
 // TODO: check other URL parameters with DD (using objectid, tplmodule etc.) ?
 
         // Get current DD object name (if any)
         if ($modname == 'dynamicdata' && !isset($data['name'])) {
-            if (xarVarIsCached('Blocks.categories','name')) {
-                $data['name'] = xarVarGetCached('Blocks.categories','name');
+            if (xarVar::isCached('Blocks.categories','name')) {
+                $data['name'] = xarVar::getCached('Blocks.categories','name');
             } else {
                 // try to get name from input
-                xarVarFetch('name', 'str', $data['name'], NULL, XARVAR_DONT_SET);
+                xarVar::fetch('name', 'str', $data['name'], NULL, xarVar::DONT_SET);
             }
         }
         if (empty($data['name'])) $data['name'] = null;
         $name = $data['name'];
 
         if ($modname == 'dynamicdata' && !empty($data['name'])) {
-            // Specify the URL parameter to use as argument for xarModURL()
+            // Specify the URL parameter to use as argument for xarController::URL()
             if (empty($urlparam)) $urlparam = 'name';
 
-            // Specify the URL value to use as argument for xarModURL()
+            // Specify the URL value to use as argument for xarController::URL()
             if (empty($urlvalue)) $urlvalue = $data['name'];
 
         } else {
-            // Specify the URL parameter to use as argument for xarModURL()
+            // Specify the URL parameter to use as argument for xarController::URL()
             if (empty($urlparam)) $urlparam = 'itemtype';
 
-            // Specify the URL value to use as argument for xarModURL()
+            // Specify the URL value to use as argument for xarController::URL()
             if (empty($urlvalue)) $urlvalue = $data['itemtype'];
         }
 
-        // Specify additional arguments for xarModURL()
+        // Specify additional arguments for xarController::URL()
         if (empty($urlextra)) {
             $urlextra = array();
             $urlargs = array();
@@ -256,12 +256,12 @@ class CategoryNavigationProperty extends SelectProperty
         $urlargs[$urlparam] = $urlvalue;
 
         // Get current categories
-        if (xarVarIsCached('Blocks.categories','catid')) {
-           $catid = xarVarGetCached('Blocks.categories','catid');
+        if (xarVar::isCached('Blocks.categories','catid')) {
+           $catid = xarVar::getCached('Blocks.categories','catid');
         }
         if (empty($catid)) {
             // try to get catid from input
-            xarVarFetch('catid', 'str', $catid, NULL, XARVAR_DONT_SET);
+            xarVar::fetch('catid', 'str', $catid, NULL, xarVar::DONT_SET);
         }
 
         // turn $catid into $cids array (and set $andcids flag)
@@ -283,19 +283,19 @@ class CategoryNavigationProperty extends SelectProperty
                 $andcids = false;
             }
         } elseif (empty($cids)) {
-            if (xarVarIsCached('Blocks.categories','cids')) {
-                $cids = xarVarGetCached('Blocks.categories','cids');
+            if (xarVar::isCached('Blocks.categories','cids')) {
+                $cids = xarVar::getCached('Blocks.categories','cids');
             }
-            if (xarVarIsCached('Blocks.categories','andcids')) {
-                $andcids = xarVarGetCached('Blocks.categories','andcids');
+            if (xarVar::isCached('Blocks.categories','andcids')) {
+                $andcids = xarVar::getCached('Blocks.categories','andcids');
             }
             if (empty($cids)) {
                 // try to get cids from input
-                xarVarFetch('cids',    'isset', $cids,    NULL,  XARVAR_DONT_SET);
-                xarVarFetch('andcids', 'isset', $andcids, false, XARVAR_NOT_REQUIRED);
+                xarVar::fetch('cids',    'isset', $cids,    NULL,  xarVar::DONT_SET);
+                xarVar::fetch('andcids', 'isset', $andcids, false, xarVar::NOT_REQUIRED);
                 // for preview of hooked new/modified items
-                xarVarFetch('new_cids',    'isset', $newcids,    NULL,  XARVAR_DONT_SET);
-                xarVarFetch('modify_cids', 'isset', $modifycids, NULL,  XARVAR_DONT_SET);
+                xarVar::fetch('new_cids',    'isset', $newcids,    NULL,  xarVar::DONT_SET);
+                xarVar::fetch('modify_cids', 'isset', $modifycids, NULL,  xarVar::DONT_SET);
 
                 if (!empty($cids)) {
                     // found some cids
@@ -387,10 +387,10 @@ class CategoryNavigationProperty extends SelectProperty
                                 }
                             }
 
-                            $label = xarVarPrepForDisplay($cat['name']);
+                            $label = xarVar::prepForDisplay($cat['name']);
                         // TODO: now this is a tricky part...
                             $urlargs['catid'] = $cat['cid'];
-                            $link = xarModURL($urlmodule,$urltype,$urlfunc,
+                            $link = xarController::URL($urlmodule,$urltype,$urlfunc,
                                               $urlargs);
 
                             if ($cat['cid'] == $cid) {
@@ -435,10 +435,10 @@ class CategoryNavigationProperty extends SelectProperty
                                 }
                             }
 
-                            $label = xarVarPrepForDisplay($cat['name']);
+                            $label = xarVar::prepForDisplay($cat['name']);
                         // TODO: now this is a tricky part...
                             $urlargs['catid'] = $cat['cid'];
-                            $link = xarModURL($urlmodule,$urltype,$urlfunc,
+                            $link = xarController::URL($urlmodule,$urltype,$urlfunc,
                                               $urlargs);
                             if ($cat['cid'] == $cid) {
                                 $catparents[] = array('catlabel' => $label,
@@ -470,7 +470,7 @@ class CategoryNavigationProperty extends SelectProperty
                         $parentid = 0;
                         foreach ($parents as $id => $info) {
                             if (empty($root)) {
-                                $root = xarVarPrepForDisplay($info['name']);
+                                $root = xarVar::prepForDisplay($info['name']);
                             }
                             if ($id = $cid) {
                                 $parentid = $info['parent'];
@@ -483,9 +483,9 @@ class CategoryNavigationProperty extends SelectProperty
                         }
                         if (!empty($parents[$parentid])) {
                             $cat = $parents[$parentid];
-                            $label = xarVarPrepForDisplay($cat['name']);
+                            $label = xarVar::prepForDisplay($cat['name']);
                             $urlargs['catid'] = $cat['cid'];
-                            $link = xarModURL($urlmodule,$urltype,$urlfunc,
+                            $link = xarController::URL($urlmodule,$urltype,$urlfunc,
                                               $urlargs);
                             if (!empty($catcount[$cat['cid']])) {
                                 $count = $catcount[$cat['cid']];
@@ -509,9 +509,9 @@ class CategoryNavigationProperty extends SelectProperty
 
                         // Generate list of sibling categories
                         foreach ($siblings as $cat) {
-                            $label = xarVarPrepForDisplay($cat['name']);
+                            $label = xarVar::prepForDisplay($cat['name']);
                             $urlargs['catid'] = $cat['cid'];
-                            $link = xarModURL($urlmodule,$urltype,$urlfunc,
+                            $link = xarController::URL($urlmodule,$urltype,$urlfunc,
                                               $urlargs);
                             if (!empty($catcount[$cat['cid']])) {
                                 $count = $catcount[$cat['cid']];
@@ -527,10 +527,10 @@ class CategoryNavigationProperty extends SelectProperty
                                 }
                                 if ($data['showchildren'] && !empty($children) && count($children) > 0) {
                                     foreach ($children as $cat) {
-                                        $clabel = xarVarPrepForDisplay($cat['name']);
+                                        $clabel = xarVar::prepForDisplay($cat['name']);
                                     // TODO: now this is a tricky part...
                                         $urlargs['catid'] = $cat['cid'];
-                                        $clink = xarModURL($urlmodule,$urltype,$urlfunc,
+                                        $clink = xarController::URL($urlmodule,$urltype,$urlfunc,
                                                            $urlargs);
                                         if (!empty($catcount[$cat['cid']])) {
                                             $ccount = $catcount[$cat['cid']];
@@ -577,11 +577,11 @@ class CategoryNavigationProperty extends SelectProperty
                         $cat = $catlist[$cid];
                         // TODO: now this is a tricky part...
                         $urlargs['catid'] = $cat['cid'];
-                        $link = xarModURL(
+                        $link = xarController::URL(
                             $urlmodule,$urltype,$urlfunc,
                             $urlargs
                         );
-                        $label = xarVarPrepForDisplay($cat['name']);
+                        $label = xarVar::prepForDisplay($cat['name']);
                         $data['catitems'][] = array(
                             'catlabel' => $label,
                             'catid' => $cat['cid'],
@@ -646,7 +646,7 @@ class CategoryNavigationProperty extends SelectProperty
                         // Initialise variables for a single trail.
                         $label = xarML('All');
                         unset($urlargs['catid']);
-                        $link = xarModURL(
+                        $link = xarController::URL(
                             $urlmodule,$urltype,$urlfunc,
                             $urlargs
                         );
@@ -691,7 +691,7 @@ class CategoryNavigationProperty extends SelectProperty
                             }
 
                             // TODO: move the prep to the template.
-                            $label = xarVarPrepForDisplay($cat['name']);
+                            $label = xarVar::prepForDisplay($cat['name']);
                             // TODO: make the link always available to the template, but make the
                             // template use the baseflag to determine whether to display the link
                             // or not.
@@ -701,7 +701,7 @@ class CategoryNavigationProperty extends SelectProperty
                                 $baseflag = 4;
                             } else {
                                 $urlargs['catid'] = $cat['cid'];
-                                $link = xarModURL(
+                                $link = xarController::URL(
                                     $urlmodule, $urltype, $urlfunc,
                                     $urlargs
                                 );
@@ -719,9 +719,9 @@ class CategoryNavigationProperty extends SelectProperty
                                 // but not always. As it is, the HTML display prep is the wrong one
                                 // to use for an attribute anyway.
                                 if (!empty($cat['description'])) {
-                                    $descriptions[$cid] = xarVarPrepHTMLDisplay($cat['description']);
+                                    $descriptions[$cid] = xarVar::prepHTMLDisplay($cat['description']);
                                 } else {
-                                    $descriptions[$cid] = xarVarPrepForDisplay($cat['name']);
+                                    $descriptions[$cid] = xarVar::prepForDisplay($cat['name']);
                                 }
                                 // Save current category info for icon etc.
                                 if (count($cids) == 1) {
@@ -743,7 +743,7 @@ class CategoryNavigationProperty extends SelectProperty
                             $viewall = '';
                         } else {
                             $urlargs['catid'] = '_' . $cid;
-                            $viewall = xarModURL(
+                            $viewall = xarController::URL(
                                 $urlmodule, $urltype, $urlfunc,
                                 $urlargs
                             );
@@ -776,7 +776,7 @@ class CategoryNavigationProperty extends SelectProperty
                         if (!empty($itemid) || !empty($andcids)) {
                             $label = xarML('Any of these categories');
                             $urlargs['catid'] = join('-', $sortcids);
-                            $link = xarModURL(
+                            $link = xarController::URL(
                                 $urlmodule,$urltype,$urlfunc,
                                 $urlargs
                             );
@@ -792,7 +792,7 @@ class CategoryNavigationProperty extends SelectProperty
                         if (empty($andcids)) {
                             $label = xarML('All of these categories');
                             $urlargs['catid'] = join('+', $sortcids);
-                            $link = xarModURL(
+                            $link = xarController::URL(
                                 $urlmodule, $urltype, $urlfunc,
                                 $urlargs
                             );
@@ -815,7 +815,7 @@ class CategoryNavigationProperty extends SelectProperty
                             'catcount' => $curcount
                         );
                         // add a hit for the categories we're viewing here
-                        if (empty($itemid) && xarModIsHooked('hitcount','categories')) {
+                        if (empty($itemid) && xarModHooks::isHooked('hitcount','categories')) {
                             foreach ($cids as $cid) {
                                 if (empty($cid)) {
                                     continue;
@@ -849,7 +849,7 @@ class CategoryNavigationProperty extends SelectProperty
                         $curcat['itemtype'] = 0;
                         $curcat['itemid'] = $cids[0];
                         $urlargs['catid'] = $cids[0];
-                        $curcat['returnurl'] = xarModURL(
+                        $curcat['returnurl'] = xarController::URL(
                             $urlmodule, $urltype, $urlfunc,
                             $urlargs
                         );
@@ -859,9 +859,9 @@ class CategoryNavigationProperty extends SelectProperty
                         // calling item display hooks *for the categories module* here !
                     // FIXME: if hitcount is hooked to categories, this will also increase the hitcount
                     //        of the category when displaying an article that belongs to that single category
-                    // Possible solution : extend xarVarIsCached('Hooks.hitcount','nocount') mechanism to take
+                    // Possible solution : extend xarVar::isCached('Hooks.hitcount','nocount') mechanism to take
                     // into account the module ???
-                        $data['cathooks'] = xarModCallHooks('item','display',$cids[0],$curcat,'categories');
+                        $data['cathooks'] = xarModHooks::call('item','display',$cids[0],$curcat,'categories');
                         // saving the current cat id for use e.g. with DD tags (<xar:data-display module="categories" itemid="$catid"/>)
                         $data['catid'] = $curcat['cid'];
                     }
@@ -870,23 +870,23 @@ class CategoryNavigationProperty extends SelectProperty
                     if (empty($itemid)) {
                         // Get current title
                         if (empty($title)) {
-                            if (xarVarIsCached('Blocks.categories', 'title')) {
-                                $title = xarVarGetCached('Blocks.categories', 'title');
+                            if (xarVar::isCached('Blocks.categories', 'title')) {
+                                $title = xarVar::getCached('Blocks.categories', 'title');
                             }
                         }
                         if (!empty($curcat['name'])) {
-                            $title = xarVarPrepForDisplay($curcat['name']);
+                            $title = xarVar::prepForDisplay($curcat['name']);
                         }
                         if (!empty($title)) {
-                            xarTplSetPageTitle($title);
+                            xarTpl::setPageTitle($title);
                         }
                     }
 
                     // TODO: don't show icons when displaying items?
                     if (!empty($curcat['image'])) {
                         // find the image in categories (we need to specify the module here)
-                        $data['catimage'] = xarTplGetImage($curcat['image'], 'categories');
-                        $data['catname'] = xarVarPrepForDisplay($curcat['name']);
+                        $data['catimage'] = xarTpl::getImage($curcat['image'], 'categories');
+                        $data['catname'] = xarVar::prepForDisplay($curcat['name']);
                     }
                     if ($data['showchildren'] == 2) {
                         // Get child categories (all sub-levels)
@@ -901,9 +901,9 @@ class CategoryNavigationProperty extends SelectProperty
                             if ($info['id'] == $cids[0]) {
                                 continue;
                             }
-                            $label = xarVarPrepForDisplay($info['name']);
+                            $label = xarVar::prepForDisplay($info['name']);
                             $urlargs['catid'] = $info['id'];
-                            $link = xarModURL(
+                            $link = xarController::URL(
                                 $urlmodule, $urltype, $urlfunc,
                                 $urlargs
                             );
@@ -954,20 +954,20 @@ class CategoryNavigationProperty extends SelectProperty
                                 }
                             }
 
-                            $label = xarVarPrepForDisplay($cat['name']);
+                            $label = xarVar::prepForDisplay($cat['name']);
                             $urlargs['catid'] = $cat['cid'];
-                            $link = xarModURL(
+                            $link = xarController::URL(
                                 $urlmodule, $urltype, $urlfunc,
                                 $urlargs
                             );
                             if (!empty($cat['description']) && $cat['description'] != $cat['name']) {
-                                    $descr = xarVarPrepHTMLDisplay($cat['description']);
+                                    $descr = xarVar::prepHTMLDisplay($cat['description']);
                                 } else {
                                     $descr = '';
                                 }
                             if (!empty($cat['image'])) {
                                 // find the image in categories (we need to specify the module here)
-                                $image = xarTplGetImage($cat['image'], 'categories');
+                                $image = xarTpl::getImage($cat['image'], 'categories');
                                 $numicons++;
                                 $data['caticons'][] = array(
                                     'catlabel' => $label,
@@ -1017,8 +1017,8 @@ class CategoryNavigationProperty extends SelectProperty
                 } else {
                     // See if we need to show anything
                     if (empty($showprevnext)) {
-                        if (xarVarIsCached('Blocks.categories','showprevnext')) {
-                            $showprevnext = xarVarGetCached('Blocks.categories','showprevnext');
+                        if (xarVar::isCached('Blocks.categories','showprevnext')) {
+                            $showprevnext = xarVar::getCached('Blocks.categories','showprevnext');
                             if (empty($showprevnext)) {
                                 return '';
                             }
@@ -1039,20 +1039,20 @@ class CategoryNavigationProperty extends SelectProperty
     //                        $data['uplabel'] = $neighbour['name'];
     //                        $data['upcid'] = $neighbour['cid'];
     //                        $urlargs['catid'] = $neighbour['cid'];
-    //                        $data['uplink'] = xarModURL($urlmodule,$urltype,$urlfunc,
+    //                        $data['uplink'] = xarController::URL($urlmodule,$urltype,$urlfunc,
     //                                                    $urlargs);
     //                    } elseif ($neighbour['link'] == 'previous') {
                         if ($neighbour['link'] == 'previous') {
                             $data['prevlabel'] = $neighbour['name'];
                             $data['prevcid'] = $neighbour['cid'];
                             $urlargs['catid'] = $neighbour['cid'];
-                            $data['prevlink'] = xarModURL($urlmodule,$urltype,$urlfunc,
+                            $data['prevlink'] = xarController::URL($urlmodule,$urltype,$urlfunc,
                                                           $urlargs);
                         } elseif ($neighbour['link'] == 'next') {
                             $data['nextlabel'] = $neighbour['name'];
                             $data['nextcid'] = $neighbour['cid'];
                             $urlargs['catid'] = $neighbour['cid'];
-                            $data['nextlink'] = xarModURL($urlmodule,$urltype,$urlfunc,
+                            $data['nextlink'] = xarController::URL($urlmodule,$urltype,$urlfunc,
                                                           $urlargs);
                         }
                     }

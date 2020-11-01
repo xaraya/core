@@ -16,7 +16,7 @@
                 <xar:set name="users">$node-&gt;users</xar:set>
                 <xar:set name="id">$node-&gt;id</xar:set>
                 <xar:set name="drawchildren">true</xar:set>
-                <xar:set name="seccheck">xarSecurityCheck('ManageRoles',0,'Roles',$node-&gt;name)</xar:set>
+                <xar:set name="seccheck">xarSecurity::check('ManageRoles',0,'Roles',$node-&gt;name)</xar:set>
 
                 <li class="leaf">
                     <div class="leaf-actions">
@@ -25,14 +25,14 @@
                             <img src="#$blankicon#" alt="#$label#"/>
                         <xar:else />
                             <xar:var name="label1">Delete this Group</xar:var>
-                            <a href="#xarModURL('roles', 'admin', 'delete', array('id' =&gt; $id))#" title="#$label1#">
+                            <a href="#xarController::URL('roles', 'admin', 'delete', array('id' =&gt; $id))#" title="#$label1#">
                                 <img src="#$deleteicon#" alt="#$label#"/>
                             </a>
                         </xar:if>
                         <xar:var name="label">Users</xar:var>
                         <xar:if condition="($users gt 0) and ($drawchildren)">
                             <xar:var name="label1">Show the Users in this Group</xar:var>
-                            <a href="#xarModURL('roles', 'admin', 'showusers', array('id' =&gt; $id, 'reload' =&gt; 1))#" title="#$label1#">
+                            <a href="#xarController::URL('roles', 'admin', 'showusers', array('id' =&gt; $id, 'reload' =&gt; 1))#" title="#$label1#">
                                 <img src="#$usersicon#" alt="#$label#"/>
                             </a>
                         <xar:else />
@@ -43,14 +43,14 @@
                             <img src="#$blankicon#" alt="#$label#"/>
                         <xar:else />
                             <xar:var name="label1">Email the Users in this Group</xar:var>
-                            <a href="#xarModURL('roles', 'admin', 'createmail', array('id' =&gt; $id))#" title="#$label1#">
+                            <a href="#xarController::URL('roles', 'admin', 'createmail', array('id' =&gt; $id))#" title="#$label1#">
                                 <img src="#$mailicon#" alt="#$label#"/>
                             </a>
                         </xar:if>
                         <xar:var name="label">Privileges</xar:var>
                         <xar:if condition="$drawchildren">
                             <xar:var name="label1">Show the Privileges assigned to this Group</xar:var>
-                            <a href="#xarModURL('roles', 'admin', 'showprivileges', array('id' =&gt; $id))#" title="#$label1#">
+                            <a href="#xarController::URL('roles', 'admin', 'showprivileges', array('id' =&gt; $id))#" title="#$label1#">
                                 <img src="#$privsicon#" alt="#$label#"/>
                             </a>
                         <xar:else />
@@ -59,7 +59,7 @@
                         <xar:var name="label">Test</xar:var>
                         <xar:if condition="$drawchildren">
                             <xar:var name="label1">Test this Groups's Privileges</xar:var>
-                            <a href="#xarModURL('roles', 'admin', 'testprivileges', array('id' =&gt; $id))#" title="#$label1#">
+                            <a href="#xarController::URL('roles', 'admin', 'testprivileges', array('id' =&gt; $id))#" title="#$label1#">
                                 <img src="#$testicon#" alt="#$label#"/>
                             </a>
                         <xar:else />
@@ -76,7 +76,7 @@
                             <xar:set name="numofusers">$users == 1 ? xarML('user') : xarML('users')</xar:set>
                             <xar:set name="description">$numofsubgroups . " " . $subgroups . ' | ' . $users . " " . $numofusers</xar:set>
                             <xar:var name="label">Modify this Group</xar:var>
-                            <a href="#xarModURL('roles', 'admin', 'modify', array('id' =&gt; $id))#" title="#$label#">
+                            <a href="#xarController::URL('roles', 'admin', 'modify', array('id' =&gt; $id))#" title="#$label#">
                                 #$node-&gt;name#
                             </a>
                             #$description#

@@ -50,9 +50,14 @@ class BaseActionController extends xarObject
         }
     }
 
+    function decode(Array $data=array())
+    {
+        return $data;
+    }
+
     function getController()   { return $this->controller; }
     function getRequest()      { return $this->request; }
-    function getOutput()       { return $response->output;}
+    //function getOutput()       { return $response->output;}
     function firstToken()      { return strtok($this->actionstring, $this->separator); }
     function nextToken()       { return strtok($this->separator); }
     

@@ -80,11 +80,13 @@ function &xarMLSLoadLocaleData($locale = NULL)
         // @todo do we need to wrap this in a try/catch construct?
         include $fileName;
         $loaded[$fileName] = true;
+        /** @phpstan-ignore-next-line */
         $GLOBALS['xarMLS_localeDataCache'][$locale] = $localeData;
     } else if (file_exists($utf8FileName) && !isset($loaded[$utf8FileName])) {
         include $utf8FileName;
         $loaded[$utf8FileName] = true;
         if ($siteCharset != 'utf-8') {
+            /** @phpstan-ignore-next-line */
             foreach ( $localeData as $tempKey => $tempValue ) {
                 $tempValue = $GLOBALS['xarMLS_newEncoding']->convert($tempValue, 'utf-8', $siteCharset, 0);
                 $localeData[$tempKey] = $tempValue;

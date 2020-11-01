@@ -19,15 +19,15 @@
 function privileges_admin_newrealm()
 {
     // Security
-    if(!xarSecurityCheck('AddPrivileges',0,'Realm')) return;
+    if(!xarSecurity::check('AddPrivileges',0,'Realm')) return;
 
     $data = array();
 
-    if (!xarVarFetch('name',      'str:1:20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('confirmed', 'bool', $confirmed, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('name',      'str:1:20', $name,      '',      xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('confirmed', 'bool', $confirmed, false, xarVar::NOT_REQUIRED)) return;
 
     if ($confirmed) {
-        if (!xarSecConfirmAuthKey()) {
+        if (!xarSec::confirmAuthKey()) {
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
@@ -55,10 +55,10 @@ function privileges_admin_newrealm()
         $result = $stmt->executeQuery($bindvars);
 
         //Redirect to view page
-        xarController::redirect(xarModURL('privileges', 'admin', 'viewrealms'));
+        xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'));
     }
 
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     return $data;
 }
 

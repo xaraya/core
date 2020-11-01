@@ -60,7 +60,7 @@ class ConfigurationProperty extends TextAreaProperty
         $property =& DataPropertyMaster::getProperty($data);
         if (empty($property)) return;
 
-        if (!xarVarFetch($data['name'],'isset',$data['configuration'],NULL,XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch($data['name'],'isset',$data['configuration'],NULL,xarVar::NOT_REQUIRED)) return;
 
         if (!$property->updateConfiguration($data)) return false;
         $this->value = $property->configuration;

@@ -18,17 +18,17 @@
 function dynamicdata_admin_view(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('EditDynamicData')) return;
+    if(!xarSecurity::check('EditDynamicData')) return;
 
-    if(!xarVarFetch('itemid',   'int',   $itemid,    1, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('startnum', 'int',   $startnum,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('numitems', 'int',   $numitems,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('layout',   'str:1' ,$layout,    'default', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('tplmodule','isset', $tplmodule, 'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',   'int',   $itemid,    1, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('name',     'isset', $name,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('startnum', 'int',   $startnum,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('numitems', 'int',   $numitems,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('sort',     'isset', $sort,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('catid',    'isset', $catid,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('layout',   'str:1' ,$layout,    'default', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('tplmodule','isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('template', 'isset', $template,  NULL, xarVar::DONT_SET)) {return;}
 
     // Override if needed from argument array
     extract($args);
@@ -79,16 +79,16 @@ function dynamicdata_admin_view(Array $args=array())
     // TODO: is this needed?
     $data = array_merge($data,xarMod::apiFunc('dynamicdata','admin','menu'));
 
-    if (xarSecurityCheck('AdminDynamicData',0)) {
+    if (xarSecurity::check('AdminDynamicData',0)) {
         if (!empty($data['table'])) {
-            $data['querylink'] = xarModURL('dynamicdata','admin','query',
+            $data['querylink'] = xarController::URL('dynamicdata','admin','query',
                                            array('table' => $data['table']));
         } elseif (!empty($data['join'])) {
-            $data['querylink'] = xarModURL('dynamicdata','admin','query',
+            $data['querylink'] = xarController::URL('dynamicdata','admin','query',
                                            array('itemid' => $objectid,
                                                  'join' => $data['join']));
         } else {
-            $data['querylink'] = xarModURL('dynamicdata','admin','query',
+            $data['querylink'] = xarController::URL('dynamicdata','admin','query',
                                            array('itemid' => $data['objectid']));
         }
     }

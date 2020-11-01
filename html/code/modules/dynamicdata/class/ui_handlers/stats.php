@@ -33,24 +33,24 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
      */
     function run(array $args = array())
     {
-        if(!xarVarFetch('catid',    'isset', $args['catid'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('catid',    'isset', $args['catid'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('sort',     'isset', $args['sort'],     NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('sort',     'isset', $args['sort'],     NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('where',    'isset', $args['where'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('where',    'isset', $args['where'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('startnum', 'isset', $args['startnum'], NULL, xarVar::DONT_SET)) 
             return;
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        if(!xarVarFetch('group',    'isset', $args['group'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('group',    'isset', $args['group'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('field',    'isset', $args['field'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('field',    'isset', $args['field'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('match',    'isset', $args['match'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('match',    'isset', $args['match'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('report',   'isset', $args['report'],   NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('report',   'isset', $args['report'],   NULL, xarVar::DONT_SET)) 
             return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
@@ -118,7 +118,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             $stats['report'] = 'Default Report';
         }
         // prepare for output now
-        $stats['report'] = xarVarPrepForDisplay($stats['report']);
+        $stats['report'] = xarVar::prepForDisplay($stats['report']);
 
         if(!isset($this->object)) 
         {
@@ -133,7 +133,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('Statistics for #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 /*
         // Set page template
         if (xarTpl::getPageTemplateName() == 'default') {
@@ -254,7 +254,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
                       'sort'      => $sort);
 
         // check if we need to save this report
-        if (!xarVarFetch('save', 'isset', $save, NULL, XARVAR_DONT_SET)) 
+        if (!xarVar::fetch('save', 'isset', $save, NULL, xarVar::DONT_SET)) 
             return;
 
         // nothing to show here
@@ -312,7 +312,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             $report['report'] = 'Default Report';
         }
         // prepare for output now
-        $report['report'] = xarVarPrepForDisplay($report['report']);
+        $report['report'] = xarVar::prepForDisplay($report['report']);
 
         if(!isset($this->object)) 
         {
@@ -327,7 +327,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('Report for #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));

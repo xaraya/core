@@ -12,7 +12,7 @@
     -->
     <div class="xar-mod-body">
         <h2>
-            <a href="#xarModURL('roles','admin','showusers')#">Member List</a>: Send #$mailtype# notification
+            <a href="#xarController::URL('roles','admin','showusers')#">Member List</a>: Send #$mailtype# notification
         </h2>
         <!-- Contextual text 
         <xar:if condition="$mailtype eq 'validation'">
@@ -46,9 +46,9 @@
         </xar:if>
         -->
         <p>
-            The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the <a href="#xarModURL('roles','admin','showusers',array('state'=>$state,'id'=>$groupid))#">members list</a>.
+            The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the <a href="#xarController::URL('roles','admin','showusers',array('state'=>$state,'id'=>$groupid))#">members list</a>.
         </p>
-        <form action="#xarModURL('roles','admin','asknotification')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('roles','admin','asknotification')#" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:var name="label">Title of the notification</xar:var>
@@ -57,7 +57,7 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                    <input type="text" name="subject" id="subject" value="#xarVar::prepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                 </div>
             </div>
             <div class="xar-row">
@@ -68,7 +68,7 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+                    <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVar::prepForDisplay($message)#</textarea>
                 </div>
             </div>
             <fieldset class="xar-form-actions">
@@ -76,7 +76,7 @@
                 <input type="hidden" name="phase" id="phase" value="notify"/>
                 <input type="hidden" name="mailtype" id="mailtype" value="#$mailtype#"/>
                 <input type="hidden" name="id" id="id" value="#$id#"/>
-                <input type="hidden" name="pass" id="pass" value="#xarVarPrepForDisplay($pass)#"/>
+                <input type="hidden" name="pass" id="pass" value="#xarVar::prepForDisplay($pass)#"/>
                 <input type="hidden" name="ip" id="ip" value="#$ip#"/>
                 <input type="hidden" name="groupid" id="groupid" value="#$groupid#"/>
                 <input type="hidden" name="state" id="state" value="#$state#"/>
@@ -190,7 +190,7 @@
                     <div class="xar-row">
                         <div class="xar-col">
                             <span title="#$messagetitle#" class="xar-form-label xar-align-right xar-padding-thickright">
-                                $#xarVarPrepForDisplay($name)#
+                                $#xarVar::prepForDisplay($name)#
                             </span>
                         </div>
                         <div class="xar-col">

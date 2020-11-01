@@ -17,12 +17,12 @@
  */
 function roles_admin_modify()
 {
-    if (!xarVarFetch('confirm',     'int',   $confirm, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('id', 'id', $id, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemid', 'id', $data['itemid'], NULL, XARVAR_DONT_SET)) return;
+    if (!xarVar::fetch('confirm',     'int',   $confirm, 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'id', $id, 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemid', 'id', $data['itemid'], NULL, xarVar::DONT_SET)) return;
     $id = isset($data['itemid']) ? $data['itemid'] : $id;
 
-    if (!xarVarFetch('duvs', 'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('duvs', 'array', $data['duvs'], array(), xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = xarRoles::get($id);
     if (empty($data['object'])) return xarResponse::NotFound();
@@ -33,7 +33,7 @@ function roles_admin_modify()
     $names = array();
 
     foreach ($data['object']->getParents() as $parent) {
-        if(xarSecurityCheck('RemoveRole',0,'Relation',$parent->getName() . ":" . $data['object']->getName())) {
+        if(xarSecurity::check('RemoveRole',0,'Relation',$parent->getName() . ":" . $data['object']->getName())) {
             $parents[] = array('parentid' => $parent->getID(),
                                'parentname' => $parent->getName(),
                                'parentuname'=> $parent->getUname());
@@ -45,7 +45,7 @@ function roles_admin_modify()
     foreach(xarRoles::getgroups() as $temp) {
         $nam = $temp['name'];
         // TODO: this is very inefficient. Here we have the perfect use case for embedding security checks directly into the SQL calls
-        if(!xarSecurityCheck('AttachRole',0,'Relation',$nam . ":" . $data['object']->getName())) continue;
+        if(!xarSecurity::check('AttachRole',0,'Relation',$nam . ":" . $data['object']->getName())) continue;
         if (!in_array($nam, $names) && $temp['id'] != $id) {
             $names[] = $nam;
             $groups[] = array('did' => $temp['id'],
@@ -61,8 +61,8 @@ function roles_admin_modify()
                                                 ));
 
     // Security
-    if (!xarSecurityCheck('EditRole',0,'Roles',$data['object']->getName())) {
-        if (!xarSecurityCheck('ReadRoles',1,'Roles',$data['object']->getName())) return;
+    if (!xarSecurity::check('EditRole',0,'Roles',$data['object']->getName())) {
+        if (!xarSecurity::check('ReadRoles',1,'Roles',$data['object']->getName())) return;
     }
 
     // call item modify hooks (for DD etc.)
@@ -71,7 +71,7 @@ function roles_admin_modify()
     $item['module']= 'roles';
     $item['itemtype'] = $data['object']->getType();
     $item['itemid']= $id;
-    $data['hooks'] = xarModCallHooks('item', 'modify', $id, $item);
+    $data['hooks'] = xarModHooks::call('item', 'modify', $id, $item);
 
     $data['groups'] = $groups;
     $data['parents'] = $parents;
@@ -79,7 +79,7 @@ function roles_admin_modify()
     if ($confirm) {
 
         // Check for a valid confirmation key
-        if(!xarSecConfirmAuthKey()) return;
+        if(!xarSec::confirmAuthKey()) return;
 
         // Enforce a check on the existence of a user of this user name
         $data['object']->properties['uname']->validation_existrule = 1;
@@ -95,7 +95,7 @@ function roles_admin_modify()
             $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
 
             // Jump to the next page
-            xarController::redirect(xarModURL('roles','admin','modify',array('itemid' => $data['itemid'])));
+            xarController::redirect(xarController::URL('roles','admin','modify',array('itemid' => $data['itemid'])));
             return true;
         }
     }

@@ -21,17 +21,17 @@ function dynamicdata_admin_new(Array $args=array())
 {
     extract($args);
 
-    if(!xarVarFetch('objectid', 'id', $objectid,     1, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',    'id', $module_id,        182,  XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'id', $itemtype,     0,    XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemid',   'isset', $itemid,    0,    XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('preview',  'isset', $preview,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule','str',   $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'id', $objectid,     1, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('name',     'isset', $name,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module_id',    'id', $module_id,        182,  xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype', 'id', $itemtype,     0,    xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',   'isset', $itemid,    0,    xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('preview',  'isset', $preview,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('join',     'isset', $join,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('table',    'isset', $table,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('template', 'isset', $template,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('notfresh', 'isset', $notfresh,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('tplmodule','str',   $tplmodule, NULL, xarVar::DONT_SET)) {return;}
 
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
@@ -55,7 +55,7 @@ function dynamicdata_admin_new(Array $args=array())
     $data['tplmodule'] = $args['tplmodule'];  //TODO: is this needed?
 
     // Generate a one-time authorisation code for this operation
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
 
     // Makes this hooks call explictly from DD - why ???
     ////$modinfo = xarMod::getInfo($myobject->moduleid);

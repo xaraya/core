@@ -34,13 +34,13 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
      */
     function run(array $args = array())
     {
-        if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('preview', 'isset', $args['preview'], NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('confirm', 'isset', $args['confirm'], NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('values', 'isset', $args['values'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('values', 'isset', $args['values'], NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('return_url', 'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('return_url', 'isset', $args['return_url'], NULL, xarVar::DONT_SET)) 
             return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
@@ -74,7 +74,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
 
         if(!empty($args['preview']) || !empty($args['confirm'])) 
         {
-            if (!empty($args['confirm']) && !xarSecConfirmAuthKey()) {
+            if (!empty($args['confirm']) && !xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
 
@@ -98,7 +98,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
         }
 
         $title = xarML('Modify #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         // call item modify hooks for this item
         $this->object->callHooks('modify');
@@ -107,7 +107,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_update',
             array('object'  => $this->object,
                   'preview' => $args['preview'],
-                  'authid'  => xarSecGenAuthKey(),
+                  'authid'  => xarSec::genAuthKey(),
                   'hooks'   => $this->object->hookoutput,
                   'tpltitle' => $this->tpltitle,
                   'return_url' => $args['return_url'])

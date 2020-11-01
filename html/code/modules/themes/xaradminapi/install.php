@@ -26,7 +26,7 @@ function themes_adminapi_install(Array $args=array())
 
     // Security Check
     // need to specify the module because this function is called by the installer module
-    if (!xarSecurityCheck('AdminThemes', 1, 'All', 'All', 'themes')) return;
+    if (!xarSecurity::check('AdminThemes', 1, 'All', 'All', 'themes')) return;
 
     // Argument check
     if (!isset($regid)) throw new EmptyParameterException('regid');

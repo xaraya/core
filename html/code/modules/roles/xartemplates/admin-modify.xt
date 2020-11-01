@@ -28,13 +28,13 @@
                             <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                                 <li class="xar-tab">
                                     <xar:var name="label">Show this group</xar:var>
-                                    <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
-                                        #xarVarPrepForDisplay($parents[$i]['parentname'])#
+                                    <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                        #xarVar::prepForDisplay($parents[$i]['parentname'])#
                                     </a>
                                 </li>
                             </xar:if>
                             <xar:set name="prevgroup">
-                                #xarVarPrepForDisplay($parents[$i]['parentname'])#
+                                #xarVar::prepForDisplay($parents[$i]['parentname'])#
                             </xar:set>
                         </xar:for>
                     </ul>
@@ -49,7 +49,7 @@
                     <xar:set name="enctype">'application/x-www-form-urlencoded'</xar:set>
                 </xar:if>
                 <form action="#xarServer::getCurrentURL()#" method="post" enctype="#$enctype#">
-                    <xar:if condition="!xarSecurityCheck('EditRoles',0,'Roles',$object:getName())">
+                    <xar:if condition="!xarSecurity::check('EditRoles',0,'Roles',$object:getName())">
                         <xar:data-display object="$object" tplmodule="roles"/>
                         <p>This #$object:label# cannot be edited or deleted.</p>
                     <xar:else />
@@ -191,8 +191,8 @@
                                         </label>
                                     </div>
                                     <div class="xar-col">
-                                        #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
-                                        #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                                        #xarLocale::getFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                                        #xarLocale::getFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
                                     </div>
                                 </div>
                             </xar:if>
@@ -204,8 +204,8 @@
                                         </label>
                                     </div>
                                     <div class="xar-col">
-                                        #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
-                                        #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                                        #xarLocale::getFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                                        #xarLocale::getFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
                                     </div>
                                 </div>
                             </xar:if>
@@ -223,7 +223,7 @@
                                 <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                                 <input type="hidden" name="itemid" id="itemid" value="#$id#"/>
                                 <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
-                                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                                <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                                 <input type="hidden" name="confirm" id="confirm" value="1"/>
                                 <xar:var name="label">Update</xar:var>
                                 <xar:button type="submit" label="$label"/>
@@ -243,7 +243,7 @@
                         <tr>
                             <td>
                                 <xar:if condition="$loop:item['parentid'] gt 4">
-                                    <a href="#xarModURL('roles','admin','modify',array('id'=>$loop->item['parentid']))#">
+                                    <a href="#xarController::URL('roles','admin','modify',array('id'=>$loop->item['parentid']))#">
                                         <xar:var name="loop:item.parentname"/>
                                     </a>
                                 <xar:else />
@@ -252,17 +252,17 @@
                             </td>
                             <td class="xar-align-center">
                                 <xar:if condition="count($parents) ne 1">
-                                    <a href="#xarModURL('roles','admin','removemember',array('childid'=>$id,'parentid'=>$loop->item['parentid'],'authid'=>xarSecGenAuthKey()))#">
+                                    <a href="#xarController::URL('roles','admin','removemember',array('childid'=>$id,'parentid'=>$loop->item['parentid'],'authid'=>xarSec::genAuthKey()))#">
                                 Remove</a>
                                 <xar:else />Cannot Remove</xar:if>
                             </td>
                         </tr>
                     </xar:loop>
                 </table>
-                <xar:if condition="!xarSecurityCheck('EditRoles',0,'Roles',$object:getName())">
+                <xar:if condition="!xarSecurity::check('EditRoles',0,'Roles',$object:getName())">
                     <p>This #$object:label# cannot be edited or deleted.</p>
                     <xar:else />
-                  <form action="#xarModURL('roles','admin','addmember')#" method="post" enctype="application/x-www-form-urlencoded">
+                  <form action="#xarController::URL('roles','admin','addmember')#" method="post" enctype="application/x-www-form-urlencoded">
                         <div class="xar-row">
                             <div class="xar-col">
                                 <xar:var name="label">Choose a parent to assign membership</xar:var>
@@ -277,7 +277,7 @@
                                     </xar:loop>
                                 </select>&#160;
                                 <input type="hidden" name="id" id="addid" value="#$id#"/>
-                                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                                <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                                 <xar:var name="label">Add</xar:var>
                                 <xar:button type="submit" label="$label"/>
                             </div>

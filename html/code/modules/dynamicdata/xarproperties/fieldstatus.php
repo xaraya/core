@@ -85,8 +85,8 @@ class FieldStatusProperty extends SelectProperty
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            if(!xarVarFetch($displayname, 'isset', $display_status, NULL, XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch($inputname,   'isset', $input_status,   NULL, XARVAR_DONT_SET)) {return;}
+            if(!xarVar::fetch($displayname, 'isset', $display_status, NULL, xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch($inputname,   'isset', $input_status,   NULL, xarVar::DONT_SET)) {return;}
         }
         $value = $display_status + $input_status;
         return $this->validateValue($value);

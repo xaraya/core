@@ -21,7 +21,7 @@ function roles_userapi_countall(Array $args=array())
     extract($args);
 
     // Security check
-    if(!xarSecurityCheck('ReadRoles')) return;
+    if(!xarSecurity::check('ReadRoles')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();
@@ -39,7 +39,7 @@ function roles_userapi_countall(Array $args=array())
     }
 
     //suppress display of pending users to non-admins
-    if (!xarSecurityCheck("AdminRole",0)) {
+    if (!xarSecurity::check("AdminRole",0)) {
         $query .= " AND state != ?";
         $bindvars[] = xarRoles::ROLES_STATE_PENDING;
     }

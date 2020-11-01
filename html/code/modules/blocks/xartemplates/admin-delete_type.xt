@@ -5,7 +5,7 @@
     <div class="xar-mod-body">
         <xar:if condition="$type['type_state'] eq xarBlock::TYPE_STATE_MISSING or $type['type_state'] eq xarBlock::TYPE_STATE_MOD_UNAVAILABLE">
             <h2>Delete Block Type</h2>
-            <form method="post" action="#xarModURL('blocks', 'admin', 'delete_type')#">
+            <form method="post" action="#xarController::URL('blocks', 'admin', 'delete_type')#">
                 <fieldset>
                     <legend>Confirm deleting this block type</legend>
                     <div class="xar-row">
@@ -52,7 +52,7 @@
                         <div class="xar-col">
                             <p class="xar-note">The following block instances will also be removed</p>
                             <xar:loop name="$type_instances">
-                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($type_instances)">,&#160;</xar:if>
                             </xar:loop>
                         </div>
@@ -61,7 +61,7 @@
                 </fieldset>
                 <fieldset>
                     <div class="xar-form-actions xar-align-center">
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                     <input type="hidden" name="confirm" id="confirm" value="true"/>
                     <input type="hidden" name="type_id" id="type_id" value="#$type['type_id']#"/>
                     <xar:var name="label">Delete Block Type</xar:var>

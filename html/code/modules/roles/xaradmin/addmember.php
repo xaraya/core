@@ -23,8 +23,8 @@
 function roles_admin_addmember()
 {
     // get parameters
-    if (!xarVarFetch('id',    'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('roleid', 'int:1:', $roleid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id',    'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('roleid', 'int:1:', $roleid, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
     if (empty($roleid)) return xarResponse::notFound();
     // call the Roles class and get the parent and child objects
@@ -32,10 +32,10 @@ function roles_admin_addmember()
     $member = xarRoles::get($id);
 
     // Security
-    if(!xarSecurityCheck('AttachRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
+    if(!xarSecurity::check('AttachRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
@@ -55,7 +55,7 @@ function roles_admin_addmember()
     if (!xarMod::apiFunc('roles','user','addmember', array('id' => $id, 'gid' => $roleid))) return;
 
     // redirect to the next page
-    xarController::redirect(xarModURL('roles', 'admin', 'modify',
+    xarController::redirect(xarController::URL('roles', 'admin', 'modify',
             array('id' => $id)));
     return true;
 }

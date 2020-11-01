@@ -26,7 +26,7 @@ function categories_userapi_getlinkage($args)
 
     if (!isset($itemid)) return array();
     if (empty($module)) {
-        $module = xarModGetName();
+        $module = xarMod::getName();
     }
 
     $modid = xarMod::getID($module);

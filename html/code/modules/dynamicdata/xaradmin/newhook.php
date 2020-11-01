@@ -22,7 +22,7 @@
 function dynamicdata_admin_newhook(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('AddDynamicData')) return;
+    if(!xarSecurity::check('AddDynamicData')) return;
 
     extract($args);
 
@@ -31,7 +31,7 @@ function dynamicdata_admin_newhook(Array $args=array())
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
     if (empty($extrainfo['module'])) {
-        $modname = xarModGetName();
+        $modname = xarMod::getName();
     } else {
         $modname = $extrainfo['module'];
     }
@@ -68,7 +68,7 @@ function dynamicdata_admin_newhook(Array $args=array())
     if (!isset($object)) return;
 
     // if we are in preview mode, we need to check for any preview values
-    if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('preview', 'isset', $preview,  NULL, xarVar::DONT_SET)) {return;}
     if (!empty($preview)) {
         $object->checkInput();
     }

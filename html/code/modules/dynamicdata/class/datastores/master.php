@@ -176,7 +176,7 @@ class DataStoreFactory extends xarObject
         $dbInfo = $dbconn->getDatabaseInfo();
 
         // TODO: re-evaluate this once we're further along
-        $modules = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        $modules = xarMod::apiFunc('modules', 'admin', 'getlist', array('filter' => array('State' => xarMod::STATE_ACTIVE)));
         /*
         foreach ($modules as $module) {
             $sources[] = array('id'=> $module['regid'], 'name' => 'module variable: ' . $module['name']);

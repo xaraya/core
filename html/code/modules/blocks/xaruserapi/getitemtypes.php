@@ -21,28 +21,28 @@ function blocks_userapi_getitemtypes(Array $args=array())
 {
     $itemtypes = array();
 
-    if (xarSecurityCheck('EditBlocks',0)) {
+    if (xarSecurity::check('EditBlocks',0)) {
         $showurl = true;
     } else {
         $showurl = false;
     }
 
     $name = xarML('Block Types');
-    $itemtypes[1] = array('label' => xarVarPrepForDisplay($name),
-                          'title' => xarVarPrepForDisplay(xarML('Display #(1)',$name)),
-                          'url'   => $showurl ? xarModURL('blocks','admin','view_types') : ''
+    $itemtypes[1] = array('label' => xarVar::prepForDisplay($name),
+                          'title' => xarVar::prepForDisplay(xarML('Display #(1)',$name)),
+                          'url'   => $showurl ? xarController::URL('blocks','admin','view_types') : ''
                          );
 
     $name = xarML('Block Groups');
-    $itemtypes[2] = array('label' => xarVarPrepForDisplay($name),
-                          'title' => xarVarPrepForDisplay(xarML('Display #(1)',$name)),
-                          'url'   => $showurl ? xarModURL('blocks','admin','view_groups') : ''
+    $itemtypes[2] = array('label' => xarVar::prepForDisplay($name),
+                          'title' => xarVar::prepForDisplay(xarML('Display #(1)',$name)),
+                          'url'   => $showurl ? xarController::URL('blocks','admin','view_groups') : ''
                          );
 
     $name = xarML('Block Instances');
-    $itemtypes[3] = array('label' => xarVarPrepForDisplay($name),
-                          'title' => xarVarPrepForDisplay(xarML('Display #(1)',$name)),
-                          'url'   => $showurl ? xarModURL('blocks','admin','view_instances') : ''
+    $itemtypes[3] = array('label' => xarVar::prepForDisplay($name),
+                          'title' => xarVar::prepForDisplay(xarML('Display #(1)',$name)),
+                          'url'   => $showurl ? xarController::URL('blocks','admin','view_instances') : ''
                          );
 
     return $itemtypes;

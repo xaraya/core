@@ -112,7 +112,7 @@ function categories_adminapi_linkcat($args)
             {
                 foreach (array_keys($childiids) as $cid)
                 {
-                    if(!xarSecurityCheck('EditCategoryLink',1,'Link',"$args[modid]:$modtype:$iid:$cid")) return;
+                    if(!xarSecurity::check('EditCategoryLink',1,'Link',"$args[modid]:$modtype:$iid:$cid")) return;
                 }
             }
             // Delete old links
@@ -127,7 +127,7 @@ function categories_adminapi_linkcat($args)
             // Security check
             foreach ($args['iids'] as $iid)
             {
-                if(!xarSecurityCheck('SubmitCategoryLink',1,'Link',"$args[modid]:$modtype:$iid:All")) return;
+                if(!xarSecurity::check('SubmitCategoryLink',1,'Link',"$args[modid]:$modtype:$iid:All")) return;
             }
         }
     }
@@ -140,7 +140,7 @@ function categories_adminapi_linkcat($args)
        foreach ($args['cids'] as $cid)
        {
           // Security check
-          if(!xarSecurityCheck('SubmitCategoryLink',1,'Link',"$args[modid]:$modtype:$iid:$cid")) return;
+          if(!xarSecurity::check('SubmitCategoryLink',1,'Link',"$args[modid]:$modtype:$iid:$cid")) return;
 
           $basecid = isset($basecids[$i]) ? $basecids[$i] : 0;
           $cidparts = explode('.',$cid);

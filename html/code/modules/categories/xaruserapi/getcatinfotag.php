@@ -48,7 +48,7 @@ function categories_userapi_getcatinfotag($args)
         // Return the formatted category array.
         // Pass all the arguments in too, allowing for a 'passthrough' from
         // the original theme tag.
-        return xarTplModule(
+        return xarTpl::module(
             'categories', 'user', 'catinfo',
             array_merge($args, array('cats'=>$cats)), $template
         );
@@ -59,7 +59,7 @@ function categories_userapi_getcatinfotag($args)
     // Set default module.
     if (empty($args['modid']) || !is_numeric($args['modid'])) {
         if (empty($args['module'])) {
-            $args['module'] = xarModGetName();
+            $args['module'] = xarMod::getName();
         }
 
         if (!empty($args['module'])) {

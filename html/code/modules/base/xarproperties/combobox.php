@@ -43,7 +43,7 @@ sys::import('modules.base.xarproperties.dropdown');
 
             // First check for text in the text box
             $tbname  = $name.'_tb';
-            if (!xarVarFetch($tbname, 'isset', $tbvalue,  NULL, XARVAR_DONT_SET)) {return;}
+            if (!xarVar::fetch($tbname, 'isset', $tbvalue,  NULL, xarVar::DONT_SET)) {return;}
 
             // store the fieldname for configurations who need them (e.g. file uploads)
             $this->fieldname = $tbname;
@@ -62,7 +62,7 @@ sys::import('modules.base.xarproperties.dropdown');
                 return $isvalid;
             } else {
                 // check as a dropdown
-                if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+                if (!xarVar::fetch($name, 'isset', $value,  NULL, xarVar::DONT_SET)) {return;}
                 // Did we find a dropdown?
                 if(!isset($value)) {
                     $this->invalid = xarML('No dropdown available for the combobox #(1)',$name);

@@ -63,13 +63,13 @@ function base_userapi_browse_files(Array $args=array())
 
     // Levels lies between 1 and max_levels.
     // Set levels=1 to stay in a single diectory.
-    if (!xarVarValidate('int:1:'.$max_levels, $levels, true)) {$levels = $max_levels;}
+    if (!xarVar::validate('int:1:'.$max_levels, $levels, true)) {$levels = $max_levels;}
 
     // The path return format is an unumerated type.
-    if (!xarVarValidate('enum:abs:rel:file', $retpath, true)) {$retpath = 'file';}
+    if (!xarVar::validate('enum:abs:rel:file', $retpath, true)) {$retpath = 'file';}
 
     // An array of directories to skip.
-    if (!xarVarValidate('list:string:1', $skipdirs, true)) {$skipdirs = array();}
+    if (!xarVar::validate('list:string:1', $skipdirs, true)) {$skipdirs = array();}
 
     // Always skip current and parent directory.
     $skipdirs += array('.', '..');

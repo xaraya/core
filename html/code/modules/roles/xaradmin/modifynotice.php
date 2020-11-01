@@ -17,32 +17,32 @@
 function roles_admin_modifynotice()
 {
     // Security
-    if (!xarSecurityCheck('AdminRoles')) return;
+    if (!xarSecurity::check('AdminRoles')) return;
     
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED)) return;
     $hooks = array();
     switch (strtolower($phase)) {
         case 'modify':
         default:
             $ips = xarModVars::get('roles','disallowedips');
             $data['ips'] = empty($ips) ? '' : unserialize($ips);
-            $data['authid'] = xarSecGenAuthKey();
+            $data['authid'] = xarSec::genAuthKey();
             $data['updatelabel'] = xarML('Update Notification Configuration');
 
-            $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
+            $hooks = xarModHooks::call('module', 'modifyconfig', 'roles',
                 array('module' => 'roles'));
             $data['hooks'] = $hooks;
 
             break;
 
         case 'update':
-            if (!xarVarFetch('askwelcomeemail', 'checkbox', $askwelcomeemail, false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('askdeactivationemail', 'checkbox', $askdeactivationemail, false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('askvalidationemail', 'checkbox', $askvalidationemail, false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('askpendingemail', 'checkbox', $askpendingemail, false, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('askpasswordemail', 'checkbox', $askpasswordemail, false, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('askwelcomeemail', 'checkbox', $askwelcomeemail, false, xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('askdeactivationemail', 'checkbox', $askdeactivationemail, false, xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('askvalidationemail', 'checkbox', $askvalidationemail, false, xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('askpendingemail', 'checkbox', $askpendingemail, false, xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('askpasswordemail', 'checkbox', $askpasswordemail, false, xarVar::NOT_REQUIRED)) return;
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             // Update module variables
@@ -52,10 +52,10 @@ function roles_admin_modifynotice()
             xarModVars::set('roles', 'askpendingemail', $askpendingemail);
             xarModVars::set('roles', 'askpasswordemail', $askpasswordemail);
 
-            xarModCallHooks('module', 'updateconfig', 'roles',
+            xarModHooks::call('module', 'updateconfig', 'roles',
                 array('module' => 'roles'));
 
-            xarController::redirect(xarModURL('roles', 'admin', 'modifynotice'));
+            xarController::redirect(xarController::URL('roles', 'admin', 'modifynotice'));
             // Return
             return true;
 

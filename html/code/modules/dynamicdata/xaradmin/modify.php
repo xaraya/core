@@ -27,21 +27,21 @@ function dynamicdata_admin_modify(Array $args=array())
 {
     extract($args);
 
-    if(!xarVarFetch('objectid', 'id',    $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id','isset', $module_id, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('join',     'isset', $join,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('notfresh', 'isset', $notfresh,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule','isset', $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'id',    $objectid,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('name',     'isset', $name,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module_id','isset', $module_id, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('join',     'isset', $join,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('table',    'isset', $table,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('notfresh', 'isset', $notfresh,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('tplmodule','isset', $tplmodule, NULL, xarVar::DONT_SET)) {return;}
 
-    if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('preview',  'isset', $preview,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',   'isset', $itemid,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('template', 'isset', $template,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('preview',  'isset', $preview,   NULL, xarVar::DONT_SET)) {return;}
 
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
-    if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', xarVar::NOT_REQUIRED)) return;
 
     if (empty($objectid) && empty($name)) $objectid = 1;
     $object = DataObjectMaster::getObject(array('objectid' => $objectid,
@@ -100,7 +100,7 @@ function dynamicdata_admin_modify(Array $args=array())
 
                 // if we're editing a dynamic property, save its property type to cache
                 // for correct processing of the configuration rule (ValidationProperty)
-                xarVarSetCached('dynamicdata','currentproptype', $object->properties['type']);
+                xarVar::setCached('dynamicdata','currentproptype', $object->properties['type']);
             }
 
             $data['preview'] = $preview;
@@ -123,7 +123,7 @@ function dynamicdata_admin_modify(Array $args=array())
 
         case 'clone':
             // user needs admin access to change the access rules
-            $data['adminaccess'] = xarSecurityCheck('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
+            $data['adminaccess'] = xarSecurity::check('',0,'All',$object->objectid . ":" . $name . ":" . "$itemid",0,'',0,800);
             $data['name'] = $object->properties['name']->value;
             if ($object->objectid == 1) {
                 $data['label'] = $object->properties['label']->value;
@@ -137,7 +137,7 @@ function dynamicdata_admin_modify(Array $args=array())
     
     $data['tplmodule'] = $args['tplmodule'];   //TODO: is this needed
     $data['objectid'] = $args['objectid'];
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
             
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {

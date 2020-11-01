@@ -94,7 +94,7 @@
     
                 <!--
                 <xar:if condition="empty($catid)">
-                    <a href="#xarModURL('categories','admin','checklinks',array('modid' => $modid, 'itemtype' => $itemtype))#">Check Orphan Links</a><br/>
+                    <a href="#xarController::URL('categories','admin','checklinks',array('modid' => $modid, 'itemtype' => $itemtype))#">Check Orphan Links</a><br/>
                 </xar:if>
                 -->
     

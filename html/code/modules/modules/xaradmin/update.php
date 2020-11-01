@@ -20,23 +20,23 @@
 function modules_admin_update()
 {
     // Security
-    if (!xarSecurityCheck('EditModules')) return; 
+    if (!xarSecurity::check('EditModules')) return; 
     
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // Get parameters
-    xarVarFetch('id','id',$regId);
+    xarVar::fetch('id','id',$regId);
     // CHECKME: what's this?
-    xarVarFetch('newdisplayname','str::',$newDisplayName); 
+    xarVar::fetch('newdisplayname','str::',$newDisplayName); 
 
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // update hooks...
-    if (!xarVarFetch('observers', 'array', $observers, array(), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('observers', 'array', $observers, array(), xarVar::NOT_REQUIRED)) return;
     
     if (!xarMod::apiFunc('modules', 'admin', 'update',
         array(
@@ -45,11 +45,11 @@ function modules_admin_update()
             'observers' => $observers,
         ))) return;
 
-    xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
+    xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET);
     if (!empty($return_url)) {
         xarController::redirect($return_url);
     } else {
-        xarController::redirect(xarModURL('modules', 'admin', 'modify', array('id' => $regId)));
+        xarController::redirect(xarController::URL('modules', 'admin', 'modify', array('id' => $regId)));
     }
     
     return true;

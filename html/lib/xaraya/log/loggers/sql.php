@@ -88,17 +88,16 @@ class xarLogger_sql extends xarLogger
      */
     function notify($message, $priority)
     {
-        if (!$this->doLogLevel($level)) return false;
+        if (!$this->doLogLevel($priority)) return false;
 
         /* Build the SQL query for this log entry insertion. */
         $q = sprintf('INSERT INTO %s (ident, logtime, priority, message)' .
                      'VALUES(?, ?, ?, ?)',
                      $this->_table);
-        $bindvars = array($thid->_ident, $this->getTime(), $priority, $message);
+        $bindvars = array($this->_ident, $this->getTime(), $priority, $message);
         $stmt =& $this->_dbconn->prepareStatement($q);
         $stmt->executeUpdate($bindvars);
 
         return true;
     }
 }
-?>

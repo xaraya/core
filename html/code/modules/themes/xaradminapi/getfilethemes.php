@@ -60,7 +60,7 @@ function themes_adminapi_getfilethemes()
                     }
 
                     // TODO: beautify :-)
-                    if (!isset($regId) || xarVarPrepForOS($directory) != $themeOsDir) {
+                    if (!isset($regId) || xarVar::prepForOS($directory) != $themeOsDir) {
                         xarSession::setVar('errormsg', 
                           "Theme '$name' exists in $basedir/$themeOsDir " .
                           "but should be in $basedir/$directory according to $basedir/$themeOsDir/xartheme.php... Skipping this theme until resolved.");

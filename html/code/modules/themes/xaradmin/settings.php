@@ -17,15 +17,15 @@
 function themes_admin_settings()
 {
     // Security
-    if(!xarSecurityCheck('AdminThemes')) return;
+    if(!xarSecurity::check('AdminThemes')) return;
 
     // form parameters
-    if (!xarVarFetch('hidecore',  'str:1:', $hidecore,  '0',                  XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('selstyle',  'str:1:', $selstyle,  'plain',              XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('selfilter', 'str:1:', $selfilter, 'XARTHEME_STATE_ANY', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('selclass',  'str:1:', $selclass,  'all',                XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('regen',     'str:1:', $regen,      false,               XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('useicons',  'checkbox', $useicons, false,               XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('hidecore',  'str:1:', $hidecore,  '0',                  xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('selstyle',  'str:1:', $selstyle,  'plain',              xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('selfilter', 'str:1:', $selfilter, 'xarTheme::STATE_ANY', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('selclass',  'str:1:', $selclass,  'all',                xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('regen',     'str:1:', $regen,      false,               xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('useicons',  'checkbox', $useicons, false,               xarVar::NOT_REQUIRED)) return;
 
     if (!xarModUserVars::set('themes', 'hidecore', $hidecore)) return;
     if (!xarModUserVars::set('themes', 'selstyle', $selstyle)) return;
@@ -33,7 +33,7 @@ function themes_admin_settings()
     if (!xarModUserVars::set('themes', 'selclass', $selclass)) return;
     if (!xarModUserVars::set('themes', 'useicons', $useicons)) return;
 
-    xarController::redirect(xarModURL('themes', 'admin', 'view', array('regen' => $regen = 1)));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view', array('regen' => $regen = 1)));
     return true;
 }
 

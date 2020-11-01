@@ -19,7 +19,7 @@
  * New way of calling hooks
  * xarHooks::notify('ModuleUpdateconfig', $item);
  * Legacy way, supported for now, deprecated in future 
- * xarModCallHooks('module', 'updateconfig', $module, $item); 
+ * xarModHooks::call('module', 'updateconfig', $module, $item); 
 **/
 sys::import('xaraya.structures.hooks.apisubject');
 class ModulesModuleUpdateconfigSubject extends ApiHookSubject

@@ -4,9 +4,9 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object:objectid)">
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
         <xar:else/>
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
         </xar:if>
         <h2>
             <xar:if condition="!empty($object:objectid) and $object:objectid eq 1">
@@ -37,7 +37,7 @@
             Trying to create this item here may break the module. Please proceed with caution.</h3>
         </xar:if>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <form method="post" action="#xarModURL('dynamicdata','admin','create')#" enctype="#$enc_type#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','create')#" enctype="#$enc_type#">
             <fieldset>
                 <legend>Item details</legend>
                 <xar:data-form object="$object"/>
@@ -53,8 +53,12 @@
                     <div class="xar-col">
                         <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                         <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
-                        <input type="hidden" name="join" id="join" value="#$object:join#"/>
-                        <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                        <xar:if condition="!empty($object:join)">
+                            <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                        </xar:if>
+                        <xar:if condition="!empty($object:table)">
+                            <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                        </xar:if>
                         <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
                         <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
                         <input type="hidden" name="notfresh" id="notfresh" value="true"/>

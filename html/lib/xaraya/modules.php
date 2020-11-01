@@ -293,7 +293,7 @@ class xarMod extends xarObject implements IxarMod
     static function getName($regID = NULL)
     {
         if(!isset($regID)) {
-            $modName = xarController::$request->getModule();
+            $modName = xarController::getRequest()->getModule();
         } else {
             $modinfo = self::getInfo($regID);
             $modName = $modinfo['name'];
@@ -965,7 +965,7 @@ class xarMod extends xarObject implements IxarMod
                     else return xarController::$response->NotFound();
                 } else {
                     ob_start();
-                    sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
+                    $r = sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
                     $error_msg = strip_tags(ob_get_contents());
                     ob_end_clean();
 

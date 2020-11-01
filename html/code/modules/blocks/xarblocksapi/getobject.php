@@ -107,7 +107,7 @@ function blocks_blocksapi_getobject(Array $args=array())
             throw new FunctionNotFoundException($args['block_method']);
 
         // Load the block language files
-        if(!xarMLSLoadTranslations($typepath)) {
+        if(!xarMLS::loadTranslations($typepath)) {
             // What to do here? return doesnt seem right
             return;
         }

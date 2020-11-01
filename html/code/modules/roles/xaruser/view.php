@@ -16,22 +16,22 @@
  */
 function roles_user_view(Array $args=array())
 {
-    if (!xarSecurityCheck('ViewRoles')) return;
+    if (!xarSecurity::check('ViewRoles')) return;
 
     // members list disabled? only show to roles admins
-    if ((bool)xarModVars::get('roles', 'displayrolelist') == false && !xarSecurityCheck('AdminRoles', 0)) {
-        xarController::redirect(xarModURL('roles', 'user', 'main'));
+    if ((bool)xarModVars::get('roles', 'displayrolelist') == false && !xarSecurity::check('AdminRoles', 0)) {
+        xarController::redirect(xarController::URL('roles', 'user', 'main'));
     }
 //    extract($args);
 
-    if(!xarVarFetch('startnum', 'int:1', $args['startnum'], NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('itemtype', 'int', $args['itemtype'], xarRoles::ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('search', 'str:1:100', $args['search'], NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('order', 'str', $args['order'], NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('include', 'str', $args['include'], NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('exclude', 'str', $args['exclude'], NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('tplmodule', 'str', $args['tplmodule'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('template', 'str', $args['template'], '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('startnum', 'int:1', $args['startnum'], NULL, xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('itemtype', 'int', $args['itemtype'], xarRoles::ROLES_USERTYPE, xarVar::NOT_REQUIRED)) return;
+    if(!xarVar::fetch('search', 'str:1:100', $args['search'], NULL, xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('order', 'str', $args['order'], NULL, xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('include', 'str', $args['include'], NULL, xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('exclude', 'str', $args['exclude'], NULL, xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('tplmodule', 'str', $args['tplmodule'], 'roles', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('template', 'str', $args['template'], '', xarVar::NOT_REQUIRED)) {return;}
 
     $data['items'] = array();
     $data['pager'] = '';
@@ -64,7 +64,7 @@ function roles_user_view(Array $args=array())
     $pagerfilter['startnum'] = '%%';
 
     $data['itemsperpage'] = $numitems;
-    $data['urltemplate'] = xarModURL('roles', 'user', 'view', $pagerfilter);
+    $data['urltemplate'] = xarController::URL('roles', 'user', 'view', $pagerfilter);
     $data['urlitemmatch'] = '%%';
 
     return xarTpl::module($args['tplmodule'],'user','view',$data,$args['template']);

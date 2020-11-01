@@ -39,7 +39,7 @@ function roles_userapi_getdeleteduser(Array $args=array())
         $itemtype = xarRoles::ROLES_USERTYPE;
     }
 
-    if(!xarSecurityCheck('ReadRoles')) return;
+    if(!xarSecurity::check('ReadRoles')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();

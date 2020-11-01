@@ -20,11 +20,11 @@
 function privileges_admin_modifyrealm()
 {
     // Security
-    if(!xarSecurityCheck('EditPrivileges',0,'Realm')) return;
+    if(!xarSecurity::check('EditPrivileges',0,'Realm')) return;
 
-    if (!xarVarFetch('id',       'int', $id,      '',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('confirmed', 'bool', $confirmed, false, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('name',      'str:1.20', $name,      '',      XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('id',       'int', $id,      '',      xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('confirmed', 'bool', $confirmed, false, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('name',      'str:1.20', $name,      '',      xarVar::NOT_REQUIRED)) {return;}
     
     $dbconn = xarDB::getConn();
     $xartable =& xarDB::getTables();
@@ -40,8 +40,8 @@ function privileges_admin_modifyrealm()
             list($result_id, $name) = $result->fields; 
         }
     } else {
-        if (!xarVarFetch('newname',   'str:1.20',$newname, '',XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarSecConfirmAuthKey()) {
+        if (!xarVar::fetch('newname',   'str:1.20',$newname, '',xarVar::NOT_REQUIRED)) {return;}
+        if (!xarSec::confirmAuthKey()) {
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
@@ -66,13 +66,13 @@ function privileges_admin_modifyrealm()
         $bindvars[] = $id;
         $result = $stmt->executeQuery($bindvars);
 
-        xarController::redirect(xarModURL('privileges', 'admin', 'viewrealms'));
+        xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'));
     }
 
     $data['id'] = $id;
     $data['name'] = $name;
     $data['newname'] = '';
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     return $data;
 }
 ?>

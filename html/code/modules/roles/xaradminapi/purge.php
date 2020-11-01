@@ -41,7 +41,7 @@ function roles_adminapi_purge(Array $args=array())
                 array('id' => $item['id']));
 
         // Security check
-        if (!xarSecurityCheck('ManageRoles',0,'Item',"$item[name]::$item[id]")) return;
+        if (!xarSecurity::check('ManageRoles',0,'Item',"$item[name]::$item[id]")) return;
 
         // Call the Roles class
         $role = xarRoles::get($item['id']);
@@ -53,7 +53,7 @@ function roles_adminapi_purge(Array $args=array())
         $item['module'] = 'roles';
         $item['itemid'] = $item['id'];
         $item['method'] = 'purge';
-        xarModCallHooks('item', 'delete', $id, $item);
+        xarModHooks::call('item', 'delete', $id, $item);
     }
 
     //finished successfully

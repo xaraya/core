@@ -18,7 +18,7 @@
 
         <fieldset>
             <div class="qstatus">
-                Status as of: #xarLocaleGetFormattedDate('medium')# / #xarLocaleGetFormattedTime('medium')#
+                Status as of: #xarLocale::getFormattedDate('medium')# / #xarLocale::getFormattedTime('medium')#
             </div>
             <legend>Queue status overview</legend>
             <xar:foreach in="$queues" key="$index" value="$qinfo">
@@ -34,10 +34,10 @@
                 </ul>
             </xar:foreach>
             <div class="qstatus">
-                <a href="#xarModURL('mail','admin','qstatus')#">
+                <a href="#xarController::URL('mail','admin','qstatus')#">
                     <xar:img scope="module" module="mail" file="refresh.gif"/>Refresh current status
                 </a>
-                <a href="#xarModURL('mail','admin','qstatus')#">
+                <a href="#xarController::URL('mail','admin','qstatus')#">
                     <xar:img scope="module" module="mail" file="reprocess.gif"/>Reprocess queues
                 </a>
             </div>

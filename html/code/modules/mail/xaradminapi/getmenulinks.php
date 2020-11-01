@@ -20,7 +20,7 @@
 function mail_adminapi_getmenulinks()
 {
     if (xarMod::isAvailable('scheduler')) {
-        $menulinks[] = array('url' => xarModURL('mail','admin','viewq'),
+        $menulinks[] = array('url' => xarController::URL('mail','admin','viewq'),
                              'title' => xarML('View all mails scheduled to be sent later'),
                              'label' => xarML('View Mail Queue'));
     }

@@ -54,7 +54,7 @@ function dynamicdata_adminapi_removehook(Array $args=array())
         //return $extrainfo;
     }
 
-    if(!xarSecurityCheck('DeleteDynamicDataItem',0,'Item',"$module_id:All:All")) {
+    if(!xarSecurity::check('DeleteDynamicDataItem',0,'Item',"$module_id:All:All")) {
         // we *must* return $extrainfo for now, or the next hook will fail
         // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
         //return $extrainfo;

@@ -31,7 +31,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#">#$parents[$i]['parentname']#</a>
+                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#">#$parents[$i]['parentname']#</a>
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
@@ -102,8 +102,8 @@
                                 </label>
                             </div>
                             <div class="xar-col">
-                                #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
-                                #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                                #xarLocale::getFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$id))#
+                                #xarLocale::getFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$id))#
                             </div>
                         </div>
                     </xar:if>
@@ -115,8 +115,8 @@
                                 </label>
                             </div>
                             <div class="xar-col">
-                                #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
-                                #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                                #xarLocale::getFormattedDate('medium', xarModUserVars::get('roles','passwordupdate',$id))#
+                                #xarLocale::getFormattedTime('medium', xarModUserVars::get('roles','passwordupdate',$id))#
                             </div>
                         </div>
                     </xar:if>

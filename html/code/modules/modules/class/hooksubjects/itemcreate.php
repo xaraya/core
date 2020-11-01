@@ -21,7 +21,7 @@
  * New way of calling hooks
  * xarHooks::notify('ItemCreate', $item);
  * Legacy way, supported for now, deprecated in future 
- * xarModCallHooks('item', 'create', $itemid, $item); 
+ * xarModHooks::call('item', 'create', $itemid, $item); 
 **/
 sys::import('xaraya.structures.hooks.apisubject');
 class ModulesItemCreateSubject extends ApiHookSubject

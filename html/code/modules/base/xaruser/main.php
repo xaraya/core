@@ -26,15 +26,15 @@
 function base_user_main(Array $args=array())
 {
     // Security Check
-    if(!xarSecurityCheck('ViewBase')) return;
+    if(!xarSecurity::check('ViewBase')) return;
     
     /* fetch some optional 'page' argument or parameter */
     extract($args);
-    if (!xarVarFetch('page','str',$page,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('page','str',$page,'',xarVar::NOT_REQUIRED)) return;
     if (!empty($page)){
         xarTpl::setPageTitle($page);
         /* Cache the custom page name so it is accessible elsewhere */
-        xarVarSetCached('Base.pages','page',$page);
+        xarVar::setCached('Base.pages','page',$page);
     } else {
         $pageTemplate = xarModVars::get('base', 'AlternatePageTemplateName');
         if (xarModVars::get('base', 'UseAlternatePageTemplate') != '' &&

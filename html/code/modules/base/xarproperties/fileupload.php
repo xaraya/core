@@ -53,15 +53,15 @@ class FileUploadProperty extends DataProperty
 
         // Determine if the uploads module is hooked to the calling module
         // if so, we will use the uploads modules functionality
-        if (xarVarGetCached('Hooks.uploads','ishooked')) {
+        if (xarVar::getCached('Hooks.uploads','ishooked')) {
             $this->UploadsModule_isHooked = TRUE;
         } else {
         // FIXME: this doesn't take into account the itemtype or non-main module objects
-            if (xarModIsHooked('uploads', xarModGetName())) {
+            if (xarModHooks::isHooked('uploads', xarMod::getName())) {
                 $this->UploadsModule_isHooked = true;
             }
             /*
-            $list = xarModGetHookList(xarModGetName(), 'item', 'transform');
+            $list = xarModHooks::getList(xarMod::getName(), 'item', 'transform');
             foreach ($list as $hook) {
                 if ($hook['module'] == 'uploads') {
                     $this->UploadsModule_isHooked = TRUE;
@@ -99,7 +99,7 @@ class FileUploadProperty extends DataProperty
             $uname = 'user';
             $id = xarUser::getVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
-            // out unwanted characters through xarVarPrepForOS, or if the database makes
+            // out unwanted characters through xarVar::prepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
             $udir = $uname . '_' . $id;
             $this->initialization_basedirectory = preg_replace('/\{user\}/',$udir,$this->initialization_basedirectory);
@@ -108,7 +108,7 @@ class FileUploadProperty extends DataProperty
             $uname = 'user';
             $id = xarUser::getVar('id');
             // Note: we add the userid just to make sure it's unique e.g. when filtering
-            // out unwanted characters through xarVarPrepForOS, or if the database makes
+            // out unwanted characters through xarVar::prepForOS, or if the database makes
             // a difference between upper-case and lower-case and the OS doesn't...
             $udir = $uname . '_' . $id;
             $this->initialization_importdirectory = preg_replace('/\{user\}/',$udir,$this->initialization_importdirectory);
@@ -129,7 +129,7 @@ class FileUploadProperty extends DataProperty
         // Store the fieldname for validations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET);
+            xarVar::fetch($name, 'isset', $value,  NULL, xarVar::DONT_SET);
         }
         return $this->validateValue($value);
     }
@@ -149,8 +149,8 @@ class FileUploadProperty extends DataProperty
         else $name = $this->propertyprefix . $this->id;
 
         // retrieve new value for preview + new/modify combinations
-        if (xarVarIsCached('DynamicData.FileUpload',$name)) {
-            $this->value = xarVarGetCached('DynamicData.FileUpload',$name);
+        if (xarVar::isCached('DynamicData.FileUpload',$name)) {
+            $this->value = xarVar::getCached('DynamicData.FileUpload',$name);
             return true;
         }
 
@@ -201,7 +201,7 @@ class FileUploadProperty extends DataProperty
                     $this->value = $return[1];
                 }
                 // save new value for preview + new/modify combinations
-                xarVarSetCached('DynamicData.FileUpload',$name,$this->value);
+                xarVar::setCached('DynamicData.FileUpload',$name,$this->value);
                 return true;
             }
         }
@@ -306,23 +306,23 @@ class FileUploadProperty extends DataProperty
                 // Note: if you use this, make sure you unlink($this->value) yourself once you're done with it
                 $this->value = $filepath;
                 // save new value for preview + new/modify combinations
-                xarVarSetCached('DynamicData.FileUpload',$name,$this->value);
+                xarVar::setCached('DynamicData.FileUpload',$name,$this->value);
 
             //} elseif ($this->obfuscate_filename) {
             // TODO: obfuscate filename + return hash & original filename + handle that combined value in the other methods
             //    $this->value = $filehash . ',' . $filename;
             //    // save new value for preview + new/modify combinations
-            //    xarVarSetCached('DynamicData.FileUpload',$name,$this->value);
+            //    xarVar::setCached('DynamicData.FileUpload',$name,$this->value);
 
             } else {
                 $this->value = $filename;
                 // save new value for preview + new/modify combinations
-                xarVarSetCached('DynamicData.FileUpload',$name,$this->value);
+                xarVar::setCached('DynamicData.FileUpload',$name,$this->value);
             }
 
         // retrieve new value for preview + new/modify combinations
-        } elseif (xarVarIsCached('DynamicData.FileUpload',$name)) {
-            $this->value = xarVarGetCached('DynamicData.FileUpload',$name);
+        } elseif (xarVar::isCached('DynamicData.FileUpload',$name)) {
+            $this->value = xarVar::getCached('DynamicData.FileUpload',$name);
         } elseif (!empty($value) &&  !(is_numeric($value) || stristr($value, ';'))) {
             if (!$this->validateExtension($value)) {
                 $this->invalid = xarML('The file type is not allowed');
@@ -336,7 +336,7 @@ class FileUploadProperty extends DataProperty
             $this->value = $value;
         } else {
             // No file name entered, get previous value
-            xarVarFetch($name. '_previous', 'isset', $value,  NULL, XARVAR_DONT_SET);
+            xarVar::fetch($name. '_previous', 'isset', $value,  NULL, xarVar::DONT_SET);
             $this->value = $value;
         }
         return true;
@@ -364,7 +364,7 @@ class FileUploadProperty extends DataProperty
 
         // inform anyone that we're showing a file upload field, and that they need to use
         // <form ... enctype="multipart/form-data" ... > in their input form
-        xarVarSetCached('Hooks.dynamicdata','withupload',1);
+        xarVar::setCached('Hooks.dynamicdata','withupload',1);
 
         if ($this->UploadsModule_isHooked == TRUE) {
             // user must have hooked the uploads module after uploading files directly
@@ -460,7 +460,7 @@ class FileUploadProperty extends DataProperty
 
         // inform anyone that we're showing a file upload field, and that they need to use
         // <form ... enctype="multipart/form-data" ... > in their input form
-        xarVarSetCached('Hooks.dynamicdata','withupload',1);
+        xarVar::setCached('Hooks.dynamicdata','withupload',1);
 
         return parent::showHidden($data);
     }

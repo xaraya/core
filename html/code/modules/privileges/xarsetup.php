@@ -130,7 +130,7 @@ function initializeSetup()
     // use external privilege wizard for 'Category' and 'Link' instances
     $instances = array(
                        array('header' => 'external', // this keyword indicates an external "wizard"
-                             'query'  => xarModURL('categories', 'admin', 'privileges'),
+                             'query'  => xarController::URL('categories', 'admin', 'privileges'),
                              'limit'  => 0
                             )
                     );
@@ -155,7 +155,7 @@ function initializeSetup()
     xarMasks::register('AdminBase','All','base','All','All',xarSecurityLevel('ACCESS_ADMIN'));
     /* This AdminPanel mask is added to replace the adminpanel module equivalent
      *   - since adminpanel module is removed as of 1.1.0
-     * At some stage we should remove this but practice has been to use this mask in xarSecurityCheck
+     * At some stage we should remove this but practice has been to use this mask in xarSecurity::check
      * frequently in module code and templates - left here for now for ease in backward compatibiilty
      * @todo remove this
      */

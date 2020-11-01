@@ -41,13 +41,13 @@ function modules_init()
               (name, regid, directory, version,
                class, category, admin_capable, user_capable, state )
               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $modInfo = xarMod_getFileInfo('modules');
+        $modInfo = xarMod::getFileInfo('modules');
         if (!isset($modInfo)) return; // throw back
         // Use version, since that's the only info likely to change
         $modVersion = $modInfo['version'];
         $bindvars = array('modules',1,'modules',(string) $modVersion,'Core Admin','System',true,false,3);
         $dbconn->Execute($query,$bindvars);
-        $modInfo = xarMod_getFileInfo('base');
+        $modInfo = xarMod::getFileInfo('base');
         if (!isset($modInfo)) return; // throw back
         // Use version, since that's the only info likely to change
         $modVersion = $modInfo['version'];
@@ -103,7 +103,7 @@ function modules_activate()
     $selstyle = xarModVars::get('modules', 'selsort');
     if (empty($hidecore))  xarModVars::set('modules', 'hidecore', 0);
     if (empty($selstyle))  xarModVars::set('modules', 'selstyle', 'plain');
-    if (empty($selfilter)) xarModVars::set('modules', 'selfilter', XARMOD_STATE_ANY);
+    if (empty($selfilter)) xarModVars::set('modules', 'selfilter', xarMod::STATE_ANY);
     if (empty($selsort))   xarModVars::set('modules', 'selsort', 'nameasc');
     // New in 1.1.x series but not used
     xarModVars::set('modules', 'disableoverview',0);

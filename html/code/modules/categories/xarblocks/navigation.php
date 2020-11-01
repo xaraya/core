@@ -70,11 +70,11 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
     //       (e.g. cross-module categories defined in categories admin ?)
         // Get current module
         if (empty($module)) {
-            if (xarVarIsCached('Blocks.categories','module')) {
-               $modname = xarVarGetCached('Blocks.categories','module');
+            if (xarVar::isCached('Blocks.categories','module')) {
+               $modname = xarVar::getCached('Blocks.categories','module');
             }
             if (empty($modname)) {
-                $modname = xarModGetName();
+                $modname = xarMod::getName();
             }
         } else {
             $modname = $module;
@@ -86,11 +86,11 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
         // Get current item type (if any)
         if (!isset($itemtype)) {
-            if (xarVarIsCached('Blocks.categories','itemtype')) {
-                $itemtype = xarVarGetCached('Blocks.categories','itemtype');
+            if (xarVar::isCached('Blocks.categories','itemtype')) {
+                $itemtype = xarVar::getCached('Blocks.categories','itemtype');
             } else {
                 // try to get itemtype from input
-                xarVarFetch('itemtype', 'id', $itemtype, NULL, XARVAR_DONT_SET);
+                xarVar::fetch('itemtype', 'id', $itemtype, NULL, xarVar::DONT_SET);
             }
         }
         if (empty($itemtype)) {
@@ -99,11 +99,11 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
 
         // Get current item id (if any)
         if (!isset($itemid)) {
-            if (xarVarIsCached('Blocks.categories','itemid')) {
-                $itemid = xarVarGetCached('Blocks.categories','itemid');
+            if (xarVar::isCached('Blocks.categories','itemid')) {
+                $itemid = xarVar::getCached('Blocks.categories','itemid');
             } else {
                 // try to get itemid from input
-                xarVarFetch('itemid', 'id', $itemid, NULL, XARVAR_DONT_SET);
+                xarVar::fetch('itemid', 'id', $itemid, NULL, xarVar::DONT_SET);
             }
         }
         if (empty($itemid)) {
@@ -154,19 +154,19 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
         }
         if (empty($showempty) || !empty($showcatcount)) {
             // A 'deep count' sums the totals at each node with the totals of all descendants.
-            if (xarVarIsCached('Blocks.categories', 'deepcount') && empty($startmodule)) {
-                $deepcount = xarVarGetCached('Blocks.categories', 'deepcount');
+            if (xarVar::isCached('Blocks.categories', 'deepcount') && empty($startmodule)) {
+                $deepcount = xarVar::getCached('Blocks.categories', 'deepcount');
             } else {
                 $deepcount = xarMod::apiFunc(
                     'categories', 'user', 'deepcount',
                     array('modid' => $modid, 'itemtype' => $itemtype)
                 );
-                xarVarSetCached('Blocks.categories','deepcount', $deepcount);
+                xarVar::setCached('Blocks.categories','deepcount', $deepcount);
             }
         }
         if (!empty($showcatcount)) {
-            if (xarVarIsCached('Blocks.categories', 'catcount') && empty($startmodule)) {
-                $catcount = xarVarGetCached('Blocks.categories', 'catcount');
+            if (xarVar::isCached('Blocks.categories', 'catcount') && empty($startmodule)) {
+                $catcount = xarVar::getCached('Blocks.categories', 'catcount');
             } else {
                 // Get number of items per category (for this module).
                 // If showcatcount == 2 then add in all descendants too.
@@ -182,22 +182,22 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                     $catcount =& $deepcount;
                 }
 
-                xarVarSetCached('Blocks.categories', 'catcount', $catcount);
+                xarVar::setCached('Blocks.categories', 'catcount', $catcount);
             }
         }
 
-        // Specify type=... & func = ... arguments for xarModURL()
+        // Specify type=... & func = ... arguments for xarController::URL()
         if (empty($type)) {
-            if (xarVarIsCached('Blocks.categories','type')) {
-                $type = xarVarGetCached('Blocks.categories','type');
+            if (xarVar::isCached('Blocks.categories','type')) {
+                $type = xarVar::getCached('Blocks.categories','type');
             }
             if (empty($type)) {
                 $type = 'user';
             }
         }
         if (empty($func)) {
-            if (xarVarIsCached('Blocks.categories','func')) {
-                $func = xarVarGetCached('Blocks.categories','func');
+            if (xarVar::isCached('Blocks.categories','func')) {
+                $func = xarVar::getCached('Blocks.categories','func');
             }
             if (empty($func)) {
                 $func = 'view';
@@ -205,12 +205,12 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
         }
 
         // Get current categories
-        if (xarVarIsCached('Blocks.categories','catid')) {
-           $catid = xarVarGetCached('Blocks.categories','catid');
+        if (xarVar::isCached('Blocks.categories','catid')) {
+           $catid = xarVar::getCached('Blocks.categories','catid');
         }
         if (empty($catid)) {
             // try to get catid from input
-            xarVarFetch('catid', 'str', $catid, NULL, XARVAR_DONT_SET);
+            xarVar::fetch('catid', 'str', $catid, NULL, xarVar::DONT_SET);
         }
         // turn $catid into $cids array (and set $andcids flag)
         $istree = 0;
@@ -231,16 +231,16 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 $andcids = false;
             }
         } elseif (empty($cids)) {
-            if (xarVarIsCached('Blocks.categories','cids')) {
-                $cids = xarVarGetCached('Blocks.categories','cids');
+            if (xarVar::isCached('Blocks.categories','cids')) {
+                $cids = xarVar::getCached('Blocks.categories','cids');
             }
-            if (xarVarIsCached('Blocks.categories','andcids')) {
-                $andcids = xarVarGetCached('Blocks.categories','andcids');
+            if (xarVar::isCached('Blocks.categories','andcids')) {
+                $andcids = xarVar::getCached('Blocks.categories','andcids');
             }
             if (empty($cids)) {
                 // try to get cids from input
-                xarVarFetch('cids',    'isset', $cids,    NULL,  XARVAR_DONT_SET);
-                xarVarFetch('andcids', 'isset', $andcids, false, XARVAR_NOT_REQUIRED);
+                xarVar::fetch('cids',    'isset', $cids,    NULL,  xarVar::DONT_SET);
+                xarVar::fetch('andcids', 'isset', $andcids, false, xarVar::NOT_REQUIRED);
 
                 if (empty($cids)) {
                     $cids = array();
@@ -288,8 +288,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 } else {
                     // See if we need to show anything
                     if (empty($showprevnext)) {
-                        if (xarVarIsCached('Blocks.categories','showprevnext')) {
-                            $showprevnext = xarVarGetCached('Blocks.categories','showprevnext');
+                        if (xarVar::isCached('Blocks.categories','showprevnext')) {
+                            $showprevnext = xarVar::getCached('Blocks.categories','showprevnext');
                             if (empty($showprevnext)) {
                                 return;
                             }
@@ -309,20 +309,20 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
     //                    if ($neighbour['link'] == 'parent') {
     //                        $data['uplabel'] = $neighbour['name'];
     //                        $data['upcid'] = $neighbour['cid'];
-    //                        $data['uplink'] = xarModURL($modname,$type,$func,
+    //                        $data['uplink'] = xarController::URL($modname,$type,$func,
     //                                                   array('itemtype' => $itemtype,
     //                                                         'catid' => $neighbour['cid']));
     //                    } elseif ($neighbour['link'] == 'previous') {
                         if ($neighbour['link'] == 'previous') {
                             $data['prevlabel'] = $neighbour['name'];
                             $data['prevcid'] = $neighbour['cid'];
-                            $data['prevlink'] = xarModURL($modname,$type,$func,
+                            $data['prevlink'] = xarController::URL($modname,$type,$func,
                                                          array('itemtype' => $itemtype,
                                                                'catid' => $neighbour['cid']));
                         } elseif ($neighbour['link'] == 'next') {
                             $data['nextlabel'] = $neighbour['name'];
                             $data['nextcid'] = $neighbour['cid'];
-                            $data['nextlink'] = xarModURL($modname,$type,$func,
+                            $data['nextlink'] = xarController::URL($modname,$type,$func,
                                                          array('itemtype' => $itemtype,
                                                                'catid' => $neighbour['cid']));
                         }
@@ -353,10 +353,10 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                     }
                     foreach ($catlist as $cat) {
                     // TODO: now this is a tricky part...
-                        $link = xarModURL($modname,$type,$func,
+                        $link = xarController::URL($modname,$type,$func,
                                          array('itemtype' => $itemtype,
                                                'catid' => $cat['id']));
-                        $label = xarVarPrepForDisplay($cat['name']);
+                        $label = xarVar::prepForDisplay($cat['name']);
                         $data['catitems'][] = array('catlabel' => $label,
                                                     'catid' => $cat['id'],
                                                     'catlink' => $link,
@@ -385,7 +385,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         $curcount = 0;
                     // TODO: now this is a tricky part...
                         $label = xarML('All');
-                        $link = xarModURL($modname,$type,$func,
+                        $link = xarController::URL($modname,$type,$func,
                                          array('itemtype' => $itemtype));
                         $join = '';
                         $catitems[] = array('catlabel' => $label,
@@ -394,12 +394,12 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                             'catjoin' => $join);
                         $join = ' &gt; ';
                         foreach ($parents as $cat) {
-                            $label = xarVarPrepForDisplay($cat['name']);
+                            $label = xarVar::prepForDisplay($cat['name']);
                             if ($cat['id'] == $cid && empty($itemid) && empty($andcids)) {
                                 $link = '';
                             } else {
                             // TODO: now this is a tricky part...
-                                $link = xarModURL($modname,$type,$func,
+                                $link = xarController::URL($modname,$type,$func,
                                                  array('itemtype' => $itemtype,
                                                        'catid' => $cat['id']));
                             }
@@ -409,9 +409,9 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                     $curcount = $catcount[$cat['id']];
                                 }
                                 if (!empty($cat['description'])) {
-                                    $descriptions[] = xarVarPrepHTMLDisplay($cat['description']);
+                                    $descriptions[] = xarVar::prepHTMLDisplay($cat['description']);
                                 } else {
-                                    $descriptions[] = xarVarPrepForDisplay($cat['name']);
+                                    $descriptions[] = xarVar::prepForDisplay($cat['name']);
                                 }
                                 // save current category info for icon etc.
                                 if (count($cids) == 1) {
@@ -432,7 +432,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         $catitems = array();
                         if (!empty($itemid) || !empty($andcids)) {
                             $label = xarML('Any of these categories');
-                            $link = xarModURL($modname,$type,$func,
+                            $link = xarController::URL($modname,$type,$func,
                                               array('itemtype' => $itemtype,
                                                     'catid' => join('-',$cids)));
                             $join = '';
@@ -443,7 +443,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         }
                         if (empty($andcids)) {
                             $label = xarML('All of these categories');
-                            $link = xarModURL($modname,$type,$func,
+                            $link = xarController::URL($modname,$type,$func,
                                               array('itemtype' => $itemtype,
                                                     'catid' => join('+',$cids)));
                             if (!empty($itemid)) {
@@ -480,11 +480,11 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         $curcat['module'] = 'categories';
                         $curcat['itemtype'] = 0;
                         $curcat['itemid'] = $cids[0];
-                        $curcat['returnurl'] = xarModURL($modname,$type,$func,
+                        $curcat['returnurl'] = xarController::URL($modname,$type,$func,
                                                          array('itemtype' => $itemtype,
                                                                'catid' => $cids[0]));
                         // calling item display hooks *for the categories module* here !
-                        $data['cathooks'] = xarModCallHooks('item','display',$cid,$curcat,'categories');
+                        $data['cathooks'] = xarModHooks::call('item','display',$cid,$curcat,'categories');
     */
                         // saving the current cat id for use e.g. with DD tags (<xar:data-display module="categories" itemid="$catid"/>)
                         $data['catid'] = $curcat['cid'];
@@ -494,21 +494,21 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                     if (empty($itemid)) {
                         // Get current title
                         if (empty($title)) {
-                            if (xarVarIsCached('Blocks.categories','title')) {
-                                $title = xarVarGetCached('Blocks.categories','title');
+                            if (xarVar::isCached('Blocks.categories','title')) {
+                                $title = xarVar::getCached('Blocks.categories','title');
                             }
                         }
                         if (!empty($curcat['name'])) {
-                            $title = xarVarPrepForDisplay($curcat['name']);
+                            $title = xarVar::prepForDisplay($curcat['name']);
                         }
-                        xarTplSetPageTitle($title);
+                        xarTpl::setPageTitle($title);
                     }
     */
                 // TODO: don't show icons when displaying items ?
                     if (!empty($curcat['image'])) {
                         // find the image in categories (we need to specify the module here)
-                        $data['catimage'] = xarTplGetImage($curcat['image'],'categories');
-                        $data['catname'] = xarVarPrepForDisplay($curcat['name']);
+                        $data['catimage'] = xarTpl::getImage($curcat['image'],'categories');
+                        $data['catname'] = xarVar::prepForDisplay($curcat['name']);
                     }
                     if ($showchildren == 2) {
                         // Get child categories (all sub-levels)
@@ -521,9 +521,9 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             if ($info['id'] == $cids[0]) {
                                 continue;
                             }
-                            $label = xarVarPrepForDisplay($info['name']);
+                            $label = xarVar::prepForDisplay($info['name']);
                         // TODO: now this is a tricky part...
-                            $link = xarModURL($modname,$type,$func,
+                            $link = xarController::URL($modname,$type,$func,
                                              array('itemtype' => $itemtype,
                                                    'catid' => $info['id']));
                             if (!empty($catcount[$info['id']])) {
@@ -533,7 +533,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             }
         /* don't show descriptions in (potentially) multi-level trees
                             if (!empty($info['description'])) {
-                                $descr = xarVarPrepHTMLDisplay($info['description']);
+                                $descr = xarVar::prepHTMLDisplay($info['description']);
                             } else {
                                 $descr = '';
                             }
@@ -562,8 +562,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         $numicons = 0;
                         foreach ($children as $cat) {
                         // TODO: now this is a tricky part...
-                            $label = xarVarPrepForDisplay($cat['name']);
-                            $link = xarModURL($modname,$type,$func,
+                            $label = xarVar::prepForDisplay($cat['name']);
+                            $link = xarController::URL($modname,$type,$func,
                                              array('itemtype' => $itemtype,
                                                    'catid' => $cat['id']));
                             if (!empty($catcount[$cat['id']])) {
@@ -573,7 +573,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                             }
                             if (!empty($cat['image'])) {
                                 // find the image in categories (we need to specify the module here)
-                                $image = xarTplGetImage($cat['image'],'categories');
+                                $image = xarTpl::getImage($cat['image'],'categories');
                                 $numicons++;
                                 $data['caticons'][] = array('catlabel' => $label,
                                                             'catid' => $cat['id'],
@@ -583,7 +583,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                                             'catnum' => $numicons);
                             } else {
                                 if (!empty($cat['description']) && $cat['description'] != $cat['name']) {
-                                    $descr = xarVarPrepHTMLDisplay($cat['description']);
+                                    $descr = xarVar::prepHTMLDisplay($cat['description']);
                                 } else {
                                     $descr = '';
                                 }
@@ -624,8 +624,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                 // Get current title (if dynamic)
                 if (!empty($dynamictitle)) {
                     if (empty($title) && empty($module)) {
-                        if (xarVarIsCached('Blocks.categories','title')) {
-                            $title = xarVarGetCached('Blocks.categories','title');
+                        if (xarVar::isCached('Blocks.categories','title')) {
+                            $title = xarVar::getCached('Blocks.categories','title');
                         }
                     }
                     if (empty($title) && !empty($itemtype)) {
@@ -670,11 +670,11 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                             }
 
-                            $link = xarModURL($modname,$type,$func,
+                            $link = xarController::URL($modname,$type,$func,
                                              array('itemtype' => $itemtype,
                                                    'catid' => $cat['id']));
 
-                            $label = xarVarPrepForDisplay($cat['name']);
+                            $label = xarVar::prepForDisplay($cat['name']);
                             if ($cat['id'] == $cid) {
                                 $catparents[] = array('catlabel' => $label,
                                                       'catid' => $cat['id'],
@@ -718,9 +718,9 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                             }
 
-                            $label = xarVarPrepForDisplay($cat['name']);
+                            $label = xarVar::prepForDisplay($cat['name']);
                         // TODO: now this is a tricky part...
-                            $link = xarModURL($modname,$type,$func,
+                            $link = xarController::URL($modname,$type,$func,
                                              array('itemtype' => $itemtype,
                                                    'catid' => $cat['id']));
 
@@ -754,7 +754,7 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         $parentid = 0;
                         foreach ($parents as $id => $info) {
                             if (empty($root)) {
-                                $root = xarVarPrepForDisplay($info['name']);
+                                $root = xarVar::prepForDisplay($info['name']);
                             }
                             if ($id == $cid) {
                                 $parentid = $info['parent'];
@@ -767,8 +767,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                         }
                         if (!empty($parents[$parentid])) {
                             $cat = $parents[$parentid];
-                            $label = xarVarPrepForDisplay($cat['name']);
-                            $link = xarModURL($modname,$type,$func,
+                            $label = xarVar::prepForDisplay($cat['name']);
+                            $link = xarController::URL($modname,$type,$func,
                                              array('itemtype' => $itemtype,
                                                    'catid' => $cat['id']));
                             if (!empty($catcount[$cat['id']])) {
@@ -811,8 +811,8 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                             }
 
-                            $label = xarVarPrepForDisplay($cat['name']);
-                            $link = xarModURL(
+                            $label = xarVar::prepForDisplay($cat['name']);
+                            $link = xarController::URL(
                                 $modname, $type, $func,
                                 array(
                                     'itemtype' => $itemtype,
@@ -829,9 +829,9 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
                                 }
                                 if ($showchildren && !empty($children) && count($children) > 0) {
                                     foreach ($children as $cat) {
-                                        $clabel = xarVarPrepForDisplay($cat['name']);
+                                        $clabel = xarVar::prepForDisplay($cat['name']);
                                     // TODO: now this is a tricky part...
-                                        $clink = xarModURL($modname,$type,$func,
+                                        $clink = xarController::URL($modname,$type,$func,
                                                           array('itemtype' => $itemtype,
                                                                 'catid' => $cat['id']));
                                         if (!empty($catcount[$cat['id']])) {

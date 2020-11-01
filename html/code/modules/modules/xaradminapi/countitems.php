@@ -13,7 +13,7 @@ function modules_adminapi_countitems(Array $args=array())
     extract($args);
     
     if (!isset($state))
-        $state = XARMOD_STATE_ACTIVE;
+        $state = xarMod::STATE_ACTIVE;
     
     if (!isset($include_core))
         $include_core = true;
@@ -47,15 +47,15 @@ function modules_adminapi_countitems(Array $args=array())
         $bindvars[] = $systemid;
     }  
 
-    if ($state != XARMOD_STATE_ANY) {
-        if ($state != XARMOD_STATE_INSTALLED) {
+    if ($state != xarMod::STATE_ANY) {
+        if ($state != xarMod::STATE_INSTALLED) {
             $where[] = 'mods.state = ?';
             $bindvars[] = $state;
         } else {
             $where[] = 'mods.state != ? AND mods.state < ? AND mods.state != ?';
-            $bindvars[] = XARMOD_STATE_UNINITIALISED;
-            $bindvars[] = XARMOD_STATE_MISSING_FROM_INACTIVE;
-            $bindvars[] = XARMOD_STATE_MISSING_FROM_UNINITIALISED;
+            $bindvars[] = xarMod::STATE_UNINITIALISED;
+            $bindvars[] = xarMod::STATE_MISSING_FROM_INACTIVE;
+            $bindvars[] = xarMod::STATE_MISSING_FROM_UNINITIALISED;
         }    
     }
     

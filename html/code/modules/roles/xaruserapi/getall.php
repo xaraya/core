@@ -32,7 +32,7 @@ function roles_userapi_getall(Array $args=array())
     if (!isset($numitems)) $numitems = -1;
 
     // Security check - need overview level to see that the roles exist
-    if (!xarSecurityCheck('ViewRoles')) return;
+    if (!xarSecurity::check('ViewRoles')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();
@@ -135,7 +135,7 @@ function roles_userapi_getall(Array $args=array())
     }
 
     // Hide pending users from non-admins
-    if (!xarSecurityCheck('AdminRoles', 0)) {
+    if (!xarSecurity::check('AdminRoles', 0)) {
         $where_clause[] = 'roletab.state <> ?';
         $bindvars[] = (int) xarRoles::ROLES_STATE_PENDING;
     }
@@ -192,7 +192,7 @@ function roles_userapi_getall(Array $args=array())
     $roles = array();
     while($result->next()) {
         list($id, $uname, $name, $email, $pass, $state, $date_reg) = $result->fields;
-        if (xarSecurityCheck('ReadRoles', 0, 'Roles', "$uname")) {
+        if (xarSecurity::check('ReadRoles', 0, 'Roles', "$uname")) {
 
             if (!empty($idlist)) {
                 $roles[$id] = array(
@@ -215,7 +215,7 @@ function roles_userapi_getall(Array $args=array())
                     'date_reg'  => $date_reg
                 );
             }
-        } elseif (xarSecurityCheck('ViewRoles', 0, 'Roles', "$uname")) {
+        } elseif (xarSecurity::check('ViewRoles', 0, 'Roles', "$uname")) {
             // If we only have overview privilege, then supply more restricted information.
             if (!empty($idlist)) {
                 $roles[$id] = array(

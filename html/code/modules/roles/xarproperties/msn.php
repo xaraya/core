@@ -71,7 +71,7 @@ class MSNProperty extends TextBoxProperty
 
         $data['link'] ='';
         if(!empty($data['value'])) {
-            $data['link'] = 'msnim:chat?contact='.xarVarPrepForDisplay($data['value']);
+            $data['link'] = 'msnim:chat?contact='.xarVar::prepForDisplay($data['value']);
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
@@ -86,7 +86,7 @@ class MSNProperty extends TextBoxProperty
     public function showOutput(Array $data = array())
     {
         if (!isset($data['value'])) $data['value'] = $this->value;
-        $data['value'] = xarVarPrepForDisplay($data['value']);
+        $data['value'] = xarVar::prepForDisplay($data['value']);
 
         $data['link'] = '';
         if (!empty($data['value'])) {

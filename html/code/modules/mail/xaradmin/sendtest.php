@@ -21,20 +21,20 @@
 function mail_admin_sendtest()
 {
     // Security
-    if (!xarSecurityCheck('ManageMail')) return;
+    if (!xarSecurity::check('ManageMail')) return;
 
     // Get parameters from whatever input we need
-    if (!xarVarFetch('message', 'str:1:', $message)) return;
-    if (!xarVarFetch('subject', 'str:1', $subject)) return;
-    if (!xarVarFetch('email', 'email', $email, '')) return;
-    if (!xarVarFetch('name', 'str:1', $name, '')) return;
-    if (!xarVarFetch('emailcc', 'email', $emailcc, '')) return;
-    if (!xarVarFetch('namecc', 'str:1', $namecc, '')) return;
-    if (!xarVarFetch('emailbcc', 'email', $emailbcc, '')) return;
-    if (!xarVarFetch('namebcc', 'str:1', $namebcc, '')) return;
+    if (!xarVar::fetch('message', 'str:1:', $message)) return;
+    if (!xarVar::fetch('subject', 'str:1', $subject)) return;
+    if (!xarVar::fetch('email', 'email', $email, '')) return;
+    if (!xarVar::fetch('name', 'str:1', $name, '')) return;
+    if (!xarVar::fetch('emailcc', 'email', $emailcc, '')) return;
+    if (!xarVar::fetch('namecc', 'str:1', $namecc, '')) return;
+    if (!xarVar::fetch('emailbcc', 'email', $emailbcc, '')) return;
+    if (!xarVar::fetch('namebcc', 'str:1', $namebcc, '')) return;
 
     // Confirm authorisation code.
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
 //        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     if (empty($email)) {
@@ -44,7 +44,7 @@ function mail_admin_sendtest()
         $name = xarModVars::get('mail', 'adminname');
     }
 
-    if (!xarVarFetch('when', 'str:1', $when, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('when', 'str:1', $when, '', xarVar::NOT_REQUIRED)) return;
     if (!empty($when)) {
         $when .= ' GMT';
         $when = strtotime($when);
@@ -70,7 +70,7 @@ function mail_admin_sendtest()
                 'when' => $when))) return;
 
     // lets update status and display updated configuration
-    xarController::redirect(xarModURL('mail', 'admin', 'compose', array('confirm' => 1)));
+    xarController::redirect(xarController::URL('mail', 'admin', 'compose', array('confirm' => 1)));
     return true;
 }
 ?>

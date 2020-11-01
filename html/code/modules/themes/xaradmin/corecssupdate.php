@@ -21,20 +21,20 @@
 function themes_admin_corecssupdate()
 {
     // Security
-    if (!xarSecurityCheck('AdminThemes')) return;
+    if (!xarSecurity::check('AdminThemes')) return;
 
     // Confirm authorisation code
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }  
     
     // params
-    if (!xarVarFetch('linkoptions', 'str::', $linkoptions, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('linkoptions', 'str::', $linkoptions, '', xarVar::NOT_REQUIRED)) return;
 
     // set modvars
     xarModVars::set('themes', 'csslinkoption', $linkoptions);
 
-    xarController::redirect(xarModURL('themes','admin','cssconfig',array('component'=>'core')));
+    xarController::redirect(xarController::URL('themes','admin','cssconfig',array('component'=>'core')));
     // Return
     return true;
 }

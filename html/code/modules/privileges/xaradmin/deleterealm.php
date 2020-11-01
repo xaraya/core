@@ -18,8 +18,8 @@
  */
 function privileges_admin_deleterealm()
 {
-    if (!xarVarFetch('id',          'isset', $id,          NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('confirmed', 'isset', $confirmed, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVar::fetch('id',          'isset', $id,          NULL, xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('confirmed', 'isset', $confirmed, NULL, xarVar::DONT_SET)) return;
 
     $dbconn = xarDB::getConn();
     $xartable =& xarDB::getTables();
@@ -38,17 +38,17 @@ function privileges_admin_deleterealm()
 
     // Security
     if (empty($name)) return xarResponse::NotFound();
-    if(!xarSecurityCheck('ManagePrivileges',0,'Realm',$name)) return;
+    if(!xarSecurity::check('ManagePrivileges',0,'Realm',$name)) return;
 
     if (empty($confirmed)) {
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
         $data['id'] = $id;
         $data['name'] = $name;
         return $data;
     }
 
 // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
@@ -59,10 +59,10 @@ function privileges_admin_deleterealm()
     $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
 // Hmm... what do we do about hooks?
-//xarModCallHooks('item', 'delete', $id, '');
+//xarModHooks::call('item', 'delete', $id, '');
 
 // redirect to the next page
-    xarController::redirect(xarModURL('privileges', 'admin', 'viewrealms'));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'));
     return true;
 }
 

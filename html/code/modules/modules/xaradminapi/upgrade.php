@@ -47,15 +47,15 @@ function modules_adminapi_upgrade(Array $args=array())
                         'admin',
                         'setstate',
                         array('regid' => $regid,
-                              'state' => XARMOD_STATE_INACTIVE));
+                              'state' => xarMod::STATE_INACTIVE));
     if (!isset($res)) return;
 
     // Get the new version information...
-    $modFileInfo = xarMod_getFileInfo($modInfo['osdirectory']);
+    $modFileInfo = xarMod::getFileInfo($modInfo['osdirectory']);
     if (!isset($modFileInfo)) return;
 
     // Bug 1671 - Invalid SQL
-    // If the module fields returned from xarMod_getFileInfo()
+    // If the module fields returned from xarMod::getFileInfo()
     // are set to false, then they must be set to a some valid value
     // or a SQL error will occur due to null and zero length fields.
     if (!$modFileInfo['admin_capable'])

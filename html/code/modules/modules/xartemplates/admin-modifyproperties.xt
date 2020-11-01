@@ -5,7 +5,7 @@
     <div class="xar-mod-body">
         <h2>Modify Properties for Module: #$displayname#</h2>
         <xar:if condition="!empty($object)">
-            <form action="#xarModURL('modules','admin','modifyproperties')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#xarController::URL('modules','admin','modifyproperties')#" method="post" enctype="application/x-www-form-urlencoded">
                 <xar:data-form object="$object"/>
                 <div class="xar-form-actions">
                     <div class="xar-row">

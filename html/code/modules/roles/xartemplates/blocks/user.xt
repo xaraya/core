@@ -32,7 +32,7 @@
                  Registered:
              </td>
              <td>
-                 #xarLocaleGetFormattedDate('short',$thisuser['date_reg'])#
+                 #xarLocale::getFormattedDate('short',$thisuser['date_reg'])#
              </td>
          </tr>
     </table>

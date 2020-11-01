@@ -79,7 +79,7 @@
                     - - - - - - - - - - - - - - - - - Begin User Variable Options - - - - - - - - - - - - - - - - - - -
                 -->
                 <xar:elseif condition="$tab eq 'duvs'"/>
-                    <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                    <form method="post" action="#xarController::URL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
                         <fieldset>
                         <legend>Basic User Variables</legend>
                         <p>Always available in a user role, and can be retrieved as
@@ -159,7 +159,7 @@
                 -->
                 <xar:elseif condition="$tab eq 'hooks'"/>
                 <xar:if condition="!empty($hooks)">
-                    <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                    <form method="post" action="#xarController::URL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
                        <fieldset>
                             <legend>Default Hooks For Users</legend>
                             <xar:foreach in="$hooks" key="$hookmodule">
@@ -177,7 +177,7 @@
                 -->
                 <xar:elseif condition="$tab eq 'grouphooks'"/>
                 <xar:if condition="!empty($hooks)">
-                    <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                    <form method="post" action="#xarController::URL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
                     enctype="application/x-www-form-urlencoded">
                         <fieldset>
                             <legend>Default Hooks For Groups</legend>
@@ -198,14 +198,14 @@
                         <legend>
                             Configure Roles Hooks
                         </legend>
-                        <xar:set name="url">#xarModURL('roles','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                        <xar:set name="url">#xarController::URL('roles','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
                         <xar:module main="false" module="modules" type="admin" func="hooks" curhook="roles" return_url="$url"/>
                     </fieldset>
                 <!--
                     - - - - - - - - - - - - - - - - - Begin Member Options - - - - - - - - - - - - - - - - - - -
                 -->
                 <xar:elseif condition="$tab eq 'memberlist'"/>
-                <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                <form method="post" action="#xarController::URL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
                     <!-- display the default settings properties -->
                     <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="admin"/>
                     <!-- if you add more roles_user_settings properties you can display them
@@ -224,7 +224,7 @@
                     - - - - - - - - - - - - - - - - - Begin Debugging Options - - - - - - - - - - - - - - - - - - -
                 -->
                 <xar:elseif condition="$tab eq 'debugging'"/>
-                <form method="post" action="#xarModURL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
+                <form method="post" action="#xarController::URL('roles','admin','modifyconfig')#" enctype="application/x-www-form-urlencoded">
                     <fieldset>
                         <legend>
                             Debug Administrators

@@ -19,7 +19,7 @@
 
 function installer_admin_finish()
 {
-    xarVarFetch('returnurl', 'str', $returnurl, 'site', XARVAR_NOT_REQUIRED);
+    xarVar::fetch('returnurl', 'str', $returnurl, 'site', xarVar::NOT_REQUIRED);
 
     // Default debug admin
     $admin = xarMod::apiFunc('roles', 'user', 'get', array('uname' => 'admin'));
@@ -44,11 +44,11 @@ function installer_admin_finish()
     
     switch ($returnurl) {
         case ('base'):
-            xarController::redirect(xarModURL('base','admin','modifyconfig'));
+            xarController::redirect(xarController::URL('base','admin','modifyconfig'));
         case ('modules'):
-            xarController::redirect(xarModURL('modules','admin','list'));
+            xarController::redirect(xarController::URL('modules','admin','list'));
         case ('blocks'):
-            xarController::redirect(xarModURL('blocks','admin','view_instances'));
+            xarController::redirect(xarController::URL('blocks','admin','view_instances'));
         case ('site'):
         default:
             xarController::redirect('index.php');

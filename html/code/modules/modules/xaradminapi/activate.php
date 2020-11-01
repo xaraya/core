@@ -28,7 +28,7 @@ function modules_adminapi_activate(Array $args=array())
 
     $modInfo = xarMod::getInfo($regid);
 
-    if($modInfo['state'] == XARMOD_STATE_UNINITIALISED) {
+    if($modInfo['state'] == xarMod::STATE_UNINITIALISED) {
         throw new Exception("Calling activate function while module is uninitialised");
     }
     // Module activate function
@@ -42,9 +42,9 @@ function modules_adminapi_activate(Array $args=array())
     // Update state of module
     $res = xarMod::apiFunc('modules','admin','setstate',
                         array('regid' => $regid,
-                              'state' => XARMOD_STATE_ACTIVE));
+                              'state' => xarMod::STATE_ACTIVE));
 
-    if (function_exists('xarOutputFlushCached') && function_exists('xarModGetName') && xarModGetName() != 'installer') {
+    if (function_exists('xarOutputFlushCached') && function_exists('xarMod::getName') && xarMod::getName() != 'installer') {
         xarOutputFlushCached('base');
         xarOutputFlushCached('modules');
         xarOutputFlushCached('base-block');

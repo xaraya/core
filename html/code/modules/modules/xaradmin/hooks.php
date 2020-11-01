@@ -20,11 +20,11 @@
 function modules_admin_hooks(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('ManageModules')) return;
+    if(!xarSecurity::check('ManageModules')) return;
 
-    if (!xarVarFetch('hook', 'isset', $curhook, null, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('layout', 'pre:trim:lower:enum:bycat', $layout, 'bycat', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('return_url', 'str', $return_url, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('hook', 'isset', $curhook, null, xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('layout', 'pre:trim:lower:enum:bycat', $layout, 'bycat', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('return_url', 'str', $return_url, '', xarVar::NOT_REQUIRED)) return;
     extract($args);
     
     // Get list of hook module(s) (observers) and the available hooks supplied 
@@ -122,7 +122,7 @@ function modules_admin_hooks(Array $args=array())
 
     $data['observers'] = $hookmods;
     $data['curhook'] = $curhook;
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     
     if (empty($return_url)) $return_url = null;
     $data['return_url'] = $return_url;

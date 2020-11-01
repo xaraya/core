@@ -69,7 +69,7 @@ function categories_userapi_getorphanlinks($args)
     uasort($catlist,'categories_userapi_getorphanlinks_sortbyleft');
 
     // Security check
-    if(!xarSecurityCheck('ViewCategoryLink')) return;
+    if(!xarSecurity::check('ViewCategoryLink')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();

@@ -11,14 +11,14 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>
-            <a href="#xarModURL('roles','admin','createmail')#">Messaging System:</a> Modify Notification Template: #$mailtype#
+            <a href="#xarController::URL('roles','admin','createmail')#">Messaging System:</a> Modify Notification Template: #$mailtype#
         </h2>
         <xar:set name="request">xarController::$request->getInfo()</xar:set>
         <xar:set name="tab">#$request.2#</xar:set>
         <xar:set name="xmldata">'mail'</xar:set>
         <xar:template type="module" module="base" file="admin-menu-skel"/>
 
-        <form method="post" action="#xarModURL('roles','admin','modifyemail')#">
+        <form method="post" action="#xarController::URL('roles','admin','modifyemail')#">
             <fieldset>
                 <legend>Select Template</legend>
                 <div class="xar-row">
@@ -62,7 +62,7 @@
                 </p>
             </fieldset>
         </form>
-        <form action="#xarModURL('roles','admin','modifyemail')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('roles','admin','modifyemail')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Email</legend>
                 <div class="xar-row">
@@ -73,7 +73,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                        <input type="text" name="subject" id="subject" value="#xarVar::prepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                     </div>
                 </div>
                 <div class="xar-row">
@@ -84,7 +84,7 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVar::prepForDisplay($message)#</textarea>
                     </div>
                 </div>
             </fieldset>

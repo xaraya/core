@@ -23,8 +23,8 @@
 function roles_admin_removemember()
 {
     // get input from any view of this page
-    if (!xarVarFetch('parentid', 'int', $parentid, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('childid',  'int', $childid, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('parentid', 'int', $parentid, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('childid',  'int', $childid, xarVar::NOT_REQUIRED)) return;
     // call the Roles class and get the parent and child objects
     $role   = xarRoles::get($parentid);
     $member = xarRoles::get($childid);
@@ -32,10 +32,10 @@ function roles_admin_removemember()
     // Security
     if (empty($role)) return xarResponse::NotFound();
     if (empty($member)) return xarResponse::NotFound();
-    if(!xarSecurityCheck('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
+    if(!xarSecurity::check('RemoveRole',1,'Relation',$role->getName() . ":" . $member->getName())) return;
 
     // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
@@ -46,10 +46,10 @@ function roles_admin_removemember()
     $pargs['module']   = 'roles';
     $pargs['itemtype'] = $role->getType(); // we might have something separate for groups later on
     $pargs['itemid']   = $parentid;
-    xarModCallHooks('item', 'unlink', $parentid, $pargs);
+    xarModHooks::call('item', 'unlink', $parentid, $pargs);
 
     // redirect to the next page
-    xarController::redirect(xarModURL('roles', 'admin', 'modify',  array('id' => $childid)));
+    xarController::redirect(xarController::URL('roles', 'admin', 'modify',  array('id' => $childid)));
     return true;
 }
 ?>

@@ -27,7 +27,7 @@ include_once 'creole/drivers/ldap/LdapResultSet.php';
  * Ldap implementation of Connection.
  *
  *
- * @author    Sébastien Cramatte <scramatte@zensoluciones.com>
+ * @author    SÃ©bastien Cramatte <scramatte@zensoluciones.com>
  * @package   creole.drivers.ldap
  */
 class LdapConnection extends ConnectionCommon implements Connection {

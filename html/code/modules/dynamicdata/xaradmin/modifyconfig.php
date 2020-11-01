@@ -21,10 +21,10 @@
 function dynamicdata_admin_modifyconfig()
 {
     // Security
-    if (!xarSecurityCheck('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) return;
 
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('tab','str:1', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+    if (!xarVar::fetch('tab','str:1', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, use_module_icons');
@@ -37,14 +37,14 @@ function dynamicdata_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
-            if (!xarVarFetch('debugmode',        'checkbox', $debugmode,        xarModVars::get('dynamicdata', 'debugmode'), XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('show_queries',     'checkbox', $show_queries,     xarConfigVars::get(null, 'Site.BL.ShowQueries'), XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('suppress_updates', 'checkbox', $suppress_updates, false, XARVAR_NOT_REQUIRED)) return;
-//            if (!xarVarFetch('administrators', 'str', $administrators, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('caching',    'checkbox', $caching, xarModVars::get('dynamicdata', 'caching'), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('debugmode',        'checkbox', $debugmode,        xarModVars::get('dynamicdata', 'debugmode'), xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('show_queries',     'checkbox', $show_queries,     xarConfigVars::get(null, 'Site.BL.ShowQueries'), xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('suppress_updates', 'checkbox', $suppress_updates, false, xarVar::NOT_REQUIRED)) return;
+//            if (!xarVar::fetch('administrators', 'str', $administrators, '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('caching',    'checkbox', $caching, xarModVars::get('dynamicdata', 'caching'), xarVar::NOT_REQUIRED)) return;
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {

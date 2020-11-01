@@ -12,14 +12,14 @@
 function mail_admin_createqArray(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AdminMail')) return;
+    if (!xarSecurity::check('AdminMail')) return;
     
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // What do we need to do
-    if(!xarVarFetch('name','str:1:12',$qName)) return;
+    if(!xarVar::fetch('name','str:1:12',$qName)) return;
 
     // Do we have the master ?
     if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {

@@ -51,7 +51,7 @@ function roles_adminapi_clearsessions($spared)
     }
 
     // Security Check
-    if(!xarSecurityCheck('EditRoles')) return;
+    if(!xarSecurity::check('EditRoles')) return;
 
 
     return true;

@@ -14,7 +14,7 @@ function themes_adminapi_countitems(Array $args=array())
     extract($args);
 
     if (!isset($state))
-        $state = XARTHEME_STATE_ACTIVE;
+        $state = xarTheme::STATE_ACTIVE;
 
     if (!isset($class))
         $class = 3; // any
@@ -27,15 +27,15 @@ function themes_adminapi_countitems(Array $args=array())
     $where = array();
     $bindvars = array();
 
-    if ($state != XARTHEME_STATE_ANY) {
-        if ($state != XARTHEME_STATE_INSTALLED) {
+    if ($state != xarTheme::STATE_ANY) {
+        if ($state != xarTheme::STATE_INSTALLED) {
             $where[] = 'themes.state = ?';
             $bindvars[] = $state;
         } else {
             $where[] = 'themes.state != ? AND themes.state < ? AND themes.state != ?';
-            $bindvars[] = XARTHEME_STATE_UNINITIALISED;
-            $bindvars[] = XARTHEME_STATE_MISSING_FROM_INACTIVE;
-            $bindvars[] = XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
+            $bindvars[] = xarTheme::STATE_UNINITIALISED;
+            $bindvars[] = xarTheme::STATE_MISSING_FROM_INACTIVE;
+            $bindvars[] = xarTheme::STATE_MISSING_FROM_UNINITIALISED;
         }
     }
     if (isset($class) && $class != 3) {

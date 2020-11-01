@@ -203,9 +203,9 @@ class DataObjectUserInterface extends xarObject
      */
     function handle(array $args = array())
     {
-        if(!xarVarFetch('method', 'isset', $args['method'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('method', 'isset', $args['method'], NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('itemid', 'isset', $args['itemid'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('itemid', 'isset', $args['itemid'], NULL, xarVar::DONT_SET)) 
             return;
 
         // default method is 'view' without itemid, or 'display' with an itemid

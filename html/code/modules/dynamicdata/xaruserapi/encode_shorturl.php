@@ -12,9 +12,9 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * return the path for a short URL to xarModURL for this module
+ * return the path for a short URL to xarController::URL for this module
  * @param array    $args array of optional parameters<br/>
- *        string   $args the function and arguments passed to xarModURL
+ *        string   $args the function and arguments passed to xarController::URL
  * @return string path to be added to index.php for a short URL, or empty if failed
  */
 function dynamicdata_userapi_encode_shorturl(Array $args=array())
@@ -35,7 +35,7 @@ function dynamicdata_userapi_encode_shorturl(Array $args=array())
     $path = '';
     // if we want to add some common arguments as URL parameters below
     $join = '?';
-    // we can't rely on xarModGetName() here !
+    // we can't rely on xarMod::getName() here !
     $module = 'dynamicdata';
 
     // return immediately when we're dealing with the main function (don't load unnecessary stuff)
@@ -65,7 +65,7 @@ function dynamicdata_userapi_encode_shorturl(Array $args=array())
     } elseif ($func == 'view') {
         if (!empty($objectcache[$module_id.':'.$itemtype])) {
             $name = $objectcache[$module_id.':'.$itemtype];
-            $alias = xarModGetAlias($name);
+            $alias = xarModAlias::resolve($name);
             if ($module == $alias) {
                 // OK, we can use a 'fake' module name here
                 $path = '/' . $name . '/';
@@ -81,7 +81,7 @@ function dynamicdata_userapi_encode_shorturl(Array $args=array())
     } elseif ($func == 'display' && isset($itemid)) {
         if (!empty($objectcache[$module_id.':'.$itemtype])) {
             $name = $objectcache[$module_id.':'.$itemtype];
-            $alias = xarModGetAlias($name);
+            $alias = xarModAlias::resolve($name);
             if ($module == $alias) {
                 // OK, we can use a 'fake' module name here
                 $path = '/' . $name . '/' . $itemid;

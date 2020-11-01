@@ -31,9 +31,9 @@
 function installer_admin_create_administrator()
 {
     if (!file_exists('install.php')) { throw new Exception('Already installed');}
-    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarVar::fetch('install_language','str::',$install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
 
-    xarVarSetCached('installer','installing', true);
+    xarVar::setCached('installer','installing', true);
     xarTpl::setThemeName('installer');
 
     $data['language'] = $install_language;
@@ -57,7 +57,7 @@ function installer_admin_create_administrator()
 
     $data['properties'] = $data['admin']->getProperties();
 
-    if (!xarVarFetch('create', 'isset', $create, FALSE, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('create', 'isset', $create, FALSE, xarVar::NOT_REQUIRED)) return;
     if (!$create) {
         return $data;
     }
@@ -128,7 +128,7 @@ function installer_admin_create_administrator()
     xarAssignPrivilege('GeneralLock','Administrators');
     xarAssignPrivilege('GeneralLock','Users');
 
-    xarController::redirect(xarModURL('installer', 'admin', 'security',array('install_language' => $install_language)));
+    xarController::redirect(xarController::URL('installer', 'admin', 'security',array('install_language' => $install_language)));
     return true;
 }
 

@@ -232,11 +232,11 @@ class xarJS extends xarObject
     {
         // now find all libs in the filesystem
         // we want to look in all active themes
-        $filter = array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE);
+        $filter = array('Class' => 2, 'State' => xarTheme::STATE_ACTIVE);
         $themes = xarMod::apiFunc('themes', 'admin', 'getlist', $filter);
         // we want to look in all active modules
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
-            array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            array('filter' => array('State' => xarMod::STATE_ACTIVE)));
         // we want to look in all properties
         $properties = xarMod::apiFunc('dynamicdata', 'user', 'getproptypes');
 
@@ -455,7 +455,7 @@ class xarJS extends xarObject
                 }
                 // fall back to current block module calling the tag
                 if (empty($module))
-                    $module = xarVarGetCached('Security.Variables', 'currentmodule');
+                    $module = xarVar::getCached('Security.Variables', 'currentmodule');
                 // block scope falls through to module validation
             case 'module':
                 // fall back to current module calling the tag
@@ -1077,7 +1077,7 @@ class xarJSLib extends xarObject
         $this->name = $name;
         $this->displayname = ucfirst($this->name);
         $this->description = xarML('#(1) JS Library', $this->displayname);
-        $this->osdirectory = xarVarPrepForOS($this->name);
+        $this->osdirectory = xarVar::prepForOS($this->name);
     }
 /**
  * Rebuild the entire cache of meta data for this lib
@@ -1097,10 +1097,10 @@ class xarJSLib extends xarObject
     {
         // we want to look in all active themes
         $themes = xarMod::apiFunc('themes', 'admin', 'getlist',
-            array('filter' => array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE)));
+            array('filter' => array('Class' => 2, 'State' => xarTheme::STATE_ACTIVE)));
         // we want to look in all active modules
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
-            array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            array('filter' => array('State' => xarMod::STATE_ACTIVE)));
         // we want to look in all properties
         $properties = xarMod::apiFunc('dynamicdata', 'user', 'getproptypes');
 

@@ -23,7 +23,7 @@ function categories_userapi_getmodules($args)
     extract($args);
 
     // Security check
-    if(!xarSecurityCheck('ViewCategoryLink')) return;
+    if(!xarSecurity::check('ViewCategoryLink')) return;
 
     if (empty($cid) || !is_numeric($cid)) {
         $cid = 0;

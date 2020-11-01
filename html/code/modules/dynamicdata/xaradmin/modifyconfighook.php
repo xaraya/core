@@ -22,7 +22,7 @@
 function dynamicdata_admin_modifyconfighook(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
     extract($args);
 
@@ -31,7 +31,7 @@ function dynamicdata_admin_modifyconfighook(Array $args=array())
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
     if (empty($extrainfo['module'])) {
-        $modname = xarModGetName();
+        $modname = xarMod::getName();
     } else {
         $modname = $extrainfo['module'];
     }
@@ -54,7 +54,7 @@ function dynamicdata_admin_modifyconfighook(Array $args=array())
         $itemtype = null;
     }
 
-    if (!xarModAPILoad('dynamicdata', 'user')) return;
+    if (!xarMod::apiLoad('dynamicdata', 'user')) return;
 
     sys::import('modules.dynamicdata.class.objects.master');
     $args = DataObjectDescriptor::getObjectID(array('module'  => $module_id,
@@ -81,7 +81,7 @@ function dynamicdata_admin_modifyconfighook(Array $args=array())
 
     $data = array();
     $data['labels'] = $labels;
-    $data['link'] = xarModURL('dynamicdata','admin','modifyprop',
+    $data['link'] = xarController::URL('dynamicdata','admin','modifyprop',
                               array('module_id' => $module_id,
                                     'itemtype' => $itemtype));
     $data['fields'] = $fields;

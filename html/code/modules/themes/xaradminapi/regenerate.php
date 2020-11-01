@@ -20,7 +20,7 @@
 function themes_adminapi_regenerate()
 {
 // Security Check
-    if(!xarSecurityCheck('AdminThemes')) return;
+    if(!xarSecurity::check('AdminThemes')) return;
 
     //Finds and updates missing themes
     sys::import('modules.modules.class.installer');
@@ -96,13 +96,13 @@ function themes_adminapi_regenerate()
                                 'admin',
                                 'setstate',
                                 array('regid' => $themeInfo['regid'],
-                                      'state' => XARTHEME_STATE_UNINITIALISED));
+                                      'state' => xarTheme::STATE_UNINITIALISED));
             if (!isset($set)) return;
         } else {
           // BEGIN bugfix (561802) - cmgrote
-            if ($dbThemes[$name]['version'] != $themeInfo['version'] && $dbThemes[$name]['state'] != XARTHEME_STATE_UNINITIALISED) {
+            if ($dbThemes[$name]['version'] != $themeInfo['version'] && $dbThemes[$name]['state'] != xarTheme::STATE_UNINITIALISED) {
                     $set = xarMod::apiFunc('themes','admin','setstate',
-                                        array('regid' => $dbThemes[$name]['regid'], 'state' => XARTHEME_STATE_UPGRADED));
+                                        array('regid' => $dbThemes[$name]['regid'], 'state' => xarTheme::STATE_UPGRADED));
                     assert(isset($set));
                 }
         }

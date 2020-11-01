@@ -37,7 +37,7 @@
  *                 (pager-[template]), default 'default',<br/>
  *                 template options are (default|multipage|mulitpagenext|multipageprev|openended)<br/>
  *        integer  $args['blocksize'] - optional, the number of pages per block, default 10<br/>
- *                 advanced options of xarTplPagerInfo<br/>
+ *                 advanced options of xarTplPager::getInfo<br/>
  *                 (not sure what they do, included for completeness)<br/>
  *        integer  $args['firstitem']<br/>
  *        integer  $args['firstpage']<br/>
@@ -48,7 +48,7 @@ function base_userapi_pager(Array $args=array())
 {
     extract($args);
     if (empty($startnum) || !is_numeric($startnum))
-        if (!xarVarFetch('startnum', 'int:1', $startnum, 1, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('startnum', 'int:1', $startnum, 1, xarVar::NOT_REQUIRED)) return;
 
     if (!isset($itemsperpage) || !is_numeric($itemsperpage)) {
         if (empty($module))

@@ -24,7 +24,7 @@ function modules_adminapi_remove(Array $args=array())
     extract($args);
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurity::check('AdminModules')) return;
 
     // Remove variables and module
 
@@ -36,10 +36,10 @@ function modules_adminapi_remove(Array $args=array())
     // Make the whole thing atomic
 
     // If the files have been removed, the module will now also be removed from the db
-    if ($modinfo['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
-        $modinfo['state'] == XARMOD_STATE_MISSING_FROM_INACTIVE ||
-        $modinfo['state'] == XARMOD_STATE_MISSING_FROM_ACTIVE ||
-        $modinfo['state'] == XARMOD_STATE_MISSING_FROM_UPGRADED ) {
+    if ($modinfo['state'] == xarMod::STATE_MISSING_FROM_UNINITIALISED ||
+        $modinfo['state'] == xarMod::STATE_MISSING_FROM_INACTIVE ||
+        $modinfo['state'] == xarMod::STATE_MISSING_FROM_ACTIVE ||
+        $modinfo['state'] == xarMod::STATE_MISSING_FROM_UPGRADED ) {
 
         // All cleanup needs to happen before a module entry is removed
         xarEvents::notify('ModRemove', $modinfo['name']);
@@ -70,14 +70,14 @@ function modules_adminapi_remove(Array $args=array())
 
         // Update state of module
         xarMod::apiFunc('modules', 'admin', 'setstate',
-                      array('regid' => $regid,'state' => XARMOD_STATE_UNINITIALISED));
+                      array('regid' => $regid,'state' => xarMod::STATE_UNINITIALISED));
     }
 
     // Delete any masks still around
     // this is now handled by the modules module ModRemove event observer
     // xarRemoveMasks($modinfo['name']);
     // this is now handled by the modules module ModRemove event observer
-    // xarModCallHooks('module','remove',$modinfo['name'],'',$modinfo['name']);
+    // xarModHooks::call('module','remove',$modinfo['name'],'',$modinfo['name']);
 
     //
     // Delete block details for this module.

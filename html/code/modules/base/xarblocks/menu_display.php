@@ -46,12 +46,12 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
             if (!empty($data['showlogout'])) {
                 $authmoduledata = xarMod::apiFunc('roles','user','getdefaultauthdata');
                 $authmodlogout = $authmoduledata['defaultloginmodname'];
-                if (xarSecurityCheck('AdminBase',0)) {
+                if (xarSecurity::check('AdminBase',0)) {
                     // Administrators get a confirmation page
-                    $data['logouturl'] = xarModURL('base', 'admin', 'confirmlogout');
+                    $data['logouturl'] = xarController::URL('base', 'admin', 'confirmlogout');
                 } else {
                     // Everyone else just gets logged out
-                    $data['logouturl'] = xarModURL($authmodlogout,'user', 'logout', array());
+                    $data['logouturl'] = xarController::URL($authmodlogout,'user', 'logout', array());
                     $data['showback'] = 0;
                 }
             }
@@ -93,8 +93,8 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
         $data['thismodtype'] = self::$thismodtype;
         $data['thisfuncname'] = self::$thisfuncname;
 
-        if (!empty($data['displayrss']) && !xarThemeIsAvailable('rss')) $data['displayrss'] = 0;
-        if (!empty($data['displayprint']) && !xarThemeIsAvailable('print')) $data['displayprint'] = 0;
+        if (!empty($data['displayrss']) && !xarMod::isAvailable('rss')) $data['displayrss'] = 0;
+        if (!empty($data['displayprint']) && !xarMod::isAvailable('print')) $data['displayprint'] = 0;
 
         return $data;
     }

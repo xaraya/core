@@ -14,16 +14,16 @@
  */
 function dynamicdata_user_filtertag(Array $args=array())
 {
-    if (!xarVarFetch('filter_submitted', 'int:0', $filter_submitted,  0, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('filter_submitted', 'int:0', $filter_submitted,  0, xarVar::NOT_REQUIRED)) {return;}
 
     if ($filter_submitted) {
-        if (!xarVarFetch('objectname', 'str',   $objectname,  '', XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('filtername', 'str',   $filtername,  '', XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('return_url', 'str',   $return_url,  '', XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('name',       'array', $names,  array(), XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('source',     'array', $source,  array(), XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('op',         'array', $op,  array(), XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('value',      'array', $value,  array(), XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('objectname', 'str',   $objectname,  '', xarVar::NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('filtername', 'str',   $filtername,  '', xarVar::NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('return_url', 'str',   $return_url,  '', xarVar::NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('name',       'array', $names,  array(), xarVar::NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('source',     'array', $source,  array(), xarVar::NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('op',         'array', $op,  array(), xarVar::NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('value',      'array', $value,  array(), xarVar::NOT_REQUIRED)) {return;}
         
         sys::import('xaraya.structures.query');
         $q = new Query();

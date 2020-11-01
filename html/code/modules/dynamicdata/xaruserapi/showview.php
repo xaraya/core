@@ -40,19 +40,19 @@ function dynamicdata_userapi_showview(Array $args=array())
 //       used by the xar:data-view tag when no object or items are specified !
 
     if (!isset($itemids)) {
-        if (!xarVarFetch('itemids', 'isset', $itemids,  NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVar::fetch('itemids', 'isset', $itemids,  NULL, xarVar::DONT_SET)) {return;}
     }
 
     if (!isset($sort)) {
-        if (!xarVarFetch('sort', 'isset', $sort,  NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVar::fetch('sort', 'isset', $sort,  NULL, xarVar::DONT_SET)) {return;}
     }
 
     if (!isset($numitems)) {
-        if (!xarVarFetch('numitems', 'isset', $numitems,  NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVar::fetch('numitems', 'isset', $numitems,  NULL, xarVar::DONT_SET)) {return;}
     }
 
     if (!isset($startnum)) {
-        if (!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVar::fetch('startnum', 'isset', $startnum,  NULL, xarVar::DONT_SET)) {return;}
     }
 
     if (isset($table)) {

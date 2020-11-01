@@ -17,10 +17,10 @@
  */
 function roles_user_changelanguage()
 {
-    if (!xarVarFetch('locale',     'str:1:', $locale,     xarMLSGetCurrentLocale(), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('return_url', 'str:1:', $return_url, xarServer::getVar('HTTP_REFERER'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('locale',     'str:1:', $locale,     xarMLS::getCurrentLocale(), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('return_url', 'str:1:', $return_url, xarServer::getVar('HTTP_REFERER'), xarVar::NOT_REQUIRED)) return;
 
-    $locales = xarMLSListSiteLocales();
+    $locales = xarMLS::listSiteLocales();
     if (!isset($locales)) return; // throw back
     // Check if requested locale is supported
     if (!in_array($locale, $locales)) {

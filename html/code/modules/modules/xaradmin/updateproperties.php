@@ -21,18 +21,18 @@
 function modules_admin_updateproperties()
 {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // Get parameters
-    xarVarFetch('id','id',$regid);
-    xarVarFetch('olddisplayname','str::',$olddisplayname);
-    xarVarFetch('displayname','str::',$displayname);
-    xarVarFetch('admincapable','isset',$admincapable, NULL, XARVAR_DONT_SET);
-    xarVarFetch('usercapable','isset',$usercapable, NULL, XARVAR_DONT_SET);
+    xarVar::fetch('id','id',$regid);
+    xarVar::fetch('olddisplayname','str::',$olddisplayname);
+    xarVar::fetch('displayname','str::',$displayname);
+    xarVar::fetch('admincapable','isset',$admincapable, NULL, xarVar::DONT_SET);
+    xarVar::fetch('usercapable','isset',$usercapable, NULL, xarVar::DONT_SET);
     $admincapable = isset($admincapable) ? true : false;
     $usercapable = isset($usercapable) ? true : false;
 
@@ -49,11 +49,11 @@ function modules_admin_updateproperties()
 
     if (!isset($updated)) return;
 
-    xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
+    xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET);
     if (!empty($return_url)) {
         xarController::redirect($return_url);
     } else {
-        xarController::redirect(xarModURL('modules', 'admin', 'list'));
+        xarController::redirect(xarController::URL('modules', 'admin', 'list'));
     }
 
     return true;

@@ -75,7 +75,7 @@ function blocks_adminapi_import(Array $args=array())
         $dupexists = !empty($info);
         if ($dupexists) {
             $msg = 'Duplicate definition for #(1) #(2)';
-            $vars = array('block',xarVarPrepForDisplay($args['name']));
+            $vars = array('block',xarVar::prepForDisplay($args['name']));
             throw new DuplicateException(null,$args['name']);
         }
 

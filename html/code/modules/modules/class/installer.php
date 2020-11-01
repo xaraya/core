@@ -68,10 +68,10 @@ class Installer extends xarObject
                 $regId = $extInfo['regid'];
                 // Set state of module to 'missing'
                 switch ($extInfo['state']) {
-                    case XARMOD_STATE_UNINITIALISED: $newstate = XARMOD_STATE_MISSING_FROM_UNINITIALISED; break;
-                    case XARMOD_STATE_INACTIVE:      $newstate = XARMOD_STATE_MISSING_FROM_INACTIVE; break;
-                    case XARMOD_STATE_ACTIVE:        $newstate = XARMOD_STATE_MISSING_FROM_ACTIVE; break;
-                    case XARMOD_STATE_UPGRADED:      $newstate = XARMOD_STATE_MISSING_FROM_UPGRADED; break;
+                    case xarMod::STATE_UNINITIALISED: $newstate = xarMod::STATE_MISSING_FROM_UNINITIALISED; break;
+                    case xarMod::STATE_INACTIVE:      $newstate = xarMod::STATE_MISSING_FROM_INACTIVE; break;
+                    case xarMod::STATE_ACTIVE:        $newstate = xarMod::STATE_MISSING_FROM_ACTIVE; break;
+                    case xarMod::STATE_UPGRADED:      $newstate = xarMod::STATE_MISSING_FROM_UPGRADED; break;
                 }
                 if (isset($newstate)) {
                     $set = xarMod::apiFunc($this->extType, 'admin', 'setstate',
@@ -99,7 +99,7 @@ class Installer extends xarObject
 
         //Find the modules which are active (should upgraded be added too?)
         foreach ($this->databaseExtensions as $name => $dbInfo) {
-            if (($dbInfo['state'] != XARMOD_STATE_MISSING_FROM_UNINITIALISED) && ($dbInfo['state'] < XARMOD_STATE_MISSING_FROM_INACTIVE))
+            if (($dbInfo['state'] != xarMod::STATE_MISSING_FROM_UNINITIALISED) && ($dbInfo['state'] < xarMod::STATE_MISSING_FROM_INACTIVE))
             {
                 $dbMods[$dbInfo['regid']] = $dbInfo;
             }
@@ -278,10 +278,10 @@ class Installer extends xarObject
             // So that we can present that nicely in the gui...
 
             switch ($extInfo['state']) {
-                case XARMOD_STATE_ACTIVE:
-                case XARMOD_STATE_UPGRADED:      $this->satisfied[$extInfo['regid']] = $extInfo; break;
-                case XARMOD_STATE_INACTIVE:
-                case XARMOD_STATE_UNINITIALISED: $this->satisfiable[$extInfo['regid']] = $extInfo; break;
+                case xarMod::STATE_ACTIVE:
+                case xarMod::STATE_UPGRADED:      $this->satisfied[$extInfo['regid']] = $extInfo; break;
+                case xarMod::STATE_INACTIVE:
+                case xarMod::STATE_UNINITIALISED: $this->satisfiable[$extInfo['regid']] = $extInfo; break;
                 default:                         $this->unsatisfiable[$extInfo['regid']] = $extInfo; break;
             }
         }
@@ -317,7 +317,7 @@ class Installer extends xarObject
             // Later on better have a full range of possibilities (adding missing and
             // unitialised). For that a good cleanup in the constant logic and
             // adding a proper array of module states would be nice...
-            if ($this->databaseExtensions[$name]['state'] == XARMOD_STATE_UNINITIALISED) continue;
+            if ($this->databaseExtensions[$name]['state'] == xarMod::STATE_UNINITIALISED) continue;
 
             if (isset($extInfo['dependencyinfo'])) {
                 $dependency = $extInfo['dependencyinfo'];
@@ -352,9 +352,9 @@ class Installer extends xarObject
 
         //TODO: Add version checks later on
         switch ($extInfo['state']) {
-            case XARMOD_STATE_ACTIVE:
-            case XARMOD_STATE_UPGRADED:  $this->active[$extInfo['regid']] = $extInfo; break;
-            case XARMOD_STATE_INACTIVE:
+            case xarMod::STATE_ACTIVE:
+            case xarMod::STATE_UPGRADED:  $this->active[$extInfo['regid']] = $extInfo; break;
+            case xarMod::STATE_INACTIVE:
             default:                     $this->initialised[$extInfo['regid']] = $extInfo; break;
         }
 
@@ -438,7 +438,7 @@ class Installer extends xarObject
     {
         $topid = $this->modulestack->pop();
         if ($this->extType == 'themes'){
-            $extInfo = xarThemeGetInfo($regid);
+            $extInfo = xarMod::getInfo($regid);
             if (!isset($extInfo)) {
                 throw new ThemeNotFoundException($regid,'Theme (regid: #(1)) does not exist.');
             }
@@ -450,9 +450,9 @@ class Installer extends xarObject
         }
 
         switch ($extInfo['state']) {
-            case XARMOD_STATE_ACTIVE:
-            case XARMOD_STATE_UPGRADED: return true;
-            case XARMOD_STATE_INACTIVE: $initialised = true; break;
+            case xarMod::STATE_ACTIVE:
+            case xarMod::STATE_UPGRADED: return true;
+            case xarMod::STATE_INACTIVE: $initialised = true; break;
             default:                    $initialised = false; break;
         }
 
@@ -462,7 +462,7 @@ class Installer extends xarObject
             // First time we've come to this module
             // Is there an install page?
             if (!$initialised && file_exists(sys::code() . 'modules/' . $extInfo['osdirectory'] . '/xartemplates/includes/installoptions.xt')) {
-                xarController::redirect(xarModURL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
+                xarController::redirect(xarController::URL('modules','admin','modifyinstalloptions',array('regid' => $regid)));
                 return true;
             }
         } else {
@@ -484,10 +484,10 @@ class Installer extends xarObject
         }
 
         // return url may have been supplied 
-        if (!xarVarFetch('return_url', 'pre:trim:str:1:',
-            $return_url, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
+            $return_url, '', xarVar::NOT_REQUIRED)) return;
         if (empty($return_url))
-            $return_url = xarModURL($this->extType, 'admin', 'list', array('state' => 0), null, $extInfo['name']);
+            $return_url = xarController::URL($this->extType, 'admin', 'list', array('state' => 0), null, $extInfo['name']);
 
         // if this is a theme we're done
         if ($this->extType == 'themes') {
@@ -541,8 +541,8 @@ class Installer extends xarObject
         if (!isset($extInfo)) throw new ModuleNotFoundException($regid,'Module (regid: #(1)) does not exist.');
 
 
-        if ($extInfo['state'] != XARMOD_STATE_ACTIVE &&
-            $extInfo['state'] != XARMOD_STATE_UPGRADED) {
+        if ($extInfo['state'] != xarMod::STATE_ACTIVE &&
+            $extInfo['state'] != xarMod::STATE_UPGRADED) {
             //We shouldnt be here
             //Throw Exception
             $msg = xarML('Module to be deactivated (#(1)) is not active nor upgraded', $extInfo['displayname']);

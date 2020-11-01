@@ -19,13 +19,13 @@
 function roles_admin_addprivilege()
 {
     // get parameters
-    if (!xarVarFetch('privid', 'int:1:', $privid, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('roleid', 'int:1:', $roleid, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('privid', 'int:1:', $privid, 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('roleid', 'int:1:', $roleid, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($privid)) return xarResponse::notFound();
     if (empty($roleid)) return xarResponse::notFound();
 
     // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
@@ -37,7 +37,7 @@ function roles_admin_addprivilege()
     $priv = xarPrivileges::getPrivilege($privid);
 
     // Security
-    if (!xarSecurityCheck('ManagePrivileges',0,'Privileges',$priv->getName())) return;
+    if (!xarSecurity::check('ManagePrivileges',0,'Privileges',$priv->getName())) return;
 
     // If this privilege is already assigned do nothing
     // Try to assign the privilege and bail if an error was thrown
@@ -48,19 +48,19 @@ function roles_admin_addprivilege()
     // We need to tell some hooks that we are coming from the add privilege screen
     // and not the update the actual roles screen.  Right now, the keywords vanish
     // into thin air.  Bug 1960 and 3161
-    xarVarSetCached('Hooks.all','noupdate',1);
+    xarVar::setCached('Hooks.all','noupdate',1);
 
 // CHECKME: do we really want to do that here (other than for flushing the cache) ?
     // call update hooks and let them know that the role has changed
     $pargs['module']   = 'roles';
     $pargs['itemtype'] = $role->getType();
     $pargs['itemid']   = $roleid;
-    xarModCallHooks('item', 'update', $roleid, $pargs);
+    xarModHooks::call('item', 'update', $roleid, $pargs);
 
-    if (!xarVarFetch('return_url', 'isset', $return_url, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('return_url', 'isset', $return_url, '', xarVar::NOT_REQUIRED)) return;
 
     if (empty($return_url)) {
-        $return_url = xarModURL('roles',  'admin', 'showprivileges',
+        $return_url = xarController::URL('roles',  'admin', 'showprivileges',
                                 array('id' => $roleid));
     }
 

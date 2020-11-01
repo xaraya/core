@@ -26,7 +26,7 @@ function modules_adminapi_updatehooks(Array $args=array())
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Security Check
-    if(!xarSecurityCheck('ManageModules',0,'All',"All:All:$regid")) return;
+    if(!xarSecurity::check('ManageModules',0,'All',"All:All:$regid")) return;
 
     // Get module name
     $modinfo = xarMod::getInfo($regid);
@@ -136,7 +136,7 @@ function modules_adminapi_updatehooks(Array $args=array())
             //if ($mod['systemid'] == $modinfo['systemid']) continue;
             // Get selected value of hook (which is an array of all the itemtypes selected)
             // hooked_$mod['name'][0] contains the global setting ( 0 -> not, 1 -> all, 2 -> some)
-            xarVarFetch("hooked_" . $mod['name'],'isset',$ishooked,'',XARVAR_DONT_REUSE);
+            xarVar::fetch("hooked_" . $mod['name'],'isset',$ishooked,'',xarVar::DONT_REUSE);
             // remove current assignments       
             xarHooks::detach($curhook, $mod['name'], -1);        
             // No setting or explicit NOT, skip it (note: empty shouldn't occur anymore

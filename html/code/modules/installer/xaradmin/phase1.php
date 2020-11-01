@@ -26,10 +26,10 @@
 function installer_admin_phase1()
 {
     if (!file_exists('install.php')) { throw new Exception('Already installed');}
-    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarVar::fetch('install_language','str::',$install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
 
     // Get the installed locales
-    $locales = xarMLSListSiteLocales();
+    $locales = xarMLS::listSiteLocales();
 
     // Construct the array for the selectbox (iso3code, string in own locale)
     if(!empty($locales)) {

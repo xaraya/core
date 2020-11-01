@@ -24,7 +24,7 @@
 function modules_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('EditModules')) return;
+    if(!xarSecurity::check('EditModules')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
@@ -33,7 +33,7 @@ function modules_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('modules','admin','overview');
     } else {
-        xarController::redirect(xarModURL('modules', 'admin', 'list'));
+        xarController::redirect(xarController::URL('modules', 'admin', 'list'));
         return true;
     }
 }

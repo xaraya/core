@@ -19,7 +19,7 @@
 function modules_admin_release()
 {
     // Security
-    if(!xarSecurityCheck('EditModules')) return;
+    if(!xarSecurity::check('EditModules')) return;
     
     // allow fopen
     if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);

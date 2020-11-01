@@ -24,7 +24,7 @@ function roles_userapi_getallgroups(Array $args=array())
     $xartable =& xarDB::getTables();
 
 // Security Check
-    if(!xarSecurityCheck('ViewRoles')) return;
+    if(!xarSecurity::check('ViewRoles')) return;
 
     if (!isset($show_top)) $show_top = 0;
     

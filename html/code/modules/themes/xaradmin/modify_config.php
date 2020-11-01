@@ -15,11 +15,11 @@
     
     function themes_admin_modify_config()
     {
-        if (!xarSecurityCheck('EditThemes')) return;
+        if (!xarSecurity::check('EditThemes')) return;
 
-        if (!xarVarFetch('itemid' ,    'int',    $data['itemid'] , 0 ,          XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('confirm',    'bool',   $data['confirm'], false,       XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('update',    'str',   $data['update'], false,       XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('update',    'str',   $data['update'], false,       xarVar::NOT_REQUIRED)) return;
 
         $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
         $data['object']->getItem(array('itemid' => $data['itemid']));
@@ -27,7 +27,7 @@
         if ($data['confirm']) {
         
             // Check for a valid confirmation key
-            if(!xarSecConfirmAuthKey()) return;
+            if(!xarSec::confirmAuthKey()) return;
 
             // Get the data from the form
             $isvalid = $data['object']->checkInput();
@@ -40,10 +40,10 @@
                 // Good data: create the item
                 $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
                 if ($data['update']) {
-                    xarController::redirect(xarModURL('themes','admin','view_configs'));
+                    xarController::redirect(xarController::URL('themes','admin','view_configs'));
                     return true;
                 } else {
-                    xarController::redirect(xarModURL('themes','admin','modify_config', $data));
+                    xarController::redirect(xarController::URL('themes','admin','modify_config', $data));
                     return true;
                 }
             }

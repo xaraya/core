@@ -17,7 +17,7 @@
  */
 function themes_admin_list()
 {
-    xarController::redirect(xarModURL('themes', 'admin', 'view'));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view'));
     return true;
 }
 ?>

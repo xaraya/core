@@ -25,7 +25,7 @@
 function themes_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('EditThemes')) return;
+    if(!xarSecurity::check('EditThemes')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
@@ -34,7 +34,7 @@ function themes_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('themes','admin','overview');
     } else {
-        xarController::redirect(xarModURL('themes', 'admin', 'view'));
+        xarController::redirect(xarController::URL('themes', 'admin', 'view'));
         return true;
     }
 }

@@ -23,7 +23,7 @@ function categories_user_main()
     $data = array();
 
     $out = '';
-    if (!xarVarFetch('catid', 'isset', $catid, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVar::fetch('catid', 'isset', $catid, NULL, xarVar::DONT_SET)) return;
     if (empty($catid) || !is_numeric($catid)) {
         // for DMOZ-like URLs
         // xarModVars::set('categories','enable_short_urls',1);
@@ -31,7 +31,7 @@ function categories_user_main()
         $catid = 0;
     }
 
-    if (!xarModAPILoad('categories','user')) return;
+    if (!xarMod::apiLoad('categories','user')) return;
 
     $parents = xarMod::apiFunc('categories','user','getparents',
                             array('cid' => $catid));
@@ -47,14 +47,14 @@ function categories_user_main()
                 $info['itemtype'] = 0;
                 $info['itemid'] = $catid;
                 $info['returnurl'] = xarModUrl('categories', 'user', 'main', array('catid' => $catid));
-                $hooks = xarModCallHooks('item','display',$catid,$info);
+                $hooks = xarModHooks::call('item','display',$catid,$info);
                 if (!empty($hooks) && is_array($hooks)) {
                 // TODO: do something specific with pubsub, hitcount, comments etc.
                     $data['hooks'] = join('',$hooks);
                 }
                 $data['parents'][] = array('catid' => $catid, 'name' => $info['name'], 'link' => '');
             } else {
-                $link = xarModURL('categories','user','main',array('catid' => $id));
+                $link = xarController::URL('categories','user','main',array('catid' => $id));
                 $data['parents'][] = array('catid' => $info['cid'], 'name' => $info['name'], 'link' => $link);
                 $title .= ' > ';
             }
@@ -63,7 +63,7 @@ function categories_user_main()
 
     // set the page title to the current category
     if (!empty($title)) {
-        xarTplSetPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
     }
 
     $children = xarMod::apiFunc('categories','user','getchildren',
@@ -110,7 +110,7 @@ function categories_user_main()
         asort($letter);
         reset($letter);
         foreach ($letter as $id => $name) {
-            $link = xarModURL('categories','user','main',array('catid' => $id));
+            $link = xarController::URL('categories','user','main',array('catid' => $id));
             $data['letters'][] = array('catid' => $id, 'name' => $name, 'link' => $link);
         }
     }
@@ -120,7 +120,7 @@ function categories_user_main()
         reset($category);
         foreach ($category as $id => $name) {
             $name = preg_replace('/_/',' ',$name);
-            $link = xarModURL('categories','user','main',array('catid' => $id));
+            $link = xarController::URL('categories','user','main',array('catid' => $id));
             $data['categories'][] = array('catid' => $id, 'name' => $name, 'link' => $link);
         }
     }
@@ -143,14 +143,14 @@ function categories_user_main()
                 $moditem = array();
                 if ($itemtype == 0) {
                     $moditem['name'] = ucwords($modinfo['displayname']);
-                    $moditem['link'] = xarModURL($modinfo['name'],'user','main');
+                    $moditem['link'] = xarController::URL($modinfo['name'],'user','main');
                 } else {
                     if (isset($mytypes) && !empty($mytypes[$itemtype])) {
                         $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype . ' - ' . $mytypes[$itemtype]['label'];
                         $moditem['link'] = $mytypes[$itemtype]['url'];
                     } else {
                         $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-                        $moditem['link'] = xarModURL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
+                        $moditem['link'] = xarController::URL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
                     }
                 }
                 $moditem['numitems'] = $stats['items'];
@@ -173,7 +173,7 @@ function categories_user_main()
                     } else {
                     // we're dealing with unknown items - skip this if you prefer
                         foreach ($links[$catid] as $iid) {
-                            $moditem['items'][$iid] = array('url'   => xarModURL($modinfo['name'],'user','display',
+                            $moditem['items'][$iid] = array('url'   => xarController::URL($modinfo['name'],'user','display',
                                                                                  array('objectid' => $iid)),
                                                             'title' => xarML('Display Item'),
                                                             'label' => xarML('item #(1)', $iid));

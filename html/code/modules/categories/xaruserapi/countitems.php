@@ -31,7 +31,7 @@ function categories_userapi_countitems($args)
     }
 
     // Security check
-    if(!xarSecurityCheck('ViewCategoryLink')) return;
+    if(!xarSecurity::check('ViewCategoryLink')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();

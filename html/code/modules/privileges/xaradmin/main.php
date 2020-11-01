@@ -24,7 +24,7 @@
 function privileges_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('EditPrivileges')) return;
+    if(!xarSecurity::check('EditPrivileges')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
@@ -33,7 +33,7 @@ function privileges_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('privileges','admin','overview');
     } else {
-        xarController::redirect(xarModURL('privileges', 'admin', 'viewprivileges'));
+        xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'));
         return true;
     }
 }

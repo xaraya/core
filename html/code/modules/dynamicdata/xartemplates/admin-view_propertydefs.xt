@@ -6,7 +6,7 @@
         <h2>Configure Property Types</h2>
         <p>Click Flush Property Cache to clear the DynamicData Property Definitions cache and to
         reload the properties definitions from the file system.</p>
-        <form method="post" action="#xarModURL('dynamicdata','admin','update_propertydefs')#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','update_propertydefs')#">
             <div class="xar-form-actions">
                 <div class="xar-row">
                     <div class="xar-col"></div>
@@ -45,12 +45,12 @@
                             </td>
                             <td>
                                 <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
-                                    <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#" title="Edit">
+                                    <a href="#xarController::URL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#" title="Edit">
                                         <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="modify-config"/>
                                     </a>
                                 <xar:else />
                                     <xar:var name="field.configuration"/>
-                                    <a href="#xarModURL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#">Edit</a>
+                                    <a href="#xarController::URL('dynamicdata','admin','showpropval',array('proptype'=>$field['name']))#">Edit</a>
                                 </xar:if>
                             </td>
                         </tr>

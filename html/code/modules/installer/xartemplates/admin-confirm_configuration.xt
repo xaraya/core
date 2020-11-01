@@ -9,7 +9,7 @@
     <div id="main_left">
         <h1 class="xar-pagetitle">Choose Privileges Setup</h1>
         <h2>Privileges</h2>
-        <form action="#xarModURL('installer','admin','confirm_configuration')#" method="post">
+        <form action="#xarController::URL('installer','admin','confirm_configuration')#" method="post">
                 <xar:loop name="$options1">
                     <p>
                         <xar:if condition="$loop:item['option'] eq ''">

@@ -25,12 +25,12 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
-                                #xarVarPrepForDisplay($parents[$i]['parentname'])#</a>
+                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                #xarVar::prepForDisplay($parents[$i]['parentname'])#</a>
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">
-                        #xarVarPrepForDisplay($parents[$i]['parentname'])#</xar:set>
+                        #xarVar::prepForDisplay($parents[$i]['parentname'])#</xar:set>
                     </xar:for>
                 </ul>
             </div>
@@ -38,7 +38,7 @@
         <xar:if condition="$frozen">
             <p>You do not have the privileges to delete #$itemtypename# #$name#</p>
         <xar:else />
-            <form method="post" action="#xarModURL('roles','admin','delete')#" enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#xarController::URL('roles','admin','delete')#" enctype="application/x-www-form-urlencoded">
                 <div class="xar-row">
                     <div class="xar-col">
                     </div>

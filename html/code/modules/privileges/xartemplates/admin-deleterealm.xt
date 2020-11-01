@@ -4,7 +4,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <xar:template type="module" file="admin-realms"/>
-        <form action="#xarModURL('privileges','admin','deleteealm')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('privileges','admin','deleteealm')#" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-form-actions">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="id" id="id" value="#$id#"/>
@@ -18,7 +18,7 @@
                 <xar:button type="submit" label="$label" tabindex="1"/>
                 <br />
                 <p>
-                    <a href="#xarModURL('privileges','admin','viewrealms')#">Cancel the deletion</a>
+                    <a href="#xarController::URL('privileges','admin','viewrealms')#">Cancel the deletion</a>
                 </p>
             </div>
         </form>

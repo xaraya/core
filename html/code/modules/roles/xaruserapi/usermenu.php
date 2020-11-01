@@ -26,14 +26,14 @@ function roles_userapi_usermenu(Array $args=array())
     // not logged in?
     if (!xarUser::isLoggedIn()){
         // redirect user to their account page after login
-        $redirecturl = xarModURL('roles', 'user', 'account');
-        xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => $redirecturl)));
+        $redirecturl = xarController::URL('roles', 'user', 'account');
+        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform', array('redirecturl' => $redirecturl)));
     }
 
     // edit account is disabled?
     if ((bool)xarModVars::get('roles', 'usereditaccount') == false) {
         // show the user their profile display
-        xarController::redirect(xarModURL('roles', 'user', 'account'));
+        xarController::redirect(xarController::URL('roles', 'user', 'account'));
     }
 
     // Get arguments from argument array
@@ -94,14 +94,14 @@ function roles_userapi_usermenu(Array $args=array())
             // if you want to provide your own update function, you can specify
             // the form action url to be used. When the form is POSTed your function
             // will be used. (see roles user usermenu for an example).
-            $data['formaction'] = xarModURL('roles', 'user', 'usermenu');
+            $data['formaction'] = xarController::URL('roles', 'user', 'usermenu');
             // not necessary, but for completeness pass back any fields you changed
             $data['tplmodule'] = 'roles';
             $data['template'] = 'usermenu';
             $data['layout'] = 'roles_user_settings';
             // pass the module name in when setting the authkey, this avoids clashes
             // when the output contained within another modules display (eg in xarpages)
-            $data['authid'] = xarSecGenAuthKey('roles');
+            $data['authid'] = xarSec::genAuthKey('roles');
             // finally return data to the calling function
             return $data;
         break;
@@ -144,16 +144,16 @@ function roles_userapi_usermenu(Array $args=array())
         case 'updateitem':
             // if you added the module name when you generated the authkey,
             // be sure to use it here when confirming :)
-            if (!xarSecConfirmAuthKey('roles')) return;
+            if (!xarSec::confirmAuthKey('roles')) return;
             // data is already validated, go ahead and update the item
             $object->updateItem();
             // you could just return directly from here...
             /*
             // be sure to check for a returnurl
-            if (!xarVarFetch('returnurl', 'pre:trim:str:1', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('returnurl', 'pre:trim:str:1', $returnurl, '', xarVar::NOT_REQUIRED)) return;
             // the default returnurl should be roles user account with a moduleload of current module
             if (empty($returnurl))
-                $returnurl = xarModURL('roles', 'user', 'account', array('moduleload' => 'roles'));
+                $returnurl = xarController::URL('roles', 'user', 'account', array('moduleload' => 'roles'));
             return xarController::redirect($returnurl);
             */
             // let the calling function know the update was a success

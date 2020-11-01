@@ -14,8 +14,8 @@
 
     function privileges_user_errors()
     {
-        if(!xarVarFetch('layout',   'isset', $data['layout']   , 'default', XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('redirecturl',   'isset', $data['redirecturl']   , xarServer::getCurrentURL(array(),false), XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('layout',   'isset', $data['layout']   , 'default', xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('redirecturl',   'isset', $data['redirecturl']   , xarServer::getCurrentURL(array(),false), xarVar::DONT_SET)) {return;}
         if (!xarUser::isLoggedIn()) {
             return $data;
         } else {

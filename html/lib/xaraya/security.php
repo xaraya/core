@@ -42,7 +42,7 @@ sys::import('modules.roles.class.roles');
  *
  * This is a wrapper function
  *
- * 
+ * @fixme   this is no longer used and the makeGroup method doesn't exist (anymore)
  * @param   string name
  * @return  bool
  */
@@ -53,7 +53,7 @@ function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname
  *
  * This is a wrapper function
  *
- * 
+ * @fixme   this is no longer used and the makeGroup method doesn't exist (anymore)
  * @param  string name
  * @return boolean
  */
@@ -295,6 +295,7 @@ function xarIsAncestor($name1, $name2)
  * @param   string name
  * @return  object role
  * @todo    what is this doing here?
+ * @fixme   ithis seems to be implemented via Javascript now in roles & privileges
  */
 function xarTree()
 {
@@ -367,7 +368,7 @@ function xarPrivExists($name)
  */
 function xarMaskExists($name,$module="All",$component="All")
 {
-    if ($mask == "All") $mask = 0;
+    if ($module == "All") $module = 0;
     $mask = xarSecurity::getMask($name,$module,$component,true);
     if ($mask) return true;
     else return false;
@@ -470,7 +471,7 @@ function xarRemoveMasks($module)
 function xarSecGenAuthKey($modName = NULL)
 {
     if (empty($modName)) {
-        list($modName) = xarController::$request->getInfo();
+        list($modName) = xarController::getRequest()->getInfo();
     }
 
     // Date gives extra security but leave it out for now
@@ -502,9 +503,9 @@ function xarSecGenAuthKey($modName = NULL)
 function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
 {
     // We don't need this check for AJAX calls
-    if (xarController::$request->isAjax()) return true;
+    if (xarController::getRequest()->isAjax()) return true;
 
-    if(!isset($modName)) list($modName) = xarController::$request->getInfo();
+    if(!isset($modName)) list($modName) = xarController::getRequest()->getInfo();
     $authid = xarController::getVar($authIdVarName);
 
     // Regenerate static part of key

@@ -17,9 +17,9 @@ sys::import('modules.dynamicdata.class.objects.master');
 function themes_admin_view_jslibs()
 {
     // Security
-    if(!xarSecurityCheck('EditThemes')) return;
+    if(!xarSecurity::check('EditThemes')) return;
 
-    if (!xarVarFetch('tab',   'str:1:100', $data['tab'], 'local', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('tab',   'str:1:100', $data['tab'], 'local', xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_jslibraries'));
 
@@ -34,10 +34,10 @@ function themes_admin_view_jslibs()
     $libobject->refresh();
 
     if ($data['tab'] == 'auto') {
-        if(!xarVarFetch('confirm',      'bool', $confirm,          false, XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('confirm',      'bool', $confirm,          false, xarVar::DONT_SET)) {return;}
         if ($confirm) {
-            if(!xarVarFetch('dd_seq',      'array', $dd_seq,          array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_position', 'array', $dd_position,     array(), XARVAR_DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_seq',      'array', $dd_seq,          array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_position', 'array', $dd_position,     array(), xarVar::DONT_SET)) {return;}
             foreach (array_keys($dd_seq) as $id) {
                 $libobject->default_libs[$id]['seq'] = $dd_seq[$id];
                 $libobject->default_libs[$id]['position'] = $dd_position[$id];
@@ -106,10 +106,10 @@ function themes_admin_view_jslibs()
             array_multisort($templib, SORT_ASC, $tempversion, SORT_DESC, $data['fieldvalues']);
         }
 
-        if(!xarVarFetch('confirm',      'bool', $confirm,          false, XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('confirm',      'bool', $confirm,          false, xarVar::DONT_SET)) {return;}
         if ($confirm) {
-            if(!xarVarFetch('dd_load',     'array', $dd_load,         array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_seq',      'array', $dd_seq,          array(), XARVAR_DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_load',     'array', $dd_load,         array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_seq',      'array', $dd_seq,          array(), xarVar::DONT_SET)) {return;}
             
             // We remove the local auto loading libraries and then repopulate them
             foreach($libobject->default_libs as $key => $value) {
@@ -166,17 +166,17 @@ function themes_admin_view_jslibs()
             $data['fieldvalues'][$row['id']] = $row;
         }
     } elseif ($data['tab'] == 'remote') {
-        if(!xarVarFetch('confirm',      'bool', $confirm,          false, XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('confirm',      'bool', $confirm,          false, xarVar::DONT_SET)) {return;}
         if ($confirm) {
-            if(!xarVarFetch('dd_id',       'array', $dd_id,       array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_type',     'array', $dd_type,     array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_parent',   'array', $dd_parent,   array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_lib',      'array', $dd_lib,      array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_version',  'array', $dd_version,  array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_scope',    'array', $dd_scope,    array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_package',  'array', $dd_package,  array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_base',     'array', $dd_base,     array(), XARVAR_DONT_SET)) {return;}
-            if(!xarVarFetch('dd_src',      'array', $dd_src,      array(), XARVAR_DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_id',       'array', $dd_id,       array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_type',     'array', $dd_type,     array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_parent',   'array', $dd_parent,   array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_lib',      'array', $dd_lib,      array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_version',  'array', $dd_version,  array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_scope',    'array', $dd_scope,    array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_package',  'array', $dd_package,  array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_base',     'array', $dd_base,     array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('dd_src',      'array', $dd_src,      array(), xarVar::DONT_SET)) {return;}
 
             $libobject->remote_libs = array();
             foreach ($dd_id as $id) {
@@ -197,17 +197,17 @@ function themes_admin_view_jslibs()
             }
             
             // Add a new remote library
-            if(!xarVarFetch('new_lib',      'str', $new_lib,      '', XARVAR_DONT_SET)) {return;}
+            if(!xarVar::fetch('new_lib',      'str', $new_lib,      '', xarVar::DONT_SET)) {return;}
             if (!empty($new_lib)) {
-                if(!xarVarFetch('new_id',       'str', $new_id,       '', XARVAR_DONT_SET)) {return;}
-                if(!xarVarFetch('new_type',     'str', $new_type,     '', XARVAR_DONT_SET)) {return;}
-                if(!xarVarFetch('new_parent',   'str', $new_parent,   '', XARVAR_DONT_SET)) {return;}
-                if(!xarVarFetch('new_version',  'str', $new_version,  '', XARVAR_DONT_SET)) {return;}
-                if(!xarVarFetch('new_scope',    'str', $new_scope,    '', XARVAR_DONT_SET)) {return;}
-                if(!xarVarFetch('new_package',  'str', $new_package,  '', XARVAR_DONT_SET)) {return;}
-                if(!xarVarFetch('new_base',     'str', $new_base,     '', XARVAR_DONT_SET)) {return;}
-                if(!xarVarFetch('new_src',      'str', $new_src,      '', XARVAR_DONT_SET)) {return;}
-                if(!xarVarFetch('new_load',     'str', $new_load,     '', XARVAR_DONT_SET)) {return;}
+                if(!xarVar::fetch('new_id',       'str', $new_id,       '', xarVar::DONT_SET)) {return;}
+                if(!xarVar::fetch('new_type',     'str', $new_type,     '', xarVar::DONT_SET)) {return;}
+                if(!xarVar::fetch('new_parent',   'str', $new_parent,   '', xarVar::DONT_SET)) {return;}
+                if(!xarVar::fetch('new_version',  'str', $new_version,  '', xarVar::DONT_SET)) {return;}
+                if(!xarVar::fetch('new_scope',    'str', $new_scope,    '', xarVar::DONT_SET)) {return;}
+                if(!xarVar::fetch('new_package',  'str', $new_package,  '', xarVar::DONT_SET)) {return;}
+                if(!xarVar::fetch('new_base',     'str', $new_base,     '', xarVar::DONT_SET)) {return;}
+                if(!xarVar::fetch('new_src',      'str', $new_src,      '', xarVar::DONT_SET)) {return;}
+                if(!xarVar::fetch('new_load',     'str', $new_load,     '', xarVar::DONT_SET)) {return;}
                 $id = $new_type . "." . $new_lib . "." . $new_version . "." . $new_scope . "." . $new_base;
                 $libobject->remote_libs[$id]['id'] = $id;
                 $libobject->remote_libs[$id]['type'] = $new_type;

@@ -33,13 +33,13 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
      */
     function run(array $args = array())
     {
-        if(!xarVarFetch('catid',    'isset', $args['catid'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('catid',    'isset', $args['catid'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('sort',     'isset', $args['sort'],     NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('sort',     'isset', $args['sort'],     NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('where',    'isset', $args['where'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('where',    'isset', $args['where'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('startnum', 'isset', $args['startnum'], NULL, xarVar::DONT_SET)) 
             return;
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
@@ -70,7 +70,7 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('View #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
             return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));

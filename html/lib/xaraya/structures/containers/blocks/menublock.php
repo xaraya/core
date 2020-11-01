@@ -85,7 +85,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
     {
         if (!isset(self::$thismodname) || !isset(self::$thismodtype) || !isset(self::$thisfuncname)) {
             // set current request info properties
-            list(self::$thismodname, self::$thismodtype, self::$thisfuncname) = xarController::$request->getInfo();
+            list(self::$thismodname, self::$thismodtype, self::$thisfuncname) = xarController::getRequest()->getInfo();
         }
         if (!isset(self::$currenturl))
             self::$currenturl = xarServer::getCurrentURL();
@@ -156,4 +156,3 @@ abstract class MenuBlock extends BasicBlock implements iBlock
         return $link;
     }
 }
-?>

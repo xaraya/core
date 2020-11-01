@@ -22,10 +22,10 @@
  */
 function blocks_admin_delete_type(Array $args = array())
 {
-    if (!xarSecurityCheck('AdminBlocks')) return;
+    if (!xarSecurity::check('AdminBlocks')) return;
 
-    if (!xarVarFetch('type_id', 'int:1:',
-        $type_id, null, XARVAR_DONT_SET)) return;
+    if (!xarVar::fetch('type_id', 'int:1:',
+        $type_id, null, xarVar::DONT_SET)) return;
 
         
     if (!isset($type_id)) {
@@ -48,18 +48,18 @@ function blocks_admin_delete_type(Array $args = array())
     if ($type['type_state'] == xarBlock::TYPE_STATE_MISSING ||
         $type['type_state'] == xarBlock::TYPE_STATE_MOD_UNAVAILABLE) {
         
-        if (!xarVarFetch('confirm', 'checkbox',
-            $confirmed, false, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('confirm', 'checkbox',
+            $confirmed, false, xarVar::NOT_REQUIRED)) return;
         
         if ($confirmed) {
-            if (!xarSecConfirmAuthKey())
+            if (!xarSec::confirmAuthKey())
                 return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
             if (!xarMod::apiFunc('blocks', 'types', 'deleteitem', 
                 array('type_id' => $type_id))) return;
-            if (!xarVarFetch('return_url', 'pre:trim:str:1:',
-                $return_url, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
+                $return_url, '', xarVar::NOT_REQUIRED)) return;
             if (empty($return_url))
-                $return_url = xarModURL('blocks', 'admin', 'view_types');
+                $return_url = xarController::URL('blocks', 'admin', 'view_types');
             xarController::redirect($return_url);                
         }
         

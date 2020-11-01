@@ -64,7 +64,7 @@ function mail_cliapi_process(Array $args=array())
 
     // 5. Generate create hook calls?
     // This would typically be something we want to postpone.
-    // TODO: insert xarModCallHooks blah blah here.
+    // TODO: insert xarModHooks::call blah blah here.
 
     // Once we got here, stuff is ok
     return 0;

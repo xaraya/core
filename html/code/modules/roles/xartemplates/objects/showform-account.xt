@@ -48,8 +48,8 @@
                         </div>
                         <div class="xar-col">
                             <xar:if condition="!empty($passwordupdate)">
-                                #xarLocaleGetFormattedDate('medium', $passwordupdate)#
-                                #xarLocaleGetFormattedTime('medium', $passwordupdate)#
+                                #xarLocale::getFormattedDate('medium', $passwordupdate)#
+                                #xarLocale::getFormattedTime('medium', $passwordupdate)#
                             <xar:else/>
                                 Never
                             </xar:if>
@@ -67,8 +67,8 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            #xarLocaleGetFormattedDate('medium', $userlastlogin)#
-                            #xarLocaleGetFormattedTime('medium', $userlastlogin)#
+                            #xarLocale::getFormattedDate('medium', $userlastlogin)#
+                            #xarLocale::getFormattedTime('medium', $userlastlogin)#
                         </div>
                     </div>
                 </xar:if>

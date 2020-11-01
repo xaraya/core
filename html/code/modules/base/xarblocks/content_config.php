@@ -49,28 +49,28 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
      */
     public function configupdate(Array $data=array())
     {
-        if (xarVarFetch('content_type', 'pre:lower:passthru:enum:text:html:bl:php:custom:data', $content_type, 'text', XARVAR_NOT_REQUIRED)) {
+        if (xarVar::fetch('content_type', 'pre:lower:passthru:enum:text:html:bl:php:custom:data', $content_type, 'text', xarVar::NOT_REQUIRED)) {
             $args['content_type'] = $content_type;
         }
 
         // TODO: check the flags that allow a posted value to override the existing value.
-        if (xarVarFetch('content_text', 'str:1', $content_text, '', XARVAR_NOT_REQUIRED)) {
+        if (xarVar::fetch('content_text', 'str:1', $content_text, '', xarVar::NOT_REQUIRED)) {
             $args['content_text'] = $content_text;
         }
 
-        if (xarVarFetch('hide_errors', 'checkbox', $hide_errors, false, XARVAR_NOT_REQUIRED)) {
+        if (xarVar::fetch('hide_errors', 'checkbox', $hide_errors, false, xarVar::NOT_REQUIRED)) {
             $args['hide_errors'] = $hide_errors;
         }
 
-        if (xarVarFetch('hide_empty', 'checkbox', $hide_empty, false, XARVAR_NOT_REQUIRED)) {
+        if (xarVar::fetch('hide_empty', 'checkbox', $hide_empty, false, xarVar::NOT_REQUIRED)) {
             $args['hide_empty'] = $hide_empty;
         }
 
-        if (xarVarFetch('custom_format', 'pre:lower:ftoken:str:0:20', $custom_format, '', XARVAR_NOT_REQUIRED)) {
+        if (xarVar::fetch('custom_format', 'pre:lower:ftoken:str:0:20', $custom_format, '', xarVar::NOT_REQUIRED)) {
             $args['custom_format'] = $custom_format;
         }
 
-        if (xarVarFetch('start_date', 'str', $start_date, '0', XARVAR_NOT_REQUIRED)) {
+        if (xarVar::fetch('start_date', 'str', $start_date, '0', xarVar::NOT_REQUIRED)) {
             // Convert the start date into a datetime format.
             // TODO: is this the way we should be converting dates from the calendar property?
             if (!empty($start_date)) {
@@ -80,7 +80,7 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
             }
         }
 
-        if (xarVarFetch('end_date', 'str', $end_date, '0', XARVAR_NOT_REQUIRED)) {
+        if (xarVar::fetch('end_date', 'str', $end_date, '0', xarVar::NOT_REQUIRED)) {
             // Convert the end date into a datetime format.
             // TODO: is this the way we should be converting dates from the calendar property?
             if (!empty($end_date)) {

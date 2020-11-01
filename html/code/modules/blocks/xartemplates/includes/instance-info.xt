@@ -45,7 +45,7 @@
                     <div class="xar-col">
                         <xar:if condition="!empty($instance_groups)">
                             <xar:loop name="$instance_groups">
-                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($instance_groups)">,&#160;</xar:if>
                             </xar:loop>
                         <xar:else/>
@@ -59,7 +59,7 @@
                     <div class="xar-col">
                         <xar:if condition="!empty($group_instances)">
                             <xar:loop name="$group_instances">
-                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($group_instances)">,&#160;</xar:if>
                             </xar:loop>
                         <xar:else/>

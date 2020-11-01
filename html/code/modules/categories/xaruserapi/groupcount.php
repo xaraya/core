@@ -35,7 +35,7 @@ function categories_userapi_groupcount($args)
     }
 
     // Security check
-    if(!xarSecurityCheck('ViewCategoryLink')) return;
+    if(!xarSecurity::check('ViewCategoryLink')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();

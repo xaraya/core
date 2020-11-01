@@ -17,28 +17,28 @@
 function dynamicdata_admin_migrate(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) return;
 
     extract($args);
 
     // the actual from-to mapping
-    if(!xarVarFetch('from',     'isset', $from,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('to',       'isset', $to,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('fieldmap', 'isset', $fieldmap, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('hookmap',  'isset', $hookmap,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('from',     'isset', $from,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('to',       'isset', $to,       NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('fieldmap', 'isset', $fieldmap, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('hookmap',  'isset', $hookmap,  NULL, xarVar::DONT_SET)) {return;}
 
     // support for the Back and Finish buttons
-    if(!xarVarFetch('step',     'int',   $step,     0,    XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('back',     'str',   $back,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('test',     'str',   $test,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('confirm',  'str',   $confirm,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('step',     'int',   $step,     0,    xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('back',     'str',   $back,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('test',     'str',   $test,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('confirm',  'str',   $confirm,  NULL, xarVar::DONT_SET)) {return;}
 
     // support for loading/saving mappings
-    if(!xarVarFetch('load',     'str',   $load,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('save',     'str',   $save,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('map',      'str',   $map,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('load',     'str',   $load,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('save',     'str',   $save,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('map',      'str',   $map,      NULL, xarVar::DONT_SET)) {return;}
 
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
     // retrieve past steps and recover if necessary
     if (!xarModVars::get('dynamicdata','migratesteps')) {
@@ -343,7 +343,7 @@ function dynamicdata_admin_migrate(Array $args=array())
 
     // migrate item(s)
     if ((!empty($test) || !empty($confirm)) && !empty($data['check'])) {
-        if (!xarSecConfirmAuthKey()) {
+        if (!xarSec::confirmAuthKey()) {
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
@@ -355,10 +355,10 @@ function dynamicdata_admin_migrate(Array $args=array())
         if (!$result) return;
         if (!empty($test)) {
             // put test results in debug string
-            $data['debug'] = xarVarPrepForDisplay($result);
+            $data['debug'] = xarVar::prepForDisplay($result);
         } elseif (!empty($confirm)) {
             // return and load the same map again
-            $url = xarModURL('dynamicdata','admin','migrate',
+            $url = xarController::URL('dynamicdata','admin','migrate',
                              array('load' => 1, 'map' => $map));
             xarController::redirect($url);
             return true;
@@ -367,7 +367,7 @@ function dynamicdata_admin_migrate(Array $args=array())
 
     // save current map
     if (!empty($save)) {
-        if(!xarVarFetch('newmap', 'str', $newmap, NULL, XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('newmap', 'str', $newmap, NULL, xarVar::DONT_SET)) {return;}
         if (!empty($newmap)) {
             $map = $newmap;
         }

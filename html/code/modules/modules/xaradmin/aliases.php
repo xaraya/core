@@ -15,11 +15,11 @@
     function modules_admin_aliases(Array $args=array())
     {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
-        if (!xarVarFetch('name',   'str', $modname,     NULL, XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('remove', 'str', $removealias, NULL, XARVAR_NOT_REQUIRED)) {return;}
-        if (!xarVarFetch('add',    'str', $addalias,    NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('name',   'str', $modname,     NULL, xarVar::NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('remove', 'str', $removealias, NULL, xarVar::NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('add',    'str', $addalias,    NULL, xarVar::NOT_REQUIRED)) {return;}
         if (!empty($removealias) && !empty($modname)) {
             xarModAlias::delete($removealias, $modname);
         } elseif (!empty($addalias) && !empty($modname)) {

@@ -272,7 +272,7 @@ class xarAutoload extends xarObject
             'xarversion'             => 'xaraya.version',
 
             // MLSBackends directory
-            'variablestream'                        => 'xaraya.mlsbackends.php',
+            'xarmls__phptranslationsbackend'        => 'xaraya.mlsbackends.php',
             'itranslationsbackend'                  => 'xaraya.mlsbackends.reference',
             'xarmls__referencesbackend'             => 'xaraya.mlsbackends.reference',
             'xarmls__xmltranslationsbackend'        => 'xaraya.mlsbackends.xml',
@@ -325,4 +325,3 @@ class xarAutoload extends xarObject
         return false;
     }
 }
-?>

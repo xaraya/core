@@ -18,13 +18,13 @@
 function dynamicdata_admin_view_propertydefs()
 {
     // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
 
-    if (!xarModAPILoad('dynamicdata', 'user')) return;
+    if (!xarMod::apiLoad('dynamicdata', 'user')) return;
     $data['fields'] = DataPropertyMaster::getPropertyTypes();
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = array();

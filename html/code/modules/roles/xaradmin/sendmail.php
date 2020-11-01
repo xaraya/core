@@ -14,17 +14,17 @@
 function roles_admin_sendmail()
 {
     // Security
-    if (!xarSecurityCheck('MailRoles')) return;
+    if (!xarSecurity::check('MailRoles')) return;
     
     // Get parameters from whatever input we need
-    if (!xarVarFetch('id',     'int:0:', $id, 0)) return;
-    if (!xarVarFetch('state',   'int:0:', $state, xarRoles::ROLES_STATE_CURRENT)) return;
-    if (!xarVarFetch('message', 'str:1:', $message,'')) return;
-    if (!xarVarFetch('subject', 'str:1',  $subject, '')) return;
-    if (!xarVarFetch('includesubgroups','int:0:',$includesubgroups,0,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id',     'int:0:', $id, 0)) return;
+    if (!xarVar::fetch('state',   'int:0:', $state, xarRoles::ROLES_STATE_CURRENT)) return;
+    if (!xarVar::fetch('message', 'str:1:', $message,'')) return;
+    if (!xarVar::fetch('subject', 'str:1',  $subject, '')) return;
+    if (!xarVar::fetch('includesubgroups','int:0:',$includesubgroups,0,xarVar::NOT_REQUIRED)) return;
 
     // Confirm authorisation code.
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Get user information
@@ -107,7 +107,7 @@ function roles_admin_sendmail()
     // If it was on, turn it back on
     xarModVars::set('themes','ShowTemplates',$themecomments);
 
-    xarController::redirect(xarModURL('roles', 'admin', 'createmail'));
+    xarController::redirect(xarController::URL('roles', 'admin', 'createmail'));
     return true;
 }
 ?>

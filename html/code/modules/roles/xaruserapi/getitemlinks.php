@@ -22,7 +22,7 @@
 function roles_userapi_getitemlinks(Array $args=array())
 {
     $itemlinks = array();
-    if (!xarSecurityCheck('ViewRoles', 0)) {
+    if (!xarSecurity::check('ViewRoles', 0)) {
         return $itemlinks;
     }
 
@@ -30,10 +30,10 @@ function roles_userapi_getitemlinks(Array $args=array())
         $item = xarMod::apiFunc('roles', 'user', 'get',
             array('id' => $itemid));
         if (!isset($item)) return;
-        $itemlinks[$itemid] = array('url' => xarModURL('roles', 'user', 'display',
+        $itemlinks[$itemid] = array('url' => xarController::URL('roles', 'user', 'display',
                 array('id' => $itemid)),
             'title' => xarML('Display User'),
-            'label' => xarVarPrepForDisplay($item['name']));
+            'label' => xarVar::prepForDisplay($item['name']));
     }
     return $itemlinks;
 }

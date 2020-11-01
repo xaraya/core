@@ -66,7 +66,7 @@ function mail_schedulerapi_sendmail(Array $args=array())
 
 // Trick : make sure we're dealing with up-to-date information here,
 //         because sending all those mails may have taken a while...
-    xarVarDelCached('Mod.Variables.mail', 'queue');
+    xarVar::delCached('Mod.Variables.mail', 'queue');
 
     // get the current waiting queue
     $serialqueue = xarModVars::get('mail','queue');

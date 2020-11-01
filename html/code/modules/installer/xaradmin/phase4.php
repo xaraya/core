@@ -26,7 +26,7 @@
 function installer_admin_phase4()
 {
     if (!file_exists('install.php')) { throw new Exception('Already installed');}
-    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarVar::fetch('install_language','str::',$install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
 
     // Get default values from config files
     $data['database_host']       = xarSystemVars::get(sys::CONFIG, 'DB.Host');

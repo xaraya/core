@@ -23,7 +23,7 @@
 function base_admin_confirmlogout()
 {
     // Security
-    if(!xarSecurityCheck('EditBase')) return;
+    if(!xarSecurity::check('EditBase')) return;
     
     // Template does it all
     return array();

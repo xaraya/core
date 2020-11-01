@@ -21,12 +21,12 @@ function roles_user_display(Array $args=array())
 {
     extract($args);
 
-    if (!xarVarFetch('id','id',$id, xarUser::getVar('id'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemid', 'int', $itemid, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('itemtype', 'int', $itemtype, 1, XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('tplmodule', 'str', $args['tplmodule'], 'roles', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('template', 'str', $args['template'], 'account', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('layout', 'str', $args['layout'], '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('id','id',$id, xarUser::getVar('id'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemid', 'int', $itemid, NULL, xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('itemtype', 'int', $itemtype, 1, xarVar::NOT_REQUIRED)) return;
+    if(!xarVar::fetch('tplmodule', 'str', $args['tplmodule'], 'roles', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('template', 'str', $args['template'], 'account', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('layout', 'str', $args['layout'], '', xarVar::NOT_REQUIRED)) {return;}
 
     $id = isset($itemid) ? $itemid : $id;
 
@@ -39,12 +39,12 @@ function roles_user_display(Array $args=array())
 
         $currentid = xarUser::getVar('id');
         if ($currentid == $id) {
-            xarController::redirect(xarModURL('roles', 'user', 'account'));
+            xarController::redirect(xarController::URL('roles', 'user', 'account'));
         }
 
         $name = $role->getName();
     // Security Check
-        if(!xarSecurityCheck('ViewRoles',0,'Roles',$name)) return;
+        if(!xarSecurity::check('ViewRoles',0,'Roles',$name)) return;
 
         $data['id'] = $role->getID();
         $itemtype = $role->getType();
@@ -68,11 +68,11 @@ function roles_user_display(Array $args=array())
         $item['module'] = 'roles';
         $item['itemtype'] = $data['itemtype'];
         $item['itemid']= $id;
-        $item['returnurl'] = xarModURL('roles', 'user', 'display',
+        $item['returnurl'] = xarController::URL('roles', 'user', 'display',
                                        array('id' => $id));
-        $data['hooks'] = xarModCallHooks('item', 'display', $id, $item);
+        $data['hooks'] = xarModHooks::call('item', 'display', $id, $item);
 
-        xarTpl::setPageTitle(xarVarPrepForDisplay($data['name']));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($data['name']));
     } else {
         $data['id'] = $id;
         $data['uname'] = '';

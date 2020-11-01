@@ -102,13 +102,13 @@ function blocks_blocksapi_getinfo(Array $args=array())
     // set a cache key based on filter params
     $key = md5(serialize($filter));
     // see if we cached it already
-    if (xarVarIsCached('Block.Info', $key)) {
-        $blockinfo = xarVarGetCached('Block.Info', $key);
+    if (xarVar::isCached('Block.Info', $key)) {
+        $blockinfo = xarVar::getCached('Block.Info', $key);
     } else {
         // call the types or instances api (both return the same data set)
         $blockinfo = xarMod::apiFunc('blocks', $apitype, 'getitem', $filter);
         // cache it
-        xarVarSetCached('Block.Info', $key, $blockinfo);
+        xarVar::setCached('Block.Info', $key, $blockinfo);
     }
     // were we supplied with instance or type and/or module params to a non-existent block/type?
     if (empty($blockinfo))

@@ -17,20 +17,20 @@
 function modules_admin_settings()
 {
     // Security
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurity::check('AdminModules')) return;
 
-    if (!xarVarFetch('hidecore', 'str:1:', $hidecore, '0', XARVAR_NOT_REQUIRED)) return; 
-    if (!xarVarFetch('selstyle', 'str:1:', $selstyle, 'plain', XARVAR_NOT_REQUIRED)) return; 
-    if (!xarVarFetch('selfilter', 'str:1:', $selfilter, 'XARMOD_STATE_ANY', XARVAR_NOT_REQUIRED)) return; 
-    if (!xarVarFetch('selsort', 'str:1:', $selsort, 'namedesc', XARVAR_NOT_REQUIRED)) return; 
-    if (!xarVarFetch('regen', 'str:1:', $regen, XARVAR_NOT_REQUIRED)) return; 
+    if (!xarVar::fetch('hidecore', 'str:1:', $hidecore, '0', xarVar::NOT_REQUIRED)) return; 
+    if (!xarVar::fetch('selstyle', 'str:1:', $selstyle, 'plain', xarVar::NOT_REQUIRED)) return; 
+    if (!xarVar::fetch('selfilter', 'str:1:', $selfilter, 'xarMod::STATE_ANY', xarVar::NOT_REQUIRED)) return; 
+    if (!xarVar::fetch('selsort', 'str:1:', $selsort, 'namedesc', xarVar::NOT_REQUIRED)) return; 
+    if (!xarVar::fetch('regen', 'str:1:', $regen, xarVar::NOT_REQUIRED)) return; 
     
     xarModUserVars::set('modules', 'hidecore', $hidecore);
     xarModUserVars::set('modules', 'selstyle', $selstyle);
     xarModUserVars::set('modules', 'selfilter', $selfilter);
     xarModUserVars::set('modules', 'selsort', $selsort);
     
-    xarController::redirect(xarModURL('modules', 'admin', 'list', array('regen' => $regen)));
+    xarController::redirect(xarController::URL('modules', 'admin', 'list', array('regen' => $regen)));
     return true;
 }
 

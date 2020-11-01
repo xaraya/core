@@ -97,6 +97,7 @@ class ShortRoute extends xarRoute
             }
         }
         
+        // @fixme does anyone know what this was supposed to do?
         if ($partial) $this->setMatchedPath($matchedPath);
         
         // Add all the parts together
@@ -106,4 +107,3 @@ class ShortRoute extends xarRoute
         return $this->parts + $this->defaults;
     }
 }
-?>

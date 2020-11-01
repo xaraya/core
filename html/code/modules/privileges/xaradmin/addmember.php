@@ -25,18 +25,18 @@
 function privileges_admin_addmember()
 {
     // Security
-    if (!xarSecurityCheck('AddPrivileges')) return; 
+    if (!xarSecurity::check('AddPrivileges')) return; 
     
 // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if(!xarVarFetch('ppid',   'isset', $id   , NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('privid', 'isset', $privid, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('ppid',   'isset', $id   , NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('privid', 'isset', $privid, NULL, xarVar::DONT_SET)) {return;}
 
     if (empty($id) || empty($privid)) {
-        xarController::redirect(xarModURL('privileges',
+        xarController::redirect(xarController::URL('privileges',
                                       'admin',
                                       'modifyprivilege',
                                       array('id'=>$id)));
@@ -68,7 +68,7 @@ function privileges_admin_addmember()
     xarSession::setVar('privileges_statusmsg', xarML('Added to Privilege',
                     'privileges'));
 // redirect to the next page
-    xarController::redirect(xarModURL('privileges',
+    xarController::redirect(xarController::URL('privileges',
                              'admin',
                              'modifyprivilege',
                              array('id'=>$id)));

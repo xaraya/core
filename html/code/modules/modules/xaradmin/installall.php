@@ -24,10 +24,10 @@
 function modules_admin_installall()
 {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
     //Testing it directly for now... Insert this back when it is put into the template
-//    if (!xarSecConfirmAuthKey()) return;
+//    if (!xarSec::confirmAuthKey()) return;
 
     //This is a very lenghty process
    @set_time_limit(600);
@@ -40,7 +40,7 @@ function modules_admin_installall()
     $installer = Installer::getInstance();    
     foreach ($dbModules as $name => $info) {
         //Jump if already installed
-        if ($info['state'] == XARMOD_STATE_INSTALLED) continue;
+        if ($info['state'] == xarMod::STATE_INSTALLED) continue;
         $dependencies = $installer->getalldependencies($info['regid']);
         //If this cannot be installed, jump it
         if (count($dependencies['unsatisfiable']) > 0) {
@@ -48,13 +48,13 @@ function modules_admin_installall()
         } else {
             if (!$installer->installmodule($info['regid'])) {
                 foreach ($dependencies['satisfiable'] as $key => $modInfo) {
-                    $dbModules[$modInfo['name']]['state'] = XARMOD_STATE_INSTALLED;
+                    $dbModules[$modInfo['name']]['state'] = xarMod::STATE_INSTALLED;
                 }
             }
         }
     }
 
-    xarController::redirect(xarModURL('modules', 'admin', 'list', array('state' => 0), NULL));
+    xarController::redirect(xarController::URL('modules', 'admin', 'list', array('state' => 0), NULL));
     return true;
 }
 

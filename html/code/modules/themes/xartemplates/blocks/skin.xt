@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <form action="#xarModURL('themes', 'user', 'switch_theme')#" method="post">
+    <form action="#xarController::URL('themes', 'user', 'switch_theme')#" method="post">
         <div>
             <xar:set name="default_theme_id">'default_theme_'.$blockid</xar:set>
             <label for="default_theme" id="#$default_theme_id#">Select Theme</label>

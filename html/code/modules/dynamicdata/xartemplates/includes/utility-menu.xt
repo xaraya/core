@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- Common Administration menu-->
-    <xar:set name="request">xarController::$request->getInfo()</xar:set>
+    <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
     <xar:set name="activetab">#$request.2#</xar:set>
     <xar:set name="activetype">#$request.1#</xar:set>
     <xar:set name="xmldata">'utilities'</xar:set>

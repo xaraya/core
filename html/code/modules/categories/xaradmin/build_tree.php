@@ -60,20 +60,20 @@
 function categories_admin_build_tree()
 {
     // Security Check
-    if (!xarSecurityCheck('AdminCategories')) return;
+    if (!xarSecurity::check('AdminCategories')) return;
 
     $verbose = false;
     
-    if(!xarVarFetch('table',     'str',  $data['table'],      'xar_categories', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('parent_id', 'str',  $data['parent_id'],  'parent_id',      XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('left_id',   'str',  $data['left_id'],    'left_id',        XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('right_id',  'str',  $data['right_id'],   'right_id',       XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('name',      'str',  $data['name'],       'name',           XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('root_name', 'str',  $data['root_name'],  'Root',           XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('table',     'str',  $data['table'],      'xar_categories', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('parent_id', 'str',  $data['parent_id'],  'parent_id',      xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('left_id',   'str',  $data['left_id'],    'left_id',        xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('right_id',  'str',  $data['right_id'],   'right_id',       xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('name',      'str',  $data['name'],       'name',           xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('root_name', 'str',  $data['root_name'],  'Root',           xarVar::NOT_REQUIRED)) {return;}
 
     // Buttons
-    if(!xarVarFetch('check',  'isset',  $data['check'],   null,       XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('build',  'isset',  $data['build'],   null,       XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('check',  'isset',  $data['check'],   null,       xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('build',  'isset',  $data['build'],   null,       xarVar::NOT_REQUIRED)) {return;}
 
     $data['message_warning'] = array();
     $data['message_error'] = array();

@@ -17,31 +17,31 @@
 function dynamicdata_admin_query(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
     extract($args);
 
-    if(!xarVarFetch('query', 'str', $query, '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('oldquery', 'str', $oldquery, '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('newquery', 'str', $newquery, '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('table', 'str', $table, '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('oldtable', 'str', $oldtable, '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('itemid', 'int', $itemid, 0, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('olditemid', 'int', $olditemid, 0, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('join', 'str', $join, '', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('oldjoin', 'str', $oldjoin, '', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('query', 'str', $query, '', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('oldquery', 'str', $oldquery, '', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('newquery', 'str', $newquery, '', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('table', 'str', $table, '', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('oldtable', 'str', $oldtable, '', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('itemid', 'int', $itemid, 0, xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('olditemid', 'int', $olditemid, 0, xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('join', 'str', $join, '', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('oldjoin', 'str', $oldjoin, '', xarVar::NOT_REQUIRED)) {return;}
 
-    if(!xarVarFetch('field', 'isset', $field, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('where', 'isset', $where, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('value', 'isset', $value, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('sort', 'isset', $sort, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('numitems', 'isset', $numitems, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('startnum', 'isset', $startnum, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('field', 'isset', $field, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('where', 'isset', $where, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('value', 'isset', $value, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('sort', 'isset', $sort, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('numitems', 'isset', $numitems, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('startnum', 'isset', $startnum, NULL, xarVar::DONT_SET)) {return;}
 
-    if(!xarVarFetch('groupby', 'isset', $groupby, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('operation', 'isset', $operation, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('groupby', 'isset', $groupby, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('operation', 'isset', $operation, NULL, xarVar::DONT_SET)) {return;}
 
-    if(!xarVarFetch('cache', 'int', $cache, 0, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('cache', 'int', $cache, 0, xarVar::DONT_SET)) {return;}
 
     $reset = false;
     // changed selected object
@@ -379,24 +379,24 @@ function dynamicdata_admin_query(Array $args=array())
             }
         }
         if (!empty($fieldlist)) {
-            $data['sample'] .= 'fieldlist="' . xarVarPrepForDisplay(join(',',$fieldlist)) . '" ';
+            $data['sample'] .= 'fieldlist="' . xarVar::prepForDisplay(join(',',$fieldlist)) . '" ';
         }
         if (!empty($whereclause)) {
-            $data['sample'] .= 'where="' . xarVarPrepForDisplay(addslashes($whereclause)) . '" ';
+            $data['sample'] .= 'where="' . xarVar::prepForDisplay(addslashes($whereclause)) . '" ';
         }
         if (!empty($grouplist) && count($grouplist) > 0) {
-            $data['sample'] .= 'groupby="' . xarVarPrepForDisplay(join(',',$grouplist)) . '" ';
+            $data['sample'] .= 'groupby="' . xarVar::prepForDisplay(join(',',$grouplist)) . '" ';
         }
         if (!empty($sortlist) && count($sortlist) > 0) {
-            $data['sample'] .= 'sort="' . xarVarPrepForDisplay(join(',',$sortlist)) . '" ';
+            $data['sample'] .= 'sort="' . xarVar::prepForDisplay(join(',',$sortlist)) . '" ';
         }
         if (!empty($cache)) {
-            $data['sample'] .= 'cache="' . xarVarPrepForDisplay($cache) . '" ';
+            $data['sample'] .= 'cache="' . xarVar::prepForDisplay($cache) . '" ';
         }
         $data['sample'] .= 'layout="list" ';
         $data['sample'] .= 'linkfield="N/A" ';
-        $data['sample'] .= 'numitems="' . xarVarPrepForDisplay($numitems) . '" ';
-        $data['sample'] .= 'startnum="' . xarVarPrepForDisplay($startnum) . '" ';
+        $data['sample'] .= 'numitems="' . xarVar::prepForDisplay($numitems) . '" ';
+        $data['sample'] .= 'startnum="' . xarVar::prepForDisplay($startnum) . '" ';
         $data['sample'] .= '/&gt;';
         xarSession::setVar('DynamicData.LastQuery',$newquery);
     } else {
@@ -445,14 +445,14 @@ function dynamicdata_admin_query(Array $args=array())
     }
 
     if (!empty($table)) {
-        $data['viewlink'] = xarModURL('dynamicdata','admin','view',
+        $data['viewlink'] = xarController::URL('dynamicdata','admin','view',
                                       array('table' => $table));
     } elseif (!empty($itemid) && !empty($join)) {
-        $data['viewlink'] = xarModURL('dynamicdata','admin','view',
+        $data['viewlink'] = xarController::URL('dynamicdata','admin','view',
                                       array('itemid' => $itemid,
                                             'join' => $join));
     } elseif (!empty($itemid)) {
-        $data['viewlink'] = xarModURL('dynamicdata','admin','view',
+        $data['viewlink'] = xarController::URL('dynamicdata','admin','view',
                                       array('itemid' => $itemid));
     }
     $data['numfields'] = count($data['properties']);

@@ -69,7 +69,7 @@
 	                </label>
                 </div>
                 <div class="xar-col">
-	                <a href="#xarModURL('modules','admin','aliases',array('name' => $modname))#">
+	                <a href="#xarController::URL('modules','admin','aliases',array('name' => $modname))#">
 	                    <xar:var name="imagealt">[set aliases]</xar:var>
 	                    <xar:set name="iconurl">xarTpl::getImage('icons/modify.png', 'theme')</xar:set>
 	                    <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>

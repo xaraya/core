@@ -60,7 +60,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
     {
         if (!isset($this->transKeyEntries[$key])) {
             if ($type == 1) {
-                return $string;
+                return $key;
             }
             else {
                 return "";
@@ -148,7 +148,7 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     function getContextNames($ctxType)
     {
-        $contextParts = xarMLSContext::getContextTypeComponents($contextType);
+        $contextParts = xarMLSContext::getContextTypeComponents($ctxType);
         
         // Complete the directory path if the context directory is not empty
         if (!empty($contextParts[1])) $this->contextlocation = $this->domainlocation . "/" . $contextParts[1];
@@ -341,4 +341,3 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
 
 }
 
-?>

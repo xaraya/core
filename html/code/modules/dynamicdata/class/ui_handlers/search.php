@@ -36,22 +36,22 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
      */
     function run(array $args = array())
     {
-        if(!xarVarFetch('catid',    'isset', $args['catid'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('catid',    'isset', $args['catid'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('sort',     'isset', $args['sort'],     NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('sort',     'isset', $args['sort'],     NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('where',    'isset', $args['where'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('where',    'isset', $args['where'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('startnum', 'isset', $args['startnum'], NULL, xarVar::DONT_SET)) 
             return;
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        if(!xarVarFetch('q',        'isset', $args['q'],        NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('q',        'isset', $args['q'],        NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('field',    'isset', $args['field'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('field',    'isset', $args['field'],    NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('match',    'isset', $args['match'],    NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('match',    'isset', $args['match'],    NULL, xarVar::DONT_SET)) 
             return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
@@ -117,7 +117,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('Search #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('Search #(1) is forbidden', $this->object->label));
@@ -175,7 +175,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
 
         // prepare for output
         if (isset($search['q']) && $search['q'] !== '') {
-            $search['q'] = xarVarPrepForDisplay($search['q']);
+            $search['q'] = xarVar::prepForDisplay($search['q']);
         }
         $search['options'] = array('like'  => '',
                                    'start' => 'starts with',
@@ -230,7 +230,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             }
         }
         $title = xarML('Query #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view'))
             return xarResponse::Forbidden(xarML('Query #(1) is forbidden', $this->object->label));
@@ -305,7 +305,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         foreach (array_keys($query['field']) as $field) {
             if (isset($query['field'][$field]) && $query['field'][$field] !== '') {
                 if (!is_array($query['field'][$field])) {
-                    $query['field'][$field] = xarVarPrepForDisplay($query['field'][$field]);
+                    $query['field'][$field] = xarVar::prepForDisplay($query['field'][$field]);
                 }
             }
         }

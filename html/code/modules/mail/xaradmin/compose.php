@@ -22,16 +22,16 @@
 function mail_admin_compose()
 {
     // Security
-    if (!xarSecurityCheck('ManageMail')) return;
+    if (!xarSecurity::check('ManageMail')) return;
     
     // Generate a one-time authorisation code for this operation
-    $data['authid']         = xarSecGenAuthKey();
+    $data['authid']         = xarSec::genAuthKey();
 
     // Get the admin email address
     $data['email']   = xarModVars::get('mail', 'adminmail');
     $data['name']    = xarModVars::get('mail', 'adminname');
 
-    if (!xarVarFetch('confirm', 'int', $confirm, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirm', 'int', $confirm, 0, xarVar::NOT_REQUIRED)) return;
     
     $data['message'] = '';
     if ($confirm) {

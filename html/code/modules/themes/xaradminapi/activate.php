@@ -35,7 +35,7 @@ function themes_adminapi_activate(Array $args=array())
     // Update state of theme
     $res = xarMod::apiFunc('themes','admin','setstate',
                         array('regid' => $regid,
-                              'state' => XARTHEME_STATE_ACTIVE));
+                              'state' => xarTheme::STATE_ACTIVE));
 
     return true;
 }

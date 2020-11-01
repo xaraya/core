@@ -450,7 +450,7 @@ class xarTpl extends xarObject
         if (method_exists('xarModVars','Get') && method_exists('xarUser','getVar')) {
             if (xarModVars::get('themes', 'variable_dump') &&
                 in_array(xarUser::getVar('uname'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-                echo '<pre>',var_dump($tplData),'</pre>';
+                echo '<pre>',var_export($tplData, 1),'</pre>';
             }
         } 
 
@@ -813,7 +813,7 @@ class xarTpl extends xarObject
                 break;
             case 'module':
                 if (empty($package))
-                    list($package) = xarController::$request->getInfo();
+                    $package = xarMod::getName();
                 // @checkme: modules is a depency of templates, redundant check?
                 if (method_exists('xarMod', 'getBaseInfo')) {
                     $modBaseInfo = xarMod::getBaseInfo($package);
@@ -1122,6 +1122,7 @@ class xarTpl extends xarObject
 /**
  * Execute template from file
  *
+ * FIXME: this cannot be private since it's used by the mail module
  * @access private
  * @param  string $sourceFileName       From which file do we want to execute? Assume it exists by now ;-)
  * @param  array  $tplData              Template variables
@@ -1130,7 +1131,7 @@ class xarTpl extends xarObject
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)
  * @todo  make the checking whether templatecode is set more robust (related to templated exception handling)
  */
-    private static function executeFromFile($sourceFileName, $tplData, $tplType = 'module')
+    public static function executeFromFile($sourceFileName, $tplData, $tplType = 'module')
     {
         assert(!empty($sourceFileName));
         assert(is_array($tplData));
@@ -1191,7 +1192,7 @@ class xarTpl extends xarObject
  * @access public
  * @param  string $sourceFileName
  * @param  string $tplOutput
- * @return void
+ * @return string generated output from the template
  *
  * @todo Rethink this function, it contains hardcoded xhtml
  */

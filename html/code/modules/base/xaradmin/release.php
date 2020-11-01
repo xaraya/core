@@ -25,7 +25,7 @@ function base_admin_release()
      * @todo change feed url once release module is moved
      */
     // Security
-    if(!xarSecurityCheck('ManageBase')) return;
+    if(!xarSecurity::check('ManageBase')) return;
 
     //number of releases to show
     $releasenumber = (int)xarModVars::get('base','releasenumber');

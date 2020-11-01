@@ -28,7 +28,7 @@
 function base_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('EditBase')) return;
+    if(!xarSecurity::check('EditBase')) return;
 
     $request = new xarRequest();
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
@@ -38,7 +38,7 @@ function base_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('base','admin','overview');
     } else {
-        xarController::redirect(xarModURL('base', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig'));
         return true;
     }
 }

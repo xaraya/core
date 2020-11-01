@@ -107,7 +107,7 @@
                     <div class="xar-col">
                         <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                         <input type="hidden" name="tplmodule" id="tplmodule" value="roles"/>
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                         <xar:var name="label">Add</xar:var>
                         <xar:button type="submit" label="$label" name="confirm"/>
                     </div>

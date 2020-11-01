@@ -59,7 +59,7 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
         $vars = array();
 
         // fetch the array of meta tags from input
-        if (!xarVarFetch('metatags', 'array', $metatags, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('metatags', 'array', $metatags, array(), xarVar::NOT_REQUIRED)) return;
         $newtags = array();     
         foreach ($metatags as $metatag) {
             // empty value = delete
@@ -68,14 +68,14 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
             $newtags[] = $metatag;
         }
         // fetch the value of the new tag (if any)
-        if (!xarVarFetch('metatypeval', 'pre:trim:lower:str:1:', $metatypeval, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('metatypeval', 'pre:trim:lower:str:1:', $metatypeval, '', xarVar::NOT_REQUIRED)) return;
         // only fetch the other params if we have a value        
         if (!empty($metatypeval)) {
-            if (!xarVarFetch('metatype', 'pre:trim:lower:enum:name:http-equiv', $metatype, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('metalang', 'pre:trim:lower:str:1:', $metalang, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('metadir', 'pre:trim:lower:enum:ltr:rtl', $metadir, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('metascheme', 'pre:trim:str:1:', $metascheme, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('metacontent', 'pre:trim:str:1:', $metacontent, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('metatype', 'pre:trim:lower:enum:name:http-equiv', $metatype, '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('metalang', 'pre:trim:lower:str:1:', $metalang, '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('metadir', 'pre:trim:lower:enum:ltr:rtl', $metadir, '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('metascheme', 'pre:trim:str:1:', $metascheme, '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('metacontent', 'pre:trim:str:1:', $metacontent, '', xarVar::NOT_REQUIRED)) return;
             if (!empty($metatype)) {
                 $newtags[] = array(
                     'type' => $metatype,
@@ -92,7 +92,7 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
         xarModVars::set('themes','meta.tags', serialize($newtags));
         
         // fetch the array of link tags from input
-        if (!xarVarFetch('linktags', 'array', $linktags, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('linktags', 'array', $linktags, array(), xarVar::NOT_REQUIRED)) return;
         $newlinks = array();
         foreach ($linktags as $linktag) {
             // delete if flag is set not empty
@@ -100,12 +100,12 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
             $newlinks[] = $linktag;
         }
         // fetch the value of the new link rel
-        if (!xarVarFetch('linkrel', 'pre:trim:str:1:', $linkrel, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('linkrel', 'pre:trim:str:1:', $linkrel, '', xarVar::NOT_REQUIRED)) return;
         // only fetch other params if rel isn't empty
         if (!empty($linkrel)) {
-            if (!xarVarFetch('linkhref', 'pre:trim:str:1:', $linkhref, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('linktitle', 'pre:trim:str:1:', $linktitle, '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('linktype', 'pre:trim:str:1:', $linktype, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('linkhref', 'pre:trim:str:1:', $linkhref, '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('linktitle', 'pre:trim:str:1:', $linktitle, '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('linktype', 'pre:trim:str:1:', $linktype, '', xarVar::NOT_REQUIRED)) return;
             $newlinks[] = array(
                 'rel' => $linkrel,
                 'href' => $linkhref,

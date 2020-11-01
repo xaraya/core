@@ -80,7 +80,7 @@ class ImageProperty extends TextBoxProperty
         if (isset($this->fieldname)) $name = $this->fieldname;
         else $name = 'dd_'.$this->id;
         $sourcename = $name . '_source';
-        if (!xarVarFetch($sourcename, 'str:1:100', $image_source, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch($sourcename, 'str:1:100', $image_source, NULL, xarVar::NOT_REQUIRED)) return;
         if (!empty($image_source)) $this->initialization_image_source = $image_source;
 
         if ($this->initialization_image_source == 'url') {
@@ -111,7 +111,7 @@ class ImageProperty extends TextBoxProperty
         if ($data['image_source'] == 'upload') $this->upload = true;
         $data['basedirectory'] = isset($data['basedir']) ? $data['basedir'] : $this->initialization_basedirectory;
         $data['extensions'] = isset($data['extensions']) ? $data['extensions'] : $this->validation_file_extensions;
-        $data['value']    = isset($data['value']) ? xarVarPrepForDisplay($data['value']) : xarVarPrepForDisplay($this->value);
+        $data['value']    = isset($data['value']) ? xarVar::prepForDisplay($data['value']) : xarVar::prepForDisplay($this->value);
 
         return parent::showInput($data);
     }

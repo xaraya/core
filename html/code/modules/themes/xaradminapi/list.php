@@ -19,13 +19,13 @@
 function themes_adminapi_list()
 {
 // Security Check
-    if(!xarSecurityCheck('AdminThemes')) return;
+    if(!xarSecurity::check('AdminThemes')) return;
 
     // Obtain information
     $themeList = xarMod::apiFunc('themes', 
                           'admin', 
                           'GetThemeList', 
-                          array('filter'     => array('State' => XARTHEME_STATE_ANY)));
+                          array('filter'     => array('State' => xarTheme::STATE_ANY)));
     //throw back
     if (!isset($themeList)) return;
 

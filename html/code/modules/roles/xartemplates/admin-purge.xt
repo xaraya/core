@@ -10,7 +10,7 @@
         <xar:template type="module" module="base" file="admin-menu-skel"/>
         <xar:if condition="$operation eq 'recall'">
             <h3>Recall Deleted Groups and Users</h3>
-            <form method="post" action="#xarModURL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded">
+            <form method="post" action="#xarController::URL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded">
                 <!-- Module List Sort and Filter Controls table -->
                 <table class="xar-table xar-fullwidth">
                     <tr>
@@ -87,7 +87,7 @@
                                 <td>#$loop:item['uname']#</td>
                                 <td>#$loop:item['email']#</td>
                                     <td class="xar-align-center">
-                                #xarLocaleFormatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
+                                #xarLocale::formatDate('%m/%d/%Y',$loop:item['date_reg'])#</td>
                                 <td>#$loop:item['itemtype']#</td>
                                     <td class="xar-align-center">
                                         <xar:if condition="$loop:item['unique'] eq 1">
@@ -116,7 +116,7 @@
         <xar:else />
             <h3>Purge Users</h3>
             <p>Note: Purged users cannot be recalled. Groups and some special users cannot be purged.</p>
-            <form method="post" action="#xarModURL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded" name="purge">
+            <form method="post" action="#xarController::URL('roles','admin','purge')#" enctype="application/x-www-form-urlencoded" name="purge">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <input type="hidden" name="operation" id="operation" value="purge"/>
                 <!-- Roles List Sort and Filter Controls table -->
@@ -186,7 +186,7 @@
                                 <td><xar:data-output type="name" value="$purgeuser['uname']"/></td>
                                 <td><xar:data-output type="name" value="$purgeuser['email']"/></td>
                                 <td class="xar-align-center">
-                                    #xarLocaleFormatDate('%m/%d/%Y',$purgeuser['date_reg'])#
+                                    #xarLocale::formatDate('%m/%d/%Y',$purgeuser['date_reg'])#
                                 </td>
                                 <td>#$purgeuser['state']#</td>
                                 <td class="xar-align-center">

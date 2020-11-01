@@ -52,7 +52,7 @@ uasort($groups,'by_name')</xar:set>
         <xar:foreach in="$groups" value="$group">
             <xar:foreach in="$items" key="$itemid" value="$fields">
                 <xar:set name="code">'SC:'.$fields['name'].':'.$group['id']</xar:set>
-                <xar:set name="dummy">xarSecurityCheck($fields['name'], 0, '', '', '', $group['name'],0,0)</xar:set>
+                <xar:set name="dummy">xarSecurity::check($fields['name'], 0, '', '', '', $group['name'],0,0)</xar:set>
                 <xar:if condition="!empty($dummy)">
                     <xar:set name="dummy">xarModVars::set('privileges',$code, 1)</xar:set>
                 <xar:else/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <form method="post" action="#xarModURL('dynamicdata','admin','create')#">
+    <form method="post" action="#xarController::URL('dynamicdata','admin','create')#">
         <table class="xar-table">
             <xar:data-form object="$object"/>
             <tr>
@@ -13,7 +13,7 @@
         <input type="hidden" name="moduleid" id="moduleid" value="#$moduleid#"/>
         <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
         <input type="hidden" name="itemid" id="itemid" value="0"/>
-        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey('dynamicdata')#"/>
+        <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey('dynamicdata')#"/>
         <input type="hidden" name="return_url" id="return_url"
         value="#xarServer::getCurrentURL()#"/>
     </form>

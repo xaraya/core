@@ -23,11 +23,11 @@
 function privileges_admin_removebranch()
 {
     // Security
-    if (!xarSecurityCheck('EditPrivileges')) return; 
+    if (!xarSecurity::check('EditPrivileges')) return; 
     
 // get input from any view of this page
-   if (!xarVarFetch('childid',  'int', $childid,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-   if (!xarVarFetch('parentid', 'int', $parentid, NULL, XARVAR_NOT_REQUIRED)) {return;}
+   if (!xarVar::fetch('childid',  'int', $childid,  NULL, xarVar::NOT_REQUIRED)) {return;}
+   if (!xarVar::fetch('parentid', 'int', $parentid, NULL, xarVar::NOT_REQUIRED)) {return;}
     if (empty($childid)) return xarResponse::notFound();
     if (empty($parentid)) return xarResponse::notFound();
 
@@ -36,7 +36,7 @@ function privileges_admin_removebranch()
    }
 
 // redirect to the next page
-    xarController::redirect(xarModURL('privileges',
+    xarController::redirect(xarController::URL('privileges',
                              'admin',
                              'viewprivileges'));
     return true;

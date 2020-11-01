@@ -22,12 +22,12 @@
 function privileges_admin_modifyconfig()
 {
     // Security
-    if (!xarSecurityCheck('AdminPrivileges')) return;
+    if (!xarSecurity::check('AdminPrivileges')) return;
     
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('testergroup', 'int', $testergroup, xarModVars::get('privileges', 'testergroup'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('tester', 'int', $tester, xarModVars::get('privileges', 'tester'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+    if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('testergroup', 'int', $testergroup, xarModVars::get('privileges', 'testergroup'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('tester', 'int', $tester, xarModVars::get('privileges', 'tester'), xarVar::NOT_REQUIRED)) return;
 
     switch ($data['tab']) {
         case 'lastresort':
@@ -104,14 +104,14 @@ function privileges_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             switch ($data['tab']) {
                 case 'general':
-                    if (!xarVarFetch('inheritdeny', 'checkbox', $inheritdeny, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('lastresort', 'checkbox', $lastresort, false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('exceptionredirect', 'checkbox', $data['exceptionredirect'], false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('inheritdeny', 'checkbox', $inheritdeny, false, xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('lastresort', 'checkbox', $lastresort, false, xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('exceptionredirect', 'checkbox', $data['exceptionredirect'], false, xarVar::NOT_REQUIRED)) return;
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
@@ -129,11 +129,11 @@ function privileges_admin_modifyconfig()
 
                     break;
                 case 'realms':
-                    if (!xarVarFetch('enablerealms', 'checkbox', $data['enablerealms'], false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('enablerealms', 'checkbox', $data['enablerealms'], false, xarVar::NOT_REQUIRED)) return;
                     xarModVars::set('privileges', 'showrealms', $data['enablerealms']);
-                    if (!xarVarFetch('realmvalue', 'str', $realmvalue, 'none', XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('realmcomparison', 'str', $realmcomparison, 'exact', XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('textvalue', 'str', $textvalue, '', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('realmvalue', 'str', $realmvalue, 'none', xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('realmcomparison', 'str', $realmcomparison, 'exact', xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('textvalue', 'str', $textvalue, '', xarVar::NOT_REQUIRED)) return;
                     if ($realmvalue == 'string') {
                         $realmvalue = empty($textvalue) ? 'none' : 'string:' . $textvalue;
                     }
@@ -141,15 +141,15 @@ function privileges_admin_modifyconfig()
                     xarModVars::set('privileges', 'realmcomparison', $realmcomparison);
                     break;
                 case 'lastresort':
-                    if (!xarVarFetch('name', 'str', $name, '', XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('password', 'str', $password, '', XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('password2', 'str', $password2, '', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('name', 'str', $name, '', xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('password', 'str', $password, '', xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('password2', 'str', $password2, '', xarVar::NOT_REQUIRED)) return;
 
                     // rudimentary check for valid password for now - fix so nicer presentation to user
                     if (strcmp($password, $password2) != 0) {
                         $msg = xarML('Last Resort Admin Creation failed! <br />The two password entries are not the same, please try again.');
                         xarSession::setVar('statusmsg', $msg);
-                       xarController::redirect(xarModURL('privileges', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
+                       xarController::redirect(xarController::URL('privileges', 'admin', 'modifyconfig',array('tab' => $data['tab'])));
                     }
                     $secret = array(
                                 'name' => MD5($name),
@@ -159,13 +159,13 @@ function privileges_admin_modifyconfig()
                     xarModVars::set('privileges','lastresort',serialize($secret));
                     break;
                 case 'testing':
-                    if (!xarVarFetch('tester', 'int', $data['tester'], xarModVars::get('privileges', 'tester'), XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('tester', 'int', $data['tester'], xarModVars::get('privileges', 'tester'), xarVar::NOT_REQUIRED)) return;
                     xarModVars::set('privileges', 'tester', $data['tester']);
-                    if (!xarVarFetch('test', 'checkbox', $test, false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('test', 'checkbox', $test, false, xarVar::NOT_REQUIRED)) return;
                     xarModVars::set('privileges', 'test', $test);
-                    if (!xarVarFetch('testdeny', 'checkbox', $testdeny, false, XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('testdeny', 'checkbox', $testdeny, false, xarVar::NOT_REQUIRED)) return;
                     xarModVars::set('privileges', 'testdeny', $testdeny);
-                    if (!xarVarFetch('testmask', 'str', $testmask, 'All', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('testmask', 'str', $testmask, 'All', xarVar::NOT_REQUIRED)) return;
                     xarModVars::set('privileges', 'testmask', $testmask);
                     xarModVars::set('privileges', 'testergroup', $testergroup);
                     break;

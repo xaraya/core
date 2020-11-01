@@ -20,9 +20,9 @@ function roles_adminapi_getgroupmenulinks()
 {
 
 // Security Check
-    if (xarSecurityCheck('AddRoles',0)) {
+    if (xarSecurity::check('AddRoles',0)) {
 
-        $menulinks[] = Array('url'   => xarModURL('roles',
+        $menulinks[] = Array('url'   => xarController::URL('roles',
                                                    'admin',
                                                    'newgroup'),
                               'title' => xarML('Add a new user group'),
@@ -30,9 +30,9 @@ function roles_adminapi_getgroupmenulinks()
     }
 
 // Security Check
-    if (xarSecurityCheck('EditRoles',0)) {
+    if (xarSecurity::check('EditRoles',0)) {
 
-        $menulinks[] = Array('url'   => xarModURL('roles',
+        $menulinks[] = Array('url'   => xarController::URL('roles',
                                                    'admin',
                                                    'viewallgroups'),
                               'title' => xarML('View and edit user groups'),

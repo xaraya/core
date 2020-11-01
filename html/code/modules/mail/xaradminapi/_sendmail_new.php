@@ -56,7 +56,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
     if (!isset($subject)) throw new EmptyParameterException('subject');
     if (!isset($message)) throw new EmptyParameterException('message');
 
-    if (!empty($when) && $when > time() && xarModIsAvailable('scheduler')) {
+    if (!empty($when) && $when > time() && xarMod::isAvailable('scheduler')) {
         if (xarMod::apiFunc('mail','admin','_queuemail', $args)) {
             // we're done here
             return true;
@@ -154,7 +154,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
     $mail->WordWrap = $wordwrap;
     $mail->Priority = $priority;
     $mail->Encoding = $encoding;
-    $mail->CharSet = xarMLSGetCharsetFromLocale(xarMLSGetCurrentLocale());
+    $mail->CharSet = xarMLS::getCharsetFromLocale(xarMLS::getCurrentLocale());
     $mail->From = $from;
     $mail->Sender = $from;
     $mail->FromName = $fromname;

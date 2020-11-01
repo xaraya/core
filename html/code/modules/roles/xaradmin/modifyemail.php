@@ -15,11 +15,11 @@
 function roles_admin_modifyemail(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('EditRoles')) return;
+    if (!xarSecurity::check('EditRoles')) return;
 
     extract($args);
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
-    if (!isset($mailtype)) xarVarFetch('mailtype', 'str:1:100', $data['mailtype'], 'welcome', XARVAR_NOT_REQUIRED);
+    if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED)) return;
+    if (!isset($mailtype)) xarVar::fetch('mailtype', 'str:1:100', $data['mailtype'], 'welcome', xarVar::NOT_REQUIRED);
     else $data['mailtype'] = $mailtype;
 
     // Get the list of available templates
@@ -49,7 +49,7 @@ function roles_admin_modifyemail(Array $args=array())
             $strings = xarMod::apiFunc('roles','admin','getmessagestrings', array('template' => $data['mailtype']));
             $data['subject'] = $strings['subject'];
             $data['message'] = $strings['message'];
-            $data['authid'] = xarSecGenAuthKey();
+            $data['authid'] = xarSec::genAuthKey();
 
             $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
                 if (isset($object) && !empty($object->objectid)) {
@@ -60,10 +60,10 @@ function roles_admin_modifyemail(Array $args=array())
 
         case 'update':
 
-            if (!xarVarFetch('message', 'str:1:', $message)) return;
-            if (!xarVarFetch('subject', 'str:1:', $subject)) return;
+            if (!xarVar::fetch('message', 'str:1:', $message)) return;
+            if (!xarVar::fetch('subject', 'str:1:', $subject)) return;
             // Confirm authorisation code
-//            if (!xarSecConfirmAuthKey()) return;
+//            if (!xarSec::confirmAuthKey()) return;
 //            xarModVars::set('roles', $data['mailtype'].'email', $message);
 //            xarModVars::set('roles', $data['mailtype'].'title', $subject);
 
@@ -98,7 +98,7 @@ function roles_admin_modifyemail(Array $args=array())
                 $msg = 'The messaging template "#(1)" is not writable or it is not allowed to delete files from #(2)';
                 throw new ConfigurationException(array($filename,$messaginghome),$msg);
             }
-            xarController::redirect(xarModURL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
+            xarController::redirect(xarController::URL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
             return true;
             break;
     }

@@ -135,7 +135,7 @@
                 </xar:set>
                 <xar:data-input type="dropdown" name="shorturl" id="shorturl" value="$value" options="$options"/>
                 &#160;
-                <a href="#xarModURL('base','admin','htaccess')#">Edit the htaccess file</a>
+                <a href="#xarController::URL('base','admin','htaccess')#">Edit the htaccess file</a>
             </div>
         </div>
         <div class="xar-row">

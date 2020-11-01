@@ -24,7 +24,7 @@ function modules_adminapi_geteventhandlers()
     if ($check) {return true;}
 
     $modlist = xarMod::apiFunc('modules','admin','getlist',
-                             array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+                             array('filter' => array('State' => xarMod::STATE_ACTIVE)));
 
     $todo = array();
     // @todo: this looks familiar, xarEvt.php has the same?

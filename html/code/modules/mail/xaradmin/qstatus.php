@@ -17,7 +17,7 @@
 function mail_admin_qstatus(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AdminMail')) return;
+    if (!xarSecurity::check('AdminMail')) return;
 
     $data = array();
 
@@ -63,7 +63,7 @@ function mail_admin_qstatus(Array $args=array())
 
         }
     }
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     $data['queues'] = $queues;
     $data['measures'] = $measures;
     return $data;

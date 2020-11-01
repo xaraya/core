@@ -17,22 +17,22 @@
 function roles_admin_asknotification(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('EditRoles')) return;
+    if (!xarSecurity::check('EditRoles')) return;
     
     // Get parameters
-    if (!xarVarFetch('phase',    'str:0:', $data['phase'],    'display', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('mailtype', 'str:0:', $data['mailtype'], 'blank', XARVAR_NOT_REQUIRED)) return;
-    if(!xarVarFetch('id',       'isset',  $id,              NULL,    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase',    'str:0:', $data['phase'],    'display', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('mailtype', 'str:0:', $data['mailtype'], 'blank', xarVar::NOT_REQUIRED)) return;
+    if(!xarVar::fetch('id',       'isset',  $id,              NULL,    xarVar::NOT_REQUIRED)) return;
     //Maybe some kind of return url will make this function available for other modules
-    if (!xarVarFetch('state',    'int:0:', $data['state'],  xarRoles::ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('groupid',  'int:0:', $data['groupid'], 0,    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('state',    'int:0:', $data['state'],  xarRoles::ROLES_STATE_CURRENT, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('groupid',  'int:0:', $data['groupid'], 0,    xarVar::NOT_REQUIRED)) return;
     //optional value
-    if (!xarVarFetch('pass',     'str:0:', $data['pass'],     NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ip',       'str:0:', $data['ip'],       NULL, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('pass',     'str:0:', $data['pass'],     NULL, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('ip',       'str:0:', $data['ip'],       NULL, xarVar::NOT_REQUIRED)) return;
     switch ($data['phase']) {
         case 'display' :
                 $data['pass'] = xarSession::getVar('tmppass');
-                xarSessionDelVar('tmppass');
+                xarSession::delVar('tmppass');
                 if ($data['mailtype'] == 'blank') {
                     $data['subject'] = '';
                     $data['message'] = '';
@@ -44,9 +44,9 @@ function roles_admin_asknotification(Array $args=array())
                     $data['message'] = $strings['message'];
                 }
                 //Display the notification form
-                if (!xarVarFetch('subject', 'str:1:', $data['subject'], $data['subject'], XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('message', 'str:1:', $data['message'], $data['message'], XARVAR_NOT_REQUIRED)) return;
-                $data['authid'] = xarSecGenAuthKey();
+                if (!xarVar::fetch('subject', 'str:1:', $data['subject'], $data['subject'], xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('message', 'str:1:', $data['message'], $data['message'], xarVar::NOT_REQUIRED)) return;
+                $data['authid'] = xarSec::genAuthKey();
                 $data['id'] = base64_encode(serialize($id));
 
                 // dynamic properties (if any)
@@ -64,11 +64,11 @@ function roles_admin_asknotification(Array $args=array())
             break;
         case 'notify' :
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
-            if (!xarVarFetch('subject', 'str:1:', $data['subject'], NULL, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('message', 'str:1:', $data['message'], NULL, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('subject', 'str:1:', $data['subject'], NULL, xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('message', 'str:1:', $data['message'], NULL, xarVar::NOT_REQUIRED)) return;
 
             // Need to convert %%var%% to #$var# so that we can compile the template
             $data['message'] = preg_replace( "/%%(.+)%%/","#$\\1#", $data['message'] );
@@ -83,7 +83,7 @@ function roles_admin_asknotification(Array $args=array())
             if (!xarMod::apiFunc('roles','admin','senduseremail', array( 'id' => $id, 'mailtype' => $data['mailtype'], 'subject' => $data['subject'], 'message' => $data['message'], 'pass' => $data['pass'], 'ip' => $data['ip']))) {
                 return xarTpl::module('roles','user','errors',array('layout'=> 'mail_failed')); 
             }
-            xarController::redirect(xarModURL('roles', 'admin', 'showusers',
+            xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
                               array('id' => $data['groupid'], 'state' => $data['state'])));
             return true;
            break;

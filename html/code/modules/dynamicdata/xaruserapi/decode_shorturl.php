@@ -36,7 +36,7 @@ function dynamicdata_userapi_decode_shorturl($params)
 
     // Check if we're dealing with an alias here
     if ($params[0] != $module) {
-        $alias = xarModGetAlias($params[0]);
+        $alias = xarModAlias::resolve($params[0]);
         // yup, looks like it
         if ($module == $alias) {
             if (isset($objectcache[$params[0]])) {

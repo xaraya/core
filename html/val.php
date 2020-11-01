@@ -74,7 +74,7 @@ function xarValidationMain()
 /**
  * Redirect to the validation page
  */
-    xarController::redirect(xarModURL('roles', 'user','getvalidation',
+    xarController::redirect(xarController::URL('roles', 'user','getvalidation',
                                   array('stage'   => 'getvalidate',
                                         'valcode' => $v,
                                         'uname'   => $user['uname'],

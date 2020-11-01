@@ -73,7 +73,7 @@ class Themes_MetaBlock extends BasicBlock
                 $metatags[] = array(
                     'type' => 'name', 
                     'value' => 'author', 
-                    'content' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY),
+                    'content' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY),
                     'lang' => '',
                     'dir' => '',
                     'scheme' => '',
@@ -132,7 +132,7 @@ class Themes_MetaBlock extends BasicBlock
                     $metatags[] = array(
                         'type' => 'name',
                         'value' => 'DC.title',
-                        'content' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY),
+                        'content' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY),
                         'lang' => '',
                         'dir' => '',
                         'scheme' => '',
@@ -153,7 +153,7 @@ class Themes_MetaBlock extends BasicBlock
             case '2.2.0':
                 // upgrades from 2.2.0 go here...
                 $linktags = array(
-                    array('rel' => 'author', 'href' => !empty($data['authorpage']) ? $data['authorpage'] : '[baseurl]', 'title' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY), 'type' => 'text/html'),
+                    array('rel' => 'author', 'href' => !empty($data['authorpage']) ? $data['authorpage'] : '[baseurl]', 'title' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY), 'type' => 'text/html'),
                     array('rel' => 'copyright', 'href' => !empty($data['copyrightpage']) ? $data['copyrightpage'] : '', 'title' => '', 'type' => 'text/html'),
                     array('rel' => 'help', 'href' => !empty($data['helppage']) ? $data['helppage'] : '' , 'title' => '', 'type' => 'text/html'),
                     array('rel' => 'glossary', 'href' => !empty($data['glossary']) ? $data['glossary'] : '', 'title' => '', 'type' => 'text/html'),                                                    
@@ -260,12 +260,12 @@ class Themes_MetaBlock extends BasicBlock
                     $decoded_url = xarServer::getCurrentURL($args);
                 break;
                 default:
-                    $decoded_url = xarModURL($modname, $modtype, $funcname, $args);
+                    $decoded_url = xarController::URL($modname, $modtype, $funcname, $args);
                 break;
             }            
         } else {
             // regular url, prepped for xml display if necessary
-            $decoded_url = xarMod::$genXmlUrls ? xarVarPrepForDisplay($url) : $url;
+            $decoded_url = xarMod::$genXmlUrls ? xarVar::prepForDisplay($url) : $url;
         } 
 
         return $decoded_url;
@@ -283,7 +283,7 @@ class Themes_MetaBlock extends BasicBlock
         $metatags[] = array(
             'type' => 'name', 
             'value' => 'author', 
-            'content' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY),
+            'content' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY),
             'lang' => '',
             'dir' => '',
             'scheme' => '',
@@ -339,7 +339,7 @@ class Themes_MetaBlock extends BasicBlock
     public function default_linktags()
     {
         $linktags = array(
-            array('rel' => 'author', 'href' => '[baseurl]', 'title' => xarModVars::get('themes', 'SiteName', XARVAR_PREP_FOR_DISPLAY), 'type' => 'text/html'),
+            array('rel' => 'author', 'href' => '[baseurl]', 'title' => xarModVars::get('themes', 'SiteName', xarVar::PREP_FOR_DISPLAY), 'type' => 'text/html'),
             array('rel' => 'copyright', 'href' => '', 'title' => '', 'type' => 'text/html'),
             array('rel' => 'help', 'href' => '' , 'title' => '', 'type' => 'text/html'),
             array('rel' => 'glossary', 'href' => '', 'title' => '', 'type' => 'text/html'),                            

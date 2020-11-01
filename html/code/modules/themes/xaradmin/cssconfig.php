@@ -20,23 +20,23 @@
 function themes_admin_cssconfig()
 {
     // Security
-    if (!xarSecurityCheck('AdminThemes',0)) return;
+    if (!xarSecurity::check('AdminThemes',0)) return;
     
     // Generate security key
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
 
     // where are we?
-    if (!xarVarFetch('component', 'str::', $component, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('component', 'str::', $component, '', xarVar::NOT_REQUIRED)) return;
 
     $data['component'] = $component;
     // is configurable enabled?
-    if (!xarVarFetch('configurable', 'checkbox', $configurable, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('configurable', 'checkbox', $configurable, false, xarVar::NOT_REQUIRED)) return;
     $data['configurable'] = $configurable;
 
     // labels and defaults
-    $data['submitbutton'] = xarVarPrepForDisplay(xarML('Submit'));
-    $data['resetbutton'] = xarVarPrepForDisplay(xarML('Reset to defaults'));
-    $data['unmanagednote'] = xarVarPrepForDisplay(xarML('No configurable options are available in unmanaged mode.'));
+    $data['submitbutton'] = xarVar::prepForDisplay(xarML('Submit'));
+    $data['resetbutton'] = xarVar::prepForDisplay(xarML('Reset to defaults'));
+    $data['unmanagednote'] = xarVar::prepForDisplay(xarML('No configurable options are available in unmanaged mode.'));
 
     switch($component) {
         case "common":
@@ -48,28 +48,28 @@ function themes_admin_cssconfig()
             if($data['csslinkoption'] == '') {
                 xarModVars::set('themes', 'csslinkoption', 'static');
                 if(file_exists($cssfilepath.'core.css')) {
-                    $data['currentcssfile'] = xarVarPrepForDisplay($cssfilepath.'core.css');
+                    $data['currentcssfile'] = xarVar::prepForDisplay($cssfilepath.'core.css');
                 } else {
-                    $data['currentcssfile'] = xarVarPrepForDisplay($filemissing);
+                    $data['currentcssfile'] = xarVar::prepForDisplay($filemissing);
                 }
             } else if($data['csslinkoption'] == 'static') {
                 if(file_exists($cssfilepath.'/core.css')) {
-                    $data['currentcssfile'] = xarVarPrepForDisplay($cssfilepath.'core.css');
+                    $data['currentcssfile'] = xarVar::prepForDisplay($cssfilepath.'core.css');
                     $handle = fopen($cssfilepath.'/core.css', 'r');
                     $data['csssource'] = fread($handle, filesize($cssfilepath.'/core.css'));
                     fclose($handle);
                 } else {
-                    $data['currentcssfile'] = xarVarPrepForDisplay($filemissing);
+                    $data['currentcssfile'] = xarVar::prepForDisplay($filemissing);
                 }
             } else if($data['csslinkoption'] == 'dynamic') {
                 if(file_exists($cssfilepath.'corecss.php')) {
-                    $data['currentcssfile'] = xarVarPrepForDisplay($cssfilepath.'corecss.php');
+                    $data['currentcssfile'] = xarVar::prepForDisplay($cssfilepath.'corecss.php');
                     $data['csssource'] = xarModVars::get('themes', 'corecss');
                 } else {
-                    $data['currentcssfile'] = xarVarPrepForDisplay($filemissing);
+                    $data['currentcssfile'] = xarVar::prepForDisplay($filemissing);
                 }
             } else {
-                $data['currentcssfile'] = xarVarPrepForDisplay($notlinked);
+                $data['currentcssfile'] = xarVar::prepForDisplay($notlinked);
             }
 
 

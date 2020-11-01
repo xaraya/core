@@ -16,7 +16,7 @@
                     <div class="xar-sub xar-floatright xar-align-right">[
                         <xar:if condition="!empty($loop:item.groups)">
                             <xar:loop name="$loop:item.groups" id="groupsl">
-                                <a href="#xarModURL('blocks','admin','modify_group')#&amp;id=#$loop:groupsl:item.id#" title="#xarML('Edit group')#">#$loop:groupsl:item.name#</a>
+                                <a href="#xarController::URL('blocks','admin','modify_group')#&amp;id=#$loop:groupsl:item.id#" title="#xarML('Edit group')#">#$loop:groupsl:item.name#</a>
                             </xar:loop>
                         <xar:else />
                             none
@@ -32,7 +32,7 @@
                         <xar:else />
                             M
                         </xar:if>|
-                        <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
+                        <a href="#xarController::URL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             E
                         </a>|
                         <a href="#$loop:item['deleteurl']#">
@@ -51,7 +51,7 @@
                     <div class="xar-sub xar-floatright xar-align-right">[
                         <xar:if condition="!empty($loop:item.groups)">
                             <xar:loop name="$loop:item.groups" id="groupsr">
-                                <a href="#xarModURL('blocks','admin','modify_group')#&amp;id=#$loop:groupsr:item.id#" title="#xarML('Edit group')#">
+                                <a href="#xarController::URL('blocks','admin','modify_group')#&amp;id=#$loop:groupsr:item.id#" title="#xarML('Edit group')#">
                                     #$loop:groupsr:item.name#
                                 </a>
                             </xar:loop>
@@ -73,7 +73,7 @@
                         <xar:else />
                             M
                         </xar:if>|
-                        <a href="#xarModURL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
+                        <a href="#xarController::URL('blocks','admin','modify_instance')#&amp;bid=#$loop:item.bid#">
                             E
                         </a>|
                         <a href="#$loop:item['deleteurl']#">

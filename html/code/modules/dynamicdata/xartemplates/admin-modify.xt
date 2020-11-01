@@ -4,9 +4,9 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object:objectid)">
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
         <xar:else/>
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
         </xar:if>
         <xar:if condition="empty($tab) or $tab eq 'edit'">
             <h2>
@@ -44,7 +44,7 @@
             <xar:else/>
                 <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
             </xar:if>
-            <form method="post" action="#xarModURL('dynamicdata','admin','update')#" enctype="#$enc_type#">
+            <form method="post" action="#xarController::URL('dynamicdata','admin','update')#" enctype="#$enc_type#">
                 <fieldset>
                     <legend>Modify Object Definition</legend>
                     <xar:if condition="$object:visibility ne 'public'">
@@ -70,8 +70,12 @@
                             <input type="hidden" name="tab" id="tab" value="edit"/>
                             <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
                             <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
-                            <input type="hidden" name="join" id="join" value="#$object:join#"/>
-                            <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                            <xar:if condition="!empty($object:join)">
+                                <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                            </xar:if>
+                            <xar:if condition="!empty($object:table)">
+                                <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                            </xar:if>
                             <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
                             <xar:if condition="!empty($return_url)">
                                 <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>
@@ -87,7 +91,7 @@
                 </div>
                 <xar:if condition="!empty($objectid) and $objectid eq 2">
                     <p>
-                        <a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
+                        <a href="#xarController::URL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
                             Edit configuration
                         </a>
                     </p>
@@ -105,7 +109,7 @@
                     </a>
                 </xar:if>
             </h2>
-            <form method="post" action="#xarModURL('dynamicdata','admin','update')#">
+            <form method="post" action="#xarController::URL('dynamicdata','admin','update')#">
                 <xar:if condition="$adminaccess">
                     <fieldset>
                         <legend>
@@ -132,7 +136,7 @@
                         </div>
                         <xar:if condition="!empty($objectid) and $objectid eq 2">
                             <p>
-                                <a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
+                                <a href="#xarController::URL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
                                     Edit configuration</a>
                             </p>
                         </xar:if>

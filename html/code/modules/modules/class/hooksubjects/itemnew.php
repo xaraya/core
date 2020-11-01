@@ -20,7 +20,7 @@
  * New way of calling hooks
  * $data['hooks'] = xarHooks::notify('ItemNew', $item);
  * Legacy way, supported for now, deprecated in future 
- * $data['hooks'] = xarModCallHooks('item', 'new', $itemid, $item); 
+ * $data['hooks'] = xarModHooks::call('item', 'new', $itemid, $item); 
  * Output in new template as
  * <xar:foreach in="$hooks" key="$hookmod" value="$hookoutput">
  *     #$hookoutput#

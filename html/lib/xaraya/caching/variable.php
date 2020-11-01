@@ -39,8 +39,8 @@ class xarVariableCache extends xarObject
             $config['Variable.TimeExpiration'] : 7200;
         self::$cacheSizeLimit = isset($config['Variable.SizeLimit']) ?
             $config['Variable.SizeLimit'] : 2097152;
-        self::$cacheScopes = isset($args['Variable.CacheScopes']) ?
-            $args['Variable.CacheScopes'] : array('DataObject.ByName' => 1,
+        self::$cacheScopes = isset($config['Variable.CacheScopes']) ?
+            $config['Variable.CacheScopes'] : array('DataObject.ByName' => 1,
                                                 'DataObjectList.ByName' => 1,
                                                 'DataObject.ById' => 1,
                                                 'DataObjectList.ById' => 1
@@ -255,4 +255,3 @@ class xarVariableCache extends xarObject
     }
 }
 
-?>

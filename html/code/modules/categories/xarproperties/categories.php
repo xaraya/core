@@ -86,13 +86,13 @@ class CategoriesProperty extends DataProperty
         $this->fieldname = $name;
 
         // Pull in local module and itemtype from the form and store for reuse
-        if (!xarVarFetch($name . '["itemtype"]', 'int', $itemtype, 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch($name . '["module_id"]', 'int', $module_id, 182, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch($name . '["itemtype"]', 'int', $itemtype, 0, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch($name . '["module_id"]', 'int', $module_id, 182, xarVar::NOT_REQUIRED)) return;
         $this->module_id = $module_id;
         $this->itemtype = $itemtype;
        
         // Get the base categories from the form
-        if (!xarVarFetch($name . '["base_category"]', 'array', $basecats, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch($name . '["base_category"]', 'array', $basecats, array(), xarVar::NOT_REQUIRED)) return;
         $this->basecategories = $basecats;
         // Get the categories from the form
         // Select type of each tree can be different
@@ -101,10 +101,10 @@ class CategoriesProperty extends DataProperty
             $select_type = 3;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
-            if (!xarVarFetch($name . '["categories"]', 'array', $categories, array(), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch($name . '["categories"]', 'array', $categories, array(), xarVar::NOT_REQUIRED)) return;
         }
         */
-        if (!xarVarFetch($name . '["categories"]', 'array', $categories, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch($name . '["categories"]', 'array', $categories, array(), xarVar::NOT_REQUIRED)) return;
         return $this->validateValue($categories);
     }
 
@@ -282,7 +282,7 @@ class CategoriesProperty extends DataProperty
         // Override for a standalone property
         if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
         // No hint at all, take the current module
-        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
+        if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarMod::getName());
 
         // Do the same for itemtypes
         if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;
@@ -436,7 +436,7 @@ class CategoriesProperty extends DataProperty
             // Override or a standalone property
             if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
             // No hint at all, take the current module
-            if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarModGetName());
+            if (!isset($this->module_id)) $this->module_id = xarMod::getID(xarMod::getName());
     
             // Do the same for itemtypes
             if (isset($this->objectref)) $this->itemtype = (int)$this->objectref->itemtype;

@@ -4,7 +4,7 @@
     <!-- TODO: multi-column output -->
     <div class="xar-mod-page-head">
         <xar:style scope="module" module="dynamicdata" file="dd"/>
-        <xar:if condition="!empty($isprimary) and xarModIsHooked('categories',$modname,$itemtype)">
+        <xar:if condition="!empty($isprimary) and xarModHooks::isHooked('categories',$modname,$itemtype)">
             <xar:template file="catnavigation"/>
         </xar:if>
     
@@ -75,7 +75,7 @@
                         <td>
                             <xar:if condition="empty($fields[$name])">&#160;
                         <xar:elseif condition="!empty($linkfield) and $linkfield eq $name"/>
-                            <a href="#xarModURL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
+                            <a href="#xarController::URL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
                                 <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
                             </a>
                         <xar:else />

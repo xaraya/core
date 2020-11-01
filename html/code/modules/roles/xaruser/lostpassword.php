@@ -19,18 +19,18 @@
 function roles_user_lostpassword()
 {
     // Security check
-    if (!xarSecurityCheck('ViewRoles')) return;
+    if (!xarSecurity::check('ViewRoles')) return;
 
     //If a user is already logged in, no reason to see this.
     //We are going to send them to their account.
     if (xarUser::isLoggedIn()) {
-        xarController::redirect(xarModURL('roles', 'user', 'account'));
+        xarController::redirect(xarController::URL('roles', 'user', 'account'));
         return true;
     }
 
-    xarTpl::setPageTitle(xarVarPrepForDisplay(xarML('Lost Password')));
+    xarTpl::setPageTitle(xarVar::prepForDisplay(xarML('Lost Password')));
 
-    if (!xarVarFetch('phase','str:1:100',$phase,'request',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase','str:1:100',$phase,'request',xarVar::NOT_REQUIRED)) return;
 
     switch(strtolower($phase)) {
 
@@ -41,11 +41,11 @@ function roles_user_lostpassword()
 
         case 'send':
 
-            if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('email','str:1:100',$email,'',XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('uname','str:1:100',$uname,'',xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('email','str:1:100',$email,'',xarVar::NOT_REQUIRED)) return;
 
             // Confirm authorisation code.
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 
@@ -74,7 +74,7 @@ function roles_user_lostpassword()
             // We need to tell some hooks that we are coming from the lost password screen
             // and not the update the actual roles screen.  Right now, the keywords vanish
             // into thin air.  Bug 1960 and 3161
-            xarVarSetCached('Hooks.all','noupdate',1);
+            xarVar::setCached('Hooks.all','noupdate',1);
 
             //Update user password
             $role = xarRoles::get($user['id']);

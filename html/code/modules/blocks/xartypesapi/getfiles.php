@@ -38,7 +38,7 @@ function blocks_typesapi_getfiles(Array $args=array())
 
     // look for blocks belonging to modules
     $modules = xarMod::apiFunc('modules','admin','getlist',
-        array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+        array('filter' => array('State' => xarMod::STATE_ACTIVE)));
     $modpath = sys::code() . 'modules/';
     foreach ($modules as $modinfo) {
         $paths[$modinfo['name']] = $modpath . $modinfo['name'] . '/xarblocks/';

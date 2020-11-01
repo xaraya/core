@@ -5,7 +5,7 @@
             <div class="xar-col"></div>
             <div class="xar-col">
                 <xar:data-input type="hidden" name="phase" id="phase" value="update"/>
-                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                 <xar:var name="label">Update</xar:var>
                 <xar:button type="submit" label="$label"/>
             </div>

@@ -21,10 +21,10 @@
 function categories_admin_checklinks()
 {
     // Security Check
-    if (!xarSecurityCheck('AdminCategories')) return;
+    if (!xarSecurity::check('AdminCategories')) return;
 
-    if(!xarVarFetch('modid',    'isset',  $modid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset',  $itemtype, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('modid',    'isset',  $modid,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype', 'isset',  $itemtype, NULL, xarVar::DONT_SET)) {return;}
 
     $data = array();
 
@@ -47,17 +47,17 @@ function categories_admin_checklinks()
                 $moditem['numlinks'] = $stats['links'];
                 if ($itemtype == 0) {
                     $moditem['name'] = ucwords($modinfo['displayname']);
-                //    $moditem['link'] = xarModURL($modinfo['name'],'user','main');
+                //    $moditem['link'] = xarController::URL($modinfo['name'],'user','main');
                 } else {
                     if (isset($mytypes) && !empty($mytypes[$itemtype])) {
                         $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype . ' - ' . $mytypes[$itemtype]['label'];
                     //    $moditem['link'] = $mytypes[$itemtype]['url'];
                     } else {
                         $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-                    //    $moditem['link'] = xarModURL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
+                    //    $moditem['link'] = xarController::URL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
                     }
                 }
-                $moditem['link'] = xarModURL('categories','admin','checklinks',
+                $moditem['link'] = xarController::URL('categories','admin','checklinks',
                                              array('modid' => $modid,
                                                    'itemtype' => empty($itemtype) ? null : $itemtype));
                 $data['moditems'][] = $moditem;
@@ -86,7 +86,7 @@ function categories_admin_checklinks()
             //    $data['modlink'] = $mytypes[$itemtype]['url'];
             } else {
                 $data['modname'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-            //    $data['modlink'] = xarModURL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
+            //    $data['modlink'] = xarController::URL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
             }
             if (isset($modlist[$modid][$itemtype])) {
                 $stats = $modlist[$modid][$itemtype];
@@ -142,10 +142,10 @@ function categories_admin_checklinks()
             $data['catinfo'] = array();
         }
 
-        if(!xarVarFetch('confirm',  'str:1:', $confirm,    '', XARVAR_NOT_REQUIRED)) return;
+        if(!xarVar::fetch('confirm',  'str:1:', $confirm,    '', xarVar::NOT_REQUIRED)) return;
         if (!empty($seencid) && !empty($confirm)) {
-            if (!xarSecConfirmAuthKey()) {
-                return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+            if (!xarSec::confirmAuthKey()) {
+                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             if (!xarMod::apiFunc('categories','admin','unlinkcids',
                                array('modid' => $modid,
@@ -153,12 +153,12 @@ function categories_admin_checklinks()
                                      'cids' => array_keys($seencid)))) {
                 return;
             }
-            xarController::redirect(xarModURL('categories', 'admin', 'checklinks'));
+            xarController::redirect(xarController::URL('categories', 'admin', 'checklinks'));
             return true;
         }
 
         // Generate a one-time authorisation code for this operation
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
     }
 
     return $data;

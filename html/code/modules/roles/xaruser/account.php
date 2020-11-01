@@ -20,8 +20,8 @@
  */
 function roles_user_account()
 {
-    if(!xarVarFetch('moduleload','str', $moduleload, '', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('tab', 'pre:trim:str:1', $tab, '', XARVAR_NOT_REQUIRED)) return;
+    if(!xarVar::fetch('moduleload','str', $moduleload, '', xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('tab', 'pre:trim:str:1', $tab, '', xarVar::NOT_REQUIRED)) return;
 
     //let's make sure other modules that refer here get to a default and existing login or logout form
     $defaultauthdata      = xarMod::apiFunc('roles','user','getdefaultauthdata');
@@ -31,8 +31,8 @@ function roles_user_account()
 
     if (!xarUser::isLoggedIn()){
         // bring the user back here after login :)
-        $redirecturl = xarModURL('roles', 'user', 'account');
-        xarController::redirect(xarModURL($defaultloginmodname,'user','showloginform', array('redirecturl' => urlencode($redirecturl))));
+        $redirecturl = xarController::URL('roles', 'user', 'account');
+        xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform', array('redirecturl' => urlencode($redirecturl))));
     }
 
     $id = xarUser::getVar('id');
@@ -45,7 +45,7 @@ function roles_user_account()
         $menutabs[] = array(
             'label' => xarML('Display Profile'),
             'title' => xarML('View your profile as it is seen by other site users'),
-            'url' => xarModURL('roles', 'user', 'account', array('tab' => 'profile')),
+            'url' => xarController::URL('roles', 'user', 'account', array('tab' => 'profile')),
             'active' => (empty($tab) || $tab == 'profile') && empty($moduleload) ? true : false
         );
 
@@ -62,7 +62,7 @@ function roles_user_account()
             $menutabs[] = array(
                 'label' => xarML('Edit Account'),
                 'title' => xarML('Edit your basic account information'),
-                'url' => xarModURL('roles', 'user', 'account', array('tab' => 'basic')),
+                'url' => xarController::URL('roles', 'user', 'account', array('tab' => 'basic')),
                 'active' => $tab == 'basic' ? true : false
             );
         }
@@ -75,7 +75,7 @@ function roles_user_account()
                     $menutabs[] = array(
                         'label' => $user_settings->label,
                         'title' => $user_settings->label,
-                        'url' => xarModURL('roles', 'user', 'account', array('moduleload' => $modname)),
+                        'url' => xarController::URL('roles', 'user', 'account', array('moduleload' => $modname)),
                         'active' => $isactive
                     );
                     if ($isactive) {
@@ -88,7 +88,7 @@ function roles_user_account()
         $menutabs[] = array(
             'label' => xarML('Logout'),
             'title' => xarML('Logout from the site'),
-            'url' => xarModURL($defaultlogoutmodname, 'user', 'logout'),
+            'url' => xarController::URL($defaultlogoutmodname, 'user', 'logout'),
             'active' => false
         );
 
@@ -117,7 +117,7 @@ function roles_user_account()
                 $data['object']->layout = ''; // default
             }
             if (empty($data['authid'])) {
-                $data['authid'] = xarSecGenAuthKey($moduleload);
+                $data['authid'] = xarSec::genAuthKey($moduleload);
             }
         // no settings, we're dealing with the roles_user object
         } else {
@@ -133,7 +133,7 @@ function roles_user_account()
                     if (xarUser::isLoggedIn() && xarUser::getVar('id')==$id) { //they should be but ..
                         $userlastlogin = xarSession::getVar('roles_thislastlogin');
                         $usercurrentlogin = xarModUserVars::get('roles','userlastlogin',$id);
-                    }elseif (xarSecurityCheck('AdminRoles',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
+                    }elseif (xarSecurity::check('AdminRoles',0,'Roles',$name) && xarModUserVars::get('roles','userlastlogin',$id)){
                         $usercurrentlogin = '';
                         $userlastlogin = xarModUserVars::get('roles','userlastlogin',$id);
                     }else{
@@ -153,7 +153,7 @@ function roles_user_account()
                 $item['module'] = 'roles';
                 $item['itemtype'] = xarRoles::ROLES_USERTYPE;
 
-                $hooks = xarModCallHooks('item','modify',$id,$item);
+                $hooks = xarModHooks::call('item','modify',$id,$item);
                 if (isset($hooks['dynamicdata'])) {
                     unset($hooks['dynamicdata']);
                 }
@@ -177,7 +177,7 @@ function roles_user_account()
         }
         // set some sensible defaults for common stuff
         if (empty($data['formaction'])) {
-            $data['formaction'] = xarModURL('roles', 'user', 'usermenu');
+            $data['formaction'] = xarController::URL('roles', 'user', 'usermenu');
         }
         if (empty($data['submitlabel'])) {
             $data['submitlabel'] = xarML('Update Settings');
@@ -189,7 +189,7 @@ function roles_user_account()
             $data['formdata'] = array();
         }
         if (empty($data['authid'])) {
-            $data['authid'] = xarSecGenAuthKey('roles');
+            $data['authid'] = xarSec::genAuthKey('roles');
         }
         $data['menutabs'] = $menutabs;
         

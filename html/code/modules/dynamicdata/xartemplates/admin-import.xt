@@ -12,7 +12,7 @@
         </xar:if>
     </div><!--/xar-mod-page-head-->
     <div class="xar-mod-page-body">
-        <form method="post" action="#xarModURL('dynamicdata','admin','import')#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','import')#">
             <fieldset>
                 <legend>Import Object Definition</legend>
                 <div class="xar-row">

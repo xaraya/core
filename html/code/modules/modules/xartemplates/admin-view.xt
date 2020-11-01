@@ -163,7 +163,7 @@
                                             <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
                                         <xar:elseif condition="!empty($item['remove_url'])"/>
                                             <a href="#$item['remove_url']#" class="xar-icon" title="#$removetitle#"><img src="#$removeicon#" class="xar-icon" alt="#$removelabel#"/></a>
-                                        <xar:elseif condition="$item['state'] eq XARMOD_STATE_ACTIVE"/>
+                                        <xar:elseif condition="$item['state'] eq xarMod::STATE_ACTIVE"/>
                                             <img src="#$removeicon#" class="xar-icon-disabled" alt="#$removelabel#" title="#$removetitle#"/>
                                         <xar:else/>
                                             <img src="#$noneicon#" class="xar-icon" alt="#$nonelabel#" title="#$nonetitle#"/>
@@ -195,7 +195,7 @@
                                             #$nonelabel#
                                         <xar:elseif condition="!empty($item['remove_url'])"/>
                                             <a href="#$item['remove_url']#" class="xar-icon" title="#$removetitle#">#$removelabel#</a>
-                                        <xar:elseif condition="$item['state'] eq XARMOD_STATE_ACTIVE"/>
+                                        <xar:elseif condition="$item['state'] eq xarMod::STATE_ACTIVE"/>
                                             #$nonelabel#
                                         <xar:else/>
                                             #$nonelabel#

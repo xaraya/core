@@ -20,7 +20,7 @@
  * New way of calling hooks
  * xarHooks::notify('ItemDelete', $item);
  * Legacy way, supported for now, deprecated in future 
- * xarModCallHooks('item', 'delete', $itemid, $item); 
+ * xarModHooks::call('item', 'delete', $itemid, $item); 
 **/
 sys::import('xaraya.structures.hooks.apisubject');
 class ModulesItemDeleteSubject extends ApiHookSubject

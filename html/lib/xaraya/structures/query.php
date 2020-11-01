@@ -45,6 +45,10 @@ class Query
     public $optimize            = true;         // Flag that indicates whether the query will be optimized
     public $distinctselect = false;
     public $distinctarray = array();
+    public $distinctname = null;
+    public $bindings = null;
+    public $pagerows = null;
+    public $cstring = null;
 
     private $starttime;
     private $key = 0;                           // Unique key for this statement (used in nested conditions)
@@ -763,12 +767,12 @@ class Query
     private function _getbinding($key)
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
-        $binding = $this->binding[$key];
+        $binding = $this->bindings[$key];
         if (!is_numeric($binding['field2']) && !mb_eregi('JOIN', $binding['op'])) {
             $sqlfield = $this->dbconn->qstr($binding['field2']);
         }
         else {
-            $sqlfield = $condition['field2'];
+            $sqlfield = $binding['field2'];
             $binding['op'] = mb_eregi('JOIN', $binding['op']) ? '=' : $binding['op'];
         }
         return $binding['field1'] . " " . $binding['op'] . " " . $sqlfield;
@@ -2306,4 +2310,3 @@ class Query
         return $this->id;
     }
 }
-?>

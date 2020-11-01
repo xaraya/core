@@ -21,13 +21,13 @@
 function themes_admin_update()
 { 
     // Security
-    if (!xarSecurityCheck('EditThemes')) return; 
+    if (!xarSecurity::check('EditThemes')) return; 
     
     // Get parameters
-    if (!xarVarFetch('id', 'int:1:', $regId, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $regId, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($regId)) return xarResponse::notFound();
 
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
@@ -40,9 +40,9 @@ function themes_admin_update()
     $delvars = array(); 
     // build array of updated and to-be-deleted theme vars
     foreach($themevars as $themevar) {
-        if (!xarVarFetch($themevar['name'], 'isset', $varname)) {return;}
+        if (!xarVar::fetch($themevar['name'], 'isset', $varname)) {return;}
 
-        if (!xarVarFetch($themevar['name'] . '-del', 'isset', $delvar, NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch($themevar['name'] . '-del', 'isset', $delvar, NULL, xarVar::NOT_REQUIRED)) {return;}
 
         if ($delvar == 'delete' && $themevar['prime'] != 1) {
             $delvars[] = $themevar['name'];
@@ -62,9 +62,9 @@ function themes_admin_update()
         } 
     } 
 
-    if (!xarVarFetch('newvarname',        'str', $newname, '',   XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('newvarvalue',       'str', $newval,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('newvardescription', 'str', $newdesc, NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('newvarname',        'str', $newname, '',   xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('newvarvalue',       'str', $newval,  NULL, xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('newvardescription', 'str', $newdesc, NULL, xarVar::NOT_REQUIRED)) {return;}
 
     $newname = trim($newname);
     $newname = preg_replace("/[\s]+/", "_", $newname);
@@ -97,12 +97,12 @@ function themes_admin_update()
         } 
     } 
 
-    if (!xarVarFetch('return', 'checkbox', $return,  false, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('return', 'checkbox', $return,  false, xarVar::NOT_REQUIRED)) {return;}
 
     if ($return) {
-        xarController::redirect(xarModURL('themes', 'admin', 'modify', array('id' => $regId)));
+        xarController::redirect(xarController::URL('themes', 'admin', 'modify', array('id' => $regId)));
     } else {
-        xarController::redirect(xarModURL('themes', 'admin', 'view'));
+        xarController::redirect(xarController::URL('themes', 'admin', 'view'));
     } 
     return true;
 } 

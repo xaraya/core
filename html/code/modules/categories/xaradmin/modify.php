@@ -22,20 +22,20 @@
  */
 function categories_admin_modify()
 {
-    if (!xarVarFetch('return_url',  'isset',  $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('itemid', 'int', $data['itemid'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemtype',    'int',    $itemtype, 2, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemtype',    'int',    $itemtype, 2, xarVar::NOT_REQUIRED)) return;
     
     // Support old cids for now
-    if (!xarVarFetch('cid','int::', $cid, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('cid','int::', $cid, NULL, xarVar::DONT_SET)) {return;}
     $data['itemid'] = !empty($data['itemid']) ? $data['itemid'] : $cid;
 
     // Security check
-    if(!xarSecurityCheck('EditCategories',1,'All',"All:$cid")) return;
+    if(!xarSecurity::check('EditCategories',1,'All',"All:$cid")) return;
     
     // Root category cannot be modified except by the site admin
     if (($cid == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
-        return xarTplModule('privileges','user','errors', array('layout' => 'no_privileges'));
+        return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
 
     // Setting up necessary data.
     sys::import('modules.dynamicdata.class.objects.master');
@@ -55,7 +55,7 @@ function categories_admin_modify()
     $catinfo['module'] = 'categories';
     $catinfo['itemtype'] = $itemtype;
     $catinfo['itemid'] = $data['itemid'];
-    $hooks = xarModCallHooks('item','modify',$cid,$catinfo);
+    $hooks = xarModHooks::call('item','modify',$cid,$catinfo);
     if (empty($hooks)) $data['hooks'] = '';
     else $data['hooks'] = $hooks;
 

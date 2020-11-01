@@ -18,18 +18,18 @@
     function dynamicdata_admin_new_static()
     {
         // Security
-        if (!xarSecurityCheck('AdminDynamicData')) return;
+        if (!xarSecurity::check('AdminDynamicData')) return;
 
-        if (!xarVarFetch('table',    'str:1',  $data['table'], '',     XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('confirm',  'bool',   $data['confirm'], false,     XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('table',    'str:1',  $data['table'], '',     xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('confirm',  'bool',   $data['confirm'], false,     xarVar::NOT_REQUIRED)) return;
 
         $data['object'] = DataObjectMaster::getObject(array('name' => 'dynamicdata_tablefields'));
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
 
         if ($data['confirm']) {
         
             // Check for a valid confirmation key
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             
@@ -65,7 +65,7 @@
                 $dbconn->Execute($query);
                 
                 // Jump to the next page
-                xarController::redirect(xarModURL('dynamicdata','admin','view_static',array('table' => $data['table'])));
+                xarController::redirect(xarController::URL('dynamicdata','admin','view_static',array('table' => $data['table'])));
                 return true;
             }
         }

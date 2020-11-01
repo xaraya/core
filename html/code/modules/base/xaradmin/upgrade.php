@@ -24,7 +24,7 @@ function base_admin_upgrade()
      * @todo change feed url once release module is moved
      */
     // Security
-    if(!xarSecurityCheck('AdminBase')) return;
+    if(!xarSecurity::check('AdminBase')) return;
     
     $fileversion = xarCore::VERSION_NUM;
     $dbversion = xarConfigVars::get(null, 'System.Core.VersionNum');

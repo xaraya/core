@@ -107,8 +107,8 @@ class CelkoPositionProperty extends DataProperty
 	 */
     public function checkInput($name = '', $value = null)
     {
-        if (!xarVarFetch($name . '_reference_id', 'int:0', $reference_id)) return;
-        if (!xarVarFetch($name . '_position', 'enum:1:2:3:4', $position)) return;
+        if (!xarVar::fetch($name . '_reference_id', 'int:0', $reference_id)) return;
+        if (!xarVar::fetch($name . '_position', 'enum:1:2:3:4', $position)) return;
         switch (intval($position)) {
             case 1: // before - same level
                 $this->rightorleft = 'left';

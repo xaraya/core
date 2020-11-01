@@ -64,6 +64,7 @@ class xarBlock extends xarObject implements ixarBlock
     {
         // Blocks Support Tables
         sys::import('modules.blocks.xartables');
+        /** @phpstan-ignore-next-line */
         $tables = blocks_xartables();
         xarDB::importTables($tables);
         return true;    
@@ -378,6 +379,8 @@ class xarBlock extends xarObject implements ixarBlock
         } catch (Exception $e) {
             if ((bool) xarModVars::get('blocks', 'noexceptions') || 
                 !in_array(xarUser::getVar('id'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
+                // Get a cache key for this block if it's suitable for block caching
+                $cacheKey = xarCache::getBlockKey($blockinfo);
                 if (!empty($cacheKey))
                     xarBlockCache::setCached($cacheKey, '');
                 return '';

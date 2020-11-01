@@ -46,7 +46,7 @@ function dynamicdata_adminapi_showfilterform(Array $args=array())
 
     // try getting the item id via input variables if necessary
     if (!isset($itemid) || !is_numeric($itemid)) {
-        if (!xarVarFetch('itemid', 'isset', $args['itemid'],  NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVar::fetch('itemid', 'isset', $args['itemid'],  NULL, xarVar::DONT_SET)) {return;}
     }
 
     // check the optional field list
@@ -75,7 +75,7 @@ function dynamicdata_adminapi_showfilterform(Array $args=array())
         $object->getItem();
     }
     // if we are in preview mode, we need to check for any preview values
-    //if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
+    //if (!xarVar::fetch('preview', 'isset', $preview,  NULL, xarVar::DONT_SET)) {return;}
     if (!empty($preview)) {
         $object->checkInput();
     }

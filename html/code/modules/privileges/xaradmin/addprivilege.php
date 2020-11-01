@@ -18,16 +18,16 @@
 function privileges_admin_addprivilege()
 {
     // Security
-    if (!xarSecurityCheck('AddPrivileges')) return; 
+    if (!xarSecurity::check('AddPrivileges')) return; 
     
-    if(!xarVarFetch('pname',      'isset', $pname,      NULL,  XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('prealm',     'isset', $prealm,     'All', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('pmodule',    'isset', $pmodule,    'All', XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pcomponent', 'isset', $pcomponent, NULL,  XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('ptype',      'isset', $type,       NULL,  XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('plevel',     'isset', $plevel,     NULL,  XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pparentid',  'isset', $pparentid,  NULL,  XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pinstance',  'array', $pinstances, array(), XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('pname',      'isset', $pname,      NULL,  xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('prealm',     'isset', $prealm,     'All', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('pmodule',    'isset', $pmodule,    'All', xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('pcomponent', 'isset', $pcomponent, NULL,  xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('ptype',      'isset', $type,       NULL,  xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('plevel',     'isset', $plevel,     NULL,  xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('pparentid',  'isset', $pparentid,  NULL,  xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('pinstance',  'array', $pinstances, array(), xarVar::NOT_REQUIRED)) {return;}
 
     $instance = "";
     foreach ($pinstances as $pinstance) {
@@ -41,7 +41,7 @@ function privileges_admin_addprivilege()
     }
 
 // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
@@ -81,7 +81,7 @@ function privileges_admin_addprivilege()
                     'privileges'));
 
 // redirect to the next page
-    xarController::redirect(xarModURL('privileges', 'admin', 'new'));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'new'));
     return true;
 }
 

@@ -105,12 +105,12 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
      */
     public function configupdate(Array $data=array())
     {
-        if(!xarVarFetch('layout',       'isset', $vars['layout'],       $this->layout, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('showcatcount', 'isset', $vars['showcatcount'], false, XARVAR_NOT_REQUIRED)) {return;}
-        if(!xarVarFetch('showchildren', 'isset', $vars['showchildren'], $this->showchildren, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('showempty',    'checkbox', $vars['showempty'], false, XARVAR_NOT_REQUIRED)) {return;}
-        if(!xarVarFetch('startmodule',  'isset', $vars['startmodule'],  $this->startmodule, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('dynamictitle', 'checkbox', $vars['dynamictitle'],  false, XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVar::fetch('layout',       'isset', $vars['layout'],       $this->layout, xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('showcatcount', 'isset', $vars['showcatcount'], false, xarVar::NOT_REQUIRED)) {return;}
+        if(!xarVar::fetch('showchildren', 'isset', $vars['showchildren'], $this->showchildren, xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('showempty',    'checkbox', $vars['showempty'], false, xarVar::NOT_REQUIRED)) {return;}
+        if(!xarVar::fetch('startmodule',  'isset', $vars['startmodule'],  $this->startmodule, xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('dynamictitle', 'checkbox', $vars['dynamictitle'],  false, xarVar::NOT_REQUIRED)) {return;}
         
         $this->setContent($vars);
         return true;

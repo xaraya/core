@@ -17,7 +17,7 @@ sys::import('modules.dynamicdata.class.objects.master');
 function themes_admin_view_configs()
 {
     // Security
-    if(!xarSecurityCheck('EditThemes')) return;
+    if(!xarSecurity::check('EditThemes')) return;
 
     $data['object'] = DataObjectMaster::getObjectList(array('name' => 'themes_configurations'));
 

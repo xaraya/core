@@ -127,7 +127,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         xarLog::message("DataObjectList::checkInput: Checking items of object " . $this->name, xarLog::LEVEL_INFO);
 
         // First get the itemids
-        if (!xarVarFetch($this->primary, 'array', $data['id'], array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch($this->primary, 'array', $data['id'], array(), xarVar::NOT_REQUIRED)) return;
         if (empty($data['id'])) return true;
         
         // Clean the itemids found
@@ -713,8 +713,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // Limit this to the dynamicdata module and maybe remove it altogether
         // This should be done in the templates
         // It is creating unnecessary shorturl encodes
-        $info = xarController::$request->getInfo();
-        if ($info[0] == 'dynamicdata') {
+        $modname = xarMod::getName();
+        if ($modname == 'dynamicdata' || $modname == 'object') {
             if ($allow_read) {
                 $options['display'] = array('otitle' => xarML('Display'),
                                             'oicon'  => 'display.png',
@@ -788,7 +788,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $viewvalues[$itemid] = array();
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
-                    $label = xarVarPrepForDisplay($this->properties[$name]->label);
+                    $label = xarVar::prepForDisplay($this->properties[$name]->label);
                     if(isset($this->items[$itemid][$name])) {
                         $value = $this->properties[$name]->showOutput(array('value' => $this->items[$itemid][$name]));
                     } else {

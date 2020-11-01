@@ -19,17 +19,17 @@ sys::import('modules.dynamicdata.class.objects.master');
 function dynamicdata_admin_export(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) return;
 
     extract($args);
 
-    if(!xarVarFetch('objectid', 'isset', $objectid, 1, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('name',     'isset', $name    , NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id','isset', $moduleid, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tofile',   'isset', $tofile,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('convert',  'isset', $convert,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'isset', $objectid, 1, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('name',     'isset', $name    , NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module_id','isset', $moduleid, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',   'isset', $itemid,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('tofile',   'isset', $tofile,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('convert',  'isset', $convert,  NULL, xarVar::DONT_SET)) {return;}
 
     $data = array();
     $data['menutitle'] = xarML('Dynamic Data Utilities');
@@ -63,16 +63,16 @@ function dynamicdata_admin_export(Array $args=array())
         $xml = xarMod::apiFunc('dynamicdata','util','export',
                              array('objectref' => &$myobject));
 
-        $data['formlink'] = xarModURL('dynamicdata','admin','export',
+        $data['formlink'] = xarController::URL('dynamicdata','admin','export',
                                       array('objectid' => $myobject->objectid,
                                             'itemid'   => 'all'));
-        $data['filelink'] = xarModURL('dynamicdata','admin','export',
+        $data['filelink'] = xarController::URL('dynamicdata','admin','export',
                                       array('objectid' => $myobject->objectid,
                                             'itemid'   => 'all',
                                             'tofile'   => 1));
 
         if (!empty($myobject->datastores) && count($myobject->datastores) == 1 && !empty($myobject->datastores['_dynamic_data_'])) {
-            $data['convertlink'] = xarModURL('dynamicdata','admin','export',
+            $data['convertlink'] = xarController::URL('dynamicdata','admin','export',
                                              array('objectid' => $myobject->objectid,
                                                    'convert'  => 1));
             if (!empty($convert)) {
@@ -90,7 +90,7 @@ function dynamicdata_admin_export(Array $args=array())
 
         $xml .= '<'.$myobject->name.' itemid="'.$itemid.'">'."\n";
         foreach (array_keys($myobject->properties) as $name) {
-            $xml .= "  <$name>" . xarVarPrepForDisplay($myobject->properties[$name]->value) . "</$name>\n";
+            $xml .= "  <$name>" . xarVar::prepForDisplay($myobject->properties[$name]->value) . "</$name>\n";
         }
         $xml .= '</'.$myobject->name.">\n";
 
@@ -140,7 +140,7 @@ function dynamicdata_admin_export(Array $args=array())
 
         } else {
             $varDir = sys::varpath();
-            $outfile = $varDir . '/uploads/' . xarVarPrepForOS($mylist->name) . '.data.' . xarLocaleFormatDate('%Y%m%d%H%M%S',time()) . '.xml';
+            $outfile = $varDir . '/uploads/' . xarVar::prepForOS($mylist->name) . '.data.' . xarLocale::formatDate('%Y%m%d%H%M%S',time()) . '.xml';
             $fp = @fopen($outfile,'w');
             if (!$fp) {
                 $data['xml'] = xarML('Unable to open file #(1)',$outfile);
@@ -151,7 +151,7 @@ function dynamicdata_admin_export(Array $args=array())
                 fputs($fp, "  <".$mylist->name." itemid=\"$itemid\">\n");
                 foreach (array_keys($mylist->properties) as $name) {
                     if (isset($item[$name])) {
-                        fputs($fp, "    <$name>" . xarVarPrepForDisplay($item[$name]) . "</$name>\n");
+                        fputs($fp, "    <$name>" . xarVar::prepForDisplay($item[$name]) . "</$name>\n");
                     } else {
                         fputs($fp, "    <$name></$name>\n");
                     }
@@ -169,7 +169,7 @@ function dynamicdata_admin_export(Array $args=array())
     }
 
     $data['objectid'] = $objectid;
-    $data['xml'] = xarVarPrepForDisplay($xml);
+    $data['xml'] = xarVar::prepForDisplay($xml);
 
     xarTpl::setPageTemplateName('admin');
 

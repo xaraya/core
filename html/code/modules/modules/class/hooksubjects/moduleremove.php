@@ -20,7 +20,7 @@
  * New way of calling hooks
  * xarHooks::notify('ModuleRemove', $item);
  * Legacy way, supported for now, deprecated in future 
- * xarModCallHooks('module', 'remove', $module, $item); 
+ * xarModHooks::call('module', 'remove', $module, $item); 
 **/
 sys::import('xaraya.structures.hooks.apisubject');
 class ModulesModuleRemoveSubject extends ApiHookSubject

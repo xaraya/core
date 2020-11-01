@@ -194,7 +194,7 @@
                     <div class="xar-col">
                         Allow users to set a home page in their user settings.
                         <br />
-                        To activate click on the User Home Page checkbox <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#">here</a>
+                        To activate click on the User Home Page checkbox <a href="#xarController::URL('roles','admin','modifyconfig',array('tab'=>'duvs'))#">here</a>
                     </div>
                 </div>
             </xar:if>
@@ -216,7 +216,7 @@
                     <div class="xar-col">
                         Defines a parent group for the current uswer that takes precedence over other groups.
                         <br />
-                        To activate click on the Primary Parent checkbox <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'duvs'))#">here</a>
+                        To activate click on the Primary Parent checkbox <a href="#xarController::URL('roles','admin','modifyconfig',array('tab'=>'duvs'))#">here</a>
                     </div>
                 </div>
             </xar:if>

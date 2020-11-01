@@ -38,7 +38,7 @@ class URLIconProperty extends URLProperty
         if (empty($data['link'])) $data['link'] = '';
 
         if (!empty($data['value']) && $data['value'] != 'http://' && empty($data['link'])) {
-            $data['link'] = xarVarPrepForDisplay($data['value']);
+            $data['link'] = xarVar::prepForDisplay($data['value']);
         }
         if (empty($data['icon'])) {
             /* We don't have a validated icon to display, use favicon */

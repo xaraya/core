@@ -6,21 +6,21 @@
       <legend>Change queue definition</legend>
 
       <!-- Normal edit form -->
-      <form style="display: inline;" method="post" action="#xarModURL('dynamicdata','admin','update')#">
+      <form style="display: inline;" method="post" action="#xarController::URL('dynamicdata','admin','update')#">
         <xar:data-form object="$object" itemid="$itemid" linkfield="name"/>
-        <input type="hidden" name="authid" value="#xarSecGenAuthKey('dynamicdata')#"/>
+        <input type="hidden" name="authid" value="#xarSec::genAuthKey('dynamicdata')#"/>
         <input type="hidden" name="itemid" value="#$itemid#"/>
         <input type="hidden" name="objectid" value="#$object:objectid#"/>
         <input type="hidden" name="modid" value="#$object:moduleid#"/>
-        <input type="hidden" name="return_url" value="#xarModURL('mail','admin','view')#"/>
+        <input type="hidden" name="return_url" value="#xarController::URL('mail','admin','view')#"/>
         <input type="hidden" name="itemtype" value="#$object:itemtype#"/>
         <xar:var name="label">Save</xar:var>
         <xar:button type="submit" label="$label"/>
       </form>
 
       <!-- When editting, offer delete option -->
-      <form style="display: inline;" method="post" action="#xarModURL('mail','admin','delete')#">
-        <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+      <form style="display: inline;" method="post" action="#xarController::URL('mail','admin','delete')#">
+        <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
         <input type="hidden" name="itemid" value="#$itemid#"/>
         <input type="hidden" name="objectid" value="#$object:objectid#"/>
         <xar:var name="label">Delete</xar:var>

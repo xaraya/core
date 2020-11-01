@@ -12,7 +12,7 @@
         <h2>Configure Notification Template</h2>
         <xar:if condition="!empty($settings)">
             <p>
-                <xar:set name="hookurl">xarModURL('modules','admin','hooks', array('hook' => 'mail'))</xar:set>
+                <xar:set name="hookurl">xarController::URL('modules','admin','hooks', array('hook' => 'mail'))</xar:set>
                 <xar:var name="hooktitle">Configure mail hooks</xar:var>
                 <xar:var name="hooklinktext">Hook the mail module to content types</xar:var>
                 <a href="#$hookurl#" title="#$hooktitle#">#$hooklinktext#</a>to receive notifications
@@ -30,7 +30,7 @@
             <xar:else />
             <p>The mail module is currently not hooked to any module</p>
         </xar:if>
-        <form method="post" action="#xarModURL('mail','admin','template')#">
+        <form method="post" action="#xarController::URL('mail','admin','template')#">
             <fieldset>
                 <div class="xar-row">
                     <div class="xar-col">
@@ -73,7 +73,7 @@
                 </p>
             </fieldset>
         </form>
-        <form action="#xarModURL('mail','admin','template')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('mail','admin','template')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Template Details</legend>
                 <div class="xar-row">
@@ -82,7 +82,7 @@
                         <label for="subject" title="#$label#" class="xar-form-label">Subject:</label>
                     </div>
                     <div class="xar-col">
-                        <input type="text" name="subject" id="subject" value="#xarVarPrepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
+                        <input type="text" name="subject" id="subject" value="#xarVar::prepForDisplay($subject)#" maxlength="150" class="xar-form-textxlong"/>
                     </div>
                 </div>
                 <div class="xar-row">
@@ -91,7 +91,7 @@
                         <label for="message" title="#$label#" class="xar-form-label">Message:</label>
                     </div>
                     <div class="xar-col">
-                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVarPrepForDisplay($message)#</textarea>
+                        <textarea name="message" id="message" class="xar-form-textareaxlarge">#xarVar::prepForDisplay($message)#</textarea>
                     </div>
                 </div>
                 <p>

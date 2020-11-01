@@ -5,7 +5,7 @@
     <div class="xar-mod-body">
         <h2>Utilities : Query #$label#</h2>
         <xar:template type="module" file="utility-menu"/>
-        <form method="post" action="#xarModURL('dynamicdata','admin','query')#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','query')#">
             <table border="0" cellpadding="5" class="xar-table xar-align-left xar-fullwidth">
                 <tr>
                     <td>

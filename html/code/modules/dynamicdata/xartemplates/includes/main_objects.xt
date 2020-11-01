@@ -11,10 +11,10 @@
     </xar:if>
 
     <!-- define the list of main objects -->
-    <xar:set name="dummy">xarVarFetch('update','isset',$update,NULL,XARVAR_NOT_REQUIRED)</xar:set>
-    <xar:if condition="(empty($startlist) or !empty($update)) and xarSecurityCheck('AdminDynamicData', 0)">
-        <xar:set name="dummy">xarVarFetch('starter','array',$starter,NULL,XARVAR_NOT_REQUIRED)</xar:set>
-        <xar:if condition="!empty($starter) and is_array($starter) and xarSecConfirmAuthKey()">
+    <xar:set name="dummy">xarVar::fetch('update','isset',$update,NULL,xarVar::NOT_REQUIRED)</xar:set>
+    <xar:if condition="(empty($startlist) or !empty($update)) and xarSecurity::check('AdminDynamicData', 0)">
+        <xar:set name="dummy">xarVar::fetch('starter','array',$starter,NULL,xarVar::NOT_REQUIRED)</xar:set>
+        <xar:if condition="!empty($starter) and is_array($starter) and xarSec::confirmAuthKey()">
             <xar:set name="startlist">array_keys($starter)</xar:set>
             <xar:set name="dummy">xarModVars::set('dynamicdata','starter_object_list',serialize($startlist))</xar:set>
             #xarController::redirect(xarServer::getCurrentURL(array('update'=> null)))#
@@ -39,7 +39,7 @@
                     </xar:if>
                 </xar:foreach>
             </ul>
-            <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+            <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
             <xar:var name="label">Update List</xar:var>
             <xar:button type="submit" label="$label"/>
         </form>
@@ -53,7 +53,7 @@
             </xar:if>
         </xar:foreach>
         </ul>
-        <xar:if condition="xarSecurityCheck('AdminDynamicData', 0)">
+        <xar:if condition="xarSecurity::check('AdminDynamicData', 0)">
             <a href="#xarServer::getCurrentURL(array('update'=> 1))#">Update this list</a>
         </xar:if>
 

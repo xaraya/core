@@ -99,7 +99,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
 
         /* default values - you shouldn't rely on these! */
         if (!isset($args['modname'])) {
-            list($mod, $type, $func) = xarController::$request->getInfo();
+            list($mod, $type, $func) = xarController::getRequest()->getInfo();
             $args['modname'] = $mod;
         }
         if (!isset($args['modid'])) {
@@ -128,4 +128,3 @@ class Dynamic_Function_DataStore extends BasicDataStore
     } /* getItems */
 }
 
-?>

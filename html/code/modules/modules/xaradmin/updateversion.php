@@ -19,10 +19,10 @@
 function modules_admin_updateversion()
 {
     // Security
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurity::check('AdminModules')) return;
 
     // Get parameters from input
-    xarVarFetch('id', 'int:1', $regId, 0, XARVAR_NOT_REQUIRED);
+    xarVar::fetch('id', 'int:1', $regId, 0, xarVar::NOT_REQUIRED);
     if (empty($regId)) return xarResponse::notFound();
 
 
@@ -37,7 +37,7 @@ function modules_admin_updateversion()
     if (!isset($updated)) return;
 
     // Redirect to module list
-    xarController::redirect(xarModURL('modules', 'admin', 'list'));
+    xarController::redirect(xarController::URL('modules', 'admin', 'list'));
 
     return true;
 }
