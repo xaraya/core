@@ -158,7 +158,7 @@ class xarPageCache extends xarObject
     {
         if (empty($url)) {
             // get module parameters
-            list($modName, $modType, $funcName) = xarController::$request->getInfo();
+            list($modName, $modType, $funcName) = xarController::getRequest()->getInfo();
             // define the cacheKey
             $cacheKey = "$modName-$modType-$funcName";
             // get the current themeDir
@@ -440,4 +440,3 @@ function xarPage_checkUserCaching($cacheGroups)
     return false;
 }
 
-?>

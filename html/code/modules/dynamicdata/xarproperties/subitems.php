@@ -192,8 +192,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['localmodule'])) {
             $this->localmodule = $data['localmodule'];
         } else {
-            $info = xarController::$request->getInfo();
-            $this->localmodule = $info[0];
+            $this->localmodule = xarMod::getName();
             $data['localmodule'] = $this->localmodule;
         }
 
@@ -296,8 +295,7 @@ class SubItemsProperty extends DataProperty
         if (isset($data['localmodule'])) {
             $this->localmodule = $data['localmodule'];
         } else {
-            $info = xarController::$request->getInfo();
-            $this->localmodule = $info[0];
+            $this->localmodule = xarMod::getName();
             $data['localmodule'] = $this->localmodule;
         }
         
@@ -530,4 +528,3 @@ class SubItemsProperty extends DataProperty
         return true;
     }
 }
-?>

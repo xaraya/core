@@ -471,7 +471,7 @@ function xarRemoveMasks($module)
 function xarSecGenAuthKey($modName = NULL)
 {
     if (empty($modName)) {
-        list($modName) = xarController::$request->getInfo();
+        list($modName) = xarController::getRequest()->getInfo();
     }
 
     // Date gives extra security but leave it out for now
@@ -503,9 +503,9 @@ function xarSecGenAuthKey($modName = NULL)
 function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
 {
     // We don't need this check for AJAX calls
-    if (xarController::$request->isAjax()) return true;
+    if (xarController::getRequest()->isAjax()) return true;
 
-    if(!isset($modName)) list($modName) = xarController::$request->getInfo();
+    if(!isset($modName)) list($modName) = xarController::getRequest()->getInfo();
     $authid = xarController::getVar($authIdVarName);
 
     // Regenerate static part of key

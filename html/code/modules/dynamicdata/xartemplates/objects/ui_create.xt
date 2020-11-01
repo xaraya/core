@@ -50,8 +50,12 @@
                 <input type="hidden" name="method" id="method" value="create"/>
                 <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
-                <input type="hidden" name="join" id="join" value="#$object:join#"/>
-                <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                <xar:if condition="!empty($object:join)">
+                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                </xar:if>
+                <xar:if condition="!empty($object:table)">
+                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                </xar:if>
                 <input type="hidden" name="notfresh" id="notfresh" value="true"/>
                 <xar:if condition="!empty($return_url)">
                     <input type="hidden" name="return_url" id="return_url" value="#$return_url#"/>

@@ -40,8 +40,12 @@
                 <div class="xar-col">
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                     <input type="hidden" name="objectid" id="objectid" value="#$object:objectid#"/>
-                    <input type="hidden" name="join" id="join" value="#$object:join#"/>
-                    <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                    <xar:if condition="!empty($object:join)">
+                        <input type="hidden" name="join" id="join" value="#$object:join#"/>
+                    </xar:if>
+                    <xar:if condition="!empty($object:table)">
+                        <input type="hidden" name="table" id="table" value="#$object:table#"/>
+                    </xar:if>
                     <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
                     <input type="hidden" name="tplmodule" id="tplmodule" value="#$tplmodule#"/>
                     <xar:if condition="!empty($return_url)">

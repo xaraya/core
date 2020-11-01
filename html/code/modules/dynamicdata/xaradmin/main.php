@@ -27,8 +27,8 @@ function dynamicdata_admin_main()
     // Security
     if(!xarSecurity::check('EditDynamicData')) return;
 
-    $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
-    $info = xarController::$request->getInfo();
+    $refererinfo = xarController::getRequest()->getInfo(xarServer::getVar('HTTP_REFERER'));
+    $info = xarController::getRequest()->getInfo();
     $samemodule = $info[0] == $refererinfo[0];
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){

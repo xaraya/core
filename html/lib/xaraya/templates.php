@@ -813,7 +813,7 @@ class xarTpl extends xarObject
                 break;
             case 'module':
                 if (empty($package))
-                    list($package) = xarController::$request->getInfo();
+                    $package = xarMod::getName();
                 // @checkme: modules is a depency of templates, redundant check?
                 if (method_exists('xarMod', 'getBaseInfo')) {
                     $modBaseInfo = xarMod::getBaseInfo($package);

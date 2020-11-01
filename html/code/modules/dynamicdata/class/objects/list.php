@@ -713,8 +713,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // Limit this to the dynamicdata module and maybe remove it altogether
         // This should be done in the templates
         // It is creating unnecessary shorturl encodes
-        $info = xarController::$request->getInfo();
-        if ($info[0] == 'dynamicdata') {
+        $modname = xarMod::getName();
+        if ($modname == 'dynamicdata' || $modname == 'object') {
             if ($allow_read) {
                 $options['display'] = array('otitle' => xarML('Display'),
                                             'oicon'  => 'display.png',
