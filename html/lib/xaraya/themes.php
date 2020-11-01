@@ -20,8 +20,8 @@
 **/
 sys::import('xaraya.variables.theme');
 function xarThemeGetVar($themeName, $name, $prep = NULL)                           {   return xarThemeVars::get($themeName, $name); }
-function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='') {   return xarThemeVars::set($themeName, $name, $value); }
-function xarThemeDelVar($themeName, $name)                                         {   return xarThemeVars::delete($themeName, $name); }
+//function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='') {   return xarThemeVars::set($themeName, $name, $value); }
+//function xarThemeDelVar($themeName, $name)                                         {   return xarThemeVars::delete($themeName, $name); }
 
 
 /**

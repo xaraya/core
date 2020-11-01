@@ -156,7 +156,7 @@ class xarCache_Storage extends xarObject
             $this->logsize = $args['logsize'];
         }
         // the namespace must be usable as a filename prefix here !
-        if (!empty($args['namespace']) && preg_match('/^[a-zA-Z0-9 _.-/]+$/', $args['namespace'])) {
+        if (!empty($args['namespace']) && preg_match('/^[a-zA-Z0-9 _.-\/]+$/', $args['namespace'])) {
             $this->namespace = $args['namespace'];
         }
         // the default prefix for the cache keys will be 'type/namespace', except in filesystem (for now)

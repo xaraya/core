@@ -20,12 +20,6 @@ sys::import('xaraya.core');
 
 xarCore::xarInit(xarCore::SYSTEM_ALL);
 
-function m($msg,$level=0) 
-{ 
-    $prefix = str_repeat('  ',$level);
-    echo "$prefix - $msg\n"; 
-}
-
 if(!xarUser::logIn('Admin','12345')) {
     throw new Exception("Authentication failed\n");
 } else {
@@ -57,6 +51,12 @@ $q = new Stack();
 $q->clear();
 _tests($q,$l--);
 */
+
+function m($msg,$level=0)
+{
+    $prefix = str_repeat('  ',$level);
+    echo "$prefix - $msg\n";
+}
 
 function _tests($seq,$l=0)
 {
@@ -92,4 +92,3 @@ function _tests($seq,$l=0)
     m($seq->pop(),$l);
     $l--;
 }
-?>

@@ -61,8 +61,8 @@ abstract class xarVariableObject extends xarObject
                     static::$instance = @unserialize(xarModVars::get(static::$module, static::$variable));
                 break;
                 case 'user':
-                    $this->_role_id = isset($role_id) ? $role_id : xarSession::getVar('role_id');
-                    static::$instance = @unserialize(xarModUserVars::get(static::$module, static::$variable, $this->_role_id));
+                    $role_id = isset($role_id) ? $role_id : xarSession::getVar('role_id');
+                    static::$instance = @unserialize(xarModUserVars::get(static::$module, static::$variable, $role_id));
                 break;
                 case 'session':
                     static::$instance = @unserialize(xarSession::getVar(static::$variable));
@@ -75,7 +75,10 @@ abstract class xarVariableObject extends xarObject
                 $c = get_called_class();
                 // NOTE: this is the one and only time the objects __construct() method 
                 // will be run unless the variable is deleted outside this class
+                // @fixme this probably needs to be new $c(); instead - but it's not used anywhere...
+		/** @phpstan-ignore-next-line */
                 static::$instance = new $c;
+                //static::$instance = new static();
                 // user vars inherit from a parent mod var, if the user var
                 // isn't set we need to save the mod var first
                 if (static::$scope == 'user')
@@ -259,4 +262,3 @@ $foo = testClass::getInstance(); // __wakeup() is called, incrementing counter
 var_dump($foo); 
 // mystring is now bar, counter incremented by 1, and lastrun is the time unset() was called :)
 */
-?>

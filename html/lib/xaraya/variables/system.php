@@ -64,7 +64,7 @@ class xarSystemVars extends xarVars implements IxarVars
         // Make stuff from config.system.php available
         // NOTE: we can not use sys::import since the variable scope would be wrong.
         include $fileName;
+        /** @phpstan-ignore-next-line */
         self::$systemVars[$scope] = $systemConfiguration;
     }
 }
-?>

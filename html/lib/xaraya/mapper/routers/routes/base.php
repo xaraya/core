@@ -24,6 +24,7 @@ class xarRoute extends xarObject implements iRoute
     protected $parts = array();
     protected $defaults = array();
     protected $keysSet     = false;
+    protected $matchedPath = null;
     
     protected $moduleKey = 'module';
     protected $typeKey   = 'type';
@@ -32,7 +33,7 @@ class xarRoute extends xarObject implements iRoute
     public function __construct(Array $defaults=array(), xarDispatcher $dispatcher=null)
     {
         $this->defaults += $defaults;
-        if (isset($request)) $this->request = $request;
+        //if (isset($request)) $this->request = $request;
         if (isset($dispatcher)) $this->dispatcher = $dispatcher;
     }
 
@@ -63,6 +64,7 @@ class xarRoute extends xarObject implements iRoute
         $path = $request->getURL();
         if ($partial) {
             if (substr($path, 0, strlen($this->route)) === $this->route) {
+                // @fixme does anyone know what this was supposed to do?
                 $this->setMatchedPath($this->_route);
                 return $this->defaults;
             }
@@ -75,9 +77,13 @@ class xarRoute extends xarObject implements iRoute
         return false;
     }
 
+    public function setMatchedPath($matchedPath)
+    {
+        $this->matchedPath = $matchedPath;
+    }
+
     public function getParts()
     {
         return $this->parts;
     }
 }
-?>

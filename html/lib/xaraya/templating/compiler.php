@@ -233,15 +233,15 @@ class XarayaCompiler extends xarBLCompiler
         if ($this->legacy_compile) {
             $xslProc = parent::getProcessor($xslFile);
         } else {
-            sys::import('xaraya/templating/xsltransformer');
+            //sys::import('xaraya/templating/xsltransformer');
+            sys::import('blocklayout.xsltransformer');
             if (empty($xslFile)) {
-                $xslProc = new XarayaLayoutXSLTProcessor();
+                $xslProc = new BlockLayoutXSLTProcessor();
             } else {
-                $xslProc = new XarayaLayoutXSLTProcessor($xslFile);
+                $xslProc = new BlockLayoutXSLTProcessor($xslFile);
             }
         }
         return $xslProc;
     }
 }
 
-?>

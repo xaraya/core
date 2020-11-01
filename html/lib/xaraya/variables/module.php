@@ -97,7 +97,7 @@ class xarModVars extends xarVars implements IxarModVars
      * @throws EmptyParameterException
      * @todo  This has some duplication with xarVar.php
      */
-    private static function preload($scope)
+    static function preload($scope)
     {
         if (empty($scope)) throw new EmptyParameterException('modName');
 
@@ -144,7 +144,7 @@ class xarModVars extends xarVars implements IxarModVars
         $modBaseInfo = xarMod::getBaseInfo($scope);
         $module_varstable = $tables['module_vars'];
         // We need the variable id
-        unset($modvarid);
+        //unset($modvarid);
         $modvarid = self::getId($scope, $name);
 
         if($value === false) $value = 0;
@@ -315,4 +315,3 @@ class xarModVars extends xarVars implements IxarModVars
         return $modvarid;
     }
 }
-?>

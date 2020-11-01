@@ -125,8 +125,8 @@ class xarVersion extends xarObject
         if (!$version1) throw new BadVersionException($version1);
         if (!$version2) throw new BadVersionException($version2);
 
-        if (!isset($args['levels']) || !is_numeric($args['levels'])) $args['levels'] = 5;
-        $power = 5 - $args['levels'];
+        if (!isset($levels) || !is_numeric($levels)) $levels = 5;
+        $power = 5 - $levels;
 
         $factor = pow(100, $power);
         $version1 = (int)($version1['versionnumber']/$factor);
@@ -150,14 +150,13 @@ class xarVersion extends xarObject
             $version2 = xarConfigVars::get(null, 'System.Core.VersionNum');
         } else {
             try {
-                $info = getBaseInfo($application);
+                $info = xarMod::getBaseInfo($application);
                 $version2 = $info['version'];
             } catch (Exception $e) {
                 throw new ModuleBaseInfoNotFoundException($application);
             }
         }
-        $result = self::compare($version1, $version2);
+        $result = self::compare($version, $version2);
         return $result >= 0;
     }
 }
-?>

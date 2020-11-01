@@ -52,7 +52,7 @@ class MxCheckValidation extends ValueValidations
         // $Domain : ebeecomm.com
         // list function reference : http://www.php.net/manual/en/function.list.php
         // split function reference : http://www.php.net/manual/en/function.split.php
-        list ( $Username, $Domain ) = split ("@", $subject);
+        list ( $Username, $Domain ) = explode ("@", $subject);
 
         // That MX(mail exchanger) record exists in domain check .
         // checkdnsrr function reference : http://www.php.net/manual/en/function.checkdnsrr.php
@@ -86,11 +86,11 @@ class MxCheckValidation extends ValueValidations
                 $Out = fgets ( $Connect, 1024 ); // Receive server's answering cord.
 
                 // Inform sender's address to server.
-                fputs ( $Connect, "MAIL FROM: <{$Email}>\r\n" );
+                fputs ( $Connect, "MAIL FROM: <{$subject}>\r\n" );
                 $From = fgets ( $Connect, 1024 ); // Receive server's answering cord.
 
                 // Inform listener's address to server.
-                fputs ( $Connect, "RCPT TO: <{$Email}>\r\n" );
+                fputs ( $Connect, "RCPT TO: <{$subject}>\r\n" );
                 $To = fgets ( $Connect, 1024 ); // Receive server's answering cord.
 
                 // Finish connection.
@@ -119,4 +119,3 @@ class MxCheckValidation extends ValueValidations
         return true;
     }
 }
-?>

@@ -585,11 +585,10 @@ class xarSession extends xarObject implements IsessionHandler
             return false;
         }
         unset($_SESSION[$var]);
-        // still needed here too
-        // mrb: why?
-        if (ini_get('register_globals')) {
-            session_unregister($var);
-        }
+        // no longer needed here
+        //if (ini_get('register_globals')) {
+        //    session_unregister($var);
+        //}
         return true;
     }
 

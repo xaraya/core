@@ -56,7 +56,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $tables = xarDB::getTables();
 
         $module_itemvarstable = $tables['module_itemvars'];
-        unset($modvarid);
+        //unset($modvarid);
         $modvarid = xarModVars::getId($scope, $name);
         if(!$modvarid)
             return;
@@ -93,7 +93,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $modsetting = xarModVars::get($scope, $name);
 
         // We need the variable id
-        unset($modvarid);
+        //unset($modvarid);
         $modvarid = xarModVars::getId($scope, $name);
         if(!$modvarid) throw new VariableNotFoundException($name);
 
@@ -141,4 +141,3 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         return true;
     }
 }
-?>

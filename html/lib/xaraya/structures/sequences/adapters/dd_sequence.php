@@ -74,10 +74,10 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
             // item currently at position N
             $IDn = $this->items[$position]['id']; // This should always exist by now
             $params['nextid'] = $this->items[$position]['id'];
-            $newID = $this->seqObject->createItem($params);
+            $newId = $this->seqObject->createItem($params);
 
             // Update the item at N-1 (if any) with the new ID of the inserted item
-            if($position > 0 && isset($newID)) {
+            if($position > 0 && isset($newId)) {
                 $this->setNextId($this->items[$position-1]['id'],$newId);
             }
         }
@@ -150,4 +150,3 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
         return $res;
     }
 }
-?>

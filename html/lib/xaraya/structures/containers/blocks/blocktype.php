@@ -186,6 +186,10 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         return $id;
     }
 
+    public function upgrade($oldversion)
+    {
+        return true;
+    }
 
 /**
  * Store content
@@ -428,4 +432,3 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
         $this->cacheexpire = $cacheexpire;
     }
 }
-?>

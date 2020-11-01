@@ -476,10 +476,10 @@ function &xarDB__datadictInit()
     if (!isset($datadict)) {
         $dbconn   = xarDB::getConn();
         // @todo This doesnt work yet in 2.x
+        sys::import('xaraya.legacy.legacy');
         $datadict = xarDBNewDataDict($dbconn, 'ALTERTABLE');
     }
 
     return $datadict;
 }
 
-?>

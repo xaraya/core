@@ -74,7 +74,7 @@ function xarUserGetNavigationThemeName()
 }
 function xarUserSetNavigationThemeName($themeName)
 {   
-    return xarUser::setNavigationThemeName($themeName); 
+    xarUser::setNavigationThemeName($themeName);
 }
 function xarUserGetNavigationLocale()
 {   
@@ -543,7 +543,7 @@ class xarUser extends xarObject
      * @param  mixed   $value the value of the variable
      * @param  integer $userId integer user's ID
      * @return boolean true if the set was successful, false if validation fails
-     * @throws EmptyParameterException, BadParameterException, NotLoggedInException, xarException, IDNotFoundException
+     * @throws EmptyParameterException, BadParameterException, NotLoggedInException, xarExceptions, IDNotFoundException
      * @todo redesign the delegation to auth* modules for handling user variables
      * @todo some securitycheck for retrieving at least other users variables ?
      */
@@ -566,12 +566,13 @@ class xarUser extends xarObject
         if ($name == 'name' || $name == 'uname' || $name == 'email') {
             // TODO: replace with some roles API
             // TODO: not -^ but get rid of this entirely here.
-            self::setUsersTableUserVar($name, $value, $userId);
+            //self::setUsersTableUserVar($name, $value, $userId);
+            throw new BadParameterException('name');
     
         } elseif (!self::isVarDefined($name)) {
             if (xarModVars::get('roles',$name)) {
                 xarCoreCache::setCached('User.Variables.'.$userId, $name, false);
-                throw new xarException($name,'User variable #(1) was not correctly registered');
+                throw new IDNotFoundException($name,'User variable #(1) was not correctly registered');
             } else {
                 xarModUserVars::set('roles',$name,$value,$userId);
             }

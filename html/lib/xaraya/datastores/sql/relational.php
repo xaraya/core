@@ -476,7 +476,7 @@ class RelationalDataStore extends SQLDataStore
 
     // Ignore if the record is a null (by way of the primary index)
             $subitemsobject = $this->object->properties[$field]->subitemsobject;
-            if ($row[$subitemsobjectname . "_" . $subitemsobject->primary] == null) return;
+            if ($value[$subitemsobjectname . "_" . $subitemsobject->primary] == null) return;
 
     // Assign the appropriate value to each of the subitemsobjct's properties
             $subfieldlist = $subitemsobject->getFieldList();
@@ -711,4 +711,3 @@ class RelationalDataStore extends SQLDataStore
 
 }
 
-?>

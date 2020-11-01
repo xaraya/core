@@ -609,10 +609,9 @@ function xarTplGetPager($startNum, $total, $urltemplate, $itemsPerPage = 10, $bl
 sys::import('modules.dynamicdata.class.properties.base');
 class Dynamic_Property extends DataProperty 
 {
-    function Dynamic_Property($args)
+    function __construct($args)
     {
         parent::__construct($args);
     }
 }
 
-?>
