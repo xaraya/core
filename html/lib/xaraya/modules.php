@@ -224,6 +224,21 @@ interface IxarMod
  */
 class xarMod extends xarObject implements IxarMod
 {
+    const STATE_UNINITIALISED              = 1;
+    const STATE_INACTIVE                   = 2;
+    const STATE_ACTIVE                     = 3;
+    const STATE_MISSING_FROM_UNINITIALISED = 4;
+    const STATE_UPGRADED                   = 5;
+    const STATE_ANY                        = 0;
+    const STATE_INSTALLED                  = 6;
+    const STATE_MISSING_FROM_INACTIVE      = 7;
+    const STATE_MISSING_FROM_ACTIVE        = 8;
+    const STATE_MISSING_FROM_UPGRADED      = 9;
+    const STATE_ERROR_UNINITIALISED        = 10;
+    const STATE_ERROR_INACTIVE             = 11;
+    const STATE_ERROR_ACTIVE               = 12;
+    const STATE_ERROR_UPGRADED             = 13;
+
     static $genShortUrls = false;
     static $genXmlUrls   = true;
 
