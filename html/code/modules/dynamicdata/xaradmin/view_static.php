@@ -70,7 +70,7 @@ function dynamicdata_admin_view_static(Array $args=array())
     $modInfo = xarMod::getInfo($module_id);
     $data['module'] = $modInfo['name'];
     $data['itemtype'] = $itemtype;
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
 
     xarTpl::setPageTemplateName('admin');
 

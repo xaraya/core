@@ -24,12 +24,12 @@
         $data['object'] = DataObjectMaster::getObject(array('name' => 'dynamicdata_tablefields'));
 
         $data['tplmodule'] = 'dynamicdata';
-        $data['authid'] = xarSecGenAuthKey('dynamicdata');
+        $data['authid'] = xarSec::genAuthKey('dynamicdata');
 
         if ($data['confirm']) {
         
             // Check for a valid confirmation key
-//            if(!xarSecConfirmAuthKey()) return;
+//            if(!xarSec::confirmAuthKey()) return;
 
             $query = 'ALTER TABLE ' .$data['table'] . ' DROP COLUMN ' . $data['field'];
             $dbconn = xarDB::getConn();

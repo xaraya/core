@@ -47,7 +47,7 @@ function dynamicdata_admin_orderprops()
         throw new BadParameterException($vars,$msg);
     }
 
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }
 

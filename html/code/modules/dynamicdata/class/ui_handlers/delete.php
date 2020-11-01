@@ -73,7 +73,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
 
         if(!empty($args['confirm'])) 
         {
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 
@@ -96,7 +96,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
         return xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_delete',
             array('object' => $this->object,
-                  'authid' => xarSecGenAuthKey(),
+                  'authid' => xarSec::genAuthKey(),
                   'tpltitle' => $this->tpltitle,
                   'return_url' => $args['return_url'])
         );

@@ -55,7 +55,7 @@ function dynamicdata_admin_new(Array $args=array())
     $data['tplmodule'] = $args['tplmodule'];  //TODO: is this needed?
 
     // Generate a one-time authorisation code for this operation
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
 
     // Makes this hooks call explictly from DD - why ???
     ////$modinfo = xarMod::getInfo($myobject->moduleid);

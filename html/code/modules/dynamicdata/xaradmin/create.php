@@ -40,7 +40,7 @@ function dynamicdata_admin_create(Array $args=array())
     if(!xarVar::fetch('template',     'isset', $template,   NULL, xarVar::DONT_SET)) {return;}
     if(!xarVar::fetch('tplmodule',    'isset', $tplmodule,   'dynamicdata', xarVar::NOT_REQUIRED)) {return;}
 
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
@@ -64,7 +64,7 @@ function dynamicdata_admin_create(Array $args=array())
 
         $data['object'] = $myobject;
 
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
         $data['preview'] = $preview;
         if (!empty($return_url)) {
             $data['return_url'] = $return_url;

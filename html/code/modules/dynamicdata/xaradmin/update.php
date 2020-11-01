@@ -42,7 +42,7 @@ function dynamicdata_admin_update(Array $args=array())
     // Security
     if(!xarSecurity::check('EditDynamicData')) return;
 
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
@@ -74,7 +74,7 @@ function dynamicdata_admin_update(Array $args=array())
 
                 $data['objectid'] = $myobject->objectid;
                 $data['itemid'] = $itemid;
-                $data['authid'] = xarSecGenAuthKey();
+                $data['authid'] = xarSec::genAuthKey();
                 $data['preview'] = $preview;
         //        $data['tplmodule'] = $tplmodule;
                 if (!empty($return_url)) {

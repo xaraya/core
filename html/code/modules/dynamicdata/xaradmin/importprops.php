@@ -30,7 +30,7 @@ function dynamicdata_admin_importprops()
     // authorisation code attached to it.  If it did not then the function will
     // proceed no further as it is possible that this is an attempt at sending
     // in false data to the system
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 

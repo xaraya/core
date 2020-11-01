@@ -140,7 +140,7 @@
                 </fieldset>
                 <xar:if condition="$export ne 'ddl'">
                     <div class="xar-align-center">
-                        <input type="hidden" name="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
                         <xar:var name="label">Import Object Definition</xar:var>
                         <xar:button type="submit" label="$label"/>
                     </div>

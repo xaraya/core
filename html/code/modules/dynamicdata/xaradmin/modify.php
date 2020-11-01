@@ -137,7 +137,7 @@ function dynamicdata_admin_modify(Array $args=array())
     
     $data['tplmodule'] = $args['tplmodule'];   //TODO: is this needed
     $data['objectid'] = $args['objectid'];
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
             
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/admin-modify-' . $args['template'] . '.xt')) {

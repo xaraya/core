@@ -74,7 +74,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
 
         if(!empty($args['preview']) || !empty($args['confirm'])) 
         {
-            if (!empty($args['confirm']) && !xarSecConfirmAuthKey()) {
+            if (!empty($args['confirm']) && !xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
 
@@ -107,7 +107,7 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
             $this->tplmodule, $this->object->template, 'ui_update',
             array('object'  => $this->object,
                   'preview' => $args['preview'],
-                  'authid'  => xarSecGenAuthKey(),
+                  'authid'  => xarSec::genAuthKey(),
                   'hooks'   => $this->object->hookoutput,
                   'tpltitle' => $this->tpltitle,
                   'return_url' => $args['return_url'])

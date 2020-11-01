@@ -39,7 +39,7 @@ function dynamicdata_admin_updateprop()
     // Security
     if(!xarSecurity::check('AdminDynamicData')) return;
 
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 

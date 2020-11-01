@@ -16,7 +16,7 @@
         <xar:template type="module" file="utility-menu"/>
        </div><!--/xar-mod-page-head-->
 		<div class="xar-mod-page-body">
-        <xar:set name="authid">#xarSecGenAuthKey()#</xar:set>
+        <xar:set name="authid">#xarSec::genAuthKey()#</xar:set>
 
         <form method="get" action="#xarServer::getBaseURL()#">
             <fieldset>

@@ -140,7 +140,7 @@ function dynamicdata_admin_export(Array $args=array())
 
         } else {
             $varDir = sys::varpath();
-            $outfile = $varDir . '/uploads/' . xarVar::prepForOS($mylist->name) . '.data.' . xarLocaleFormatDate('%Y%m%d%H%M%S',time()) . '.xml';
+            $outfile = $varDir . '/uploads/' . xarVar::prepForOS($mylist->name) . '.data.' . xarLocale::formatDate('%Y%m%d%H%M%S',time()) . '.xml';
             $fp = @fopen($outfile,'w');
             if (!$fp) {
                 $data['xml'] = xarML('Unable to open file #(1)',$outfile);

@@ -16,7 +16,7 @@
                 </xar:set>
                 <xar:data-display object="$object" fieldlist="$fieldlist"/>
             </fieldset>
-            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+            <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
             <input type="hidden" name="itemid" id="itemid" value="#$itemid#"/>
             <!-- This is the main part of the page -->
             #$showval# 
@@ -89,7 +89,7 @@
                 </div>
             </div>
 <!-- See CHECKME in showpropval
-                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                 <input type="submit" name="confirm" value="#xarML('Update')#" disabled="disabled"/>
 -->
         </form>

@@ -107,7 +107,7 @@ function dynamicdata_admin_delete(Array $args=array())
                 $data['related'] = xarML('Warning : there are #(1) properties and #(2) items associated with this object !', count($mylist->properties), $mylist->countItems());
             }
         }
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
 
         xarTpl::setPageTitle(xarML('Delete Item #(1) in #(2)', $data['itemid'], $myobject->label));
 
@@ -121,7 +121,7 @@ function dynamicdata_admin_delete(Array $args=array())
 
     // If we get here it means that the user has confirmed the action
 
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 

@@ -91,7 +91,7 @@ function dynamicdata_admin_access(Array $args=array())
     }
 
     if (!empty($confirm)) {
-        if (!xarSecConfirmAuthKey()) {
+        if (!xarSec::confirmAuthKey()) {
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }
 
@@ -236,7 +236,7 @@ function dynamicdata_admin_access(Array $args=array())
                                 'lt'    => 'less than',
                                 'ne'    => 'not equal to');
 
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
 
     if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access.xt') ||
         file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access-' . $data['template'] . '.xt')) {

@@ -35,7 +35,7 @@ function dynamicdata_admin_import(Array $args=array())
         $basedir = sys::code() . 'modules/dynamicdata';
     }
     $data['basedir'] = $basedir;
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
 
     $filetype = 'xml';
     $files = xarMod::apiFunc('dynamicdata','admin','browse',
@@ -47,7 +47,7 @@ function dynamicdata_admin_import(Array $args=array())
     }
 
     if (empty($refresh) && (!empty($import) || !empty($xml))) {
-        if (!xarSecConfirmAuthKey()) {
+        if (!xarSec::confirmAuthKey()) {
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 

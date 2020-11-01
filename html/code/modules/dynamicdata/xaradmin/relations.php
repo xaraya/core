@@ -235,7 +235,7 @@ function dynamicdata_admin_relations(Array $args=array())
             $data['withfields'] = $withobject->properties;
         }
         if (!empty($confirm)) {
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
 /* no longer in use (for now ?)
@@ -260,7 +260,7 @@ function dynamicdata_admin_relations(Array $args=array())
             return true;
 
         } elseif (!empty($delete) && !empty($what)) {
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
             // remove selected link(s)
@@ -315,7 +315,7 @@ function dynamicdata_admin_relations(Array $args=array())
             $data['withfields'] = $withobject->properties;
         }
         if (!empty($confirm)) {
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 /* no longer in use (for now ?)
@@ -340,7 +340,7 @@ function dynamicdata_admin_relations(Array $args=array())
             return true;
 
         } elseif (!empty($delete) && !empty($what)) {
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             // remove selected link(s)

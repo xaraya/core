@@ -24,12 +24,12 @@
         if (!xarVar::fetch('confirm',  'bool',   $data['confirm'], false,     xarVar::NOT_REQUIRED)) return;
 
         $data['object'] = DataObjectMaster::getObject(array('name' => 'dynamicdata_tablefields'));
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
 
         if ($data['confirm']) {
         
             // Check for a valid confirmation key
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             

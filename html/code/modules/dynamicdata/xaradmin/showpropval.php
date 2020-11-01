@@ -95,7 +95,7 @@ function dynamicdata_admin_showpropval(Array $args=array())
             if (!empty($confirm) || !empty($exit)) {
                 // store the updated configuration rule back in the value
                 $myobject->properties['configuration']->value = $property->configuration;
-                if (!xarSecConfirmAuthKey()) {
+                if (!xarSec::confirmAuthKey()) {
                     return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }
 
@@ -186,7 +186,7 @@ function dynamicdata_config_propval($proptype)
 // CHECKME: allow updating the default configuration for a property type someday ? See
 //          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
             if (!empty($confirm)) {
-                if (!xarSecConfirmAuthKey()) {
+                if (!xarSec::confirmAuthKey()) {
                     return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }
 // TODO: we need some method in PropertyRegistration to update a property type ;-)

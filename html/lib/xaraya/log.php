@@ -120,7 +120,7 @@ function xarLogVariable($name, $var, $level = '')
  * @author Marc Lutolf
  * @todo  Document functions
  * @todo  Add options to simple & html logger
- * @todo  When calendar & xarLocaleFormatDate is done complete simple logger and html logger
+ * @todo  When calendar & xarLocale::formatDate is done complete simple logger and html logger
  * @todo  When xarMail is done do email logger
 **/
 
