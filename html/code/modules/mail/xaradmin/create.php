@@ -12,7 +12,7 @@
 function mail_admin_create(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AddMail')) return; 
+    if (!xarSecurity::check('AddMail')) return; 
     
     // User requested to create a new mailqueue
     // We have to do 2 things:

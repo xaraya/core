@@ -26,7 +26,7 @@
 function mail_admin_main()
 {
     // Security
-    if (!xarSecurityCheck('EditMail')) return;
+    if (!xarSecurity::check('EditMail')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
@@ -35,7 +35,7 @@ function mail_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('mail','admin','overview');
     } else {
-        xarController::redirect(xarModURL('mail', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('mail', 'admin', 'modifyconfig'));
         return true;
     }
 } 

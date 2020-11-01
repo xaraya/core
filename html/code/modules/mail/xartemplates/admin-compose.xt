@@ -14,7 +14,7 @@
     <div class="xar-mod-body">
         <h2>Compose Message</h2>
         <div><span style="color: red">#$message#</span></div>
-        <form action="#xarModURL('mail','admin','sendtest')#" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('mail','admin','sendtest')#" method="post" onsubmit="return xar_base_formCheck(this, mail_fieldRequired, mail_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Message Details</legend>
                 <div class="xar-row">
@@ -105,7 +105,7 @@
                         <xar:data-input type="textarea" name="message" id="message" class="xar-form-textarealarge"/>
                     </div>
                 </div>
-                <xar:if condition="xarModIsAvailable('scheduler')">
+                <xar:if condition="xarMod::isAvailable('scheduler')">
                     <div class="xar-row">
                         <div class="xar-col">
                             <xar:var name="label">Test scheduled mails</xar:var>

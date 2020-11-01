@@ -35,7 +35,7 @@ function mail_adminapi_hookmailcreate(Array $args=array())
         if (!empty($extrainfo['module'])) {
             $modname = $extrainfo['module'];
         } else {
-            $modname = xarModGetName();
+            $modname = xarMod::getName();
         }
     }
 

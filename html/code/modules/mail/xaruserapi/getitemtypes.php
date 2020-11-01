@@ -49,9 +49,9 @@ function mail_userapi_getitemtypes(Array $args=array())
         if ($modid != $object['moduleid']) continue;
         // Should we skip the "internal" mail objects (i.e. the queue-definition)?
         // if ($object['objectid'] == $qdefObjectInfo['objectid'] ) continue;
-        $itemtypes[$object['itemtype']] = array('label' => xarVarPrepForDisplay($object['label']),
-                                                'title' => xarVarPrepForDisplay(xarML('View #(1)',$object['label'])),
-                                                'url'   => xarModURL('mail','user','view',array('itemtype' => $object['itemtype'])),
+        $itemtypes[$object['itemtype']] = array('label' => xarVar::prepForDisplay($object['label']),
+                                                'title' => xarVar::prepForDisplay(xarML('View #(1)',$object['label'])),
+                                                'url'   => xarController::URL('mail','user','view',array('itemtype' => $object['itemtype'])),
                                                 'info'  => $object
                                                );
     }

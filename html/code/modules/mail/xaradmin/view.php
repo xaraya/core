@@ -15,14 +15,14 @@
 function mail_admin_view(Array $args=array())
 {
      // Security
-    if (!xarSecurityCheck('AdminMail')) return;
+    if (!xarSecurity::check('AdminMail')) return;
      
     // Retrieve the object which holds our queue definition
     if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         return OfferCreate();
     } else {
         $data['qdef'] = $qdefInfo;
-        if(!xarVarFetch('itemid','int:1:',$data['itemid'],0,XARVAR_NOT_REQUIRED)) return;
+        if(!xarVar::fetch('itemid','int:1:',$data['itemid'],0,xarVar::NOT_REQUIRED)) return;
         return $data;
     }
 }
@@ -42,7 +42,7 @@ function mail_admin_view(Array $args=array())
  */
 function OfferCreate($qDef = null)
 {
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     $data['qdef_name'] = isset($qDef) ? $qDef : 'mailqueues';
     $data['qdef_method'] = 1;
     $data['qdef_create'] = array(array('id' => 1,'name' => xarML('Create new object with name')));

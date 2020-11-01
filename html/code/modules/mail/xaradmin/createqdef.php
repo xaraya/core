@@ -12,23 +12,23 @@
 function mail_admin_createqdef(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AdminMail')) return; 
+    if (!xarSecurity::check('AdminMail')) return; 
     
     // Are we legitimately here
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     // First determine whether we need to look at the name entered, or the object chosen
-    if(!xarVarFetch('qdef_choose','int:1',$qdef_choose, 0, XARVAR_NOT_REQUIRED)) return;
+    if(!xarVar::fetch('qdef_choose','int:1',$qdef_choose, 0, xarVar::NOT_REQUIRED)) return;
     switch($qdef_choose) {
     case 1:  // Name entered
         $qdefNew = true;
-        if(!xarVarFetch('qdef_name_enter','str:1:12',$qdefName)) return;
+        if(!xarVar::fetch('qdef_name_enter','str:1:12',$qdefName)) return;
         break;
     case 2:  // Object chosen
         $qdefNew = false;
-        if(!xarVarFetch('qdef_name_choose','int:1:',$qdefObjectId)) return;
+        if(!xarVar::fetch('qdef_name_choose','int:1:',$qdefObjectId)) return;
         if (empty($qdefObjectId)) return xarResponse::notFound();
         // Get the name of the object from dd
         $qdefObject = xarMod::apiFunc('dynamicdata','user','getobject',array('objectid' => $qdefObjectId));

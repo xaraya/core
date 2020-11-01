@@ -16,7 +16,7 @@
 function mail_adminapi_createq(Array $args=array())
 {
     // Security Check
-    if (!xarSecurityCheck('AdminMail')) return;
+    if (!xarSecurity::check('AdminMail')) return;
 
     extract($args);
 

@@ -16,11 +16,11 @@
 function mail_admin_template(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AdminMail')) return;
+    if (!xarSecurity::check('AdminMail')) return;
 
     extract($args);
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!isset($mailtype)) xarVarFetch('mailtype', 'str:1:100', $data['mailtype'], 'createhook', XARVAR_NOT_REQUIRED);
+    if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+    if (!isset($mailtype)) xarVar::fetch('mailtype', 'str:1:100', $data['mailtype'], 'createhook', xarVar::NOT_REQUIRED);
     else $data['mailtype'] = $mailtype;
 
     // Get the list of available templates
@@ -35,14 +35,14 @@ function mail_admin_template(Array $args=array())
                                            'template' => $data['mailtype']));
             $data['subject'] = $strings['subject'];
             $data['message'] = $strings['message'];
-            $data['authid'] = xarSecGenAuthKey();
+            $data['authid'] = xarSec::genAuthKey();
             break;
 
         case 'update':
-            if (!xarVarFetch('message', 'str:1:', $message)) return;
-            if (!xarVarFetch('subject', 'str:1:', $subject)) return;
+            if (!xarVar::fetch('message', 'str:1:', $message)) return;
+            if (!xarVar::fetch('subject', 'str:1:', $subject)) return;
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 
@@ -54,7 +54,7 @@ function mail_admin_template(Array $args=array())
                 return;
             }
 
-            xarController::redirect(xarModURL('mail', 'admin', 'template',
+            xarController::redirect(xarController::URL('mail', 'admin', 'template',
                                           array('mailtype' => $data['mailtype'])));
             return true;
             break;
@@ -77,7 +77,7 @@ function mail_admin_template(Array $args=array())
                         $link = $mytypes[$itemtype]['url'];
                     } else {
                         $type = xarML('type #(1)',$itemtype);
-                        $link = xarModURL($modname,'user','view',array('itemtype' => $itemtype));
+                        $link = xarController::URL($modname,'user','view',array('itemtype' => $itemtype));
                     }
                     $data['settings']["$modname.$itemtype"] = array('modname' => $modname,
                                                                     'type' => $type,
@@ -85,7 +85,7 @@ function mail_admin_template(Array $args=array())
                 }
             } else {
                 $type = '';
-                $link = xarModURL($modname,'user','main');
+                $link = xarController::URL($modname,'user','main');
                 $data['settings'][$modname] = array('modname' => $modname,
                                                     'type' => $type,
                                                     'link' => $link);

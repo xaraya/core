@@ -21,15 +21,15 @@
 function mail_admin_viewq(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AdminMail')) return;
+    if (!xarSecurity::check('AdminMail')) return;
 
     extract($args);
-    if (!xarVarFetch('action','str', $action, '')) return;
+    if (!xarVar::fetch('action','str', $action, '')) return;
 
     $data = array();
     if (!empty($action)) {
         // Confirm authorisation code
-        if (!xarSecConfirmAuthKey()) {
+        if (!xarSec::confirmAuthKey()) {
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
@@ -41,7 +41,7 @@ function mail_admin_viewq(Array $args=array())
                 break;
 
             case 'view':
-                if (!xarVarFetch('id','str', $id, '')) return;
+                if (!xarVar::fetch('id','str', $id, '')) return;
                 if (!empty($id)) {
                     // retrieve the mail data
                     $maildata = xarModVars::get('mail',$id);
@@ -53,7 +53,7 @@ function mail_admin_viewq(Array $args=array())
                 break;
 
             case 'delete':
-                if (!xarVarFetch('id','str', $id, '')) return;
+                if (!xarVar::fetch('id','str', $id, '')) return;
                 if (!empty($id)) {
                     // get the waiting queue
                     $serialqueue = xarModVars::get('mail','queue');
@@ -72,7 +72,7 @@ function mail_admin_viewq(Array $args=array())
                     $serialqueue = serialize($queue);
                     xarModVars::set('mail','queue',$serialqueue);
 
-                    xarController::redirect(xarModURL('mail', 'admin', 'viewq'));
+                    xarController::redirect(xarController::URL('mail', 'admin', 'viewq'));
                     return true;
                 }
                 break;
@@ -96,7 +96,7 @@ function mail_admin_viewq(Array $args=array())
     $data['items'] = $queue;
     // TODO: add a pager (once it exists in BL)
     $data['pager'] = '';
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
 
     // return the template variables defined in this template
     return $data;

@@ -114,7 +114,7 @@
                 </fieldset>
                 <fieldset>
                     <legend>Debugging</legend>
-                    If debug mode is active, exception messages are visible to the debug administrators, which are defined <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
+                    If debug mode is active, exception messages are visible to the debug administrators, which are defined <a href="#xarController::URL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
                     <div class="xar-row">
                         <div class="xar-col">
                             <xar:var name="label">Debug mode</xar:var>
@@ -473,7 +473,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:if condition="xarModIsAvailable('scheduler')">
+                            <xar:if condition="xarMod::isAvailable('scheduler')">
                                 <xar:data-input type="dropdown" name="interval" options="$intervals" value="$interval"/>
                             <xar:else />
                                 <xar:data-input type="hidden" name="interval" value=""/>
@@ -573,7 +573,7 @@
                     <legend>
                         Configure Mail Hooks
                     </legend>
-                    <xar:set name="url">#xarModURL('mail','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                    <xar:set name="url">#xarController::URL('mail','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
                     <xar:module main="false" module="modules" type="admin" func="hooks" curhook="mail" return_url="$url"/>
                 </fieldset>
             </xar:if>
