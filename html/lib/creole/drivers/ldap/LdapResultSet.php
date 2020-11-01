@@ -29,7 +29,7 @@ require_once 'creole/common/ResultSetCommon.php';
  * are performed.  We will assume that if the lmitSQL() operation failed that an
  * exception was thrown, and that OFFSET/LIMIT will never be emulated for Ldap.
  * 
- * @author    Sébastien Cramatte <scramatte@zensoluciones.com>
+ * @author    SÃ©bastien Cramatte <scramatte@zensoluciones.com>
  * @version   $Revision: 69 $
  * @package   creole.drivers.ldap
  */
