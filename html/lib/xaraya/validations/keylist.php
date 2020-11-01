@@ -65,13 +65,13 @@ class KeyListValidation extends ValueValidations
             foreach  ($subject as $key => $value) {
                 // Note: key is a copy, so it will not get updated by the validation routine.
                 // That is the behaviour we want: not to start updating key values.
-                $return = xarVarValidate($validation_key, $key);
+                $return = xarVar::validate($validation_key, $key);
 
                 // The value validation is optional. We may want to just validate the keys
                 // and disregard the values.
                 if (!empty($validation_value)) {
                     // subject[key] is a reference to the original value, so it can get updated.
-                    $return = $return & xarVarValidate($validation_value, $subject[$key]);
+                    $return = $return & xarVar::validate($validation_value, $subject[$key]);
                 }
 
                 if (!$return) {

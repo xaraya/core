@@ -66,7 +66,7 @@ class StrListValidation extends ValueValidations
             if ($count > 0 && !empty($validation)) {
                 for($i = 0; $i < $count; $i++) {
                     // Validate each element in turn.
-                    $return = $return & xarVarValidate($validation, $elements[$i]);
+                    $return = $return & xarVar::validate($validation, $elements[$i]);
                     if (!$return) {
                         // This one failed validation - don't try and validate any more.
                         break;

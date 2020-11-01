@@ -67,7 +67,7 @@ class xarAutoload extends xarObject
 
         // Load autoload functions for the modules
         if (method_exists('xarMod', 'apiFunc')) {
-            $activeMods = xarModAPIFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => xarMod::STATE_ACTIVE)));
         } else {
             return array();
         }

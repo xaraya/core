@@ -523,7 +523,7 @@ function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=fal
 //            // We've used up the current random
 //            // number, make up a new one
 //            srand((double)microtime()*1000000);
-//            xarSessionSetVar('rand', rand());
+//            xarSession::setVar('rand', rand());
 //
 //            return true;
 //        }
@@ -531,7 +531,7 @@ function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=fal
     if ((md5($partkey)) == $authid) {
         // Match - generate new random number for next key and leave happy
         srand((double)microtime()*1000000);
-        xarSessionSetVar('rand', rand());
+        xarSession::setVar('rand', rand());
         return true;
     }
     // Not found, assume invalid

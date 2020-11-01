@@ -44,7 +44,7 @@ class xarDispatcher extends xarObject
     public function isValidModule($module)
     {
         if (empty($module) || !is_string($module)) return false;
-        $available = xarModIsAvailable($module);
+        $available = xarMod::isAvailable($module);
         return $available;
     }
 

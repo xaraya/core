@@ -355,7 +355,7 @@ class xarPageCache extends xarObject
         // We delay checking this extra caching rule until now
         if (self::$cacheHookedOnly) {
             $modName = substr($cacheKey, 0, strpos($cacheKey, '-'));
-            if (!xarModIsHooked('xarcachemanager', $modName)) { return; }
+            if (!xarModHooks::isHooked('xarcachemanager', $modName)) { return; }
         }
 
         if (// the cache entry doesn't exist or has expired (no log here) AND

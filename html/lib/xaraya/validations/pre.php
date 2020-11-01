@@ -33,8 +33,8 @@
  * passthru:... - pass the remainder of the parameters on to further validation, which could
  * alias: val:... be any string validation type (e-mail, strings with min/max lengths, etc).
  *                Alias for passthru is 'val'.
- * html         - prep for HTML - xarVarPrepHTMLDisplay()
- * display      - prep for display - xarVarPrepForDisplay()
+ * html         - prep for HTML - xarVar::prepHTMLDisplay()
+ * display      - prep for display - xarVar::prepForDisplay()
  * store        - prep for store (uses the default database connection for escaping quotes)
  * field:name   - name of the form field; if a validation error occurs, an error message will
  *                be generated, with the field name quoted.
@@ -90,8 +90,8 @@ class PreValidation extends ValueValidations
                     case 'trim'   : $subject = trim($subject); break;
                     case 'upper'  : $subject = strtoupper($subject); break;
                     case 'lower'  : $subject = strtolower($subject); break;
-                    case 'html'   : $subject = xarVarPrepHTMLDisplay($subject); break;
-                    case 'display': $subject = xarVarPrepForDisplay($subject); break;
+                    case 'html'   : $subject = xarVar::prepHTMLDisplay($subject); break;
+                    case 'display': $subject = xarVar::prepForDisplay($subject); break;
                     case 'store'  :
                     case 'sql'    :
                         // @todo this doesnt belong here, creates database dependency too
@@ -194,7 +194,7 @@ class PreValidation extends ValueValidations
                     if (!empty($parameters)) {
                         // Roll up the remaining parameters.
                         $validation = implode(':', $parameters);
-                        $return = xarVarValidate($validation, $subject);
+                        $return = xarVar::validate($validation, $subject);
                     }
 
                     // The passthru validation consumes all further parameters, so clear

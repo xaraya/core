@@ -531,7 +531,7 @@ class xarMod extends xarObject implements IxarMod
         $modInfo['state'] = (int)$modInfo['state'];
 
         // Shortcut for os prepared directory
-        $modInfo['osdirectory'] = xarVarPrepForOS($modInfo['directory']);
+        $modInfo['osdirectory'] = xarVar::prepForOS($modInfo['directory']);
 
         switch($type) {
         case 'module':
@@ -667,7 +667,7 @@ class xarMod extends xarObject implements IxarMod
         $modBaseInfo['displaydescription'] = xarMod::getDisplayDescription($directory, $type);
         // Shortcut for os prepared directory
         // TODO: <marco> get rid of it since useless
-        $modBaseInfo['osdirectory'] = xarVarPrepForOS($directory);
+        $modBaseInfo['osdirectory'] = xarVar::prepForOS($directory);
         if ($type == 'theme') {
             try {
                 $modBaseInfo['configuration'] = unserialize($configuration);
@@ -813,9 +813,9 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modDir)) {
             $modBaseInfo = self::getBaseInfo($modName,$type);
             if (!isset($modBaseInfo)) return; // throw back
-            $modDir = xarVarPrepForOS($modBaseInfo['directory']);
+            $modDir = xarVar::prepForOS($modBaseInfo['directory']);
         } else {
-            $modDir = xarVarPrepForOS($modDir);
+            $modDir = xarVar::prepForOS($modDir);
         }
 
         // For base and modules, which don't have a xartables - CHECKME: why not again ?
@@ -1050,7 +1050,7 @@ class xarMod extends xarObject implements IxarMod
         }
         
         // Not the correct version - throw exception unless we are upgrading
-        if (!self::checkVersion($modName) && !xarVarGetCached('Upgrade', 'upgrading')) {
+        if (!self::checkVersion($modName) && !xarVar::getCached('Upgrade', 'upgrading')) {
             die('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
         }
         

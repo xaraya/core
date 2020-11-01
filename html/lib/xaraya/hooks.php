@@ -97,7 +97,7 @@ class xarHooks extends xarEvents
         $where[] = "eo.module_id = mo.regid";
         // only get observers of active modules
         $where[] = "mo.state = ?";
-        $bindvars[] = XARMOD_STATE_ACTIVE;  
+        $bindvars[] = xarMod::STATE_ACTIVE;
 
         // This excludes observers of one or more modules in order to avoid duplication
         // The common case is hooking DD to some itemtype that is already a dataobject:
