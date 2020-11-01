@@ -37,6 +37,9 @@ use GraphQL\Error\DebugFlag;
 use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
 
+/**
+ * See xardocs/graphql.txt for class structure
+ */
 class xarGraphQL extends xarObject
 {
     public static $type_cache = [];
@@ -51,6 +54,7 @@ class xarGraphQL extends xarObject
         'user'     => 'usertype',
         'serial'   => 'serialtype',
         'mixed'    => 'mixedtype',
+        'mutation' => 'mutationtype',
     ];
     public static $extra_types = [];
 
@@ -63,9 +67,11 @@ class xarGraphQL extends xarObject
             self::$extra_types = $extraTypes;
         }
         $queryType = self::get_type("query");
+        $mutationType = self::get_type("mutation");
 
         $schema = new Schema([
             'query' => $queryType,
+            'mutation' => $mutationType,
             'typeLoader' => function ($name) {
                 return self::get_type($name);
             }
@@ -89,6 +95,10 @@ class xarGraphQL extends xarObject
         $page_ext = '_page';
         if (substr($name, -strlen($page_ext)) === $page_ext) {
             return self::get_page_type(substr($name, 0, strlen($name) - strlen($page_ext)));
+        }
+        $input_ext = '_input';
+        if (substr($name, -strlen($input_ext)) === $input_ext) {
+            return self::get_input_type(substr($name, 0, strlen($name) - strlen($input_ext)));
         }
         // make Object Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
@@ -136,7 +146,41 @@ class xarGraphQL extends xarObject
             self::$type_cache[$page] = $type;
             return $type;
         }
+        // @todo get paginated Object Type for existing type classes?
         throw new Exception("Unknown graphql type: " . $page);
+    }
+
+    /**
+     * Get GraphQL Input Type by name
+     */
+    public static function get_input_type($name)
+    {
+        $name = strtolower($name);
+        $input = $name . '_input';
+        if (isset(self::$type_cache[$input])) {
+            return self::$type_cache[$input];
+        }
+        // make Object Type from BuildType for extra dynamicdata object types
+        if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
+            $clazz = self::get_type_class("buildtype");
+            $type = $clazz::make_input_type($name);
+            if (!$type) {
+                throw new Exception("Unknown graphql type: " . $input);
+            }
+            self::$type_cache[$input] = $type;
+            return $type;
+        }
+        if (!array_key_exists($name, self::$type_mapper)) {
+            throw new Exception("Unknown graphql type: " . $input);
+        }
+        $clazz = self::get_type_class(self::$type_mapper[$name]);
+        // get input type from existing type class
+        $type = $clazz::_xar_get_input_type();
+        if (!$type) {
+            throw new Exception("Unknown graphql type: " . $input);
+        }
+        self::$type_cache[$input] = $type;
+        return $type;
     }
 
     /**
@@ -158,6 +202,7 @@ class xarGraphQL extends xarObject
             'usertype' => xarGraphQLUserType::class,
             'serialtype' => xarGraphQLSerialType::class,
             'mixedtype' => xarGraphQLMixedType::class,
+            'mutationtype' => xarGraphQLMutationType::class,
         ];
         if (!array_key_exists($type, $class_mapper) && array_key_exists($type, self::$type_mapper)) {
             $type = self::$type_mapper[$type];

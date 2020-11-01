@@ -48,6 +48,7 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
             'id' => Type::nonNull(Type::id()),
             'name' => Type::string(),
             'age' => Type::int(),
+            'location' => Type::string(),
         ];
         return $fields;
     }

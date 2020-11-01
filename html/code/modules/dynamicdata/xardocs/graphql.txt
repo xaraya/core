@@ -1,0 +1,101 @@
+gql.php
+ |- graphql::get_schema
+ | |
+ | #- get_type
+ |   |
+ |   |- basetype::__construct
+ |   | |
+ |   | #- _xar_get_object_fields (overridden in child classes)
+ |   |
+ |   |- buildtype::make_type
+ |   | |
+ |   | |- get_object_fields - DataObjectMaster::getObject geProperties()
+ |   | | |
+ |   | | #- get_deferred_field
+ |   | |
+ |   | #- object_field_resolver
+ |   |
+ |   |- querytype::__construct
+ |   | |
+ |   | #- get_query_fields
+ |   |   |
+ |   |   |- add_query_field
+ |   |   | |
+ |   |   | #- basetype::_xar_get_query_field
+ |   |   |   |
+ |   |   |   |- _xar_get_page_query @todo
+ |   |   |   | ...
+ |   |   |   |- _xar_get_list_query
+ |   |   |   | |
+ |   |   |   | #- _xar_list_query_resolver - DataObjectMaster::getObjectList
+ |   |   |   |
+ |   |   |   #- _xar_get_item_query
+ |   |   |     |
+ |   |   |     #- _xar_item_query_resolver - DataObjectMaster::getObject
+ |   |   |
+ |   |   #- buildtype::get_query_fields
+ |   |     |
+ |   |     |- get_page_query
+ |   |     | |
+ |   |     | |- graphql::get_page_type
+ |   |     | | |
+ |   |     | | |- basetype::@todo
+ |   |     | | |
+ |   |     | | #- buildtype::make_page_type
+ |   |     | |
+ |   |     | #- page_query_resolver
+ |   |     |
+ |   |     |- get_list_query
+ |   |     | |
+ |   |     | #- list_query_resolver - DataObjectMaster::getObjectList getItems()
+ |   |     |
+ |   |     #- get_item_query
+ |   |       |
+ |   |       #- item_query_resolver - DataObjectMaster::getObject getItem()
+ |   |
+ |   #- mutationtype::__construct
+ |     |
+ |     #- get_mutation_fields
+ |       |
+ |       |- add_mutation_field
+ |       | |
+ |       | #- basetype::_xar_get_mutation_field
+ |       |   |
+ |       |   |- _xar_get_create_mutation
+ |       |   | |
+ |       |   | |- graphql::get_input_type
+ |       |   | | |
+ |       |   | | |- basetype::_xar_get_input_type
+ |       |   | | | |
+ |       |   | | | #- _xar_get_object_fields (overridden in child classes)
+ |       |   | | |
+ |       |   | | #- buildtype::make_input_type
+ |       |   | |   |
+ |       |   | |   #- get_object_fields - DataObjectMaster::getObject geProperties()
+ |       |   | |
+ |       |   | #- _xar_create_mutation_resolver - DataObjectMaster::getObject createItem()
+ |       |   |
+ |       |   |- _xar_get_update_mutation
+ |       |   | |
+ |       |   | #- _xar_update_mutation_resolver - DataObjectMaster::getObject updateItem()
+ |       |   |
+ |       |   |- _xar_get_delete_mutation
+ |       |     |
+ |       |     #- _xar_delete_mutation_resolver - DataObjectMaster::getObject deleteItem()
+ |       |
+ |       #- buildtype::get_mutation_fields @todo
+ |         |
+ |         ...
+ |
+ #- build_schema
+   |
+   #- type_config_decorator
+      |
+      |- buildtype::object_query_resolver
+      | |
+      | |- list_query_resolver - DataObjectMaster::getObjectList getItems()
+      | |
+      | #- item_query_resolver - DataObjectMaster::getObject getItem()
+      |
+      #- buildtype::object_field_resolver
+

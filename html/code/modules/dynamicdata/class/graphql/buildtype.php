@@ -12,6 +12,7 @@
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Deferred;
 
 /**
@@ -61,6 +62,32 @@ class xarGraphQLBuildType
         ];
         $newType = new ObjectType([
             'name' => $page,
+            'description' => $description,
+            'fields' => $fields,
+            //'resolveField' => self::object_field_resolver($type, $object),
+        ]);
+        return $newType;
+    }
+
+    /**
+     * Make a generic Input Object Type for create/update mutations
+     */
+    public static function make_input_type($name, $type = null, $object = null, $list = null, $item = null)
+    {
+        // name=Property, type=property, object=properties, list=properties, item=property
+        list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
+        $input = $name . '_Input';
+        $description = "$input: input $type type for $object objects";
+        $fields = self::get_object_fields($object);
+        if (!empty($fields['id'])) {
+            //unset($fields['id']);
+            $fields['id'] = Type::id();  // allow null for create here
+        }
+        if (!empty($fields['keys'])) {
+            unset($fields['keys']);
+        }
+        $newType = new InputObjectType([
+            'name' => $input,
             'description' => $description,
             'fields' => $fields,
             //'resolveField' => self::object_field_resolver($type, $object),
@@ -481,4 +508,18 @@ class xarGraphQLBuildType
         };
         return $resolver;
     }
+
+    /**
+     * Get the root mutation fields for this object for the GraphQL Mutation type (create..., update..., delete...)
+     */
+    public static function get_mutation_fields($name, $type = null, $object = null, $list = null, $item = null)
+    {
+        // name=Property, type=property, object=properties, list=properties, item=property
+        list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
+        $fields = [
+            //self::get_item_query($item, $type, $object),
+        ];
+        return $fields;
+    }
+
 }
