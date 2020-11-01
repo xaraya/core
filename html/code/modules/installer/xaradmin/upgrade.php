@@ -14,7 +14,7 @@
  */
 function installer_admin_upgrade()
 {    
-    if(!xarVarFetch('phase','int', $data['phase'], 1, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('phase','int', $data['phase'], 1, xarVar::DONT_SET)) {return;}
 
     // Version information
     $fileversion = xarCore::VERSION_NUM;
@@ -67,8 +67,8 @@ function installer_admin_upgrade()
         
         // Get the password from the last page, either entered by the user (and needs to be encrypted)
         // or stored on a previous page
-        if(!xarVarFetch('password','str', $data['password'], '', XARVAR_NOT_REQUIRED)) {return;}
-        if(!xarVarFetch('pass','str', $pass, '', XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVar::fetch('password','str', $data['password'], '', xarVar::NOT_REQUIRED)) {return;}
+        if(!xarVar::fetch('pass','str', $pass, '', xarVar::NOT_REQUIRED)) {return;}
 
         // Encrypt if needed using the encryption scheme of the roles module
         if (!empty($pass)) {
@@ -87,7 +87,7 @@ function installer_admin_upgrade()
     
     if ($data['phase'] == 1) {
         $data['active_step'] = 1;
-        if(!xarVarFetch('error','int', $data['error'], 0, XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVar::fetch('error','int', $data['error'], 0, xarVar::NOT_REQUIRED)) {return;}
 
     } elseif ($data['phase'] == 2) {
         $data['active_step'] = 2;

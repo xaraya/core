@@ -101,7 +101,7 @@ function installer_adminapi_initialise(Array $args=array())
         throw new EmptyParameterException('directory or initfunc');
     }
 
-    $osDirectory = xarVarPrepForOS($directory);
+    $osDirectory = xarVar::prepForOS($directory);
     $modInitFile = sys::code() . 'modules/'. $osDirectory. '/xarinit.php';
 
 

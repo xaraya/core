@@ -8,7 +8,7 @@
     </div>
     <div id="main_left">
         <h1>Administrator Account Creation</h1>
-        <form action="#xarModURL('installer','admin','create_administrator')#" method="post">
+        <form action="#xarController::URL('installer','admin','create_administrator')#" method="post">
             <p>
                 Please enter the settings for your Administrator account.
                 This information is necessary in order to properly secure your Xaraya installation.

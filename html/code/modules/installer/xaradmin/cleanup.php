@@ -21,12 +21,12 @@
 function installer_admin_cleanup()
 {
     if (!file_exists('install.php')) { throw new Exception('Already installed');}
-    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
+    xarVar::fetch('install_language','str::',$install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
     xarTpl::setThemeName('installer');
 
-    xarVarFetch('remove', 'checkbox', $remove, false, XARVAR_NOT_REQUIRED);
-    xarVarFetch('rename', 'checkbox', $rename, false, XARVAR_NOT_REQUIRED);
-    xarVarFetch('newname', 'str', $newname, '', XARVAR_NOT_REQUIRED);
+    xarVar::fetch('remove', 'checkbox', $remove, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('rename', 'checkbox', $rename, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('newname', 'str', $newname, '', xarVar::NOT_REQUIRED);
 
     if ($remove) {
         try {
@@ -284,7 +284,7 @@ if (is_file("upgrade.php")) echo "<div>Please delete upgrade.php from your web r
     $data['language']    = $install_language;
     $data['phase'] = 10;
     $data['phase_label'] = xarML('Step Ten');
-    $data['finalurl'] = xarModURL('installer', 'admin', 'finish');
+    $data['finalurl'] = xarController::URL('installer', 'admin', 'finish');
 
     return $data;
 }

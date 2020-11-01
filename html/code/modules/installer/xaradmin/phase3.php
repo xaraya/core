@@ -27,8 +27,8 @@
 function installer_admin_phase3()
 {
     if (!file_exists('install.php')) { throw new Exception('Already installed');}
-    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-    if (!xarVarFetch('agree','regexp:(agree|disagree)',$agree)) return;
+    xarVar::fetch('install_language','str::',$install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
+    if (!xarVar::fetch('agree','regexp:(agree|disagree)',$agree)) return;
 
     $retry=1;
 

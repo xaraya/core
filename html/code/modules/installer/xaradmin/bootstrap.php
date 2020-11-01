@@ -25,8 +25,8 @@
 function installer_admin_bootstrap()
 {
     if (!file_exists('install.php')) { throw new Exception('Already installed');}
-    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-    xarVarSetCached('installer','installing', true);
+    xarVar::fetch('install_language','str::',$install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
+    xarVar::setCached('installer','installing', true);
 
 # --------------------------------------------------------
 # Create DD configuration and sample objects
@@ -121,9 +121,9 @@ function installer_admin_bootstrap()
     $themelist = array('print','rss','default');
     foreach ($themelist as $theme) {
         // Set state to inactive
-        $regid = xarThemeGetIDFromName($theme);
+        $regid = xarTheme::getIDFromName($theme);
         if (isset($regid)) {
-            if (!xarMod::apiFunc('themes','admin','setstate', array('regid'=> $regid,'state'=> XARTHEME_STATE_INACTIVE))){
+            if (!xarMod::apiFunc('themes','admin','setstate', array('regid'=> $regid,'state'=> xarTheme::STATE_INACTIVE))){
                 throw new Exception("Setting state of theme with regid: $regid failed");
             }
             // Activate the theme
@@ -134,7 +134,7 @@ function installer_admin_bootstrap()
         }
     }
 
-    xarController::redirect(xarModURL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
+    xarController::redirect(xarController::URL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
     return true;
 }
 

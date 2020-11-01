@@ -34,19 +34,19 @@
 function installer_admin_phase5()
 {
     if (!file_exists('install.php')) { throw new Exception('Already installed');}
-    xarVarFetch('install_language','str::',$install_language, 'en_US.utf-8', XARVAR_NOT_REQUIRED);
-    xarVarSetCached('installer','installing', true);
+    xarVar::fetch('install_language','str::',$install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
+    xarVar::setCached('installer','installing', true);
 
     // Get arguments
-    if (!xarVarFetch('install_database_host','pre:trim:passthru:str',$dbHost)) return;
-    if (!xarVarFetch('install_database_name','pre:trim:passthru:str',$dbName,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_username','pre:trim:passthru:str',$dbUname,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_password','pre:trim:passthru:str',$dbPass,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_prefix','pre:trim:passthru:str',$dbPrefix,'xar',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_charset','pre:trim:passthru:str',$dbCharset,'utf8',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_database_type','str:1:',$dbType)) return;
-    if (!xarVarFetch('install_create_database','checkbox',$createDB,false,XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirmDB','bool',$confirmDB,false,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('install_database_host','pre:trim:passthru:str',$dbHost)) return;
+    if (!xarVar::fetch('install_database_name','pre:trim:passthru:str',$dbName,'',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('install_database_username','pre:trim:passthru:str',$dbUname,'',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('install_database_password','pre:trim:passthru:str',$dbPass,'',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('install_database_prefix','pre:trim:passthru:str',$dbPrefix,'xar',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('install_database_charset','pre:trim:passthru:str',$dbCharset,'utf8',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('install_database_type','str:1:',$dbType)) return;
+    if (!xarVar::fetch('install_create_database','checkbox',$createDB,false,xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirmDB','bool',$confirmDB,false,xarVar::NOT_REQUIRED)) return;
 
     if ($dbName == '') {
         return xarTpl::module('installer','admin','errors',array('layout' => 'no_database'));
@@ -245,7 +245,7 @@ function installer_admin_phase5()
     }
 
     // install the security stuff here, but disable the registerMask and
-    // and xarSecurityCheck functions until we've finished the installation process
+    // and xarSecurity::check functions until we've finished the installation process
     sys::import('xaraya.security');
     sys::import('xaraya.modules');
     sys::import('xaraya.hooks');
@@ -262,7 +262,7 @@ function installer_admin_phase5()
     // 2. Create some variables we'll need in installing modules 
     sys::import('xaraya.variables');
     $a = array();
-    xarVar_init($a);
+    xarVar::init($a);
     xarConfigVars::set(null, 'System.ModuleAliases',array());
     xarConfigVars::set(null, 'Site.MLS.DefaultLocale', $install_language);
     xarConfigVars::set(null, 'Site.BL.DocType', 'xhtml1-strict');

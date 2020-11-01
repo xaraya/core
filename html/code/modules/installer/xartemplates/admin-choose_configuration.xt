@@ -8,7 +8,7 @@
     </div>
     <div id="main_left">
         <h1>Choose a Configuration</h1>
-        <form action="#xarModURL('installer','admin','confirm_configuration')#" method="post">
+        <form action="#xarController::URL('installer','admin','confirm_configuration')#" method="post">
             <h3>Available Configurations</h3>
             <xar:if condition="isset($warning)">
                 #$warning# 

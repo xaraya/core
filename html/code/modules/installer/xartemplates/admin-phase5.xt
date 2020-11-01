@@ -4,7 +4,7 @@
     <link rel='icon' href="favicon.ico"/>
     <xar:set name="active_step">5</xar:set>
     <xar:if condition="$confirmDB">
-        <meta http-equiv="refresh" content="1;URL=#xarModURL('installer','admin','bootstrap',array('install_language'=>$language,))#"/>
+        <meta http-equiv="refresh" content="1;URL=#xarController::URL('installer','admin','bootstrap',array('install_language'=>$language,))#"/>
         <div id="main_right">
             <xar:template file="status"/>
         </div>
@@ -16,7 +16,7 @@
                 <p>Thank you for your patience.</p>
                 <p>
                     If your browser does not automatically redirect, please click to 
-                    <a href="#xarModURL('installer','admin','bootstrap',array('install_language'=>$language,))#">
+                    <a href="#xarController::URL('installer','admin','bootstrap',array('install_language'=>$language,))#">
                         manually continue to the next stage
                     </a>.
                 </p>
