@@ -26,10 +26,10 @@ function modules_admin_modify(Array $args=array())
     
     extract($args);
 
-    // xarVarFetch does validation if not explicitly set to be not required
-    if (!xarVarFetch('id', 'int:1', $id, 0, XARVAR_NOT_REQUIRED)) return; 
+    // xarVar::fetch does validation if not explicitly set to be not required
+    if (!xarVar::fetch('id', 'int:1', $id, 0, xarVar::NOT_REQUIRED)) return; 
     if (empty($id)) return xarResponse::notFound();
-    xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET);
+    xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET);
 
     $modInfo = xarMod::getInfo($id);
     if (!isset($modInfo)) return;
@@ -38,7 +38,7 @@ function modules_admin_modify(Array $args=array())
     $displayName = $modInfo['displayname'];
 
     // Security
-    if(!xarSecurityCheck('AdminModules',0,'All',"$modname::$id")) return;
+    if(!xarSecurity::check('AdminModules',0,'All',"$modname::$id")) return;
 
     // Get the list of all item types for this module (if any)
     try {
@@ -130,7 +130,7 @@ function modules_admin_modify(Array $args=array())
     $data['observers'] = $observers;
     $data['module'] = $modname;
     $data['displayname'] = $displayName;
-    $data['authid'] = xarSecGenAuthKey('modules');
+    $data['authid'] = xarSec::genAuthKey('modules');
 
     if (!empty($return_url)) {
         $data['return_url'] = $return_url;

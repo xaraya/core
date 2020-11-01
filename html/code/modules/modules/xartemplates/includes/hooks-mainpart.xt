@@ -59,7 +59,7 @@
     </xar:if>
 
     <xar:if condition="!empty($cats)">
-        <form action="#xarModURL('modules','admin','updatehooks')#" method="post">
+        <form action="#xarController::URL('modules','admin','updatehooks')#" method="post">
             <div>
                 <xar:foreach in="$cats" key="$cat" value="$subjects">
 

@@ -22,7 +22,7 @@
 function modules_admin_confirmlogout()
 {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
     // Template does it all
     return array();    

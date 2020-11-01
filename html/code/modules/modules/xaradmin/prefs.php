@@ -18,7 +18,7 @@
 function modules_admin_prefs()
 {
     // Security
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurity::check('AdminModules')) return;
     
     $data = array();
     

@@ -25,10 +25,10 @@
 function modules_admin_modifyconfig()
 {
     // Security
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurity::check('AdminModules')) return;
     
-    if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if(!xarVarFetch('disableoverview','checkbox', $data['disableoverview'], (bool)xarModVars::get('modules', 'disableoverview'), XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase',        'str:1:100', $phase,       'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+    if(!xarVar::fetch('disableoverview','checkbox', $data['disableoverview'], (bool)xarModVars::get('modules', 'disableoverview'), xarVar::NOT_REQUIRED)) return;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'modules'));
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
@@ -40,7 +40,7 @@ function modules_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
             $isvalid = $data['module_settings']->checkInput();

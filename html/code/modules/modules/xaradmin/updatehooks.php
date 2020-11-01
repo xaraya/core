@@ -17,13 +17,13 @@
 function modules_admin_updatehooks()
 {
     // Security
-    if(!xarSecurityCheck('ManageModules')) {return;}
+    if(!xarSecurity::check('ManageModules')) {return;}
 
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
     // Curhook contains module name
-    if (!xarVarFetch('curhook', 'str:1:', $curhook)) {return;}
+    if (!xarVar::fetch('curhook', 'str:1:', $curhook)) {return;}
 
     $regId = xarMod::getRegID($curhook);
     if (!isset($curhook) || !isset($regId)) {
@@ -31,7 +31,7 @@ function modules_admin_updatehooks()
         throw new Exception($msg);
     }
 
-    if (!xarVarFetch('subjects', 'array', $subjects, null, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('subjects', 'array', $subjects, null, xarVar::NOT_REQUIRED)) return;
   
     
 
@@ -45,11 +45,11 @@ function modules_admin_updatehooks()
         if(!xarMod::apiFunc('modules', 'admin', 'updatehooks', $data)) return;
     }
 
-    if (!xarVarFetch('return_url', 'isset', $return_url, '', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('return_url', 'isset', $return_url, '', xarVar::NOT_REQUIRED)) {return;}
     if (!empty($return_url)) {
         xarController::redirect($return_url);
     } else {
-        xarController::redirect(xarModURL('modules', 'admin', 'hooks',
+        xarController::redirect(xarController::URL('modules', 'admin', 'hooks',
                                       array('hook' => $curhook)));
     }
     return true;

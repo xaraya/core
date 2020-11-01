@@ -23,7 +23,7 @@
 function modules_adminapi_disablehooks(Array $args=array())
 {
     // Security Check (called by other modules, so we can't use one this here)
-    //    if(!xarSecurityCheck('ManageModules')) return;
+    //    if(!xarSecurity::check('ManageModules')) return;
 
     // Get arguments from argument array
     extract($args);

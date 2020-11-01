@@ -17,7 +17,7 @@
  */
 function modules_user_errors($args)
 {
-    if(!xarSecurityCheck('EditModules')) return;
+    if(!xarSecurity::check('EditModules')) return;
     $data['layout'] = 'general';
     $data['message'] = urldecode($args['message']);
     return $data;

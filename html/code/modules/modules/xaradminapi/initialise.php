@@ -55,7 +55,7 @@ function modules_adminapi_initialise(Array $args=array())
                         'admin',
                         'setstate',
                         array('regid' => $regid,
-                              'state' => XARMOD_STATE_INACTIVE));
+                              'state' => xarMod::STATE_INACTIVE));
 
     // debug($set);
     if (!isset($set)) {

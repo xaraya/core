@@ -20,7 +20,7 @@ function modules_adminapi_gethooklist(Array $args=array())
 {
     // Security Check
     // @CHECKME: is this info not useful to other modules?
-    if(!xarSecurityCheck('ManageModules')) return;
+    if(!xarSecurity::check('ManageModules')) return;
 
     // Get arguments from argument array
     extract($args);

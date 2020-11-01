@@ -21,7 +21,7 @@
 function modules_adminapi_executeinitfunction(Array $args=array())
 {
     // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurity::check('AdminModules')) return;
 
     // Argument check
     if (!isset($args['regid'])) throw new EmptyParameterException('regid');
@@ -39,7 +39,7 @@ function modules_adminapi_executeinitfunction(Array $args=array())
     }
 
     // Get module database info, they might be needed in the function to be called
-    xarMod__loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
+    xarMod::loadDbInfo($modInfo['name'], $modInfo['osdirectory']);
 
     $xarinitfile = '';
     if (file_exists(sys::code() . 'modules/'. $modInfo['osdirectory'] .'/xarinit.php')) {

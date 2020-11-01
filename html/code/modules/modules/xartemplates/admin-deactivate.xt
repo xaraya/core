@@ -12,7 +12,7 @@
                 </xar:foreach>
             </ul>
         </xar:if>
-        <form action="#xarModURL('modules','admin','deactivate')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('modules','admin','deactivate')#" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-form-actions">
                 <input type="hidden" name="id" id="id" value="#$id#"/>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>

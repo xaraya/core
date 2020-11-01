@@ -5,7 +5,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Toolbox</h2>
-        <form method="post" action="#xarModURL('modules','admin','tools')#">
+        <form method="post" action="#xarController::URL('modules','admin','tools')#">
             <p>Module Information Generator/Validator</p>
             <p>
                 Although the Xaraya modules system still recognises the 'old style' modinfo from xarversion.php, we strongly encourage all module developers to re-generate their module's information to comply with the 'new' XML format.

@@ -25,17 +25,17 @@
 function modules_admin_activate()
 {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
     // Security and sanity checks
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
-    if (!xarVarFetch('return_url', 'pre:trim:str:1:',
-        $return_url, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
+        $return_url, '', xarVar::NOT_REQUIRED)) return;
         
     // Activate
     $activated = xarMod::apiFunc('modules',
@@ -49,7 +49,7 @@ function modules_admin_activate()
     // set the target location (anchor) to go to within the page
     $target=$minfo['name'];
     if (empty($return_url))
-        $return_url = xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
+        $return_url = xarController::URL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
         
     xarController::redirect($return_url);
     return true;

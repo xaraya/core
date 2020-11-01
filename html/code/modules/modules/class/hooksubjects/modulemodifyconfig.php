@@ -23,7 +23,7 @@
  * New way of calling hooks
  * $data['hooks'] = xarHooks::notify('ModuleModifyconfig', $item);
  * Legacy way, supported for now, deprecated in future 
- * $data['hooks'] = xarModCallHooks('module', 'modifyconfig', 'modulename', $item); 
+ * $data['hooks'] = xarModHooks::call('module', 'modifyconfig', 'modulename', $item); 
  * Output in modifyconfig template as
  * <xar:foreach in="$hooks" key="$hookmod" value="$hookoutput">
  *     #$hookoutput#

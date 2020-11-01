@@ -19,7 +19,7 @@ function modules_adminapi_regenerate()
 {
     // Security Check
     // need to specify the module because this function is called by the installer module
-    if(!xarSecurityCheck('AdminModules', 1, 'All', 'All', 'modules')) {return;}
+    if(!xarSecurity::check('AdminModules', 1, 'All', 'All', 'modules')) {return;}
 
     //Finds and updates missing modules
     sys::import('modules.modules.class.installer');
@@ -89,7 +89,7 @@ function modules_adminapi_regenerate()
             $set = xarMod::apiFunc('modules', 'admin', 'setstate',
                                  array(
                                        'regid' => $modinfo['regid'],
-                                       'state' => XARMOD_STATE_UNINITIALISED
+                                       'state' => xarMod::STATE_UNINITIALISED
                                        )
                                  );
             if (!isset($set)) {return;}
@@ -116,7 +116,7 @@ function modules_adminapi_regenerate()
                             'modules', 'admin', 'upgrade',
                             array(
                                 'regid' => $modinfo['regid'],
-                                'state' => XARMOD_STATE_INACTIVE
+                                'state' => xarMod::STATE_INACTIVE
                             )
                         );
 
@@ -124,7 +124,7 @@ function modules_adminapi_regenerate()
                             'modules', 'admin', 'activate',
                             array(
                                 'regid' => $modinfo['regid'],
-                                'state' => XARMOD_STATE_ACTIVE
+                                'state' => xarMod::STATE_ACTIVE
                             )
                         );
                     }
@@ -132,9 +132,9 @@ function modules_adminapi_regenerate()
                     // Automatically update the module version for uninstalled modules or
                     // where the version number is equivalent (but could be a different format)
                     // or if the module is a core module.
-                    if ($dbModules[$name]['state'] == XARMOD_STATE_UNINITIALISED ||
-                        $dbModules[$name]['state'] == XARMOD_STATE_MISSING_FROM_UNINITIALISED ||
-                        $dbModules[$name]['state'] == XARMOD_STATE_ERROR_UNINITIALISED ||
+                    if ($dbModules[$name]['state'] == xarMod::STATE_UNINITIALISED ||
+                        $dbModules[$name]['state'] == xarMod::STATE_MISSING_FROM_UNINITIALISED ||
+                        $dbModules[$name]['state'] == xarMod::STATE_ERROR_UNINITIALISED ||
                         $vercompare == 0 || $is_core)
                     {
 
@@ -149,12 +149,12 @@ function modules_adminapi_regenerate()
                             // Get module ID
                             $regId = $modinfo['regid'];
 
-                            $newstate = XARMOD_STATE_INACTIVE;
+                            $newstate = xarMod::STATE_INACTIVE;
                             xarMod::apiFunc('modules','admin','upgrade',
                                             array(    'regid'    => $regId,
                                                     'state'    => $newstate));
 
-                            $newstate = XARMOD_STATE_ACTIVE;
+                            $newstate = xarMod::STATE_ACTIVE;
                             xarMod::apiFunc('modules','admin','activate',
                                             array(    'regid'    => $regId,
                                                     'state'    => $newstate));
@@ -169,7 +169,7 @@ function modules_adminapi_regenerate()
                             'modules', 'admin', 'setstate',
                             array(
                                 'regid' => $modinfo['regid'],
-                                'state' => XARMOD_STATE_UPGRADED
+                                'state' => xarMod::STATE_UPGRADED
                             )
                         );
 
@@ -184,36 +184,36 @@ function modules_adminapi_regenerate()
                     // than the db version.
 
                     // Check if error state is already set
-                    if (($dbModules[$name]['state'] == XARMOD_STATE_ERROR_UNINITIALISED) ||
-                        ($dbModules[$name]['state'] == XARMOD_STATE_ERROR_INACTIVE) ||
-                        ($dbModules[$name]['state'] == XARMOD_STATE_ERROR_ACTIVE) ||
-                        ($dbModules[$name]['state'] == XARMOD_STATE_ERROR_UPGRADED)) {
+                    if (($dbModules[$name]['state'] == xarMod::STATE_ERROR_UNINITIALISED) ||
+                        ($dbModules[$name]['state'] == xarMod::STATE_ERROR_INACTIVE) ||
+                        ($dbModules[$name]['state'] == xarMod::STATE_ERROR_ACTIVE) ||
+                        ($dbModules[$name]['state'] == xarMod::STATE_ERROR_UPGRADED)) {
                         // Continue to next module
                         continue;
                     }
 
                     // Clear cache to make sure we set the correct states
-                    //if (xarVarIsCached('Mod.Infos', $modinfo['regid'])) {
-                    //    xarVarDelCached('Mod.Infos', $modinfo['regid']);
+                    //if (xarVar::isCached('Mod.Infos', $modinfo['regid'])) {
+                    //    xarVar::delCached('Mod.Infos', $modinfo['regid']);
                     //}
 
                     // Set error state
-                    $modstate = XARMOD_STATE_ANY;
+                    $modstate = xarMod::STATE_ANY;
                     switch ($dbModules[$name]['state']) {
-                        case XARMOD_STATE_UNINITIALISED:
-                            $modstate = XARMOD_STATE_ERROR_UNINITIALISED;
+                        case xarMod::STATE_UNINITIALISED:
+                            $modstate = xarMod::STATE_ERROR_UNINITIALISED;
                             break;
-                        case XARMOD_STATE_INACTIVE:
-                            $modstate = XARMOD_STATE_ERROR_INACTIVE;
+                        case xarMod::STATE_INACTIVE:
+                            $modstate = xarMod::STATE_ERROR_INACTIVE;
                             break;
-                        case XARMOD_STATE_ACTIVE:
-                            $modstate = XARMOD_STATE_ERROR_ACTIVE;
+                        case xarMod::STATE_ACTIVE:
+                            $modstate = xarMod::STATE_ERROR_ACTIVE;
                             break;
-                        case XARMOD_STATE_UPGRADED:
-                            $modstate = XARMOD_STATE_ERROR_UPGRADED;
+                        case xarMod::STATE_UPGRADED:
+                            $modstate = xarMod::STATE_ERROR_UPGRADED;
                             break;
                     }
-                    if ($modstate != XARMOD_STATE_ANY) {
+                    if ($modstate != xarMod::STATE_ANY) {
                         $set = xarMod::apiFunc(
                             'modules', 'admin', 'setstate',
                             array(
@@ -230,26 +230,26 @@ function modules_adminapi_regenerate()
             }
 
             // From here on we have something in the file system or the db
-            $newstate = XARMOD_STATE_ANY;
+            $newstate = xarMod::STATE_ANY;
             switch ($dbModules[$name]['state']) {
-                case XARMOD_STATE_MISSING_FROM_UNINITIALISED:
-                case XARMOD_STATE_ERROR_UNINITIALISED:
-                    $newstate = XARMOD_STATE_UNINITIALISED;
+                case xarMod::STATE_MISSING_FROM_UNINITIALISED:
+                case xarMod::STATE_ERROR_UNINITIALISED:
+                    $newstate = xarMod::STATE_UNINITIALISED;
                     break;
-                case XARMOD_STATE_MISSING_FROM_INACTIVE:
-                case XARMOD_STATE_ERROR_INACTIVE:
-                    $newstate = XARMOD_STATE_INACTIVE;
+                case xarMod::STATE_MISSING_FROM_INACTIVE:
+                case xarMod::STATE_ERROR_INACTIVE:
+                    $newstate = xarMod::STATE_INACTIVE;
                     break;
-                case XARMOD_STATE_MISSING_FROM_ACTIVE:
-                case XARMOD_STATE_ERROR_ACTIVE:
-                    $newstate = XARMOD_STATE_ACTIVE;
+                case xarMod::STATE_MISSING_FROM_ACTIVE:
+                case xarMod::STATE_ERROR_ACTIVE:
+                    $newstate = xarMod::STATE_ACTIVE;
                     break;
-                case XARMOD_STATE_MISSING_FROM_UPGRADED:
-                case XARMOD_STATE_ERROR_UPGRADED:
-                    $newstate = XARMOD_STATE_UPGRADED;
+                case xarMod::STATE_MISSING_FROM_UPGRADED:
+                case xarMod::STATE_ERROR_UPGRADED:
+                    $newstate = xarMod::STATE_UPGRADED;
                     break;
             }
-            if ($newstate != XARMOD_STATE_ANY) {
+            if ($newstate != xarMod::STATE_ANY) {
                 $set = xarMod::apiFunc(
                     'modules', 'admin', 'setstate',
                     array(

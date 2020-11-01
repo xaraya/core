@@ -27,11 +27,11 @@
  * The same thing is applied to the AdminCapable property.
  * Permitted values for Class and Category are the ones defined in RFC 13.
  *
- * Permitted values for State are XARMOD_STATE_ANY, XARMOD_STATE_UNINITIALISED,
- * XARMOD_STATE_INACTIVE, XARMOD_STATE_ACTIVE, XARMOD_STATE_MISSING,
- * XARMOD_STATE_UPGRADED, XARMOD_STATE_INSTALLED
- * The XARMOD_STATE_ANY means that any state is valid.
- * The default value of State is XARMOD_STATE_ACTIVE.
+ * Permitted values for State are xarMod::STATE_ANY, xarMod::STATE_UNINITIALISED,
+ * xarMod::STATE_INACTIVE, xarMod::STATE_ACTIVE, XARMOD_STATE_MISSING,
+ * xarMod::STATE_UPGRADED, xarMod::STATE_INSTALLED
+ * The xarMod::STATE_ANY means that any state is valid.
+ * The default value of State is xarMod::STATE_ACTIVE.
  * For other criteria there's no default value.
  * The orderBy parameter specifies the order by which is sorted the result
  * array, can be one of name, regid, class, category or a combination of them,
@@ -96,7 +96,7 @@ function modules_adminapi_getlist(Array $args=array())
     if (isset($filter['State'])) {
         $get['state'] = $filter['State'];
     } else {
-        $get['state'] = XARMOD_STATE_ACTIVE;
+        $get['state'] = xarMod::STATE_ACTIVE;
     }
    
     $result = xarMod::apiFunc('modules', 'admin', 'getitems', $get);

@@ -25,7 +25,7 @@ function modules_adminapi_checkversion()
 
     // Security Check
     // need to specify the module because this function is called by the installer module
-    if(!xarSecurityCheck('AdminModules',1,'All','All','modules')) return;
+    if(!xarSecurity::check('AdminModules',1,'All','All','modules')) return;
 
     // Get all modules in the filesystem
     $fileModules = xarMod::apiFunc('modules','admin','getfilemodules');
@@ -51,15 +51,15 @@ function modules_adminapi_checkversion()
                 // Get module ID
                 $regId = $modInfo['regid'];
                 switch ($modInfo['state']) {
-                    case XARMOD_STATE_UNINITIALISED:
+                    case xarMod::STATE_UNINITIALISED:
                         break;
-                    case XARMOD_STATE_INACTIVE || XARMOD_STATE_ACTIVE || XARMOD_STATE_UPGRADED:
-                        $newstate = XARMOD_STATE_INACTIVE;
+                    case xarMod::STATE_INACTIVE || xarMod::STATE_ACTIVE || xarMod::STATE_UPGRADED:
+                        $newstate = xarMod::STATE_INACTIVE;
                         xarMod::apiFunc('modules','admin','upgrade',
                                         array(    'regid'    => $regId,
                                                 'state'    => $newstate));
                         
-                        $newstate = XARMOD_STATE_ACTIVE;
+                        $newstate = xarMod::STATE_ACTIVE;
                         xarMod::apiFunc('modules','admin','activate',
                                         array(    'regid'    => $regId,
                                                 'state'    => $newstate));
@@ -81,16 +81,16 @@ function modules_adminapi_checkversion()
                 // Get module ID
                 $regId = $modInfo['regid'];
                 switch ($modInfo['state']) {
-                    case XARMOD_STATE_UNINITIALISED:
+                    case xarMod::STATE_UNINITIALISED:
                         break;
-                    case XARMOD_STATE_INACTIVE:
-                        $newstate = XARMOD_STATE_UPGRADED;
+                    case xarMod::STATE_INACTIVE:
+                        $newstate = xarMod::STATE_UPGRADED;
                         break;
-                    case XARMOD_STATE_ACTIVE:
-                        $newstate = XARMOD_STATE_UPGRADED;
+                    case xarMod::STATE_ACTIVE:
+                        $newstate = xarMod::STATE_UPGRADED;
                         break;
-                    case XARMOD_STATE_UPGRADED:
-                        $newstate = XARMOD_STATE_UPGRADED;
+                    case xarMod::STATE_UPGRADED:
+                        $newstate = xarMod::STATE_UPGRADED;
                         break;
                 }
                 if (isset($newstate)) {

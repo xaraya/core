@@ -13,7 +13,7 @@
         <p>
             Your preferences can be reset to defaults from this page, so that you can, for instance, see the same startup page as a new admin..
         </p>
-        <form method="post" action="#xarModURL('modules','admin','pref')#">
+        <form method="post" action="#xarController::URL('modules','admin','pref')#">
             <div class="xar-form-actions">
                 <xar:var name="label">Restore</xar:var>
                 <xar:button type="submit" label="$label" name="restore"/>

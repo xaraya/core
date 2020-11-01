@@ -30,11 +30,11 @@ function modules_adminapi_setstate(Array $args=array())
     if (!isset($state)) throw new EmptyParameterException('state');
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurity::check('AdminModules')) return;
 
     // Clear cache to make sure we get newest values
-    if (xarVarIsCached('Mod.Infos', $regid)) {
-        xarVarDelCached('Mod.Infos', $regid);
+    if (xarVar::isCached('Mod.Infos', $regid)) {
+        xarVar::delCached('Mod.Infos', $regid);
     }
 
     //Get module info
@@ -50,40 +50,40 @@ function modules_adminapi_setstate(Array $args=array())
     if ($state == $oldState) return true;
     // Check valid state transition
     switch ($state) {
-        case XARMOD_STATE_UNINITIALISED:
+        case xarMod::STATE_UNINITIALISED:
             // So, we're basically good all the time here?
-            if (($oldState == XARMOD_STATE_MISSING_FROM_UNINITIALISED) ||
-                ($oldState == XARMOD_STATE_ERROR_UNINITIALISED)) break;
+            if (($oldState == xarMod::STATE_MISSING_FROM_UNINITIALISED) ||
+                ($oldState == xarMod::STATE_ERROR_UNINITIALISED)) break;
 
-            if ($oldState != XARMOD_STATE_INACTIVE) {
+            if ($oldState != xarMod::STATE_INACTIVE) {
                 // New Module
                 break;
             }
             break;
-        case XARMOD_STATE_INACTIVE:
-            if (($oldState != XARMOD_STATE_UNINITIALISED) &&
-                ($oldState != XARMOD_STATE_ACTIVE) &&
-                ($oldState != XARMOD_STATE_MISSING_FROM_INACTIVE) &&
-                ($oldState != XARMOD_STATE_ERROR_INACTIVE) &&
-                ($oldState != XARMOD_STATE_UPGRADED)) {
+        case xarMod::STATE_INACTIVE:
+            if (($oldState != xarMod::STATE_UNINITIALISED) &&
+                ($oldState != xarMod::STATE_ACTIVE) &&
+                ($oldState != xarMod::STATE_MISSING_FROM_INACTIVE) &&
+                ($oldState != xarMod::STATE_ERROR_INACTIVE) &&
+                ($oldState != xarMod::STATE_UPGRADED)) {
                 xarSession::setVar('errormsg', xarML('Invalid module state transition'));
                 return false;
             }
             break;
-        case XARMOD_STATE_ACTIVE:
-            if (($oldState != XARMOD_STATE_INACTIVE) &&
-                ($oldState != XARMOD_STATE_ERROR_ACTIVE) &&
-                ($oldState != XARMOD_STATE_MISSING_FROM_ACTIVE)) {
+        case xarMod::STATE_ACTIVE:
+            if (($oldState != xarMod::STATE_INACTIVE) &&
+                ($oldState != xarMod::STATE_ERROR_ACTIVE) &&
+                ($oldState != xarMod::STATE_MISSING_FROM_ACTIVE)) {
                 xarSession::setVar('errormsg', xarML('Invalid module state transition'));
                 throw new Exception("Setting from $oldState to $state for module $regid failed");
                 return false;
             }
             break;
-        case XARMOD_STATE_UPGRADED:
-            if (($oldState != XARMOD_STATE_INACTIVE) &&
-                ($oldState != XARMOD_STATE_ACTIVE) &&
-                ($oldState != XARMOD_STATE_ERROR_UPGRADED) &&
-                ($oldState != XARMOD_STATE_MISSING_FROM_UPGRADED)) {
+        case xarMod::STATE_UPGRADED:
+            if (($oldState != xarMod::STATE_INACTIVE) &&
+                ($oldState != xarMod::STATE_ACTIVE) &&
+                ($oldState != xarMod::STATE_ERROR_UPGRADED) &&
+                ($oldState != xarMod::STATE_MISSING_FROM_UPGRADED)) {
                 xarSession::setVar('errormsg', xarML('Invalid module state transition'));
                 return false;
             }
@@ -98,8 +98,8 @@ function modules_adminapi_setstate(Array $args=array())
     // We're update module state here we must update at least
     // the base info in the cache.
     $modInfo['state']=$state;
-    xarVarSetCached('Mod.Infos',$regid,$modInfo);
-    xarVarSetCached('Mod.BaseInfos',$modInfo['name'],$modInfo);
+    xarVar::setCached('Mod.Infos',$regid,$modInfo);
+    xarVar::setCached('Mod.BaseInfos',$modInfo['name'],$modInfo);
 
     return $state;
 }

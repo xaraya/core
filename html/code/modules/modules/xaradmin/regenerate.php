@@ -23,9 +23,9 @@
 function modules_admin_regenerate()
 {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
@@ -35,7 +35,7 @@ function modules_admin_regenerate()
     if (!isset($regenerated)) return;
 
     // Redirect
-    xarController::redirect(xarModURL('modules', 'admin', 'list'));
+    xarController::redirect(xarController::URL('modules', 'admin', 'list'));
 
     return true;
 }

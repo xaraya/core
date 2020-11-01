@@ -53,7 +53,7 @@ function modules_adminapi_getfilemodules(Array $args=array())
                 if (is_dir(sys::code() . "modules/$modOsDir")) {
 
                     // no xarversion.php, no module
-                    $modFileInfo = xarMod_getFileInfo($modOsDir);
+                    $modFileInfo = xarMod::getFileInfo($modOsDir);
                     if (!isset($modFileInfo)) {
                         continue;
                     }
@@ -118,12 +118,12 @@ function modules_adminapi_getfilemodules(Array $args=array())
                     foreach ($fileModules as $module) {
                         if($regId == $module['regid']) {
                             $msg = xarML('The same registered ID (#(1)) was found in two different modules, #(2) and #(3). Please remove one of the modules and regenerate the list.',$regId, $name, $module['name']);
-                            xarController::redirect(xarModURL('modules', 'user', 'errors', array('message' => urlencode($msg))));
+                            xarController::redirect(xarController::URL('modules', 'user', 'errors', array('message' => urlencode($msg))));
                             return true;
                         }
                         if($nameinfile == $module['nameinfile']) {
                             $msg = xarML('The module #(1) was found under two different registered IDs, #(2) and #(3). Please remove one of the modules and regenerate the list',$nameinfile, $regId, $module['regid']);
-                            xarController::redirect(xarModURL('modules', 'user', 'errors', array('message' => urlencode($msg))));
+                            xarController::redirect(xarController::URL('modules', 'user', 'errors', array('message' => urlencode($msg))));
                             return true;
                         }
                     }

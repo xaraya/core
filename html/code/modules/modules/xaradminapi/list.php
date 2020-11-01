@@ -22,7 +22,7 @@ function modules_adminapi_list(Array $args=array())
     extract($args);
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules')) return;
+    if(!xarSecurity::check('AdminModules')) return;
 
     // Obtain information
     if (!isset($state)) $state = '';

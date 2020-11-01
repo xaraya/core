@@ -19,13 +19,13 @@
 function modules_admin_viewerror()
 {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
     // Get parameters
-    xarVarFetch('id', 'int', $regId, 0, XARVAR_NOT_REQUIRED);
+    xarVar::fetch('id', 'int', $regId, 0, xarVar::NOT_REQUIRED);
     if (empty($regId)) return xarResponse::notFound();
 
-    //if (!xarSecConfirmAuthKey()) return;
+    //if (!xarSec::confirmAuthKey()) return;
 
     // Get module information from the database
     $dbModule = xarMod::apiFunc('modules',
@@ -44,10 +44,10 @@ function modules_admin_viewerror()
     // Get the module state and display appropriate template
     // for the error that was encountered with the module
     switch($dbModule['state']) {
-        case XARMOD_STATE_ERROR_UNINITIALISED:
-        case XARMOD_STATE_ERROR_INACTIVE:
-        case XARMOD_STATE_ERROR_ACTIVE:
-        case XARMOD_STATE_ERROR_UPGRADED: 
+        case xarMod::STATE_ERROR_UNINITIALISED:
+        case xarMod::STATE_ERROR_INACTIVE:
+        case xarMod::STATE_ERROR_ACTIVE:
+        case xarMod::STATE_ERROR_UPGRADED: 
             // Set template to 'update'
             $template = 'errorupdate';
 

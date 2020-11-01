@@ -13,7 +13,7 @@ function modules_adminapi_getitems(Array $args=array())
     extract($args);
     
     if (!isset($state))
-        $state = XARMOD_STATE_ACTIVE;
+        $state = xarMod::STATE_ACTIVE;
     
     if (!isset($include_core))
         $include_core = true;
@@ -63,15 +63,15 @@ function modules_adminapi_getitems(Array $args=array())
         $bindvars[] = $systemid;
     }  
 
-    if ($state != XARMOD_STATE_ANY) {
-        if ($state != XARMOD_STATE_INSTALLED) {
+    if ($state != xarMod::STATE_ANY) {
+        if ($state != xarMod::STATE_INSTALLED) {
             $where[] = 'mods.state = ?';
             $bindvars[] = $state;
         } else {
             $where[] = 'mods.state != ? AND mods.state < ? AND mods.state != ?';
-            $bindvars[] = XARMOD_STATE_UNINITIALISED;
-            $bindvars[] = XARMOD_STATE_MISSING_FROM_INACTIVE;
-            $bindvars[] = XARMOD_STATE_MISSING_FROM_UNINITIALISED;
+            $bindvars[] = xarMod::STATE_UNINITIALISED;
+            $bindvars[] = xarMod::STATE_MISSING_FROM_INACTIVE;
+            $bindvars[] = xarMod::STATE_MISSING_FROM_UNINITIALISED;
         }    
     }
     
@@ -133,33 +133,33 @@ function modules_adminapi_getitems(Array $args=array())
             else $item[$field] = $result->fields[$field];
         }
 
-        if (xarVarIsCached('Mod.Infos', $item['regid'])) {
+        if (xarVar::isCached('Mod.Infos', $item['regid'])) {
             // merge cached info with db info 
-            $item += xarVarGetCached('Mod.Infos', $item['regid']);
+            $item += xarVar::getCached('Mod.Infos', $item['regid']);
         } else {
             $item['displayname'] = xarMod::getDisplayName($item['name']);
             $item['displaydescription'] = xarMod::getDisplayDescription($item['name']);
             // Shortcut for os prepared directory
-            $item['osdirectory'] = xarVarPrepForOS($item['directory']);
+            $item['osdirectory'] = xarVar::prepForOS($item['directory']);
 
-            xarVarSetCached('Mod.BaseInfos', $item['name'], $item);            
+            xarVar::setCached('Mod.BaseInfos', $item['name'], $item);            
                    
-            $fileinfo = xarMod_getFileInfo($item['osdirectory']);
+            $fileinfo = xarMod::getFileInfo($item['osdirectory']);
             if (isset($fileinfo)) {
                 $item = array_merge($fileinfo, $item);
-                xarVarSetCached('Mod.Infos', $item['regid'], $item);
+                xarVar::setCached('Mod.Infos', $item['regid'], $item);
                 switch ($item['state']) {
-                case XARMOD_STATE_MISSING_FROM_UNINITIALISED:
-                    $item['state'] = XARMOD_STATE_UNINITIALISED;
+                case xarMod::STATE_MISSING_FROM_UNINITIALISED:
+                    $item['state'] = xarMod::STATE_UNINITIALISED;
                     break;
-                case XARMOD_STATE_MISSING_FROM_INACTIVE:
-                    $item['state'] = XARMOD_STATE_INACTIVE;
+                case xarMod::STATE_MISSING_FROM_INACTIVE:
+                    $item['state'] = xarMod::STATE_INACTIVE;
                     break;
-                case XARMOD_STATE_MISSING_FROM_ACTIVE:
-                    $item['state'] = XARMOD_STATE_ACTIVE;
+                case xarMod::STATE_MISSING_FROM_ACTIVE:
+                    $item['state'] = xarMod::STATE_ACTIVE;
                     break;
-                case XARMOD_STATE_MISSING_FROM_UPGRADED:
-                    $item['state'] = XARMOD_STATE_UPGRADED;
+                case xarMod::STATE_MISSING_FROM_UPGRADED:
+                    $item['state'] = xarMod::STATE_UPGRADED;
                     break;
                 }
             }        

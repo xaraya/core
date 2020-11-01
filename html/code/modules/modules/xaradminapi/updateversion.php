@@ -25,7 +25,7 @@ function modules_adminapi_updateversion(Array $args=array())
     if (!isset($regId)) throw new EmptyParameterException('redId');
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regId")) return;
+    if(!xarSecurity::check('AdminModules',0,'All',"All:All:$regId")) return;
 
     //  Get database connection and tables
     $dbconn = xarDB::getConn();

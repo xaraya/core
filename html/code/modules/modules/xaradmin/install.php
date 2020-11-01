@@ -28,17 +28,17 @@ sys::import('modules.modules.class.installer');
 function modules_admin_install()
 {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
     $installer = Installer::getInstance();    
     // Security and sanity checks
     // TODO: check under what conditions this is needed
-//    if (!xarSecConfirmAuthKey()) return;
+//    if (!xarSec::confirmAuthKey()) return;
 
-    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
-    if (!xarVarFetch('return_url', 'pre:trim:str:1:',
-        $return_url, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
+        $return_url, '', xarVar::NOT_REQUIRED)) return;
 
     // First check for a proper core version
     if (!$installer->checkCore($id)) 
@@ -50,7 +50,7 @@ function modules_admin_install()
         $installer->verifydependency($id);
 
         //Checking if the user has already passed thru the GUI:
-        xarVarFetch('command', 'checkbox', $command, false, XARVAR_NOT_REQUIRED);
+        xarVar::fetch('command', 'checkbox', $command, false, xarVar::NOT_REQUIRED);
     } catch (ModuleNotFoundException $e) {
         $command = false;
     }
@@ -58,7 +58,7 @@ function modules_admin_install()
     $data['moduledependencies'] = $installer->getalldependencies($id);
 
     // Finally check the property dependencies
-    if (!xarVarFetch('ignore_properties', 'int:1:', $ignore_properties, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('ignore_properties', 'int:1:', $ignore_properties, 0, xarVar::NOT_REQUIRED)) return;
     $propdependencies['satisfied'] = array();
     $propdependencies['unsatisfiable'] = array();
     if (isset($data['moduledependencies']['satisfied'])) {
@@ -97,7 +97,7 @@ function modules_admin_install()
             $data['dependencyinfo'] = array();
         }
 
-        $data['authid']       = xarSecGenAuthKey();
+        $data['authid']       = xarSec::genAuthKey();
         $data['return_url'] = $return_url;
         return $data;
     }
@@ -114,14 +114,14 @@ function modules_admin_install()
     $minfo = xarMod::getInfo($id);
 
     //Bail if we've lost our module
-    if ($minfo['state'] != XARMOD_STATE_MISSING_FROM_INACTIVE) {
+    if ($minfo['state'] != xarMod::STATE_MISSING_FROM_INACTIVE) {
         //Installs with dependencies, first initialise the necessary dependencies
         //then the module itself
         $installer->installmodule($id);
     }
     // Note: if the module installed successfully, the above method will have already redirected,
     // and thus the following won't be executed 
-    xarSessionDelVar('installing');
+    xarSession::delVar('installing');
 
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
@@ -133,7 +133,7 @@ function modules_admin_install()
     }
 
     if (empty($return_url))
-        $return_url = xarModURL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
+        $return_url = xarController::URL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
 
     xarController::redirect($return_url);
     return true;

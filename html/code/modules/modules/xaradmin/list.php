@@ -19,7 +19,7 @@
  */
 function modules_admin_list()
 {
-    xarController::redirect(xarModURL('modules', 'admin', 'view'));
+    xarController::redirect(xarController::URL('modules', 'admin', 'view'));
     return true;
 }
 ?>

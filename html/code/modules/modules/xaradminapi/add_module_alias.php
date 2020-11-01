@@ -28,14 +28,14 @@ function modules_adminapi_add_module_alias(Array $args=array())
     if (empty($aliasModName)) throw new EmptyParameterException('aliasModName');
 
     // Check if the module name we want to define is already in use
-    if (xarMod_getBaseInfo($aliasModName)) {
+    if (xarMod::getBaseInfo($aliasModName)) {
         throw new DuplicateException(array('module alias',$aliasModName));
     } else {
         // We did not find the base info, that is good, no?
     }
 
     // Check if the alias we want to set it to *does* exist
-    if (!xarMod_getBaseInfo($modName)) return;
+    if (!xarMod::getBaseInfo($modName)) return;
 
     // Get the list of current aliases
     $aliases = xarConfigVars::get(null, 'System.ModuleAliases');

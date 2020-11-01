@@ -20,22 +20,22 @@
 function modules_admin_modinfo()
 {
     // Security
-    if (!xarSecurityCheck('ViewModules')) return; 
+    if (!xarSecurity::check('ViewModules')) return; 
     
     $data = array();
     
-    if (!xarVarFetch('id', 'notempty', $id)) {return;}
+    if (!xarVar::fetch('id', 'notempty', $id)) {return;}
 
     // obtain maximum information about module
     $modinfo = xarMod::getInfo($id);
 
     // data vars for template
-    $data['modid']              = xarVarPrepForDisplay($id);
-    $data['modname']            = xarVarPrepForDisplay($modinfo['name']);
-    $data['moddescr']           = xarVarPrepForDisplay($modinfo['description']);
-    $data['moddispname']        = xarVarPrepForDisplay($modinfo['displayname']);
-    $data['moddispdesc']        = xarVarPrepForDisplay($modinfo['displaydescription']);
-    $data['modlisturl']         = xarModURL('modules', 'admin', 'list');
+    $data['modid']              = xarVar::prepForDisplay($id);
+    $data['modname']            = xarVar::prepForDisplay($modinfo['name']);
+    $data['moddescr']           = xarVar::prepForDisplay($modinfo['description']);
+    $data['moddispname']        = xarVar::prepForDisplay($modinfo['displayname']);
+    $data['moddispdesc']        = xarVar::prepForDisplay($modinfo['displaydescription']);
+    $data['modlisturl']         = xarController::URL('modules', 'admin', 'list');
 
     $aliasesMap = xarConfigVars::get(null,'System.ModuleAliases');
     $aliases = array();
@@ -43,18 +43,18 @@ function modules_admin_modinfo()
         if ($value == $data['modname']) $aliases[] = $key;
     }
     $data['aliases']            = !empty($aliases) ? implode(', ', $aliases) : xarML('None');
-    $data['moddir']             = sys::code(). 'modules/' . xarVarPrepForDisplay($modinfo['directory']);
-    $data['modclass']           = xarVarPrepForDisplay($modinfo['class']);
-    $data['modcat']             = xarVarPrepForDisplay($modinfo['category']);
-    $data['modver']             = xarVarPrepForDisplay($modinfo['version']);
-    $data['modauthor']          = xarVarPrepForDisplay($modinfo['author']);
-    $data['modcontact']         = xarVarPrepForDisplay($modinfo['contact']);
+    $data['moddir']             = sys::code(). 'modules/' . xarVar::prepForDisplay($modinfo['directory']);
+    $data['modclass']           = xarVar::prepForDisplay($modinfo['class']);
+    $data['modcat']             = xarVar::prepForDisplay($modinfo['category']);
+    $data['modver']             = xarVar::prepForDisplay($modinfo['version']);
+    $data['modauthor']          = xarVar::prepForDisplay($modinfo['author']);
+    $data['modcontact']         = xarVar::prepForDisplay($modinfo['contact']);
     if(!empty($modinfo['dependencyinfo'])){
 
         $dependencies = array();
         foreach ($modinfo['dependencyinfo'] as $key => $value) {
             if ($key != 0) {
-                $data['link'] = xarModURL('modules','admin','modinfo', array('id' => $key));
+                $data['link'] = xarController::URL('modules','admin','modinfo', array('id' => $key));
                 $dependencies[] = '<a href="'.$data["link"].'">'.$value['name'].'</a>';
             } else {
                 $dependencies[] = $value['name'];

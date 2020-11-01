@@ -15,15 +15,15 @@
 function modules_admin_modifyinstalloptions(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AdminModules')) return; 
+    if (!xarSecurity::check('AdminModules')) return; 
     
     sys::import('modules.modules.class.installer');
     $installer = Installer::getInstance();    
     if (!$installer->modulestack->size()) {
-        xarVarFetch('regid', 'int', $regid, NULL, XARVAR_DONT_SET);
+        xarVar::fetch('regid', 'int', $regid, NULL, xarVar::DONT_SET);
         if(!isset($regid)) throw new Exception('Missing id of module for installation options...aborting');
         $modInfo = xarMod::getInfo($regid);
-        $data['authid'] = xarSecGenAuthKey('modules');
+        $data['authid'] = xarSec::genAuthKey('modules');
         $data['regid'] = $modInfo['regid'];
         $data['modname'] = $modInfo['name'];
         $data['displayname'] = $modInfo['displayname'];

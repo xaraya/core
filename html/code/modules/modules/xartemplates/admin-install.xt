@@ -9,7 +9,7 @@
             <p>
                 The module #$displayname# you are trying to install depends on additional components. Please review the listing below:
             </p>
-            <form action="#xarModURL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#xarController::URL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
                 <div>
                     <input type="hidden" name="id" id="id" value="#$id#"/>
                     <input type="hidden" name="authid" id="authid" value="#$authid#"/>
@@ -109,7 +109,7 @@
             </form>
         </xar:if>
         <xar:if condition="isset($propdependencies['unsatisfiable']) AND count($propdependencies['unsatisfiable']) ne 0">
-            <form action="#xarModURL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#xarController::URL('modules','admin','install')#" method="post" enctype="application/x-www-form-urlencoded">
                 <h3>Property dependencies that are not satisfied</h3>
                 <ul>
                     <xar:foreach in="$propdependencies['unsatisfiable']" value="$propInfo">                                
@@ -139,7 +139,7 @@
         <!-- This section deals with install errors. -->
         <xar:template file="install-errors" type="module"/>
         <p>
-            <a href="#xarModURL('modules','admin','view')#">Go back to the modules list</a>
+            <a href="#xarController::URL('modules','admin','view')#">Go back to the modules list</a>
         </p>
     </div>
 </xar:template>

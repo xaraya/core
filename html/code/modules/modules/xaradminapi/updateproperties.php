@@ -28,7 +28,7 @@ function modules_adminapi_updateproperties(Array $args=array())
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Security Check
-    if(!xarSecurityCheck('AdminModules',0,'All',"All:All:$regid")) return;
+    if(!xarSecurity::check('AdminModules',0,'All',"All:All:$regid")) return;
 
     // Update
     $xartable =& xarDB::getTables();

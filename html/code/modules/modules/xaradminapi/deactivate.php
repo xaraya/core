@@ -33,11 +33,11 @@ function modules_adminapi_deactivate(Array $args=array())
 
     //Shouldnt we check first if the module is alredy ACTIVATED????
     //What should we do with UPGRADED STATE? What is it meant to?
-    //  if ($modInfo['state'] != XARMOD_STATE_ACTIVE)
+    //  if ($modInfo['state'] != xarMod::STATE_ACTIVE)
 
     // Module activate function
     // only run if the module is actually there. It may have been removed
-    if ($modInfo['state'] != XARMOD_STATE_MISSING_FROM_ACTIVE) {
+    if ($modInfo['state'] != xarMod::STATE_MISSING_FROM_ACTIVE) {
         if (!xarMod::apiFunc('modules','admin','executeinitfunction',
                            array('regid'    => $regid,
                                  'function' => 'deactivate'))) {
@@ -48,7 +48,7 @@ function modules_adminapi_deactivate(Array $args=array())
     // Update state of module
     $res = xarMod::apiFunc('modules','admin','setstate',
                         array('regid' => $regid,
-                              'state' => XARMOD_STATE_INACTIVE));
+                              'state' => xarMod::STATE_INACTIVE));
 
 
 
