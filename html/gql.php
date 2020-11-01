@@ -27,17 +27,20 @@ sys::init();
 xarDatabase::init();
 
 
-function xarGraphQLGetData($queryString = '{hello}', $variableValues = [])
+function xarGraphQLGetData($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [])
 {
-    $schema = xarGraphQL::get_schema();
+    $schema = xarGraphQL::get_schema($extraTypes);
+    //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
+    //$schema = xarGraphQL::build_schema($schemaFile, $extraTypes);
+    //print_r($schema);
     if ($queryString == '{schema}') {
-        return SchemaPrinter::doPrint($schema);
+        $header = "schema {\n  query: Query\n}\n\n";
+        return $header . SchemaPrinter::doPrint($schema);
         //return SchemaPrinter::printIntrospectionSchema($schema);
     }
     
     $rootValue = ['prefix' => 'You said: message='];
     $context = ['context' => true, 'object' => null];
-    $operationName = null;
     $fieldResolver = null;
     $validationRules = null;
     
@@ -78,9 +81,15 @@ if (!empty($rawInput)) {
     $input = json_decode($rawInput, true);
     $query = isset($input['query']) ? $input['query'] : '{schema}';
     $variables = isset($input['variables']) ? $input['variables'] : null;
+    $operationName = isset($input['operationName']) ? $input['operationName'] : null;
 } else {
     $query = isset($_REQUEST['query']) ? $_REQUEST['query'] : '{schema}';
     $variables = isset($_REQUEST['variables']) ? $_REQUEST['variables'] : null;
+    $operationName = isset($_REQUEST['operationName']) ? $_REQUEST['operationName'] : null;
+}
+// /gql.php?query=query($id:ID!){object(id:$id){name}}&variables={"id":"2"}
+if (!empty($variables) && is_string($variables)) {
+    $variables = json_decode($variables, true);
 }
 
 //$query = '{hello}';
@@ -89,6 +98,8 @@ if (!empty($rawInput)) {
 //$query = '{samples { name, age } }';
 //$query = '{sample(id: 0) { name, age } }';
 //$query = '{schema}';
-$data = xarGraphQLGetData($query, $variables);
+//$data = xarGraphQLGetData($query, $variables, $operationName);
+$extraTypes = ['module', 'theme', 'category', 'configuration'];
+$data = xarGraphQLGetData($query, $variables, $operationName, $extraTypes);
 
 xarGraphQLSendData($data);

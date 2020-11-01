@@ -76,7 +76,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 
         $php_locale_dir = sys::varpath()."/locales/{$this->locale}";
 
-        if (!$parsedLocale = xarMLS__parseLocaleString("{$this->locale}")) return false;
+        if (!$parsedLocale = xarMLS::parseLocaleString("{$this->locale}")) return false;
         $xml_locale_dir = sys::varpath().'/locales/';
         $xml_locale_dir .= $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
 
@@ -250,7 +250,7 @@ class PHPBackendGenerator extends xarObject
     function __construct($locale)
     {
         $this->locale = $locale;
-        $l = xarLocaleGetInfo($locale);
+        $l = xarMLS::localeGetInfo($locale);
         $this->outCharset = $l['charset'];
         $this->isUTF8 = ($l['charset'] == 'utf-8');
 
@@ -283,7 +283,7 @@ class PHPBackendGenerator extends xarObject
 
         $php_locale_dir = "$locales_dir/{$this->locale}";
 
-        if (!$parsedLocale = xarMLS__parseLocaleString("{$this->locale}")) return false;
+        if (!$parsedLocale = xarMLS::parseLocaleString("{$this->locale}")) return false;
         $xml_locale_dir = "$locales_dir/";
         $xml_locale_dir .= $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
 

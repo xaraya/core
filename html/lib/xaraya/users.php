@@ -231,7 +231,7 @@ class xarUser extends xarObject
     
         // Set user session information
         // TODO: make this a class static in xarSession.php
-        if (!xarSession_setUserInfo($userId, $rememberMe))
+        if (!xarSession::setUserInfo($userId, $rememberMe))
             return; // throw back
     
         // Set user auth module information
@@ -255,7 +255,7 @@ class xarUser extends xarObject
         // Set session variables
     
         // Keep a reference to auth module that authenticates successfully
-        xarSessionSetVar('authenticationModule', $authModName);
+        xarSession::setVar('authenticationModule', $authModName);
     
         // FIXME: <marco> here we could also set a last_logon timestamp
         //<jojodee> currently set in individual authsystem when success on login returned to it
@@ -282,12 +282,12 @@ class xarUser extends xarObject
         $userId = xarSession::getVar('id');
     
         // Reset user session information
-        $res = xarSession_setUserInfo(xarSession::$anonId, false);
+        $res = xarSession::setUserInfo(xarSession::$anonId, false);
         if (!isset($res)) {
             return; // throw back
         }
     
-        xarSessionDelVar('authenticationModule');
+        xarSession::delVar('authenticationModule');
     
         // User logged out successfully, trigger the proper event with the old userid
         //xarEvents::trigger('UserLogout',$userId);
@@ -384,7 +384,7 @@ class xarUser extends xarObject
     {
         xarLog::message("Changing the navigation locale from ". self::getNavigationLocale() . " to " . $locale, xarLog::LEVEL_INFO);
         if (xarMLS::getMode() != xarMLS::SINGLE_LANGUAGE_MODE) {
-            xarSessionSetVar('navigationLocale', $locale);
+            xarSession::setVar('navigationLocale', $locale);
             if (self::isLoggedIn()) {
                 xarModUserVars::set('roles', 'locale', $locale);
             }
@@ -689,7 +689,7 @@ class xarUser extends xarObject
     static private function isVarDefined($name)
     {
         // Retrieve the dynamic user object if necessary
-        if (!isset(self::$objectRef) && xarModIsHooked('dynamicdata','roles')) {
+        if (!isset(self::$objectRef) && xarModHooks::isHooked('dynamicdata','roles')) {
             self::$objectRef = xarMod::apiFunc('dynamicdata', 'user', 'getobject',
                                                            array('module' => 'roles'));
             if (empty(self::$objectRef) || empty(self::$objectRef->objectid)) {

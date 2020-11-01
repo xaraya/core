@@ -98,6 +98,17 @@ function xarTheme_getVarsByTheme($themeName)
 
 class xarTheme extends xarObject
 {
+    const STATE_UNINITIALISED              = 1;
+    const STATE_INACTIVE                   = 2;
+    const STATE_ACTIVE                     = 3;
+    const STATE_MISSING_FROM_UNINITIALISED = 4;
+    const STATE_UPGRADED                   = 5;
+    const STATE_ANY                        = 0;
+    const STATE_INSTALLED                  = 6;
+    const STATE_MISSING_FROM_INACTIVE      = 7;
+    const STATE_MISSING_FROM_ACTIVE        = 8;
+    const STATE_MISSING_FROM_UPGRADED      = 9;
+
     public static function getIDFromName($themeName,$id='regid')
     {
         return xarThemeGetIDFromName($themeName, $id);

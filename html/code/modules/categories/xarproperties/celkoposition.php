@@ -91,10 +91,10 @@ class CelkoPositionProperty extends DataProperty
         $this->filepath  = 'modules/categories/xarproperties';
 
         $this->position_options = array(
-					array('id' => '1', 'name' => xarML('Right before, at the same level')),
-					array('id' => '2', 'name' => xarML('Right after, at the same level')),
-					array('id' => '4', 'name' => xarML('The first child item')),
-					array('id' => '3', 'name' => xarML('The last child item')),
+					array('id' => '1', 'name' => xarMLS::translate('Right before, at the same level')),
+					array('id' => '2', 'name' => xarMLS::translate('Right after, at the same level')),
+					array('id' => '4', 'name' => xarMLS::translate('The first child item')),
+					array('id' => '3', 'name' => xarMLS::translate('The last child item')),
 					);
     }
 
@@ -147,7 +147,7 @@ class CelkoPositionProperty extends DataProperty
         $this->reference_entry = $this->getItem($this->reference_id);
 
         if ($this->reference_entry == false) {
-            $this->invalid = xarML('The reference entry does not exist');
+            $this->invalid = xarMLS::translate('The reference entry does not exist');
             $this->value = null;
             return false;
         }
@@ -162,7 +162,7 @@ class CelkoPositionProperty extends DataProperty
            ($this->reference_entry[$this->initialization_celkoleft_id] <= $this->current_entry[$this->initialization_celkoright_id])
           )
         {
-            $this->invalid = xarML('The reference entry cannot be the current entry or one of its children');
+            $this->invalid = xarMLS::translate('The reference entry cannot be the current entry or one of its children');
             $this->value = null;
             return false;
         }
@@ -170,7 +170,7 @@ class CelkoPositionProperty extends DataProperty
         // No moving to before or after the root entry
         $isroot = $this->reference_entry[$this->initialization_celkoleft_id] == 1;
         if ($isroot && ($this->inorout == 'out')) {
-            $this->invalid = xarML('Cannot move an entry to before or after the root entry');
+            $this->invalid = xarMLS::translate('Cannot move an entry to before or after the root entry');
             $this->value = null;
             return false;
         }
@@ -192,7 +192,7 @@ class CelkoPositionProperty extends DataProperty
 #
 # There is more than one item for this itemid. That's a problem.
 #
-            throw new Exception(xarML('More than one item for the itemid value #(1)',$itemid));
+            throw new Exception(xarMLS::translate('More than one item for the itemid value #(1)',$itemid));
         } elseif ($n == 1) {
 # --------------------------------------------------------
 #
@@ -288,7 +288,7 @@ class CelkoPositionProperty extends DataProperty
                 $parentItem = $this->getItem($this->reference_id);
                 
                 if ($parentItem == false) {
-                   xarSession::setVar('errormsg', xarML('The parent item does not exist'));
+                   xarSession::setVar('errormsg', xarMLS::translate('The parent item does not exist'));
                    return false;
                 }
                 $this->right = $parentItem[$this->initialization_celkoright_id];
@@ -332,7 +332,7 @@ class CelkoPositionProperty extends DataProperty
         $current_entry = $this->getItem($itemid);
 
         if ($current_entry == false) {
-            xarSession::setVar('errormsg', xarML('The entry you are updating does not exist'));
+            xarSession::setVar('errormsg', xarMLS::translate('The entry you are updating does not exist'));
             return false;
         }
 
@@ -663,7 +663,7 @@ class CelkoPositionProperty extends DataProperty
                   break;
 
                   default:
-                    $msg = xarML('Valid values: IN or OUT');
+                    $msg = xarMLS::translate('Valid values: IN or OUT');
                     throw new BadParameterException(null, $msg);
                }
             break;
@@ -678,12 +678,12 @@ class CelkoPositionProperty extends DataProperty
                   break;
 
                   default:
-                    $msg = xarML('Valid values: IN or OUT');
+                    $msg = xarMLS::translate('Valid values: IN or OUT');
                     throw new BadParameterException(null, $msg);
                }
             break;
             default:
-            $msg = xarML('Valid values: RIGHT or LEFT');
+            $msg = xarMLS::translate('Valid values: RIGHT or LEFT');
             throw new BadParameterException(null, $msg);
         }
         return $point_of_insertion;
@@ -725,7 +725,7 @@ class CelkoPositionProperty extends DataProperty
         if (isset($eid) && !is_array($eid) && $eid != false) {
            $ecat = $this->getItem($eid);
            if ($ecat == false) {
-               xarSession::setVar('errormsg', xarML('That item does not exist'));
+               xarSession::setVar('errormsg', xarMLS::translate('That item does not exist'));
                return array();
            }
            //$SQLquery .= " AND P1.left_id
@@ -910,4 +910,3 @@ class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDat
     }
 }
 
-?>

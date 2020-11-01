@@ -57,7 +57,7 @@ function &xarMLSLoadLocaleData($locale = NULL)
     }
 
     // check for locale availability
-    $siteLocales = xarMLSListSiteLocales();
+    $siteLocales = xarMLS::listSiteLocales();
 
     $nullreturn = null; $falsereturn = false;
     if (!in_array($locale, $siteLocales)) {

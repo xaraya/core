@@ -522,12 +522,12 @@ class xarTpl extends xarObject
     private static function getScopeFileName($scope, $package, $tplBase, $tplName=null, $tplPart='', $callerMod=null)
     {
         // prep input
-        $package = xarVarPrepForOS($package);
-        $tplBase = xarVarPrepForOS($tplBase);
+        $package = xarVar::prepForOS($package);
+        $tplBase = xarVar::prepForOS($tplBase);
         if (!empty($tplName))
-            $tplName = xarVarPrepForOS($tplName);
+            $tplName = xarVar::prepForOS($tplName);
         if (!empty($tplPart))
-            $tplPart = strtr(trim(xarVarPrepForOS($tplPart)), " ", "/");
+            $tplPart = strtr(trim(xarVar::prepForOS($tplPart)), " ", "/");
         $canTemplateName = strtr($tplName, "-", "/");
         $canonical = ($canTemplateName == $tplName) ? false : true;
 
@@ -659,10 +659,10 @@ class xarTpl extends xarObject
  */
     public static function object($modName, $objectName, $tplType = 'showdisplay', $tplData = array(), $tplBase = NULL)
     {
-        $modName = xarVarPrepForOS($modName);
-        $objectName = xarVarPrepForOS($objectName);
-        $tplType = xarVarPrepForOS($tplType);
-        $tplBase   = empty($tplBase) ? $tplType : xarVarPrepForOS($tplBase);
+        $modName = xarVar::prepForOS($modName);
+        $objectName = xarVar::prepForOS($objectName);
+        $tplType = xarVar::prepForOS($tplType);
+        $tplBase   = empty($tplBase) ? $tplType : xarVar::prepForOS($tplBase);
         $cachename = "$modName:$objectName:$tplType:$tplBase:objects";
 
         // cache frequently-used sourcefilenames for DD elements
@@ -698,10 +698,10 @@ class xarTpl extends xarObject
  */
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
     {
-        $modName = xarVarPrepForOS($modName);
-        $propertyName = xarVarPrepForOS($propertyName);
-        $tplType = xarVarPrepForOS($tplType);
-        $tplBase   = empty($tplBase) ? $tplType : xarVarPrepForOS($tplBase);
+        $modName = xarVar::prepForOS($modName);
+        $propertyName = xarVar::prepForOS($propertyName);
+        $tplType = xarVar::prepForOS($tplType);
+        $tplBase   = empty($tplBase) ? $tplType : xarVar::prepForOS($tplBase);
         $cachename = "$modName:$propertyName:$tplType:$tplBase:properties";
 
         // cache frequently-used sourcefilenames for DD elements
@@ -803,7 +803,7 @@ class xarTpl extends xarObject
             case 'theme':
                 // optional theme images to look in passed as third param
                 if (!empty($package)) {
-                    $package = xarVarPrepForOS($package);
+                    $package = xarVar::prepForOS($package);
                     $paths[] = self::getThemeDir($package) . '/images/' . $fileName;
                 }                
                 // current theme images
@@ -820,7 +820,7 @@ class xarTpl extends xarObject
                     if (!isset($modBaseInfo)) return;
                     $modOsDir = $modBaseInfo['osdirectory'];
                 } else {
-                    $modOsDir = xarVarPrepForOS($package);
+                    $modOsDir = xarVar::prepForOS($package);
                 }
                 // handle legacy calls to base module images moved to common/images or themename/images
                 // @todo remove this when all modules are passing correct params 
@@ -841,7 +841,7 @@ class xarTpl extends xarObject
                 break;
             case 'property':
                 if (empty($package)) return;
-                $package = xarVarPrepForOS($package);
+                $package = xarVar::prepForOS($package);
                 // current theme property images
                 $paths[] = self::getThemeDir() . '/properties/' . $package . '/images/' . $fileName;
                 // common property images
@@ -853,7 +853,7 @@ class xarTpl extends xarObject
                 break;
             case 'block':
                 if (empty($package)) return;
-                $package = xarVarPrepForOS($package);
+                $package = xarVar::prepForOS($package);
                 // current theme block images
                 $paths[] = self::getThemeDir() . '/blocks/' . $package . '/images/' . $fileName;
                 // common block images
@@ -1072,7 +1072,7 @@ class xarTpl extends xarObject
     public static function includeModuleTemplate($modName, $templateName, $tplData, $propertyName='')
     {
         // FIXME: can we trust templatename here? and eliminate the dependency with xarVar?
-        $templateName = xarVarPrepForOS($templateName);
+        $templateName = xarVar::prepForOS($templateName);
         $themeDir = self::getThemeDir();
         $commonDir = self::getThemeDir('common');
         

@@ -55,6 +55,12 @@ class xarGraphQLDummyType extends ObjectType
                     return 'Here is the schema';
                 }
             ],
+            'whoami' => [
+                'type' => xarGraphQL::get_type('user'),
+                'resolve' => function () {
+                    return array('id' => 0, 'name' => 'Anonymous');
+                }
+            ],
         ];
         return array($name => $fields[$name]);
     }

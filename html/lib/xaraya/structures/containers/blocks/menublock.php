@@ -41,7 +41,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
         $typeCapable = ucfirst($this->menumodtype) . 'Capable';
         // get the list of modules for this menu modtype
         $this->xarmodules = xarMod::apiFunc('modules','admin','getlist',
-            array('filter' => array($typeCapable => true, 'State' => XARMOD_STATE_ACTIVE)));
+            array('filter' => array($typeCapable => true, 'State' => xarMod::STATE_ACTIVE)));
         // get module aliases while we're here, we need those too
         $aliasMap = xarConfigVars::get(null,'System.ModuleAliases');
         $aliases = array();
@@ -130,7 +130,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
         if (empty($link['title'])) {
             $link['title'] = $this->modulelist[$modname]['displaydescription'];
         }
-        $link['url'] = xarModURL($modname, $this->menumodtype, 'main', array());
+        $link['url'] = xarController::URL($modname, $this->menumodtype, 'main', array());
         if ($link['url'] == self::$currenturl) $link['url'] = '';
 
         if (empty($link['name'])) {

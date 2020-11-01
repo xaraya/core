@@ -1,10 +1,66 @@
+schema {
+  query: Query
+}
+
 type Access {
   keys: [String]
-  filters: String
+  filters: Serial
+}
+
+"""
+Category: generic category type for categories objects (categories, category)
+"""
+type Category {
+  id: ID!
+  name: String
+  keys: [String]
+  description: String
+  image: String
+  template: String
+  child_categories: String
+  position: String
+  links: Int
+  state: String
+}
+
+"""
+Configuration: generic configuration type for configurations objects (configurations, configuration)
+"""
+type Configuration {
+  id: ID!
+  name: String
+  keys: [String]
+  label: String
+  description: String
+  property_id: String
+  ignore_empty: String
+  configuration: String
+}
+
+type KeyVal {
+  key: String
+  value: Mixed
+}
+
+scalar Mixed
+
+"""Module: generic module type for modules objects (modules, module)"""
+type Module {
+  id: ID!
+  name: String
+  keys: [String]
+  regid: Int
+  directory: String
+  version: String
+  class: String
+  category: String
+  admin_capable: String
+  user_capable: String
+  state: String
 }
 
 type Object {
-  objectid: ID
+  objectid: ID!
   keys: [String]
   name: String
   label: String
@@ -13,7 +69,8 @@ type Object {
   class: String
   urlparam: String
   access: Access
-  config: [String]
+  config: Serial
+  config_l: [String]
   maxid: Int
   isalias: Boolean
   category: String
@@ -21,16 +78,69 @@ type Object {
 }
 
 type Property {
-  id: ID
+  id: ID!
   keys: [String]
   name: String
   label: String
   objectid: String
-  type: Int
+  type: String
   defaultvalue: String
   source: String
   status: Int
   translatable: Boolean
+  seq: Int
+  configuration: Serial
+  configuration_kv: [KeyVal]
+  args: [String]
+}
+
+"""
+Publications_document: generic publications_document type for
+publications_documents objects (publications_documents, publications_document)
+"""
+type Publications_document {
+  id: ID!
+  name: String
+  keys: [String]
+  title: String
+  description: String
+  body: String
+  notes: String
+  parent: Int
+  author: User
+  state: String
+  pages: Int
+  locale: String
+  itemtype: String
+  pagetype: String
+  start_date: String
+  end_date: String
+  no_end: String
+  version: Int
+  summary_template: String
+  detail_template: String
+  page_template: String
+  theme: String
+  created: String
+  modified: String
+  process_state: String
+  position: String
+  access: String
+  redirect_flag: String
+  redirect_url: String
+  proxy_url: String
+  alias_flag: String
+  alias: String
+  page_title: String
+  page_description: String
+  keywords: String
+  sitemap_flag: String
+  sitemap_source_flag: String
+  sitemap_custom_field: String
+  menu_flag: String
+  menu_source_flag: String
+  menu_custom_field: String
+  sequence: Int
 }
 
 type Query {
@@ -43,10 +153,39 @@ type Query {
   object(id: ID!): Object
   properties: [Property]
   property(id: ID!): Property
+  modules: [Module]
+  module(id: ID!): Module
+  themes: [Theme]
+  theme(id: ID!): Theme
+  categories: [Category]
+  category(id: ID!): Category
+  configurations: [Configuration]
+  configuration(id: ID!): Configuration
+  publications_documents: [Publications_document]
+  publications_document(id: ID!): Publications_document
 }
 
 type Sample {
-  id: ID
+  id: ID!
   name: String
   age: Int
+}
+
+scalar Serial
+
+"""Theme: generic theme type for themes objects (themes, theme)"""
+type Theme {
+  id: ID!
+  name: String
+  keys: [String]
+  regid: Int
+  directory: String
+  version: String
+  configuration: String
+  state: String
+}
+
+type User {
+  id: ID!
+  name: String
 }

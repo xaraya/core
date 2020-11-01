@@ -30,7 +30,7 @@ class ListValidation extends ValueValidations
         if (isset($parameters[0]) && trim($parameters[0]) != '') {
             $validation = implode(':', $parameters);
             foreach  ($subject as $key => $value) {
-                $return = xarVarValidate($validation, $subject[$key]);
+                $return = xarVar::validate($validation, $subject[$key]);
                 //$return === null or $return === false => return
                 if (!$return) {
                     return $return;

@@ -97,7 +97,7 @@ class xarHooks extends xarEvents
         $where[] = "eo.module_id = mo.regid";
         // only get observers of active modules
         $where[] = "mo.state = ?";
-        $bindvars[] = XARMOD_STATE_ACTIVE;  
+        $bindvars[] = xarMod::STATE_ACTIVE;
 
         // This excludes observers of one or more modules in order to avoid duplication
         // The common case is hooking DD to some itemtype that is already a dataobject:
@@ -469,22 +469,7 @@ class xarHooks extends xarEvents
  */
 function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '')
 {
-    // scope and action are concatenated to form the name of the hook event
-    $event = ucfirst($hookScope) . ucfirst($hookAction);
-    if (empty($extraInfo))
-        $extraInfo = array();
-    if (!isset($extraInfo['itemid']))
-        $extraInfo['itemid'] = $hookId;
-    if (isset($callerModName) && !isset($extraInfo['module']))
-        $extraInfo['module'] = $callerModName;
-    if (isset($callerItemType) && !isset($extraInfo['itemtype']))
-        $extraInfo['itemtype'] = $callerItemType;
-    $args = array(
-        'objectid' => $hookId,
-        'extrainfo' => $extraInfo,
-    );
-    // Notify the hook subject (event) observers
-    return xarHooks::notify($event, $args);
+    return xarModHooks::call($hookScope, $hookAction, $hookId, $extraInfo, $callerModName, $callerItemType);
 }
 
 /**
@@ -508,8 +493,7 @@ function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $c
 // This is the actual function that gets modules hooked to a module (+ itemtype) 
 function xarModGetHookList($callerModName, $hookScope, $hookAction, $callerItemType = '')
 {
-    $event = ucfirst($hookScope) . ucfirst($hookAction);
-    return xarHooks::getSubjectObservers($callerModName, $event, $callerItemType);
+    return xarModHooks::getList($callerModName, $hookScope, $hookAction, $callerItemType);
 }
 
 /**
@@ -532,7 +516,7 @@ function xarModGetHookList($callerModName, $hookScope, $hookAction, $callerItemT
  */
 function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '')
 {
-    return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
+    return xarModHooks::isHooked($hookModName, $callerModName, $callerItemType);
 }
 
 /**
@@ -587,3 +571,48 @@ function xarModUnregisterHook($hookScope, $hookAction, $hookArea,$hookModName, $
     return xarHooks::unregisterObserver($event, $hookModName);
 }
 
+/**
+ * Move public static functions to class
+ */
+class xarModHooks extends xarObject
+{
+    /**
+     * Carry out hook operations for module
+     */
+    public static function call($hookScope, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '')
+    {
+        // scope and action are concatenated to form the name of the hook event
+        $event = ucfirst($hookScope) . ucfirst($hookAction);
+        if (empty($extraInfo))
+            $extraInfo = array();
+        if (!isset($extraInfo['itemid']))
+            $extraInfo['itemid'] = $hookId;
+        if (isset($callerModName) && !isset($extraInfo['module']))
+            $extraInfo['module'] = $callerModName;
+        if (isset($callerItemType) && !isset($extraInfo['itemtype']))
+            $extraInfo['itemtype'] = $callerItemType;
+        $args = array(
+            'objectid' => $hookId,
+            'extrainfo' => $extraInfo,
+        );
+        // Notify the hook subject (event) observers
+        return xarHooks::notify($event, $args);
+    }
+
+    /**
+     * Get list of available hooks for a particular module[, scope] and action
+     */
+    public static function getList($callerModName, $hookScope, $hookAction, $callerItemType = '')
+    {
+        $event = ucfirst($hookScope) . ucfirst($hookAction);
+        return xarHooks::getSubjectObservers($callerModName, $event, $callerItemType);
+    }
+
+    /**
+     * Check if a particular hook module is hooked to the current module (+ itemtype)
+     */
+    public static function isHooked($hookModName, $callerModName = NULL, $callerItemType = '')
+    {
+        return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
+    }
+}

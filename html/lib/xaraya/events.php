@@ -522,7 +522,7 @@ class xarEvents extends xarObject implements ixarEvents
         // get subjects for valid, active modules only 
         $where[] = "es.module_id = ms.regid";
         $where[] = "ms.state = ?";
-        $bindvars[] = XARMOD_STATE_ACTIVE;
+        $bindvars[] = xarMod::STATE_ACTIVE;
         // get subjects for current subjecttype
         $where[] = "es.itemtype = ?";
         $bindvars[] = $subjecttype;        
@@ -589,7 +589,7 @@ class xarEvents extends xarObject implements ixarEvents
         $where[] = "ms.regid = s.module_id";
          // only get subjects of active modules
         $where[] = "ms.state = ?";
-        $bindvars[] = XARMOD_STATE_ACTIVE; 
+        $bindvars[] = xarMod::STATE_ACTIVE;
         // only get subjects for the current subject itemtype
         $where[] =  "s.itemtype = ?";
         $bindvars[] = $subjecttype;
@@ -597,7 +597,7 @@ class xarEvents extends xarObject implements ixarEvents
         $where[] = "mo.regid = o.module_id";
         // only get observers of active modules
         $where[] = "mo.state = ?";
-        $bindvars[] = XARMOD_STATE_ACTIVE;  
+        $bindvars[] = xarMod::STATE_ACTIVE;
         // only get observers for the current observer itemtype
         $where[] = "o.itemtype = ?";
         $bindvars[] = $observertype;
@@ -658,9 +658,9 @@ class xarEvents extends xarObject implements ixarEvents
         $where[] = "eo.module_id = mo.regid";
         // make sure they belong to an active module
         $where[] = "mo.state = ?";
-        $bindvars[] = XARMOD_STATE_ACTIVE;
+        $bindvars[] = xarMod::STATE_ACTIVE;
         $where[] = "ms.state = ?";
-        $bindvars[] = XARMOD_STATE_ACTIVE;
+        $bindvars[] = xarMod::STATE_ACTIVE;
         // only observers of current observer itemtype
         $where[] = "eo.itemtype = ?";
         $bindvars[] = $observertype;

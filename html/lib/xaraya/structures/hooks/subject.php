@@ -42,7 +42,7 @@ abstract class HookSubject extends EventSubject implements ixarEventSubject, ixa
         // when notified, the observer can obtain extrainfo in one hit from $subject->getExtrainfo();    
         extract($args);
         // Hooks called using xarHooks::notify() $args is extrainfo
-        // Hooks called using xarModCallHooks, $args is an array containing objectid, and extrainfo
+        // Hooks called using xarModHooks::call, $args is an array containing objectid, and extrainfo
         if (empty($extrainfo)) $extrainfo = $args;
         
         // extrainfo must be an array
