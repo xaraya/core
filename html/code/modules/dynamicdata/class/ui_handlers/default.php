@@ -76,17 +76,17 @@ class DataObjectDefaultHandler extends xarObject
         }
 
         // get some common URL parameters
-        if (!xarVarFetch('object',   'isset', $args['object'],   NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('name',     'isset', $args['name'],     NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('module',   'isset', $args['module'],   NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('itemtype', 'isset', $args['itemtype'], NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('table',    'isset', $args['table'],    NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('layout',   'isset', $args['layout'],   NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('template', 'isset', $args['template'], NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('startnum', 'isset', $args['startnum'], NULL, XARVAR_DONT_SET)) {return;}
-        if (!xarVarFetch('numitems', 'isset', $args['numitems'], NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVar::fetch('object',   'isset', $args['object'],   NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('name',     'isset', $args['name'],     NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('module',   'isset', $args['module'],   NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('itemtype', 'isset', $args['itemtype'], NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('table',    'isset', $args['table'],    NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('layout',   'isset', $args['layout'],   NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('template', 'isset', $args['template'], NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('startnum', 'isset', $args['startnum'], NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('numitems', 'isset', $args['numitems'], NULL, xarVar::DONT_SET)) {return;}
 
-         if (!xarVarFetch('fieldlist', 'isset', $fieldlist, NULL, XARVAR_DONT_SET)) {return;}
+         if (!xarVar::fetch('fieldlist', 'isset', $fieldlist, NULL, xarVar::DONT_SET)) {return;}
         // make fieldlist an array, 
         // @todo should the object class do it?
         if (!empty($fieldlist)) {
@@ -156,7 +156,7 @@ class DataObjectDefaultHandler extends xarObject
         }
 
         if (!method_exists($this->object, $this->method)) {
-            return xarML('Unknown method #(1) for #(2)', xarVarPrepForDisplay($this->method), $this->object->label);
+            return xarML('Unknown method #(1) for #(2)', xarVar::prepForDisplay($this->method), $this->object->label);
         }
 
         // Pre-fetch item(s) for some standard dataobject methods
@@ -177,7 +177,7 @@ class DataObjectDefaultHandler extends xarObject
         }
 
         $title = $this->object->label;
-        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         // Here we try to run the requested method directly
         $output = $this->object->{$this->method}($this->args);

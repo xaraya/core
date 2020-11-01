@@ -23,14 +23,14 @@
 function dynamicdata_user_search(Array $args=array())
 {
 // Security Check
-    if(!xarSecurityCheck('ViewDynamicData')) return;
+    if(!xarSecurity::check('ViewDynamicData')) return;
 
     $data = array();
 
-    if (!xarVarFetch('q', 'isset', $q, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('dd_check', 'isset', $dd_check, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('startnum', 'int:0', $startnum,  NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('numitems', 'int:0', $numitems,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('q', 'isset', $q, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('dd_check', 'isset', $dd_check, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('startnum', 'int:0', $startnum,  NULL, xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('numitems', 'int:0', $numitems,  NULL, xarVar::NOT_REQUIRED)) {return;}
     if (empty($dd_check)) {
         $dd_check = array();
     }
@@ -40,10 +40,10 @@ function dynamicdata_user_search(Array $args=array())
         $data['ishooked'] = 1;
     } else {
         $data['ishooked'] = 0;
-        $data['q'] = isset($q) ? xarVarPrepForDisplay($q) : null;
+        $data['q'] = isset($q) ? xarVar::prepForDisplay($q) : null;
 
-        if(!xarVarFetch('module_id',    'int',   $module_id,     NULL, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('itemtype', 'int',   $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('module_id',    'int',   $module_id,     NULL, xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('itemtype', 'int',   $itemtype,  NULL, xarVar::DONT_SET)) {return;}
         if (empty($module_id) && empty($itemtype)) {
             $data['gotobject'] = 0;
         } else {
@@ -121,7 +121,7 @@ function dynamicdata_user_search(Array $args=array())
         if (!empty($q) && count($wherelist) > 0) {
             //$where = join(' or ',$wherelist);
             $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-            $pagerurl = xarModURL('dynamicdata','user','search',
+            $pagerurl = xarController::URL('dynamicdata','user','search',
                                   array('module_id' => ($module_id == $mymodid) ? null : $module_id,
                                         'itemtype' => empty($itemtype) ? null : $itemtype,
                                         'q' => $q,
@@ -161,7 +161,7 @@ function dynamicdata_user_search(Array $args=array())
             $itemtype = null;
         }
         $data['items'][] = array(
-                                 'link'     => xarModURL('dynamicdata','user',$myfunc,
+                                 'link'     => xarController::URL('dynamicdata','user',$myfunc,
                                                          array('module_id' => $module_id,
                                                                'itemtype' => $itemtype)),
                                  'label'    => $label,

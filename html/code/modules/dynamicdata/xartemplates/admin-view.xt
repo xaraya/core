@@ -8,9 +8,9 @@
                 <xar:var name="label">DataObjects</xar:var>
             </xar:if>
             <xar:if condition="!empty($object) and !empty($object:objectid)">
-                <xar:set name="newlink">xarModURL('dynamicdata','admin','new',array('objectid' => $object->objectid))</xar:set>
+                <xar:set name="newlink">xarController::URL('dynamicdata','admin','new',array('objectid' => $object->objectid))</xar:set>
             <xar:else/>
-                <xar:set name="newlink">xarModURL('dynamicdata','admin','new',array('table' => $table))</xar:set>
+                <xar:set name="newlink">xarController::URL('dynamicdata','admin','new',array('table' => $table))</xar:set>
             </xar:if>
             <h2>View #$label#&#160;</h2>
 
@@ -28,7 +28,7 @@
                 </xar:if>
                 <xar:if condition="$object:checkAccess('config')">
                     <dd>
-                        <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $object->objectid))</xar:set>
+                        <xar:set name="proplink">xarController::URL('dynamicdata','admin','modifyprop',array('itemid' => $object->objectid))</xar:set>
                         <a class="xar-icon xar-icon-modify-config" href="#$proplink#" title="Configure #$label#">
                             <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
                                 <img src="#xarTpl::getImage('icons/modify-config.png','base')#" class="xar-icon" alt="Configure #$label#"/>

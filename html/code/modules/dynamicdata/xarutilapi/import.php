@@ -84,7 +84,7 @@ function dynamicdata_utilapi_import(Array $args=array())
         $dupexists = !empty($info);
         if ($dupexists && !$overwrite) {
             $msg = 'Duplicate definition for #(1) #(2)';
-            $vars = array('object',xarVarPrepForDisplay($args['name']));
+            $vars = array('object',xarVar::prepForDisplay($args['name']));
             throw new DuplicateException(null,$args['name']);
         }
 
@@ -269,7 +269,7 @@ function dynamicdata_utilapi_import(Array $args=array())
                         $objectname2objectid[$currentobject] = $$currentobject;
                     } else {
                         $msg = 'Unknown #(1) "#(2)"';
-                        $vars = array('object',xarVarPrepForDisplay($thisname));
+                        $vars = array('object',xarVar::prepForDisplay($thisname));
                         throw new BadParameterException($vars,$msg);
                     }
                 }

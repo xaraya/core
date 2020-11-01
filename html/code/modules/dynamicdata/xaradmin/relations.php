@@ -17,26 +17,26 @@
 function dynamicdata_admin_relations(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) return;
 
-    if(!xarVarFetch('module',    'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id', 'isset', $module_id, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype',  'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('objectid',  'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',     'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('field',     'isset', $field,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('value',     'isset', $value,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('relation',  'isset', $relation,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('direction', 'isset', $direction, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('withobjectid', 'isset', $withobjectid, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('withtable', 'isset', $withtable, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('withfield', 'isset', $withfield, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('withvalue', 'isset', $withvalue, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('confirm',   'isset', $confirm,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('update',    'isset', $update,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('delete',    'isset', $delete,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('what',      'isset', $what,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('extra',     'isset', $extra,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('module',    'isset', $module,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module_id', 'isset', $module_id, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype',  'isset', $itemtype,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid',  'isset', $objectid,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('table',     'isset', $table,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('field',     'isset', $field,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('value',     'isset', $value,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('relation',  'isset', $relation,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('direction', 'isset', $direction, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('withobjectid', 'isset', $withobjectid, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('withtable', 'isset', $withtable, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('withfield', 'isset', $withfield, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('withvalue', 'isset', $withvalue, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('confirm',   'isset', $confirm,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('update',    'isset', $update,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('delete',    'isset', $delete,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('what',      'isset', $what,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('extra',     'isset', $extra,     NULL, xarVar::DONT_SET)) {return;}
 
     // filter out invalid tables
     $xartables =& xarDB::getTables();
@@ -255,7 +255,7 @@ function dynamicdata_admin_relations(Array $args=array())
 
             // add link
             DataObjectLinks::addLink($objectid, $field, $withobjectid, $withfield, $relation, $direction, $extra);
-            xarController::redirect(xarModURL('dynamicdata', 'admin', 'relations',
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'relations',
                                             array('objectid' => $objectid)));
             return true;
 
@@ -268,12 +268,12 @@ function dynamicdata_admin_relations(Array $args=array())
                 if (empty($link_id) || empty($val)) continue;
                 DataObjectLinks::removeLink($link_id);
             }
-            xarController::redirect(xarModURL('dynamicdata', 'admin', 'relations',
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'relations',
                                             array('objectid' => $objectid)));
             return true;
 
         } elseif (!empty($update)) {
-            if(!xarVarFetch('getlinkedobjects', 'isset', $getlinkedobjects, NULL, XARVAR_DONT_SET)) {return;}
+            if(!xarVar::fetch('getlinkedobjects', 'isset', $getlinkedobjects, NULL, xarVar::DONT_SET)) {return;}
             if (!empty($getlinkedobjects)) {
                 xarModItemVars::set('dynamicdata', 'getlinkedobjects', 1, $objectid);
             } else {
@@ -335,7 +335,7 @@ function dynamicdata_admin_relations(Array $args=array())
             // CHECKME: always bi-directional for tables ?
             $direction = 'bi';
             DataStoreLinks::addLink($table, $field, $withtable, $withfield, $relation, $direction, $extra);
-            xarController::redirect(xarModURL('dynamicdata', 'admin', 'relations',
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'relations',
                                           array('table' => $table)));
             return true;
 
@@ -348,7 +348,7 @@ function dynamicdata_admin_relations(Array $args=array())
                 if (empty($link_id) || empty($val)) continue;
                 DataStoreLinks::removeLink($link_id);
             }
-            xarController::redirect(xarModURL('dynamicdata', 'admin', 'relations',
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'relations',
                                           array('table' => $table)));
             return true;
         }

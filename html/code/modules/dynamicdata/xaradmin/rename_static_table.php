@@ -15,11 +15,11 @@
     function dynamicdata_admin_rename_static_table()
     {
         // Security
-        if (!xarSecurityCheck('AdminDynamicData')) return;
+        if (!xarSecurity::check('AdminDynamicData')) return;
 
-        if (!xarVarFetch('table',      'str:1',  $data['table'],    '',     XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('newtable',   'str:1',  $data['newtable'],    '',     XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('confirm',    'bool',   $data['confirm'], false,       XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('table',      'str:1',  $data['table'],    '',     xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('newtable',   'str:1',  $data['newtable'],    '',     xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
 
         $data['object'] = DataObjectMaster::getObject(array('name' => 'dynamicdata_tablefields'));
 
@@ -27,13 +27,13 @@
 
         if ($data['confirm']) {
             if (empty($data['newtable'])) 
-                xarController::redirect(xarModURL('dynamicdata','admin','view_static',array('table' => $data['table'])));
+                xarController::redirect(xarController::URL('dynamicdata','admin','view_static',array('table' => $data['table'])));
             $query = 'RENAME TABLE ' . $data['table'] . ' TO ' . $data['newtable'];
             $dbconn = xarDB::getConn();
             $dbconn->Execute($query);
 
             // Jump to the next page
-            xarController::redirect(xarModURL('dynamicdata','admin','view_static',array('table' => $data['newtable'])));
+            xarController::redirect(xarController::URL('dynamicdata','admin','view_static',array('table' => $data['newtable'])));
             return true;
         }
         return $data;

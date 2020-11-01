@@ -24,16 +24,16 @@
 function dynamicdata_admin_orderprops()
 {
     // Security
-    if(!xarSecurityCheck('EditDynamicData')) return;
+    if(!xarSecurity::check('EditDynamicData')) return;
 
     // Get parameters from whatever input we need.  All arguments to this
-    // function should be obtained from xarVarFetch()
-    if(!xarVarFetch('objectid',          'isset', $objectid,          NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',         'isset', $module_id,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0, XARVAR_DONT_SET)) {return;}
+    // function should be obtained from xarVar::fetch()
+    if(!xarVar::fetch('objectid',          'isset', $objectid,          NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module_id',         'isset', $module_id,         NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype',          'int:1:', $itemtype,         0, xarVar::DONT_SET)) {return;}
 
-    if(!xarVarFetch('itemid',        'isset', $itemid,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('direction',     'isset', $direction,      NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',        'isset', $itemid,         NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('direction',     'isset', $direction,      NULL, xarVar::DONT_SET)) {return;}
 
     if (empty($direction)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
@@ -113,7 +113,7 @@ function dynamicdata_admin_orderprops()
         }
     }
 
-    xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modifyprop',
                         array('module_id'    => $module_id,
                               'itemtype' => $itemtype,
         )));

@@ -63,7 +63,7 @@ function dynamicdata_userapi_dropdownlist(Array $args=array())
                 $list[$itemid] = $value;
             }
         } else {
-            $list[$itemid] = xarVarPrepForDisplay($item[$field]);
+            $list[$itemid] = xarVar::prepForDisplay($item[$field]);
         }
     }
     return $list;

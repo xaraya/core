@@ -6,7 +6,7 @@
     <div class="xar-mod-body">
         <h2>Utilities - Export DataObject Definition</h2>
         <xar:template type="module" file="utility-menu"/>
-        <form method="post" action="#xarModURL('dynamicdata','admin','export')#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','export')#">
             <fieldset class="xar-form-actions">
                 <legend>Select Object</legend>
                 <div class="xar-row">

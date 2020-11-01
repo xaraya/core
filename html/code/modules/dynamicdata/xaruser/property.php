@@ -15,8 +15,8 @@
 
 function dynamicdata_user_property(Array $args=array())
 {
-    if (!xarVarFetch('prop', 'str', $property, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('act',  'str', $act, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('prop', 'str', $property, '', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('act',  'str', $act, '', xarVar::NOT_REQUIRED)) return;
     if (empty($property) || empty($act))
         return xarResponse::NotFound();
         

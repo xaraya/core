@@ -33,13 +33,13 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
      */
     function run(array $args = array())
     {
-        if(!xarVarFetch('preview', 'isset', $args['preview'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('preview', 'isset', $args['preview'], NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('confirm', 'isset', $args['confirm'], NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('values', 'isset', $args['values'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('values', 'isset', $args['values'], NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('return_url', 'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('return_url', 'isset', $args['return_url'], NULL, xarVar::DONT_SET)) 
             return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
@@ -96,7 +96,7 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
         }
 
         $title = xarML('New #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         // call item new hooks for this item
         $this->object->callHooks('new');

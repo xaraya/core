@@ -35,7 +35,7 @@ function dynamicdata_utilapi_importproperties(Array $args=array())
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
     if (empty($itemtype)) {
         $itemtype = 0;

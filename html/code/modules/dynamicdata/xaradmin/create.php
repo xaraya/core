@@ -31,14 +31,14 @@ function dynamicdata_admin_create(Array $args=array())
 // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
 //        or relies on $myobject or other stuff like that...
 
-    if (!xarVarFetch('objectid',    'isset', $objectid,   NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('itemid',      'isset', $itemid,     0,    XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('preview',     'isset', $preview,    0,    XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('return_url',  'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('join',        'isset', $join,       NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('table',       'isset', $table,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('template',     'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule',    'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('objectid',    'isset', $objectid,   NULL, xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('itemid',      'isset', $itemid,     0,    xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('preview',     'isset', $preview,    0,    xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('return_url',  'isset', $return_url, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('join',        'isset', $join,       NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('table',       'isset', $table,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('template',     'isset', $template,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('tplmodule',    'isset', $tplmodule,   'dynamicdata', xarVar::NOT_REQUIRED)) {return;}
 
     if (!xarSecConfirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
@@ -92,10 +92,10 @@ function dynamicdata_admin_create(Array $args=array())
     if (!empty($return_url)) {
         xarController::redirect($return_url);
     } elseif (!empty($table)) {
-        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
                                       array('table' => $table)));
     } else {
-        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
                                       array(
                                       'itemid' => $objectid,
                                       'tplmodule' => $tplmodule

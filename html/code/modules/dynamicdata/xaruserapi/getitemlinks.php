@@ -60,7 +60,7 @@ function dynamicdata_userapi_getitemlinks(Array $args=array())
         } else {
             $label = xarML('Item #(1)',$itemid);
         }
-        $itemlinks[$itemid] = array('url'   => xarModURL('dynamicdata', 'user', 'display',
+        $itemlinks[$itemid] = array('url'   => xarController::URL('dynamicdata', 'user', 'display',
                                                          array('itemtype' => $itemtype,
                                                                'itemid' => $itemid)),
                                     'title' => xarML('Display Item'),

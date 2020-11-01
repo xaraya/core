@@ -20,17 +20,17 @@ function dynamicdata_admin_delete(Array $args=array())
 {
    extract($args);
 
-    if(!xarVarFetch('objectid',   'isset', $objectid,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('name',       'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemid',     'int:1:',    $itemid, 0, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('objectid',   'isset', $objectid,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('name',       'isset', $name,       NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',     'int:1:',    $itemid, 0, xarVar::NOT_REQUIRED)) {return;}
     if (empty($itemid)) return xarResponse::notFound();
-    if(!xarVarFetch('confirm',    'isset', $confirm,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('noconfirm',  'isset', $noconfirm,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('join',       'isset', $join,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',      'isset', $table,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule',  'isset', $tplmodule,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('template',   'isset', $template,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('return_url', 'isset', $return_url, NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('confirm',    'isset', $confirm,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('noconfirm',  'isset', $noconfirm,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('join',       'isset', $join,       NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('table',      'isset', $table,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('tplmodule',  'isset', $tplmodule,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('template',   'isset', $template,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET)) {return;}
 
     $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
                                          'name'       => $name,
@@ -56,13 +56,13 @@ function dynamicdata_admin_delete(Array $args=array())
         if (!empty($return_url)) {
             xarController::redirect($return_url);
         } elseif (!empty($table)) {
-            xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
                                           array(
                                             'table'     => $table,
                                             'tplmodule' => $data['tplmodule'],
                                           )));
         } else {
-            xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
                                           array(
                                             'itemid'    => $data['objectid'],
                                             'tplmodule' => $data['tplmodule'],
@@ -139,13 +139,13 @@ function dynamicdata_admin_delete(Array $args=array())
     if (!empty($return_url)) {
         xarController::redirect($return_url);
     } elseif (!empty($table)) {
-        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
                                       array(
                                       'table'     => $table,
                                       'tplmodule' => $tplmodule,
                                       )));
     } else {
-        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
                                       array(
                                       'name' => $myobject->name,
                                       'tplmodule' => $tplmodule,

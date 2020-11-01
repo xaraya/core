@@ -4,9 +4,9 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object:objectid)">
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
         <xar:else/>
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
         </xar:if>
         <h2>
             <xar:if condition="!empty($objectid) and $objectid eq 1">
@@ -33,7 +33,7 @@
         <h3 class="xar-align-center">Confirm Deleting This Item?</h3>
         <xar:data-display object="$object"/>
         <div style="clear:both">&#160;</div>
-        <form method="post" action="#xarModURL('dynamicdata','admin','delete')#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','delete')#">
             <div class="xar-row">
                 <div class="xar-col">
                 </div>

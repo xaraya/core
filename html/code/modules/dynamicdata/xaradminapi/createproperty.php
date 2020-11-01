@@ -49,7 +49,7 @@ function dynamicdata_adminapi_createproperty(Array $args=array())
 
     if (empty($moduleid)) {
         // defaults to the current module
-        $moduleid = xarMod::getRegID(xarModGetName());
+        $moduleid = xarMod::getRegID(xarMod::getName());
     }
     if (empty($itemtype)) {
         $itemtype = 0;

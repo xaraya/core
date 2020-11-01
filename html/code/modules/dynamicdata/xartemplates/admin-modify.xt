@@ -4,9 +4,9 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object:objectid)">
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
         <xar:else/>
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
         </xar:if>
         <xar:if condition="empty($tab) or $tab eq 'edit'">
             <h2>
@@ -44,7 +44,7 @@
             <xar:else/>
                 <xar:set name="enc_type">'application/x-www-form-urlencoded'</xar:set>
             </xar:if>
-            <form method="post" action="#xarModURL('dynamicdata','admin','update')#" enctype="#$enc_type#">
+            <form method="post" action="#xarController::URL('dynamicdata','admin','update')#" enctype="#$enc_type#">
                 <fieldset>
                     <legend>Modify Object Definition</legend>
                     <xar:if condition="$object:visibility ne 'public'">
@@ -87,7 +87,7 @@
                 </div>
                 <xar:if condition="!empty($objectid) and $objectid eq 2">
                     <p>
-                        <a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
+                        <a href="#xarController::URL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
                             Edit configuration
                         </a>
                     </p>
@@ -105,7 +105,7 @@
                     </a>
                 </xar:if>
             </h2>
-            <form method="post" action="#xarModURL('dynamicdata','admin','update')#">
+            <form method="post" action="#xarController::URL('dynamicdata','admin','update')#">
                 <xar:if condition="$adminaccess">
                     <fieldset>
                         <legend>
@@ -132,7 +132,7 @@
                         </div>
                         <xar:if condition="!empty($objectid) and $objectid eq 2">
                             <p>
-                                <a href="#xarModURL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
+                                <a href="#xarController::URL('dynamicdata','admin','showpropval',array('itemid'=>$itemid))#">
                                     Edit configuration</a>
                             </p>
                         </xar:if>

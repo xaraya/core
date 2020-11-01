@@ -34,7 +34,7 @@ function dynamicdata_user_displayhook(Array $args=array())
     if (is_array($extrainfo) && !empty($extrainfo['module']) && is_string($extrainfo['module'])) {
         $modname = $extrainfo['module'];
     } else {
-        $modname = xarModGetName();
+        $modname = xarMod::getName();
     }
 
     $module_id = xarMod::getRegID($modname);
@@ -47,8 +47,8 @@ function dynamicdata_user_displayhook(Array $args=array())
     if (is_array($extrainfo) && isset($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
         $itemtype = $extrainfo['itemtype'];
 // TODO: find some better way to do this !
-    } elseif (xarVarIsCached('Hooks.display','itemtype')) {
-        $itemtype = xarVarGetCached('Hooks.display','itemtype');
+    } elseif (xarVar::isCached('Hooks.display','itemtype')) {
+        $itemtype = xarVar::getCached('Hooks.display','itemtype');
     } else {
         $itemtype = null;
     }

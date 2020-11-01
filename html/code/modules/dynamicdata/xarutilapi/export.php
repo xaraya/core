@@ -64,7 +64,7 @@ function dynamicdata_utilapi_export(Array $args=array())
             if (is_array($myobject->properties[$name]->value)) {
                 $xml .= "  <$name>\n";
                 foreach ($myobject->$name as $field => $value) {
-                    $xml .= "    <$field>" . xarVarPrepForDisplay($value) . "</$field>\n";
+                    $xml .= "    <$field>" . xarVar::prepForDisplay($value) . "</$field>\n";
                 }
                 $xml .= "  </$name>\n";
             } elseif ($name == 'config') {
@@ -73,7 +73,7 @@ function dynamicdata_utilapi_export(Array $args=array())
                 $xml .= "  <$name>" . $value . "</$name>\n";
             } else {
                 $value = $myobject->properties[$name]->value;
-                $xml .= "  <$name>" . xarVarPrepForDisplay($value) . "</$name>\n";
+                $xml .= "  <$name>" . xarVar::prepForDisplay($value) . "</$name>\n";
             }
         }
     }
@@ -85,18 +85,18 @@ function dynamicdata_utilapi_export(Array $args=array())
             if ($key != 'name' && isset($properties[$name][$key])) {
                 if ($key == 'type') {
                     // replace numeric property type with text version
-                    $xml .= "      <$key>".xarVarPrepForDisplay($proptypes[$properties[$name][$key]]['name'])."</$key>\n";
+                    $xml .= "      <$key>".xarVar::prepForDisplay($proptypes[$properties[$name][$key]]['name'])."</$key>\n";
                 } elseif ($key == 'source') {
                     // replace local table prefix with default xar_* one
                     $val = $properties[$name][$key];
                     $val = preg_replace("/^$prefix/",'xar_',$val);
-                    $xml .= "      <$key>".xarVarPrepForDisplay($val)."</$key>\n";
+                    $xml .= "      <$key>".xarVar::prepForDisplay($val)."</$key>\n";
                 } elseif ($key == 'configuration') {
                     // don't replace anything in the serialized value
                     $val = $properties[$name][$key];
                     $xml .= "      <$key>" . $val . "</$key>\n";
                 } else {
-                    $xml .= "      <$key>".xarVarPrepForDisplay($properties[$name][$key])."</$key>\n";
+                    $xml .= "      <$key>".xarVar::prepForDisplay($properties[$name][$key])."</$key>\n";
                 }
             }
         }

@@ -29,18 +29,18 @@ function dynamicdata_admin_update(Array $args=array())
 {
     extract($args);
 
-    if(!xarVarFetch('objectid',   'isset', $objectid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemid',     'isset', $itemid,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('join',       'isset', $join,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',      'isset', $table,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule',  'isset', $tplmodule,   'dynamicdata', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('preview',    'isset', $preview,     0, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('objectid',   'isset', $objectid,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',     'isset', $itemid,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('join',       'isset', $join,        NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('table',      'isset', $table,       NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('tplmodule',  'isset', $tplmodule,   'dynamicdata', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('return_url', 'isset', $return_url,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('preview',    'isset', $preview,     0, xarVar::NOT_REQUIRED)) {return;}
 
-    if (!xarVarFetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('tab', 'pre:trim:lower:str:1', $data['tab'], 'edit', xarVar::NOT_REQUIRED)) return;
 
     // Security
-    if(!xarSecurityCheck('EditDynamicData')) return;
+    if(!xarSecurity::check('EditDynamicData')) return;
 
     if (!xarSecConfirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
@@ -59,7 +59,7 @@ function dynamicdata_admin_update(Array $args=array())
             // if we're editing a dynamic property, save its property type to cache
             // for correct processing of the configuration rule (ValidationProperty)
             if ($myobject->objectid == 2) {
-                xarVarSetCached('dynamicdata','currentproptype', $myobject->properties['type']);
+                xarVar::setCached('dynamicdata','currentproptype', $myobject->properties['type']);
             }
 
             $isvalid = $myobject->checkInput(array(), 0, 'dd');
@@ -130,14 +130,14 @@ function dynamicdata_admin_update(Array $args=array())
 
         case 'clone':
             // only admins can change access rules
-            $adminaccess = xarSecurityCheck('',0,'All',$myobject->objectid . ":" . $myobject->name . ":" . "All",0,'',0,800);
+            $adminaccess = xarSecurity::check('',0,'All',$myobject->objectid . ":" . $myobject->name . ":" . "All",0,'',0,800);
 
             if (!$adminaccess)
                 return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
 
             $name = $myobject->properties['name']->getValue();
             $myobject->properties['name']->setValue();
-            if(!xarVarFetch('newname',   'str', $newname,   "", XARVAR_NOT_REQUIRED)) {return;}
+            if(!xarVar::fetch('newname',   'str', $newname,   "", xarVar::NOT_REQUIRED)) {return;}
             if (empty($newname)) $newname = $name . "_copy";
             $newname = strtolower(str_ireplace(" ", "_", $newname));
             
@@ -168,7 +168,7 @@ function dynamicdata_admin_update(Array $args=array())
             }
             
             // Got to the object to modify it
-            xarController::redirect(xarModURL('dynamicdata', 'admin', 'modify',
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modify',
                                       array('itemid' => $newitemid)));
             return true;
         break;
@@ -177,17 +177,17 @@ function dynamicdata_admin_update(Array $args=array())
     if (!empty($return_url)) {
         xarController::redirect($return_url);
     } elseif ($myobject->objectid == 1) { // for dynamic objects, return to modify
-        xarController::redirect(xarModURL('dynamicdata', 'admin', 'modify',
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modify',
                                       array('itemid' => $itemid)));
     } elseif ($myobject->objectid == 2) { // for dynamic properties, return to modifyprop
         $objectid = $myobject->properties['objectid']->value;
-        xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modifyprop',
                                       array('itemid' => $objectid)));
     } elseif (!empty($table)) {
-        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
                                       array('table' => $table)));
     } else {
-        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view',
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
                                       array(
                                       'itemid' => $objectid,
                                       'tplmodule' => $tplmodule

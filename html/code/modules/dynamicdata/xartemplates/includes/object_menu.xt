@@ -5,31 +5,31 @@
         <xar:set name="tab">'edit'</xar:set>
     </xar:if>
     <xar:if condition="$tab ne 'edit'">
-        <xar:set name="editlink">xarModURL('dynamicdata','admin','modify',array('itemid' => $itemid))</xar:set>
+        <xar:set name="editlink">xarController::URL('dynamicdata','admin','modify',array('itemid' => $itemid))</xar:set>
         &#160;<a href="#$editlink#" title="Modify DataObject #$label#">
             <xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="modify"/>
         </a>
     </xar:if>
     <xar:if condition="$tab ne 'modifyprop'">
-        <xar:set name="proplink">xarModURL('dynamicdata','admin','modifyprop',array('itemid' => $itemid))</xar:set>
+        <xar:set name="proplink">xarController::URL('dynamicdata','admin','modifyprop',array('itemid' => $itemid))</xar:set>
         &#160;<a href="#$proplink#" title="Modify DataProperties for #$label#">
             <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="modifyprop"/>
         </a>
     </xar:if>
     <xar:if condition="$tab ne 'access'">
-        <xar:set name="accesslink">xarModURL('dynamicdata','admin','access',array('itemid' => $itemid))</xar:set>
+        <xar:set name="accesslink">xarController::URL('dynamicdata','admin','access',array('itemid' => $itemid))</xar:set>
         &#160;<a href="#$accesslink#" title="Modify Access Rules for #$label#">
             <xar:img scope="theme" file="icons/privileges.png" class="xar-icon" alt="access"/>
         </a>
     </xar:if>
     <xar:if condition="$tab ne 'view'">
-        <xar:set name="itemslink">xarModURL('dynamicdata','admin','view',array('itemid' => $itemid))</xar:set>
+        <xar:set name="itemslink">xarController::URL('dynamicdata','admin','view',array('itemid' => $itemid))</xar:set>
         &#160;<a href="#$itemslink#" title="View Items for #$label#">
             <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="viewitems"/>
         </a>
     </xar:if>
     <xar:if condition="$tab ne 'export'">
-        <xar:set name="exportlink">xarModURL('dynamicdata','admin','export',array('objectid' => $itemid))</xar:set>
+        <xar:set name="exportlink">xarController::URL('dynamicdata','admin','export',array('objectid' => $itemid))</xar:set>
         &#160;<a href="#$exportlink#" title="Export Object Definition for #$label#">
             <xar:img scope="theme" file="icons/export-xml.png" class="xar-icon" alt="export"/>
         </a>

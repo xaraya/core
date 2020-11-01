@@ -55,7 +55,7 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
     if (empty($itemids) || empty($hookmap)) {
         // nothing to do here
@@ -75,7 +75,7 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
         {
             case 'categories':
                 // load table definitions et al.
-                xarModAPILoad('categories','user');
+                xarMod::apiLoad('categories','user');
                 $xartable =& xarDB::getTables();
                 if (empty($xartable['categories_linkage'])) {
                     continue;
@@ -92,7 +92,7 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
             case 'ratings':
             case 'xlink':
                 // load table definitions et al.
-                xarModAPILoad($tohook,'user');
+                xarMod::apiLoad($tohook,'user');
                 $xartable =& xarDB::getTables();
                 if (empty($xartable[$tohook])) {
                     continue;
@@ -105,7 +105,7 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
 
             case 'comments':
                 // load table definitions et al.
-                xarModAPILoad('comments','user');
+                xarMod::apiLoad('comments','user');
                 $xartable =& xarDB::getTables();
                 if (empty($xartable['comments'])) {
                     continue;
@@ -124,7 +124,7 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
 
             case 'polls':
                 // load table definitions et al.
-                xarModAPILoad('polls','user');
+                xarMod::apiLoad('polls','user');
                 $xartable =& xarDB::getTables();
                 if (empty($xartable['polls'])) {
                     continue;
@@ -145,7 +145,7 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
 
             case 'uploads':
                 // load table definitions et al.
-                xarModAPILoad('uploads','user');
+                xarMod::apiLoad('uploads','user');
                 $xartable =& xarDB::getTables();
                 if (empty($xartable['file_associations'])) {
                     continue;

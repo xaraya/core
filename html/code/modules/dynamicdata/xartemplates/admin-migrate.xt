@@ -18,7 +18,7 @@
 </pre>
             </div>
         </xar:if>
-        <form method="post" action="#xarModURL('dynamicdata','admin','migrate')#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','migrate')#">
             <fieldset>
                 <legend>Mapping</legend>
                     <div class="xar-row">

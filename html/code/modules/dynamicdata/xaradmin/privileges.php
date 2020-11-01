@@ -19,22 +19,22 @@
 function dynamicdata_admin_privileges(Array $args=array())
 { 
     // Security
-    if (!xarSecurityCheck('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) return;
 
     extract($args);
 
-    if (!xarVarFetch('objectid', 'id' , $objectid, NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('moduleid', 'str', $moduleid, 0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric or modulename
-    if (!xarVarFetch('itemtype', 'str', $itemtype, 0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric 
-    if (!xarVarFetch('itemid', 'str', $itemid, 0, XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric  
-    if (!xarVarFetch('apply', 'str' , $apply , false, XARVAR_NOT_REQUIRED)) return; // boolean?
-    if (!xarVarFetch('extpid', 'str', $extpid, '', XARVAR_NOT_REQUIRED)) return; // empty, 'All', numeric ?
-    if (!xarVarFetch('extname', 'str', $extname, '', XARVAR_NOT_REQUIRED)) return; // ?
-    if (!xarVarFetch('extrealm', 'str', $extrealm, '', XARVAR_NOT_REQUIRED)) return; // ?
-    if (!xarVarFetch('extmodule','str', $extmodule, '', XARVAR_NOT_REQUIRED)) return; // ?
-    if (!xarVarFetch('extcomponent', 'enum:All:Item:Field:Type', $extcomponent)) return; // FIXME: is 'Type' needed?
-    if (!xarVarFetch('extinstance', 'str:1', $extinstance, '', XARVAR_NOT_REQUIRED)) return; // somthing:somthing:somthing or empty
-    if (!xarVarFetch('extlevel', 'str:1', $extlevel)) return;
+    if (!xarVar::fetch('objectid', 'id' , $objectid, NULL, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('moduleid', 'str', $moduleid, 0, xarVar::NOT_REQUIRED)) return; // empty, 'All', numeric or modulename
+    if (!xarVar::fetch('itemtype', 'str', $itemtype, 0, xarVar::NOT_REQUIRED)) return; // empty, 'All', numeric 
+    if (!xarVar::fetch('itemid', 'str', $itemid, 0, xarVar::NOT_REQUIRED)) return; // empty, 'All', numeric  
+    if (!xarVar::fetch('apply', 'str' , $apply , false, xarVar::NOT_REQUIRED)) return; // boolean?
+    if (!xarVar::fetch('extpid', 'str', $extpid, '', xarVar::NOT_REQUIRED)) return; // empty, 'All', numeric ?
+    if (!xarVar::fetch('extname', 'str', $extname, '', xarVar::NOT_REQUIRED)) return; // ?
+    if (!xarVar::fetch('extrealm', 'str', $extrealm, '', xarVar::NOT_REQUIRED)) return; // ?
+    if (!xarVar::fetch('extmodule','str', $extmodule, '', xarVar::NOT_REQUIRED)) return; // ?
+    if (!xarVar::fetch('extcomponent', 'enum:All:Item:Field:Type', $extcomponent)) return; // FIXME: is 'Type' needed?
+    if (!xarVar::fetch('extinstance', 'str:1', $extinstance, '', xarVar::NOT_REQUIRED)) return; // somthing:somthing:somthing or empty
+    if (!xarVar::fetch('extlevel', 'str:1', $extlevel)) return;
 
 // TODO: combine 'Item' and 'Type' instances someday ?
 
@@ -82,13 +82,20 @@ function dynamicdata_admin_privileges(Array $args=array())
 
     if (!empty($apply)) {
         // create/update the privilege
-        $pid = xarReturnPrivilege($extpid,$extname,$extrealm,$extmodule,$extcomponent,$newinstance,$extlevel);
+        $pid = xarMod::apiFunc('privileges','admin','returnprivilege',array(
+            'pid' => $extpid,
+            'name' => $extname,
+            'realm' => $extrealm,
+            'module' => $extmodule,
+            'component' => $extcomponent,
+            'instance' => $newinstance,
+            'level' => $extlevel));
         if (empty($pid)) {
             return; // throw back
         }
 
         // redirect to the privilege
-        xarController::redirect(xarModURL('privileges', 'admin', 'modifyprivilege',
+        xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
                                         array('id' => $pid)));
         return true;
     }
@@ -150,7 +157,7 @@ function dynamicdata_admin_privileges(Array $args=array())
                   'extmodule'    => $extmodule,
                   'extcomponent' => $extcomponent,
                   'extlevel'     => $extlevel,
-                  'extinstance'  => xarVarPrepForDisplay(join(':',$newinstance)),
+                  'extinstance'  => xarVar::prepForDisplay(join(':',$newinstance)),
                  );
 
     $data['refreshlabel'] = xarML('Refresh');

@@ -66,9 +66,9 @@ class SubFormProperty extends DataProperty
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            if (!xarVarFetch($name, 'isset', $value,  NULL, XARVAR_DONT_SET)) {return;}
+            if (!xarVar::fetch($name, 'isset', $value,  NULL, xarVar::DONT_SET)) {return;}
         }
-        if (!xarVarFetch('fieldprefix', 'isset', $this->fieldprefix,  NULL, XARVAR_DONT_SET)) {return;}
+        if (!xarVar::fetch('fieldprefix', 'isset', $this->fieldprefix,  NULL, xarVar::DONT_SET)) {return;}
         return $this->validateValue($value);
     }
 
@@ -94,25 +94,25 @@ class SubFormProperty extends DataProperty
 
         // retrieve new value for preview + new/modify combinations (in case we miss the preview)
 /*
-        if (xarVarIsCached('DynamicData.SubForm',$name)) {
-            $this->value = xarVarGetCached('DynamicData.SubForm',$name);
+        if (xarVar::isCached('DynamicData.SubForm',$name)) {
+            $this->value = xarVar::getCached('DynamicData.SubForm',$name);
             return true;
         }
 */
         // see if we're still dealing with the same item here
         if ($this->style == 'itemid' && !empty($this->title)) {
             $oldname = $name . '_old';
-            xarVarFetch($oldname, 'id', $oldvalue, $this->value, XARVAR_NOT_REQUIRED);
+            xarVar::fetch($oldname, 'id', $oldvalue, $this->value, xarVar::NOT_REQUIRED);
         } elseif ($this->style == 'parentid' && !empty($this->link)) {
             $oldname = $name . '_old';
-            xarVarFetch($oldname, 'id', $oldvalue, $this->value, XARVAR_NOT_REQUIRED);
+            xarVar::fetch($oldname, 'id', $oldvalue, $this->value, xarVar::NOT_REQUIRED);
             $newname = $name . '_new';
-            xarVarFetch($newname, 'id', $newvalue, NULL, XARVAR_NOT_REQUIRED);
+            xarVar::fetch($newname, 'id', $newvalue, NULL, xarVar::NOT_REQUIRED);
         } elseif ($this->style == 'childlist' && !empty($this->link)) {
             $oldname = $name . '_old';
-            xarVarFetch($oldname, 'id', $oldvalue, $this->value, XARVAR_NOT_REQUIRED);
+            xarVar::fetch($oldname, 'id', $oldvalue, $this->value, xarVar::NOT_REQUIRED);
             $newname = $name . '_new';
-            xarVarFetch($newname, 'id', $newvalue, NULL, XARVAR_NOT_REQUIRED);
+            xarVar::fetch($newname, 'id', $newvalue, NULL, xarVar::NOT_REQUIRED);
         } else {
             $oldvalue = $this->value;
         }
@@ -182,7 +182,7 @@ class SubFormProperty extends DataProperty
 
                 // Preserve the index in case it has meaning
                 $idx = null;
-                xarVarFetch("Key_" . $i . "_" . $prefix, 'str', $idx, NULL, XARVAR_NOT_REQUIRED);
+                xarVar::fetch("Key_" . $i . "_" . $prefix, 'str', $idx, NULL, xarVar::NOT_REQUIRED);
                 if (!empty($idx) && !isset($values[$idx])) {
                     $values[$idx] = $value;
                 } else {
@@ -220,7 +220,7 @@ class SubFormProperty extends DataProperty
             }
 
             // if we don't know we're previewing, we don't really have a choice here
-            if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+            if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
             if (empty($preview))
             {
                 if (empty($value) || empty($object->itemid)) {
@@ -235,14 +235,14 @@ class SubFormProperty extends DataProperty
                 }
                 $value = $itemid;
                 // save new value for preview + new/modify combinations (in case we miss the preview)
-                xarVarSetCached('DynamicData.SubForm',$name,$value);
+                xarVar::setCached('DynamicData.SubForm',$name,$value);
             }
             $this->value = $value;
 
         } elseif ($this->style == 'parentid' && !empty($value) && $value == $oldvalue && !empty($this->input)) {
 
             // check if we want to create new child items or not
-            xarVarFetch($name . '_dd_create', 'array', $dd_create, NULL, XARVAR_NOT_REQUIRED);
+            xarVar::fetch($name . '_dd_create', 'array', $dd_create, NULL, xarVar::NOT_REQUIRED);
             if (!empty($dd_create) && !empty($dd_create[$this->objectid])) {
                 $docreate = 1;
             } else {
@@ -257,7 +257,7 @@ class SubFormProperty extends DataProperty
                 // check user input for the object item - using the current name as field prefix
                 $propertyid = $name .'_dd_'.$propertyid;
                 unset($propertyvaluearray);
-                xarVarFetch($propertyid, 'array', $propertyvaluearray, NULL, XARVAR_NOT_REQUIRED);
+                xarVar::fetch($propertyid, 'array', $propertyvaluearray, NULL, xarVar::NOT_REQUIRED);
                 if (!empty($propertyvaluearray)) {
                     foreach ($propertyvaluearray as $id => $val) {
                         if (empty($id) && !$docreate) continue;
@@ -318,7 +318,7 @@ class SubFormProperty extends DataProperty
             $this->invalid = null;
 
             // if we don't know we're previewing, we don't really have a choice here
-            if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+            if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
             if (empty($preview))
             {
                 foreach ($childitems as $id => $item) {
@@ -338,7 +338,7 @@ class SubFormProperty extends DataProperty
         } elseif ($this->style == 'childlist' && (empty($value) || !empty($newvalue)) && !empty($this->input)) {
 
             // check if we want to create new child items or not
-            xarVarFetch($name . '_dd_create', 'array', $dd_create, NULL, XARVAR_NOT_REQUIRED);
+            xarVar::fetch($name . '_dd_create', 'array', $dd_create, NULL, xarVar::NOT_REQUIRED);
             if (!empty($dd_create) && !empty($dd_create[$this->objectid])) {
                 $docreate = 1;
             } else {
@@ -353,7 +353,7 @@ class SubFormProperty extends DataProperty
                 // check user input for the object item - using the current name as field prefix
                 $propertyid = $name .'_dd_'.$propertyid;
                 unset($propertyvaluearray);
-                xarVarFetch($propertyid, 'array', $propertyvaluearray, NULL, XARVAR_NOT_REQUIRED);
+                xarVar::fetch($propertyid, 'array', $propertyvaluearray, NULL, xarVar::NOT_REQUIRED);
                 if (!empty($propertyvaluearray)) {
                     foreach ($propertyvaluearray as $id => $val) {
                         if (empty($id) && !$docreate) continue;
@@ -415,7 +415,7 @@ class SubFormProperty extends DataProperty
 
             $value = array();
             // if we don't know we're previewing, we don't really have a choice here
-            if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+            if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
             if (empty($preview))
             {
                 foreach ($childitems as $id => $item) {

@@ -254,7 +254,7 @@ class DataProperty extends xarObject implements iDataProperty
     {
         $found = false;
         $value = null;
-        xarVarFetch($name, 'isset', $namevalue, NULL, XARVAR_DONT_SET);
+        xarVar::fetch($name, 'isset', $namevalue, NULL, xarVar::DONT_SET);
         if(isset($namevalue)) {
             $found = true;
             $value = $namevalue;
@@ -266,7 +266,7 @@ class DataProperty extends xarObject implements iDataProperty
      * Check the input value of this property
      *
      * @param string $name name of the input field (default is 'dd_NN' with NN the property id)
-     * @param mixed  $value value of the input field (default is retrieved via xarVarFetch())
+     * @param mixed  $value value of the input field (default is retrieved via xarVar::fetch())
      */
     public function checkInput($name = '', $value = null)
     {
@@ -509,7 +509,7 @@ class DataProperty extends xarObject implements iDataProperty
         }
         
         // If this is set, pass only allowed HTML tags
-        if ($this->display_striptags)  $data['value']    = xarVarPrepHTMLDisplay($data['value']);
+        if ($this->display_striptags)  $data['value']    = xarVar::prepHTMLDisplay($data['value']);
         
         // TODO: does this hurt when it is an array?
         if(!isset($data['tplmodule'])) $data['tplmodule']   = $this->tplmodule;
@@ -558,7 +558,7 @@ class DataProperty extends xarObject implements iDataProperty
         $data['id']       = !empty($data['id'])   ? $data['id']   : $this->propertyprefix . $this->id;
         if(!isset($data['id'])) $data['id']   = $data['name'];
         
-        $data['label'] = isset($data['label']) ? xarVarPrepForDisplay($data['label']) : xarVarPrepForDisplay($this->label);
+        $data['label'] = isset($data['label']) ? xarVar::prepForDisplay($data['label']) : xarVar::prepForDisplay($this->label);
         // Allow 0 as a fieldprefix
         if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0)  $data['fieldprefix'] = $this->_fieldprefix;
         // A field prefix added here can override the previous one
@@ -628,7 +628,7 @@ class DataProperty extends xarObject implements iDataProperty
         if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
         if(!isset($data['template'])) $data['template'] = $this->template;
         if(!isset($data['layout']))   $data['layout']   = $this->layout;
-        return xarTplProperty($data['tplmodule'], $data['template'], 'filter', $data);
+        return xarTpl::property($data['tplmodule'], $data['template'], 'filter', $data);
     }
 
     /**
@@ -659,10 +659,10 @@ class DataProperty extends xarObject implements iDataProperty
         if (is_array($data['value'])){
             $temp = array();
             foreach ($data['value'] as $key => $tmp) 
-                $temp[$key] = (!is_array($tmp)) ? xarVarPrepForDisplay($tmp) : $tmp;
+                $temp[$key] = (!is_array($tmp)) ? xarVar::prepForDisplay($tmp) : $tmp;
             $data['value'] = $temp;
         } else {
-            $data['value'] = xarVarPrepForDisplay($data['value']);
+            $data['value'] = xarVar::prepForDisplay($data['value']);
         }
 
         $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->invalid;
@@ -996,7 +996,7 @@ class DataProperty extends xarObject implements iDataProperty
 
     public function exportValue($itemid, $item)
     {
-        return xarVarPrepForDisplay($item[$this->name]);
+        return xarVar::prepForDisplay($item[$this->name]);
     }
     
     public function preCreate() { return true; }

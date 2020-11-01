@@ -26,12 +26,12 @@ function dynamicdata_admin_modifyprop()
 {
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
-    if(!xarVarFetch('itemid',   'isset', $itemid,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',    'isset', $module_id,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('details',  'isset', $details,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('layout',   'str:1', $layout,   'default', XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('itemid',   'isset', $itemid,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module_id',    'isset', $module_id,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('table',    'isset', $table,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('details',  'isset', $details,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('layout',   'str:1', $layout,   'default', xarVar::NOT_REQUIRED)) {return;}
 
     if (!isset($args['itemid']) || (is_null($args['itemid']))) {
         $args = DataObjectDescriptor::getObjectID(
@@ -65,7 +65,7 @@ function dynamicdata_admin_modifyprop()
         unset($tmpobject);
     } else {
         // Security
-        if(!xarSecurityCheck('AdminDynamicData')) return;
+        if(!xarSecurity::check('AdminDynamicData')) return;
         $objectid = null;
         $data['visibility'] = 'public';
     }
@@ -119,7 +119,7 @@ function dynamicdata_admin_modifyprop()
     }
     $hooks = array();
     if ($isprimary) {
-        $hooks = xarModCallHooks('module','modifyconfig',$modinfo['name'],
+        $hooks = xarModHooks::call('module','modifyconfig',$modinfo['name'],
                                  array('module' => $modinfo['name'],
                                        'itemtype' => $itemtype));
     }
@@ -131,18 +131,18 @@ function dynamicdata_admin_modifyprop()
     $data['checkbox']        =& DataPropertyMaster::getProperty(array('type' => 'checkbox'));
 
     // We have to specify this here, the js expects non xml urls and the => makes the template invalied
-    $data['urlform'] = xarModURL('dynamicdata','admin','form',array('objectid' => $data['objectid'], 'theme' => 'print'),false);
+    $data['urlform'] = xarController::URL('dynamicdata','admin','form',array('objectid' => $data['objectid'], 'theme' => 'print'),false);
     $data['layout'] = $layout;
 
     if (empty($details)) {
         $data['static'] = array();
         $data['relations'] = array();
         if (!empty($objectid)) {
-            $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+            $data['detailslink'] = xarController::URL('dynamicdata','admin','modifyprop',
                                              array('itemid' => $objectid,
                                                    'details' => 1));
         } else {
-            $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+            $data['detailslink'] = xarController::URL('dynamicdata','admin','modifyprop',
                                              array('module_id' => $module_id,
                                                    'itemtype' => empty($itemtype) ? null : $itemtype,
                                                    'details' => 1));
@@ -189,10 +189,10 @@ function dynamicdata_admin_modifyprop()
     $data['labels']['linkto'] = xarML('To');
 
     if (!empty($objectid)) {
-        $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+        $data['detailslink'] = xarController::URL('dynamicdata','admin','modifyprop',
                                          array('itemid' => $objectid));
     } else {
-        $data['detailslink'] = xarModURL('dynamicdata','admin','modifyprop',
+        $data['detailslink'] = xarController::URL('dynamicdata','admin','modifyprop',
                                          array('module_id' => $module_id,
                                                'itemtype' => empty($itemtype) ? null : $itemtype));
     }

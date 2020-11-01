@@ -25,13 +25,13 @@ function dynamicdata_admin_access(Array $args=array())
 {
     extract($args);
 
-    if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',   'isset', $itemid,    NULL, xarVar::DONT_SET)) {return;}
     if (empty($itemid)) return xarResponse::notFound();
-    if(!xarVarFetch('name',     'isset', $name, 'objects', XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('tplmodule','isset', $tplmodule, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('template', 'isset', $template,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('preview',  'isset', $preview,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('confirm',  'isset', $confirm,   NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('name',     'isset', $name, 'objects', xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('tplmodule','isset', $tplmodule, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('template', 'isset', $template,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('preview',  'isset', $preview,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('confirm',  'isset', $confirm,   NULL, xarVar::DONT_SET)) {return;}
 
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
@@ -52,7 +52,7 @@ function dynamicdata_admin_access(Array $args=array())
     $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
     
     // Security
-    if (!$tmpobject->checkAccess('config') && !xarSecurityCheck('AdminDynamicData',0))
+    if (!$tmpobject->checkAccess('config') && !xarSecurity::check('AdminDynamicData',0))
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
     unset($tmpobject);
 
@@ -103,12 +103,12 @@ function dynamicdata_admin_access(Array $args=array())
             $objectaccess['access'][$level] = $accessproperty->value;
         }
 */
-        if(!xarVarFetch('do_access', 'isset', $do_access, NULL, XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('do_access', 'isset', $do_access, NULL, xarVar::DONT_SET)) {return;}
 
         // define the new access list for each level
         $accesslist = array();
         if (!empty($do_access)) {
-            if(!xarVarFetch('access', 'isset', $access, array(), XARVAR_DONT_SET)) {return;}
+            if(!xarVar::fetch('access', 'isset', $access, array(), xarVar::DONT_SET)) {return;}
 
             foreach ($data['levels'] as $level => $info) {
                 if (empty($access[$level])) {
@@ -134,7 +134,7 @@ function dynamicdata_admin_access(Array $args=array())
 
         // define the new filter list
         $filterlist = array();
-        if(!xarVarFetch('filters', 'isset', $filters, array(), XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('filters', 'isset', $filters, array(), xarVar::DONT_SET)) {return;}
         foreach ($filters as $filterid => $filterinfo) {
             if (empty($filterinfo['group']) || empty($filterinfo['prop']) || empty($filterinfo['match'])) {
                 continue;
@@ -156,11 +156,11 @@ function dynamicdata_admin_access(Array $args=array())
         $accessstring = serialize($objectaccess);
         $itemid = $object->updateItem(array('access' => $accessstring));
 
-        if(!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
+        if(!xarVar::fetch('return_url', 'isset', $return_url,  NULL, xarVar::DONT_SET)) {return;}
         if (!empty($return_url)) {
             xarController::redirect($return_url);
         } else {
-            xarController::redirect(xarModURL('dynamicdata', 'admin', 'access',
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'access',
                                             array('itemid' => $itemid,
                                                   'tplmodule' => $tplmodule)));
         }
@@ -214,7 +214,7 @@ function dynamicdata_admin_access(Array $args=array())
             array_push($data['filters'], array('group' => $group,
                                                'prop'  => $filter[0],
                                                'match' => $filter[1],
-                                               'value' => xarVarPrepForDisplay($filter[2]),
+                                               'value' => xarVar::prepForDisplay($filter[2]),
                                                'level' => ''));
         }
     }

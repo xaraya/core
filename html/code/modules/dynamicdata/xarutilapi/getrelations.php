@@ -33,7 +33,7 @@ function dynamicdata_utilapi_getrelations(Array $args=array())
         $module_id = xarMod::getRegID($module);
     }
     if (empty($module_id)) {
-        $module_id = xarMod::getRegID(xarModGetName());
+        $module_id = xarMod::getRegID(xarMod::getName());
     }
     $modinfo = xarMod::getInfo($module_id);
     if (empty($itemtype)) {
@@ -42,7 +42,7 @@ function dynamicdata_utilapi_getrelations(Array $args=array())
 
     $invalid = array();
     if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
-        $invalid[] = 'module id ' . xarVarPrepForDisplay($module_id);
+        $invalid[] = 'module id ' . xarVar::prepForDisplay($module_id);
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
         $invalid[] = 'item type';
@@ -64,10 +64,10 @@ function dynamicdata_utilapi_getrelations(Array $args=array())
 
     // get the list of hook modules that are enabled for this module
 // TODO: get all hooks types, not only item display hooks
-//    $hooklist = xarModGetHookList($modinfo['name'],'item','display');
-    $hooklist = array_merge(xarModGetHookList($modinfo['name'],'item','display'),
-                            xarModGetHookList($modinfo['name'],'item','update'),
-                            xarModGetHookList($modinfo['name'],'module','remove'));
+//    $hooklist = xarModHooks::getList($modinfo['name'],'item','display');
+    $hooklist = array_merge(xarModHooks::getList($modinfo['name'],'item','display'),
+                            xarModHooks::getList($modinfo['name'],'item','update'),
+                            xarModHooks::getList($modinfo['name'],'module','remove'));
     $modlist = array();
     foreach ($hooklist as $hook) {
         $modlist[$hook['module']] = 1;

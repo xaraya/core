@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <form method="post" action="#xarModURL('dynamicdata','user','filtertag')#">
+    <form method="post" action="#xarController::URL('dynamicdata','user','filtertag')#">
         <xar:set name="multiple">count($properties) > 1</xar:set>
         <xar:data-filterform object="$object" fieldlist="$fieldlist" valuelist="$valuelist" oplist="$oplist"/>
         <input type="hidden" name="return_url" value="#$return_url#"/>

@@ -47,7 +47,7 @@
                     <legend>
                         Configure Dynamicdata Hooks
                     </legend>
-                    <xar:set name="url">#xarModURL('dynamicdata','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                    <xar:set name="url">#xarController::URL('dynamicdata','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
                     <xar:module main="false" module="modules" type="admin" func="hooks" curhook="dynamicdata" return_url="$url"/>
                 </fieldset>
             </xar:if>

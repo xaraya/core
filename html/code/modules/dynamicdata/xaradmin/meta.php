@@ -16,14 +16,14 @@
 function dynamicdata_admin_meta(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
     extract($args);
 
-    if (!xarVarFetch('export', 'notempty', $export, '', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('table', 'notempty', $table, '', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('showdb', 'notempty', $showdb, 0, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('db', 'notempty', $db, xarDB::getName(), XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('export', 'notempty', $export, '', xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('table', 'notempty', $table, '', xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('showdb', 'notempty', $showdb, 0, xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('db', 'notempty', $db, xarDB::getName(), xarVar::NOT_REQUIRED)) {return;}
 
     $data = array();
 

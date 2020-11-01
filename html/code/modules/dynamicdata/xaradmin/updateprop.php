@@ -21,23 +21,23 @@
  */
 function dynamicdata_admin_updateprop()
 {
-    if(!xarVarFetch('objectid',          'isset', $objectid,          1, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',         'isset', $module_id,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype',          'int:1:', $itemtype,         0, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',             'isset', $table,             NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_name',           'isset', $dd_name,           NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_label',          'isset', $dd_label,          NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_type',           'isset', $dd_type,           NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_default',        'isset', $dd_defaultvalue,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_seq',            'isset', $dd_seq,            NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_translatable',   'isset', $dd_translatable,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_source',         'isset', $dd_source,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('display_dd_status', 'isset', $display_dd_status, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('input_dd_status',   'isset', $input_dd_status,   NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('dd_configuration',  'isset', $dd_configuration,  NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid',          'isset', $objectid,          1, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module_id',         'isset', $module_id,         NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype',          'int:1:', $itemtype,         0, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('table',             'isset', $table,             NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('dd_name',           'isset', $dd_name,           NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('dd_label',          'isset', $dd_label,          NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('dd_type',           'isset', $dd_type,           NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('dd_default',        'isset', $dd_defaultvalue,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('dd_seq',            'isset', $dd_seq,            NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('dd_translatable',   'isset', $dd_translatable,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('dd_source',         'isset', $dd_source,         NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('display_dd_status', 'isset', $display_dd_status, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('input_dd_status',   'isset', $input_dd_status,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('dd_configuration',  'isset', $dd_configuration,  NULL, xarVar::DONT_SET)) {return;}
 
     // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
     if (!xarSecConfirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
@@ -184,12 +184,12 @@ function dynamicdata_admin_updateprop()
 
     if ($isprimary) {
         $modinfo = xarMod::getInfo($module_id);
-        xarModCallHooks('module','updateconfig',$modinfo['name'],
+        xarModHooks::call('module','updateconfig',$modinfo['name'],
                         array('module' => $modinfo['name'],
                               'itemtype' => $itemtype));
     }
 
-    xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modifyprop',
                         array('itemid'    => $objectid,
                               'table'    => $table)));
     return true;

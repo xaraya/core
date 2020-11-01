@@ -15,11 +15,11 @@
     function dynamicdata_admin_delete_static()
     {
         //Security
-        if (!xarSecurityCheck('AdminDynamicData')) return;
+        if (!xarSecurity::check('AdminDynamicData')) return;
 
-        if (!xarVarFetch('table',      'str:1',  $data['table'],    '',     XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('field' ,     'str:1',  $data['field'] , '' ,          XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('confirm',    'bool',   $data['confirm'], false,       XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('table',      'str:1',  $data['table'],    '',     xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('field' ,     'str:1',  $data['field'] , '' ,          xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
 
         $data['object'] = DataObjectMaster::getObject(array('name' => 'dynamicdata_tablefields'));
 
@@ -36,7 +36,7 @@
             $dbconn->Execute($query);
 
             // Jump to the next page
-            xarController::redirect(xarModURL('dynamicdata','admin','view_static',array('table' => $data['table'])));
+            xarController::redirect(xarController::URL('dynamicdata','admin','view_static',array('table' => $data['table'])));
             return true;
         }
         return $data;

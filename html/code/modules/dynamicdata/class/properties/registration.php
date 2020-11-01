@@ -236,7 +236,7 @@ class PropertyRegistration extends DataContainer
                 // the module is active.
                 $propDirs = $dirs;
             } else {
-                if (!xarVarGetCached('installer','installing')) {
+                if (!xarVar::getCached('installer','installing')) {
                     // Repopulate the configurations table
                     $tables =& xarDB::getTables();
                     $sql = "DELETE FROM $tables[dynamic_configurations]";
@@ -247,7 +247,7 @@ class PropertyRegistration extends DataContainer
                     $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
                 }
 
-                $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+                $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => xarMod::STATE_ACTIVE)));
                 assert(!empty($activeMods)); // this should never happen
 
                 foreach($activeMods as $modInfo) {

@@ -17,12 +17,12 @@
 function dynamicdata_admin_importprops()
 {
     // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
-    if(!xarVarFetch('objectid', 'isset', $objectid,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',    'isset', $module_id,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'isset', $objectid,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module_id',    'isset', $module_id,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('table',    'isset', $table,     NULL, xarVar::DONT_SET)) {return;}
 
     if (empty($module_id)) throw new EmptyParameterException('module_id');
 
@@ -42,7 +42,7 @@ function dynamicdata_admin_importprops()
         return;
     }
 
-    xarController::redirect(xarModURL('dynamicdata', 'admin', 'modifyprop',
+    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modifyprop',
                                   array('module_id' => $module_id,
                                         'itemtype' => $itemtype)));
 }

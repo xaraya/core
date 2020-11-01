@@ -32,7 +32,7 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
         $module_id = xarMod::getRegID($module);
     }
     if (empty($module_id)) {
-        $module_id = xarMod::getRegID(xarModGetName());
+        $module_id = xarMod::getRegID(xarMod::getName());
     }
     $modinfo = xarMod::getInfo($module_id);
     if (empty($itemtype)) {
@@ -41,7 +41,7 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
 
     $invalid = array();
     if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
-        $invalid[] = 'module id ' . xarVarPrepForDisplay($module_id);
+        $invalid[] = 'module id ' . xarVar::prepForDisplay($module_id);
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
         $invalid[] = 'item type';

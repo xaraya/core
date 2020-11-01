@@ -33,11 +33,11 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
      */
     function run(array $args = array())
     {
-        if(!xarVarFetch('cancel',  'isset', $args['cancel'],  NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('cancel',  'isset', $args['cancel'],  NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('confirm', 'isset', $args['confirm'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('confirm', 'isset', $args['confirm'], NULL, xarVar::DONT_SET)) 
             return;
-        if(!xarVarFetch('return_url', 'isset', $args['return_url'], NULL, XARVAR_DONT_SET)) 
+        if(!xarVar::fetch('return_url', 'isset', $args['return_url'], NULL, xarVar::DONT_SET)) 
             return;
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
@@ -91,7 +91,7 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
         }
 
         $title = xarML('Delete #(1)', $this->object->label);
-        xarTpl::setPageTitle(xarVarPrepForDisplay($title));
+        xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         return xarTpl::object(
             $this->tplmodule, $this->object->template, 'ui_delete',

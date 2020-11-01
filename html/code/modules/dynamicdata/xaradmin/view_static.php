@@ -17,14 +17,14 @@
 function dynamicdata_admin_view_static(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
-    if(!xarVarFetch('module',   'isset', $module,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('module_id',    'isset', $module_id,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('table',    'isset', $table,     '', XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('newtable',    'isset', $newtable,     '', XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('export',  'isset', $export,       0, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('module',   'isset', $module,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module_id',    'isset', $module_id,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('table',    'isset', $table,     '', xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('newtable',    'isset', $newtable,     '', xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('export',  'isset', $export,       0, xarVar::DONT_SET)) {return;}
 
     extract($args);
 

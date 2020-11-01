@@ -25,7 +25,7 @@
 function dynamicdata_admin_main()
 {
     // Security
-    if(!xarSecurityCheck('EditDynamicData')) return;
+    if(!xarSecurity::check('EditDynamicData')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
@@ -34,7 +34,7 @@ function dynamicdata_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('dynamicdata','admin','overview');
     } else {
-        xarController::redirect(xarModURL('dynamicdata', 'admin', 'view'));
+        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view'));
         return true;
     }
 }

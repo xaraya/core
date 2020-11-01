@@ -44,14 +44,14 @@ function dynamicdata_adminapi_updatehook(Array $args=array())
     // We can exit immediately if the status flag is set because we are just updating
     // the status in the articles or other content module that works on that principle
     // Bug 1960 and 3161
-    if (xarVarIsCached('Hooks.all','noupdate') || !empty($extrainfo['statusflag'])){
+    if (xarVar::isCached('Hooks.all','noupdate') || !empty($extrainfo['statusflag'])){
         return $extrainfo;
     }
 
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
     if (empty($extrainfo['module'])) {
-        $modname = xarModGetName();
+        $modname = xarMod::getName();
     } else {
         $modname = $extrainfo['module'];
     }

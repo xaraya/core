@@ -15,12 +15,12 @@
 function dynamicdata_admin_utilities(Array $args=array())
 {
     // Security
-    if (!xarSecurityCheck('EditDynamicData')) return;
+    if (!xarSecurity::check('EditDynamicData')) return;
     
     extract($args);
-    if(!xarVarFetch('q','str', $data['option'], 'query', XARVAR_NOT_REQUIRED)) {return;}
-    xarTpl::setPageTitle(xarVarPrepForDisplay(xarML($data['option'])));
-    xarController::redirect(xarModURL('dynamicdata', 'admin', 'import'));
+    if(!xarVar::fetch('q','str', $data['option'], 'query', xarVar::NOT_REQUIRED)) {return;}
+    xarTpl::setPageTitle(xarVar::prepForDisplay(xarML($data['option'])));
+    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'import'));
     return true;
 }
 ?>

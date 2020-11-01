@@ -41,7 +41,7 @@ function &dynamicdata_userapi_getitem(Array $args=array())
     $nullreturn = NULL;
 
     if (empty($module_id) && empty($moduleid)) {
-        $modname = empty($module) ? xarModGetName() : $module;
+        $modname = empty($module) ? xarMod::getName() : $module;
         $module_id   = is_numeric($modname) ? $modname : xarMod::getRegID($modname);
     } elseif (empty($module_id)) {
         $module_id = $moduleid;

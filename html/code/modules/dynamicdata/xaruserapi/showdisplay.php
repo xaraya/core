@@ -54,7 +54,7 @@ function dynamicdata_userapi_showdisplay(Array $args=array())
         $object->getItem();
     }
     // if we are in preview mode, we need to check for any preview values
-    //if (!xarVarFetch('preview', 'isset', $preview,  NULL, XARVAR_DONT_SET)) {return;}
+    //if (!xarVar::fetch('preview', 'isset', $preview,  NULL, xarVar::DONT_SET)) {return;}
     if (!empty($preview)) {
         $object->checkInput();
     }

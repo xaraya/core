@@ -4,9 +4,9 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object:objectid)">
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('itemid' => $object->objectid))</xar:set>
         <xar:else/>
-            <xar:set name="viewlink">xarModURL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
+            <xar:set name="viewlink">xarController::URL('dynamicdata','admin','view',array('table' => $object->table))</xar:set>
         </xar:if>
         <h2>
             <xar:if condition="!empty($object:objectid) and $object:objectid eq 1">
@@ -37,7 +37,7 @@
             Trying to create this item here may break the module. Please proceed with caution.</h3>
         </xar:if>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <form method="post" action="#xarModURL('dynamicdata','admin','create')#" enctype="#$enc_type#">
+        <form method="post" action="#xarController::URL('dynamicdata','admin','create')#" enctype="#$enc_type#">
             <fieldset>
                 <legend>Item details</legend>
                 <xar:data-form object="$object"/>

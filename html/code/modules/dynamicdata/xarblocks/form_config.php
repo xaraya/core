@@ -34,7 +34,7 @@ class Dynamicdata_FormBlockConfig extends Dynamicdata_FormBlock implements iBloc
  */
     public function configupdate()
     {
-        if (!xarVarFetch('objectid', 'id', $objectid, 0, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('objectid', 'id', $objectid, 0, xarVar::NOT_REQUIRED)) {return;}
         $this->objectid = $objectid;
         return true;
     }

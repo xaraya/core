@@ -1129,7 +1129,7 @@ class DataObjectMaster extends xarObject
         $displayvalues = array();
         $properties = $this->getProperties($args);
         foreach($properties as $property) {
-            $label = xarVarPrepForDisplay($property->label);
+            $label = xarVar::prepForDisplay($property->label);
             $displayvalues[$label] = $property->showOutput();
         }
         return $displayvalues;
@@ -1199,7 +1199,7 @@ class DataObjectMaster extends xarObject
                 $types [$row['itemtype']] = array(
                                             'label' => $row['objectlabel'],
                                             'title' => xarML('View #(1)',$row['objectlabel']),
-                                            'url' => xarModURL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
+                                            'url' => xarController::URL('dynamicdata','user','view',array('itemtype' => $row['itemtype'])));
             }
         }
         return $types;
@@ -1304,11 +1304,11 @@ class DataObjectMaster extends xarObject
 //        $this->hookvalues['module'] = xarMod::getName($this->moduleid);
 //        $this->hookvalues['itemtype'] = $this->itemtype;
 //        $this->hookvalues['itemid'] = $this->itemid;
-        // CHECKME: is this sufficient in most cases, or do we need an explicit xarModURL() ?
+        // CHECKME: is this sufficient in most cases, or do we need an explicit xarController::URL() ?
         $this->hookvalues['returnurl'] = xarServer::getCurrentURL();
 
         // Use the standard method to call hooks 
-        $hooks = xarModCallHooks('item', $action, $this->itemid, $this->hookvalues);
+        $hooks = xarModHooks::call('item', $action, $this->itemid, $this->hookvalues);
         // FIXME: we don't need two distinct properties to store gui and api hook responses
         // A response is a response, it's up to the caller to decide if it's appropriate
         // For now we'll populate both with the same data

@@ -18,19 +18,19 @@
 function dynamicdata_admin_showpropval(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) return;
 
     extract($args);
 
     // get the property id
-    if (!xarVarFetch('itemid',  'id',    $itemid, NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('exit', 'isset', $exit, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('itemid',  'id',    $itemid, NULL, xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('exit', 'isset', $exit, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('confirm', 'isset', $confirm, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
 
     if (empty($itemid)) {
         // get the property type for sample configuration
-        if (!xarVarFetch('proptype', 'isset', $proptype, NULL, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('proptype', 'isset', $proptype, NULL, xarVar::NOT_REQUIRED)) {return;}
 
         // show sample configuration for some property type
         return dynamicdata_config_propval($proptype);
@@ -63,8 +63,8 @@ function dynamicdata_admin_showpropval(Array $args=array())
     $module_id = $myobject->properties['module_id']->value;
     $itemtype = $myobject->properties['itemtype']->value;
     $modinfo = xarMod::getInfo($module_id);
-    if (xarModIsHooked('uploads', $modinfo['name'], $itemtype)) {
-        xarVarSetCached('Hooks.uploads','ishooked',1);
+    if (xarModHooks::isHooked('uploads', $modinfo['name'], $itemtype)) {
+        xarVar::setCached('Hooks.uploads','ishooked',1);
     }
     */
 
@@ -84,7 +84,7 @@ function dynamicdata_admin_showpropval(Array $args=array())
     $data['propertytype'] = DataPropertyMaster::getProperty(array('type' => $data['type']));
 
     if (!empty($preview) || !empty($confirm) || !empty($exit)) {
-        if (!xarVarFetch($data['name'], 'isset', $configuration, NULL, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch($data['name'], 'isset', $configuration, NULL, xarVar::NOT_REQUIRED)) return;
 
         // pass the current value as configuration rule
         $data['configuration'] = isset($configuration) ? $configuration : '';
@@ -103,16 +103,16 @@ function dynamicdata_admin_showpropval(Array $args=array())
                 if (empty($newid)) return;
 
                 if (empty($exit)) {
-                    $return_url = xarModURL('dynamicdata', 'admin', 'showpropval', array('itemid' => $itemid));
+                    $return_url = xarController::URL('dynamicdata', 'admin', 'showpropval', array('itemid' => $itemid));
                     xarController::redirect($return_url);
                     return true;
                 }
             }
             if (!empty($exit)) {
-                if (!xarVarFetch('return_url', 'isset', $return_url,  NULL, XARVAR_DONT_SET)) {return;}
+                if (!xarVar::fetch('return_url', 'isset', $return_url,  NULL, xarVar::DONT_SET)) {return;}
                 if (empty($return_url)) {
                     // return to modifyprop
-                    $return_url = xarModURL('dynamicdata', 'admin', 'modifyprop',
+                    $return_url = xarController::URL('dynamicdata', 'admin', 'modifyprop',
                                             array('itemid' => $parentobjectid));
                 }
                 xarController::redirect($return_url);
@@ -170,10 +170,10 @@ function dynamicdata_config_propval($proptype)
         return $data;
     }
 
-    if (!xarVarFetch('preview', 'isset', $preview, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('confirm', 'isset', $confirm, NULL, xarVar::DONT_SET)) {return;}
     if (!empty($preview) || !empty($confirm)) {
-        if (!xarVarFetch($data['name'],'isset',$configuration,NULL,XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch($data['name'],'isset',$configuration,NULL,xarVar::NOT_REQUIRED)) return;
 
         // pass the current value as configuration rule
         $data['configuration'] = isset($configuration) ? $configuration : '';

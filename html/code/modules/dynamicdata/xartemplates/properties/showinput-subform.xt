@@ -233,7 +233,7 @@
                     <input type="hidden" name="#$name#" id="#$id#" value="#$value#"/>
                     <xar:else />
                     <input type="hidden" name="#$name#_old" id="#$id#_old"
-                    value="#xarVarPrepForDisplay($value)#"/>
+                    value="#xarVar::prepForDisplay($value)#"/>
                     <input type="hidden" name="#$name#_new" id="#$id#_new" value="1"/>
                 </xar:if>
                 <xar:if condition="$style eq 'childlist' or (!empty($dropdown) and !empty($count)) or !empty($value)">
