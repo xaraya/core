@@ -23,12 +23,12 @@
 function authsystem_user_showloginform(Array $args = array())
 {
     extract($args);
-    xarVarFetch('redirecturl', 'str:1:254', $redirecturl, '', XARVAR_NOT_REQUIRED);
+    xarVar::fetch('redirecturl', 'str:1:254', $redirecturl, '', xarVar::NOT_REQUIRED);
     if (empty($redirecturl)) {
         $redirecturl = xarModVars::get('authsystem', 'forwarding_page');
         if(empty($redirecturl)) $redirecturl = xarServer::getBaseURL();
     }
-    $redirecturl = xarVarPrepHTMLDisplay($redirecturl);
+    $redirecturl = xarVar::prepHTMLDisplay($redirecturl);
     $truecurrenturl = xarServer::getCurrentURL(array(), false);
     $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=> $redirecturl,'truecurrenturl'=>$truecurrenturl));
     $data['redirecturl'] = $urldata['redirecturl'];

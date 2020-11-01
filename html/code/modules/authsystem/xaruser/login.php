@@ -35,23 +35,23 @@ function authsystem_user_login()
         return xarTpl::module('authsystem','user','errors',array('layout' => 'locked_out', 'lockouttime' => $lockouttime));
     }
 
-    if (!xarVarFetch('uname','str:0:64',$uname,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('uname','str:0:64',$uname,'',xarVar::NOT_REQUIRED)) return;
     if (empty($uname))
         return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
-    if (!xarVarFetch('pass','str:0:254',$pass,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('pass','str:0:254',$pass,'',xarVar::NOT_REQUIRED)) return;
     if (empty($pass))
         return xarTpl::module('authsystem','user','errors',array('layout' => 'missing_data', 'lockouttime' => $lockouttime));
 
     $redirect = xarServer::getBaseURL();
-    if (!xarVarFetch('rememberme','checkbox',$rememberme,false,XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('redirecturl','str:1:254',$redirecturl,$redirect,XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('rememberme','checkbox',$rememberme,false,xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('redirecturl','str:1:254',$redirecturl,$redirect,xarVar::NOT_REQUIRED)) return;
 
     // Defaults
     if (preg_match('/authsystem/',$redirecturl)) {
         $redirecturl = $redirect;
     }
-    $redirecturl = xarVarPrepHTMLDisplay($redirecturl);
-    $rememberme = xarVarPrepHTMLDisplay($rememberme);
+    $redirecturl = xarVar::prepHTMLDisplay($redirecturl);
+    $rememberme = xarVar::prepHTMLDisplay($rememberme);
 
     // Scan authentication modules and set user state appropriately
     $extAuthentication = false;
@@ -162,7 +162,7 @@ function authsystem_user_login()
 
         case xarRoles::ROLES_STATE_NOTVALIDATED:
             //User still must validate
-            xarController::redirect(xarModURL('roles', 'user', 'getvalidation', array('uname' => $uname, 'valcode' => $pass, 'phase' => 'getvalidate')));
+            xarController::redirect(xarController::URL('roles', 'user', 'getvalidation', array('uname' => $uname, 'valcode' => $pass, 'phase' => 'getvalidate')));
             break;
 
         case xarRoles::ROLES_STATE_ACTIVE:
@@ -247,7 +247,7 @@ function authsystem_user_login()
                     $truecurrenturl = xarServer::getCurrentURL(array(), false);
                     $url = xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $user['id']));
                     if (empty($url)) {
-                        $urldata['redirecturl'] = xarModURL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
+                        $urldata['redirecturl'] = xarController::URL(xarModVars::get('modules','defaultmodule'),xarModVars::get('modules','defaulttypename'),xarModVars::get('modules','defaultfuncname'));
                         $urldata['externalurl'] = false;
                     } else {
                         try {

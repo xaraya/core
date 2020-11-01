@@ -13,14 +13,14 @@
                             You are already logged in. What do you want to do?
                         </div>
                         <div class="xar-col">
-                            <a href="#xarModURL('authsystem','user','logout')#">Log out</a>
+                            <a href="#xarController::URL('authsystem','user','logout')#">Log out</a>
                             &#160;&#160;
                             <a href="#$redirecturl#">Continue</a>
                         </div>
                     </div>
             </fieldset>
         <xar:else/>
-            <form action="#xarModURL('authsystem','user','login')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#xarController::URL('authsystem','user','login')#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Login</legend>
                     <xar:data-input type="hidden" name="redirecturl" id="returnurl" value="$redirecturl"/>
@@ -42,7 +42,7 @@
                     </div>
                     <div class="xar-row">
                         <div class="xar-col">
-                            <a href="#xarModURL('roles','user','lostpassword')#">Request a new password</a>
+                            <a href="#xarController::URL('roles','user','lostpassword')#">Request a new password</a>
                         </div>
                         <div class="xar-col">
                             <xar:data-input type="checkbox" name="rememberme" id="remembermeform" value="1" tabindex="3"/>&#160;

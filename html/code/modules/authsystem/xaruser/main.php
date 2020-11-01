@@ -31,7 +31,7 @@ function authsystem_user_main()
         $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=> $redirect,'truecurrenturl'=>$truecurrenturl));
         xarController::redirect($urldata['redirecturl']);
     } else {
-        xarController::redirect(xarModURL('authsystem', 'user', 'showloginform'));
+        xarController::redirect(xarController::URL('authsystem', 'user', 'showloginform'));
     }
     return true;
 }
