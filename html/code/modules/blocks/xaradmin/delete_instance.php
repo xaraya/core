@@ -25,10 +25,10 @@
  */
 function blocks_admin_delete_instance()
 {
-    if (!xarSecurityCheck('ManageBlocks')) return;
+    if (!xarSecurity::check('ManageBlocks')) return;
 
-    if (!xarVarFetch('block_id', 'int:1:',
-        $block_id, null, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('block_id', 'int:1:',
+        $block_id, null, xarVar::NOT_REQUIRED)) return;
 
     if (!isset($block_id)) {
         $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';
@@ -46,7 +46,7 @@ function blocks_admin_delete_instance()
     }
 
     // admin access is needed for some operations 
-    $isadmin = xarSecurityCheck('',0,'Block',"$instance[type]:$instance[name]:$instance[block_id]",$instance['module'],'',0,800);
+    $isadmin = xarSecurity::check('',0,'Block',"$instance[type]:$instance[name]:$instance[block_id]",$instance['module'],'',0,800);
     $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
     // check delete access 
     if ($isadmin) {
@@ -64,11 +64,11 @@ function blocks_admin_delete_instance()
     if (!$candelete)
         return xarTpl::module('privileges','user','errors',array('layout' => 'no_privileges'));
 
-    if (!xarVarFetch('confirm', 'checkbox', 
-        $confirmed, false, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirm', 'checkbox', 
+        $confirmed, false, xarVar::NOT_REQUIRED)) return;
     
     if ($confirmed) {
-        if (!xarSecConfirmAuthKey())
+        if (!xarSec::confirmAuthKey())
             return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
         
         // delete instance from db
@@ -82,7 +82,7 @@ function blocks_admin_delete_instance()
             throw $e;
         }
             
-        $return_url = xarModURL('blocks', 'admin', 'view_instances');
+        $return_url = xarController::URL('blocks', 'admin', 'view_instances');
         xarController::redirect($return_url);
     }
     

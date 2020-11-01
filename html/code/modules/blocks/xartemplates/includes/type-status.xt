@@ -14,11 +14,11 @@
         <xar:sec mask="AdminBlocks" catch="false">
         <p>
             If the file(s) were removed, or permissions changed in error, first replace them,
-            then <a href="#xarModURL('blocks', 'admin', 'refresh_types')#">click here to reactivate the block type</a>.
+            then <a href="#xarController::URL('blocks', 'admin', 'refresh_types')#">click here to reactivate the block type</a>.
         </p>
         <p>
             If the files were removed because you are no longer using this block type,
-            <a href="#xarModURL('blocks', 'admin', 'delete_type', array('type_id' => $block['type_id']))#">click here to remove the type from the database</a>.
+            <a href="#xarController::URL('blocks', 'admin', 'delete_type', array('type_id' => $block['type_id']))#">click here to remove the type from the database</a>.
         </p>
         <xar:else/>
             <p>Please notify the site administrator</p>
@@ -62,7 +62,7 @@
         </p>
         <p>
             If the module was removed because you are no longer using it,
-            <a href="#xarModURL('blocks', 'admin', 'delete_type', array('type_id' => $block['type_id']))#">click here to remove the type from the database</a>.
+            <a href="#xarController::URL('blocks', 'admin', 'delete_type', array('type_id' => $block['type_id']))#">click here to remove the type from the database</a>.
         </p>
         <xar:else/>
             <p>Please notify the site administrator</p>

@@ -4,7 +4,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Delete Block Instance</h2>
-        <form method="post" action="#xarModURL('blocks', 'admin', 'delete_instance')#">
+        <form method="post" action="#xarController::URL('blocks', 'admin', 'delete_instance')#">
             <fieldset>
                 <legend>Confirm deleting this block instance</legend>
                 <div class="xar-row">
@@ -39,7 +39,7 @@
                         <div class="xar-col">
                             <p class="xar-note">This instance belongs to the following block groups</p>
                             <xar:loop name="$instance_groups">
-                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($instance_groups)">,&#160;</xar:if>
                             </xar:loop>
                         </div>
@@ -50,7 +50,7 @@
                         <div class="xar-col">
                             <p class="xar-note">The following instances belong to this block group</p>
                             <xar:loop name="$group_instances">
-                                <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($group_instances)">,&#160;</xar:if>
                             </xar:loop>
                         </div>
@@ -61,7 +61,7 @@
                 <div class="xar-row">
                     <div class="xar-col"></div>
                     <div class="xar-col">
-                        <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                        <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                         <input type="hidden" name="confirm" id="confirm" value="true"/>
                         <input type="hidden" name="block_id" id="block_id" value="#$instance['block_id']#"/>
                         <xar:var name="label">Cancel</xar:var>

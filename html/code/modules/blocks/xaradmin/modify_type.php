@@ -22,10 +22,10 @@
  */
 function blocks_admin_modify_type(Array $args=array())
 {
-    if (!xarSecurityCheck('ManageBlocks')) return;
+    if (!xarSecurity::check('ManageBlocks')) return;
     
-    if (!xarVarFetch('type_id', 'int:1:',
-        $type_id, null, XARVAR_DONT_SET)) return;
+    if (!xarVar::fetch('type_id', 'int:1:',
+        $type_id, null, xarVar::DONT_SET)) return;
         
     if (!isset($type_id)) {
         $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';
@@ -47,12 +47,12 @@ function blocks_admin_modify_type(Array $args=array())
     $data = array();
     
     // determine the interface, method and phase 
-    if (!xarVarFetch('interface', 'pre:trim:lower:str:1:',
-        $interface, 'display', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('block_method', 'pre:trim:lower:str:1:',
-        $method, null, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phase', 'pre:trim:lower:str:1:',
-        $phase, 'display', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('interface', 'pre:trim:lower:str:1:',
+        $interface, 'display', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('block_method', 'pre:trim:lower:str:1:',
+        $method, null, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase', 'pre:trim:lower:str:1:',
+        $phase, 'display', xarVar::NOT_REQUIRED)) return;
 
     // show the status warning if the type isn't active
     if ($type['type_state'] != xarBlock::TYPE_STATE_ACTIVE) {
@@ -62,7 +62,7 @@ function blocks_admin_modify_type(Array $args=array())
     } else {
         // admins only beyond the display interface methods 
         if ($interface != 'display')
-            if (!xarSecurityCheck('AdminBlocks')) return;    
+            if (!xarSecurity::check('AdminBlocks')) return;    
         // get the block object and load the interface
         $block = xarBlock::getObject($type, $interface);
     }
@@ -102,11 +102,11 @@ function blocks_admin_modify_type(Array $args=array())
                             $invalid['check'] = xarML('Failed validating block type form input');
                         }
                         // fetch block subsystem configuration 
-                        if (!xarVarFetch('type_block_template', 'pre:trim:str:1:127', $block_template, null, XARVAR_NOT_REQUIRED)) return;
-                        if (!xarVarFetch('type_box_template', 'pre:trim:str:1:127', $box_template, null, XARVAR_NOT_REQUIRED)) return;
+                        if (!xarVar::fetch('type_block_template', 'pre:trim:str:1:127', $block_template, null, xarVar::NOT_REQUIRED)) return;
+                        if (!xarVar::fetch('type_box_template', 'pre:trim:str:1:127', $box_template, null, xarVar::NOT_REQUIRED)) return;
                         // update block configuration 
                         if (empty($invalid)) {
-                            if (!xarSecConfirmAuthKey())
+                            if (!xarSec::confirmAuthKey())
                                 return xarTpl::module('privileges', 'user', 'errors', 
                                     array('layout' => 'bad_author'));
                             if (isset($result) && is_array($result)) {
@@ -137,7 +137,7 @@ function blocks_admin_modify_type(Array $args=array())
                         }
                         // update block configuration 
                         if (empty($invalid)) {
-                            if (!xarSecConfirmAuthKey())
+                            if (!xarSec::confirmAuthKey())
                                 return xarTpl::module('privileges', 'user', 'errors', 
                                     array('layout' => 'bad_author'));
                             if (!empty($result) && is_array($result)) {
@@ -153,10 +153,10 @@ function blocks_admin_modify_type(Array $args=array())
             
             break;
             case 'caching':
-                if (!xarVarFetch('type_nocache', 'checkbox', $nocache, false, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('type_pageshared', 'checkbox', $pageshared, false, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('type_usershared', 'int:0:2', $usershared, 0, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('type_cacheexpire', 'str:1:', $cacheexpire, null, XARVAR_NOT_REQUIRED)) return;
+                if (!xarVar::fetch('type_nocache', 'checkbox', $nocache, false, xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('type_pageshared', 'checkbox', $pageshared, false, xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('type_usershared', 'int:0:2', $usershared, 0, xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('type_cacheexpire', 'str:1:', $cacheexpire, null, xarVar::NOT_REQUIRED)) return;
                 
                 // convert cacheexpire from hh:mm:ss format to an integer
                 if (!empty($cacheexpire)) 
@@ -179,7 +179,7 @@ function blocks_admin_modify_type(Array $args=array())
                 
                 // update block configuration 
                 if (empty($invalid)) {
-                    if (!xarSecConfirmAuthKey())
+                    if (!xarSec::confirmAuthKey())
                         return xarTpl::module('privileges', 'user', 'errors', 
                             array('layout' => 'bad_author'));
                     if (!empty($result) && is_array($result)) {
@@ -212,7 +212,7 @@ function blocks_admin_modify_type(Array $args=array())
 
                 // update block configuration 
                 if (empty($invalid)) {
-                    if (!xarSecConfirmAuthKey())
+                    if (!xarSec::confirmAuthKey())
                         return xarTpl::module('privileges', 'user', 'errors', 
                             array('layout' => 'bad_author'));
                     if (!empty($result) && is_array($result)) {
@@ -244,7 +244,7 @@ function blocks_admin_modify_type(Array $args=array())
                 }            
                 // update block configuration 
                 if (empty($invalid)) {
-                    if (!xarSecConfirmAuthKey())
+                    if (!xarSec::confirmAuthKey())
                         return xarTpl::module('privileges', 'user', 'errors', 
                             array('layout' => 'bad_author'));
                     if (!empty($result) && is_array($result)) {
@@ -263,9 +263,9 @@ function blocks_admin_modify_type(Array $args=array())
         
             if (!xarMod::apiFunc('blocks', 'types', 'updateitem', $type)) return;
             
-            if (!xarVarFetch('return_url', 'pre:trim:str:1:', $return_url, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('return_url', 'pre:trim:str:1:', $return_url, '', xarVar::NOT_REQUIRED)) return;
             if (empty($return_url))
-                $return_url = xarModURL('blocks', 'admin', 'modify_type',
+                $return_url = xarController::URL('blocks', 'admin', 'modify_type',
                     array(
                         'type_id' => $type['type_id'],
                         'interface' => $interface,
@@ -421,7 +421,7 @@ function blocks_admin_modify_type(Array $args=array())
         'active' => ($interface == 'display' && $method == 'info'),
     );
     if ($interface != 'display' || $method != 'status') {
-        if (xarSecurityCheck('AdminBlocks', 0)) {
+        if (xarSecurity::check('AdminBlocks', 0)) {
             $interfaces[] = array(
                 'url' => xarServer::getCurrentURL(array('interface' => 'config', 'block_method' => null)),
                 'label' => xarML('Config'),

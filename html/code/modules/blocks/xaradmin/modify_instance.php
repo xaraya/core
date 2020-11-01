@@ -26,10 +26,10 @@ function blocks_admin_modify_instance()
      * 
      * @TODO Need to sperate this out to API calls.
      */
-    if (!xarSecurityCheck('ManageBlocks')) return;
+    if (!xarSecurity::check('ManageBlocks')) return;
 
-    if (!xarVarFetch('block_id', 'int:1:',
-        $block_id, null, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('block_id', 'int:1:',
+        $block_id, null, xarVar::NOT_REQUIRED)) return;
 
     if (!isset($block_id)) {
         $msg = 'Missing #(1) for #(2) module #(3) function #(4)()';
@@ -49,12 +49,12 @@ function blocks_admin_modify_instance()
     $data = array();
 
     // determine the interface, method and phase 
-    if (!xarVarFetch('interface',    'pre:trim:lower:str:1:', $interface, 'display', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('block_method', 'pre:trim:lower:str:1:', $method,    null,      XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phase',        'pre:trim:lower:str:1:', $phase,     'display', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('interface',    'pre:trim:lower:str:1:', $interface, 'display', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('block_method', 'pre:trim:lower:str:1:', $method,    null,      xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase',        'pre:trim:lower:str:1:', $phase,     'display', xarVar::NOT_REQUIRED)) return;
 
     // admin access is needed for some operations 
-    $isadmin = xarSecurityCheck('',0,'Block',"$blockinfo[type]:$blockinfo[name]:$blockinfo[block_id]",$blockinfo['module'],'',0,800);
+    $isadmin = xarSecurity::check('',0,'Block',"$blockinfo[type]:$blockinfo[name]:$blockinfo[block_id]",$blockinfo['module'],'',0,800);
 
     // show the status warning if the type isn't active
     if ($blockinfo['type_state'] != xarBlock::TYPE_STATE_ACTIVE) {
@@ -137,15 +137,15 @@ function blocks_admin_modify_instance()
                 switch ($method) {
                     case 'config':
                         if ($isadmin) {
-                            if (!xarVarFetch('instance_name',           'pre:trim:str:1:',   $name, '', XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_title',          'pre:trim:str:0:',   $title, '', XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_state',          'int:0:4',           $state, null, XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_expire',         'pre:trim:str:0:20', $expire, 0, XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_expire_reset',   'checkbox',          $expire_reset, false, XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_box_template',   'pre:trim:str:0:',   $box_template, '', XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_block_template', 'pre:trim:str:0:',   $block_template, '', XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_groups',         'array',             $groups, array(), XARVAR_NOT_REQUIRED)) return;
-                            if (!xarVarFetch('instance_attachgroup',    'int:1:',            $attachgroup, null, XARVAR_NOT_REQUIRED)) return;
+                            if (!xarVar::fetch('instance_name',           'pre:trim:str:1:',   $name, '', xarVar::NOT_REQUIRED)) return;
+                            if (!xarVar::fetch('instance_title',          'pre:trim:str:0:',   $title, '', xarVar::NOT_REQUIRED)) return;
+                            if (!xarVar::fetch('instance_state',          'int:0:4',           $state, null, xarVar::NOT_REQUIRED)) return;
+                            if (!xarVar::fetch('instance_expire',         'pre:trim:str:0:20', $expire, 0, xarVar::NOT_REQUIRED)) return;
+                            if (!xarVar::fetch('instance_expire_reset',   'checkbox',          $expire_reset, false, xarVar::NOT_REQUIRED)) return;
+                            if (!xarVar::fetch('instance_box_template',   'pre:trim:str:0:',   $box_template, '', xarVar::NOT_REQUIRED)) return;
+                            if (!xarVar::fetch('instance_block_template', 'pre:trim:str:0:',   $block_template, '', xarVar::NOT_REQUIRED)) return;
+                            if (!xarVar::fetch('instance_groups',         'array',             $groups, array(), xarVar::NOT_REQUIRED)) return;
+                            if (!xarVar::fetch('instance_attachgroup',    'int:1:',            $attachgroup, null, xarVar::NOT_REQUIRED)) return;
                     
                             if (empty($name) || strlen($name) > 64) {
                                 $invalid['name'] = xarML('Name must be a string between 1 and 64 characters long');
@@ -230,7 +230,7 @@ function blocks_admin_modify_instance()
 
                         if (empty($invalid)) {
 
-                            if (!xarSecConfirmAuthKey())
+                            if (!xarSec::confirmAuthKey())
                                 return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
 
                             if (isset($result) && is_array($result)) {
@@ -303,7 +303,7 @@ function blocks_admin_modify_instance()
                         }
                         // update block configuration 
                         if (empty($invalid)) {
-                            if (!xarSecConfirmAuthKey())
+                            if (!xarSec::confirmAuthKey())
                                 return xarTpl::module('privileges', 'user', 'errors', 
                                     array('layout' => 'bad_author'));
                             if (!empty($result) && is_array($result)) {
@@ -318,14 +318,14 @@ function blocks_admin_modify_instance()
             break;
             case 'caching':
 
-                if (!xarVarFetch('instance_nocache', 'checkbox', 
-                    $nocache, false, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('instance_pageshared', 'checkbox', 
-                    $pageshared, false, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('instance_usershared', 'int:0:2', 
-                    $usershared, 0, XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('instance_cacheexpire', 'str:1:', 
-                    $cacheexpire, NULL, XARVAR_NOT_REQUIRED)) return;
+                if (!xarVar::fetch('instance_nocache', 'checkbox', 
+                    $nocache, false, xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('instance_pageshared', 'checkbox', 
+                    $pageshared, false, xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('instance_usershared', 'int:0:2', 
+                    $usershared, 0, xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('instance_cacheexpire', 'str:1:', 
+                    $cacheexpire, NULL, xarVar::NOT_REQUIRED)) return;
                 
                 // convert cacheexpire from hh:mm:ss format to an integer
                 if (!empty($cacheexpire)) 
@@ -348,7 +348,7 @@ function blocks_admin_modify_instance()
                 
                 // update block configuration 
                 if (empty($invalid)) {
-                    if (!xarSecConfirmAuthKey())
+                    if (!xarSec::confirmAuthKey())
                         return xarTpl::module('privileges', 'user', 'errors', 
                             array('layout' => 'bad_author'));
                     if (!empty($result) && is_array($result)) {
@@ -382,7 +382,7 @@ function blocks_admin_modify_instance()
 
                 // update block configuration 
                 if (empty($invalid)) {
-                    if (!xarSecConfirmAuthKey())
+                    if (!xarSec::confirmAuthKey())
                         return xarTpl::module('privileges', 'user', 'errors', 
                             array('layout' => 'bad_author'));
                     if (!empty($result) && is_array($result)) {
@@ -419,7 +419,7 @@ function blocks_admin_modify_instance()
                 }            
                 // update block configuration 
                 if (empty($invalid)) {
-                    if (!xarSecConfirmAuthKey())
+                    if (!xarSec::confirmAuthKey())
                         return xarTpl::module('privileges', 'user', 'errors', 
                             array('layout' => 'bad_author'));
                     if (!empty($result) && is_array($result)) {
@@ -439,10 +439,10 @@ function blocks_admin_modify_instance()
 
             if (!xarMod::apiFunc('blocks', 'instances', 'updateitem', $blockinfo)) return;
             
-            if (!xarVarFetch('return_url', 'pre:trim:str:1:',
-                $return_url, '', XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
+                $return_url, '', xarVar::NOT_REQUIRED)) return;
             if (empty($return_url))
-                $return_url = xarModURL('blocks', 'admin', 'modify_instance',
+                $return_url = xarController::URL('blocks', 'admin', 'modify_instance',
                     array(
                         'block_id' => $blockinfo['block_id'],
                         'interface' => $interface,
@@ -614,7 +614,7 @@ function blocks_admin_modify_instance()
                     
                     if (is_array($value)) {/*
                         foreach ($value as $k => $v) {
-                            $v = xarVarPrepForDisplay($v);
+                            $v = xarVar::prepForDisplay($v);
                             $value[$k] = $v;
                         }*/
                         $xml .= "  <$key>";

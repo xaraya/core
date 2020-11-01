@@ -24,14 +24,14 @@ function blocks_admin_new_instance()
 {
     // @checkme: Add here vs Manage elsewhere ?
     // @checkme: Instance mask still relevent with anon masks in play?
-    if (!xarSecurityCheck('AddBlocks', 1, 'Instance')) return;
+    if (!xarSecurity::check('AddBlocks', 1, 'Instance')) return;
     
     $data = array();
     
-    if (!xarVarFetch('type_id', 'int:1:',
-        $data['type_id'], null, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phase', 'pre:trim:lower:str:1:',
-        $phase, 'options', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('type_id', 'int:1:',
+        $data['type_id'], null, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase', 'pre:trim:lower:str:1:',
+        $phase, 'options', xarVar::NOT_REQUIRED)) return;
 
     $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
     
@@ -68,18 +68,18 @@ function blocks_admin_new_instance()
         }
         if (empty($invalid)) {
             // set defaults (form phase, 1st run) / fetch input (update phase) 
-            if (!xarVarFetch('name', 'pre:trim:lower:str:1:64',
-                $data['name'], '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('title', 'pre:trim:str:0:254',
-                $data['title'], '', XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('state', 'int:0:3',
-                $data['state'], null, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('block_template', 'pre:trim:str:0:127',
-                $data['block_template'], null, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('box_template', 'pre:trim:str:0:127',
-                $data['box_template'], null, XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('groups', 'array',
-                $data['groups'], array(), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('name', 'pre:trim:lower:str:1:64',
+                $data['name'], '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('title', 'pre:trim:str:0:254',
+                $data['title'], '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('state', 'int:0:3',
+                $data['state'], null, xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('block_template', 'pre:trim:str:0:127',
+                $data['block_template'], null, xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('box_template', 'pre:trim:str:0:127',
+                $data['box_template'], null, xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('groups', 'array',
+                $data['groups'], array(), xarVar::NOT_REQUIRED)) return;
             // get the block type object
             $block_type = xarMod::apiFunc('blocks', 'blocks', 'getobject', $type);
             $instance_states = xarMod::apiFunc('blocks', 'instances', 'getstates');
@@ -99,7 +99,7 @@ function blocks_admin_new_instance()
     // deal with update phase - at this point we have a valid type which user can create instances of
     if ($phase == 'update') {
         // validations
-        if (!xarSecConfirmAuthKey())
+        if (!xarSec::confirmAuthKey())
             return xarTpl::module('privileges', 'user', 'errors', array('layout' => 'bad_author'));
         // groups, optional, if supplied must be valid block groups
         // validated here because createitem has no knowledge of them
@@ -177,7 +177,7 @@ function blocks_admin_new_instance()
                     
         if (empty($invalid)) {
             if (empty($return_url))
-                $return_url = xarModURL('blocks', 'admin', 'modify_instance', 
+                $return_url = xarController::URL('blocks', 'admin', 'modify_instance', 
                     array('block_id' => $block_id));
             xarController::redirect($return_url);
             

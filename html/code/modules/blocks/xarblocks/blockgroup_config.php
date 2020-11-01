@@ -35,7 +35,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
         $instances = array();
         
         if (!empty($group_instances)) {
-            $authid = xarSecGenAuthKey();
+            $authid = xarSec::genAuthKey();
             $i = 1;
             $numitems = count($group_instances);
             foreach ($this->group_instances as $id) {
@@ -65,7 +65,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
             if ($block['block_id'] == $this->block_id || isset($instances[$block['block_id']])) continue;
             $block_options[] = array(
                 'id' => $block['block_id'],
-                'name' => xarVarPrepForDisplay($block['name']),
+                'name' => xarVar::prepForDisplay($block['name']),
             );
         }
         $data['block_options'] = $block_options;
@@ -82,7 +82,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
     {
 
         // remove block(s) from this block group
-        if (!xarVarFetch('remove_block', 'array', $remove_block, NULL, XARVAR_DONT_SET)) return;
+        if (!xarVar::fetch('remove_block', 'array', $remove_block, NULL, xarVar::DONT_SET)) return;
         if (!empty($remove_block)) {
             $removes = xarMod::apiFunc('blocks', 'instances', 'getitems',
                 array('block_id' => array_keys($remove_block)));
@@ -99,7 +99,7 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
         }
 
         // add a block to this block group
-        if (!xarVarFetch('add_block', 'int:1:', $add_block, NULL, XARVAR_DONT_SET)) return;
+        if (!xarVar::fetch('add_block', 'int:1:', $add_block, NULL, xarVar::DONT_SET)) return;
         if (!empty($add_block)) {
             $add = xarMod::apiFunc('blocks', 'instances', 'getitem', 
                 array('block_id' => $add_block));
@@ -120,8 +120,8 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
     {
         $data = $this->getInfo();
         // re-order block instances
-        if (!xarVarFetch('move', 'int:1:', $move, NULL, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('direction', 'pre:trim:lower:enum:up:down', $direction, NULL, XARVAR_DONT_SET)) return;
+        if (!xarVar::fetch('move', 'int:1:', $move, NULL, xarVar::DONT_SET)) return;
+        if (!xarVar::fetch('direction', 'pre:trim:lower:enum:up:down', $direction, NULL, xarVar::DONT_SET)) return;
         if (!empty($move) && !empty($direction)) 
             $this->orderInstance($move, $direction);
         

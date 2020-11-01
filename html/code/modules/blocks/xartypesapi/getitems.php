@@ -52,7 +52,7 @@ function blocks_typesapi_getitems(Array $args=array())
             $module_id = 0;
         } elseif (!is_string($module) || 
             (!xarMod::isAvailable($module) && 
-                (!xarVarIsCached('Blocks.event', 'modremove') || xarVarGetCached('Blocks.event',  'modremove') != $module))
+                (!xarVar::isCached('Blocks.event', 'modremove') || xarVar::getCached('Blocks.event',  'modremove') != $module))
             ) {
             $invalid[] = 'module';
         } else {

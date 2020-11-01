@@ -4,7 +4,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>New Block Instance</h2>
-        <form action="#xarModURL('blocks', 'admin', 'new_instance')#" method="post">
+        <form action="#xarController::URL('blocks', 'admin', 'new_instance')#" method="post">
             <xar:if condition="empty($phase) or $phase eq 'options'">
                 <input type="hidden" name="phase" id="phase" value="form"/>
                 <fieldset>
@@ -33,7 +33,7 @@
             <xar:elseif condition="$phase eq 'form'"/>
                 <input type="hidden" name="type_id" id="type_id" value="#$type['type_id']#"/>
                 <input type="hidden" name="phase" id="phase" value="update"/>
-                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                 <fieldset>
                     <legend>Create Instance</legend>
                     <div class="xar-row">

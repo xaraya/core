@@ -26,10 +26,10 @@
 function blocks_admin_modifyconfig()
 {
     // Security
-    if(!xarSecurityCheck('AdminBlocks')) return;
+    if(!xarSecurity::check('AdminBlocks')) return;
     
-    if (!xarVarFetch('phase',        'str:1:100', $phase,       'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase',        'str:1:100', $phase,       'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+    if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'blocks'));
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
@@ -48,7 +48,7 @@ function blocks_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
             $isvalid = $data['module_settings']->checkInput();
@@ -57,9 +57,9 @@ function blocks_admin_modifyconfig()
                 return xarTpl::module('blocks','admin','modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
-                if (!xarVarFetch('noexceptions', 'int:0:1', $noexceptions, 0, XARVAR_NOT_REQUIRED)) return;
+                if (!xarVar::fetch('noexceptions', 'int:0:1', $noexceptions, 0, xarVar::NOT_REQUIRED)) return;
                 xarModVars::set('blocks', 'noexceptions', $noexceptions);
-            //    xarController::redirect(xarModURL('blocks', 'admin', 'modifyconfig'));
+            //    xarController::redirect(xarController::URL('blocks', 'admin', 'modifyconfig'));
             //    return true;
             }
             // If this is an AJAX call, end here

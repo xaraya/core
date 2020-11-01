@@ -13,7 +13,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>New Block Type</h2>
-        <form action="#xarModURL('blocks', 'admin', 'new_type')#" method="post" onsubmit="return xar_base_formCheck(this,blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('blocks', 'admin', 'new_type')#" method="post" onsubmit="return xar_base_formCheck(this,blocks_fieldRequired, blocks_fieldDescription);" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>Block Type Properties</legend>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
@@ -35,12 +35,12 @@
                             <select name="blockname" id="blockname">
                                 <xar:loop name="$type_list">
                                     <xar:if condition="$loop:item.name eq $blockname">
-                                        <option value="#xarVarPrepForDisplay($loop:item.name)#"
+                                        <option value="#xarVar::prepForDisplay($loop:item.name)#"
                                         selected="selected">
-                                        #xarVarPrepForDisplay($loop:item.name)#</option>
+                                        #xarVar::prepForDisplay($loop:item.name)#</option>
                                         <xar:else />
-                                        <option value="#xarVarPrepForDisplay($loop:item.name)#">
-                                        #xarVarPrepForDisplay($loop:item.name)#</option>
+                                        <option value="#xarVar::prepForDisplay($loop:item.name)#">
+                                        #xarVar::prepForDisplay($loop:item.name)#</option>
                                     </xar:if>
                                 </xar:loop>
                             </select>

@@ -41,7 +41,7 @@
 
         <xar:else/>
             
-            <form method="post" action="#xarModURL('blocks', 'admin', 'modify_instance')#">
+            <form method="post" action="#xarController::URL('blocks', 'admin', 'modify_instance')#">
 
                 <xar:if condition="$interface eq 'config'">
                     <xar:if condition="$method eq 'config'">
@@ -110,8 +110,8 @@
                                     </div>
                                     <div class="xar-col">
                                         <xar:if condition="$block['expirein'] > 0">
-                                            #xarLocaleGetFormattedDate('medium', $block['expire'])#
-                                            at #xarLocaleGetFormattedTime('short', $block['expire'])#
+                                            #xarLocale::getFormattedDate('medium', $block['expire'])#
+                                            at #xarLocale::getFormattedTime('short', $block['expire'])#
                                         <xar:else />
                                             this block has expired
                                         </xar:if>
@@ -189,7 +189,7 @@
                                             <xar:foreach in="$block['groups']" key="$group_id" value="$group">
                                                 <tr>
                                                     <td>
-                                                        <a href="#xarModURL('blocks', 'admin', 'modify_instance', array('block_id' => $group_id))#">#$group['name']#</a>
+                                                        <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $group_id))#">#$group['name']#</a>
                                                     </td>
                                                     <td><input type="text" name="instance_groups[#$group_id#][box_template]" id="instance_groups_#$group_id#_box_template" value="#$group['box_template']#"/></td>
                                                     <td><input type="text" name="instance_groups[#$group_id#][block_template]" id="instance_groups_#$group_id#_block_template" value="#$group['block_template']#"/></td>
@@ -320,7 +320,7 @@
                             </div>
                             <div class="xar-col">
                                 <input type="hidden" name="phase" id="phase" value="update"/>
-                                <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                                <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                                 <input type="hidden" name="block_id" id="block_id" value="#$block['block_id']#"/>
                                 <input type="hidden" name="interface" id="interface" value="#$interface#"/>
                                 <input type="hidden" name="method" id="method" value="#$method#"/>

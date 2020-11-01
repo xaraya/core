@@ -29,7 +29,7 @@ function blocks_userapi_getitemlinks(Array $args=array())
     }
     $itemlinks = array();
 
-    if (xarSecurityCheck('EditBlocks',0)) {
+    if (xarSecurity::check('EditBlocks',0)) {
         $showurl = true;
     } else {
         $showurl = false;
@@ -49,9 +49,9 @@ function blocks_userapi_getitemlinks(Array $args=array())
             foreach ($itemids as $itemid) {
                 if (!isset($types[$itemid])) continue;
                 $label = $types[$itemid]['module'] . '/' . $types[$itemid]['type'];
-                $itemlinks[$itemid] = array('label' => xarVarPrepForDisplay($label),
+                $itemlinks[$itemid] = array('label' => xarVar::prepForDisplay($label),
                                             'title' => xarML('View Block Type'),
-                                            'url'   => $showurl ? xarModURL('blocks', 'admin', 'view_types',
+                                            'url'   => $showurl ? xarController::URL('blocks', 'admin', 'view_types',
                                                                             array('tid' => $itemid)) : '');
             }
             break;
@@ -69,9 +69,9 @@ function blocks_userapi_getitemlinks(Array $args=array())
             foreach ($itemids as $itemid) {
                 if (!isset($groups[$itemid])) continue;
                 $label = $groups[$itemid]['name'];
-                $itemlinks[$itemid] = array('label' => xarVarPrepForDisplay($label),
+                $itemlinks[$itemid] = array('label' => xarVar::prepForDisplay($label),
                                             'title' => xarML('View Block Group'),
-                                            'url'   => $showurl ? xarModURL('blocks', 'admin', 'view_groups',
+                                            'url'   => $showurl ? xarController::URL('blocks', 'admin', 'view_groups',
                                                                             array('id' => $itemid)) : '');
             }
             break;
@@ -89,9 +89,9 @@ function blocks_userapi_getitemlinks(Array $args=array())
             foreach ($itemids as $itemid) {
                 if (!isset($instances[$itemid])) continue;
                 $label = $instances[$itemid]['name'];
-                $itemlinks[$itemid] = array('label' => xarVarPrepForDisplay($label),
+                $itemlinks[$itemid] = array('label' => xarVar::prepForDisplay($label),
                                             'title' => xarML('Modify Block Instance'),
-                                            'url'   => $showurl ? xarModURL('blocks', 'admin', 'modify_instance',
+                                            'url'   => $showurl ? xarController::URL('blocks', 'admin', 'modify_instance',
                                                                             array('bid' => $itemid)) : '');
             }
             break;

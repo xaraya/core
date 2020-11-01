@@ -30,7 +30,7 @@ function blocks_user_display(Array $args=array())
     {
         $benum .= ':'.$binfo['name'];
     }
-    if(!xarVarFetch('name',$benum,$name)) return;
+    if(!xarVar::fetch('name',$benum,$name)) return;
 
     // Template issues a wrapped xar:block tag.
     $data['name'] = $name;
