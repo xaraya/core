@@ -15,24 +15,24 @@
 function roles_admin_showusers()
 {
     // Security
-    if (!xarSecurityCheck('EditRoles')) return;
+    if (!xarSecurity::check('EditRoles')) return;
 
-    if (xarVarIsCached('roles', 'defaultgroupid')) {
-        $defaultgroupid = xarVarGetCached('roles', 'defaultgroupid');
+    if (xarVar::isCached('roles', 'defaultgroupid')) {
+        $defaultgroupid = xarVar::getCached('roles', 'defaultgroupid');
     } else {
         $defaultgroupid = xarModVars::get('roles','defaultgroup');
     }
-    xarVarSetCached('roles', 'defaultgroupid', $defaultgroupid);
+    xarVar::setCached('roles', 'defaultgroupid', $defaultgroupid);
 
-    if (!xarVarFetch('id',       'int:0:', $id,              $defaultgroupid, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('startnum', 'int:1:', $startnum,         1,   XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('state',    'int:0:', $data['state'],    xarRoles::ROLES_STATE_CURRENT, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('selstyle', 'isset',  $data['selstyle'], xarSession::getVar('rolesdisplay'), XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('invalid',  'str:0:', $data['invalid'],  NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('order',    'str:0:', $data['order'],    'name', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('search',   'str:0:', $data['search'],   NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('reload',   'str:0:', $reload,           NULL,    XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('numitems', 'int:1',  $numitems,        (int)xarModVars::get('roles','items_per_page'), XARVAR_DONT_SET)) return;
+    if (!xarVar::fetch('id',       'int:0:', $id,              $defaultgroupid, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('startnum', 'int:1:', $startnum,         1,   xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('state',    'int:0:', $data['state'],    xarRoles::ROLES_STATE_CURRENT, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('selstyle', 'isset',  $data['selstyle'], xarSession::getVar('rolesdisplay'), xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('invalid',  'str:0:', $data['invalid'],  NULL, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('order',    'str:0:', $data['order'],    'name', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('search',   'str:0:', $data['search'],   NULL, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('reload',   'str:0:', $reload,           NULL,    xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('numitems', 'int:1',  $numitems,        (int)xarModVars::get('roles','items_per_page'), xarVar::DONT_SET)) return;
     if (empty($data['selstyle'])) $data['selstyle'] = 0;
     xarSession::setVar('rolesdisplay', $data['selstyle']);
 
@@ -140,7 +140,7 @@ function roles_admin_showusers()
     $ids = array();
 
     foreach($q->output() as $row) {
-        $users[$row['id']]['frozen'] = !xarSecurityCheck('EditRoles',0,'Roles',$row['name']);
+        $users[$row['id']]['frozen'] = !xarSecurity::check('EditRoles',0,'Roles',$row['name']);
 
     }
     if ($id != 0) $data['title'] .= " ".xarML('of Group')." ";
@@ -157,8 +157,8 @@ function roles_admin_showusers()
     $data['id']        = $id;
     $data['users']      = $users;
     $data['object']     = $object;
-    $data['authid']     = xarSecGenAuthKey();
-    $data['removeurl']  = xarModURL('roles', 'admin','delete', array('id' => $id));
+    $data['authid']     = xarSec::genAuthKey();
+    $data['removeurl']  = xarController::URL('roles', 'admin','delete', array('id' => $id));
     $filter['startnum'] = '%%';
     $filter['id']      = $id;
     $filter['state']    = $data['state'];
@@ -167,7 +167,7 @@ function roles_admin_showusers()
 
     $data['startnum'] = $startnum;
     $data['itemsperpage'] = $numitems;
-    $data['urltemplate'] = xarModURL('roles', 'admin', 'showusers',$filter);
+    $data['urltemplate'] = xarController::URL('roles', 'admin', 'showusers',$filter);
     $data['urlitemmatch'] = '%%';
 
     return $data;

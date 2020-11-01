@@ -45,7 +45,7 @@ function roles_adminapi_recall(Array $args=array())
     $item['module'] = 'roles';
     $item['itemid'] = $id;
     $item['method'] = 'recall';
-    xarModCallHooks('item', 'create', $id, $item);
+    xarModHooks::call('item', 'create', $id, $item);
 
     //finished successfully
     return true;

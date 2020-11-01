@@ -76,7 +76,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
         foreach ($activeusers as $key => $thisuser) {
             $data['activeusers'][$key] = array(
                 'name' => $thisuser['name'],
-                'userurl' => xarModURL(
+                'userurl' => xarController::URL(
                     'roles', 'user', 'display',
                          array('id' => $thisuser['id'])
                 ),
@@ -97,7 +97,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
                         array('id'=>$thisuser['id'])
                     );
 
-                    $data['activeusers'][$key]['messagesurl'] =xarModURL(
+                    $data['activeusers'][$key]['messagesurl'] =xarController::URL(
                         'messages', 'user', 'display',
                         array('id'=>$thisuser['id'])
                     );

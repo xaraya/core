@@ -41,11 +41,11 @@ function roles_userapi_leftjoin(Array $args=array())
     }
 
     // Security check
-    if (!xarSecurityCheck('ViewRoles',0)) return;
+    if (!xarSecurity::check('ViewRoles',0)) return;
 
 // TODO: check this !
     foreach ($ids as $id) {
-        if (!xarSecurityCheck('ReadRoles',0,'All',"All:All:$id")) return;
+        if (!xarSecurity::check('ReadRoles',0,'All',"All:All:$id")) return;
     }
 
     // Table definition

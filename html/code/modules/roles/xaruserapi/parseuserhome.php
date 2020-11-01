@@ -48,7 +48,7 @@ function roles_userapi_parseuserhome(Array $args=array())
                     if (empty($url[2])) $url[2]="main";
                     $url = xarModUrl($url[0],$url[1],$url[2]);
                 if(isset($sections[1])) {
-                   $url .= xarVarPrepForDisplay($sections[1]);
+                   $url .= xarVar::prepForDisplay($sections[1]);
                 }
                 break;
             }
@@ -56,12 +56,12 @@ function roles_userapi_parseuserhome(Array $args=array())
             {
                 $url = explode(':', substr($url, 1,  - 1));
                  // Get current pubtype type (if any)
-                if (xarVarIsCached('Blocks.articles', 'ptid')) {
-                    $ptid = xarVarGetCached('Blocks.articles', 'ptid');
+                if (xarVar::isCached('Blocks.articles', 'ptid')) {
+                    $ptid = xarVar::getCached('Blocks.articles', 'ptid');
                 }
                 if (empty($ptid)) {
                      // try to get ptid from input
-                     xarVarFetch('ptid', 'isset', $ptid, NULL, XARVAR_DONT_SET);
+                     xarVar::fetch('ptid', 'isset', $ptid, NULL, xarVar::DONT_SET);
                 }
                 // if the current pubtype is active, then we are here
                 if ($url[0] == $ptid) {
@@ -73,15 +73,15 @@ function roles_userapi_parseuserhome(Array $args=array())
             case '(': // category link
             {
                 $url = explode(':', substr($url, 1,  - 1));
-                if (xarVarIsCached('Blocks.categories','catid')) {
-                    $catid = xarVarGetCached('Blocks.categories','catid');
+                if (xarVar::isCached('Blocks.categories','catid')) {
+                    $catid = xarVar::getCached('Blocks.categories','catid');
                 }
                 if (empty($catid)) {
                     // try to get catid from input
-                     xarVarFetch('catid', 'isset', $catid, NULL, XARVAR_DONT_SET);
+                     xarVar::fetch('catid', 'isset', $catid, NULL, xarVar::DONT_SET);
                 }
-                if (empty($catid) && xarVarIsCached('Blocks.categories','cids')) {
-                     $cids = xarVarGetCached('Blocks.categories','cids');
+                if (empty($catid) && xarVar::isCached('Blocks.categories','cids')) {
+                     $cids = xarVar::getCached('Blocks.categories','cids');
                 } else {
                     $cids = array();
                 }
@@ -113,9 +113,9 @@ function roles_userapi_parseuserhome(Array $args=array())
                         throw new BadParameterException($url,$msg);
                     }
                 }
-                // BUG 2023: Make sure manual URLs are prepped for XML, consistent with xarModURL()
+                // BUG 2023: Make sure manual URLs are prepped for XML, consistent with xarController::URL()
                 if (!empty($GLOBALS['xarMod_generateXMLURLs'])) {
-                    $url = xarVarPrepForDisplay($url);
+                    $url = xarVar::prepForDisplay($url);
                 }
            }
          }

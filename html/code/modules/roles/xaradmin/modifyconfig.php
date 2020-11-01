@@ -20,10 +20,10 @@
 function roles_admin_modifyconfig()
 {
     // Security
-    if (!xarSecurityCheck('AdminRoles')) return;
+    if (!xarSecurity::check('AdminRoles')) return;
     
-    if (!xarVarFetch('phase', 'str:1:100', $phase,       'modify',  XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('tab',   'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase', 'str:1:100', $phase,       'modify',  xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+    if (!xarVar::fetch('tab',   'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
 
     // get a list of everyone with admin privileges
     // TODO: find a more elegant way to do this
@@ -90,7 +90,7 @@ function roles_admin_modifyconfig()
             $hooks = xarHooks::notify('ModuleModifyconfig', $item);
             /* 
             // Item type 1 is the default itemtype for 'user' roles.
-            $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
+            $hooks = xarModHooks::call('module', 'modifyconfig', 'roles',
                                      array('module' => 'roles',
                                            'itemtype' => xarRoles::ROLES_USERTYPE));
             */            
@@ -100,7 +100,7 @@ function roles_admin_modifyconfig()
             $hooks = xarHooks::notify('ModuleModifyconfig', $item);
             /*
             // Item type 2 is the itemtype for 'group' roles.
-            $hooks = xarModCallHooks('module', 'modifyconfig', 'roles',
+            $hooks = xarModHooks::call('module', 'modifyconfig', 'roles',
                                      array('module' => 'roles',
                                            'itemtype' => xarRoles::ROLES_GROUPTYPE));
             */            
@@ -165,15 +165,15 @@ function roles_admin_modifyconfig()
 
         case 'update':
             // Confirm authorisation code
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }
             switch ($data['tab']) {
                 case 'general':
-                    if (!xarVarFetch('defaultauthmodule', 'int:1:',   $defaultauthmodule, xarMod::getRegID('authsystem'), XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('defaultregmodule',  'int:1:',   $defaultregmodule, '', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-                    if (!xarVarFetch('siteadmin',         'int:1',    $siteadmin,        (int)xarModVars::get('roles','admin'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('defaultgroup',      'str:1',    $defaultgroup,     'Users', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
+                    if (!xarVar::fetch('defaultauthmodule', 'int:1:',   $defaultauthmodule, xarMod::getRegID('authsystem'), xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+                    if (!xarVar::fetch('defaultregmodule',  'int:1:',   $defaultregmodule, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+                    if (!xarVar::fetch('siteadmin',         'int:1',    $siteadmin,        (int)xarModVars::get('roles','admin'), xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('defaultgroup',      'str:1',    $defaultgroup,     'Users', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
@@ -189,13 +189,13 @@ function roles_admin_modifyconfig()
 
                 case 'hooks':
                     // Role type 'user' (itemtype 1).
-                    xarModCallHooks('module', 'updateconfig', 'roles',
+                    xarModHooks::call('module', 'updateconfig', 'roles',
                                     array('module' => 'roles',
                                           'itemtype' => xarRoles::ROLES_USERTYPE));
                     break;
                 case 'grouphooks':
                     // Role type 'group' (itemtype 2).
-                    xarModCallHooks('module', 'updateconfig', 'roles',
+                    xarModHooks::call('module', 'updateconfig', 'roles',
                                     array('module' => 'roles',
                                           'itemtype' => xarRoles::ROLES_GROUPTYPE));
                     break;
@@ -209,7 +209,7 @@ function roles_admin_modifyconfig()
                     }
                     break;
                 case 'debugging':
-                    if (!xarVarFetch('debugadmins', 'str', $candidates, '', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('debugadmins', 'str', $candidates, '', xarVar::NOT_REQUIRED)) return;
 
                     // Get the users to be shown the debug messages
                     if (empty($candidates)) {
@@ -225,7 +225,7 @@ function roles_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.User.DebugAdmins', $debugadmins);
                 break;
             }
-            xarController::redirect(xarModURL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
+            xarController::redirect(xarController::URL('roles','admin','modifyconfig',array('tab' => $data['tab'])));
             break;
     }
     return $data;

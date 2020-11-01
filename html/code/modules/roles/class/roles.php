@@ -140,13 +140,13 @@ class xarRoles extends xarObject
     public static function get($id)
     {
         $cacheKey = 'Roles.ById';
-        if(xarVarIsCached($cacheKey,$id)) {
-            return xarVarGetCached($cacheKey,$id);
+        if(xarVar::isCached($cacheKey,$id)) {
+            return xarVar::getCached($cacheKey,$id);
         }
         // Need to get it from DB.
         // TODO: move caching to _lookuprole?
         $r = self::_lookuprole('id',(int) $id);
-        xarVarSetCached($cacheKey,$id,$r);
+        xarVar::setCached($cacheKey,$id,$r);
         return $r;
     }
 
@@ -269,13 +269,13 @@ class xarRoles extends xarObject
         elseif ($row['itemtype'] == self::ROLES_GROUPTYPE) $name = 'roles_groups';
         else throw new Exception(xarML('Unknown role type'));
         $cacheKey = 'Roles.ById';
-        if(xarVarIsCached($cacheKey,$row['id'])) {
-            return xarVarGetCached($cacheKey,$row['id']);
+        if(xarVar::isCached($cacheKey,$row['id'])) {
+            return xarVar::getCached($cacheKey,$row['id']);
         }
         sys::import('modules.dynamicdata.class.objects.master');
         $role = DataObjectMaster::getObject(array('name' => $name));
         $role->getItem(array('itemid' => $row['id']));
-        xarVarSetCached($cacheKey,$row['id'],$role);
+        xarVar::setCached($cacheKey,$row['id'],$role);
         return $role;
     }
 }

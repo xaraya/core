@@ -18,12 +18,12 @@
 function roles_admin_new()
 {
     // Security
-    if (!xarSecurityCheck('AddRoles')) return;
+    if (!xarSecurity::check('AddRoles')) return;
 
-    if (!xarVarFetch('parentid',    'id',    $data['parentid'], (int)xarModVars::get('roles','defaultgroup'), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemtype',    'int',   $data['itemtype'], xarRoles::ROLES_USERTYPE, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('duvs',        'array', $data['duvs'], array(), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirm',     'str',   $confirm, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('parentid',    'id',    $data['parentid'], (int)xarModVars::get('roles','defaultgroup'), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemtype',    'int',   $data['itemtype'], xarRoles::ROLES_USERTYPE, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('duvs',        'array', $data['duvs'], array(), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirm',     'str',   $confirm, '', xarVar::NOT_REQUIRED)) return;
 
     if ($data['itemtype'] == xarRoles::ROLES_USERTYPE) $name = 'roles_users';
     elseif ($data['itemtype'] == xarRoles::ROLES_GROUPTYPE) $name = 'roles_groups';
@@ -35,11 +35,11 @@ function roles_admin_new()
     $item['exclude_module'] = array('dynamicdata');
     $item['module'] = 'roles';
     $item['itemtype'] = $data['itemtype'];
-    $data['hooks'] = xarModCallHooks('item', 'new', '', $item);
+    $data['hooks'] = xarModHooks::call('item', 'new', '', $item);
 
     if ($confirm) {
         // Check for a valid confirmation key
-        if(!xarSecConfirmAuthKey()) return;
+        if(!xarSec::confirmAuthKey()) return;
 
         // Enforce a check on the existence of a user of this user name
         $data['object']->properties['uname']->validation_existrule = 1;
@@ -55,7 +55,7 @@ function roles_admin_new()
             $itemid = $data['object']->createItem();
 
             // Jump to the next page
-            xarController::redirect(xarModURL('roles','admin','new'));
+            xarController::redirect(xarController::URL('roles','admin','new'));
             return true;
         }
     }

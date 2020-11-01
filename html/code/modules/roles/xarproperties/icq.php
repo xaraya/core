@@ -70,7 +70,7 @@ class ICQProperty extends TextBoxProperty
 
         $data['link'] ='';
         if(!empty($data['value'])) {
-            $data['link'] = 'http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($data['value']);
+            $data['link'] = 'http://wwp.icq.com/scripts/search.dll?to='.xarVar::prepForDisplay($data['value']);
         }
         // $data['value'] is prepared for display by textbox
         return parent::showInput($data);
@@ -100,10 +100,10 @@ class ICQProperty extends TextBoxProperty
             //The data is there for anyone that wants to use the vars themselves in the template.
             $link = '<script type="text/javascript"><!--
 if ( navigator.userAgent.toLowerCase().indexOf(\'mozilla\') != -1 && navigator.userAgent.indexOf(\'5.\') == -1 )
-    document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
+    document.write(\' <a href="http://wwp.icq.com/scripts/search.dll?to='.xarVar::prepForDisplay($value).'"><img src="'.xarVar::prepForDisplay($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a>\');
 else
-    document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/'.xarVarPrepForDisplay($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.xarVarPrepForDisplay($value).'&amp;img=5" width="18" height="18" alt=""/></a>\');
-//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVarPrepForDisplay($value).'"><img src="'.xarVarPrepForDisplay($data['image']).'" alt="ICQ Number" title="ICQ Number" border="0"/></a></noscript>';
+    document.write(\'<a href="http://wwp.icq.com/scripts/search.dll?to='.xarVar::prepForDisplay($value).'"><img src="'.xarVar::prepForDisplay($data['image']).'" alt="ICQ Number" title="ICQ Number" alt=""/></a><a href="http://wwp.icq.com/'.xarVar::prepForDisplay($value).'#pager"><img src="http://web.icq.com/whitepages/online?icq='.xarVar::prepForDisplay($value).'&amp;img=5" width="18" height="18" alt=""/></a>\');
+//--></script><noscript><a href="http://wwp.icq.com/scripts/search.dll?to='.xarVar::prepForDisplay($value).'"><img src="'.xarVar::prepForDisplay($data['image']).'" alt="ICQ Number" title="ICQ Number" border="0"/></a></noscript>';
 
         }
 

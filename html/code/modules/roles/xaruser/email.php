@@ -30,10 +30,10 @@ function roles_user_email(Array $args=array())
 
     extract($args);
 
-    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
 
-    if (!xarVarFetch('phase', 'enum:modify:confirm', $phase, 'modify', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase', 'enum:modify:confirm', $phase, 'modify', xarVar::NOT_REQUIRED)) return;
 
     // If this validation fails, then do NOT send an e-mail, but
     // re-present the form to the user with an error message. Don't redirect,
@@ -42,8 +42,8 @@ function roles_user_email(Array $args=array())
     $error_message = '';
     // WATCH OUT: &= is not the same as =&
     try {
-        xarVarFetch('subject', 'html:restricted', $subject);
-        xarVarFetch('message', 'html:restricted', $message);
+        xarVar::fetch('subject', 'html:restricted', $subject);
+        xarVar::fetch('message', 'html:restricted', $message);
     } catch (ValidationExceptions $e) {
         // Ensure we don't sent the e-mail.
         $phase = 'modify';
@@ -52,7 +52,7 @@ function roles_user_email(Array $args=array())
     }
 
     // Security Check
-    if (!xarSecurityCheck('ReadRoles')) return;
+    if (!xarSecurity::check('ReadRoles')) return;
 
     switch(strtolower($phase)) {
         case 'modify':
@@ -69,24 +69,24 @@ function roles_user_email(Array $args=array())
             $data['message'] = $message;
             $data['error_message'] = $error_message;
 
-            $data['authid'] = xarSecGenAuthKey();
+            $data['authid'] = xarSec::genAuthKey();
 
             xarTpl::setPageTitle(xarML('Mail User'));
             break;
 
         case 'confirm':
             // Bug 3342: don't allow arbitrary sender and recipient name details to be passed in.
-            //if (!xarVarFetch('fname','str:1:100',$fname)) return;
-            //if (!xarVarFetch('femail','str:1:100',$femail)) return;
-            //if (!xarVarFetch('name', 'str:1:100', $name)) return;
+            //if (!xarVar::fetch('fname','str:1:100',$fname)) return;
+            //if (!xarVar::fetch('femail','str:1:100',$femail)) return;
+            //if (!xarVar::fetch('name', 'str:1:100', $name)) return;
 
             // Confirm authorisation code.
-            if (!xarSecConfirmAuthKey()) {
+            if (!xarSec::confirmAuthKey()) {
                 return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
             }        
 
             // Security Check
-            if (!xarSecurityCheck('ReadRoles')) return;
+            if (!xarSecurity::check('ReadRoles')) return;
 
             // If the sender details have not been passed in to $args, then
             // fetch them from the current user now.
@@ -96,7 +96,7 @@ function roles_user_email(Array $args=array())
                 $femail = xarUser::getVar('email');
             }
 
-            list($message) = xarModCallHooks('item', 'transform', $id, array($message));
+            list($message) = xarModHooks::call('item', 'transform', $id, array($message));
 
             // Get user information
             $data = xarMod::apiFunc('roles', 'user', 'get', array('id' => $id));
@@ -116,7 +116,7 @@ function roles_user_email(Array $args=array())
             )) return;
 
             // lets update status and display updated configuration
-            xarController::redirect(xarModURL('roles', 'user', 'viewlist'));
+            xarController::redirect(xarController::URL('roles', 'user', 'viewlist'));
 
             break;
     }

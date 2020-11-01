@@ -7,7 +7,7 @@
               #$itemtypename# List
             </legend>
             <xar:if condition="!empty($message)">
-                <p>#xarVarPrepForDisplay($message)#</p>
+                <p>#xarVar::prepForDisplay($message)#</p>
             <xar:else />
                 <table class="xar-table" width="100%" border="1" cellspacing="0" cellpadding="2">
                     <tr>

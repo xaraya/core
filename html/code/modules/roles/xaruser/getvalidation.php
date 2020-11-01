@@ -27,20 +27,20 @@
 function roles_user_getvalidation()
 {
     // Security check
-    if (!xarSecurityCheck('ViewRoles')) return;
+    if (!xarSecurity::check('ViewRoles')) return;
 
     //If a user is already logged in, no reason to see this.
     //We are going to send them to their account.
     if (xarUser::isLoggedIn()) {
-       xarController::redirect(xarModURL('roles', 'user', 'account',
+       xarController::redirect(xarController::URL('roles', 'user', 'account',
                                       array('id' => xarUser::getVar('id'))));
        return true;
     }
 
-    if (!xarVarFetch('uname','str:1:100',$uname,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('valcode','str:1:100',$valcode,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('sent','int:0:2',$sent,0,XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('phase','str:1:100',$phase,'startvalidation',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('uname','str:1:100',$uname,'',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('valcode','str:1:100',$valcode,'',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('sent','int:0:2',$sent,0,xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase','str:1:100',$phase,'startvalidation',xarVar::NOT_REQUIRED)) return;
 
     xarTpl::setPageTitle(xarML('Validate Your Account'));
     /* This function to be provided with support functions to ensure we have got a default regmodule,
@@ -65,7 +65,7 @@ function roles_user_getvalidation()
 
     //Set some general vars that we need in various options
     $pending = xarModVars::get($regmodule, 'explicitapproval');
-    $loginlink = xarModURL($defaultloginmodname,'user','main');
+    $loginlink = xarController::URL($defaultloginmodname,'user','main');
 
     $tplvars=array();
     $tplvars['loginlink'] = $loginlink;
@@ -148,8 +148,8 @@ function roles_user_getvalidation()
                 $url = xarModUrl('roles', 'user', 'main');
 
                 $time = '4';
-                xarVarSetCached('Meta.refresh','url', $url);
-                xarVarSetCached('Meta.refresh','time', $time);
+                xarVar::setCached('Meta.refresh','url', $url);
+                xarVar::setCached('Meta.refresh','time', $time);
             }
 
             //TODO : This registration and validation processes need to be totally revamped and clearly defined - make do for now
@@ -218,7 +218,7 @@ function roles_user_getvalidation()
             $data = xarTpl::module('roles','user', 'getvalidation', $tplvars);
 
             // Redirect
-            xarController::redirect(xarModURL('roles', 'user', 'getvalidation',array('sent' => 1)));
+            xarController::redirect(xarController::URL('roles', 'user', 'getvalidation',array('sent' => 1)));
 
         }
 

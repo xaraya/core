@@ -31,7 +31,7 @@ function roles_userapi_addmember(Array $args=array())
     $user = xarRoles::get($id);
 
 // Security Check
-    if(!xarSecurityCheck('AttachRole',1,'Relation',$group->getName() . ":" . $user->getName())) return;
+    if(!xarSecurity::check('AttachRole',1,'Relation',$group->getName() . ":" . $user->getName())) return;
 
     if (!$group->addMember($user)) return;
 

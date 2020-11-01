@@ -16,10 +16,10 @@
  */
 function roles_admin_delete()
 {
-    if (!xarVarFetch('id', 'id', $id, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('itemid', 'id', $itemid, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('returnurl', 'str', $returnurl, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'id', $id, 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemid', 'id', $itemid, NULL, xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('confirmation', 'str:1:', $confirmation, '', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('returnurl', 'str', $returnurl, '', xarVar::NOT_REQUIRED)) return;
 
     $id = isset($itemid) ? $itemid : $id;
 
@@ -43,9 +43,9 @@ function roles_admin_delete()
     $name = $role->getName();
 
     // Security
-    if (!xarSecurityCheck('ManageRoles',1,'Roles',$name)) return;
+    if (!xarSecurity::check('ManageRoles',1,'Roles',$name)) return;
     
-    $data['frozen'] = !xarSecurityCheck('ManageRoles',0,'Roles',$name);
+    $data['frozen'] = !xarSecurity::check('ManageRoles',0,'Roles',$name);
 
     // Prohibit removal of any groups that have children
     if($role->countChildren()) {
@@ -66,7 +66,7 @@ function roles_admin_delete()
         // Load Template
         $data['itemtype'] = $itemtype;
         $types = xarMod::apiFunc('roles','user','getitemtypes');
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
         $data['id'] = $id;
         $data['ptype'] = $role->getType();
         $data['deletelabel'] = xarML('Delete');
@@ -74,7 +74,7 @@ function roles_admin_delete()
         $data['returnurl'] = $returnurl;
         return $data;
     } else {
-        if (!xarSecConfirmAuthKey()) {
+        if (!xarSec::confirmAuthKey()) {
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
         // Check to make sure the user is not active on the site.
@@ -93,13 +93,13 @@ function roles_admin_delete()
             $pargs['module'] = 'roles';
             $pargs['itemtype'] = $itemtype;
             $pargs['itemid'] = $id;
-            xarModCallHooks('item', 'delete', $id, $pargs);
+            xarModHooks::call('item', 'delete', $id, $pargs);
         } else {
             return xarTpl::module('roles','user','errors',array('layout' => 'remove_active_session', 'user' => $role->getName()));
         }
         // redirect to the next page
         if (empty($returnurl)) {
-            xarController::redirect(xarModURL('roles', 'admin', 'showusers'));
+            xarController::redirect(xarController::URL('roles', 'admin', 'showusers'));
         } else {
             xarController::redirect($returnurl);
         }

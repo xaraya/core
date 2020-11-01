@@ -164,7 +164,7 @@ class UsernameProperty extends TextBoxProperty
             } else {
                 $textvalue = $this->value;
             }
-            $data['link_url'] = xarModURL('roles','user','display',array('id' => $this->value));
+            $data['link_url'] = xarController::URL('roles','user','display',array('id' => $this->value));
         } else {
             $data['link_url'] = "";
         }

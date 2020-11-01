@@ -24,7 +24,7 @@ function roles_userapi_getmenulinks()
     $menulinks = array();
     if ((bool)xarModVars::get('roles', 'displayrolelist')){
             $menulinks[] = array(
-                'url'   => xarModURL('roles','user','view'),
+                'url'   => xarController::URL('roles','user','view'),
                 'title' => xarML('View All Users'),
                 'label' => xarML('Memberslist'),
                 'active' => array('view'),
@@ -32,7 +32,7 @@ function roles_userapi_getmenulinks()
     }
     if (xarUser::isLoggedIn()){
         $menulinks[] = array(
-            'url'   => xarModURL('roles','user','account'),
+            'url'   => xarController::URL('roles','user','account'),
             'title' => xarML('Your Custom Configuration'),
             'label' => xarML('Your Account'),
             'active' => array('account'),

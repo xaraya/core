@@ -16,12 +16,12 @@
 function roles_admin_createpassword()
 {
     // Security
-    if (!xarSecurityCheck('EditRoles')) return;
+    if (!xarSecurity::check('EditRoles')) return;
     
     // Get parameters
-    if(!xarVarFetch('state', 'isset', $state, NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('groupid', 'int:0:', $groupid, 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('id', 'isset', $id)) {
+    if(!xarVar::fetch('state', 'isset', $state, NULL, xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('groupid', 'int:0:', $groupid, 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'isset', $id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
         $vars = array('parameters', 'admin', 'createpassword', 'Roles');
         throw new BadParameterException($vars,$msg);
@@ -34,11 +34,11 @@ function roles_admin_createpassword()
     if (!$role->updateItem()) return;
 
     if (!xarModVars::get('roles', 'askpasswordemail')) {
-        xarController::redirect(xarModURL('roles', 'admin', 'showusers',
+        xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
                       array('id' => $groupid, 'state' => $state)));
     } else {
         xarSession::setVar('tmppass',$pass);
-        xarController::redirect(xarModURL('roles', 'admin', 'asknotification',
+        xarController::redirect(xarController::URL('roles', 'admin', 'asknotification',
         array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)));
     }
     return true;

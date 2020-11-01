@@ -20,7 +20,7 @@
 function roles_userapi_getallactive(Array $args=array())
 {
     // Security Check
-    if(!xarSecurityCheck('ViewRoles')) return;
+    if(!xarSecurity::check('ViewRoles')) return;
 
     // Set some defaults
     $include_anonymous = true;
@@ -79,7 +79,7 @@ function roles_userapi_getallactive(Array $args=array())
 
     while($result->next()) {
         list($id, $uname, $name, $email, $date_reg, $ipaddr) = $result->fields;
-        if (xarSecurityCheck('ViewRoles', 0, 'All', "$uname:All:$id")) {
+        if (xarSecurity::check('ViewRoles', 0, 'All', "$uname:All:$id")) {
             $sessions[] = array('id'       => (int) $id,
                                 'name'      => $name,
                                 'uname'     => $uname,

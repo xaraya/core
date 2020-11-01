@@ -104,7 +104,7 @@ class Role extends DataObject
         xarModUserVars::set('roles','allowemail', false, $id);
 
         // Get a value for the parent id
-        if (empty($data['parentid'])) xarVarFetch('parentid',  'int', $data['parentid'],  NULL, XARVAR_DONT_SET);
+        if (empty($data['parentid'])) xarVar::fetch('parentid',  'int', $data['parentid'],  NULL, xarVar::DONT_SET);
         if (empty($data['parentid'])) $data['parentid'] = (int)xarModVars::get('roles', 'defaultgroup');
         if (!empty($data['parentid'])) {
             sys::import('modules.roles.class.roles');
@@ -114,7 +114,7 @@ class Role extends DataObject
         }
 
         // add the duvs
-        if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED)) return;
         foreach($duvs as $key => $value) {
             xarModUserVars::set('roles',$key, $value, $id);
         }
@@ -124,14 +124,14 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
         $item['exclude_module'] = array('dynamicdata');
-        xarModCallHooks('item', 'create', $id, $item);
+        xarModHooks::call('item', 'create', $id, $item);
         return $id;
     }
 
     public function updateItem(Array $data = array())
     {
         $id = parent::updateItem($data);
-        if (!xarVarFetch('duvs','array',$duvs,array(),XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('duvs','array',$duvs,array(),xarVar::NOT_REQUIRED)) return;
         foreach($duvs as $key => $value) {
             xarModUserVars::set('roles',$key, $value, $id);
         }
@@ -139,7 +139,7 @@ class Role extends DataObject
         $item['itemtype'] = $this->getType();
         $item['itemid'] = $id;
         $item['exclude_module'] = array('dynamicdata');
-        xarModCallHooks('item', 'update', $id, $item);
+        xarModHooks::call('item', 'update', $id, $item);
         return $id;
     }
 
@@ -205,7 +205,7 @@ class Role extends DataObject
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
-        xarModCallHooks('item', 'link', $this->getID(), $item);
+        xarModHooks::call('item', 'link', $this->getID(), $item);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -260,7 +260,7 @@ class Role extends DataObject
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
         $item['itemid']   = $this->getID();
-        xarModCallHooks('item', 'unlink', $this->getID(), $item);
+        xarModHooks::call('item', 'unlink', $this->getID(), $item);
 
         // Refresh the privileges cached for the current sessions
         xarMasks::clearCache();
@@ -328,7 +328,7 @@ class Role extends DataObject
         $item['itemid'] = $this->getID();
         $item['method'] = 'delete';
         $item['exclude_module'] = array('dynamicdata');
-        xarModCallHooks('item', 'delete', $this->getID(), $item);
+        xarModHooks::call('item', 'delete', $this->getID(), $item);
 
         // CHECKME: re-assign all privileges to the child roles ? (probably not)
         return true;
@@ -372,7 +372,7 @@ class Role extends DataObject
         $item['itemid'] = $this->getID();
         $item['itemtype'] = $this->getType();
         $item['method'] = 'purge';
-        xarModCallHooks('item', 'delete', $this->getID(), $item);
+        xarModHooks::call('item', 'delete', $this->getID(), $item);
         return true;
     }
 
@@ -388,8 +388,8 @@ class Role extends DataObject
         static $stmt = null;  // For each id, the query is the same, prepare it once.
 
         $cacheKey = "Privileges.ById";
-        if(xarVarIsCached($cacheKey,$this->properties['id']->value)) {
-            return xarVarGetCached($cacheKey,$this->properties['id']->value);
+        if(xarVar::isCached($cacheKey,$this->properties['id']->value)) {
+            return xarVar::getCached($cacheKey,$this->properties['id']->value);
         }
         // We'll have to get it.
         xarLog::message("ROLE: getting privileges for id: " . $this->properties['id']->value, xarLog::LEVEL_INFO);
@@ -427,7 +427,7 @@ class Role extends DataObject
                     'parentid' => 0));
             array_push($privileges, $perm);
         }
-        xarVarSetCached($cacheKey,$this->properties['id']->value,$privileges);
+        xarVar::setCached($cacheKey,$this->properties['id']->value,$privileges);
         return $privileges;
     }
 
@@ -650,8 +650,8 @@ class Role extends DataObject
         if ($this->getID() == 1) return $parents;
 
         // if it's cached, we can return it
-        if(xarVarIsCached($cacheKey,$this->properties['id']->value)) {
-            return xarVarGetCached($cacheKey,$this->properties['id']->value);
+        if(xarVar::isCached($cacheKey,$this->properties['id']->value)) {
+            return xarVar::getCached($cacheKey,$this->properties['id']->value);
         }
 
         // if this is a user just perform a SELECT on the rolemembers table
@@ -673,7 +673,7 @@ class Role extends DataObject
             $parents[] = $role;
         }
         // done
-        xarVarSetCached($cacheKey,$this->properties['id']->value,$parents);
+        xarVar::setCached($cacheKey,$this->properties['id']->value,$parents);
         return $parents;
     }
 

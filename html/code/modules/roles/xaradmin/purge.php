@@ -20,11 +20,11 @@
 function roles_admin_purge(Array $args=array())
 {
     // Security
-    if(!xarSecurityCheck('ManageRoles')) return;
+    if(!xarSecurity::check('ManageRoles')) return;
 
     // Get parameters from whatever input we need
-    if (!xarVarFetch('operation',    'str', $data['operation'], 'recall', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirmation', 'str', $confirmation,       0,       XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('operation',    'str', $data['operation'], 'recall', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirmation', 'str', $confirmation,       0,       xarVar::NOT_REQUIRED)) return;
 
     extract($args);
 
@@ -40,17 +40,17 @@ function roles_admin_purge(Array $args=array())
 
     if ($data['operation'] == 'recall')
     {
-        if (!xarVarFetch('recallstate',    'int:1:', $data['recallstate'],  NULL, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('recallsubmit',   'str',    $recallsubmit,         NULL, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('recallsearch',   'str',    $data['recallsearch'], NULL, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('startnum', 'int:1:', $startnum,       1,    XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('recallids',      'isset',  $recallids,           array(), XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('groupid',       'int:1',  $data['groupid'],     0,    XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('recallstate',    'int:1:', $data['recallstate'],  NULL, xarVar::DONT_SET)) return;
+        if (!xarVar::fetch('recallsubmit',   'str',    $recallsubmit,         NULL, xarVar::DONT_SET)) return;
+        if (!xarVar::fetch('recallsearch',   'str',    $data['recallsearch'], NULL, xarVar::DONT_SET)) return;
+        if (!xarVar::fetch('startnum', 'int:1:', $startnum,       1,    xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('recallids',      'isset',  $recallids,           array(), xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('groupid',       'int:1',  $data['groupid'],     0,    xarVar::NOT_REQUIRED)) return;
 
         if ($confirmation == xarML("Recall"))
         {
  // --- recall users and groups
-            if(!xarSecurityCheck('ManageRoles')) return;
+            if(!xarSecurity::check('ManageRoles')) return;
             if ($data['groupid'] != 0) $parentgroup = xarRoles::get($data['groupid']);
             foreach ($recallids as $id => $val) {
                 $role = xarRoles::get($id);
@@ -103,7 +103,7 @@ function roles_admin_purge(Array $args=array())
                 $msg = xarML('Execution halted: the role with id #(1) has an empty name. This needs to be corrected manually in the database.', $role['id']);
                 throw new Exception($msg);
             }
-            if (xarSecurityCheck('ReadRoles', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
+            if (xarSecurity::check('ReadRoles', 0, 'All', $role['uname'] . ":All:" . $role['id'])) {
                 $skip = 0;
                 $unique = 1;
                 $thisrole = xarRoles::get($role['id']);
@@ -142,7 +142,7 @@ function roles_admin_purge(Array $args=array())
         $data['submitRecall']    = xarML('Recall');
         $data['recallroles']     = $recallroles;
         $data['startnum'] = $startnum;
-        $data['urltemplate'] = xarModURL('roles', 'admin', 'purge', $recallfilter);
+        $data['urltemplate'] = xarController::URL('roles', 'admin', 'purge', $recallfilter);
         $data['urlitemmatch'] = '%%';
         $data['itemsperpage'] = $numitems;
 
@@ -150,17 +150,17 @@ function roles_admin_purge(Array $args=array())
 //--------------------------------------------------------
     elseif ($data['operation'] == 'purge')
     {
-        if (!xarVarFetch('purgestate',    'int',    $data['purgestate'], -1,      XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('purgesearch',   'str',    $data['purgesearch'], NULL,   XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('purgesubmit',   'str',    $purgesubmit,         NULL,   XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('startnum', 'int:1:', $startnum,       1,      XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('purgeids',     'isset',  $purgeids,           array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('purgestate',    'int',    $data['purgestate'], -1,      xarVar::DONT_SET)) return;
+        if (!xarVar::fetch('purgesearch',   'str',    $data['purgesearch'], NULL,   xarVar::DONT_SET)) return;
+        if (!xarVar::fetch('purgesubmit',   'str',    $purgesubmit,         NULL,   xarVar::DONT_SET)) return;
+        if (!xarVar::fetch('startnum', 'int:1:', $startnum,       1,      xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('purgeids',     'isset',  $purgeids,           array(), xarVar::NOT_REQUIRED)) return;
 
         // Check for confirmation.
         if ($confirmation == xarML("Purge"))
         {
 // --- purge users
-            if(!xarSecurityCheck('AdminRoles')) return;
+            if(!xarSecurity::check('AdminRoles')) return;
             foreach ($purgeids as $id => $val) {
 // --- skip if we are trying to remove the designated site admin.
 // TODO: insert error feedabck here somehow
@@ -185,7 +185,7 @@ function roles_admin_purge(Array $args=array())
                 $item['module'] = 'roles';
                 $item['itemid'] = $id;
                 $item['method'] = 'purge';
-                xarModCallHooks('item', 'delete', $id, $item);
+                xarModHooks::call('item', 'delete', $id, $item);
             }
         }
 
@@ -298,14 +298,14 @@ function roles_admin_purge(Array $args=array())
         $data['submitPurge'] = xarML('Purge');
         $data['purgeusers']  = $purgeusers;
         $data['startnum'] = $startnum;
-        $data['urltemplate'] = xarModURL('roles', 'admin', 'purge', $purgefilter);
+        $data['urltemplate'] = xarController::URL('roles', 'admin', 'purge', $purgefilter);
         $data['urlitemmatch'] = '%%';
         $data['itemsperpage'] = $numitems;
 
     } // end elseif
 
     // --- finish up
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     // Return
     return $data;
 }

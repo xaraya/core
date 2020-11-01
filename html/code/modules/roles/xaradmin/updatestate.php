@@ -16,16 +16,16 @@
 function roles_admin_updatestate()
 {
     // Security
-    if (!xarSecurityCheck('EditRoles')) return;
+    if (!xarSecurity::check('EditRoles')) return;
     
     // Get parameters
-    if (!xarVarFetch('status',      'int:0:', $data['status'],   NULL,    XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('state',       'int:0:', $data['state'],    0,       XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('groupid',    'int:0:', $data['groupid'], 1,       XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('updatephase', 'str:1:', $updatephase,      'update',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('ids',        'isset',  $ids,             NULL,    XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('status',      'int:0:', $data['status'],   NULL,    xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('state',       'int:0:', $data['state'],    0,       xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('groupid',    'int:0:', $data['groupid'], 1,       xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('updatephase', 'str:1:', $updatephase,      'update',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('ids',        'isset',  $ids,             NULL,    xarVar::NOT_REQUIRED)) return;
 
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     // invalid fields (we'll check this below)
     // check if the username is empty
     //Note : We should not provide xarML here. (should be in the template for better translation)
@@ -35,7 +35,7 @@ function roles_admin_updatestate()
     }
      if (isset($invalid)) {
         // if so, return to the previous template
-        return xarController::redirect(xarModURL('roles','admin', 'showusers',
+        return xarController::redirect(xarController::URL('roles','admin', 'showusers',
                              array('authid'  => $data['authid'],
                                    'state'   => $data['state'],
                                    'invalid' => $invalid,
@@ -88,11 +88,11 @@ function roles_admin_updatestate()
     $ids = $idnotify;
     // Success
      if ((!xarModVars::get('roles', 'ask'.$mailtype.'email')) || (count($idnotify) == 0)) {
-            xarController::redirect(xarModURL('roles', 'admin', 'showusers',
+            xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
                           array('id' => $data['groupid'], 'state' => $data['state'])));
      }
      else {
-        xarController::redirect(xarModURL('roles', 'admin', 'asknotification',
+        xarController::redirect(xarController::URL('roles', 'admin', 'asknotification',
                           array('id' => $ids, 'mailtype' => $mailtype, 'groupid' => $data['groupid'], 'state' => $data['state'])));
      }
      return true;

@@ -35,7 +35,7 @@ function roles_userapi_countallactive(Array $args=array())
     }
 
     // Security Check
-    if(!xarSecurityCheck('ReadRoles')) return;
+    if(!xarSecurity::check('ReadRoles')) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();

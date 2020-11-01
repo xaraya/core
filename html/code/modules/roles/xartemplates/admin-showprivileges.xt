@@ -28,7 +28,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarModURL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
                                     <xar:var name="parents[$i].parentname"/>
                                 </a>
                             </li>
@@ -43,7 +43,7 @@
         <!-- Show the general tab list for roles -->
         <fieldset>
           <legend>
-                Privileges inherited by #xarVarPrepForDisplay($pname)#:
+                Privileges inherited by #xarVar::prepForDisplay($pname)#:
           </legend>
             <xar:if condition="count($inherited) eq 0">
                 <p>No privileges inherited.</p>
@@ -65,7 +65,7 @@
                         <xar:loop name="$inherited">
                             <tr>
                                 <td>
-                                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
+                                    <a href="#xarController::URL('privileges','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
                                         <xar:var name="loop:item.name"/>
                                     </a>
                                 </td>
@@ -95,7 +95,7 @@
             </xar:if>
         </fieldset>
         <fieldset>
-            <legend>Privileges assigned to #xarVarPrepForDisplay($pname)#:</legend>
+            <legend>Privileges assigned to #xarVar::prepForDisplay($pname)#:</legend>
             <xar:if condition="count($privileges) eq 0">
                 <p>No privileges assigned.</p>
             <xar:else />
@@ -116,7 +116,7 @@
                     <xar:loop name="$privileges">
                         <tr>
                             <td>
-                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
+                                <a href="#xarController::URL('privileges','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
                                     <xar:var name="loop:item.name"/>
                                 </a>
                             </td>
@@ -146,12 +146,12 @@
                     </xar:loop>
                 </table>
             </xar:if>
-          <form action="#xarModURL('roles','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
+          <form action="#xarController::URL('roles','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
                 <div class="xar-row">
                     <div class="xar-col">
                         <xar:var name="label">Select the Privilege to add</xar:var>
                         <label for="privid" title="#$label#" class="xar-form-label">
-                            Assign a Privilege to #$itemtypename# '#xarVarPrepForDisplay($pname)#'
+                            Assign a Privilege to #$itemtypename# '#xarVar::prepForDisplay($pname)#'
                         </label>
                     </div>
                     <div class="xar-col">

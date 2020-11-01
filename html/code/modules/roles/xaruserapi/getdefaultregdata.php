@@ -28,7 +28,7 @@ function roles_userapi_getdefaultregdata()
 
     if (!empty($defaultregmodname)) {
         //check the module is available
-        if (xarModIsAvailable($defaultregmodname)) {
+        if (xarMod::isAvailable($defaultregmodname)) {
            //We can't really assume people will want this module as registration
            //Rethink - what we need to avert this problem
            if (xarModVars::get($defaultregmodname, 'allowregistration')==1) {
@@ -38,10 +38,10 @@ function roles_userapi_getdefaultregdata()
            }
         }
     } else {
-         if (xarModIsAvailable('registration')) {
+         if (xarMod::isAvailable('registration')) {
            //for now - set the registration module but don't make it the active registration
            //the case where somehow the defautlregmodule modvar is unset or empty
-           $defaultregmodname   = xarModGetNameFromId('registration');
+           $defaultregmodname   = xarMod::getNameFromId('registration');
            $defaultregmodactive = false;
          }
     }

@@ -17,19 +17,19 @@
  */
 function roles_user_search()
 {
-    if (!xarVarFetch('startnum', 'isset', $startnum,  NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('email',    'isset', $email,     NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('uname',    'isset', $uname,     NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('name',     'isset', $name,      NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('q',        'isset', $q,         NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('bool',     'isset', $bool,      NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('author',   'isset', $author,    NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('startnum', 'isset', $startnum,  NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('email',    'isset', $email,     NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('uname',    'isset', $uname,     NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('name',     'isset', $name,      NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('q',        'isset', $q,         NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('bool',     'isset', $bool,      NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('sort',     'isset', $sort,      NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('author',   'isset', $author,    NULL, xarVar::DONT_SET)) {return;}
     $data = array();
     $data['users'] = array();
     // show the search form
     if (!isset($q)) {
-        if (xarModIsHooked('dynamicdata','roles')) {
+        if (xarModHooks::isHooked('dynamicdata','roles')) {
             // get the DataObject defined for this module
             $object = xarMod::apiFunc('dynamicdata','user','getobject',
                                      array('module' => 'roles'));
@@ -59,9 +59,9 @@ function roles_user_search()
     // remember what we selected before
     $data['checked'] = array();
 
-    if (xarModIsHooked('dynamicdata','roles')) {
+    if (xarModHooks::isHooked('dynamicdata','roles')) {
         // make sure the DD classes are loaded
-        if (!xarModAPILoad('dynamicdata','user')) return $data;
+        if (!xarMod::apiLoad('dynamicdata','user')) return $data;
 
         // get a new object list for roles
         $object = new DataObjectList(array('moduleid'  => xarMod::getRegID('roles')));
@@ -81,7 +81,7 @@ function roles_user_search()
             $where = array();
             // see which properties we're supposed to search in
             foreach (array_keys($object->properties) as $field) {
-                if (!xarVarFetch($field, 'checkbox', $checkfield,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+                if (!xarVar::fetch($field, 'checkbox', $checkfield,  NULL, xarVar::NOT_REQUIRED)) {return;}
                 if ($checkfield) {
                     $where[] = $field . " LIKE " . $quotedlike;
                     $where[] = $field . " LIKE " . $quotedupper;

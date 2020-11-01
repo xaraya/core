@@ -30,7 +30,7 @@ function roles_userapi_removemember(Array $args=array())
     $user = xarRoles::get($id);
 
 // Security Check
-    if(!xarSecurityCheck('RemoveRole',1,'Relation',$group->getName() . ":" . $user->getName())) return;
+    if(!xarSecurity::check('RemoveRole',1,'Relation',$group->getName() . ":" . $user->getName())) return;
 
     if (!$group->removeMember($user)) return;
 

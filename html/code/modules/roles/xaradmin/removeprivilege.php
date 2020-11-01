@@ -19,11 +19,11 @@
 function roles_admin_removeprivilege()
 {
     // Security
-    if (!xarSecurityCheck('EditRoles')) return;
+    if (!xarSecurity::check('EditRoles')) return;
     
-    if (!xarVarFetch('privid',       'int:1:', $privid)) return;
-    if (!xarVarFetch('roleid',       'int:1:', $roleid)) return;
-    if (!xarVarFetch('confirmation', 'str:1:', $confirmation, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('privid',       'int:1:', $privid)) return;
+    if (!xarVar::fetch('roleid',       'int:1:', $roleid)) return;
+    if (!xarVar::fetch('confirmation', 'str:1:', $confirmation, '', xarVar::NOT_REQUIRED)) return;
     // Call the Roles class and get the role
     $role  = xarRoles::get($roleid);
 
@@ -52,7 +52,7 @@ function roles_admin_removeprivilege()
 
     if (empty($confirmation)) {
         // Load Template
-        $data['authid']   = xarSecGenAuthKey();
+        $data['authid']   = xarSec::genAuthKey();
         $data['roleid']   = $roleid;
         $data['privid']   = $privid;
         $data['ptype']    = $role->getType();
@@ -62,7 +62,7 @@ function roles_admin_removeprivilege()
         return $data;
     } else {
         // Check for authorization code
-        if (!xarSecConfirmAuthKey()) {
+        if (!xarSec::confirmAuthKey()) {
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
         // Try to remove the privilege and bail if an error was thrown
@@ -71,16 +71,16 @@ function roles_admin_removeprivilege()
         // We need to tell some hooks that we are coming from the add privilege screen
         // and not the update the actual roles screen.  Right now, the keywords vanish
         // into thin air.  Bug 1960 and 3161
-        xarVarSetCached('Hooks.all','noupdate',1);
+        xarVar::setCached('Hooks.all','noupdate',1);
 
 // CHECKME: do we really want to do that here (other than for flushing the cache) ?
         // call update hooks and let them know that the role has changed
         $pargs['module'] = 'roles';
         $pargs['itemid'] = $roleid;
-        xarModCallHooks('item', 'update', $roleid, $pargs);
+        xarModHooks::call('item', 'update', $roleid, $pargs);
 
         // redirect to the next page
-        xarController::redirect(xarModURL('roles', 'admin', 'showprivileges', array('id' => $roleid)));
+        xarController::redirect(xarController::URL('roles', 'admin', 'showprivileges', array('id' => $roleid)));
         return true;
     }
 }

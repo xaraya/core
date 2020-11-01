@@ -25,7 +25,7 @@ function roles_userapi_updatestatus(Array $args=array())
     if (!isset($uname)) throw new EmptyParameterException('uname');
     if (!isset($state)) throw new EmptyParameterException('state');
 
-    if (!xarSecurityCheck('ViewRoles')) return;
+    if (!xarSecurity::check('ViewRoles')) return;
 
     // Get DB Set-up
     $dbconn = xarDB::getConn();

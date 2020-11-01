@@ -48,7 +48,7 @@ function roles_adminapi_senduseremail(Array $args=array())
             if (!isset($ip)) $ip = '';
             
             $validationlink = isset($user['valcode']) ?
-                xarModURL('roles', 'user', 'getvalidation',
+                xarController::URL('roles', 'user', 'getvalidation',
                     array(
                         'uname' => $user['uname'],
                         'phase' => 'getvalidate',

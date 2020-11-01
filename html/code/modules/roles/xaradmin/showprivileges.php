@@ -19,9 +19,9 @@
 function roles_admin_showprivileges()
 {
     // Security
-    if (!xarSecurityCheck('EditRoles')) return;
+    if (!xarSecurity::check('EditRoles')) return;
     
-    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
 
     // Call the Roles class and get the role
@@ -102,7 +102,7 @@ function roles_admin_showprivileges()
     // extract the info for display by the template
     $currentprivileges = array();
     foreach ($curprivileges as $priv) {
-        $frozen = !xarSecurityCheck('ManagePrivileges',0,'Privileges',$priv->getName());
+        $frozen = !xarSecurity::check('ManagePrivileges',0,'Privileges',$priv->getName());
         if ($priv->getModule() == null) {
             $currentprivileges[] = array('privid' => $priv->getID(),
                 'name' => $priv->getName(),
@@ -201,13 +201,13 @@ function roles_admin_showprivileges()
     $data['inherited'] = $inherited;
     $data['privileges'] = $currentprivileges;
     $data['directassigned'] = $directassigned;
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     $data['groups'] = xarRoles::getgroups();
-    $data['removeurl'] = xarModURL('roles',
+    $data['removeurl'] = xarController::URL('roles',
         'admin',
         'removeprivilege',
         array('roleid' => $id));
-    $data['groupurl'] = xarModURL('roles',
+    $data['groupurl'] = xarController::URL('roles',
         'admin',
         'showprivileges');
     $data['addlabel'] = xarML('Add');

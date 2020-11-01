@@ -34,12 +34,12 @@ class Roles_LanguageBlock extends BasicBlock
 	 */
     function display()
     {
-        // if (xarMLSGetMode() != xarMLS::BOXED_MULTI_LANGUAGE_MODE) {
-        if (xarMLSGetMode() == xarMLS::SINGLE_LANGUAGE_MODE) return;
+        // if (xarMLS::getMode() != xarMLS::BOXED_MULTI_LANGUAGE_MODE) {
+        if (xarMLS::getMode() == xarMLS::SINGLE_LANGUAGE_MODE) return;
 
         $current_locale = xarUser::getNavigationLocale();
 
-        $site_locales = xarMLSListSiteLocales();
+        $site_locales = xarMLS::listSiteLocales();
 
         asort($site_locales);
         if (count($site_locales) <= 1) return;
@@ -57,7 +57,7 @@ class Roles_LanguageBlock extends BasicBlock
             );
         }
 
-        $data['form_action'] = xarModURL('roles', 'user', 'changelanguage');
+        $data['form_action'] = xarController::URL('roles', 'user', 'changelanguage');
         $data['form_picker_name'] = 'locale';
         $data['locales'] = $locales;
 

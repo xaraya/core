@@ -32,7 +32,7 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    #xarLocaleGetFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$userid))#  #xarLocaleGetFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$userid))#
+                    #xarLocale::getFormattedDate('medium', xarModUserVars::get('roles','userlastlogin',$userid))#  #xarLocale::getFormattedTime('medium', xarModUserVars::get('roles','userlastlogin',$userid))#
                 </div>
             </div>
         </xar:if>
@@ -44,8 +44,8 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <a href="#xarModURL('roles','user','email',array('id'=>$userid))#">
-                        Send an Email to #xarVarPrepForDisplay(xarUser::getVar('name', $userid))#
+                    <a href="#xarController::URL('roles','user','email',array('id'=>$userid))#">
+                        Send an Email to #xarVar::prepForDisplay(xarUser::getVar('name', $userid))#
                     </a>
                 </div>
             </div>
