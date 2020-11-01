@@ -5,7 +5,7 @@
             #$row['name']#
         </td>
         <td>
-            <a href="#xarModURL('roles','admin','showprivileges',array('id' => $row['role_id']))#">
+            <a href="#xarController::URL('roles','admin','showprivileges',array('id' => $row['role_id']))#">
                 #$row['role_name']#
             </a>
         </td>
@@ -24,7 +24,7 @@
         </td>
         -->
         <td style="text-align: center;">
-            <a href="#xarModURL('privileges','admin','assignprivileges',array('phase' => 'remove', 'assignment' => $row['role_id'] . ',' . $row['id']))#">
+            <a href="#xarController::URL('privileges','admin','assignprivileges',array('phase' => 'remove', 'assignment' => $row['role_id'] . ',' . $row['id']))#">
                 Remove
             </a>
         </td>

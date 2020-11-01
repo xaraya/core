@@ -218,8 +218,8 @@ class xarMasks extends xarSecurity
 
     /**
             if ($module == '') list($module) = xarController::$request->getInfo();
-                xarController::redirect(xarModURL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
-                xarController::redirect(xarModURL('privileges','user','errors',array('layout' => 'no_privileges')));
+                xarController::redirect(xarController::URL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false));
+                xarController::redirect(xarController::URL('privileges','user','errors',array('layout' => 'no_privileges')));
      * forgetprivsets: remove all irreducible set of privileges from the db
      *
      * used to lighten the cache
@@ -249,8 +249,8 @@ class xarMasks extends xarSecurity
         static $selStmt = null;
         static $insStmt = null;
 
-        if (xarVarIsCached('Security.getprivset', $role)) {
-            return xarVarGetCached('Security.getprivset', $role);
+        if (xarVar::isCached('Security.getprivset', $role)) {
+            return xarVar::getCached('Security.getprivset', $role);
         }
         $query = "SELECT set FROM " . self::$privsetstable . " WHERE id =?";
         if(!isset($selStmt)) $selStmt = self::$dbconn->prepareStatement($query);
@@ -268,7 +268,7 @@ class xarMasks extends xarSecurity
             list($serprivs) = $result->fields;
         }
         // MrB: Why the unserialize here?
-        xarVarSetCached('Security.getprivset', $role, unserialize($serprivs));
+        xarVar::setCached('Security.getprivset', $role, unserialize($serprivs));
         return unserialize($serprivs);
     }
 

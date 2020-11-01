@@ -58,7 +58,7 @@
 
             // check if the query is there
             if ($selection =='') {
-                $msg = xarML('A query is missing in component #(1) of module #(2)', $component, xarModGetNameFromID($modid));
+                $msg = xarML('A query is missing in component #(1) of module #(2)', $component, xarMod::getNameFromID($modid));
                 // TODO: make it descendent from xarExceptions.
                 throw new Exception($msg);
             }

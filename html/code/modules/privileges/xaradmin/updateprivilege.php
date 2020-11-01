@@ -16,24 +16,24 @@
 function privileges_admin_updateprivilege()
 {
     // Security
-    if (!xarSecurityCheck('EditPrivileges')) return; 
+    if (!xarSecurity::check('EditPrivileges')) return; 
     
 // Clear Session Vars
-    xarSessionDelVar('privileges_statusmsg');
+    xarSession::delVar('privileges_statusmsg');
 
 // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if(!xarVarFetch('id',         'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pname',      'isset', $name,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('prealm',     'isset', $realm,     'All', XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('pmodule',    'isset', $pmodule,    'All',    XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('pcomponent', 'isset', $component,  'All', XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('ptype',      'isset', $type,       NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('plevel',     'isset', $level,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pinstance',  'isset', $pinstance,  NULL, XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('id',         'isset', $id,        NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('pname',      'isset', $name,       NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('prealm',     'isset', $realm,     'All', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('pmodule',    'isset', $pmodule,    'All',    xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('pcomponent', 'isset', $component,  'All', xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('ptype',      'isset', $type,       NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('plevel',     'isset', $level,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('pinstance',  'isset', $pinstance,  NULL, xarVar::NOT_REQUIRED)) {return;}
 
     $instance = "";
     if (!empty($pinstance)) {
@@ -49,7 +49,7 @@ function privileges_admin_updateprivilege()
     }
 
 // Security Check
-    if(!xarSecurityCheck('EditPrivileges',0,'Privileges',$name)) return;
+    if(!xarSecurity::check('EditPrivileges',0,'Privileges',$name)) return;
 
 // call the Privileges class and update the values
 
@@ -76,13 +76,13 @@ function privileges_admin_updateprivilege()
 //Try to update the privilege to the repository and bail if an error was thrown
     if (!$priv->update()) {return;}
 
-    xarModCallHooks('item', 'update', $id, '');
+    xarModHooks::call('item', 'update', $id, '');
 
     xarSession::setVar('privileges_statusmsg', xarML('Privilege Modified',
                     'privileges'));
 
 // redirect to the next page
-    xarController::redirect(xarModURL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
     return true;
 }
 

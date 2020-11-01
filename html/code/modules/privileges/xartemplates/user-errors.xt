@@ -29,7 +29,7 @@
                 <xar:if condition="!xarUser::isLoggedIn()">
                     <div style="margin-top: 20px; margin-left: 20px">
                         <xar:var name="label">Log in</xar:var>
-                        <xar:set name="link">xarModURL('authsystem', 'user', 'showloginform')</xar:set>
+                        <xar:set name="link">xarController::URL('authsystem', 'user', 'showloginform')</xar:set>
                         <xar:button type="link" target="$link" label="$label"/>
                     </div>
                 </xar:if>

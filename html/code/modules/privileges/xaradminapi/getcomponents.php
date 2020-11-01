@@ -14,7 +14,7 @@
      *
      * Returns an array of all the components that have been registered for a given module.
      * The components correspond to masks in the masks table. Each one can be used to
-     * construct a privilege's xarSecurityCheck.
+     * construct a privilege's xarSecurity::check.
      * They are used to populate dropdowns in displays
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
@@ -32,7 +32,7 @@
             $components[] = array('id' => -2,
                                'name' => 'All');
         } else {
-            $module = xarModGetNameFromID($modid);
+            $module = xarMod::getNameFromID($modid);
 
             // Do we have the components in a file?
             try {

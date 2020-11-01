@@ -17,16 +17,16 @@
 function privileges_admin_viewprivileges()
 {
     // Security
-    if(!xarSecurityCheck('EditPrivileges')) return;
+    if(!xarSecurity::check('EditPrivileges')) return;
 
     $data = array();
 
-    if (!xarVarFetch('show', 'isset', $data['show'], 'assigned', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('show', 'isset', $data['show'], 'assigned', xarVar::NOT_REQUIRED)) return;
 
     // Clear Session Vars
-    xarSessionDelVar('privileges_statusmsg');
+    xarSession::delVar('privileges_statusmsg');
 
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }

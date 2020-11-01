@@ -18,11 +18,11 @@
 function privileges_admin_removerole()
 {
     // Security
-    if(!xarSecurityCheck('EditPrivileges')) return;
+    if(!xarSecurity::check('EditPrivileges')) return;
 
-    if (!xarVarFetch('id',          'isset', $id,          NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('roleid',       'isset', $roleid,       NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('confirmation', 'isset', $confirmation, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('id',          'isset', $id,          NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('roleid',       'isset', $roleid,       NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('confirmation', 'isset', $confirmation, NULL, xarVar::DONT_SET)) {return;}
     if (empty($id)) return xarResponse::notFound();
     if (empty($roleid)) return xarResponse::notFound();
 
@@ -43,7 +43,7 @@ function privileges_admin_removerole()
         }
 
 // Clear Session Vars
-    xarSessionDelVar('privileges_statusmsg');
+    xarSession::delVar('privileges_statusmsg');
 
 // get the names of the role and privilege for display purposes
     $rolename = $role->getName();
@@ -52,7 +52,7 @@ function privileges_admin_removerole()
     if (empty($confirmation)) {
 
         //Load Template
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
         $data['roleid'] = $roleid;
         $data['id'] = $id;
         $data['ptype'] = $role->getType();
@@ -64,7 +64,7 @@ function privileges_admin_removerole()
     else {
 
 // Check for authorization code
-        if (!xarSecConfirmAuthKey()) {
+        if (!xarSec::confirmAuthKey()) {
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         }        
 
@@ -75,7 +75,7 @@ function privileges_admin_removerole()
                         'privileges'));
 
 // redirect to the next page
-        xarController::redirect(xarModURL('privileges',
+        xarController::redirect(xarController::URL('privileges',
                                  'admin',
                                  'viewroles',
                                  array('id'=>$id)));

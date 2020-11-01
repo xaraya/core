@@ -36,7 +36,7 @@
 	                    <xar:for start="$i=0" test="$i lt count($parents)" iter="$i++">
 	                        <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
 	                            <li class="xar-tab">
-	                                <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$parents[$i]['parentid']))#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
+	                                <a href="#xarController::URL('privileges','admin','modifyprivilege',array('id'=>$parents[$i]['parentid']))#" title="#xarML('Show this privilege')#" class="xar-norm xar-norm-outline">
 	                                    #$parents[$i]['parentname']#
 	                                </a>
 	                            </li>
@@ -50,29 +50,29 @@
 	                <xar:var name="label">Manage privilege</xar:var>
 	                <li class="xar-tabs-label" title="#$title#">#$label#</li>
 	                <li class="xar-tab">
-	                    <a href="#xarModURL('privileges','admin','displayprivilege',array('id'=>$ppid))#">
+	                    <a href="#xarController::URL('privileges','admin','displayprivilege',array('id'=>$ppid))#">
 	                        Display
 	                    </a>
 	                </li>
 	                <li class="xar-tab-active">
-	                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$ppid))#">
+	                    <a href="#xarController::URL('privileges','admin','modifyprivilege',array('id'=>$ppid))#">
 	                        Modify
 	                     </a>
 	                </li>
 	                <li class="xar-tab">
-	                    <a href="#xarModURL('privileges','admin','deleteprivilege',array('id'=>$ppid))#">
+	                    <a href="#xarController::URL('privileges','admin','deleteprivilege',array('id'=>$ppid))#">
 	                        Delete
 	                    </a>
 	                </li>
 	                <li class="xar-tab">
-	                    <a href="#xarModURL('privileges','admin','viewroles',array('id'=>$ppid))#">
+	                    <a href="#xarController::URL('privileges','admin','viewroles',array('id'=>$ppid))#">
 	                        Groups/Users
 	                    </a>
 	                </li>
 	            </ul>
 	      </div>
 	      <div class="xar-mod-page-body">
-	      <form name="privilegeform" id="privilegeform" action="#xarModURL('privileges','admin','updateprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
+	      <form name="privilegeform" id="privilegeform" action="#xarController::URL('privileges','admin','updateprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
 	            <fieldset>
 	                <legend>Privilege properties</legend>
 	                <xar:if condition="$frozen">
@@ -96,7 +96,7 @@
                                 <input type="text" name="pname" id="pname" value="#$pname#" maxlength="40" class="xar-form-textlong"/>
                             </div>
                         </div>
-	                    <xar:set name="onclick">"this.form.action='" . xarModURL('privileges','admin','modifyprivilege') ."';this.form.submit()";</xar:set>
+	                    <xar:set name="onclick">"this.form.action='" . xarController::URL('privileges','admin','modifyprivilege') ."';this.form.submit()";</xar:set>
 	                    <!-- FIXME: make this dprop support onclick, cause IE6 doesn't do onchange
 	                    <div class="xar-col dummy">
 	                        <xar:set name="options">
@@ -312,11 +312,11 @@
                         <div class="xar-row">
                             <div class="xar-col">
                                 <span class="xar-form-label">
-                                    <a href="#xarModURL('privileges','admin','modifyprivilege',array('id'=>$loop->item['parentid']))#">
+                                    <a href="#xarController::URL('privileges','admin','modifyprivilege',array('id'=>$loop->item['parentid']))#">
                                         #$loop:item['parentname']#
                                     </a>
                                 </span>
-                                <a href="#xarModURL('privileges','admin','removemember',array('childid'=>$ppid,'parentid'=>$loop->item['parentid'],'authid'=>$authid))#">
+                                <a href="#xarController::URL('privileges','admin','removemember',array('childid'=>$ppid,'parentid'=>$loop->item['parentid'],'authid'=>$authid))#">
                                     <img src="#sys::code()#modules/privileges/xarimages/remove.gif" alt="#xarML('Remove')#" title="Remove #$pname# from #$loop:item['parentname']#"/>
                                 </a>
                             </div>

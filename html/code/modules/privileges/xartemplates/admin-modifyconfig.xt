@@ -247,7 +247,7 @@
                     <fieldset>
                         <legend>Testing Settings</legend>
                         <p class="xar-note">
-                            The options activated below display messages visible to the debug administrators, which are defined <a href="#xarModURL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
+                            The options activated below display messages visible to the debug administrators, which are defined <a href="#xarController::URL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
                         </p>
                         <div class="xar-row">
                             <div class="xar-col">

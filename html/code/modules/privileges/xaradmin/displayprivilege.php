@@ -18,10 +18,10 @@
 function privileges_admin_displayprivilege()
 {
     // Security
-    if(!xarSecurityCheck('EditPrivileges')) return;
+    if(!xarSecurity::check('EditPrivileges')) return;
 
-    if(!xarVarFetch('id',           'isset', $id,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pinstance',     'array', $instance,   array(), XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('id',           'isset', $id,        NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('pinstance',     'array', $instance,   array(), xarVar::NOT_REQUIRED)) {return;}
 
 //Call the Privileges class and get the privilege to be modified
     sys::import('modules.privileges.class.privileges');

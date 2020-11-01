@@ -12,7 +12,7 @@
             <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
         </xar:if>
         <li class="#$tabclass#">
-            <a href="#xarModURL('privileges', 'admin', 'assignprivileges', array('tabmodule' => 'All Modules', 'tab' => 'all'))#" class="#$linkclass#">
+            <a href="#xarController::URL('privileges', 'admin', 'assignprivileges', array('tabmodule' => 'All Modules', 'tab' => 'all'))#" class="#$linkclass#">
                 All modules
             </a>
         </li>
@@ -25,7 +25,7 @@
                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
             <li class="#$tabclass#">
-                <a href="#xarModURL('privileges', 'admin', 'assignprivileges', array('tabmodule' => $tabname,'tab' => $tabname))#" class="#$linkclass#">
+                <a href="#xarController::URL('privileges', 'admin', 'assignprivileges', array('tabmodule' => $tabname,'tab' => $tabname))#" class="#$linkclass#">
                     #$thistab['displayname']#
                 </a>
             </li>

@@ -51,7 +51,7 @@
         <table class="xar-table" border="0" cellspacing="5" width="100%">
             <tr>
                 <td>
-                    <a href="#xarModURL('privileges','admin','newprivilege')#">Add Privilege</a>
+                    <a href="#xarController::URL('privileges','admin','newprivilege')#">Add Privilege</a>
                 </td>
             </tr>
             <tr>

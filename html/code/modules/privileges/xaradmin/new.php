@@ -18,24 +18,24 @@
 function privileges_admin_new()
 {
     // Security
-    if(!xarSecurityCheck('AddPrivileges')) return;
+    if(!xarSecurity::check('AddPrivileges')) return;
 
     $data = array();
 
-    if (!xarVarFetch('id',         'isset', $data['id'],        '',          XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pname',      'isset', $data['pname'],      '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pparentid',  'isset', $data['pparentid'],  '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('prealm',     'isset', $data['prealm'],     'All',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pmodule',    'isset', $data['pmodule'],    'All',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pcomponent', 'isset', $data['pcomponent'], 'All',      XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('pinstance',  'isset', $data['pinstance'],  '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('plevel',     'isset', $data['plevel'],     '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('ptype',      'isset', $data['ptype'],      '',         XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('show',       'isset', $data['show'],       'assigned', XARVAR_NOT_REQUIRED)) {return;}
-    if (!xarVarFetch('trees',      'isset', $trees,              NULL,       XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('id',         'isset', $data['id'],        '',          xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('pname',      'isset', $data['pname'],      '',         xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('pparentid',  'isset', $data['pparentid'],  '',         xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('prealm',     'isset', $data['prealm'],     'All',      xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('pmodule',    'isset', $data['pmodule'],    'All',      xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('pcomponent', 'isset', $data['pcomponent'], 'All',      xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('pinstance',  'isset', $data['pinstance'],  '',         xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('plevel',     'isset', $data['plevel'],     '',         xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('ptype',      'isset', $data['ptype'],      '',         xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('show',       'isset', $data['show'],       'assigned', xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('trees',      'isset', $trees,              NULL,       xarVar::NOT_REQUIRED)) {return;}
 
 // Clear Session Vars
-    xarSessionDelVar('privileges_statusmsg');
+    xarSession::delVar('privileges_statusmsg');
 
 // remove duplicate entries from the list of privileges
     $privileges = array();
@@ -64,7 +64,7 @@ function privileges_admin_new()
     $data['levels'] = array();
     foreach ($accesslevels as $key => $value) $data['levels'][] = array('id' => $key, 'name' => $value);
     
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     $data['realms'] = xarPrivileges::getrealms();
     $data['privileges'] = $privileges;
     $data['components'] = xarMod::apiFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));

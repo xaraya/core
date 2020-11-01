@@ -17,11 +17,11 @@
  */
 function privileges_admin_deleteprivilege()
 {
-    if (!xarVarFetch('id',          'isset', $id,          NULL, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('confirmation', 'isset', $confirmation, NULL, XARVAR_DONT_SET)) return;
+    if (!xarVar::fetch('id',          'isset', $id,          NULL, xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('confirmation', 'isset', $confirmation, NULL, xarVar::DONT_SET)) return;
 
 // Clear Session Vars
-    xarSessionDelVar('privileges_statusmsg');
+    xarSession::delVar('privileges_statusmsg');
 
 //Call the Privileges class and get the privilege to be deleted
     sys::import('modules.privileges.class.privileges');
@@ -30,7 +30,7 @@ function privileges_admin_deleteprivilege()
     $name = $priv->getName();
 
     // Security
-    if(!xarSecurityCheck('ManagePrivileges',0,'Privileges',$name)) return;
+    if(!xarSecurity::check('ManagePrivileges',0,'Privileges',$name)) return;
 
     if (empty($confirmation)) {
 
@@ -41,7 +41,7 @@ function privileges_admin_deleteprivilege()
                                         'parentname'=>$parent->getName());
         }
         //Load Template
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
         $data['id'] = $id;
         $data['pname'] = $name;
         $data['parents'] = $parents;
@@ -50,20 +50,20 @@ function privileges_admin_deleteprivilege()
     }
 
 // Check for authorization code
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
 //Try to remove the privilege and bail if an error was thrown
     if (!$priv->remove()) return;
 
-    xarModCallHooks('item', 'delete', $id, '');
+    xarModHooks::call('item', 'delete', $id, '');
 
     xarSession::setVar('privileges_statusmsg', xarML('Privilege Removed',
                     'privileges'));
 
 // redirect to the next page
-    xarController::redirect(xarModURL('privileges', 'admin', 'viewprivileges'));
+    xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'));
     return true;
 }
 

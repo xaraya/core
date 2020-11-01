@@ -17,22 +17,22 @@
 function privileges_admin_modifyprivilege()
 {
     // Security
-    if(!xarSecurityCheck('EditPrivileges')) return;
+    if(!xarSecurity::check('EditPrivileges')) return;
 
-    if(!xarVarFetch('id',            'isset', $id,           NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pname',         'isset', $name,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('prealm',        'isset', $realm,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pmodule',       'isset', $pmodule,      NULL, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('pcomponent',    'isset', $component,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('poldcomponent', 'isset', $oldcomponent, NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('ptype',         'isset', $type,         NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('plevel',        'isset', $level,        NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('pinstance',     'array', $instance,     array(), XARVAR_NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('id',            'isset', $id,           NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('pname',         'isset', $name,         NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('prealm',        'isset', $realm,        NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('pmodule',       'isset', $pmodule,      NULL, xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('pcomponent',    'isset', $component,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('poldcomponent', 'isset', $oldcomponent, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('ptype',         'isset', $type,         NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('plevel',        'isset', $level,        NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('pinstance',     'array', $instance,     array(), xarVar::NOT_REQUIRED)) {return;}
 
-    if(!xarVarFetch('pparentid',     'isset', $pparentid,    NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('pparentid',     'isset', $pparentid,    NULL, xarVar::DONT_SET)) {return;}
 
 // Clear Session Vars
-    xarSessionDelVar('privileges_statusmsg');
+    xarSession::delVar('privileges_statusmsg');
 
 //Call the Privileges class and get the privilege to be modified
     sys::import('modules.privileges.class.privileges');
@@ -65,7 +65,7 @@ function privileges_admin_modifyprivilege()
     $data['pname'] = $name;
 
     // Security Check
-    $data['frozen'] = !xarSecurityCheck('EditPrivileges',0,'Privileges',$name);
+    $data['frozen'] = !xarSecurity::check('EditPrivileges',0,'Privileges',$name);
 
     if(isset($realm)) {$data['prealm'] = $realm;}
     else {$data['prealm'] = $priv->getRealm();}
@@ -118,7 +118,7 @@ function privileges_admin_modifyprivilege()
     foreach ($accesslevels as $key => $value) $data['levels'][] = array('id' => $key, 'name' => $value);
     
     $data['oldcomponent'] = $component;
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     $data['parents'] = $parents;
     $data['privileges'] = $privileges;
     $data['realms'] = xarPrivileges::getrealms();;

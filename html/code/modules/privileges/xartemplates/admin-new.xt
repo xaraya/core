@@ -25,7 +25,7 @@
     </script>
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
-        <form id="privilegeform" action="#xarModURL('privileges','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form id="privilegeform" action="#xarController::URL('privileges','admin','addprivilege')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>                    
                     Add Privilege                    

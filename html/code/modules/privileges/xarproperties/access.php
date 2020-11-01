@@ -395,7 +395,7 @@ class AccessProperty extends DataProperty
         if (isset($data['instance']))  $this->instance = $data['instance'];
 
         $access = false;
-        if (xarSecurityCheck('', 
+        if (xarSecurity::check('', 
                           0, 
                           $this->component, 
                           $this->instance, 

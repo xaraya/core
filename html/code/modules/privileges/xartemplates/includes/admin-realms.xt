@@ -18,7 +18,7 @@
                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
             <li class="#$tabclass#">
-                <a href="#xarModURL('privileges','admin','viewrealms')#" class="#$linkclass#">View Realms</a>
+                <a href="#xarController::URL('privileges','admin','viewrealms')#" class="#$linkclass#">View Realms</a>
             </li>
             <xar:if condition="$activetab eq 'newrealm'">
                 <xar:set name="tabclass">'xar-tab-active'</xar:set>
@@ -28,7 +28,7 @@
                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
             </xar:if>
             <li class="#$tabclass#">
-                <a href="#xarModURL('privileges','admin','newrealm')#" class="#$linkclass#">Add Realm</a>
+                <a href="#xarController::URL('privileges','admin','newrealm')#" class="#$linkclass#">Add Realm</a>
             </li>
         </ul>
     </div>
