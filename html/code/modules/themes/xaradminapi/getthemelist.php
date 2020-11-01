@@ -61,7 +61,7 @@ function themes_adminapi_getthemelist(Array $args=array())
     if (isset($filter['State'])) {
         $get['state'] = $filter['State'];
     } else {
-        $get['state'] = XARTHEME_STATE_ACTIVE;
+        $get['state'] = xarTheme::STATE_ACTIVE;
     }
     
     return xarMod::apiFunc('themes', 'admin', 'getitems', $get);

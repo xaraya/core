@@ -17,7 +17,7 @@
                     </xar:if>
                     <xar:var name="label">Create New Configuration Item</xar:var>
                     <div>
-                        <a href="#xarModURL('themes','admin','new_config')#" title="#$label#" class="#$xar-icon">New Configuration</a>
+                        <a href="#xarController::URL('themes','admin','new_config')#" title="#$label#" class="#$xar-icon">New Configuration</a>
                     </div>
                 </div>
 	        </xar:if>

@@ -22,13 +22,13 @@
 function themes_admin_themesinfo()
 {
     // Security
-    if (!xarSecurityCheck('EditThemes')) return; 
+    if (!xarSecurity::check('EditThemes')) return; 
     
     $data = array();
     
-    if (!xarVarFetch('id', 'int:1:', $themeid, 0, XARVAR_NOT_REQUIRED)) return; 
-    if (!xarVarFetch('exit', 'isset', $exit, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('confirm', 'isset', $confirm, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('id', 'int:1:', $themeid, 0, xarVar::NOT_REQUIRED)) return; 
+    if (!xarVar::fetch('exit', 'isset', $exit, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('confirm', 'isset', $confirm, NULL, xarVar::DONT_SET)) {return;}
     if (empty($themeid)) return xarResponse::notFound();
 
     // obtain maximum information about a theme
@@ -47,7 +47,7 @@ function themes_admin_themesinfo()
     if ($confirm || $exit) {
     
         // Check for a valid confirmation key
-        if(!xarSecConfirmAuthKey()) return;
+        if(!xarSec::confirmAuthKey()) return;
 
         // Get the data from the form
         $isvalid = $data['theme']->properties['configuration']->checkInput();
@@ -60,30 +60,30 @@ function themes_admin_themesinfo()
             
             // Jump to the next page
             if ($exit) {
-                xarController::redirect(xarModURL('themes','admin','view'));
+                xarController::redirect(xarController::URL('themes','admin','view'));
             } else {
-                xarController::redirect(xarModURL('themes','admin','themesinfo',array('id' => $themeid)));
+                xarController::redirect(xarController::URL('themes','admin','themesinfo',array('id' => $themeid)));
             }
             return true;
         }
     }
 
-    $data['themename']            = xarVarPrepForDisplay($info['name']);
-    $data['themedescr']           = xarVarPrepForDisplay($info['description']);
-    //$data['themedispname']        = xarVarPrepForDisplay($themeinfo['displayname']);
-    $data['themelisturl']         = xarModURL('themes', 'admin', 'view');
+    $data['themename']            = xarVar::prepForDisplay($info['name']);
+    $data['themedescr']           = xarVar::prepForDisplay($info['description']);
+    //$data['themedispname']        = xarVar::prepForDisplay($themeinfo['displayname']);
+    $data['themelisturl']         = xarController::URL('themes', 'admin', 'view');
 
-    $data['themedir']             = xarVarPrepForDisplay($info['directory']);
-    $data['themeclass']           = xarVarPrepForDisplay($info['class']);
-    $data['themever']             = xarVarPrepForDisplay($info['version']);
+    $data['themedir']             = xarVar::prepForDisplay($info['directory']);
+    $data['themeclass']           = xarVar::prepForDisplay($info['class']);
+    $data['themever']             = xarVar::prepForDisplay($info['version']);
     $data['themestate']           = $info['state'];
-    $data['themeauthor']          = preg_replace('/,/', '<br />', xarVarPrepForDisplay($info['author']));
+    $data['themeauthor']          = preg_replace('/,/', '<br />', xarVar::prepForDisplay($info['author']));
     if(!empty($info['dependency'])){
         $dependency             = xarML('Working on it...');
     } else {
         $dependency             = xarML('None');
     }
-    $data['themedependency']      = xarVarPrepForDisplay($dependency);
+    $data['themedependency']      = xarVar::prepForDisplay($dependency);
     
     return $data;
 }

@@ -24,7 +24,7 @@ function themes_adminapi_remove(Array $args=array())
 {
     extract($args);
 
-    if(!xarSecurityCheck('AdminThemes')) return;
+    if(!xarSecurity::check('AdminThemes')) return;
 
     // Remove variables and theme
     $dbconn = xarDB::getConn();

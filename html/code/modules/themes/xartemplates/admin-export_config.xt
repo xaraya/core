@@ -5,7 +5,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Export Theme Definition</h2>
-        <form method="post" action="#xarModURL('themes','admin','export_config')#">
+        <form method="post" action="#xarController::URL('themes','admin','export_config')#">
             <fieldset>
                 <legend>Select Theme</legend>
                 <div class="xar-row">
@@ -22,7 +22,7 @@
             <fieldset>
                 <legend>Configuration</legend>
                 <xar:if condition="empty($xml)">
-                    There are no configuration options defined for this theme. Define some <a href="#xarModURL('themes','admin','new_config')#">here</a>.
+                    There are no configuration options defined for this theme. Define some <a href="#xarController::URL('themes','admin','new_config')#">here</a>.
                 <xar:else/>
                     <div class="xar-row">
                         <div class="xar-col">

@@ -23,14 +23,14 @@
 function themes_admin_initialise()
 { 
     // Security
-    if (!xarSecurityCheck('AdminThemes')) return; 
+    if (!xarSecurity::check('AdminThemes')) return; 
     
     // Security and sanity checks
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    if (!xarVarFetch('id', 'int:1:', $id, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($id)) return xarResponse::notFound();
 
     // Initialise theme
@@ -41,7 +41,7 @@ function themes_admin_initialise()
 
     if (!isset($initialised)) return;
 
-    xarController::redirect(xarModURL('themes', 'admin', 'view'));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view'));
     return true;
 } 
 

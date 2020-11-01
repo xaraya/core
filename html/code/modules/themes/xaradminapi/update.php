@@ -35,7 +35,7 @@ function themes_adminapi_update(Array $args=array())
     $themename = $themeInfo['name'];
 
     // Security Check
-    if (!xarSecurityCheck('AdminThemes',0,'All',"All:All:$regId")) return;
+    if (!xarSecurity::check('AdminThemes',0,'All',"All:All:$regId")) return;
 
     $themeInfo = xarMod::getBaseInfo($themename, 'theme');
 

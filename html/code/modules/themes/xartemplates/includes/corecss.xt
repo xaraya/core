@@ -8,7 +8,7 @@
         <p>
             Normally, it is sufficient to leave on the default settings (static). When the dynamic option is selected administrators and theme developers can visually review and modify each core class as they see fit. The last option is to suppress the core css - it may be useful for debugging purposes.
         </p>
-        <form class="xar-blocks-admin" action="#xarModURL('themes', 'admin', 'corecssupdate')#" method="post">
+        <form class="xar-blocks-admin" action="#xarController::URL('themes', 'admin', 'corecssupdate')#" method="post">
             <fieldset class="xar-norm">
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <fieldset class="formelements xar-norm">

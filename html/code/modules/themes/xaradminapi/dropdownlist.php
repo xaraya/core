@@ -23,11 +23,11 @@
  * The same thing is applied to the AdminCapable property.
  * Permitted values for Class and Category are the ones defined in the proper
  * RFC.
- * Permitted values for State are XARTHEME_STATE_ANY, XARTHEME_STATE_UNINITIALISED,
- * XARTHEME_STATE_INACTIVE, XARTHEME_STATE_ACTIVE, XARTHEME_STATE_MISSING,
- * XARTHEME_STATE_UPGRADED.
- * The XARTHEME_STATE_ANY means that any state is valid.
- * The default value of State is XARTHEME_STATE_ACTIVE.
+ * Permitted values for State are xarTheme::STATE_ANY, xarTheme::STATE_UNINITIALISED,
+ * xarTheme::STATE_INACTIVE, xarTheme::STATE_ACTIVE, XARTHEME_STATE_MISSING,
+ * xarTheme::STATE_UPGRADED.
+ * The xarTheme::STATE_ANY means that any state is valid.
+ * The default value of State is xarTheme::STATE_ACTIVE.
  * For other criteria there's no default value.
  * The orderBy parameter specifies the order by which is sorted the result
  * array, can be one of name, regid, class, category or a combination of them,

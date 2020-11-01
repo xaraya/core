@@ -231,11 +231,11 @@ class xarCSS extends xarObject
     {
         // now find all libs in the filesystem
         // we want to look in all active themes
-        $filter = array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE);
+        $filter = array('Class' => 2, 'State' => xarTheme::STATE_ACTIVE);
         $themes = xarMod::apiFunc('themes', 'admin', 'getlist', $filter);
         // we want to look in all active modules
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
-            array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            array('filter' => array('State' => xarMod::STATE_ACTIVE)));
         // we want to look in all active themes
         // we want to look in all active modules
         // set default paths and filenames
@@ -412,7 +412,7 @@ class xarCSS extends xarObject
         $tag = array(
             'method'     => $method,
             'scope'      => $scope,
-            'base'       => !empty($base)      ? xarVarPrepForOS($base) : xarCSS::CSSCOMMONBASE,
+            'base'       => !empty($base)      ? xarVar::prepForOS($base) : xarCSS::CSSCOMMONBASE,
             'file'       => !empty($file)      ? $file      : xarCSS::CSSCOMMONFILE,
             'fileext'    => !empty($fileext)   ? $fileext   : xarCSS::CSSCOMMONFILEEXT,
             'type'       => !empty($type)      ? $type      : xarCSS::CSSTYPETEXT,
@@ -427,7 +427,7 @@ class xarCSS extends xarObject
             'property'   => '',
             'block'      => '',
             'url'        => '',
-            'alternatedir' => !empty($alternatedir) ? xarVarPrepForOS($alternatedir) : '',
+            'alternatedir' => !empty($alternatedir) ? xarVar::prepForOS($alternatedir) : '',
         );
 
         // Local or remote absolute url, just include it and return
@@ -488,7 +488,7 @@ class xarCSS extends xarObject
             case 'block':
                 if (!empty($block)) {
                     $tag['block'] = $block;
-                    $block = xarVarPrepForOS($block);
+                    $block = xarVar::prepForOS($block);
                     // themes/theme/blocks/block/style
                     $paths[] = $themeDir . '/blocks/' . $block . '/' . $tag['base'] . '/' . $fileName;
                     // themes/common/blocks/block/style
@@ -498,7 +498,7 @@ class xarCSS extends xarObject
                     break;
                 }
                 if (empty($module))
-                    $module = xarVarGetCached('Security.Variables', 'currentmodule');
+                    $module = xarVar::getCached('Security.Variables', 'currentmodule');
             case 'module':
                 if (empty($module))
                     $module = xarMod::getName();
@@ -528,7 +528,7 @@ class xarCSS extends xarObject
                 break;
             case 'property':
                 $tag['property'] = $property;
-                $property = xarVarPrepForOS($property);
+                $property = xarVar::prepForOS($property);
                 // themes/theme/properties/property/style
                 
                 $paths[] = $themeDir . '/properties/' . $property . '/' . $tag['base'] . '/' . $fileName;
@@ -897,7 +897,7 @@ class xarCSSLib extends xarObject
         $this->name = $name;
         $this->displayname = ucfirst($this->name);
         $this->description = xarML('#(1) CSS Framework', $this->displayname);
-        $this->osdirectory = xarVarPrepForOS($this->name);
+        $this->osdirectory = xarVar::prepForOS($this->name);
     }
 
 /**
@@ -909,10 +909,10 @@ class xarCSSLib extends xarObject
     {
         // we want to look in all active themes
         $themes = xarMod::apiFunc('themes', 'admin', 'getlist',
-            array('filter' => array('Class' => 2, 'State' => XARTHEME_STATE_ACTIVE)));
+            array('filter' => array('Class' => 2, 'State' => xarTheme::STATE_ACTIVE)));
         // we want to look in all active modules
         $modules = xarMod::apiFunc('modules', 'admin', 'getlist',
-            array('filter' => array('State' => XARMOD_STATE_ACTIVE)));
+            array('filter' => array('State' => xarMod::STATE_ACTIVE)));
         // set default paths and filenames
         $libName     = $this->name;
         $baseDir     = xarTpl::getBaseDir();

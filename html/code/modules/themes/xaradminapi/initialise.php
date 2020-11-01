@@ -38,7 +38,7 @@ function themes_adminapi_initialise(Array $args=array())
     // Update state of theme
     $set = xarMod::apiFunc('themes', 'admin', 'setstate',
                         array('regid' => $regid,
-                              'state' => XARTHEME_STATE_INACTIVE));
+                              'state' => xarTheme::STATE_INACTIVE));
 
     if (!isset($set)) {
         throw new Exception('Could not set state of theme');

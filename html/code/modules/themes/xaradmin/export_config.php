@@ -17,8 +17,8 @@ sys::import('modules.dynamicdata.class.objects.master');
     
 function themes_admin_export_config()
 {
-    if (!xarVarFetch('itemid' ,    'int',    $data['itemid'] , 0 ,          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirm',    'bool',   $data['confirm'], false,       XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObjectList(array('name' => 'themes_configurations'));
 
@@ -42,7 +42,7 @@ function themes_admin_export_config()
                     // don't replace anything in the serialized value
                         $xml .= "    <$name>" . $value;
                     } else {
-                        $xml .= "    <$name>" . xarVarPrepForDisplay($value);
+                        $xml .= "    <$name>" . xarVar::prepForDisplay($value);
                     }
                 } else {
                     $xml .= "    <$name>";

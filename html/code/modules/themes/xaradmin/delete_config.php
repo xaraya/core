@@ -15,8 +15,8 @@ sys::import('modules.dynamicdata.class.objects.master');
 
 function themes_admin_delete_config()
 {
-    if (!xarVarFetch('itemid' ,    'int',    $data['itemid'] , 0 ,          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirm',    'int',   $data['confirm'], 0,       XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirm',    'int',   $data['confirm'], 0,       xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
     $data['object']->getItem(array('itemid' => $data['itemid']));
@@ -28,13 +28,13 @@ function themes_admin_delete_config()
     if ($data['confirm']) {
     
         // Check for a valid confirmation key
-        if(!xarSecConfirmAuthKey()) return;
+        if(!xarSec::confirmAuthKey()) return;
 
         // Delete the item
         $item = $data['object']->deleteItem();
             
         // Jump to the next page
-        xarResponse::redirect(xarModURL('themes','admin','view_configs'));
+        xarResponse::redirect(xarController::URL('themes','admin','view_configs'));
         return true;
     }
     return $data;

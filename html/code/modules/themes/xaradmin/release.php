@@ -20,7 +20,7 @@
 function themes_admin_release()
 {
     // Security
-    if(!xarSecurityCheck('EditThemes')) return;
+    if(!xarSecurity::check('EditThemes')) return;
     
     // allow fopen
     if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);

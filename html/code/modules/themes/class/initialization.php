@@ -57,7 +57,7 @@ class ThemeInitialization extends xarObject
                 // Clear the cache
                 self::ClearCache();
 
-                $activeThemes = xarMod::apiFunc('themes','admin','getlist', array('filter' => array('State' => XARTHEME_STATE_ACTIVE)));
+                $activeThemes = xarMod::apiFunc('themes','admin','getlist', array('filter' => array('State' => xarTheme::STATE_ACTIVE)));
                 assert(!empty($activeThemes)); // this should never happen
 
                 foreach($activeThemes as $themeInfo) {

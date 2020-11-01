@@ -56,26 +56,26 @@
                     <td class="action">
                         <xar:if condition="xarModVars::get('themes','use_module_icons')">
                             <xar:var name="title">Display Configuration</xar:var>
-                            <a href="#xarModURL('themes','admin','display_config',array('itemid' => $fields['id']))#" title="#$title#" class="xar-icon-display">
+                            <a href="#xarController::URL('themes','admin','display_config',array('itemid' => $fields['id']))#" title="#$title#" class="xar-icon-display">
                                 <xar:img scope="theme" file="icons/display.png" class="xar-icon" alt="$title"/>
                             </a>&#160;
                             <xar:var name="title">Modify Configuration</xar:var>
-                            <a href="#xarModURL('themes','admin','modify_config',array('itemid' => $fields['id']))#" title="#$title#" class="xar-icon-modify">
+                            <a href="#xarController::URL('themes','admin','modify_config',array('itemid' => $fields['id']))#" title="#$title#" class="xar-icon-modify">
                                 <xar:img scope="theme" file="icons/modify.png" class="xar-icon" alt="$title"/>
                             </a>&#160;
                             <xar:var name="title">Delete Configuration</xar:var>
-                            <a href="#xarModURL('themes','admin','delete_config',array('itemid' => $fields['id']))#" title="#$title#" class="xar-icon-delete">
+                            <a href="#xarController::URL('themes','admin','delete_config',array('itemid' => $fields['id']))#" title="#$title#" class="xar-icon-delete">
                                 <xar:img scope="theme" file="icons/delete.png" class="xar-icon" alt="$title"/>
                             </a>&#160;
                             <xar:var name="title">Export Configuration</xar:var>
-                            &#160;<a href="#xarModURL('themes','admin','export_config',array('itemid' => $fields['theme_id']))#" title="#$title#" class="xar-icon-export">
+                            &#160;<a href="#xarController::URL('themes','admin','export_config',array('itemid' => $fields['theme_id']))#" title="#$title#" class="xar-icon-export">
                                 <xar:img scope="theme" file="icons/export-xml.png" class="xar-icon" alt="$title"/>
                             </a>
                         <xar:else/>
-                            <a href="#xarModURL('themes','admin','display_config',array('itemid' => $fields['id']))#">Display</a>&#160;
-                            <a href="#xarModURL('themes','admin','modify_config',array('itemid' => $fields['id']))#">Modify</a>&#160;
-                            <a href="#xarModURL('themes','admin','delete_config',array('itemid' => $fields['id']))#">Delete</a>&#160;
-                            <a href="#xarModURL('themes','admin','export_config',array('itemid' => $fields['id']))#">Export</a>&#160;
+                            <a href="#xarController::URL('themes','admin','display_config',array('itemid' => $fields['id']))#">Display</a>&#160;
+                            <a href="#xarController::URL('themes','admin','modify_config',array('itemid' => $fields['id']))#">Modify</a>&#160;
+                            <a href="#xarController::URL('themes','admin','delete_config',array('itemid' => $fields['id']))#">Delete</a>&#160;
+                            <a href="#xarController::URL('themes','admin','export_config',array('itemid' => $fields['id']))#">Export</a>&#160;
                         </xar:if>
                     </td>
                 </tr>

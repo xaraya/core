@@ -16,8 +16,8 @@ sys::import('modules.dynamicdata.class.objects.master');
 
 function themes_admin_display_config(Array $args=array())
 {
-    if (!xarVarFetch('itemid' ,    'int',    $data['itemid'] , 0 ,          XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirm',    'bool',   $data['confirm'], false,       XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
 

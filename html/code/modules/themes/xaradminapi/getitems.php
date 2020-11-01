@@ -15,7 +15,7 @@ function themes_adminapi_getitems(Array $args=array())
     extract($args);
 
     if (!isset($state))
-        $state = XARTHEME_STATE_ACTIVE;
+        $state = xarTheme::STATE_ACTIVE;
 
     if (!isset($class))
         $class = 3; // any
@@ -50,15 +50,15 @@ function themes_adminapi_getitems(Array $args=array())
         $bindvars[] = $regid;
     }
     
-    if ($state != XARTHEME_STATE_ANY) {
-        if ($state != XARTHEME_STATE_INSTALLED) {
+    if ($state != xarTheme::STATE_ANY) {
+        if ($state != xarTheme::STATE_INSTALLED) {
             $where[] = 'themes.state = ?';
             $bindvars[] = $state;
         } else {
             $where[] = 'themes.state != ? AND themes.state < ? AND themes.state != ?';
-            $bindvars[] = XARTHEME_STATE_UNINITIALISED;
-            $bindvars[] = XARTHEME_STATE_MISSING_FROM_INACTIVE;
-            $bindvars[] = XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
+            $bindvars[] = xarTheme::STATE_UNINITIALISED;
+            $bindvars[] = xarTheme::STATE_MISSING_FROM_INACTIVE;
+            $bindvars[] = xarTheme::STATE_MISSING_FROM_UNINITIALISED;
         }
     }
     
@@ -103,7 +103,7 @@ function themes_adminapi_getitems(Array $args=array())
         } else {
             $item['displayname'] = $item['name'];
             // Shortcut for os prepared directory 
-            $item['osdirectory'] = xarVarPrepForOS($item['directory']);
+            $item['osdirectory'] = xarVar::prepForOS($item['directory']);
             
             xarCoreCache::setCached('Theme.BaseInfos', $item['name'], $item);                   
 
@@ -112,17 +112,17 @@ function themes_adminapi_getitems(Array $args=array())
                 $item = array_merge($fileinfo, $item);
                 xarCoreCache::setCached('Theme.Infos', $item['regid'], $item);
                 switch ($item['state']) {
-                case XARTHEME_STATE_MISSING_FROM_UNINITIALISED:
-                    $item['state'] = XARTHEME_STATE_UNINITIALISED;
+                case xarTheme::STATE_MISSING_FROM_UNINITIALISED:
+                    $item['state'] = xarTheme::STATE_UNINITIALISED;
                     break;
-                case XARTHEME_STATE_MISSING_FROM_INACTIVE:
-                    $item['state'] = XARTHEME_STATE_INACTIVE;
+                case xarTheme::STATE_MISSING_FROM_INACTIVE:
+                    $item['state'] = xarTheme::STATE_INACTIVE;
                     break;
-                case XARTHEME_STATE_MISSING_FROM_ACTIVE:
-                    $item['state'] = XARTHEME_STATE_ACTIVE;
+                case xarTheme::STATE_MISSING_FROM_ACTIVE:
+                    $item['state'] = xarTheme::STATE_ACTIVE;
                     break;
-                case XARTHEME_STATE_MISSING_FROM_UPGRADED:
-                    $item['state'] = XARTHEME_STATE_UPGRADED;
+                case xarTheme::STATE_MISSING_FROM_UPGRADED:
+                    $item['state'] = xarTheme::STATE_UPGRADED;
                     break;
                 }
             } else {
@@ -141,17 +141,17 @@ function themes_adminapi_getitems(Array $args=array())
                 // as per the patch by Garrett Hunter
                 // Credits: Garrett Hunter <Garrett.Hunter@Verizon.net>
                 switch ($item['state']) {
-                case XARTHEME_STATE_UNINITIALISED:
-                    $item['state'] = XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
+                case xarTheme::STATE_UNINITIALISED:
+                    $item['state'] = xarTheme::STATE_MISSING_FROM_UNINITIALISED;
                     break;
-                case XARTHEME_STATE_INACTIVE:
-                    $item['state'] = XARTHEME_STATE_MISSING_FROM_INACTIVE;
+                case xarTheme::STATE_INACTIVE:
+                    $item['state'] = xarTheme::STATE_MISSING_FROM_INACTIVE;
                     break;
-                case XARTHEME_STATE_ACTIVE:
-                    $item['state'] = XARTHEME_STATE_MISSING_FROM_ACTIVE;
+                case xarTheme::STATE_ACTIVE:
+                    $item['state'] = xarTheme::STATE_MISSING_FROM_ACTIVE;
                     break;
-                case XARTHEME_STATE_UPGRADED:
-                    $item['state'] = XARTHEME_STATE_MISSING_FROM_UPGRADED;
+                case xarTheme::STATE_UPGRADED:
+                    $item['state'] = xarTheme::STATE_MISSING_FROM_UPGRADED;
                     break;
                 }
                 //$item['class'] = "";

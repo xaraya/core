@@ -18,24 +18,24 @@
 function themes_admin_view()
 {
     // Security
-    if(!xarSecurityCheck('AdminThemes')) return;
+    if(!xarSecurity::check('AdminThemes')) return;
 
     // lets regenerate the list on each reload, for now
     if(!xarMod::apiFunc('themes', 'admin', 'regenerate')) return;
 
-    if (!xarVarFetch('phase', 'pre:trim:lower:enum:update',
-        $phase, null, XARVAR_DONT_SET)) return;
+    if (!xarVar::fetch('phase', 'pre:trim:lower:enum:update',
+        $phase, null, xarVar::DONT_SET)) return;
 
     // update default themes
     if ($phase == 'update') {
-        if (!xarSecConfirmAuthKey()) 
+        if (!xarSec::confirmAuthKey()) 
             return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
         $old_user_theme = xarModVars::get('themes', 'default_theme');
         $old_admin_theme = xarModVars::get('themes', 'admin_theme');
-        if (!xarVarFetch('user_theme', 'pre:trim:lower:str:1:',
-            $new_user_theme, $old_user_theme, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('admin_theme', 'pre:trim:lower:str:1:',
-            $new_admin_theme, $old_admin_theme, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('user_theme', 'pre:trim:lower:str:1:',
+            $new_user_theme, $old_user_theme, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('admin_theme', 'pre:trim:lower:str:1:',
+            $new_admin_theme, $old_admin_theme, xarVar::NOT_REQUIRED)) return;
         if ($new_user_theme != $old_user_theme) {
             $themeid = xarThemeGetIdFromName($new_user_theme);
             if ($themeid) {
@@ -73,24 +73,24 @@ function themes_admin_view()
                 $new_admin_theme = $new_user_theme;
             xarModVars::set('themes', 'admin_theme', $new_admin_theme);
         }
-        $return_url = xarModURL('themes', 'admin', 'view');
+        $return_url = xarController::URL('themes', 'admin', 'view');
         xarController::redirect($return_url);
     }
     
     // display phase     
     $data = array();
         
-    if (!xarVarFetch('startnum', 'int:1:',
-        $data['startnum'], 1, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('startnum', 'int:1:',
+        $data['startnum'], 1, xarVar::NOT_REQUIRED)) return;
 
-    if (!xarVarFetch('tab', 'pre:trim:lower:enum:plain:preview',
-        $data['tab'], null, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('state', 'int',
-        $data['state'], null, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('class', 'int:0:4', // 0=system, 1=utility, 2=user, 3=all
-        $data['class'], null, XARVAR_DONT_SET)) return;
-    if (!xarVarFetch('sort', 'pre:trim:upper:enum:ASC:DESC',
-        $data['sort'], 'ASC', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('tab', 'pre:trim:lower:enum:plain:preview',
+        $data['tab'], null, xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('state', 'int',
+        $data['state'], null, xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('class', 'int:0:4', // 0=system, 1=utility, 2=user, 3=all
+        $data['class'], null, xarVar::DONT_SET)) return;
+    if (!xarVar::fetch('sort', 'pre:trim:upper:enum:ASC:DESC',
+        $data['sort'], 'ASC', xarVar::NOT_REQUIRED)) return;
     
     if (!isset($data['tab']))
         $data['tab'] = xarModUserVars::get('themes', 'selstyle');
@@ -104,7 +104,7 @@ function themes_admin_view()
     
     $data['items_per_page'] = xarModVars::get('themes', 'items_per_page');
 
-    $authid = xarSecGenAuthKey();
+    $authid = xarSec::genAuthKey();
     $themes = xarMod::apiFunc('themes', 'admin', 'getitems',
         array(
             'state' => $data['state'],
@@ -124,36 +124,36 @@ function themes_admin_view()
     $data['admin_theme'] = xarModVars::get('themes', 'admin_theme');
 
     foreach ($themes as $key => $theme) {
-        $theme['info_url'] = xarModURL('themes', 'admin', 'themesinfo',
+        $theme['info_url'] = xarController::URL('themes', 'admin', 'themesinfo',
             array('id' => $theme['regid']));
-        $return_url = xarServer::getCurrentURL(array('state' => $data['state'] != XARTHEME_STATE_ANY ? XARTHEME_STATE_ANY : null), false, $theme['name']);
+        $return_url = xarServer::getCurrentURL(array('state' => $data['state'] != xarTheme::STATE_ANY ? xarTheme::STATE_ANY : null), false, $theme['name']);
         $return_url = urlencode($return_url);
         switch ($theme['state']) {
-            case XARTHEME_STATE_UNINITIALISED: // 1
+            case xarTheme::STATE_UNINITIALISED: // 1
                 if ($theme['class'] != 4)
-                    $theme['init_url'] = xarModURL('themes', 'admin', 'install',
+                    $theme['init_url'] = xarController::URL('themes', 'admin', 'install',
                         array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
             break;
-            case XARTHEME_STATE_INACTIVE: // 2
-                $theme['activate_url'] = xarModURL('themes', 'admin', 'activate',
+            case xarTheme::STATE_INACTIVE: // 2
+                $theme['activate_url'] = xarController::URL('themes', 'admin', 'activate',
                     array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
-                $theme['remove_url'] = xarModURL('themes', 'admin', 'remove',
+                $theme['remove_url'] = xarController::URL('themes', 'admin', 'remove',
                     array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));   
             break;
-            case XARTHEME_STATE_ACTIVE: // 3
+            case xarTheme::STATE_ACTIVE: // 3
                 if ($theme['name'] != $data['user_theme'] && $theme['name'] != $data['admin_theme']) 
-                    $theme['deactivate_url'] = xarModURL('themes', 'admin', 'deactivate',
+                    $theme['deactivate_url'] = xarController::URL('themes', 'admin', 'deactivate',
                         array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
             break;
-            case XARTHEME_STATE_UPGRADED: // 5
-                $theme['upgrade_url'] = xarModURL('themes', 'admin', 'upgrade',
+            case xarTheme::STATE_UPGRADED: // 5
+                $theme['upgrade_url'] = xarController::URL('themes', 'admin', 'upgrade',
                     array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
             break;
-            case XARTHEME_STATE_MISSING_FROM_UNINITIALISED: // 4
-            case XARTHEME_STATE_MISSING_FROM_INACTIVE: // 7
-            case XARTHEME_STATE_MISSING_FROM_ACTIVE: // 8
-            case XARTHEME_STATE_MISSING_FROM_UPGRADED: // 9
-                $theme['remove_url'] = xarModURL('themes', 'admin', 'remove',
+            case xarTheme::STATE_MISSING_FROM_UNINITIALISED: // 4
+            case xarTheme::STATE_MISSING_FROM_INACTIVE: // 7
+            case xarTheme::STATE_MISSING_FROM_ACTIVE: // 8
+            case xarTheme::STATE_MISSING_FROM_UPGRADED: // 9
+                $theme['remove_url'] = xarController::URL('themes', 'admin', 'remove',
                     array('id' => $theme['regid'], 'authid' => $authid, 'return_url' => $return_url));
             break;
             
@@ -166,24 +166,24 @@ function themes_admin_view()
     $data['authid'] = $authid;
 
     $data['states'] = array(
-        XARTHEME_STATE_ANY => 
-            array('id' => XARTHEME_STATE_ANY, 'name' => xarML('All')),
-        XARTHEME_STATE_INSTALLED =>
-            array('id' => XARTHEME_STATE_INSTALLED, 'name' => xarML('Installed')),
-        XARTHEME_STATE_ACTIVE =>    
-            array('id' => XARTHEME_STATE_ACTIVE, 'name' => xarML('Active')),
-        XARTHEME_STATE_INACTIVE =>    
-            array('id' => XARTHEME_STATE_INACTIVE, 'name' => xarML('Inactive')),
-        XARTHEME_STATE_UNINITIALISED =>
-            array('id' => XARTHEME_STATE_UNINITIALISED, 'name' => xarML('Uninitialized')),
-        XARTHEME_STATE_MISSING_FROM_UNINITIALISED =>
-            array('id' => XARTHEME_STATE_MISSING_FROM_UNINITIALISED, 'name' => xarML('Missing (Not Inited)')),
-        XARTHEME_STATE_MISSING_FROM_INACTIVE => 
-            array('id' => XARTHEME_STATE_MISSING_FROM_INACTIVE, 'name' => xarML('Missing (Inactive)')),
-        XARTHEME_STATE_MISSING_FROM_ACTIVE =>   
-            array('id' => XARTHEME_STATE_MISSING_FROM_ACTIVE, 'name' => xarML('Missing (Active)')),
-        XARTHEME_STATE_MISSING_FROM_UPGRADED =>
-            array('id' => XARTHEME_STATE_MISSING_FROM_UPGRADED, 'name' => xarML('Missing (Upgraded)')),
+        xarTheme::STATE_ANY => 
+            array('id' => xarTheme::STATE_ANY, 'name' => xarML('All')),
+        xarTheme::STATE_INSTALLED =>
+            array('id' => xarTheme::STATE_INSTALLED, 'name' => xarML('Installed')),
+        xarTheme::STATE_ACTIVE =>    
+            array('id' => xarTheme::STATE_ACTIVE, 'name' => xarML('Active')),
+        xarTheme::STATE_INACTIVE =>    
+            array('id' => xarTheme::STATE_INACTIVE, 'name' => xarML('Inactive')),
+        xarTheme::STATE_UNINITIALISED =>
+            array('id' => xarTheme::STATE_UNINITIALISED, 'name' => xarML('Uninitialized')),
+        xarTheme::STATE_MISSING_FROM_UNINITIALISED =>
+            array('id' => xarTheme::STATE_MISSING_FROM_UNINITIALISED, 'name' => xarML('Missing (Not Inited)')),
+        xarTheme::STATE_MISSING_FROM_INACTIVE => 
+            array('id' => xarTheme::STATE_MISSING_FROM_INACTIVE, 'name' => xarML('Missing (Inactive)')),
+        xarTheme::STATE_MISSING_FROM_ACTIVE =>   
+            array('id' => xarTheme::STATE_MISSING_FROM_ACTIVE, 'name' => xarML('Missing (Active)')),
+        xarTheme::STATE_MISSING_FROM_UPGRADED =>
+            array('id' => xarTheme::STATE_MISSING_FROM_UPGRADED, 'name' => xarML('Missing (Upgraded)')),
     );
           
     $data['classes'] = array(
@@ -205,7 +205,7 @@ function themes_admin_view()
     xarModUserVars::set('themes', 'selclass', $data['class']);
      
     $count = count($themes);
-    if ($data['state'] == XARTHEME_STATE_ANY) {
+    if ($data['state'] == xarTheme::STATE_ANY) {
         if ($data['class'] == 3) {
             $searched = xarML('Showing #(1) themes', $count);
         } else {

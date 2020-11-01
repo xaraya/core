@@ -22,14 +22,14 @@
 function themes_admin_setdefault()
 {
     // Security
-    if (!xarSecurityCheck('AdminThemes')) return;
+    if (!xarSecurity::check('AdminThemes')) return;
     
     // Security and sanity checks
-    if (!xarSecConfirmAuthKey()) {
+    if (!xarSec::confirmAuthKey()) {
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }
     
-    if (!xarVarFetch('id', 'int:1:', $defaulttheme, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $defaulttheme, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($defaulttheme)) return xarResponse::notFound();
 
 
@@ -42,16 +42,16 @@ function themes_admin_setdefault()
     $themeInfo = xarThemeGetInfo($defaulttheme);
 
     if ($themeInfo['class'] != 2) {
-        xarController::redirect(xarModURL('themes', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
     }
 
-    if (xarVarIsCached('Mod.Variables.themes', 'default_theme')) {
-        xarVarDelCached('Mod.Variables.themes', 'default_theme');
+    if (xarVar::isCached('Mod.Variables.themes', 'default_theme')) {
+        xarVar::delCached('Mod.Variables.themes', 'default_theme');
     }
 
     //update the database - activate the theme
     if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$defaulttheme))) {
-        xarController::redirect(xarModURL('themes', 'admin', 'modifyconfig'));
+        xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
     }
 
     // update the data
@@ -60,7 +60,7 @@ function themes_admin_setdefault()
 
     // set the target location (anchor) to go to within the page
     $target = $themeInfo['name'];
-    xarController::redirect(xarModURL('themes', 'admin', 'view', array('state' => 0), NULL, $target));
+    xarController::redirect(xarController::URL('themes', 'admin', 'view', array('state' => 0), NULL, $target));
     return true;
 }
 ?>

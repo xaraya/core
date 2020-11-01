@@ -34,7 +34,7 @@ function themes_init()
     // FIXME: how would these values ever be passed in?
     if (empty($selstyle)) $selstyle = 'plain';
     // TODO: this is themes, not mods
-    if (empty($selfilter)) $selfilter = XARMOD_STATE_ANY;
+    if (empty($selfilter)) $selfilter = xarMod::STATE_ANY;
     if (empty($hidecore)) $hidecore = 0;
     xarModVars::set('themes', 'hidecore', $hidecore);
     xarModVars::set('themes', 'selstyle', $selstyle);

@@ -21,7 +21,7 @@
  */
 function themes_admin_modify()
 {
-    if (!xarVarFetch('id', 'int:1:', $regId, 0, XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('id', 'int:1:', $regId, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($regId)) return xarResponse::notFound();
 
     $themeInfo = xarThemeGetInfo($regId); 
@@ -31,7 +31,7 @@ function themes_admin_modify()
     $themeName = $themeInfo['name'];
     
     // Security
-    if (!xarSecurityCheck('AdminThemes', 0, 'All', '$themeName::$regId')) return;
+    if (!xarSecurity::check('AdminThemes', 0, 'All', '$themeName::$regId')) return;
 
     $themevars = array();
     //xarTheme_getVarsByTheme($themeName);
@@ -41,7 +41,7 @@ function themes_admin_modify()
         $displayInfo[] = array('name' => $k, 'value' => $v);
     } 
     // End form
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     $data['id'] = $regId;
     $data['name'] = $themeInfo['name'];
     $data['themeInfo'] = $displayInfo;

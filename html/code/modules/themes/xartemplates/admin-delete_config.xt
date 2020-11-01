@@ -16,13 +16,13 @@
 
         <xar:data-display object="$object"/>
 
-        <form method="post" action="#xarModURL('themes','admin','delete_config')#">
+        <form method="post" action="#xarController::URL('themes','admin','delete_config')#">
             <div class="xar-form-actions">
               <div class="xar-row">
                   <div class="xar-col">
                   </div>
                   <div class="xar-col">
-                    <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+                    <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
                     <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
                     <input type="hidden" name="confirm" id="confirm" value="1"/>
                     <xar:var name="label">Cancel</xar:var>

@@ -23,8 +23,8 @@
     <!--
         The XMLRPC-server module takes case of filling the RSD information 
     -->
-    <xar:if condition="xarModIsAvailable('xmlrpcserver')">
-        <link rel="EditURI" type="application/rsd+xml" title="RSD" href="#xarModURL('xmlrpcserver','user','main')#"/>
+    <xar:if condition="xarMod::isAvailable('xmlrpcserver')">
+        <link rel="EditURI" type="application/rsd+xml" title="RSD" href="#xarController::URL('xmlrpcserver','user','main')#"/>
     </xar:if>
     
 </xar:template>
