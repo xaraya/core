@@ -185,10 +185,10 @@
     </table>
     <!-- add and delete icons are now created by the js dynamically on init 
          set variables to pass to js (includes translated strings for icon alt and title :) )--> 
-    <xar:set name="del_icon">xarTplGetImage("icons/delete.png", "base")</xar:set>
+    <xar:set name="del_icon">xarTpl::getImage("icons/delete.png", "base")</xar:set>
     <xar:var name="del_alt">Remove</xar:var>
     <xar:var name="del_title">Remove this row</xar:var>
-    <xar:set name="add_icon">xarTplGetImage("icons/add.png", "base")</xar:set>
+    <xar:set name="add_icon">xarTpl::getImage("icons/add.png", "base")</xar:set>
     <xar:var name="add_alt">Add</xar:var>
     <xar:var name="add_title">Add a new row</xar:var>
     <!-- Create the table js object and pass in configuration params -->  

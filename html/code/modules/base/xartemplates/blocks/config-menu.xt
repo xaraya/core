@@ -11,7 +11,7 @@
             </label>
         </div>
         <div class="xar-col">
-            <input type="text" name="marker" id="marker" value="#xarVarPrepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
+            <input type="text" name="marker" id="marker" value="#xarVar::prepForDisplay($marker)#" maxlength="255" class="xar-form-textshort"/>
         </div>
     </div>
     <div class="xar-row">

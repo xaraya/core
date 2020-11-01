@@ -60,7 +60,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
 
         // Handle any methods specific to this block
         // CHECKME: is this the right place for handling this
-        if (!xarVarFetch('menumethod',  'str:1:255', $menumethod, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('menumethod',  'str:1:255', $menumethod, '', xarVar::NOT_REQUIRED)) return;
         switch ($menumethod) {
             case  'linkorder':
                 $links = array_merge($vars, $this->linkorderupdate());
@@ -74,33 +74,33 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         }
 
         // display options
-        if (!xarVarFetch('showlogout',  'checkbox', $showlogout, false, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('logoutlabel',  'str:1:255', $logoutlabel, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('logouttitle',  'str:1:255', $logouttitle, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayrss',  'checkbox', $displayrss, false, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('rsslabel',  'str:1:255', $rsslabel, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('rsstitle',  'str:1:255', $rsstitle, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('displayprint','checkbox', $displayprint, false, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('printlabel',  'str:1:255', $printlabel, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('printtitle',  'str:1:255', $printtitle, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('marker',      'str:0',    $marker, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showback',    'checkbox', $showback, false, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('backlabel',  'str:1:255', $backlabel, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('backtitle',  'str:1:255', $backtitle, '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('showlogout',  'checkbox', $showlogout, false, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('logoutlabel',  'str:1:255', $logoutlabel, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('logouttitle',  'str:1:255', $logouttitle, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('displayrss',  'checkbox', $displayrss, false, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('rsslabel',  'str:1:255', $rsslabel, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('rsstitle',  'str:1:255', $rsstitle, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('displayprint','checkbox', $displayprint, false, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('printlabel',  'str:1:255', $printlabel, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('printtitle',  'str:1:255', $printtitle, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('marker',      'str:0',    $marker, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('showback',    'checkbox', $showback, false, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('backlabel',  'str:1:255', $backlabel, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('backtitle',  'str:1:255', $backtitle, '', xarVar::NOT_REQUIRED)) return;
         // userlinks
-        if (!xarVarFetch('userlinks',   'array',    $userlinks, array(), XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('links_select', 'pre:trim:lower:enum:show:hide:delete', $links_select, 'none', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('userlinks',   'array',    $userlinks, array(), xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('links_select', 'pre:trim:lower:enum:show:hide:delete', $links_select, 'none', xarVar::NOT_REQUIRED)) return;
 
         // add new link
-        if (!xarVarFetch('links_new_url', 'str:1:254', $new_url, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('links_new_label', 'str:1:254', $new_label, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('links_new_title', 'str:1:254', $new_title, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('links_new_blank', 'checkbox', $new_blank, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('links_new_position', 'int:0:3', $new_position, 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('links_new_relation', 'int:0:', $new_relation, 0, XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('links_new_url', 'str:1:254', $new_url, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('links_new_label', 'str:1:254', $new_label, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('links_new_title', 'str:1:254', $new_title, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('links_new_blank', 'checkbox', $new_blank, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('links_new_position', 'int:0:3', $new_position, 0, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('links_new_relation', 'int:0:', $new_relation, 0, xarVar::NOT_REQUIRED)) return;
 
         // modulelist
-        if (!xarVarFetch('modulelist',  'array',    $modulelist, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('modulelist',  'array',    $modulelist, array(), xarVar::NOT_REQUIRED)) return;
 
         // handle user links
         // Build new link if we have any values for it
@@ -348,14 +348,14 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                 if ($i < $numlinks) {
                     $link['downurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' =>  $linkid, 'direction' => 'down', 'authid' => $authid, 'this' => '0'));
                     /*
-                    $link['downurl'] = xarModURL('blocks', 'admin', 'modify_instance',
+                    $link['downurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                     */
                 }
                 if ($i > 1) {
                     $link['upurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid));
                     /*
-                    $link['upurl'] = xarModURL('blocks', 'admin', 'modify_instance',
+                    $link['upurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
                         array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
                     */
                 }
@@ -377,14 +377,14 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
                         if ($j < $numsublinks) {
                             $link['downurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid));
                             /*
-                            $sublink['downurl'] = xarModURL('blocks', 'admin', 'modify_instance',
+                            $sublink['downurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'down', 'authid' => $authid, 'phase' => 'update'));
                             */
                         }
                         if ($j > 1) {
                             $sublink['upurl'] = xarServer::getCurrentUrl(array('interface' => 'config', 'menumethod' => 'linkorder', 'phase' => 'update', 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid));
                             /*
-                            $sublink['upurl'] = xarModURL('blocks', 'admin', 'modify_instance',
+                            $sublink['upurl'] = xarController::URL('blocks', 'admin', 'modify_instance',
                                 array('interface' => 'config', 'method' => 'linkorder', 'block_id' => $this->block_id, 'linkid' => $linkid, 'sublinkid' => $sublinkid, 'direction' => 'up', 'authid' => $authid, 'phase' => 'update'));
                             */
                         }
@@ -410,9 +410,9 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     public function linkorderupdate(Array $data=array())
     {
         $data = $this->getInfo();
-        if (!xarVarFetch('linkid', 'int:0:', $linkid, null, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('sublinkid', 'int:0:', $sublinkid, null, XARVAR_DONT_SET)) return;
-        if (!xarVarFetch('direction', 'pre:trim:lower:enum:up:down', $direction, null, XARVAR_DONT_SET)) return;
+        if (!xarVar::fetch('linkid', 'int:0:', $linkid, null, xarVar::DONT_SET)) return;
+        if (!xarVar::fetch('sublinkid', 'int:0:', $sublinkid, null, xarVar::DONT_SET)) return;
+        if (!xarVar::fetch('direction', 'pre:trim:lower:enum:up:down', $direction, null, xarVar::DONT_SET)) return;
 
         if (!isset($linkid)) throw new EmptyParameterException('linkid');
         if (!isset($direction)) throw new EmptyParameterException('direction');
@@ -453,7 +453,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
         $data['userlinks'] = $this->userlinks;
         $data['return_url'] = xarServer::getCurrentURL(array('interface' => 'config', 'menumethod' => null, 'authid' => null, 'direction' => null, 'sublinkid' => null, 'linkid' => null, 'phase' => null), null, 'menulinks_'.$this->block_id);
         /* 
-        $data['return_url'] = xarModURL('blocks', 'admin', 'modify_instance',
+        $data['return_url'] = xarController::URL('blocks', 'admin', 'modify_instance',
             array('block_id' => $this->block_id, 'interface' => 'config'), null, 'menulinks_'.$this->block_id);
         */
         return $data;

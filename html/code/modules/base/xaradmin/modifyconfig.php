@@ -24,10 +24,10 @@
 function base_admin_modifyconfig()
 {
     // Security
-    if(!xarSecurityCheck('AdminBase')) return;
+    if(!xarSecurity::check('AdminBase')) return;
     
-    if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-    if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'display', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+    if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'display', xarVar::NOT_REQUIRED)) return;
 
     $localehome = sys::varpath() . "/locales";
     if (!file_exists($localehome)) {
@@ -61,7 +61,7 @@ function base_admin_modifyconfig()
 
     // TODO: delete after new backend testing
     // $data['translationsBackend'] = xarConfigVars::get(null, 'Site.MLS.TranslationsBackend');
-    $data['authid'] = xarSecGenAuthKey();
+    $data['authid'] = xarSec::genAuthKey();
     $data['updatelabel'] = xarML('Update Base Configuration');
 
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'base'));
@@ -119,14 +119,14 @@ function base_admin_modifyconfig()
                 break;
                 case 'logging':
                     // Delete the log file and create a new, empty one
-                    if (!xarVarFetch('clear','isset',$clear,NULL,XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('clear','isset',$clear,NULL,xarVar::NOT_REQUIRED)) return;
                     $filepath = $picker->initialization_basedirectory . $data['logfilename'];
                     if (isset($clear)) {
                         unlink($filepath);
                         touch($filepath);
                     }
                     // Rename the log file and create a new, empty one
-                    if (!xarVarFetch('clearsave','isset',$clear,NULL,XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('clearsave','isset',$clear,NULL,xarVar::NOT_REQUIRED)) return;
                     $filepath = $picker->initialization_basedirectory . $data['logfilename'];
                     if (isset($clear)) {
                         $newname = $filepath . "_" . time();
@@ -144,21 +144,21 @@ function base_admin_modifyconfig()
         case 'update':
             switch ($data['tab']) {
                 case 'setup':
-                    if (!xarVarFetch('middleware', 'str', $middleware, 'Creole' ,XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('middleware', 'str', $middleware, 'Creole' ,xarVar::NOT_REQUIRED)) return;
                     $variables = array('DB.Middleware' => $middleware);
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
-                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'setup')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'setup')));
                     break;
                 case 'display':
-                    if (!xarVarFetch('alternatepagetemplate','checkbox',$alternatePageTemplate,false, XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('alternatepagetemplatename','str',$alternatePageTemplateName,'',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('defaultmodule',  'str:1:', $defaultModuleName, xarModVars::get('modules', 'defaultmodule'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('defaulttype',    'str:1:', $defaultModuleType, xarModVars::get('modules', 'defaultmoduletype'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('defaultfunction','str:1:', $defaultModuleFunction,xarModVars::get('modules', 'defaultmodulefunction'),XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('defaultdatapath','str:1:', $defaultDataPath, xarModVars::get('modules', 'defaultdatapath'),XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('shorturl','str',$enableShortURLs,false,XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('allowsslashes','checkbox',$allowsslashes,false,XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('htmlentites','checkbox',$FixHTMLEntities,false,XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('alternatepagetemplate','checkbox',$alternatePageTemplate,false, xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('alternatepagetemplatename','str',$alternatePageTemplateName,'',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('defaultmodule',  'str:1:', $defaultModuleName, xarModVars::get('modules', 'defaultmodule'), xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('defaulttype',    'str:1:', $defaultModuleType, xarModVars::get('modules', 'defaultmoduletype'), xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('defaultfunction','str:1:', $defaultModuleFunction,xarModVars::get('modules', 'defaultmodulefunction'),xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('defaultdatapath','str:1:', $defaultDataPath, xarModVars::get('modules', 'defaultdatapath'),xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('shorturl','str',$enableShortURLs,false,xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('allowsslashes','checkbox',$allowsslashes,false,xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('htmlentites','checkbox',$FixHTMLEntities,false,xarVar::NOT_REQUIRED)) return;
 
                     $isvalid = $data['module_settings']->checkInput();
                     if (!$isvalid) {
@@ -174,24 +174,24 @@ function base_admin_modifyconfig()
                     xarModVars::set('base','UseAlternatePageTemplate', ($alternatePageTemplate ? 1 : 0));
                     xarModVars::set('base','AlternatePageTemplateName', $alternatePageTemplateName);
 
-                    xarModUserVars::set('roles','userhome', xarModURL($defaultModuleName, $defaultModuleType, $defaultModuleFunction),1);
+                    xarModUserVars::set('roles','userhome', xarController::URL($defaultModuleName, $defaultModuleType, $defaultModuleFunction),1);
                     xarConfigVars::set(null, 'Site.Core.EnableShortURLsSupport', $enableShortURLs);
                     xarConfigVars::set(null, 'Site.Core.WebserverAllowsSlashes', $allowsslashes);
                     // enable short urls for the base module itself too
                     xarConfigVars::set(null, 'Site.Core.FixHTMLEntities', $FixHTMLEntities);
                     break;
                 case 'security':
-                    if (!xarVarFetch('securitylevel','str:1:',$securityLevel)) return;
-                    if (!xarVarFetch('sessionduration','int:1:',$sessionDuration,30,XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('sessiontimeout','int:1:',$sessionTimeout,10,XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('authmodule_order','str:1:',$authmodule_order,'',XARVAR_NOT_REQUIRED)) {return;}
-                    if (!xarVarFetch('cookiename','str:1:',$cookieName,'',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('cookiepath','str:1:',$cookiePath,'',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('cookiedomain','str:1:',$cookieDomain,'',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('referercheck','str:1:',$refererCheck,'',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('secureserver','checkbox',$secureServer,true,XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('sslport','int',$sslport,443,XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('cookietimeout','int:1:',$cookietimeout,'',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('securitylevel','str:1:',$securityLevel)) return;
+                    if (!xarVar::fetch('sessionduration','int:1:',$sessionDuration,30,xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('sessiontimeout','int:1:',$sessionTimeout,10,xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('authmodule_order','str:1:',$authmodule_order,'',xarVar::NOT_REQUIRED)) {return;}
+                    if (!xarVar::fetch('cookiename','str:1:',$cookieName,'',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('cookiepath','str:1:',$cookiePath,'',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('cookiedomain','str:1:',$cookieDomain,'',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('referercheck','str:1:',$refererCheck,'',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('secureserver','checkbox',$secureServer,true,xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('sslport','int',$sslport,443,xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('cookietimeout','int:1:',$cookietimeout,'',xarVar::NOT_REQUIRED)) return;
                     sys::import('modules.dynamicdata.class.properties.master');
                     $orderselect = DataPropertyMaster::getProperty(array('name' => 'orderselect'));
                     $orderselect->checkInput('authmodules');
@@ -216,13 +216,13 @@ function base_admin_modifyconfig()
                     
                     /*
                     // Encryption
-                    if (!xarVarFetch('cipher','str:1',$cipher,'blowfish',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('mode','str:1',$mode,'cbc',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('key','str:1',$key,'jamaica',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('initvector','str:1',$initvector,'xaraya2x',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('hint','str:1',$hint,'',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('cipher','str:1',$cipher,'blowfish',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('mode','str:1',$mode,'cbc',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('key','str:1',$key,'jamaica',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('initvector','str:1',$initvector,'xaraya2x',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('hint','str:1',$hint,'',xarVar::NOT_REQUIRED)) return;
 
-                    if (!xarVarFetch('key','str:1',$key,'jamaica',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('key','str:1',$key,'jamaica',xarVar::NOT_REQUIRED)) return;
                     $keyholder = DataPropertyMaster::getProperty(array('type' => 'password'));
                     $keyholder->checkInput('key',$key);
                     $key = $keyholder->value;
@@ -237,11 +237,11 @@ function base_admin_modifyconfig()
                     );
                     xarMod::apiFunc('installer','admin','modifysystemvars', $args);
                     */
-                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'security')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'security')));
                     break;
                 case 'locales':
-                    if (!xarVarFetch('defaultlocale','str:1:',$defaultLocale)) return;
-                    if (!xarVarFetch('mlsmode','str:1:',$MLSMode,'SINGLE', XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('defaultlocale','str:1:',$defaultLocale)) return;
+                    if (!xarVar::fetch('mlsmode','str:1:',$MLSMode,'SINGLE', xarVar::NOT_REQUIRED)) return;
 
                     sys::import('modules.dynamicdata.class.properties.master');
                     $locales = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
@@ -250,7 +250,7 @@ function base_admin_modifyconfig()
                     if (!in_array($defaultLocale,$localesList)) $localesList[] = $defaultLocale;
                     sort($localesList);
                     if ($MLSMode == 'UNBOXED') {
-                        if (xarMLSGetCharsetFromLocale($defaultLocale) != 'utf-8') {
+                        if (xarMLS::getCharsetFromLocale($defaultLocale) != 'utf-8') {
                             throw new ConfigurationException(null,'You should select utf-8 locale as default before selecting UNBOXED mode');
                         }
                     }
@@ -263,24 +263,24 @@ function base_admin_modifyconfig()
                     // It sets the navigation locale for all logged in users who have not explicitly chosen one
                     xarModVars::set('roles', 'locale', $defaultLocale);
 
-                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'locales')));
                     break;
                 case 'caching':                    
                     break;
                 case 'logging':                    
-                    if (!xarVarFetch('logenabled','int',$logenabled,0,XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('logenabled','int',$logenabled,0,xarVar::NOT_REQUIRED)) return;
                     $checkboxlist = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
                     $checkboxlist->checkInput('loglevel');
                     $loglevel = serialize($checkboxlist->value);
                     $variables = array('Log.Enabled' => $logenabled, 'Log.Level' => $loglevel, 'Log.Filename' => $data['logfilename']);
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
-                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
                     break;
                 case 'other':
-                    if (!xarVarFetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('proxyhost',    'str:1:',   $proxyhost,     xarModVars::get('base', 'proxyhost'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('proxyport',    'int:1:',   $proxyport,     xarModVars::get('base', 'proxyport'), XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('releasenumber','int:1:',   $releasenumber, xarModVars::get('base','releasenumber'),XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('loadlegacy',   'checkbox', $loadLegacy,    xarConfigVars::get(null, 'Site.Core.LoadLegacy'), xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('proxyhost',    'str:1:',   $proxyhost,     xarModVars::get('base', 'proxyhost'), xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('proxyport',    'int:1:',   $proxyport,     xarModVars::get('base', 'proxyport'), xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('releasenumber','int:1:',   $releasenumber, xarModVars::get('base','releasenumber'),xarVar::NOT_REQUIRED)) return;
                     // Save these in normal module variables for now
                     xarModVars::set('base','proxyhost',$proxyhost);
                     xarModVars::set('base','proxyport',$proxyport);
@@ -288,8 +288,8 @@ function base_admin_modifyconfig()
                     xarConfigVars::set(null, 'Site.Core.LoadLegacy', $loadLegacy);
 
                     // Timezone, offset and DST
-                    if (!xarVarFetch('hosttimezone','str:1:',$hosttimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
-                    if (!xarVarFetch('sitetimezone','str:1:',$sitetimezone,'UTC',XARVAR_NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('hosttimezone','str:1:',$hosttimezone,'UTC',xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('sitetimezone','str:1:',$sitetimezone,'UTC',xarVar::NOT_REQUIRED)) return;
 
                     $tzobject = new DateTimezone($hosttimezone);
                     $variables = array('SystemTimeZone' => !empty($tzobject) ? $hosttimezone : 'UTC');
@@ -305,12 +305,12 @@ function base_admin_modifyconfig()
                         xarConfigVars::set(null, 'Site.MLS.DefaultTimeOffset', 0);
                     }
                     xarModVars::set('roles', 'usertimezone', xarConfigVars::get(null, 'Site.Core.TimeZone'));
-                    xarController::redirect(xarModURL('base', 'admin', 'modifyconfig', array('tab' => 'other')));
+                    xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'other')));
                     break;
             }
 
             // Call updateconfig hooks
-            xarModCallHooks('module','updateconfig','base', array('module' => 'base'));
+            xarModHooks::call('module','updateconfig','base', array('module' => 'base'));
         }
     return $data;
 }

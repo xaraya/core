@@ -9,7 +9,7 @@
             </label>
         </div>
         <div class="xar-col" style="width: 600px">
-            <textarea name="content_text" id="content_text_block_#$_bl_block_id#" class="xar-form-textarealarge">#xarVarPrepForDisplay($content_text)#</textarea>
+            <textarea name="content_text" id="content_text_block_#$_bl_block_id#" class="xar-form-textarealarge">#xarVar::prepForDisplay($content_text)#</textarea>
         </div>
     </div>
     <div class="xar-row">
@@ -73,7 +73,7 @@
             </label>
         </div>
         <div class="xar-col">
-            <input type="text" name="custom_format" id="custom_format" value="#xarVarPrepForDisplay($custom_format)#" maxlength="20" class="xar-form-textmedium"/>
+            <input type="text" name="custom_format" id="custom_format" value="#xarVar::prepForDisplay($custom_format)#" maxlength="20" class="xar-form-textmedium"/>
         </div>
     </div>
     <div class="xar-row">

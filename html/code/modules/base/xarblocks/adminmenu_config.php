@@ -63,11 +63,11 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
     {
         $data = parent::update($data);
 
-        if (!xarVarFetch('showlogout', 'int:0:1', $showlogout, 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('menustyle' , 'pre:trim:lower:enum:byname:bycat' , $menustyle , 'bycat', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('showfront', 'int:0:1', $showfront, 0, XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('marker',      'str:0',    $marker, '', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('modulelist', 'array', $modulelist, array(), XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('showlogout', 'int:0:1', $showlogout, 0, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('menustyle' , 'pre:trim:lower:enum:byname:bycat' , $menustyle , 'bycat', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('showfront', 'int:0:1', $showfront, 0, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('marker',      'str:0',    $marker, '', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('modulelist', 'array', $modulelist, array(), xarVar::NOT_REQUIRED)) return;
 
         if (empty($modulelist)) $modulelist = array('modules' => array('visible' => 1));
 

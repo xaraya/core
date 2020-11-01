@@ -18,14 +18,14 @@
 function base_admin_composer()
 {
     // Security
-    if(!xarSecurityCheck('ManageBase')) return;
+    if(!xarSecurity::check('ManageBase')) return;
 
-    if (!xarVarFetch('setup',       'isset', $setup,       NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install',     'isset', $install,     NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('update',      'isset', $update,      NULL, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_dir', 'str',   $data['install_dir'], sys::lib(), XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('package_dir', 'str',   $data['package_dir'], 'vendor', XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('install_com', 'str',   $data['install_com'], 'php composer.phar update ', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('setup',       'isset', $setup,       NULL, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('install',     'isset', $install,     NULL, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('update',      'isset', $update,      NULL, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('install_dir', 'str',   $data['install_dir'], sys::lib(), xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('package_dir', 'str',   $data['package_dir'], 'vendor', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('install_com', 'str',   $data['install_com'], 'php composer.phar update ', xarVar::NOT_REQUIRED)) return;
     
     // Check that the libcurl extension is installed
     $data['libcurl']             = extension_loaded('curl');
@@ -90,7 +90,7 @@ function base_admin_composer()
         chdir($base_directory);
         $data['message'][] = 'success';
     } elseif ($update) {
-        if (!xarVarFetch('composer',    'str',   $data['composer'],    '', XARVAR_NOT_REQUIRED)) return;
+        if (!xarVar::fetch('composer',    'str',   $data['composer'],    '', xarVar::NOT_REQUIRED)) return;
         xarMod::apiFunc('base', 'admin', 'write_file', array('file' => 'composer/composer.json', 'data' => $data['composer']));
     }
 

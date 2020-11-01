@@ -90,7 +90,7 @@ class ArrayProperty extends DataProperty
                 $displayconfig = $this->display_column_definition;
             }
             $columncount = isset($displayconfig) ? count($displayconfig) : 0;
-            if (!xarVarFetch($name,    'array', $elements, array(), XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch($name,    'array', $elements, array(), xarVar::NOT_REQUIRED)) return;
             // Get the number of rows we are saving
             $rows = count($elements);
 

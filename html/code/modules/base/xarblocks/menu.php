@@ -209,11 +209,11 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                     $args[$key] = $val;
                 }
             }
-            $decoded_url = xarModURL($modname, $modtype, $funcname, $args);
+            $decoded_url = xarController::URL($modname, $modtype, $funcname, $args);
 
         } elseif (xarMod::$genXmlUrls) {
             // regular url, prepped for xml display if necessary
-            $decoded_url = xarVarPrepForDisplay($url);
+            $decoded_url = xarVar::prepForDisplay($url);
         }
 
         // pass details of decode to calling function,
@@ -238,12 +238,12 @@ class Base_MenuBlock extends MenuBlock implements iBlock
             {
                 $line['url'] = explode(':', substr($line['url'], 1,  - 1));
                 // Get current pubtype type (if any)
-                if (xarVarIsCached('Blocks.articles', 'ptid')) {
-                    $ptid = xarVarGetCached('Blocks.articles', 'ptid');
+                if (xarVar::isCached('Blocks.articles', 'ptid')) {
+                    $ptid = xarVar::getCached('Blocks.articles', 'ptid');
                 }
                 if (empty($ptid)) {
                     // try to get ptid from input
-                    xarVarFetch('ptid', 'isset', $ptid, NULL, XARVAR_DONT_SET);
+                    xarVar::fetch('ptid', 'isset', $ptid, NULL, xarVar::DONT_SET);
                 }
                 // if the current pubtype is active, then we are here
                 if ($line['url'][0] == $ptid) {
@@ -255,15 +255,15 @@ class Base_MenuBlock extends MenuBlock implements iBlock
             case '(': // category link
             {
                 $line['url'] = explode(':', substr($line['url'], 1,  - 1));
-                if (xarVarIsCached('Blocks.categories','catid')) {
-                    $catid = xarVarGetCached('Blocks.categories','catid');
+                if (xarVar::isCached('Blocks.categories','catid')) {
+                    $catid = xarVar::getCached('Blocks.categories','catid');
                 }
                 if (empty($catid)) {
                     // try to get catid from input
-                    xarVarFetch('catid', 'isset', $catid, NULL, XARVAR_DONT_SET);
+                    xarVar::fetch('catid', 'isset', $catid, NULL, xarVar::DONT_SET);
                 }
-                if (empty($catid) && xarVarIsCached('Blocks.categories','cids')) {
-                    $cids = xarVarGetCached('Blocks.categories','cids');
+                if (empty($catid) && xarVar::isCached('Blocks.categories','cids')) {
+                    $cids = xarVar::getCached('Blocks.categories','cids');
                 } else {
                     $cids = array();
                 }

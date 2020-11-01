@@ -92,7 +92,7 @@ function base_userapi_getfile(Array $args=array())
                 $path = $vardir;
             }
             if (!$islocal) {
-                $path .= '/' . xarVarPrepForOS($info['host']);
+                $path .= '/' . xarVar::prepForOS($info['host']);
             }
             if (!is_dir($path)) {
                 mkdir($path);
@@ -107,7 +107,7 @@ function base_userapi_getfile(Array $args=array())
             if (count($fileparts) > 0) {
                 foreach ($fileparts as $part) {
                     if ($part === '') continue;
-                    $path .= '/' . xarVarPrepForOS($part);
+                    $path .= '/' . xarVar::prepForOS($part);
                     if (!is_dir($path)) {
                         mkdir($path);
                     }
@@ -118,7 +118,7 @@ function base_userapi_getfile(Array $args=array())
             }
             $file = $path . '/' . $filename;
             if (!empty($info['query'])) {
-                $file .= '_' . xarVarPrepForOS($info['query']);
+                $file .= '_' . xarVar::prepForOS($info['query']);
             }
         }
         $expire = time() - $refresh;

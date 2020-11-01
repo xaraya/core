@@ -18,9 +18,9 @@
 function base_admin_sysinfo()
 {
     // Security
-    if(!xarSecurityCheck('AdminBase')) return;
+    if(!xarSecurity::check('AdminBase')) return;
 
-    xarVarFetch('what','int:-1:127',$what,INFO_GENERAL, XARVAR_NOT_REQUIRED);
+    xarVar::fetch('what','int:-1:127',$what,INFO_GENERAL, xarVar::NOT_REQUIRED);
     $data['what'] = $what;
     ob_start();
     phpinfo($what);

@@ -11,7 +11,7 @@
             <xar:loop name="$content_lines">
             <xar:if condition="$loop:index gt 0">
                 <br />
-            </xar:if>#xarVarPrepForDisplay($loop:item)#</xar:loop>
+            </xar:if>#xarVar::prepForDisplay($loop:item)#</xar:loop>
         </div>
     </xar:if>
     <!--
@@ -53,7 +53,7 @@
             <xar:loop name="$content_lines">
             <xar:if condition="$loop:index gt 0">
                 <br />
-            </xar:if>#xarVarPrepForDisplay($loop:item)#</xar:loop>
+            </xar:if>#xarVar::prepForDisplay($loop:item)#</xar:loop>
         </div>
     </xar:if>
 </xar:template>

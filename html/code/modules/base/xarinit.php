@@ -38,7 +38,7 @@ function base_init()
     // Start Configuration Unit
     sys::import('xaraya.variables');
     $systemArgs = array();
-    xarVar_init($systemArgs);
+    xarVar::init($systemArgs);
 
     /****************************************************************
      * Set System Configuration Variables

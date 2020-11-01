@@ -17,11 +17,11 @@
  */
 function base_user_errors($args)
 {
-    if (!xarVarFetch('errortype', 'str', $errortype, '', XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('errortype', 'str', $errortype, '', xarVar::NOT_REQUIRED)) return;
     switch ($errortype) {
         case 'forbidden':
-            if (!xarVarFetch('message',  'str', $msg,      '',   XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('template', 'str', $template, NULL, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('message',  'str', $msg,      '',   xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('template', 'str', $template, NULL, xarVar::NOT_REQUIRED)) return;
             return xarResponse::Forbidden($msg, 'base', 'message', 'forbidden', $template);
             break;
         case 'exception':
@@ -30,8 +30,8 @@ function base_user_errors($args)
         case 'usererror':
         case 'notfound':
         default:
-            if (!xarVarFetch('message',  'str', $msg,      '',   XARVAR_NOT_REQUIRED)) return;
-            if (!xarVarFetch('template', 'str', $template, NULL, XARVAR_NOT_REQUIRED)) return;
+            if (!xarVar::fetch('message',  'str', $msg,      '',   xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('template', 'str', $template, NULL, xarVar::NOT_REQUIRED)) return;
             return xarResponse::NotFound($msg, 'base', 'message', 'notfound', $template);
             break;
     }

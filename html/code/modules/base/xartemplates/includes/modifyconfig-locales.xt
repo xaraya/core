@@ -77,7 +77,7 @@
             <dd>
 	            <select name="defaultlocale" id="defaultlocale">
 	                <xar:loop name="$locales">
-	                    <xar:if condition="xarMLSGetSiteLocale() eq $loop:item['name']">
+	                    <xar:if condition="xarMLS::getSiteLocale() eq $loop:item['name']">
 	                        <option value="#$loop:item['name']#" selected="selected">
 	                            #$loop:item['name']#
 	                        </option>

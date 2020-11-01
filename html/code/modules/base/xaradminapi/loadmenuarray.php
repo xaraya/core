@@ -79,7 +79,7 @@ function base_adminapi_loadmenuarray(Array $args=array())
             if (!empty($menu['variable'])) {
                 $args['urlargs'][$menu['variable']] = $value;
             }
-            if (!isset($url)) $url = xarModURL($args['modname'], $type, $target, $args['urlargs']);
+            if (!isset($url)) $url = xarController::URL($args['modname'], $type, $target, $args['urlargs']);
             $menulinks[] = array(
                 'label'       => $label,
                 'title'       => $title,
@@ -125,7 +125,7 @@ function base_adminapi_loadmenuarray(Array $args=array())
                 if (!empty($menu['variable'])) {
                     $args['urlargs'][$menu['variable']] = $value;
                 }
-                $url = xarModURL($args['modname'], $type, $target, $args['urlargs']);
+                $url = xarController::URL($args['modname'], $type, $target, $args['urlargs']);
                 $menulinks[] = array(
                     'label'       => $label,
                     'title'       => $title,
@@ -156,7 +156,7 @@ function base_adminapi_loadmenuarray(Array $args=array())
         $currenturl = xarServer::getCurrentURL();
         foreach ($menulinks as $k => $v) {
             // Security check
-            if (!empty($v['mask']) && !xarSecurityCheck($v['mask'], 0)) {
+            if (!empty($v['mask']) && !xarSecurity::check($v['mask'], 0)) {
                 unset($menulinks[$k]);
                 continue;
             }

@@ -129,8 +129,8 @@ class SelectProperty extends DataProperty
         if (isset($data['options'])) $this->options = $data['options'];
         // get the option corresponding to this value
         $result = $this->getOption();
-        // only apply xarVarPrepForDisplay on strings, not arrays et al.
-        if (!empty($result) && is_string($result)) $result = xarVarPrepForDisplay($result);
+        // only apply xarVar::prepForDisplay on strings, not arrays et al.
+        if (!empty($result) && is_string($result)) $result = xarVar::prepForDisplay($result);
         if (!empty($data['link'])) {
             $data['option'] = array('id' => $this->value, 'name' => $result, 'link' => $data['link']);
         } else {

@@ -54,7 +54,7 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
                     if(!isset($mod['category']) or $mod['category'] == '0') {
                         $mod['category'] = xarML('Unknown');
                     }
-                    $cat = xarVarPrepForDisplay($mod['category']);
+                    $cat = xarVar::prepForDisplay($mod['category']);
                     // add module link to category
                     $categories[$cat][$modname] = $link;
                 break;
@@ -84,12 +84,12 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
         /* <chris> removing this for now as it isn't used anywhere
         if (file_exists(sys::code() . 'modules/'.$thismodname.'/xaradmin/overview.php')) {
             if ($thisfuncname<>'overview' && $thisfuncname<>'main') {
-                $overviewlink = xarModURL($thismodname,'admin','overview',array(),NULL,$thisfuncname);
+                $overviewlink = xarController::URL($thismodname,'admin','overview',array(),NULL,$thisfuncname);
             } else {
-                $overviewlink = xarModURL($thismodname,'admin','overview');
+                $overviewlink = xarController::URL($thismodname,'admin','overview');
             }
         } else { //no overview exists;
-            $overviewlink = xarModURL('base','admin','overview',array('template'=>'nooverview'));
+            $overviewlink = xarController::URL('base','admin','overview',array('template'=>'nooverview'));
         }
         $data['overviewlink']=$overviewlink;
         */
