@@ -9,7 +9,7 @@
         <xar:template file="alert_error"/>
         <xar:template file="alert_success"/>
         <xar:template file="alert_warning"/>
-        <form action="#xarModURL('categories','admin','build_tree')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('categories','admin','build_tree')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset class="xar-norm">
                 <legend>
                     <strong>

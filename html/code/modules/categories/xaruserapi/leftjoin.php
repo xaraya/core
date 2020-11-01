@@ -83,28 +83,28 @@ function categories_userapi_leftjoin($args)
     }
 
     // Security check
-    if (!xarSecurityCheck('ViewCategoryLink',0)) return array();
+    if (!xarSecurity::check('ViewCategoryLink',0)) return array();
 
 /*
     if (count($cids) > 0) {
         if (count($iids) > 0) {
             foreach ($cids as $cid) {
                 foreach ($iids as $iid) {
-                    if(!xarSecurityCheck('ViewCategoryLink',1,'Link',"$modid:All:$iid:$cid")) return;
+                    if(!xarSecurity::check('ViewCategoryLink',1,'Link',"$modid:All:$iid:$cid")) return;
                 }
             }
         } else {
             foreach ($cids as $cid) {
-                if(!xarSecurityCheck('ViewCategoryLink',1,'Link',"$modid:All:All:$cid")) return;
+                if(!xarSecurity::check('ViewCategoryLink',1,'Link',"$modid:All:All:$cid")) return;
             }
         }
     } elseif (count($iids) > 0) {
     // Note: your module should be checking security for the iids too !
         foreach ($iids as $iid) {
-            if(!xarSecurityCheck('ViewCategoryLink',1,'Link',"$modid:All:$iid:All")) return;
+            if(!xarSecurity::check('ViewCategoryLink',1,'Link',"$modid:All:$iid:All")) return;
         }
     } else {
-        if(!xarSecurityCheck('ViewCategoryLink',1,'Link',"$modid:All:All:All")) return;
+        if(!xarSecurity::check('ViewCategoryLink',1,'Link',"$modid:All:All:All")) return;
     }
 */
 

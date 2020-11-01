@@ -234,7 +234,7 @@ function categories_userapi_getcat($args)
                ) = $result->fields;
         $result->MoveNext();
 
-        if (!xarSecurityCheck('ViewCategories',0,'Category',"$name:$cid")) {
+        if (!xarSecurity::check('ViewCategories',0,'Category',"$name:$cid")) {
              continue;
         }
 

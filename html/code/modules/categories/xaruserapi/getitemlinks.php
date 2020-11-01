@@ -30,10 +30,10 @@ function categories_userapi_getitemlinks($args)
 
     foreach ($args['itemids'] as $itemid) {
         if (!isset($catlist[$itemid])) continue;
-        $itemlinks[$itemid] = array('url'   => xarModURL('categories', 'user', 'main',
+        $itemlinks[$itemid] = array('url'   => xarController::URL('categories', 'user', 'main',
                                                          array('catid' => $itemid)),
-                                            'title' => xarVarPrepForDisplay($catlist[$itemid]['name']),
-                                            'label' => xarVarPrepForDisplay($catlist[$itemid]['description']));
+                                            'title' => xarVar::prepForDisplay($catlist[$itemid]['name']),
+                                            'label' => xarVar::prepForDisplay($catlist[$itemid]['description']));
     }
     return $itemlinks;
 }

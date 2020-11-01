@@ -7,7 +7,7 @@
         <h2>
             Delete Category
         </h2>
-        <form class="xar-formwidget" action="#xarModURL('categories','admin','delete')#" method="post" enctype="application/x-www-form-urlencoded">
+        <form class="xar-formwidget" action="#xarController::URL('categories','admin','delete')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset>
                 <legend>
                     <strong>

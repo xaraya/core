@@ -38,7 +38,7 @@ function categories_admin_modifyhook($args)
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
     if (empty($extrainfo['module'])) {
-        $modname = xarModGetName();
+        $modname = xarMod::getName();
     } else {
         $modname = $extrainfo['module'];
     }
@@ -82,7 +82,7 @@ function categories_admin_modifyhook($args)
         $modtype = 'All';
         $data['itemtype'] = 0;
     }
-    if (!xarSecurityCheck('EditCategoryLink',0,'Link',"$modid:$modtype:All:All")) return '';
+    if (!xarSecurity::check('EditCategoryLink',0,'Link',"$modid:$modtype:All:All")) return '';
 
 /* ---------------------------- TODO: Remove
     if (empty($extrainfo['mastercids']) || !is_array($extrainfo['mastercids'])) {
@@ -107,7 +107,7 @@ function categories_admin_modifyhook($args)
             $cids = $extrainfo['modify_cids'];
         } else {
             // try to get cids from input
-            xarVarFetch('modify_cids', 'list:int:1:', $cids, NULL, XARVAR_NOT_REQUIRED);
+            xarVar::fetch('modify_cids', 'list:int:1:', $cids, NULL, xarVar::NOT_REQUIRED);
             if (empty($cids) || !is_array($cids)) {
                 $links = xarMod::apiFunc('categories', 'user', 'getlinks',
                                        array('iids' => array($objectid),
@@ -161,14 +161,14 @@ function categories_admin_modifyhook($args)
         $labels['categories'] = xarML('Category');
     }
 
-    return xarTplModule('categories','admin','modifyhook',
+    return xarTpl::module('categories','admin','modifyhook',
                          array('labels' => $labels,
                                'numcats' => $numcats,
                                'items' => $items));
 ------------------------------- */
 
     // check if we're previewing some modified item
-    if (!xarVarFetch('preview', 'isset', $data['preview'], NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('preview', 'isset', $data['preview'], NULL, xarVar::DONT_SET)) {return;}
 
     return $data;
 }

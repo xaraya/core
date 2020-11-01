@@ -61,7 +61,7 @@
 
     <xar:if condition="!empty($show_edit) and !empty($current_id)">
         <xar:sec id="showEdit" mask="EditCategories" catch="false" component="All" instance="All:$current_id">
-            [&#160;<a href="#xarModURL('categories','admin','modify',array('cid' => $current_id))#">
+            [&#160;<a href="#xarController::URL('categories','admin','modify',array('cid' => $current_id))#">
             Edit
             </a> ]
         </xar:sec>

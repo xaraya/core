@@ -22,10 +22,10 @@
      */
     function categories_admin_new()
     {
-        if (!xarVarFetch('return_url',  'isset',  $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
-        if(!xarVarFetch('repeat','int:1:', $data['repeat'], 1, XARVAR_NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('repeat','int:1:', $data['repeat'], 1, xarVar::NOT_REQUIRED)) {return;}
 
-        if(!xarSecurityCheck('AddCategories')) return;
+        if(!xarSecurity::check('AddCategories')) return;
 
         sys::import('modules.dynamicdata.class.objects.master');
         for ($i=1;$i<=$data['repeat'];$i++) {
@@ -40,7 +40,7 @@
         $catinfo = array();
         $catinfo['module'] = 'categories';
         $catinfo['itemid'] = '';
-        $hooks = xarModCallHooks('item','new','',$catinfo);
+        $hooks = xarModHooks::call('item','new','',$catinfo);
         if (empty($hooks)) {
             $data['hooks'] = '';
         } else {
@@ -70,7 +70,7 @@
         }
 
         $data['categories'] = $categories;
-        $data['authid'] = xarSecGenAuthKey();
+        $data['authid'] = xarSec::genAuthKey();
         return $data;
     }
 ?>

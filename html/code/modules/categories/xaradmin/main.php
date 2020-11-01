@@ -20,7 +20,7 @@
 function categories_admin_main()
 {
     // Security check
-    if(!xarSecurityCheck('EditCategories')) return;
+    if(!xarSecurity::check('EditCategories')) return;
 
     $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::$request->getInfo();
@@ -29,7 +29,7 @@ function categories_admin_main()
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return array();
     } else {
-        xarController::redirect(xarModURL('categories', 'admin', 'view'));
+        xarController::redirect(xarController::URL('categories', 'admin', 'view'));
     }
 
     return true;

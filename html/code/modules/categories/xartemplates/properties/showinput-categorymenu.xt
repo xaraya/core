@@ -41,7 +41,7 @@
                                 <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                             </xar:if>
                             <li class="#$tabclass#">
-                                <a href="#xarModURL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
+                                <a href="#xarController::URL($urlinfo[0],$urlinfo[1],$tab['target'])#" class="#$linkclass#">
                                     #$tab['label']#
                                 </a>
                             </li>

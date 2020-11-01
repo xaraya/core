@@ -25,23 +25,23 @@
 function categories_admin_privileges($args)
 {
     // Security Check
-    if (!xarSecurityCheck('AdminCategories')) return;
+    if (!xarSecurity::check('AdminCategories')) return;
 
     extract($args);
 
     // fixed params
-    if (!xarVarFetch('cid',          'isset', $cid,          NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('moduleid',     'isset', $moduleid,     NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('itemtype',     'isset', $itemtype,     NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('itemid',       'isset', $itemid,       NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('apply',        'isset', $apply,        NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('extpid',       'isset', $extpid,       NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('extname',      'isset', $extname,      NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('extrealm',     'isset', $extrealm,     NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('extmodule',    'isset', $extmodule,    NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('extcomponent', 'isset', $extcomponent, NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('extinstance',  'isset', $extinstance,  NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('extlevel',     'isset', $extlevel,     NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('cid',          'isset', $cid,          NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('moduleid',     'isset', $moduleid,     NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('itemtype',     'isset', $itemtype,     NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('itemid',       'isset', $itemid,       NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('apply',        'isset', $apply,        NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('extpid',       'isset', $extpid,       NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('extname',      'isset', $extname,      NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('extrealm',     'isset', $extrealm,     NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('extmodule',    'isset', $extmodule,    NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('extcomponent', 'isset', $extcomponent, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('extinstance',  'isset', $extinstance,  NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('extlevel',     'isset', $extlevel,     NULL, xarVar::DONT_SET)) {return;}
 
     sys::import('modules.dynamicdata.class.properties.master');
     $categories = DataPropertyMaster::getProperty(array('name' => 'categories'));
@@ -101,7 +101,7 @@ function categories_admin_privileges($args)
             }
 
             // redirect to the privilege
-            xarController::redirect(xarModURL('privileges', 'admin', 'modifyprivilege',
+            xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
                                           array('pid' => $pid)));
             return true;
         }
@@ -114,7 +114,7 @@ function categories_admin_privileges($args)
                       'extmodule'    => $extmodule,
                       'extcomponent' => $extcomponent,
                       'extlevel'     => $extlevel,
-                      'extinstance'  => xarVarPrepForDisplay(join(':',$newinstance)),
+                      'extinstance'  => xarVar::prepForDisplay(join(':',$newinstance)),
                      );
 
         $seencid = array();
@@ -218,7 +218,7 @@ function categories_admin_privileges($args)
         }
 
         // redirect to the privilege
-        xarController::redirect(xarModURL('privileges', 'admin', 'modifyprivilege',
+        xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
                                       array('pid' => $pid)));
         return true;
     }
@@ -247,7 +247,7 @@ function categories_admin_privileges($args)
                   'extmodule'    => $extmodule,
                   'extcomponent' => $extcomponent,
                   'extlevel'     => $extlevel,
-                  'extinstance'  => xarVarPrepForDisplay(join(':',$newinstance)),
+                  'extinstance'  => xarVar::prepForDisplay(join(':',$newinstance)),
                  );
 
     $catlist = array();

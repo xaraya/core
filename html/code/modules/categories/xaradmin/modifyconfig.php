@@ -21,10 +21,10 @@
     function categories_admin_modifyconfig()
     {
         // Security Check
-        if (!xarSecurityCheck('AdminCategories')) return;
-        if (!xarVarFetch('phase', 'str:1:100', $phase, 'modify', XARVAR_NOT_REQUIRED, XARVAR_PREP_FOR_DISPLAY)) return;
-        if (!xarVarFetch('tab', 'str:1:100', $data['tab'], 'general', XARVAR_NOT_REQUIRED)) return;
-        if (!xarVarFetch('tabmodule', 'str:1:100', $tabmodule, 'categories', XARVAR_NOT_REQUIRED)) return;
+        if (!xarSecurity::check('AdminCategories')) return;
+        if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
+        if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch('tabmodule', 'str:1:100', $tabmodule, 'categories', xarVar::NOT_REQUIRED)) return;
 
         $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'categories'));
         $data['module_settings']->setFieldList('items_per_page, use_module_alias, use_module_icons, enable_short_urls');
@@ -47,14 +47,14 @@
 
             case 'update':
                 // Confirm authorisation code
-                if (!xarSecConfirmAuthKey()) {
-                    return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+                if (!xarSec::confirmAuthKey()) {
+                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }        
-                if (!xarVarFetch('usejsdisplay', 'checkbox', $usejsdisplay, xarModVars::get('categories', 'usejsdisplay'), XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('numstats', 'int', $numstats, xarModVars::get('categories', 'numstats'), XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('showtitle', 'checkbox', $showtitle, xarModVars::get('categories', 'showtitle'), XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('allowbatch', 'checkbox', $allowbatch, xarModVars::get('categories', 'allowbatch'), XARVAR_NOT_REQUIRED)) return;
-                if (!xarVarFetch('categoriesobject', 'str', $categoriesobject, xarModVars::get('categories', 'categoriesobject'), XARVAR_NOT_REQUIRED)) return;
+                if (!xarVar::fetch('usejsdisplay', 'checkbox', $usejsdisplay, xarModVars::get('categories', 'usejsdisplay'), xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('numstats', 'int', $numstats, xarModVars::get('categories', 'numstats'), xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('showtitle', 'checkbox', $showtitle, xarModVars::get('categories', 'showtitle'), xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('allowbatch', 'checkbox', $allowbatch, xarModVars::get('categories', 'allowbatch'), xarVar::NOT_REQUIRED)) return;
+                if (!xarVar::fetch('categoriesobject', 'str', $categoriesobject, xarModVars::get('categories', 'categoriesobject'), xarVar::NOT_REQUIRED)) return;
 
                 $modvars = array(
                                 'usejsdisplay',
@@ -66,12 +66,12 @@
 
                 $isvalid = $data['module_settings']->checkInput();
                 if (!$isvalid) {
-                    return xarTplModule('categories','admin','modifyconfig', $data);        
+                    return xarTpl::module('categories','admin','modifyconfig', $data);        
                 } else {
                     $itemid = $data['module_settings']->updateItem();
                 }
 
-                xarController::redirect(xarModURL('categories', 'admin', 'modifyconfig',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
+                xarController::redirect(xarController::URL('categories', 'admin', 'modifyconfig',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 // Return
                 return true;
                 break;

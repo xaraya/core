@@ -21,7 +21,7 @@
 function categories_admin_hooks()
 {
     // Security check
-    if(!xarSecurityCheck('ManageCategories')) return;
+    if(!xarSecurity::check('ManageCategories')) return;
 
     $data = array();
 

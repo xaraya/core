@@ -37,7 +37,7 @@ function categories_userapi_getlinks($args)
     }
 
     // Security check
-    if(!xarSecurityCheck('ViewCategoryLink',0)) return array();
+    if(!xarSecurity::check('ViewCategoryLink',0)) return array();
 
     // Get database setup
     $dbconn = xarDB::getConn();

@@ -31,7 +31,7 @@ function categories_admin_modifyconfighook($args)
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
     if (empty($extrainfo['module'])) {
-        $modname = xarModGetName();
+        $modname = xarMod::getName();
     } else {
         $modname = $extrainfo['module'];
     }
@@ -105,7 +105,7 @@ function categories_admin_modifyconfighook($args)
     }
     unset($item);
 -----------------------------------*/
-    if(xarSecurityCheck('AddCategories',0)) {
+    if(xarSecurity::check('AddCategories',0)) {
         $newcat = xarML('new');
     } else {
         $newcat = '';
@@ -118,7 +118,7 @@ function categories_admin_modifyconfighook($args)
     $data['modname'] = $modname;
     $data['itemtype'] = $extrainfo['itemtype'];
 
-    return xarTplModule('categories','admin','modifyconfighook', $data);
+    return xarTpl::module('categories','admin','modifyconfighook', $data);
 }
 
 ?>

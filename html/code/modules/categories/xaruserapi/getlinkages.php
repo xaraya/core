@@ -27,7 +27,7 @@
  */
 function categories_userapi_getlinkages($args)
 {
-    if(!xarSecurityCheck('ViewCategoryLink')) return;
+    if(!xarSecurity::check('ViewCategoryLink')) return;
 
     // Get arguments from argument array
     extract($args);

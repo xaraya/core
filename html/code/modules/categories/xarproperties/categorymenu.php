@@ -33,7 +33,7 @@ class CategoryMenuProperty extends CategoryTreeProperty
 	 */
     public function showInput(Array $data = array())
     {
-        if(!xarVarFetch('activetab',    'isset', $data['activetab'],    0, XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVar::fetch('activetab',    'isset', $data['activetab'],    0, xarVar::NOT_REQUIRED)) {return;}
 
         if (!isset($data['parent'])) $data['parent'] = 0;
         if (!isset($data['levels'])) $data['levels'] = 1;

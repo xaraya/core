@@ -45,7 +45,7 @@ function categories_adminapi_removehook($args)
         throw new BadParameterException(null, $msg);
     }
 
-    if(!xarSecurityCheck('ManageCategoryLink',1,'Link',"$modid:All:All:All")) return;
+    if(!xarSecurity::check('ManageCategoryLink',1,'Link',"$modid:All:All:All")) return;
 
     // Get database setup
     $dbconn = xarDB::getConn();

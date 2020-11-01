@@ -32,7 +32,7 @@ function categories_admin_newhook($args)
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
     if (empty($extrainfo['module'])) {
-        $modname = xarModGetName();
+        $modname = xarMod::getName();
     } else {
         $modname = $extrainfo['module'];
     }
@@ -70,7 +70,7 @@ function categories_admin_newhook($args)
         $modtype = 'All';
         $data['itemtype'] = 0;
     }
-    if (!xarSecurityCheck('SubmitCategoryLink',0,'Link',"$modid:$modtype:All:All")) return '';
+    if (!xarSecurity::check('SubmitCategoryLink',0,'Link',"$modid:$modtype:All:All")) return '';
 
 /* ---------------------------- TODO: Remove
     if (empty($extrainfo['mastercids']) || !is_array($extrainfo['mastercids'])) {
@@ -95,7 +95,7 @@ function categories_admin_newhook($args)
             $cids = $extrainfo['new_cids'];
         } else {
             // try to get cids from input
-            xarVarFetch('new_cids', 'list:int:1:', $cids, NULL, XARVAR_NOT_REQUIRED);
+            xarVar::fetch('new_cids', 'list:int:1:', $cids, NULL, xarVar::NOT_REQUIRED);
             if (empty($cids) || !is_array($cids)) {
                 $cids = array();
             }
@@ -142,14 +142,14 @@ function categories_admin_newhook($args)
         $labels['categories'] = xarML('Category');
     }
 
-    return xarTplModule('categories','admin','newhook',
+    return xarTpl::module('categories','admin','newhook',
                          array('labels' => $labels,
                                'numcats' => $numcats,
                                'items' => $items));
 ------------------------------- */
 
     // check if we're previewing some new item
-    if (!xarVarFetch('preview', 'isset', $data['preview'], NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('preview', 'isset', $data['preview'], NULL, xarVar::DONT_SET)) {return;}
 
     return $data;
 }

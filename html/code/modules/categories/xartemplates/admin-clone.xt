@@ -6,8 +6,8 @@
         <h2>
             Clone Category
         </h2>
-        <form action="#xarModURL('categories','admin','clone',array())#" method="post" enctype="application/x-www-form-urlencoded">
-            <input type="hidden" name="authid" id="authid" value="#xarSecGenAuthKey()#"/>
+        <form action="#xarController::URL('categories','admin','clone',array())#" method="post" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
             <fieldset class="xar-norm">
                 Do you want to create a copy of the category "#$object:properties.name:value#"?<br/>
                 This action wil make a copy of the chosen category, and all its subcategories.<br/> 

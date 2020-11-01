@@ -24,15 +24,15 @@
  */
 function categories_admin_delete()
 {
-    if (!xarVarFetch('itemid','int:1:',$data['itemid'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirm','str:1:',$confirm,'',XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('itemid','int:1:',$data['itemid'], 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirm','str:1:',$confirm,'',xarVar::NOT_REQUIRED)) return;
 
     // Security check
-    if(!xarSecurityCheck('ManageCategories',1,'category',"All:" . $data['itemid'])) return;
+    if(!xarSecurity::check('ManageCategories',1,'category',"All:" . $data['itemid'])) return;
 
     // Root category cannot be deleted except by the site admin
     if (($data['itemid'] == 1) && (xarUser::getVar('id') != xarModVars::get('roles', 'admin')))
-        return xarTplModule('privileges','user','errors', array('layout' => 'no_privileges'));
+        return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
 
     // Check for confirmation
     if (empty($confirm)) {
@@ -51,7 +51,7 @@ function categories_admin_delete()
 
         $data['cid'] = $data['itemid'];
         $data['name'] = $cat['name'];
-        $data['authkey'] = xarSecGenAuthKey();
+        $data['authkey'] = xarSec::genAuthKey();
 
         $data['numcats'] = xarMod::apiFunc('categories','user','countcats',
                                          $cat);
@@ -65,15 +65,15 @@ function categories_admin_delete()
 
 
     // Confirm Auth Key
-    if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    if (!xarSec::confirmAuthKey()) {
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     sys::import('modules.categories.class.worker');
     $worker = new CategoryWorker();
     $result = $worker->delete($data['itemid']);
 
-    xarController::redirect(xarModURL('categories','admin','view', array()));
+    xarController::redirect(xarController::URL('categories','admin','view', array()));
     return true;
 }
 

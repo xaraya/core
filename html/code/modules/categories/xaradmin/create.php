@@ -20,16 +20,16 @@
 function categories_admin_create()
 {
     // Confirm authorisation code
-    if (!xarSecConfirmAuthKey()) {
-        return xarTplModule('privileges','user','errors',array('layout' => 'bad_author'));
+    if (!xarSec::confirmAuthKey()) {
+        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
     //Checkbox work for submit buttons too
-    if (!xarVarFetch('return_url',  'isset',  $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('reassign', 'checkbox',  $reassign, false, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('repeat',   'int:1:100', $data['repeat'],   1,     XARVAR_NOT_REQUIRED)) return;
+    if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('reassign', 'checkbox',  $reassign, false, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('repeat',   'int:1:100', $data['repeat'],   1,     xarVar::NOT_REQUIRED)) return;
     if ($reassign) {
-        xarController::redirect(xarModURL('categories','admin','new',array('repeat' => $data['repeat'])));
+        xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])));
         return true;
     }
 
@@ -40,16 +40,16 @@ function categories_admin_create()
     }
 
     if (!$isvalid) {
-        $data['authid'] = xarSecGenAuthKey();
-        return xarTplModule('categories','admin','new',$data);
+        $data['authid'] = xarSec::genAuthKey();
+        return xarTpl::module('categories','admin','new',$data);
     }
     
     for ($i=1;$i<=$data['repeat'];$i++) {
         $data['objects'][$i]->createItem();
     }
 
-    xarController::redirect(xarModURL('categories','admin','view'));
-//    xarController::redirect(xarModURL('categories','admin','new',array('repeat' => $data['repeat'])));
+    xarController::redirect(xarController::URL('categories','admin','view'));
+//    xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])));
     return true;
 }
 ?>

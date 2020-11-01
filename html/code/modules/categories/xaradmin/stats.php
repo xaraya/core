@@ -21,14 +21,14 @@
 function categories_admin_stats()
 {
     // Security Check
-    if (!xarSecurityCheck('AdminCategories')) return;
+    if (!xarSecurity::check('AdminCategories')) return;
 
-    if(!xarVarFetch('modid',    'isset', $modid,     NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemtype', 'isset', $itemtype,  NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('itemid',   'isset', $itemid,    NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('sort',     'isset', $sort,      NULL, XARVAR_DONT_SET)) {return;}
-    if(!xarVarFetch('startnum', 'isset', $startnum,     1, XARVAR_NOT_REQUIRED)) {return;}
-    if(!xarVarFetch('catid',    'isset', $catid,     NULL, XARVAR_DONT_SET)) {return;}
+    if(!xarVar::fetch('modid',    'isset', $modid,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid',   'isset', $itemid,    NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('sort',     'isset', $sort,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('startnum', 'isset', $startnum,     1, xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('catid',    'isset', $catid,     NULL, xarVar::DONT_SET)) {return;}
 
     $data = array();
 
@@ -53,20 +53,20 @@ function categories_admin_stats()
                 $moditem['numlinks'] = $stats['links'];
                 if ($itemtype == 0) {
                     $moditem['name'] = ucwords($modinfo['displayname']);
-                //    $moditem['link'] = xarModURL($modinfo['name'],'user','main');
+                //    $moditem['link'] = xarController::URL($modinfo['name'],'user','main');
                 } else {
                     if (isset($mytypes) && !empty($mytypes[$itemtype])) {
                         $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype . ' - ' . $mytypes[$itemtype]['label'];
                     //    $moditem['link'] = $mytypes[$itemtype]['url'];
                     } else {
                         $moditem['name'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-                    //    $moditem['link'] = xarModURL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
+                    //    $moditem['link'] = xarController::URL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
                     }
                 }
-                $moditem['link'] = xarModURL('categories','admin','stats',
+                $moditem['link'] = xarController::URL('categories','admin','stats',
                                              array('modid' => $modid,
                                                    'itemtype' => empty($itemtype) ? null : $itemtype));
-                $moditem['delete'] = xarModURL('categories','admin','unlink',
+                $moditem['delete'] = xarController::URL('categories','admin','unlink',
                                                array('modid' => $modid,
                                                      'itemtype' => empty($itemtype) ? null : $itemtype));
                 $data['moditems'][] = $moditem;
@@ -74,7 +74,7 @@ function categories_admin_stats()
                 $data['numlinks'] += $moditem['numlinks'];
             }
         }
-        $data['delete'] = xarModURL('categories','admin','unlink');
+        $data['delete'] = xarController::URL('categories','admin','unlink');
     } else {
         $modinfo = xarMod::getInfo($modid);
         $data['module'] = $modinfo['name'];
@@ -96,7 +96,7 @@ function categories_admin_stats()
             //    $data['modlink'] = $mytypes[$itemtype]['url'];
             } else {
                 $data['modname'] = ucwords($modinfo['displayname']) . ' ' . $itemtype;
-            //    $data['modlink'] = xarModURL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
+            //    $data['modlink'] = xarController::URL($modinfo['name'],'user','view',array('itemtype' => $itemtype));
             }
             if (isset($modlist[$modid][$itemtype])) {
                 $stats = $modlist[$modid][$itemtype];
@@ -119,7 +119,7 @@ function categories_admin_stats()
                                                     'itemtype' => $itemtype,
                                                     'catid' => $catid));
         }
-        $data['url'] = xarModURL('categories','admin','stats',
+        $data['url'] = xarController::URL('categories','admin','stats',
                                               array('modid' => $modid,
                                                     'itemtype' => $itemtype,
                                                     'catid' => $catid,
@@ -155,7 +155,7 @@ function categories_admin_stats()
             foreach ($cids as $cid) {
                 $seencid[$cid] = 1;
             }
-            $data['moditems'][$itemid]['delete'] = xarModURL('categories','admin','unlink',
+            $data['moditems'][$itemid]['delete'] = xarController::URL('categories','admin','unlink',
                                                              array('modid' => $modid,
                                                                    'itemtype' => $itemtype,
                                                                    'itemid' => $itemid));
@@ -172,21 +172,21 @@ function categories_admin_stats()
         } else {
             $data['catinfo'] = array();
         }
-        $data['delete'] = xarModURL('categories','admin','unlink',
+        $data['delete'] = xarController::URL('categories','admin','unlink',
                                     array('modid' => $modid,
                                           'itemtype' => $itemtype));
         $data['sortlink'] = array();
         if (empty($sort) || $sort == 'itemid') {
              $data['sortlink']['itemid'] = '';
         } else {
-             $data['sortlink']['itemid'] = xarModURL('categories','admin','stats',
+             $data['sortlink']['itemid'] = xarController::URL('categories','admin','stats',
                                                      array('modid' => $modid,
                                                            'itemtype' => $itemtype));
         }
         if (!empty($sort) && $sort == 'numlinks') {
              $data['sortlink']['numlinks'] = '';
         } else {
-             $data['sortlink']['numlinks'] = xarModURL('categories','admin','stats',
+             $data['sortlink']['numlinks'] = xarController::URL('categories','admin','stats',
                                                       array('modid' => $modid,
                                                             'itemtype' => $itemtype,
                                                             'sort' => 'numlinks'));

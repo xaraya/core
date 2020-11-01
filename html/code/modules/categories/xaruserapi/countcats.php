@@ -28,7 +28,7 @@ function categories_userapi_countcats($args)
     extract($args);
 
     // Security check
-    if(!xarSecurityCheck('ViewCategories')) return;
+    if(!xarSecurity::check('ViewCategories')) return;
 
     // Database information
     $dbconn = xarDB::getConn();

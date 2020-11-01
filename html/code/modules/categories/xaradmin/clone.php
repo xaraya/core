@@ -22,17 +22,17 @@
  */
 function categories_admin_clone()
 {
-    if (!xarVarFetch('return_url',  'isset',  $data['return_url'], NULL, XARVAR_DONT_SET)) {return;}
-    if (!xarVarFetch('itemid',      'int',    $data['itemid'], 0, XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('confirm',     'str:1:', $confirm,'',XARVAR_NOT_REQUIRED)) return;
-    if (!xarVarFetch('newname',     'str:1:', $newname,   "", XARVAR_NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('itemid',      'int',    $data['itemid'], 0, xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('confirm',     'str:1:', $confirm,'',xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('newname',     'str:1:', $newname,   "", xarVar::NOT_REQUIRED)) {return;}
     
     // Support old cids for now
-    if (!xarVarFetch('cid','int::', $cid, NULL, XARVAR_DONT_SET)) {return;}
+    if (!xarVar::fetch('cid','int::', $cid, NULL, xarVar::DONT_SET)) {return;}
     $data['itemid'] = !empty($data['itemid']) ? $data['itemid'] : $cid;
 
     // Security check
-    if(!xarSecurityCheck('AddCategories',1,'All',"All:$cid")) return;
+    if(!xarSecurity::check('AddCategories',1,'All',"All:$cid")) return;
 
     // Setting up necessary data.
     sys::import('modules.dynamicdata.class.objects.master');
@@ -40,13 +40,13 @@ function categories_admin_clone()
     $data['object']->getItem(array('itemid' => $data['itemid']));
 
     if ($confirm) {
-        $access = xarSecurityCheck('',0,'All',"All:" . $data['object']->name . ":" . "All",0,'',0,700);
+        $access = xarSecurity::check('',0,'All',"All:" . $data['object']->name . ":" . "All",0,'',0,700);
 
         if (!$access)
-            return xarTplModule('privileges','user','errors', array('layout' => 'no_privileges'));
+            return xarTpl::module('privileges','user','errors', array('layout' => 'no_privileges'));
 
         $data['name'] = $data['object']->properties['name']->value;
-        if(!xarVarFetch('newname',   'str', $newname,   "", XARVAR_NOT_REQUIRED)) {return;}
+        if(!xarVar::fetch('newname',   'str', $newname,   "", xarVar::NOT_REQUIRED)) {return;}
         if (empty($newname)) $newname = $data['name'] . "_copy";
         if ($newname == $data['name']) $newname = $data['name'] . "_copy";
         $newname = str_ireplace(" ", "_", $newname);
@@ -58,7 +58,7 @@ function categories_admin_clone()
         // Change the name of the top level category we added
         $data['object']->updateItem(array('itemid' => $toplevel, 'name' => $newname));
 
-        xarController::redirect(xarModURL('categories','admin','view'));
+        xarController::redirect(xarController::URL('categories','admin','view'));
         return true;
     }  
     return $data;

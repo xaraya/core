@@ -39,7 +39,7 @@ function categories_userapi_getitemcats($args)
 
     // Default the module name.
     if (empty($modid) && empty($module)) {
-        $module = xarModGetName();
+        $module = xarMod::getName();
     }
 
     // Get module ID if only a name provided.
