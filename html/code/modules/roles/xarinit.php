@@ -61,8 +61,8 @@ function roles_init()
 function roles_activate()
 {
     // Register hooks here, init is too soon
-    xarModRegisterHook('item', 'search', 'GUI','roles', 'user', 'search');
-    xarModRegisterHook('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
+    xarModHooks::register('item', 'search', 'GUI','roles', 'user', 'search');
+    xarModHooks::register('item', 'usermenu', 'GUI','roles', 'user', 'usermenu');
     // Enter some default groups and users and put them in a hierarchy
     $rolefields = array(
                     'itemid' => 0,  // make this explicit, because we are going to reuse the roles we define

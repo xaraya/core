@@ -36,7 +36,7 @@
           <xsl:call-template name="xarvar_getcode"/>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:text>xarVarPrepForDisplay(</xsl:text>
+          <xsl:text>xarVar::prepForDisplay(</xsl:text>
             <xsl:call-template name="xarvar_getcode"/>
           <xsl:text>)</xsl:text>
         </xsl:otherwise>
@@ -56,7 +56,7 @@
                 <xsl:call-template name="xarvar_getcode"/>
               </xsl:when>
               <xsl:otherwise>
-                <xsl:text>xarVarPrepForDisplay(</xsl:text>
+                <xsl:text>xarVar::prepForDisplay(</xsl:text>
                   <xsl:call-template name="xarvar_getcode"/>
                 <xsl:text>)</xsl:text>
               </xsl:otherwise>
@@ -163,7 +163,7 @@
       </xsl:when>
       <!-- Session vars -->
       <xsl:when test="@scope = 'session'">
-        <xsl:text>xarSessionGetVar('</xsl:text>
+        <xsl:text>xarSession::getVar('</xsl:text>
         <xsl:value-of select="@name"/>
         <xsl:text>')</xsl:text>
       </xsl:when>

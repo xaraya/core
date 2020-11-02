@@ -46,29 +46,29 @@ function categories_init()
 # Set up hooks
 #
     // when a new module item is being specified
-    if (!xarModRegisterHook('item', 'new', 'GUI', 'categories', 'admin', 'newhook'))  return false;
+    if (!xarModHooks::register('item', 'new', 'GUI', 'categories', 'admin', 'newhook'))  return false;
 
     // when a module item is created (uses 'cids')
-    if (!xarModRegisterHook('item', 'create', 'API', 'categories', 'admin', 'createhook')) return false;
+    if (!xarModHooks::register('item', 'create', 'API', 'categories', 'admin', 'createhook')) return false;
 
     // when a module item is being modified (uses 'cids')
-    if (!xarModRegisterHook('item', 'modify', 'GUI', 'categories', 'admin', 'modifyhook')) return false;
+    if (!xarModHooks::register('item', 'modify', 'GUI', 'categories', 'admin', 'modifyhook')) return false;
 
     // when a module item is updated (uses 'cids')
-    if (!xarModRegisterHook('item', 'update', 'API', 'categories', 'admin', 'updatehook')) return false;
+    if (!xarModHooks::register('item', 'update', 'API', 'categories', 'admin', 'updatehook')) return false;
 
     // when a module item is deleted
-    if (!xarModRegisterHook('item', 'delete', 'API', 'categories', 'admin', 'deletehook')) return false;
+    if (!xarModHooks::register('item', 'delete', 'API', 'categories', 'admin', 'deletehook')) return false;
 
     // when a module configuration is being modified (uses 'cids')
-    if (!xarModRegisterHook('module', 'modifyconfig', 'GUI', 'categories', 'admin', 'modifyconfighook')) return false;
+    if (!xarModHooks::register('module', 'modifyconfig', 'GUI', 'categories', 'admin', 'modifyconfighook')) return false;
 
     // when a module configuration is updated (uses 'cids')
-    if (!xarModRegisterHook('module', 'updateconfig', 'API', 'categories', 'admin', 'updateconfighook')) return false;
+    if (!xarModHooks::register('module', 'updateconfig', 'API', 'categories', 'admin', 'updateconfighook')) return false;
 
     // when a whole module is removed, e.g. via the modules admin screen
     // (set object ID to the module name !)
-    if (!xarModRegisterHook('module', 'remove', 'API', 'categories', 'admin', 'removehook'))  return false;
+    if (!xarModHooks::register('module', 'remove', 'API', 'categories', 'admin', 'removehook'))  return false;
 
     /*********************************************************************
     * Define instances for this module

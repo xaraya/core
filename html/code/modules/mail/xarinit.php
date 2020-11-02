@@ -38,9 +38,9 @@ function mail_init()
     xarModVars::set('mail', 'embed_images', false);
     xarModVars::set('mail', 'debug', false);
 
-    xarModRegisterHook('item', 'create', 'API', 'mail', 'admin', 'hookmailcreate');
-    xarModRegisterHook('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');
-    xarModRegisterHook('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
+    xarModHooks::register('item', 'create', 'API', 'mail', 'admin', 'hookmailcreate');
+    xarModHooks::register('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');
+    xarModHooks::register('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
 
     xarRegisterMask('ViewMail','All','mail','All','All','ACCESS_OVERVIEW');
     xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');

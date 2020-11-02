@@ -10,7 +10,7 @@
 
 <xsl:template match="xar:sec">
   <xsl:processing-instruction name="php">
-    <xsl:text>if (xarSecurityCheck("</xsl:text>
+    <xsl:text>if (xarSecurity::check("</xsl:text>
     <xsl:value-of select="@mask"/>
     <xsl:text>",</xsl:text>
     <xsl:choose>
