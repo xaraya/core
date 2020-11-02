@@ -4,12 +4,12 @@
         <xar:else />
         <xar:loop name="$items">
             <item>
-                <title>#xarVarPrepForDisplay($loop:item['Subject'])#</title>
+                <title>#xarVar::prepForDisplay($loop:item['Subject'])#</title>
                 <link>#xarModUrl('newsgroups', 'user', 'article', array('group' =&gt; $group,
                 'article' =&gt; $loop:item['number']))#</link>
                 <description></description>
-                <author>#xarVarPrepEmailDisplay(xarVarPrepForDisplay($loop:item['From']))#</author>
-                <pubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S
+                <author>#xarVar::prepEmailDisplay(xarVar::prepForDisplay($loop:item['From']))#</author>
+                <pubDate>#xarLocale::formatUTCDate("%a, %d %b %Y %H:%M:%S
                 GMT",strtotime($loop:item['Date']))#</pubDate>
             </item>
         </xar:loop>

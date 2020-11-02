@@ -21,12 +21,12 @@
             <author><xar:data-output property="$properties['author']" value="$fields['author']"/></author>
         </xar:if>
         <xar:if condition="isset($properties['pubdate']) and !empty($fields['pubdate'])">
-            <pubDate>#xarLocaleFormatUTCDate("%a, %d %b %Y %H:%M:%S GMT",$field['pubdate'])#</pubDate>
+            <pubDate>#xarLocale::formatUTCDate("%a, %d %b %Y %H:%M:%S GMT",$field['pubdate'])#</pubDate>
         </xar:if>
         <!-- uncomment these if you want to eg use a property value as a description
         <content:format rdf:resource="http://www.w3.org/1999/xhtml" />
-        <content:encoded><![CDATA[ #xarVarPrepHTMLDisplay($fields['description'])# ]]></content:encoded>
-        <description>#xarVarPrepForDisplay($fields['description'])#</description>
+        <content:encoded><![CDATA[ #xarVar::prepHTMLDisplay($fields['description'])# ]]></content:encoded>
+        <description>#xarVar::prepForDisplay($fields['description'])#</description>
         -->
     </item>
     </xar:foreach>

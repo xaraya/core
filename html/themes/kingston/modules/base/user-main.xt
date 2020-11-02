@@ -33,7 +33,7 @@
             <li>Rewritten core: faster and lighter</li>
             <li>Rewritten Blocklayout templating system based on XSL </li>
             <li>Enhanced dynamicdata functionality: more consistent and flexible objects and properties for more power and better performance</li>
-            <li>New Installer and <a href="#xarModURL('themes','admin','list')#">Default themes</a></li>
+            <li>New Installer and <a href="#xarController::URL('themes','admin','list')#">Default themes</a></li>
         </ul>
 
         <h3>Support</h3>
@@ -81,28 +81,28 @@
                 The basic Xaraya installation is deliberately maintained lean. The 9 core modules initially installed by the installer module are meant to contain the basic functionality you need to be able to build more complex sites and applications on:
                 <ul>
                     <li>
-                        The <a href="#xarModURL('base','admin')#">Base</a> module manages the sitewide settings of Xaraya.
+                        The <a href="#xarController::URL('base','admin')#">Base</a> module manages the sitewide settings of Xaraya.
                     </li>
                     <li>
-                        The <a href="#xarModURL('blocks','admin')#">Blocks</a> module lets you create and manage blocks.
+                        The <a href="#xarController::URL('blocks','admin')#">Blocks</a> module lets you create and manage blocks.
                     </li>
                     <li>
-                        The <a href="#xarModURL('dynamicdata','admin')#">DynamicData</a> module makesit possible to create custom objects for your applications.
+                        The <a href="#xarController::URL('dynamicdata','admin')#">DynamicData</a> module makesit possible to create custom objects for your applications.
                     </li>
                     <li>
-                        The <a href="#xarModURL('mail','admin')#">Mail</a> module gives Xaraya basic mail functionality.
+                        The <a href="#xarController::URL('mail','admin')#">Mail</a> module gives Xaraya basic mail functionality.
                     </li>
                     <li>
-                        The <a href="#xarModURL('modules','admin')#">Modules</a> module lets you install and manage additional modules.
+                        The <a href="#xarController::URL('modules','admin')#">Modules</a> module lets you install and manage additional modules.
                     </li>
                     <li>
-                        The <a href="#xarModURL('privileges','admin')#">Privileges</a> module manages the permissions users have on your site.
+                        The <a href="#xarController::URL('privileges','admin')#">Privileges</a> module manages the permissions users have on your site.
                     </li>
                     <li>
-                        The <a href="#xarModURL('roles','admin')#">Roles</a> module manages users and their profiles.
+                        The <a href="#xarController::URL('roles','admin')#">Roles</a> module manages users and their profiles.
                     </li>
                     <li>
-                        The <a href="#xarModURL('themes','admin')#">Themes</a> module lets you install and manage additional themes.
+                        The <a href="#xarController::URL('themes','admin')#">Themes</a> module lets you install and manage additional themes.
                     </li>
                 </ul>
             </p>
