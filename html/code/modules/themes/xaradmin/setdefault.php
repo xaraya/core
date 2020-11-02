@@ -39,7 +39,7 @@ function themes_admin_setdefault()
         $defaulttheme = $whatwasbefore;
     }
 
-    $themeInfo = xarThemeGetInfo($defaulttheme);
+    $themeInfo = xarTheme::getInfo($defaulttheme);
 
     if ($themeInfo['class'] != 2) {
         xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));

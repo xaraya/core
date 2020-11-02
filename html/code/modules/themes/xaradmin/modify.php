@@ -24,7 +24,7 @@ function themes_admin_modify()
     if (!xarVar::fetch('id', 'int:1:', $regId, 0, xarVar::NOT_REQUIRED)) return;
     if (empty($regId)) return xarResponse::notFound();
 
-    $themeInfo = xarThemeGetInfo($regId); 
+    $themeInfo = xarTheme::getInfo($regId); 
     // throw back
     if (!isset($themeInfo)) return;
 
@@ -34,7 +34,7 @@ function themes_admin_modify()
     if (!xarSecurity::check('AdminThemes', 0, 'All', '$themeName::$regId')) return;
 
     $themevars = array();
-    //xarTheme_getVarsByTheme($themeName);
+    //xarTheme::getVarsByTheme($themeName);
 
     $displayInfo = array();
     foreach($themeInfo as $k => $v) {

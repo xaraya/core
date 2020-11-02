@@ -541,8 +541,7 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
  */
 function xarModRegisterHook($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
 {
-    $event = ucfirst($hookScope) . ucfirst($hookAction);
-    return xarHooks::registerObserver($event, $hookModName, $hookArea, $hookModType, $hookModFunc);
+    return xarModHooks::register($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc);
 }
 
 /**
@@ -567,8 +566,7 @@ function xarModRegisterHook($hookScope, $hookAction, $hookArea, $hookModName, $h
  */
 function xarModUnregisterHook($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc)
 {
-    $event = ucfirst($hookScope) . ucfirst($hookAction);
-    return xarHooks::unregisterObserver($event, $hookModName);
+    return xarModHooks::unregister($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc);
 }
 
 /**
@@ -614,5 +612,23 @@ class xarModHooks extends xarObject
     public static function isHooked($hookModName, $callerModName = NULL, $callerItemType = '')
     {
         return xarHooks::isAttached($hookModName, $callerModName, $callerItemType);
+    }
+
+    /**
+     * register a hook function
+     */
+    public static function register($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
+    {
+        $event = ucfirst($hookScope) . ucfirst($hookAction);
+        return xarHooks::registerObserver($event, $hookModName, $hookArea, $hookModType, $hookModFunc);
+    }
+
+    /**
+     * unregister a hook function (deprecated - use unregisterHookModule or the standard deinstall for modules instead)
+     */
+    public static function unregister($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc)
+    {
+        $event = ucfirst($hookScope) . ucfirst($hookAction);
+        return xarHooks::unregisterObserver($event, $hookModName);
     }
 }

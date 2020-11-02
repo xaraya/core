@@ -34,12 +34,7 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)                        
  */
 function xarThemeGetIDFromName($themeName,$id='regid')
 {
-    if (empty($themeName)) throw new EmptyParameterException('themeName');
-
-    $themeBaseInfo = xarMod::getBaseInfo($themeName, 'theme');
-    if (!isset($themeBaseInfo)) return; // throw back
-
-    return $themeBaseInfo[$id];
+    return xarTheme::getIDFromName($themeName, $id);
 }
 
 /**
@@ -49,7 +44,7 @@ function xarThemeGetIDFromName($themeName,$id='regid')
  * @param themeRegId theme id
  * @return array array of theme information
  */
-function xarThemeGetInfo($regId) { return xarMod::getInfo($regId, $type = 'theme'); }
+function xarThemeGetInfo($regId) { return xarTheme::getInfo($regId); }
 
 /**
  * checks if a theme is installed and its state is XARTHEME_STATE_ACTIVE
@@ -58,7 +53,7 @@ function xarThemeGetInfo($regId) { return xarMod::getInfo($regId, $type = 'theme
  * @param themeName registered name of theme
  * @return boolean true if the theme is available, false if not
  */
-function xarThemeIsAvailable($themeName) { return xarMod::isAvailable($themeName, $type = 'theme'); }
+function xarThemeIsAvailable($themeName) { return xarTheme::isAvailable($themeName); }
 
 // PROTECTED FUNCTIONS
 
@@ -70,7 +65,7 @@ function xarThemeIsAvailable($themeName) { return xarMod::isAvailable($themeName
  * @return xarMod::getFileInfo for processing
  * @todo move to own class so we can protect it
  */
-function xarTheme_getFileInfo($themeOsDir) { return xarMod::getFileInfo($themeOsDir, $type = 'theme'); }
+function xarTheme_getFileInfo($themeOsDir) { return xarTheme::getFileInfo($themeOsDir); }
 
 /**
  * Load a theme's base information
@@ -79,7 +74,7 @@ function xarTheme_getFileInfo($themeOsDir) { return xarMod::getFileInfo($themeOs
  * @param themeName the theme's name
  * @return to xarMod__getBaseInfo for processing
  */
-function xarTheme_getBaseInfo($themeName) { return xarMod::getBaseInfo($themeName, $type = 'theme'); }
+function xarTheme_getBaseInfo($themeName) { return xarTheme::getBaseInfo($themeName); }
 
 /**
  * Get all theme variables for a particular theme
@@ -89,11 +84,7 @@ function xarTheme_getBaseInfo($themeName) { return xarMod::getBaseInfo($themeNam
  */
 function xarTheme_getVarsByTheme($themeName)
 {
-    // TODO: we would need to return all mod item vars here where:
-    // mod  = themes
-    // item = the theme
-    // For now, return the vars of the themes module
-    return xarModVars::preload('themes');
+    return xarTheme::getVarsByTheme($themeName);
 }
 
 class xarTheme extends xarObject
@@ -109,19 +100,61 @@ class xarTheme extends xarObject
     const STATE_MISSING_FROM_ACTIVE        = 8;
     const STATE_MISSING_FROM_UPGRADED      = 9;
 
+    /**
+     * Gets theme registry ID given its name
+     */
     public static function getIDFromName($themeName,$id='regid')
     {
-        return xarThemeGetIDFromName($themeName, $id);
+        if (empty($themeName)) throw new EmptyParameterException('themeName');
+
+        $themeBaseInfo = xarMod::getBaseInfo($themeName, 'theme');
+        if (!isset($themeBaseInfo)) return; // throw back
+
+        return $themeBaseInfo[$id];
     }
 
+    /**
+     * get information on theme
+     */
     public static function getInfo($regId)
     {
-        return xarThemeGetInfo($regId);
+        return xarMod::getInfo($regId, $type = 'theme');
     }
 
+    /**
+     * checks if a theme is installed and its state is XARTHEME_STATE_ACTIVE
+     */
     public static function isAvailable($themeName)
     {
-        return xarThemeIsAvailable($themeName);
+        return xarMod::isAvailable($themeName, $type = 'theme');
+    }
+
+    /**
+     * Get info from xartheme.php
+     */
+    public static function getFileInfo($themeOsDir)
+    {
+        return xarMod::getFileInfo($themeOsDir, $type = 'theme');
+    }
+
+    /**
+     * Load a theme's base information
+     */
+    public static function getBaseInfo($themeName)
+    {
+        return xarMod::getBaseInfo($themeName, $type = 'theme');
+    }
+
+    /**
+     * Get all theme variables for a particular theme
+     */
+    public static function getVarsByTheme($themeName)
+    {
+        // TODO: we would need to return all mod item vars here where:
+        // mod  = themes
+        // item = the theme
+        // For now, return the vars of the themes module
+        return xarModVars::preload('themes');
     }
 }
 

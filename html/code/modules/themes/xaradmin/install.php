@@ -35,7 +35,7 @@ function themes_admin_install()
     if (!xarVar::fetch('return_url', 'pre:trim:str:1:',
         $return_url, '', xarVar::NOT_REQUIRED)) return;
 
-    $minfo=xarThemeGetInfo($id);
+    $minfo=xarTheme::getInfo($id);
     if (!xarMod::apiFunc('themes','admin','install',array('regid'=>$id))) return;
 
     // set the target location (anchor) to go to within the page

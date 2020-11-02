@@ -30,7 +30,7 @@ function themes_adminapi_getdbthemes()
     while($result->next()) {
         list($themeRegId) = $result->fields;
         //Get Theme Info
-        $themeInfo = xarThemeGetInfo($themeRegId);
+        $themeInfo = xarTheme::getInfo($themeRegId);
         if (!isset($themeInfo)) return;
 
         $name = $themeInfo['name'];

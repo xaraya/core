@@ -439,7 +439,7 @@
               </xsl:when>
               <xsl:otherwise>
                 <!-- Ok, we have nothin, but a label -->
-                <xsl:text>echo xarTplProperty('dynamicdata','label','showoutput',array('label'=&gt;'</xsl:text>
+                <xsl:text>echo xarTpl::property('dynamicdata','label','showoutput',array('label'=&gt;'</xsl:text>
                 <xsl:value-of select="@label"/><xsl:text>'</xsl:text>
                 <xsl:if test="@for">
                   <xsl:text>,'for'=&gt;'</xsl:text>
@@ -480,7 +480,7 @@
       </xsl:when>
       <xsl:otherwise>
         <!-- If we have an object, throw out its label -->
-        <xsl:text>echo xarVarPrepForDisplay(</xsl:text>
+        <xsl:text>echo xarVar::prepForDisplay(</xsl:text>
         <xsl:value-of select="@object"/><xsl:text>-&gt;label);</xsl:text>
       </xsl:otherwise>
     </xsl:choose>

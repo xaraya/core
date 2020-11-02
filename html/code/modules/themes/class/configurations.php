@@ -33,7 +33,7 @@ class Configurations extends xarObject
     {
         if (empty($pattern)) return false;
         if ($themeID == 0) return false;
-        $items = array(xarThemeGetInfo($themeID));
+        $items = array(xarTheme::getInfo($themeID));
 
         $checked_files = array();
         foreach ($items as $item) {
