@@ -65,7 +65,7 @@ xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
                         title="Use submenus in the page for admin functions."/>
                     </div>
                     <div class="checkInputContainer">
-                        <xar:set name="checked">xarModIsHooked('themes', 'roles')</xar:set>
+                        <xar:set name="checked">xarModHooks::isHooked('themes', 'roles')</xar:set>
                         <xar:data-input type="checkbox" name="usermenu" id="usermenu"
                         checked="$checked"/>
                         <xar:data-label label="Allow users to set their theme in User Account page"
@@ -166,7 +166,7 @@ xmlns:xf="http://www.w3.org/2002/xforms" xml:lang="en">
                         <label for="var_dump">Debug Templates by Showing Variables
                         Available</label>
                     </div>
-                    <xar:if condition="xarThemeIsAvailable('atom')">
+                    <xar:if condition="xarTheme::isAvailable('atom')">
                         <!-- This should be moved if we ever fully support the atom spec -->
                         <div class="textInputContainer">
                             <label for="AtomTag">Atom Tag</label>

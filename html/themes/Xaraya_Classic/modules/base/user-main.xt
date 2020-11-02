@@ -9,7 +9,7 @@
         <h1 class="xar-mod-head">Thank you for installing and trying Xaraya!</h1>
         <div class="xar-mod-body xar-overflow-auto">
             <xar:set name="versionnum">xarCore::VERSION_NUM</xar:set>
-            <xar:if condition="defined('XARCORE_VERSION_REV')">
+            <xar:if condition="defined('xarCore::VERSION_REV')">
                 <xar:set name="mtrev">xarCore::$build</xar:set>
             </xar:if>
             <h2>Xaraya has reached Production Stable Version #$versionnum#</h2>
@@ -29,8 +29,8 @@
             to a separate Admin area you may prefer a separate look to your Administration area
             rather than the default Admin Menu. Start by logging into your site as Administrator
             and turning on the Admin Dashboard 
-            <xar:if condition="xarUserIsLoggedIn() and xarSecurityCheck('AdminTheme',0)">in your 
-            <a href="#xarModURL('themes','admin','modifyconfig')#">Themes Module Modify Config</a>option.
+            <xar:if condition="xarUser::isLoggedIn() and xarSecurity::check('AdminTheme',0)">in your 
+            <a href="#xarController::URL('themes','admin','modifyconfig')#">Themes Module Modify Config</a>option.
             
             <xar:else />in your Themes Module Modify Config option.</xar:if></p>
             <h4>Explore</h4>

@@ -77,15 +77,15 @@
 	<!-- !FOOTER -->
 	<xar:if condition="$xar_footer ne 'no'">
 	<div id="page-footer">
-        <a class="xar-icon xar-icon-xaraya" href="http://www.xaraya.com" target="_blank" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-xaraya-pb-twotone.png); width: 205px;">Powered by Xaraya</a>
+        <a class="xar-icon xar-icon-xaraya" href="http://www.xaraya.com" target="_blank" style="background-image: url(#xarTpl::getThemeDir()#/images/admin/logos/logo-xaraya-pb-twotone.png); width: 205px;">Powered by Xaraya</a>
         <a href="http://www.xaraya.com/index.php/xarpages/support" target="_blank">Support </a>
         <a href="http://www.xaraya.com/index.php/xarpages/community" target="_blank">Community </a>
         <a href="http://www.xaraya.com/index.php/documentation/c18/" target="_blank">Knowledgebase </a>
         <a href="http://www.xaraya.com/index.php/release/view.html" target="_blank">Extend </a>
         <a href="http://bugs.xarya.com" target="_blank">BugReport </a>
-        <a class="xar-icon" href="http://www.php.net" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-php.png); width: 31px;">PHP</a>
-        <a class="xar-icon" href="http://www.mysql.com" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-mysql.png); width: 48px;">MySQL</a>
-        <a class="xar-icon" href="http://www.w3schools.com/xsl/" style="background-image: url(#xarTplGetThemeDir()#/images/admin/logos/logo-xsl.png); width: 28px;">XSL</a>
+        <a class="xar-icon" href="http://www.php.net" style="background-image: url(#xarTpl::getThemeDir()#/images/admin/logos/logo-php.png); width: 31px;">PHP</a>
+        <a class="xar-icon" href="http://www.mysql.com" style="background-image: url(#xarTpl::getThemeDir()#/images/admin/logos/logo-mysql.png); width: 48px;">MySQL</a>
+        <a class="xar-icon" href="http://www.w3schools.com/xsl/" style="background-image: url(#xarTpl::getThemeDir()#/images/admin/logos/logo-xsl.png); width: 28px;">XSL</a>
     </div>
     </xar:if>
 

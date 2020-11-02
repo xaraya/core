@@ -18,7 +18,7 @@ dtd="xhtml1-strict">
             <xar:style scope="module" module="base" file="tabs"/>
         </head>
         <body>
-            <xar:set name="isupgrade">#xarVarGetCached('Upgrade', 'upgrading')#</xar:set>
+            <xar:set name="isupgrade">#xarVar::getCached('Upgrade', 'upgrading')#</xar:set>
             <div id="wrapper">
                 <div id="footer">
                     <ul id="navlist">

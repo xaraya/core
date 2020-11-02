@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="themes/installer/style/style.css"/>
 </head>
 <body>
-    <xar:set name="isupgrade">#xarVarGetCached('Upgrade', 'upgrading')#</xar:set>
+    <xar:set name="isupgrade">#xarVar::getCached('Upgrade', 'upgrading')#</xar:set>
     <div id="header">
         <div id="header_logo">
             <div id="head_link">Xaraya</div>
@@ -25,7 +25,7 @@
 
                     <div id="header_contentcore">
                         <xar:set name="script">basename(xarServer::getVar('SCRIPT_NAME'))</xar:set>
-                        <xar:set name="dummy">1;xarVarFetch('module','str',$modulename,'',XARVAR_NOT_REQUIRED)</xar:set>
+                        <xar:set name="dummy">1;xarVar::fetch('module','str',$modulename,'',xarVar::NOT_REQUIRED)</xar:set>
                         <xar:if condition="$script eq 'install.php' OR $modulename eq 'installer'">
                             <h1>Xaraya Installer</h1>
                             <p>

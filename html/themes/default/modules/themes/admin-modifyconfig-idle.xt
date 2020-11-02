@@ -8,7 +8,7 @@
     &amp;xar_modurl- like entities are problematic in validation, otherwise handy - filling the
     array of options manually by using a php array. - invalid xml (=&gt;) - mixing of template
     (xml) domain and code (php) domain - use of value="#$submitbutton#" in submit button is purely
-    for ML reasons, that should not be needed. - xarVarDelCached should be in the code, the
+    for ML reasons, that should not be needed. - xarVar::delCached should be in the code, the
     templater should not be bothered by it - input controls like a text input field require 4 lines
     of xml, but most of it is unstructured. Alternative examples have been added inline as comments
     for inspiration. - - ...amend when encountering more...</xar:comment>
@@ -19,7 +19,7 @@
         <div class="xar-mod-body">
             <xar:template type="module" file="admin-menu"/>
             <h2>Modify Configuration</h2>
-            <form action="#xarModURL('themes','admin','updateconfig')#" method="post" enctype="application/x-www-form-urlencoded">
+            <form action="#xarController::URL('themes','admin','updateconfig')#" method="post" enctype="application/x-www-form-urlencoded">
                 <fieldset>
                     <legend>Configuration Options</legend>
                     <div class="textInputContainer">
@@ -58,7 +58,7 @@
                         <xar:data-label label="Enable InPage Admin SubMenus" for="adminpagemenu" title="Use submenus in the page for admin functions."/>
                     </div>
                     <div class="checkInputContainer">
-                        <xar:set name="checkUsermenu">xarModIsHooked('themes', 'roles')</xar:set>
+                        <xar:set name="checkUsermenu">xarModHooks::isHooked('themes', 'roles')</xar:set>
                         <xar:data-input type="checkbox" name="usermenu" id="usermenu" checked="$checkUsermenu"/>
                         <xar:data-label label="Allow users to set their theme in User Account page" for="usermenu" title="Allow users to select themes from their Account Details page."/>
                     </div>
@@ -87,14 +87,14 @@
                     1)</xar:set>
                     <xar:data-label label="Copyright" for="copyright"/>
                     <xar:data-input type="textbox" name="copyright" id="copyright" value="$valCopyright"/>
-                </div>#xarVarDelCached('Mod.Variables.themes','SiteCopyRight')# 
+                </div>#xarVar::delCached('Mod.Variables.themes','SiteCopyRight')# 
                 <div class="textareaContainer">
                     <xar:set name="valFooternote">xarModVars::get('themes', 'SiteFooter',
                     1)</xar:set>
                     <xar:data-label label="Footer Note" for="footer"/>
                     <xar:data-input type="textarea" id="footer" name="footer" cols="60" rows="5"
                     value="$valFooternote"/>
-                </div>#xarVarDelCached('Mod.Variables.themes','SiteFooter')# 
+                </div>#xarVar::delCached('Mod.Variables.themes','SiteFooter')# 
                 <div class="textInputContainer">
                     <xar:set name="valSeperator">xarModVars::get('themes', 'SiteTitleSeparator', 1)</xar:set>
                     <xar:data-label label="Page Title Separator" for="separator"/>
@@ -152,7 +152,7 @@
                         <xar:data-label label="Debug Templates by Showing Variables Available"
                         for="var_dump"/>
                     </div>
-                    <xar:if condition="xarThemeIsAvailable('atom')">
+                    <xar:if condition="xarTheme::isAvailable('atom')">
                         <!-- This should be moved if we ever fully support the atom spec -->
                         <div class="textInputContainer">
                             <xar:set name="valAtomtag">xarModVars::get('themes', 'AtomTag',
