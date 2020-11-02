@@ -27,7 +27,7 @@ function themes_adminapi_upgrade(Array $args=array())
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get theme information
-    $themeInfo = xarThemeGetInfo($regid);
+    $themeInfo = xarTheme::getInfo($regid);
     if (empty($themeInfo)) {
         xarSession::setVar('errormsg', xarML('No such theme'));
         return false;

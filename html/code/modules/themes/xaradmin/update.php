@@ -31,10 +31,10 @@ function themes_admin_update()
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
-    $themeInfo = xarThemeGetInfo($regId);
+    $themeInfo = xarTheme::getInfo($regId);
 
     $themename = $themeInfo['name'];
-    $themevars = xarTheme_getVarsByTheme($themename);
+    $themevars = xarTheme::getVarsByTheme($themename);
 
     $updatevars = array();
     $delvars = array(); 

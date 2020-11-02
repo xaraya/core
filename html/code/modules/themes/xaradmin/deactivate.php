@@ -40,7 +40,7 @@ function themes_admin_deactivate()
     xarVar::fetch('command', 'checkbox', $command, false, xarVar::NOT_REQUIRED);
 
     // set the target location (anchor) to go to within the page
-    $minfo=xarThemeGetInfo($id);
+    $minfo=xarTheme::getInfo($id);
     $target=$minfo['name'];
     if (empty($return_url))
         $return_url = xarController::URL('themes', 'admin', 'view', array('state' => xarTheme::STATE_ANY), NULL, $target);

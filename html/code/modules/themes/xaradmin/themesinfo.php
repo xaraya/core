@@ -32,7 +32,7 @@ function themes_admin_themesinfo()
     if (empty($themeid)) return xarResponse::notFound();
 
     // obtain maximum information about a theme
-    $info = xarThemeGetInfo($themeid);
+    $info = xarTheme::getInfo($themeid);
 
     // get the theme object corresponding to this theme
     sys::import('modules.dynamicdata.class.objects.master');

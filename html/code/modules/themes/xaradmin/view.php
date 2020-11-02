@@ -39,7 +39,7 @@ function themes_admin_view()
         if ($new_user_theme != $old_user_theme) {
             $themeid = xarThemeGetIdFromName($new_user_theme);
             if ($themeid) {
-                $info = xarThemeGetInfo($themeid);
+                $info = xarTheme::getInfo($themeid);
                 if ($info['class'] != 2) {
                     $new_user_theme = $old_user_theme;
                 } else {
@@ -56,7 +56,7 @@ function themes_admin_view()
         if ($new_admin_theme != $old_admin_theme) {
             $themeid = xarThemeGetIdFromName($new_admin_theme);
             if ($themeid) {
-                $info = xarThemeGetInfo($themeid);
+                $info = xarTheme::getInfo($themeid);
                 if ($info['class'] != 2) {
                     $new_admin_theme = $old_admin_theme;
                 } else {

@@ -38,7 +38,7 @@ function themes_adminapi_setstate(Array $args=array())
     }
 
     //Get theme info
-    $themeInfo = xarThemeGetInfo($regid);
+    $themeInfo = xarTheme::getInfo($regid);
 
     //Set up database object
     $dbconn = xarDB::getConn();

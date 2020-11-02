@@ -626,7 +626,7 @@ class xarModHooks extends xarObject
     /**
      * unregister a hook function (deprecated - use unregisterHookModule or the standard deinstall for modules instead)
      */
-    function unregister($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc)
+    public static function unregister($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc)
     {
         $event = ucfirst($hookScope) . ucfirst($hookAction);
         return xarHooks::unregisterObserver($event, $hookModName);

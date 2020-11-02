@@ -30,7 +30,7 @@ function themes_adminapi_activate(Array $args=array())
     if (isset($name)) $regid = xarMod::getRegid($name, 'theme');
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
-    $themeInfo = xarThemeGetInfo($regid);
+    $themeInfo = xarTheme::getInfo($regid);
 
     // Update state of theme
     $res = xarMod::apiFunc('themes','admin','setstate',

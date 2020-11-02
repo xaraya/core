@@ -45,7 +45,7 @@ function themes_admin_activate()
 
     //throw back
     if (!isset($activated)) return;
-    $minfo = xarThemeGetInfo($id);
+    $minfo = xarTheme::getInfo($id);
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
     if (empty($return_url))

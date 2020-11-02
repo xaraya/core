@@ -28,7 +28,7 @@ function themes_adminapi_update(Array $args=array())
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     // Get theme information
-    $themeInfo = xarThemeGetInfo($regid);
+    $themeInfo = xarTheme::getInfo($regid);
     if (!isset($themeInfo)) {
         throw new ThemeNotFoundException($regid,'Theme (regid: #(1) does not exist.');
     }
