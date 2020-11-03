@@ -43,7 +43,7 @@ function authsystem_admin_createpassword()
      }
      if (!xarModVars::get('roles', 'askpasswordemail')) {
         xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
-                      array('id' => $data['groupid'], 'state' => $data['state'])));
+                      array('id' => $groupid, 'state' => $state)));
         return true;
     }
     else {
@@ -53,4 +53,3 @@ function authsystem_admin_createpassword()
         array('id' => array($id => '1'), 'mailtype' => 'password', 'groupid' => $groupid, 'state' => $state)));
     }
 }
-?>

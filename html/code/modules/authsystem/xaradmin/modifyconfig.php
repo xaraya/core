@@ -22,7 +22,8 @@ function authsystem_admin_modifyconfig()
 {
     // Security
     if (!xarSecurity::check('AdminAuthsystem')) return;
-    
+
+    $data = array();
     if (!xarVar::fetch('phase',           'str:1:100', $phase,                  'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
     if (!xarVar::fetch('uselockout',      'checkbox',  $data['uselockout'],      xarModVars::get('authsystem', 'uselockout'),     xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('lockouttime',     'int:1:',    $data['lockouttime'],     (int)xarModVars::get('authsystem', 'lockouttime'),       xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
@@ -67,4 +68,3 @@ function authsystem_admin_modifyconfig()
     }
     return $data;
 }
-?>

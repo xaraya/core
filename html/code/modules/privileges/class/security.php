@@ -109,6 +109,10 @@ class xarSecurity extends xarObject
     */
     public static function check($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$realm=0,$level=0)
     {
+        $installing = xarCoreCache::getCached('installer','installing');
+        if(isset($installing) && ($installing == true)) {
+           return true;
+        }
         self::initialize();
         $userID = xarSession::getVar('role_id');
         
