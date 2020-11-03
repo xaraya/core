@@ -32,7 +32,7 @@ function themes_adminapi_getfilethemes()
             default:
                 if (is_dir($basedir ."/" . $themeOsDir)) {
                     // no xartheme.php, no theme
-                    $themeFileInfo = xarTheme_getFileInfo($themeOsDir);
+                    $themeFileInfo = xarTheme::getFileInfo($themeOsDir);
                     if (!isset($themeFileInfo)) {
                         continue 2;
                     }

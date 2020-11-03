@@ -43,7 +43,7 @@ function sql_230_06()
         // update theme classes        
         while($result->next()) {
             list($regid,$directory) = $result->fields;
-            $info = xarTheme_getFileInfo($directory);
+            $info = xarTheme::getFileInfo($directory);
             if (!$info) continue; // skip themes missing a xartheme.php 
             $query = "UPDATE $table
                       SET class = ? WHERE regid = ?";

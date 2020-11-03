@@ -40,7 +40,7 @@ function themes_adminapi_upgrade(Array $args=array())
     if (!isset($res)) return;
 
     // Get the new version information...
-    $themeFileInfo = xarTheme_getFileInfo($themeInfo['osdirectory']);
+    $themeFileInfo = xarTheme::getFileInfo($themeInfo['osdirectory']);
     if (!isset($themeFileInfo)) return;
 
     // Note the changes in the database...

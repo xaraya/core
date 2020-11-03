@@ -107,7 +107,7 @@ function themes_adminapi_getitems(Array $args=array())
             
             xarCoreCache::setCached('Theme.BaseInfos', $item['name'], $item);                   
 
-            $fileinfo = xarTheme_getFileInfo($item['osdirectory']);
+            $fileinfo = xarTheme::getFileInfo($item['osdirectory']);
             if (isset($fileinfo)) {
                 $item = array_merge($fileinfo, $item);
                 xarCoreCache::setCached('Theme.Infos', $item['regid'], $item);
