@@ -380,9 +380,10 @@ class xarBlock extends xarObject implements ixarBlock
             if ((bool) xarModVars::get('blocks', 'noexceptions') || 
                 !in_array(xarUser::getVar('id'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
                 // Get a cache key for this block if it's suitable for block caching
-                $cacheKey = xarCache::getBlockKey($blockinfo);
-                if (!empty($cacheKey))
-                    xarBlockCache::setCached($cacheKey, '');
+                if (!empty($blockinfo))
+                    $cacheKey = xarCache::getBlockKey($blockinfo);
+                    if (!empty($cacheKey))
+                        xarBlockCache::setCached($cacheKey, '');
                 return '';
             } else {
                 throw($e); 
