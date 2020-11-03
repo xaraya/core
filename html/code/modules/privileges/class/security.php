@@ -165,7 +165,7 @@ class xarSecurity extends xarObject
             if ($module == '') list($module) = xarController::$request->getInfo();
 
             // I'm a bit lost on this line. Does this var ever get set?
-            // <mikespub> this gets set in xarBlock_render, to replace the xarModVars::set /
+            // <mikespub> this gets set in xarBlock::render, to replace the xarModVars::set /
             // xarModVars::get combination you used before (although $module will generally
             // not be 'blocks', so I have no idea why this is needed anyway)
             if ($module == 'blocks' && xarVar::isCached('Security.Variables','currentmodule'))
