@@ -111,7 +111,9 @@ class Category extends DataObject
                 $toplevels = $worker->gettoplevel();
                 // Take the first one
                 $toplevel = reset($toplevels);
-                $this->properties['position']->reference_id = (int)$toplevel['id'];
+                if (isset($toplevel) && isset($toplevel['id'])) {
+                    $this->properties['position']->reference_id = (int)$toplevel['id'];
+                }
             }
 
             // Now that we have all the information, run the create
@@ -120,4 +122,3 @@ class Category extends DataObject
         }
     }
 }
-?>

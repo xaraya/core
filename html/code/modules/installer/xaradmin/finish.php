@@ -21,9 +21,9 @@ function installer_admin_finish()
 {
     xarVar::fetch('returnurl', 'str', $returnurl, 'site', xarVar::NOT_REQUIRED);
 
-    // Default debug admin
+    // Default debug admin @fixme this was just configured by the user, and could be anything...
     $admin = xarMod::apiFunc('roles', 'user', 'get', array('uname' => 'admin'));
-    xarConfigVars::set(null, 'Site.User.DebugAdmins', array($admin['id']));
+    if (!empty($admin) && !empty($admin['id'])) xarConfigVars::set(null, 'Site.User.DebugAdmins', array($admin['id']));
 
     // Default for the site time zone is the system time zone
     xarConfigVars::set(null, 'Site.Core.TimeZone', xarSystemVars::get(sys::CONFIG, 'SystemTimeZone'));
@@ -56,4 +56,3 @@ function installer_admin_finish()
     return true;
 }
 
-?>
