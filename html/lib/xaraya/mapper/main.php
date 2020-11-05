@@ -126,9 +126,9 @@ class xarController extends xarObject
 
         $value = xarMLS::convertFromInput($value, $method);
 
-        if (get_magic_quotes_gpc()) {
-            $value = self::__stripslashes($value);
-        }
+        //if (get_magic_quotes_gpc()) {
+        //    $value = self::__stripslashes($value);
+        //}
         return $value;
     }
 

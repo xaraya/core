@@ -316,6 +316,8 @@ class xarMod extends xarObject implements IxarMod
     {
         if (empty($modName)) $modName = self::getName();
         $modInfo = self::getFileInfo($modName, $type);
+        //print_r($modName . '=' . http_build_query($modInfo) . "<br>\n");
+        if (empty($modInfo['displayname'])) $modInfo['displayname'] = $modName;
         return xarML($modInfo['displayname']);
     }
 
@@ -333,6 +335,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modName)) $modName = self::getName();
 
         $modInfo = self::getFileInfo($modName, $type);
+        if (empty($modInfo['displaydescription'])) $modInfo['displaydescription'] = $modName;
         return xarML($modInfo['displaydescription']);
     }
 
@@ -362,7 +365,7 @@ class xarMod extends xarObject implements IxarMod
     static function getRegId($modName, $type = 'module')
     {
         $ids = self::getIds($modName, $type);
-        return !is_null($ids['regid']) ? (int)$ids['regid'] : null;
+        return (isset($ids['regid']) && !is_null($ids['regid'])) ? (int)$ids['regid'] : null;
     }
 
     /**
@@ -376,6 +379,7 @@ class xarMod extends xarObject implements IxarMod
     static function getId($modName)
     {
         $ids = self::getIds($modName);
+        if (!isset($ids) || !isset($ids['systemid'])) return;
         return $ids['systemid'];
     }
 
