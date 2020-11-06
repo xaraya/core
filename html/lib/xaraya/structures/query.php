@@ -768,12 +768,12 @@ class Query
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
         $binding = $this->bindings[$key];
-        if (!is_numeric($binding['field2']) && !mb_eregi('JOIN', $binding['op'])) {
+        if (!is_numeric($binding['field2']) && !preg_match('/JOIN/i', $binding['op'])) {
             $sqlfield = $this->dbconn->qstr($binding['field2']);
         }
         else {
             $sqlfield = $binding['field2'];
-            $binding['op'] = mb_eregi('JOIN', $binding['op']) ? '=' : $binding['op'];
+            $binding['op'] = preg_match('/JOIN/i', $binding['op']) ? '=' : $binding['op'];
         }
         return $binding['field1'] . " " . $binding['op'] . " " . $sqlfield;
     }
@@ -835,7 +835,7 @@ class Query
             if ($expression_flag) {
                 $condition['field2'] = trim(substr($condition['field2'],5));
                 $sqlfield = $condition['field2'];
-            } elseif (!is_numeric($condition['field2']) && !mb_eregi('JOIN', $condition['op'])) {
+            } elseif (!is_numeric($condition['field2']) && !preg_match('/JOIN/i', $condition['op'])) {
                 if ($this->usebinding) {
                     $this->bindvars[] = $condition['field2'];
                     $sqlfield = '?';
@@ -843,13 +843,13 @@ class Query
                     $sqlfield = $this->dbconn->qstr($condition['field2']);
                 }
             } else {
-                if ($this->usebinding && !mb_eregi('JOIN', $condition['op'])) {
+                if ($this->usebinding && !preg_match('/JOIN/i', $condition['op'])) {
                     $this->bindvars[] = $condition['field2'];
                     $sqlfield = '?';
                 } else {
                     $sqlfield = $condition['field2'];
                 }
-                $condition['op'] = mb_eregi('JOIN', $condition['op']) ? '=' : $condition['op'];
+                $condition['op'] = preg_match('/JOIN/i', $condition['op']) ? '=' : $condition['op'];
             }
         }
         switch ($this->type) {

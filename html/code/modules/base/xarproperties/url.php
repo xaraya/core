@@ -50,7 +50,7 @@ class URLProperty extends TextBoxProperty
             } else {
               // If we have a scheme but nothing following it,
                 // then consider the link empty :-)
-                if (mb_eregi('^[a-z]+\:\/\/$', $value)) {
+                if (preg_match('/^[a-z]+\:\/\/$/i', $value)) {
                     $this->value = '';
                 } else {
                     // Do some URL validation below. Separate for better understanding
@@ -71,4 +71,3 @@ class URLProperty extends TextBoxProperty
         return true;
     }
 }
-?>

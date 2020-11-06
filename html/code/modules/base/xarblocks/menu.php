@@ -220,9 +220,9 @@ class Base_MenuBlock extends MenuBlock implements iBlock
         // used by Base_MenuBlockAdmin::update() method
         if ($infoarray) {
             return array(
-                'modname' => isset($modinfo[0]) ? $modinfo[0] : !empty($modname) ? $modname : '',
-                'modtype' => isset($modinfo[1]) ? $modinfo[1] : !empty($modtype) ? $modtype : '',
-                'funcname' => isset($modinfo[2]) ? $modinfo[2] : !empty($funcname) ? $funcname : '',
+                'modname' => isset($modinfo[0]) ? $modinfo[0] : (!empty($modname) ? $modname : ''),
+                'modtype' => isset($modinfo[1]) ? $modinfo[1] : (!empty($modtype) ? $modtype : ''),
+                'funcname' => isset($modinfo[2]) ? $modinfo[2] : (!empty($funcname) ? $funcname : ''),
                 'modparams' => $args,
                 'encodedurl' => $url,
                 'url' => $decoded_url,
@@ -286,4 +286,3 @@ class Base_MenuBlock extends MenuBlock implements iBlock
 
     }
 }
-?>
