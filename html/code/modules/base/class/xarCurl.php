@@ -354,7 +354,7 @@ class xarCurl extends xarObject
         $this->getinfo();
 
         // Remove the 100 header.
-        if (mb_ereg('^HTTP/1.1 100', $result)) {
+        if (preg_match('/^HTTP\/1\.1 100/', $result)) {
             $pos = strpos($result, "\r\n\r\n");
             if (!$pos) {
                 $pos = strpos($result, "\n\n");
@@ -562,4 +562,3 @@ class xarCurl extends xarObject
     }
 }
 
-?>
