@@ -3,7 +3,6 @@
  * Display Blocks
  * *
  * @package core\blocks
- * @subpackage blocks
  * @category Xaraya Web Applications Framework
  * @version 2.2.0
  * @copyright see the html/credits.html file in this release
@@ -37,7 +36,6 @@ interface ixarBlock
  * Display Blocks
  * *
  * @package core\blocks
- * @subpackage blocks
  * @category Xaraya Web Applications Framework
  * @version 2.2.0
  * @copyright see the html/credits.html file in this release

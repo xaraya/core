@@ -3,7 +3,6 @@
  * Multi Language System
  *
  * @package core\multilanguage
- * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -31,16 +30,9 @@ sys::import('xaraya.mlsbackends.reference');
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::getMode()
+ * @deprecated
+ */
 function xarMLSGetMode()
 {   
     return xarMLS::getMode(); 
@@ -48,16 +40,9 @@ function xarMLSGetMode()
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::getSiteLocale()
+ * @deprecated
+ */
 function xarMLSGetSiteLocale()
 {   
     return xarMLS::getSiteLocale(); 
@@ -65,16 +50,9 @@ function xarMLSGetSiteLocale()
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::listSiteLocales()
+ * @deprecated
+ */
 function xarMLSListSiteLocales()
 {   
     return xarMLS::listSiteLocales(); 
@@ -82,16 +60,9 @@ function xarMLSListSiteLocales()
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::getCurrentLocale()
+ * @deprecated
+ */
 function xarMLSGetCurrentLocale()
 {   
     return xarMLS::getCurrentLocale(); 
@@ -99,16 +70,9 @@ function xarMLSGetCurrentLocale()
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::getCharsetFromLocale()
+ * @deprecated
+ */
 function xarMLSGetCharsetFromLocale($locale)
 {   
     return xarMLS::getCharsetFromLocale($locale); 
@@ -116,16 +80,9 @@ function xarMLSGetCharsetFromLocale($locale)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::translate()
+ * @deprecated
+ */
 function xarML($rawstring/*, ...*/)
 {
     return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
@@ -133,16 +90,9 @@ function xarML($rawstring/*, ...*/)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::translateByKey()
+ * @deprecated
+ */
 function xarMLByKey($key/*, ...*/)
 {   
     return call_user_func_array(array('xarMLS', 'translateByKey'), func_get_args());
@@ -150,16 +100,9 @@ function xarMLByKey($key/*, ...*/)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::localeGetInfo()
+ * @deprecated
+ */
 function xarLocaleGetInfo($locale)
 {   
     return xarMLS::localeGetInfo($locale); 
@@ -167,16 +110,9 @@ function xarLocaleGetInfo($locale)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::localeGetString()
+ * @deprecated
+ */
 function xarLocaleGetString($localeInfo)
 {   
     return xarMLS::localeGetString($localeInfo); 
@@ -184,16 +120,9 @@ function xarLocaleGetString($localeInfo)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::localeGetList()
+ * @deprecated
+ */
 function xarLocaleGetList($filter=array())
 {   
     return xarMLS::localeGetList($filter); 
@@ -201,16 +130,9 @@ function xarLocaleGetList($filter=array())
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::userTime()
+ * @deprecated
+ */
 function xarMLS_userTime($time=null,$flag=1)
 {   
     return xarMLS::userTime($time,$flag); 
@@ -218,16 +140,9 @@ function xarMLS_userTime($time=null,$flag=1)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::userOffset()
+ * @deprecated
+ */
 function xarMLS_userOffset($timestamp = null)
 {   
     return xarMLS::userOffset($timestamp); 
@@ -235,16 +150,9 @@ function xarMLS_userOffset($timestamp = null)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::setCurrentLocale()
+ * @deprecated
+ */
 function xarMLS_setCurrentLocale($locale)
 {   
     return xarMLS::setCurrentLocale($locale); 
@@ -252,16 +160,9 @@ function xarMLS_setCurrentLocale($locale)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::_loadTranslations()
+ * @deprecated
+ */
 function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 {   
     return xarMLS::_loadTranslations($dnType, $dnName, $ctxType, $ctxName); 
@@ -269,16 +170,9 @@ function xarMLS_loadTranslations($dnType, $dnName, $ctxType, $ctxName)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::loadTranslations()
+ * @deprecated
+ */
 function xarMLSLoadTranslations($path)
 {   
     return xarMLS::loadTranslations($path); 
@@ -286,16 +180,9 @@ function xarMLSLoadTranslations($path)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::convertFromInput()
+ * @deprecated
+ */
 function xarMLS_convertFromInput($var, $method)
 {   
     return xarMLS::convertFromInput($var, $method); 
@@ -303,16 +190,9 @@ function xarMLS_convertFromInput($var, $method)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::parseLocaleString()
+ * @deprecated
+ */
 function xarMLS__parseLocaleString($locale)
 {   
     return xarMLS::parseLocaleString($locale); 
@@ -320,16 +200,9 @@ function xarMLS__parseLocaleString($locale)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::mkdirr()
+ * @deprecated
+ */
 function xarMLS__mkdirr($path)
 {   
     return xarMLS::mkdirr($path); 
@@ -337,16 +210,9 @@ function xarMLS__mkdirr($path)
 
 /**
  * Legacy call
- *
- * @package core\multilanguage
- * @subpackage multilanguage
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
-**/
+ * @uses xarMLS::iswritable()
+ * @deprecated
+ */
 function xarMLS__iswritable($directory=NULL)
 {   
     return xarMLS::iswritable($directory=NULL); 
@@ -357,7 +223,6 @@ function xarMLS__iswritable($directory=NULL)
  * Multilanguage System Class
  *
  * @package core\multilanguage
- * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -1101,7 +966,6 @@ class xarMLS extends xarObject
  * Multilanguage Context Class
  *
  * @package core\multilanguage
- * @subpackage multilanguage
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release

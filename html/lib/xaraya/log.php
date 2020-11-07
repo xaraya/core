@@ -18,70 +18,50 @@ class LoggerException extends Exception
 // Legacy calls
 
 /**
- * @package core\logging
- * @subpackage logging
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
-**/
+ * Legacy call
+ * @uses xarLog::configFile()
+ * @deprecated
+ */
 function xarLogConfigFile()
 {   
     return xarLog::configFile(); 
 }
 
 /**
- * @package core\logging
- * @subpackage logging
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
-**/
+ * Legacy call
+ * @uses xarLog::configReadable()
+ * @deprecated
+ */
 function xarLogConfigReadable()
 {   
     return xarLog::configReadable(); 
 }
 
 /**
- * @package core\logging
- * @subpackage logging
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
-**/
+ * Legacy call
+ * @uses xarLog::fallbackFile()
+ * @deprecated
+ */
 function xarLogFallbackFile()
 {   
     return xarLog::fallbackFile(); 
 }
 
 /**
- * @package core\logging
- * @subpackage logging
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
-**/
+ * Legacy call
+ * @uses xarLog::fallbackPossible()
+ * @deprecated
+ */
 function xarLogFallbackPossible()
 {   
     return xarLog::fallbackPossible(); 
 }
 
 /**
- * @package core\logging
- * @subpackage logging
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
-**/
+ * Legacy call
+ * @uses xarLog::message()
+ * @deprecated
+ */
 function xarLogMessage($message, $level = '')
 {   
     if (empty($level)) $level = xarLog::LEVEL_DEBUG;
@@ -89,14 +69,10 @@ function xarLogMessage($message, $level = '')
 }
 
 /**
- * @package core\logging
- * @subpackage logging
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
-**/
+ * Legacy call
+ * @uses xarLog::variable()
+ * @deprecated
+ */
 function xarLogVariable($name, $var, $level = '')
 {   
     if (empty($level)) $level = xarLog::LEVEL_DEBUG;
@@ -107,7 +83,6 @@ function xarLogVariable($name, $var, $level = '')
  * Logging Facilities
  *
  * @package core\logging
- * @subpackage logging
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -260,6 +235,7 @@ class xarLog extends xarObject
      */
     static public function message($message, $level = self::LEVEL_DEBUG)
     {
+        if (empty($level)) $level = xarLog::LEVEL_DEBUG;
         if (($level == self::LEVEL_DEBUG) && !xarCore::isDebuggerActive()) return;
 
         // this makes a copy of the object, so the original $this->_buffer was never updated

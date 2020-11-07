@@ -2,8 +2,7 @@
 /**
  * The Core
  *
- * @package core
- * @subpackage core
+ * @package core\core
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -82,8 +81,7 @@
  **/
 
 /**
- * @package core
- * @subpackage core
+ * @package core\core
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -154,10 +152,12 @@ sys::import('xaraya.exceptions');
 sys::import('xaraya.caching.core');
 
 /**
- * Xaraya core class<br/>
+ * Xaraya core class
+ *
  * This class is the engine of the Xaraya framework.
  * It is called with each page request and loads the functionality required to process the request.
  *
+ * @package core\core
  * @todo change xarCore:: calls to xarCoreCache:: and put other core stuff here ?
  * @todo clean up duplicate const between xarCore:: and xarConst::
 **/
@@ -590,6 +590,7 @@ class xarCore extends xarCoreCache
 /**
  * Convenience class for keeping track of debugger operation
  *
+ * @package core\core
  * @todo this is close to exceptions or logging than core, see also notes earlier
 **/
 class xarDebug extends xarObject

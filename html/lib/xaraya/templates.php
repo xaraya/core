@@ -22,7 +22,6 @@
  * Exception raised by the templating subsystem
  *
  * @package core\templating
- * @subpackage templating
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -39,7 +38,6 @@ class BLValidationException extends ValidationExceptions
  * Exception raised by the templating subsystem
  *
  * @package core\templating
- * @subpackage templating
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -52,11 +50,12 @@ class BLException extends xarExceptions
     protected $message = 'Unknown blocklayout exception (TODO)';
 }
 
+sys::import('xaraya.variables.config');
+
 /**
  * BlockLayout Template Engine
  *
  * @package core\templating
- * @subpackage templating
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -69,9 +68,6 @@ class BLException extends xarExceptions
  * @author Andy Varganov <andyv@xaraya.com>
  * @author Jason Judge
  **/
-
-sys::import('xaraya.variables.config');
-
 class xarTpl extends xarObject
 {
     // statics to replace $GLOBALS[xarTpl_*]
@@ -1342,12 +1338,8 @@ class xarTpl extends xarObject
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::init()
+ * @deprecated
  **/
 function xarTpl_init(&$args)
 {
@@ -1358,12 +1350,8 @@ function xarTpl_init(&$args)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::getThemeName()
+ * @deprecated
  **/
 function xarTplGetThemeName()
 {
@@ -1374,12 +1362,8 @@ function xarTplGetThemeName()
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::setThemeName()
+ * @deprecated
  **/
 function xarTplSetThemeName($themeName)
 {
@@ -1390,12 +1374,8 @@ function xarTplSetThemeName($themeName)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::setThemeDir()
+ * @deprecated
  **/
 function xarTplSetThemeDir($themeDir)
 {
@@ -1412,12 +1392,8 @@ function xarTpl__SetThemeNameAndDir($name)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::getThemeDir()
+ * @deprecated
  **/
 function xarTplGetThemeDir($theme=null)
 {
@@ -1428,12 +1404,8 @@ function xarTplGetThemeDir($theme=null)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::getPageTemplateName()
+ * @deprecated
  **/
 function xarTplGetPageTemplateName()
 {
@@ -1444,12 +1416,8 @@ function xarTplGetPageTemplateName()
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::setPageTemplateName()
+ * @deprecated
  **/
 function xarTplSetPageTemplateName($templateName)
 {
@@ -1460,12 +1428,8 @@ function xarTplSetPageTemplateName($templateName)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::getDocType()
+ * @deprecated
  **/
 function xarTplGetDoctype()
 {
@@ -1476,12 +1440,8 @@ function xarTplGetDoctype()
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::setDocType()
+ * @deprecated
  **/
 function xarTplSetDoctype($doctypeName)
 {
@@ -1492,12 +1452,8 @@ function xarTplSetDoctype($doctypeName)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::setPageTitle()
+ * @deprecated
  **/
 function xarTplSetPageTitle($title = NULL, $module = NULL)
 {
@@ -1508,12 +1464,8 @@ function xarTplSetPageTitle($title = NULL, $module = NULL)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::getPageTitle()
+ * @deprecated
  **/
 function xarTplGetPageTitle()
 {
@@ -1524,12 +1476,8 @@ function xarTplGetPageTitle()
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::module()
+ * @deprecated
  **/
 function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
 {
@@ -1540,12 +1488,8 @@ function xarTplModule($modName, $modType, $funcName, $tplData = array(), $templa
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::block()
+ * @deprecated
  **/
 function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, $tplBase = NULL)
 {
@@ -1556,12 +1500,8 @@ function xarTplBlock($modName, $blockType, $tplData = array(), $tplName = NULL, 
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::property()
+ * @deprecated
  **/
 function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
 {
@@ -1572,12 +1512,8 @@ function xarTplProperty($modName, $propertyName, $tplType = 'showoutput', $tplDa
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::object()
+ * @deprecated
  **/
 function xarTplObject($modName, $objectName, $tplType = 'showdisplay', $tplData = array(), $tplBase = NULL)
 {
@@ -1594,12 +1530,8 @@ function xarTpl__DDElement($modName, $ddName, $tplType, $tplData, $tplBase,$elem
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::getImage()
+ * @deprecated
  **/
 function xarTplGetImage($modImage, $modName = NULL)
 {    
@@ -1610,12 +1542,8 @@ function xarTplGetImage($modImage, $modName = NULL)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::string()
+ * @deprecated
  **/
 function xarTplString($templateCode, &$tplData)
 {
@@ -1626,12 +1554,8 @@ function xarTplString($templateCode, &$tplData)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::file()
+ * @deprecated
  **/
 function xarTplFile($fileName, &$tplData)
 {
@@ -1642,12 +1566,8 @@ function xarTplFile($fileName, &$tplData)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::compileString()
+ * @deprecated
  **/
 function xarTplCompileString($templateSource)
 {
@@ -1658,12 +1578,8 @@ function xarTplCompileString($templateSource)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::renderPage()
+ * @deprecated
  **/
 function xarTpl_renderPage($mainModuleOutput, $pageTemplate = NULL)
 {
@@ -1674,12 +1590,8 @@ function xarTpl_renderPage($mainModuleOutput, $pageTemplate = NULL)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::renderBlockBox()
+ * @deprecated
  **/
 function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
 {
@@ -1690,12 +1602,8 @@ function xarTpl_renderBlockBox($blockInfo, $templateName = NULL)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::includeThemeTemplate()
+ * @deprecated
  **/
 function xarTpl_includeThemeTemplate($templateName, $tplData)
 {
@@ -1706,12 +1614,8 @@ function xarTpl_includeThemeTemplate($templateName, $tplData)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::includeModuleTemplate()
+ * @deprecated
  **/
 function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $propertyName='')
 {
@@ -1725,12 +1629,8 @@ function xarTpl_includeModuleTemplate($modName, $templateName, $tplData, $proper
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::executeFromFile()
+ * @deprecated
  **/
 function xarTpl__executeFromFile($sourceFileName, $tplData, $tplType = 'module')
 {
@@ -1750,12 +1650,8 @@ function xarTpl__getSourceFileName($modName,$tplBase, $templateName = NULL, $tpl
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::outputTemplate()
+ * @deprecated
  **/
 function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
 {
@@ -1766,12 +1662,8 @@ function xarTpl_outputTemplate($sourceFileName, &$tplOutput)
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::outputPHPCommentBlockInTemplates()
+ * @deprecated
  **/
 function xarTpl_outputPHPCommentBlockInTemplates()
 {
@@ -1782,12 +1674,8 @@ function xarTpl_outputPHPCommentBlockInTemplates()
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::outputTemplateFilenames()
+ * @deprecated
  **/
 function xarTpl_outputTemplateFilenames()
 {
@@ -1798,12 +1686,8 @@ function xarTpl_outputTemplateFilenames()
  * Legacy call
  *
  * @package core\templating
- * @subpackage templating
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * @uses xarTpl::modifyHeaderContent()
+ * @deprecated
  **/
 function xarTpl_modifyHeaderContent($sourceFileName, &$tplOutput)
 {
