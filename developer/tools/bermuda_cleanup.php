@@ -5,155 +5,326 @@
  *     Find all global constants defined in lib/xaraya and save to core_constants.json
  * search_module_files:
  *     Search all module files for global functions and constants, and optionally replace
+ *
+ * Requirements:
+ *
+ * composer require --dev phpdocumentor/reflection
+ *
  */
 require dirname(dirname(__DIR__)).'/vendor/autoload.php';
 //use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
 
-// See https://github.com/nikic/PHP-Parser/blob/master/doc/2_Usage_of_basic_components.markdown
-function parse_core_files($inDir)
-{
-    // iterate over all .php files in the directory
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($inDir));
-    $files = new \RegexIterator($files, '/\.php$/');
 
-    $factory = \phpDocumentor\Reflection\Php\ProjectFactory::createInstance();
-    $localFiles = array();
-    foreach ($files as $file) {
-        try {
-            echo $file->getPathName() . "\n";
-            $localFiles[] = new \phpDocumentor\Reflection\File\LocalFile($file->getPathName());
-        } catch (Exception $e) {
-            echo 'Parse Error: ', $e->getMessage();
+class XarayaCodeAnalyzer
+{
+    const PHP_EXT = '/\.php$/';
+    const ALL_EXT = '/\.(php|inc|xt|xml|xsl)$/';
+
+    public $project = null;
+    public $functions = array();
+    public $constants = array();
+    public $classes = array();
+    public $replaced = array();
+    public $missing = array();
+    public $totals = array();
+    public $inDir = null;
+    public $fileExt = null;
+    public $verbose = false;
+    public $refresh = false;
+
+    public function __construct($inDir = null, $fileExt = self::PHP_EXT)
+    {
+        $this->initialize($inDir, $fileExt);
+    }
+
+    public function initialize($inDir, $fileExt)
+    {
+        if (!empty($inDir)) {
+            $this->inDir = $inDir;
+        }
+        if (!empty($fileExt)) {
+            $this->fileExt = $fileExt;
+        }
+        $this->functions = array();
+        $this->constants = array();
+        $this->classes = array();
+        $this->replaced = array();
+        $this->missing = array();
+        $this->totals = array(
+            'namespaces' => 0,
+            'files' => 0,
+            'includes' => 0,
+            'constants' => 0,
+            'functions' => 0,
+            'classes' => 0,
+            'interfaces' => 0,
+            'traits' => 0,
+            'class_const' => 0,
+            'methods' => 0
+        );
+    }
+
+    public function log($message, $always = false)
+    {
+        if ($always || $this->verbose) {
+            echo $message . "\n";
         }
     }
-    $project = $factory->create('MyProject', $localFiles);
-    $totals = array('namespaces' => 0, 'files' => 0, 'includes' => 0, 'constants' => 0, 'functions' => 0, 'classes' => 0, 'interfaces' => 0, 'traits' => 0, 'class_const' => 0, 'methods' => 0);
-    //var_dump(array_keys($project->getNamespaces()));
-    $totals['namespaces'] = count($project->getNamespaces());
-    //$root = $project->getRootNamespace();
-    $functions = array();
-    $constants = array();
-    $classes = array();
-    $missing = array();
-    //$printer = new PrettyPrinter();
-    foreach ($project->getFiles() as $file) {
-        $fpath = $file->getPath();
-        $totals['files'] += 1;
-        $totals['includes'] += count($file->getIncludes());
-        $totals['functions'] += count($file->getFunctions());
-        foreach ($file->getFunctions() as $function) {
-            $name = $function->getName();
-            $lname = strtolower($name);
-            if (array_key_exists($lname, $functions)) {
-                echo 'Function Conflict: ' . $name . "\n";
+
+    public function to_json($var)
+    {
+        return json_encode($var, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+    }
+
+    // See https://github.com/nikic/PHP-Parser/blob/master/doc/2_Usage_of_basic_components.markdown
+    public function load_project($inDir = null, $fileExt = self::PHP_EXT)
+    {
+        $this->initialize($inDir, $fileExt);
+
+        // iterate over all .php files in the directory
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->inDir));
+        $files = new \RegexIterator($files, $this->fileExt);
+
+        $factory = \phpDocumentor\Reflection\Php\ProjectFactory::createInstance();
+        $localFiles = array();
+        foreach ($files as $file) {
+            try {
+                //echo $file->getPathName() . "\n";
+                $localFiles[] = new \phpDocumentor\Reflection\File\LocalFile($file->getPathName());
+            } catch (Exception $e) {
+                echo 'Parse Error: ', $e->getMessage();
             }
+        }
+        $this->project = $factory->create('MyProject', $localFiles);
+        return $this->project;
+    }
+
+    public function parse_project()
+    {
+        //var_dump(array_keys($this->project->getNamespaces()));
+        $this->totals['namespaces'] = count($this->project->getNamespaces());
+        //$root = $this->project->getRootNamespace();
+        foreach ($this->project->getFiles() as $file) {
+            $this->parse_file($file);
+        }
+        $this->log($this->to_json($this->totals));
+    }
+
+    public function parse_file($file, $totals=true)
+    {
+        if ($totals) {
+            $this->totals['files'] += 1;
+            $this->totals['includes'] += count($file->getIncludes());
+            $this->totals['functions'] += count($file->getFunctions());
+            $this->totals['constants'] += count($file->getConstants());
+            $this->totals['classes'] += count($file->getClasses());
+            $this->totals['interfaces'] += count($file->getInterfaces());
+            $this->totals['traits'] += count($file->getTraits());
+        }
+        $fpath = $file->getPath();
+        foreach ($file->getFunctions() as $function) {
+            $this->add_function($function, $fpath);
+        }
+        foreach ($file->getConstants() as $constant) {
+            $this->add_constant($constant, $fpath);
+        }
+        foreach ($file->getClasses() as $class) {
+            $this->add_class($class, $fpath);
+            if ($totals) {
+                $this->totals['methods'] += count($class->getMethods());
+                $this->totals['class_const'] += count($class->getConstants());
+            }
+        }
+    }
+
+    public function add_function($function, $fpath)
+    {
+        $name = $function->getName();
+        $lname = strtolower($name);
+        if (array_key_exists($lname, $this->functions)) {
+            $this->log('Function Conflict: ' . $name, true);
+        }
+        $args = array();
+        foreach ($function->getArguments() as $arg) {
+            $args[] = ($arg->getType() != 'mixed' ? $arg->getType() . ' ' : '') . ($arg->isVariadic() ? '...' : '') . ($arg->isByReference() ? '&' : '') . '$' . $arg->getName() . ($arg->getDefault() !== null ? ' = ' . $arg->getDefault() : '');
+        }
+        $this->functions[$lname] = array('file' => $fpath, 'name' => $name, 'args' => $args);
+        $this->functions[$lname]['line'] = $function->getLocation()->getLineNumber();
+        $docblock = $function->getDocBlock();
+        if (!empty($docblock) && $docblock->hasTag('uses')) {
+            $tags = $docblock->getTagsByName('uses');
+            $this->functions[$lname]['uses'] = str_replace('\\', '', implode(', ', $tags));
+        }
+    }
+
+    public function add_constant($constant, $fpath)
+    {
+        $name = $constant->getName();
+        $lname = strtolower($name);
+        if (array_key_exists(strtolower($lname), $this->constants)) {
+            $this->log('Constant Conflict: ' . $name, true);
+        }
+        $this->constants[$lname] = array('file' => $fpath, 'name' => $name, 'value' => $constant->getValue());
+    }
+
+    public function add_class($class, $fpath)
+    {
+        $name = $class->getName();
+        $lname = strtolower($name);
+        if (array_key_exists(strtolower($lname), $this->classes)) {
+            $this->log('Class Conflict: ' . $name, true);
+        }
+        $this->classes[$lname] = array('file' => $fpath, 'name' => $name, 'methods' => array(), 'const' => array());
+        $this->classes[$lname]['line'] = $class->getLocation()->getLineNumber();
+        foreach ($class->getMethods() as $method) {
+            $mname = $method->getName();
+            //$docblock = $method->getDocBlock();
+            //if (!empty($docblock)) {
+            //    $tags = $docblock->getTags();
+            //    var_dump($tags);
+            //}
             $args = array();
-            foreach ($function->getArguments() as $arg) {
+            foreach ($method->getArguments() as $arg) {
                 $args[] = ($arg->getType() != 'mixed' ? $arg->getType() . ' ' : '') . ($arg->isVariadic() ? '...' : '') . ($arg->isByReference() ? '&' : '') . '$' . $arg->getName() . ($arg->getDefault() !== null ? ' = ' . $arg->getDefault() : '');
             }
-            $functions[$lname] = array('file' => $fpath, 'name' => $name, 'args' => $args);
-            if (preg_match('/^(xar[A-Z][a-z]+?)([A-Z].+|_(.+))$/', $name, $matches) || preg_match('/^(xar[A-Z]+)([A-Z].+|_(.+))$/', $name, $matches)) {
-                $functions[$lname]['class'] = $matches[1];
-                if (!empty($matches[3])) {
-                    $functions[$lname]['check'] = $matches[3];
-                } else {
-                    $functions[$lname]['check'] = $matches[2];
-                }
-            }
-            $functions[$lname]['line'] = $function->getLocation()->getLineNumber();
+            $this->classes[$lname]['methods'][strtolower($mname)] = array('name' => $mname, 'args' => $args);
+            $this->classes[$lname]['methods'][strtolower($mname)]['line'] = $method->getLocation()->getLineNumber();
         }
-        $totals['constants'] += count($file->getConstants());
-        foreach ($file->getConstants() as $constant) {
-            $name = $constant->getName();
-            $lname = strtolower($name);
-            if (array_key_exists(strtolower($lname), $constants)) {
-                echo 'Constant Conflict: ' . $name . "\n";
-            }
-            $constants[$lname] = array('file' => $fpath, 'name' => $name, 'value' => $constant->getValue());
-            if (preg_match('/^([A-Za-z]+)_(.+)$/', $name, $matches)) {
-                $constants[$lname]['class'] = $matches[1];
-                $constants[$lname]['check'] = $matches[2];
-            }
+        foreach ($class->getConstants() as $constant) {
+            $cname = $constant->getName();
+            $this->classes[$lname]['const'][strtolower($cname)] = array('name' => $cname, 'value' => $constant->getValue());
         }
-        $totals['classes'] += count($file->getClasses());
-        foreach ($file->getClasses() as $class) {
-            $name = $class->getName();
-            $lname = strtolower($name);
-            if (array_key_exists(strtolower($lname), $classes)) {
-                echo 'Class Conflict: ' . $name . "\n";
-            }
-            $classes[$lname] = array('file' => $fpath, 'name' => $name, 'methods' => array(), 'const' => array());
-            $totals['methods'] += count($class->getMethods());
-            foreach ($class->getMethods() as $method) {
-                $mname = $method->getName();
-                $args = array();
-                foreach ($method->getArguments() as $arg) {
-                    $args[] = ($arg->getType() != 'mixed' ? $arg->getType() . ' ' : '') . ($arg->isVariadic() ? '...' : '') . ($arg->isByReference() ? '&' : '') . '$' . $arg->getName() . ($arg->getDefault() !== null ? ' = ' . $arg->getDefault() : '');
-                }
-                $classes[$lname]['methods'][strtolower($mname)] = array('name' => $mname, 'args' => $args);
-            }
-            $totals['class_const'] += count($class->getConstants());
-            foreach ($class->getConstants() as $constant) {
-                $cname = $constant->getName();
-                $classes[$lname]['const'][strtolower($cname)] = array('name' => $cname, 'value' => $constant->getValue());
-            }
-        }
-        $totals['interfaces'] += count($file->getInterfaces());
-        $totals['traits'] += count($file->getTraits());
     }
-    echo json_encode($totals, JSON_PRETTY_PRINT);
-    $found = 0;
-    foreach (array_keys($functions) as $lname) {
-        $function = $functions[$lname];
+
+    public function find_core_functions()
+    {
+        $found = 0;
+        foreach (array_keys($this->functions) as $lname) {
+            $found += $this->match_core_function($lname);
+        }
+        $this->save_core_functions();
+        $this->log('Found Functions: ' . $found, true);
+    }
+
+    public function load_core_functions()
+    {
+        if ($this->refresh || !file_exists('core_functions.json')) {
+            $this->find_core_functions();
+        }
+        $contents = file_get_contents('core_functions.json');
+        $this->functions = json_decode($contents, true);
+        $this->log('Load Functions: ' . count($this->functions), true);
+    }
+
+    public function save_core_functions()
+    {
+        ksort($this->functions);
+        file_put_contents('core_functions.json', $this->to_json($this->functions));
+    }
+
+    public function match_core_function($lname)
+    {
+        $function = $this->functions[$lname];
+        if (!empty($function['uses']) && preg_match('/^(xar[A-Z]\w+)::(\w+)\(\)$/', $function['uses'], $matches)) {
+            $this->functions[$lname]['class'] = $matches[1];
+            $this->functions[$lname]['check'] = $matches[2];
+            $function = array_replace($function, $this->functions[$lname]);
+	} elseif (preg_match('/^(xar[A-Z][a-z]+?)([A-Z].+|_(.+))$/', $function['name'], $matches) || preg_match('/^(xar[A-Z]+)([A-Z].+|_(.+))$/', $function['name'], $matches)) {
+            $this->functions[$lname]['class'] = $matches[1];
+            if (!empty($matches[3])) {
+                $this->functions[$lname]['check'] = $matches[3];
+            } else {
+                $this->functions[$lname]['check'] = $matches[2];
+            }
+            $function = array_replace($function, $this->functions[$lname]);
+            $this->log($function['name'] . ' CHECK');
+        }
         if (!isset($function['class'])) {
-            echo $function['name'] . ' SKIP ' . "\n";
-            continue;
+            $this->log($function['name'] . ' SKIP ');
+            return 0;
         }
         $cname = strtolower($function['class']);
-        if (isset($classes[$cname])) {
-            $class = $classes[$cname];
+        if (isset($this->classes[$cname])) {
+            $class = $this->classes[$cname];
             $mname = strtolower($function['check']);
             if (isset($class['methods'][$mname])) {
                 $method = $class['methods'][$mname];
-                echo $function['name'] . ' ' . $class['name'] . '::' . $method['name'] . "\n";
-                $functions[$lname]['class'] = $class['name'];
-                $functions[$lname]['method'] = $method['name'];
-                $functions[$lname]['margs'] = $method['args'];
-                $found += 1;
-                continue;
+                $this->log($function['name'] . ' ' . $class['name'] . '::' . $method['name']);
+                $this->functions[$lname]['class'] = $class['name'];
+                $this->functions[$lname]['method'] = $method['name'];
+                $this->functions[$lname]['margs'] = $method['args'];
+                return 1;
             }
         }
-        echo $function['name'] . ' TODO: ' . $function['line'] . ' ' . $function['file'] . "\n";
-        $file = $project->getFiles()[$function['file']];
-        $lines = array_slice(explode("\n", $file->getSource()), $function['line'] - 1);
+        $this->log($function['name'] . ' TODO: ' . $function['line'] . ' ' . $function['file']);
+        $line = $this->get_next_return($function['file'], $function['line']);
+        if (!empty($line) && preg_match('/ return (\w+)::(\w+)\(([^\)]*)/', $line, $matches)) {
+            $this->log($function['name'] . ' FOUND ' . $matches[1] . '::' . $matches[2] . ' ' . $function['file']);
+            $this->functions[$lname]['class'] = $matches[1];
+            $this->functions[$lname]['method'] = $matches[2];
+            $this->functions[$lname]['rargs'] = $matches[3];
+            //$this->functions[$lname]['uses'] = $matches[1] . '::' . $matches[2] . '()';
+            return 1;
+        }
+        //$this->functions[$lname]['return'] = trim($line);
+        $this->log($function['name'] . ' LOST ');
+        return 0;
+    }
+
+    public function get_next_return($fpath, $line)
+    {
+        $file = $this->project->getFiles()[$fpath];
+        $lines = array_slice(explode("\n", $file->getSource()), $line - 1);
         //echo implode("\n", $lines);
         foreach ($lines as $line) {
             if (strpos($line, ' return ') !== false) {
-                if (preg_match('/ return (\w+)::(\w+)\(([^\)]*)/', $line, $matches)) {
-                    echo $function['name'] . ' FOUND ' . $matches[1] . '::' . $matches[2] . ' ' . $function['file'] . "\n";
-                    $functions[$lname]['class'] = $matches[1];
-                    $functions[$lname]['method'] = $matches[2];
-                    $functions[$lname]['rargs'] = $matches[3];
-                    $found += 1;
-                } else {
-                    echo $function['name'] . ' LOST ' . "\n";
-                }
-                break;
+	        return $line;
             }
-        }
+	}
+	return null;
     }
-    file_put_contents('core_functions.json', json_encode($functions, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK));
-    echo 'Found Functions: ' . $found . "\n";
-    $found = 0;
-    foreach (array_keys($constants) as $lname) {
-        $constant = $constants[$lname];
+
+    public function find_core_constants()
+    {
+        $found = 0;
+        foreach (array_keys($this->constants) as $lname) {
+            $found += $this->match_core_constant($lname);
+        }
+        $this->save_core_constants();
+        $this->log('Found Constants: ' . $found, true);
+    }
+
+    public function load_core_constants()
+    {
+        if ($this->refresh || !file_exists('core_constants.json')) {
+            $this->find_core_constants();
+        }
+        $contents = file_get_contents('core_constants.json');
+        $this->constants = json_decode($contents, true);
+        $this->log('Load Constants: ' . count($this->constants), true);
+    }
+
+    public function save_core_constants()
+    {
+        ksort($this->constants);
+        file_put_contents('core_constants.json', $this->to_json($this->constants));
+    }
+
+    public function match_core_constant($lname)
+    {
+        $constant = $this->constants[$lname];
+        if (preg_match('/^([A-Za-z]+)_(.+)$/', $constant['name'], $matches)) {
+            $this->constants[$lname]['class'] = $matches[1];
+            $this->constants[$lname]['check'] = $matches[2];
+            $constant = array_replace($constant, $this->constants[$lname]);
+        }
         if (!isset($constant['class'])) {
-            echo $constant['name'] . ' SKIP ' . "\n";
-            continue;
+            $this->log($constant['name'] . ' SKIP ');
+            return 0;
         }
         $cname = strtolower($constant['class']);
-        if (isset($classes[$cname])) {
-            $class = $classes[$cname];
+        if (isset($this->classes[$cname])) {
+            $class = $this->classes[$cname];
             $cname = strtolower($constant['check']);
             if (isset($class['const'][$cname])) {
                 $const = $class['const'][$cname];
@@ -161,88 +332,159 @@ function parse_core_files($inDir)
                     echo $constant['name'] . ' (' . $constant['value'] . ') != ' . $class['name'] . '::' . $const['name'] . ' (' . $const['value'] . ")\n";
                     exit;
                 }
-                echo $constant['name'] . ' ' . $class['name'] . '::' . $const['name'] . "\n";
-                $constants[$lname]['class'] = $class['name'];
-                $constants[$lname]['const'] = $const['name'];
-                $found += 1;
-                continue;
+                $this->log($constant['name'] . ' ' . $class['name'] . '::' . $const['name']);
+                $this->constants[$lname]['class'] = $class['name'];
+                $this->constants[$lname]['const'] = $const['name'];
+                return 1;
             }
         }
+        return 0;
     }
-    file_put_contents('core_constants.json', json_encode($constants, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK));
-    echo 'Found Constants: ' . $found . "\n";
-}
 
-function search_module_files($inDir, $fixMe=false)
-{
-    $contents = file_get_contents('core_functions.json');
-    $functions = json_decode($contents, true);
-    $contents = file_get_contents('core_constants.json');
-    $constants = json_decode($contents, true);
-    $search = array();
-    $replace = array();
-    foreach ($functions as $lname => $function) {
-        if (empty($function['class']) || empty($function['method'])) {
-            continue;
+    public function find_core_replaced()
+    {
+        $this->replaced = array();
+        $this->missing = array();
+        if (empty($this->functions)) {
+            $this->load_core_functions();
         }
-        // @checkme security.php is still messed up
-        if (strpos($function['file'], 'security.php') !== false) {
-            continue;
-        }
-        $search[] = $function['name'];
-        $replace[] = $function['class'] . '::' . $function['method'];
-    }
-    foreach ($constants as $lname => $constant) {
-        if (empty($constant['class']) || empty($constant['const'])) {
-            continue;
-        }
-        // @checkme security.php is still messed up
-        if (strpos($constant['file'], 'security.php') !== false) {
-            continue;
-        }
-        $search[] = $constant['name'];
-        $replace[] = $constant['class'] . '::' . $constant['const'];
-    }
-    echo 'Functions: ' . count($functions) . ' - Constants: ' . count($constants) . ' - Replace: ' . count($replace) . "\n";
-    $pattern = '/' . implode('|', $search) . '/';
-    // iterate over all .php, .inc, .xt, .xml and .xsl files in the directory
-    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($inDir));
-    $files = new \RegexIterator($files, '/\.(php|inc|xt|xml|xsl)$/');
-
-    $todo = array();
-    foreach ($files as $file) {
-        try {
-            $contents = file_get_contents($file->getPathName());
-            if (!preg_match_all($pattern, $contents, $matches)) {
+        foreach ($this->functions as $lname => $function) {
+            if (empty($function['class'])) {
                 continue;
             }
-            echo $file->getPathName() . ' - ' . count($matches[0]) . ' matches: ' . implode(', ', array_unique($matches[0])) . "\n";
-            $todo[] = $file->getPathName();
-        } catch (Exception $e) {
-            echo 'Parse Error: ', $e->getMessage();
-            exit;
+            if (empty($function['method'])) {
+                if (!array_key_exists($function['file'], $this->missing)) {
+                    $this->missing[$function['file']] = array();
+                }
+                $this->missing[$function['file']][$function['name']] = $function['class'] . ':: ? = ' . $function['check'];
+                continue;
+            }
+            // @checkme security.php is still messed up
+            if (strpos($function['file'], 'security.php') !== false && strpos($lname, 'authkey') === false) {
+                if (!array_key_exists($function['file'], $this->missing)) {
+                    $this->missing[$function['file']] = array();
+                }
+                $this->missing[$function['file']][$function['name']] = $function['class'] . '::' . $function['method'] . ' = ' . $function['check'] . ' ?';
+                continue;
+            }
+            $this->replaced[$function['name']] = $function['class'] . '::' . $function['method'];
         }
+        if (empty($this->constants)) {
+            $this->load_core_constants();
+        }
+        foreach ($this->constants as $lname => $constant) {
+            if (empty($constant['class'])) {
+                continue;
+            }
+            if (empty($constant['const'])) {
+                if (!array_key_exists($constant['file'], $this->missing)) {
+                    $this->missing[$constant['file']] = array();
+                }
+                $this->missing[$constant['file']][$constant['name']] = $constant['class'] . ':: ? = ' . $constant['check'];
+                continue;
+            }
+            // @checkme security.php is still messed up
+            if (strpos($constant['file'], 'security.php') !== false) {
+                if (!array_key_exists($constant['file'], $this->missing)) {
+                    $this->missing[$constant['file']] = array();
+                }
+                $this->missing[$constant['file']][$constant['name']] = $constant['class'] . '::' . $constant['const'] . '= ' . $constant['check'] . ' ?';
+                continue;
+            }
+            $this->replaced[$constant['name']] = $constant['class'] . '::' . $constant['const'];
+        }
+        $this->save_core_replaced();
+        $this->log('Found Replaced: ' . count($this->replaced), true);
+        $this->log('Found Missing: ' . count($this->missing), true);
+        $this->log($this->to_json($this->missing));
     }
-    echo 'Found ' . count($todo) . ' files to fix' . "\n";
-    if (!$fixMe) {
-        echo 'Set $fixMe = true; to fix' . "\n";
-        return;
+
+    public function load_core_replaced()
+    {
+        if ($this->refresh || !file_exists('core_replace.json')) {
+            $this->find_core_replaced();
+        }
+        $contents = file_get_contents('core_replace.json');
+        $this->replaced = json_decode($contents, true);
+        $this->log('Load Replaced: ' . count($this->replaced), true);
     }
-    foreach ($todo as $filepath) {
-        echo 'Fixing ' . $filepath . "\n";
-        $contents = file_get_contents($filepath);
-        $contents = str_replace($search, $replace, $contents);
-        file_put_contents($filepath, $contents);
+
+    public function save_core_replaced()
+    {
+        ksort($this->replaced);
+        file_put_contents('core_replace.json', $this->to_json($this->replaced));
+    }
+
+    public function parse_core_files($inDir = null)
+    {
+        $this->load_project($inDir);
+        $this->parse_project();
+        $this->find_core_functions();
+        $this->find_core_constants();
+        $this->find_core_replaced();
+    }
+
+    public function check_module_files($inDir, $fixMe = false)
+    {
+        $this->load_core_replaced();
+        $search = array();
+        $replace = array();
+        foreach ($this->replaced as $old => $new) {
+            $search[] = $old;
+            $replace[] = $new;
+        }
+        $pattern = '/' . implode('|', $search) . '/';
+        // iterate over all .php, .inc, .xt, .xml and .xsl files in the directory
+        $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($inDir));
+        $files = new \RegexIterator($files, self::ALL_EXT);
+
+        $todo = array();
+        foreach ($files as $file) {
+            try {
+                $contents = file_get_contents($file->getPathName());
+                if (!preg_match_all($pattern, $contents, $matches)) {
+                    continue;
+                }
+                $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' matches: ' . implode(', ', array_unique($matches[0])));
+                $todo[] = $file->getPathName();
+            } catch (Exception $e) {
+                echo 'Parse Error: ', $e->getMessage();
+                exit;
+            }
+        }
+        $this->log('Found ' . count($todo) . ' files to fix', true);
+        if (!$fixMe) {
+            $this->log('Set $fixMe = true; to fix', true);
+            return;
+        }
+        foreach ($todo as $filepath) {
+            $this->log('Fixing ' . $filepath);
+            $contents = file_get_contents($filepath);
+            $contents = str_replace($search, $replace, $contents);
+            file_put_contents($filepath, $contents);
+        }
     }
 }
 
-$refresh = false;
+$refresh = true;
 if ($refresh || !file_exists('core_functions.json') || !file_exists('core_constants.json')) {
-    $inDir = dirname(dirname(__DIR__)).'/html/lib/xaraya';
-    parse_core_files($inDir);
+    $inDir = dirname(dirname(__DIR__)) . '/html/lib/xaraya';
+    $analyzer = new XarayaCodeAnalyzer();
+    $analyzer->parse_core_files($inDir);
 }
 
-$fixMe = false;
-$inDir = dirname(dirname(__DIR__)).'/html/code/modules/';
+$fixMe = true;
+$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
 //$inDir = dirname(dirname(__DIR__)).'/html/themes/';
-search_module_files($inDir, $fixMe);
+//$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/';
+//$analyzer = new XarayaCodeAnalyzer();
+//$analyzer->check_module_files($inDir, $fixMe);
+
+//$modName = 'dynamicdata';
+//$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/' . $modName . '/';
+$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/xarcachemanager/';
+//$analyzer = new XarayaCodeAnalyzer($inDir);
+//$analyzer->verbose = true;
+//$analyzer->load_project();
+//$analyzer->parse_project();
+// @todo

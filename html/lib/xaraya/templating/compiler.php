@@ -7,7 +7,6 @@ if (!class_exists('xarExceptions')) {
  * Exception raised by the templating subsystem
  *
  * @package core\templating
- * @subpackage templating
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -26,7 +25,6 @@ sys::import('blocklayout.compiler');
  * XarayaCompiler - an extension of the BL compiler
  *
  * @package core\templating
- * @subpackage templating
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release

@@ -2,8 +2,7 @@
 /**
  * Theme handling functions
  *
- * @package core
- * @subpackage themes
+ * @package core\themes
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -14,11 +13,13 @@
  * @todo Most of this doesnt belong here, but in the themes module, move it away
 */
 
+sys::import('xaraya.variables.theme');
 /**
  * Wrapper functions to support Xaraya 1 API
  *
+ * @uses xarThemeVars::get()
+ * @deprecated
 **/
-sys::import('xaraya.variables.theme');
 function xarThemeGetVar($themeName, $name, $prep = NULL)                           {   return xarThemeVars::get($themeName, $name); }
 //function xarThemeSetVar($themeName, $name, $prime = NULL, $value, $description='') {   return xarThemeVars::set($themeName, $name, $value); }
 //function xarThemeDelVar($themeName, $name)                                         {   return xarThemeVars::delete($themeName, $name); }
@@ -26,8 +27,9 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)                        
 
 /**
  * Gets theme registry ID given its name
- *
  * 
+ * @uses xarTheme::getIDFromName()
+ * @deprecated
  * @param themeName The name of the theme
  * @return theme RegID for processing
  * @throws EmptyParameterException
@@ -40,7 +42,8 @@ function xarThemeGetIDFromName($themeName,$id='regid')
 /**
  * get information on theme
  *
- * 
+ * @uses xarTheme::getInfo()
+ * @deprecated
  * @param themeRegId theme id
  * @return array array of theme information
  */
@@ -49,7 +52,8 @@ function xarThemeGetInfo($regId) { return xarTheme::getInfo($regId); }
 /**
  * checks if a theme is installed and its state is XARTHEME_STATE_ACTIVE
  *
- * 
+ * @uses xarTheme::isAvailable()
+ * @deprecated
  * @param themeName registered name of theme
  * @return boolean true if the theme is available, false if not
  */
@@ -60,7 +64,8 @@ function xarThemeIsAvailable($themeName) { return xarTheme::isAvailable($themeNa
 /**
  * Get info from xartheme.php
  *
- * 
+ * @uses xarTheme::getFileInfo()
+ * @deprecated
  * @param themeOSdir the theme's directory
  * @return xarMod::getFileInfo for processing
  * @todo move to own class so we can protect it
@@ -70,7 +75,8 @@ function xarTheme_getFileInfo($themeOsDir) { return xarTheme::getFileInfo($theme
 /**
  * Load a theme's base information
  *
- * 
+ * @uses xarTheme::getBaseInfo()
+ * @deprecated
  * @param themeName the theme's name
  * @return to xarMod__getBaseInfo for processing
  */
@@ -79,7 +85,8 @@ function xarTheme_getBaseInfo($themeName) { return xarTheme::getBaseInfo($themeN
 /**
  * Get all theme variables for a particular theme
  *
- * 
+ * @uses xarTheme::getVarsByTheme()
+ * @deprecated
  * @return array an array of theme variables
  */
 function xarTheme_getVarsByTheme($themeName)
@@ -87,6 +94,9 @@ function xarTheme_getVarsByTheme($themeName)
     return xarTheme::getVarsByTheme($themeName);
 }
 
+/**
+ * Theme handling functions
+ */
 class xarTheme extends xarObject
 {
     const STATE_UNINITIALISED              = 1;

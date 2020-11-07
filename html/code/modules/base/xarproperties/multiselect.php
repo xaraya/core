@@ -151,7 +151,7 @@ class MultiSelectProperty extends SelectProperty
             // Legacy support: if the validation field is an array, we'll assume that this is an array of id => name
             } elseif (!empty($data['validation']) && is_array($data['validation']) && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
                 sys::import('xaraya.legacy.validations');
-                $this->options = dropdown($data['validation']);
+                $this->options = xar_legacy_validations_dropdown($data['validation']);
             }
 
         // Allow overriding by specific parameters
@@ -209,4 +209,3 @@ class MultiSelectProperty extends SelectProperty
         return $value;
     }
 }
-?>

@@ -17,6 +17,7 @@
 /**
  * Interface declaration for xarDDObject
  *
+ * @package core\objects
  * @todo this is very likely to change, it was created as baseline for refactoring
  */
 interface IxarDDObject
@@ -27,6 +28,7 @@ interface IxarDDObject
 /**
  * Preliminary class to model xarDDObject interface
  *
+ * @package core\objects
  */
 class xarDDObject extends xarObject implements IxarDDObject
 {

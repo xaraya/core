@@ -3,7 +3,6 @@
  * Variable utilities
  *
  * @package core\variables
- * @subpackage variables
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -18,7 +17,6 @@
  * Exception raised by the variables subsystem
  *
  * @package core\variables
- * @subpackage variables
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -35,7 +33,6 @@ class VariableValidationException extends ValidationExceptions
  * Exception raised by the variables subsystem
  *
  * @package core\exceptions
- * @subpackage exceptions
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -54,7 +51,6 @@ class ConfigurationException extends ConfigurationExceptions
  * Interface declaration for classes dealing with sets of variables
  *
  * @package core\variables
- * @subpackage variables
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -75,7 +71,6 @@ interface IxarVars
  * Base class for variable handling in core
  *
  * @package core\variables
- * @subpackage variables
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -91,6 +86,8 @@ class xarVars extends xarObject
 
 /**
  * Variables package defines
+ * @package core\variables
+ * @deprecated
  */
 define('XARVAR_ALLOW_NO_ATTRIBS', 1);
 define('XARVAR_ALLOW', 2);
@@ -111,6 +108,7 @@ define('XARVAR_PREP_TRIM',        8);
 
 /**
  * Move public static functions to class
+ * @package core\variables
  */
 class xarVar extends xarObject
 {
@@ -402,7 +400,6 @@ class xarVar extends xarObject
     /**@+
      * Wrapper functions for var caching as in Xaraya 1 API
      * See the documentation of protected xarCoreCache::*Cached for details
-     *
      * 
      * @see xarCore
      */
@@ -457,23 +454,40 @@ class xarVar extends xarObject
 }
 
 /**
- * Original function calls
+ * Legacy call
+ * @uses xarVar::init()
+ * @deprecated
  */
 function xarVar_init(&$args)
 {
     return xarVar::init($args);
 }
 
+/**
+ * Legacy call
+ * @uses xarVar::batchFetch()
+ * @deprecated
+ */
 function xarVarBatchFetch()
 {
     return xarVar::batchFetch();
 }
 
+/**
+ * Legacy call
+ * @uses xarVar::fetch()
+ * @deprecated
+ */
 function xarVarFetch($name, $validation, &$value, $defaultValue = NULL, $flags = xarVar::GET_OR_POST, $prep = xarVar::PREP_FOR_NOTHING)
 {
     return xarVar::fetch($name, $validation, $value, $defaultValue, $flags, $prep);
 }
 
+/**
+ * Legacy call
+ * @uses xarVar::validate()
+ * @deprecated
+ */
 function xarVarValidate($validation, &$subject, $supress = false, $name = '')
 {
     return xarVar::validate($validation, $subject, $supress, $name);
@@ -502,13 +516,37 @@ function xarVarValidate($validation, &$subject, $supress = false, $name = '')
  * Wrapper functions for var caching as in Xaraya 1 API
  * See the documentation of protected xarCoreCache::*Cached for details
  *
- * 
  * @see xarCore
  */
+/**
+ * Legacy call
+ * @uses xarVar::isCached()
+ * @deprecated
+ */
 function xarVarIsCached($scope,  $name)         { return xarCoreCache::isCached($scope, $name);         }
+/**
+ * Legacy call
+ * @uses xarVar::getCached()
+ * @deprecated
+ */
 function xarVarGetCached($scope, $name)         { return xarCoreCache::getCached($scope, $name);        }
+/**
+ * Legacy call
+ * @uses xarVar::setCached()
+ * @deprecated
+ */
 function xarVarSetCached($scope, $name, $value) { return xarCoreCache::setCached($scope, $name, $value);}
+/**
+ * Legacy call
+ * @uses xarVar::delCached()
+ * @deprecated
+ */
 function xarVarDelCached($scope, $name)         { return xarCoreCache::delCached($scope, $name);        }
+/**
+ * Legacy call
+ * @uses xarVar::flushCached()
+ * @deprecated
+ */
 function xarVarFlushCached($scope)              { return xarCoreCache::flushCached($scope);             }
 
 /*

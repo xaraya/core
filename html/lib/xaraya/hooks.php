@@ -6,7 +6,6 @@
  * @checkme Replace 'module' with 'config' scope to indicate that we actually configure hooks for module itemtypes, objects, etc. there ?
  * @todo <chris> review the above todo's and checkme's
  * @package core\hooks
- * @subpackage hooks
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -449,23 +448,8 @@ class xarHooks extends xarEvents
  * Carry out hook operations for module
  *
  * @package core\hooks
- * @subpackage hooks
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- * @access public
- * @param hookScope string the scope the hook is called for - 'item', 'module', ...
- * @param hookAction string the action the hook is called for - 'transform', 'display', 'new', 'create', 'delete', ...
- * @param hookId mixed the id of the object the hook is called for (module-specific)
- * @param extraInfo mixed extra information for the hook, dependent on hookAction
- * @param callerModName string for what module are we calling this (default = current main module)
- *        Note : better pass the caller module via $extraInfo['module'] if necessary, so that hook functions receive it too
- * @param callerItemType string optional item type for the calling module (default = none)
- *        Note : better pass the item type via $extraInfo['itemtype'] if necessary, so that hook functions receive it too
- * @return mixed output from hooks, or null if there are no hooks
- * @throws BadParameterException
+ * @uses xarModHooks::call()
+ * @deprecated
  */
 function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '')
 {
@@ -476,21 +460,9 @@ function xarModCallHooks($hookScope, $hookAction, $hookId, $extraInfo = NULL, $c
  * Get list of available hooks for a particular module[, scope] and action
  *
  * @package core\hooks
- * @subpackage hooks
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- *
- * @param callerModName string name of the calling module
- * @param hookScope string the hook scope
- * @param hookAction string the hook action
- * @param callerItemType string optional item type for the calling module (default = none)
- * @return array of hook information arrays, or null if database error
- * @throws DATABASE_ERROR
+ * @uses xarModHooks::getList()
+ * @deprecated
  */
-// This is the actual function that gets modules hooked to a module (+ itemtype) 
 function xarModGetHookList($callerModName, $hookScope, $hookAction, $callerItemType = '')
 {
     return xarModHooks::getList($callerModName, $hookScope, $hookAction, $callerItemType);
@@ -500,19 +472,8 @@ function xarModGetHookList($callerModName, $hookScope, $hookAction, $callerItemT
  * Check if a particular hook module is hooked to the current module (+ itemtype)
  *
  * @package core\hooks
- * @subpackage hooks
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- * @access public
- * @static modHookedCache array
- * @param hookModName string name of the hook module we're looking for
- * @param callerModName string name of the calling module (default = current)
- * @param callerItemType string optional item type for the calling module (default = none)
- * @return mixed true if the module is hooked
- * @throws DATABASE_ERROR, BAD_PARAM
+ * @uses xarModHooks::isHooked()
+ * @deprecated
  */
 function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '')
 {
@@ -523,21 +484,8 @@ function xarModIsHooked($hookModName, $callerModName = NULL, $callerItemType = '
  * register a hook function
  *
  * @package core\hooks
- * @subpackage hooks
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- * @access public
- * @param hookScope the hook scope
- * @param hookAction the hook action
- * @param hookArea the area of the hook (either 'GUI' or 'API')
- * @param hookModName name of the hook module
- * @param hookModType name of the hook type ('user' / 'admin' / ... for regular functions, or 'class' for hook call handlers)
- * @param hookModFunc name of the hook function or handler class
- * @return bool true on success
- * @throws BadParameterException
+ * @uses xarModHooks::register()
+ * @deprecated
  */
 function xarModRegisterHook($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
 {
@@ -548,21 +496,8 @@ function xarModRegisterHook($hookScope, $hookAction, $hookArea, $hookModName, $h
  * unregister a hook function (deprecated - use unregisterHookModule or the standard deinstall for modules instead)
  *
  * @package core\hooks
- * @subpackage hooks
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- * @access public
- * @param hookScope the hook scope
- * @param hookAction the hook action
- * @param hookArea the area of the hook (either 'GUI' or 'API')
- * @param hookModName name of the hook module
- * @param hookModType name of the hook type ('user' / 'admin' / ... for regular functions, or 'class' for hook call handlers)
- * @param hookModFunc name of the hook function or handler class
- * @return bool true if the unregister call suceeded, false if it failed
- * @throws BadParameterException
+ * @uses xarModHooks::unregister()
+ * @deprecated
  */
 function xarModUnregisterHook($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc)
 {
@@ -570,12 +505,26 @@ function xarModUnregisterHook($hookScope, $hookAction, $hookArea,$hookModName, $
 }
 
 /**
- * Move public static functions to class
+ * Hook operations for modules
+ *
+ * @package core\hooks
  */
 class xarModHooks extends xarObject
 {
     /**
      * Carry out hook operations for module
+     *
+     * @access public
+     * @param $hookScope string the scope the hook is called for - 'item', 'module', ...
+     * @param $hookAction string the action the hook is called for - 'transform', 'display', 'new', 'create', 'delete', ...
+     * @param $hookId mixed the id of the object the hook is called for (module-specific)
+     * @param $extraInfo mixed extra information for the hook, dependent on hookAction
+     * @param $callerModName string for what module are we calling this (default = current main module)
+     *        Note : better pass the caller module via $extraInfo['module'] if necessary, so that hook functions receive it too
+     * @param $callerItemType string optional item type for the calling module (default = none)
+     *        Note : better pass the item type via $extraInfo['itemtype'] if necessary, so that hook functions receive it too
+     * @return mixed output from hooks, or null if there are no hooks
+     * @throws BadParameterException
      */
     public static function call($hookScope, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '')
     {
@@ -599,6 +548,14 @@ class xarModHooks extends xarObject
 
     /**
      * Get list of available hooks for a particular module[, scope] and action
+     *
+     * @access public
+     * @param $callerModName string name of the calling module
+     * @param $hookScope string the hook scope
+     * @param $hookAction string the hook action
+     * @param $callerItemType string optional item type for the calling module (default = none)
+     * @return array of hook information arrays, or null if database error
+     * @throws DATABASE_ERROR
      */
     public static function getList($callerModName, $hookScope, $hookAction, $callerItemType = '')
     {
@@ -608,6 +565,13 @@ class xarModHooks extends xarObject
 
     /**
      * Check if a particular hook module is hooked to the current module (+ itemtype)
+     *
+     * @access public
+     * @param $hookModName string name of the hook module we're looking for
+     * @param $callerModName string name of the calling module (default = current)
+     * @param $callerItemType string optional item type for the calling module (default = none)
+     * @return mixed true if the module is hooked
+     * @throws DATABASE_ERROR, BAD_PARAM
      */
     public static function isHooked($hookModName, $callerModName = NULL, $callerItemType = '')
     {
@@ -616,6 +580,16 @@ class xarModHooks extends xarObject
 
     /**
      * register a hook function
+     *
+     * @access public
+     * @param $hookScope the hook scope
+     * @param $hookAction the hook action
+     * @param $hookArea the area of the hook (either 'GUI' or 'API')
+     * @param $hookModName name of the hook module
+     * @param $hookModType name of the hook type ('user' / 'admin' / ... for regular functions, or 'class' for hook call handlers)
+     * @param $hookModFunc name of the hook function or handler class
+     * @return bool true on success
+     * @throws BadParameterException
      */
     public static function register($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)
     {
@@ -625,6 +599,16 @@ class xarModHooks extends xarObject
 
     /**
      * unregister a hook function (deprecated - use unregisterHookModule or the standard deinstall for modules instead)
+     *
+     * @access public
+     * @param $hookScope the hook scope
+     * @param $hookAction the hook action
+     * @param $hookArea the area of the hook (either 'GUI' or 'API')
+     * @param $hookModName name of the hook module
+     * @param $hookModType name of the hook type ('user' / 'admin' / ... for regular functions, or 'class' for hook call handlers)
+     * @param $hookModFunc name of the hook function or handler class
+     * @return bool true if the unregister call suceeded, false if it failed
+     * @throws BadParameterException
      */
     public static function unregister($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc)
     {

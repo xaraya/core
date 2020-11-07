@@ -1,7 +1,6 @@
 <?php
 /**
- * @package core
- * @subpackage legacy
+ * @package core\legacy\templates
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -9,9 +8,11 @@
  * @link http://www.xaraya.info
  */
 
-    // Load templates with the .xd extension
-    
-    function loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName,$canonical)
+    /**
+     * Load templates with the .xd extension
+     * @deprecated
+     */
+    function xar_legacy_templates_loadsourcefilename($tplBaseDir,$tplSubPart,$tplBase,$templateName,$canTemplateName,$canonical)
     {
         xarLog::message("TPL: 7. Try legacy .xd templates in $tplBaseDir/xartemplates/", xarLog::LEVEL_INFO);
         if(!empty($templateName) &&
@@ -26,20 +27,23 @@
         return $sourceFileName;
     }
     
-    /* Transform entities into numeric
+    /**
+     * Transform entities into numeric
      * Remove $ from varnames in xar:set
      * Add a blanksspace to empty text areas
      * Convert old tag name into new
+     * @deprecated
      */
-     function fixLegacy($templatestring)
+     function xar_legacy_templates_fixLegacy($templatestring)
     {
         // Quick & dirty wrapper for missing xmlns:xar in old 1.x templates
         if (!strpos($templatestring, ' xmlns:xar="') && !strpos($templatestring, '</xar:template>')) {
             $templatestring = '<?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">' . $templatestring . '</xar:template>';
+            $entities = xar_legacy_templates_entities();
 
             // Replace non-numeric entitites in old 1.x templates
-            $templatestring = str_replace(array_keys(entities()),entities(),$templatestring);
+            $templatestring = str_replace(array_keys($entities),$entities,$templatestring);
 
             // Allow xar:set name="$var" in old 1.x templates
             $templatestring = str_replace('<xar:set name="$','<xar:set name="',$templatestring);
@@ -53,7 +57,11 @@
         return $templatestring;
     }
 
-    function entities()
+    /**
+     * Transform entities into numeric
+     * @deprecated
+     */
+    function xar_legacy_templates_entities()
     {
         return array(
                 '&amp;'    =>      '&#38;',
@@ -164,4 +172,3 @@
                 '&bull;'    =>      '&#8226;',
                 );
     }
-?>

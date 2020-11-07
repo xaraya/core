@@ -32,7 +32,7 @@ require_once 'creole/common/PdoPreparedStatementCommon.php';
 //TODO: use PDO prepared statements
 class PdoSQLitePreparedStatement extends PdoPreparedStatementCommon {
     
-    public function executeQuery($p1 = null, $fetchmode = null)
+    public function executeQuery($p1 = null, $fetchmode = null, $rs_class = NULL)
 	{    
         require_once 'creole/drivers/pdosqlite/PdoSQLiteResultSet.php';
         return parent::executeQuery( $p1, $fetchmode, 'PdoSQLiteResultSet');

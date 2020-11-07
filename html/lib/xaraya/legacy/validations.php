@@ -1,7 +1,6 @@
 <?php
 /**
- * @package core
- * @subpackage legacy
+ * @package core\legacy\validations
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -9,9 +8,11 @@
  * @link http://www.xaraya.info
  */
 
-    // Legacy validations by dataproperty
-    
-    function dropdown($validation)
+    /**
+     * Legacy validations by dataproperty
+     * @deprecated
+     */
+    function xar_legacy_validations_dropdown($validation)
     {
         $options = array();
         try {
@@ -23,4 +24,3 @@
         }
         return $options;
     }
-?>
