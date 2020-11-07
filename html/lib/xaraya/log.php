@@ -15,70 +15,6 @@ class LoggerException extends Exception
     // Fill in later.
 }
 
-// Legacy calls
-
-/**
- * Legacy call
- * @uses xarLog::configFile()
- * @deprecated
- */
-function xarLogConfigFile()
-{   
-    return xarLog::configFile(); 
-}
-
-/**
- * Legacy call
- * @uses xarLog::configReadable()
- * @deprecated
- */
-function xarLogConfigReadable()
-{   
-    return xarLog::configReadable(); 
-}
-
-/**
- * Legacy call
- * @uses xarLog::fallbackFile()
- * @deprecated
- */
-function xarLogFallbackFile()
-{   
-    return xarLog::fallbackFile(); 
-}
-
-/**
- * Legacy call
- * @uses xarLog::fallbackPossible()
- * @deprecated
- */
-function xarLogFallbackPossible()
-{   
-    return xarLog::fallbackPossible(); 
-}
-
-/**
- * Legacy call
- * @uses xarLog::message()
- * @deprecated
- */
-function xarLogMessage($message, $level = '')
-{   
-    if (empty($level)) $level = xarLog::LEVEL_DEBUG;
-    return xarLog::message($message, $level); 
-}
-
-/**
- * Legacy call
- * @uses xarLog::variable()
- * @deprecated
- */
-function xarLogVariable($name, $var, $level = '')
-{   
-    if (empty($level)) $level = xarLog::LEVEL_DEBUG;
-    return xarLog::variable($name, $var, $level); 
-}
-
 /**
  * Logging Facilities
  *
@@ -322,3 +258,6 @@ function xarLog__shutdown_handler()
     }
  */
 }
+
+// Legacy calls - import by default for now...
+sys::import('xaraya.legacy.log');
