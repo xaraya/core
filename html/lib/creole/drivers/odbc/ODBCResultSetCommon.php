@@ -125,7 +125,7 @@ abstract class ODBCResultSetCommon extends ResultSetCommon
     protected function readLobData($column, $binmode, $curdata = null)
     {
         // Retrieve field num
-        $fldNum = (is_int($column) ? $column : getFieldNum($column));
+        $fldNum = (is_int($column) ? $column : $this->getFieldNum($column));
 
         $data = $curdata;
         $newdata = null;
@@ -158,9 +158,9 @@ abstract class ODBCResultSetCommon extends ResultSetCommon
     /**
      * Converts row fields to names if FETCHMODE_ASSOC is set.
      *
-     * @param array& Row to convert.
+     * @param array $row to convert.
      *
-     * @return array& Converted row.
+     * @return array Converted row.
      */
     protected function checkFetchMode(&$row)
     {
