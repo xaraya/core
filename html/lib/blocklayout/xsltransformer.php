@@ -135,7 +135,7 @@ class BlockLayoutXSLTProcessor extends xarObject
             if (class_exists('xarConfigVars') && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
         		xarLog::message(xarML("XSL: running the legacy transform code"), xarLog::LEVEL_INFO);
                 sys::import('xaraya.legacy.templates');
-                $this->prepXml = fixLegacy($this->prepXml);
+                $this->prepXml = xar_legacy_templates_fixLegacy($this->prepXml);
             }
         } catch (Exception $e) {}
 
