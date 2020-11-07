@@ -21,7 +21,7 @@
         "check": "LOAD_ONLYACTIVE"
     },
     "xarmod_state_active": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ACTIVE",
         "value": 3,
         "class": "xarMod",
@@ -29,7 +29,7 @@
         "const": "STATE_ACTIVE"
     },
     "xarmod_state_any": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ANY",
         "value": 0,
         "class": "xarMod",
@@ -37,7 +37,7 @@
         "const": "STATE_ANY"
     },
     "xarmod_state_error_active": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ERROR_ACTIVE",
         "value": 12,
         "class": "xarMod",
@@ -45,7 +45,7 @@
         "const": "STATE_ERROR_ACTIVE"
     },
     "xarmod_state_error_inactive": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ERROR_INACTIVE",
         "value": 11,
         "class": "xarMod",
@@ -53,7 +53,7 @@
         "const": "STATE_ERROR_INACTIVE"
     },
     "xarmod_state_error_uninitialised": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ERROR_UNINITIALISED",
         "value": 10,
         "class": "xarMod",
@@ -61,7 +61,7 @@
         "const": "STATE_ERROR_UNINITIALISED"
     },
     "xarmod_state_error_upgraded": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_ERROR_UPGRADED",
         "value": 13,
         "class": "xarMod",
@@ -69,7 +69,7 @@
         "const": "STATE_ERROR_UPGRADED"
     },
     "xarmod_state_inactive": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_INACTIVE",
         "value": 2,
         "class": "xarMod",
@@ -77,7 +77,7 @@
         "const": "STATE_INACTIVE"
     },
     "xarmod_state_installed": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_INSTALLED",
         "value": 6,
         "class": "xarMod",
@@ -85,7 +85,7 @@
         "const": "STATE_INSTALLED"
     },
     "xarmod_state_missing_from_active": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_MISSING_FROM_ACTIVE",
         "value": 8,
         "class": "xarMod",
@@ -93,7 +93,7 @@
         "const": "STATE_MISSING_FROM_ACTIVE"
     },
     "xarmod_state_missing_from_inactive": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_MISSING_FROM_INACTIVE",
         "value": 7,
         "class": "xarMod",
@@ -101,7 +101,7 @@
         "const": "STATE_MISSING_FROM_INACTIVE"
     },
     "xarmod_state_missing_from_uninitialised": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_MISSING_FROM_UNINITIALISED",
         "value": 4,
         "class": "xarMod",
@@ -109,7 +109,7 @@
         "const": "STATE_MISSING_FROM_UNINITIALISED"
     },
     "xarmod_state_missing_from_upgraded": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_MISSING_FROM_UPGRADED",
         "value": 9,
         "class": "xarMod",
@@ -117,7 +117,7 @@
         "const": "STATE_MISSING_FROM_UPGRADED"
     },
     "xarmod_state_uninitialised": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_UNINITIALISED",
         "value": 1,
         "class": "xarMod",
@@ -125,7 +125,7 @@
         "const": "STATE_UNINITIALISED"
     },
     "xarmod_state_upgraded": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARMOD_STATE_UPGRADED",
         "value": 5,
         "class": "xarMod",
@@ -133,7 +133,7 @@
         "const": "STATE_UPGRADED"
     },
     "xartheme_state_active": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_ACTIVE",
         "value": 3,
         "class": "xarTheme",
@@ -141,7 +141,7 @@
         "const": "STATE_ACTIVE"
     },
     "xartheme_state_any": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_ANY",
         "value": 0,
         "class": "xarTheme",
@@ -149,7 +149,7 @@
         "const": "STATE_ANY"
     },
     "xartheme_state_inactive": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_INACTIVE",
         "value": 2,
         "class": "xarTheme",
@@ -157,7 +157,7 @@
         "const": "STATE_INACTIVE"
     },
     "xartheme_state_installed": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_INSTALLED",
         "value": 6,
         "class": "xarTheme",
@@ -165,7 +165,7 @@
         "const": "STATE_INSTALLED"
     },
     "xartheme_state_missing_from_active": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_MISSING_FROM_ACTIVE",
         "value": 8,
         "class": "xarTheme",
@@ -173,7 +173,7 @@
         "const": "STATE_MISSING_FROM_ACTIVE"
     },
     "xartheme_state_missing_from_inactive": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_MISSING_FROM_INACTIVE",
         "value": 7,
         "class": "xarTheme",
@@ -181,7 +181,7 @@
         "const": "STATE_MISSING_FROM_INACTIVE"
     },
     "xartheme_state_missing_from_uninitialised": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_MISSING_FROM_UNINITIALISED",
         "value": 4,
         "class": "xarTheme",
@@ -189,7 +189,7 @@
         "const": "STATE_MISSING_FROM_UNINITIALISED"
     },
     "xartheme_state_missing_from_upgraded": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_MISSING_FROM_UPGRADED",
         "value": 9,
         "class": "xarTheme",
@@ -197,7 +197,7 @@
         "const": "STATE_MISSING_FROM_UPGRADED"
     },
     "xartheme_state_uninitialised": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_UNINITIALISED",
         "value": 1,
         "class": "xarTheme",
@@ -205,7 +205,7 @@
         "const": "STATE_UNINITIALISED"
     },
     "xartheme_state_upgraded": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/modules.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/modules.php",
         "name": "XARTHEME_STATE_UPGRADED",
         "value": 5,
         "class": "xarTheme",
@@ -220,7 +220,7 @@
         "check": "AUTH_AUTHENTICATION"
     },
     "xaruser_auth_denied": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
         "name": "XARUSER_AUTH_DENIED",
         "value": -2,
         "class": "xarUser",
@@ -235,7 +235,7 @@
         "check": "AUTH_DYNAMIC_USER_DATA_HANDLER"
     },
     "xaruser_auth_failed": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
         "name": "XARUSER_AUTH_FAILED",
         "value": -1,
         "class": "xarUser",
@@ -271,7 +271,7 @@
         "check": "AUTH_USER_ENUMERABLE"
     },
     "xaruser_last_resort": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/users.php",
         "name": "XARUSER_LAST_RESORT",
         "value": -3,
         "class": "xarUser",
@@ -279,7 +279,7 @@
         "const": "LAST_RESORT"
     },
     "xarvar_allow": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_ALLOW",
         "value": 2,
         "class": "xarVar",
@@ -287,7 +287,7 @@
         "const": "ALLOW"
     },
     "xarvar_allow_no_attribs": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_ALLOW_NO_ATTRIBS",
         "value": 1,
         "class": "xarVar",
@@ -295,7 +295,7 @@
         "const": "ALLOW_NO_ATTRIBS"
     },
     "xarvar_dont_reuse": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_DONT_REUSE",
         "value": 256,
         "class": "xarVar",
@@ -303,7 +303,7 @@
         "const": "DONT_REUSE"
     },
     "xarvar_dont_set": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_DONT_SET",
         "value": 128,
         "class": "xarVar",
@@ -311,7 +311,7 @@
         "const": "DONT_SET"
     },
     "xarvar_get_only": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_GET_ONLY",
         "value": 2,
         "class": "xarVar",
@@ -319,7 +319,7 @@
         "const": "GET_ONLY"
     },
     "xarvar_get_or_post": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_GET_OR_POST",
         "value": 0,
         "class": "xarVar",
@@ -327,7 +327,7 @@
         "const": "GET_OR_POST"
     },
     "xarvar_not_required": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_NOT_REQUIRED",
         "value": 64,
         "class": "xarVar",
@@ -335,7 +335,7 @@
         "const": "NOT_REQUIRED"
     },
     "xarvar_post_only": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_POST_ONLY",
         "value": 4,
         "class": "xarVar",
@@ -343,7 +343,7 @@
         "const": "POST_ONLY"
     },
     "xarvar_prep_for_display": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_FOR_DISPLAY",
         "value": 1,
         "class": "xarVar",
@@ -351,7 +351,7 @@
         "const": "PREP_FOR_DISPLAY"
     },
     "xarvar_prep_for_html": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_FOR_HTML",
         "value": 2,
         "class": "xarVar",
@@ -359,7 +359,7 @@
         "const": "PREP_FOR_HTML"
     },
     "xarvar_prep_for_nothing": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_FOR_NOTHING",
         "value": 0,
         "class": "xarVar",
@@ -367,7 +367,7 @@
         "const": "PREP_FOR_NOTHING"
     },
     "xarvar_prep_for_store": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_FOR_STORE",
         "value": 4,
         "class": "xarVar",
@@ -375,7 +375,7 @@
         "const": "PREP_FOR_STORE"
     },
     "xarvar_prep_trim": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/variables.php",
         "name": "XARVAR_PREP_TRIM",
         "value": 8,
         "class": "xarVar",
