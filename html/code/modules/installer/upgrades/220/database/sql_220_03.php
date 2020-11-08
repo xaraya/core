@@ -57,7 +57,7 @@ function sql_220_03()
         );
 
         // Create the eventsystem table
-        $query = xarDBCreateTable($events_table, $fields);
+        $query = xarTableDDL::createTable($events_table, $fields);
         $dbconn->Execute($query);
 
         // each entry should be unique
@@ -65,7 +65,7 @@ function sql_220_03()
             'fields' => array('event', 'module_id', 'itemtype'),
             'unique' => true);
 
-        $query = xarDBCreateIndex($events_table, $index);
+        $query = xarTableDDL::createIndex($events_table, $index);
         $dbconn->Execute($query);
         $dbconn->commit();
 

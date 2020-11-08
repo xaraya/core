@@ -61,7 +61,7 @@ function sql_220_07()
         );
 
         // Create the hooks table
-        $query = xarDBCreateTable($hooks_table, $fields);
+        $query = xarTableDDL::createTable($hooks_table, $fields);
         $dbconn->Execute($query);                
 
         // each entry should be unique
@@ -70,7 +70,7 @@ function sql_220_07()
             'fields' => array('observer', 'subject', 'itemtype', 'scope'),
             'unique' => true
         );        
-        $query = xarDBCreateIndex($hooks_table, $index);
+        $query = xarTableDDL::createIndex($hooks_table, $index);
         $dbconn->Execute($query);
             
         if (!empty($inserts)) {
