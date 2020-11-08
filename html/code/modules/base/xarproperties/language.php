@@ -39,7 +39,7 @@ class LanguageListProperty extends SelectProperty
         asort($list);
 
         foreach ($list as $locale) {
-            $locale_data =& xarMLSLoadLocaleData($locale);
+            $locale_data = xarLocale::loadData($locale);
             $name = $locale_data['/language/display'] . " (" . $locale_data['/country/display'] . ")";
             $options[] = array('id'   => $locale,
                                      'name' => $name,
@@ -48,4 +48,3 @@ class LanguageListProperty extends SelectProperty
         return $options;
     }
 }
-?>
