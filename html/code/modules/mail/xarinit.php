@@ -42,11 +42,11 @@ function mail_init()
     xarModHooks::register('item', 'delete', 'API', 'mail', 'admin', 'hookmaildelete');
     xarModHooks::register('item', 'update', 'API', 'mail', 'admin', 'hookmailchange');
 
-    xarRegisterMask('ViewMail','All','mail','All','All','ACCESS_OVERVIEW');
-    xarRegisterMask('EditMail','All','mail','All','All','ACCESS_EDIT');
-    xarRegisterMask('AddMail','All','mail','All','All','ACCESS_ADD');
-    xarRegisterMask('ManageMail', 'All','mail','All','All','ACCESS_DELETE');
-    xarRegisterMask('AdminMail','All','mail','All','All','ACCESS_ADMIN');
+    xarMasks::register('ViewMail','All','mail','All','All','ACCESS_OVERVIEW');
+    xarMasks::register('EditMail','All','mail','All','All','ACCESS_EDIT');
+    xarMasks::register('AddMail','All','mail','All','All','ACCESS_ADD');
+    xarMasks::register('ManageMail', 'All','mail','All','All','ACCESS_DELETE');
+    xarMasks::register('AdminMail','All','mail','All','All','ACCESS_ADMIN');
 
     // Installation complete; check for upgrades
     return mail_upgrade('2.0.0');
