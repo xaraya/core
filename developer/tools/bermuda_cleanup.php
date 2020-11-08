@@ -473,6 +473,10 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
                 if (!preg_match_all($pattern, $contents, $matches)) {
                     continue;
                 }
+                if (strpos($file->getPathName(), '/legacy/') !== false) {
+                    $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
+                    continue;
+                }
                 $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' matches: ' . implode(', ', array_unique($matches[0])));
                 $todo[] = $file->getPathName();
             } catch (Exception $e) {
@@ -483,6 +487,10 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
         $this->log('Found ' . count($todo) . ' files to fix', true);
         if (!$fixMe) {
             $this->log('Set $fixMe = true; to fix', true);
+            return;
+        }
+        if (strpos($inDir, '/lib/xaraya/') !== false) {
+            $this->log('Sorry, this cannot be used to clean lib/xaraya', true);
             return;
         }
         foreach ($todo as $filepath) {

@@ -53,7 +53,7 @@ class xarTheme extends xarObject
     }
 
     /**
-     * checks if a theme is installed and its state is XARTHEME_STATE_ACTIVE
+     * checks if a theme is installed and its state is STATE_ACTIVE
      */
     public static function isAvailable($themeName)
     {

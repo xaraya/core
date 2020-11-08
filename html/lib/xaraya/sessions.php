@@ -91,7 +91,7 @@ class xarSession extends xarObject implements IsessionHandler
             // of the session namespace (yes, we still need this in this case)
             foreach($GLOBALS as $k=>$v) {
                 if (substr($k,0,5) == self::PREFIX) {
-                    throw new SessionException('xarSession_init: Session Support initialisation failed.');
+                    throw new SessionException('xarSession init: Session Support initialisation failed.');
                 }
             }
         }

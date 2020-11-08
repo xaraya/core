@@ -59,7 +59,7 @@ function privileges_admin_modifyconfig()
         case 'testing':
              $settestergroup=xarModVars::get('privileges','testergroup');
              if (!isset($settestergroupp) || empty($settestergroup)) {
-                 $settestergrouprole = xarFindRole('Administrators');
+                 $settestergrouprole = xarRoles::findRole('Administrators');
                  $settestergroup = $settestergrouprole->getID();
              }
              if (!isset($testergroup) || empty($testergroup)) {
@@ -67,7 +67,7 @@ function privileges_admin_modifyconfig()
              }
              $data['testergroup'] = $testergroup;
 
-             $grouplist=xarGetGroups();
+             $grouplist=xarRoles::getgroups();
              $data['grouplist']=$grouplist;
 
              $testusers=xarMod::apiFunc('roles','user','getUsers',array('id'=>$testergroup));

@@ -45,7 +45,7 @@ class Roles_LanguageBlock extends BasicBlock
         if (count($site_locales) <= 1) return;
 
         foreach ($site_locales as $locale) {
-            $locale_data =& xarMLSLoadLocaleData($locale);
+            $locale_data = xarLocale::loadData($locale);
 
             $selected = ($current_locale == $locale);
 
@@ -72,4 +72,3 @@ class Roles_LanguageBlock extends BasicBlock
     }
 }
 
-?>

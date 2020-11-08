@@ -54,7 +54,7 @@ function sql_230_03()
         );
 
         // Create the eventsystem table
-        $query = xarDBCreateTable($table, $fields);
+        $query = xarTableDDL::createTable($table, $fields);
         $dbconn->Execute($query);
         $dbconn->commit();     
 

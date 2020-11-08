@@ -185,7 +185,7 @@ function installer_admin_phase5()
         if ($dbExists) {
             if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;
         }
-        if(!$dbconn->Execute(xarDBCreateDatabase($dbName,$dbType,$dbCharset))) {
+        if(!$dbconn->Execute(xarTableDDL::createDatabase($dbName,$dbType,$dbCharset))) {
           //if (!xarInstallAPIFunc('createdb', $config_args)) {
           $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
           throw new Exception($msg);
@@ -225,7 +225,7 @@ function installer_admin_phase5()
                     if (strpos($table, '_') && (substr($table, 0, strpos($table, '_')) == $dbPrefix)) {
                         // we have the same prefix.
                         try {
-                            $sql = xarDBDropTable($table, $dbType);
+                            $sql = xarTableDDL::dropTable($table, $dbType);
                             $dbconn->Execute($sql);
                         } catch (SQLException $dropfail) {
                             // retry with drop view

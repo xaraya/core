@@ -42,7 +42,7 @@ function installer_admin_phase1()
             // already determined from existing files. The relative code is in install.php
             //$fileName = sys::varpath() . "/locales/$locale/locale.xml";
             //if(file_exists($fileName)) {
-            $locale_data =& xarMLSLoadLocaleData($locale);
+            $locale_data = xarLocale::loadData($locale);
             $languages[$locale] = $locale_data['/language/display'];
             //}
         }
@@ -55,4 +55,3 @@ function installer_admin_phase1()
 
     return $data;
 }
-?>

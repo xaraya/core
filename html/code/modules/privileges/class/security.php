@@ -14,7 +14,7 @@
  */
 
 /**
- * xarSecurityCheck: class for the mask repository
+ * xarSecurity::check: class for the mask repository
  *
  * Represents the repository containing all security masks
  *
@@ -250,7 +250,7 @@ class xarSecurity extends xarObject
             case "group":
                 //get some info on the user
                 $thisname=xarUser::getVar('uname');
-                $role = xarUFindRole($thisname);
+                $role = xarRoles::ufindRole($thisname);
                 $parent='Everybody'; //set a default
                 //We now have primary parent implemented
                 //Use primary parent if implemented else get first parent??

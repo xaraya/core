@@ -177,7 +177,7 @@ function sql_230_07()
                 'charset' => $charset,
             ),
         );
-        $query = xarDBCreateTable($types_table, $fields); 
+        $query = xarTableDDL::createTable($types_table, $fields); 
         $dbconn->Execute($query);
 
         // index columns
@@ -186,7 +186,7 @@ function sql_230_07()
             'fields' => array('type', 'module_id', 'state'),
             'unique' => true,
         );
-        $query = xarDBCreateIndex($types_table, $index);
+        $query = xarTableDDL::createIndex($types_table, $index);
         $dbconn->Execute($query);
 
         $index = array(
@@ -194,7 +194,7 @@ function sql_230_07()
             'fields' => array('category'),
             'unique' => false,
         );
-        $query = xarDBCreateIndex($types_table, $index);
+        $query = xarTableDDL::createIndex($types_table, $index);
         $dbconn->Execute($query);
         
         // create block instances table
@@ -238,7 +238,7 @@ function sql_230_07()
                 'charset' => $charset,
             ),
         );
-        $query = xarDBCreateTable($instances_table, $fields); 
+        $query = xarTableDDL::createTable($instances_table, $fields); 
         $dbconn->Execute($query);
         
         // index columns
@@ -247,7 +247,7 @@ function sql_230_07()
             'fields' => array('name', 'state'),
             'unique' => true,
         );
-        $query = xarDBCreateIndex($instances_table, $index);
+        $query = xarTableDDL::createIndex($instances_table, $index);
         $dbconn->Execute($query);
 
         $index = array(
@@ -255,7 +255,7 @@ function sql_230_07()
             'fields' => array('type_id'),
             'unique' => false,
         );
-        $query = xarDBCreateIndex($instances_table, $index);
+        $query = xarTableDDL::createIndex($instances_table, $index);
         $dbconn->Execute($query);
 
         // insert types

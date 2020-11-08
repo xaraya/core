@@ -98,7 +98,7 @@ class xarMLS extends xarObject
         date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
     
         // Register MLS events
-        // These should be done before the xarMLS_setCurrentLocale function
+        // These should be done before the xarMLS::setCurrentLocale function
         // These are now registered during base module init
         // @CHECKME: <chris> grep -R xarEvents::trigger . finds no results
         // It appears these events are never raised ?
@@ -256,7 +256,7 @@ class xarMLS extends xarObject
         if (isset($GLOBALS['xarMLS_backend'])) {
             $trans = $GLOBALS['xarMLS_backend']->translateByKey($key);
         } else {
-            // This happen in rare cases when xarMLByKey is called before self::init has been called
+            // This happen in rare cases when xarMLS::translateByKey is called before self::init has been called
             $trans = $key;
         }
         if (empty($trans)) {

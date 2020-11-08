@@ -68,9 +68,9 @@ function modules_adminapi_standarddeinstall(Array $args=array())
 #
      // Move the descendants to the Users group
     try {
-        $role = xarFindRole(ucfirst($module) . 'Group');
+        $role = xarRoles::findRole(ucfirst($module) . 'Group');
         if (!empty($role)) {
-            $usersgroup = xarFindRole('Users');
+            $usersgroup = xarRoles::findRole('Users');
             $descendants = $role->getDescendants();
             foreach ($descendants as $item) {
                 $parents = $item->getParents();
@@ -99,8 +99,8 @@ function modules_adminapi_standarddeinstall(Array $args=array())
 #
 # Remove modvars, masks and privilege instances
 #
-    xarRemoveMasks($module);
-    xarRemoveInstances($module);
+    xarMasks::removemasks($module);
+    xarPrivileges::removeInstances($module);
     xarModVars::delete_all($module);
 
     // Deinstall successful

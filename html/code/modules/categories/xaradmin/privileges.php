@@ -95,7 +95,7 @@ function categories_admin_privileges($args)
 
         if (!empty($apply)) {
             // create/update the privilege
-            $pid = xarReturnPrivilege($extpid,$extname,$extrealm,$extmodule,$extcomponent,$newinstance,$extlevel);
+            $pid = xarPrivileges::external($extpid,$extname,$extrealm,$extmodule,$extcomponent,$newinstance,$extlevel);
             if (empty($pid)) {
                 return; // throw back
             }
@@ -212,7 +212,7 @@ function categories_admin_privileges($args)
 
     if (!empty($apply)) {
         // create/update the privilege
-        $pid = xarReturnPrivilege($extpid,$extname,$extrealm,$extmodule,$extcomponent,$newinstance,$extlevel);
+        $pid = xarPrivileges::external($extpid,$extname,$extrealm,$extmodule,$extcomponent,$newinstance,$extlevel);
         if (empty($pid)) {
             return; // throw back
         }
