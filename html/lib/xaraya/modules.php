@@ -275,7 +275,7 @@ class xarMod extends xarObject implements IxarMod
     }
 
     /**
-     * Check if a module is installed and its state is XARMOD_STATE_ACTIVE
+     * Check if a module is installed and its state is STATE_ACTIVE
      *
      * 
      * @static modAvailableCache array
@@ -306,7 +306,7 @@ class xarMod extends xarObject implements IxarMod
             $modState = $modBaseInfo['state'];
             $modAvailableCache[$modBaseInfo['name']] = false;
 
-            if ($modState == XARMOD_STATE_ACTIVE) {
+            if ($modState == self::STATE_ACTIVE) {
                 $modAvailableCache[$modBaseInfo['name']] = true;
             }
         }
@@ -414,12 +414,12 @@ class xarMod extends xarObject implements IxarMod
         switch($type) {
         case 'module':
         default:
-            if (!isset($modInfo['state'])) $modInfo['state'] = XARMOD_STATE_MISSING_FROM_UNINITIALISED; //return; // throw back
+            if (!isset($modInfo['state'])) $modInfo['state'] = self::STATE_MISSING_FROM_UNINITIALISED; //return; // throw back
             $modFileInfo = self::getFileInfo($modInfo['osdirectory']);
             break;
         case 'theme':
             if (!isset($modInfo['state'])) {
-                $modInfo['state']= XARTHEME_STATE_MISSING_FROM_UNINITIALISED;
+                $modInfo['state']= self::STATE_MISSING_FROM_UNINITIALISED;
             }
             $modFileInfo = self::getFileInfo($modInfo['osdirectory'], $type = 'theme');
             break;
@@ -556,7 +556,7 @@ class xarMod extends xarObject implements IxarMod
 
         // This needed?
         if (empty($modBaseInfo['state'])) {
-            $modBaseInfo['state'] = XARMOD_STATE_UNINITIALISED;
+            $modBaseInfo['state'] = self::STATE_UNINITIALISED;
         }
         xarCoreCache::setCached($cacheCollection, $name, $modBaseInfo);
 
@@ -923,7 +923,7 @@ class xarMod extends xarObject implements IxarMod
         if (!isset($modBaseInfo)) throw new ModuleNotFoundException($modName);
 
         // Not a valid module state - throw exception
-        if ($modBaseInfo['state'] != XARMOD_STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
+        if ($modBaseInfo['state'] != self::STATE_ACTIVE && !($flags & XARMOD_LOAD_ANYSTATE) ) {
             throw new ModuleNotActiveException($modName);
         }
         

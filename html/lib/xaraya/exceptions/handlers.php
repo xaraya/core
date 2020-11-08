@@ -191,7 +191,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             }
         }
 
-        if (!function_exists('xarModURL')) {
+        if (!class_exists('xarController')) {
             $rawmsg = "Normal Xaraya error processing has stopped because of an error encountered.\n\n";
             $rawmsg .= "The last registered error message is:\n\n";
             $rawmsg .= $msg;
@@ -244,4 +244,3 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         return $out;
     }
 }
-?>

@@ -72,7 +72,7 @@ class xarURL extends xarObject
     }
 
     /**
-     * Format GET parameters formed by nested arrays, to support xarModURL().
+     * Format GET parameters formed by nested arrays, to support xarController::URL().
      * This function will recurse for each level to the arrays.
      *
      * @param args array the array to be expanded as a GET parameter
@@ -402,11 +402,11 @@ class xarServer extends xarObject
     /**
      * Generates an URL that reference to a module function.
      *
-     * Cfr. xarModURL() in modules
+     * Cfr. xarMod URL() in modules
      */
     static function getModuleURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
     {
-        // CHECKME: move xarModURL() and xarMod__URL* stuff here, and leave stub in modules ?
+        // CHECKME: move xarMod URL() and xarMod__URL* stuff here, and leave stub in modules ?
         return xarController::URL($modName, $modType, $funcName, $args, $generateXMLURL, $fragment, $entrypoint);
     }
 
