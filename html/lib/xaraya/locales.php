@@ -37,7 +37,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  * Locale data is an associative array, its keys are described at the top
  * of this file
  *
- * 
+ * @uses xarLocale::loadData()
  * @return array locale data
  * @throws LocaleNotFoundException
  * @todo   figure out why we go through this function for xarMod::isAvailable
@@ -951,6 +951,19 @@ class xarMLS__LocaleDataLoader extends xarObject
  */
 class xarLocale extends xarObject
 {
+    /**
+     * Gets the locale data for a certain locale.
+     * Locale data is an associative array, its keys are described at the top
+     * of this file
+     *
+     * @return array locale data
+     * @throws LocaleNotFoundException
+     * @todo   figure out why we go through this function for xarMod::isAvailable
+     */
+    public static function loadData($locale = NULL)
+    {
+        return xarMLSLoadLocaleData($locale);
+    }
     public static function parseCurrency($currency, $localeData = NULL)
     {
         return xarLocaleParseCurrency($currency, $localeData);
