@@ -46,7 +46,7 @@ function blocks_init()
        Note that the old instances and masks and code in the files was not 'matched' so don't think they worked properly in any case.
     */
     // checkme: <chris/> at install, surely we have nothing to remove?
-    //xarRemoveInstances('blocks');
+    //xarPrivileges::removeInstances('blocks');
     //$blockGroupsTable    = $prefix . '_block_groups';
     $blockTypesTable     = $prefix . '_block_types';
     $blockInstancesTable = $prefix . '_block_instances';
@@ -63,7 +63,7 @@ function blocks_init()
                        array('header' => 'Block Name:',
                              'query' => $query2,
                              'limit' => 20));
-    xarDefineInstance('blocks','Block',$instances);
+    xarPrivileges::defineInstance('blocks','Block',$instances);
 
     //Define an instance that refers to items that a block contains
     // checkme: items that a block contains? what does that mean? 
@@ -76,13 +76,13 @@ function blocks_init()
                        array('header' => 'Module Name:',
                              'query' => $query2,
                              'limit' => 20));
-    xarDefineInstance('blocks','BlockItem',$instances);
+    xarPrivileges::defineInstance('blocks','BlockItem',$instances);
 
-    xarRegisterMask('ViewBlocks','All','blocks','All','All','ACCESS_OVERVIEW');
-    xarRegisterMask('EditBlocks','All','blocks','All','All','ACCESS_EDIT');
-    xarRegisterMask('AddBlocks','All','blocks','All','All','ACCESS_ADD');
-    xarRegisterMask('ManageBlocks','All','blocks','All','All','ACCESS_DELETE');
-    xarRegisterMask('AdminBlocks','All','blocks','All','All','ACCESS_ADMIN');
+    xarMasks::register('ViewBlocks','All','blocks','All','All','ACCESS_OVERVIEW');
+    xarMasks::register('EditBlocks','All','blocks','All','All','ACCESS_EDIT');
+    xarMasks::register('AddBlocks','All','blocks','All','All','ACCESS_ADD');
+    xarMasks::register('ManageBlocks','All','blocks','All','All','ACCESS_DELETE');
+    xarMasks::register('AdminBlocks','All','blocks','All','All','ACCESS_ADMIN');
 
     // Installation complete; check for upgrades
     return blocks_upgrade('2.2.0');
