@@ -32,7 +32,7 @@
             $components[] = array('id' => -2,
                                'name' => 'All');
         } else {
-            $module = xarMod::getNameFromID($modid);
+            $module = xarMod::getName($modid);
 
             // Do we have the components in a file?
             try {
@@ -76,4 +76,3 @@
         }
         return $components;
     }
-?>

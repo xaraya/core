@@ -19,7 +19,7 @@ function initializeSetup()
     /*********************************************************************
     * Define instances for the core modules
     * Format is
-    * xarDefineInstance(Module,Component,Querystring,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
+    * xarPrivileges::defineInstance(Module,Component,Querystring,ApplicationVar,LevelTable,ChildIDField,ParentIDField)
     *********************************************************************/
     $prefix = xarDB::getPrefix();
 
@@ -48,13 +48,13 @@ function initializeSetup()
                        array('header' => 'Block ID:',
                              'query' => $query3,
                              'limit' => 20));
-    xarDefineInstance('roles','Block',$instances);
+    xarPrivileges::defineInstance('roles','Block',$instances);
 
     $query = "SELECT DISTINCT name FROM $rolesTable";
     $instances = array(array('header' => 'Users and Groups',
                              'query' => $query,
                              'limit' => 20));
-    xarDefineInstance('roles','Roles',$instances,0,$roleMembersTable,'id','parentid','Instances of the roles module, including multilevel nesting');
+    xarPrivileges::defineInstance('roles','Roles',$instances,0,$roleMembersTable,'id','parentid','Instances of the roles module, including multilevel nesting');
 
     $instances = array(array('header' => 'Parent:',
                              'query' => $query,
@@ -62,14 +62,14 @@ function initializeSetup()
                        array('header' => 'Child:',
                              'query' => $query,
                              'limit' => 20));
-    xarDefineInstance('roles','Relation',$instances,0,$roleMembersTable,'id','parentid','Instances of the roles module, including multilevel nesting');
+    xarPrivileges::defineInstance('roles','Relation',$instances,0,$roleMembersTable,'id','parentid','Instances of the roles module, including multilevel nesting');
 
    // ----------------------------- Privileges Module
     $query = "SELECT DISTINCT name FROM $privilegesTable";
     $instances = array(array('header' => 'Privileges',
                              'query' => $query,
                              'limit' => 20));
-    xarDefineInstance('privileges','Privileges',$instances,0,$privMembersTable,'privilege_id','parent_id','Instances of the privileges module, including multilevel nesting');
+    xarPrivileges::defineInstance('privileges','Privileges',$instances,0,$privMembersTable,'privilege_id','parent_id','Instances of the privileges module, including multilevel nesting');
 
     // ----------------------------- Base Module
     $info = xarMod::getBaseInfo('base');
@@ -86,7 +86,7 @@ function initializeSetup()
                        array('header' => 'Block ID:',
                              'query' => $query3,
                              'limit' => 20));
-    xarDefineInstance('base','Block',$instances);
+    xarPrivileges::defineInstance('base','Block',$instances);
 
    // ------------------------------- Themes Module
     $query1 = "SELECT DISTINCT name FROM $themesTable";
@@ -97,7 +97,7 @@ function initializeSetup()
                        array('header' => 'Theme ID:',
                              'query' => $query2,
                              'limit' => 20));
-    xarDefineInstance('themes','Themes',$instances);
+    xarPrivileges::defineInstance('themes','Themes',$instances);
 
     $info = xarMod::getBaseInfo('themes');
     $sysid = $info['systemid'];
@@ -113,7 +113,7 @@ function initializeSetup()
                        array('header' => 'Block ID:',
                              'query' => $query3,
                              'limit' => 20));
-    xarDefineInstance('themes','Block',$instances);
+    xarPrivileges::defineInstance('themes','Block',$instances);
 
    // ------------------------------- Categories Module
     $info = xarMod::getBaseInfo('categories');
@@ -125,7 +125,7 @@ function initializeSetup()
                                 'limit' => 20
                             )
                     );
-    xarDefineInstance('categories','Block',$instances);
+    xarPrivileges::defineInstance('categories','Block',$instances);
 
     // use external privilege wizard for 'Category' and 'Link' instances
     $instances = array(
@@ -134,10 +134,10 @@ function initializeSetup()
                              'limit'  => 0
                             )
                     );
-    xarDefineInstance('categories', 'Link', $instances);
+    xarPrivileges::defineInstance('categories', 'Link', $instances);
 // TODO: get this parent/child stuff to work someday, or implement some other way ?
-    //xarDefineInstance('categories', 'Category', $instances);
-    xarDefineInstance('categories', 'Category', $instances,1,$categorytable,'id',
+    //xarPrivileges::defineInstance('categories', 'Category', $instances);
+    xarPrivileges::defineInstance('categories', 'Category', $instances,1,$categorytable,'id',
     'parent_id','Instances of the categories module, including multilevel nesting');
 
     /*********************************************************************

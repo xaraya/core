@@ -270,7 +270,7 @@ class AccessProperty extends DataProperty
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if (xarIsParent($allowed, xarUser::getVar('uname'))) return true;        
+            if (xarRoles::isParent($allowed, xarUser::getVar('uname'))) return true;
         }
         
         // We need to be in the correct realm
@@ -320,7 +320,7 @@ class AccessProperty extends DataProperty
     {
         // Some groups always have access
         foreach ($this->allallowed as $allowed) {
-            if (xarIsParent($allowed, xarUser::getVar('uname'))) return true;        
+            if (xarRoles::isParent($allowed, xarUser::getVar('uname'))) return true;
         }
 
         if (isset($data['exclusive'])) $exclusive = $data['exclusive'];
@@ -331,7 +331,7 @@ class AccessProperty extends DataProperty
             if (isset($data['group'])) {
                 if (!is_array($data['group'])) {
                     $groupsarray = explode(',', $data['group']);
-                    $groupsdata = xarGetGroups();
+                    $groupsdata = xarRoles::getgroups();
                     foreach ($groupsarray as $group) {
                         $group = trim($group);
                         foreach ($groupsdata as $groupdata) {
@@ -442,7 +442,7 @@ class AccessProperty extends DataProperty
                 if (xarUser::isLoggedIn()) $access = true;
             } elseif ($group) {
                 $rolesgroup = xarRoles::getRole($group);
-                $thisuser = xarCurrentRole();
+                $thisuser = xarRoles::current();
                 if (is_object($rolesgroup)) {
                     if ($thisuser->isAncestor($rolesgroup)) $access = true;
                 } 
@@ -522,4 +522,3 @@ class AccessPropertyInstall extends AccessProperty implements iDataPropertyInsta
         return true;
     }
 }
-?>
