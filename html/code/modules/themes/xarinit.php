@@ -56,11 +56,11 @@ function themes_init()
     xarModVars::set('themes', 'dashtemplate', 'dashboard');
     xarModVars::set('themes', 'adminpagemenu', true);
     xarModVars::set('themes', 'userpagemenu', true);
-    xarRegisterMask('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
-    xarRegisterMask('EditThemes','All','themes','All','All','ACCESS_EDIT');
-    xarRegisterMask('AddThemes','All','themes','All','All','ACCESS_ADD');
-    xarRegisterMask('ManageThemes','All','themes','All','All','ACCESS_DELETE');
-    xarRegisterMask('AdminThemes','All','themes','All','All','ACCESS_ADMIN');
+    xarMasks::register('ViewThemes','All','themes','All','All','ACCESS_OVERVIEW');
+    xarMasks::register('EditThemes','All','themes','All','All','ACCESS_EDIT');
+    xarMasks::register('AddThemes','All','themes','All','All','ACCESS_ADD');
+    xarMasks::register('ManageThemes','All','themes','All','All','ACCESS_DELETE');
+    xarMasks::register('AdminThemes','All','themes','All','All','ACCESS_ADMIN');
     xarModVars::set('themes', 'selclass', 'all');
     xarModVars::set('themes', 'useicons', false);
     xarModVars::set('themes','flushcaches', '');
