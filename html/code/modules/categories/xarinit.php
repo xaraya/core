@@ -79,31 +79,31 @@ function categories_init()
 #
 # Set up masks
 #
-    xarRegisterMask('ViewCategories','All','categories','Category','All:All','ACCESS_OVERVIEW');
-    xarRegisterMask('ReadCategories','All','categories','Category','All:All','ACCESS_READ');
-    xarRegisterMask('CommmentCategories','All','categories','Category','All:All','ACCESS_COMMENT');
-    xarRegisterMask('ModerateCategories','All','categories','Category','All:All','ACCESS_MODERATE');
-    xarRegisterMask('EditCategories','All','categories','Category','All:All','ACCESS_EDIT');
-    xarRegisterMask('AddCategories','All','categories','Category','All:All','ACCESS_ADD');
-    xarRegisterMask('ManageCategories','All','categories','Category','All:All','ACCESS_DELETE');
-    xarRegisterMask('AdminCategories','All','categories','Category','All:All','ACCESS_ADMIN');
-    xarRegisterMask('ReadCategoryBlock','All','categories','Block','All:All:All','ACCESS_READ');
-    xarRegisterMask('ViewCategoryLink','All','categories','Link','All:All:All:All','ACCESS_OVERVIEW');
-    xarRegisterMask('SubmitCategoryLink','All','categories','Link','All:All:All:All','ACCESS_COMMENT');
-    xarRegisterMask('EditCategoryLink','All','categories','Link','All:All:All:All','ACCESS_EDIT');
-    xarRegisterMask('ManageCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
+    xarMasks::register('ViewCategories','All','categories','Category','All:All','ACCESS_OVERVIEW');
+    xarMasks::register('ReadCategories','All','categories','Category','All:All','ACCESS_READ');
+    xarMasks::register('CommmentCategories','All','categories','Category','All:All','ACCESS_COMMENT');
+    xarMasks::register('ModerateCategories','All','categories','Category','All:All','ACCESS_MODERATE');
+    xarMasks::register('EditCategories','All','categories','Category','All:All','ACCESS_EDIT');
+    xarMasks::register('AddCategories','All','categories','Category','All:All','ACCESS_ADD');
+    xarMasks::register('ManageCategories','All','categories','Category','All:All','ACCESS_DELETE');
+    xarMasks::register('AdminCategories','All','categories','Category','All:All','ACCESS_ADMIN');
+    xarMasks::register('ReadCategoryBlock','All','categories','Block','All:All:All','ACCESS_READ');
+    xarMasks::register('ViewCategoryLink','All','categories','Link','All:All:All:All','ACCESS_OVERVIEW');
+    xarMasks::register('SubmitCategoryLink','All','categories','Link','All:All:All:All','ACCESS_COMMENT');
+    xarMasks::register('EditCategoryLink','All','categories','Link','All:All:All:All','ACCESS_EDIT');
+    xarMasks::register('ManageCategoryLink','All','categories','Link','All:All:All:All','ACCESS_DELETE');
 # --------------------------------------------------------
 #
 # Set up privileges
 #
-    xarRegisterPrivilege('ViewCategories','All','categories','Category','All','ACCESS_OVERVIEW');
-    xarRegisterPrivilege('ReadCategories','All','categories','Category','All','ACCESS_READ');
-    xarRegisterPrivilege('CommmentCategories','All','categories','Category','All','ACCESS_COMMENT');
-    xarRegisterPrivilege('ModerateCategories','All','categories','Category','All','ACCESS_MODERATE');
-    xarRegisterPrivilege('EditCategories','All','categories','Category','All','ACCESS_EDIT');
-    xarRegisterPrivilege('AddCategories','All','categories','Category','All','ACCESS_ADD');
-    xarRegisterPrivilege('ManageCategories','All','categories','Category','All:All','ACCESS_DELETE');
-    xarRegisterPrivilege('AdminCategories','All','categories','Category','All','ACCESS_ADMIN');
+    xarPrivileges::register('ViewCategories','All','categories','Category','All','ACCESS_OVERVIEW');
+    xarPrivileges::register('ReadCategories','All','categories','Category','All','ACCESS_READ');
+    xarPrivileges::register('CommmentCategories','All','categories','Category','All','ACCESS_COMMENT');
+    xarPrivileges::register('ModerateCategories','All','categories','Category','All','ACCESS_MODERATE');
+    xarPrivileges::register('EditCategories','All','categories','Category','All','ACCESS_EDIT');
+    xarPrivileges::register('AddCategories','All','categories','Category','All','ACCESS_ADD');
+    xarPrivileges::register('ManageCategories','All','categories','Category','All:All','ACCESS_DELETE');
+    xarPrivileges::register('AdminCategories','All','categories','Category','All','ACCESS_ADMIN');
 # --------------------------------------------------------
 #
 # Set up modvars
