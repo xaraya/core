@@ -660,5 +660,32 @@ class xarSecurity extends xarObject
         return $display;
     }
 
+    /**
+     * hasPrivilege: checks whether a privilege exists.
+     *
+     * @param   string name of privilege
+     * @return  boolean
+     */
+    public static function hasPrivilege($name)
+    {
+        $priv = xarPrivileges::findPrivilege($name);
+        if ($priv) return true;
+        else return false;
+    }
+
+    /**
+     * hasMask: checks whether a mask exists.
+     *
+     * @param   string name of mask
+     * @param   string module of mask
+     * @return  bool
+     */
+    public static function hasMask($name,$module="All",$component="All")
+    {
+        if ($module == "All") $module = 0;
+        $mask = self::getMask($name,$module,$component,true);
+        if ($mask) return true;
+        else return false;
+    }
 
 }

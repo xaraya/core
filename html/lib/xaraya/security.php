@@ -41,8 +41,9 @@ sys::import('modules.roles.class.roles');
  *
  * This is a wrapper function
  *
- * @deprecated
  * @fixme   this is no longer used and the makeGroup method doesn't exist (anymore)
+ * @uses xarRoles::makeGroup()
+ * @deprecated
  * @param   string name
  * @return  bool
  */
@@ -53,8 +54,9 @@ function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname
  *
  * This is a wrapper function
  *
+ * @fixme   this is no longer used and the makeUser method doesn't exist (anymore)
+ * @uses xarRoles::makeUser()
  * @deprecated
- * @fixme   this is no longer used and the makeGroup method doesn't exist (anymore)
  * @param  string name
  * @return boolean
  */
@@ -132,7 +134,8 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarPrivileges::register()
+ * @deprecated
  * @param  string name
  * @param  integer realm
  * @param  string module
@@ -144,12 +147,7 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  */
 function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='')
 {
-    // Check if the privilege already exists
-    $privilege = xarPrivileges::findPrivilege($name);
-    if (!$privilege) {
-        return xarPrivileges::register($name,$realm,$module,$component,$instance,$level,$description);
-    }
-    return;
+    return xarPrivileges::register($name,$realm,$module,$component,$instance,$level,$description);
 }
 
 /**
@@ -189,17 +187,14 @@ function xarAssignPrivilege($privilege,$role)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarPrivileges::removeModule()
+ * @deprecated
  * @param   string module
  * @return  bool
  */
 function xarRemovePrivileges($module)
 {
-    // Get the pids for the module
-    $modulePrivileges = xarPrivileges::findPrivilegesForModule($module);
-    foreach ($modulePrivileges as $modulePrivilege) {
-        $modulePrivilege->remove();
-    }
+    xarPrivileges::removeModule($module);
 }
 
 /**
@@ -319,7 +314,8 @@ function xarTree()
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarPrivileges::external()
+ * @deprecated
  * @param   integer pid,level
  * @param   strings pid,name,realm,module,component
  * @param   array instance
@@ -327,14 +323,7 @@ function xarTree()
  */
 function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$level)
 {
-    return xarMod::apiFunc('privileges','admin','returnprivilege',array(
-        'pid' => $pid,
-        'name' => $name,
-        'realm' => $realm,
-        'module' => $module,
-        'component' => $component,
-        'instance' => $instance,
-        'level' => $level));
+    return xarPrivileges::external($pid,$name,$realm,$module,$component,$instance,$level);
 }
 
 /**
@@ -355,31 +344,28 @@ function xarSecurityLevel($levelname)
 /**
  * xarPrivExists: checks whether a privilege exists.
  *
- *
+ * @uses xarSecurity::hasPrivilege()
+ * @deprecated
  * @param   string name of privilege
  * @return  boolean
  */
 function xarPrivExists($name)
 {
-    $priv = xarPrivileges::findPrivilege($name);
-    if ($priv) return true;
-    else return false;
+    return xarSecurity::hasPrivilege($name);
 }
 
 /**
  * xarMaskExists: checks whether a mask exists.
  *
- *
+ * @uses xarSecurity::hasMask()
+ * @deprecated
  * @param   string name of mask
  * @param   string module of mask
  * @return  bool
  */
 function xarMaskExists($name,$module="All",$component="All")
 {
-    if ($module == "All") $module = 0;
-    $mask = xarSecurity::getMask($name,$module,$component,true);
-    if ($mask) return true;
-    else return false;
+    return xarSecurity::hasMask($name, $module, $component);
 }
 
 /**
@@ -460,46 +446,22 @@ function xarRemoveMasks($module)
 /**
  * Generate an authorisation key
  *
- * The authorisation key is used to confirm that actions requested by a
- * particular user have followed the correct path.  Any stage that an
- * action could be made (e.g. a form or a 'delete' button) this function
- * must be called and the resultant string passed to the client as either
- * a GET or POST variable.  When the action then takes place it first calls
- * xarSecConfirmAuthKey() to ensure that the operation has
- * indeed been manually requested by the user and that the key is valid
- *
  * @uses xarSec::genAuthKey()
+ * @deprecated
  * @param string modName the module this authorisation key is for (optional)
  * @return string an encrypted key for use in authorisation of operations
  * @todo bring back possibility of extra security by using date (See code)
  */
 function xarSecGenAuthKey($modName = NULL)
 {
-    if (empty($modName)) {
-        list($modName) = xarController::getRequest()->getInfo();
-    }
-
-    // Date gives extra security but leave it out for now
-    // $key = xarSession::getVar('rand') . $modName . date ('YmdGi');
-    $key = xarSession::getVar('rand') . strtolower($modName);
-
-    // Encrypt key
-    $authid = md5($key);
-
-    // Tell xarCache not to cache this page
-    xarCache::noCache();
-
-    // Return encrypted key
-    return $authid;
+    return xarSec::genAuthKey($modName);
 }
 
 /**
  * Confirm an authorisation key is valid
  *
- * See description of xarSecGenAuthKey for information on
- * this function
- *
  * @uses xarSec::confirmAuthKey()
+ * @deprecated
  * @param string authIdVarName
  * @return boolean true if the key is valid, false if it is not
  * @throws ForbiddenOperationException
@@ -507,92 +469,102 @@ function xarSecGenAuthKey($modName = NULL)
  */
 function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
 {
-    // We don't need this check for AJAX calls
-    if (xarController::getRequest()->isAjax()) return true;
-
-    if(!isset($modName)) list($modName) = xarController::getRequest()->getInfo();
-    $authid = xarController::getVar($authIdVarName);
-
-    // Regenerate static part of key
-    $partkey = xarSession::getVar('rand') . strtolower($modName);
-
-// Not using time-sensitive keys for the moment
-//    // Key life is 5 minutes, so search backwards and forwards 5
-//    // minutes to see if there is a match anywhere
-//    for ($i=-5; $i<=5; $i++) {
-//        $testdate  = mktime(date('G'), date('i')+$i, 0, date('m') , date('d'), date('Y'));
-//
-//        $testauthid = md5($partkey . date('YmdGi', $testdate));
-//        if ($testauthid == $authid) {
-//            // Match
-//
-//            // We've used up the current random
-//            // number, make up a new one
-//            srand((double)microtime()*1000000);
-//            xarSession::setVar('rand', rand());
-//
-//            return true;
-//        }
-//    }
-    if ((md5($partkey)) == $authid) {
-        // Match - generate new random number for next key and leave happy
-        srand((double)microtime()*1000000);
-        xarSession::setVar('rand', rand());
-        return true;
-    }
-    // Not found, assume invalid
-    if ($catch) throw new ForbiddenOperationException();
-    else return false;
+    return xarSec::confirmAuthKey($modName, $authIdVarName, $catch);
 }
+
+// @todo move xarSecurity class from privileges to here or keep it modular?
 
 /**
  * Move public static functions to class
  *
- * @todo current function names are a bit of a mess in here :-(
+ * @package core\security
  */
 class xarSec extends xarObject
 {
     /**
-    public static function makeRoleMemberByUname($childName, $parentName)
-    {
-        return xarRoles::makeMemberByUname($childName, $parentName);
-    }
-    public static function makeRoleMemberByID($childId, $parentId)
-    {
-        return xarRoles::makeMemberByID($childId, $parentId);
-    }
-    public static function removeRoleMemberByID($childId, $parentId)
-    {
-        return xarRoles::removeMemberByID($childId, $parentId);
-    }
-    public static function removePrivileges($module)
-    {
-        return xarRemovePrivileges($module);
-    }
-    public static function isParent($name1, $name2)
-    {
-        return xarRoles::isParent($name1, $name2);
-    }
-    public static function isAncestor($name1, $name2)
-    {
-        return xarRoles::isAncestor($name1, $name2);
-    }
-    public static function privExists($name)
-    {
-        return xarPrivExists($name);
-    }
-    public static function maskExists($name,$module="All",$component="All")
-    {
-        return xarMaskExists($name,$module,$component);
-    }
+     * Generate an authorisation key
+     *
+     * The authorisation key is used to confirm that actions requested by a
+     * particular user have followed the correct path.  Any stage that an
+     * action could be made (e.g. a form or a 'delete' button) this function
+     * must be called and the resultant string passed to the client as either
+     * a GET or POST variable.  When the action then takes place it first calls
+     * xarSec::confirmAuthKey() to ensure that the operation has
+     * indeed been manually requested by the user and that the key is valid
+     *
+     * @param string modName the module this authorisation key is for (optional)
+     * @return string an encrypted key for use in authorisation of operations
+     * @todo bring back possibility of extra security by using date (See code)
      */
     public static function genAuthKey($modName = NULL)
     {
-        return xarSecGenAuthKey($modName);
+        if (empty($modName)) {
+            list($modName) = xarController::getRequest()->getInfo();
+        }
+
+        // Date gives extra security but leave it out for now
+        // $key = xarSession::getVar('rand') . $modName . date ('YmdGi');
+        $key = xarSession::getVar('rand') . strtolower($modName);
+
+        // Encrypt key
+        $authid = md5($key);
+
+        // Tell xarCache not to cache this page
+        xarCache::noCache();
+
+        // Return encrypted key
+        return $authid;
     }
+
+    /**
+     * Confirm an authorisation key is valid
+     *
+     * See description of xarSec::genAuthKey for information on
+     * this function
+     *
+     * @param string authIdVarName
+     * @return boolean true if the key is valid, false if it is not
+     * @throws ForbiddenOperationException
+     * @todo bring back possibility of time authorized keys
+     */
     public static function confirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=false)
     {
-        return xarSecConfirmAuthKey($modName, $authIdVarName, $catch);
+        // We don't need this check for AJAX calls
+        if (xarController::getRequest()->isAjax()) return true;
+
+        if(!isset($modName)) list($modName) = xarController::getRequest()->getInfo();
+        $authid = xarController::getVar($authIdVarName);
+
+        // Regenerate static part of key
+        $partkey = xarSession::getVar('rand') . strtolower($modName);
+
+    // Not using time-sensitive keys for the moment
+    //    // Key life is 5 minutes, so search backwards and forwards 5
+    //    // minutes to see if there is a match anywhere
+    //    for ($i=-5; $i<=5; $i++) {
+    //        $testdate  = mktime(date('G'), date('i')+$i, 0, date('m') , date('d'), date('Y'));
+    //
+    //        $testauthid = md5($partkey . date('YmdGi', $testdate));
+    //        if ($testauthid == $authid) {
+    //            // Match
+    //
+    //            // We've used up the current random
+    //            // number, make up a new one
+    //            srand((double)microtime()*1000000);
+    //            xarSession::setVar('rand', rand());
+    //
+    //            return true;
+    //        }
+    //    }
+        if ((md5($partkey)) == $authid) {
+            // Match - generate new random number for next key and leave happy
+            srand((double)microtime()*1000000);
+            xarSession::setVar('rand', rand());
+            return true;
+        }
+        // Not found, assume invalid
+        if ($catch) throw new ForbiddenOperationException();
+        else return false;
     }
 }
 
