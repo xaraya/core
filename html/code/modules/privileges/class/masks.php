@@ -123,6 +123,9 @@ class xarMasks extends xarSecurity
         } else {
             $module_id = xarMod::getID($module);
         }
+        if (is_string($level)) {
+            $level = xarSecurity::getLevel($level);
+        }
 
         $realmid = null;
         if($realm != 'All') {
@@ -191,12 +194,21 @@ class xarMasks extends xarSecurity
      * @param   module name
      * @return  boolean
     */
-    public static function removemasks($module_id)
+    public static function removemasks($module)
     {
         self::initialize();
+        if (is_int($module)) {
+            $modid = $module;
+        } elseif ($module == "All") {
+            $modid = xarSecurity::PRIVILEGES_ALL;
+        } elseif ($module == null) {
+            $modid = null;
+        } else {
+            $modid = xarMod::getID($module);
+        }
         $query = "DELETE FROM " . self::$privilegestable . " WHERE itemtype = ? AND module_id = ?";
         //Execute the query, bail if an exception was thrown
-        self::$dbconn->Execute($query,array(self::PRIVILEGES_MASKTYPE, $module_id));
+        self::$dbconn->Execute($query,array(self::PRIVILEGES_MASKTYPE, $modid));
         return true;
     }
 
@@ -206,14 +218,14 @@ class xarMasks extends xarSecurity
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
+     * @uses xarSecurity::getLevel()
+     * @deprecated
      * @param   string $levelname the
      * @return  integer access level
     */
     public static function xarSecLevel($levelname)
     {
-        // If we could somehow turn a string into the name of a class constant, that would be great.
-        sys::import('modules.privileges.class.securitylevel');
-        return SecurityLevel::get($levelname);
+        return xarSecurity::getLevel($levelname);
     }
 
     /**
@@ -303,4 +315,3 @@ class xarMasks extends xarSecurity
         }
     }
 }
-?>

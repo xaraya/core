@@ -1019,19 +1019,19 @@ class xarMod extends xarObject implements IxarMod
         // TODO: check for access e.g. by group
 
         // Fall back on mask-less security check with access levels corresponding to action
-        sys::import('modules.privileges.class.securitylevel');
+        sys::import('modules.privileges.class.security');
 
         // default actions supported on modules
         switch($action)
         {
             case 'admin':
-                $seclevel = SecurityLevel::ADMIN;
+                $seclevel = xarSecurity::ACCESS_ADMIN;
                 break;
 
         // CHECKME: any others we really use on module level (instead of object/item/block/... level) ?
 
             case 'view':
-                $seclevel = SecurityLevel::OVERVIEW;
+                $seclevel = xarSecurity::ACCESS_OVERVIEW;
                 break;
 
             default:

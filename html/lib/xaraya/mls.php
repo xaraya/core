@@ -107,6 +107,14 @@ class xarMLS extends xarObject
         //xarEvents::register('MLSMissingTranslationKey');
         //xarEvents::register('MLSMissingTranslationDomain');
     
+        // TODO: reminder for if/when we drop the legacy functions or switch to namespaces someday
+        if (!function_exists('xarML')) {
+            function xarML($rawstring/*, ...*/)
+            {
+                return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
+            }
+	}
+
         // FIXME: this was previously conditional on User subsystem initialisation,
         // but in the 2.x flow we need it earlier apparently, so made this unconditional
         // *AND* commented out the assertion on running this once per request lower

@@ -27,6 +27,16 @@ class xarSecurity extends xarObject
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
     const PRIVILEGES_ALL = 0;
+    const ACCESS_INVALID =   -1;
+    const ACCESS_NONE    =    0;
+    const ACCESS_OVERVIEW = 100;
+    const ACCESS_READ     = 200;
+    const ACCESS_COMMENT  = 300;
+    const ACCESS_MODERATE = 400;
+    const ACCESS_EDIT     = 500;
+    const ACCESS_ADD      = 600;
+    const ACCESS_DELETE   = 700;
+    const ACCESS_ADMIN    = 800;
 
     public    static $levels;
     protected static $dbconn;
@@ -55,7 +65,7 @@ class xarSecurity extends xarObject
     protected static $maskbasedgrouplist;
 
     /**
-     * xarMasks: constructor for the class
+     * xarSecurity: constructor for the class
      *
      * Just sets up the db connection and initializes some variables
      *
@@ -93,7 +103,23 @@ class xarSecurity extends xarObject
 
         // @todo refactor callers to do this directly
         sys::import('modules.privileges.class.securitylevel');
+        // @todo get rid of securitylevel class - see xarSecurity::getLevel()
         self::$levels = SecurityLevel::$displayMap;
+    }
+
+    /**
+     * getLevel: gets a security level based on its name.
+     *
+     * @param   integer levelname
+     * @return  security level
+     */
+    public static function getLevel($levelname)
+    {
+        $constname = "self::{$levelname}";
+        if (defined($constname)) {
+            return constant($constname);
+        }
+        return self::ACCESS_INVALID;
     }
 
     /**
@@ -634,6 +660,32 @@ class xarSecurity extends xarObject
         return $display;
     }
 
+    /**
+     * hasPrivilege: checks whether a privilege exists.
+     *
+     * @param   string name of privilege
+     * @return  boolean
+     */
+    public static function hasPrivilege($name)
+    {
+        $priv = xarPrivileges::findPrivilege($name);
+        if ($priv) return true;
+        else return false;
+    }
+
+    /**
+     * hasMask: checks whether a mask exists.
+     *
+     * @param   string name of mask
+     * @param   string module of mask
+     * @return  bool
+     */
+    public static function hasMask($name,$module="All",$component="All")
+    {
+        if ($module == "All") $module = 0;
+        $mask = self::getMask($name,$module,$component,true);
+        if ($mask) return true;
+        else return false;
+    }
 
 }
-?>

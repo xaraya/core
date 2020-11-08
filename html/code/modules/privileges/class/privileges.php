@@ -136,6 +136,11 @@ class xarPrivileges extends xarMasks
     public static function register($name,$realm,$module,$component,$instance,$level,$description='')
     {
         parent::initialize();
+        // Check if the privilege already exists
+        $privilege = self::findPrivilege($name);
+        if ($privilege) {
+            return;
+        }
 
         $realmid = null;
         if($realm != 'All') {
@@ -149,6 +154,9 @@ class xarPrivileges extends xarMasks
             $module_id = null;
         } else {
             $module_id = xarMod::getID($module);
+        }
+        if (is_string($level)) {
+            $level = xarSecurity::getLevel($level);
         }
         $query = "INSERT INTO " . parent::$privilegestable . " (
                     name, realm_id, module_id, component,
@@ -586,6 +594,23 @@ class xarPrivileges extends xarMasks
     }
 
     /**
+     * removeModule: removes the privileges registered by a module from the database
+     *
+     * This is a wrapper function
+     *
+     * @param   string module
+     * @return  bool
+     */
+    public static function removeModule($module)
+    {
+        // Get the pids for the module
+        $modulePrivileges = self::findPrivilegesForModule($module);
+        foreach ($modulePrivileges as $modulePrivilege) {
+            $modulePrivilege->remove();
+        }
+    }
+
+    /**
      * makeMember: makes a privilege a child of another privilege
      *
      * Creates an entry in the privmembers table
@@ -605,5 +630,50 @@ class xarPrivileges extends xarMasks
         if ($child->isParentPrivilege($parent)) return true;
         return $parent->addMember($child);
     }
+
+    /**
+     * external: stores a privilege from an external wizard in the repository.
+     *
+     * This is a wrapper function
+     *
+     * @param   integer pid,level
+     * @param   strings pid,name,realm,module,component
+     * @param   array instance
+     * @return  boolean
+     */
+    public static function external($pid,$name,$realm,$module,$component,$instance,$level)
+    {
+        // from xarMod::apiFunc('privileges','admin','returnprivilege',array(...));
+        if (!empty($instance) && is_array($instance)) {
+            $instance = implode(':',$instance);
+        }
+        $instance = !empty($instance) ? $instance : "All";
+
+        if(empty($pid)) {
+            $pargs = array('name' => $name,
+                           'realm' => $realm,
+                           'module' => $module,
+                           'module_id'=>xarMod::getID($module),
+                           'component' => $component,
+                           'instance' => $instance,
+                           'level' => $level,
+                           'parentid' => 0
+                           );
+            sys::import('modules.privileges.class.privilege');
+            $priv = new xarPrivilege($pargs);
+            if ($priv->add()) return $priv->getID();
+        } else {
+            $priv = self::getPrivilege($pid);
+            $priv->setName($name);
+            $priv->setRealm($realm);
+            $priv->setModule($module);
+            $priv->setModuleID($module);
+            $priv->setComponent($component);
+            $priv->setInstance($instance);
+            $priv->setLevel($level);
+            if ($priv->update()) return $priv->getID();
+        }
+    }
+
 }
 

@@ -8,8 +8,7 @@
  * BUT THIS ONE WILL BE ABANDONED, YOU MIGHT AS WELL WRITE YOUR CODE TO USE
  * THE MAINTAINED SUBSYSTEM.
 
- * @package core
- * @subpackage database
+ * @package core\database
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -37,7 +36,7 @@
 /**
  * Generate the SQL to create a database
  *
- * 
+ * @uses xarTableDDL::createDatabase()
  * @param databaseName
  * @param databaseType
  * @return string sql statement for database creation
@@ -83,7 +82,7 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
 /**
  * Generate the SQL to create a table
  *
- * 
+ * @uses xarTableDDL::createTable()
  * @param tableName the table to alter
  * @param args['command'] command to perform on table(add,modify,drop,rename)
  * @param args['field'] name of column to alter
@@ -150,7 +149,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
 /**
  * Alter database table
  *
- * 
+ * @uses xarTableDDL::alterTable()
  * @param tableName the table to alter
  * @param args['command'] command to perform on table(add,modify,drop,rename)
  * @param args['field'] name of column to alter
@@ -219,7 +218,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
 /**
  * Generate the SQL to delete a table
  *
- * 
+ * @uses xarTableDDL::dropTable()
  * @param tableName the physical table name
  * @param index an array containing the index name, type and fields array
  * @return data|false the generated SQL statement, or false on failure
@@ -267,6 +266,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
 /**
  * Generate the SQL to create a table index
  *
+ * @uses xarTableDDL::createIndex()
  * @param tableName the physical table name
  * @param index an array containing the index name, type and fields array
  * @param databaseType is an optional parameter to specify the database type
@@ -335,7 +335,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 /**
  * Generate the SQL to drop an index
  *
- * 
+ * @uses xarTableDDL::dropIndex()
  * @param tableName
  * @param name a db index name
  * @param databaseType
@@ -382,6 +382,38 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
             throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
     }
     return $sql;
+}
+
+class xarTableDDL extends xarObject
+{
+    public static function init()
+    {
+        return true;
+    }
+    public static function createDatabase($databaseName, $databaseType=NULL, $databaseCharset='utf-8')
+    {
+        return xarDBCreateDatabase($databaseName, $databaseType, $databaseCharset);
+    }
+    public static function createTable($tableName, $fields, $databaseType="",$charset="")
+    {
+        return xarDBCreateTable($tableName, $fields, $databaseType,$charset);
+    }
+    public static function alterTable($tableName, $args, $databaseType = NULL)
+    {
+        return xarDBAlterTable($tableName, $args, $databaseType);
+    }
+    public static function dropTable($tableName, $databaseType = NULL)
+    {
+        return xarDBDropTable($tableName, $databaseType);
+    }
+    public static function createIndex($tableName, $index, $databaseType = NULL)
+    {
+        return xarDBCreateIndex($tableName, $index, $databaseType);
+    }
+    public static function dropIndex($tableName, $index, $databaseType = NULL)
+    {
+        return xarDBDropIndex($tableName, $index, $databaseType);
+    }
 }
 
 class xarXMLInstaller extends xarObject
@@ -435,4 +467,3 @@ class xarXMLInstaller extends xarObject
     }
 }
 
-?>

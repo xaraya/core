@@ -240,6 +240,82 @@ class xarRoles extends xarObject
     }
 
     /**
+     * makeMemberByUname: create a parent-child relationship in the database between two roles
+     *
+     * This is a wrapper function
+     *
+     * @param  string child uname
+     * @param  string parent uname
+     * @return boolean
+     */
+    public static function makeMemberByUname($childName, $parentName)
+    {
+        $parent = self::ufindRole($parentName);
+        $child = self::ufindRole($childName);
+
+        return $parent->addMember($child);
+    }
+
+    /**
+     * makeMemberByID: create a parent-child relationship in the database between two roles
+     *
+     * This is a wrapper function
+     *
+     * @param  string child ID
+     * @param  string parent ID
+     * @return boolean
+     */
+    public static function makeMemberByID($childId, $parentId)
+    {
+        $parent = self::getRole($parentId);
+        $child = self::getRole($childId);
+
+        return $parent->addMember($child);
+    }
+
+    /**
+     * removeMemberByID: destroys a parent-child relationship in the database between two roles
+     *
+     * This is a wrapper function
+     *
+     * @param  string child ID
+     * @param  string parent ID
+     * @return boolean
+     */
+    public static function removeMemberByID($childId, $parentId)
+    {
+        $parent = self::getRole($parentId);
+        $child = self::getRole($childId);
+
+        return $parent->removeMember($child);
+    }
+
+    public static function current()
+    {
+        return self::getRole(xarSession::getVar('role_id'));
+    }
+
+    public static function isParent($name1, $name2)
+    {
+        $role1 = self::findRole($name1);
+        $role2 = self::ufindRole($name2);
+        if (is_object($role1) && is_object($role2)) {
+            return $role2->isParent($role1);
+        }
+        return false;
+    }
+
+    public static function isAncestor($name1, $name2)
+    {
+        $role1 = self::findRole($name1);
+        $role2 = self::ufindRole($name2);
+        if (is_object($role1) && is_object($role2)) {
+            return $role2->isAncestor($role1);
+        }
+        return false;
+    }
+
+    /**
      * _lookuprole : Lookup a row based upon a specified field
      *
      * @param string $field

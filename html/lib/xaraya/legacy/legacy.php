@@ -62,7 +62,7 @@ function xarCoreGetVarDirPath() { return sys::varpath(); }
  **/
 /**
  * @package core\legacy
- * @uses   xarSystemVars
+ * @uses   xarSystemVars::get()
  * @deprecated replaced by xarSystemVars
  */
 function xarCore_getSystemVar($name)
@@ -97,13 +97,13 @@ sys::import('xaraya.variables.config');
 
 /**
  * @package core\legacy
- * @uses xarConfigVars
+ * @uses xarConfigVars::set()
  * @deprecated
  */
 function xarConfigSetVar($name, $value) { return xarConfigVars::set(null, $name, $value); }
 /**
  * @package core\legacy
- * @uses xarConfigVars
+ * @uses xarConfigVars::get()
  * @deprecated
  */
 function xarConfigGetVar($name)         { return xarConfigVars::get(null, $name); }
@@ -291,7 +291,7 @@ function &xarDBGetTables()           { return xarDB::getTables();}
 // Does this work?
 /**
  * @package core\legacy
- * @uses lib/xaraya/tableddl.php
+ * @uses xarTableDDL::init()
  * @deprecated
  */
 function xarDBLoadTableMaintenanceAPI() { return sys::import('xaraya.tableddl'); }
@@ -305,7 +305,7 @@ function xarDBGetType()              { return xarDB::getType(); }
 
 /**
  * @package core\legacy
- * @uses lib/xaraya/tableddl.php
+ * @uses xarTableDDL::init()
  * @deprecated
  */
 function &xarDBNewDataDict(Connection &$dbconn, $mode = 'READONLY') 
