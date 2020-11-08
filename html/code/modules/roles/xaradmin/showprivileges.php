@@ -56,6 +56,7 @@ function roles_admin_showprivileges()
         $groupname = $ancestor->getName();
         $groupid = $ancestor->getID();
         foreach($allprivileges as $priv) {
+            $priv->normalize();
             if ($priv->getModule() == null) {
                 $inherited[] = array('privid' => $priv->getID(),
                         'name' => $priv->getName(),
@@ -102,6 +103,7 @@ function roles_admin_showprivileges()
     // extract the info for display by the template
     $currentprivileges = array();
     foreach ($curprivileges as $priv) {
+        $priv->normalize();
         $frozen = !xarSecurity::check('ManagePrivileges',0,'Privileges',$priv->getName());
         if ($priv->getModule() == null) {
             $currentprivileges[] = array('privid' => $priv->getID(),
