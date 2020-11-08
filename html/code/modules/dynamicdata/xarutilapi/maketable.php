@@ -163,7 +163,7 @@ function dynamicdata_utilapi_maketable(Array $args=array())
 
     // Create the Table - the function will return the SQL is successful or
     // raise an exception if it fails, in this case $query is empty
-    $query = xarDBCreateTable($table,$fields);
+    $query = xarTableDDL::createTable($table,$fields);
     if (empty($query)) return; // throw back
     $dbconn->Execute($query);
 

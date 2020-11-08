@@ -185,17 +185,17 @@ function dynamicdata_init()
      * Format is
      * register(Name,Realm,Module,Component,Instance,Level,Description)
      *********************************************************************/
-    xarRegisterMask('ViewDynamicData','All','dynamicdata','All','All','ACCESS_OVERVIEW');
-    xarRegisterMask('EditDynamicData','All','dynamicdata','All','All','ACCESS_EDIT');
-    xarRegisterMask('AddDynamicData','All','dynamicdata','All','All','ACCESS_ADD');
-    xarRegisterMask('ManageDynamicData','All','dynamicdata','All','All','ACCESS_DELETE');
-    xarRegisterMask('AdminDynamicData','All','dynamicdata','All','All','ACCESS_ADMIN');
-    xarRegisterMask('ViewDynamicDataItems','All','dynamicdata','Item','All:All:All','ACCESS_OVERVIEW');
-    xarRegisterMask('ReadDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_READ');
-    xarRegisterMask('EditDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_EDIT');
-    xarRegisterMask('AddDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADD');
-    xarRegisterMask('DeleteDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_DELETE');
-    xarRegisterMask('AdminDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADMIN');
+    xarMasks::register('ViewDynamicData','All','dynamicdata','All','All','ACCESS_OVERVIEW');
+    xarMasks::register('EditDynamicData','All','dynamicdata','All','All','ACCESS_EDIT');
+    xarMasks::register('AddDynamicData','All','dynamicdata','All','All','ACCESS_ADD');
+    xarMasks::register('ManageDynamicData','All','dynamicdata','All','All','ACCESS_DELETE');
+    xarMasks::register('AdminDynamicData','All','dynamicdata','All','All','ACCESS_ADMIN');
+    xarMasks::register('ViewDynamicDataItems','All','dynamicdata','Item','All:All:All','ACCESS_OVERVIEW');
+    xarMasks::register('ReadDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_READ');
+    xarMasks::register('EditDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_EDIT');
+    xarMasks::register('AddDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADD');
+    xarMasks::register('DeleteDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_DELETE');
+    xarMasks::register('AdminDynamicDataItem','All','dynamicdata','Item','All:All:All','ACCESS_ADMIN');
     /*********************************************************************
      * Define instances for this module
      * Format is
@@ -208,7 +208,7 @@ function dynamicdata_init()
             'limit'  => 0
         )
     );
-    xarDefineInstance('dynamicdata','Item',$instances);
+    xarPrivileges::defineInstance('dynamicdata','Item',$instances);
     // Installation complete; check for upgrades
     return dynamicdata_upgrade('2.0.0');
 }
