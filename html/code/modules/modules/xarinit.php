@@ -120,7 +120,7 @@ function modules_upgrade($oldversion)
             $hookstable = $xartable['hooks'];
             $charset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
             $fieldargs = array('command' => 'add', 'field' => 't_file', 'type' => 'varchar', 'size' => 254, 'null' => false, 'charset' => $charset);
-            $query = xarDBAlterTable($hookstable,$fieldargs);
+            $query = xarTableDDL::alterTable($hookstable,$fieldargs);
             $result = $dbconn->Execute($query);
             if (!$result) return;
         case '2.0.1':

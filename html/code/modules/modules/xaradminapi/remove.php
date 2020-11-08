@@ -75,7 +75,7 @@ function modules_adminapi_remove(Array $args=array())
 
     // Delete any masks still around
     // this is now handled by the modules module ModRemove event observer
-    // xarRemoveMasks($modinfo['name']);
+    // xarMasks::removemasks($modinfo['name']);
     // this is now handled by the modules module ModRemove event observer
     // xarModHooks::call('module','remove',$modinfo['name'],'',$modinfo['name']);
 
