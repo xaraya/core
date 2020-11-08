@@ -150,6 +150,9 @@ class xarPrivileges extends xarMasks
         } else {
             $module_id = xarMod::getID($module);
         }
+        if (is_string($level)) {
+            $level = xarSecurity::getLevel($level);
+        }
         $query = "INSERT INTO " . parent::$privilegestable . " (
                     name, realm_id, module_id, component,
                     instance, level, description, itemtype)

@@ -1,8 +1,7 @@
 <?php
 /**
  *
- * @package core
- * @subpackage security
+ * @package core\security
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -42,6 +41,7 @@ sys::import('modules.roles.class.roles');
  *
  * This is a wrapper function
  *
+ * @deprecated
  * @fixme   this is no longer used and the makeGroup method doesn't exist (anymore)
  * @param   string name
  * @return  bool
@@ -53,6 +53,7 @@ function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname
  *
  * This is a wrapper function
  *
+ * @deprecated
  * @fixme   this is no longer used and the makeGroup method doesn't exist (anymore)
  * @param  string name
  * @return boolean
@@ -67,7 +68,8 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarRoles::makeMemberByName()
+ * @deprecated
  * @param  string child name
  * @param  string parent name
  * @return boolean
@@ -82,17 +84,15 @@ function xarMakeRoleMemberByName($childName, $parentName)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarRoles::makeMemberByUname()
+ * @deprecated
  * @param  string child uname
  * @param  string parent uname
  * @return boolean
  */
 function xarMakeRoleMemberByUname($childName, $parentName)
 {
-    $parent = xarRoles::ufindRole($parentName);
-    $child = xarRoles::ufindRole($childName);
-
-    return $parent->addMember($child);
+    return xarRoles::makeMemberByUname($childName, $parentName);
 }
 
 /**
@@ -100,17 +100,15 @@ function xarMakeRoleMemberByUname($childName, $parentName)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarRoles::makeMemberByID()
+ * @deprecated
  * @param  string child ID
  * @param  string parent ID
  * @return boolean
  */
 function xarMakeRoleMemberByID($childId, $parentId)
 {
-    $parent = xarRoles::getRole($parentId);
-    $child = xarRoles::getRole($childId);
-
-    return $parent->addMember($child);
+    return xarRoles::makeMemberByID($childId, $parentId);
 }
 
 /**
@@ -118,17 +116,15 @@ function xarMakeRoleMemberByID($childId, $parentId)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarRoles::removeMemberByID()
+ * @deprecated
  * @param  string child ID
  * @param  string parent ID
  * @return boolean
  */
 function xarRemoveRoleMemberByID($childId, $parentId)
 {
-    $parent = xarRoles::getRole($parentId);
-    $child = xarRoles::getRole($childId);
-
-    return $parent->removeMember($child);
+    return xarRoles::removeMemberByID($childId, $parentId);
 }
 
 /**
@@ -142,7 +138,7 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  * @param  string module
  * @param  string component
  * @param  string instance
- * @param  integer level
+ * @param  mixed   $level string or integer - support both and convert as needed in register()
  * @param  string description
  * @return boolean
  */
@@ -151,7 +147,7 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
     // Check if the privilege already exists
     $privilege = xarPrivileges::findPrivilege($name);
     if (!$privilege) {
-        return xarPrivileges::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+        return xarPrivileges::register($name,$realm,$module,$component,$instance,$level,$description);
     }
     return;
 }
@@ -161,7 +157,8 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarPrivileges::makeMember()
+ * @deprecated
  * @param  string childName
  * @param  string  parentName
  * @return boolean
@@ -176,7 +173,8 @@ function xarMakePrivilegeMember($childName, $parentName)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarPrivileges::assign()
+ * @deprecated
  * @param  string  privilege name
  * @param  string role name
  * @return boolean
@@ -209,7 +207,8 @@ function xarRemovePrivileges($module)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarPrivileges::defineInstance()
+ * @deprecated
  * @param  string module
  * @param  string type
  * @param  string query
@@ -230,7 +229,8 @@ function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarPrivileges::removeInstances()
+ * @deprecated
  * @param   string module
  * @return  bool
  */
@@ -244,7 +244,8 @@ function xarRemoveInstances($module)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarRoles::getgroups()
+ * @deprecated
  * @return array of strings
  */
 function xarGetGroups() { return xarRoles::getgroups(); }
@@ -254,36 +255,43 @@ function xarGetGroups() { return xarRoles::getgroups(); }
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarRoles::findRole()
+ * @deprecated
  * @param   string name
  * @return  object role
  */
 function xarFindRole($name) { return xarRoles::findRole($name);  }
+/**
+ * @uses xarRoles::ufindRole()
+ * @deprecated
+ */
 function xarUFindRole($name){ return xarRoles::ufindRole($name); }
 
+/**
+ * @uses xarRoles::current()
+ * @deprecated
+ */
 function xarCurrentRole()
 {
-    return xarRoles::getRole(xarSession::getVar('role_id'));
+    return xarRoles::current();
 }
 
+/**
+ * @uses xarRoles::isParent()
+ * @deprecated
+ */
 function xarIsParent($name1, $name2)
 {
-    $role1 = xarRoles::findRole($name1);
-    $role2 = xarRoles::ufindRole($name2);
-    if (is_object($role1) && is_object($role2)) {
-        return $role2->isParent($role1);
-    }
-    return false;
+    return xarRoles::isParent($name1, $name2);
 }
 
+/**
+ * @uses xarRoles::isAncestor()
+ * @deprecated
+ */
 function xarIsAncestor($name1, $name2)
 {
-    $role1 = xarRoles::findRole($name1);
-    $role2 = xarRoles::ufindRole($name2);
-    if (is_object($role1) && is_object($role2)) {
-        return $role2->isAncestor($role1);
-    }
-    return false;
+    return xarRoles::isAncestor($name1, $name2);
 }
 
 /**
@@ -291,7 +299,8 @@ function xarIsAncestor($name1, $name2)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarTreeRenderer
+ * @deprecated
  * @param   string name
  * @return  object role
  * @todo    what is this doing here?
@@ -333,20 +342,20 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarSecurity::getLevel()
+ * @deprecated
  * @param   integer levelname
  * @return  security level
  */
 function xarSecurityLevel($levelname)
 {
-    return xarMasks::xarSecLevel($levelname);
+    return xarSecurity::getLevel($levelname);
 }
 
 /**
  * xarPrivExists: checks whether a privilege exists.
  *
  *
- * 
  * @param   string name of privilege
  * @return  boolean
  */
@@ -361,7 +370,6 @@ function xarPrivExists($name)
  * xarMaskExists: checks whether a mask exists.
  *
  *
- * 
  * @param   string name of mask
  * @param   string module of mask
  * @return  bool
@@ -380,7 +388,8 @@ function xarMaskExists($name,$module="All",$component="All")
  * Checks the current group or user's privileges against a component
  * This function should be invoked every time a security check needs to be done
  *
- * 
+ * @uses xarSecurity::check()
+ * @deprecated
  * @param  string  $mask
  * @param  integer $showException
  * @param  string  $component
@@ -404,25 +413,27 @@ function xarSecurityCheck($mask, $showException=1, $component='', $instance='', 
 /**
  * xarRegisterMask: wrapper function for registering a mask
  *
- * 
+ * @uses xarMasks::register()
+ * @deprecated
  * @param  string  $name
  * @param  integer $realm
  * @param  string  $module
  * @param  string  $component
  * @param  string  $instance
- * @param  integer $level
+ * @param  mixed   $level string or integer - support both and convert as needed in register()
  * @param  string  $description
  * @return boolean
  */
 function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$description='')
 {
-    return xarMasks::register($name,$realm,$module,$component,$instance,xarSecurityLevel($level),$description);
+    return xarMasks::register($name,$realm,$module,$component,$instance,$level,$description);
 }
 
 /**
  * xarUnregisterMask: wrapper function for unregistering a mask
  *
- * 
+ * @uses xarMasks::unregister()
+ * @deprecated
  * @param  string name
  * @return boolean
  */
@@ -436,20 +447,14 @@ function xarUnregisterMask($name)
  *
  * This is a wrapper function
  *
- * 
+ * @uses xarMasks::removemasks()
+ * @deprecated
  * @param   string module
  * @return  bool
  */
 function xarRemoveMasks($module)
 {
-    if ($module == "All") {
-        $modid = xarSecurity::PRIVILEGES_ALL;
-    } elseif ($module == null) {
-        $modid = null;
-    } else {
-        $modid = xarMod::getID($module);
-    }
-    return xarMasks::removeMasks($modid);
+    return xarMasks::removemasks($module);
 }
 
 /**
@@ -463,7 +468,7 @@ function xarRemoveMasks($module)
  * xarSecConfirmAuthKey() to ensure that the operation has
  * indeed been manually requested by the user and that the key is valid
  *
- * 
+ * @uses xarSec::genAuthKey()
  * @param string modName the module this authorisation key is for (optional)
  * @return string an encrypted key for use in authorisation of operations
  * @todo bring back possibility of extra security by using date (See code)
@@ -494,7 +499,7 @@ function xarSecGenAuthKey($modName = NULL)
  * See description of xarSecGenAuthKey for information on
  * this function
  *
- * 
+ * @uses xarSec::confirmAuthKey()
  * @param string authIdVarName
  * @return boolean true if the key is valid, false if it is not
  * @throws ForbiddenOperationException
@@ -547,17 +552,18 @@ function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=fal
  */
 class xarSec extends xarObject
 {
+    /**
     public static function makeRoleMemberByUname($childName, $parentName)
     {
-        return xarMakeRoleMemberByUname($childName, $parentName);
+        return xarRoles::makeMemberByUname($childName, $parentName);
     }
     public static function makeRoleMemberByID($childId, $parentId)
     {
-        return xarMakeRoleMemberByID($childId, $parentId);
+        return xarRoles::makeMemberByID($childId, $parentId);
     }
     public static function removeRoleMemberByID($childId, $parentId)
     {
-        return xarRemoveRoleMemberByID($childId, $parentId);
+        return xarRoles::removeMemberByID($childId, $parentId);
     }
     public static function removePrivileges($module)
     {
@@ -565,11 +571,11 @@ class xarSec extends xarObject
     }
     public static function isParent($name1, $name2)
     {
-        return xarIsParent($name1, $name2);
+        return xarRoles::isParent($name1, $name2);
     }
     public static function isAncestor($name1, $name2)
     {
-        return xarIsAncestor($name1, $name2);
+        return xarRoles::isAncestor($name1, $name2);
     }
     public static function privExists($name)
     {
@@ -579,6 +585,7 @@ class xarSec extends xarObject
     {
         return xarMaskExists($name,$module,$component);
     }
+     */
     public static function genAuthKey($modName = NULL)
     {
         return xarSecGenAuthKey($modName);

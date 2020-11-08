@@ -12,6 +12,7 @@
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
  * @todo  this is here as replacement for what we used to have in a table, but wrapping levels are a bit high for getting to this info
+ * @todo get rid of securitylevel class - see xarSecurity::getLevel()
  **/
 final class SecurityLevel extends xarObject
 {
@@ -54,6 +55,7 @@ final class SecurityLevel extends xarObject
         self::ADMIN    => 'Administer (800)'
         );
 
+    // @todo get rid of securitylevel class - see xarSecurity::getLevel()
     public static function get($name)
     {
         if(isset(self::$nameMap[$name])) {
@@ -63,4 +65,3 @@ final class SecurityLevel extends xarObject
         }
     }
 }
-?>
