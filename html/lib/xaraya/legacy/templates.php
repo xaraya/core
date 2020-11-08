@@ -104,19 +104,19 @@ function xarTplSetPageTemplateName($templateName)
  * Legacy call
  *
  * @package core\templating
- * @uses xarTpl::getDocType()
+ * @uses xarTpl::getDoctype()
  * @deprecated
  **/
 function xarTplGetDoctype()
 {
-    return xarTpl::getDocType();
+    return xarTpl::getDoctype();
 }
 
 /**
  * Legacy call
  *
  * @package core\templating
- * @uses xarTpl::setDocType()
+ * @uses xarTpl::setDoctype()
  * @deprecated
  **/
 function xarTplSetDoctype($doctypeName)

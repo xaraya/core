@@ -162,11 +162,11 @@ function xarModGetDisplayableDescription($modName = NULL, $type = 'module')
 
 /**
  * Legacy call
- * @uses xarMod::getRegID()
+ * @uses xarMod::getRegId()
  * @deprecated
  */
 function xarModGetIDFromName($modName, $type = 'module')
-{   return xarMod::getRegID($modName, $type); }
+{   return xarMod::getRegId($modName, $type); }
 
 /**
  * Legacy call
