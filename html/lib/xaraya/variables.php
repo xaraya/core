@@ -107,6 +107,9 @@ class xarVar extends xarObject
     const PREP_FOR_STORE   = 4;
     const PREP_TRIM        = 8;
 
+    public static $allowableHTML = array();
+    public static $fixHTMLEntities = true;
+
     /**
      * Initialise the variable handling options
      *
@@ -129,8 +132,8 @@ class xarVar extends xarObject
 
         // Initialise the variable cache
         sys::import('xaraya.variables.config');
-        $GLOBALS['xarVar_allowableHTML'] = xarConfigVars::get(null, 'Site.Core.AllowableHTML', array());
-        $GLOBALS['xarVar_fixHTMLEntities'] = xarConfigVars::get(null, 'Site.Core.FixHTMLEntities',true);
+	self::$allowableHTML = xarConfigVars::get(null, 'Site.Core.AllowableHTML', array());
+	self::$fixHTMLEntities = xarConfigVars::get(null, 'Site.Core.FixHTMLEntities',true);
 
         return true;
     }
@@ -512,7 +515,7 @@ function xarVarPrepHTMLDisplay()
 
     if (!isset($allowedtags)) {
         $allowedHTML = array();
-        foreach($GLOBALS['xarVar_allowableHTML'] as $k=>$v) {
+        foreach(xarVar::$allowableHTML as $k=>$v) {
             if ($k == '!--') {
                 if ($v <> 0) {
                     $allowedHTML[] = "$k.*?--";
@@ -561,7 +564,7 @@ function xarVarPrepHTMLDisplay()
                                      $var);
 
         // Fix entities if required
-        if ($GLOBALS['xarVar_fixHTMLEntities']) {
+        if (xarVar::$fixHTMLEntities) {
             $var = preg_replace('/&amp;([a-z#0-9]+);/i', "&\\1;", $var);
         }
 

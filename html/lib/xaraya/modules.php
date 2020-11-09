@@ -113,8 +113,9 @@ class xarMod extends xarObject implements IxarMod
     const STATE_ERROR_ACTIVE               = 12;
     const STATE_ERROR_UPGRADED             = 13;
 
-    static $genShortUrls = false;
-    static $genXmlUrls   = true;
+    public static $genShortUrls = false;
+    public static $genXmlUrls   = true;
+    public static $noCacheState = false;
 
     /**
      * Initialize
@@ -301,7 +302,7 @@ class xarMod extends xarObject implements IxarMod
         // Return false if the result wasn't set
         if (!isset($modBaseInfo)) return false; // throw back
 
-        if (!empty($GLOBALS['xarMod_noCacheState']) || !isset($modAvailableCache[$modBaseInfo['name']])) {
+        if (!empty(self::$noCacheState) || !isset($modAvailableCache[$modBaseInfo['name']])) {
             // We should be ok now, return the state of the module
             $modState = $modBaseInfo['state'];
             $modAvailableCache[$modBaseInfo['name']] = false;
@@ -484,18 +485,18 @@ class xarMod extends xarObject implements IxarMod
             throw new BadParameterException($type,'The value of the "type" parameter must be "module" or "theme", it was "#(1)"');
         }
 
-        // The GLOBALS['xarMod_noCacheState'] flag tells Xaraya *not*
+        // The self::$noCacheState flag tells Xaraya *not*
         // to cache module (+state) where this would lead to problems
         // like in the installer for example.
         if ($type == 'module') {
             $cacheCollection = 'Mod.BaseInfos';
-            $checkNoState = 'xarMod_noCacheState';
+            $checkNoState = xarMod::$noCacheState;
         } else {
             $cacheCollection = 'Theme.BaseInfos';
-            $checkNoState = 'xarTheme_noCacheState';
+            $checkNoState = xarTheme::$noCacheState;
         }
 
-        if (empty($GLOBALS[$checkNoState]) && xarCoreCache::isCached($cacheCollection, $modName)) {
+        if (empty($checkNoState) && xarCoreCache::isCached($cacheCollection, $modName)) {
             return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
@@ -577,7 +578,7 @@ class xarMod extends xarObject implements IxarMod
     {
         if (empty($modOsDir)) throw new EmptyParameterException('modOsDir');
 
-        if (empty($GLOBALS['xarMod_noCacheState']) && xarCoreCache::isCached('Mod.getFileInfos', $modOsDir ." / " . $type)) {
+        if (empty(self::$noCacheState) && xarCoreCache::isCached('Mod.getFileInfos', $modOsDir ." / " . $type)) {
             return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
@@ -591,7 +592,7 @@ class xarMod extends xarObject implements IxarMod
             $fileName = sys::code() . 'modules/' . $modOsDir . '/xarversion.php';
             $part = 'xarversion';
             // If the locale is already present, it means we can make the translations available
-            if(!empty($GLOBALS['xarMLS_currentLocale']))
+            if(!empty(xarMLS::$currentLocale))
                 xarMLS::_loadTranslations(xarMLS::DNTYPE_MODULE, $modOsDir, 'modules:', 'version');
             break;
         case 'property':

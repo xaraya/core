@@ -31,6 +31,8 @@ class xarTheme extends xarObject
     const STATE_MISSING_FROM_ACTIVE        = 8;
     const STATE_MISSING_FROM_UPGRADED      = 9;
 
+    public static $noCacheState = false;
+
     /**
      * Gets theme registry ID given its name
      */

@@ -130,7 +130,7 @@ abstract class xarMLS__ReferencesBackend  extends xarObject implements ITranslat
                 // CHECKME: save $this->domainlocation here instead ?
                 //$this->domaincache["$dnType.$dnName"] = true;
                 return true;
-            } elseif ($GLOBALS['xarMLS_backendName'] == 'xml2php') {
+            } elseif (xarMLS::$backendName == 'xml2php') {
                 $this->locale = $locale;
                 // CHECKME: save $this->domainlocation here instead ?
                 //$this->domaincache["$dnType.$dnName"] = true;
@@ -174,4 +174,3 @@ abstract class xarMLS__ReferencesBackend  extends xarObject implements ITranslat
     }
 
 }
-?>

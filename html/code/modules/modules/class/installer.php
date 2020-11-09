@@ -390,7 +390,7 @@ class Installer extends xarObject
         // Make xarMod::getInfo not cache anything...
         //We should make a function to handle this or maybe whenever we
         //have a central caching solution...
-        $GLOBALS['xarMod_noCacheState'] = true;
+	xarMod::$noCacheState = true;
 
         if (!empty($extInfo['extensions'])) {
             foreach ($extInfo['extensions'] as $extension) {
@@ -534,7 +534,7 @@ class Installer extends xarObject
         // Make xarMod::getInfo not cache anything...
         //We should make a funcion to handle this instead of seeting a global var
         //or maybe whenever we have a central caching solution...
-        $GLOBALS['xarMod_noCacheState'] = true;
+	xarMod::$noCacheState = true;
 
         // Get module information
         $extInfo = xarMod::getInfo($regid);
@@ -627,4 +627,3 @@ class Installer extends xarObject
     }
 }
 
-?>

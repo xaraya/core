@@ -23,6 +23,8 @@ sys::import('xaraya.mlsbackends.reference');
 
 class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
+    public static $PHPBackend_entries = array();
+    public static $PHPBackend_keyEntries = array();
     public $gen;
     public $basePHPDir;
     public $baseXMLDir;
@@ -38,8 +40,8 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 
     function translate($string, $type = 0)
     {
-        if (isset($GLOBALS['xarML_PHPBackend_entries'][$string]))
-            return $GLOBALS['xarML_PHPBackend_entries'][$string];
+        if (isset(self::$PHPBackend_entries[$string]))
+            return self::$PHPBackend_entries[$string];
         else {
             if ($type == 1) {
                 return $string;
@@ -52,8 +54,8 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 
     function translateByKey($key, $type = 0)
     {
-        if (isset($GLOBALS['xarML_PHPBackend_keyEntries'][$key]))
-            return $GLOBALS['xarML_PHPBackend_keyEntries'][$key];
+        if (isset(self::$PHPBackend_keyEntries[$key]))
+            return self::$PHPBackend_keyEntries[$key];
         else {
             if ($type == 1) {
                 return $key;
@@ -66,8 +68,8 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 
     function clear()
     {
-        $GLOBALS['xarML_PHPBackend_entries'] = array();
-        $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
+        self::$PHPBackend_entries = array();
+        self::$PHPBackend_keyEntries = array();
     }
 
     function bindDomain($domainType=xarMLS::DNTYPE_CORE, $domainName='xaraya')
@@ -141,7 +143,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
                 list($key, $value) = explode('=', $line);
                 $key = trim($key);
                 $value = trim($value);
-                $GLOBALS['xarML_PHPBackend_keyEntries'][$key] = $value;
+                self::$PHPBackend_keyEntries[$key] = $value;
             }
         }
     }
@@ -365,7 +367,7 @@ class PHPBackendGenerator extends xarObject
                     $start = '$xarML_PHPBackend_keyEntries[\''.$node['value']."']";
                 } elseif ($node['tag'] == 'TRANSLATION') {
                     if ($this->outCharset != 'utf-8') {
-                        $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
+                        $node['value'] = xarMLS::$newEncoding->convert($node['value'], 'utf-8', $this->outCharset, 0);
                     }
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     if (!empty($node['value'])) {
@@ -392,7 +394,7 @@ class PHPBackendGenerator extends xarObject
                     $entryType = 'key';
                 } elseif ($node['tag'] == 'TRANSLATION') {
                     if ($this->outCharset != 'utf-8') {
-                        $node['value'] = $GLOBALS['xarMLS_newEncoding']->convert($node['value'], 'utf-8', $this->outCharset, 0);
+                        $node['value'] = xarMLS::$newEncoding->convert($node['value'], 'utf-8', $this->outCharset, 0);
                     }
                     $node['value'] = str_replace('\'', '\\\'', $node['value']);
                     if ($entryType == 'string') {

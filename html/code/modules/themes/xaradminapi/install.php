@@ -38,9 +38,8 @@ function themes_adminapi_install(Array $args=array())
     // Make xarMod::getInfo not cache anything...
     //We should make a funcion to handle this or maybe whenever we
     //have a central caching solution...
-    $GLOBALS['xarTheme_noCacheState'] = true;
+    xarTheme::$noCacheState = true;
 
     $installer->installmodule($regid);
     return true;
 }
-?>
