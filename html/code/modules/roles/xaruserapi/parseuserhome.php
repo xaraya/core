@@ -114,7 +114,7 @@ function roles_userapi_parseuserhome(Array $args=array())
                     }
                 }
                 // BUG 2023: Make sure manual URLs are prepped for XML, consistent with xarController::URL()
-                if (!empty($GLOBALS['xarMod_generateXMLURLs'])) {
+                if (!empty(xarMod::$genXmlUrls)) {
                     $url = xarVar::prepForDisplay($url);
                 }
            }
@@ -126,4 +126,3 @@ function roles_userapi_parseuserhome(Array $args=array())
 
     return $data;
 }
-?>

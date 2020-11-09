@@ -98,7 +98,7 @@ class xarUser extends xarObject
         //xarEvents::register('UserLogout');
     
         // Populate the GLOBAL for legacy calls
-        $GLOBALS['xarUser_authenticationModules'] =  self::$authenticationModules;
+        //$GLOBALS['xarUser_authenticationModules'] =  self::$authenticationModules;
         
         return true;
     }

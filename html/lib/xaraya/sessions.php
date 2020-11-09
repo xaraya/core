@@ -55,6 +55,14 @@ class xarSession extends xarObject implements IsessionHandler
     const  PREFIX='XARSV';     // Reserved by us for our session vars
     const  COOKIE='XARAYASID'; // Our cookiename
     public static $anonId;     // Replacement for _XAR_ID_UNREGISTERED
+    private static $securityLevel;
+    private static $duration;
+    private static $inactivityTimeout;
+    //private static $cookieName;
+    //private static $cookiePath;
+    //private static $cookieDomain;
+    //private static $refererCheck;
+    private static $lastSaved;
     private $db;               // We store sessioninfo in the database
     private $tbl;              // Container for the session info
     private $isNew = true;     // Flag signalling if we're dealing with a new session
@@ -318,9 +326,9 @@ class xarSession extends xarObject implements IsessionHandler
             $this->isNew = false;
             list($XARSVid, $this->ipAddress, $lastused, $vars) = $result->getRow();
             // in case garbage collection didn't have the opportunity to do its job
-            if (!empty($GLOBALS['xarSession_systemArgs']['securityLevel']) &&
-                $GLOBALS['xarSession_systemArgs']['securityLevel'] == 'High') {
-                $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
+            if (!empty(self::$securityLevel) &&
+                self::$securityLevel == 'High') {
+                $timeoutSetting = time() - (self::$inactivityTimeout * 60);
                 if ($lastused < $timeoutSetting) {
                     // force a reset of the userid (but use the same sessionid)
                     $this->setUserInfo(self::$anonId, 0);
@@ -345,7 +353,7 @@ class xarSession extends xarObject implements IsessionHandler
     /**
      * PHP function to write a set of session variables
      *
-     * 
+     * @todo don't bother saving when nothing has been updated? See saveTime() below
      * @throws Exception
      */
     function write($sessionId, $vars)
@@ -398,9 +406,9 @@ class xarSession extends xarObject implements IsessionHandler
      */
     function gc($maxlifetime)
     {
-        $timeoutSetting = time() - ($GLOBALS['xarSession_systemArgs']['inactivityTimeout'] * 60);
+        $timeoutSetting = time() - (self::$inactivityTimeout * 60);
         $bindvars = array();
-        switch ($GLOBALS['xarSession_systemArgs']['securityLevel']) {
+        switch (self::$securityLevel) {
         case 'Low':
             // Low security - delete session info if user decided not to
             //                remember themself
@@ -415,7 +423,7 @@ class xarSession extends xarObject implements IsessionHandler
             $where = "(remember = ? AND last_use <  ?) OR first_use < ?";
             $bindvars[] = false;
             $bindvars[] = $timeoutSetting;
-            $bindvars[] = (time()- ($GLOBALS['xarSession_systemArgs']['duration'] * 86400));
+            $bindvars[] = (time()- (self::$duration * 86400));
             break;
         case 'High':
         default:
@@ -448,7 +456,14 @@ class xarSession extends xarObject implements IsessionHandler
             $args = self::getConfig();
         }
         /* @todo: get rid of the global */
-        $GLOBALS['xarSession_systemArgs'] = $args;
+        //$GLOBALS['xarSession_systemArgs'] = $args;
+        self::$securityLevel = $args['securityLevel'];
+        self::$duration = $args['duration'];
+        self::$inactivityTimeout = $args['inactivityTimeout'];
+        //self::$cookieName = $args['cookieName'];
+        //self::$cookiePath = $args['cookiePath'];
+        //self::$cookieDomain = $args['cookieDomain'];
+        //self::$refererCheck = $args['refererCheck'));
 
 	self::$anonId = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
         if (!defined('_XAR_ID_UNREGISTERED')) {
@@ -601,10 +616,10 @@ class xarSession extends xarObject implements IsessionHandler
     static function saveTime($lastused = 0)
     {
         // initialize saveTime if necessary
-        if (!isset($GLOBALS['xarSession_saveTime']) || !empty($lastused)) {
-            $GLOBALS['xarSession_saveTime'] = (int) $lastused;
+        if (!isset(self::$lastSaved) || !empty($lastused)) {
+            self::$lastSaved = (int) $lastused;
         }
-        return $GLOBALS['xarSession_saveTime'];
+        return self::$lastSaved;
     }
 
     /**
@@ -614,7 +629,7 @@ class xarSession extends xarObject implements IsessionHandler
      */
     public static function getSecurityLevel()
     {
-        return $GLOBALS['xarSession_systemArgs']['securityLevel'];
+        return self::$securityLevel;
     }
 }
 
