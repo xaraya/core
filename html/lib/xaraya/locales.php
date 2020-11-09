@@ -52,8 +52,8 @@ function &xarMLSLoadLocaleData($locale = NULL)
     // rraymond : move the check for the loaded locale before processing as
     //          : all of this would have been taken care of the first time
     //          : the locale data was loaded - saves processing time
-    if (isset($GLOBALS['xarMLS_localeDataCache'][$locale])) {
-        return $GLOBALS['xarMLS_localeDataCache'][$locale];
+    if (isset(xarMLS::$localeDataCache[$locale])) {
+        return xarMLS::$localeDataCache[$locale];
     }
 
     // check for locale availability
@@ -81,53 +81,53 @@ function &xarMLSLoadLocaleData($locale = NULL)
         include $fileName;
         $loaded[$fileName] = true;
         /** @phpstan-ignore-next-line */
-        $GLOBALS['xarMLS_localeDataCache'][$locale] = $localeData;
+        xarMLS::$localeDataCache[$locale] = $localeData;
     } else if (file_exists($utf8FileName) && !isset($loaded[$utf8FileName])) {
         include $utf8FileName;
         $loaded[$utf8FileName] = true;
         if ($siteCharset != 'utf-8') {
             /** @phpstan-ignore-next-line */
             foreach ( $localeData as $tempKey => $tempValue ) {
-                $tempValue = $GLOBALS['xarMLS_newEncoding']->convert($tempValue, 'utf-8', $siteCharset, 0);
+                $tempValue = xarMLS::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
                 $localeData[$tempKey] = $tempValue;
             }
         }
-        $GLOBALS['xarMLS_localeDataCache'][$locale] = $localeData;
+        xarMLS::$localeDataCache[$locale] = $localeData;
     } else {
 /* TODO: delete after new backend testing
-        if ($GLOBALS['xarMLS_backendName'] == 'xml2php') {
+        if (xarMLS::$backendName == 'xml2php') {
 */
             if (!$parsedLocale = xarMLS::parseLocaleString($locale)) return $falsereturn;
             $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
             $siteCharset = $parsedLocale['charset'];
-            $res = $GLOBALS['xarMLS_localeDataLoader']->load($utf8locale);
+            $res = xarMLS::$localeDataLoader->load($utf8locale);
             if (isset($res) && $res == false) {
                 throw new LocaleNotFoundException($utf8locale);
             }
             if (!isset($res)) return $nullreturn; // Throw back
-            $tempArray = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
+            $tempArray = xarMLS::$localeDataLoader->getLocaleData();
             if ($siteCharset != 'utf-8') {
                 foreach ( $tempArray as $tempKey => $tempValue ) {
-                    $tempValue = $GLOBALS['xarMLS_newEncoding']->convert($tempValue, 'utf-8', $siteCharset, 0);
+                    $tempValue = xarMLS::$newEncoding->convert($tempValue, 'utf-8', $siteCharset, 0);
                     $tempArray[$tempKey] = $tempValue;
                 }
             }
-            $GLOBALS['xarMLS_localeDataCache'][$locale] = $tempArray;
+            xarMLS::$localeDataCache[$locale] = $tempArray;
 /* TODO: delete after new backend testing
         } else {
-            $res = $GLOBALS['xarMLS_localeDataLoader']->load($locale);
+            $res = xarMLS::$localeDataLoader->load($locale);
             if (!isset($res)) return $nullreturn; // Throw back
             if ($res == false) {
                 // Can we use xarML here? border case, play it safe for now.
                 throw new LocaleNotFoundException($locale);
 
             }
-            $GLOBALS['xarMLS_localeDataCache'][$locale] = $GLOBALS['xarMLS_localeDataLoader']->getLocaleData();
+            xarMLS::$localeDataCache[$locale] = xarMLS::$localeDataLoader->getLocaleData();
         }
 */
     }
 
-    return $GLOBALS['xarMLS_localeDataCache'][$locale];
+    return xarMLS::$localeDataCache[$locale];
 }
 
 /**

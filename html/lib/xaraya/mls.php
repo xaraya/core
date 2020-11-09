@@ -49,6 +49,18 @@ class xarMLS extends xarObject
     const DNTYPE_BLOCK      = 5;
     const DNTYPE_OBJECT     = 6;
 
+    public static $mode              = self::SINGLE_LANGUAGE_MODE;
+    public static $backendName       = 'xml2php';
+    public static $localeDataLoader  = null;
+    public static $localeDataCache   = array();
+    public static $currentLocale     = '';
+    public static $defaultLocale     = 'en_US.utf-8';
+    public static $allowedLocales    = array('en_US.utf-8');
+    public static $newEncoding       = null;
+    public static $defaultTimeZone   = 'UTC';
+    public static $defaultTimeOffset = 0;
+    public static $backend           = null;
+
     /**
      * Initializes the Multi Language System
      *
@@ -61,41 +73,41 @@ class xarMLS extends xarObject
             $args = self::getConfig();
         }
         switch ($args['MLSMode']) {
-        case xarMLS::SINGLE_LANGUAGE_MODE:
-        case xarMLS::BOXED_MULTI_LANGUAGE_MODE:
-            $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
+        case self::SINGLE_LANGUAGE_MODE:
+        case self::BOXED_MULTI_LANGUAGE_MODE:
+		self::$mode = $args['MLSMode'];
             break;
-        case xarMLS::UNBOXED_MULTI_LANGUAGE_MODE:
-            $GLOBALS['xarMLS_mode'] = $args['MLSMode'];
+        case self::UNBOXED_MULTI_LANGUAGE_MODE:
+		self::$mode = $args['MLSMode'];
             if (!function_exists('mb_http_input')) {
                 // mbstring required
                 throw new Exception('xarMLS::init: Mbstring PHP extension is required for UNBOXED MULTI language mode.');
             }
             break;
         default:
-            $GLOBALS['xarMLS_mode'] = 'BOXED';
+	    self::$mode = self::BOXED_MULTI_LANGUAGE_MODE;
             //throw new Exception('xarMLS::init: Unknown MLS mode: '.$args['MLSMode']);
         }
-        $GLOBALS['xarMLS_backendName'] = $args['translationsBackend'];
+	self::$backendName = $args['translationsBackend'];
     
         // USERLOCALE FIXME Delete after new backend testing
-        $GLOBALS['xarMLS_localeDataLoader'] = new xarMLS__LocaleDataLoader();
-        $GLOBALS['xarMLS_localeDataCache'] = array();
+	self::$localeDataLoader = new xarMLS__LocaleDataLoader();
+	self::$localeDataCache = array();
     
-        $GLOBALS['xarMLS_currentLocale'] = '';
+	self::$currentLocale = '';
     
-        $GLOBALS['xarMLS_defaultLocale'] = $args['defaultLocale'];
-        $GLOBALS['xarMLS_allowedLocales'] = $args['allowedLocales'];
+	self::$defaultLocale = $args['defaultLocale'];
+	self::$allowedLocales = $args['allowedLocales'];
     
-        $GLOBALS['xarMLS_newEncoding'] = new xarCharset;
+	self::$newEncoding = new xarCharset;
     
-        $GLOBALS['xarMLS_defaultTimeZone'] = !empty($args['defaultTimeZone']) ?
-                                             $args['defaultTimeZone'] : @date_default_timezone_get();
-        $GLOBALS['xarMLS_defaultTimeOffset'] = isset($args['defaultTimeOffset']) ?
-                                               $args['defaultTimeOffset'] : 0;
+	self::$defaultTimeZone = !empty($args['defaultTimeZone']) ?
+                                 $args['defaultTimeZone'] : @date_default_timezone_get();
+	self::$defaultTimeOffset = isset($args['defaultTimeOffset']) ?
+                                   $args['defaultTimeOffset'] : 0;
     
         // Set the timezone
-        date_default_timezone_set ($GLOBALS['xarMLS_defaultTimeZone']);
+        date_default_timezone_set(self::$defaultTimeZone);
     
         // Register MLS events
         // These should be done before the xarMLS::setCurrentLocale function
@@ -145,7 +157,7 @@ class xarMLS extends xarObject
      */
     static public function getMode()
     {
-        return isset($GLOBALS['xarMLS_mode']) ? $GLOBALS['xarMLS_mode'] : 'BOXED';
+        return isset(self::$mode) ? self::$mode : self::BOXED_MULTI_LANGUAGE_MODE;
     }
 
     /**
@@ -155,7 +167,7 @@ class xarMLS extends xarObject
      * @author Marco Canini <marco@xaraya.com>
      * @return string the site locale
      */
-    static public function getSiteLocale() { return $GLOBALS['xarMLS_defaultLocale']; }
+    static public function getSiteLocale() { return self::$defaultLocale; }
 
     /**
      * Returns an array of locales available in the site
@@ -167,9 +179,9 @@ class xarMLS extends xarObject
     {
         $mode = self::getMode();
         if ($mode == xarMLS::SINGLE_LANGUAGE_MODE) {
-            return array($GLOBALS['xarMLS_defaultLocale']);
+            return array(self::$defaultLocale);
         } else {
-            return $GLOBALS['xarMLS_allowedLocales'];
+            return self::$allowedLocales;
         }
     }
 
@@ -179,7 +191,7 @@ class xarMLS extends xarObject
      * @author Marco Canini <marco@xaraya.com>
      * @return string current locale
      */
-    static public function getCurrentLocale() { return $GLOBALS['xarMLS_currentLocale']; }
+    static public function getCurrentLocale() { return self::$currentLocale; }
 
     /**
      * Gets the charset component from a locale
@@ -219,8 +231,8 @@ class xarMLS extends xarObject
         // - multiple newlines -> 1 newline
     //    $string = preg_replace(array('[\x0d]','/[\t ]+/','/\s*\n\s*/'), array('',' ',"\n"),$string);
 
-        if (isset($GLOBALS['xarMLS_backend'])) {
-            $trans = $GLOBALS['xarMLS_backend']->translate($string,1);
+        if (isset(self::$backend)) {
+            $trans = self::$backend->translate($string,1);
         } else {
             // This happen in rare cases when xarML is called before self::init has been called
             $trans = $string;
@@ -253,8 +265,8 @@ class xarMLS extends xarObject
         // Key must have a value and not contain spaces
         if(empty($key) || strpos($key," ")) throw new BadParameterException('key');
     
-        if (isset($GLOBALS['xarMLS_backend'])) {
-            $trans = $GLOBALS['xarMLS_backend']->translateByKey($key);
+        if (isset(self::$backend)) {
+            $trans = self::$backend->translateByKey($key);
         } else {
             // This happen in rare cases when xarMLS::translateByKey is called before self::init has been called
             $trans = $key;
@@ -422,7 +434,7 @@ class xarMLS extends xarObject
         }
 
         // Set current locale
-        $GLOBALS['xarMLS_currentLocale'] = $locale;
+	self::$currentLocale = $locale;
     
         $curCharset = self::getCharsetFromLocale($locale);
         if ($mode == xarMLS::UNBOXED_MULTI_LANGUAGE_MODE) {
@@ -430,7 +442,7 @@ class xarMLS extends xarObject
             // To be able to continue, we set the mode to BOXED
             if ($curCharset != "utf-8") {
                 xarLog::message("Resetting MLS mode to BOXED", xarLog::LEVEL_INFO);
-                xarConfigVars::set(null, 'Site.MLS.MLSMode','BOXED');
+                xarConfigVars::set(null, 'Site.MLS.MLSMode', self::BOXED_MULTI_LANGUAGE_MODE);
             } else {
                 if (!xarCore::funcIsDisabled('ini_set')) ini_set('mbstring.func_overload', 7);
                 mb_internal_encoding($curCharset);
@@ -446,18 +458,18 @@ class xarMLS extends xarObject
         //}
     
         $alternatives = self::getLocaleAlternatives($locale);
-        switch ($GLOBALS['xarMLS_backendName']) {
+        switch (self::$backendName) {
         case 'xml':
             sys::import('xaraya.mlsbackends.xml');
-            $GLOBALS['xarMLS_backend'] = new xarMLS__XMLTranslationsBackend($alternatives);
+	    self::$backend = new xarMLS__XMLTranslationsBackend($alternatives);
             break;
         case 'php':
             sys::import('xaraya.mlsbackends.php');
-            $GLOBALS['xarMLS_backend'] = new xarMLS__PHPTranslationsBackend($alternatives);
+	    self::$backend = new xarMLS__PHPTranslationsBackend($alternatives);
             break;
         case 'xml2php':
             sys::import('xaraya.mlsbackends.xml2php');
-            $GLOBALS['xarMLS_backend'] = new xarMLS__XML2PHPTranslationsBackend($alternatives);
+	    self::$backend = new xarMLS__XML2PHPTranslationsBackend($alternatives);
             break;
         }
 
@@ -479,11 +491,11 @@ class xarMLS extends xarObject
     
         xarLog::message("MLS: Loading translations for the context ". "$domainType,$domainName,$contextType,$contextName", xarLog::LEVEL_INFO);
 
-        if (!isset($GLOBALS['xarMLS_backend'])) {
+        if (!isset(self::$backend)) {
             xarLog::message("xarMLS: No translation backend was selected for ". "$domainType,$domainName,$contextType,$contextName", xarLog::LEVEL_WARNING);
             return false;
         }
-        if (empty($GLOBALS['xarMLS_currentLocale'])) {
+        if (empty(self::$currentLocale)) {
             xarLog::message("xarMLS: No current locale was selected", xarLog::LEVEL_WARNING);
             return false;
         }
@@ -493,13 +505,13 @@ class xarMLS extends xarObject
             return $loadedTranslations["$domainType.$domainName.$contextType.$contextName"];
         }
 
-        if ($GLOBALS['xarMLS_backend']->bindDomain($domainType, $domainName)) {
+        if (self::$backend->bindDomain($domainType, $domainName)) {
             switch ($domainType) {
                 case xarMLS::DNTYPE_THEME:
                     // Load common translations
                     if (!isset($loadedCommons[$domainName.'theme'])) {
                         $loadedCommons[$domainName.'theme'] = true;
-                        if (!$GLOBALS['xarMLS_backend']->loadContext('themes:', 'common')) return;
+                        if (!self::$backend->loadContext('themes:', 'common')) return;
                     }
                 break;
                 case xarMLS::DNTYPE_MODULE:
@@ -507,34 +519,34 @@ class xarMLS extends xarObject
                     // for which it's necessary to load common translations
                     if (!isset($loadedCommons[$domainName.'module'])) {
                         $loadedCommons[$domainName.'module'] = true;
-                        if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'common')) return;
-                        if (!$GLOBALS['xarMLS_backend']->loadContext('modules:', 'version')) return;
+                        if (!self::$backend->loadContext('modules:', 'common')) return;
+                        if (!self::$backend->loadContext('modules:', 'version')) return;
                     }
                 break;
                 case xarMLS::DNTYPE_PROPERTY:
                     // Load common translations
                     if (!isset($loadedCommons[$domainName.'property'])) {
                         $loadedCommons[$domainName.'property'] = true;
-                        if (!$GLOBALS['xarMLS_backend']->loadContext('properties:', 'common')) return;
+                        if (!self::$backend->loadContext('properties:', 'common')) return;
                     }
                 break;
                 case xarMLS::DNTYPE_BLOCK:
                     // Load common translations
                     if (!isset($loadedCommons[$domainName.'block'])) {
                         $loadedCommons[$domainName.'block'] = true;
-                        if (!$GLOBALS['xarMLS_backend']->loadContext('blocks:', 'common')) return;
+                        if (!self::$backend->loadContext('blocks:', 'common')) return;
                     }
                 break;
                 case xarMLS::DNTYPE_OBJECT:
                     // Load common translations
                     if (!isset($loadedCommons[$domainName.'object'])) {
                         $loadedCommons[$domainName.'object'] = true;
-                        if (!$GLOBALS['xarMLS_backend']->loadContext('objects:', 'common')) return;
+                        if (!self::$backend->loadContext('objects:', 'common')) return;
                     }
                 break;
             }
 
-            if (!$GLOBALS['xarMLS_backend']->loadContext($contextType, $contextName)) return;
+            if (!self::$backend->loadContext($contextType, $contextName)) return;
             $loadedTranslations["$domainType.$domainName.$contextType.$contextName"] = true;
             return true;
         } else {

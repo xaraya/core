@@ -23,6 +23,9 @@
 sys::import('xaraya.mlsbackends.reference');
 class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implements ITranslationsBackend
 {
+    public static $PHPBackend_entries = array();
+    public static $PHPBackend_keyEntries = array();
+
     function __construct($locales)
     {
         parent::__construct($locales);
@@ -31,8 +34,8 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     function translate($string, $type = 0)
     {
-        if (isset($GLOBALS['xarML_PHPBackend_entries'][$string]))
-            return $GLOBALS['xarML_PHPBackend_entries'][$string];
+        if (isset(self::$PHPBackend_entries[$string]))
+            return self::$PHPBackend_entries[$string];
         else {
             if ($type == 1) {
                 return $string;
@@ -45,8 +48,8 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     function translateByKey($key, $type = 0)
     {
-        if (isset($GLOBALS['xarML_PHPBackend_keyEntries'][$key]))
-            return $GLOBALS['xarML_PHPBackend_keyEntries'][$key];
+        if (isset(self::$PHPBackend_keyEntries[$key]))
+            return self::$PHPBackend_keyEntries[$key];
         else {
             if ($type == 1) {
                 return $key;
@@ -59,8 +62,8 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
 
     function clear()
     {
-        $GLOBALS['xarML_PHPBackend_entries'] = array();
-        $GLOBALS['xarML_PHPBackend_keyEntries'] = array();
+        self::$PHPBackend_entries = array();
+        self::$PHPBackend_keyEntries = array();
     }
 
     function bindDomain($dnType=xarMLS::DNTYPE_CORE, $dnName='xaraya')
@@ -88,7 +91,7 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
                 list($key, $value) = explode('=', $line);
                 $key = trim($key);
                 $value = trim($value);
-                $GLOBALS['xarML_PHPBackend_keyEntries'][$key] = $value;
+                self::$PHPBackend_keyEntries[$key] = $value;
             }
         }
     }
@@ -127,4 +130,3 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
     }
 }
 
-?>
