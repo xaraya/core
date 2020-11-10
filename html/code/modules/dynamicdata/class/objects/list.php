@@ -244,6 +244,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $this->setSort($this->sort);
         // add content filters before setWhere()
         $this->addFilters();
+        // add selecting on itemids again for relational tables - moved to sql/relational.php
+        //if (!empty($this->primary) && !empty($this->itemids)) {
+        //    $primarysource = $this->properties[$this->primary]->source;
+        //    $this->dataquery->in($primarysource, $this->itemids);
+        //}
         $conditions = $this->setWhere($this->where);
         $this->dataquery->addconditions($conditions);
         $this->setGroupBy($this->groupby);
