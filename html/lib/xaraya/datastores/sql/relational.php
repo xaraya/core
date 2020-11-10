@@ -413,6 +413,12 @@ class RelationalDataStore extends SQLDataStore
         if (!empty($this->object->primary))
             $q->addorder($this->object->properties[$this->object->primary]->source);
         
+        // add selecting on itemids again for relational tables - moved from objects/list.php
+        if (!empty($this->object->primary) && !empty($itemids) && count($itemids) > 0) {
+            $primarysource = $this->object->properties[$this->object->primary]->source;
+            $q->in($primarysource, $itemids);
+        }
+
         if (!empty($numitems)) {
             // Add limits if called for
             $q->setrowstodo($numitems);

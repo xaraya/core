@@ -58,7 +58,15 @@ class xarGraphQLDummyType extends ObjectType
             'whoami' => [
                 'type' => xarGraphQL::get_type('user'),
                 'resolve' => function () {
-                    return array('id' => 0, 'name' => 'Anonymous');
+                    xarSession::init();
+                    //xarUser::init();
+                    if (!xarUser::isLoggedIn()) {
+                        return array('id' => 0, 'name' => 'Anonymous');
+                    }
+                    //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
+                    $role = xarRoles::current();
+                    $fields = $role->getFieldValues();
+                    return array('id' => $fields['id'], 'name' => $fields['name']);
                 }
             ],
         ];

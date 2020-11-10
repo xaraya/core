@@ -42,7 +42,6 @@ class xarGraphQLUserType extends xarGraphQLBaseType
             //        return array_keys($user);
             //    }
             //],
-            'name' => Type::string(),
             // other fields that might come in handy somewhere
             //'uname' => Type::string(),
             //'email' => Type::string(),
@@ -92,12 +91,26 @@ class xarGraphQLUserType extends xarGraphQLBaseType
         if (empty(static::$_xar_todo)) {
             return;
         }
-        $idlist = implode(",", static::$_xar_todo);
-        //print_r("Loading " . $idlist);
-        // @todo lookup usernames
+        //$idlist = implode(",", static::$_xar_todo);
+        //foreach (static::$_xar_todo as $id) {
+        //    static::$_xar_cache["$id"] = array('id' => $id, 'name' => "user_" . $id);
+        //}
+        // @checkme create an extra object with 'username' property, add to extratypes and try extras_page{extras{...}}
+        $object = 'roles_users';
+        $fieldlist = array('id', 'name');;
+        $itemids = array();
         foreach (static::$_xar_todo as $id) {
-            static::$_xar_cache["$id"] = array('id' => $id, 'name' => "user_" . $id);
+            $itemids[] = intval($id);
         }
+        //$params = array('name' => $object);
+        $params = array('name' => $object, 'fieldlist' => $fieldlist);
+        //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $itemids);
+        $objectlist = DataObjectMaster::getObjectList($params);
+        $params = array('itemids' => $itemids);
+        //print_r("Params " . var_export($params, true));
+        // @todo check why it doesn't select/return only $itemids anymore!?
+        static::$_xar_cache = $objectlist->getItems($params);
+        //print_r("Found " . var_export(static::$_xar_cache, true));
         static::$_xar_todo = [];
     }
 }

@@ -255,7 +255,7 @@ class xarGraphQL extends xarObject
         //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
         //$schema = xarGraphQL::build_schema($schemaFile, $extraTypes);
         if ($queryString == '{schema}') {
-            $header = "schema {\n  query: Query\n}\n\n";
+            $header = "schema {\n  query: Query\n  mutation: Mutation\n}\n\n";
             return $header . SchemaPrinter::doPrint($schema);
             //return SchemaPrinter::printIntrospectionSchema($schema);
         }

@@ -34,7 +34,7 @@ function xarGraphQLGetData($queryString = '{schema}', $variableValues = [], $ope
     //$schema = xarGraphQL::build_schema($schemaFile, $extraTypes);
     //print_r($schema);
     if ($queryString == '{schema}') {
-        $header = "schema {\n  query: Query\n}\n\n";
+        $header = "schema {\n  query: Query\n  mutation: Mutation\n}\n\n";
         return $header . SchemaPrinter::doPrint($schema);
         //return SchemaPrinter::printIntrospectionSchema($schema);
     }
