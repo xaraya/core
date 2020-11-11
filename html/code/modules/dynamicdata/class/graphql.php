@@ -207,6 +207,10 @@ class xarGraphQL extends xarObject
         if (!array_key_exists($type, $class_mapper) && array_key_exists($type, self::$type_mapper)) {
             $type = self::$type_mapper[$type];
         }
+        // from deferred_field_resolver()
+        if (!array_key_exists($type, $class_mapper) && in_array($type, self::$extra_types)) {
+            $type = 'basetype';
+        }
         return $class_mapper[$type];
     }
  

@@ -29,6 +29,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
      */
     public static function _xar_get_object_fields($object)
     {
+        //$clazz = xarGraphQL::get_type_class("buildtype");
         $fields = [
             'id' => Type::nonNull(Type::id()),
             //'keys' => Type::listOf(Type::string()),
@@ -52,6 +53,8 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'name' => Type::string(),
             'label' => Type::string(),
             'objectid' => Type::string(),
+            //'objectid' => xarGraphQL::get_type('object'),
+            //'object_id' => $clazz::get_deferred_field('object_id', 'object'),
             'type' => Type::string(),
             'defaultvalue' => Type::string(),
             'source' => Type::string(),
