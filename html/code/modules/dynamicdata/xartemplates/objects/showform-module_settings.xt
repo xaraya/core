@@ -49,8 +49,9 @@
                 <xar:set name="aliasmap">xarConfigVars::get(null,'System.ModuleAliases')</xar:set>
                 <xar:set name="options">array()</xar:set>
                 <xar:if condition="!empty($aliasmap)">
+                	<xar:set name="modname">xarMod::getName()</xar:set>
                     <xar:foreach in="$aliasmap" key="$aliasname" value="$modulename">
-                        <xar:if condition="$modulename != xarMod::getName()">
+                        <xar:if condition="$modulename != $modname">
                             <xar:continue/>
                         </xar:if>
                         <xar:set name="dummy">1;$options[$aliasname] = $aliasname</xar:set>
