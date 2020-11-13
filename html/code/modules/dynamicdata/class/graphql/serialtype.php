@@ -13,7 +13,7 @@ use GraphQL\Type\Definition\ScalarType;
 use GraphQL\Language\AST\StringValueNode;
 
 /**
- * GraphQL ScalarType for serialized fields - @todo test this
+ * GraphQL ScalarType for serialized fields
  */
 class xarGraphQLSerialType extends ScalarType
 {
@@ -21,6 +21,9 @@ class xarGraphQLSerialType extends ScalarType
 
     public function serialize($value)
     {
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["serial scalar type"];
+        }
         if (empty($value) || !is_string($value)) {
             return $value;
         }

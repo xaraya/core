@@ -180,6 +180,9 @@ class xarGraphQLBaseType extends ObjectType
         }
         // @todo should we pass along the object instead of the type here?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["deferred field"]);
+            }
             $fields = $info->getFieldSelection(0);
             if (array_key_exists('id', $fields) && count($fields) < 2) {
                 return array('id' => $values[$prop_name]);
@@ -202,6 +205,9 @@ class xarGraphQLBaseType extends ObjectType
 
     public static function _xar_add_deferred($type, $id, $fieldlist = null)
     {
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["add deferred $type $id"];
+        }
         // @todo preserve fieldlist to optimize loading afterwards too
         //print_r("Adding $type $id");
         if (!array_key_exists("$id", static::$_xar_deferred[$type]['cache']) && !in_array($id, static::$_xar_deferred[$type]['todo'])) {
@@ -220,6 +226,9 @@ class xarGraphQLBaseType extends ObjectType
     {
         if (empty(static::$_xar_deferred[$type]['todo'])) {
             return;
+        }
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["load deferred $type"];
         }
         // @todo should we pass along the object instead of the type here?
         $idlist = implode(",", static::$_xar_deferred[$type]['todo']);
@@ -244,7 +253,7 @@ class xarGraphQLBaseType extends ObjectType
             static::$_xar_deferred[$type]['todo'] = [];
         } catch (Exception $e) {
             print_r($e-getMessage());
-            parent::_xar_load_deferred();
+            parent::_xar_load_deferred($type);
         }
          */
         static::$_xar_deferred[$type]['todo'] = [];
@@ -252,6 +261,9 @@ class xarGraphQLBaseType extends ObjectType
 
     public static function _xar_get_deferred($type, $id)
     {
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["get deferred $type $id"];
+        }
         // @todo should we pass along the object instead of the type here?
         if (!empty(static::$_xar_deferred[$type]['todo'])) {
             static::_xar_load_deferred($type);
@@ -310,6 +322,9 @@ class xarGraphQLBaseType extends ObjectType
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["create mutation"]);
+            }
             //print_r($rootValue);
             $fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -361,6 +376,9 @@ class xarGraphQLBaseType extends ObjectType
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["update mutation"]);
+            }
             //print_r($rootValue);
             $fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -408,6 +426,9 @@ class xarGraphQLBaseType extends ObjectType
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["delete mutation"]);
+            }
             //print_r($rootValue);
             $fields = $info->getFieldSelection(1);
             //print_r($fields);

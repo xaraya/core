@@ -36,6 +36,9 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'keys' => [
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = array_merge($info->path, ["property keys"]);
+                    }
                     //print_r("property keys resolve");
                     if (is_array($property)) {
                         return array_keys($property);
@@ -65,7 +68,9 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'configuration_kv' => [
                 'type' => Type::listOf(xarGraphQL::get_type("keyval")),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
-                    //print_r("property config resolve");
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = array_merge($info->path, ["property configuration_kv"]);
+                    }
                     if (is_array($property) && isset($property['configuration'])) {
                         $values = @unserialize($property['configuration']);
                         if (empty($values)) {

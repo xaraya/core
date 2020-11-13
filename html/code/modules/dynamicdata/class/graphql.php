@@ -57,6 +57,8 @@ class xarGraphQL extends xarObject
         'mutation' => 'mutationtype',
     ];
     public static $extra_types = [];
+    public static $trace_path = false;
+    public static $paths = [];
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -281,6 +283,9 @@ class xarGraphQL extends xarObject
         );
         //$serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
         $serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE);
+        if (self::$trace_path) {
+            $serializableResult['paths'] = self::$paths;
+        }
         return $serializableResult;
     }
 

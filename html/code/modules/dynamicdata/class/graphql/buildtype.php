@@ -251,6 +251,9 @@ class xarGraphQLBuildType
             list($name, $type, $object, $list, $item) = self::sanitize($type);
         }
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["object field"]);
+            }
             $name = $info->fieldName;
             if (is_array($values)) {
                 if ($name == 'keys') {
@@ -343,6 +346,9 @@ class xarGraphQLBuildType
             list($name, $type, $object, $list, $item) = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["page query"]);
+            }
             // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
             $allowed = array_flip(['sort', 'offset', 'limit', 'filters', 'count']);
             $fields = $info->getFieldSelection(1);
@@ -404,6 +410,9 @@ class xarGraphQLBuildType
             list($name, $type, $object, $list, $item) = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["list query"]);
+            }
             //print_r($rootValue);
             //$fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -477,6 +486,9 @@ class xarGraphQLBuildType
             list($name, $type, $object, $list, $item) = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["item query"]);
+            }
             //print_r($rootValue);
             $fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -524,6 +536,9 @@ class xarGraphQLBuildType
     {
         // call either list_query_resolver or item_query_resolver here depending on $args['id']
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["object query"]);
+            }
             $type = self::singularize($info->fieldName);
             if (!empty($args['id'])) {
                 //print_r($info->parentType->name . "." . $info->fieldName . "[" . $args['id'] . "]");

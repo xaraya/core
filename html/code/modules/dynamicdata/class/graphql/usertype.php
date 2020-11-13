@@ -89,6 +89,9 @@ class xarGraphQLUserType extends xarGraphQLBaseType
         if (empty(static::$_xar_deferred[$type]['todo'])) {
             return;
         }
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["load deferred $type"];
+        }
         // @todo should we pass along the object instead of the type here?
         // @checkme create an extra object with 'username' property, add to extratypes and try extras_page{extras{...}}
         $object = static::$_xar_object;
@@ -108,7 +111,7 @@ class xarGraphQLUserType extends xarGraphQLBaseType
             static::$_xar_deferred[$type]['todo'] = [];
         } catch (Exception $e) {
             print_r($e->getMessage());
-            parent::_xar_load_deferred();
+            parent::_xar_load_deferred($type);
         }
     }
 }

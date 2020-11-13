@@ -13,7 +13,7 @@ use GraphQL\Type\Definition\ScalarType;
 use GraphQL\Language\AST\StringValueNode;
 
 /**
- * GraphQL ScalarType for mixed type fields - @todo test this
+ * GraphQL ScalarType for mixed type fields - used in keyval type instead of multival
  */
 class xarGraphQLMixedType extends ScalarType
 {
@@ -21,6 +21,9 @@ class xarGraphQLMixedType extends ScalarType
 
     public function serialize($value)
     {
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["mixed scalar type"];
+        }
         return $value;
     }
 

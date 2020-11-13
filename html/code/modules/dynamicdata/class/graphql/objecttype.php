@@ -37,6 +37,9 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'keys' => [
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($object, $args, $context, ResolveInfo $info) {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = array_merge($info->path, ["object keys"]);
+                    }
                     //print_r("object keys resolve");
                     if (empty($object['_objectref'])) {
                         return null;
@@ -97,6 +100,9 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
         //$clazz = xarGraphQL::get_type_class("buildtype");
         //return $clazz::list_query_resolver($type, $object);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["object list query"]);
+            }
             //print_r("objects resolve");
             $fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -158,6 +164,9 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
         //$clazz = xarGraphQL::get_type_class("buildtype");
         //return $clazz::item_query_resolver($type, $object);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["object item query"]);
+            }
             //print_r("object resolve");
             //print_r($rootValue);
             $fields = $info->getFieldSelection(1);

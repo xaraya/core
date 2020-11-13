@@ -31,6 +31,9 @@ class xarGraphQLAccessType extends ObjectType
                 'filters' => xarGraphQL::get_type('serial'),
             ],
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = array_merge($info->path, ["access field"]);
+                }
                 if (empty($object)) {
                     return null;
                 }
