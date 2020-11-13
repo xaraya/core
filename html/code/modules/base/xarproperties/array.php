@@ -148,7 +148,8 @@ class ArrayProperty extends DataProperty
         }
 
         // If this is an associative array, check if the keys are unique
-        if ($this->validation_associative_array) {
+        // @checkme this assumes the input form uses keys the same way too, but sources = [ ["", "", "internal"] ]
+        if ($this->validation_associative_array && $this->source != 'dynamic_objects.sources') {
             $initial_count = count($value[0]);
             $keycol = $value[0];
             $temp = array();
@@ -456,4 +457,3 @@ class ArrayProperty extends DataProperty
         return parent::updateConfiguration($data);
     }
 }
-?>

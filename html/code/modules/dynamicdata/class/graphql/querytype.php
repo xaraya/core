@@ -74,5 +74,4 @@ class xarGraphQLQueryType extends ObjectType
         // @todo switch to get_list_query and get_item_query format
         return $clazz::_xar_get_query_field($name);
     }
-
 }

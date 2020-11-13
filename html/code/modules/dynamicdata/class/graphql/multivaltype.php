@@ -27,6 +27,9 @@ class xarGraphQLMultiValType extends UnionType
                 Type::listOf(xarGraphQL::get_type("keyval")),
             ],
             'resolveType' => function ($value, $context, ResolveInfo $info) {
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = array_merge($info->path, ["multival type"]);
+                }
                 if (!is_array($value)) {
                     return Type::string();
                 }
