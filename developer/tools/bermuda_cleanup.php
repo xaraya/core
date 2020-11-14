@@ -72,7 +72,7 @@ class XarayaCodeAnalyzer
     }
 
     // See https://github.com/nikic/PHP-Parser/blob/master/doc/2_Usage_of_basic_components.markdown
-    public function load_project($inDir = null, $fileExt = self::PHP_EXT)
+    public function load_project($inDir = null, $extraFiles = array(), $fileExt = self::PHP_EXT)
     {
         $this->initialize($inDir, $fileExt);
 
@@ -86,6 +86,14 @@ class XarayaCodeAnalyzer
             try {
                 //echo $file->getPathName() . "\n";
                 $localFiles[] = new \phpDocumentor\Reflection\File\LocalFile($file->getPathName());
+            } catch (Exception $e) {
+                echo 'Parse Error: ', $e->getMessage();
+            }
+        }
+        foreach ($extraFiles as $filepath) {
+            try {
+                //echo $filepath . "\n";
+                $localFiles[] = new \phpDocumentor\Reflection\File\LocalFile($filepath);
             } catch (Exception $e) {
                 echo 'Parse Error: ', $e->getMessage();
             }
@@ -185,6 +193,7 @@ class XarayaCodeAnalyzer
             $this->log('Class Conflict: ' . $name, true);
         }
         $this->classes[$lname] = array('file' => $fpath, 'name' => $name, 'methods' => array(), 'const' => array());
+        $this->classes[$lname]['parent'] = (string) $class->getParent();
         $this->classes[$lname]['line'] = $class->getLocation()->getLineNumber();
         foreach ($class->getMethods() as $method) {
             $mname = $method->getName();
@@ -216,13 +225,115 @@ class XarayaCodeAnalyzer
     }
 }
 
+class xarNode implements JsonSerializable
+{
+    public static $analyzer;
+    public static $formatter;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+        $this->children = array();
+        $this->parent = null;
+    }
+
+    public function add($child)
+    {
+        if (!($child instanceof self)) {
+            $child = new self($child);
+        }
+        $this->children[$child->name] = $child;
+        $child->parent = $this;
+    }
+
+    public function get($name)
+    {
+        if (!array_key_exists($name, $this->children)) {
+            $this->add($name);
+        }
+        return $this->children[$name];
+    }
+
+    public function jsonSerialize()
+    {
+        if ($this->name == 'root') {
+            return array_values($this->children);
+        }
+        if (!empty(self::$formatter) && is_callable(self::$formatter)) {
+            return self::$formatter($this);
+        }
+        if (!empty(self::$analyzer)) {
+            $lname = strtolower($this->name);
+            if (array_key_exists($lname, self::$analyzer->classes)) {
+                if (empty($this->children)) {
+                    return [$this->name => ['methods' => array_keys(self::$analyzer->classes[$lname]['methods'])]];
+                }
+                return [$this->name => ['methods' => array_keys(self::$analyzer->classes[$lname]['methods']), 'extended' => array_values($this->children)]];
+            }
+            return [$this->name => array_values($this->children)];
+        }
+        return [$this->name => array_values($this->children)];
+    }
+}
+
 class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
 {
     public $replaced = array();
     public $missing = array();
+    public $classroot = null;
+
+    public function load_core_files()
+    {
+        $inDir = dirname(dirname(__DIR__)) . '/html/lib/xaraya';
+        $extraFiles = [dirname(dirname(__DIR__)) . '/html/bootstrap.php'];
+        $this->load_project($inDir, $extraFiles);
+        $this->parse_project();
+    }
+
+    public function find_core_classes()
+    {
+        if (empty($this->classes)) {
+            $this->load_core_files();
+        }
+        $found = 0;
+        foreach (array_keys($this->classes) as $lname) {
+            $found += $this->match_core_class($lname);
+        }
+        $this->save_core_classes();
+        $this->log('Found Classes: ' . $found, true);
+    }
+
+    public function load_core_classes()
+    {
+        if ($this->refresh || !file_exists('core_classes.json')) {
+            $this->find_core_classes();
+        }
+        $contents = file_get_contents('core_classes.json');
+        $this->classes = json_decode($contents, true);
+        $this->log('Load Classes: ' . count($this->classes), true);
+    }
+
+    public function save_core_classes()
+    {
+        ksort($this->classes);
+        file_put_contents('core_classes.json', $this->to_json($this->classes));
+    }
+
+    public function match_core_class($lname)
+    {
+        $class = $this->classes[$lname];
+        // nothing interesting to do here for now...
+        if (preg_match('/^(xar[A-Z]\w+)$/', $class['name'], $matches)) {
+            return 1;
+        }
+        return 0;
+    }
 
     public function find_core_functions()
     {
+        if (empty($this->classes)) {
+            $this->load_core_classes();
+        }
         $found = 0;
         foreach (array_keys($this->functions) as $lname) {
             $found += $this->match_core_function($lname);
@@ -301,6 +412,9 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
 
     public function find_core_constants()
     {
+        if (empty($this->classes)) {
+            $this->load_core_classes();
+        }
         $found = 0;
         foreach (array_keys($this->constants) as $lname) {
             $found += $this->match_core_constant($lname);
@@ -434,13 +548,85 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
         file_put_contents('core_replace.json', $this->to_json($this->replaced));
     }
 
-    public function parse_core_files($inDir = null)
+    public function parse_core_files($inDir = null, $extraFiles = array())
     {
-        $this->load_project($inDir);
+        $this->load_project($inDir, $extraFiles);
         $this->parse_project();
+        $this->find_core_classes();
         $this->find_core_functions();
         $this->find_core_constants();
         $this->find_core_replaced();
+    }
+
+    public function get_class_tree()
+    {
+        if (empty($this->classes)) {
+            $this->load_core_classes();
+        }
+        $this->classroot = new xarNode('root');
+        foreach (array_keys($this->classes) as $lname) {
+            if (!array_key_exists('node', $this->classes[$lname])) {
+                $this->classes[$lname]['node'] = new xarNode($this->classes[$lname]['name']);
+            }
+            $class = $this->classes[$lname];
+            // base class
+            if (strlen($class['parent']) < 2) {
+                $this->log('Root: ' . $class['name'] . ' - ' . $class['parent'] . ' ' . $class['file']);
+                $parent = 'None';
+                $node = $this->classroot->get($parent);
+                $node->add($class['node']);
+                continue;
+            }
+            // actual namespace class
+            if (strpos($class['parent'], '\\', 1) !== false) {
+                $this->log('Other: ' . $class['name'] . ' - ' . $class['parent'] . ' ' . $class['file'], true);
+                $node = $this->classroot->get($class['parent']);
+                $node->add($class['node']);
+                continue;
+            }
+            $parent = substr($class['parent'], 1);
+            $lparent = strtolower($parent);
+            if (!array_key_exists($lparent, $this->classes)) {
+                // class is predefined in PHP - don't autoload here
+                if (class_exists($parent, false)) {
+                    $this->log('Defined: ' . $class['name'] . ' - ' . $class['parent'] . ' ' . $class['file']);
+                    $node = $this->classroot->get($parent);
+                    $node->add($class['node']);
+                    continue;
+                }
+                // class is defined elsewhere, e.g. in code/modules
+                $this->log('Orphan: ' . $class['name'] . ' - ' . $class['parent'] . ' ' . $class['file']);
+                $node = $this->classroot->get($class['parent']);
+                $node->add($class['node']);
+                continue;
+            }
+            $this->log('Found: ' . $class['name'] . ' - ' . $class['parent'] . ' ' . $class['file']);
+            if (!array_key_exists('node', $this->classes[$lparent])) {
+                $this->classes[$lparent]['node'] = new xarNode($this->classes[$lparent]['name']);
+            }
+            $this->classes[$lparent]['node']->add($class['node']);
+        }
+        $this->log($this->to_json($this->classroot));
+        return $this->classroot;
+    }
+
+    public function show_class_tree($name = null)
+    {
+        if (empty($this->classroot)) {
+            $this->get_class_tree();
+        }
+        if (empty($name)) {
+            $this->log($this->to_json($this->classroot), true);
+            return;
+        }
+        $lname = strtolower($name);
+        if (!array_key_exists($lname, $this->classes)) {
+            $this->log('Invalid class name ' . $name, true);
+            return;
+        }
+        // show methods overridden in extended classes
+        xarNode::$analyzer = $this;
+        $this->log($this->to_json($this->classes[$lname]['node']), true);
     }
 }
 
@@ -602,13 +788,18 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
 }
 
 $refresh = false;
-if ($refresh || !file_exists('core_functions.json') || !file_exists('core_constants.json')) {
+if ($refresh || !file_exists('core_functions.json') || !file_exists('core_constants.json') || !file_exists('core_classes.json')) {
     $inDir = dirname(dirname(__DIR__)) . '/html/lib/xaraya';
+    $extraFiles = [dirname(dirname(__DIR__)) . '/html/bootstrap.php'];
     $analyzer = new XarayaCoreAnalyzer();
     $analyzer->verbose = true;
-    $analyzer->parse_core_files($inDir);
+    $analyzer->parse_core_files($inDir, $extraFiles);
 }
+//$analyzer = new XarayaCoreAnalyzer();
+//$analyzer->get_class_tree();
 
+
+/**
 $fixMe = false;
 //$inDir = dirname(dirname(__DIR__)) . '/html/lib/';  // don't fixMe this - use only for verification
 $inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
@@ -618,16 +809,21 @@ $inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
 $analyzer = new XarayaModuleAnalyzer();
 $analyzer->verbose = true;
 $analyzer->check_module_files($inDir, $fixMe);
+ */
 
 //$modName = 'dynamicdata';
 //$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/' . $modName . '/';
-$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/xarcachemanager/';
-/**
+//$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/xarcachemanager/';
+$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
 $analyzer = new XarayaModuleAnalyzer($inDir);
-$analyzer->verbose = true;
+//$analyzer->verbose = true;
 $analyzer->load_project();
 $analyzer->parse_project();
 // @todo
-$analyzer->find_module_functions();
-$analyzer->find_module_classes();
- */
+//$analyzer->find_module_functions();
+//$analyzer->find_module_classes();
+//ksort($analyzer->classes);
+//file_put_contents('module_classes.json', $analyzer->to_json($analyzer->classes));
+//$analyzer->get_class_tree();
+//$analyzer->show_class_tree();
+$analyzer->show_class_tree('dataproperty');
