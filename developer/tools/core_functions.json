@@ -134,6 +134,16 @@
         "check": "renderGroup",
         "method": "renderGroup"
     },
+    "xarboot_getpublicobjectproperties": {
+        "file": "/home/mikespub/xaraya-core/html/bootstrap.php",
+        "name": "xarBoot_getPublicObjectProperties",
+        "args": [
+            "$obj"
+        ],
+        "line": 32,
+        "class": "xarBoot",
+        "check": "getPublicObjectProperties"
+    },
     "xarcache_getstorage": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/legacy.php",
         "name": "xarCache_getStorage",
@@ -2918,7 +2928,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepEmailDisplay",
         "args": [],
-        "line": 601,
+        "line": 604,
         "class": "xarVar",
         "check": "PrepEmailDisplay",
         "method": "prepEmailDisplay",
@@ -2930,7 +2940,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepForDisplay",
         "args": [],
-        "line": 468,
+        "line": 471,
         "class": "xarVar",
         "check": "PrepForDisplay",
         "method": "prepForDisplay",
@@ -2942,7 +2952,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepForOS",
         "args": [],
-        "line": 651,
+        "line": 654,
         "class": "xarVar",
         "check": "PrepForOS",
         "method": "prepForOS",
@@ -2954,7 +2964,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepHTMLDisplay",
         "args": [],
-        "line": 508,
+        "line": 511,
         "class": "xarVar",
         "check": "PrepHTMLDisplay",
         "method": "prepHTMLDisplay",
@@ -2968,7 +2978,7 @@
         "args": [
             "$matches"
         ],
-        "line": 580,
+        "line": 583,
         "class": "xarVar",
         "check": "PrepHTMLDisplay__callback"
     },
