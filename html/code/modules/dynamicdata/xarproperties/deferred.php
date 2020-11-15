@@ -20,10 +20,10 @@ sys::import('modules.dynamicdata.class.properties.base');
  /**
   * This property displays a deferred load for a value (experimental - do not use in production)
   *
-  * Config: the defaultvalue can be set to automatically load an object property if the value contains its itemid
-  * Format: dataobject:<objectname>.<propname> or dataobject:<objectname>.<propname>,<propname2>,<propname3>
-  * Example: dataobject:roles_users:uname will show the username if the property contains the user id
-  *       or dataobject:roles_users:name,uname,email will show the name,uname,email if the property contains the user id
+  * Configuration:
+  * the defaultvalue can be set to automatically load an object property if the value contains its itemid,
+  * or you can use DeferredProperty::set_resolver($resolver, $name) method to set a resolver function
+  * or you can inherit this class and override the static override_me_load() method below
   */
 class DeferredProperty extends DataProperty
 {
@@ -31,6 +31,7 @@ class DeferredProperty extends DataProperty
     public $name       = 'deferred';
     public $desc       = 'Deferred Load';
     public $reqmodules = array('dynamicdata');
+    public $options    = array();
     public static $deferred = array();  // array of $name with deferred 'todo' values and 'cache' load for each
     public static $resolver = array('default' => null);  // array of 'default' and optional $name with resolver function for each
 
@@ -45,20 +46,39 @@ class DeferredProperty extends DataProperty
 
         static::init_deferred($this->name);
         // @checkme set dataobject resolver based on defaultvalue = dataobject:<objectname>.<propname>
-        if (!empty($this->defaultvalue) && substr($this->defaultvalue, 0, 11) === 'dataobject:') {
-            list($object, $field) = explode('.', substr($this->defaultvalue, 11));
-            if (!static::has_resolver($this->name)) {
-                // @checkme support dataobject:<objectname>.<propname>,<propname2>,<propname3> here too
-                if (strpos($field, ',') !== false) {
-                    $fieldlist = explode(',', $field);
-                } else {
-                    $fieldlist = [$field];
-                }
-                $resolver = deferred_dataobject_resolver($object, $fieldlist);
-                static::set_resolver($resolver, $this->name);
-            }
-            $this->defaultvalue = '';
+        $this->parseConfigValue($this->defaultvalue);
+    }
+
+    /**
+     * The defaultvalue can be set to automatically load an object property if the value contains its itemid
+     *
+     * Format:
+     *     dataobject:<objectname>.<propname>
+     *  or dataobject:<objectname>.<propname>,<propname2>,<propname3>
+     * Example:
+     *     dataobject:roles_users:uname will show the username if the property contains the user id
+     *  or dataobject:roles_users:name,uname,email will show the name,uname,email if the property contains the user id
+     *
+     * @param string $value the defaultvalue used to configure the dataobject resolver function
+     */
+    public function parseConfigValue($value)
+    {
+        if (empty($value) || substr($value, 0, 11) !== 'dataobject:') {
+            return;
         }
+        list($object, $field) = explode('.', substr($value, 11));
+        if (!static::has_resolver($this->name)) {
+            // @checkme support dataobject:<objectname>.<propname>,<propname2>,<propname3> here too
+            if (strpos($field, ',') !== false) {
+                $fieldlist = explode(',', $field);
+            } else {
+                $fieldlist = [$field];
+            }
+            $resolver = deferred_dataobject_resolver($object, $fieldlist);
+            static::set_resolver($resolver, $this->name);
+        }
+        $this->defaultvalue = '';
+        $this->value = '';
     }
 
     /**
@@ -80,7 +100,7 @@ class DeferredProperty extends DataProperty
     public function setValue($value=null)
     {
         $this->log_trace();
-        $this->value = $value;
+        parent::setValue($value);
     }
 
     /**
@@ -113,6 +133,28 @@ class DeferredProperty extends DataProperty
     }
 
     /**
+     * Show an input field for setting/modifying the value of this property
+     *
+     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $args['value'] value of the field (default is the current value)
+     * @param $args['id'] id of the field
+     * @param $args['tabindex'] tab index of the field
+     * @param $args['module'] which module is responsible for the templating
+     * @param $args['template'] what's the partial name of the showinput template.
+     * @param $args[*] rest of arguments is passed on to the templating method.
+     *
+     * @return string containing the HTML (or other) text to output in the BL template
+     */
+    public function showInput(array $data = array())
+    {
+        if (!isset($data['options'])) {
+            $data['options'] = $this->getOptions();
+        }
+        $this->log_trace();
+        return parent::showInput($data);
+    }
+
+    /**
      * Show some default output for this property
      *
      * @param mixed $data['value'] value of the property (default is the current value)
@@ -122,13 +164,48 @@ class DeferredProperty extends DataProperty
     {
         if (isset($data['value'])) {
             $data['value'] = static::get_deferred($this->name, $data['value']);
-        } elseif (isset($this->value)) {
+        } elseif (!empty($this->value)) {
             // @checkme for showDisplay(), set data['value'] here
             static::add_deferred($this->name, $this->value);
             $data['value'] = static::get_deferred($this->name, $this->value);
         }
         $this->log_trace();
         return parent::showOutput($data);
+    }
+
+    /**
+     * Retrieve the list of options on demand - only used for showInput() here, not validateValue() or elsewhere
+     */
+    public function getOptions()
+    {
+        if (count($this->options) > 0) {
+            return $this->options;
+        }
+
+        $this->options = array();
+        // @checkme (ab)use the resolver to retrieve all items here
+        $resolver = static::get_resolver($this->name);
+        if (empty($resolver) || !is_callable($resolver)) {
+            return $this->options;
+        }
+        $items = call_user_func($resolver, $this->name, array());
+        $first = reset($items);
+        if (is_array($first)) {
+            if (array_key_exists('name', $first)) {
+                $key = 'name';
+            } else {
+                // @checkme pick the first key available here
+                $key = array_shift(array_keys($first));
+            }
+            foreach ($items as $id => $value) {
+                $this->options[] = array('id' => $id, 'name' => $value[$key]);
+            }
+        } else {
+            foreach ($items as $id => $value) {
+                $this->options[] = array('id' => $id, 'name' => $value);
+            }
+        }
+        return $this->options;
     }
 
     /**
@@ -240,11 +317,18 @@ class DeferredProperty extends DataProperty
     public function log_trace()
     {
         return;
-        $trace = debug_backtrace(false, 3);
-        array_shift($trace);
-        $caller = array_shift($trace);
-        print_r("Caller: <pre>" . var_export($caller, true) . "</pre>");
-        print_r("Trace: <pre>" . var_export($trace, true) . "</pre>");
+        try {
+            $trace = debug_backtrace(false, 3);
+            array_shift($trace);
+            $caller = array_shift($trace);
+            print_r("<pre>Caller:\n");
+            print_r($caller);
+            //print_r("\nTrace:\n");
+            //print_r($trace);
+            print_r("</pre>");
+        } catch (Exception $e) {
+            print_r($e->getMessage());
+        }
     }
 
     /**
