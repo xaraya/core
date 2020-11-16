@@ -21,7 +21,7 @@
                 <xar:if condition="empty($loop:item['title'])">
                     #$loop:item['name']#
                     <xar:else />
-                        <span title="#xarVarPrepfordisplay($loop:item['title'])#">
+                        <span title="#xarVar::prepForDisplay($loop:item['title'])#">
                         #$loop:item['name']#
                     </span>
                 </xar:if>

@@ -82,7 +82,7 @@ function modules_admin_remove ()
     PropertyRegistration::importPropertyTypes(true);
 
     // Hmmm, I wonder if the target adding is considered a hack
-    // it certainly depends on the implementation of xarModUrl
+    // it certainly depends on the implementation of xarController::URL
     //    xarController::redirect(xarController::URL('modules', 'admin', "list#$target"));
     xarController::redirect($return_url);
     // Never reached

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <form method="post" action="#xarModUrl('blocks', 'admin', 'settings')#">
+    <form method="post" action="#xarController::URL('blocks', 'admin', 'settings')#">
         <fieldset>
             <legend>View Options</legend>
             <div class="xar-row">

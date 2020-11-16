@@ -271,7 +271,7 @@ class XsltCallbacks extends xarObject
                 if( isset($entityParts[2]) and
                     isset($entityParts[3]) and
                     isset($entityParts[4])
-                ) return "#xarModUrl('$entityParts[2]','$entityParts[3]','$entityParts[4]')#";
+                ) return "#xarController::URL('$entityParts[2]','$entityParts[3]','$entityParts[4]')#";
                 break;
             // &xar-var;
             case 'var':

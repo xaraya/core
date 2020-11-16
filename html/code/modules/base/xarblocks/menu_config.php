@@ -330,7 +330,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     public function getUserLinks()
     {
         $userlinks = array();
-        $authid = xarSecGenAuthkey();
+        $authid = xarSec::genAuthKey();
         if (!empty($this->userlinks)) {
             $numlinks = count($this->userlinks);
             $i = 1;
