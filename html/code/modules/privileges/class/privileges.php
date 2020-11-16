@@ -76,7 +76,7 @@ class xarPrivileges extends xarMasks
                           ( module_id, component, header,
                             query, ddlimit, description)
                           VALUES (?,?,?,?,?,?)";
-                    $modInfo = xarMod_GetBaseInfo($module);
+                    $modInfo = xarMod::getBaseInfo($module);
                     $module_id = $modInfo['systemid'];
                     $bindvars = array(
                                       $module_id, $type, $instance['header'],
@@ -108,7 +108,7 @@ class xarPrivileges extends xarMasks
         parent::initialize();
         try {
             parent::$dbconn->begin();
-            $modInfo = xarMod_GetBaseInfo($module);
+            $modInfo = xarMod::getBaseInfo($module);
             $module_id = $modInfo['systemid'];
             $query = "DELETE FROM " . parent::$instancestable . " WHERE module_id = ?";
             //Execute the query, bail if an exception was thrown

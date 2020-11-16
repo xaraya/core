@@ -119,7 +119,7 @@
                             </label>
                         </div>
                         <div class="xar-col">
-                            <xar:set name="onchange">"javascript:this.form.action = '" . xarModURl('privileges','admin','new') . "';this.form.submit();"</xar:set>
+                            <xar:set name="onchange">"javascript:this.form.action = '" . xarController::URL('privileges','admin','new') . "';this.form.submit();"</xar:set>
                             <xar:data-input type="module" name="pmodule" value="$pmodule" firstline="All,All" onchange="$onchange"  store_prop="name"/>
                         </div>
                     </div>

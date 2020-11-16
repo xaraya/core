@@ -54,7 +54,7 @@ function themes_admin_deactivate()
     $deactivated = xarMod::apiFunc('themes','admin','setstate',array('regid' => $id,'state' => xarTheme::STATE_INACTIVE)); 
 
     // Hmmm, I wonder if the target adding is considered a hack
-    // it certainly depends on the implementation of xarModUrl
+    // it certainly depends on the implementation of xarController::URL
     xarController::redirect($return_url);
     return true;
 }

@@ -110,7 +110,7 @@ function roles_user_getvalidation()
                 if (!xarMod::apiFunc('roles', 'user', 'updatestatus',
                                     array('uname' => $uname,
                                           'state' => xarRoles::ROLES_STATE_ACTIVE))) return;
-                xarController::redirect(xarModUrl('roles', 'user', 'main'));
+                xarController::redirect(xarController::URL('roles', 'user', 'main'));
                 
             } elseif  ($pending == 1 && ($status['id'] != xarModVars::get('roles','admin')))  {
                 // This is a new user and the site requires admin approval
@@ -145,7 +145,7 @@ function roles_user_getvalidation()
                     }
                 }
 
-                $url = xarModUrl('roles', 'user', 'main');
+                $url = xarController::URL('roles', 'user', 'main');
 
                 $time = '4';
                 xarVar::setCached('Meta.refresh','url', $url);

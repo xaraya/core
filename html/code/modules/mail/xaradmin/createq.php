@@ -24,7 +24,7 @@ function mail_admin_createqArray(Array $args=array())
     // Do we have the master ?
     if(!$qdefInfo = xarMod::apiFunc('mail','admin','getqdef')) {
         // Redirect to the view page, which offers to create one
-        xarController::redirect(xarModUrl('mail','admin','view'));
+        xarController::redirect(xarController::URL('mail','admin','view'));
         return true;
     }
 
@@ -33,7 +33,7 @@ function mail_admin_createqArray(Array $args=array())
     if(!$qData) return; // exception
     
     // Show the status screen again, 
-    xarController::redirect(xarModUrl('mail','admin','qstatus'));
+    xarController::redirect(xarController::URL('mail','admin','qstatus'));
     return true;
 }
 ?>

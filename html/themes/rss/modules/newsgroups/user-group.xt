@@ -5,7 +5,7 @@
         <xar:loop name="$items">
             <item>
                 <title>#xarVar::prepForDisplay($loop:item['Subject'])#</title>
-                <link>#xarModUrl('newsgroups', 'user', 'article', array('group' =&gt; $group,
+                <link>#xarController::URL('newsgroups', 'user', 'article', array('group' =&gt; $group,
                 'article' =&gt; $loop:item['number']))#</link>
                 <description></description>
                 <author>#xarVar::prepEmailDisplay(xarVar::prepForDisplay($loop:item['From']))#</author>

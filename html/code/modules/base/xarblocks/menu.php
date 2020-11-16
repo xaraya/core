@@ -249,7 +249,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                 if ($line['url'][0] == $ptid) {
                     $here = 'true';
                 }
-                $line['url'] = xarModUrl('articles', 'user', 'view', array('ptid' => $line['url'][0]));
+                $line['url'] = xarController::URL('articles', 'user', 'view', array('ptid' => $line['url'][0]));
                 break;
             }
             case '(': // category link
@@ -279,7 +279,7 @@ class Base_MenuBlock extends MenuBlock implements iBlock
                         $here = 'true';
                     }
                 }
-                $line['url'] = xarModUrl('articles', 'user', 'view', array('catid' => $line['url'][0]));
+                $line['url'] = xarController::URL('articles', 'user', 'view', array('catid' => $line['url'][0]));
                 break;
             }
         */

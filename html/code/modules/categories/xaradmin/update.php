@@ -50,7 +50,7 @@ function categories_admin_update()
     }
 
     $itemid = $data['object']->updateItem(array('itemid' => $data['itemid']));
-    xarController::redirect(xarModUrl('categories','admin','view'));
+    xarController::redirect(xarController::URL('categories','admin','view'));
     return true;
 }
 ?>

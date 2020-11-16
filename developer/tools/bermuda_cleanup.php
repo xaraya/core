@@ -647,7 +647,7 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
             $search[] = $old;
             $replace[] = $new;
         }
-        $pattern = '/' . implode('|', $search) . '/';
+        $pattern = '/' . implode('|', $search) . '/i';
         // iterate over all .php, .inc, .xt, .xml and .xsl files in the directory
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($inDir));
         $files = new \RegexIterator($files, self::ALL_EXT);
@@ -682,7 +682,7 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
         foreach ($todo as $filepath) {
             $this->log('Fixing ' . $filepath);
             $contents = file_get_contents($filepath);
-            $contents = str_replace($search, $replace, $contents);
+            $contents = str_ireplace($search, $replace, $contents);
             file_put_contents($filepath, $contents);
         }
     }
@@ -800,6 +800,7 @@ if ($refresh || !file_exists('core_functions.json') || !file_exists('core_consta
 
 
 /**
+ */
 $fixMe = false;
 //$inDir = dirname(dirname(__DIR__)) . '/html/lib/';  // don't fixMe this - use only for verification
 $inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
@@ -809,8 +810,8 @@ $inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
 $analyzer = new XarayaModuleAnalyzer();
 $analyzer->verbose = true;
 $analyzer->check_module_files($inDir, $fixMe);
- */
 
+/**
 //$modName = 'dynamicdata';
 //$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/' . $modName . '/';
 //$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/xarcachemanager/';
@@ -827,3 +828,4 @@ $analyzer->parse_project();
 //$analyzer->get_class_tree();
 //$analyzer->show_class_tree();
 $analyzer->show_class_tree('dataproperty');
+ */

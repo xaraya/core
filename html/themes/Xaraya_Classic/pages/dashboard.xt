@@ -24,7 +24,7 @@ dtd="xhtml1-strict">
         </head>
         <body>
             <div id="header">#$sitename# 
-            <a href="#xarModUrl()#" title="#$sitename#">( View Site &gt; )</a></div>
+            <a href="#xarController::URL()#" title="#$sitename#">( View Site &gt; )</a></div>
             <div id="wrapper">
                 <div id="adminmenu">
                     <xar:var name="adminnav"/>
