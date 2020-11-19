@@ -120,7 +120,7 @@ class VariableTableDataStore extends SQLDataStore
             $query = "INSERT INTO $dynamicdata (property_id,item_id,value)
                       VALUES (?,?,?)";
             $bindvars = array($propid,$itemid, (string) $value);
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
         }
         return $itemid;
@@ -1007,7 +1007,7 @@ class VariableTableDataStore extends SQLDataStore
                     FROM $dynamicobjects ";
             $query .= "WHERE id = ? ";
             $bindvars[] = (int)$objectid;
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $result= $stmt->executeQuery($bindvars);
         if (!$result->first()) return; // this should not happen
 
@@ -1016,4 +1016,3 @@ class VariableTableDataStore extends SQLDataStore
         return $nextid;
     }
 }
-?>
