@@ -288,6 +288,30 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     }
 
     /**
+     * Add where clauses for dynamic_data objects in object search ui or deferlink property
+     * @todo fix setWhere() and/or dataquery to support other datastores than relational ones
+     */
+    public function addWhere($name, $clause, $join = '', $pre = '', $post = '')
+    {
+        if (!array_key_exists($name, $this->properties)) {
+            return;
+        }
+        if (!property_exists($this, 'ddwhere')) {
+            $this->ddwhere = array();
+        }
+        // Result in variabletable:
+        // $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+        $whereitem = array(
+            'join' => $join,
+            'pre' => $pre,
+            'field' => $this->properties[$name]->id,
+            'clause' => $clause,
+            'post' => $post
+        );
+        $this->ddwhere[] = $whereitem;
+    }
+
+    /**
      * Add content filters to where clauses - do not call directly for now...
      */
     private function addFilters()
