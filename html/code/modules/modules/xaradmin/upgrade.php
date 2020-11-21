@@ -63,7 +63,7 @@ function modules_admin_upgrade()
     if (empty($return_url))
         $return_url = xarController::URL('modules', 'admin', 'list', array('state' => 0), NULL, $target);
     // Hmmm, I wonder if the target adding is considered a hack
-    // it certainly depends on the implementation of xarModUrl
+    // it certainly depends on the implementation of xarController::URL
     //    xarController::redirect(xarController::URL('modules', 'admin', "list#$target"));
     xarController::redirect($return_url);
 

@@ -46,7 +46,7 @@ function roles_userapi_parseuserhome(Array $args=array())
 */
                 if (empty($url[1])) $url[1]="user";
                     if (empty($url[2])) $url[2]="main";
-                    $url = xarModUrl($url[0],$url[1],$url[2]);
+                    $url = xarController::URL($url[0],$url[1],$url[2]);
                 if(isset($sections[1])) {
                    $url .= xarVar::prepForDisplay($sections[1]);
                 }
@@ -67,7 +67,7 @@ function roles_userapi_parseuserhome(Array $args=array())
                 if ($url[0] == $ptid) {
                      $here = 'true';
                 }
-                $url = xarModUrl('articles', 'user', 'view', array('ptid' => $url[0]));
+                $url = xarController::URL('articles', 'user', 'view', array('ptid' => $url[0]));
                 break;
             }
             case '(': // category link
@@ -97,7 +97,7 @@ function roles_userapi_parseuserhome(Array $args=array())
                         $here = 'true';
                     }
                 }
-                $url = xarModUrl('articles', 'user', 'view', array('catid' => $url[0]));
+                $url = xarController::URL('articles', 'user', 'view', array('catid' => $url[0]));
                         break;
             }
             default : // standard URL

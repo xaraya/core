@@ -135,7 +135,7 @@ function convertFile($path)
         // replace BL tags
         $str = xarBLTags($str);        
         // replace html entities
-        $str = xmlEntities($str);
+        //$str = xmlEntities($str);
     }
     
     // nothing changed? we're done...
@@ -167,7 +167,7 @@ function convertFile($path)
             */
             /* uncomment if mtn executable is available */
             // NOTE: only do this if you're updating files in a monotone workspace
-            $mtnex = 'mtn'; // set an absolute path if mtn is not in your environment $PATH, eg /usr/bin/mtn
+            $mtnex = 'git'; // set an absolute path if mtn is not in your environment $PATH, eg /usr/bin/mtn
             $todir = dirname($path);
             chdir($todir);
             exec("$mtnex mv $oldname $newname");
@@ -256,13 +256,13 @@ function xarPHP($str)
     }  
     
     // replace require|include(_once) "modules/*" with sys::import("modules.*") 
-    $inc_re = '!^(\s*(?:include|require)+(?:_once)?[^\'|"]*)+((?:\'|")+modules/[^\'|"]*(?:\'|")+)+([^;]*;)+!m';
-    if (preg_match_all($inc_re, $str, $matches)) {
-        foreach ($matches[2] as $k => $match) {
+    $inc_re = '!^(\s*)((?:include|require)+(?:_once)?[^\'|"]*)((?:\'|")+modules/[^\'|"]*(?:\'|")+)([^;]*;)!m';
+    if (preg_match_all($inc_re, $str, $matches, PREG_PATTERN_ORDER)) {
+        foreach ($matches[3] as $k => $match) {
             $match = str_replace('.php', '', $match);
             $match = str_replace('/', '.', $match);
             $match = "sys::import({$match});";
-            $str = str_replace($matches[0][$k], $match, $str);
+            $str = str_replace($matches[0][$k], $matches[1][$k] . $match, $str);
         }
     }
     
@@ -279,8 +279,8 @@ function xarPHP($str)
 **/
 function xarTemplates($str)
 {
-    $xml_re = '!<\?xml[^>]*>!';
-    $tpl_re = '!<xar:template\s+xmlns[^>]*>!';
+    $xml_re = '!<\?xml[^>]*>[\r\n]*!';
+    $tpl_re = '!<xar:template\s+xmlns[^>]*>[\r\n]*!';
     // check for xml declaration...
     if (preg_match($xml_re, $str)) {
         // remove it...

@@ -37,7 +37,7 @@ function themes_admin_view()
         if (!xarVar::fetch('admin_theme', 'pre:trim:lower:str:1:',
             $new_admin_theme, $old_admin_theme, xarVar::NOT_REQUIRED)) return;
         if ($new_user_theme != $old_user_theme) {
-            $themeid = xarThemeGetIdFromName($new_user_theme);
+            $themeid = xarTheme::getIDFromName($new_user_theme);
             if ($themeid) {
                 $info = xarTheme::getInfo($themeid);
                 if ($info['class'] != 2) {
@@ -54,7 +54,7 @@ function themes_admin_view()
             xarModVars::set('themes', 'default_theme', $new_user_theme);
         }
         if ($new_admin_theme != $old_admin_theme) {
-            $themeid = xarThemeGetIdFromName($new_admin_theme);
+            $themeid = xarTheme::getIDFromName($new_admin_theme);
             if ($themeid) {
                 $info = xarTheme::getInfo($themeid);
                 if ($info['class'] != 2) {

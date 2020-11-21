@@ -82,7 +82,7 @@ function modules_admin_deactivate ()
     }
 
     // Hmmm, I wonder if the target adding is considered a hack
-    // it certainly depends on the implementation of xarModUrl
+    // it certainly depends on the implementation of xarController::URL
     xarController::redirect($return_url);
 
     return true;

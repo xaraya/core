@@ -22,6 +22,7 @@ use GraphQL\Deferred;
 class xarGraphQLBuildType
 {
     public static $property_id = [];
+    public static $known_proptype_ids = [];
 
     /**
      * Make a generic Object Type for a dynamicdata object type by name = "Module" for modules etc.
@@ -178,11 +179,22 @@ class xarGraphQLBuildType
             'decimal' => Type::float(),
             'dropdown' => Type::string(),  // @todo use EnumType here?
         ];
+        if (empty(self::$known_proptype_ids)) {
+            self::$known_proptype_ids = array(
+                self::get_property_id('username') => 'user',
+                self::get_property_id('userlist') => 'user',
+                self::get_property_id('object') => 'object',
+                //self::get_property_id('objectref') => 'object',  // @todo look at configuration
+                self::get_property_id('propertyref') => 'property',
+                //self::get_property_id('module') => 'module',
+                self::get_property_id('categories') => 'category'
+            );
+        }
         // @todo add fields based on object descriptor?
-        $user_prop_id = self::get_property_id('username');
         foreach ($objectref->getProperties() as $key => $property) {
-            if ($property->type == $user_prop_id) {
-                $fields[$property->name] = self::get_deferred_field($property->name, 'user');
+            if (array_key_exists($property->type, self::$known_proptype_ids)) {
+                // @todo should we pass along the object too?
+                $fields[$property->name] = self::get_deferred_field($property->name, self::$known_proptype_ids[$property->type]);
                 continue;
             }
             if ($property->name == 'configuration') {
@@ -200,10 +212,8 @@ class xarGraphQLBuildType
     {
         if (empty(self::$property_id[$name])) {
             $proptypes = DataPropertyMaster::getPropertyTypes();
-            foreach ($proptypes as $typeid => $proptype)
-            {
-                if($proptype['name'] == $name)
-                {
+            foreach ($proptypes as $typeid => $proptype) {
+                if ($proptype['name'] == $name) {
                     self::$property_id[$name] = $typeid;
                     break;
                 }
@@ -212,12 +222,13 @@ class xarGraphQLBuildType
         return self::$property_id[$name];
     }
 
-    public static function get_deferred_field($name, $type)
+    public static function get_deferred_field($fieldname, $type)
     {
         return [
-            'name' => $name,
+            'name' => $fieldname,
             'type' => xarGraphQL::get_type($type),
-            'resolve' => self::deferred_field_resolver($type, $name),
+            // @todo should we pass along the object instead of the type here?
+            'resolve' => self::deferred_field_resolver($type, $fieldname),
         ];
     }
 
@@ -225,7 +236,8 @@ class xarGraphQLBuildType
     {
         // we only need the type class here, not the type instance
         $clazz = xarGraphQL::get_type_class($type);
-        return $clazz::_xar_deferred_field_resolver($prop_name);
+        // @todo should we pass along the object instead of the type here?
+        return $clazz::_xar_deferred_field_resolver($type, $prop_name);
     }
 
     /**
@@ -239,6 +251,9 @@ class xarGraphQLBuildType
             list($name, $type, $object, $list, $item) = self::sanitize($type);
         }
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["object field"]);
+            }
             $name = $info->fieldName;
             if (is_array($values)) {
                 if ($name == 'keys') {
@@ -268,7 +283,9 @@ class xarGraphQLBuildType
                     return $values->getPublicProperties();
                 }
                 if (property_exists($values, 'properties') && in_array($name, $values->properties)) {
-                    return $values->properties[$name]->getValue();
+                    // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
+                    //return $values->properties[$name]->getValue();
+                    return $values->properties[$name]->value;
                 }
                 if (property_exists($values, $name)) {
                     return $values->{$name};
@@ -329,7 +346,10 @@ class xarGraphQLBuildType
             list($name, $type, $object, $list, $item) = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php 
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["page query"]);
+            }
+            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
             $allowed = array_flip(['sort', 'offset', 'limit', 'filters', 'count']);
             $fields = $info->getFieldSelection(1);
             $args = array_intersect_key($args, $allowed);
@@ -390,6 +410,9 @@ class xarGraphQLBuildType
             list($name, $type, $object, $list, $item) = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["list query"]);
+            }
             //print_r($rootValue);
             //$fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -400,7 +423,7 @@ class xarGraphQLBuildType
             //$params = array('name' => $object, 'fieldlist' => array_keys($fields));
             //print_r($params);
             $objectlist = DataObjectMaster::getObjectList($params);
-            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php 
+            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
             $allowed = array_flip(['sort', 'offset', 'limit', 'filters']);
             $args = array_intersect_key($args, $allowed);
             //print_r($args);
@@ -426,7 +449,13 @@ class xarGraphQLBuildType
             //if (!empty($args['filters'])) {
             //    $params['filters'] = $args['filters'];
             //}
-            $items = $objectlist->getItems($params);
+            try {
+                // @checkme bypass getItemValue() and get the raw values from the properties to allow deferred handling
+                $items = $objectlist->getItems($params);
+            } catch (Exception $e) {
+                print_r($e->getMessage());
+                $items = array();
+            }
             return $items;
         };
         return $resolver;
@@ -457,6 +486,9 @@ class xarGraphQLBuildType
             list($name, $type, $object, $list, $item) = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["item query"]);
+            }
             //print_r($rootValue);
             $fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -473,7 +505,15 @@ class xarGraphQLBuildType
             if ($itemid != $params['itemid']) {
                 throw new Exception('Unknown ' . $type);
             }
-            $values = $objectitem->getFieldValues();
+            try {
+                // @checkme this throws exception for userlist property when xarUser::init() is not called first
+                //$values = $objectitem->getFieldValues();
+                // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
+                $values = $objectitem->getFieldValues(array(), 1);
+            } catch (Exception $e) {
+                print_r($e-getMessage());
+                $values = array('id' => $args['id']);
+            }
             // see objecttype
             if ($object == 'objects') {
                 if (array_key_exists('properties', $fields)) {
@@ -496,6 +536,9 @@ class xarGraphQLBuildType
     {
         // call either list_query_resolver or item_query_resolver here depending on $args['id']
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["object query"]);
+            }
             $type = self::singularize($info->fieldName);
             if (!empty($args['id'])) {
                 //print_r($info->parentType->name . "." . $info->fieldName . "[" . $args['id'] . "]");
@@ -521,5 +564,4 @@ class xarGraphQLBuildType
         ];
         return $fields;
     }
-
 }

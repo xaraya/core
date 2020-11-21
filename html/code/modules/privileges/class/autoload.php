@@ -29,7 +29,7 @@ function privileges_classes_autoload($class)
         'xarprivilege'         => 'modules.privileges.class.privilege',
         'xarprivileges'        => 'modules.privileges.class.privileges',
         'xarsecurity'          => 'modules.privileges.class.security',
-        'xarsecuritylevel'     => 'modules.privileges.class.securitylevel',
+        'xarSecurity::getLevel'     => 'modules.privileges.class.securitylevel',
     );
     
     if (isset($class_array[$class])) {

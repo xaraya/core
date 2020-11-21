@@ -13,7 +13,7 @@ function mail_user_display(Array $args=array())
 {
     if(!xarVar::fetch('itemid','int:1:',$itemid,0,xarVar::NOT_REQUIRED)) return;
     if (empty($itemid)) return xarResponse::notFound();
-    xarController::redirect(xarModUrl('mail','admin','view',array('itemid' => $itemid)));
+    xarController::redirect(xarController::URL('mail','admin','view',array('itemid' => $itemid)));
     return true;
 }
 ?>

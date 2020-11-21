@@ -24,8 +24,7 @@ class xarGraphQLBaseType extends ObjectType
     public static $_xar_object = '';
     public static $_xar_list   = '';
     public static $_xar_item   = '';
-    protected static $_xar_todo = [];
-    protected static $_xar_cache = [];
+    protected static $_xar_deferred = array();
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
@@ -174,9 +173,16 @@ class xarGraphQLBaseType extends ObjectType
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_deferred_field_resolver($prop_name)
+    public static function _xar_deferred_field_resolver($type, $prop_name)
     {
-        $resolver = function($values, $args, $context, ResolveInfo $info) use ($prop_name) {
+        if (!array_key_exists($type, static::$_xar_deferred)) {
+            static::$_xar_deferred[$type] = array('todo' => [], 'fields' => ['id'], 'cache' => []);
+        }
+        // @todo should we pass along the object instead of the type here?
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["deferred field"]);
+            }
             $fields = $info->getFieldSelection(0);
             if (array_key_exists('id', $fields) && count($fields) < 2) {
                 return array('id' => $values[$prop_name]);
@@ -188,22 +194,24 @@ class xarGraphQLBaseType extends ObjectType
             //if (!in_array('name', $queryPlan->subFields('User'))) {
             //    return array('id' => $values[$prop_name]);
             //}
-            static::_xar_add_deferred($values[$prop_name], array_keys($fields));
+            static::_xar_add_deferred($type, $values[$prop_name], array_keys($fields));
 
-            return new GraphQL\Deferred(function () use ($values, $prop_name) {
-                return static::_xar_get_deferred($values[$prop_name]);
+            return new GraphQL\Deferred(function () use ($type, $values, $prop_name) {
+                return static::_xar_get_deferred($type, $values[$prop_name]);
             });
         };
         return $resolver;
     }
 
-    public static function _xar_add_deferred($id, $fieldlist = null)
+    public static function _xar_add_deferred($type, $id, $fieldlist = null)
     {
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["add deferred $type $id"];
+        }
         // @todo preserve fieldlist to optimize loading afterwards too
-        // @todo use common [type][id] for todo and cache, or override in inherited class?
-        //print_r("Adding $id");
-        if (!array_key_exists("$id", static::$_xar_cache) && !in_array($id, static::$_xar_todo)) {
-            static::$_xar_todo[] = $id;
+        //print_r("Adding $type $id");
+        if (!array_key_exists("$id", static::$_xar_deferred[$type]['cache']) && !in_array($id, static::$_xar_deferred[$type]['todo'])) {
+            static::$_xar_deferred[$type]['todo'][] = $id;
         }
     }
 
@@ -214,29 +222,55 @@ class xarGraphQLBaseType extends ObjectType
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_load_deferred()
+    public static function _xar_load_deferred($type)
     {
-        //print_r("Loading " . implode(",", static::$_xar_todo));
-        if (empty(static::$_xar_todo)) {
+        if (empty(static::$_xar_deferred[$type]['todo'])) {
             return;
         }
-        $idlist = implode(",", static::$_xar_todo);
-        //print_r("Loading " . $idlist);
-        // @todo lookup usernames
-        foreach (static::$_xar_todo as $id) {
-            static::$_xar_cache["$id"] = array('id' => $id, 'name' => "override_me_" . $id);
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["load deferred $type"];
         }
-        static::$_xar_todo = [];
+        // @todo should we pass along the object instead of the type here?
+        $idlist = implode(",", static::$_xar_deferred[$type]['todo']);
+        //print_r("Loading " . $idlist);
+        foreach (static::$_xar_deferred[$type]['todo'] as $id) {
+            static::$_xar_deferred[$type]['cache']["$id"] = array('id' => $id, 'name' => "override_me_" . $id);
+        }
+        /**
+        $object = static::$_xar_object;
+        $fieldlist = array('id', 'name');
+        $itemids = array();
+        foreach (static::$_xar_deferred[$type]['todo'] as $id) {
+            $itemids[] = intval($id);
+        }
+        //$params = array('name' => $object);
+        $params = array('name' => $object, 'fieldlist' => $fieldlist);
+        //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $itemids);
+        $objectlist = DataObjectMaster::getObjectList($params);
+        $params = array('itemids' => $itemids);
+        try {
+            static::$_xar_deferred[$type]['cache'] = $objectlist->getItems($params);
+            static::$_xar_deferred[$type]['todo'] = [];
+        } catch (Exception $e) {
+            print_r($e-getMessage());
+            parent::_xar_load_deferred($type);
+        }
+         */
+        static::$_xar_deferred[$type]['todo'] = [];
     }
 
-    public static function _xar_get_deferred($id)
+    public static function _xar_get_deferred($type, $id)
     {
-        if (!empty(static::$_xar_todo)) {
-            static::_xar_load_deferred();
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["get deferred $type $id"];
         }
-        //print_r("Getting $id");
-        if (array_key_exists("$id", static::$_xar_cache)) {
-            return static::$_xar_cache["$id"];
+        // @todo should we pass along the object instead of the type here?
+        if (!empty(static::$_xar_deferred[$type]['todo'])) {
+            static::_xar_load_deferred($type);
+        }
+        //print_r("Getting $type $id");
+        if (array_key_exists($type, static::$_xar_deferred) && array_key_exists("$id", static::$_xar_deferred[$type]['cache'])) {
+            return static::$_xar_deferred[$type]['cache']["$id"];
         }
         return array('id' => $id);
     }
@@ -260,7 +294,7 @@ class xarGraphQLBaseType extends ObjectType
                 break;
             default:
                 throw new Exception('Unknown mutation ' . $name);
-	}
+        }
     }
 
     /**
@@ -288,6 +322,9 @@ class xarGraphQLBaseType extends ObjectType
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["create mutation"]);
+            }
             //print_r($rootValue);
             $fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -339,6 +376,9 @@ class xarGraphQLBaseType extends ObjectType
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["update mutation"]);
+            }
             //print_r($rootValue);
             $fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -386,6 +426,9 @@ class xarGraphQLBaseType extends ObjectType
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["delete mutation"]);
+            }
             //print_r($rootValue);
             $fields = $info->getFieldSelection(1);
             //print_r($fields);
@@ -406,5 +449,4 @@ class xarGraphQLBaseType extends ObjectType
         };
         return $resolver;
     }
-
 }

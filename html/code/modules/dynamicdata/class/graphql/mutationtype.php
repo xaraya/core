@@ -67,5 +67,4 @@ class xarGraphQLMutationType extends ObjectType
         //return $clazz::_xar_get_mutation_field($name);
         return array($name => $clazz::_xar_get_mutation_field($name));
     }
-
 }

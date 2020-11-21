@@ -40,6 +40,9 @@ class xarGraphQLKeyValType extends ObjectType
              */
             /**
             'resolveField' => function ($object, $args, $context, ResolveInfo $info) {
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = array_merge($info->path, ["keyval field"]);
+                }
                 if (empty($object)) {
                     return null;
                 }

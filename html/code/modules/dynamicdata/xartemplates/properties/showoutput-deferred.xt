@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="isset($value)">
+        <xar:if condition="is_array($value)">
+        <div class="xar-form-container-after">
+            <xar:foreach in="$value" key="$key" value="$val">
+                <div class="xar-row">
+                    <div class="xar-col">
+                    <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
+                    <xar:var name="val"/>
+                    </div>
+                </div>
+            </xar:foreach>
+        </div>
+        <xar:else/>
+            <xar:var name="value"/>
+        </xar:if>
+    </xar:if>
+</xar:template>

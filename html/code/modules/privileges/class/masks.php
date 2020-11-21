@@ -45,7 +45,7 @@ class xarMasks extends xarSecurity
     public static function getmasks($modid=self::PRIVILEGES_ALL,$component='All')
     {
         self::initialize();
-        // TODO: try to do all this a bit more compact and without xarMod_GetBaseInfo
+        // TODO: try to do all this a bit more compact and without xarMod::getBaseInfo
         // TODO: sort on the name of the mod again
         // TODO: evaluate ambiguous signature of this method: does 'All' mean get *only* the masks which apply to all modules
         //       or get *all* masks.

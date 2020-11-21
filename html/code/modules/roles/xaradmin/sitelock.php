@@ -65,7 +65,7 @@ function roles_admin_sitelock(Array $args=array())
         } elseif ($cmd == 'add') {
             if (!xarVar::fetch('newname', 'str', $newname, NULL, xarVar::DONT_SET)) return;
             if (isset($newname)) {
-                $r = xaruFindRole($newname);
+                $r = xarRoles::ufindRole($newname);
                 if (!$r) $r = xarRoles::findRole($newname);
                 if($r) {
                     $newid  = $r->getID();

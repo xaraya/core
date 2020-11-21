@@ -120,7 +120,7 @@ class VariableTableDataStore extends SQLDataStore
             $query = "INSERT INTO $dynamicdata (property_id,item_id,value)
                       VALUES (?,?,?)";
             $bindvars = array($propid,$itemid, (string) $value);
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
         }
         return $itemid;
@@ -475,7 +475,7 @@ class VariableTableDataStore extends SQLDataStore
         // ------------------------------------------------------
         // TODO: make sure this is portable !
         // more difficult case where we need to create a pivot table, basically
-        } elseif ($this->object->numitems > 0 || !empty($this->object->sort) || !empty($this->object->where) || !empty($this->object->groupby)) {
+        } elseif ($this->object->numitems > 0 || !empty($this->object->sort) || !empty($this->object->where) || !empty($this->object->groupby) || (property_exists($this->object, 'ddwhere') && !empty($this->object->ddwhere))) {
 
             $dbtype = $this->getType();
             if (substr($dbtype,0,4) == 'oci8') {
@@ -512,6 +512,21 @@ class VariableTableDataStore extends SQLDataStore
             $query .= " FROM $dynamicdata
                        WHERE property_id IN (" . join(', ',$propids) . ")
                     GROUP BY item_id ";
+
+            // Not sure what removing some invoice tax status field in commit 2092fd13e6b45e217806195ab4a3839ccbc98a52
+            // had to do with commenting out the 'where' capability in variabletable in 2012, but there you have it...
+            // Re-activating using a different property name for now, in case there are hidden side-effects elsewhere
+            if (property_exists($this->object, 'ddwhere') && is_array($this->object->ddwhere)) {
+                $query .= " HAVING ";
+                foreach ($this->object->ddwhere as $whereitem) {
+                    // Postgres does not support column aliases in HAVING clauses, but you can use the same aggregate function
+                    if (substr($dbtype,0,8) == 'postgres') {
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'MAX(CASE WHEN property_id = ' . 'dd_' . $whereitem['field'] . " THEN $propval ELSE '' END) " . $whereitem['clause'] . $whereitem['post'] . ' ';
+                    } else {
+                        $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+                    }
+                }
+            }
 /*
             if (count($this->object->where) > 0) {
                   $query .= " HAVING ";
@@ -1007,7 +1022,7 @@ class VariableTableDataStore extends SQLDataStore
                     FROM $dynamicobjects ";
             $query .= "WHERE id = ? ";
             $bindvars[] = (int)$objectid;
-        $stmt = $this->db->prepareStatement($query);
+        $stmt = $this->prepareStatement($query);
         $result= $stmt->executeQuery($bindvars);
         if (!$result->first()) return; // this should not happen
 
@@ -1016,4 +1031,3 @@ class VariableTableDataStore extends SQLDataStore
         return $nextid;
     }
 }
-?>
