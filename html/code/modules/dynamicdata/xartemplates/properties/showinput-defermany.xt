@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="empty($options)">
+        <input type="text" id="#$id#" name="#$name#" value="#$value#"/>
+    <xar:else />
+        <!-- TODO: adapt from multiselect here -->
+        <xar:if condition="!isset($onchange)">
+          <xar:set name="onchange">'return true;'</xar:set>
+        </xar:if>
+        <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$onchange#">
+            <xar:foreach in="$options" value="$option">
+                <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
+                    <xar:if condition="$option['id'] eq $value">
+                        <option value="#$option['id']#" selected="selected">#$option['name']#</option>
+                    <xar:else />
+                        <option value="#$option['id']#">#$option['name']#</option>
+                    </xar:if>
+                <xar:elseif condition="$option['id'] eq $value"/>
+                    <option selected="selected">#$option['name']#</option>
+                <xar:else />
+                    <option>#$option['name']#</option>
+                </xar:if>
+            </xar:foreach>
+        </select>
+    </xar:if>
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>
