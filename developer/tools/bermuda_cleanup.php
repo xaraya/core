@@ -663,6 +663,10 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
                     $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
                     continue;
                 }
+                if (strpos($file->getPathName(), '/xarayatesting/tests/core/') !== false) {
+                    $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
+                    continue;
+                }
                 $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' matches: ' . implode(', ', array_unique($matches[0])));
                 $todo[] = $file->getPathName();
             } catch (Exception $e) {

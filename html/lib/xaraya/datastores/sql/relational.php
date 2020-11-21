@@ -675,7 +675,7 @@ class RelationalDataStore extends SQLDataStore
                 $query .= " ORDER BY $itemidfield";
             }
             // We got the query, prepare it
-            $stmt = $this->db->prepareStatement($query);
+            $stmt = $this->prepareStatement($query);
 
             // Now set additional parameters if we need to
             if ($numitems > 0) {
