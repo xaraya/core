@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="isset($value)">
         <xar:if condition="is_array($value)">
-        <div class="xar-form-container-after">
+        <div class="xar-form-container">
             <xar:foreach in="$value" key="$key" value="$val">
                 <div class="xar-row">
                     <div class="xar-col">
@@ -13,6 +13,8 @@
                 </div>
             </xar:foreach>
         </div>
+        <xar:elseif condition="!empty($link)"/>
+            <a href="#$link#">#$value#</a>
         <xar:else/>
             <xar:var name="value"/>
         </xar:if>

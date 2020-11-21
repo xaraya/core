@@ -20,14 +20,13 @@
                 <xar:foreach in="$properties" key="$name">
                     <td>
                         <xar:set name="propid">#$properties.$name:id#</xar:set>
-                        <xar:set name="fieldname">$fieldprefix . 'dd_' . $propid . '[' . $itemid .
-                        ']'</xar:set>
+                        <xar:set name="fieldname">$fieldprefix . 'dd_' . $propid . '[' . $itemid . ']'</xar:set>
                         <xar:if condition="!empty($fields[$name])">
-                            <xar:data-input property="$properties[$name]" name="$fieldname" size="10" value="$fields[$name]"/>
-                            size="10" value="$fields[$name]"/>
+                            <xar:data-input property="$properties[$name]" name="$fieldname" size="10" value="$fields[$name]"
+                            _itemid="$itemid" size="10" value="$fields[$name]"/>
                             <xar:else />
                             <xar:data-input property="$properties[$name]" name="$fieldname"
-                            size="10"/>
+                            _itemid="$itemid" size="10"/>
                         </xar:if>
                     </td>
                 </xar:foreach>

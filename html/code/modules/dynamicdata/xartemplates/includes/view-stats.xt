@@ -34,14 +34,14 @@
                                     <!-- show operation values directly here -->
                                     <xar:var name="fields.$name" prep="true" />
                                 <xar:else/>
-                                    <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
+                                    <xar:data-output property="$properties[$name]" _itemid="$itemid" value="$fields[$name]"/>
                                 </xar:if>
                                 </a>
                             <xar:elseif condition="!empty($properties[$name]->operation)" />
                                 <!-- show operation values directly here -->
                                 <xar:var name="fields.$name" prep="true" />
                             <xar:else />
-                                <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
+                                <xar:data-output property="$properties[$name]" _itemid="$itemid" value="$fields[$name]"/>
                             </xar:if>
                         </td>
                     </xar:foreach>
