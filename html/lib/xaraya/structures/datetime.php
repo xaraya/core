@@ -82,6 +82,7 @@ class XarDateTime extends DateTime
         $this->setnow($timezone);
         $this->hour = 0;
         $this->minute= 0;
+        $this->second= 0;
         $this->regenerate();
     }
 
