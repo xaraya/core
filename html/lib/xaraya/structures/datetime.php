@@ -77,6 +77,14 @@ class XarDateTime extends DateTime
         $this->extract();
     }
 
+    public function settoday($timezone=null)
+    {
+        $this->setnow($timezone);
+        $this->hour = 0;
+        $this->minute= 0;
+        $this->regenerate();
+    }
+
     public function regenerate()
     {
         $this->timestamp = mktime($this->hour,$this->minute,$this->second,$this->month,$this->day,$this->year);
