@@ -189,6 +189,8 @@ class DeferredItemProperty extends DataProperty
     {
         $data = $this->getDeferredData($data);
         $this->log_trace();
+        //if (empty($data['_itemid'])) $data['_itemid'] = 0;
+        //if(!isset($data['value']))     $data['value']    = $this->value;
         return parent::showOutput($data);
     }
 
