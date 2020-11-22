@@ -11,17 +11,28 @@
                     <div class="xar-row">
                         <div class="xar-col">
                         <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
+                        <xar:if condition="!empty($link)">
+                            <xar:set name="itemlink">str_replace('[itemid]', $key, $link)</xar:set>
+                            <label for="#$key#_value" title="" style=""><a href="#$itemlink#">#$key#</a>:</label>&#160;
+                        <xar:else/>
+                            <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
+                        </xar:if>
                         <xar:var name="val"/>
                         </div>
                     </div>
                 </xar:foreach>
             </div>
+            <xar:elseif condition="!empty($link)"/>
+                <xar:foreach in="$value" value="$val">
+                     <xar:set name="itemlink">str_replace('[itemid]', $val, $link)</xar:set>
+                     <a href="#$itemlink#">#$val#</a>&#160;</xar:foreach>
             <xar:else/>
-                <xar:set name="val">implode(',', $value)</xar:set>
-               [<xar:var name="val"/>]
+                <xar:set name="val">implode('&#160;', $value)</xar:set>
+                <xar:var name="val"/>
             </xar:if>
         <xar:elseif condition="!empty($link)"/>
-            <a href="#$link#">#$value#</a>
+            <xar:set name="itemlink">str_replace('[itemid]', $value, $link)</xar:set>
+            <a href="#$itemlink#">#$value#</a>
         <xar:else/>
             <xar:var name="value"/>
         </xar:if>

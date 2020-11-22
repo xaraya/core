@@ -38,6 +38,7 @@ class DeferredManyProperty extends DeferredItemProperty
     public $desc       = 'Deferred Many';
     public $reqmodules = array('dynamicdata');
     public $options    = array();
+    public $defername  = null;
     public $linkname   = null;
     public $caller_id  = null;
     public $called_id  = null;
@@ -66,15 +67,40 @@ class DeferredManyProperty extends DeferredItemProperty
         if (empty($value) || substr($value, 0, 11) !== 'linkobject:') {
             return;
         }
-        list($linkname, $caller_id, $called_id) = explode('.', substr($value, 11));
-        if (!static::has_resolver($this->name)) {
+        // make sure we always have at least two parts here
+        list($linkpart, $targetpart) = explode(':', substr($value, 11) . ':');
+        $this->defername = $linkpart;
+        list($linkname, $caller_id, $called_id) = explode('.', $linkpart);
+        if (!static::has_resolver($this->defername)) {
             $resolver = deferred_linkobject_resolver($linkname, $caller_id, $called_id);
-            static::set_resolver($resolver, $this->name);
-            $this->linkname = $linkname;
-            $this->caller_id = $caller_id;
-            $this->called_id = $called_id;
-            // sorry, you'll have to deal with it directly in the template
-            $this->displaylink = null;
+            static::set_resolver($resolver, $this->defername);
+        }
+        $this->linkname = $linkname;
+        $this->caller_id = $caller_id;
+        $this->called_id = $called_id;
+        // sorry, you'll have to deal with it directly in the template
+        $this->displaylink = null;
+        if (!empty($targetpart)) {
+            // make sure we always have at least two parts here
+            list($object, $field) = explode('.', $targetpart . '.');
+            // @checkme support <objectname>.<propname>,<propname2>,<propname3> here too
+            $fieldlist = explode(',', $field);
+            // @todo add and call resolver for target dataobject once we loaded all links
+            if (!empty($fieldlist)) {
+                //if (!static::has_resolver($object)) {
+                //    $resolver = deferred_dataobject_resolver($object, $fieldlist);
+                //    static::set_resolver($resolver, $object);
+                //}
+                //static::init_deferred($object);
+            }
+            $this->objectname = $object;
+            $this->fieldlist = $fieldlist;
+            // see if we can use a fixed template for display links here
+            $this->displaylink = xarServer::getObjectURL($object, 'display', array('itemid' => '[itemid]'));
+            if (strpos($this->displaylink, '[itemid]') === false) {
+                // sorry, you'll have to deal with it directly in the template
+                $this->displaylink = null;
+            }
         }
         // reset default value and current value after config parsing
         $this->defaultvalue = '';
@@ -131,7 +157,7 @@ class DeferredManyProperty extends DeferredItemProperty
     {
         // @checkme we use the itemid as value here
         if (isset($itemid)) {
-            static::add_deferred($this->name, $itemid);
+            static::add_deferred($this->defername, $itemid);
         }
     }
 
@@ -150,6 +176,7 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function showInput(array $data = array())
     {
+        $data = $this->getDeferredData($data);
         return parent::showInput($data);
     }
 
@@ -171,12 +198,25 @@ class DeferredManyProperty extends DeferredItemProperty
     {
         // @checkme we use the itemid as value here
         if (isset($data['_itemid'])) {
-            $data['value'] = static::get_deferred($this->name, $data['_itemid']);
+            // see if we can use a fixed template for display links - replace itemid in template per value in array
+            if (!isset($data['link']) && !empty($this->displaylink) && !empty($data['_itemid'])) {
+                //$data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
+                $data['link'] = $this->displaylink;
+            }
+            $data['value'] = static::get_deferred($this->defername, $data['_itemid']);
         } elseif (!empty($this->_itemid)) {
             // @checkme for showDisplay(), set data['value'] here
-            static::add_deferred($this->name, $this->_itemid);
-            $data['value'] = static::get_deferred($this->name, $this->_itemid);
+            static::add_deferred($this->defername, $this->_itemid);
+            // see if we can use a fixed template for display links - replace itemid in template per value in array
+            if (!isset($data['link']) && !empty($this->displaylink) && !empty($this->_itemid)) {
+                //$data['link'] = str_replace('[itemid]', (string) $this->_itemid, $this->displaylink);
+                $data['link'] = $this->displaylink;
+            }
+            $data['value'] = static::get_deferred($this->defername, $this->_itemid);
+        } else {
+            $data['value'] = '';
         }
+        $this->value = $data['value'];
         return $data;
     }
 
@@ -190,13 +230,16 @@ class DeferredManyProperty extends DeferredItemProperty
         }
 
         $this->options = array();
+        if (empty($this->objectname)) {
+            return $this->options;
+        }
         /**
-        // @checkme (ab)use the resolver to retrieve all items here
-        $resolver = static::get_resolver($this->name);
+        // @checkme (ab)use the resolver to retrieve all items from the target here
+        $resolver = static::get_resolver($this->objectname);
         if (empty($resolver) || !is_callable($resolver)) {
             return $this->options;
         }
-        $items = call_user_func($resolver, $this->name, array());
+        $items = call_user_func($resolver, $this->objectname, array());
         $first = reset($items);
         if (is_array($first)) {
             $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
