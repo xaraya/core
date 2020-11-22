@@ -48,10 +48,12 @@ class DeferredItemProperty extends DataProperty
         $this->template = 'deferitem';
         $this->filepath = 'modules/dynamicdata/xarproperties';
 
-        $this->defername = $this->name;
         // @checkme set dataobject resolver based on defaultvalue = dataobject:<objectname>.<propname>
         $this->parseConfigValue($this->defaultvalue);
-        static::init_deferred($this->defername);
+        if (empty($this->defername)) {
+            $this->defername = $this->name;
+            static::init_deferred($this->defername);
+        }
     }
 
     /**
@@ -80,6 +82,7 @@ class DeferredItemProperty extends DataProperty
             $resolver = deferred_dataobject_resolver($object, $fieldlist);
             static::set_resolver($resolver, $this->defername);
         }
+        static::init_deferred($this->defername);
         $this->objectname = $object;
         $this->fieldlist = $fieldlist;
         // see if we can use a fixed template for display links here
@@ -174,6 +177,8 @@ class DeferredItemProperty extends DataProperty
         if (!isset($data['options'])) {
             $data['options'] = $this->getOptions();
         }
+        // @checkme we *don't* really want to retrieve the data based on the value here - extended in defermany
+        //$data = $this->getDeferredData($data);
         $this->log_trace();
         //if(!isset($data['value']))       $data['value']    = $this->value;
         return parent::showInput($data);
@@ -204,6 +209,7 @@ class DeferredItemProperty extends DataProperty
             // see if we can use a fixed template for display links here
             if (!isset($data['link']) && !empty($this->displaylink) && !empty($data['value'])) {
                 $data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
+                $data['source'] = $data['value'];
             }
             $data['value'] = static::get_deferred($this->defername, $data['value']);
         } elseif (!empty($this->value)) {
@@ -213,6 +219,7 @@ class DeferredItemProperty extends DataProperty
             // see if we can use a fixed template for display links here
             if (!isset($data['link']) && !empty($this->displaylink) && !empty($this->value)) {
                 $data['link'] = str_replace('[itemid]', (string) $this->value, $this->displaylink);
+                $data['source'] = $this->value;
             }
             $data['value'] = static::get_deferred($this->defername, $this->value);
         }
@@ -235,7 +242,7 @@ class DeferredItemProperty extends DataProperty
         if (empty($resolver) || !is_callable($resolver)) {
             return $this->options;
         }
-        $items = call_user_func($resolver, $this->name, array());
+        $items = call_user_func($resolver, $this->defername, array());
         $first = reset($items);
         if (is_array($first)) {
             $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
@@ -296,6 +303,7 @@ class DeferredItemProperty extends DataProperty
         if (empty(static::$deferred[$name]['todo'])) {
             return;
         }
+        static::pre_load_deferred($name);
         //print_r('Loading ' . $name . ': ' . implode(',', static::$deferred[$name]['todo']));
         $resolver = static::get_resolver($name);
         // 1. call $name or 'default' resolver if defined, or
@@ -305,7 +313,29 @@ class DeferredItemProperty extends DataProperty
         } else {
             static::$deferred[$name]['cache'] = static::override_me_load($name, static::$deferred[$name]['todo']);
         }
+        static::post_load_deferred($name);
         static::$deferred[$name]['todo'] = array();
+    }
+
+    /**
+     * Pre-processing before loading <whatever> for each $value from 'todo' to 'cache'
+     *
+     * @param string $name name of the property
+     */
+    public static function pre_load_deferred($name)
+    {
+        return true;
+    }
+
+    /**
+     * Post-processing after loading <whatever> for each $value from 'todo' to 'cache'
+     * @todo override in defermany to look up target props if requested
+     *
+     * @param string $name name of the property
+     */
+    public static function post_load_deferred($name)
+    {
+        return true;
     }
 
     /**
@@ -452,9 +482,19 @@ function deferred_dataobject_resolver($object = 'modules', $fieldlist = ['name']
         //print_r('Query ' . $object . ' with itemids IN (' . implode(',', $values) . ')');
         $params = array('itemids' => $values);
         $result = $objectlist->getItems($params);
+        //var_export($result);
         // return array("$itemid" => assoc array of $fields)
         if (count($fieldlist) > 1) {
-            return $result;
+            // @checkme variabletable returns all fields at the moment - filter here for now
+            //return $result;
+            $values = array();
+            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
+            $allowed = array_flip($fieldlist);
+            foreach ($result as $itemid => $props) {
+                $key = (string) $itemid;
+                $values[$key] = array_intersect_key($props, $allowed);
+            }
+            return $values;
         }
         // return array("$itemid" => single $field value)
         $first = reset($result);
@@ -466,7 +506,8 @@ function deferred_dataobject_resolver($object = 'modules', $fieldlist = ['name']
         }
         $values = array();
         foreach ($result as $itemid => $props) {
-            $values[$itemid] = $props[$field];
+            $key = (string) $itemid;
+            $values[$key] = $props[$field];
         }
         return $values;
     };
@@ -474,16 +515,7 @@ function deferred_dataobject_resolver($object = 'modules', $fieldlist = ['name']
 }
 
 // set 'default' deferred resolver as a test here
-//DeferredProperty::$resolver['default'] = deferred_example_resolver();
 //DeferredProperty::set_resolver(deferred_example_resolver());
-// replacing "Username" or "User List" propertytype - for showOutput() only
-// Same as defaultvalue = dataobject:roles_users.name
-//DeferredProperty::set_resolver(deferred_dataobject_resolver('roles_users'));
-// retrieving more than 1 property - requires adapting showOutput() template too, to deal with assoc array properly
-// Same as defaultvalue = dataobject:roles_users.name,uname,email
-//DeferredProperty::set_resolver(deferred_dataobject_resolver('roles_users', ['name', 'uname', 'email']));
-// replacing dynamic_properties.objectid = "Object" propertytype
-// Same as defaultvalue = dataobject:objects.name
-//DeferredProperty::set_resolver(deferred_dataobject_resolver('objects'));
-// Same as defaultvalue = dataobject:properties.label
-//DeferredProperty::set_resolver(deferred_dataobject_resolver('properties', ['label']));
+// dataobject:roles_users.name replacing "Username" or "User List" propertytype - for showOutput() only
+// dataobject:roles_users.name,uname,email retrieving more than 1 property - requires adapting showOutput() template too, to deal with assoc array properly
+// dataobject:objects.name replacing dynamic_properties.objectid = "Object" propertytype

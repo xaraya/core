@@ -4,20 +4,32 @@
     <xar:if condition="isset($value)">
         <xar:if condition="is_array($value)">
             <xar:set name="first">reset($value)</xar:set>
-            <xar:if condition="is_array($first)">
+            <xar:if condition="!is_numeric($first)">
             <div class="xar-form-container">
                 <!-- TODO: show related item details -->
                 <xar:foreach in="$value" key="$key" value="$val">
                     <div class="xar-row">
                         <div class="xar-col">
-                        <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
                         <xar:if condition="!empty($link)">
                             <xar:set name="itemlink">str_replace('[itemid]', $key, $link)</xar:set>
-                            <label for="#$key#_value" title="" style=""><a href="#$itemlink#">#$key#</a>:</label>&#160;
+                            <label title="" style=""><a href="#$itemlink#">#$key#</a>:</label>&#160;
                         <xar:else/>
-                            <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
+                            <label title="" style="">#$key#:</label>&#160;
                         </xar:if>
-                        <xar:var name="val"/>
+                        <xar:if condition="is_array($val)">
+                            <div class="xar-form-container">
+                                <xar:foreach in="$val" key="$k" value="$v">
+                                    <div class="xar-row">
+                                        <div class="xar-col">
+                                        <label title="" style="">#$k#:</label>&#160;
+                                        <xar:var name="v"/>
+                                        </div>
+                                    </div>
+                                </xar:foreach>
+                            </div>
+                        <xar:else/>
+                            <xar:var name="val"/>
+                        </xar:if>
                         </div>
                     </div>
                 </xar:foreach>

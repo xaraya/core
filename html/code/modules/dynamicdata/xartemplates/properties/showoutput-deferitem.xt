@@ -4,10 +4,17 @@
     <xar:if condition="isset($value)">
         <xar:if condition="is_array($value)">
         <div class="xar-form-container">
+            <xar:if condition="!empty($link) and !empty($source)">
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label title="" style=""><a href="#$link#">#$source#</a>:</label>&#160;
+                    </div>
+                </div>
+            </xar:if>
             <xar:foreach in="$value" key="$key" value="$val">
                 <div class="xar-row">
                     <div class="xar-col">
-                    <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
+                    <label title="" style="">#$key#:</label>&#160;
                     <xar:var name="val"/>
                     </div>
                 </div>
