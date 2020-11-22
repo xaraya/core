@@ -282,10 +282,21 @@ class VariableTableDataStore extends SQLDataStore
             $this->cache = $args['cache'];
         }
 
+        // @todo start filtering properties again at some point :-)
+        $fieldlist = $this->object->getFieldList();
+        $wherelist = array();
+        if (property_exists($this->object, 'ddwhere') && is_array($this->object->ddwhere)) {
+            foreach ($this->object->ddwhere as $whereitem) {
+                $wherelist[] = $whereitem['field'];
+            }
+        }
         $propids = array();
         $propnames = array_keys($this->object->properties);
         $properties = array();
         foreach ($this->object->properties as $property) {
+            //if ((!empty($fieldlist) && !in_array($property->name, $fieldlist)) && $property->name !== $this->object->primary && !in_array($property->id, $wherelist)) {
+            //    continue;
+            //}
             $propids[] = $property->id;
             $properties[$property->id] = $property;
         }
