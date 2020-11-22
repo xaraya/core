@@ -72,7 +72,7 @@ class DeferredItemProperty extends DataProperty
             return;
         }
         $objectpart = substr($value, 11);
-        $this->defername = $this->name;
+        $this->defername = $objectpart;
         list($object, $field) = explode('.', $objectpart);
         // @checkme support dataobject:<objectname>.<propname>,<propname2>,<propname3> here too
         $fieldlist = explode(',', $field);
@@ -229,7 +229,7 @@ class DeferredItemProperty extends DataProperty
         }
 
         $this->options = array();
-        //print_r('Getting options: ' . $this->name);
+        //print_r('Getting options: ' . $this->defername);
         // @checkme (ab)use the resolver to retrieve all items here
         $resolver = static::get_resolver($this->defername);
         if (empty($resolver) || !is_callable($resolver)) {
@@ -279,6 +279,7 @@ class DeferredItemProperty extends DataProperty
             isset(static::$deferred[$name]) &&
             !in_array($value, static::$deferred[$name]['todo']) &&
             !array_key_exists("$value", static::$deferred[$name]['cache'])) {
+            //print_r('Adding to ' . $name . ': ' . $value);
             static::$deferred[$name]['todo'][] = $value;
         }
     }
