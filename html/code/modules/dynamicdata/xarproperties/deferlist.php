@@ -10,7 +10,7 @@ sys::import('modules.dynamicdata.xarproperties.deferitem');
  * The relationships are defined based on the values in the deferred item property, listing the itemids of Called1.
  *
  * Data Objects:
- *    Caller     
+ *    Caller
  *     itemid      N   Called1
  * (*) listprop1 ====>  itemid
  *                      propname (+)
@@ -26,9 +26,10 @@ sys::import('modules.dynamicdata.xarproperties.deferitem');
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
- 
+
  /**
-  * This property displays a deferred item list for a value (experimental - do not use in production)
+  * This property displays a deferred item list for a value array (experimental - do not use in production)
+  * In general, $this->value should be encoded, and $data['value'] and *ItemValue should be in decoded format
   *
   * Configuration:
   * the defaultvalue can be set to automatically load object properties if the value includes their itemids,
@@ -64,7 +65,7 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function getValue()
     {
-        // @todo where to serialize/unserialize?
+        // already encoded
         return parent::getValue();
     }
 
@@ -75,7 +76,11 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function setValue($value=null)
     {
-        // @todo where to serialize/unserialize?
+        // 1. in construct() set to defaultvalue - skip
+        // 2. in showForm() set for input preview and update - encode
+        if (!empty($value) && is_array($value)) {
+            $value = json_encode($value);
+        }
         parent::setValue($value);
     }
 
@@ -87,7 +92,7 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function getItemValue($itemid)
     {
-        // @todo where to serialize/unserialize?
+        // already decoded in setItemValue for deferred lookup and showView()
         return parent::getItemValue($itemid);
     }
 
@@ -100,7 +105,10 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function setItemValue($itemid, $value, $fordisplay=0)
     {
-        // @todo where to serialize/unserialize?
+        // 1. in getItems() set to value from datastore - decode for deferred lookup and showView()
+        if (!empty($value) && is_string($value) && !is_numeric($value)) {
+            $value = json_decode($value, true);
+        }
         parent::setItemValue($itemid, $value, $fordisplay);
     }
 
@@ -134,6 +142,16 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function showInput(array $data = array())
     {
+        // 1. in showForm() get value from property - not set via setValue in datastore, except in preview - decode
+        if (!isset($data['value']) && !empty($this->value) && is_string($this->value) && !is_numeric($this->value)) {
+            //$this->value = json_decode($this->value, true);
+            $values = json_decode($this->value, true);
+            // @checkme for showForm(), set data['value'] here
+            foreach ($values as $value) {
+                static::add_deferred($this->defername, $value);
+            }
+            $data['value'] = $values;
+        }
         return parent::showInput($data);
     }
 
@@ -145,6 +163,17 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function showOutput(array $data = array())
     {
+        // 1. in showView() get value from data = from objectlist via getItemValue/setItemValue - skip
+        // 2. in showDisplay() get value from property - not set via setValue in datastore - decode
+        if (!isset($data['value']) && !empty($this->value) && is_string($this->value) && !is_numeric($this->value)) {
+            //$this->value = json_decode($this->value, true);
+            $values = json_decode($this->value, true);
+            // @checkme for showDisplay(), set data['value'] here
+            foreach ($values as $value) {
+                static::add_deferred($this->defername, $value);
+            }
+            $data['value'] = $values;
+        }
         return parent::showOutput($data);
     }
 
@@ -187,4 +216,3 @@ class DeferredListProperty extends DeferredItemProperty
         return $data;
     }
 }
-

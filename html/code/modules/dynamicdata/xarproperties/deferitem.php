@@ -408,7 +408,7 @@ class DeferredItemProperty extends DataProperty
     {
         return;
         try {
-            $trace = debug_backtrace(false, 3);
+            $trace = debug_backtrace(2, 3);
             array_shift($trace);
             $caller = array_shift($trace);
             print_r("<pre>Caller: " . $this->name . ' (' . $this->_itemid . ")\n");

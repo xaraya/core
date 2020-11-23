@@ -338,7 +338,7 @@ class DeferredManyProperty extends DeferredItemProperty
         if (!array_key_exists($target, static::$deferred) || !array_key_exists($target, static::$resolver)) {
             throw new Exception('Unknown target ' . $target . ' for deferred property ' . $name);
         }
-	static::$deferred[$name]['target'] = $target;
+        static::$deferred[$name]['target'] = $target;
         return true;
     }
 }
@@ -387,4 +387,3 @@ function deferred_linkobject_resolver($linkname = 'api_films_people', $caller_id
     };
     return $resolver;
 }
-
