@@ -9,6 +9,18 @@ sys::import('modules.dynamicdata.class.properties.base');
  *
  * Note: this might be an alternative approach for some of the dataquery gymnastics used in some objects and properties
  *
+ * The relationships are defined based on the value of the deferred item property, matching the itemid of Called1.
+ *
+ * Data Objects:
+ *    Caller
+ *     itemid      1   Called1
+ * (*) itemprop1 ---->  itemid
+ *                      propname (+)
+ *                      propname2
+ * (*) this property
+ * (+) as an extension, the deferred item could also refer to another property than the itemid in Called1 (todo)
+ * Note: you can have several defer* properties per object, each pointing to a different relationship
+ *
  * @package modules\dynamicdata
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
@@ -204,25 +216,24 @@ class DeferredItemProperty extends DataProperty
      */
     public function getDeferredData(array $data = array())
     {
+        $value = null;
         if (isset($data['value'])) {
-            //$data['link'] = xarServer::getObjectURL($this->objectname, 'display', array('itemid' => $data['value']));
-            // see if we can use a fixed template for display links here
-            if (!isset($data['link']) && !empty($this->displaylink) && !empty($data['value'])) {
-                $data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
-                $data['source'] = $data['value'];
-            }
-            $data['value'] = static::get_deferred($this->defername, $data['value']);
+            $value = $data['value'];
         } elseif (!empty($this->value)) {
+            $value = $this->value;
             // @checkme for showDisplay(), set data['value'] here
             static::add_deferred($this->defername, $this->value);
-            //$data['link'] = xarServer::getObjectURL($this->objectname, 'display', array('itemid' => $this->value));
-            // see if we can use a fixed template for display links here
-            if (!isset($data['link']) && !empty($this->displaylink) && !empty($this->value)) {
-                $data['link'] = str_replace('[itemid]', (string) $this->value, $this->displaylink);
-                $data['source'] = $this->value;
-            }
-            $data['value'] = static::get_deferred($this->defername, $this->value);
         }
+        if (empty($value)) {
+            return $data;
+        }
+        //$data['link'] = xarServer::getObjectURL($this->objectname, 'display', array('itemid' => $value));
+        // see if we can use a fixed template for display links here
+        if (!isset($data['link']) && !empty($this->displaylink)) {
+            $data['link'] = str_replace('[itemid]', (string) $value, $this->displaylink);
+            $data['source'] = $value;
+        }
+        $data['value'] = static::get_deferred($this->defername, $value);
         return $data;
     }
 

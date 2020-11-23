@@ -5,15 +5,27 @@ sys::import('modules.dynamicdata.xarproperties.deferitem');
 /**
  * The Deferred Many property delays loading related objects based on the itemids until they need to be shown.
  *
+ * @todo make this query work for relational datastores: select where caller_id in $values
+ *
  * Note: this is for many-to-many relationships stored in a separate object, not for one-to-many objectlinks or subitems
+ * The relationships are defined based on the itemid of the source & target objects, stored via a separate link object.
+ * The property itself holds no significant value in the database - it may be used to store a cached version someday...
  *
  * Data Objects:
- *    Caller
- *     itemid   --+    LinkName1
- * (*) manyprop1  +-->  caller_id       Called1
- *                      called_id  --->  itemid
- *                                       otherprop
+ *    Caller    1
+ *     itemid  ---+    LinkName1
+ * (*) manyprop1  +-->  caller_id   N   Called1
+ *                      called_id  ===>  itemid
+ *                                       propname
+ *                | M               1|   propname2
+ *                +===            <--+   manyprop2 (+)
  * (*) this property
+ * (+) For many-to-many relationships, you'll typically have a manyprop2 property in Called1 that points back to Caller
+ * For example, films have many actors, and actors play in many films (hopefully).
+ *
+ * Note: you can have several defer* properties per object, each pointing to a different relationship
+ * As a special case, you could have an itemprop on one side and a manyprop on the other side, e.g. an actor only has
+ * one home town, but a home town may hold many actors. That case could also be implemented via a listprop (todo)
  *
  * @package modules\dynamicdata
  * @category Xaraya Web Applications Framework
@@ -357,7 +369,7 @@ function deferred_linkobject_resolver($linkname = 'api_films_people', $caller_id
         $params = array('name' => $linkname, 'fieldlist' => $fieldlist);
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         $objectlist = DataObjectMaster::getObjectList($params);
-        // @todo select where caller_id in $values
+        // @todo make this query work for relational datastores: select where caller_id in $values
         //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
         //$result = $objectlist->getItems($params);
         //print_r('Query ' . $linkname . ' with ' . $caller_id . ' IN (' . implode(',', $values) . ')');
