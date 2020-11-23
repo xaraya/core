@@ -5,15 +5,27 @@ sys::import('modules.dynamicdata.xarproperties.deferitem');
 /**
  * The Deferred Many property delays loading related objects based on the itemids until they need to be shown.
  *
+ * @todo make this query work for relational datastores: select where caller_id in $values
+ *
  * Note: this is for many-to-many relationships stored in a separate object, not for one-to-many objectlinks or subitems
+ * The relationships are defined based on the itemid of the source & target objects, stored via a separate link object.
+ * The property itself holds no significant value in the database - it may be used to store a cached version someday...
  *
  * Data Objects:
- *    Caller
- *     itemid   --+    LinkName1
- * (*) manyprop1  +-->  caller_id       Called1
- *                      called_id  --->  itemid
- *                                       otherprop
+ *    Caller    1
+ *     itemid  ---+    LinkName1
+ * (*) manyprop1  +-->  caller_id   N   Called1
+ *                      called_id  ===>  itemid
+ *                                       propname
+ *                | M               1|   propname2
+ *                +===            <--+   manyprop2 (+)
  * (*) this property
+ * (+) For many-to-many relationships, you'll typically have a manyprop2 property in Called1 that points back to Caller
+ * For example, films have many actors, and actors play in many films (hopefully).
+ *
+ * Note: you can have several defer* properties per object, each pointing to a different relationship
+ * As a special case, you could have an itemprop on one side and a manyprop on the other side, e.g. an actor only has
+ * one home town, but a home town may hold many actors. That case could also be implemented via a listprop (todo)
  *
  * @package modules\dynamicdata
  * @category Xaraya Web Applications Framework
@@ -42,6 +54,7 @@ class DeferredManyProperty extends DeferredItemProperty
     public $linkname   = null;
     public $caller_id  = null;
     public $called_id  = null;
+    public $targetname = null;
     public $displaylink = null;
 
     public function __construct(ObjectDescriptor $descriptor)
@@ -57,6 +70,9 @@ class DeferredManyProperty extends DeferredItemProperty
      *
      * Format:
      *     linkobject:<linkname>.<caller_id>.<called_id>
+     *     linkobject:<linkname>.<caller_id>.<called_id>:<calledname> (= for display link only)
+     *     linkobject:<linkname>.<caller_id>.<called_id>:<calledname>.<propname> (for loading propname too - TODO)
+     *     linkobject:<linkname>.<caller_id>.<called_id>:<calledname>.<propname>,<propname2>,<propname3>
      * Example:
      *     linkobject:api_films_people.films_id.people_id will show the people involved in the films id (SWAPI)
      *
@@ -75,6 +91,7 @@ class DeferredManyProperty extends DeferredItemProperty
             $resolver = deferred_linkobject_resolver($linkname, $caller_id, $called_id);
             static::set_resolver($resolver, $this->defername);
         }
+        static::init_deferred($this->defername);
         $this->linkname = $linkname;
         $this->caller_id = $caller_id;
         $this->called_id = $called_id;
@@ -87,11 +104,13 @@ class DeferredManyProperty extends DeferredItemProperty
             $fieldlist = explode(',', $field);
             // @todo add and call resolver for target dataobject once we loaded all links
             if (!empty($fieldlist)) {
-                //if (!static::has_resolver($object)) {
-                //    $resolver = deferred_dataobject_resolver($object, $fieldlist);
-                //    static::set_resolver($resolver, $object);
-                //}
-                //static::init_deferred($object);
+                $this->targetname = $targetpart;
+                if (!static::has_resolver($this->targetname)) {
+                    $resolver = deferred_dataobject_resolver($object, $fieldlist);
+                    static::set_resolver($resolver, $this->targetname);
+                }
+                static::init_deferred($this->targetname);
+                static::set_deferred_target($this->defername, $this->targetname);
             }
             $this->objectname = $object;
             $this->fieldlist = $fieldlist;
@@ -176,6 +195,7 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function showInput(array $data = array())
     {
+        // @checkme we *do* want to retrieve the data based on the itemid here - extension on deferitem
         $data = $this->getDeferredData($data);
         return parent::showInput($data);
     }
@@ -230,16 +250,16 @@ class DeferredManyProperty extends DeferredItemProperty
         }
 
         $this->options = array();
-        if (empty($this->objectname)) {
+        if (empty($this->targetname)) {
             return $this->options;
         }
         /**
         // @checkme (ab)use the resolver to retrieve all items from the target here
-        $resolver = static::get_resolver($this->objectname);
+        $resolver = static::get_resolver($this->targetname);
         if (empty($resolver) || !is_callable($resolver)) {
             return $this->options;
         }
-        $items = call_user_func($resolver, $this->objectname, array());
+        $items = call_user_func($resolver, $this->targetname, array());
         $first = reset($items);
         if (is_array($first)) {
             $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
@@ -258,6 +278,68 @@ class DeferredManyProperty extends DeferredItemProperty
         }
          */
         return $this->options;
+    }
+
+    /**
+     * Post-processing after loading <whatever> for each $value from 'todo' to 'cache'
+     * @todo override in defermany to look up target props if requested
+     *
+     * @param string $name name of the property
+     */
+    public static function post_load_deferred($name)
+    {
+        if (!array_key_exists('target', static::$deferred[$name]) || empty(static::$deferred[$name]['target'])) {
+            return true;
+        }
+        $target = static::$deferred[$name]['target'];
+        // @checkme we need to find the unique itemids across all values here - this is probably more memory-efficient
+        $distinct = array();
+        foreach (static::$deferred[$name]['cache'] as $key => $values) {
+            $distinct = array_unique(array_merge($distinct, $values));
+        }
+        //print_r('We have ' . count($distinct) . ' items for ' . $target . ' to process from ' . $name);
+        if (empty($distinct)) {
+            return true;
+        }
+        $resolver = static::get_resolver($target);
+        if (empty($resolver) || !is_callable($resolver)) {
+            return false;
+        }
+        $items = call_user_func($resolver, $target, $distinct);
+        //print_r('We got ' . count($items) . ' items for ' . $target);
+        //var_export($items);
+        foreach (array_keys(static::$deferred[$name]['cache']) as $key) {
+            $oldvalues = static::$deferred[$name]['cache'][$key];
+            $newvalues = array();
+            foreach ($oldvalues as $itemid) {
+                $id = (string) $itemid;
+                if (array_key_exists($id, $items)) {
+                    $newvalues[$id] = $items[$id];
+                } else {
+                    $newvalues[$id] = $id;
+                }
+            }
+            static::$deferred[$name]['cache'][$key] = $newvalues;
+        }
+        return true;
+    }
+
+    /**
+     * Set target for post-processing after loading <whatever> for each $value from 'todo' to 'cache'
+     *
+     * @param string $name name of the deferred property
+     * @param string $target name of the target to retrieve dataobject props from - deferred & resolver must exist
+     */
+    public static function set_deferred_target($name, $target)
+    {
+        if (array_key_exists('target', static::$deferred[$name]) && $target != static::$deferred[$name]['target']) {
+            throw new Exception('Not allowed to switch target for deferred property ' . $name);
+        }
+        if (!array_key_exists($target, static::$deferred) || !array_key_exists($target, static::$resolver)) {
+            throw new Exception('Unknown target ' . $target . ' for deferred property ' . $name);
+        }
+        static::$deferred[$name]['target'] = $target;
+        return true;
     }
 }
 
@@ -287,7 +369,7 @@ function deferred_linkobject_resolver($linkname = 'api_films_people', $caller_id
         $params = array('name' => $linkname, 'fieldlist' => $fieldlist);
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         $objectlist = DataObjectMaster::getObjectList($params);
-        // @todo select where caller_id in $values
+        // @todo make this query work for relational datastores: select where caller_id in $values
         //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
         //$result = $objectlist->getItems($params);
         //print_r('Query ' . $linkname . ' with ' . $caller_id . ' IN (' . implode(',', $values) . ')');
@@ -305,4 +387,3 @@ function deferred_linkobject_resolver($linkname = 'api_films_people', $caller_id
     };
     return $resolver;
 }
-
