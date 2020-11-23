@@ -197,6 +197,9 @@ class xarGraphQLBuildType
                 $fields[$property->name] = self::get_deferred_field($property->name, self::$known_proptype_ids[$property->type]);
                 continue;
             }
+            if ($property->type == self::$known_proptype_ids['deferitem']) {
+                // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
+            }
             if ($property->name == 'configuration') {
                 $fields[$property->name] = Type::listOf(xarGraphQL::get_type("keyval"));
                 continue;
