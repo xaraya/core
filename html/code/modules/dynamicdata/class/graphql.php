@@ -299,6 +299,7 @@ class xarGraphQL extends xarObject
     public static function send_data($data)
     {
         if (is_string($data)) {
+            //header('Access-Control-Allow-Origin: *');
             header('Content-Type: text/plain; charset=utf-8');
             echo $data;
             return;
