@@ -154,7 +154,7 @@ class DeferredItemProperty extends DataProperty
      */
     public function setItemValue($itemid, $value, $fordisplay=0)
     {
-        $this->setDataToDefer($itemid, $value);
+        $value = $this->setDataToDefer($itemid, $value);
         $this->log_trace();
         //$this->value = $value;
         //$this->_items[$itemid][$this->name] = $this->value;
@@ -169,6 +169,7 @@ class DeferredItemProperty extends DataProperty
         if (isset($value)) {
             static::add_deferred($this->defername, $value);
         }
+        return $value;
     }
 
     /**
@@ -220,9 +221,8 @@ class DeferredItemProperty extends DataProperty
         if (isset($data['value'])) {
             $value = $data['value'];
         } elseif (!empty($this->value)) {
-            $value = $this->value;
             // @checkme for showDisplay(), set data['value'] here
-            static::add_deferred($this->defername, $this->value);
+            $value = $this->setDataToDefer($this->_itemid, $this->value);
         }
         if (empty($value)) {
             return $data;

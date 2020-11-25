@@ -178,6 +178,8 @@ class DeferredManyProperty extends DeferredItemProperty
         if (isset($itemid)) {
             static::add_deferred($this->defername, $itemid);
         }
+        //return $value;
+        return $itemid;
     }
 
     /**
@@ -217,25 +219,24 @@ class DeferredManyProperty extends DeferredItemProperty
     public function getDeferredData(array $data = array())
     {
         // @checkme we use the itemid as value here
+        $itemid = null;
         if (isset($data['_itemid'])) {
-            // see if we can use a fixed template for display links - replace itemid in template per value in array
-            if (!isset($data['link']) && !empty($this->displaylink) && !empty($data['_itemid'])) {
-                //$data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
-                $data['link'] = $this->displaylink;
-            }
-            $data['value'] = static::get_deferred($this->defername, $data['_itemid']);
+            $itemid = $data['_itemid'];
         } elseif (!empty($this->_itemid)) {
             // @checkme for showDisplay(), set data['value'] here
-            static::add_deferred($this->defername, $this->_itemid);
-            // see if we can use a fixed template for display links - replace itemid in template per value in array
-            if (!isset($data['link']) && !empty($this->displaylink) && !empty($this->_itemid)) {
-                //$data['link'] = str_replace('[itemid]', (string) $this->_itemid, $this->displaylink);
-                $data['link'] = $this->displaylink;
-            }
-            $data['value'] = static::get_deferred($this->defername, $this->_itemid);
-        } else {
-            $data['value'] = '';
+            $itemid = $this->setDataToDefer($this->_itemid, $this->value);
         }
+        if (empty($itemid)) {
+            $data['value'] = '';
+            $this->value = $data['value'];
+            return $data;
+        }
+        // see if we can use a fixed template for display links - replace itemid in template per value in array
+        if (!isset($data['link']) && !empty($this->displaylink) && !empty($itemid)) {
+            //$data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
+            $data['link'] = $this->displaylink;
+        }
+        $data['value'] = static::get_deferred($this->defername, $itemid);
         $this->value = $data['value'];
         return $data;
     }
