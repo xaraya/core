@@ -176,14 +176,43 @@ class xarGraphQLBaseType extends ObjectType
     public static function _xar_deferred_field_resolver($type, $prop_name, $property = null)
     {
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
+        if (!empty($property)) {
+            $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name, $property) {
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = array_merge($info->path, ["deferred property"]);
+                }
+                $fields = $info->getFieldSelection(0);
+                if (array_key_exists('id', $fields) && count($fields) < 2) {
+                    return array('id' => $values[$prop_name]);
+                }
+                //print_r($fields);
+                //$queryPlan = $info->lookAhead();
+                //print_r($queryPlan->queryPlan());
+                //print_r($queryPlan->subFields('User'));
+                //if (!in_array('name', $queryPlan->subFields('User'))) {
+                //    return array('id' => $values[$prop_name]);
+                //}
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = ["add deferred $type " . $values['id']];
+                }
+                // @todo  how to avoid setting this twice for lists?
+                $value = $property->setDataToDefer($values['id'], $values[$prop_name]);
+
+                return new GraphQL\Deferred(function () use ($type, $values, $prop_name, $property) {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = ["get deferred $type " . $values['id']];
+                    }
+                    $data = $property->getDeferredData(array('value' => $values[$prop_name], '_itemid' => $values['id']));
+                    return $data['value'];
+                });
+            };
+            return $resolver;
+        }
         if (!array_key_exists($type, static::$_xar_deferred)) {
             static::$_xar_deferred[$type] = array('todo' => [], 'fields' => ['id'], 'cache' => []);
-            if (!empty($property)) {
-                static::$_xar_deferred[$type]['property'] = $property;
-            }
         }
         // @todo should we pass along the object instead of the type here?
-        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name, $property) {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name) {
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["deferred field"]);
             }
@@ -236,19 +265,11 @@ class xarGraphQLBaseType extends ObjectType
         if (xarGraphQL::$trace_path) {
             xarGraphQL::$paths[] = ["load deferred $type"];
         }
-        // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
-        if (!empty(static::$_xar_deferred[$type]['property'])) {
-            $property = static::$_xar_deferred[$type]['property'];
-            $loader = $property::get_resolver($property->defername);
-            static::$_xar_deferred[$type]['cache'] = call_user_func($loader, $type, static::$_xar_deferred[$type]['todo']);
-        // @todo handle post_load_deferred for defermany
-        } else {
-            // @todo should we pass along the object instead of the type here?
-            $idlist = implode(",", static::$_xar_deferred[$type]['todo']);
-            //print_r("Loading " . $idlist);
-            foreach (static::$_xar_deferred[$type]['todo'] as $id) {
-                static::$_xar_deferred[$type]['cache']["$id"] = array('id' => $id, 'name' => "override_me_" . $id);
-            }
+        // @todo should we pass along the object instead of the type here?
+        $idlist = implode(",", static::$_xar_deferred[$type]['todo']);
+        //print_r("Loading " . $idlist);
+        foreach (static::$_xar_deferred[$type]['todo'] as $id) {
+            static::$_xar_deferred[$type]['cache']["$id"] = array('id' => $id, 'name' => "override_me_" . $id);
         }
         /**
         $object = static::$_xar_object;
