@@ -1483,6 +1483,23 @@ class Query
         // Update the ID for this query
         $this->id = $this->createID();
     }
+    public function remove_last_condition()
+    {
+        // Get the key of the last condition
+        end($this->conditions);
+        $last_key = key($this->conditions);
+        
+        // Remove the condition from the array of conditions
+        array_pop($this->conditions);
+
+        // Remove the condition entry from the conjunctions array
+        foreach ($this->conjunctions as $k => $v) {
+        	if ($v['conditions'] == $last_key) {
+        		unset($this->conjunctions[$k]);
+        		break;
+        	}
+        }
+    }
     public function clearfield($x)
     {
         $count = count($this->fields);
