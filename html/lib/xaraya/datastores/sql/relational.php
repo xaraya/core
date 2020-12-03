@@ -414,7 +414,8 @@ class RelationalDataStore extends SQLDataStore
             $q->addorder($this->object->properties[$this->object->primary]->source);
         
         // add selecting on itemids again for relational tables - moved from objects/list.php
-        if (!empty($this->object->primary) && !empty($itemids) && count($itemids) > 0) {
+        $select_from_ids = (!empty($this->object->primary) && !empty($itemids) && count($itemids)) > 0;
+        if ($select_from_ids) {
             $primarysource = $this->object->properties[$this->object->primary]->source;
             $q->in($primarysource, $itemids);
         }
@@ -432,9 +433,16 @@ class RelationalDataStore extends SQLDataStore
         
         // Run the query
         if (!$q->run()) throw new Exception(xarML('Query failed'));
+        
+        // Restore the query back to its state before selecting on itemids
+        if ($select_from_ids) {
+            $q->remove_last_condition();
+        }
+
+        // Get the result
         $result = $q->output();
         if (empty($result)) return;
-        // Distribute the results to the appropriate properties
+        // Distribute the result to the appropriate properties
         $fordisplay = (isset($args['fordisplay'])) ? $args['fordisplay'] : 0;
 
         foreach ($result as $key => $row) {
