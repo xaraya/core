@@ -362,8 +362,10 @@ class RelationalDataStore extends SQLDataStore
         }
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
-        } elseif (isset($this->_itemids)) {
-            $itemids = $this->_itemids;
+// random: removing this as it injects prior results (?) into the current query (see addDataStore method in master.php)
+//		   itemids should be passed via $args['itemids']
+//        } elseif (isset($this->_itemids)) {
+//            $itemids = $this->_itemids;
         } else {
             $itemids = array();
         }
