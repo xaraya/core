@@ -324,10 +324,7 @@ final class sys extends xarObject
      *    sys::import('blocklayout.compiler')              -> lib/blocklayout/compiler.php
      *    sys::import('modules.mymodule.xarincludes.test') -> html/code/modules/mymodule/xarincludes/test.php
      *    sys::import('properties.myproperty.main')        -> html/code/properties/myproperty/main.php
-     *
-     * The beginning of the dot path is scanned for 'modules.'
-     * if found it assumes a module import
-     * is meant, otherwise a core component import is assumed.
+     *    sys::import('blocks.myblock.entry')              -> html/code/blocks/myblock/entry.php
      *
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
