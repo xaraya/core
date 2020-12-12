@@ -110,9 +110,9 @@ class xarTpl extends xarObject
         self::$generateXMLURLs = $args['generateXMLURLs'];
 
         $pageTemplateName = isset($args['pageTemplateName']) ? $args['pageTemplateName'] : 'default';
-        if (!self::setPageTemplateName($args['pageTemplateName'])) {
+        if (!self::setPageTemplateName($pageTemplateName)) {
             // If there is no page template, we can't show anything
-            throw new FileNotFoundException($args['pageTemplateName'] . '.xt',"xarTpl::init: Called a nonexistent #(1) page in theme directory '". self::getThemeDir() ."'");
+            throw new FileNotFoundException($pageTemplateName . '.xt',"xarTpl::init: Called a nonexistent #(1) page in theme directory '". self::getThemeDir() ."'");
         }
 
         // @todo is the core define still needed now?

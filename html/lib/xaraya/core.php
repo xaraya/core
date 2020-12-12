@@ -604,7 +604,7 @@ class xarDebug extends xarObject
     	if (empty($exception)) return null;
     	
 	    if (is_array($exception)) $exception = $exception[0] . '::' . $exception[1];
-        xarLog::message("xarDebug: Setting exception handler to $exception", xarLog::LEVEL_DEBUG);
+//        xarLog::message("xarDebug: Setting exception handler to $exception", xarLog::LEVEL_DEBUG);
         
 	    return set_exception_handler($exception);
     }
