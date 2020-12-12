@@ -193,11 +193,7 @@ function xarInstallLoader()
     // Start BlockLayout Template Engine
     // This is probably the trickiest part, but we want the installer
     // templateable too obviously
-    // @checkme <chris/> themesBaseDirectory is not accounted for in xarTpl::init()
-    // the value comes from Site.BL.ThemesDirectory and falls back to 'themes'
-    // any reason we need to define it here?
     $systemArgs = array('enableTemplatesCaching' => false,
-                        'themesBaseDirectory'    => 'themes',
                         'defaultThemeDir'        => 'installer',
                         'pageTemplateName'       => 'admin',
                         'defaultDocType'         => 'xhtml1-strict',
