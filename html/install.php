@@ -199,6 +199,7 @@ function xarInstallLoader()
     $systemArgs = array('enableTemplatesCaching' => false,
                         'themesBaseDirectory'    => 'themes',
                         'defaultThemeDir'        => 'installer',
+                        'pageTemplateName'       => 'admin',
                         'defaultDocType'         => 'xhtml1-strict',
                         'generateXMLURLs'        => false);
     xarTpl::init($systemArgs);
