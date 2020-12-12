@@ -229,7 +229,7 @@ function xarLog__shutdown_handler()
      }
      xarLog::message("xarLog: Running the shutdown handler", xarLog::LEVEL_INFO);
      if (!method_exists('xarSession', 'getId') || !method_exists('xarUser', 'getVar')) {
-         xarLog::message("xarLog: Leaving session unexpectedly before session and user was defined", xarLog::LEVEL_DEBUG);
+         xarLog::message("xarLog: Leaving session unexpectedly before session and user were defined", xarLog::LEVEL_DEBUG);
      } else{
          xarLog::message("xarLog: Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")", xarLog::LEVEL_INFO);
      }
