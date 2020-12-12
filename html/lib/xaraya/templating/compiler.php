@@ -88,7 +88,7 @@ class XarayaCompiler extends xarBLCompiler
 
     public function compileFile($fileName)
     {
-        xarLog::message(xarML("Xar: compiling the file '#(1)'", $fileName), xarLog::LEVEL_INFO);
+        xarLog::message(xarML("Xar: Compiling the file '#(1)'", $fileName), xarLog::LEVEL_INFO);
         $output = parent::compileFile($fileName);
         return $output;
     }
