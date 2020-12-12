@@ -35,7 +35,7 @@ class BlockLayoutXSLTProcessor extends xarObject
 
         // Set up the stylesheet
         sys::import('xaraya.exceptions.handlers');
-        set_exception_handler('ExceptionHandlers::bone');
+    	xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
         if (isset($xslFile)) $this->setStyleSheet($xslFile);
 
         // Set up the document to transform
@@ -144,7 +144,7 @@ class BlockLayoutXSLTProcessor extends xarObject
 
         // Transform it
         xarLog::message(xarML("XSL: Running the XML transform"), xarLog::LEVEL_INFO);
-        set_exception_handler(array('ExceptionHandlers','defaulthandler'));
+    	xarDebug::setExceptionHandler(array('ExceptionHandlers','defaulthandler'));
         // What should we initialize $result to?
         try {
         	$this->postXML = $this->transformToXML($this->xmlDoc);

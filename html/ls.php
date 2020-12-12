@@ -63,7 +63,7 @@ function xarLSLoader($argc, $argv)
  * Set to the minimalist exception handler
  */
     sys::import('xaraya.exceptions');
-    set_exception_handler(array('ExceptionHandlers','bone'));
+    xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
 
 /**
  * We need a (fake) ip address to run Xaraya

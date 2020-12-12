@@ -157,7 +157,7 @@ function xarInstallLoader()
         As long as we are coming in through install.php we need to pick up the
         bones if something goes wrong, so set the handler to bone for now
     */
-    set_exception_handler(array('ExceptionHandlers','bone'));
+    xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
 
     // Enable debugging always for the installer
     xarCore::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
