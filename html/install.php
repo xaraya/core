@@ -153,11 +153,6 @@ function xarInstallLoader()
 
     // Start Exception Handling System very early
     sys::import('xaraya.exceptions');
-    /*
-        As long as we are coming in through install.php we need to pick up the
-        bones if something goes wrong, so set the handler to bone for now
-    */
-    xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
 
     // Enable debugging always for the installer
     xarCore::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
@@ -179,6 +174,12 @@ function xarInstallLoader()
     // Start Logging Facilities as soon as possible
     $systemArgs = array();
     xarLog::init($systemArgs);
+
+    /*
+        As long as we are coming in through install.php we need to pick up the
+        bones if something goes wrong, so set the handler to bone for now
+    */
+    xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
 
     // Start HTTP Protocol Server/Request/Response utilities
     $systemArgs = array('enableShortURLsSupport' =>false,
