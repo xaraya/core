@@ -195,7 +195,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
 
     protected function compile(&$templateSource)
     {
-        xarLog::message(xarML("BL: checking the XSLT processor"), xarLog::LEVEL_INFO);
+        xarLog::message(xarML("BL: checking for an XSLT processor"), xarLog::LEVEL_INFO);
         if (!isset($this->processor)) {
             $this->processor = $this->getProcessor();
             $xslDoc = new DOMDocument;
