@@ -599,7 +599,7 @@ class xarDebug extends xarObject
     public static $sqlCalls  = 0; // Should be in flags imo
     public static $startTime = 0; // Should not be here at all
     
-    public static function setExceptonHandler($exception='')
+    public static function setExceptionHandler($exception='')
     {
     	if (empty($exception)) return null;
     	
