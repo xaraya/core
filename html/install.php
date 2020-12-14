@@ -32,6 +32,18 @@
  * 6. pick optional components
  * ---call optional components' init funcs, disable non-reusable areas of install module
  * 7. finished!
+ *
+ * The load sequence is:
+ * --- phase1.php
+ * --- phase2.php
+ * --- phase3.php
+ * --- phase4.php
+ * --- phase5.php
+ * --- bootstrap.php
+ * --- create_administrator.php
+ * --- security.php
+ * --- cleanup.php
+ * --- finish.php
 */
 
 /**
