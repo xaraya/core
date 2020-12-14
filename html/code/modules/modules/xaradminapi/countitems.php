@@ -12,91 +12,49 @@ function modules_adminapi_countitems(Array $args=array())
 {
     extract($args);
     
-    if (!isset($state))
-        $state = xarMod::STATE_ACTIVE;
-    
-    if (!isset($include_core))
-        $include_core = true;
+    // Set some defaults
+    if (!isset($state)) $state = xarMod::STATE_ACTIVE;
+    if (!isset($include_core)) $include_core = true;
         
     // Determine the tables we are going to use
-    $dbconn = xarDB::getConn();
     $tables =& xarDB::getTables();
-    $modules_table = $tables['modules'];
+    $q = new Query('SELECT', $tables['modules']);
     
-    $select = array();
-    $where = array();
-    $bindvars = array();
- 
-    if (!empty($regid)) {
-        $where[] = 'mods.regid = ?';
-        $bindvars[] = $regid;
-    }    
+    if (!empty($regid)) $q->eq('regid', $regid);
     
     if (!empty($name)) {
         if (is_array($name)) {
-            $where[] = 'mods.name IN (' . implode(',', array_fill(0, count($name), '?')) . ')';
-            $bindvars = array_merge($bindvars, $name);
+            $q->in('name', $name);
         } else {             
-            $where[] = 'mods.name = ?';
-            $bindvars[] = $name;
+            $q->eq('name', $name);
         }
     }
     
-    if (!empty($systemid)) {
-        $where[] = 'mods.id = ?';
-        $bindvars[] = $systemid;
-    }  
+    if (!empty($systemid)) $q->eq('id', $systemid);
 
     if ($state != xarMod::STATE_ANY) {
         if ($state != xarMod::STATE_INSTALLED) {
-            $where[] = 'mods.state = ?';
-            $bindvars[] = $state;
+            $q->eq('state', $state);
         } else {
-            $where[] = 'mods.state != ? AND mods.state < ? AND mods.state != ?';
-            $bindvars[] = xarMod::STATE_UNINITIALISED;
-            $bindvars[] = xarMod::STATE_MISSING_FROM_INACTIVE;
-            $bindvars[] = xarMod::STATE_MISSING_FROM_UNINITIALISED;
+            $q->ne('state', xarMod::STATE_UNINITIALISED);
+            $q->lt('state', xarMod::STATE_MISSING_FROM_INACTIVE);
+            $q->ne('state', xarMod::STATE_MISSING_FROM_UNINITIALISED);
         }    
     }
     
-    if (!empty($modclass)) {
-        $where[] = 'mods.class = ?';
-        $bindvars[] = $modclass;
-    }
-    
-    if (!empty($category)) {
-        $where[] = 'mods.category = ?';
-        $bindvars[] = $category;
-    }
+    if (!empty($modclass)) $q->eq('class', $modclass);
+    if (!empty($category)) $q->eq('category', $category);
     
     if (!$include_core) {
         $coremods = array('base','roles','privileges','blocks','themes','authsystem','mail','dynamicdata','installer','modules','categories');
-        $where[] = 'mods.name NOT IN (' . implode(',', array_fill(0, count($coremods), '?')) . ')';
-        $bindvars = array_merge($bindvars, $coremods);        
+        $q->notin('name', $coremods);
     }
 
-    if (isset($user_capable)) {
-        $where[] = 'mods.user_capable = ?';
-        $bindvars[] = (int) $user_capable;
-    }
-
-    if (isset($admin_capable)) {
-        $where[] = 'mods.admin_capable = ?';
-        $bindvars[] = (int) $admin_capable;
-    }  
+    if (!empty($user_capable)) $q->eq('user_capable', (int)$user_capable);
+    if (!empty($admin_capable)) $q->eq('admin_capable', (int)$admin_capable);    
     
-    
-    // build query
-    $query = "SELECT COUNT(mods.id)"; 
-    $query .= " FROM $modules_table mods";
-    if (!empty($where))
-        $query .= ' WHERE ' . join(' AND ', $where);    
-    $result = $dbconn->Execute($query,$bindvars);
-    if (!$result) return;    
-    list($count) = $result->fields;
-
-    $result->Close();
-    
-    return $count;
+    $q->run();
+    $result = $q->output();
+    return count($result);
 }
 ?>
