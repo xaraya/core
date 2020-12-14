@@ -38,7 +38,7 @@ function roles_userapi_getallgroups(Array $args=array())
         $q->addfields(array('r.id AS id','r.name AS name','r.users AS users','rm.parent_id AS parentid'));
         $conditions = array();
     
-// Restriction by group
+		// Restriction by group
         if (isset($group)) {
             $groups = explode(',', $group);
             foreach ($groups as $group) {
@@ -46,7 +46,7 @@ function roles_userapi_getallgroups(Array $args=array())
             }
         }
 
-// Restriction by parent group
+		// Restriction by parent group
          if (isset($parent)) {
             $groups = explode(',', $parent);
             foreach ($groups as $group) {
@@ -67,12 +67,14 @@ function roles_userapi_getallgroups(Array $args=array())
         if (count($conditions) != 0) $q->qor($conditions);
         $q->eq('r.itemtype',xarRoles::ROLES_GROUPTYPE);
         $q->ne('r.state',xarRoles::ROLES_STATE_DELETED);
-        $q->setgroup('r.id');
+// Apparently this is not needed
+//        $q->setgroup('r.id');
+
         $q->run();
         return $q->output();
 
-// Restriction by ancestor group. This option supports group IDs or names.
     } else {
+	// Restriction by ancestor group. This option supports group IDs or names.
 
         // Get all the groups
         $q = new Query('SELECT');
