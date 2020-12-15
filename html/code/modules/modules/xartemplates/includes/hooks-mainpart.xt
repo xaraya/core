@@ -77,6 +77,8 @@
                                 <div class="xar-col">
                                     <label for="#$subject_id#_hookstate_0">Do NOT enable #$observers[$curhook]['displayname']# hooks in #$modinfo['displayname']#</label>
                                 </div>
+                                <div class="xar-col-condensed">
+                                </div>
                                 <div class="xar-col">
                                     <xar:if condition="$modinfo['hookstate'] eq 0">
                                         <input type="radio" id="#$subject_id#_hookstate_0" name="#$subject_name#[hookstate]" value="0" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes');setDisplayOff('#$subject_id#_itemtypes_0');"/>
@@ -92,6 +94,8 @@
                                     <label for="#$subject_id#_hookstate_1">Enable ALL
                                     #$observers[$curhook]['displayname']# hooks for ALL items in #$modinfo['displayname']#</label>
                                 </div>
+                                <div class="xar-col-condensed">
+                                </div>
                                 <div class="xar-col">
                                     <xar:if condition="$modinfo['hookstate'] eq 1">
                                         <input type="radio" id="#$subject_id#_hookstate_1" name="#$subject_name#[hookstate]" value="1" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes');setDisplayOff('#$subject_id#_itemtypes_0');"/>
@@ -106,6 +110,8 @@
                                 <div class="xar-col">
                                     <label for="#$subject_id#_hookstate_2">Enable SOME
                                     #$observers[$curhook]['displayname']# hooks for ALL items in #$modinfo['displayname']#</label>
+                                </div>
+                                <div class="xar-col-condensed">
                                 </div>
                                 <div class="xar-col">
                                     <xar:if condition="$modinfo['hookstate'] eq 2">
@@ -148,6 +154,8 @@
                                     <label for="#$subject_id#_hookstate_3">Enable SOME
                                     #$observers[$curhook]['displayname']# hooks for SOME items in #$modinfo['displayname']#</label>
                                 </div>
+                                <div class="xar-col-condensed">
+                                </div>
                                 <div class="xar-col">
                                     <xar:if condition="$modinfo['hookstate'] eq 3">
                                         <input type="radio" id="#$subject_id#_hookstate_3" name="#$subject_name#[hookstate]" value="3" checked="checked" onclick="setDisplayOff('#$subject_id#_itemtypes_0');setDisplayOn('#$subject_id#_itemtypes');"/>
@@ -168,6 +176,8 @@
                                     <div class="xar-col">
                                         <label for="#$type_id#_0_scopes_0_0">Do NOT enable #$observers[$curhook]['displayname']# hooks for items in #$typeinfo['label']#</label>
                                     </div>
+                                	<div class="xar-col-condensed">
+                                	</div>
                                     <div class="xar-col">
                                         <xar:if condition="$typeinfo['scopes'][0] eq 0">
                                             <input type="radio" id="#$type_id#_scopes_0_0" name="#$type_name#[scopes][0]" value="0" checked="checked" onclick="setDisplayOff('#$type_id#_scopes');"/>
@@ -181,6 +191,8 @@
                                     <div class="xar-col">
                                         <label for="#$type_id#_0_scopes_0_1">Enable ALL #$observers[$curhook]['displayname']# hooks for items in #$typeinfo['label']#</label>
                                     </div>
+                                	<div class="xar-col-condensed">
+                                	</div>
                                     <div class="xar-col">
                                         <xar:if condition="$typeinfo['scopes'][0] eq 1">
                                             <input type="radio" id="#$type_id#_scopes_0_1" name="#$type_name#[scopes][0]" value="1" checked="checked" onclick="setDisplayOff('#$type_id#_scopes');"/>
@@ -196,6 +208,8 @@
                                         <div class="xar-col">
                                             <label for="#$type_id#_scopes_0_2">Enable SOME #$observers[$curhook]['displayname']# hooks for items in #$typeinfo['label']#</label>
                                         </div>
+                                		<div class="xar-col-condensed">
+                                		</div>
                                         <div class="xar-col">
                                             <xar:if condition="$typeinfo['scopes'][0] eq 2">
                                                 <input type="radio" id="#$type_id#_scopes_0_2" name="#$type_name#[scopes][0]" value="2" onclick="setDisplayOn('#$type_id#_scopes');" checked="checked"/>
