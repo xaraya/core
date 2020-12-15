@@ -21,22 +21,6 @@ function modules_adminapi_getitems(Array $args=array())
     $tables =& xarDB::getTables();
     $q = new Query('SELECT', $tables['modules']);
     $q->addfields("id as systemid, regid, name, directory, version, class, category, state,user_capable, admin_capable");
-    $select   = array();
-    $where    = array();
-    $orderby  = array();
-    $bindvars = array();
-
-    $select['id']            = 'mods.id';
-    $select['regid']         = 'mods.regid';
-    $select['name']          = 'mods.name';
-    $select['directory']     = 'mods.directory';
-    $select['version']       = 'mods.version';
-    $select['systemid']      = 'mods.id';
-    $select['class']         = 'mods.class';
-    $select['category']      = 'mods.category';
-    $select['state']         = 'mods.state';
-    $select['user_capable']  = 'mods.user_capable';
-    $select['admin_capable'] = 'mods.admin_capable';    
 
     if (!empty($regid)) $q->eq('regid', $regid);
     
@@ -84,7 +68,6 @@ function modules_adminapi_getitems(Array $args=array())
         if (empty($startnum)) $startnum = 1;
         $q->setstartat($startnum - 1);
     }
-//    $q->qecho();
     $q->run();
 
     $items = array();
