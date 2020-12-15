@@ -77,30 +77,27 @@ class PrivilegesTree extends Tree
         //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
         $dbconn = xarDB::getConn();
         $xartable =& xarDB::getTables();
-        $query = "SELECT p.id, p.name, r.name,
-                         m.name, p.component, p.instance,
-                         p.level,  p.description, pm.parent_id
-                  FROM " . $xartable['privileges'] . " p LEFT JOIN ". $xartable['realms'] . " r ON p.realm_id = r.id
-                  LEFT JOIN ". $xartable['modules'] . " m ON p.module_id = m.id
-                  LEFT JOIN ". $xartable['privmembers'] . " pm ON p.id = pm.privilege_id
-                  WHERE itemtype = " . xarPrivileges::PRIVILEGES_PRIVILEGETYPE .
-                  " ORDER BY p.name";
-        $stmt = $dbconn->prepareStatement($query);
-        // The fetchmode *needed* to be here, dunno why. Exception otherwise
-        $result = $stmt->executeQuery($query,ResultSet::FETCHMODE_NUM);
-        while($result->next()) {
-            list($id, $name, $realm, $module, $component, $instance, $level,
-                    $description, $parentid) = $result->fields;
-            $nodedata = array('id' => $id,
-                               'name' => $name,
-                               'realm' => is_null($realm) ? 'All' : $realm,
-                               'module' => $module,
-                               'component' => $component,
-                               'instance' => $instance,
-                               'level' => $level,
-                               'description' => $description,
-                               'parent' => $parentid,);
-            $this->treedata[] = $nodedata;
+        $q = new Query('SELECT');
+        // Add fields
+        $q->addfields("p.id AS id, p.name AS name, p.component AS component, p.instance AS instance, p.level AS level, p. description AS description");
+        $q->addfields("r.name AS realm, m.name AS module, pm.parent_id AS parent");
+        // Add tables
+        $q->addtable($xartable['privileges'], 'p');
+        $q->addtable($xartable['modules'], 'm');
+        $q->leftjoin('p.module_id', 'm.id');
+        $q->addtable($xartable['realms'], 'r');
+        $q->leftjoin('p.realm_id', 'r.id');
+        $q->addtable($xartable['privmembers'], 'pm');
+        $q->leftjoin('p.id', 'pm.privilege_id');
+        // Add conditions
+        $q->eq('p.itemtype', xarPrivileges::PRIVILEGES_PRIVILEGETYPE);
+        // Add ordering
+        $q->setorder('p.name');
+        $q->run();
+        
+        foreach ($q->output as $row) {
+        	if ($row['realm'] == null) $row['realm'] = 'All';
+            $this->treedata[] = $row;
         }
         parent::createnodes($node);
     }
