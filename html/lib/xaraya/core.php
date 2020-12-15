@@ -192,7 +192,7 @@ class xarCore extends xarCoreCache
     const SYSTEM_HOOKS         = xarConst::SYSTEM_HOOKS;
     const SYSTEM_ALL           = xarConst::SYSTEM_ALL;
     
-    public static $build       = 'unknown';
+    public static $build       = self::VERSION_REV;
     public static $runLevel    = self::SYSTEM_NONE;
 
     /**
