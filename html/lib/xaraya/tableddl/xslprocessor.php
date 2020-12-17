@@ -14,7 +14,7 @@ class XarayaXSLProcessor extends xarObject
 
         // Set up the stylesheet
 		sys::import('xaraya.exceptions.handlers');
-		set_exception_handler('ExceptionHandlers::bone');
+    	xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
         $this->setStyleSheet($xslFile);
 
         // Set up the document to transform
@@ -52,7 +52,8 @@ class XarayaXSLProcessor extends xarObject
         $this->setSourceFile($xml);
 
 		sys::import('xaraya.exceptions.handlers');
-		set_exception_handler('ExceptionHandlers::defaulthandler');
+    	xarDebug::setExceptionHandler(array('ExceptionHandlers','defaulthandler'));
+
         // What should we initialize $result to?
         // Transform it
         $this->postXML = $this->xslProc->transformToXML($this->xmlDoc);

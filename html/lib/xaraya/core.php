@@ -192,7 +192,7 @@ class xarCore extends xarCoreCache
     const SYSTEM_HOOKS         = xarConst::SYSTEM_HOOKS;
     const SYSTEM_ALL           = xarConst::SYSTEM_ALL;
     
-    public static $build       = 'unknown';
+    public static $build       = self::VERSION_REV;
     public static $runLevel    = self::SYSTEM_NONE;
 
     /**
@@ -598,4 +598,14 @@ class xarDebug extends xarObject
     public static $flags     = 0; // default off?
     public static $sqlCalls  = 0; // Should be in flags imo
     public static $startTime = 0; // Should not be here at all
+    
+    public static function setExceptionHandler($exception='')
+    {
+    	if (empty($exception)) return null;
+    	
+	    if (is_array($exception)) $exception = $exception[0] . '::' . $exception[1];
+        xarLog::message("xarDebug: Setting exception handler to $exception", xarLog::LEVEL_DEBUG);
+        
+	    return set_exception_handler($exception);
+    }
 }

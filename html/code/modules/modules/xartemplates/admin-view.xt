@@ -8,34 +8,27 @@
         </div>
         <div class="xar-mod-page-body">
 
-            <form method="get" action="#xarServer::getBaseURL()#index.php">
-                <input type="hidden" name="module" id="module" value="modules"/>
-                <input type="hidden" name="type" id="type" value="admin"/>
-                <input type="hidden" name="func" id="func" value="list"/>
+            <form method="post" action="#xarServer::getCurrentURL()#">
                 <table class="xar-table xar-items-controls">
                     <thead>
                         <tr>
                             <th><label for="state">State</label></th>
                             <th><label for="modtype">Type</label></th>
-                            <noscript>
-                            <th><label for="apply">Action</label></th>
-                            </noscript>
+                            <!-- <th><label for="apply">Action</label></th> -->
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>
-                                <xar:data-input type="dropdown" name="state" id="state" value="$state" options="$states" onchange="this.form.submit();return false;"/>
+                                <xar:data-input type="dropdown" name="state" id="state" value="$state" options="$states" onchange="this.form.submit();"/>
                             </td>
                             <td>
-                                <xar:data-input type="dropdown" name="modtype" id="modtype" value="$modtype" options="$modtypes" onchange="this.form.submit();return false;"/>
+                                <xar:data-input type="dropdown" name="modtype" id="modtype" value="$modtype" options="$modtypes" onchange="this.form.submit();"/>
                             </td>
-                            <noscript>
                             <td>
                                 <xar:var name="applyLabel">Apply Filter</xar:var>
-                                <xar:button type="submit" name="apply" id="apply" label="$applyLabel"/>
+                                <!-- <xar:button type="submit" name="apply" id="apply" label="$applyLabel"/> -->
                             </td>
-                            </noscript>
                         </tr>
                     </tbody>
                 </table>

@@ -32,6 +32,18 @@
  * 6. pick optional components
  * ---call optional components' init funcs, disable non-reusable areas of install module
  * 7. finished!
+ *
+ * The load sequence is:
+ * --- phase1.php
+ * --- phase2.php
+ * --- phase3.php
+ * --- phase4.php
+ * --- phase5.php
+ * --- bootstrap.php
+ * --- create_administrator.php
+ * --- security.php
+ * --- cleanup.php
+ * --- finish.php
 */
 
 /**
@@ -153,11 +165,6 @@ function xarInstallLoader()
 
     // Start Exception Handling System very early
     sys::import('xaraya.exceptions');
-    /*
-        As long as we are coming in through install.php we need to pick up the
-        bones if something goes wrong, so set the handler to bone for now
-    */
-    set_exception_handler(array('ExceptionHandlers','bone'));
 
     // Enable debugging always for the installer
     xarCore::activateDebugger(xarConst::DBG_ACTIVE | xarConst::DBG_EXCEPTIONS | xarConst::DBG_SHOW_PARAMS_IN_BT);
@@ -180,6 +187,12 @@ function xarInstallLoader()
     $systemArgs = array();
     xarLog::init($systemArgs);
 
+    /*
+        As long as we are coming in through install.php we need to pick up the
+        bones if something goes wrong, so set the handler to bone for now
+    */
+    xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
+
     // Start HTTP Protocol Server/Request/Response utilities
     $systemArgs = array('enableShortURLsSupport' =>false,
                         'defaultModuleName'      => 'installer',
@@ -193,12 +206,9 @@ function xarInstallLoader()
     // Start BlockLayout Template Engine
     // This is probably the trickiest part, but we want the installer
     // templateable too obviously
-    // @checkme <chris/> themesBaseDirectory is not accounted for in xarTpl::init()
-    // the value comes from Site.BL.ThemesDirectory and falls back to 'themes'
-    // any reason we need to define it here?
     $systemArgs = array('enableTemplatesCaching' => false,
-                        'themesBaseDirectory'    => 'themes',
                         'defaultThemeDir'        => 'installer',
+                        'pageTemplateName'       => 'admin',
                         'defaultDocType'         => 'xhtml1-strict',
                         'generateXMLURLs'        => false);
     xarTpl::init($systemArgs);

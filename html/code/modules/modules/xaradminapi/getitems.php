@@ -12,94 +12,46 @@ function modules_adminapi_getitems(Array $args=array())
 {
     extract($args);
     
-    if (!isset($state))
-        $state = xarMod::STATE_ACTIVE;
-    
-    if (!isset($include_core))
-        $include_core = true;
-    
-    if (!isset($sort))
-        $sort = 'name ASC';
+    // Set some defaults
+    if (!isset($state)) $state = xarMod::STATE_ACTIVE;
+    if (!isset($include_core)) $include_core = true;
+    if (!isset($sort)) $sort = 'name ASC';
         
-    // Determine the tables we are going to use
-    $dbconn = xarDB::getConn();
+    // Determine the table we are going to use
     $tables =& xarDB::getTables();
-    $modules_table = $tables['modules'];
-    
-    $select   = array();
-    $where    = array();
-    $orderby  = array();
-    $bindvars = array();
+    $q = new Query('SELECT', $tables['modules']);
+    $q->addfields("id as systemid, regid, name, directory, version, class, category, state,user_capable, admin_capable");
 
-    $select['id']            = 'mods.id';
-    $select['regid']         = 'mods.regid';
-    $select['name']          = 'mods.name';
-    $select['directory']     = 'mods.directory';
-    $select['version']       = 'mods.version';
-    $select['systemid']      = 'mods.id';
-    $select['class']         = 'mods.class';
-    $select['category']      = 'mods.category';
-    $select['state']         = 'mods.state';
-    $select['user_capable']  = 'mods.user_capable';
-    $select['admin_capable'] = 'mods.admin_capable';    
-
-    if (!empty($regid)) {
-        $where[] = 'mods.regid = ?';
-        $bindvars[] = $regid;
-    }    
+    if (!empty($regid)) $q->eq('regid', $regid);
     
     if (!empty($name)) {
         if (is_array($name)) {
-            $where[] = 'mods.name IN (' . implode(',', array_fill(0, count($name), '?')) . ')';
-            $bindvars = array_merge($bindvars, $name);
+            $q->in('name', $name);
         } else {             
-            $where[] = 'mods.name = ?';
-            $bindvars[] = $name;
+            $q->eq('name', $name);
         }
     }
     
-    if (!empty($systemid)) {
-        $where[] = 'mods.id = ?';
-        $bindvars[] = $systemid;
-    }  
-
     if ($state != xarMod::STATE_ANY) {
         if ($state != xarMod::STATE_INSTALLED) {
-            $where[] = 'mods.state = ?';
-            $bindvars[] = $state;
+            $q->eq('state', $state);
         } else {
-            $where[] = 'mods.state != ? AND mods.state < ? AND mods.state != ?';
-            $bindvars[] = xarMod::STATE_UNINITIALISED;
-            $bindvars[] = xarMod::STATE_MISSING_FROM_INACTIVE;
-            $bindvars[] = xarMod::STATE_MISSING_FROM_UNINITIALISED;
+            $q->ne('state', xarMod::STATE_UNINITIALISED);
+            $q->lt('state', xarMod::STATE_MISSING_FROM_INACTIVE);
+            $q->ne('state', xarMod::STATE_MISSING_FROM_UNINITIALISED);
         }    
     }
     
-    if (!empty($modclass)) {
-        $where[] = 'mods.class = ?';
-        $bindvars[] = $modclass;
-    }
-    
-    if (!empty($category)) {
-        $where[] = 'mods.category = ?';
-        $bindvars[] = $category;
-    }
+    if (!empty($modclass)) $q->eq('class', $modclass);
+    if (!empty($category)) $q->eq('category', $category);
     
     if (!$include_core) {
         $coremods = array('base','roles','privileges','blocks','themes','authsystem','mail','dynamicdata','installer','modules','categories');
-        $where[] = 'mods.name NOT IN (' . implode(',', array_fill(0, count($coremods), '?')) . ')';
-        $bindvars = array_merge($bindvars, $coremods);        
+        $q->notin('name', $coremods);
     }
 
-    if (isset($user_capable)) {
-        $where[] = 'mods.user_capable = ?';
-        $bindvars[] = (int) $user_capable;
-    }
-
-    if (isset($admin_capable)) {
-        $where[] = 'mods.admin_capable = ?';
-        $bindvars[] = (int) $admin_capable;
-    }  
+    if (!empty($user_capable)) $q->eq('user_capable', (int)$user_capable);
+    if (!empty($admin_capable)) $q->eq('admin_capable', (int)$admin_capable);
 
     if (!is_array($sort))
         $sort = strpos($sort, ',') !== false ? array_map('trim', explode(',', $sort)) : array(trim($sort));
@@ -108,33 +60,21 @@ function modules_adminapi_getitems(Array $args=array())
         if (!isset($select[$sortfield]) || isset($orderby[$sortfield])) continue;
         $orderby[$sortfield] = $select[$sortfield] . ' ' . strtoupper($sortorder);
     }
-    
-    $query = "SELECT " . join(',', $select);
-    $query .= " FROM $modules_table mods";
-    if (!empty($where))
-        $query .= " WHERE " . join(' AND ', $where);
-    if (!empty($orderby))
-        $query .= " ORDER BY " . join(',', $orderby);
+    // We just order by name for now
+    $q->setorder('name', 'ASC');
 
-    $stmt = $dbconn->prepareStatement($query);
     if (!empty($numitems)) {
-        $stmt->setLimit($numitems);
-        if (empty($startnum))
-            $startnum = 1;
-        $stmt->setOffset($startnum - 1);
+        $q->setrowstodo($numitems);
+        if (empty($startnum)) $startnum = 1;
+        $q->setstartat($startnum - 1);
     }
-    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+    $q->run();
 
     $items = array();
-    while ($result->next()) {
-        $item = array();
-        foreach (array_keys($select) as $field) {
-            if ($field == 'systemid') $item[$field] = $result->fields['id'];
-            else $item[$field] = $result->fields[$field];
-        }
+    foreach ($q->output() as $item) {
 
         if (xarVar::isCached('Mod.Infos', $item['regid'])) {
-            // merge cached info with db info 
+            // Merge cached info with db info 
             $item += xarVar::getCached('Mod.Infos', $item['regid']);
         } else {
             $item['displayname'] = xarMod::getDisplayName($item['name']);
@@ -166,7 +106,6 @@ function modules_adminapi_getitems(Array $args=array())
         }
         $items[] = $item;    
     }
-    $result->close();
 
     return $items;
 }

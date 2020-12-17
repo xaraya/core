@@ -227,23 +227,23 @@ function xarLog__shutdown_handler()
      if (class_exists('xarAutoload')) {
          xarAutoload::$shutdown = true;
      }
-     xarLog::message("xarLog shutdown handler", xarLog::LEVEL_INFO);
+     xarLog::message("xarLog: Running the shutdown handler", xarLog::LEVEL_INFO);
      if (!method_exists('xarSession', 'getId') || !method_exists('xarUser', 'getVar')) {
-         xarLog::message("Leaving session unexpectedly before session and user was defined", xarLog::LEVEL_WARNING);
+         xarLog::message("xarLog: Leaving session unexpectedly before session and user were defined", xarLog::LEVEL_DEBUG);
      } else{
-         xarLog::message("Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")", xarLog::LEVEL_INFO);
+         xarLog::message("xarLog: Leaving session: " . xarSession::getId() . " - User: " . xarUser::getVar('uname') . " (ID: " . xarUser::getVar('id') . ")", xarLog::LEVEL_INFO);
      }
 
      // If the debugger was active, we can dispose it now.
      if(xarDebug::$flags & xarConst::DBG_SQL) {
-         xarLog::message("Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
+         xarLog::message("xarLog: Total SQL queries: $GLOBALS[xarDebug_sqlCalls].");
      }
 
      if (xarDebug::$flags & xarConst::DBG_ACTIVE) {
          $lmtime = explode(' ', microtime());
          $endTime = $lmtime[1] + $lmtime[0];
          $totalTime = ($endTime - xarDebug::$startTime);
-         xarLog::message("Response was served in $totalTime seconds.");
+         xarLog::message("xarLog: Response was served in $totalTime seconds.", xarLog::LEVEL_DEBUG);
      }
 
 //During register_shutdown, it's already too late.

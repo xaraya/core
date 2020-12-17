@@ -14,5 +14,5 @@
         <xar:data-input type="dropdown" options="$options" name="$name" value="$value" firstline="$firstline"/>
     -->
     
-    <xar:data-input type="dropdown" name="$name" options="$options" value="$value"/>
+    <xar:data-input type="dropdown" name="$name" id="$id" options="$options" value="$value"/>
 </xar:template>

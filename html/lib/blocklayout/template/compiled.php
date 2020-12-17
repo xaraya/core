@@ -48,7 +48,7 @@ class CompiledTemplate extends xarObject
 
         if($this->type=='page') {
 			sys::import('xaraya.exceptions.handlers');
-			set_exception_handler('ExceptionHandlers::bone');
+    		xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
         }
 
         // Executing means generating output, start a buffer for it

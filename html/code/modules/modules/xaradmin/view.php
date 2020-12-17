@@ -26,19 +26,20 @@ function modules_admin_view()
 
     $coremods = array('base','roles','privileges','blocks','themes','authsystem','mail','dynamicdata','installer','modules','categories');
 
-    // display phase     
+    // Display phase     
     $data = array();
-        
-    if (!xarVar::fetch('startnum', 'int:1:',
-        $data['startnum'], 1, xarVar::NOT_REQUIRED)) return;
-
-    if (!xarVar::fetch('state', 'int',
-        $data['state'], null, xarVar::DONT_SET)) return;
-    if (!xarVar::fetch('modtype', 'int:0:2', // 0=all, 1=core only, 2=non-core only
-        $data['modtype'], null, xarVar::DONT_SET)) return;
-    if (!xarVar::fetch('sort', 'pre:trim:upper:enum:ASC:DESC',
-        $data['sort'], 'ASC', xarVar::NOT_REQUIRED)) return;
+       
+    // Get the place at which we want to start disolaying
+    if (!xarVar::fetch('startnum', 'int:1:', $data['startnum'], 1, xarVar::NOT_REQUIRED)) return;
+    // Check for a state filter
+    if (!xarVar::fetch('state', 'int', $data['state'], null, xarVar::DONT_SET)) return;
+	// Check for a module type filter
+	// 0=all, 1=core only, 2=non-core only
+    if (!xarVar::fetch('modtype', 'int:0:2', $data['modtype'], null, xarVar::DONT_SET)) return;
+    // Check for a sort: we can sort by name ASC or DESC
+    if (!xarVar::fetch('sort', 'pre:trim:upper:enum:ASC:DESC', $data['sort'], 'ASC', xarVar::NOT_REQUIRED)) return;
     
+    // Save the filters of this user
     if (!isset($data['state']))
         $data['state'] = xarModUserVars::get('modules', 'selfilter');
     if (!isset($data['state']))
@@ -69,12 +70,11 @@ function modules_admin_view()
         'numitems' => $data['items_per_page'],
         'sort' => 'name '.$data['sort'],
     );
-    
+
     $items = xarMod::apiFunc('modules', 'admin', 'getitems', $itemargs);
 
     $authid = xarSec::genAuthKey();
 
-    
     foreach ($items as $key => $item) {
         $item['iscore'] = in_array($item['name'], $coremods);
         $item['info_url'] = xarController::URL('modules', 'admin', 'modinfo', 
@@ -168,7 +168,7 @@ function modules_admin_view()
         2 => array('id' => 2, 'name' => xarML('Non-core')),
     );
 
-    // remember filter selections for current user 
+    // Remember filter selections for current user 
     xarModUserVars::set('modules', 'selfilter', $data['state']);
     xarModUserVars::set('modules', 'hidecore', $data['modtype']);
 
@@ -187,7 +187,7 @@ function modules_admin_view()
         }    
     }
     $data['searched'] = $searched;
-    
+
     return $data;    
 }
 ?>

@@ -404,7 +404,7 @@ class Query
                 if ($fields != '') {
                     $newfields = explode(',',$fields);
                     foreach ($newfields as $field) {
-                        $field = $this->_deconstructfield($field);
+                        $field = $this->_deconstructfield(trim($field));
                         $this->addfield($field);
                     }
                 }
@@ -412,11 +412,11 @@ class Query
         } else {
             if ($this->type == 'SELECT') {
                 foreach ($fields as $field) {
-                    $field = $this->_deconstructfield($field);
+                    $field = $this->_deconstructfield(trim($field));
                     $this->addfield($field);
                 }
             } else {
-                foreach ($fields as $field) $this->addfield($field);
+                foreach ($fields as $field) $this->addfield(trim($field));
             }
         }
     }

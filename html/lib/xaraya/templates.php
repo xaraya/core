@@ -109,9 +109,10 @@ class xarTpl extends xarObject
         // a client thing (js internal code generation for example)
         self::$generateXMLURLs = $args['generateXMLURLs'];
 
-        if (!self::setPageTemplateName('default')) {
+        $pageTemplateName = isset($args['pageTemplateName']) ? $args['pageTemplateName'] : 'default';
+        if (!self::setPageTemplateName($pageTemplateName)) {
             // If there is no page template, we can't show anything
-            throw new FileNotFoundException('default.xt',"xarTpl::init: Nonexistent #(1) page in theme directory '". self::getThemeDir() ."'");
+            throw new FileNotFoundException($pageTemplateName . '.xt',"xarTpl::init: Called a nonexistent #(1) page in theme directory '". self::getThemeDir() ."'");
         }
 
         // @todo is the core define still needed now?
@@ -357,7 +358,7 @@ class xarTpl extends xarObject
         // keep track of page title when we're caching
         xarCache::setPageTitle($title, $module);
 
-        xarLog::message("xarTpl::setPageTitle: Setting pagetitle to $title", xarLog::LEVEL_INFO);
+        xarLog::message("xarTpl::setPageTitle: Setting pageTitle to $title", xarLog::LEVEL_INFO);
         
         // @checkme: modules is a dependency of templates, redundant check?
         if (!method_exists('xarModVars','Get')){

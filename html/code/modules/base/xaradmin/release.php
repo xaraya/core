@@ -90,7 +90,7 @@ function base_admin_release()
       $data['chanlink']   =   $info['channel']['link'];
       $data['chandesc']   =   $info['channel']['description'];
     } else {
-        throw new DataNotFoundException(null,'There is a problem with a feed.');
+        return xarResponse::NotFound(xarML('No release feed is currently available'));
     }
     $data['releasenumber']=$releasenumber;
     $data['feedcontent'] = $feedcontent;

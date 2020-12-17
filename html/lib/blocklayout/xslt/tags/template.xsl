@@ -120,9 +120,7 @@
                   <xsl:when test="$scope='property'">
                     <xsl:choose>
                       <xsl:when test="@property != ''">
-                        <xsl:text>"</xsl:text>
                           <xsl:value-of select="@property"/>
-                        <xsl:text>"</xsl:text>
                       </xsl:when>
                       <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'properties/'),'/')) &gt; 0">
                         <xsl:text>"</xsl:text>
@@ -134,14 +132,10 @@
                   <xsl:otherwise>
                     <xsl:choose>
                       <xsl:when test="@module != ''">
-                        <xsl:text>"</xsl:text>
                           <xsl:value-of select="@module"/>
-                        <xsl:text>"</xsl:text>
                       </xsl:when>
                       <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'modules/'),'/')) &gt; 0">
-                        <xsl:text>"</xsl:text>
                           <xsl:value-of select="substring-before(substring-after($bl_dirname,'modules/'),'/')"/>
-                        <xsl:text>"</xsl:text>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:text>xarMod::getName()</xsl:text>
@@ -183,11 +177,11 @@
                 <xsl:call-template name="resolvePHP">
                    <xsl:with-param name="expr" select="$scope"/>
                 </xsl:call-template>
-                <xsl:text>",</xsl:text>        
+                <xsl:text>","</xsl:text>        
                 <xsl:call-template name="resolvePHP">
                    <xsl:with-param name="expr" select="$package"/>
                 </xsl:call-template>           
-                <xsl:text>,"</xsl:text> 
+                <xsl:text>","</xsl:text> 
                  <xsl:call-template name="resolvePHP">
                    <xsl:with-param name="expr" select="@file"/>
                 </xsl:call-template>
