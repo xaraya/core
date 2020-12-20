@@ -19,6 +19,7 @@ function modules_adminapi_getitems(Array $args=array())
         
     // Determine the table we are going to use
     $tables =& xarDB::getTables();
+    sys::import('xaraya.structures.query');
     $q = new Query('SELECT', $tables['modules']);
     $q->addfields("id as systemid, regid, name, directory, version, class, category, state,user_capable, admin_capable");
 
