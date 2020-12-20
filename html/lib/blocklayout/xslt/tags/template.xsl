@@ -106,9 +106,7 @@
                   <xsl:when test="$scope='block'">
                     <xsl:choose>
                       <xsl:when test="@block != ''">
-                        <xsl:text>"</xsl:text>
                           <xsl:value-of select="@block"/>
-                        <xsl:text>"</xsl:text>
                       </xsl:when>
                       <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'blocks/'),'/')) &gt; 0">
                         <xsl:text>"</xsl:text>
@@ -123,9 +121,7 @@
                           <xsl:value-of select="@property"/>
                       </xsl:when>
                       <xsl:when test="string-length(substring-before(substring-after($bl_dirname,'properties/'),'/')) &gt; 0">
-                        <xsl:text>"</xsl:text>
                           <xsl:value-of select="substring-before(substring-after($bl_dirname,'properties/'),'/')"/>
-                        <xsl:text>"</xsl:text>
                       </xsl:when>
                     </xsl:choose>
                   </xsl:when>
