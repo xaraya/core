@@ -37,6 +37,15 @@
 			<title>View category statistics per module</title>
             <label>View Statistics</label>
         </menuitem>
+        <menuitem>
+			<mask>AdminCategories</mask>
+            <includes>
+                <includeitem>build_tree</includeitem>
+            </includes>
+            <target>build_tree</target>
+			<title>Manage the category tree</title>
+            <label>Celko Trees</label>
+        </menuitem>
         <!--
         <menuitem>
 			<mask>AdminCategories</mask>
