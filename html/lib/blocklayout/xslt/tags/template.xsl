@@ -94,9 +94,7 @@
                   <xsl:when test="$scope='theme'">
                     <xsl:choose>
                       <xsl:when test="@theme != ''">
-                        <xsl:text>"</xsl:text>
                           <xsl:value-of select="@theme"/>
-                        <xsl:text>"</xsl:text>
                       </xsl:when>
                       <xsl:otherwise>
                         <xsl:text>xarTpl::getThemeName()</xsl:text>
