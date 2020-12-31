@@ -33,11 +33,12 @@ class BlockLayoutXSLTProcessor extends xarObject
         $this->xslProc = new XSLTProcessor();
         $this->xslProc->registerPHPFunctions();
 
-        // Set up the stylesheet
+        // Set the exceptions handler
         sys::import('xaraya.exceptions.handlers');
     	xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
-        if (isset($xslFile)) $this->setStyleSheet($xslFile);
 
+        // Set up the stylesheet
+        if (isset($xslFile)) $this->setStyleSheet($xslFile);
         // Set up the document to transform
         $this->xmlDoc = new DOMDocument();
         // Setting this to false makes it 2 times faster, what do we lose?
@@ -160,6 +161,19 @@ class BlockLayoutXSLTProcessor extends xarObject
     protected function postProcess()
     {
         /*
+        	This first part processes the PHP expressions if there is no support for XSLT::registerPHPFunctions()
+        	This seems to be the case with MAMP as far as I can tell, at least in later PHP versions (7.x). Or maybe it's just badly documented.
+        	This is not elegant, but it is just moving the resolution of PHP expressions from the XLS transform to here.
+        	The code that does the resolving is the same. At worst, I think, we lose some speed.
+        	
+        	- We have replaced the #...# delimiters with %#%...%#%. This is not necessary, but might avoid some mixups and in any case is clearer.
+        	- TDOD: move this back to xar2php.xsl when we can (when PHP adopts XSLT 2.x?)
+        */
+        $exprPattern = '/%#%(.*?)%#%/';
+        $callBack    = array('XsltCallbacks','phpexpressions');
+        $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML);
+        
+        /*
             Expressions in attributes are not handled by the transform because
             XSLT can not generate anything other than valid XML which means
             processing instruction inside attribute values are impossible.
@@ -210,6 +224,14 @@ class BlockLayoutXSLTProcessor extends xarObject
 **/
 class XsltCallbacks extends xarObject
 {
+    static function phpexpressions($matches)
+    {
+        // Ignore empty strings
+        $raw = ExpressionTransformer::transformPHPExpression($matches[1]);
+        $res = self::reverseXMLEntities($raw);
+        return $res;
+    }
+
     static function mlsplaceholders($matches)
     {
         $res = $matches[1].'#'.$matches[2];
@@ -226,7 +248,7 @@ class XsltCallbacks extends xarObject
         $raw = self::reverseXMLEntities($raw);
         // Return the first match too, to ensure not changing the input
         $res = '<?php echo ' . $raw .';?>';
-        xarLog::message('XsltCallbacks::attributes: '. $matches[0] . ' => ' . $res, xarLog::LEVEL_INFO);
+//        xarLog::message('XsltCallbacks::attributes: '. $matches[0] . ' => ' . $res, xarLog::LEVEL_INFO);
         return $res;
     }
 
