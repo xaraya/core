@@ -755,6 +755,7 @@ class CelkoPositionProperty extends DataProperty
 
         $items = array();
 
+        // FIXME: in PDO the last row appears twice ein the resulting array
         $index = -1;
         $result->first();
         while (!$result->EOF) {
