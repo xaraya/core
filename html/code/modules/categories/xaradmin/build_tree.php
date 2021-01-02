@@ -355,14 +355,14 @@ function categories_admin_build_tree()
         $previous_left_id = 0;
         $previous_right_id = 0;
         foreach($data['all_rows'] as $key => $row) {
-        	if ($row[$data['left_id']] == $previous_left_id + 1) {
+        	if ((int)$row[$data['left_id']] == $previous_left_id + 1) {
         		$indent++;
-        	} elseif ($row[$data['left_id']] != $previous_right_id + 1) {
-        		$indent = $indent - ($row[$data['left_id']] - $previous_right_id - 1);
+        	} elseif ((int)$row[$data['left_id']] != $previous_right_id + 1) {
+        		$indent = $indent - ((int)$row[$data['left_id']] - $previous_right_id - 1);
         	}
         	$data['all_rows'][$key]['level'] = $indent;
-        	$previous_left_id = $row[$data['left_id']];
-        	$previous_right_id = $row[$data['right_id']];
+        	$previous_left_id = (int)$row[$data['left_id']];
+        	$previous_right_id = (int)$row[$data['right_id']];
         }
 
     } elseif (isset($data['build'])) {       
