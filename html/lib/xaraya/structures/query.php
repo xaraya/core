@@ -1675,8 +1675,9 @@ class Query
     }
     public function setdistinct($x = 1)
     {
-        if ($x == 1) $this->distinctselect = '';
-        else {
+        if ($x == 1) {
+        	$this->distinctselect = '';
+        } else {
             $this->distinctselect = $x;
             $this->distinctarray = $this->_deconstructfield($x);
         }
