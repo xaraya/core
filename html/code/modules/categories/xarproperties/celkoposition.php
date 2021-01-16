@@ -708,8 +708,7 @@ class CelkoPositionProperty extends DataProperty
             The second WHERE conditions below selects all categories in P1 except the current category and its descendents.
         */
         $bindvars = array();
-        $SQLquery = "SELECT
-                            COUNT(P2.id) AS indent,
+        $SQLquery = "SELECT COUNT(P2.id) AS indent,
                             P1.id,"
                             . $select_fields .
                             "P1." . $this->initialization_celkoparent_id . ",
@@ -739,6 +738,7 @@ class CelkoPositionProperty extends DataProperty
             $SQLquery .= " AND " . $this->initialization_celkofilter;
         
         // Have to specify all selected attributes in GROUP BY
+        // CHECKME: this might be DB specific
         $SQLquery .= " GROUP BY P1.id, " . $select_fields . " P1." . $this->initialization_celkoparent_id . ", P1." . $this->initialization_celkoleft_id . ", P1." . $this->initialization_celkoright_id . " ";
         $SQLquery .= " ORDER BY P1." . $this->initialization_celkoleft_id;
 
@@ -755,6 +755,7 @@ class CelkoPositionProperty extends DataProperty
 
         $items = array();
 
+        // FIXME: in PDO the last row appears twice ein the resulting array
         $index = -1;
         $result->first();
         while (!$result->EOF) {

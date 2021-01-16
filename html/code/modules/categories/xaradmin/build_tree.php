@@ -111,7 +111,7 @@ function categories_admin_build_tree()
         return $data;
     }
     $all_rows = $q->output();
-    
+    $data['all_rows'] = array();
 # --------------------------------------------------------
 #
 # Check the data, no changes here
@@ -349,6 +349,21 @@ function categories_admin_build_tree()
         $data['message_success'][] = xarML('Number of rows: #(1)', count($all_rows));
         $data['message_success'][] = xarML('Number of indices: #(1)', $id_count);
         if (empty($data['message_error'])) $data['message_success'][] = xarML('The Celko indices are correct');
+        
+        $data['all_rows'] = $all_rows;
+        $indent = 0;
+        $previous_left_id = 0;
+        $previous_right_id = 0;
+        foreach($data['all_rows'] as $key => $row) {
+        	if ((int)$row[$data['left_id']] == $previous_left_id + 1) {
+        		$indent++;
+        	} elseif ((int)$row[$data['left_id']] != $previous_right_id + 1) {
+        		$indent = $indent - ((int)$row[$data['left_id']] - $previous_right_id - 1);
+        	}
+        	$data['all_rows'][$key]['level'] = $indent;
+        	$previous_left_id = (int)$row[$data['left_id']];
+        	$previous_right_id = (int)$row[$data['right_id']];
+        }
 
     } elseif (isset($data['build'])) {       
         

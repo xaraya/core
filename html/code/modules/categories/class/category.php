@@ -117,6 +117,7 @@ class Category extends DataObject
             }
 
             // Now that we have all the information, run the create
+			// The heavy lifting (i.e. changing all the right and left indices) is done by the position property
             $id = parent::createItem($args);
             return $id;
         }

@@ -3,17 +3,25 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>
-            Build Tree
+            Manage Trees
         </h2>
-        <xar:template file="alert_info"/>
-        <xar:template file="alert_error"/>
-        <xar:template file="alert_success"/>
-        <xar:template file="alert_warning"/>
+		<div class="xar-row">
+			This page lets you examine a Celko tree for consistency and rebuild it if necessary.
+		</div>
+		<div class="xar-row">
+			For information on how this works see the comments in html/code/modules/categories/xaradmin/build_tree.php.
+		</div>
+		<div class="xar-row">
+			Celko trees are used in the categories module, but can be used in other modules as well. If they are stored in a single database table, then this functionality can be used to manage them.
+		</div>
+		<div class="xar-row" style="margin-bottom: 10px">
+			For general information on Celko (nested set) trees see <a href="https://en.wikipedia.org/wiki/Nested_set_model" target="_blank">this page</a>.
+		</div>
+
         <form action="#xarController::URL('categories','admin','build_tree')#" method="post" enctype="application/x-www-form-urlencoded">
             <fieldset class="xar-norm">
                 <legend>
-                    <strong>
-                    Tree</strong>
+                    <strong>Tree Details</strong>
                 </legend>
                 <div class="xar-row">
                     <div class="xar-col">
@@ -77,5 +85,42 @@
                 </div>
             </div>
         </form>
+        
+		<xar:if condition="!empty($all_rows)">
+			<fieldset class="xar-norm">
+				<legend>
+					<strong>Analysis</strong>
+				</legend>
+				<xar:template file="alert_info"/>
+				<xar:template file="alert_error"/>
+				<xar:template file="alert_success"/>
+				<xar:template file="alert_warning"/>
+			</fieldset>
+			<table>
+				<tr>
+					<th style="50px">ID</th>
+					<th style="50px">Left ID</th>
+					<th style="50px">Right ID</th>
+					<th style="50px">Parent ID</th>
+					<th style="50">Level</th>
+					<th style="200px">Name</th>
+				</tr>
+				<xar:foreach in="$all_rows" value="$row">
+					<tr>
+						<td style="50px">#$row['id']#</td>
+						<td style="50px">#$row[$left_id]#</td>
+						<td style="50px">#$row[$right_id]#</td>
+						<td style="50px">#$row[$parent_id]#</td>
+						<td style="50px">#$row['level']#</td>
+						<td style="200px">
+							<xar:for start="$i=0" test="$i le $row['level']" iter="$i++">
+								&#160;
+							</xar:for>
+							#$row['name']#
+						</td>
+					</tr>
+				</xar:foreach>
+			</table>
+		</xar:if>
     </div>
 </xar:template>

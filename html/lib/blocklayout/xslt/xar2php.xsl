@@ -214,9 +214,15 @@
 <!-- Expression resolving in nodes-->
 <xsl:template name="resolvePHP">
   <xsl:param name="expr"/>
+<!-- Do nothing, just return the value -->
+  <xsl:text>%#%</xsl:text>
+  <xsl:value-of select="$expr"/>
+  <xsl:text>%#%</xsl:text>
+<!--
   <xsl:value-of
         select="php:functionString('BlockLayoutXSLTProcessor::phpexpression',string($expr))"
         disable-output-escaping="yes"/>
+-->
 </xsl:template>
 
 <!--
