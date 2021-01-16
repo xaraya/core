@@ -134,7 +134,7 @@ class xarGraphQLBuildType
     {
         if (substr($type, -1) === "y") {
             $object = substr($type, 0, strlen($type) - 1) . "ies";
-        } elseif ($type !== "sample") {
+        } elseif ($type !== "sample" && $type !== "api_people" && $type !== "api_species") {
             $object = $type . "s";
         } else {
             $object = $type;
@@ -148,7 +148,9 @@ class xarGraphQLBuildType
      */
     public static function singularize($name)
     {
-        if (substr($name, -3) === "ies") {
+        if ($name === "api_species") {
+            $type = $name;
+        } elseif (substr($name, -3) === "ies") {
             $type = substr($name, 0, strlen($name) - 3) . "y";
         } elseif (substr($name, -1) === "s") {
             $type = substr($name, 0, strlen($name) - 1);
@@ -197,6 +199,21 @@ class xarGraphQLBuildType
                 $fields[$property->name] = self::get_deferred_field($property->name, self::$known_proptype_ids[$property->type]);
                 continue;
             }
+            if ($property->type == self::get_property_id('deferitem')) {
+                // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
+                $fields[$property->name] = self::get_deferred_item($property->name, $property);
+                continue;
+            }
+            if ($property->type == self::get_property_id('deferlist')) {
+                // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
+                $fields[$property->name] = self::get_deferred_list($property->name, $property);
+                continue;
+            }
+            if ($property->type == self::get_property_id('defermany')) {
+                // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
+                $fields[$property->name] = self::get_deferred_many($property->name, $property);
+                continue;
+            }
             if ($property->name == 'configuration') {
                 $fields[$property->name] = Type::listOf(xarGraphQL::get_type("keyval"));
                 continue;
@@ -232,12 +249,91 @@ class xarGraphQLBuildType
         ];
     }
 
-    public static function deferred_field_resolver($type, $prop_name)
+    public static function get_deferred_item($fieldname, $property)
+    {
+        // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
+        //$type = "mixed";
+        //$type = $property->objectname;
+        if (count($property->fieldlist) > 1) {
+            try {
+                $type = self::singularize($property->objectname);
+                $type = xarGraphQL::get_type($type);
+            } catch (Exception $e) {
+                $type = xarGraphQL::get_type("mixed");
+            }
+        } else {
+            $type = xarGraphQL::get_type("mixed");
+        }
+        // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
+        //$loader = $property::get_resolver($property->defername);
+        return [
+            'name' => $fieldname,
+            'type' => $type,
+            'resolve' => self::deferred_field_resolver($property->defername, $fieldname, $property),
+        ];
+    }
+
+    public static function get_deferred_list($fieldname, $property)
+    {
+        // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
+        //$type = "mixed";
+        //$type = $property->objectname;
+        if (count($property->fieldlist) > 1) {
+            try {
+                $type = self::singularize($property->objectname);
+                $type = xarGraphQL::get_type($type);
+            } catch (Exception $e) {
+                $type = xarGraphQL::get_type("mixed");
+            }
+        } else {
+            $type = xarGraphQL::get_type("mixed");
+        }
+        // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
+        //$loader = $property::get_resolver($property->defername);
+        return [
+            'name' => $fieldname,
+            // @checkme we get back a list of deferred items here
+            'type' => Type::listOf($type),
+            'resolve' => self::deferred_field_resolver($property->defername, $fieldname, $property),
+        ];
+    }
+
+    public static function get_deferred_many($fieldname, $property)
+    {
+        // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
+        //$type = "mixed";
+        //$type = $property->targetname;
+        if (!empty($property->targetname) && count($property->fieldlist) > 1) {
+            try {
+                $type = self::singularize($property->targetname);
+                $type = xarGraphQL::get_type($type);
+            } catch (Exception $e) {
+                $type = xarGraphQL::get_type("mixed");
+            }
+        } else {
+            $type = xarGraphQL::get_type("mixed");
+        }
+        // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
+        //$loader = $property::get_resolver($property->defername);
+        return [
+            'name' => $fieldname,
+            // @checkme we get back a list of deferred items here
+            'type' => Type::listOf($type),
+            // @checkme we need the itemid here!
+            'resolve' => self::deferred_field_resolver($property->defername, 'id', $property),
+        ];
+    }
+
+    public static function deferred_field_resolver($type, $prop_name, $property = null)
     {
         // we only need the type class here, not the type instance
-        $clazz = xarGraphQL::get_type_class($type);
+        if (!empty($property)) {
+            $clazz = xarGraphQL::get_type_class('basetype');
+        } else {
+            $clazz = xarGraphQL::get_type_class($type);
+        }
         // @todo should we pass along the object instead of the type here?
-        return $clazz::_xar_deferred_field_resolver($type, $prop_name);
+        return $clazz::_xar_deferred_field_resolver($type, $prop_name, $property);
     }
 
     /**

@@ -106,9 +106,6 @@ class DeferredListProperty extends DeferredItemProperty
     public function setItemValue($itemid, $value, $fordisplay=0)
     {
         // 1. in getItems() set to value from datastore - decode for deferred lookup and showView()
-        if (!empty($value) && is_string($value) && !is_numeric($value)) {
-            $value = json_decode($value, true);
-        }
         parent::setItemValue($itemid, $value, $fordisplay);
     }
 
@@ -118,6 +115,9 @@ class DeferredListProperty extends DeferredItemProperty
     public function setDataToDefer($itemid, $values)
     {
         if (!empty($values)) {
+            if (is_string($values) && !is_numeric($values)) {
+                $values = json_decode($values, true);
+            }
             if (!is_array($values)) {
                 $values = array($values);
             }
@@ -125,6 +125,7 @@ class DeferredListProperty extends DeferredItemProperty
                 static::add_deferred($this->defername, $value);
             }
         }
+        return $values;
     }
 
     /**
@@ -143,14 +144,9 @@ class DeferredListProperty extends DeferredItemProperty
     public function showInput(array $data = array())
     {
         // 1. in showForm() get value from property - not set via setValue in datastore, except in preview - decode
-        if (!isset($data['value']) && !empty($this->value) && is_string($this->value) && !is_numeric($this->value)) {
-            //$this->value = json_decode($this->value, true);
-            $values = json_decode($this->value, true);
+        if (!isset($data['value']) && !empty($this->value)) {
             // @checkme for showForm(), set data['value'] here
-            foreach ($values as $value) {
-                static::add_deferred($this->defername, $value);
-            }
-            $data['value'] = $values;
+            $data['value'] = $this->setDataToDefer($this->_itemid, $this->value);
         }
         return parent::showInput($data);
     }
@@ -165,14 +161,9 @@ class DeferredListProperty extends DeferredItemProperty
     {
         // 1. in showView() get value from data = from objectlist via getItemValue/setItemValue - skip
         // 2. in showDisplay() get value from property - not set via setValue in datastore - decode
-        if (!isset($data['value']) && !empty($this->value) && is_string($this->value) && !is_numeric($this->value)) {
-            //$this->value = json_decode($this->value, true);
-            $values = json_decode($this->value, true);
+        if (!isset($data['value']) && !empty($this->value)) {
             // @checkme for showDisplay(), set data['value'] here
-            foreach ($values as $value) {
-                static::add_deferred($this->defername, $value);
-            }
-            $data['value'] = $values;
+            $data['value'] = $this->setDataToDefer($this->_itemid, $this->value);
         }
         return parent::showOutput($data);
     }
@@ -189,14 +180,8 @@ class DeferredListProperty extends DeferredItemProperty
                 $values = array($values);
             }
         } elseif (!empty($this->value)) {
-            $values = $this->value;
-            if (!is_array($values)) {
-                $values = array($values);
-            }
             // @checkme for showDisplay(), set data['value'] here
-            foreach ($values as $value) {
-                static::add_deferred($this->defername, $value);
-            }
+            $values = $this->setDataToDefer($this->_itemid, $this->value);
         }
         if (empty($values)) {
             $data['value'] = '';

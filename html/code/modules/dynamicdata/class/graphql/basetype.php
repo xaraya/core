@@ -173,8 +173,41 @@ class xarGraphQLBaseType extends ObjectType
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_deferred_field_resolver($type, $prop_name)
+    public static function _xar_deferred_field_resolver($type, $prop_name, $property = null)
     {
+        // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
+        if (!empty($property)) {
+            $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name, $property) {
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = array_merge($info->path, ["deferred property"]);
+                }
+                $fields = $info->getFieldSelection(0);
+                if (array_key_exists('id', $fields) && count($fields) < 2) {
+                    return array('id' => $values[$prop_name]);
+                }
+                //print_r($fields);
+                //$queryPlan = $info->lookAhead();
+                //print_r($queryPlan->queryPlan());
+                //print_r($queryPlan->subFields('User'));
+                //if (!in_array('name', $queryPlan->subFields('User'))) {
+                //    return array('id' => $values[$prop_name]);
+                //}
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = ["add deferred $type " . $values['id']];
+                }
+                // @todo  how to avoid setting this twice for lists?
+                $value = $property->setDataToDefer($values['id'], $values[$prop_name]);
+
+                return new GraphQL\Deferred(function () use ($type, $values, $prop_name, $property) {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = ["get deferred $type " . $values['id']];
+                    }
+                    $data = $property->getDeferredData(array('value' => $values[$prop_name], '_itemid' => $values['id']));
+                    return $data['value'];
+                });
+            };
+            return $resolver;
+        }
         if (!array_key_exists($type, static::$_xar_deferred)) {
             static::$_xar_deferred[$type] = array('todo' => [], 'fields' => ['id'], 'cache' => []);
         }
@@ -194,6 +227,7 @@ class xarGraphQLBaseType extends ObjectType
             //if (!in_array('name', $queryPlan->subFields('User'))) {
             //    return array('id' => $values[$prop_name]);
             //}
+            // @todo  handle value array for deferlist
             static::_xar_add_deferred($type, $values[$prop_name], array_keys($fields));
 
             return new GraphQL\Deferred(function () use ($type, $values, $prop_name) {
@@ -210,6 +244,7 @@ class xarGraphQLBaseType extends ObjectType
         }
         // @todo preserve fieldlist to optimize loading afterwards too
         //print_r("Adding $type $id");
+        // @todo handle value array for deferlist
         if (!array_key_exists("$id", static::$_xar_deferred[$type]['cache']) && !in_array($id, static::$_xar_deferred[$type]['todo'])) {
             static::$_xar_deferred[$type]['todo'][] = $id;
         }
@@ -269,6 +304,7 @@ class xarGraphQLBaseType extends ObjectType
             static::_xar_load_deferred($type);
         }
         //print_r("Getting $type $id");
+        // @todo handle value array for deferlist
         if (array_key_exists($type, static::$_xar_deferred) && array_key_exists("$id", static::$_xar_deferred[$type]['cache'])) {
             return static::$_xar_deferred[$type]['cache']["$id"];
         }
