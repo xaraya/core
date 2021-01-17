@@ -115,6 +115,12 @@
     <xsl:when test="string-length(translate($expr, '&#x20;&#x9;&#xD;&#xA;', '')) = 0">
       <xsl:value-of select="$expr"/>
     </xsl:when>
+    <!-- Ensure that a single '-' is handled correctly -->
+    <xsl:when test="translate($expr, '&#x20;&#x9;&#xD;&#xA;', '') = '-'">
+      <xsl:text>'</xsl:text>
+      <xsl:value-of select="$expr"/>
+      <xsl:text>'</xsl:text>
+    </xsl:when>
     <!-- Ignore numbers -->
     <xsl:when test="string(number($expr))!='NaN'">
       <xsl:value-of select="$expr"/>
