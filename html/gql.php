@@ -17,64 +17,17 @@
  */
 require dirname(__DIR__).'/vendor/autoload.php';
 
+// use the GraphQL PHP library here
 use GraphQL\GraphQL;
-use GraphQL\Error\DebugFlag;
-use GraphQL\Utils\SchemaPrinter;
 
 // initialize bootstrap
 sys::init();
 // initialize database
 xarDatabase::init();
-
-
-function xarGraphQLGetData($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [])
-{
-    $schema = xarGraphQL::get_schema($extraTypes);
-    //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
-    //$schema = xarGraphQL::build_schema($schemaFile, $extraTypes);
-    //print_r($schema);
-    if ($queryString == '{schema}') {
-        $header = "schema {\n  query: Query\n  mutation: Mutation\n}\n\n";
-        return $header . SchemaPrinter::doPrint($schema);
-        //return SchemaPrinter::printIntrospectionSchema($schema);
-    }
-    
-    $rootValue = ['prefix' => 'You said: message='];
-    $context = ['context' => true, 'object' => null];
-    $fieldResolver = null;
-    $validationRules = null;
-    
-    $result = GraphQL::executeQuery(
-        $schema,
-        $queryString,
-        $rootValue,
-        $context,
-        $variableValues,
-        $operationName,
-        $fieldResolver,
-        $validationRules
-    );
-    //$serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
-    $serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE);
-    return $serializableResult;
-}
-
-function xarGraphQLSendData($data)
-{
-    if (is_string($data)) {
-        header('Content-Type: text/plain; charset=utf-8');
-        echo $data;
-        return;
-    }
-    try {
-        $data = json_encode($data, JSON_PRETTY_PRINT);
-    } catch (Exception $e) {
-        $data = json_last_error_msg();
-    }
-    header('Access-Control-Allow-Origin: *');
-    header('Content-Type: application/json; charset=utf-8');
-    echo $data;
-}
+// initialize modules
+//xarMod::init();
+// initialize users
+//xarUser::init();
 
 $rawInput = file_get_contents('php://input');
 if (!empty($rawInput)) {
@@ -100,6 +53,9 @@ if (!empty($variables) && is_string($variables)) {
 //$query = '{schema}';
 //$data = xarGraphQLGetData($query, $variables, $operationName);
 $extraTypes = ['module', 'theme', 'category', 'configuration'];
-$data = xarGraphQLGetData($query, $variables, $operationName, $extraTypes);
+//$extraTypes = ['module', 'theme', 'category', 'configuration', 'categories_linkage', 'extra'];
+$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);
+//$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
+//$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes, $schemaFile);
 
-xarGraphQLSendData($data);
+xarGraphQL::send_data($data);

@@ -91,7 +91,7 @@ class DeferredItemProperty extends DataProperty
         // @checkme support dataobject:<objectname>.<propname>,<propname2>,<propname3> here too
         $fieldlist = explode(',', $field);
         if (!static::has_resolver($this->defername)) {
-            $resolver = deferred_dataobject_resolver($object, $fieldlist);
+            $resolver = static::dataobject_resolver($object, $fieldlist);
             static::set_resolver($resolver, $this->defername);
         }
         static::init_deferred($this->defername);
@@ -154,7 +154,7 @@ class DeferredItemProperty extends DataProperty
      */
     public function setItemValue($itemid, $value, $fordisplay=0)
     {
-        $this->setDataToDefer($itemid, $value);
+        $value = $this->setDataToDefer($itemid, $value);
         $this->log_trace();
         //$this->value = $value;
         //$this->_items[$itemid][$this->name] = $this->value;
@@ -169,6 +169,7 @@ class DeferredItemProperty extends DataProperty
         if (isset($value)) {
             static::add_deferred($this->defername, $value);
         }
+        return $value;
     }
 
     /**
@@ -220,9 +221,8 @@ class DeferredItemProperty extends DataProperty
         if (isset($data['value'])) {
             $value = $data['value'];
         } elseif (!empty($this->value)) {
-            $value = $this->value;
             // @checkme for showDisplay(), set data['value'] here
-            static::add_deferred($this->defername, $this->value);
+            $value = $this->setDataToDefer($this->_itemid, $this->value);
         }
         if (empty($value)) {
             return $data;
@@ -340,7 +340,7 @@ class DeferredItemProperty extends DataProperty
 
     /**
      * Post-processing after loading <whatever> for each $value from 'todo' to 'cache'
-     * @todo override in defermany to look up target props if requested
+     * @checkme override in defermany to look up target props if requested
      *
      * @param string $name name of the property
      */
@@ -389,7 +389,7 @@ class DeferredItemProperty extends DataProperty
 
     /**
      * Set resolver function to actually load <whatever> for each $value ($name-specific or 'default')
-     * @todo make resolver configurable via property config someday?
+     * @todo make resolver configurable via property config (instead of defaultvalue) someday?
      *
      * @param callable $resolver
      * @param string $name name of the property
@@ -402,6 +402,64 @@ class DeferredItemProperty extends DataProperty
     public static function has_resolver($name = 'default')
     {
         return array_key_exists($name, static::$resolver);
+    }
+
+    /**
+     * Deferred resolver for dynamic dataobjects to assign to static::$resolver
+     * @todo make resolver configurable via property config (instead of defaultvalue) someday?
+     * @todo support combining property lookups on different fields? Not really a use case for this yet...
+     *
+     * @param string $object the name of the dataobject you want to look up
+     * @param array $fieldlist the list of dataobject properties to return for each value=itemid
+     * @return callable resolver to return a single value per itemid, or an assoc array per itemid
+     */
+    public static function dataobject_resolver($object = 'modules', $fieldlist = ['name'])
+    {
+        /**
+         * Deferred resolver function
+         * @param string $name name of the property
+         * @param array $values list of property values to load <whatever> for (= assumed itemids here)
+         * @uses mixed $object the name of the dataobject you want to look up
+         * @uses array $fieldlist the list of dataobject properties to return for each value=itemid
+         * @return array associative array of all "$value" => <whatever> that need to be loaded
+         */
+        $resolver = function ($name, $values) use ($object, $fieldlist) {
+            $params = array('name' => $object, 'fieldlist' => $fieldlist);
+            //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
+            $objectlist = DataObjectMaster::getObjectList($params);
+            //print_r('Query ' . $object . ' with itemids IN (' . implode(',', $values) . ')');
+            $params = array('itemids' => $values);
+            $result = $objectlist->getItems($params);
+            //var_export($result);
+            // return array("$itemid" => assoc array of $fields)
+            if (count($fieldlist) > 1) {
+                // @checkme variabletable returns all fields at the moment - filter here for now
+                //return $result;
+                $values = array();
+                // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
+                $allowed = array_flip($fieldlist);
+                foreach ($result as $itemid => $props) {
+                    $key = (string) $itemid;
+                    $values[$key] = array_intersect_key($props, $allowed);
+                }
+                return $values;
+            }
+            // return array("$itemid" => single $field value)
+            $first = reset($result);
+            $field = array_pop($fieldlist);
+            if (!array_key_exists($field, $first)) {
+                // @checkme pick the first key available here?
+                $fieldlist = array_keys($first);
+                $field = array_shift($fieldlist);
+            }
+            $values = array();
+            foreach ($result as $itemid => $props) {
+                $key = (string) $itemid;
+                $values[$key] = $props[$field];
+            }
+            return $values;
+        };
+        return $resolver;
     }
 
     public function log_trace()
@@ -423,7 +481,7 @@ class DeferredItemProperty extends DataProperty
 
     /**
      * *Override this method* to actually load <whatever> for each $value (if static::$resolver is not used)
-     * @todo look up <whatever> in batch based on $values in overridden method here
+     * @todo look up <whatever> in batch based on $values in overridden method here - if we don't use dataobject
      *
      * @param string $name name of the property
      * @param array $values list of property values to load <whatever> for
@@ -457,7 +515,7 @@ function deferred_example_resolver($what = 'resolve_me')
      */
     $resolver = function ($name, $values) use ($what) {
         $result = array();
-        // @todo look up <whatever> in batch based on $values here
+        // @todo look up <whatever> in batch based on $values here - if we don't use dataobject here
         foreach ($values as $value) {
             //$result["$value"] = array('what' => $what, 'id' => $value, 'name' => $name, 'whatever' => $what . '_' . $name . '_' . (string) $value);
             $result["$value"] = $what . '_' . $name . '_' . (string) $value;
@@ -467,66 +525,8 @@ function deferred_example_resolver($what = 'resolve_me')
     return $resolver;
 }
 
-/**
- * Deferred resolver for dynamic dataobjects to assign to static::$resolver
- * @todo make resolver configurable via property config (instead of defaultvalue) someday?
- * @todo support combining property lookups on different fields? Not really a use case for this yet...
- *
- * @param string $object the name of the dataobject you want to look up
- * @param array $fieldlist the list of dataobject properties to return for each value=itemid
- * @return callable resolver to return a single value per itemid, or an assoc array per itemid
- */
-function deferred_dataobject_resolver($object = 'modules', $fieldlist = ['name'])
-{
-    /**
-     * Deferred resolver function
-     * @param string $name name of the property
-     * @param array $values list of property values to load <whatever> for (= assumed itemids here)
-     * @uses mixed $object the name of the dataobject you want to look up
-     * @uses array $fieldlist the list of dataobject properties to return for each value=itemid
-     * @return array associative array of all "$value" => <whatever> that need to be loaded
-     */
-    $resolver = function ($name, $values) use ($object, $fieldlist) {
-        $params = array('name' => $object, 'fieldlist' => $fieldlist);
-        //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
-        $objectlist = DataObjectMaster::getObjectList($params);
-        //print_r('Query ' . $object . ' with itemids IN (' . implode(',', $values) . ')');
-        $params = array('itemids' => $values);
-        $result = $objectlist->getItems($params);
-        //var_export($result);
-        // return array("$itemid" => assoc array of $fields)
-        if (count($fieldlist) > 1) {
-            // @checkme variabletable returns all fields at the moment - filter here for now
-            //return $result;
-            $values = array();
-            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
-            $allowed = array_flip($fieldlist);
-            foreach ($result as $itemid => $props) {
-                $key = (string) $itemid;
-                $values[$key] = array_intersect_key($props, $allowed);
-            }
-            return $values;
-        }
-        // return array("$itemid" => single $field value)
-        $first = reset($result);
-        $field = array_pop($fieldlist);
-        if (!array_key_exists($field, $first)) {
-            // @checkme pick the first key available here?
-            $fieldlist = array_keys($first);
-            $field = array_shift($fieldlist);
-        }
-        $values = array();
-        foreach ($result as $itemid => $props) {
-            $key = (string) $itemid;
-            $values[$key] = $props[$field];
-        }
-        return $values;
-    };
-    return $resolver;
-}
-
 // set 'default' deferred resolver as a test here
-//DeferredProperty::set_resolver(deferred_example_resolver());
+//DeferredItemProperty::set_resolver(deferred_example_resolver());
 // dataobject:roles_users.name replacing "Username" or "User List" propertytype - for showOutput() only
 // dataobject:roles_users.name,uname,email retrieving more than 1 property - requires adapting showOutput() template too, to deal with assoc array properly
 // dataobject:objects.name replacing dynamic_properties.objectid = "Object" propertytype

@@ -253,13 +253,17 @@ class xarGraphQL extends xarObject
     }
 
     /**
-     * Utility function to execute a GraphQL query and return the data
+     * Utility function to execute a GraphQL query and get the data
      */
-    public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [])
+    public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null)
     {
         $schema = self::get_schema($extraTypes);
-        //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
-        //$schema = xarGraphQL::build_schema($schemaFile, $extraTypes);
+        //$schemaFile = __DIR__ . '/graphql/schema.graphql';
+        if (!empty($schemaFile)) {
+            $schema = self::build_schema($schemaFile, $extraTypes);
+        } else {
+            $schema = self::get_schema($extraTypes);
+        }
         if ($queryString == '{schema}') {
             $header = "schema {\n  query: Query\n  mutation: Mutation\n}\n\n";
             return $header . SchemaPrinter::doPrint($schema);
@@ -290,11 +294,12 @@ class xarGraphQL extends xarObject
     }
 
     /**
-     * Utility function to send back the data
+     * Utility function to send the data to the browser or app
      */
     public static function send_data($data)
     {
         if (is_string($data)) {
+            //header('Access-Control-Allow-Origin: *');
             header('Content-Type: text/plain; charset=utf-8');
             echo $data;
             return;

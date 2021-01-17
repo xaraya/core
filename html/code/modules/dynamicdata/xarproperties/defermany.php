@@ -88,7 +88,7 @@ class DeferredManyProperty extends DeferredItemProperty
         $this->defername = $linkpart;
         list($linkname, $caller_id, $called_id) = explode('.', $linkpart);
         if (!static::has_resolver($this->defername)) {
-            $resolver = deferred_linkobject_resolver($linkname, $caller_id, $called_id);
+            $resolver = static::linkobject_resolver($linkname, $caller_id, $called_id);
             static::set_resolver($resolver, $this->defername);
         }
         static::init_deferred($this->defername);
@@ -102,11 +102,11 @@ class DeferredManyProperty extends DeferredItemProperty
             list($object, $field) = explode('.', $targetpart . '.');
             // @checkme support <objectname>.<propname>,<propname2>,<propname3> here too
             $fieldlist = explode(',', $field);
-            // @todo add and call resolver for target dataobject once we loaded all links
+            // add and call resolver for target dataobject once we loaded all links
             if (!empty($fieldlist)) {
                 $this->targetname = $targetpart;
                 if (!static::has_resolver($this->targetname)) {
-                    $resolver = deferred_dataobject_resolver($object, $fieldlist);
+                    $resolver = static::dataobject_resolver($object, $fieldlist);
                     static::set_resolver($resolver, $this->targetname);
                 }
                 static::init_deferred($this->targetname);
@@ -178,6 +178,8 @@ class DeferredManyProperty extends DeferredItemProperty
         if (isset($itemid)) {
             static::add_deferred($this->defername, $itemid);
         }
+        //return $value;
+        return $itemid;
     }
 
     /**
@@ -217,25 +219,24 @@ class DeferredManyProperty extends DeferredItemProperty
     public function getDeferredData(array $data = array())
     {
         // @checkme we use the itemid as value here
+        $itemid = null;
         if (isset($data['_itemid'])) {
-            // see if we can use a fixed template for display links - replace itemid in template per value in array
-            if (!isset($data['link']) && !empty($this->displaylink) && !empty($data['_itemid'])) {
-                //$data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
-                $data['link'] = $this->displaylink;
-            }
-            $data['value'] = static::get_deferred($this->defername, $data['_itemid']);
+            $itemid = $data['_itemid'];
         } elseif (!empty($this->_itemid)) {
             // @checkme for showDisplay(), set data['value'] here
-            static::add_deferred($this->defername, $this->_itemid);
-            // see if we can use a fixed template for display links - replace itemid in template per value in array
-            if (!isset($data['link']) && !empty($this->displaylink) && !empty($this->_itemid)) {
-                //$data['link'] = str_replace('[itemid]', (string) $this->_itemid, $this->displaylink);
-                $data['link'] = $this->displaylink;
-            }
-            $data['value'] = static::get_deferred($this->defername, $this->_itemid);
-        } else {
-            $data['value'] = '';
+            $itemid = $this->setDataToDefer($this->_itemid, $this->value);
         }
+        if (empty($itemid)) {
+            $data['value'] = '';
+            $this->value = $data['value'];
+            return $data;
+        }
+        // see if we can use a fixed template for display links - replace itemid in template per value in array
+        if (!isset($data['link']) && !empty($this->displaylink) && !empty($itemid)) {
+            //$data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
+            $data['link'] = $this->displaylink;
+        }
+        $data['value'] = static::get_deferred($this->defername, $itemid);
         $this->value = $data['value'];
         return $data;
     }
@@ -282,7 +283,7 @@ class DeferredManyProperty extends DeferredItemProperty
 
     /**
      * Post-processing after loading <whatever> for each $value from 'todo' to 'cache'
-     * @todo override in defermany to look up target props if requested
+     * @checkme overridden in defermany to look up target props if requested
      *
      * @param string $name name of the property
      */
@@ -341,49 +342,49 @@ class DeferredManyProperty extends DeferredItemProperty
         static::$deferred[$name]['target'] = $target;
         return true;
     }
-}
 
-/**
- * Deferred resolver for dynamic object links to assign to static::$resolver
- * @todo make resolver configurable via property config (instead of defaultvalue) someday?
- * @todo support combining property lookups on different fields? Not really a use case for this yet...
- *
- * @param string $linkname the name of the linkobject you want to look up
- * @param string $caller_id the name of the caller_id you want to look up
- * @param string $called_id the name of the called_id you want to look up
- * @return callable resolver to return an array of called_id per caller_id
- */
-function deferred_linkobject_resolver($linkname = 'api_films_people', $caller_id = 'films_id', $called_id = 'people_id')
-{
     /**
-     * Deferred resolver function
-     * @param string $name name of the property
-     * @param array $values list of itemids to load related objects for
-     * @uses string $linkname the name of the linkobject you want to look up
-     * @uses string $caller_id the name of the caller_id you want to look up
-     * @uses string $called_id the name of the called_id you want to look up
-     * @return array associative array of all "$caller_id" => array of $called_ids
+     * Deferred resolver for dynamic object links to assign to static::$resolver
+     * @todo make resolver configurable via property config (instead of defaultvalue) someday?
+     * @todo support combining property lookups on different fields? Not really a use case for this yet...
+     *
+     * @param string $linkname the name of the linkobject you want to look up
+     * @param string $caller_id the name of the caller_id you want to look up
+     * @param string $called_id the name of the called_id you want to look up
+     * @return callable resolver to return an array of called_id per caller_id
      */
-    $resolver = function ($name, $values) use ($linkname, $caller_id, $called_id) {
-        $fieldlist = array($caller_id, $called_id);
-        $params = array('name' => $linkname, 'fieldlist' => $fieldlist);
-        //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
-        $objectlist = DataObjectMaster::getObjectList($params);
-        // @todo make this query work for relational datastores: select where caller_id in $values
-        //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
-        //$result = $objectlist->getItems($params);
-        //print_r('Query ' . $linkname . ' with ' . $caller_id . ' IN (' . implode(',', $values) . ')');
-        $objectlist->addWhere($caller_id, 'IN (' . implode(',', $values) . ')');
-        $result = $objectlist->getItems();
-        $values = array();
-        foreach ($result as $itemid => $props) {
-            $key = (string) $props[$caller_id];
-            if (!array_key_exists($key, $values)) {
-                $values[$key] = array();
+    public static function linkobject_resolver($linkname = 'api_films_people', $caller_id = 'films_id', $called_id = 'people_id')
+    {
+        /**
+         * Deferred resolver function
+         * @param string $name name of the property
+         * @param array $values list of itemids to load related objects for
+         * @uses string $linkname the name of the linkobject you want to look up
+         * @uses string $caller_id the name of the caller_id you want to look up
+         * @uses string $called_id the name of the called_id you want to look up
+         * @return array associative array of all "$caller_id" => array of $called_ids
+         */
+        $resolver = function ($name, $values) use ($linkname, $caller_id, $called_id) {
+            $fieldlist = array($caller_id, $called_id);
+            $params = array('name' => $linkname, 'fieldlist' => $fieldlist);
+            //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
+            $objectlist = DataObjectMaster::getObjectList($params);
+            // @todo make this query work for relational datastores: select where caller_id in $values
+            //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
+            //$result = $objectlist->getItems($params);
+            //print_r('Query ' . $linkname . ' with ' . $caller_id . ' IN (' . implode(',', $values) . ')');
+            $objectlist->addWhere($caller_id, 'IN (' . implode(',', $values) . ')');
+            $result = $objectlist->getItems();
+            $values = array();
+            foreach ($result as $itemid => $props) {
+                $key = (string) $props[$caller_id];
+                if (!array_key_exists($key, $values)) {
+                    $values[$key] = array();
+                }
+                $values[$key][] = $props[$called_id];
             }
-            $values[$key][] = $props[$called_id];
-        }
-        return $values;
-    };
-    return $resolver;
+            return $values;
+        };
+        return $resolver;
+    }
 }
