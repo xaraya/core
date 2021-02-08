@@ -145,12 +145,15 @@ class DataObjectRESTHandler extends xarObject
         if (!self::hasSchema($schema)) {
             return array('method' => 'getObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
         }
+        if (empty($itemid)) {
+            throw new Exception('Unknown id ' . $object);
+        }
         $fieldlist = array_keys(self::getDisplaySchemaProperties($schema));
         $params = array('name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist);
         $objectitem = DataObjectMaster::getObject($params);
         $itemid = $objectitem->getItem();
-        if ($itemid != $args['itemid']) {
-            throw new Exception('Unknown ' . $object);
+        if ($itemid != $params['itemid']) {
+            throw new Exception('Unknown item ' . $object);
         }
         // @checkme this throws exception for userlist property when xarUser::init() is not called first
         //$result = $objectitem->getFieldValues();
@@ -171,6 +174,78 @@ class DataObjectRESTHandler extends xarObject
         //$item['_links'] = array('self' => array('href' => self::getURL($object, $itemid)));
         //return array('method' => 'getObjectItem', 'args' => $args, 'schema' => $schema, 'fieldlist' => $fieldlist, 'result' => $item);
         return $item;
+    }
+
+    public static function createObjectItem($args)
+    {
+        $object = $args['object'];
+        $schema = 'create-' . $object;
+        if (!self::hasSchema($schema)) {
+            return array('method' => 'createObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
+        }
+        $properties = self::getCreateSchemaProperties($schema);
+        // @todo sanity check on input based on properties
+        if (empty($args['input'])) {
+            throw new Exception('Unknown input ' . $object);
+        }
+        if (!empty($args['input']['id'])) {
+            unset($args['input']['id']);
+        }
+        $params = array('name' => $object);
+        $objectitem = DataObjectMaster::getObject($params);
+        $itemid = $objectitem->createItem($args['input']);
+        if (empty($itemid)) {
+            throw new Exception('Unknown item ' . $object);
+        }
+        return array('method' => 'createObjectItem', 'args' => $args, 'schema' => $schema, 'properties' => $properties, 'result' => $itemid);
+    }
+
+    public static function updateObjectItem($args)
+    {
+        $object = $args['object'];
+        $itemid = $args['itemid'];
+        $schema = 'update-' . $object;
+        if (!self::hasSchema($schema)) {
+            return array('method' => 'updateObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
+        }
+        if (empty($itemid)) {
+            throw new Exception('Unknown id ' . $object);
+        }
+        $properties = self::getUpdateSchemaProperties($schema);
+        // @todo sanity check on input based on properties
+        if (empty($args['input'])) {
+            throw new Exception('Unknown input ' . $object);
+        }
+        if (!empty($args['input']['id']) && $itemid != $args['input']['id']) {
+            throw new Exception('Unknown id ' . $object);
+        }
+        $params = array('name' => $object, 'itemid' => $itemid);
+        $objectitem = DataObjectMaster::getObject($params);
+        $itemid = $objectitem->updateItem($args['input']);
+        if ($itemid != $params['itemid']) {
+            throw new Exception('Unknown item ' . $object);
+        }
+        return array('method' => 'updateObjectItem', 'args' => $args, 'schema' => $schema, 'properties' => $properties, 'result' => $itemid);
+    }
+
+    public static function deleteObjectItem($args)
+    {
+        $object = $args['object'];
+        $itemid = $args['itemid'];
+        $schema = 'update-' . $object;
+        if (!self::hasSchema($schema)) {
+            return array('method' => 'deleteObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
+        }
+        if (empty($itemid)) {
+            throw new Exception('Unknown id ' . $object);
+        }
+        $params = array('name' => $object, 'itemid' => $itemid);
+        $objectitem = DataObjectMaster::getObject($params);
+        $itemid = $objectitem->deleteItem();
+        if ($itemid != $params['itemid']) {
+            throw new Exception('Unknown item ' . $object);
+        }
+        return array('method' => 'deleteObjectItem', 'args' => $args, 'schema' => $schema, 'result' => $itemid);
     }
 
     public static function loadSchemas()
@@ -205,6 +280,18 @@ class DataObjectRESTHandler extends xarObject
         return self::$schemas[$schema]['properties'];
     }
 
+    public static function getCreateSchemaProperties($schema)
+    {
+        // schema (object) -> properties
+        return self::$schemas[$schema]['properties'];
+    }
+
+    public static function getUpdateSchemaProperties($schema)
+    {
+        // schema (object) -> properties
+        return self::$schemas[$schema]['properties'];
+    }
+
     /**
      * Register REST API routes (in FastRoute format)
      */
@@ -213,6 +300,10 @@ class DataObjectRESTHandler extends xarObject
         $r->get('/objects', ['DataObjectRESTHandler', 'getObjects']);
         $r->get('/objects/{object}', ['DataObjectRESTHandler', 'getObjectList']);
         $r->get('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'getObjectItem']);
+        $r->post('/objects/{object}', ['DataObjectRESTHandler', 'createObjectItem']);
+        $r->put('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'updateObjectItem']);
+        $r->delete('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'deleteObjectItem']);
+        //$r->patch('/objects/{object}', ['DataObjectRESTHandler', 'patchObjectDefinition']);
     }
 
     /**

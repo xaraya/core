@@ -23,6 +23,7 @@ class DataObjectRESTBuilder extends xarObject
     protected static $schemas = array();
     protected static $responses = array();
     protected static $parameters = array();
+    protected static $requestBodies = array();
     protected static $tags = array();
 
     public static function init(array $args = array())
@@ -66,7 +67,8 @@ class DataObjectRESTBuilder extends xarObject
         $doc['components'] = array(
             'schemas' => self::$schemas,
             'responses' => self::$responses,
-            'parameters' => self::$parameters
+            'parameters' => self::$parameters,
+            'requestBodies' => self::$requestBodies
         );
         $doc['tags'] = self::$tags;
         $content = json_encode($doc, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -79,8 +81,10 @@ class DataObjectRESTBuilder extends xarObject
         self::$schemas = array();
         self::$responses = array();
         self::$parameters = array();
+        self::$requestBodies = array();
         self::$tags = array();
         self::add_parameters();
+        self::add_responses();
     }
 
     public static function add_parameters()
@@ -122,6 +126,20 @@ class DataObjectRESTBuilder extends xarObject
                 )
             ),
             'description' => 'Property to sort on and optional direction (comma separated)',
+        );
+    }
+
+    public static function add_responses()
+    {
+        self::$responses['itemid'] = array(
+            'description' => 'Return itemid value',
+            'content' => array(
+                'application/json' => array(
+                    'schema' => array(
+                        'type' => 'string'
+                    )
+                )
+            )
         );
     }
 
@@ -179,6 +197,7 @@ class DataObjectRESTBuilder extends xarObject
         $objectref = DataObjectMaster::getObject($params);
         $prop_display = array();
         $prop_view = array();
+        $prop_create = array();
         // @todo add fields based on object descriptor?
         foreach ($objectref->getProperties() as $key => $property) {
             if (array_key_exists($property->type, self::$proptype_names)) {
@@ -190,18 +209,23 @@ class DataObjectRESTBuilder extends xarObject
             $datatype = self::match_proptype($property);
             switch ($property->getDisplayStatus()) {
                 case DataPropertyMaster::DD_DISPLAYSTATE_DISABLED:
+                    //$prop_create[$property->name] = $datatype;
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE:
                     $prop_display[$property->name] = $datatype;
                     $prop_view[$property->name] = $datatype;
+                    $prop_create[$property->name] = $datatype;
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY:
                     $prop_display[$property->name] = $datatype;
+                    $prop_create[$property->name] = $datatype;
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN:
+                    //$prop_create[$property->name] = $datatype;
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY:
                     $prop_view[$property->name] = $datatype;
+                    $prop_create[$property->name] = $datatype;
                     break;
                 default:
                     throw new Exception('Unsupported display status ' . $property->getDisplayStatus());
@@ -210,6 +234,12 @@ class DataObjectRESTBuilder extends xarObject
         }
         self::add_object_view($objectname, $prop_view);
         self::add_object_display($objectname, $prop_display);
+        if ($objectname == 'sample') {
+            self::add_object_create($objectname, $prop_create);
+            self::add_object_update($objectname, $prop_create);
+            self::add_object_delete($objectname, $prop_create);
+            //self::add_object_patch($objectname, $prop_create);
+        }
         self::$tags[] = array('name' => $objectname, 'description' => $objectname . ' operations');
         return $properties;
     }
@@ -304,6 +334,91 @@ class DataObjectRESTBuilder extends xarObject
         self::$schemas['display-' . $objectname] = array(
             'type' => 'object',
             'properties' => $properties
+        );
+    }
+
+    public static function add_object_create($objectname, $properties)
+    {
+        $path = '/objects/' . $objectname;
+        self::$paths[$path]['post'] = array(
+            'requestBody' => array(
+                '$ref' => '#/components/requestBodies/create-' . $objectname
+            ),
+            'tags' => array($objectname),
+            'operationId' => 'create_' . $objectname,
+            'description' => 'Create ' . $objectname,
+            'responses' => array(
+                '200' => array(
+                    '$ref' => '#/components/responses/itemid'
+                )
+            )
+        );
+        self::$requestBodies['create-' . $objectname] = array(
+            'description' => 'Create ' . $objectname . ' object',
+            'content' => array(
+                'application/json' => array(
+                    'schema' => array(
+                        '$ref' => '#/components/schemas/create-' . $objectname
+                    )
+                )
+            )
+        );
+        self::$schemas['create-' . $objectname] = array(
+            'type' => 'object',
+            'properties' => $properties
+        );
+    }
+
+    public static function add_object_update($objectname, $properties)
+    {
+        $path = '/objects/' . $objectname . '/{id}';
+        self::$paths[$path]['put'] = array(
+            'parameters' => array(
+                array('$ref' => '#/components/parameters/itemid')
+            ),
+            'requestBody' => array(
+                '$ref' => '#/components/requestBodies/update-' . $objectname
+            ),
+            'tags' => array($objectname),
+            'operationId' => 'update_' . $objectname,
+            'description' => 'Update ' . $objectname,
+            'responses' => array(
+                '200' => array(
+                    '$ref' => '#/components/responses/itemid'
+                )
+            )
+        );
+        self::$requestBodies['update-' . $objectname] = array(
+            'description' => 'Update ' . $objectname . ' object',
+            'content' => array(
+                'application/json' => array(
+                    'schema' => array(
+                        '$ref' => '#/components/schemas/update-' . $objectname
+                    )
+                )
+            )
+        );
+        self::$schemas['update-' . $objectname] = array(
+            'type' => 'object',
+            'properties' => $properties
+        );
+    }
+
+    public static function add_object_delete($objectname, $properties)
+    {
+        $path = '/objects/' . $objectname . '/{id}';
+        self::$paths[$path]['delete'] = array(
+            'parameters' => array(
+                array('$ref' => '#/components/parameters/itemid')
+            ),
+            'tags' => array($objectname),
+            'operationId' => 'delete_' . $objectname,
+            'description' => 'Delete ' . $objectname,
+            'responses' => array(
+                '200' => array(
+                    '$ref' => '#/components/responses/itemid'
+                )
+            )
         );
     }
 

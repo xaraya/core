@@ -80,7 +80,11 @@ function dispatch_request($method, $path)
                 parse_str($_SERVER['QUERY_STRING'], $more);
                 $vars = array_merge($more, $vars);
             }
-            // @todo handle php://input for POST etc.
+            // handle php://input for POST etc.
+            $rawInput = file_get_contents('php://input');
+            if (!empty($rawInput)) {
+                $vars['input'] = json_decode($rawInput, true);
+            }
             $result = call_user_func($handler, $vars);
             DataObjectRESTHandler::output($result);
             break;
