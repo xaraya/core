@@ -24,7 +24,7 @@ class DataObjectRESTHandler extends xarObject
     {
         $openapi = sys::varpath() . '/cache/openapi.json';
         if (!file_exists($openapi)) {
-            return array('TODO' => 'generate var/cache/openapi.json');
+            return array('TODO' => 'generate var/cache/openapi.json with builder');
         }
         $content = file_get_contents($openapi);
         $doc = json_decode($content, true);
@@ -205,6 +205,19 @@ class DataObjectRESTHandler extends xarObject
         return self::$schemas[$schema]['properties'];
     }
 
+    /**
+     * Register REST API routes (in FastRoute format)
+     */
+    public static function registerRoutes($r)
+    {
+        $r->get('/objects', ['DataObjectRESTHandler', 'getObjects']);
+        $r->get('/objects/{object}', ['DataObjectRESTHandler', 'getObjectList']);
+        $r->get('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'getObjectItem']);
+    }
+
+    /**
+     * Send Content-Type and JSON result to the browser
+     */
     public static function output($result, $status = 200)
     {
         //http_response_code($status);
