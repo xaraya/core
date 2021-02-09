@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" file="dd"/>
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>Utilities - Test APIs</h2>
+        <xar:template type="module" file="utility-menu"/>
+        <fieldset class="xar-form-actions">
+            <legend>REST API</legend>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <code>$ composer require --dev nikic/fast-route</code>
+                </div>
+                <div class="xar-col">
+                    Pre-requisite composer package for the REST API endpoint
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <a href="./code/modules/dynamicdata/xartests/swagger-ui.html">Swagger UI</a>
+                </div>
+                <div class="xar-col">
+                    Explore the REST API for Dynamic Data Objects
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                <xar:if condition="!empty($openapi)">
+                    <a href="./var/cache/openapi.json">var/cache/openapi.json</a>
+                <xar:else/>
+                    var/cache/openapi.json 
+                </xar:if>
+                    &#8635; <a href="#xarController::URL('dynamicdata','admin','test_apis',array('create'=>1))#">re-build</a>
+                </div>
+                <div class="xar-col">
+                    The current openapi.json document for this API
+                </div>
+            </div>
+        </fieldset>
+        <fieldset class="xar-form-actions">
+            <legend>GraphQL</legend>
+            <div class="xar-row">
+                <div class="xar-col">
+                   <code>$ composer require --dev webonyx/graphql-php</code>
+                </div>
+                <div class="xar-col">
+                    Pre-requisite composer package for the GraphQL interface
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <a href="./code/modules/dynamicdata/xartests/playground.html">GraphQL Playground</a>
+                </div>
+                <div class="xar-col">
+                    Experiment with GraphQL queries and mutations on objects
+                </div>
+            </div>
+        </fieldset>
+        <form method="post">
+            <fieldset class="xar-form-actions">
+                <legend>Objects Available via APIs</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <ul>
+                        <xar:foreach in="$objects" value="$item">
+                            <li><input type="checkbox" name="starter[#$item['name']#]" id="starter_#$item['name']#" checked="checked"/>&#160;<a href="#xarServer::getObjectURL($item['name'])#">#$item['label']#</a></li>
+                        </xar:foreach>
+                        </ul>
+                    </div>
+                    <div class="xar-col">
+                    </div>
+                </div>
+            <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
+            <xar:var name="label">TODO: Update List</xar:var>
+            <xar:button type="submit" label="$label" disabled="disabled"/>
+            <!-- see xartemplates/includes/main_objects.xt -->
+            </fieldset>
+        </form>
+    </div>
+</xar:template>

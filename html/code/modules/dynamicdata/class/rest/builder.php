@@ -59,8 +59,9 @@ class DataObjectRESTBuilder extends xarObject
         $doc = array();
         $doc['openapi'] = '3.0.2';
         $doc['info'] = array(
-            'title' => 'DynamicData REST API (read-only)',
-            'version' => '1.0.0'
+            'title' => 'DynamicData REST API',
+            'description' => 'This provides a REST API endpoint as proof of concept to access Dynamic Data Objects stored in dynamic_data. Access to all objects is limited to read-only mode by default. The Sample object requires cookie authentication to create/update/delete items (after login on this site).',
+            'version' => '1.1.0'
         );
         $doc['servers'] = array(
             array('url' => xarServer::getBaseURL() . self::$endpoint)
