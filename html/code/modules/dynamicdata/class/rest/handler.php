@@ -183,6 +183,8 @@ class DataObjectRESTHandler extends xarObject
         if (!self::hasSchema($schema)) {
             return array('method' => 'createObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
         }
+        // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+        $user = self::whoami();
         $properties = self::getCreateSchemaProperties($schema);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -193,11 +195,16 @@ class DataObjectRESTHandler extends xarObject
         }
         $params = array('name' => $object);
         $objectitem = DataObjectMaster::getObject($params);
+        if (!$objectitem->checkAccess('create')) {
+            http_response_code(403);
+            exit;
+        }
         $itemid = $objectitem->createItem($args['input']);
         if (empty($itemid)) {
             throw new Exception('Unknown item ' . $object);
         }
-        return array('method' => 'createObjectItem', 'args' => $args, 'schema' => $schema, 'properties' => $properties, 'result' => $itemid);
+        //return array('method' => 'createObjectItem', 'args' => $args, 'schema' => $schema, 'properties' => $properties, 'user' => $user, 'result' => $itemid);
+        return $itemid;
     }
 
     public static function updateObjectItem($args)
@@ -211,6 +218,8 @@ class DataObjectRESTHandler extends xarObject
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
+        // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+        $user = self::whoami();
         $properties = self::getUpdateSchemaProperties($schema);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -221,11 +230,16 @@ class DataObjectRESTHandler extends xarObject
         }
         $params = array('name' => $object, 'itemid' => $itemid);
         $objectitem = DataObjectMaster::getObject($params);
+        if (!$objectitem->checkAccess('update')) {
+            http_response_code(403);
+            exit;
+        }
         $itemid = $objectitem->updateItem($args['input']);
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown item ' . $object);
         }
-        return array('method' => 'updateObjectItem', 'args' => $args, 'schema' => $schema, 'properties' => $properties, 'result' => $itemid);
+        //return array('method' => 'updateObjectItem', 'args' => $args, 'schema' => $schema, 'properties' => $properties, 'user' => $user, 'result' => $itemid);
+        return $itemid;
     }
 
     public static function deleteObjectItem($args)
@@ -239,13 +253,20 @@ class DataObjectRESTHandler extends xarObject
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
+        // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+        $user = self::whoami();
         $params = array('name' => $object, 'itemid' => $itemid);
         $objectitem = DataObjectMaster::getObject($params);
+        if (!$objectitem->checkAccess('delete')) {
+            http_response_code(403);
+            exit;
+        }
         $itemid = $objectitem->deleteItem();
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown item ' . $object);
         }
-        return array('method' => 'deleteObjectItem', 'args' => $args, 'schema' => $schema, 'result' => $itemid);
+        //return array('method' => 'deleteObjectItem', 'args' => $args, 'schema' => $schema, 'user' => $user, 'result' => $itemid);
+        return $itemid;
     }
 
     public static function loadSchemas()
@@ -293,6 +314,31 @@ class DataObjectRESTHandler extends xarObject
     }
 
     /**
+     * Verify that the cookie corresponds to an authorized user (with minimal core load) or exit
+     */
+    public static function whoami($args = null)
+    {
+        $cookie = !empty($_COOKIE['XARAYASID']) ? $_COOKIE['XARAYASID'] : '';
+        if (empty($cookie)) {
+            http_response_code(401);
+            header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
+            exit;
+        }
+        // @checkme see graphql whoami quey in dummytype.php
+        xarSession::init();
+        //xarUser::init();
+        if (!xarUser::isLoggedIn()) {
+            http_response_code(401);
+            header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
+            exit;
+        }
+        //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
+        $role = xarRoles::current();
+        $user = $role->getFieldValues();
+        return array('id' => $user['id'], 'name' => $user['name']);
+    }
+
+    /**
      * Register REST API routes (in FastRoute format)
      */
     public static function registerRoutes($r)
@@ -304,6 +350,7 @@ class DataObjectRESTHandler extends xarObject
         $r->put('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'updateObjectItem']);
         $r->delete('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'deleteObjectItem']);
         //$r->patch('/objects/{object}', ['DataObjectRESTHandler', 'patchObjectDefinition']);
+        $r->get('/whoami', ['DataObjectRESTHandler', 'whoami']);
     }
 
     /**

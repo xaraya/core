@@ -36,7 +36,7 @@ function try_builder()
 {
     DataObjectRESTBuilder::init();
     $objects = DataObjectRESTBuilder::get_objects();
-    //DataObjectRESTBuilder::create_openapi();
+    DataObjectRESTBuilder::create_openapi();
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($objects, JSON_PRETTY_PRINT);
 }

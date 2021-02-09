@@ -24,6 +24,7 @@ class DataObjectRESTBuilder extends xarObject
     protected static $responses = array();
     protected static $parameters = array();
     protected static $requestBodies = array();
+    protected static $securitySchemes = array();
     protected static $tags = array();
 
     public static function init(array $args = array())
@@ -49,6 +50,7 @@ class DataObjectRESTBuilder extends xarObject
     {
         self::init_openapi();
         self::add_objects();
+        self::add_whoami();
         self::dump_openapi();
     }
 
@@ -68,7 +70,8 @@ class DataObjectRESTBuilder extends xarObject
             'schemas' => self::$schemas,
             'responses' => self::$responses,
             'parameters' => self::$parameters,
-            'requestBodies' => self::$requestBodies
+            'requestBodies' => self::$requestBodies,
+            'securitySchemes' => self::$securitySchemes
         );
         $doc['tags'] = self::$tags;
         $content = json_encode($doc, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
@@ -82,9 +85,11 @@ class DataObjectRESTBuilder extends xarObject
         self::$responses = array();
         self::$parameters = array();
         self::$requestBodies = array();
+        self::$securitySchemes = array();
         self::$tags = array();
         self::add_parameters();
         self::add_responses();
+        self::add_securitySchemes();
     }
 
     public static function add_parameters()
@@ -141,6 +146,26 @@ class DataObjectRESTBuilder extends xarObject
                 )
             )
         );
+        self::$responses['unauthorized'] = array(
+            'description' => 'Authorization information is missing or invalid',
+            'headers' => array(
+                'WWW-Authenticate' => array(
+                    'schema' => array(
+                        'type' => 'string'
+                    )
+                )
+            )
+        );
+    }
+
+    public static function add_securitySchemes()
+    {
+        self::$securitySchemes['cookieAuth'] = array(
+            'type' => 'apiKey',
+            'description' => 'Use Xaraya Session Cookie (after login on the site)',
+            'name' => 'XARAYASID',
+            'in' => 'cookie'
+        );
     }
 
     public static function add_objects()
@@ -186,6 +211,7 @@ class DataObjectRESTBuilder extends xarObject
         if (empty(self::$objects)) {
             self::init_openapi();
             self::add_objects();
+            self::add_whoami();
         }
         return self::$objects;
     }
@@ -350,7 +376,13 @@ class DataObjectRESTBuilder extends xarObject
             'responses' => array(
                 '200' => array(
                     '$ref' => '#/components/responses/itemid'
+                ),
+                '401' => array(
+                    '$ref' => '#/components/responses/unauthorized'
                 )
+            ),
+            'security' => array(
+                array('cookieAuth' => array())
             )
         );
         self::$requestBodies['create-' . $objectname] = array(
@@ -385,7 +417,13 @@ class DataObjectRESTBuilder extends xarObject
             'responses' => array(
                 '200' => array(
                     '$ref' => '#/components/responses/itemid'
+                ),
+                '401' => array(
+                    '$ref' => '#/components/responses/unauthorized'
                 )
+            ),
+            'security' => array(
+                array('cookieAuth' => array())
             )
         );
         self::$requestBodies['update-' . $objectname] = array(
@@ -417,6 +455,56 @@ class DataObjectRESTBuilder extends xarObject
             'responses' => array(
                 '200' => array(
                     '$ref' => '#/components/responses/itemid'
+                ),
+                '401' => array(
+                    '$ref' => '#/components/responses/unauthorized'
+                )
+            ),
+            'security' => array(
+                array('cookieAuth' => array())
+            )
+        );
+    }
+
+    public static function add_whoami()
+    {
+        $path = '/whoami';
+        self::$paths[$path] = array(
+            'get' => array(
+                'tags' => array('objects'),
+                'operationId' => 'whoami',
+                'description' => 'Display current user',
+                'responses' => array(
+                    '200' => array(
+                        '$ref' => '#/components/responses/whoami'
+                    ),
+                    '401' => array(
+                        '$ref' => '#/components/responses/unauthorized'
+                    )
+                ),
+                'security' => array(
+                    array('cookieAuth' => array())
+                )
+            )
+        );
+        self::$responses['whoami'] = array(
+            'description' => 'Display current user',
+            'content' => array(
+                'application/json' => array(
+                    'schema' => array(
+                        '$ref' => '#/components/schemas/whoami'
+                    )
+                )
+            )
+        );
+        self::$schemas['whoami'] = array(
+            'type' => 'object',
+            'properties' => array(
+                'id' => array(
+                    'type' => 'integer'
+                ),
+                'name' => array(
+                    'type' => 'string'
                 )
             )
         );
