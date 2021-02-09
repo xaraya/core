@@ -63,7 +63,11 @@ class xarCache_Storage extends xarObject
                 break;
 
             case 'apc':
-                if (function_exists('apc_fetch')) {
+            case 'apcu':
+                if (function_exists('apcu_fetch')) {
+                    sys::import('xaraya.caching.storage.apcu');
+                    $classname = 'xarCache_APCu_Storage';
+                } elseif (function_exists('apc_fetch')) {
                     sys::import('xaraya.caching.storage.apc');
                     $classname = 'xarCache_APC_Storage';
                 } else {
@@ -462,4 +466,3 @@ class xarCache_Storage extends xarObject
     }
 }
 
-?>

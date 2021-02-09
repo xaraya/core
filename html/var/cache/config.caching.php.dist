@@ -31,7 +31,7 @@ $cachingConfiguration['Page.ExpireHeader'] = 0;
 $cachingConfiguration['Page.CacheGroups'] = '';
 // Only cache the pages of modules hooked to xarCacheManager
 $cachingConfiguration['Page.HookedOnly'] = 0;
-// Store the cached pages in filesystem, database or memcache
+// Store the cached pages in filesystem, database, apcu, xcache or memcached
 $cachingConfiguration['Page.CacheStorage'] = 'filesystem';
 // Keep a logfile of the cache hits and misses for pages, e.g. in var/logs/page.log
 $cachingConfiguration['Page.LogFile'] = '';
@@ -56,7 +56,7 @@ $cachingConfiguration['AutoCache.KeepStats'] = 0;
 
 // Maximum life time of block cache in seconds
 $cachingConfiguration['Block.TimeExpiration'] = 7200;
-// Store the cached blocks in filesystem, database or memcache
+// Store the cached blocks in filesystem, database, apcu, xcache or memcached
 $cachingConfiguration['Block.CacheStorage'] = 'filesystem';
 // Keep a logfile of the cache hits and misses for blocks, e.g. in var/logs/block.log
 $cachingConfiguration['Block.LogFile'] = '';
@@ -65,7 +65,7 @@ $cachingConfiguration['Block.SizeLimit'] = 2097152;
 
 // Maximum life time of module cache in seconds
 $cachingConfiguration['Module.TimeExpiration'] = 7200;
-// Store the cached modules in filesystem, database or memcache
+// Store the cached modules in filesystem, database, apcu, xcache or memcached
 $cachingConfiguration['Module.CacheStorage'] = 'filesystem';
 // Keep a logfile of the cache hits and misses for modules, e.g. in var/logs/module.log
 $cachingConfiguration['Module.LogFile'] = '';
@@ -76,7 +76,7 @@ $cachingConfiguration['Module.CacheFunctions'] = array('main' => 1, 'view' => 1,
 
 // Maximum life time of object cache in seconds
 $cachingConfiguration['Object.TimeExpiration'] = 7200;
-// Store the cached objects in filesystem, database or memcache
+// Store the cached objects in filesystem, database, apcu, xcache or memcached
 $cachingConfiguration['Object.CacheStorage'] = 'filesystem';
 // Keep a logfile of the cache hits and misses for objects, e.g. in var/logs/object.log
 $cachingConfiguration['Object.LogFile'] = '';
@@ -90,11 +90,10 @@ $cachingConfiguration['Object.CacheMethods'] = array('view' => 1, 'display' => 1
 $cachingConfiguration['Variable.CacheIsEnabled'] = 0;
 // Maximum life time of variable cache in seconds
 $cachingConfiguration['Variable.TimeExpiration'] = 7200;
-// Store the cached variables in filesystem, database or memcache. Empty defaults to database
-$cachingConfiguration['Variable.CacheStorage'] = 'xcache';
+// Store the cached variables in filesystem, database, apcu, xcache or memcached. Empty defaults to database
+$cachingConfiguration['Variable.CacheStorage'] = 'apcu';
 // Keep a logfile of the cache hits and misses for variables, e.g. in var/logs/variable.log
 $cachingConfiguration['Variable.LogFile'] = '';
 // Size in bytes to limit the variable cache to
 $cachingConfiguration['Variable.SizeLimit'] = 2097152;
 
-?>
