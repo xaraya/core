@@ -33,6 +33,9 @@ function dynamicdata_properties_autoload($class)
         'fieldstatusproperty'       => 'modules.dynamicdata.xarproperties.fieldstatus',
         'datasourceproperty'        => 'modules.dynamicdata.xarproperties.datasource',
         'configurationproperty'     => 'modules.dynamicdata.xarproperties.configuration',
+        'deferreditemproperty'      => 'modules.dynamicdata.xarproperties.deferitem',
+        'deferredlistproperty'      => 'modules.dynamicdata.xarproperties.deferlist',
+        'deferredmanyproperty'      => 'modules.dynamicdata.xarproperties.defermany',
     );
     
     if (isset($class_array[$class])) {

@@ -50,5 +50,11 @@
             <label>Migrate Items</label>
         </menuitem>
 -->
+        <menuitem>
+            <mask>EditDynamicData</mask>
+            <value>test_apis</value>
+            <target>test_apis</target>
+            <label>Test APIs</label>
+        </menuitem>
     </menuitems>
 </menu>
