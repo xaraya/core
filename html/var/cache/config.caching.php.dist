@@ -1,5 +1,5 @@
 <?php
-// Barebones caching config variables - 
+// Barebones caching config variables -
 // The idea is to keep the overhead low when doing page
 // level caching.
 
@@ -10,11 +10,41 @@
 // sys::varpath() . '/cache/output/cache.modulelevel' : enable module caching
 // sys::varpath() . '/cache/output/cache.objectlevel' : enable object caching
 
+/**
+ * Sample Doctrine CacheProvider
+ *
+ * Note: this assumes you install doctrine/cache with composer
+ * and use composer autoload in the entrypoint, see e.g. rst.php
+ *
+ * $ composer require --dev doctrine/cache
+ * $ head html/rst.php
+ * <?php
+ * ...
+ * require dirname(__DIR__).'/vendor/autoload.php';
+ * ...
+ *
+ * https://www.doctrine-project.org/projects/doctrine-cache/en/current/index.html
+ */
+function xarGetDoctrineCacheProvider()
+{
+    $memcached = new Memcached();
+    $servers = array(
+        array('mem1.domain.com', 11211, 33),
+        array('mem2.domain.com', 11211, 67)
+    );
+    $memcached->addServers($servers);
+    $cache = new Doctrine\Common\Cache\MemcachedCache();
+    $cache->setMemcached($memcached);
+    return $cache;
+}
+// $cacheProvider = xarGetDoctrineCacheProvider();
+$cacheProvider = null;
+
 // Only cache this theme
 $cachingConfiguration['Output.DefaultTheme'] = 'default';
 // Size in bytes to limit the output cache to
 $cachingConfiguration['Output.SizeLimit'] = 2097152;
-// Default site cookie name 
+// Default site cookie name
 $cachingConfiguration['Output.CookieName'] = 'XARAYASID';
 // Default site locale
 $cachingConfiguration['Output.DefaultLocale'] = 'en_US.utf-8';
@@ -31,8 +61,10 @@ $cachingConfiguration['Page.ExpireHeader'] = 0;
 $cachingConfiguration['Page.CacheGroups'] = '';
 // Only cache the pages of modules hooked to xarCacheManager
 $cachingConfiguration['Page.HookedOnly'] = 0;
-// Store the cached pages in filesystem, database, apcu, xcache or memcached
+// Store the cached pages in filesystem, database, apcu or doctrine cache provider
 $cachingConfiguration['Page.CacheStorage'] = 'filesystem';
+// Use instantiated Doctrine CacheProvider - see above
+// $cachingConfiguration['Page.CacheProvider'] = $cacheProvider;
 // Keep a logfile of the cache hits and misses for pages, e.g. in var/logs/page.log
 $cachingConfiguration['Page.LogFile'] = '';
 // Size in bytes to limit the page cache to
@@ -56,8 +88,10 @@ $cachingConfiguration['AutoCache.KeepStats'] = 0;
 
 // Maximum life time of block cache in seconds
 $cachingConfiguration['Block.TimeExpiration'] = 7200;
-// Store the cached blocks in filesystem, database, apcu, xcache or memcached
+// Store the cached blocks in filesystem, database, apcu or doctrine cache provider
 $cachingConfiguration['Block.CacheStorage'] = 'filesystem';
+// Use instantiated Doctrine CacheProvider - see above
+// $cachingConfiguration['Block.CacheProvider'] = $cacheProvider;
 // Keep a logfile of the cache hits and misses for blocks, e.g. in var/logs/block.log
 $cachingConfiguration['Block.LogFile'] = '';
 // Size in bytes to limit the block cache to
@@ -65,8 +99,10 @@ $cachingConfiguration['Block.SizeLimit'] = 2097152;
 
 // Maximum life time of module cache in seconds
 $cachingConfiguration['Module.TimeExpiration'] = 7200;
-// Store the cached modules in filesystem, database, apcu, xcache or memcached
+// Store the cached modules in filesystem, database, apcu or doctrine cache provider
 $cachingConfiguration['Module.CacheStorage'] = 'filesystem';
+// Use instantiated Doctrine CacheProvider - see above
+// $cachingConfiguration['Module.CacheProvider'] = $cacheProvider;
 // Keep a logfile of the cache hits and misses for modules, e.g. in var/logs/module.log
 $cachingConfiguration['Module.LogFile'] = '';
 // Size in bytes to limit the module cache to
@@ -76,8 +112,10 @@ $cachingConfiguration['Module.CacheFunctions'] = array('main' => 1, 'view' => 1,
 
 // Maximum life time of object cache in seconds
 $cachingConfiguration['Object.TimeExpiration'] = 7200;
-// Store the cached objects in filesystem, database, apcu, xcache or memcached
+// Store the cached objects in filesystem, database, apcu or doctrine cache provider
 $cachingConfiguration['Object.CacheStorage'] = 'filesystem';
+// Use instantiated Doctrine CacheProvider - see above
+// $cachingConfiguration['Object.CacheProvider'] = $cacheProvider;
 // Keep a logfile of the cache hits and misses for objects, e.g. in var/logs/object.log
 $cachingConfiguration['Object.LogFile'] = '';
 // Size in bytes to limit the object cache to
@@ -90,8 +128,10 @@ $cachingConfiguration['Object.CacheMethods'] = array('view' => 1, 'display' => 1
 $cachingConfiguration['Variable.CacheIsEnabled'] = 0;
 // Maximum life time of variable cache in seconds
 $cachingConfiguration['Variable.TimeExpiration'] = 7200;
-// Store the cached variables in filesystem, database, apcu, xcache or memcached. Empty defaults to database
+// Store the cached variables in filesystem, database, apcu or doctrine cache provider. Empty defaults to database
 $cachingConfiguration['Variable.CacheStorage'] = 'apcu';
+// Use instantiated Doctrine CacheProvider - see above
+// $cachingConfiguration['Variable.CacheProvider'] = $cacheProvider;
 // Keep a logfile of the cache hits and misses for variables, e.g. in var/logs/variable.log
 $cachingConfiguration['Variable.LogFile'] = '';
 // Size in bytes to limit the variable cache to

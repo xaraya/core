@@ -10,8 +10,8 @@
  */
 /**
  * Cache data using Turck MMCache [http://turck-mmcache.sourceforge.net/]
+ * @deprecated
  */
-
 class xarCache_MMCache_Storage extends xarCache_Storage implements ixarCache_Storage
 {
     public function __construct(Array $args = array())
@@ -108,5 +108,3 @@ class xarCache_MMCache_Storage extends xarCache_Storage implements ixarCache_Sto
         return array();
     }
 }
-
-?>

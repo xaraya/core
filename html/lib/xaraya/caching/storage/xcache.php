@@ -10,8 +10,8 @@
  */
 /**
  * Cache data using XCache [http://xcache.lighttpd.net/]
+ * @deprecated
  */
-
 class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Storage
 {
     public function __construct(Array $args = array())
@@ -207,4 +207,3 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
     }
 }
 
-?>

@@ -11,8 +11,8 @@
 /**
  * Cache data using the PHP Memcache extension [http://www.php.net/memcache]
  * and one or more memcached server(s) [http://www.danga.com/memcached/]
+ * @deprecated
  */
-
 class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_Storage
 {
     public $host       = 'localhost';
@@ -209,4 +209,3 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
     }
 }
 
-?>
