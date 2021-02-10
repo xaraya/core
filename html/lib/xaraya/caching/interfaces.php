@@ -15,6 +15,7 @@ interface ixarCache_Storage
 {
     public function __construct(Array $args = array());
     public function setNamespace($namespace = '');
+    public function setProvider($provider = '');
     public function setCode($code = '');
     public function getCacheKey($key = '');
     public function setExpire($expire = 0);
@@ -35,4 +36,4 @@ interface ixarCache_Storage
     public function getCachedList();
     public function getCachedKeys();
 }
-?>
+

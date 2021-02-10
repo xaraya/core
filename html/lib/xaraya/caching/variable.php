@@ -48,6 +48,8 @@ class xarVariableCache extends xarObject
 
         $storage = !empty($config['Variable.CacheStorage']) ?
             $config['Variable.CacheStorage'] : 'database';
+        $provider = !empty($config['Variable.CacheProvider']) ?
+            $config['Variable.CacheProvider'] : null;
         self::$cacheDir = isset($config['Variable.CacheDir']) ?
             $config['Variable.CacheDir'] : xarCache::$cacheDir . '/variables';
     // CHECKME: we won't actually support filesystem as storage here for security !?
@@ -59,6 +61,7 @@ class xarVariableCache extends xarObject
         // Note: make sure this isn't used before core loading if we use database storage
         self::$cacheStorage = xarCache::getStorage(array('storage'   => $storage,
                                                          'type'      => 'variable',
+                                                         'provider'  => $provider,
                                                          // we (won't) store cache files under this
                                                          'cachedir'  => self::$cacheDir,
                                                          'expire'    => self::$cacheTime,

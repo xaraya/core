@@ -43,10 +43,13 @@ class xarBlockCache extends xarObject
 
         $storage = !empty($args['Block.CacheStorage']) ?
             $args['Block.CacheStorage'] : 'filesystem';
+        $provider = !empty($config['Block.CacheProvider']) ?
+            $config['Block.CacheProvider'] : null;
         $logfile = !empty($args['Block.LogFile']) ?
             $args['Block.LogFile'] : null;
         self::$cacheStorage = xarCache::getStorage(array('storage'   => $storage,
                                                          'type'      => 'block',
+                                                         'provider'  => $provider,
                                                          // we store output cache files under this
                                                          'cachedir'  => xarOutputCache::$cacheDir,
                                                          'expire'    => self::$cacheTime,
@@ -344,4 +347,4 @@ class xarBlockCache extends xarObject
         self::$cacheStorage->flushCached($cacheKey);
     }
 }
-?>
+

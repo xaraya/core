@@ -25,6 +25,7 @@
  *
  * https://www.doctrine-project.org/projects/doctrine-cache/en/current/index.html
  */
+/**
 function xarGetDoctrineCacheProvider()
 {
     $memcached = new Memcached();
@@ -38,6 +39,8 @@ function xarGetDoctrineCacheProvider()
     return $cache;
 }
 // $cacheProvider = xarGetDoctrineCacheProvider();
+$cacheProvider = new Doctrine\Common\Cache\ApcuCache();
+ */
 $cacheProvider = null;
 
 // Only cache this theme

@@ -4,7 +4,14 @@
     "type": "project",
     "require-dev": {
         "phpstan/phpstan": "^0.12.50",
-        "webonyx/graphql-php": "dev-master"
+        "webonyx/graphql-php": "dev-master",
+        "nikic/fast-route": "2.0.x-dev"
+    },
+    "suggest": {
+        "doctrine/cache": "To use supported Doctrine CacheProviders for caching",
+        "doctrine/dbal": "To experiment with JSON data types",
+        "phpdocumentor/reflection": "Required to use bermuda_cleanup.php in developer/tools",
+        "xaraya/modules": "To experiment with adding modules via composer cli"
     },
     "license": "GPL-2.0-or-later",
     "require": {},

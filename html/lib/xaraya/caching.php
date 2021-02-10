@@ -232,7 +232,7 @@ class xarCache extends xarObject
      * Get a storage class instance for some type of cached data
      *
      * 
-     * @param string  $storage the storage you want (filesystem, database or memcached)
+     * @param string  $storage the storage you want (filesystem, database, apcu or doctrine)
      * @param string  $type the type of cached data (page, block, template, ...)
      * @param string  $cachedir the path to the cache directory (for filesystem)
      * @param string  $code the cache code (for URL factors et al.) if it's fixed
@@ -240,6 +240,8 @@ class xarCache extends xarObject
      * @param integer $sizelimit the maximum size for the cache storage
      * @param string  $logfile the path to the logfile for HITs and MISSes
      * @param integer $logsize the maximum size of the logfile
+     * @param string  $namespace optional namespace prefix for the cache keys
+     * @param object  $provider an instantiated Doctrine CacheProvider (for doctrine)
      * @return object the specified cache storage
      */
     public static function getStorage(array $args = array())
@@ -300,4 +302,3 @@ class xarCache extends xarObject
     }
 }
 
-?>
