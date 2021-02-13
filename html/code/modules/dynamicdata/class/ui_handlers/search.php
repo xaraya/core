@@ -103,6 +103,10 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         if (empty($search['match'])) {
             $search['match'] = 'like';
         }
+        $search['sort'] = null;
+        if (isset($this->args['sort'])) {
+            $search['sort'] = $this->args['sort'];
+        }
 
         if(!isset($this->object)) 
         {
@@ -167,6 +171,10 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             }
             // count the items
             $result->countItems();
+            // @checkme setArguments() is not applied without arguments
+            if (!empty($this->args['sort']) && !is_array($result->sort)) {
+                $result->setSort($this->args['sort']);
+            }
             // get the items
             $result->getItems();
             // call the view hooks
@@ -215,6 +223,10 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         // initialize match types if necessary
         if (empty($query['match'])) {
             $query['match'] = array();
+        }
+        $query['sort'] = null;
+        if (isset($this->args['sort'])) {
+            $query['sort'] = $this->args['sort'];
         }
 
         if(!isset($this->object)) 
@@ -295,6 +307,10 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             }
             // count the items
             $result->countItems();
+            // @checkme setArguments() is not applied without arguments
+            if (!empty($this->args['sort']) && !is_array($result->sort)) {
+                $result->setSort($this->args['sort']);
+            }
             // get the items
             $result->getItems();
             // call the view hooks

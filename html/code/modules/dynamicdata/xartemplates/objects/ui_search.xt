@@ -100,6 +100,24 @@
                         </table>
                     </div>
                 </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="sort">Sort by</label>
+                    </div>
+                    <div class="xar-col">
+                        <select name="sort" id="sort">
+                            <option value=""></option>
+                            <xar:foreach in="$show_props" value="$name">
+                                <xar:set name="property">#$object:properties.$name#</xar:set>
+                                <xar:if condition="$search['sort'] eq $name">
+                                    <option value="#$name#" selected="selected">#$property:label#</option>
+                                <xar:else/>
+                                    <option value="#$name#">#$property:label#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                    </div>
+                </div>
             </fieldset>
         </form>
         <xar:if condition="!empty($result)">

@@ -90,7 +90,7 @@ class DataObjectRESTHandler extends xarObject
         }
         $params = array('name' => $object, 'fieldlist' => $fieldlist);
         $objectlist = DataObjectMaster::getObjectList($params);
-        $result = array('items' => array(), 'count' => $objectlist->countItems(), 'limit' => $limit, 'offset' => $offset);
+        $result = array('items' => array(), 'count' => $objectlist->countItems(), 'limit' => $limit, 'offset' => $offset, 'order' => $order);
         $params = array('numitems' => $limit);
         if (!empty($offset) && !empty($result['count'])) {
             if ($offset < $result['count']) {
@@ -99,7 +99,6 @@ class DataObjectRESTHandler extends xarObject
                 throw new Exception('Invalid offset ' . $offset);
             }
         }
-        /**
         if (!empty($order)) {
             $params['sort'] = array();
             $sorted = explode(',', $order);
@@ -112,7 +111,6 @@ class DataObjectRESTHandler extends xarObject
             }
             //$params['sort'] = implode(',', $params['sort']);
         }
-         */
         $items = $objectlist->getItems($params);
         $deferred = array();
         foreach ($fieldlist as $key) {

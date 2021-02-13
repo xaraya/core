@@ -77,6 +77,10 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
 
         $this->object->countItems();
 
+        // @checkme setArguments() is not applied without arguments
+        if (!empty($this->args['sort']) && !is_array($this->object->sort)) {
+            $this->object->setSort($this->args['sort']);
+        }
         $this->object->getItems();
 
         $this->object->callHooks('view');
