@@ -99,8 +99,10 @@ function roles_admin_showusers()
 
     // Sort ye
     // FIXME: this hardwiring is only possible because this list os not configurable
+    // this should be using the properties['regdate']->source like ObjectList setSort() does
     if ($data['order'] == 'regdate')  $data['order'] ='date_reg';
     $q->setorder($data['order']);
+    if ($data['order'] == 'date_reg')  $data['order'] = 'regdate';
 
     // Add limits
     $q->setrowstodo($numitems);
