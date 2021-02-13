@@ -50,10 +50,13 @@ class xarModuleCache extends xarObject
 
         $storage = !empty($args['Module.CacheStorage']) ?
             $args['Module.CacheStorage'] : 'filesystem';
+        $provider = !empty($config['Module.CacheProvider']) ?
+            $config['Module.CacheProvider'] : null;
         $logfile = !empty($args['Module.LogFile']) ?
             $args['Module.LogFile'] : null;
         self::$cacheStorage = xarCache::getStorage(array('storage'   => $storage,
                                                          'type'      => 'module',
+                                                         'provider'  => $provider,
                                                          // we store output cache files under this
                                                          'cachedir'  => xarOutputCache::$cacheDir,
                                                          'expire'    => self::$cacheTime,

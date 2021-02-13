@@ -16,7 +16,7 @@ sys::import('xaraya.caching.interfaces');
 
 class xarCache_Storage extends xarObject
 {
-    public $storage    = '';        // filesystem, database, memcached, ...
+    public $storage    = '';        // filesystem, database, apcu or doctrine cache
     public $cachedir   = 'var/cache/output';
     public $type       = '';        // page, block, object, module, template, core, ...
     public $code       = '';        // URL factors et al.
@@ -26,6 +26,7 @@ class xarCache_Storage extends xarObject
     public $logfile    = null;
     public $logsize    = 2000000;   // for each logfile
     public $namespace  = '';        // optional namespace prefix for the cache keys (= sitename, version, ...)
+    public $provider   = null;      // instantiated Doctrine CacheProvider (for doctrine)
 
     public $prefix     = '';        // the default prefix for the cache keys will be 'type/namespace' (except in filesystem)
 
@@ -39,7 +40,7 @@ class xarCache_Storage extends xarObject
     /**
      * Factory class method for cache storage (only 'storage' is semi-required)
      * 
-     * @param string  $storage the storage you want (filesystem, database or memcached)
+     * @param string  $storage the storage you want (filesystem, database, apcu or doctrine)
      * @param string  $type the type of cached data (page, block, template, ...)
      * @param string  $cachedir the path to the cache directory (for filesystem)
      * @param string  $code the cache code (for URL factors et al.) if it's fixed
@@ -48,6 +49,7 @@ class xarCache_Storage extends xarObject
      * @param string  $logfile the path to the logfile for HITs and MISSes
      * @param integer $logsize the maximum size of the logfile
      * @param string  $namespace optional namespace prefix for the cache keys
+     * @param object  $provider an instantiated Doctrine CacheProvider (for doctrine)
      * @return object the specified cache storage
      */
     public static function getCacheStorage(array $args = array())
@@ -70,6 +72,16 @@ class xarCache_Storage extends xarObject
                 } elseif (function_exists('apc_fetch')) {
                     sys::import('xaraya.caching.storage.apc');
                     $classname = 'xarCache_APC_Storage';
+                } else {
+                    sys::import('xaraya.caching.storage.filesystem');
+                    $classname = 'xarCache_FileSystem_Storage';
+                }
+                break;
+
+            case 'doctrine':
+                if (class_exists('Doctrine\\Common\\Cache\\CacheProvider')) {
+                    sys::import('xaraya.caching.storage.doctrine');
+                    $classname = 'xarCache_Doctrine_Storage';
                 } else {
                     sys::import('xaraya.caching.storage.filesystem');
                     $classname = 'xarCache_FileSystem_Storage';
@@ -159,6 +171,9 @@ class xarCache_Storage extends xarObject
         if (!empty($args['logsize'])) {
             $this->logsize = $args['logsize'];
         }
+        if (!empty($args['provider'])) {
+            $this->provider = $args['provider'];
+        }
         // the namespace must be usable as a filename prefix here !
         if (!empty($args['namespace']) && preg_match('/^[a-zA-Z0-9 _.-\/]+$/', $args['namespace'])) {
             $this->namespace = $args['namespace'];
@@ -177,6 +192,14 @@ class xarCache_Storage extends xarObject
         $this->namespace = $namespace;
         // the default prefix for the cache keys will be 'type/namespace', except in filesystem (for now)
         $this->prefix = $this->type . '/' . $this->namespace;
+    }
+
+    /**
+     * Set the current Doctrine CacheProvider (for doctrine)
+     */
+    public function setProvider($provider = '')
+    {
+        $this->provider = $provider;
     }
 
     /**

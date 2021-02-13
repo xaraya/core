@@ -11,8 +11,8 @@
 
 /**
  * Cache data using APC [http://pecl.php.net/apc/]
+ * @deprecated
  */
-
 sys::import('xaraya.caching.storage');
 class xarCache_APC_Storage extends xarCache_Storage implements ixarCache_Storage
 {

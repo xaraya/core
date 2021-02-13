@@ -10,8 +10,8 @@
  */
 /**
  * Cache data using eAccelerator [http://eaccelerator.net/]
+ * @deprecated
  */
-
 class xarCache_eAccelerator_Storage extends xarCache_Storage implements ixarCache_Storage
 {
     public function __construct(Array $args = array())
@@ -109,4 +109,3 @@ class xarCache_eAccelerator_Storage extends xarCache_Storage implements ixarCach
     }
 }
 
-?>

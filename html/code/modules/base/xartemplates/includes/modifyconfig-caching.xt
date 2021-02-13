@@ -37,6 +37,20 @@
                     <xar:data-output type="dropdown" name="persistent_storagetype" value="$value" options="$options"/>
                 </div>
             </div>
+            <xar:if condition="!empty($cache_settings['Variable.CacheProvider'])">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">The instantiated Doctrine CacheProvider</xar:var>
+                    <label for="shorturl" title="#$label#" class="xar-form-label">
+                        Cache Provider
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:set name="value">get_class($cache_settings['Variable.CacheProvider'])</xar:set>
+                    <xar:data-output type="textbox" name="persistent_cacheprovider" value="$value"/>
+                </div>
+            </div>
+            </xar:if>
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:var name="label">The length of time before the content in cache is deleted</xar:var>
