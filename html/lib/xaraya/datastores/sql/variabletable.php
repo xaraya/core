@@ -290,11 +290,17 @@ class VariableTableDataStore extends SQLDataStore
                 $wherelist[] = $whereitem['field'];
             }
         }
+        $sortlist = array();
+        if (property_exists($this->object, 'ddsort') && is_array($this->object->ddsort)) {
+            foreach ($this->object->ddsort as $sortitem) {
+                $sortlist[] = $sortitem['field'];
+            }
+        }
         $propids = array();
         $propnames = array_keys($this->object->properties);
         $properties = array();
         foreach ($this->object->properties as $property) {
-            //if ((!empty($fieldlist) && !in_array($property->name, $fieldlist)) && $property->name !== $this->object->primary && !in_array($property->id, $wherelist)) {
+            //if ((!empty($fieldlist) && !in_array($property->name, $fieldlist)) && $property->name !== $this->object->primary && !in_array($property->id, $wherelist) && !in_array($property->id, $sortlist)) {
             //    continue;
             //}
             $propids[] = $property->id;
@@ -486,7 +492,7 @@ class VariableTableDataStore extends SQLDataStore
         // ------------------------------------------------------
         // TODO: make sure this is portable !
         // more difficult case where we need to create a pivot table, basically
-        } elseif ($this->object->numitems > 0 || !empty($this->object->sort) || !empty($this->object->where) || !empty($this->object->groupby) || (property_exists($this->object, 'ddwhere') && !empty($this->object->ddwhere))) {
+        } elseif ($this->object->numitems > 0 || !empty($this->object->sort) || !empty($this->object->where) || !empty($this->object->groupby) || (property_exists($this->object, 'ddwhere') && !empty($this->object->ddwhere)) || (property_exists($this->object, 'ddsort') && !empty($this->object->ddsort))) {
 
             $dbtype = $this->getType();
             if (substr($dbtype,0,4) == 'oci8') {
@@ -536,6 +542,18 @@ class VariableTableDataStore extends SQLDataStore
                     } else {
                         $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
                     }
+                }
+            }
+            // Not sure what removing some invoice tax status field in commit 2092fd13e6b45e217806195ab4a3839ccbc98a52
+            // had to do with commenting out the 'sort' capability in variabletable in 2012, but there you have it...
+            // Re-activating using a different property name for now, in case there are hidden side-effects elsewhere
+            if (property_exists($this->object, 'ddsort') && is_array($this->object->ddsort)) {
+                $query .= " ORDER BY ";
+                $join = '';
+                foreach ($this->object->ddsort as $sortitem) {
+                    if (empty($sortitem)) continue;
+                    $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+                    $join = ', ';
                 }
             }
 /*

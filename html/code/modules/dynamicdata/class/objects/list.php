@@ -212,8 +212,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->itemids = explode(',',$this->itemids);
             }
         }
+        if (!is_array($this->sort)) $this->sort = explode(',',$this->sort);
         if (!is_array($this->groupby)) $this->groupby = explode(',',$this->groupby);
         if (!is_array($this->fieldlist)) $this->fieldlist = explode(',',$this->fieldlist);
+        // Clean up arrays by removing false values (= empty, false, null, 0)
+        if (!empty($this->itemids)) $this->itemids = array_filter($this->itemids);
+        if (!empty($this->sort)) $this->sort = array_filter($this->sort);
+        if (!empty($this->groupby)) $this->groupby = array_filter($this->groupby);
+        if (!empty($this->fieldlist)) $this->fieldlist = array_filter($this->fieldlist);
 
         $this->getDataStore(true);
 
@@ -284,6 +290,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
             // Add the field's order clause
             $this->dataquery->addorder($this->properties[$criteria]->source, $sortorder);
+            // @todo fix setSort() and/or dataquery to support other datastores than relational ones
+            if (is_object($this->datastore) && get_class($this->datastore) == 'VariableTableDataStore') {
+                $this->addSort($criteria, $sortorder);
+            }
         }
     }
 
@@ -309,6 +319,32 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             'post' => $post
         );
         $this->ddwhere[] = $whereitem;
+    }
+
+    /**
+     * Add sort order for dynamic_data objects in object lists
+     * @todo fix setSort() and/or dataquery to support other datastores than relational ones
+     */
+    public function addSort($name, $sortorder = 'ASC')
+    {
+        if (!array_key_exists($name, $this->properties)) {
+            return;
+        }
+        if (!property_exists($this, 'ddsort')) {
+            $this->ddsort = array();
+        }
+        if (!empty($sortorder) && strtoupper($sortorder) == 'DESC') {
+            $sortorder = 'DESC';
+        } else {
+            $sortorder = 'ASC';
+        }
+        // Result in variabletable:
+        //  $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+        $sortitem = array(
+            'field' => $this->properties[$name]->id,
+            'sortorder' => $sortorder
+        );
+        $this->ddsort[] = $sortitem;
     }
 
     /**
