@@ -59,6 +59,12 @@ class xarGraphQL extends xarObject
     public static $extra_types = [];
     public static $trace_path = false;
     public static $paths = [];
+    public static $trace_time = false;
+    public static $times = [];
+    public static $prev_time = 0;
+    public static $cache_plan = false;
+    public static $cacheScope = 'GraphQLAPI.QueryPlan';
+    public static $cacheKey = null;
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -252,18 +258,31 @@ class xarGraphQL extends xarObject
         return $typeConfig;
     }
 
+    public static function timer($label)
+    {
+        if (self::$trace_time) {
+            $now = microtime(true);
+            if (empty(self::$prev_time)) {
+                self::$prev_time = !empty($_SERVER['REQUEST_TIME_FLOAT']) ? $_SERVER['REQUEST_TIME_FLOAT'] : 0;
+                self::$times[] = array('request' => self::$prev_time);
+            }
+            self::$times[] = array($label => ($now - self::$prev_time));
+            self::$prev_time = $now;
+        }
+    }
+
     /**
      * Utility function to execute a GraphQL query and get the data
      */
     public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null)
     {
-        $schema = self::get_schema($extraTypes);
-        //$schemaFile = __DIR__ . '/graphql/schema.graphql';
+        self::timer('start');
         if (!empty($schemaFile)) {
             $schema = self::build_schema($schemaFile, $extraTypes);
         } else {
             $schema = self::get_schema($extraTypes);
         }
+        self::timer('schema');
         if ($queryString == '{schema}') {
             $header = "schema {\n  query: Query\n  mutation: Mutation\n}\n\n";
             return $header . SchemaPrinter::doPrint($schema);
@@ -271,7 +290,7 @@ class xarGraphQL extends xarObject
         }
         
         $rootValue = ['prefix' => 'You said: message='];
-        $context = ['context' => true, 'object' => null];
+        $context = ['request' => $_REQUEST, 'server' => $_SERVER];
         $fieldResolver = null;
         $validationRules = null;
         
@@ -285,10 +304,20 @@ class xarGraphQL extends xarObject
             $fieldResolver,
             $validationRules
         );
+        self::timer('query');
         //$serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
         $serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE);
+        self::timer('array');
+        $extensions = array();
         if (self::$trace_path) {
-            $serializableResult['paths'] = self::$paths;
+            $extensions['paths'] = self::$paths;
+        }
+        self::timer('stop');
+        if (self::$trace_time) {
+            $extensions['times'] = self::$times;
+        }
+        if (!empty($extensions)) {
+            $serializableResult['extensions'] = $extensions;
         }
         return $serializableResult;
     }
@@ -312,5 +341,12 @@ class xarGraphQL extends xarObject
         header('Access-Control-Allow-Origin: *');
         header('Content-Type: application/json; charset=utf-8');
         echo $data;
+    }
+
+    public static function dump_schema($extraTypes = null)
+    {
+        $schemaFile = sys::varpath() . '/cache/schema.graphql';
+        $content = self::get_data('{schema}', [], null, $extraTypes);
+        file_put_contents($schemaFile, $content);
     }
 }

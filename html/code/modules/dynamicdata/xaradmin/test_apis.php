@@ -30,11 +30,24 @@ function dynamicdata_admin_test_apis(array $args=array())
     if (!empty($create)) {
         DataObjectRESTBuilder::create_openapi();
     }
+    /**
+    if (!xarVar::fetch('create_gql', 'notempty', $create_gql, 0, xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    GraphQL::init();
+    if (!empty($create_gql)) {
+        GraphQL::dump_schema();
+    }
+     */
 
     $data = array();
     $openapi = sys::varpath() . '/cache/openapi.json';
     if (file_exists($openapi)) {
         $data['openapi'] = $openapi;
+    }
+    $graphql = sys::varpath() . '/cache/schema.graphql';
+    if (file_exists($graphql)) {
+        $data['graphql'] = $graphql;
     }
     $data['objects'] = DataObjectRESTBuilder::get_objects();
 

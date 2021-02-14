@@ -56,6 +56,19 @@
                     Experiment with GraphQL queries and mutations on objects
                 </div>
             </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                <xar:if condition="!empty($graphql)">
+                    <a href="./var/cache/schema.graphql">var/cache/schema.graphql</a>
+                <xar:else/>
+                    var/cache/schema.graphql
+                </xar:if>
+                    &#8635; <!-- a href="#xarController::URL('dynamicdata','admin','test_apis',array('create_gql'=>1))#">re-build</a -->
+                </div>
+                <div class="xar-col">
+                    The current schema.graphql document for this API
+                </div>
+            </div>
         </fieldset>
         <form method="post">
             <fieldset class="xar-form-actions">

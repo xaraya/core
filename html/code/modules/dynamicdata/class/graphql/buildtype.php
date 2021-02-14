@@ -393,6 +393,46 @@ class xarGraphQLBuildType
         return $resolver;
     }
 
+    public static function dump_query_plan($plan)
+    {
+        if (!is_array($plan)) {
+            return $plan;
+        }
+        $info = array();
+	foreach ($plan as $key => $value) {
+            if ($key === 'type' && !is_array($value)) {
+                $info[$key] = (string) $value;
+            } else {
+                $info[$key] = self::dump_query_plan($value);
+	    }
+        }
+        return $info;
+    }
+
+    public static function check_query_plan($queryType, $rootValue, $args, $context, ResolveInfo $info)
+    {
+        $queryPlan = $info->lookAhead();
+        $dumpPlan = self::dump_query_plan($queryPlan->queryPlan());
+        $queryId = $queryType . '-' . md5(json_encode($dumpPlan));
+        if (!empty($args) && is_array($args)) {
+            ksort($args);
+        }
+        // @todo cache query plan + (later) perhaps result based on args
+        if (xarGraphQL::$cache_plan) {
+	    xarGraphQL::$cacheKey = xarCache::getVariableKey(xarGraphQL::$cacheScope, $queryId);
+            if (!empty(xarGraphQL::$cacheKey) && !xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
+                xarVariableCache::setCached(xarGraphQL::$cacheKey, $dumpPlan);
+            }
+        }
+        return array(
+            'queryid' => $queryId,
+            'querytype' => $queryType,
+            'queryplan' => $dumpPlan,
+            'rootvalue' => $rootValue,
+            'args' => $args
+        );
+    }
+
     /**
      * Get the root query fields for this object for the GraphQL Query type (list, item)
      */
@@ -443,6 +483,10 @@ class xarGraphQLBuildType
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (xarGraphQL::$trace_path) {
+                if (empty(xarGraphQL::$paths)) {
+                    $queryType = $type . '_page';
+                    xarGraphQL::$paths[] = self::check_query_plan($queryType, $rootValue, $args, $context, $info);
+                }
                 xarGraphQL::$paths[] = array_merge($info->path, ["page query"]);
             }
             // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
@@ -507,6 +551,10 @@ class xarGraphQLBuildType
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (xarGraphQL::$trace_path) {
+                if (empty(xarGraphQL::$paths)) {
+                    $queryType = $type . '_list';
+                    xarGraphQL::$paths[] = self::check_query_plan($queryType, $rootValue, $args, $context, $info);
+                }
                 xarGraphQL::$paths[] = array_merge($info->path, ["list query"]);
             }
             //print_r($rootValue);
@@ -583,6 +631,10 @@ class xarGraphQLBuildType
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (xarGraphQL::$trace_path) {
+                if (empty(xarGraphQL::$paths)) {
+                    $queryType = $type . '_item';
+                    xarGraphQL::$paths[] = self::check_query_plan($queryType, $rootValue, $args, $context, $info);
+                }
                 xarGraphQL::$paths[] = array_merge($info->path, ["item query"]);
             }
             //print_r($rootValue);

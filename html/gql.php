@@ -22,6 +22,8 @@ use GraphQL\GraphQL;
 
 // initialize bootstrap
 sys::init();
+// initialize caching
+xarCache::init();
 // initialize database
 xarDatabase::init();
 // initialize modules
@@ -51,9 +53,12 @@ if (!empty($variables) && is_string($variables)) {
 //$query = '{samples { name, age } }';
 //$query = '{sample(id: 0) { name, age } }';
 //$query = '{schema}';
-//$data = xarGraphQLGetData($query, $variables, $operationName);
+//xarGraphQL::$trace_path = true;
+//xarGraphQL::$trace_time = true;
+//xarGraphQL::$cache_plan = true;
+//$data = xarGraphQL::get_data($query, $variables, $operationName);
 $extraTypes = ['module', 'theme', 'category', 'configuration'];
-//$extraTypes = ['module', 'theme', 'category', 'configuration', 'categories_linkage', 'extra'];
+//$extraTypes = ['module', 'theme', 'category', 'configuration', 'categories_linkage', 'extra', 'api_film', 'api_people', 'api_planet', 'api_species', 'api_starship', 'api_vehicle'];
 $data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
 //$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes, $schemaFile);
