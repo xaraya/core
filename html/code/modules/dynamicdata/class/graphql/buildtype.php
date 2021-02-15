@@ -399,12 +399,12 @@ class xarGraphQLBuildType
             return $plan;
         }
         $info = array();
-	foreach ($plan as $key => $value) {
+        foreach ($plan as $key => $value) {
             if ($key === 'type' && !is_array($value)) {
                 $info[$key] = (string) $value;
             } else {
                 $info[$key] = self::dump_query_plan($value);
-	    }
+            }
         }
         return $info;
     }
@@ -419,9 +419,18 @@ class xarGraphQLBuildType
         }
         // @todo cache query plan + (later) perhaps result based on args
         if (xarGraphQL::$cache_plan) {
-	    xarGraphQL::$cacheKey = xarCache::getVariableKey(xarGraphQL::$cacheScope, $queryId);
-            if (!empty(xarGraphQL::$cacheKey) && !xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
-                xarVariableCache::setCached(xarGraphQL::$cacheKey, $dumpPlan);
+            xarGraphQL::$cacheKey = xarCache::getVariableKey(xarGraphQL::$cacheScope, $queryId);
+            if (!empty(xarGraphQL::$cacheKey)) {
+                if (!xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
+                    xarVariableCache::setCached(xarGraphQL::$cacheKey, $dumpPlan);
+                }
+                if (xarGraphQL::$cache_data) {
+                    // @checkme add current arguments to cacheKey to cache results
+                    if (!empty($args)) {
+                        xarGraphQL::$cacheKey .= '-' . md5(json_encode($args));
+                    }
+                    xarGraphQL::$cacheKey .= '-result';
+                }
             }
         }
         return array(
@@ -486,6 +495,10 @@ class xarGraphQLBuildType
                 if (empty(xarGraphQL::$paths)) {
                     $queryType = $type . '_page';
                     xarGraphQL::$paths[] = self::check_query_plan($queryType, $rootValue, $args, $context, $info);
+                    // @checkme don't try to resolve anything further if the result is already cached?
+                    if (xarGraphQL::$cache_data && !empty(xarGraphQL::$cacheKey) && xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
+                        return;
+                    }
                 }
                 xarGraphQL::$paths[] = array_merge($info->path, ["page query"]);
             }
@@ -554,6 +567,10 @@ class xarGraphQLBuildType
                 if (empty(xarGraphQL::$paths)) {
                     $queryType = $type . '_list';
                     xarGraphQL::$paths[] = self::check_query_plan($queryType, $rootValue, $args, $context, $info);
+                    // @checkme don't try to resolve anything further if the result is already cached?
+                    if (xarGraphQL::$cache_data && !empty(xarGraphQL::$cacheKey) && xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
+                        return;
+                    }
                 }
                 xarGraphQL::$paths[] = array_merge($info->path, ["list query"]);
             }
@@ -634,6 +651,10 @@ class xarGraphQLBuildType
                 if (empty(xarGraphQL::$paths)) {
                     $queryType = $type . '_item';
                     xarGraphQL::$paths[] = self::check_query_plan($queryType, $rootValue, $args, $context, $info);
+                    // @checkme don't try to resolve anything further if the result is already cached?
+                    if (xarGraphQL::$cache_data && !empty(xarGraphQL::$cacheKey) && xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
+                        return;
+                    }
                 }
                 xarGraphQL::$paths[] = array_merge($info->path, ["item query"]);
             }

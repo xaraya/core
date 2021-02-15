@@ -63,6 +63,7 @@ class xarGraphQL extends xarObject
     public static $times = [];
     public static $prev_time = 0;
     public static $cache_plan = false;
+    public static $cache_data = false;
     public static $cacheScope = 'GraphQLAPI.QueryPlan';
     public static $cacheKey = null;
 
@@ -308,6 +309,14 @@ class xarGraphQL extends xarObject
         //$serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
         $serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE);
         self::timer('array');
+        if (self::$cache_data && !empty(self::$cacheKey)) {
+            if (xarVariableCache::isCached(self::$cacheKey)) {
+                $serializableResult = xarVariableCache::getCached(self::$cacheKey);
+                self::timer('cache');
+            } else {
+                xarVariableCache::setCached(self::$cacheKey, $serializableResult);
+            }
+        }
         $extensions = array();
         if (self::$trace_path) {
             $extensions['paths'] = self::$paths;
