@@ -66,7 +66,8 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'seq' => Type::int(),
             'configuration' => xarGraphQL::get_type('serial'),
             'configuration_kv' => [
-                'type' => Type::listOf(xarGraphQL::get_type("keyval")),
+                //'type' => Type::listOf(xarGraphQL::get_type("keyval")),
+                'type' => xarGraphQL::get_type_list("keyval"),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
                     if (xarGraphQL::$trace_path) {
                         xarGraphQL::$paths[] = array_merge($info->path, ["property configuration_kv"]);

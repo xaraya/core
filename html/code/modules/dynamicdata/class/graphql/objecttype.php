@@ -85,7 +85,8 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'isalias' => Type::boolean(),
             'category' => Type::string(),
             //'category' => $clazz::get_deferred_field('category', 'category'),
-            'properties' => Type::listOf(xarGraphQL::get_type("property")),
+            //'properties' => Type::listOf(xarGraphQL::get_type("property")),
+            'properties' => xarGraphQL::get_type_list("property"),
         ];
         return $fields;
     }

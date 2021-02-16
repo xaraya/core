@@ -87,7 +87,8 @@ class xarGraphQLBaseType extends ObjectType
         $fields = [];
         if (!empty(static::$_xar_list)) {
             $fields[static::$_xar_list] = [
-                'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)),
+                //'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)),
+                'type' => xarGraphQL::get_type_list(static::$_xar_type),
                 'resolve' => static::_xar_list_query_resolver(static::$_xar_type, static::$_xar_object),
             ];
         }
@@ -112,7 +113,8 @@ class xarGraphQLBaseType extends ObjectType
     {
         return [
             'name' => $list,
-            'type' => Type::listOf(xarGraphQL::get_type($type)),
+            //'type' => Type::listOf(xarGraphQL::get_type($type)),
+            'type' => xarGraphQL::get_type_list($type),
             /**
             'args' => [
                 'sort' => Type::string(),

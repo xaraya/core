@@ -36,6 +36,7 @@ use GraphQL\Type\Schema;
 use GraphQL\Error\DebugFlag;
 use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
+use GraphQL\Type\Definition\Type;
 
 /**
  * See xardocs/graphql.txt for class structure
@@ -101,6 +102,32 @@ class xarGraphQL extends xarObject
         if (isset(self::$type_cache[$name])) {
             return self::$type_cache[$name];
         }
+        // Schema doesn't accept lazy loading of query type (besides typeLoader)
+        if (in_array($name, ['query', 'mutation'])) {
+            return self::load_lazy_type($name);
+        }
+        // See https://github.com/webonyx/graphql-php/pull/557
+        return function () use ($name) {
+            return self::load_lazy_type($name);
+        };
+    }
+
+    // 'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)), doesn't accept lazy loading
+    public static function get_type_list($name)
+    {
+        $name = strtolower($name);
+        // See https://github.com/webonyx/graphql-php/pull/557
+        return function () use ($name) {
+            return Type::listOf(self::load_lazy_type($name));
+        };
+    }
+
+    public static function load_lazy_type($name)
+    {
+        if (isset(self::$type_cache[$name])) {
+            return self::$type_cache[$name];
+        }
+        //self::$paths[] = ['load_lazy_type', $name];
         $page_ext = '_page';
         if (substr($name, -strlen($page_ext)) === $page_ext) {
             return self::get_page_type(substr($name, 0, strlen($name) - strlen($page_ext)));
