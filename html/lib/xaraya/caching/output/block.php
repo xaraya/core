@@ -43,8 +43,8 @@ class xarBlockCache extends xarObject
 
         $storage = !empty($args['Block.CacheStorage']) ?
             $args['Block.CacheStorage'] : 'filesystem';
-        $provider = !empty($config['Block.CacheProvider']) ?
-            $config['Block.CacheProvider'] : null;
+        $provider = !empty($args['Block.CacheProvider']) ?
+            $args['Block.CacheProvider'] : null;
         $logfile = !empty($args['Block.LogFile']) ?
             $args['Block.LogFile'] : null;
         self::$cacheStorage = xarCache::getStorage(array('storage'   => $storage,
