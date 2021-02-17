@@ -257,10 +257,10 @@ class xarGraphQLBuildType
         //$type = "mixed";
         //$type = $property->objectname;
         if (count($property->fieldlist) > 1) {
-            try {
-                $type = self::singularize($property->objectname);
+            $type = self::singularize($property->objectname);
+            if (xarGraphQL::has_type($type)) {
                 $type = xarGraphQL::get_type($type);
-            } catch (Exception $e) {
+            } else {
                 $type = xarGraphQL::get_type("mixed");
             }
         } else {
@@ -281,11 +281,11 @@ class xarGraphQLBuildType
         //$type = "mixed";
         //$type = $property->objectname;
         if (count($property->fieldlist) > 1) {
-            try {
-                $type = self::singularize($property->objectname);
+            $type = self::singularize($property->objectname);
+            if (xarGraphQL::has_type($type)) {
                 //$type = xarGraphQL::get_type($type);
                 $typelist = xarGraphQL::get_type_list($type);
-            } catch (Exception $e) {
+            } else {
                 //$type = xarGraphQL::get_type("mixed");
                 $typelist = xarGraphQL::get_type_list("mixed");
             }
@@ -310,11 +310,11 @@ class xarGraphQLBuildType
         //$type = "mixed";
         //$type = $property->targetname;
         if (!empty($property->targetname) && count($property->fieldlist) > 1) {
-            try {
-                $type = self::singularize($property->targetname);
+            $type = self::singularize($property->targetname);
+            if (xarGraphQL::has_type($type)) {
                 //$type = xarGraphQL::get_type($type);
                 $typelist = xarGraphQL::get_type_list($type);
-            } catch (Exception $e) {
+            } else {
                 //$type = xarGraphQL::get_type("mixed");
                 $typelist = xarGraphQL::get_type_list("mixed");
             }

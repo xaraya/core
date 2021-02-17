@@ -106,10 +106,21 @@ class xarGraphQL extends xarObject
         if (in_array($name, ['query', 'mutation'])) {
             return self::load_lazy_type($name);
         }
+        //if (!self::has_type($name)) {
+        //    throw new Exception("Unknown graphql type: " . $name);
+        //}
         // See https://github.com/webonyx/graphql-php/pull/557
         return function () use ($name) {
             return self::load_lazy_type($name);
         };
+    }
+
+    public static function has_type($name)
+    {
+        if (in_array($name, self::$extra_types) || array_key_exists($name, self::$type_mapper)) {
+            return true;
+        }
+        return false;
     }
 
     // 'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)), doesn't accept lazy loading
