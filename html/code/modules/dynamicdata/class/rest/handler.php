@@ -19,6 +19,8 @@ class DataObjectRESTHandler extends xarObject
     public static $endpoint = 'rst.php/v1';
     public static $objects = array();
     public static $schemas = array();
+    public static $security = array();
+    public static $modules = array();
 
     public static function getOpenAPI($args = null)
     {
@@ -31,15 +33,23 @@ class DataObjectRESTHandler extends xarObject
         return $doc;
     }
 
-    public static function getURL($object = null, $itemid = null)
+    public static function getBaseURL($base = '', $path = null, $args = array())
+    {
+        if (empty($path)) {
+            return xarServer::getBaseURL() . self::$endpoint . $base;
+        }
+        return xarServer::getBaseURL() . self::$endpoint . $base . '/' . $path;
+    }
+
+    public static function getObjectURL($object = null, $itemid = null)
     {
         if (empty($object)) {
-            return xarServer::getBaseURL() . self::$endpoint . '/objects';
+            return self::getBaseURL('/objects');
         }
         if (empty($itemid)) {
-            return xarServer::getBaseURL() . self::$endpoint . '/objects/' . $object;
+            return self::getBaseURL('/objects', $object);
         }
-        return xarServer::getBaseURL() . self::$endpoint . '/objects/' . $object . '/' . $itemid;
+        return self::getBaseURL('/objects', $object . '/' . $itemid);
     }
 
     public static function getObjects($args)
@@ -56,7 +66,7 @@ class DataObjectRESTHandler extends xarObject
             if ($item['datastore'] !== 'dynamicdata') {
                 continue;
             }
-            $item['_links'] = array('self' => array('href' => self::getURL($item['name'])));
+            $item['_links'] = array('self' => array('href' => self::getObjectURL($item['name'])));
             array_push($result['items'], $item);
         }
         $result['filter'] = 'datastore,eq,dynamicdata';
@@ -70,6 +80,11 @@ class DataObjectRESTHandler extends xarObject
         $schema = 'view-' . $object;
         if (!self::hasSchema($schema)) {
             return array('method' => 'getObjectList', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
+        }
+        $operationId = 'view_' . $object;
+        if (self::hasSecurity($operationId)) {
+            // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+            self::checkuser();
         }
         $fieldlist = array_keys(self::getViewSchemaProperties($schema));
         $limit = 20;
@@ -90,6 +105,10 @@ class DataObjectRESTHandler extends xarObject
         }
         $params = array('name' => $object, 'fieldlist' => $fieldlist);
         $objectlist = DataObjectMaster::getObjectList($params);
+        if (self::hasSecurity($operationId) && !$objectlist->checkAccess('view')) {
+            http_response_code(403);
+            exit;
+        }
         $result = array('items' => array(), 'count' => $objectlist->countItems(), 'limit' => $limit, 'offset' => $offset, 'order' => $order);
         $params = array('numitems' => $limit);
         if (!empty($offset) && !empty($result['count'])) {
@@ -128,7 +147,7 @@ class DataObjectRESTHandler extends xarObject
                 $data = $objectlist->properties[$key]->getDeferredData(array('value' => $item[$key], '_itemid' => $itemid));
                 $item[$key] = $data['value'];
             }
-            $item['_links'] = array('self' => array('href' => self::getURL($object, $itemid)));
+            $item['_links'] = array('self' => array('href' => self::getObjectURL($object, $itemid)));
             array_push($result['items'], $item);
         }
         //return array('method' => 'getObjectList', 'args' => $args, 'schema' => $schema, 'fieldlist' => $fieldlist, 'result' => $result);
@@ -146,9 +165,18 @@ class DataObjectRESTHandler extends xarObject
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
+        $operationId = 'display_' . $object;
+        if (self::hasSecurity($operationId)) {
+            // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+            self::checkuser();
+        }
         $fieldlist = array_keys(self::getDisplaySchemaProperties($schema));
         $params = array('name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist);
         $objectitem = DataObjectMaster::getObject($params);
+        if (self::hasSecurity($operationId) && !$objectitem->checkAccess('display')) {
+            http_response_code(403);
+            exit;
+        }
         $itemid = $objectitem->getItem();
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown item ' . $object);
@@ -169,7 +197,7 @@ class DataObjectRESTHandler extends xarObject
                 $item[$key] = $data['value'];
             }
         }
-        //$item['_links'] = array('self' => array('href' => self::getURL($object, $itemid)));
+        //$item['_links'] = array('self' => array('href' => self::getObjectURL($object, $itemid)));
         //return array('method' => 'getObjectItem', 'args' => $args, 'schema' => $schema, 'fieldlist' => $fieldlist, 'result' => $item);
         return $item;
     }
@@ -182,7 +210,8 @@ class DataObjectRESTHandler extends xarObject
             return array('method' => 'createObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $user = self::whoami();
+        //$user = self::whoami();
+        self::checkuser();
         $properties = self::getCreateSchemaProperties($schema);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -217,7 +246,8 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $user = self::whoami();
+        //$user = self::whoami();
+        self::checkuser();
         $properties = self::getUpdateSchemaProperties($schema);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -252,7 +282,8 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $user = self::whoami();
+        //$user = self::whoami();
+        self::checkuser();
         $params = array('name' => $object, 'itemid' => $itemid);
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('delete')) {
@@ -275,6 +306,14 @@ class DataObjectRESTHandler extends xarObject
                 return $doc;
             }
             self::$schemas = $doc['components']['schemas'];
+            self::$security = array();
+            foreach ($doc['paths'] as $path => $operations) {
+                foreach ($operations as $method => $operation) {
+                    if (!empty($operation['security'])) {
+                        self::$security[$operation['operationId']] = $operation['security'];
+                    }
+                }
+            }
         }
     }
 
@@ -282,6 +321,15 @@ class DataObjectRESTHandler extends xarObject
     {
         self::loadSchemas();
         if (empty(self::$schemas[$schema])) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function hasSecurity($operationId)
+    {
+        self::loadSchemas();
+        if (empty(self::$security[$operationId])) {
             return false;
         }
         return true;
@@ -312,9 +360,21 @@ class DataObjectRESTHandler extends xarObject
     }
 
     /**
-     * Verify that the cookie corresponds to an authorized user (with minimal core load) or exit
+     * Return the current user or exit with 401 status code
      */
     public static function whoami($args = null)
+    {
+        self::checkuser();
+        //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
+        $role = xarRoles::current();
+        $user = $role->getFieldValues();
+        return array('id' => $user['id'], 'name' => $user['name']);
+    }
+
+    /**
+     * Verify that the cookie corresponds to an authorized user (with minimal core load) or exit with 401 status code
+     */
+    private static function checkuser()
     {
         $cookie = !empty($_COOKIE['XARAYASID']) ? $_COOKIE['XARAYASID'] : '';
         if (empty($cookie)) {
@@ -322,7 +382,7 @@ class DataObjectRESTHandler extends xarObject
             header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
             exit;
         }
-        // @checkme see graphql whoami quey in dummytype.php
+        // @checkme see graphql whoami query in dummytype.php
         xarSession::init();
         //xarUser::init();
         if (!xarUser::isLoggedIn()) {
@@ -330,10 +390,70 @@ class DataObjectRESTHandler extends xarObject
             header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
             exit;
         }
-        //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
-        $role = xarRoles::current();
-        $user = $role->getFieldValues();
-        return array('id' => $user['id'], 'name' => $user['name']);
+    }
+
+    public static function getModuleURL($module = null, $api = null, $args = array())
+    {
+        if (empty($module)) {
+            return self::getBaseURL('/modules');
+        }
+        if (empty($api)) {
+            return self::getBaseURL('/modules', $module);
+        }
+        return self::getBaseURL('/modules', $module . '/' . $api);
+    }
+
+    public static function getModules($args)
+    {
+        if (empty(self::$modules)) {
+            $modulelist = array('dynamicdata');
+            self::$modules = array();
+            xarMod::init();
+            foreach ($modulelist as $module) {
+                self::$modules[$module] = array(
+                    'module' => $module,
+                    'apilist' => xarMod::apiFunc($module, 'rest', 'getlist')
+                );
+            }
+        }
+        $result = array('items' => array(), 'count' => count(self::$modules));
+        foreach (self::$modules as $itemid => $item) {
+            $item['apilist'] = array_keys($item['apilist']);
+            $item['_links'] = array('self' => array('href' => self::getModuleURL($item['module'])));
+            array_push($result['items'], $item);
+        }
+        return $result;
+    }
+
+    public static function getModuleApis($args)
+    {
+        $module = $args['module'];
+        $result = array('module' => $module, 'apilist' => array(), 'count' => 0);
+        xarMod::init();
+        // Get the list of REST API calls supported by this module (if any)
+        $apilist = xarMod::apiFunc($module, 'rest', 'getlist');
+        foreach ($apilist as $api => $item) {
+            $item['path'] = self::getModuleURL($module, $item['path']);
+            $result['apilist'][$api] = $item;
+        }
+        $result['count'] = count($result['apilist']);
+        return $result;
+    }
+
+    public static function getModuleCall($args)
+    {
+        $module = $args['module'];
+        $path = $args['path'];
+        xarMod::init();
+        // Find the REST API call corresponding to this path and method
+        $apilist = xarMod::apiFunc($module, 'rest', 'getlist');
+        foreach ($apilist as $api => $item) {
+            if ($item['path'] == $path && $item['method'] == 'get') {
+                return xarMod::apiFunc($module, 'rest', $api);
+            }
+        }
+        $result = array('module' => $module, 'path' => $path, 'args' => $args, 'apilist' => $apilist);
+        return $result;
     }
 
     /**
@@ -349,6 +469,9 @@ class DataObjectRESTHandler extends xarObject
         $r->delete('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'deleteObjectItem']);
         //$r->patch('/objects/{object}', ['DataObjectRESTHandler', 'patchObjectDefinition']);
         $r->get('/whoami', ['DataObjectRESTHandler', 'whoami']);
+        $r->get('/modules', ['DataObjectRESTHandler', 'getModules']);
+        $r->get('/modules/{module}', ['DataObjectRESTHandler', 'getModuleApis']);
+        $r->get('/modules/{module}/{path}', ['DataObjectRESTHandler', 'getModuleCall']);
     }
 
     /**

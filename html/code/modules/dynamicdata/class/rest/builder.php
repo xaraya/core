@@ -18,6 +18,7 @@ class DataObjectRESTBuilder extends xarObject
     protected static $openapi;
     protected static $endpoint = 'rst.php/v1';
     protected static $objects = array();
+    protected static $internal = array('objects', 'properties', 'configurations');
     protected static $proptype_names = array();
     protected static $paths = array();
     protected static $schemas = array();
@@ -133,6 +134,17 @@ class DataObjectRESTBuilder extends xarObject
             ),
             'description' => 'Property to sort on and optional direction (comma separated)',
         );
+        self::$parameters['filter'] = array(
+            'name' => 'filter',
+            'in' => 'query',
+            'schema' => array(
+                'type' => 'array',
+                'items' => array(
+                    'type' => 'string'
+                )
+            ),
+            'description' => 'Filters to be applied. Each filter consists of a property, an operator and a value (comma separated)',
+        );
     }
 
     public static function add_responses()
@@ -173,19 +185,20 @@ class DataObjectRESTBuilder extends xarObject
     {
         self::get_proptype_names();
         self::$objects = array();
-        $objectname = 'objects';
+        $objectname = 'start';
         $fieldlist = array('objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore');
         $prop_view = array();
         foreach ($fieldlist as $field) {
             $prop_view[$field] = array('type' => 'string');
         }
-        self::add_object_view($objectname, $prop_view);
+        self::add_object_view($objectname, $prop_view, '/objects');
         self::$tags[] = array('name' => $objectname, 'description' => $objectname . ' operations');
+        $objectname = 'objects';
         $params = array('name' => $objectname, 'fieldlist' => $fieldlist);
         $objectlist = DataObjectMaster::getObjectList($params);
         $items = $objectlist->getItems();
         foreach ($items as $itemid => $item) {
-            if ($item['datastore'] !== 'dynamicdata') {
+            if ($item['datastore'] !== 'dynamicdata' && !in_array($item['name'], self::$internal)) {
                 continue;
             }
             //echo $itemid . ': ' . json_encode($item) . "\n";
@@ -271,18 +284,18 @@ class DataObjectRESTBuilder extends xarObject
         return $properties;
     }
 
-    public static function add_object_view($objectname, $properties)
+    public static function add_object_view($objectname, $properties, $path = '')
     {
-        $path = '/objects/' . $objectname;
-        if ($objectname == 'objects') {
-            $path = '/objects';
+        if (empty($path)) {
+            $path = '/objects/' . $objectname;
         }
         self::$paths[$path] = array(
             'get' => array(
                 'parameters' => array(
                     array('$ref' => '#/components/parameters/limit'),
                     array('$ref' => '#/components/parameters/offset'),
-                    array('$ref' => '#/components/parameters/order')
+                    array('$ref' => '#/components/parameters/order'),
+                    array('$ref' => '#/components/parameters/filter')
                 ),
                 'tags' => array($objectname),
                 'operationId' => 'view_' . $objectname,
@@ -294,6 +307,14 @@ class DataObjectRESTBuilder extends xarObject
                 )
             )
         );
+        if (in_array($objectname, self::$internal)) {
+            self::$paths[$path]['get']['responses']['401'] = array(
+                '$ref' => '#/components/responses/unauthorized'
+            );
+            self::$paths[$path]['get']['security'] = array(
+                array('cookieAuth' => array())
+            );
+        }
         self::$responses['view-' . $objectname] = array(
             'description' => 'View list of ' . $objectname . ' objects',
             'content' => array(
@@ -317,6 +338,9 @@ class DataObjectRESTBuilder extends xarObject
                     'type' => 'integer'
                 ),
                 'order' => array(
+                    'type' => 'string'
+                ),
+                'filter' => array(
                     'type' => 'string'
                 ),
                 'items' => array(
@@ -348,6 +372,14 @@ class DataObjectRESTBuilder extends xarObject
                 )
             )
         );
+        if (in_array($objectname, self::$internal)) {
+            self::$paths[$path]['get']['responses']['401'] = array(
+                '$ref' => '#/components/responses/unauthorized'
+            );
+            self::$paths[$path]['get']['security'] = array(
+                array('cookieAuth' => array())
+            );
+        }
         self::$responses['display-' . $objectname] = array(
             'description' => 'Display single ' . $objectname . ' object',
             'content' => array(
@@ -472,7 +504,7 @@ class DataObjectRESTBuilder extends xarObject
         $path = '/whoami';
         self::$paths[$path] = array(
             'get' => array(
-                'tags' => array('objects'),
+                'tags' => array('start'),
                 'operationId' => 'whoami',
                 'description' => 'Display current user',
                 'responses' => array(
@@ -527,12 +559,19 @@ class DataObjectRESTBuilder extends xarObject
             case 'textarea':
             case 'objectref':
             case 'propertyref':
+            case 'object':
+            case 'module':
+            case 'categories':
+            case 'fieldtype':
+            case 'datasource':
+            case 'fieldstatus':
             case 'dropdown':
             case 'deferitem':
             //case 'string':
                 $datatype = array('type' => 'string');
                 break;
             case 'array':
+            case 'configuration':
             case 'defermany':
             case 'deferlist':
                 $datatype = array('type' => 'array', 'items' => array('type' => 'string'));
@@ -543,6 +582,9 @@ class DataObjectRESTBuilder extends xarObject
             case 'url':
             case 'image':
                 $datatype = array('type' => 'string', 'format' => 'uri');
+                break;
+            case 'checkbox':
+                $datatype = array('type' => 'boolean');
                 break;
             default:
                 throw new Exception('Unsupported property type ' . $property->type . '=' . self::$proptype_names[$property->type] . ' (' . $property->basetype . ')');
