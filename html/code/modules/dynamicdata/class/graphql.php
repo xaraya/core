@@ -30,6 +30,8 @@
 //sys::import('modules.dynamicdata.class.graphql.propertytype');
 //sys::import('modules.dynamicdata.class.graphql.accesstype');
 //sys::import('modules.dynamicdata.class.graphql.keyvaltype');
+//sys::import('xaraya.caching.cachetrait');
+//sys::import('modules.dynamicdata.class.timertrait');
 
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
@@ -43,6 +45,9 @@ use GraphQL\Type\Definition\Type;
  */
 class xarGraphQL extends xarObject
 {
+    use xarCacheTrait;
+    use xarTimerTrait;
+
     public static $type_cache = [];
     public static $type_mapper = [
         'query'    => 'querytype',
@@ -60,13 +65,8 @@ class xarGraphQL extends xarObject
     public static $extra_types = [];
     public static $trace_path = false;
     public static $paths = [];
-    public static $trace_time = false;
-    public static $times = [];
-    public static $prev_time = 0;
     public static $cache_plan = false;
     public static $cache_data = false;
-    public static $cacheScope = 'GraphQLAPI.QueryPlan';
-    public static $cacheKey = null;
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -297,31 +297,28 @@ class xarGraphQL extends xarObject
         return $typeConfig;
     }
 
-    public static function timer($label)
-    {
-        if (self::$trace_time) {
-            $now = microtime(true);
-            if (empty(self::$prev_time)) {
-                self::$prev_time = !empty($_SERVER['REQUEST_TIME_FLOAT']) ? $_SERVER['REQUEST_TIME_FLOAT'] : 0;
-                self::$times[] = array('request' => self::$prev_time);
-            }
-            self::$times[] = array($label => ($now - self::$prev_time));
-            self::$prev_time = $now;
-        }
-    }
-
     /**
      * Utility function to execute a GraphQL query and get the data
      */
     public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null)
     {
-        self::timer('start');
+        if (self::$trace_path) {
+            self::$enableTimer = true;
+        }
+        if (self::$cache_plan || self::$cache_data) {
+            self::$enableCache = true;
+        }
+        if (self::$enableCache) {
+            $cacheScope = 'GraphQLAPI.QueryPlan';
+            self::setCacheScope($cacheScope);
+        }
+        self::setTimer('start');
         if (!empty($schemaFile)) {
             $schema = self::build_schema($schemaFile, $extraTypes);
         } else {
             $schema = self::get_schema($extraTypes);
         }
-        self::timer('schema');
+        self::setTimer('schema');
         if ($queryString == '{schema}') {
             $header = "schema {\n  query: Query\n  mutation: Mutation\n}\n\n";
             return $header . SchemaPrinter::doPrint($schema);
@@ -343,25 +340,26 @@ class xarGraphQL extends xarObject
             $fieldResolver,
             $validationRules
         );
-        self::timer('query');
+        self::setTimer('query');
         //$serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
         $serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE);
-        self::timer('array');
-        if (self::$cache_data && !empty(self::$cacheKey)) {
-            if (xarVariableCache::isCached(self::$cacheKey)) {
-                $serializableResult = xarVariableCache::getCached(self::$cacheKey);
-                self::timer('cache');
+        self::setTimer('array');
+        if (self::$cache_data && self::hasCacheKey()) {
+            $cacheKey = self::getCacheKey();
+            if (self::isCached($cacheKey)) {
+                $serializableResult = self::getCached($cacheKey);
+                self::setTimer('cache');
             } else {
-                xarVariableCache::setCached(self::$cacheKey, $serializableResult);
+                self::setCached($cacheKey, $serializableResult);
             }
         }
         $extensions = array();
         if (self::$trace_path) {
             $extensions['paths'] = self::$paths;
         }
-        self::timer('stop');
-        if (self::$trace_time) {
-            $extensions['times'] = self::$times;
+        self::setTimer('stop');
+        if (self::$enableTimer) {
+            $extensions['times'] = self::getTimers();
         }
         if (!empty($extensions)) {
             $serializableResult['extensions'] = $extensions;

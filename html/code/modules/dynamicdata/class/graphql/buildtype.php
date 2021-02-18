@@ -429,17 +429,18 @@ class xarGraphQLBuildType
         }
         // @todo cache query plan + (later) perhaps result based on args
         if (xarGraphQL::$cache_plan) {
-            xarGraphQL::$cacheKey = xarCache::getVariableKey(xarGraphQL::$cacheScope, $queryId);
-            if (!empty(xarGraphQL::$cacheKey)) {
-                if (!xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
-                    xarVariableCache::setCached(xarGraphQL::$cacheKey, $dumpPlan);
+            $cacheKey = xarGraphQL::getCacheKey($queryId);
+            if (!empty($cacheKey)) {
+                if (!xarGraphQL::isCached($cacheKey)) {
+                    xarGraphQL::setCached($cacheKey, $dumpPlan);
                 }
                 if (xarGraphQL::$cache_data) {
                     // @checkme add current arguments to cacheKey to cache results
                     if (!empty($args)) {
-                        xarGraphQL::$cacheKey .= '-' . md5(json_encode($args));
+                        $cacheKey .= '-' . md5(json_encode($args));
                     }
-                    xarGraphQL::$cacheKey .= '-result';
+                    $cacheKey .= '-result';
+                    xarGraphQL::setCacheKey($cacheKey);
                 }
             }
         }
@@ -506,7 +507,7 @@ class xarGraphQLBuildType
                     $queryType = $type . '_page';
                     xarGraphQL::$paths[] = self::check_query_plan($queryType, $rootValue, $args, $context, $info);
                     // @checkme don't try to resolve anything further if the result is already cached?
-                    if (xarGraphQL::$cache_data && !empty(xarGraphQL::$cacheKey) && xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
+                    if (xarGraphQL::$cache_data && xarGraphQL::hasCacheKey() && xarGraphQL::isCached(xarGraphQL::getCacheKey())) {
                         return;
                     }
                 }
@@ -579,7 +580,7 @@ class xarGraphQLBuildType
                     $queryType = $type . '_list';
                     xarGraphQL::$paths[] = self::check_query_plan($queryType, $rootValue, $args, $context, $info);
                     // @checkme don't try to resolve anything further if the result is already cached?
-                    if (xarGraphQL::$cache_data && !empty(xarGraphQL::$cacheKey) && xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
+                    if (xarGraphQL::$cache_data && xarGraphQL::hasCacheKey() && xarGraphQL::isCached(xarGraphQL::getCacheKey())) {
                         return;
                     }
                 }
@@ -663,7 +664,7 @@ class xarGraphQLBuildType
                     $queryType = $type . '_item';
                     xarGraphQL::$paths[] = self::check_query_plan($queryType, $rootValue, $args, $context, $info);
                     // @checkme don't try to resolve anything further if the result is already cached?
-                    if (xarGraphQL::$cache_data && !empty(xarGraphQL::$cacheKey) && xarVariableCache::isCached(xarGraphQL::$cacheKey)) {
+                    if (xarGraphQL::$cache_data && xarGraphQL::hasCacheKey() && xarGraphQL::isCached(xarGraphQL::getCacheKey())) {
                         return;
                     }
                 }
