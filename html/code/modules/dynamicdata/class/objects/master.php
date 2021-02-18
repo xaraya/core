@@ -1574,7 +1574,7 @@ class DataObjectMaster extends xarObject
         // check if we have specific access rules for this level
         if (!empty($access_rules) && is_array($access_rules) && !empty($access_rules[$level])) {
             $anonid = xarConfigVars::get(null,'Site.User.AnonymousUID');
-            if (empty($roleid) && xarCore::isLoaded(xarCore::SYSTEM_USER) && xarUser::isLoggedIn()) {
+            if (empty($roleid) && !empty(xarSession::$anonId) && xarUser::isLoggedIn()) {
                 // get the direct parents of the current user (no ancestors)
                 $grouplist = xarCache::getParents();
             } elseif (!empty($roleid) && $roleid != $anonid) {
@@ -1674,7 +1674,7 @@ class DataObjectMaster extends xarObject
         $findLogic    = array();
         $replaceLogic = array();
         foreach ($this->properties as $name => $property) {
-        	// If the source is empty (like virtual properties) then ignore
+            // If the source is empty (like virtual properties) then ignore
             if (empty($property->source)) continue;
             // Replace the property name unless it is in quotes (in which case it could be a value
             $findLogic[] = "/['\"]" . $name . "['\"](*SKIP)(*FAIL)|\b" . $name . "\b/";
