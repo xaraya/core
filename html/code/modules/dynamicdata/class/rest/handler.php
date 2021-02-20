@@ -20,6 +20,7 @@ class DataObjectRESTHandler extends xarObject
     public static $objects = array();
     public static $schemas = array();
     public static $security = array();
+    public static $config = array();
     public static $modules = array();
 
     public static function getOpenAPI($args = null)
@@ -86,6 +87,7 @@ class DataObjectRESTHandler extends xarObject
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             self::checkuser();
         }
+        $config = self::getConfig($operationId);
         $fieldlist = array_keys(self::getViewSchemaProperties($schema));
         $limit = 20;
         if (!empty($args['limit']) && is_numeric($args['limit'])) {
@@ -102,12 +104,60 @@ class DataObjectRESTHandler extends xarObject
         $filter = [];
         if (!empty($args['filter'])) {
             $filter = $args['filter'];
+            if (!is_array($filter)) {
+                $filter = array($filter);
+            }
+            // Clean up arrays by removing false values (= empty, false, null, 0)
+            $filter = array_filter($filter);
         }
         $params = array('name' => $object, 'fieldlist' => $fieldlist);
         $objectlist = DataObjectMaster::getObjectList($params);
         if (self::hasSecurity($operationId) && !$objectlist->checkAccess('view')) {
             http_response_code(403);
             exit;
+        }
+        // @todo make this query work for relational datastores
+        // See code/modules/dynamicdata/class/ui_handlers/search.php
+        $wherestring = '';
+        if (!empty($filter)) {
+            $join = '';
+            $mapop = array('eq' => '=', 'ne' => '!=', 'gt' => '>', 'lt' => '<', 'le' => '>=', 'ge' => '<=', 'in' => 'IN');
+            foreach ($filter as $where) {
+                list($field, $op, $value) = explode(',', $where . ',,');
+                if (empty($field) || empty($objectlist->properties[$field]) || empty($op) || empty($mapop[$op])) {
+                    continue;
+                }
+                $clause = '';
+                if (is_numeric($value)) {
+                    $clause = $mapop[$op] . " " . $value;
+                } elseif (is_string($value)) {
+                    if ($op !== 'in') {
+                        $value = str_replace("'", "\\'", $value);
+                        $clause = $mapop[$op] . " '" . $value . "'";
+                    } else {
+                        // keep only the third variable with the rest of the string, e.g. itemid,in,3,7,11
+                        list( , , $value) = explode(',', $where, 3);
+                        $value = str_replace("'", "\\'", $value);
+                        $value = explode(',', $value);
+                        if (count($value) > 0) {
+                            if (is_numeric($value[0])) {
+                                $clause = $mapop[$op] . " (" . implode(", ", $value) . ")";
+                            } elseif (is_string($value[0])) {
+                                $clause = $mapop[$op] . " ('" . implode("', '", $value) . "')";
+                            }
+                        }
+                    }
+                }
+                if (!empty($clause)) {
+                    $objectlist->addWhere($field, $clause, $join);
+                    $wherestring .= $join . ' ' . $field . ' ' . trim($clause);
+                    $join = 'AND';
+                }
+            }
+        }
+        if (!empty($wherestring) && is_object($objectlist->datastore) && get_class($objectlist->datastore) !== 'VariableTableDataStore') {
+            $conditions = $objectlist->setWhere($wherestring);
+            $objectlist->dataquery->addconditions($conditions);
         }
         $result = array('items' => array(), 'count' => $objectlist->countItems(), 'limit' => $limit, 'offset' => $offset, 'order' => $order);
         $params = array('numitems' => $limit);
@@ -170,6 +220,7 @@ class DataObjectRESTHandler extends xarObject
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             self::checkuser();
         }
+        $config = self::getConfig($operationId);
         $fieldlist = array_keys(self::getDisplaySchemaProperties($schema));
         $params = array('name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist);
         $objectitem = DataObjectMaster::getObject($params);
@@ -307,10 +358,14 @@ class DataObjectRESTHandler extends xarObject
             }
             self::$schemas = $doc['components']['schemas'];
             self::$security = array();
+            self::$config = array();
             foreach ($doc['paths'] as $path => $operations) {
                 foreach ($operations as $method => $operation) {
                     if (!empty($operation['security'])) {
                         self::$security[$operation['operationId']] = $operation['security'];
+                    }
+                    if (!empty($operation['x-xaraya-config'])) {
+                        self::$config[$operation['operationId']] = $operation['x-xaraya-config'];
                     }
                 }
             }
@@ -333,6 +388,15 @@ class DataObjectRESTHandler extends xarObject
             return false;
         }
         return true;
+    }
+
+    public static function getConfig($operationId)
+    {
+        self::loadSchemas();
+        if (empty(self::$config[$operationId])) {
+            return array();
+        }
+        return self::$config[$operationId];
     }
 
     public static function getViewSchemaProperties($schema)

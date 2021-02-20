@@ -52,6 +52,7 @@ class DataObjectRESTBuilder extends xarObject
         self::init_openapi();
         self::add_objects();
         self::add_whoami();
+        self::add_modules();
         self::dump_openapi();
     }
 
@@ -226,6 +227,7 @@ class DataObjectRESTBuilder extends xarObject
             self::init_openapi();
             self::add_objects();
             self::add_whoami();
+            self::add_modules();
         }
         return self::$objects;
     }
@@ -314,7 +316,15 @@ class DataObjectRESTBuilder extends xarObject
             self::$paths[$path]['get']['security'] = array(
                 array('cookieAuth' => array())
             );
+            $do_cache = false;
+        } else {
+            $do_cache = true;
         }
+        self::$paths[$path]['get']['x-xaraya-config'] = array(
+            'caching' => $do_cache,
+            'parameters' => array('object', 'limit', 'offset', 'order', 'filter'),
+            'timeout' => 7200
+        );
         self::$responses['view-' . $objectname] = array(
             'description' => 'View list of ' . $objectname . ' objects',
             'content' => array(
@@ -379,7 +389,15 @@ class DataObjectRESTBuilder extends xarObject
             self::$paths[$path]['get']['security'] = array(
                 array('cookieAuth' => array())
             );
+            $do_cache = false;
+        } else {
+            $do_cache = true;
         }
+        self::$paths[$path]['get']['x-xaraya-config'] = array(
+            'caching' => $do_cache,
+            'parameters' => array('object', 'itemid'),
+            'timeout' => 7200
+        );
         self::$responses['display-' . $objectname] = array(
             'description' => 'Display single ' . $objectname . ' object',
             'content' => array(
@@ -418,6 +436,7 @@ class DataObjectRESTBuilder extends xarObject
                 array('cookieAuth' => array())
             )
         );
+        //self::$paths[$path]['post']['x-xaraya-config'] = array();
         self::$requestBodies['create-' . $objectname] = array(
             'description' => 'Create ' . $objectname . ' object',
             'content' => array(
@@ -459,6 +478,7 @@ class DataObjectRESTBuilder extends xarObject
                 array('cookieAuth' => array())
             )
         );
+        //self::$paths[$path]['put']['x-xaraya-config'] = array();
         self::$requestBodies['update-' . $objectname] = array(
             'description' => 'Update ' . $objectname . ' object',
             'content' => array(
@@ -497,6 +517,7 @@ class DataObjectRESTBuilder extends xarObject
                 array('cookieAuth' => array())
             )
         );
+        //self::$paths[$path]['delete']['x-xaraya-config'] = array();
     }
 
     public static function add_whoami()
@@ -520,6 +541,7 @@ class DataObjectRESTBuilder extends xarObject
                 )
             )
         );
+        //self::$paths[$path]['get']['x-xaraya-config'] = array();
         self::$responses['whoami'] = array(
             'description' => 'Display current user',
             'content' => array(
@@ -538,6 +560,59 @@ class DataObjectRESTBuilder extends xarObject
                 ),
                 'name' => array(
                     'type' => 'string'
+                )
+            )
+        );
+    }
+
+    public static function add_modules()
+    {
+        $path = '/modules';
+        self::$paths[$path] = array(
+            'get' => array(
+                'tags' => array('start'),
+                'operationId' => 'modules',
+                'description' => 'Show available REST API calls for modules',
+                'responses' => array(
+                    '200' => array(
+                        '$ref' => '#/components/responses/modules'
+                    ),
+                    '401' => array(
+                        '$ref' => '#/components/responses/unauthorized'
+                    )
+                ),
+                'security' => array(
+                    array('cookieAuth' => array())
+                )
+            )
+        );
+        //self::$paths[$path]['get']['x-xaraya-config'] = array();
+        self::$responses['modules'] = array(
+            'description' => 'Show available REST API calls for modules',
+            'content' => array(
+                'application/json' => array(
+                    'schema' => array(
+                        '$ref' => '#/components/schemas/modules'
+                    )
+                )
+            )
+        );
+        $properties = array(
+            'module' => array('type' => 'string'),
+            'apilist' => array('type' => 'array', 'items' => array('type' => 'string'))
+        );
+        self::$schemas['modules'] = array(
+            'type' => 'object',
+            'properties' => array(
+                'count' => array(
+                    'type' => 'integer'
+                ),
+                'items' => array(
+                    'type' => 'array',
+                    'items' => array(
+                        'type' => 'object',
+                        'properties' => $properties
+                    )
                 )
             )
         );
