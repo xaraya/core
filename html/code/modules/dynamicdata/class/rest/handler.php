@@ -116,7 +116,7 @@ class DataObjectRESTHandler extends xarObject
             http_response_code(403);
             exit;
         }
-        // @todo make this query work for relational datastores
+        // @todo fix setWhere() and/or dataquery to support other datastores than relational ones
         // See code/modules/dynamicdata/class/ui_handlers/search.php
         $wherestring = '';
         if (!empty($filter)) {
@@ -160,6 +160,9 @@ class DataObjectRESTHandler extends xarObject
             $objectlist->dataquery->addconditions($conditions);
         }
         $result = array('items' => array(), 'count' => $objectlist->countItems(), 'limit' => $limit, 'offset' => $offset, 'order' => $order);
+        if (!empty($filter)) {
+            $result['filter'] = $filter;
+        }
         $params = array('numitems' => $limit);
         if (!empty($offset) && !empty($result['count'])) {
             if ($offset < $result['count']) {

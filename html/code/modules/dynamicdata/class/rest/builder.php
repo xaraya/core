@@ -124,6 +124,9 @@ class DataObjectRESTBuilder extends xarObject
             ),
             'description' => 'Offset to start items from',
         );
+        // style = form + explode = false
+        // Value: order = array('module_id', '-name')
+        // Query: order=module_id,-name
         self::$parameters['order'] = array(
             'name' => 'order',
             'in' => 'query',
@@ -133,10 +136,15 @@ class DataObjectRESTBuilder extends xarObject
                     'type' => 'string'
                 )
             ),
-            'description' => 'Property to sort on and optional direction (comma separated)',
+            'style' => 'form',
+            'explode' => false,
+            'description' => 'Property to sort on and optional -direction (comma separated)',
         );
+        // style = form + explode = true
+        // Value: filter = array('datastore,eq,dynamicdata', 'class,eq,DataObject')
+        // Query: filter[]=datastore,eq,dynamicdata&filter[]=class,eq,DataObject (+ url-encode [],)
         self::$parameters['filter'] = array(
-            'name' => 'filter',
+            'name' => 'filter[]',
             'in' => 'query',
             'schema' => array(
                 'type' => 'array',
@@ -144,6 +152,8 @@ class DataObjectRESTBuilder extends xarObject
                     'type' => 'string'
                 )
             ),
+            'style' => 'form',
+            'explode' => true,
             'description' => 'Filters to be applied. Each filter consists of a property, an operator and a value (comma separated)',
         );
     }
@@ -351,7 +361,10 @@ class DataObjectRESTBuilder extends xarObject
                     'type' => 'string'
                 ),
                 'filter' => array(
-                    'type' => 'string'
+                    'type' => 'array',
+                    'items' => array(
+                        'type' => 'string'
+                    )
                 ),
                 'items' => array(
                     'type' => 'array',
