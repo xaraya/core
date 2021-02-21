@@ -374,6 +374,19 @@ class DataObjectRESTHandler extends xarObject
                     self::$config['objects'][$item['name']] = $item;
                 }
             }
+            if (!empty(self::$config['modules'])) {
+                self::$modules = self::$config['modules'];
+            } else {
+                $modulelist = array('dynamicdata');
+                self::$modules = array();
+                xarMod::init();
+                foreach ($modulelist as $module) {
+                    self::$modules[$module] = array(
+                        'module' => $module,
+                        'apilist' => xarMod::apiFunc($module, 'rest', 'getlist')
+                    );
+                }
+            }
         }
     }
 
@@ -514,15 +527,7 @@ class DataObjectRESTHandler extends xarObject
     public static function getModules($args)
     {
         if (empty(self::$modules)) {
-            $modulelist = array('dynamicdata');
-            self::$modules = array();
-            xarMod::init();
-            foreach ($modulelist as $module) {
-                self::$modules[$module] = array(
-                    'module' => $module,
-                    'apilist' => xarMod::apiFunc($module, 'rest', 'getlist')
-                );
-            }
+            self::loadConfig();
         }
         $result = array('items' => array(), 'count' => count(self::$modules));
         foreach (self::$modules as $itemid => $item) {
@@ -541,8 +546,9 @@ class DataObjectRESTHandler extends xarObject
         // Get the list of REST API calls supported by this module (if any)
         $apilist = xarMod::apiFunc($module, 'rest', 'getlist');
         foreach ($apilist as $api => $item) {
+            $item['name'] = $api;
             $item['path'] = self::getModuleURL($module, $item['path']);
-            $result['apilist'][$api] = $item;
+            $result['apilist'][] = $item;
         }
         $result['count'] = count($result['apilist']);
         return $result;

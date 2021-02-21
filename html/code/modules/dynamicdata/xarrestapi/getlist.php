@@ -21,7 +21,8 @@ function dynamicdata_restapi_getlist($args = array())
     $apilist['get_hello'] = array(
         'path' => 'hello',
         'method' => 'get',
-        'description' => 'Hello World'
+        'description' => 'Hello World',
+        'parameters' => array('name')
     );
     return $apilist;
 }

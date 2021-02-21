@@ -28,6 +28,7 @@ class DataObjectRESTBuilder extends xarObject
     protected static $requestBodies = array();
     protected static $securitySchemes = array();
     protected static $tags = array();
+    protected static $modules = array();
 
     public static function init(array $args = array())
     {
@@ -70,7 +71,7 @@ class DataObjectRESTBuilder extends xarObject
         $doc['info'] = array(
             'title' => 'DynamicData REST API',
             'description' => 'This provides a REST API endpoint as proof of concept to access Dynamic Data Objects stored in dynamic_data. Access to all objects is limited to read-only mode by default. The Sample object requires cookie authentication to create/update/delete items (after login on this site). Some internal DD objects are also available in read-only mode for use in Javascript on the site.',
-            'version' => '1.2.0'
+            'version' => '1.3.0'
         );
         $doc['info']['x-generated'] = date('c');
         $doc['servers'] = array(
@@ -91,6 +92,7 @@ class DataObjectRESTBuilder extends xarObject
         $configData = array();
         $configData['start'] = array('objects', 'whoami', 'modules');
         $configData['objects'] = self::$objects;
+        $configData['modules'] = self::$modules;
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
     }
 
@@ -675,6 +677,136 @@ class DataObjectRESTBuilder extends xarObject
                     )
                 )
             )
+        );
+        if (empty(self::$modules)) {
+            $modulelist = array('dynamicdata');
+            self::$modules = array();
+            xarMod::init();
+            foreach ($modulelist as $module) {
+                self::$modules[$module] = array(
+                    'module' => $module,
+                    'apilist' => xarMod::apiFunc($module, 'rest', 'getlist')
+                );
+            }
+        }
+        foreach (self::$modules as $itemid => $item) {
+            self::add_module_apilist($item['module'], $item['apilist']);
+        }
+    }
+
+    public static function add_module_apilist($module, $apilist)
+    {
+        $path = '/modules/' . $module;
+        $operationId = $module . '_apilist';
+        $schema = $module . '-apilist';
+        self::$paths[$path] = array(
+            'get' => array(
+                'tags' => array($module . '_module'),
+                'operationId' => $operationId,
+                'description' => 'Show REST API calls for module ' . $module,
+                'responses' => array(
+                    '200' => array(
+                        '$ref' => '#/components/responses/' . $schema
+                    ),
+                    '401' => array(
+                        '$ref' => '#/components/responses/unauthorized'
+                    )
+                ),
+                'security' => array(
+                    array('cookieAuth' => array())
+                )
+            )
+        );
+        self::$responses[$schema] = array(
+            'description' => 'Show REST API calls for module ' . $module,
+            'content' => array(
+                'application/json' => array(
+                    'schema' => array(
+                        '$ref' => '#/components/schemas/' . $schema
+                    )
+                )
+            )
+        );
+        $properties = array(
+            'name' => array('type' => 'string'),
+            'path' => array('type' => 'string'),
+            'method' => array('type' => 'string'),
+            'description' => array('type' => 'string'),
+            'parameters' => array('type' => 'array', 'items' => array('type' => 'string'))
+        );
+        self::$schemas[$schema] = array(
+            'type' => 'object',
+            'properties' => array(
+                'module' => array(
+                    'type' => 'string'
+                ),
+                'apilist' => array(
+                    'type' => 'array',
+                    'items' => array(
+                        'type' => 'object',
+                        'properties' => $properties
+                    )
+                ),
+                'count' => array(
+                    'type' => 'integer'
+                )
+            )
+        );
+        foreach ($apilist as $api => $item) {
+            self::add_module_api($module, $api, $item);
+        }
+        self::$tags[] = array('name' => $module . '_module', 'description' => $module . ' module operations');
+    }
+
+    public static function add_module_api($module, $api, $item)
+    {
+        $path = '/modules/' . $module . '/' . $item['path'];
+        $operationId = $module . '_' . $api;
+        $schema = $module . '-' . $api;
+        self::$paths[$path] = array(
+            $item['method'] => array(
+                'tags' => array($module . '_module'),
+                'operationId' => $operationId,
+                'description' => 'Call REST API ' . $api . ' in module ' . $module,
+                'responses' => array(
+                    '200' => array(
+                        '$ref' => '#/components/responses/' . $schema
+                    ),
+                    '401' => array(
+                        '$ref' => '#/components/responses/unauthorized'
+                    )
+                ),
+                'security' => array(
+                    array('cookieAuth' => array())
+                )
+            )
+        );
+        if (!empty($item['parameters'])) {
+            $parameters = array();
+            foreach ($item['parameters'] as $name) {
+                $parameters[] = array(
+                    'name' => $name,
+                    'in' => 'query',
+                    'schema' => array(
+                        'type' => 'string'
+                    ),
+                    'description' => $name . ' value'
+                );
+            }
+            self::$paths[$path][$item['method']]['parameters'] = $parameters;
+        }
+        self::$responses[$schema] = array(
+            'description' => 'Call REST API ' . $api . ' in module ' . $module,
+            'content' => array(
+                'application/json' => array(
+                    'schema' => array(
+                        '$ref' => '#/components/schemas/' . $schema
+                    )
+                )
+            )
+        );
+        self::$schemas[$schema] = array(
+            'type' => 'string'
         );
     }
 

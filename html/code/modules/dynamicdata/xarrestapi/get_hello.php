@@ -18,5 +18,6 @@
 function dynamicdata_restapi_get_hello($args = array())
 {
     $result = 'World';
-    return $result;
+    xarVar::fetch('name', 'isset', $name, null, xarVar::NOT_REQUIRED);
+    return !empty($name) ? $name : $result;
 }
