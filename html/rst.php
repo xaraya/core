@@ -24,7 +24,7 @@ require dirname(__DIR__).'/vendor/autoload.php';
 // initialize bootstrap
 sys::init();
 // initialize caching
-//xarCache::init();
+xarCache::init();
 // initialize database
 xarDatabase::init();
 // initialize modules
@@ -36,7 +36,7 @@ function try_builder()
 {
     DataObjectRESTBuilder::init();
     $objects = DataObjectRESTBuilder::get_objects();
-    DataObjectRESTBuilder::create_openapi();
+    //DataObjectRESTBuilder::create_openapi();
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($objects, JSON_PRETTY_PRINT);
 }

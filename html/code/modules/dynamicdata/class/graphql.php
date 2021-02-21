@@ -390,7 +390,10 @@ class xarGraphQL extends xarObject
 
     public static function dump_schema($extraTypes = null)
     {
-        $schemaFile = sys::varpath() . '/cache/schema.graphql';
+        $configFile = sys::varpath() . '/cache/api/graphql_config.json';
+        $configData = array('extraTypes' => $extraTypes);
+        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
+        $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         $content = self::get_data('{schema}', [], null, $extraTypes);
         file_put_contents($schemaFile, $content);
     }

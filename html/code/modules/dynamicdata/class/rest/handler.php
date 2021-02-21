@@ -19,15 +19,17 @@ class DataObjectRESTHandler extends xarObject
     public static $endpoint = 'rst.php/v1';
     public static $objects = array();
     public static $schemas = array();
-    public static $security = array();
+    //public static $security = array();
     public static $config = array();
     public static $modules = array();
 
     public static function getOpenAPI($args = null)
     {
-        $openapi = sys::varpath() . '/cache/openapi.json';
+        $openapi = sys::varpath() . '/cache/api/openapi.json';
         if (!file_exists($openapi)) {
-            return array('TODO' => 'generate var/cache/openapi.json with builder');
+            sys::import('modules.dynamicdata.class.rest.builder');
+            DataObjectRESTBuilder::init();
+            return array('TODO' => 'generate var/cache/api/openapi.json with builder');
         }
         $content = file_get_contents($openapi);
         $doc = json_decode($content, true);
@@ -56,11 +58,7 @@ class DataObjectRESTHandler extends xarObject
     public static function getObjects($args)
     {
         if (empty(self::$objects)) {
-            $object = 'objects';
-            $fieldlist = array('objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore');
-            $params = array('name' => $object, 'fieldlist' => $fieldlist);
-            $objectlist = DataObjectMaster::getObjectList($params);
-            self::$objects = $objectlist->getItems();
+            self::loadConfig();
         }
         $result = array('items' => array(), 'count' => count(self::$objects));
         foreach (self::$objects as $itemid => $item) {
@@ -78,18 +76,16 @@ class DataObjectRESTHandler extends xarObject
     public static function getObjectList($args)
     {
         $object = $args['object'];
-        $schema = 'view-' . $object;
-        if (!self::hasSchema($schema)) {
-            return array('method' => 'getObjectList', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
+        $method = 'view';
+        if (!self::hasOperation($object, $method)) {
+            return array('method' => 'getObjectList', 'args' => $args, 'error' => 'Unknown operation');
         }
-        $operationId = 'view_' . $object;
-        if (self::hasSecurity($operationId)) {
+        if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             self::checkuser();
         }
-        $config = self::getConfig($operationId);
-        $fieldlist = array_keys(self::getViewSchemaProperties($schema));
-        $limit = 20;
+        $fieldlist = self::getViewProperties($object);
+        $limit = 100;
         if (!empty($args['limit']) && is_numeric($args['limit'])) {
             $limit = intval($args['limit']);
         }
@@ -112,7 +108,7 @@ class DataObjectRESTHandler extends xarObject
         }
         $params = array('name' => $object, 'fieldlist' => $fieldlist);
         $objectlist = DataObjectMaster::getObjectList($params);
-        if (self::hasSecurity($operationId) && !$objectlist->checkAccess('view')) {
+        if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view')) {
             http_response_code(403);
             exit;
         }
@@ -136,7 +132,7 @@ class DataObjectRESTHandler extends xarObject
                         $clause = $mapop[$op] . " '" . $value . "'";
                     } else {
                         // keep only the third variable with the rest of the string, e.g. itemid,in,3,7,11
-                        list( , , $value) = explode(',', $where, 3);
+                        list(, , $value) = explode(',', $where, 3);
                         $value = str_replace("'", "\\'", $value);
                         $value = explode(',', $value);
                         if (count($value) > 0) {
@@ -203,7 +199,7 @@ class DataObjectRESTHandler extends xarObject
             $item['_links'] = array('self' => array('href' => self::getObjectURL($object, $itemid)));
             array_push($result['items'], $item);
         }
-        //return array('method' => 'getObjectList', 'args' => $args, 'schema' => $schema, 'fieldlist' => $fieldlist, 'result' => $result);
+        //return array('method' => 'getObjectList', 'args' => $args, 'fieldlist' => $fieldlist, 'result' => $result);
         return $result;
     }
 
@@ -211,23 +207,21 @@ class DataObjectRESTHandler extends xarObject
     {
         $object = $args['object'];
         $itemid = $args['itemid'];
-        $schema = 'display-' . $object;
-        if (!self::hasSchema($schema)) {
-            return array('method' => 'getObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
+        $method = 'display';
+        if (!self::hasOperation($object, $method)) {
+            return array('method' => 'getObjectItem', 'args' => $args, 'error' => 'Unknown operation');
         }
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
-        $operationId = 'display_' . $object;
-        if (self::hasSecurity($operationId)) {
+        if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             self::checkuser();
         }
-        $config = self::getConfig($operationId);
-        $fieldlist = array_keys(self::getDisplaySchemaProperties($schema));
+        $fieldlist = self::getDisplayProperties($object);
         $params = array('name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist);
         $objectitem = DataObjectMaster::getObject($params);
-        if (self::hasSecurity($operationId) && !$objectitem->checkAccess('display')) {
+        if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display')) {
             http_response_code(403);
             exit;
         }
@@ -252,21 +246,21 @@ class DataObjectRESTHandler extends xarObject
             }
         }
         //$item['_links'] = array('self' => array('href' => self::getObjectURL($object, $itemid)));
-        //return array('method' => 'getObjectItem', 'args' => $args, 'schema' => $schema, 'fieldlist' => $fieldlist, 'result' => $item);
+        //return array('method' => 'getObjectItem', 'args' => $args, 'fieldlist' => $fieldlist, 'result' => $item);
         return $item;
     }
 
     public static function createObjectItem($args)
     {
         $object = $args['object'];
-        $schema = 'create-' . $object;
-        if (!self::hasSchema($schema)) {
-            return array('method' => 'createObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
+        $method = 'create';
+        if (!self::hasOperation($object, $method)) {
+            return array('method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation');
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
         //$user = self::whoami();
         self::checkuser();
-        $properties = self::getCreateSchemaProperties($schema);
+        $fieldlist = self::getCreateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
             throw new Exception('Unknown input ' . $object);
@@ -284,7 +278,7 @@ class DataObjectRESTHandler extends xarObject
         if (empty($itemid)) {
             throw new Exception('Unknown item ' . $object);
         }
-        //return array('method' => 'createObjectItem', 'args' => $args, 'schema' => $schema, 'properties' => $properties, 'user' => $user, 'result' => $itemid);
+        //return array('method' => 'createObjectItem', 'args' => $args, 'properties' => $properties, 'user' => $user, 'result' => $itemid);
         return $itemid;
     }
 
@@ -292,9 +286,9 @@ class DataObjectRESTHandler extends xarObject
     {
         $object = $args['object'];
         $itemid = $args['itemid'];
-        $schema = 'update-' . $object;
-        if (!self::hasSchema($schema)) {
-            return array('method' => 'updateObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
+        $method = 'update';
+        if (!self::hasOperation($object, $method)) {
+            return array('method' => 'updateObjectItem', 'args' => $args, 'error' => 'Unknown operation');
         }
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
@@ -302,7 +296,7 @@ class DataObjectRESTHandler extends xarObject
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
         //$user = self::whoami();
         self::checkuser();
-        $properties = self::getUpdateSchemaProperties($schema);
+        $fieldlist = self::getUpdateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
             throw new Exception('Unknown input ' . $object);
@@ -320,7 +314,7 @@ class DataObjectRESTHandler extends xarObject
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown item ' . $object);
         }
-        //return array('method' => 'updateObjectItem', 'args' => $args, 'schema' => $schema, 'properties' => $properties, 'user' => $user, 'result' => $itemid);
+        //return array('method' => 'updateObjectItem', 'args' => $args, 'properties' => $properties, 'user' => $user, 'result' => $itemid);
         return $itemid;
     }
 
@@ -328,9 +322,9 @@ class DataObjectRESTHandler extends xarObject
     {
         $object = $args['object'];
         $itemid = $args['itemid'];
-        $schema = 'update-' . $object;
-        if (!self::hasSchema($schema)) {
-            return array('method' => 'deleteObjectItem', 'args' => $args, 'schema' => $schema, 'error' => 'Unknown schema');
+        $method = 'delete';
+        if (!self::hasOperation($object, $method)) {
+            return array('method' => 'deleteObjectItem', 'args' => $args, 'error' => 'Unknown operation');
         }
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
@@ -348,8 +342,64 @@ class DataObjectRESTHandler extends xarObject
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown item ' . $object);
         }
-        //return array('method' => 'deleteObjectItem', 'args' => $args, 'schema' => $schema, 'user' => $user, 'result' => $itemid);
+        //return array('method' => 'deleteObjectItem', 'args' => $args, 'user' => $user, 'result' => $itemid);
         return $itemid;
+    }
+
+    public static function loadConfig()
+    {
+        if (empty(self::$config)) {
+            self::$config = array();
+            $configFile = sys::varpath() . '/cache/api/restapi_config.json';
+            if (file_exists($configFile)) {
+                $contents = file_get_contents($configFile);
+                self::$config = json_decode($contents, true);
+            }
+            $fieldlist = array('objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore');
+            $allowed = array_flip($fieldlist);
+            if (!empty(self::$config['objects'])) {
+                self::$objects = array();
+                foreach (self::$config['objects'] as $name => $item) {
+                    $item = array_intersect_key($item, $allowed);
+                    self::$objects[$name] = $item;
+                }
+            } else {
+                $object = 'objects';
+                $params = array('name' => $object, 'fieldlist' => $fieldlist);
+                $objectlist = DataObjectMaster::getObjectList($params);
+                self::$objects = $objectlist->getItems();
+                self::$config['objects'] = array();
+                foreach (self::$objects as $itemid => $item) {
+                    $item = array_intersect_key($item, $allowed);
+                    self::$config['objects'][$item['name']] = $item;
+                }
+            }
+        }
+    }
+
+    public static function hasObject($object)
+    {
+        self::loadConfig();
+        if (empty(self::$config) || empty(self::$config['objects']) || empty(self::$config['objects'][$object])) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function hasOperation($object, $method)
+    {
+        if (!self::hasObject($object)) {
+            return false;
+        }
+        if (empty(self::$config['objects'][$object]['x-operations']) || empty(self::$config['objects'][$object]['x-operations'][$method])) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function getOperation($object, $method)
+    {
+        return self::$config['objects'][$object]['x-operations'][$method];
     }
 
     public static function loadSchemas()
@@ -360,6 +410,7 @@ class DataObjectRESTHandler extends xarObject
                 return $doc;
             }
             self::$schemas = $doc['components']['schemas'];
+            /**
             self::$security = array();
             self::$config = array();
             foreach ($doc['paths'] as $path => $operations) {
@@ -372,58 +423,48 @@ class DataObjectRESTHandler extends xarObject
                     }
                 }
             }
+             */
         }
     }
 
-    public static function hasSchema($schema)
+    public static function hasSecurity($object, $method)
     {
-        self::loadSchemas();
-        if (empty(self::$schemas[$schema])) {
-            return false;
-        }
-        return true;
+        $operation = self::getOperation($object, $method);
+        return !empty($operation['security']) ? true : false;
     }
 
-    public static function hasSecurity($operationId)
+    public static function getProperties($object, $method)
     {
-        self::loadSchemas();
-        if (empty(self::$security[$operationId])) {
-            return false;
-        }
-        return true;
+        $operation = self::getOperation($object, $method);
+        return $operation['properties'];
     }
 
-    public static function getConfig($operationId)
-    {
-        self::loadSchemas();
-        if (empty(self::$config[$operationId])) {
-            return array();
-        }
-        return self::$config[$operationId];
-    }
-
-    public static function getViewSchemaProperties($schema)
+    public static function getViewProperties($object)
     {
         // schema (object) -> properties -> items (array) -> items (object) -> properties
-        return self::$schemas[$schema]['properties']['items']['items']['properties'];
+        //return self::$schemas[$schema]['properties']['items']['items']['properties'];
+        return self::getProperties($object, 'view');
     }
 
-    public static function getDisplaySchemaProperties($schema)
+    public static function getDisplayProperties($object)
     {
         // schema (object) -> properties
-        return self::$schemas[$schema]['properties'];
+        //return self::$schemas[$schema]['properties'];
+        return self::getProperties($object, 'display');
     }
 
-    public static function getCreateSchemaProperties($schema)
+    public static function getCreateProperties($object)
     {
         // schema (object) -> properties
-        return self::$schemas[$schema]['properties'];
+        //return self::$schemas[$schema]['properties'];
+        return self::getProperties($object, 'create');
     }
 
-    public static function getUpdateSchemaProperties($schema)
+    public static function getUpdateProperties($object)
     {
         // schema (object) -> properties
-        return self::$schemas[$schema]['properties'];
+        //return self::$schemas[$schema]['properties'];
+        return self::getProperties($object, 'update');
     }
 
     /**

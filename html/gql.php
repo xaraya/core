@@ -61,6 +61,14 @@ if (!empty($variables) && is_string($variables)) {
 //$data = xarGraphQL::get_data($query, $variables, $operationName);
 $extraTypes = ['module', 'theme', 'category', 'configuration'];
 //$extraTypes = ['module', 'theme', 'category', 'configuration', 'categories_linkage', 'extra', 'api_film', 'api_people', 'api_planet', 'api_species', 'api_starship', 'api_vehicle'];
+$configFile = sys::varpath() . '/cache/api/graphql_config.json';
+if (file_exists($configFile)) {
+    $contents = file_get_contents($configFile);
+    $configData = json_decode($contents, true);
+    if (!empty($configData) && !empty($configData['extraTypes'])) {
+        $extraTypes = $configData['extraTypes'];
+    }
+}
 $data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
 //$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes, $schemaFile);

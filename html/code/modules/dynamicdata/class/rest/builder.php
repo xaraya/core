@@ -16,6 +16,7 @@ sys::import('modules.dynamicdata.class.objects.master');
 class DataObjectRESTBuilder extends xarObject
 {
     protected static $openapi;
+    protected static $config;
     protected static $endpoint = 'rst.php/v1';
     protected static $objects = array();
     protected static $internal = array('objects', 'properties', 'configurations');
@@ -33,8 +34,14 @@ class DataObjectRESTBuilder extends xarObject
         if (isset(self::$openapi)) {
             return;
         }
-        self::$openapi = sys::varpath() . '/cache/openapi.json';
+        self::$openapi = sys::varpath() . '/cache/api/openapi.json';
         self::parse_openapi();
+        self::$config = array();
+        $configFile = sys::varpath() . '/cache/api/restapi_config.json';
+        if (file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            self::$config = json_decode($contents, true);
+        }
     }
 
     public static function parse_openapi()
@@ -47,10 +54,10 @@ class DataObjectRESTBuilder extends xarObject
         return $doc;
     }
 
-    public static function create_openapi()
+    public static function create_openapi($objectList = array())
     {
         self::init_openapi();
-        self::add_objects();
+        self::add_objects($objectList);
         self::add_whoami();
         self::add_modules();
         self::dump_openapi();
@@ -79,6 +86,11 @@ class DataObjectRESTBuilder extends xarObject
         $doc['tags'] = self::$tags;
         $content = json_encode($doc, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(self::$openapi, $content);
+        $configFile = sys::varpath() . '/cache/api/restapi_config.json';
+        $configData = array();
+        $configData['start'] = array('objects', 'whoami', 'modules');
+        $configData['objects'] = self::$objects;
+        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
     }
 
     public static function init_openapi()
@@ -111,7 +123,7 @@ class DataObjectRESTBuilder extends xarObject
             'in' => 'query',
             'schema' => array(
                 'type' => 'integer',
-                'default' => 20
+                'default' => 100
             ),
             'description' => 'Number of items to return',
         );
@@ -192,7 +204,23 @@ class DataObjectRESTBuilder extends xarObject
         );
     }
 
-    public static function add_objects()
+    public static function get_potential_objects($selectedList = array())
+    {
+        $objectname = 'objects';
+        $fieldlist = array('objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore');
+        $params = array('name' => $objectname, 'fieldlist' => $fieldlist);
+        $objectlist = DataObjectMaster::getObjectList($params);
+        $items = $objectlist->getItems();
+        foreach (array_keys($items) as $itemid) {
+            $item = $items[$itemid];
+            if ($item['datastore'] !== 'dynamicdata' && !in_array($item['name'], self::$internal) && (empty($selectedList) || !in_array($item['name'], $selectedList))) {
+                unset($items[$itemid]);
+            }
+        }
+        return $items;
+    }
+
+    public static function add_objects($selectedList = array())
     {
         self::get_proptype_names();
         self::$objects = array();
@@ -204,17 +232,18 @@ class DataObjectRESTBuilder extends xarObject
         }
         self::add_object_view($objectname, $prop_view, '/objects');
         self::$tags[] = array('name' => $objectname, 'description' => $objectname . ' operations');
-        $objectname = 'objects';
-        $params = array('name' => $objectname, 'fieldlist' => $fieldlist);
-        $objectlist = DataObjectMaster::getObjectList($params);
-        $items = $objectlist->getItems();
+        $items = self::get_potential_objects($selectedList);
         foreach ($items as $itemid => $item) {
-            if ($item['datastore'] !== 'dynamicdata' && !in_array($item['name'], self::$internal)) {
+            if (!empty($selectedList)) {
+                if (!in_array($item['name'], $selectedList)) {
+                    continue;
+                }
+            } elseif ($item['datastore'] !== 'dynamicdata' && !in_array($item['name'], self::$internal)) {
                 continue;
             }
-            //echo $itemid . ': ' . json_encode($item) . "\n";
-            $item['properties'] = self::get_object_properties($item['name']);
             self::$objects[$item['name']] = $item;
+            self::$objects[$item['name']]['x-operations'] = array();
+            self::$objects[$item['name']]['properties'] = self::get_object_properties($item['name']);
         }
         return self::$objects;
     }
@@ -326,15 +355,12 @@ class DataObjectRESTBuilder extends xarObject
             self::$paths[$path]['get']['security'] = array(
                 array('cookieAuth' => array())
             );
+            $do_security = true;
             $do_cache = false;
         } else {
+            $do_security = false;
             $do_cache = true;
         }
-        self::$paths[$path]['get']['x-xaraya-config'] = array(
-            'caching' => $do_cache,
-            'parameters' => array('object', 'limit', 'offset', 'order', 'filter'),
-            'timeout' => 7200
-        );
         self::$responses['view-' . $objectname] = array(
             'description' => 'View list of ' . $objectname . ' objects',
             'content' => array(
@@ -375,6 +401,15 @@ class DataObjectRESTBuilder extends xarObject
                 )
             )
         );
+        if ($objectname !== 'start') {
+            self::$objects[$objectname]['x-operations']['view'] = array(
+                'properties' => array_keys($properties),
+                'security' => $do_security,
+                'caching' => $do_cache,
+                'parameters' => array('object', 'limit', 'offset', 'order', 'filter'),
+                'timeout' => 7200
+            );
+        }
     }
 
     public static function add_object_display($objectname, $properties)
@@ -402,15 +437,12 @@ class DataObjectRESTBuilder extends xarObject
             self::$paths[$path]['get']['security'] = array(
                 array('cookieAuth' => array())
             );
+            $do_security = true;
             $do_cache = false;
         } else {
+            $do_security = false;
             $do_cache = true;
         }
-        self::$paths[$path]['get']['x-xaraya-config'] = array(
-            'caching' => $do_cache,
-            'parameters' => array('object', 'itemid'),
-            'timeout' => 7200
-        );
         self::$responses['display-' . $objectname] = array(
             'description' => 'Display single ' . $objectname . ' object',
             'content' => array(
@@ -424,6 +456,13 @@ class DataObjectRESTBuilder extends xarObject
         self::$schemas['display-' . $objectname] = array(
             'type' => 'object',
             'properties' => $properties
+        );
+        self::$objects[$objectname]['x-operations']['display'] = array(
+            'properties' => array_keys($properties),
+            'security' => $do_security,
+            'caching' => $do_cache,
+            'parameters' => array('object', 'itemid'),
+            'timeout' => 7200
         );
     }
 
@@ -449,7 +488,6 @@ class DataObjectRESTBuilder extends xarObject
                 array('cookieAuth' => array())
             )
         );
-        //self::$paths[$path]['post']['x-xaraya-config'] = array();
         self::$requestBodies['create-' . $objectname] = array(
             'description' => 'Create ' . $objectname . ' object',
             'content' => array(
@@ -463,6 +501,10 @@ class DataObjectRESTBuilder extends xarObject
         self::$schemas['create-' . $objectname] = array(
             'type' => 'object',
             'properties' => $properties
+        );
+        self::$objects[$objectname]['x-operations']['create'] = array(
+            'properties' => array_keys($properties),
+            'security' => true
         );
     }
 
@@ -491,7 +533,6 @@ class DataObjectRESTBuilder extends xarObject
                 array('cookieAuth' => array())
             )
         );
-        //self::$paths[$path]['put']['x-xaraya-config'] = array();
         self::$requestBodies['update-' . $objectname] = array(
             'description' => 'Update ' . $objectname . ' object',
             'content' => array(
@@ -505,6 +546,10 @@ class DataObjectRESTBuilder extends xarObject
         self::$schemas['update-' . $objectname] = array(
             'type' => 'object',
             'properties' => $properties
+        );
+        self::$objects[$objectname]['x-operations']['update'] = array(
+            'properties' => array_keys($properties),
+            'security' => true
         );
     }
 
@@ -530,7 +575,10 @@ class DataObjectRESTBuilder extends xarObject
                 array('cookieAuth' => array())
             )
         );
-        //self::$paths[$path]['delete']['x-xaraya-config'] = array();
+        self::$objects[$objectname]['x-operations']['delete'] = array(
+            'properties' => array_keys($properties),
+            'security' => true
+        );
     }
 
     public static function add_whoami()
@@ -554,7 +602,6 @@ class DataObjectRESTBuilder extends xarObject
                 )
             )
         );
-        //self::$paths[$path]['get']['x-xaraya-config'] = array();
         self::$responses['whoami'] = array(
             'description' => 'Display current user',
             'content' => array(
@@ -599,7 +646,6 @@ class DataObjectRESTBuilder extends xarObject
                 )
             )
         );
-        //self::$paths[$path]['get']['x-xaraya-config'] = array();
         self::$responses['modules'] = array(
             'description' => 'Show available REST API calls for modules',
             'content' => array(
