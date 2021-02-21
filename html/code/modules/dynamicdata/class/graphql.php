@@ -395,6 +395,7 @@ class xarGraphQL extends xarObject
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         $content = self::get_data('{schema}', [], null, $extraTypes);
+        $content .= "\n" . '"""Generated: ' . date('c') . '"""';
         file_put_contents($schemaFile, $content);
     }
 }

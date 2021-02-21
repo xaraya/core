@@ -53,6 +53,8 @@
                 <div class="xar-col">
                 <xar:if condition="!empty($openapi)">
                     <a href="./var/cache/api/openapi.json">var/cache/api/openapi.json</a>
+                    <xar:set name="mtime">filemtime($openapi)</xar:set>
+                    (#xarLocale::formatUTCDate("%Y-%m-%d", $mtime)#)
                 <xar:else/>
                     var/cache/api/openapi.json
                 </xar:if>
@@ -85,6 +87,8 @@
                 <div class="xar-col">
                 <xar:if condition="!empty($schema)">
                     <a href="./var/cache/api/schema.graphql">var/cache/api/schema.graphql</a>
+                    <xar:set name="mtime">filemtime($schema)</xar:set>
+                    (#xarLocale::formatUTCDate("%Y-%m-%d", $mtime)#)
                 <xar:else/>
                     var/cache/api/schema.graphql
                 </xar:if>
@@ -128,6 +132,7 @@
                 <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
                 <xar:var name="label">Update List</xar:var>
                 <xar:button type="submit" label="$label"/>
+                <p>Note: don't forget to &#8635; re-build the API schema document(s) above after updating this object list</p>
             </fieldset>
         </form>
     </div>
