@@ -59,6 +59,7 @@ class xarGraphQLBuildType
             'offset' => Type::int(),
             'limit' => Type::int(),
             'count' => Type::int(),
+            'filter' => Type::listOf(Type::string()),
             //$list => Type::listOf(xarGraphQL::get_type($type)),
             $list => xarGraphQL::get_type_list($type),
         ];
@@ -486,7 +487,7 @@ class xarGraphQLBuildType
                     'type' => Type::int(),
                     'defaultValue' => 20,
                 ],
-                //'filters' => Type::string(),
+                'filter' => Type::listOf(Type::string()),
             ],
             'resolve' => self::page_query_resolver($type, $object),
         ];
@@ -514,7 +515,7 @@ class xarGraphQLBuildType
                 xarGraphQL::$paths[] = array_merge($info->path, ["page query"]);
             }
             // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
-            $allowed = array_flip(['sort', 'offset', 'limit', 'filters', 'count']);
+            $allowed = array_flip(['sort', 'offset', 'limit', 'filter', 'count']);
             $fields = $info->getFieldSelection(1);
             $args = array_intersect_key($args, $allowed);
             $todo = array_keys(array_diff_key($fields, $allowed));
@@ -558,7 +559,7 @@ class xarGraphQLBuildType
                     'type' => Type::int(),
                     'defaultValue' => 20,
                 ],
-                //'filters' => Type::string(),
+                'filter' => Type::listOf(Type::string()),
             ],
              */
             'resolve' => self::list_query_resolver($type, $object),
@@ -597,7 +598,7 @@ class xarGraphQLBuildType
             //print_r($params);
             $objectlist = DataObjectMaster::getObjectList($params);
             // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
-            $allowed = array_flip(['sort', 'offset', 'limit', 'filters']);
+            $allowed = array_flip(['sort', 'offset', 'limit', 'filter']);
             $args = array_intersect_key($args, $allowed);
             //print_r($args);
             $params = array();
@@ -619,8 +620,8 @@ class xarGraphQLBuildType
             if (!empty($args['limit'])) {
                 $params['numitems'] = $args['limit'];
             }
-            //if (!empty($args['filters'])) {
-            //    $params['filters'] = $args['filters'];
+            //if (!empty($args['filter'])) {
+            //    $params['filter'] = $args['filter'];
             //}
             try {
                 // @checkme bypass getItemValue() and get the raw values from the properties to allow deferred handling
@@ -744,5 +745,158 @@ class xarGraphQLBuildType
             //self::get_item_query($item, $type, $object),
         ];
         return $fields;
+    }
+
+    /**
+     * Get create mutation field for this object type
+     */
+    public static function get_create_mutation($name, $type, $object)
+    {
+        return [
+            'name' => $name,
+            'type' => xarGraphQL::get_type($type),
+            'args' => [
+                'input' => xarGraphQL::get_input_type($type)
+            ],
+            'resolve' => self::create_mutation_resolver($type, $object),
+        ];
+    }
+
+    /**
+     * Get the create mutation resolver for the object type
+     */
+    public static function create_mutation_resolver($type, $object = null)
+    {
+        // when using type config decorator and object_query_resolver
+        //if (!isset($object)) {
+        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
+        //}
+        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["create mutation"]);
+            }
+            //print_r($rootValue);
+            $fields = $info->getFieldSelection(1);
+            //print_r($fields);
+            //$queryPlan = $info->lookAhead();
+            //print_r($queryPlan->queryPlan());
+            //print_r($queryPlan->subFields('Property'));
+            if (empty($args['input'])) {
+                throw new Exception('Unknown input ' . $type);
+            }
+            if (!empty($args['input']['id'])) {
+                //$params = array('name' => $object, 'itemid' => $args['input']['id']);
+                unset($args['input']['id']);
+            }
+            $params = array('name' => $object);
+            //print_r($params);
+            $objectitem = DataObjectMaster::getObject($params);
+            $itemid = $objectitem->createItem($args['input']);
+            if (!empty($params['itemid']) && $itemid != $params['itemid']) {
+                throw new Exception('Unknown item ' . $type);
+            }
+            $values = $objectitem->getFieldValues();
+            return $values;
+        };
+        return $resolver;
+    }
+
+    /**
+     * Get update mutation field for this object type
+     */
+    public static function get_update_mutation($name, $type, $object)
+    {
+        return [
+            'name' => $name,
+            'type' => xarGraphQL::get_type($type),
+            'args' => [
+                'input' => xarGraphQL::get_input_type($type)
+            ],
+            'resolve' => self::update_mutation_resolver($type, $object),
+        ];
+    }
+
+    /**
+     * Get the update mutation resolver for the object type
+     */
+    public static function update_mutation_resolver($type, $object = null)
+    {
+        // when using type config decorator and object_query_resolver
+        //if (!isset($object)) {
+        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
+        //}
+        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["update mutation"]);
+            }
+            //print_r($rootValue);
+            $fields = $info->getFieldSelection(1);
+            //print_r($fields);
+            //$queryPlan = $info->lookAhead();
+            //print_r($queryPlan->queryPlan());
+            //print_r($queryPlan->subFields('Property'));
+            if (empty($args['input']) || empty($args['input']['id'])) {
+                throw new Exception('Unknown input ' . $type);
+            }
+            $params = array('name' => $object, 'itemid' => $args['input']['id']);
+            //print_r($params);
+            $objectitem = DataObjectMaster::getObject($params);
+            $itemid = $objectitem->updateItem($args['input']);
+            if ($itemid != $params['itemid']) {
+                throw new Exception('Unknown item ' . $type);
+            }
+            $values = $objectitem->getFieldValues();
+            return $values;
+        };
+        return $resolver;
+    }
+
+    /**
+     * Get delete mutation field for this object type
+     */
+    public static function get_delete_mutation($name, $type, $object)
+    {
+        return [
+            'name' => $name,
+            'type' => Type::nonNull(Type::id()),
+            'args' => [
+                'id' => Type::nonNull(Type::id())
+            ],
+            'resolve' => self::delete_mutation_resolver($type, $object),
+        ];
+    }
+
+    /**
+     * Get the delete mutation resolver for the object type
+     */
+    public static function delete_mutation_resolver($type, $object = null)
+    {
+        // when using type config decorator and object_query_resolver
+        //if (!isset($object)) {
+        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
+        //}
+        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["delete mutation"]);
+            }
+            //print_r($rootValue);
+            $fields = $info->getFieldSelection(1);
+            //print_r($fields);
+            //$queryPlan = $info->lookAhead();
+            //print_r($queryPlan->queryPlan());
+            //print_r($queryPlan->subFields('Property'));
+            if (empty($args['id'])) {
+                throw new Exception('Unknown id ' . $type);
+            }
+            $params = array('name' => $object, 'itemid' => $args['id']);
+            //print_r($params);
+            $objectitem = DataObjectMaster::getObject($params);
+            $itemid = $objectitem->deleteItem();
+            if ($itemid != $params['itemid']) {
+                throw new Exception('Unknown item ' . $type);
+            }
+            return $itemid;
+        };
+        return $resolver;
     }
 }

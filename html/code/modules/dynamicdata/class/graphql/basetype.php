@@ -83,26 +83,11 @@ class xarGraphQLBaseType extends ObjectType
      */
     public static function _xar_get_query_field($name)
     {
-        // @todo switch to get_list_query and get_item_query format
-        $fields = [];
-        if (!empty(static::$_xar_list)) {
-            $fields[static::$_xar_list] = [
-                //'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)),
-                'type' => xarGraphQL::get_type_list(static::$_xar_type),
-                'resolve' => static::_xar_list_query_resolver(static::$_xar_type, static::$_xar_object),
-            ];
+        if (!empty(static::$_xar_list) && $name == static::$_xar_list) {
+            return static::_xar_get_list_query(static::$_xar_list, static::$_xar_type, static::$_xar_object);
         }
-        if (!empty(static::$_xar_item)) {
-            $fields[static::$_xar_item] = [
-                'type' => xarGraphQL::get_type(static::$_xar_type),
-                'args' => [
-                    'id' => Type::nonNull(Type::id())
-                ],
-                'resolve' => static::_xar_item_query_resolver(static::$_xar_type, static::$_xar_object),
-            ];
-        }
-        if (!empty($name) && array_key_exists($name, $fields)) {
-            return array($name => $fields[$name]);
+        if (!empty(static::$_xar_item) && $name == static::$_xar_item) {
+            return static::_xar_get_item_query(static::$_xar_item, static::$_xar_type, static::$_xar_object);
         }
     }
 
@@ -352,41 +337,13 @@ class xarGraphQLBaseType extends ObjectType
 
     /**
      * Get the create mutation resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
     public static function _xar_create_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
-        //if (!isset($object)) {
-        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
-        //}
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["create mutation"]);
-            }
-            //print_r($rootValue);
-            $fields = $info->getFieldSelection(1);
-            //print_r($fields);
-            //$queryPlan = $info->lookAhead();
-            //print_r($queryPlan->queryPlan());
-            //print_r($queryPlan->subFields('Property'));
-            if (empty($args['input'])) {
-                throw new Exception('Unknown input ' . $type);
-            }
-            if (!empty($args['input']['id'])) {
-                //$params = array('name' => $object, 'itemid' => $args['input']['id']);
-                unset($args['input']['id']);
-            }
-            $params = array('name' => $object);
-            //print_r($params);
-            $objectitem = DataObjectMaster::getObject($params);
-            $itemid = $objectitem->createItem($args['input']);
-            if (!empty($params['itemid']) && $itemid != $params['itemid']) {
-                throw new Exception('Unknown item ' . $type);
-            }
-            $values = $objectitem->getFieldValues();
-            return $values;
-        };
-        return $resolver;
+        $clazz = xarGraphQL::get_type_class("buildtype");
+        return $clazz::create_mutation_resolver($type, $object);
     }
 
     /**
@@ -406,37 +363,13 @@ class xarGraphQLBaseType extends ObjectType
 
     /**
      * Get the update mutation resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
     public static function _xar_update_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
-        //if (!isset($object)) {
-        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
-        //}
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["update mutation"]);
-            }
-            //print_r($rootValue);
-            $fields = $info->getFieldSelection(1);
-            //print_r($fields);
-            //$queryPlan = $info->lookAhead();
-            //print_r($queryPlan->queryPlan());
-            //print_r($queryPlan->subFields('Property'));
-            if (empty($args['input']) || empty($args['input']['id'])) {
-                throw new Exception('Unknown input ' . $type);
-            }
-            $params = array('name' => $object, 'itemid' => $args['input']['id']);
-            //print_r($params);
-            $objectitem = DataObjectMaster::getObject($params);
-            $itemid = $objectitem->updateItem($args['input']);
-            if ($itemid != $params['itemid']) {
-                throw new Exception('Unknown item ' . $type);
-            }
-            $values = $objectitem->getFieldValues();
-            return $values;
-        };
-        return $resolver;
+        $clazz = xarGraphQL::get_type_class("buildtype");
+        return $clazz::update_mutation_resolver($type, $object);
     }
 
     /**
@@ -456,35 +389,12 @@ class xarGraphQLBaseType extends ObjectType
 
     /**
      * Get the delete mutation resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
     public static function _xar_delete_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
-        //if (!isset($object)) {
-        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
-        //}
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["delete mutation"]);
-            }
-            //print_r($rootValue);
-            $fields = $info->getFieldSelection(1);
-            //print_r($fields);
-            //$queryPlan = $info->lookAhead();
-            //print_r($queryPlan->queryPlan());
-            //print_r($queryPlan->subFields('Property'));
-            if (empty($args['id'])) {
-                throw new Exception('Unknown id ' . $type);
-            }
-            $params = array('name' => $object, 'itemid' => $args['id']);
-            //print_r($params);
-            $objectitem = DataObjectMaster::getObject($params);
-            $itemid = $objectitem->deleteItem();
-            if ($itemid != $params['itemid']) {
-                throw new Exception('Unknown item ' . $type);
-            }
-            return $itemid;
-        };
-        return $resolver;
+        $clazz = xarGraphQL::get_type_class("buildtype");
+        return $clazz::delete_mutation_resolver($type, $object);
     }
 }

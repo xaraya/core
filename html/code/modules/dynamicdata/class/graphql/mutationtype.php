@@ -38,9 +38,9 @@ class xarGraphQLMutationType extends ObjectType
     {
         $fields = array();
         foreach (static::$mutation_mapper as $name => $type) {
-            $add_fields = static::add_mutation_field($name, $type);
-            if (!empty($add_fields)) {
-                $fields = array_merge($fields, $add_fields);
+            $add_field = static::add_mutation_field($name, $type);
+            if (!empty($add_field)) {
+                array_push($fields, $add_field);
             }
         }
         // @todo get mutation fields from BuildType for extra dynamicdata object types
@@ -62,9 +62,6 @@ class xarGraphQLMutationType extends ObjectType
     public static function add_mutation_field($name, $type)
     {
         $clazz = xarGraphQL::get_type_class($type);
-        // @checkme for some reason, mutation doesn't accept full field definition without $name => like query
-        // contrary to https://webonyx.github.io/graphql-php/type-system/object-types/#shorthand-field-definitions
-        //return $clazz::_xar_get_mutation_field($name);
-        return array($name => $clazz::_xar_get_mutation_field($name));
+        return $clazz::_xar_get_mutation_field($name);
     }
 }

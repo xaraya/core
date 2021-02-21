@@ -26,6 +26,8 @@ class xarGraphQLAccessType extends ObjectType
                 'keys' => Type::listOf(Type::string()),
                 //'access' => Type::string(),
                 //'access' => Type::listOf(xarGraphQL::get_type("keyval")),
+                //'access' => xarGraphQL::get_type_list("keyval"),
+                'access' => xarGraphQL::get_type("mixed"),
                 //'display_access' => Type::listOf(xarGraphQL::get_type("keyval")),
                 //'filters' => Type::string(),
                 'filters' => xarGraphQL::get_type('serial'),
@@ -43,6 +45,8 @@ class xarGraphQLAccessType extends ObjectType
                 }
                 if ($info->fieldName == 'access' && !empty($object['access']) && is_string($object['access'])) {
                     $values = @unserialize($object[$info->fieldName]);
+                    return $values;
+                    /**
                     $access = array();
                     foreach ($values as $key => $value) {
                         //if (is_array($value)) {
@@ -51,6 +55,7 @@ class xarGraphQLAccessType extends ObjectType
                         $access[] = array('key' => $key, 'value' => $value);
                     }
                     return $access;
+                     */
                 }
                 if ($info->fieldName == 'display_access' && !empty($object['display_access']) && is_array($object['display_access'])) {
                     $values = $object[$info->fieldName];
@@ -71,12 +76,5 @@ class xarGraphQLAccessType extends ObjectType
             }
         ];
         parent::__construct($config);
-    }
-
-    public static function _xar_get_query_field($name)
-    {
-        $fields = [
-        ];
-        return array($name => $fields[$name]);
     }
 }
