@@ -81,6 +81,7 @@ class xarGraphQLBuildType
         list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
         $input = $name . '_Input';
         $description = "$input: input $type type for $object objects";
+        // @todo adapt object fields to InputObjectType where needed, e.g. KeyVal to Mixed?
         $fields = self::get_object_fields($object);
         if (!empty($fields['id'])) {
             //unset($fields['id']);
@@ -219,6 +220,7 @@ class xarGraphQLBuildType
             if ($property->name == 'configuration') {
                 //$fields[$property->name] = Type::listOf(xarGraphQL::get_type("keyval"));
                 $fields[$property->name] = xarGraphQL::get_type_list("keyval");
+                //$fields[$property->name] = xarGraphQL::get_type_list("mixed");
                 continue;
             }
             if (!array_key_exists($property->name, $fields)) {
@@ -742,7 +744,9 @@ class xarGraphQLBuildType
         // name=Property, type=property, object=properties, list=properties, item=property
         list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
         $fields = [
-            //self::get_item_query($item, $type, $object),
+            //self::get_create_mutation('create' . $name, $type, $object),
+            //self::get_update_mutation('update' . $name, $type, $object),
+            //self::get_delete_mutation('delete' . $name, $type, $object),
         ];
         return $fields;
     }
