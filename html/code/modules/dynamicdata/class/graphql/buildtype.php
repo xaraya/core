@@ -259,13 +259,14 @@ class xarGraphQLBuildType
         // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
         //$type = "mixed";
         //$type = $property->objectname;
-        if (count($property->fieldlist) > 1) {
+        //if (count($property->fieldlist) > 1) {
+        if (!empty(xarGraphQL::$object_type[$property->objectname])) {
+            $type = xarGraphQL::$object_type[$property->objectname];
+        } else {
             $type = self::singularize($property->objectname);
-            if (xarGraphQL::has_type($type)) {
-                $type = xarGraphQL::get_type($type);
-            } else {
-                $type = xarGraphQL::get_type("mixed");
-            }
+        }
+        if (xarGraphQL::has_type($type)) {
+            $type = xarGraphQL::get_type($type);
         } else {
             $type = xarGraphQL::get_type("mixed");
         }
@@ -283,17 +284,15 @@ class xarGraphQLBuildType
         // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
         //$type = "mixed";
         //$type = $property->objectname;
-        if (count($property->fieldlist) > 1) {
-            $type = self::singularize($property->objectname);
-            if (xarGraphQL::has_type($type)) {
-                //$type = xarGraphQL::get_type($type);
-                $typelist = xarGraphQL::get_type_list($type);
-            } else {
-                //$type = xarGraphQL::get_type("mixed");
-                $typelist = xarGraphQL::get_type_list("mixed");
-            }
+        //if (count($property->fieldlist) > 1) {
+        if (!empty(xarGraphQL::$object_type[$property->objectname])) {
+            $type = xarGraphQL::$object_type[$property->objectname];
         } else {
-            //$type = xarGraphQL::get_type("mixed");
+            $type = self::singularize($property->objectname);
+        }
+        if (xarGraphQL::has_type($type)) {
+            $typelist = xarGraphQL::get_type_list($type);
+        } else {
             $typelist = xarGraphQL::get_type_list("mixed");
         }
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
@@ -312,15 +311,19 @@ class xarGraphQLBuildType
         // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
         //$type = "mixed";
         //$type = $property->targetname;
-        if (!empty($property->targetname) && count($property->fieldlist) > 1) {
-            $type = self::singularize($property->targetname);
-            if (xarGraphQL::has_type($type)) {
-                //$type = xarGraphQL::get_type($type);
-                $typelist = xarGraphQL::get_type_list($type);
+        //if (!empty($property->targetname) && count($property->fieldlist) > 1) {
+        if (!empty($property->objectname)) {
+            if (!empty(xarGraphQL::$object_type[$property->objectname])) {
+                $type = xarGraphQL::$object_type[$property->objectname];
             } else {
-                //$type = xarGraphQL::get_type("mixed");
-                $typelist = xarGraphQL::get_type_list("mixed");
+                $type = self::singularize($property->objectname);
             }
+        } else {
+            $type = "mixed";
+        }
+        if (xarGraphQL::has_type($type)) {
+            //$type = xarGraphQL::get_type($type);
+            $typelist = xarGraphQL::get_type_list($type);
         } else {
             //$type = xarGraphQL::get_type("mixed");
             $typelist = xarGraphQL::get_type_list("mixed");

@@ -67,6 +67,7 @@ class xarGraphQL extends xarObject
     public static $paths = [];
     public static $cache_plan = false;
     public static $cache_data = false;
+    public static $object_type = [];
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -76,6 +77,7 @@ class xarGraphQL extends xarObject
         if (!empty($extraTypes)) {
             self::$extra_types = $extraTypes;
         }
+        self::map_objects();
         $queryType = self::get_type("query");
         $mutationType = self::get_type("mutation");
 
@@ -91,6 +93,21 @@ class xarGraphQL extends xarObject
             $schema->assertValid();
         }
         return $schema;
+    }
+
+    public static function map_objects()
+    {
+        foreach (self::$type_mapper as $name => $type) {
+            $clazz = self::get_type_class($type);
+            if (property_exists($clazz, '_xar_object') && !empty($clazz::$_xar_object)) {
+                self::$object_type[$clazz::$_xar_object] = $name;
+            }
+        }
+        $clazz = self::get_type_class("buildtype");
+        foreach (self::$extra_types as $type) {
+            list($name, $type, $object, $list, $item) = $clazz::sanitize($type);
+            self::$object_type[$object] = $name;
+        }
     }
 
     /**
@@ -117,6 +134,7 @@ class xarGraphQL extends xarObject
 
     public static function has_type($name)
     {
+        $name = strtolower($name);
         if (in_array($name, self::$extra_types) || array_key_exists($name, self::$type_mapper)) {
             return true;
         }
