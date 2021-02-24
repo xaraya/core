@@ -1,6 +1,7 @@
 <?php
 /* Include parent class */
 sys::import('modules.dynamicdata.xarproperties.deferitem');
+sys::import('modules.dynamicdata.class.objects.loader');
 
 /**
  * The Deferred List property delays loading extra information using the database values until they need to be shown.
@@ -33,8 +34,6 @@ sys::import('modules.dynamicdata.xarproperties.deferitem');
   *
   * Configuration:
   * the defaultvalue can be set to automatically load object properties if the value includes their itemids,
-  * or you can use DeferredProperty::set_resolver($resolver, $name) method to set a resolver function
-  * or you can inherit this class and override the static override_me_load() method below
   */
 class DeferredListProperty extends DeferredItemProperty
 {
@@ -109,6 +108,15 @@ class DeferredListProperty extends DeferredItemProperty
         parent::setItemValue($itemid, $value, $fordisplay);
     }
 
+    public function getDeferredLoader()
+    {
+        //static::init_deferred($this->defername);
+        if (!isset(static::$deferred[$this->defername]['loader'])) {
+            static::$deferred[$this->defername]['loader'] = new DataObjectListLoader($this->objectname, $this->fieldlist);
+        }
+        return static::$deferred[$this->defername]['loader'];
+    }
+
     /**
      * Set the data to defer here - in this case the property values
      */
@@ -121,9 +129,10 @@ class DeferredListProperty extends DeferredItemProperty
             if (!is_array($values)) {
                 $values = array($values);
             }
-            foreach ($values as $value) {
-                static::add_deferred($this->defername, $value);
-            }
+            //foreach ($values as $value) {
+            //    static::add_deferred($this->defername, $value);
+            //}
+            $this->getDeferredLoader()->add($values);
         }
         return $values;
     }
@@ -192,12 +201,21 @@ class DeferredListProperty extends DeferredItemProperty
         if (!isset($data['link']) && !empty($this->displaylink)) {
             $data['link'] = $this->displaylink;
         }
-        $items = array();
-        foreach ($values as $value) {
-            $key = (string) $value;
-            $items[$key] = static::get_deferred($this->defername, $value);
+        //$items = array();
+        //foreach ($values as $value) {
+        //    $key = (string) $value;
+        //    $items[$key] = static::get_deferred($this->defername, $value);
+        //}
+        //$data['value'] = $items;
+        $data['value'] = $this->getDeferredLoader()->get($values);
+        if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], reset($data['value']))) {
+            $field = $this->fieldlist[0];
+            $values = array();
+            foreach ($data['value'] as $key => $props) {
+                $values[$key] = $props[$field];
+            }
+            $data['value'] = $values;
         }
-        $data['value'] = $items;
         return $data;
     }
 }

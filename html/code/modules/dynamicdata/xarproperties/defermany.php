@@ -1,6 +1,7 @@
 <?php
 /* Include parent class */
 sys::import('modules.dynamicdata.xarproperties.deferitem');
+sys::import('modules.dynamicdata.class.objects.loader');
 
 /**
  * The Deferred Many property delays loading related objects based on the itemids until they need to be shown.
@@ -40,8 +41,6 @@ sys::import('modules.dynamicdata.xarproperties.deferitem');
   *
   * Configuration:
   * the defaultvalue can be set to automatically load related object link properties based on the itemids,
-  * or you can use DeferredProperty::set_resolver($resolver, $name) method to set a resolver function
-  * or you can inherit this class and override the static override_me_load() method below
   */
 class DeferredManyProperty extends DeferredItemProperty
 {
@@ -71,7 +70,7 @@ class DeferredManyProperty extends DeferredItemProperty
      * Format:
      *     linkobject:<linkname>.<caller_id>.<called_id>
      *     linkobject:<linkname>.<caller_id>.<called_id>:<calledname> (= for display link only)
-     *     linkobject:<linkname>.<caller_id>.<called_id>:<calledname>.<propname> (for loading propname too - TODO)
+     *     linkobject:<linkname>.<caller_id>.<called_id>:<calledname>.<propname> (for loading propname too)
      *     linkobject:<linkname>.<caller_id>.<called_id>:<calledname>.<propname>,<propname2>,<propname3>
      * Example:
      *     linkobject:api_films_people.films_id.people_id will show the people involved in the films id (SWAPI)
@@ -87,14 +86,16 @@ class DeferredManyProperty extends DeferredItemProperty
         list($linkpart, $targetpart) = explode(':', substr($value, 11) . ':');
         $this->defername = $linkpart;
         list($linkname, $caller_id, $called_id) = explode('.', $linkpart);
-        if (!static::has_resolver($this->defername)) {
-            $resolver = static::linkobject_resolver($linkname, $caller_id, $called_id);
-            static::set_resolver($resolver, $this->defername);
-        }
+        //if (!static::has_resolver($this->defername)) {
+        //    $resolver = static::linkobject_resolver($linkname, $caller_id, $called_id);
+        //    static::set_resolver($resolver, $this->defername);
+        //}
         static::init_deferred($this->defername);
         $this->linkname = $linkname;
         $this->caller_id = $caller_id;
         $this->called_id = $called_id;
+        //static::$deferred[$this->defername]['loader'] = new LinkObjectItemLoader($this->linkname, $this->caller_id, $this->called_id);
+        $this->getDeferredLoader();
         // sorry, you'll have to deal with it directly in the template
         $this->displaylink = null;
         if (!empty($targetpart)) {
@@ -104,13 +105,16 @@ class DeferredManyProperty extends DeferredItemProperty
             $fieldlist = explode(',', $field);
             // add and call resolver for target dataobject once we loaded all links
             if (!empty($fieldlist)) {
+                // @todo delay creating target resolver until we know which fields to retrieve (if coming from GraphQL)
                 $this->targetname = $targetpart;
-                if (!static::has_resolver($this->targetname)) {
-                    $resolver = static::dataobject_resolver($object, $fieldlist);
-                    static::set_resolver($resolver, $this->targetname);
-                }
+                //if (!static::has_resolver($this->targetname)) {
+                //    $resolver = static::dataobject_resolver($object, $fieldlist);
+                //    static::set_resolver($resolver, $this->targetname);
+                //}
                 static::init_deferred($this->targetname);
-                static::set_deferred_target($this->defername, $this->targetname);
+                //static::set_deferred_target($this->defername, $this->targetname);
+                //static::$deferred[$this->defername]['loader']->setTarget($object, $fieldlist);
+                $this->getDeferredLoader()->setTarget($object, $fieldlist);
             }
             $this->objectname = $object;
             $this->fieldlist = $fieldlist;
@@ -169,6 +173,15 @@ class DeferredManyProperty extends DeferredItemProperty
         parent::setItemValue($itemid, $value, $fordisplay);
     }
 
+    public function getDeferredLoader()
+    {
+        //static::init_deferred($this->defername);
+        if (!isset(static::$deferred[$this->defername]['loader'])) {
+            static::$deferred[$this->defername]['loader'] = new LinkObjectItemLoader($this->linkname, $this->caller_id, $this->called_id);
+        }
+        return static::$deferred[$this->defername]['loader'];
+    }
+
     /**
      * Set the data to defer here - based on the object itemid here
      */
@@ -176,7 +189,8 @@ class DeferredManyProperty extends DeferredItemProperty
     {
         // @checkme we use the itemid as value here
         if (isset($itemid)) {
-            static::add_deferred($this->defername, $itemid);
+            //static::add_deferred($this->defername, $itemid);
+            $this->getDeferredLoader()->add($itemid);
         }
         //return $value;
         return $itemid;
@@ -236,7 +250,16 @@ class DeferredManyProperty extends DeferredItemProperty
             //$data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
             $data['link'] = $this->displaylink;
         }
-        $data['value'] = static::get_deferred($this->defername, $itemid);
+        //$data['value'] = static::get_deferred($this->defername, $itemid);
+        $data['value'] = $this->getDeferredLoader()->get($itemid);
+        if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], reset($data['value']))) {
+            $field = $this->fieldlist[0];
+            $values = array();
+            foreach ($data['value'] as $key => $props) {
+                $values[$key] = $props[$field];
+            }
+            $data['value'] = $values;
+        }
         $this->value = $data['value'];
         return $data;
     }
@@ -302,6 +325,7 @@ class DeferredManyProperty extends DeferredItemProperty
         if (empty($distinct)) {
             return true;
         }
+        // @todo delay creating target resolver until we know which fields to retrieve (if coming from GraphQL)
         $resolver = static::get_resolver($target);
         if (empty($resolver) || !is_callable($resolver)) {
             return false;
