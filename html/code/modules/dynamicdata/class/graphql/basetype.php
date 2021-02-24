@@ -204,9 +204,12 @@ class xarGraphQLBaseType extends ObjectType
             return $resolver;
         }
         if (!array_key_exists($type, static::$_xar_deferred)) {
-            //static::$_xar_deferred[$type] = array('todo' => [], 'fields' => ['id'], 'cache' => []);
             static::$_xar_deferred[$type] = new DataObjectLoader(static::$_xar_object, ['id', 'name']);
-            // @todo support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+            // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+            $loader = static::_xar_load_deferred($type);
+            if (!empty($loader)) {
+                static::$_xar_deferred[$type]->setResolver($loader);
+            }
         }
         // @todo should we pass along the object instead of the type here?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name) {
@@ -246,11 +249,6 @@ class xarGraphQLBaseType extends ObjectType
         //print_r("Adding $type $id");
         // @todo handle value array for deferlist
         static::$_xar_deferred[$type]->add($id);
-        /**
-        if (!array_key_exists("$id", static::$_xar_deferred[$type]['cache']) && !in_array($id, static::$_xar_deferred[$type]['todo'])) {
-            static::$_xar_deferred[$type]['todo'][] = $id;
-        }
-         */
     }
 
     /**
@@ -262,39 +260,7 @@ class xarGraphQLBaseType extends ObjectType
      */
     public static function _xar_load_deferred($type)
     {
-        if (empty(static::$_xar_deferred[$type]['todo'])) {
-            return;
-        }
-        if (xarGraphQL::$trace_path) {
-            xarGraphQL::$paths[] = ["load deferred $type"];
-        }
-        // @todo should we pass along the object instead of the type here?
-        $idlist = implode(",", static::$_xar_deferred[$type]['todo']);
-        //print_r("Loading " . $idlist);
-        foreach (static::$_xar_deferred[$type]['todo'] as $id) {
-            static::$_xar_deferred[$type]['cache']["$id"] = array('id' => $id, 'name' => "override_me_" . $id);
-        }
-        /**
-        $object = static::$_xar_object;
-        $fieldlist = array('id', 'name');
-        $itemids = array();
-        foreach (static::$_xar_deferred[$type]['todo'] as $id) {
-            $itemids[] = intval($id);
-        }
-        //$params = array('name' => $object);
-        $params = array('name' => $object, 'fieldlist' => $fieldlist);
-        //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $itemids);
-        $objectlist = DataObjectMaster::getObjectList($params);
-        $params = array('itemids' => $itemids);
-        try {
-            static::$_xar_deferred[$type]['cache'] = $objectlist->getItems($params);
-            static::$_xar_deferred[$type]['todo'] = [];
-        } catch (Exception $e) {
-            print_r($e-getMessage());
-            parent::_xar_load_deferred($type);
-        }
-         */
-        static::$_xar_deferred[$type]['todo'] = [];
+        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
     }
 
     public static function _xar_get_deferred($type, $id)
@@ -304,18 +270,6 @@ class xarGraphQLBaseType extends ObjectType
         }
         // @todo support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
         return static::$_xar_deferred[$type]->get($id);
-        /**
-        // @todo should we pass along the object instead of the type here?
-        if (!empty(static::$_xar_deferred[$type]['todo'])) {
-            static::_xar_load_deferred($type);
-        }
-        //print_r("Getting $type $id");
-        // @todo handle value array for deferlist
-        if (array_key_exists($type, static::$_xar_deferred) && array_key_exists("$id", static::$_xar_deferred[$type]['cache'])) {
-            return static::$_xar_deferred[$type]['cache']["$id"];
-        }
-        return array('id' => $id);
-         */
     }
 
     /**
