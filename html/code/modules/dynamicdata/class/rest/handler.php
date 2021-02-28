@@ -68,7 +68,7 @@ class DataObjectRESTHandler extends xarObject
             $item['_links'] = array('self' => array('href' => self::getObjectURL($item['name'])));
             array_push($result['items'], $item);
         }
-        $result['filter'] = 'datastore,eq,dynamicdata';
+        $result['filter'] = ['datastore,eq,dynamicdata'];
         //return array('method' => 'getObjects', 'args' => $args, 'result' => $result);
         return $result;
     }
@@ -83,103 +83,32 @@ class DataObjectRESTHandler extends xarObject
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             self::checkuser();
+            //$args['access'] = 'view';
+        }
+        // @checkme always count here
+        $args['count'] = true;
+        if (empty($args['limit']) || !is_numeric($args['limit'])) {
+            $args['limit'] = 100;
         }
         $fieldlist = self::getViewProperties($object);
-        $limit = 100;
-        if (!empty($args['limit']) && is_numeric($args['limit'])) {
-            $limit = intval($args['limit']);
-        }
-        $offset = 0;
-        if (!empty($args['offset']) && is_numeric($args['offset'])) {
-            $offset = intval($args['offset']);
-        }
-        $order = '';
-        if (!empty($args['order'])) {
-            $order = $args['order'];
-        }
-        $filter = [];
-        if (!empty($args['filter'])) {
-            $filter = $args['filter'];
-            if (!is_array($filter)) {
-                $filter = array($filter);
-            }
-            // Clean up arrays by removing false values (= empty, false, null, 0)
-            $filter = array_filter($filter);
-        }
-        $params = array('name' => $object, 'fieldlist' => $fieldlist);
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $loader = new DataObjectLoader($object, $fieldlist);
+        $loader->parseQueryArgs($args);
+        $objectlist = $loader->getObjectList();
         if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view')) {
             http_response_code(403);
             exit;
         }
-        // @todo fix setWhere() and/or dataquery to support other datastores than relational ones
-        // See code/modules/dynamicdata/class/ui_handlers/search.php
-        $wherestring = '';
-        if (!empty($filter)) {
-            $join = '';
-            $mapop = array('eq' => '=', 'ne' => '!=', 'gt' => '>', 'lt' => '<', 'le' => '>=', 'ge' => '<=', 'in' => 'IN');
-            foreach ($filter as $where) {
-                list($field, $op, $value) = explode(',', $where . ',,');
-                if (empty($field) || empty($objectlist->properties[$field]) || empty($op) || empty($mapop[$op])) {
-                    continue;
-                }
-                $clause = '';
-                if (is_numeric($value)) {
-                    $clause = $mapop[$op] . " " . $value;
-                } elseif (is_string($value)) {
-                    if ($op !== 'in') {
-                        $value = str_replace("'", "\\'", $value);
-                        $clause = $mapop[$op] . " '" . $value . "'";
-                    } else {
-                        // keep only the third variable with the rest of the string, e.g. itemid,in,3,7,11
-                        list(, , $value) = explode(',', $where, 3);
-                        $value = str_replace("'", "\\'", $value);
-                        $value = explode(',', $value);
-                        if (count($value) > 0) {
-                            if (is_numeric($value[0])) {
-                                $clause = $mapop[$op] . " (" . implode(", ", $value) . ")";
-                            } elseif (is_string($value[0])) {
-                                $clause = $mapop[$op] . " ('" . implode("', '", $value) . "')";
-                            }
-                        }
-                    }
-                }
-                if (!empty($clause)) {
-                    $objectlist->addWhere($field, $clause, $join);
-                    $wherestring .= $join . ' ' . $field . ' ' . trim($clause);
-                    $join = 'AND';
-                }
-            }
-        }
-        if (!empty($wherestring) && is_object($objectlist->datastore) && get_class($objectlist->datastore) !== 'VariableTableDataStore') {
-            $conditions = $objectlist->setWhere($wherestring);
-            $objectlist->dataquery->addconditions($conditions);
-        }
-        $result = array('items' => array(), 'count' => $objectlist->countItems(), 'limit' => $limit, 'offset' => $offset, 'order' => $order);
-        if (!empty($filter)) {
-            $result['filter'] = $filter;
-        }
-        $params = array('numitems' => $limit);
-        if (!empty($offset) && !empty($result['count'])) {
-            if ($offset < $result['count']) {
-                $params['startnum'] = $offset + 1;
-            } else {
-                throw new Exception('Invalid offset ' . $offset);
-            }
-        }
-        if (!empty($order)) {
-            $params['sort'] = array();
-            $sorted = explode(',', $order);
-            foreach ($sorted as $sortme) {
-                if (substr($sortme, 0, 1) === '-') {
-                    $params['sort'][] = substr($sortme, 1) . ' DESC';
-                    continue;
-                }
-                $params['sort'][] = $sortme;
-            }
-            //$params['sort'] = implode(',', $params['sort']);
-        }
+        $params = $loader->addPagingParams();
         $items = $objectlist->getItems($params);
+        //$items = $loader->query($args);
+        $result = array(
+            'items' => array(),
+            'count' => $loader->count,
+            'limit' => $loader->limit,
+            'offset' => $loader->offset,
+            'order' => $loader->order,
+            'filter' => $loader->filter,
+        );
         $deferred = array();
         foreach ($fieldlist as $key) {
             if (!empty($objectlist->properties[$key]) && method_exists($objectlist->properties[$key], 'getDeferredData')) {
@@ -217,6 +146,7 @@ class DataObjectRESTHandler extends xarObject
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             self::checkuser();
+            //$args['access'] = 'display';
         }
         $fieldlist = self::getDisplayProperties($object);
         $params = array('name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist);
@@ -258,7 +188,6 @@ class DataObjectRESTHandler extends xarObject
             return array('method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation');
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        //$user = self::whoami();
         self::checkuser();
         $fieldlist = self::getCreateProperties($object);
         // @todo sanity check on input based on properties
@@ -294,7 +223,6 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        //$user = self::whoami();
         self::checkuser();
         $fieldlist = self::getUpdateProperties($object);
         // @todo sanity check on input based on properties
@@ -330,7 +258,6 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        //$user = self::whoami();
         self::checkuser();
         $params = array('name' => $object, 'itemid' => $itemid);
         $objectitem = DataObjectMaster::getObject($params);
