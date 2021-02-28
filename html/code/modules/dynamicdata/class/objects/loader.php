@@ -4,6 +4,21 @@
  * It was inspired by how GraphQL-PHP tackles the N+1 problem, but without proxy, callable or promises (sync or async).
  * Right now this would be the equivalent of lazy loading in batch for showOutput() in object lists :-)
  *
+ * Usage:
+ * $itemloader = new DataObjectItemLoader('sample', ['name', 'age']);
+ * // get list of itemids from somewhere, e.g. a parent list
+ * // ...
+ * // add itemids to dataloader for delayed loading
+ * foreach ($itemids as $id) {
+ *     $itemloader->add($id);
+ * }
+ * // do some more processing
+ * // ...
+ * // get items from dataloader cache after internal bulk loading
+ * foreach ($itemids as $id) {
+ *     $item = $itemloader->get($id);
+ * }
+ *
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -26,6 +41,29 @@ class DataObjectLoader
     public $preLoader = null;
     public $postLoader = null;
     public $checkFieldlist = true;
+    public $order = '';
+    public $limit = null;
+    public $offset = 0;
+    public $filter = [];
+    public $count = false;
+    public $access = null;
+    public static $loaders = array();
+
+    public static function getItemLoader(string $objectname = 'sample', array $fieldlist = ['id', 'name'])
+    {
+        // we don't have an itemloader for this object yet, so we make a new one and keep it
+        if (empty(self::$loaders[$objectname])) {
+            self::$loaders[$objectname] = new DataObjectItemLoader($objectname, $fieldlist);
+            return self::$loaders[$objectname];
+        }
+        // we already have all the fields we need in the current itemloader, so we use it
+        $newfieldlist = array_unique(array_merge(self::$loaders[$objectname]->fieldlist, $fieldlist));
+        if (count($newfieldlist) == count(self::$loaders[$objectname]->fieldlist)) {
+            return self::$loaders[$objectname];
+        }
+        // we are missing some fields in the current itemloader, so we make a new one
+        return new DataObjectItemLoader($objectname, $fieldlist);
+    }
 
     public function __construct(string $objectname = 'sample', array $fieldlist = ['id', 'name'], ?callable $resolver = null)
     {
@@ -39,6 +77,7 @@ class DataObjectLoader
         $this->checkFieldlist = true;
     }
 
+    // https://stackoverflow.com/questions/36079651/silence-declaration-should-be-compatible-warnings-in-php-7/36196748
     public function add($value)
     {
         if (is_array($value)) {
@@ -64,6 +103,7 @@ class DataObjectLoader
         }
     }
 
+    // https://stackoverflow.com/questions/36079651/silence-declaration-should-be-compatible-warnings-in-php-7/36196748
     public function get($value)
     {
         if (!empty($this->todo)) {
@@ -142,6 +182,7 @@ class DataObjectLoader
         $values = array();
         // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
         $allowed = array_flip($this->fieldlist);
+        $allowed['id'] = true;
         //$addPrimary = false;
         //if (!empty($objectlist->primary) && !in_array($objectlist->primary, $this->fieldlist)) {
         //    $allowed[$objectlist->primary] = true;
@@ -154,22 +195,25 @@ class DataObjectLoader
             $key = (string) $itemid;
             $values[$key] = array_intersect_key($props, $allowed);
         }
-        /**
-        // return array("$itemid" => single $field value)
-        $first = reset($result);
-        $field = array_pop($fieldlist);
-        if (!array_key_exists($field, $first)) {
-            // @checkme pick the first key available here?
-            $fieldlist = array_keys($first);
-            $field = array_shift($fieldlist);
-        }
-        $values = array();
-        foreach ($result as $itemid => $props) {
-            $key = (string) $itemid;
-            $values[$key] = $props[$field];
-        }
-         */
+        // return array("$itemid" => single $field value) - see defer* properties
         return $values;
+    }
+
+    public function getObjectList(array $params = array())
+    {
+        if (empty($params)) {
+            $params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist);
+            //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
+        }
+        $objectlist = DataObjectMaster::getObjectList($params);
+        if (!empty($this->access) && !$objectlist->checkAccess($this->access)) {
+            //http_response_code(403);
+            throw new Exception('No access to object ' . $this->objectname);
+            return;
+        }
+        $this->applyObjectFilter($objectlist);
+        $this->getCount($objectlist);
+        return $objectlist;
     }
 
     public function setFieldlist(array $fieldlist)
@@ -183,6 +227,170 @@ class DataObjectLoader
             $this->fieldlist = array_unique(array_merge($this->fieldlist, $fieldlist));
             $this->checkFieldlist = false;
         }
+    }
+
+    public function setOrder(string $order)
+    {
+        $this->order = $order;
+    }
+
+    public function setLimit(int $limit)
+    {
+        $this->limit = $limit;
+    }
+
+    public function setOffset(int $offset)
+    {
+        $this->offset = $offset;
+    }
+
+    public function setFilter(array $filter)
+    {
+        $this->filter = $filter;
+    }
+
+    public function addFilter(array $filter)
+    {
+        array_push($this->filter, $filter);
+    }
+
+    public function query(array $args)
+    {
+        $this->parseQueryArgs($args);
+        $objectlist = $this->getObjectList();
+        $params = $this->addPagingParams();
+        $result = $objectlist->getItems($params);
+        $values = array();
+        // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
+        $allowed = array_flip($this->fieldlist);
+        $allowed['id'] = true;
+        foreach ($result as $itemid => $props) {
+            $key = (string) $itemid;
+            $values[$key] = array_intersect_key($props, $allowed);
+        }
+        //return $result;
+        return $values;
+    }
+
+    public function count(array $args)
+    {
+        if (empty($args['count'])) {
+            $args['count'] = true;
+        }
+        $this->parseQueryArgs($args);
+        $objectlist = $this->getObjectList();
+        return $this->count;
+    }
+
+    public function parseQueryArgs(array $args)
+    {
+        $allowed = array_flip(['order', 'offset', 'limit', 'filter', 'count', 'access']);
+        $args = array_intersect_key($args, $allowed);
+        if (!empty($args['order'])) {
+            $this->setOrder($args['order']);
+        }
+        if (!empty($args['limit']) && is_numeric($args['limit'])) {
+            $this->setLimit(intval($args['limit']));
+        }
+        if (!empty($args['offset']) && is_numeric($args['offset'])) {
+            $this->setOffset(intval($args['offset']));
+        }
+        if (!empty($args['filter'])) {
+            $filter = $args['filter'];
+            if (!is_array($filter)) {
+                $filter = array($filter);
+            }
+            // Clean up arrays by removing false values (= empty, false, null, 0)
+            $this->setFilter(array_filter($filter));
+        }
+        if (!empty($args['count'])) {
+            $this->count = $args['count'];
+        }
+        if (!empty($args['access'])) {
+            $this->access = $args['access'];
+        }
+    }
+
+    public function applyObjectFilter($objectlist)
+    {
+        if (empty($this->filter)) {
+            return;
+        }
+        // @todo fix setWhere() and/or dataquery to support other datastores than relational ones
+        // See code/modules/dynamicdata/class/ui_handlers/search.php
+        $wherestring = '';
+        $join = '';
+        $mapop = array('eq' => '=', 'ne' => '!=', 'gt' => '>', 'lt' => '<', 'le' => '>=', 'ge' => '<=', 'in' => 'IN');
+        foreach ($this->filter as $where) {
+            list($field, $op, $value) = explode(',', $where . ',,');
+            if (empty($field) || empty($objectlist->properties[$field]) || empty($op) || empty($mapop[$op])) {
+                continue;
+            }
+            $clause = '';
+            if (is_numeric($value)) {
+                $clause = $mapop[$op] . " " . $value;
+            } elseif (is_string($value)) {
+                if ($op !== 'in') {
+                    $value = str_replace("'", "\\'", $value);
+                    $clause = $mapop[$op] . " '" . $value . "'";
+                } else {
+                    // keep only the third variable with the rest of the string, e.g. itemid,in,3,7,11
+                    list(, , $value) = explode(',', $where, 3);
+                    $value = str_replace("'", "\\'", $value);
+                    $value = explode(',', $value);
+                    if (count($value) > 0) {
+                        if (is_numeric($value[0])) {
+                            $clause = $mapop[$op] . " (" . implode(", ", $value) . ")";
+                        } elseif (is_string($value[0])) {
+                            $clause = $mapop[$op] . " ('" . implode("', '", $value) . "')";
+                        }
+                    }
+                }
+            }
+            if (!empty($clause)) {
+                $objectlist->addWhere($field, $clause, $join);
+                $wherestring .= $join . ' ' . $field . ' ' . trim($clause);
+                $join = 'AND';
+            }
+        }
+        if (!empty($wherestring) && is_object($objectlist->datastore) && get_class($objectlist->datastore) !== 'VariableTableDataStore') {
+            $conditions = $objectlist->setWhere($wherestring);
+            $objectlist->dataquery->addconditions($conditions);
+        }
+    }
+
+    public function getCount($objectlist)
+    {
+        if (!empty($this->count) && !is_integer($this->count)) {
+            $this->count = $objectlist->countItems();
+        }
+        return $this->count;
+    }
+
+    public function addPagingParams(array $params = array())
+    {
+        if (!empty($this->order)) {
+            $params['sort'] = array();
+            $sorted = explode(',', $this->order);
+            foreach ($sorted as $sortme) {
+                if (substr($sortme, 0, 1) === '-') {
+                    $params['sort'][] = substr($sortme, 1) . ' DESC';
+                    continue;
+                }
+                $params['sort'][] = $sortme;
+            }
+            //$params['sort'] = implode(',', $params['sort']);
+        }
+        if (!empty($this->limit)) {
+            $params['numitems'] = $this->limit;
+        }
+        if (!empty($this->offset)) {
+            $params['startnum'] = $this->offset + 1;
+        }
+        //if (!empty($this->filter)) {
+        //    $params['filter'] = $this->filter;
+        //}
+        return $params;
     }
 
     public function getResolver()
@@ -212,29 +420,34 @@ class DataObjectLoader
 
 class DataObjectItemLoader extends DataObjectLoader
 {
-    public function add(int $value)
+    public function add($value)
     {
+        assert(is_int($values));
         $this->addItem($value);
     }
 
-    public function get(int $value)
+    public function get($value)
     {
+        assert(is_int($values));
         if (!empty($this->todo)) {
             $this->load();
         }
+        // @checkme don't slice array based on limit and offset here?
         return $this->getItem($value);
     }
 }
 
 class DataObjectListLoader extends DataObjectLoader
 {
-    public function add(array $values)
+    public function add($values)
     {
+        assert(is_array($values));
         $this->addList($values);
     }
 
-    public function get(array $values)
+    public function get($values)
     {
+        assert(is_array($values));
         if (!empty($this->todo)) {
             $this->load();
         }
@@ -258,11 +471,12 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         parent::__construct($linkname, [$caller_id, $called_id], $resolver);
     }
 
-    public function setTarget(string $objectname = 'sample', array $fieldlist = ['id', 'name'], ?callable $resolver = null)
+    public function setTarget(string $objectname = 'sample', array $fieldlist = ['id', 'name'])
     {
         // @checkme we could use a DataObjectListLoader and pass all the values to it, but that's less efficient
         //$this->targetLoader = new DataObjectListLoader($objectname, $fieldlist, $resolver);
-        $this->targetLoader = new DataObjectItemLoader($objectname, $fieldlist, $resolver);
+        //$this->targetLoader = new DataObjectItemLoader($objectname, $fieldlist);
+        $this->targetLoader = DataObjectLoader::getItemLoader($objectname, $fieldlist);
     }
 
     public function getTarget()
@@ -282,6 +496,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         //print_r('Query ' . $linkname . ' with ' . $caller_id . ' IN (' . implode(',', $values) . ')');
         $objectlist->addWhere($this->caller_id, 'IN (' . implode(',', $itemids) . ')');
         $result = $objectlist->getItems();
+        // return array("$caller_id" => list of $called_ids)
         $values = array();
         foreach ($result as $itemid => $props) {
             $key = (string) $props[$this->caller_id];
@@ -293,6 +508,25 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         return $values;
     }
 
+    public function getObjectList(array $params = array())
+    {
+        if (empty($params)) {
+            $fieldlist = array($this->caller_id, $this->called_id);
+            $params = array('name' => $this->linkname, 'fieldlist' => $fieldlist);
+            //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
+        }
+        $objectlist = DataObjectMaster::getObjectList($params);
+        return $objectlist;
+    }
+
+    public function mergeFieldlist(array $fieldlist)
+    {
+        if (!empty($fieldlist) && $this->checkFieldlist && $this->targetLoader) {
+            $this->targetLoader->mergeFieldlist($fieldlist);
+            $this->checkFieldlist = false;
+        }
+    }
+
     public function postLoad()
     {
         if (empty($this->targetLoader)) {
@@ -300,9 +534,9 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             return;
         }
         // @checkme fieldlist was updated, pass along to target loader
-        if (!$this->checkFieldlist) {
-            $this->targetLoader->mergeFieldlist($this->fieldlist);
-        }
+        //if (!$this->checkFieldlist) {
+        //    $this->targetLoader->mergeFieldlist($this->fieldlist);
+        //}
         // @checkme we could use a DataObjectListLoader and pass all the values to it, but that's less efficient
         //foreach ($this->cache as $key => $values) {
         //    $this->targetLoader->add($values);
@@ -310,26 +544,37 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         // @checkme we need to find the unique itemids across all values here - this is probably more memory-efficient
         $distinct = array();
         foreach ($this->cache as $key => $values) {
+            // @checkme slice array based on limit and offset here?
+            if (!empty($this->limit) || !empty($this->offset)) {
+                $values = array_slice($values, $this->offset, $this->limit);
+            }
             $distinct = array_unique(array_merge($distinct, $values));
         }
         if (empty($distinct)) {
             return true;
         }
-        $items = $this->targetLoader->getValues($distinct);
-        foreach (array_keys($this->cache) as $key) {
-            $oldvalues = $this->cache[$key];
+        $this->targetLoader->addList($distinct);
+        $this->targetLoader->load();
+        parent::postLoad();
+    }
+
+    public function getItem(int $value)
+    {
+        if (!empty($value) &&
+            array_key_exists("$value", $this->cache)) {
+            //return $this->cache["$value"];
+            // @checkme slice array based on limit and offset here?
+            $oldvalues = $this->cache["$value"];
+            if (!empty($this->limit) || !empty($this->offset)) {
+                $oldvalues = array_slice($oldvalues, $this->offset, $this->limit);
+            }
             $newvalues = array();
             foreach ($oldvalues as $itemid) {
                 $id = (string) $itemid;
-                if (array_key_exists($id, $items)) {
-                    $newvalues[$id] = $items[$id];
-                } else {
-                    $newvalues[$id] = $id;
-                }
+                $newvalues[$id] = $this->targetLoader->get($itemid);
             }
-            $this->cache[$key] = $newvalues;
+            return $newvalues;
         }
-        parent::postLoad();
     }
 }
 
