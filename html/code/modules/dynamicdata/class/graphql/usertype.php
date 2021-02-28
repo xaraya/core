@@ -93,7 +93,6 @@ class xarGraphQLUserType extends xarGraphQLBaseType
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = ["load deferred $type"];
             }
-            // @todo should we pass along the object instead of the type here?
             // @checkme create an extra object with 'username' property, add to extratypes and try extras_page{extras{...}}
             //$params = array('name' => $object);
             $params = array('name' => $object, 'fieldlist' => $fieldlist);

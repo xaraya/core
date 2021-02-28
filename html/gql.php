@@ -55,9 +55,9 @@ if (!empty($variables) && is_string($variables)) {
 //$query = '{schema}';
 //xarGraphQL::$trace_path = true;
 //xarGraphQL::$enableTimer = true;
-//xarGraphQL::$enableCache = true;
 //xarGraphQL::$cache_plan = true;
 //xarGraphQL::$cache_data = true;
+//xarGraphQL::$enableCache = true;
 //$data = xarGraphQL::get_data($query, $variables, $operationName);
 $extraTypes = ['module', 'theme', 'category', 'configuration'];
 //$extraTypes = ['module', 'theme', 'category', 'configuration', 'categories_linkage', 'extra', 'api_film', 'api_people', 'api_planet', 'api_species', 'api_starship', 'api_vehicle'];

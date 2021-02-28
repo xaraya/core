@@ -40,6 +40,9 @@ use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
 use GraphQL\Type\Definition\Type;
 
+// use GraphQL\Validator\Rules;
+// use GraphQL\Validator\DocumentValidator;
+
 /**
  * See xardocs/graphql.txt for class structure
  */
@@ -65,6 +68,8 @@ class xarGraphQL extends xarObject
     public static $extra_types = [];
     public static $trace_path = false;
     public static $paths = [];
+    public static $query_plan = null;
+    public static $type_fields = [];
     public static $cache_plan = false;
     public static $cache_data = false;
     public static $object_type = [];
@@ -78,6 +83,7 @@ class xarGraphQL extends xarObject
             self::$extra_types = $extraTypes;
         }
         self::map_objects();
+        // Schema doesn't accept lazy loading of query type (besides typeLoader)
         $queryType = self::get_type("query");
         $mutationType = self::get_type("mutation");
 
@@ -178,10 +184,6 @@ class xarGraphQL extends xarObject
         if (!array_key_exists($name, self::$type_mapper)) {
             throw new Exception("Unknown graphql type: " . $name);
         }
-        // lazy loading?
-        //return function() {
-        //        return self::queryType();
-        //};
         $clazz = self::get_type_class(self::$type_mapper[$name]);
         $type = new $clazz();
         if (!$type) {
@@ -343,6 +345,11 @@ class xarGraphQL extends xarObject
             //return SchemaPrinter::printIntrospectionSchema($schema);
         }
         
+        // Add to standard set of rules globally (values from GraphQL Playground IntrospectionQuery)
+        // DocumentValidator::addRule(new Rules\QueryComplexity(181));
+        // DocumentValidator::addRule(new Rules\QueryDepth(11));
+        // DocumentValidator::addRule(new Rules\DisableIntrospection());
+
         $rootValue = ['prefix' => 'You said: message='];
         $context = ['request' => $_REQUEST, 'server' => $_SERVER];
         $fieldResolver = null;
