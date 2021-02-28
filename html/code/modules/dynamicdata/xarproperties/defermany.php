@@ -272,7 +272,7 @@ class DeferredManyProperty extends DeferredItemProperty
         if (empty($this->targetname)) {
             return $this->options;
         }
-        /**
+        /** */
         // @checkme (ab)use the resolver to retrieve all items from the target here
         $target = $this->getDeferredLoader()->getTarget();
         if (empty($target)) {
@@ -280,22 +280,16 @@ class DeferredManyProperty extends DeferredItemProperty
         }
         $items = $target->getValues(array());
         $first = reset($items);
-        if (is_array($first)) {
-            $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
-            if (!array_key_exists($field, $first)) {
-                // @checkme pick the first field available here?
-                $fieldlist = array_keys($first);
-                $field = array_shift($fieldlist);
-            }
-            foreach ($items as $id => $value) {
-                $this->options[] = array('id' => $id, 'name' => $value[$field]);
-            }
-        } else {
-            foreach ($items as $id => $value) {
-                $this->options[] = array('id' => $id, 'name' => $value);
-            }
+        $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
+        if (!array_key_exists($field, $first)) {
+            // @checkme pick the first field available here?
+            $fieldlist = array_keys($first);
+            $field = array_shift($fieldlist);
         }
-         */
+        foreach ($items as $id => $value) {
+            $this->options[] = array('id' => $id, 'name' => $value[$field]);
+        }
+        /** */
         return $this->options;
     }
 }
