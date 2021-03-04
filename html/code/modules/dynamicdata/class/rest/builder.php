@@ -233,6 +233,18 @@ class DataObjectRESTBuilder extends xarObject
         foreach ($fieldlist as $field) {
             $prop_view[$field] = array('type' => 'string');
         }
+        $fieldlist = array('id', 'name', 'label', 'type', 'status', 'seq', 'basetype');
+        $properties = array();
+        foreach ($fieldlist as $field) {
+            $properties[$field] = array('type' => 'string');
+        }
+        $prop_view['properties'] = array(
+            'type' => 'array',
+            'items' => array(
+                'type' => 'object',
+                'properties' => $properties
+            )
+        );
         self::add_object_view($objectname, $prop_view, '/objects');
         self::$tags[] = array('name' => $objectname, 'description' => $objectname . ' operations');
         $items = self::get_potential_objects($selectedList);
@@ -283,38 +295,57 @@ class DataObjectRESTBuilder extends xarObject
         $prop_view = array();
         $prop_create = array();
         // @todo add fields based on object descriptor?
+        $fieldlist = array('id', 'name', 'label', 'type', 'status', 'seq', 'basetype');
         foreach ($objectref->getProperties() as $key => $property) {
-            if (array_key_exists($property->type, self::$proptype_names)) {
-                $properties[$property->name] = self::$proptype_names[$property->type] . ' (' . $property->basetype . ')';
-            } else {
-                $properties[$property->name] = $property->basetype;
+            //if (array_key_exists($property->type, self::$proptype_names)) {
+            //    $properties[$property->name] = self::$proptype_names[$property->type] . ' (' . $property->basetype . ')';
+            //} else {
+            //    $properties[$property->name] = $property->basetype;
+            //}
+            $propinfo = array();
+            foreach ($property->getPublicProperties() as $name => $value) {
+                if (!in_array($name, $fieldlist)) {
+                    continue;
+                }
+                if (is_object($value)) {
+                    $propinfo[$name] = get_class($value);
+                } else {
+                    $propinfo[$name] = $value;
+                }
             }
+            $propinfo["type"] = self::$proptype_names[$property->type];
             // @todo improve matching types
             $datatype = self::match_proptype($property);
             switch ($property->getDisplayStatus()) {
                 case DataPropertyMaster::DD_DISPLAYSTATE_DISABLED:
                     //$prop_create[$property->name] = $datatype;
+                    $propinfo["status"] = "disabled";
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE:
                     $prop_display[$property->name] = $datatype;
                     $prop_view[$property->name] = $datatype;
                     $prop_create[$property->name] = $datatype;
+                    $propinfo["status"] = "active";
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY:
                     $prop_display[$property->name] = $datatype;
                     $prop_create[$property->name] = $datatype;
+                    $propinfo["status"] = "displayonly";
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN:
                     //$prop_create[$property->name] = $datatype;
+                    $properties[$property->name]["status"] = "hidden";
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY:
                     $prop_view[$property->name] = $datatype;
                     $prop_create[$property->name] = $datatype;
+                    $propinfo["status"] = "viewonly";
                     break;
                 default:
                     throw new Exception('Unsupported display status ' . $property->getDisplayStatus());
                     break;
             }
+            $properties[] = $propinfo;
         }
         self::add_object_view($objectname, $prop_view);
         self::add_object_display($objectname, $prop_display);

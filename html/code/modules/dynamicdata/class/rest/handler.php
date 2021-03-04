@@ -282,7 +282,7 @@ class DataObjectRESTHandler extends xarObject
                 $contents = file_get_contents($configFile);
                 self::$config = json_decode($contents, true);
             }
-            $fieldlist = array('objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore');
+            $fieldlist = array('objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties');
             $allowed = array_flip($fieldlist);
             if (!empty(self::$config['objects'])) {
                 self::$objects = array();

@@ -64,6 +64,14 @@
                     The current openapi.json document for this API
                 </div>
             </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <a href="./code/modules/dynamicdata/xartests/datatables.html">DataTables</a>
+                </div>
+                <div class="xar-col">
+                    Example using the REST API in web pages with jQuery and DataTables
+                </div>
+            </div>
         </fieldset>
         <fieldset class="xar-form-actions">
             <legend>GraphQL</legend>
