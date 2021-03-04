@@ -32,6 +32,23 @@ function base_admin_composer()
 
     // Check if the installer has already been installed
     $data['installed'] = file_exists('composer') && file_exists('composer/composer.phar');
+    $data['composer_file'] = 'composer/composer.json';
+    if (empty($data['installed'])) {
+        $root = sys::root();
+        // flat install supporting symlinks
+        if (empty($root)) {
+            $root = realpath(dirname(realpath($_SERVER['SCRIPT_FILENAME'])) . '/../');
+            //$vendor = realpath(dirname(realpath($_SERVER['SCRIPT_FILENAME'])) . '/../vendor');
+        } else {
+            $root = realpath($root);
+            //$vendor = realpath($root . 'vendor');
+        }
+        //require_once $vendor .'/autoload.php';
+        $data['installed'] = $root && is_dir($root) && file_exists($root . '/composer.json');
+        if (!empty($data['installed'])) {
+            $data['composer_file'] = $root . '/composer.json';
+        }
+    }
 
     // Default message is none
     $data['message'] = array();
@@ -91,11 +108,10 @@ function base_admin_composer()
         $data['message'][] = 'success';
     } elseif ($update) {
         if (!xarVar::fetch('composer',    'str',   $data['composer'],    '', xarVar::NOT_REQUIRED)) return;
-        xarMod::apiFunc('base', 'admin', 'write_file', array('file' => 'composer/composer.json', 'data' => $data['composer']));
+        xarMod::apiFunc('base', 'admin', 'write_file', array('file' => $data['composer_file'], 'data' => $data['composer']));
     }
 
-    $data['composer'] = trim(xarMod::apiFunc('base', 'admin', 'read_file', array('file' => 'composer/composer.json')));
+    $data['composer'] = trim(xarMod::apiFunc('base', 'admin', 'read_file', array('file' => $data['composer_file'])));
 
     return $data;
 }
-?>
