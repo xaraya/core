@@ -1,6 +1,7 @@
 <?php
 /* Include parent class */
 sys::import('modules.dynamicdata.class.properties.base');
+sys::import('modules.dynamicdata.class.objects.loader');
 
 /**
  * The Deferred Item property delays loading extra information using the database values until they need to be shown.
@@ -34,8 +35,6 @@ sys::import('modules.dynamicdata.class.properties.base');
   *
   * Configuration:
   * the defaultvalue can be set to automatically load an object property if the value contains its itemid,
-  * or you can use DeferredProperty::set_resolver($resolver, $name) method to set a resolver function
-  * or you can inherit this class and override the static override_me_load() method below
   */
 class DeferredItemProperty extends DataProperty
 {
@@ -48,8 +47,8 @@ class DeferredItemProperty extends DataProperty
     public $objectname = null;
     public $fieldlist  = null;
     public $displaylink = null;
-    public static $deferred = array();  // array of $name with deferred 'todo' values and 'cache' items for each
-    public static $resolver = array('default' => null);  // array of 'default' and optional $name with resolver function for each
+    public $singlevalue = false;
+    public static $deferred = array();  // array of $name with deferred data object item loader
 
     public function __construct(ObjectDescriptor $descriptor)
     {
@@ -90,13 +89,10 @@ class DeferredItemProperty extends DataProperty
         list($object, $field) = explode('.', $objectpart);
         // @checkme support dataobject:<objectname>.<propname>,<propname2>,<propname3> here too
         $fieldlist = explode(',', $field);
-        if (!static::has_resolver($this->defername)) {
-            $resolver = static::dataobject_resolver($object, $fieldlist);
-            static::set_resolver($resolver, $this->defername);
-        }
         static::init_deferred($this->defername);
         $this->objectname = $object;
         $this->fieldlist = $fieldlist;
+        //$this->getDeferredLoader();
         // see if we can use a fixed template for display links here
         $this->displaylink = xarServer::getObjectURL($object, 'display', array('itemid' => '[itemid]'));
         if (strpos($this->displaylink, '[itemid]') === false) {
@@ -162,12 +158,24 @@ class DeferredItemProperty extends DataProperty
     }
 
     /**
+     * Get the deferred data object item loader
+     */
+    public function getDeferredLoader()
+    {
+        //static::init_deferred($this->defername);
+        if (empty(static::$deferred[$this->defername])) {
+            static::$deferred[$this->defername] = new DataObjectItemLoader($this->objectname, $this->fieldlist);
+        }
+        return static::$deferred[$this->defername];
+    }
+
+    /**
      * Set the data to defer here - in this case the property value
      */
     public function setDataToDefer($itemid, $value)
     {
         if (isset($value)) {
-            static::add_deferred($this->defername, $value);
+            $this->getDeferredLoader()->add($value);
         }
         return $value;
     }
@@ -205,6 +213,9 @@ class DeferredItemProperty extends DataProperty
      */
     public function showOutput(array $data = array())
     {
+        if (!$this->singlevalue && count($this->fieldlist) == 1) {
+            $this->singlevalue = true;
+        }
         $data = $this->getDeferredData($data);
         $this->log_trace();
         //if (empty($data['_itemid'])) $data['_itemid'] = 0;
@@ -233,7 +244,10 @@ class DeferredItemProperty extends DataProperty
             $data['link'] = str_replace('[itemid]', (string) $value, $this->displaylink);
             $data['source'] = $value;
         }
-        $data['value'] = static::get_deferred($this->defername, $value);
+        $data['value'] = $this->getDeferredLoader()->get($value);
+        if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], $data['value'])) {
+            $data['value'] = $data['value'][$this->fieldlist[0]];
+        }
         return $data;
     }
 
@@ -249,26 +263,16 @@ class DeferredItemProperty extends DataProperty
         $this->options = array();
         //print_r('Getting options: ' . $this->defername);
         // @checkme (ab)use the resolver to retrieve all items here
-        $resolver = static::get_resolver($this->defername);
-        if (empty($resolver) || !is_callable($resolver)) {
-            return $this->options;
-        }
-        $items = call_user_func($resolver, $this->defername, array());
+        $items = $this->getDeferredLoader()->getValues(array());
         $first = reset($items);
-        if (is_array($first)) {
-            $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
-            if (!array_key_exists($field, $first)) {
-                // @checkme pick the first field available here?
-                $fieldlist = array_keys($first);
-                $field = array_shift($fieldlist);
-            }
-            foreach ($items as $id => $value) {
-                $this->options[] = array('id' => $id, 'name' => $value[$field]);
-            }
-        } else {
-            foreach ($items as $id => $value) {
-                $this->options[] = array('id' => $id, 'name' => $value);
-            }
+        $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
+        if (!array_key_exists($field, $first)) {
+            // @checkme pick the first field available here?
+            $fieldlist = array_keys($first);
+            $field = array_shift($fieldlist);
+        }
+        foreach ($items as $id => $value) {
+            $this->options[] = array('id' => $id, 'name' => $value[$field]);
         }
         return $this->options;
     }
@@ -281,185 +285,8 @@ class DeferredItemProperty extends DataProperty
     public static function init_deferred($name)
     {
         if (!isset(static::$deferred[$name])) {
-            static::$deferred[$name] = array('todo' => array(), 'cache' => array());
+            static::$deferred[$name] = null;
         }
-    }
-
-    /**
-     * Add $value to list for deferred loading of <whatever>
-     *
-     * @param string $name name of the property
-     * @param mixed $value value for which we'll do a deferred load
-     */
-    public static function add_deferred($name, $value)
-    {
-        if (isset($value) &&
-            isset(static::$deferred[$name]) &&
-            !in_array($value, static::$deferred[$name]['todo']) &&
-            !array_key_exists("$value", static::$deferred[$name]['cache'])) {
-            //print_r('Adding to ' . $name . ': ' . $value);
-            static::$deferred[$name]['todo'][] = $value;
-        }
-    }
-
-    /**
-     * Load <whatever> for each $value, using
-     * 1. callable static::$resolver[$name] or static::$resolver['default'] function, or
-     * 2. custom override_me_load() method
-     *
-     * @param string $name name of the property
-     */
-    public static function load_deferred($name)
-    {
-        if (empty(static::$deferred[$name]['todo'])) {
-            return;
-        }
-        static::pre_load_deferred($name);
-        //print_r('Loading ' . $name . ': ' . implode(',', static::$deferred[$name]['todo']));
-        $resolver = static::get_resolver($name);
-        // 1. call $name or 'default' resolver if defined, or
-        if (!empty($resolver) && is_callable($resolver)) {
-            static::$deferred[$name]['cache'] = call_user_func($resolver, $name, static::$deferred[$name]['todo']);
-        // 2. call overridden static override_me_load() method in property
-        } else {
-            static::$deferred[$name]['cache'] = static::override_me_load($name, static::$deferred[$name]['todo']);
-        }
-        static::post_load_deferred($name);
-        static::$deferred[$name]['todo'] = array();
-    }
-
-    /**
-     * Pre-processing before loading <whatever> for each $value from 'todo' to 'cache'
-     *
-     * @param string $name name of the property
-     */
-    public static function pre_load_deferred($name)
-    {
-        return true;
-    }
-
-    /**
-     * Post-processing after loading <whatever> for each $value from 'todo' to 'cache'
-     * @checkme override in defermany to look up target props if requested
-     *
-     * @param string $name name of the property
-     */
-    public static function post_load_deferred($name)
-    {
-        return true;
-    }
-
-    /**
-     * Get deferred load of <whatever> for $value
-     *
-     * @param string $name name of the property
-     * @param mixed $value value for which we'll do a deferred load
-     * @return mixed <whatever> for $value
-     */
-    public static function get_deferred($name, $value)
-    {
-        if (!empty(static::$deferred[$name]['todo'])) {
-            static::load_deferred($name);
-        }
-        if (isset($value) &&
-            isset(static::$deferred[$name]) &&
-            array_key_exists("$value", static::$deferred[$name]['cache'])) {
-            return static::$deferred[$name]['cache']["$value"];
-        }
-        //return $value;
-    }
-
-    /**
-     * Get resolver function to actually load <whatever> for each $value ($name-specific or 'default')
-     *
-     * @param string $name name of the property
-     * @return callable resolver
-     */
-    public static function get_resolver($name)
-    {
-        // 1.a. use $name resolver if defined, or
-        if (array_key_exists($name, static::$resolver) && is_callable(static::$resolver[$name])) {
-            return static::$resolver[$name];
-        // 1.b. use 'default' resolver if defined
-        } elseif (!empty(static::$resolver['default']) && is_callable(static::$resolver['default'])) {
-            return static::$resolver['default'];
-        }
-        return null;
-    }
-
-    /**
-     * Set resolver function to actually load <whatever> for each $value ($name-specific or 'default')
-     * @todo make resolver configurable via property config (instead of defaultvalue) someday?
-     *
-     * @param callable $resolver
-     * @param string $name name of the property
-     */
-    public static function set_resolver($resolver, $name = 'default')
-    {
-        static::$resolver[$name] = $resolver;
-    }
-
-    public static function has_resolver($name = 'default')
-    {
-        return array_key_exists($name, static::$resolver);
-    }
-
-    /**
-     * Deferred resolver for dynamic dataobjects to assign to static::$resolver
-     * @todo make resolver configurable via property config (instead of defaultvalue) someday?
-     * @todo support combining property lookups on different fields? Not really a use case for this yet...
-     *
-     * @param string $object the name of the dataobject you want to look up
-     * @param array $fieldlist the list of dataobject properties to return for each value=itemid
-     * @return callable resolver to return a single value per itemid, or an assoc array per itemid
-     */
-    public static function dataobject_resolver($object = 'modules', $fieldlist = ['name'])
-    {
-        /**
-         * Deferred resolver function
-         * @param string $name name of the property
-         * @param array $values list of property values to load <whatever> for (= assumed itemids here)
-         * @uses mixed $object the name of the dataobject you want to look up
-         * @uses array $fieldlist the list of dataobject properties to return for each value=itemid
-         * @return array associative array of all "$value" => <whatever> that need to be loaded
-         */
-        $resolver = function ($name, $values) use ($object, $fieldlist) {
-            $params = array('name' => $object, 'fieldlist' => $fieldlist);
-            //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
-            $objectlist = DataObjectMaster::getObjectList($params);
-            //print_r('Query ' . $object . ' with itemids IN (' . implode(',', $values) . ')');
-            $params = array('itemids' => $values);
-            $result = $objectlist->getItems($params);
-            //var_export($result);
-            // return array("$itemid" => assoc array of $fields)
-            if (count($fieldlist) > 1) {
-                // @checkme variabletable returns all fields at the moment - filter here for now
-                //return $result;
-                $values = array();
-                // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
-                $allowed = array_flip($fieldlist);
-                foreach ($result as $itemid => $props) {
-                    $key = (string) $itemid;
-                    $values[$key] = array_intersect_key($props, $allowed);
-                }
-                return $values;
-            }
-            // return array("$itemid" => single $field value)
-            $first = reset($result);
-            $field = array_pop($fieldlist);
-            if (!array_key_exists($field, $first)) {
-                // @checkme pick the first key available here?
-                $fieldlist = array_keys($first);
-                $field = array_shift($fieldlist);
-            }
-            $values = array();
-            foreach ($result as $itemid => $props) {
-                $key = (string) $itemid;
-                $values[$key] = $props[$field];
-            }
-            return $values;
-        };
-        return $resolver;
     }
 
     public function log_trace()
@@ -478,55 +305,4 @@ class DeferredItemProperty extends DataProperty
             print_r($e->getMessage());
         }
     }
-
-    /**
-     * *Override this method* to actually load <whatever> for each $value (if static::$resolver is not used)
-     * @todo look up <whatever> in batch based on $values in overridden method here - if we don't use dataobject
-     *
-     * @param string $name name of the property
-     * @param array $values list of property values to load <whatever> for
-     * @return array associative array of all "$value" => <whatever> that need to be loaded
-     */
-    public static function override_me_load($name, $values)
-    {
-        $result = array();
-        foreach ($values as $value) {
-            //$result["$value"] = array('id' => $value, 'name' => $name, 'whatever' => 'override_me_' . $name . '_' . (string) $value);
-            $result["$value"] = 'override_me_' . $name . '_' . (string) $value;
-        }
-        return $result;
-    }
 }
-
-/**
- * Example of creating a deferred resolver to assign to static::$resolver
- *
- * @param mixed $what something you want to use in the resolver function perhaps
- * @return callable resolver
- */
-function deferred_example_resolver($what = 'resolve_me')
-{
-    /**
-     * Deferred resolver function
-     * @param string $name name of the property
-     * @param array $values list of property values to load <whatever> for
-     * @uses mixed $what something you want to use in the resolver function perhaps
-     * @return array associative array of all "$value" => <whatever> that need to be loaded
-     */
-    $resolver = function ($name, $values) use ($what) {
-        $result = array();
-        // @todo look up <whatever> in batch based on $values here - if we don't use dataobject here
-        foreach ($values as $value) {
-            //$result["$value"] = array('what' => $what, 'id' => $value, 'name' => $name, 'whatever' => $what . '_' . $name . '_' . (string) $value);
-            $result["$value"] = $what . '_' . $name . '_' . (string) $value;
-        }
-        return $result;
-    };
-    return $resolver;
-}
-
-// set 'default' deferred resolver as a test here
-//DeferredItemProperty::set_resolver(deferred_example_resolver());
-// dataobject:roles_users.name replacing "Username" or "User List" propertytype - for showOutput() only
-// dataobject:roles_users.name,uname,email retrieving more than 1 property - requires adapting showOutput() template too, to deal with assoc array properly
-// dataobject:objects.name replacing dynamic_properties.objectid = "Object" propertytype

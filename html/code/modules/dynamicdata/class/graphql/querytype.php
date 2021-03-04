@@ -45,14 +45,12 @@ class xarGraphQLQueryType extends ObjectType
     public static function get_query_fields()
     {
         $fields = array();
-        // @todo switch to get_list_query and get_item_query format
         foreach (static::$query_mapper as $name => $type) {
-            $add_fields = static::add_query_field($name, $type);
-            if (!empty($add_fields)) {
-                $fields = array_merge($fields, $add_fields);
+            $add_field = static::add_query_field($name, $type);
+            if (!empty($add_field)) {
+                array_push($fields, $add_field);
             }
         }
-        // @todo get query fields from BuildType for extra dynamicdata object types
         if (!empty(xarGraphQL::$extra_types)) {
             $clazz = xarGraphQL::get_type_class("buildtype");
             foreach (xarGraphQL::$extra_types as $name) {
@@ -71,7 +69,6 @@ class xarGraphQLQueryType extends ObjectType
     public static function add_query_field($name, $type)
     {
         $clazz = xarGraphQL::get_type_class($type);
-        // @todo switch to get_list_query and get_item_query format
         return $clazz::_xar_get_query_field($name);
     }
 }

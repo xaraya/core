@@ -43,7 +43,12 @@ class xarVariableCache extends xarObject
             $config['Variable.CacheScopes'] : array('DataObject.ByName' => 1,
                                                 'DataObjectList.ByName' => 1,
                                                 'DataObject.ById' => 1,
-                                                'DataObjectList.ById' => 1
+                                                'DataObjectList.ById' => 1,
+                                                // can't serialize schema with closures
+                                                'GraphQLAPI.Schema' => 0,
+                                                'GraphQLAPI.QueryPlan' => 1,
+                                                'RestAPI.Objects' => 0,
+                                                'RestAPI.ObjectList' => array('sample' => 1)
                                                 );
 
         $storage = !empty($config['Variable.CacheStorage']) ?

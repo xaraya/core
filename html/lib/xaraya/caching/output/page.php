@@ -67,8 +67,8 @@ class xarPageCache extends xarObject
 
         $storage = !empty($args['Page.CacheStorage']) ?
             $args['Page.CacheStorage'] : 'filesystem';
-        $provider = !empty($config['Page.CacheProvider']) ?
-            $config['Page.CacheProvider'] : null;
+        $provider = !empty($args['Page.CacheProvider']) ?
+            $args['Page.CacheProvider'] : null;
         $logfile = !empty($args['Page.LogFile']) ?
             $args['Page.LogFile'] : null;
         // Note: make sure this isn't used before core loading if we use database storage

@@ -24,7 +24,8 @@ class xarGraphQLMultiValType extends UnionType
             'name' => 'MultiVal',
             'types' => [
                 Type::string(),
-                Type::listOf(xarGraphQL::get_type("keyval")),
+                //Type::listOf(xarGraphQL::get_type("keyval")),
+                xarGraphQL::get_type_list("keyval"),
             ],
             'resolveType' => function ($value, $context, ResolveInfo $info) {
                 if (xarGraphQL::$trace_path) {
@@ -33,16 +34,10 @@ class xarGraphQLMultiValType extends UnionType
                 if (!is_array($value)) {
                     return Type::string();
                 }
-                return Type::listOf(xarGraphQL::get_type("keyval"));
+                //return Type::listOf(xarGraphQL::get_type("keyval"));
+                return xarGraphQL::get_type_list("keyval");
             }
         ];
         parent::__construct($config);
-    }
-
-    public static function _xar_get_query_field($name)
-    {
-        $fields = [
-        ];
-        return array($name => $fields[$name]);
     }
 }

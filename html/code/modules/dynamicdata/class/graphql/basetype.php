@@ -83,25 +83,11 @@ class xarGraphQLBaseType extends ObjectType
      */
     public static function _xar_get_query_field($name)
     {
-        // @todo switch to get_list_query and get_item_query format
-        $fields = [];
-        if (!empty(static::$_xar_list)) {
-            $fields[static::$_xar_list] = [
-                'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)),
-                'resolve' => static::_xar_list_query_resolver(static::$_xar_type, static::$_xar_object),
-            ];
+        if (!empty(static::$_xar_list) && $name == static::$_xar_list) {
+            return static::_xar_get_list_query(static::$_xar_list, static::$_xar_type, static::$_xar_object);
         }
-        if (!empty(static::$_xar_item)) {
-            $fields[static::$_xar_item] = [
-                'type' => xarGraphQL::get_type(static::$_xar_type),
-                'args' => [
-                    'id' => Type::nonNull(Type::id())
-                ],
-                'resolve' => static::_xar_item_query_resolver(static::$_xar_type, static::$_xar_object),
-            ];
-        }
-        if (!empty($name) && array_key_exists($name, $fields)) {
-            return array($name => $fields[$name]);
+        if (!empty(static::$_xar_item) && $name == static::$_xar_item) {
+            return static::_xar_get_item_query(static::$_xar_item, static::$_xar_type, static::$_xar_object);
         }
     }
 
@@ -112,21 +98,20 @@ class xarGraphQLBaseType extends ObjectType
     {
         return [
             'name' => $list,
-            'type' => Type::listOf(xarGraphQL::get_type($type)),
-            /**
+            //'type' => Type::listOf(xarGraphQL::get_type($type)),
+            'type' => xarGraphQL::get_type_list($type),
             'args' => [
-                'sort' => Type::string(),
-                'offset' => [
-                    'type' => Type::int(),
-                    'defaultValue' => 0,
-                ],
-                'limit' => [
-                    'type' => Type::int(),
-                    'defaultValue' => 20,
-                ],
-                //'filters' => Type::string(),
+                //'order' => Type::string(),
+                //'offset' => [
+                //    'type' => Type::int(),
+                //    'defaultValue' => 0,
+                //],
+                //'limit' => [
+                //    'type' => Type::int(),
+                //    'defaultValue' => 20,
+                //],
+                'filter' => Type::listOf(Type::string()),
             ],
-             */
             'resolve' => static::_xar_list_query_resolver($type, $object),
         ];
     }
@@ -179,21 +164,28 @@ class xarGraphQLBaseType extends ObjectType
         if (!empty($property)) {
             $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name, $property) {
                 if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = array_merge($info->path, ["deferred property"]);
+                    xarGraphQL::$paths[] = array_merge($info->path, ["deferred property " . $type, $args]);
                 }
                 $fields = $info->getFieldSelection(0);
                 if (array_key_exists('id', $fields) && count($fields) < 2) {
                     return array('id' => $values[$prop_name]);
                 }
-                //print_r($fields);
-                //$queryPlan = $info->lookAhead();
-                //print_r($queryPlan->queryPlan());
-                //print_r($queryPlan->subFields('User'));
-                //if (!in_array('name', $queryPlan->subFields('User'))) {
-                //    return array('id' => $values[$prop_name]);
-                //}
+                $fieldlist = array_keys($fields);
+                if (!empty(xarGraphQL::$object_type[$property->objectname])) {
+                    $objtype = strtolower(xarGraphQL::$object_type[$property->objectname]);
+                    if (array_key_exists($objtype, xarGraphQL::$type_fields)) {
+                        $fieldlist = xarGraphQL::$type_fields[$objtype];
+                    }
+                }
                 if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = ["add deferred $type " . $values['id']];
+                    xarGraphQL::$paths[] = ["add deferred $type " . $values['id'] . " " . implode(',', $fieldlist)];
+                }
+                $loader = $property->getDeferredLoader();
+                // @checkme limit the # of children per itemid when we use data loader?
+                // @checkme preserve fieldlist to optimize loading afterwards too
+                if ($loader->checkFieldlist && !empty($fieldlist)) {
+                    $loader->mergeFieldlist($fieldlist);
+                    $loader->parseQueryArgs($args);
                 }
                 // @todo  how to avoid setting this twice for lists?
                 $value = $property->setDataToDefer($values['id'], $values[$prop_name]);
@@ -203,32 +195,50 @@ class xarGraphQLBaseType extends ObjectType
                         xarGraphQL::$paths[] = ["get deferred $type " . $values['id']];
                     }
                     $data = $property->getDeferredData(array('value' => $values[$prop_name], '_itemid' => $values['id']));
+                    //print_r($data['value']);
+                    // @checkme convert deferred data into assoc array or list of assoc array
+                    //if (property_exists($property, 'linkname')) {
+                    //    return array('count' => 0, 'filter' => array("$type,eq,".$values['id']), $property->objectname => $data['value']);
+                    //}
                     return $data['value'];
                 });
             };
             return $resolver;
         }
         if (!array_key_exists($type, static::$_xar_deferred)) {
-            static::$_xar_deferred[$type] = array('todo' => [], 'fields' => ['id'], 'cache' => []);
+            static::$_xar_deferred[$type] = new DataObjectLoader(static::$_xar_object, ['id']);
+            // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+            $getValuesFunc = static::_xar_load_deferred($type);
+            if (!empty($getValuesFunc)) {
+                static::$_xar_deferred[$type]->setResolver($getValuesFunc);
+            }
         }
         // @todo should we pass along the object instead of the type here?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name) {
             if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["deferred field"]);
+                xarGraphQL::$paths[] = array_merge($info->path, ["deferred field " . $type, $args]);
             }
             $fields = $info->getFieldSelection(0);
             if (array_key_exists('id', $fields) && count($fields) < 2) {
                 return array('id' => $values[$prop_name]);
             }
-            //print_r($fields);
-            //$queryPlan = $info->lookAhead();
-            //print_r($queryPlan->queryPlan());
-            //print_r($queryPlan->subFields('User'));
+            if (array_key_exists($type, xarGraphQL::$type_fields)) {
+                $fieldlist = xarGraphQL::$type_fields[$type];
+            } else {
+                $fieldlist = array_keys($fields);
+            }
             //if (!in_array('name', $queryPlan->subFields('User'))) {
             //    return array('id' => $values[$prop_name]);
             //}
+            $loader = static::$_xar_deferred[$type];
+            // @checkme limit the # of children per itemid when we use data loader?
+            // @checkme preserve fieldlist to optimize loading afterwards too
+            if ($loader->checkFieldlist && !empty($fieldlist)) {
+                $loader->mergeFieldlist($fieldlist);
+                $loader->parseQueryArgs($args);
+            }
             // @todo  handle value array for deferlist
-            static::_xar_add_deferred($type, $values[$prop_name], array_keys($fields));
+            static::_xar_add_deferred($type, $values[$prop_name], $fieldlist);
 
             return new GraphQL\Deferred(function () use ($type, $values, $prop_name) {
                 return static::_xar_get_deferred($type, $values[$prop_name]);
@@ -240,14 +250,10 @@ class xarGraphQLBaseType extends ObjectType
     public static function _xar_add_deferred($type, $id, $fieldlist = null)
     {
         if (xarGraphQL::$trace_path) {
-            xarGraphQL::$paths[] = ["add deferred $type $id"];
+            xarGraphQL::$paths[] = ["add deferred $type $id " . implode(',', $fieldlist)];
         }
-        // @todo preserve fieldlist to optimize loading afterwards too
-        //print_r("Adding $type $id");
         // @todo handle value array for deferlist
-        if (!array_key_exists("$id", static::$_xar_deferred[$type]['cache']) && !in_array($id, static::$_xar_deferred[$type]['todo'])) {
-            static::$_xar_deferred[$type]['todo'][] = $id;
-        }
+        static::$_xar_deferred[$type]->add($id);
     }
 
     /**
@@ -259,39 +265,7 @@ class xarGraphQLBaseType extends ObjectType
      */
     public static function _xar_load_deferred($type)
     {
-        if (empty(static::$_xar_deferred[$type]['todo'])) {
-            return;
-        }
-        if (xarGraphQL::$trace_path) {
-            xarGraphQL::$paths[] = ["load deferred $type"];
-        }
-        // @todo should we pass along the object instead of the type here?
-        $idlist = implode(",", static::$_xar_deferred[$type]['todo']);
-        //print_r("Loading " . $idlist);
-        foreach (static::$_xar_deferred[$type]['todo'] as $id) {
-            static::$_xar_deferred[$type]['cache']["$id"] = array('id' => $id, 'name' => "override_me_" . $id);
-        }
-        /**
-        $object = static::$_xar_object;
-        $fieldlist = array('id', 'name');
-        $itemids = array();
-        foreach (static::$_xar_deferred[$type]['todo'] as $id) {
-            $itemids[] = intval($id);
-        }
-        //$params = array('name' => $object);
-        $params = array('name' => $object, 'fieldlist' => $fieldlist);
-        //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $itemids);
-        $objectlist = DataObjectMaster::getObjectList($params);
-        $params = array('itemids' => $itemids);
-        try {
-            static::$_xar_deferred[$type]['cache'] = $objectlist->getItems($params);
-            static::$_xar_deferred[$type]['todo'] = [];
-        } catch (Exception $e) {
-            print_r($e-getMessage());
-            parent::_xar_load_deferred($type);
-        }
-         */
-        static::$_xar_deferred[$type]['todo'] = [];
+        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
     }
 
     public static function _xar_get_deferred($type, $id)
@@ -299,16 +273,8 @@ class xarGraphQLBaseType extends ObjectType
         if (xarGraphQL::$trace_path) {
             xarGraphQL::$paths[] = ["get deferred $type $id"];
         }
-        // @todo should we pass along the object instead of the type here?
-        if (!empty(static::$_xar_deferred[$type]['todo'])) {
-            static::_xar_load_deferred($type);
-        }
-        //print_r("Getting $type $id");
-        // @todo handle value array for deferlist
-        if (array_key_exists($type, static::$_xar_deferred) && array_key_exists("$id", static::$_xar_deferred[$type]['cache'])) {
-            return static::$_xar_deferred[$type]['cache']["$id"];
-        }
-        return array('id' => $id);
+        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        return static::$_xar_deferred[$type]->get($id);
     }
 
     /**
@@ -350,41 +316,13 @@ class xarGraphQLBaseType extends ObjectType
 
     /**
      * Get the create mutation resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
     public static function _xar_create_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
-        //if (!isset($object)) {
-        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
-        //}
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["create mutation"]);
-            }
-            //print_r($rootValue);
-            $fields = $info->getFieldSelection(1);
-            //print_r($fields);
-            //$queryPlan = $info->lookAhead();
-            //print_r($queryPlan->queryPlan());
-            //print_r($queryPlan->subFields('Property'));
-            if (empty($args['input'])) {
-                throw new Exception('Unknown input ' . $type);
-            }
-            if (!empty($args['input']['id'])) {
-                //$params = array('name' => $object, 'itemid' => $args['input']['id']);
-                unset($args['input']['id']);
-            }
-            $params = array('name' => $object);
-            //print_r($params);
-            $objectitem = DataObjectMaster::getObject($params);
-            $itemid = $objectitem->createItem($args['input']);
-            if (!empty($params['itemid']) && $itemid != $params['itemid']) {
-                throw new Exception('Unknown item ' . $type);
-            }
-            $values = $objectitem->getFieldValues();
-            return $values;
-        };
-        return $resolver;
+        $clazz = xarGraphQL::get_type_class("buildtype");
+        return $clazz::create_mutation_resolver($type, $object);
     }
 
     /**
@@ -404,37 +342,13 @@ class xarGraphQLBaseType extends ObjectType
 
     /**
      * Get the update mutation resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
     public static function _xar_update_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
-        //if (!isset($object)) {
-        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
-        //}
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["update mutation"]);
-            }
-            //print_r($rootValue);
-            $fields = $info->getFieldSelection(1);
-            //print_r($fields);
-            //$queryPlan = $info->lookAhead();
-            //print_r($queryPlan->queryPlan());
-            //print_r($queryPlan->subFields('Property'));
-            if (empty($args['input']) || empty($args['input']['id'])) {
-                throw new Exception('Unknown input ' . $type);
-            }
-            $params = array('name' => $object, 'itemid' => $args['input']['id']);
-            //print_r($params);
-            $objectitem = DataObjectMaster::getObject($params);
-            $itemid = $objectitem->updateItem($args['input']);
-            if ($itemid != $params['itemid']) {
-                throw new Exception('Unknown item ' . $type);
-            }
-            $values = $objectitem->getFieldValues();
-            return $values;
-        };
-        return $resolver;
+        $clazz = xarGraphQL::get_type_class("buildtype");
+        return $clazz::update_mutation_resolver($type, $object);
     }
 
     /**
@@ -454,35 +368,12 @@ class xarGraphQLBaseType extends ObjectType
 
     /**
      * Get the delete mutation resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
     public static function _xar_delete_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
-        //if (!isset($object)) {
-        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
-        //}
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["delete mutation"]);
-            }
-            //print_r($rootValue);
-            $fields = $info->getFieldSelection(1);
-            //print_r($fields);
-            //$queryPlan = $info->lookAhead();
-            //print_r($queryPlan->queryPlan());
-            //print_r($queryPlan->subFields('Property'));
-            if (empty($args['id'])) {
-                throw new Exception('Unknown id ' . $type);
-            }
-            $params = array('name' => $object, 'itemid' => $args['id']);
-            //print_r($params);
-            $objectitem = DataObjectMaster::getObject($params);
-            $itemid = $objectitem->deleteItem();
-            if ($itemid != $params['itemid']) {
-                throw new Exception('Unknown item ' . $type);
-            }
-            return $itemid;
-        };
-        return $resolver;
+        $clazz = xarGraphQL::get_type_class("buildtype");
+        return $clazz::delete_mutation_resolver($type, $object);
     }
 }

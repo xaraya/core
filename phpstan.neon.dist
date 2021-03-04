@@ -1,0 +1,9 @@
+parameters:
+    level: 0
+    paths:
+        - html
+        - developer
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    excludePaths:
+        - html/var/*

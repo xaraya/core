@@ -158,7 +158,9 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
             // add the where clauses directly here to avoid quoting issues
+            $wherestring = '';
             if (!empty($result->where)) {
+                //$wherestring = $result->where;
                 $join = 'and';
                 // TODO: wrap OR statements in (...) below
             } else {
@@ -166,8 +168,13 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             }
             foreach ($wherelist as $name => $clause) {
                 $result->addWhere($name, $clause, $join);
+                $wherestring .= $join . ' ' . $name . ' ' . trim($clause);
                 // CHECKME: use OR by default here !
                 $join = 'or';
+            }
+            if (!empty($wherestring) && is_object($result->datastore) && get_class($result->datastore) !== 'VariableTableDataStore') {
+                $conditions = $result->setWhere($wherestring);
+                $result->dataquery->addconditions($conditions);
             }
             // count the items
             $result->countItems();
@@ -290,6 +297,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
             // add the where clauses directly here to avoid quoting issues
+            $wherestring = '';
             if (!empty($result->where)) {
                 $join = 'and';
             } else {
@@ -297,13 +305,19 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             }
             foreach ($wherelist as $name => $clause) {
                 $result->addWhere($name, $clause, $join);
+                $wherestring .= $join . ' ' . $name . ' ' . trim($clause);
                 // CHECKME: use AND by default here !
                 $join = 'and';
             }
             foreach ($extralist as $extra) {
                 $result->addWhere($extra[0], $extra[1], $join);
+                $wherestring .= $join . ' ' . $extra[0] . ' ' . trim($extra[1]);
                 // CHECKME: use AND by default here !
                 $join = 'and';
+            }
+            if (!empty($wherestring) && is_object($result->datastore) && get_class($result->datastore) !== 'VariableTableDataStore') {
+                $conditions = $result->setWhere($wherestring);
+                $result->dataquery->addconditions($conditions);
             }
             // count the items
             $result->countItems();

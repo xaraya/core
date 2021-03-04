@@ -57,11 +57,4 @@ class xarGraphQLKeyValType extends ObjectType
         ];
         parent::__construct($config);
     }
-
-    public static function _xar_get_query_field($name)
-    {
-        $fields = [
-        ];
-        return array($name => $fields[$name]);
-    }
 }

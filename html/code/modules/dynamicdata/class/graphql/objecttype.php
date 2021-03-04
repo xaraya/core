@@ -40,7 +40,6 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                     if (xarGraphQL::$trace_path) {
                         xarGraphQL::$paths[] = array_merge($info->path, ["object keys"]);
                     }
-                    //print_r("object keys resolve");
                     if (empty($object['_objectref'])) {
                         return null;
                     }
@@ -67,6 +66,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                     return @unserialize($object['access']);
                 }
             ],
+            'datastore' => Type::string(),
             // this is not returned via getFieldValues()
             'config' => xarGraphQL::get_type("serial"),
             'config_l' => [
@@ -84,8 +84,15 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'maxid' => Type::int(),
             'isalias' => Type::boolean(),
             'category' => Type::string(),
+            '_objectref' => [
+                'type' => Type::string(),
+                'resolve' => function ($object, $args) {
+                    return get_class($object['_objectref']);
+                }
+            ],
             //'category' => $clazz::get_deferred_field('category', 'category'),
-            'properties' => Type::listOf(xarGraphQL::get_type("property")),
+            //'properties' => Type::listOf(xarGraphQL::get_type("property")),
+            'properties' => xarGraphQL::get_type_list("property"),
         ];
         return $fields;
     }
@@ -103,18 +110,18 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["object list query"]);
             }
-            //print_r("objects resolve");
             $fields = $info->getFieldSelection(1);
-            //print_r($fields);
-            //$queryPlan = $info->lookAhead();
-            //print_r($queryPlan->queryPlan());
-            //print_r($queryPlan->subFields('Property'));
-            $args = array('name' => $object);
-            $objectlist = DataObjectMaster::getObjectList($args);
-            //foreach ($objectlist->getProperties() as $key => $property) {
-            //    print($property->name . ': ' . $property->basetype . "\n");
-            //}
-            $items = $objectlist->getItems();
+            if (array_key_exists($type, xarGraphQL::$type_fields)) {
+                $fieldlist = xarGraphQL::$type_fields[$type];
+            } else {
+                $fieldlist = array_keys($fields);
+            }
+            $loader = new DataObjectLoader($object, $fieldlist);
+            $loader->parseQueryArgs($args);
+            $objectlist = $loader->getObjectList();
+            $params = $loader->addPagingParams();
+            $items = $objectlist->getItems($params);
+            //$items = $loader->query($args);
             // @checkme where do we unserialize best - or do we simply re-use what DD already did for us?
             //if (in_array('access', $fields)) {
             //}
@@ -167,13 +174,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["object item query"]);
             }
-            //print_r("object resolve");
-            //print_r($rootValue);
             $fields = $info->getFieldSelection(1);
-            //print_r($fields);
-            //$queryPlan = $info->lookAhead();
-            //print_r($queryPlan->queryPlan());
-            //print_r($queryPlan->subFields('Property'));
             if (empty($args['id'])) {
                 throw new Exception('Unknown ' . $type);
             }
@@ -222,8 +223,6 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             }
             // this is not returned via getFieldValues()
             if (in_array('config', $fields)) {
-                //print_r("object resolve");
-                //print_r($objectref->config);
                 if (!empty($objectref->config)) {
                     //$values['config'] = @unserialize($objectref->config);
                     $values['config'] = $objectref->config;

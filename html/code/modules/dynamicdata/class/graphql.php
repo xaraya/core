@@ -30,18 +30,27 @@
 //sys::import('modules.dynamicdata.class.graphql.propertytype');
 //sys::import('modules.dynamicdata.class.graphql.accesstype');
 //sys::import('modules.dynamicdata.class.graphql.keyvaltype');
+//sys::import('xaraya.caching.cachetrait');
+//sys::import('modules.dynamicdata.class.timertrait');
 
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 use GraphQL\Error\DebugFlag;
 use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
+use GraphQL\Type\Definition\Type;
+
+// use GraphQL\Validator\Rules;
+// use GraphQL\Validator\DocumentValidator;
 
 /**
  * See xardocs/graphql.txt for class structure
  */
 class xarGraphQL extends xarObject
 {
+    use xarCacheTrait;
+    use xarTimerTrait;
+
     public static $type_cache = [];
     public static $type_mapper = [
         'query'    => 'querytype',
@@ -59,6 +68,11 @@ class xarGraphQL extends xarObject
     public static $extra_types = [];
     public static $trace_path = false;
     public static $paths = [];
+    public static $query_plan = null;
+    public static $type_fields = [];
+    public static $cache_plan = false;
+    public static $cache_data = false;
+    public static $object_type = [];
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -68,6 +82,8 @@ class xarGraphQL extends xarObject
         if (!empty($extraTypes)) {
             self::$extra_types = $extraTypes;
         }
+        self::map_objects();
+        // Schema doesn't accept lazy loading of query type (besides typeLoader)
         $queryType = self::get_type("query");
         $mutationType = self::get_type("mutation");
 
@@ -85,6 +101,21 @@ class xarGraphQL extends xarObject
         return $schema;
     }
 
+    public static function map_objects()
+    {
+        foreach (self::$type_mapper as $name => $type) {
+            $clazz = self::get_type_class($type);
+            if (property_exists($clazz, '_xar_object') && !empty($clazz::$_xar_object)) {
+                self::$object_type[$clazz::$_xar_object] = $name;
+            }
+        }
+        $clazz = self::get_type_class("buildtype");
+        foreach (self::$extra_types as $type) {
+            list($name, $type, $object, $list, $item) = $clazz::sanitize($type);
+            self::$object_type[$object] = $name;
+        }
+    }
+
     /**
      * Get GraphQL Type by name
      */
@@ -94,6 +125,44 @@ class xarGraphQL extends xarObject
         if (isset(self::$type_cache[$name])) {
             return self::$type_cache[$name];
         }
+        // Schema doesn't accept lazy loading of query type (besides typeLoader)
+        if (in_array($name, ['query', 'mutation'])) {
+            return self::load_lazy_type($name);
+        }
+        //if (!self::has_type($name)) {
+        //    throw new Exception("Unknown graphql type: " . $name);
+        //}
+        // See https://github.com/webonyx/graphql-php/pull/557
+        return function () use ($name) {
+            return self::load_lazy_type($name);
+        };
+    }
+
+    public static function has_type($name)
+    {
+        $name = strtolower($name);
+        if (in_array($name, self::$extra_types) || array_key_exists($name, self::$type_mapper)) {
+            return true;
+        }
+        return false;
+    }
+
+    // 'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)), doesn't accept lazy loading
+    public static function get_type_list($name)
+    {
+        $name = strtolower($name);
+        // See https://github.com/webonyx/graphql-php/pull/557
+        return function () use ($name) {
+            return Type::listOf(self::load_lazy_type($name));
+        };
+    }
+
+    public static function load_lazy_type($name)
+    {
+        if (isset(self::$type_cache[$name])) {
+            return self::$type_cache[$name];
+        }
+        //self::$paths[] = ['load_lazy_type', $name];
         $page_ext = '_page';
         if (substr($name, -strlen($page_ext)) === $page_ext) {
             return self::get_page_type(substr($name, 0, strlen($name) - strlen($page_ext)));
@@ -115,10 +184,6 @@ class xarGraphQL extends xarObject
         if (!array_key_exists($name, self::$type_mapper)) {
             throw new Exception("Unknown graphql type: " . $name);
         }
-        // lazy loading?
-        //return function() {
-        //        return self::queryType();
-        //};
         $clazz = self::get_type_class(self::$type_mapper[$name]);
         $type = new $clazz();
         if (!$type) {
@@ -257,21 +322,36 @@ class xarGraphQL extends xarObject
      */
     public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null)
     {
-        $schema = self::get_schema($extraTypes);
-        //$schemaFile = __DIR__ . '/graphql/schema.graphql';
+        if (self::$trace_path) {
+            self::$enableTimer = true;
+        }
+        if (self::$cache_plan || self::$cache_data) {
+            self::$enableCache = true;
+        }
+        if (self::$enableCache) {
+            $cacheScope = 'GraphQLAPI.QueryPlan';
+            self::setCacheScope($cacheScope);
+        }
+        self::setTimer('start');
         if (!empty($schemaFile)) {
             $schema = self::build_schema($schemaFile, $extraTypes);
         } else {
             $schema = self::get_schema($extraTypes);
         }
+        self::setTimer('schema');
         if ($queryString == '{schema}') {
             $header = "schema {\n  query: Query\n  mutation: Mutation\n}\n\n";
             return $header . SchemaPrinter::doPrint($schema);
             //return SchemaPrinter::printIntrospectionSchema($schema);
         }
         
+        // Add to standard set of rules globally (values from GraphQL Playground IntrospectionQuery)
+        // DocumentValidator::addRule(new Rules\QueryComplexity(181));
+        // DocumentValidator::addRule(new Rules\QueryDepth(11));
+        // DocumentValidator::addRule(new Rules\DisableIntrospection());
+
         $rootValue = ['prefix' => 'You said: message='];
-        $context = ['context' => true, 'object' => null];
+        $context = ['request' => $_REQUEST, 'server' => $_SERVER];
         $fieldResolver = null;
         $validationRules = null;
         
@@ -285,10 +365,29 @@ class xarGraphQL extends xarObject
             $fieldResolver,
             $validationRules
         );
+        self::setTimer('query');
         //$serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
         $serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE);
+        self::setTimer('array');
+        if (self::$cache_data && self::hasCacheKey()) {
+            $cacheKey = self::getCacheKey();
+            if (self::isCached($cacheKey)) {
+                $serializableResult = self::getCached($cacheKey);
+                self::setTimer('cache');
+            } else {
+                self::setCached($cacheKey, $serializableResult);
+            }
+        }
+        $extensions = array();
         if (self::$trace_path) {
-            $serializableResult['paths'] = self::$paths;
+            $extensions['paths'] = self::$paths;
+        }
+        self::setTimer('stop');
+        if (self::$enableTimer) {
+            $extensions['times'] = self::getTimers();
+        }
+        if (!empty($extensions)) {
+            $serializableResult['extensions'] = $extensions;
         }
         return $serializableResult;
     }
@@ -312,5 +411,16 @@ class xarGraphQL extends xarObject
         header('Access-Control-Allow-Origin: *');
         header('Content-Type: application/json; charset=utf-8');
         echo $data;
+    }
+
+    public static function dump_schema($extraTypes = null)
+    {
+        $configFile = sys::varpath() . '/cache/api/graphql_config.json';
+        $configData = array('extraTypes' => $extraTypes);
+        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
+        $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
+        $content = self::get_data('{schema}', [], null, $extraTypes);
+        $content .= "\n" . '"""Generated: ' . date('c') . '"""';
+        file_put_contents($schemaFile, $content);
     }
 }

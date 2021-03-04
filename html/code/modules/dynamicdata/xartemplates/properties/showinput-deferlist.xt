@@ -10,10 +10,22 @@
         <input type="text" id="#$id#" name="#$name#" value="#implode(',', $value)#"/>
     <xar:else />
         <!-- TODO: adapt from multiselect here -->
+        <xar:if condition="!isset($size)">
+            <xar:if condition="count($options) gt 5">
+                <xar:set name="size">5</xar:set>
+            <xar:else />
+                <xar:set name="size">count($options)</xar:set>
+            </xar:if>
+        </xar:if>
         <xar:if condition="!isset($onchange)">
           <xar:set name="onchange">'return true;'</xar:set>
         </xar:if>
-        <select name="#$name#[]" id="#$id#" tabindex="#$tabindex#" onchange="#$onchange#" multiple="multiple">
+        <select name="#$name#[]" id="#$id#" tabindex="#$tabindex#" multiple="multiple" size="#$size#" onchange="#$onchange#">
+            <xar:if condition="count($value) lt 1">
+                <option value="" selected="selected"></option>
+            <xar:else />
+                <option value=""></option>
+            </xar:if>
             <xar:foreach in="$options" value="$option">
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
                     <xar:if condition="in_array($option['id'], $value)">

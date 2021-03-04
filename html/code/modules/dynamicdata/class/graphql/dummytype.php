@@ -31,12 +31,14 @@ class xarGraphQLDummyType extends ObjectType
     {
         $fields = [
             'hello' => [
+                'name' => 'hello',
                 'type' => Type::string(),
                 'resolve' => function () {
                     return 'Hello World!';
                 }
             ],
             'echo' => [
+                'name' => 'echo',
                 'type' => Type::string(),
                 'args' => [
                     'message' => ['type' => Type::string()],
@@ -50,12 +52,14 @@ class xarGraphQLDummyType extends ObjectType
                 }
             ],
             'schema' => [
+                'name' => 'schema',
                 'type' => Type::string(),
                 'resolve' => function () {
                     return 'Here is the schema';
                 }
             ],
             'whoami' => [
+                'name' => 'whoami',
                 'type' => xarGraphQL::get_type('user'),
                 'resolve' => function () {
                     xarSession::init();
@@ -70,6 +74,8 @@ class xarGraphQLDummyType extends ObjectType
                 }
             ],
         ];
-        return array($name => $fields[$name]);
+        if (!empty($fields[$name])) {
+            return $fields[$name];
+        }
     }
 }

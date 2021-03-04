@@ -86,32 +86,22 @@ class xarGraphQLUserType extends xarGraphQLBaseType
      */
     public static function _xar_load_deferred($type)
     {
-        if (empty(static::$_xar_deferred[$type]['todo'])) {
-            return;
-        }
-        if (xarGraphQL::$trace_path) {
-            xarGraphQL::$paths[] = ["load deferred $type"];
-        }
-        // @todo should we pass along the object instead of the type here?
-        // @checkme create an extra object with 'username' property, add to extratypes and try extras_page{extras{...}}
         $object = static::$_xar_object;
         $fieldlist = array('id', 'name');
-        $itemids = array();
-        foreach (static::$_xar_deferred[$type]['todo'] as $id) {
-            $itemids[] = intval($id);
-        }
-        //$params = array('name' => $object);
-        $params = array('name' => $object, 'fieldlist' => $fieldlist);
-        //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $itemids);
-        $objectlist = DataObjectMaster::getObjectList($params);
-        $params = array('itemids' => $itemids);
-        //print_r("Loading $type: " . implode(", ", $itemids));
-        try {
-            static::$_xar_deferred[$type]['cache'] = $objectlist->getItems($params);
-            static::$_xar_deferred[$type]['todo'] = [];
-        } catch (Exception $e) {
-            print_r($e->getMessage());
-            parent::_xar_load_deferred($type);
-        }
+        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        $resolver = function ($values) use ($type, $object, $fieldlist) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = ["load deferred $type"];
+            }
+            // @checkme create an extra object with 'username' property, add to extratypes and try extras_page{extras{...}}
+            //$params = array('name' => $object);
+            $params = array('name' => $object, 'fieldlist' => $fieldlist);
+            //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $itemids);
+            $objectlist = DataObjectMaster::getObjectList($params);
+            $params = array('itemids' => $values);
+            //print_r("Loading $type: " . implode(", ", $itemids));
+            return $objectlist->getItems($params);
+        };
+        return $resolver;
     }
 }

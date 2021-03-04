@@ -8,6 +8,11 @@
           <xar:set name="onchange">'return true;'</xar:set>
         </xar:if>
         <select name="#$name#" id="#$id#" tabindex="#$tabindex#" onchange="#$onchange#">
+            <xar:if condition="empty($value)">
+                <option value="" selected="selected"></option>
+            <xar:else />
+                <option value=""></option>
+            </xar:if>
             <xar:foreach in="$options" value="$option">
                 <xar:if condition="empty($option['id']) or $option['id'] ne $option['name']">
                     <xar:if condition="$option['id'] eq $value">
