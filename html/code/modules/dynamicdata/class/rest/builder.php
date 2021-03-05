@@ -90,6 +90,8 @@ class DataObjectRESTBuilder extends xarObject
         file_put_contents(self::$openapi, $content);
         $configFile = sys::varpath() . '/cache/api/restapi_config.json';
         $configData = array();
+        $configData['generated'] = date('c');
+        $configData['caution'] = 'This file is updated when you rebuild the openapi.json document in Dynamic Data - Utilities - Test APIs';
         $configData['start'] = array('objects', 'whoami', 'modules');
         $configData['objects'] = self::$objects;
         $configData['modules'] = self::$modules;

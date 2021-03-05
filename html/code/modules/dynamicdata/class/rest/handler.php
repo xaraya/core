@@ -297,6 +297,9 @@ class DataObjectRESTHandler extends xarObject
                 self::$objects = $objectlist->getItems();
                 self::$config['objects'] = array();
                 foreach (self::$objects as $itemid => $item) {
+                    if ($item['datastore'] !== 'dynamicdata') {
+                        continue;
+                    }
                     $item = array_intersect_key($item, $allowed);
                     self::$config['objects'][$item['name']] = $item;
                 }
