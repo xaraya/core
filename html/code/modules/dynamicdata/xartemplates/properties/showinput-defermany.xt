@@ -11,10 +11,10 @@
     <xar:else />
         <!-- TODO: adapt from multiselect here -->
         <xar:if condition="!isset($size)">
-            <xar:if condition="count($options) gt 5">
+            <xar:if condition="count($options) gt 4">
                 <xar:set name="size">5</xar:set>
             <xar:else />
-                <xar:set name="size">count($options)</xar:set>
+                <xar:set name="size">count($options) + 1</xar:set>
             </xar:if>
         </xar:if>
         <xar:if condition="!isset($onchange)">

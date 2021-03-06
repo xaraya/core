@@ -171,6 +171,9 @@ class DataObjectLoader
 
     public function getValues(array $itemids)
     {
+        if (empty($this->objectname)) {
+            return array();
+        }
         $params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist);
         //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         $objectlist = DataObjectMaster::getObjectList($params);
@@ -574,6 +577,50 @@ class LinkObjectItemLoader extends DataObjectItemLoader
                 $newvalues[$id] = $this->targetLoader->get($itemid);
             }
             return $newvalues;
+        }
+    }
+
+    /**
+     * Allow setting the cache values for showInput() in preview mode
+     */
+    public function set(int $itemid, array $values)
+    {
+        if (!empty($itemid)) {
+            $this->cache["$itemid"] = $values;
+            if (!empty($values)) {
+                $this->targetLoader->addList($values);
+                $this->targetLoader->load();
+            }
+        }
+    }
+
+    /**
+     * Save the new values in the Link Object for updateValue()
+     */
+    public function save(int $itemid, array $values)
+    {
+        if (empty($itemid)) {
+            return;
+        }
+        $params = array('name' => $this->linkname);
+        $objectlist = DataObjectMaster::getObjectList($params);
+        $objectlist->addWhere($this->caller_id, '= ' . $itemid);
+        $result = $objectlist->getItems();
+        $oldlinks = array();
+        foreach ($result as $linkid => $props) {
+            $oldlinks[intval($props[$this->called_id])] = $linkid;
+        }
+        $newvalues = array_diff($values, array_keys($oldlinks));
+        $delvalues = array_diff(array_keys($oldlinks), $values);
+        if (empty($newvalues) && empty($delvalues)) {
+            return;
+        }
+        $objectref = DataObjectMaster::getObject($params);
+        foreach ($delvalues as $called_id) {
+            $objectref->deleteItem(array('itemid' => $oldlinks[$called_id]));
+        }
+        foreach ($newvalues as $called_id) {
+            $objectref->createItem(array($this->caller_id => $itemid, $this->called_id => $called_id));
         }
     }
 }

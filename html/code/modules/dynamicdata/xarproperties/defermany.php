@@ -128,6 +128,7 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function getValue()
     {
+        // @checkme not really needed here, since we use itemid + linkobject
         return parent::getValue();
     }
 
@@ -138,7 +139,48 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function setValue($value=null)
     {
+        // 1. in construct() set to defaultvalue - skip
+        // 2. in showForm() set for input preview and update - set cache values
+        if (!empty($value) && is_array($value)) {
+            $value = array_filter($value);
+            $this->log_trace();
+            if (!empty($this->_itemid) && !empty($this->linkname)) {
+                $this->getDeferredLoader()->set($this->_itemid, $value);
+            }
+            // @checkme not really needed here, since we use itemid + linkobject
+            $value = json_encode($value);
+        }
         parent::setValue($value);
+    }
+
+    public function createValue($itemid=0)
+    {
+        // @checkme $itemid is still unknown at this point, since this is called before datastore->createItem()
+        $this->updateValue($itemid);
+    }
+
+    public function updateValue($itemid=0)
+    {
+        if (empty($itemid) || empty($this->value) || empty($this->linkname)) {
+            return;
+        }
+        $value = $this->value;
+        if (is_string($value)) {
+            // @checkme not really needed here, since we use itemid + linkobject
+            $value = @json_decode($value, true);
+        }
+        if (!is_array($value)) {
+            throw new Exception("DeferMany Value: " + var_export($value, true));
+        }
+        $this->getDeferredLoader()->save($itemid, $value);
+    }
+
+    public function deleteValue($itemid=0)
+    {
+        if (empty($itemid) || empty($this->linkname)) {
+            return;
+        }
+        $this->getDeferredLoader()->save($itemid, array());
     }
 
     /**
@@ -149,6 +191,7 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function getItemValue($itemid)
     {
+        // already setDataToDefer in setItemValue for deferred lookup and showView()
         return parent::getItemValue($itemid);
     }
 
@@ -161,6 +204,7 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function setItemValue($itemid, $value, $fordisplay=0)
     {
+        // 1. in getItems() set to value from datastore - setDataToDefer for deferred lookup and showView()
         parent::setItemValue($itemid, $value, $fordisplay);
     }
 
@@ -182,7 +226,7 @@ class DeferredManyProperty extends DeferredItemProperty
     public function setDataToDefer($itemid, $value)
     {
         // @checkme we use the itemid as value here
-        if (isset($itemid)) {
+        if (!empty($itemid) && !empty($this->linkname)) {
             $this->getDeferredLoader()->add($itemid);
         }
         //return $value;
@@ -204,7 +248,7 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function showInput(array $data = array())
     {
-        if (!$this->singlevalue && count($this->fieldlist) == 1) {
+        if (!$this->singlevalue && !empty($this->fieldlist) && count($this->fieldlist) == 1) {
             $this->singlevalue = true;
         }
         // @checkme we *do* want to retrieve the data based on the itemid here - extension on deferitem
@@ -228,6 +272,9 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function getDeferredData(array $data = array())
     {
+        if (empty($this->linkname)) {
+            return $data;
+        }
         // @checkme we use the itemid as value here
         $itemid = null;
         if (isset($data['_itemid'])) {
@@ -247,7 +294,7 @@ class DeferredManyProperty extends DeferredItemProperty
             $data['link'] = $this->displaylink;
         }
         $data['value'] = $this->getDeferredLoader()->get($itemid);
-        if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], reset($data['value']))) {
+        if ($this->singlevalue && is_array($data['value']) && !empty($data['value']) && array_key_exists($this->fieldlist[0], reset($data['value']))) {
             $field = $this->fieldlist[0];
             $values = array();
             foreach ($data['value'] as $key => $props) {
@@ -281,7 +328,7 @@ class DeferredManyProperty extends DeferredItemProperty
         $items = $target->getValues(array());
         $first = reset($items);
         $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
-        if (!array_key_exists($field, $first)) {
+        if ($first !== false && !array_key_exists($field, $first)) {
             // @checkme pick the first field available here?
             $fieldlist = array_keys($first);
             $field = array_shift($fieldlist);
