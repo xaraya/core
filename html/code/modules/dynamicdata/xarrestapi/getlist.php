@@ -19,10 +19,28 @@ function dynamicdata_restapi_getlist($args = array())
 {
     $apilist = array();
     $apilist['get_hello'] = array(
+        //'type' => 'rest',  // default
         'path' => 'hello',
         'method' => 'get',
-        'description' => 'Hello World',
+        'description' => 'Call REST API get_hello() in module dynamicdata',
         'parameters' => array('name')
+    );
+    $apilist['post_hello'] = array(
+        //'type' => 'rest',  // default
+        'path' => 'hello',
+        'method' => 'post',
+        'description' => 'Call REST API post_hello() in module dynamicdata',
+        // @checkme verify/expand how POSTed values are defined
+        'requestBody' => array('application/json' => array('name'))
+    );
+    $apilist['getobjects'] = array(
+        'type' => 'user',
+        'path' => 'anotherapi',
+        'method' => 'get',
+        'description' => 'Call existing module userapi function (getobjects) via REST API',
+        'parameters' => array(),
+        // @todo transform assoc array("$itemid" => $item) to list of $item
+        'response' => array('type' => 'array', 'items' => array('type' => 'object'))
     );
     return $apilist;
 }

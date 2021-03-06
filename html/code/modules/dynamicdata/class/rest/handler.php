@@ -501,7 +501,31 @@ class DataObjectRESTHandler extends xarObject
         $apilist = xarMod::apiFunc($module, 'rest', 'getlist');
         foreach ($apilist as $api => $item) {
             if ($item['path'] == $path && $item['method'] == 'get') {
-                return xarMod::apiFunc($module, 'rest', $api);
+                $type = empty($item['type']) ? 'rest' : $item['type'];
+                // @checkme pass all args from handler here?
+                return xarMod::apiFunc($module, $type, $api, $args);
+            }
+        }
+        $result = array('module' => $module, 'path' => $path, 'args' => $args, 'apilist' => $apilist);
+        return $result;
+    }
+
+    public static function postModuleCall($args)
+    {
+        $module = $args['module'];
+        $path = $args['path'];
+        // this contains any POSTed args from rst.php
+        if (empty($args['input'])) {
+            $args['input'] = array();
+        }
+        xarMod::init();
+        // Find the REST API call corresponding to this path and method
+        $apilist = xarMod::apiFunc($module, 'rest', 'getlist');
+        foreach ($apilist as $api => $item) {
+            if ($item['path'] == $path && $item['method'] == 'post') {
+                $type = empty($item['type']) ? 'rest' : $item['type'];
+                // @checkme handle POSTed args by passing $args['input'] only in handler?
+                return xarMod::apiFunc($module, $type, $api, $args['input']);
             }
         }
         $result = array('module' => $module, 'path' => $path, 'args' => $args, 'apilist' => $apilist);
@@ -524,6 +548,7 @@ class DataObjectRESTHandler extends xarObject
         $r->get('/modules', ['DataObjectRESTHandler', 'getModules']);
         $r->get('/modules/{module}', ['DataObjectRESTHandler', 'getModuleApis']);
         $r->get('/modules/{module}/{path}', ['DataObjectRESTHandler', 'getModuleCall']);
+        $r->post('/modules/{module}/{path}', ['DataObjectRESTHandler', 'postModuleCall']);
     }
 
     /**

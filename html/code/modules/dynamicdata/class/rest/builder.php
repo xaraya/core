@@ -762,6 +762,7 @@ class DataObjectRESTBuilder extends xarObject
         );
         $properties = array(
             'name' => array('type' => 'string'),
+            'type' => array('type' => 'string', 'default' => 'rest'),
             'path' => array('type' => 'string'),
             'method' => array('type' => 'string'),
             'description' => array('type' => 'string'),
@@ -796,22 +797,26 @@ class DataObjectRESTBuilder extends xarObject
         $path = '/modules/' . $module . '/' . $item['path'];
         $operationId = $module . '_' . $api;
         $schema = $module . '-' . $api;
-        self::$paths[$path] = array(
-            $item['method'] => array(
-                'tags' => array($module . '_module'),
-                'operationId' => $operationId,
-                'description' => 'Call REST API ' . $api . ' in module ' . $module,
-                'responses' => array(
-                    '200' => array(
-                        '$ref' => '#/components/responses/' . $schema
-                    ),
-                    '401' => array(
-                        '$ref' => '#/components/responses/unauthorized'
-                    )
+        if (empty(self::$paths[$path])) {
+            self::$paths[$path] = array();
+        }
+        if (empty($item['description'])) {
+            $item['description'] = 'Call REST API ' . $api . ' in module ' . $module;
+        }
+        self::$paths[$path][$item['method']] = array(
+            'tags' => array($module . '_module'),
+            'operationId' => $operationId,
+            'description' => $item['description'],
+            'responses' => array(
+                '200' => array(
+                    '$ref' => '#/components/responses/' . $schema
                 ),
-                'security' => array(
-                    array('cookieAuth' => array())
+                '401' => array(
+                    '$ref' => '#/components/responses/unauthorized'
                 )
+            ),
+            'security' => array(
+                array('cookieAuth' => array())
             )
         );
         if (!empty($item['parameters'])) {
@@ -828,6 +833,18 @@ class DataObjectRESTBuilder extends xarObject
             }
             self::$paths[$path][$item['method']]['parameters'] = $parameters;
         }
+        // @checkme verify/expand how POSTed values are defined
+        if (!empty($item['requestBody'])) {
+            $requestBody = array('content' => array());
+            foreach ($item['requestBody'] as $mediatype => $vars) {
+                $properties = array();
+                foreach ($vars as $name) {
+                    $properties[$name] = array('type' => 'string');
+		}
+                $requestBody['content'][$mediatype]['schema'] = array('type' => 'object', 'properties' => $properties);
+            }
+            self::$paths[$path][$item['method']]['requestBody'] = $requestBody;
+        }
         self::$responses[$schema] = array(
             'description' => 'Call REST API ' . $api . ' in module ' . $module,
             'content' => array(
@@ -838,9 +855,12 @@ class DataObjectRESTBuilder extends xarObject
                 )
             )
         );
-        self::$schemas[$schema] = array(
-            'type' => 'string'
-        );
+        if (empty($item['response'])) {
+            $item['response'] = array(
+                'type' => 'string'
+            );
+        }
+        self::$schemas[$schema] = $item['response'];
     }
 
     public static function match_proptype($property)
