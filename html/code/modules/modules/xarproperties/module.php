@@ -62,6 +62,7 @@ class ModuleProperty extends ObjectRefProperty
             return $this->options;
         }
         
+        $options = array();
         $items = xarMod::apiFunc('modules', 'admin', 'getlist',array('filter' => $this->filter));
         foreach($items as $item) {
             try {
