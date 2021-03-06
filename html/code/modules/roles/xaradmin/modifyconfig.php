@@ -154,7 +154,8 @@ function roles_admin_modifyconfig()
                     $debugadmins = array();
                     $candidates = xarConfigVars::get(null, 'Site.User.DebugAdmins');
                     foreach ($candidates as $candidate) {
-                        $admin = xarMod::apiFunc('roles','user','get',array('id' => (int)$candidate));
+                        //$admin = xarMod::apiFunc('roles','user','get',array('id' => (int)$candidate));
+                        $admin = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
                         if(!empty($admin)) $debugadmins[] = $admin['uname'];
                     }
                     $data['debugadmins'] = implode(',', $debugadmins);
