@@ -123,7 +123,11 @@ class DataObjectRESTHandler extends xarObject
             }
             foreach ($deferred as $key) {
                 $data = $objectlist->properties[$key]->getDeferredData(array('value' => $item[$key], '_itemid' => $itemid));
-                $item[$key] = $data['value'];
+                if ($data['value'] && in_array(get_class($objectlist->properties[$key]), array('DeferredListProperty', 'DeferredManyProperty'))) {
+                    $item[$key] = array_values($data['value']);
+                } else {
+                    $item[$key] = $data['value'];
+                }
             }
             $item['_links'] = array('self' => array('href' => self::getObjectURL($object, $itemid)));
             array_push($result['items'], $item);
@@ -172,7 +176,11 @@ class DataObjectRESTHandler extends xarObject
             if (!empty($objectitem->properties[$key]) && method_exists($objectitem->properties[$key], 'getDeferredData')) {
                 // @checkme take value and itemid directly from the property here, to set deferred data if needed
                 $data = $objectitem->properties[$key]->getDeferredData();
-                $item[$key] = $data['value'];
+                if ($data['value'] && in_array(get_class($objectitem->properties[$key]), array('DeferredListProperty', 'DeferredManyProperty'))) {
+                    $item[$key] = array_values($data['value']);
+                } else {
+                    $item[$key] = $data['value'];
+                }
             }
         }
         //$item['_links'] = array('self' => array('href' => self::getObjectURL($object, $itemid)));
@@ -297,6 +305,9 @@ class DataObjectRESTHandler extends xarObject
                 self::$objects = $objectlist->getItems();
                 self::$config['objects'] = array();
                 foreach (self::$objects as $itemid => $item) {
+                    if ($item['datastore'] !== 'dynamicdata') {
+                        continue;
+                    }
                     $item = array_intersect_key($item, $allowed);
                     self::$config['objects'][$item['name']] = $item;
                 }

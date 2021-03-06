@@ -174,7 +174,7 @@ class DeferredItemProperty extends DataProperty
      */
     public function setDataToDefer($itemid, $value)
     {
-        if (isset($value)) {
+        if (!empty($value) && !empty($this->objectname)) {
             $this->getDeferredLoader()->add($value);
         }
         return $value;
@@ -213,7 +213,7 @@ class DeferredItemProperty extends DataProperty
      */
     public function showOutput(array $data = array())
     {
-        if (!$this->singlevalue && count($this->fieldlist) == 1) {
+        if (!$this->singlevalue && !empty($this->fieldlist) && count($this->fieldlist) == 1) {
             $this->singlevalue = true;
         }
         $data = $this->getDeferredData($data);
@@ -228,6 +228,9 @@ class DeferredItemProperty extends DataProperty
      */
     public function getDeferredData(array $data = array())
     {
+        if (empty($this->objectname)) {
+            return $data;
+        }
         $value = null;
         if (isset($data['value'])) {
             $value = $data['value'];
@@ -261,12 +264,15 @@ class DeferredItemProperty extends DataProperty
         }
 
         $this->options = array();
+        if (empty($this->objectname)) {
+            return $this->options;
+        }
         //print_r('Getting options: ' . $this->defername);
         // @checkme (ab)use the resolver to retrieve all items here
         $items = $this->getDeferredLoader()->getValues(array());
         $first = reset($items);
         $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
-        if (!array_key_exists($field, $first)) {
+        if ($first !== false && !array_key_exists($field, $first)) {
             // @checkme pick the first field available here?
             $fieldlist = array_keys($first);
             $field = array_shift($fieldlist);

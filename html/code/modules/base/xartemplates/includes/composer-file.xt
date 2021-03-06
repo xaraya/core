@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <xar:set name="writable">file_exists('composer/composer.json') AND is_writeable('composer/composer.json')</xar:set>
+    <xar:set name="writable">file_exists($composer_file) AND is_writeable($composer_file)</xar:set>
     <fieldset>
         <legend>
             Manage composer.json
@@ -30,7 +30,11 @@
                 </div>
                 <div class="xar-col">
                     <xar:var name="value">Save</xar:var>
-                    <xar:button name="update" value="$value"/>
+		    <xar:if condition="$composer_file ne 'composer/composer.json'">
+                        <xar:button name="update" value="$value" disabled="disabled"/>
+                    <xar:else/>
+                        <xar:button name="update" value="$value"/>
+                    </xar:if>
                 </div>
             </div>
         </xar:if>

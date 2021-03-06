@@ -125,13 +125,14 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function setDataToDefer($itemid, $values)
     {
-        if (!empty($values)) {
+        if (!empty($values) && !empty($this->objectname)) {
             if (is_string($values) && !is_numeric($values)) {
                 $values = json_decode($values, true);
             }
             if (!is_array($values)) {
                 $values = array($values);
             }
+            $values = array_filter($values);
             $this->getDeferredLoader()->add($values);
         }
         return $values;
@@ -182,12 +183,16 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function getDeferredData(array $data = array())
     {
+        if (empty($this->objectname)) {
+            return $data;
+        }
         $values = null;
         if (isset($data['value'])) {
             $values = $data['value'];
             if (!is_array($values)) {
                 $values = array($values);
             }
+            $values = array_filter($values);
         } elseif (!empty($this->value)) {
             // @checkme for showDisplay(), set data['value'] here
             $values = $this->setDataToDefer($this->_itemid, $this->value);

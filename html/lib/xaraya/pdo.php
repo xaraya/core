@@ -218,7 +218,7 @@ class xarPDO extends PDO
     public function getDatabaseInfo()
     {
         if (null === $this->databaseInfo) {
-            $databaseInfo = new DatabaseInfo($this);
+            $databaseInfo = new PDODatabaseInfo($this);
             
             // Set up pointer
             $this->databaseInfo = $databaseInfo;
@@ -300,7 +300,7 @@ class xarPDO extends PDO
 			} elseif (substr(strtoupper($string),0,6) == "SELECT") {
 				$stmt = $this->query($string, $flag);
 				$this->row_count = $stmt->rowCount();
-				$result = new ResultSet($stmt, $flag);
+				$result = new PDOResultSet($stmt, $flag);
 				return $result;
 			} else {
 				$rows_affected = $this->exec($string);
@@ -309,7 +309,7 @@ class xarPDO extends PDO
 					$this->last_id = $this->lastInsertId();
 				}
 				// Create an empty result set
-				$result = new ResultSet();
+				$result = new PDOResultSet();
 				return $result;
 			}
         } catch (Exception $e) {
@@ -337,7 +337,7 @@ class xarPDO extends PDO
 				$this->last_id = $this->lastInsertId();
 			}
 			$this->row_count = $stmt->rowCount();
-			return new ResultSet($stmt, $flag);
+			return new PDOResultSet($stmt, $flag);
         } catch (Exception $e) {
         	throw $e;
         }
@@ -370,7 +370,7 @@ class xarPDO extends PDO
 			} catch (Exception $e) {
 				throw $e;
 			}
-            $result = new ResultSet($stmt, $flag);
+            $result = new PDOResultSet($stmt, $flag);
         } else {
             // Prepare a SQL statement
             $this->queryString = $string;
@@ -489,7 +489,7 @@ class xarPDOStatement extends xarObject
         
         // If this is a SELECT, create a result set for the results
         if (substr(strtoupper($this->pdo->queryString),0,6) == "SELECT") {
-            $result = new ResultSet($this, $flag);
+            $result = new PDOResultSet($this, $flag);
             // Save the bindvars
             $this->bindvars = $bindvars;
             return $result;
@@ -591,7 +591,7 @@ class xarPDOStatement extends xarObject
  * PDO does not have much metadata, so we have to roll our own here
  *
  */
-class DatabaseInfo extends xarObject
+class PDODatabaseInfo extends xarObject
 {
     private $pdo;
     private $tables;
@@ -1011,4 +1011,3 @@ class PDOResultSet extends xarObject
         return $this->pdostatement;
     }
 }
-?>

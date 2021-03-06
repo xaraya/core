@@ -90,6 +90,8 @@ class DataObjectRESTBuilder extends xarObject
         file_put_contents(self::$openapi, $content);
         $configFile = sys::varpath() . '/cache/api/restapi_config.json';
         $configData = array();
+        $configData['generated'] = date('c');
+        $configData['caution'] = 'This file is updated when you rebuild the openapi.json document in Dynamic Data - Utilities - Test APIs';
         $configData['start'] = array('objects', 'whoami', 'modules');
         $configData['objects'] = self::$objects;
         $configData['modules'] = self::$modules;
@@ -865,15 +867,19 @@ class DataObjectRESTBuilder extends xarObject
             case 'datasource':
             case 'fieldstatus':
             case 'dropdown':
-            case 'deferitem':
             //case 'string':
                 $datatype = array('type' => 'string');
                 break;
+            case 'deferitem':
+                $datatype = array('type' => 'object');
+                break;
             case 'array':
             case 'configuration':
+                $datatype = array('type' => 'array', 'items' => array('type' => 'string'));
+                break;
             case 'defermany':
             case 'deferlist':
-                $datatype = array('type' => 'array', 'items' => array('type' => 'string'));
+                $datatype = array('type' => 'array', 'items' => array('type' => 'object'));
                 break;
             case 'calendar':
                 $datatype = array('type' => 'string', 'format' => 'date-time');

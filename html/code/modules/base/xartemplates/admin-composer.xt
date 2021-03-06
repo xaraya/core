@@ -98,7 +98,11 @@
                             </div>
                             <div class="xar-col">
                                 <xar:var name="value">Run</xar:var>
-                                <xar:button name="install" value="$value"/>
+		                <xar:if condition="$composer_file ne 'composer/composer.json'">
+                                    <xar:button name="install" value="$value" disabled="disabled"/>
+                                <xar:else/>
+                                    <xar:button name="install" value="$value"/>
+                                </xar:if>
                             </div>
                         </div>
                     </fieldset>
