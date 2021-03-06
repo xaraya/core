@@ -867,15 +867,19 @@ class DataObjectRESTBuilder extends xarObject
             case 'datasource':
             case 'fieldstatus':
             case 'dropdown':
-            case 'deferitem':
             //case 'string':
                 $datatype = array('type' => 'string');
                 break;
+            case 'deferitem':
+                $datatype = array('type' => 'object');
+                break;
             case 'array':
             case 'configuration':
+                $datatype = array('type' => 'array', 'items' => array('type' => 'string'));
+                break;
             case 'defermany':
             case 'deferlist':
-                $datatype = array('type' => 'array', 'items' => array('type' => 'string'));
+                $datatype = array('type' => 'array', 'items' => array('type' => 'object'));
                 break;
             case 'calendar':
                 $datatype = array('type' => 'string', 'format' => 'date-time');
