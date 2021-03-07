@@ -209,6 +209,128 @@ class DataObjectRESTBuilder extends xarObject
         );
     }
 
+    public static function add_operation_security($path, $method = 'get')
+    {
+        self::$paths[$path][$method]['responses']['401'] = array(
+            '$ref' => '#/components/responses/unauthorized'
+        );
+        self::$paths[$path][$method]['security'] = array(
+            array('cookieAuth' => array())
+        );
+    }
+
+    public static function add_operation_requestBody($path, $method, $schema, $properties, $mediaType = 'application/json')
+    {
+        self::$paths[$path][$method]['requestBody'] = array(
+            '$ref' => '#/components/requestBodies/' . $schema
+        );
+        $description = ucfirst(str_replace('-', ' ', $schema));
+        self::$requestBodies[$schema] = array(
+            'description' => $description,
+            'content' => array(
+                $mediaType => array(
+                    'schema' => array(
+                        '$ref' => '#/components/schemas/' . $schema . '-body'
+                    )
+                )
+            )
+        );
+        self::$schemas[$schema . '-body'] = array(
+            'type' => 'object',
+            'properties' => $properties
+        );
+    }
+
+    public static function add_operation_response($path, $method, $schema, $properties = array(), $code = '200', $mediaType = 'application/json')
+    {
+        self::$paths[$path][$method]['responses'] = array(
+            $code => array(
+                '$ref' => '#/components/responses/' . $schema
+            )
+        );
+        if (array_key_exists($schema, self::$responses)) {
+            return;
+        }
+        $description = ucfirst(str_replace('-', ' ', $schema));
+        self::$responses[$schema] = array(
+            'description' => $description,
+            'content' => array(
+                $mediaType => array(
+                    'schema' => array(
+                        '$ref' => '#/components/schemas/' . $schema
+                    )
+                )
+            )
+        );
+        if (array_key_exists($schema, self::$schemas)) {
+            return;
+        }
+        if (empty($properties)) {
+            // @checkme default to string or object?
+            self::$schemas[$schema] = array(
+                'type' => 'string'
+            );
+        } elseif (!empty($properties['type']) && is_string($properties['type'])) {
+            // we have a complete schema definition here
+            self::$schemas[$schema] = $properties;
+        } else {
+            // we have json object properties here
+            self::$schemas[$schema] = array(
+                'type' => 'object',
+                'properties' => $properties
+            );
+        }
+    }
+
+    public static function get_page_properties($itemproperties)
+    {
+        $pageproperties = array(
+            'count' => array(
+                'type' => 'integer'
+            ),
+            'limit' => array(
+                'type' => 'integer'
+            ),
+            'offset' => array(
+                'type' => 'integer'
+            ),
+            'order' => array(
+                'type' => 'string'
+            ),
+            'filter' => array(
+                'type' => 'array',
+                'items' => array(
+                    'type' => 'string'
+                )
+            ),
+            'items' => array(
+                'type' => 'array',
+                'items' => array(
+                    'type' => 'object',
+                    'properties' => $itemproperties
+                )
+            )
+        );
+        return $pageproperties;
+    }
+
+    public static function get_list_properties($itemproperties)
+    {
+        $listproperties = array(
+            'count' => array(
+                'type' => 'integer'
+            ),
+            'items' => array(
+                'type' => 'array',
+                'items' => array(
+                    'type' => 'object',
+                    'properties' => $itemproperties
+                )
+            )
+        );
+        return $listproperties;
+    }
+
     public static function get_potential_objects($selectedList = array())
     {
         $objectname = 'objects';
@@ -336,7 +458,7 @@ class DataObjectRESTBuilder extends xarObject
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN:
                     //$prop_create[$property->name] = $datatype;
-                    $properties[$property->name]["status"] = "hidden";
+                    $propinfo["status"] = "hidden";
                     break;
                 case DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY:
                     $prop_view[$property->name] = $datatype;
@@ -366,8 +488,12 @@ class DataObjectRESTBuilder extends xarObject
         if (empty($path)) {
             $path = '/objects/' . $objectname;
         }
+        $method = 'get';
+        $schema = 'view-' . $objectname;
+        $operationId = str_replace('-', '_', $schema);
+        $description = ucfirst(str_replace('-', ' ', $schema));
         self::$paths[$path] = array(
-            'get' => array(
+            $method => array(
                 'parameters' => array(
                     array('$ref' => '#/components/parameters/limit'),
                     array('$ref' => '#/components/parameters/offset'),
@@ -375,68 +501,20 @@ class DataObjectRESTBuilder extends xarObject
                     array('$ref' => '#/components/parameters/filter')
                 ),
                 'tags' => array($objectname),
-                'operationId' => 'view_' . $objectname,
-                'description' => 'View list of ' . $objectname,
-                'responses' => array(
-                    '200' => array(
-                        '$ref' => '#/components/responses/view-' . $objectname
-                    )
-                )
+                'operationId' => $operationId,
+                'description' => $description
             )
         );
+        $pageproperties = self::get_page_properties($properties);
+        self::add_operation_response($path, $method, $schema, $pageproperties);
         if (in_array($objectname, self::$internal)) {
-            self::$paths[$path]['get']['responses']['401'] = array(
-                '$ref' => '#/components/responses/unauthorized'
-            );
-            self::$paths[$path]['get']['security'] = array(
-                array('cookieAuth' => array())
-            );
+            self::add_operation_security($path, $method);
             $do_security = true;
             $do_cache = false;
         } else {
             $do_security = false;
             $do_cache = true;
         }
-        self::$responses['view-' . $objectname] = array(
-            'description' => 'View list of ' . $objectname . ' objects',
-            'content' => array(
-                'application/json' => array(
-                    'schema' => array(
-                        '$ref' => '#/components/schemas/view-' . $objectname
-                    )
-                )
-            )
-        );
-        self::$schemas['view-' . $objectname] = array(
-            'type' => 'object',
-            'properties' => array(
-                'count' => array(
-                    'type' => 'integer'
-                ),
-                'limit' => array(
-                    'type' => 'integer'
-                ),
-                'offset' => array(
-                    'type' => 'integer'
-                ),
-                'order' => array(
-                    'type' => 'string'
-                ),
-                'filter' => array(
-                    'type' => 'array',
-                    'items' => array(
-                        'type' => 'string'
-                    )
-                ),
-                'items' => array(
-                    'type' => 'array',
-                    'items' => array(
-                        'type' => 'object',
-                        'properties' => $properties
-                    )
-                )
-            )
-        );
         if ($objectname !== 'start') {
             self::$objects[$objectname]['x-operations']['view'] = array(
                 'properties' => array_keys($properties),
@@ -451,48 +529,29 @@ class DataObjectRESTBuilder extends xarObject
     public static function add_object_display($objectname, $properties)
     {
         $path = '/objects/' . $objectname . '/{id}';
+        $method = 'get';
+        $schema = 'display-' . $objectname;
+        $operationId = str_replace('-', '_', $schema);
+        $description = ucfirst(str_replace('-', ' ', $schema));
         self::$paths[$path] = array(
-            'get' => array(
+            $method => array(
                 'parameters' => array(
                     array('$ref' => '#/components/parameters/itemid')
                 ),
                 'tags' => array($objectname),
-                'operationId' => 'display_' . $objectname,
-                'description' => 'Display single ' . $objectname,
-                'responses' => array(
-                    '200' => array(
-                        '$ref' => '#/components/responses/display-' . $objectname
-                    )
-                )
+                'operationId' => $operationId,
+                'description' => $description
             )
         );
+        self::add_operation_response($path, $method, $schema, $properties);
         if (in_array($objectname, self::$internal)) {
-            self::$paths[$path]['get']['responses']['401'] = array(
-                '$ref' => '#/components/responses/unauthorized'
-            );
-            self::$paths[$path]['get']['security'] = array(
-                array('cookieAuth' => array())
-            );
+            self::add_operation_security($path, $method);
             $do_security = true;
             $do_cache = false;
         } else {
             $do_security = false;
             $do_cache = true;
         }
-        self::$responses['display-' . $objectname] = array(
-            'description' => 'Display single ' . $objectname . ' object',
-            'content' => array(
-                'application/json' => array(
-                    'schema' => array(
-                        '$ref' => '#/components/schemas/display-' . $objectname
-                    )
-                )
-            )
-        );
-        self::$schemas['display-' . $objectname] = array(
-            'type' => 'object',
-            'properties' => $properties
-        );
         self::$objects[$objectname]['x-operations']['display'] = array(
             'properties' => array_keys($properties),
             'security' => $do_security,
@@ -505,39 +564,19 @@ class DataObjectRESTBuilder extends xarObject
     public static function add_object_create($objectname, $properties)
     {
         $path = '/objects/' . $objectname;
-        self::$paths[$path]['post'] = array(
-            'requestBody' => array(
-                '$ref' => '#/components/requestBodies/create-' . $objectname
-            ),
+        $method = 'post';
+        $schema = 'create-' . $objectname;
+        $operationId = str_replace('-', '_', $schema);
+        $description = ucfirst(str_replace('-', ' ', $schema));
+        self::$paths[$path][$method] = array(
             'tags' => array($objectname),
-            'operationId' => 'create_' . $objectname,
-            'description' => 'Create ' . $objectname,
-            'responses' => array(
-                '200' => array(
-                    '$ref' => '#/components/responses/itemid'
-                ),
-                '401' => array(
-                    '$ref' => '#/components/responses/unauthorized'
-                )
-            ),
-            'security' => array(
-                array('cookieAuth' => array())
-            )
+            'operationId' => $operationId,
+            'description' => $description
         );
-        self::$requestBodies['create-' . $objectname] = array(
-            'description' => 'Create ' . $objectname . ' object',
-            'content' => array(
-                'application/json' => array(
-                    'schema' => array(
-                        '$ref' => '#/components/schemas/create-' . $objectname
-                    )
-                )
-            )
-        );
-        self::$schemas['create-' . $objectname] = array(
-            'type' => 'object',
-            'properties' => $properties
-        );
+        // @checkme this returns the itemid
+        self::add_operation_response($path, $method, 'itemid');
+        self::add_operation_requestBody($path, $method, $schema, $properties);
+        self::add_operation_security($path, $method);
         self::$objects[$objectname]['x-operations']['create'] = array(
             'properties' => array_keys($properties),
             'security' => true
@@ -547,42 +586,21 @@ class DataObjectRESTBuilder extends xarObject
     public static function add_object_update($objectname, $properties)
     {
         $path = '/objects/' . $objectname . '/{id}';
-        self::$paths[$path]['put'] = array(
+        $method = 'put';
+        $schema = 'update-' . $objectname;
+        $operationId = str_replace('-', '_', $schema);
+        $description = ucfirst(str_replace('-', ' ', $schema));
+        self::$paths[$path][$method] = array(
             'parameters' => array(
                 array('$ref' => '#/components/parameters/itemid')
             ),
-            'requestBody' => array(
-                '$ref' => '#/components/requestBodies/update-' . $objectname
-            ),
             'tags' => array($objectname),
-            'operationId' => 'update_' . $objectname,
-            'description' => 'Update ' . $objectname,
-            'responses' => array(
-                '200' => array(
-                    '$ref' => '#/components/responses/itemid'
-                ),
-                '401' => array(
-                    '$ref' => '#/components/responses/unauthorized'
-                )
-            ),
-            'security' => array(
-                array('cookieAuth' => array())
-            )
+            'operationId' => $operationId,
+            'description' => $description
         );
-        self::$requestBodies['update-' . $objectname] = array(
-            'description' => 'Update ' . $objectname . ' object',
-            'content' => array(
-                'application/json' => array(
-                    'schema' => array(
-                        '$ref' => '#/components/schemas/update-' . $objectname
-                    )
-                )
-            )
-        );
-        self::$schemas['update-' . $objectname] = array(
-            'type' => 'object',
-            'properties' => $properties
-        );
+        self::add_operation_response($path, $method, 'itemid');
+        self::add_operation_requestBody($path, $method, $schema, $properties);
+        self::add_operation_security($path, $method);
         self::$objects[$objectname]['x-operations']['update'] = array(
             'properties' => array_keys($properties),
             'security' => true
@@ -592,25 +610,20 @@ class DataObjectRESTBuilder extends xarObject
     public static function add_object_delete($objectname, $properties)
     {
         $path = '/objects/' . $objectname . '/{id}';
-        self::$paths[$path]['delete'] = array(
+        $method = 'delete';
+        $schema = 'delete-' . $objectname;
+        $operationId = str_replace('-', '_', $schema);
+        $description = ucfirst(str_replace('-', ' ', $schema));
+        self::$paths[$path][$method] = array(
             'parameters' => array(
                 array('$ref' => '#/components/parameters/itemid')
             ),
             'tags' => array($objectname),
-            'operationId' => 'delete_' . $objectname,
-            'description' => 'Delete ' . $objectname,
-            'responses' => array(
-                '200' => array(
-                    '$ref' => '#/components/responses/itemid'
-                ),
-                '401' => array(
-                    '$ref' => '#/components/responses/unauthorized'
-                )
-            ),
-            'security' => array(
-                array('cookieAuth' => array())
-            )
+            'operationId' => $operationId,
+            'description' => $description
         );
+        self::add_operation_response($path, $method, 'itemid');
+        self::add_operation_security($path, $method);
         self::$objects[$objectname]['x-operations']['delete'] = array(
             'properties' => array_keys($properties),
             'security' => true
@@ -620,97 +633,56 @@ class DataObjectRESTBuilder extends xarObject
     public static function add_whoami()
     {
         $path = '/whoami';
+        $method = 'get';
+        $schema = 'show-whoami';
+        $operationId = str_replace('-', '_', $schema);
+        $description = 'Display current user';
         self::$paths[$path] = array(
-            'get' => array(
+            $method => array(
                 'tags' => array('start'),
-                'operationId' => 'whoami',
-                'description' => 'Display current user',
-                'responses' => array(
-                    '200' => array(
-                        '$ref' => '#/components/responses/whoami'
-                    ),
-                    '401' => array(
-                        '$ref' => '#/components/responses/unauthorized'
-                    )
-                ),
-                'security' => array(
-                    array('cookieAuth' => array())
-                )
+                'operationId' => $operationId,
+                'description' => $description
             )
         );
-        self::$responses['whoami'] = array(
-            'description' => 'Display current user',
-            'content' => array(
-                'application/json' => array(
-                    'schema' => array(
-                        '$ref' => '#/components/schemas/whoami'
-                    )
-                )
+        $properties = array(
+            'id' => array(
+                'type' => 'integer'
+            ),
+            'name' => array(
+                'type' => 'string'
             )
         );
-        self::$schemas['whoami'] = array(
-            'type' => 'object',
-            'properties' => array(
-                'id' => array(
-                    'type' => 'integer'
-                ),
-                'name' => array(
-                    'type' => 'string'
-                )
-            )
-        );
+        self::add_operation_response($path, $method, $schema, $properties);
+        self::add_operation_security($path, $method);
     }
 
     public static function add_modules()
     {
         $path = '/modules';
+        $method = 'get';
+        $schema = 'list-modules';
+        $operationId = str_replace('-', '_', $schema);
+        $description = 'Show available REST API calls for modules';
         self::$paths[$path] = array(
-            'get' => array(
+            $method => array(
                 'tags' => array('start'),
-                'operationId' => 'modules',
-                'description' => 'Show available REST API calls for modules',
-                'responses' => array(
-                    '200' => array(
-                        '$ref' => '#/components/responses/modules'
-                    ),
-                    '401' => array(
-                        '$ref' => '#/components/responses/unauthorized'
-                    )
-                ),
-                'security' => array(
-                    array('cookieAuth' => array())
-                )
-            )
-        );
-        self::$responses['modules'] = array(
-            'description' => 'Show available REST API calls for modules',
-            'content' => array(
-                'application/json' => array(
-                    'schema' => array(
-                        '$ref' => '#/components/schemas/modules'
-                    )
-                )
+                'operationId' => $operationId,
+                'description' => $description
             )
         );
         $properties = array(
-            'module' => array('type' => 'string'),
-            'apilist' => array('type' => 'array', 'items' => array('type' => 'string'))
-        );
-        self::$schemas['modules'] = array(
-            'type' => 'object',
-            'properties' => array(
-                'count' => array(
-                    'type' => 'integer'
-                ),
+            'module' => array(
+                'type' => 'string'
+            ),
+            'apilist' => array(
+                'type' => 'array',
                 'items' => array(
-                    'type' => 'array',
-                    'items' => array(
-                        'type' => 'object',
-                        'properties' => $properties
-                    )
+                    'type' => 'string'
                 )
             )
         );
+        $listproperties = self::get_list_properties($properties);
+        self::add_operation_response($path, $method, $schema, $listproperties);
         if (empty(self::$modules)) {
             $modulelist = array('dynamicdata');
             self::$modules = array();
@@ -730,28 +702,25 @@ class DataObjectRESTBuilder extends xarObject
     public static function add_module_apilist($module, $apilist)
     {
         $path = '/modules/' . $module;
-        $operationId = $module . '_apilist';
+        $method = 'get';
         $schema = $module . '-apilist';
+        $operationId = str_replace('-', '_', $schema);
+        $description = 'Show REST API calls for module ' . $module;
         self::$paths[$path] = array(
-            'get' => array(
+            $method => array(
                 'tags' => array($module . '_module'),
                 'operationId' => $operationId,
-                'description' => 'Show REST API calls for module ' . $module,
+                'description' => $description,
                 'responses' => array(
                     '200' => array(
                         '$ref' => '#/components/responses/' . $schema
-                    ),
-                    '401' => array(
-                        '$ref' => '#/components/responses/unauthorized'
                     )
-                ),
-                'security' => array(
-                    array('cookieAuth' => array())
                 )
             )
         );
+        //self::add_operation_response($path, $method, $schema, $properties);
         self::$responses[$schema] = array(
-            'description' => 'Show REST API calls for module ' . $module,
+            'description' => $description,
             'content' => array(
                 'application/json' => array(
                     'schema' => array(
@@ -761,12 +730,42 @@ class DataObjectRESTBuilder extends xarObject
             )
         );
         $properties = array(
-            'name' => array('type' => 'string'),
-            'type' => array('type' => 'string', 'default' => 'rest'),
-            'path' => array('type' => 'string'),
-            'method' => array('type' => 'string'),
-            'description' => array('type' => 'string'),
-            'parameters' => array('type' => 'array', 'items' => array('type' => 'string'))
+            'name' => array(
+                'type' => 'string'
+            ),
+            'type' => array(
+                'type' => 'string',
+                'default' => 'rest'
+            ),
+            'path' => array(
+                'type' => 'string'
+            ),
+            'method' => array(
+                'type' => 'string',
+                'default' => 'get'
+            ),
+            'security' => array(
+                'type' => 'boolean',
+                'default' => false
+            ),
+            'description' => array(
+                'type' => 'string'
+            ),
+            'parameters' => array(
+                'type' => 'array',
+                'items' => array(
+                    'type' => 'string'
+                )
+            ),
+            'requestBody' => array(
+                'type' => 'object',
+                'additionalProperties' => array(
+                    'type' => 'array',
+                    'items' => array(
+                        'type' => 'string'
+                    )
+                )
+            )
         );
         self::$schemas[$schema] = array(
             'type' => 'object',
@@ -795,13 +794,13 @@ class DataObjectRESTBuilder extends xarObject
     public static function add_module_api($module, $api, $item)
     {
         $path = '/modules/' . $module . '/' . $item['path'];
-        $operationId = $module . '_' . $api;
         $schema = $module . '-' . $api;
-        if (empty(self::$paths[$path])) {
-            self::$paths[$path] = array();
-        }
+        $operationId = str_replace('-', '_', $schema);
         if (empty($item['description'])) {
             $item['description'] = 'Call REST API ' . $api . ' in module ' . $module;
+        }
+        if (empty(self::$paths[$path])) {
+            self::$paths[$path] = array();
         }
         self::$paths[$path][$item['method']] = array(
             'tags' => array($module . '_module'),
@@ -810,15 +809,12 @@ class DataObjectRESTBuilder extends xarObject
             'responses' => array(
                 '200' => array(
                     '$ref' => '#/components/responses/' . $schema
-                ),
-                '401' => array(
-                    '$ref' => '#/components/responses/unauthorized'
                 )
-            ),
-            'security' => array(
-                array('cookieAuth' => array())
             )
         );
+        if (!empty($item['security'])) {
+            self::add_operation_security($path, $item['method']);
+        }
         if (!empty($item['parameters'])) {
             $parameters = array();
             foreach ($item['parameters'] as $name) {
@@ -833,20 +829,19 @@ class DataObjectRESTBuilder extends xarObject
             }
             self::$paths[$path][$item['method']]['parameters'] = $parameters;
         }
-        // @checkme verify/expand how POSTed values are defined
+        // @checkme verify/expand how POSTed values are defined - assuming simple json object with string props for now
         if (!empty($item['requestBody'])) {
-            $requestBody = array('content' => array());
             foreach ($item['requestBody'] as $mediatype => $vars) {
                 $properties = array();
                 foreach ($vars as $name) {
                     $properties[$name] = array('type' => 'string');
-		}
-                $requestBody['content'][$mediatype]['schema'] = array('type' => 'object', 'properties' => $properties);
+                }
+                self::add_operation_requestBody($path, $item['method'], $schema, $properties, $mediatype);
             }
-            self::$paths[$path][$item['method']]['requestBody'] = $requestBody;
         }
+        //self::add_operation_response($path, $method, $schema, $properties);
         self::$responses[$schema] = array(
-            'description' => 'Call REST API ' . $api . ' in module ' . $module,
+            'description' => $item['description'],
             'content' => array(
                 'application/json' => array(
                     'schema' => array(

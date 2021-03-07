@@ -19,7 +19,6 @@ class DataObjectRESTHandler extends xarObject
     public static $endpoint = 'rst.php/v1';
     public static $objects = array();
     public static $schemas = array();
-    //public static $security = array();
     public static $config = array();
     public static $modules = array();
 
@@ -362,20 +361,6 @@ class DataObjectRESTHandler extends xarObject
                 return $doc;
             }
             self::$schemas = $doc['components']['schemas'];
-            /**
-            self::$security = array();
-            self::$config = array();
-            foreach ($doc['paths'] as $path => $operations) {
-                foreach ($operations as $method => $operation) {
-                    if (!empty($operation['security'])) {
-                        self::$security[$operation['operationId']] = $operation['security'];
-                    }
-                    if (!empty($operation['x-xaraya-config'])) {
-                        self::$config[$operation['operationId']] = $operation['x-xaraya-config'];
-                    }
-                }
-            }
-             */
         }
     }
 
@@ -484,7 +469,7 @@ class DataObjectRESTHandler extends xarObject
             return array('method' => 'getModuleApis', 'args' => $args, 'error' => 'Unknown module');
         }
         $result = array('module' => $module, 'apilist' => array(), 'count' => 0);
-        $apilist = self::$modules[$module]['apilist'];
+        $apilist = self::getModuleApiList($module);
         foreach ($apilist as $api => $item) {
             $item['name'] = $api;
             $item['path'] = self::getModuleURL($module, $item['path']);
@@ -501,6 +486,10 @@ class DataObjectRESTHandler extends xarObject
         $func = self::getModuleApiFunc($module, $path, 'get');
         if (empty($func)) {
             return array('method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api');
+        }
+        if (!empty($func['security'])) {
+            // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+            self::checkuser();
         }
         xarMod::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
@@ -520,6 +509,10 @@ class DataObjectRESTHandler extends xarObject
         if (empty($func)) {
             return array('method' => 'postModuleCall', 'args' => $args, 'error' => 'Unknown module api');
         }
+        if (!empty($func['security'])) {
+            // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+            self::checkuser();
+        }
         xarMod::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
         // @checkme handle POSTed args by passing $args['input'] only in handler?
@@ -535,12 +528,20 @@ class DataObjectRESTHandler extends xarObject
         return true;
     }
 
+    public static function getModuleApiList($module)
+    {
+        if (!self::hasModule($module)) {
+            return;
+        }
+        return self::$modules[$module]['apilist'];
+    }
+
     public static function getModuleApiFunc($module, $path, $method = 'get')
     {
         if (!self::hasModule($module)) {
             return;
         }
-        $apilist = self::$modules[$module]['apilist'];
+        $apilist = self::getModuleApiList($module);
         foreach ($apilist as $api => $item) {
             if ($item['path'] == $path && $item['method'] == $method) {
                 $item['name'] = $api;
