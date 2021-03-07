@@ -61,6 +61,7 @@ class DataObjectRESTBuilder extends xarObject
         self::add_objects($objectList);
         self::add_whoami();
         self::add_modules();
+        self::add_token();
         self::dump_openapi();
     }
 
@@ -70,7 +71,7 @@ class DataObjectRESTBuilder extends xarObject
         $doc['openapi'] = '3.0.2';
         $doc['info'] = [
             'title' => 'DynamicData REST API',
-            'description' => 'This provides a REST API endpoint as proof of concept to access Dynamic Data Objects stored in dynamic_data. Access to all objects is limited to read-only mode by default. The Sample object requires cookie authentication to create/update/delete items (after login on this site). Some internal DD objects are also available in read-only mode for use in Javascript on the site.',
+            'description' => 'This provides a REST API endpoint as proof of concept to access Dynamic Data Objects stored in dynamic_data. Access to all objects is limited to read-only mode by default. The Sample object requires cookie authentication (after login on this site) or token authentication to create/update/delete items. Some internal DD objects are also available in read-only mode for use in Javascript on the site.',
             'version' => '1.3.0',
         ];
         $doc['info']['x-generated'] = date('c');
@@ -207,15 +208,34 @@ class DataObjectRESTBuilder extends xarObject
             'name' => 'XARAYASID',
             'in' => 'cookie',
         ];
+        // @checkme still issues getting the Authorization header passed to PHP with Apache
+        // See https://stackoverflow.com/questions/40582161/how-to-properly-use-bearer-tokens
+        //self::$securitySchemes['bearerAuth'] = [
+        //    'type' => 'http',
+        //    'scheme' => 'bearer',
+        //    'bearerFormat' => 'Not JWT',
+        //    'description' => 'Use API access token after sign-in on /token',
+        //];
+        self::$securitySchemes['headerAuth'] = [
+            'type' => 'apiKey',
+            'description' => 'Use API access token after sign-in on /token',
+            'name' => 'X-AUTH-TOKEN',
+            'in' => 'header',
+        ];
     }
 
-    public static function add_operation_security($path, $method = 'get')
+    public static function add_operation_security($path, $method = 'get', $add_auth = true)
     {
         self::$paths[$path][$method]['responses']['401'] = [
             '$ref' => '#/components/responses/unauthorized',
         ];
+        if (!$add_auth) {
+            return;
+        }
         self::$paths[$path][$method]['security'] = [
             ['cookieAuth' => []],
+            //['bearerAuth' => []],
+            ['headerAuth' => []],
         ];
     }
 
@@ -406,6 +426,7 @@ class DataObjectRESTBuilder extends xarObject
             self::add_objects();
             self::add_whoami();
             self::add_modules();
+            self::add_token();
         }
         return self::$objects;
     }
@@ -636,7 +657,7 @@ class DataObjectRESTBuilder extends xarObject
         $method = 'get';
         $schema = 'show-whoami';
         $operationId = str_replace('-', '_', $schema);
-        $description = 'Display current user';
+        $description = 'Display current user based on token or cookie';
         self::$paths[$path] = [
             $method => [
                 'tags' => ['start'],
@@ -856,6 +877,49 @@ class DataObjectRESTBuilder extends xarObject
             ];
         }
         self::$schemas[$schema] = $item['response'];
+    }
+
+    public static function add_token()
+    {
+        $path = '/token';
+        $method = 'post';
+        $schema = 'access-token';
+        $operationId = str_replace('-', '_', $schema);
+        $description = 'Get API access token (TODO)';
+        self::$paths[$path] = [
+            $method => [
+                'tags' => ['start'],
+                'operationId' => $operationId,
+                'description' => $description,
+            ],
+        ];
+        $properties = [
+            'uname' => [
+                'type' => 'string',
+            ],
+            'pass' => [
+                'type' => 'string',
+                'format' => 'password',
+            ],
+            'access' => [
+                'type' => 'string',
+                'default' => 'display',
+                'enum' => ['view', 'display', 'update', 'create', 'delete', 'admin'],
+            ],
+        ];
+        self::add_operation_requestBody($path, $method, $schema, $properties);
+        $properties = [
+            'access_token' => [
+                'type' => 'string',
+                'format' => 'byte',
+            ],
+            'expiration' => [
+                'type' => 'string',
+                'format' => 'date-time',
+            ],
+        ];
+        self::add_operation_response($path, $method, $schema, $properties);
+        self::add_operation_security($path, $method, false);
     }
 
     public static function match_proptype($property)

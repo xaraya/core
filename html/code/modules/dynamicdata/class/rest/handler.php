@@ -21,6 +21,8 @@ class DataObjectRESTHandler extends xarObject
     public static $schemas = [];
     public static $config = [];
     public static $modules = [];
+    public static $expires = 12 * 60 * 60;  // 12 hours
+    public static $cacheStorage;
 
     public static function getOpenAPI($args = null)
     {
@@ -81,7 +83,7 @@ class DataObjectRESTHandler extends xarObject
         }
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkuser();
+            self::checkUser();
             //$args['access'] = 'view';
         }
         // @checkme always count here
@@ -148,7 +150,7 @@ class DataObjectRESTHandler extends xarObject
         }
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkuser();
+            self::checkUser();
             //$args['access'] = 'display';
         }
         $fieldlist = self::getDisplayProperties($object);
@@ -195,7 +197,7 @@ class DataObjectRESTHandler extends xarObject
             return ['method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        self::checkuser();
+        self::checkUser();
         $fieldlist = self::getCreateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -230,7 +232,7 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        self::checkuser();
+        self::checkUser();
         $fieldlist = self::getUpdateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -265,7 +267,7 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        self::checkuser();
+        self::checkUser();
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('delete')) {
@@ -409,9 +411,9 @@ class DataObjectRESTHandler extends xarObject
      */
     public static function whoami($args = null)
     {
-        self::checkuser();
+        $userId = self::checkUser();
         //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
-        $role = xarRoles::current();
+        $role = xarRoles::getRole($userId);
         $user = $role->getFieldValues();
         return ['id' => $user['id'], 'name' => $user['name']];
     }
@@ -419,22 +421,106 @@ class DataObjectRESTHandler extends xarObject
     /**
      * Verify that the cookie corresponds to an authorized user (with minimal core load) or exit with 401 status code
      */
-    private static function checkuser()
+    private static function checkUser()
     {
-        $cookie = !empty($_COOKIE['XARAYASID']) ? $_COOKIE['XARAYASID'] : '';
-        if (empty($cookie)) {
+        $userInfo = self::checkToken();
+        if (!empty($userInfo)) {
+            $userInfo = @json_decode($userInfo, true);
+            if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$expires))) {
+                http_response_code(401);
+                //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
+                header('WWW-Authenticate: Token realm="Xaraya Site Login", created=');
+                exit;
+            }
+            return $userInfo['userId'];
+        }
+        $userId = self::checkCookie();
+        if (empty($userId)) {
             http_response_code(401);
             header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
             exit;
+        }
+        return $userId;
+    }
+
+    /**
+     * Verify that the cookie corresponds to an authorized user (with minimal core load) using xarSession
+     */
+    private static function checkCookie()
+    {
+        $cookie = !empty($_COOKIE['XARAYASID']) ? $_COOKIE['XARAYASID'] : '';
+        if (empty($cookie)) {
+            return;
         }
         // @checkme see graphql whoami query in dummytype.php
         xarSession::init();
         //xarUser::init();
         if (!xarUser::isLoggedIn()) {
+            return;
+        }
+        return xarSession::getVar('role_id');
+    }
+
+    /**
+     * Verify that the token corresponds to an authorized user (with minimal core load) using xarCache_Storage
+     */
+    private static function checkToken()
+    {
+        $token = !empty($_SERVER['HTTP_X_AUTH_TOKEN']) ? $_SERVER['HTTP_X_AUTH_TOKEN'] : '';
+        if (empty($token) || !(self::getCacheStorage()->isCached($token))) {
+            return;
+        }
+        return self::getCacheStorage()->getCached($token);
+    }
+
+    public static function postToken($args)
+    {
+        // this contains any POSTed args from rst.php
+        if (empty($args['input'])) {
+            $args['input'] = [];
+        }
+        $uname = $args['input']['uname'];
+        $pass = $args['input']['pass'];
+        $access = $args['input']['access'];
+        if (!in_array($access, ['display', 'update', 'create', 'delete', 'admin'])) {
             http_response_code(401);
-            header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
+            //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
+            header('WWW-Authenticate: Token realm="Xaraya Site Login", access=');
             exit;
         }
+        //xarSession::init();
+        xarMod::init();
+        xarUser::init();
+        // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
+        // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
+        $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args['input']);
+        if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
+            http_response_code(401);
+            //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
+            header('WWW-Authenticate: Token realm="Xaraya Site Login"');
+            exit;
+        }
+        if (function_exists('random_bytes')) {
+            $token = bin2hex(random_bytes(32));
+        } elseif (function_exists('openssl_random_pseudo_bytes')) {
+            $token = bin2hex(openssl_random_pseudo_bytes(32));
+        } else {
+            return ['method' => 'postToken', 'error' => 'no decent token generator'];
+        }
+        // @checkme clean up cachestorage occasionally based on size
+        self::getCacheStorage()->sizeLimitReached();
+        self::getCacheStorage()->setCached($token, json_encode(['userId' => $userId, 'access' => $access, 'created' => time()]));
+        $expiration = date('c', time() + self::$expires);
+        return ['access_token' => $token, 'expiration' => $expiration, 'error' => 'TODO'];
+    }
+
+    public static function getCacheStorage()
+    {
+        if (!isset(self::$cacheStorage)) {
+            // @checkme access cachestorage directly here
+            self::$cacheStorage = xarCache::getStorage(['storage' => 'database', 'type' => 'token', 'expire' => self::$expires, 'sizelimit' => 2000000]);
+        }
+        return self::$cacheStorage;
     }
 
     public static function getModuleURL($module = null, $api = null, $args = [])
@@ -489,7 +575,7 @@ class DataObjectRESTHandler extends xarObject
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkuser();
+            self::checkUser();
         }
         xarMod::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
@@ -511,7 +597,7 @@ class DataObjectRESTHandler extends xarObject
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkuser();
+            self::checkUser();
         }
         xarMod::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
@@ -563,6 +649,7 @@ class DataObjectRESTHandler extends xarObject
         $r->delete('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'deleteObjectItem']);
         //$r->patch('/objects/{object}', ['DataObjectRESTHandler', 'patchObjectDefinition']);
         $r->get('/whoami', ['DataObjectRESTHandler', 'whoami']);
+        $r->post('/token', ['DataObjectRESTHandler', 'postToken']);
         $r->get('/modules', ['DataObjectRESTHandler', 'getModules']);
         $r->get('/modules/{module}', ['DataObjectRESTHandler', 'getModuleApis']);
         $r->get('/modules/{module}/{path}', ['DataObjectRESTHandler', 'getModuleCall']);
