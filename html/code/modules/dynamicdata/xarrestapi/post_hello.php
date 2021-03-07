@@ -15,7 +15,7 @@
  *
  * @return array of info
  */
-function dynamicdata_restapi_post_hello($args = array())
+function dynamicdata_restapi_post_hello($args = [])
 {
     // @checkme handle POSTed args by passing $args['input'] only in handler?
     //extract($args);

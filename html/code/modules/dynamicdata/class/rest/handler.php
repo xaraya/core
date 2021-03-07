@@ -17,10 +17,10 @@ sys::import('modules.dynamicdata.class.objects.master');
 class DataObjectRESTHandler extends xarObject
 {
     public static $endpoint = 'rst.php/v1';
-    public static $objects = array();
-    public static $schemas = array();
-    public static $config = array();
-    public static $modules = array();
+    public static $objects = [];
+    public static $schemas = [];
+    public static $config = [];
+    public static $modules = [];
 
     public static function getOpenAPI($args = null)
     {
@@ -28,14 +28,14 @@ class DataObjectRESTHandler extends xarObject
         if (!file_exists($openapi)) {
             sys::import('modules.dynamicdata.class.rest.builder');
             DataObjectRESTBuilder::init();
-            return array('TODO' => 'generate var/cache/api/openapi.json with builder');
+            return ['TODO' => 'generate var/cache/api/openapi.json with builder'];
         }
         $content = file_get_contents($openapi);
         $doc = json_decode($content, true);
         return $doc;
     }
 
-    public static function getBaseURL($base = '', $path = null, $args = array())
+    public static function getBaseURL($base = '', $path = null, $args = [])
     {
         if (empty($path)) {
             return xarServer::getBaseURL() . self::$endpoint . $base;
@@ -59,12 +59,12 @@ class DataObjectRESTHandler extends xarObject
         if (empty(self::$objects)) {
             self::loadConfig();
         }
-        $result = array('items' => array(), 'count' => count(self::$objects));
+        $result = ['items' => [], 'count' => count(self::$objects)];
         foreach (self::$objects as $itemid => $item) {
             if ($item['datastore'] !== 'dynamicdata') {
                 continue;
             }
-            $item['_links'] = array('self' => array('href' => self::getObjectURL($item['name'])));
+            $item['_links'] = ['self' => ['href' => self::getObjectURL($item['name'])]];
             array_push($result['items'], $item);
         }
         $result['filter'] = ['datastore,eq,dynamicdata'];
@@ -77,7 +77,7 @@ class DataObjectRESTHandler extends xarObject
         $object = $args['object'];
         $method = 'view';
         if (!self::hasOperation($object, $method)) {
-            return array('method' => 'getObjectList', 'args' => $args, 'error' => 'Unknown operation');
+            return ['method' => 'getObjectList', 'args' => $args, 'error' => 'Unknown operation'];
         }
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
@@ -100,15 +100,15 @@ class DataObjectRESTHandler extends xarObject
         $params = $loader->addPagingParams();
         $items = $objectlist->getItems($params);
         //$items = $loader->query($args);
-        $result = array(
-            'items' => array(),
+        $result = [
+            'items' => [],
             'count' => $loader->count,
             'limit' => $loader->limit,
             'offset' => $loader->offset,
             'order' => $loader->order,
             'filter' => $loader->filter,
-        );
-        $deferred = array();
+        ];
+        $deferred = [];
         foreach ($fieldlist as $key) {
             if (!empty($objectlist->properties[$key]) && method_exists($objectlist->properties[$key], 'getDeferredData')) {
                 array_push($deferred, $key);
@@ -121,14 +121,14 @@ class DataObjectRESTHandler extends xarObject
                 unset($item[$key]);
             }
             foreach ($deferred as $key) {
-                $data = $objectlist->properties[$key]->getDeferredData(array('value' => $item[$key], '_itemid' => $itemid));
-                if ($data['value'] && in_array(get_class($objectlist->properties[$key]), array('DeferredListProperty', 'DeferredManyProperty'))) {
+                $data = $objectlist->properties[$key]->getDeferredData(['value' => $item[$key], '_itemid' => $itemid]);
+                if ($data['value'] && in_array(get_class($objectlist->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty'])) {
                     $item[$key] = array_values($data['value']);
                 } else {
                     $item[$key] = $data['value'];
                 }
             }
-            $item['_links'] = array('self' => array('href' => self::getObjectURL($object, $itemid)));
+            $item['_links'] = ['self' => ['href' => self::getObjectURL($object, $itemid)]];
             array_push($result['items'], $item);
         }
         //return array('method' => 'getObjectList', 'args' => $args, 'fieldlist' => $fieldlist, 'result' => $result);
@@ -141,7 +141,7 @@ class DataObjectRESTHandler extends xarObject
         $itemid = $args['itemid'];
         $method = 'display';
         if (!self::hasOperation($object, $method)) {
-            return array('method' => 'getObjectItem', 'args' => $args, 'error' => 'Unknown operation');
+            return ['method' => 'getObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
@@ -152,7 +152,7 @@ class DataObjectRESTHandler extends xarObject
             //$args['access'] = 'display';
         }
         $fieldlist = self::getDisplayProperties($object);
-        $params = array('name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist);
+        $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
         $objectitem = DataObjectMaster::getObject($params);
         if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display')) {
             http_response_code(403);
@@ -165,7 +165,7 @@ class DataObjectRESTHandler extends xarObject
         // @checkme this throws exception for userlist property when xarUser::init() is not called first
         //$result = $objectitem->getFieldValues();
         // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
-        $item = $objectitem->getFieldValues(array(), 1);
+        $item = $objectitem->getFieldValues([], 1);
         // @todo filter out fieldlist in dynamic_data datastore
         $diff = array_diff(array_keys($item), $fieldlist);
         foreach ($diff as $key) {
@@ -175,7 +175,7 @@ class DataObjectRESTHandler extends xarObject
             if (!empty($objectitem->properties[$key]) && method_exists($objectitem->properties[$key], 'getDeferredData')) {
                 // @checkme take value and itemid directly from the property here, to set deferred data if needed
                 $data = $objectitem->properties[$key]->getDeferredData();
-                if ($data['value'] && in_array(get_class($objectitem->properties[$key]), array('DeferredListProperty', 'DeferredManyProperty'))) {
+                if ($data['value'] && in_array(get_class($objectitem->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty'])) {
                     $item[$key] = array_values($data['value']);
                 } else {
                     $item[$key] = $data['value'];
@@ -192,7 +192,7 @@ class DataObjectRESTHandler extends xarObject
         $object = $args['object'];
         $method = 'create';
         if (!self::hasOperation($object, $method)) {
-            return array('method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation');
+            return ['method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
         self::checkuser();
@@ -204,7 +204,7 @@ class DataObjectRESTHandler extends xarObject
         if (!empty($args['input']['id'])) {
             unset($args['input']['id']);
         }
-        $params = array('name' => $object);
+        $params = ['name' => $object];
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('create')) {
             http_response_code(403);
@@ -224,7 +224,7 @@ class DataObjectRESTHandler extends xarObject
         $itemid = $args['itemid'];
         $method = 'update';
         if (!self::hasOperation($object, $method)) {
-            return array('method' => 'updateObjectItem', 'args' => $args, 'error' => 'Unknown operation');
+            return ['method' => 'updateObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
@@ -239,7 +239,7 @@ class DataObjectRESTHandler extends xarObject
         if (!empty($args['input']['id']) && $itemid != $args['input']['id']) {
             throw new Exception('Unknown id ' . $object);
         }
-        $params = array('name' => $object, 'itemid' => $itemid);
+        $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('update')) {
             http_response_code(403);
@@ -259,14 +259,14 @@ class DataObjectRESTHandler extends xarObject
         $itemid = $args['itemid'];
         $method = 'delete';
         if (!self::hasOperation($object, $method)) {
-            return array('method' => 'deleteObjectItem', 'args' => $args, 'error' => 'Unknown operation');
+            return ['method' => 'deleteObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
         self::checkuser();
-        $params = array('name' => $object, 'itemid' => $itemid);
+        $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('delete')) {
             http_response_code(403);
@@ -283,26 +283,26 @@ class DataObjectRESTHandler extends xarObject
     public static function loadConfig()
     {
         if (empty(self::$config)) {
-            self::$config = array();
+            self::$config = [];
             $configFile = sys::varpath() . '/cache/api/restapi_config.json';
             if (file_exists($configFile)) {
                 $contents = file_get_contents($configFile);
                 self::$config = json_decode($contents, true);
             }
-            $fieldlist = array('objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties');
+            $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
             $allowed = array_flip($fieldlist);
             if (!empty(self::$config['objects'])) {
-                self::$objects = array();
+                self::$objects = [];
                 foreach (self::$config['objects'] as $name => $item) {
                     $item = array_intersect_key($item, $allowed);
                     self::$objects[$name] = $item;
                 }
             } else {
                 $object = 'objects';
-                $params = array('name' => $object, 'fieldlist' => $fieldlist);
+                $params = ['name' => $object, 'fieldlist' => $fieldlist];
                 $objectlist = DataObjectMaster::getObjectList($params);
                 self::$objects = $objectlist->getItems();
-                self::$config['objects'] = array();
+                self::$config['objects'] = [];
                 foreach (self::$objects as $itemid => $item) {
                     if ($item['datastore'] !== 'dynamicdata') {
                         continue;
@@ -314,14 +314,14 @@ class DataObjectRESTHandler extends xarObject
             if (!empty(self::$config['modules'])) {
                 self::$modules = self::$config['modules'];
             } else {
-                $modulelist = array('dynamicdata');
-                self::$modules = array();
+                $modulelist = ['dynamicdata'];
+                self::$modules = [];
                 xarMod::init();
                 foreach ($modulelist as $module) {
-                    self::$modules[$module] = array(
+                    self::$modules[$module] = [
                         'module' => $module,
-                        'apilist' => xarMod::apiFunc($module, 'rest', 'getlist')
-                    );
+                        'apilist' => xarMod::apiFunc($module, 'rest', 'getlist'),
+                    ];
                 }
                 self::$config['modules'] = self::$modules;
             }
@@ -413,7 +413,7 @@ class DataObjectRESTHandler extends xarObject
         //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
         $role = xarRoles::current();
         $user = $role->getFieldValues();
-        return array('id' => $user['id'], 'name' => $user['name']);
+        return ['id' => $user['id'], 'name' => $user['name']];
     }
 
     /**
@@ -437,7 +437,7 @@ class DataObjectRESTHandler extends xarObject
         }
     }
 
-    public static function getModuleURL($module = null, $api = null, $args = array())
+    public static function getModuleURL($module = null, $api = null, $args = [])
     {
         if (empty($module)) {
             return self::getBaseURL('/modules');
@@ -453,10 +453,10 @@ class DataObjectRESTHandler extends xarObject
         if (empty(self::$modules)) {
             self::loadConfig();
         }
-        $result = array('items' => array(), 'count' => count(self::$modules));
+        $result = ['items' => [], 'count' => count(self::$modules)];
         foreach (self::$modules as $itemid => $item) {
             $item['apilist'] = array_keys($item['apilist']);
-            $item['_links'] = array('self' => array('href' => self::getModuleURL($item['module'])));
+            $item['_links'] = ['self' => ['href' => self::getModuleURL($item['module'])]];
             array_push($result['items'], $item);
         }
         return $result;
@@ -466,9 +466,9 @@ class DataObjectRESTHandler extends xarObject
     {
         $module = $args['module'];
         if (!self::hasModule($module)) {
-            return array('method' => 'getModuleApis', 'args' => $args, 'error' => 'Unknown module');
+            return ['method' => 'getModuleApis', 'args' => $args, 'error' => 'Unknown module'];
         }
-        $result = array('module' => $module, 'apilist' => array(), 'count' => 0);
+        $result = ['module' => $module, 'apilist' => [], 'count' => 0];
         $apilist = self::getModuleApiList($module);
         foreach ($apilist as $api => $item) {
             $item['name'] = $api;
@@ -485,7 +485,7 @@ class DataObjectRESTHandler extends xarObject
         $path = $args['path'];
         $func = self::getModuleApiFunc($module, $path, 'get');
         if (empty($func)) {
-            return array('method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api');
+            return ['method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
@@ -503,11 +503,11 @@ class DataObjectRESTHandler extends xarObject
         $path = $args['path'];
         // this contains any POSTed args from rst.php
         if (empty($args['input'])) {
-            $args['input'] = array();
+            $args['input'] = [];
         }
         $func = self::getModuleApiFunc($module, $path, 'post');
         if (empty($func)) {
-            return array('method' => 'postModuleCall', 'args' => $args, 'error' => 'Unknown module api');
+            return ['method' => 'postModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
