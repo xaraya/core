@@ -18,8 +18,8 @@
 function dynamicdata_restapi_post_hello($args = array())
 {
     // @checkme handle POSTed args by passing $args['input'] only in handler?
-    extract($args);
+    //extract($args);
     $result = 'World';
     //xarVar::fetch('name', 'isset', $name, null, xarVar::NOT_REQUIRED);
-    return !empty($name) ? $name : $result;
+    return !empty($args['name']) ? $args['name'] : $result;
 }

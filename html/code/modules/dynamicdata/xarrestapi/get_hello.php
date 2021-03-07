@@ -18,8 +18,8 @@
 function dynamicdata_restapi_get_hello($args = array())
 {
     // @checkme pass all args from handler here?
-    extract($args);
+    //extract($args);
     $result = 'World';
     //xarVar::fetch('name', 'isset', $name, null, xarVar::NOT_REQUIRED);
-    return !empty($name) ? $name : $result;
+    return !empty($args['name']) ? $args['name'] : $result;
 }

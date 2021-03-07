@@ -324,6 +324,7 @@ class DataObjectRESTHandler extends xarObject
                         'apilist' => xarMod::apiFunc($module, 'rest', 'getlist')
                     );
                 }
+                self::$config['modules'] = self::$modules;
             }
         }
     }
@@ -479,10 +480,11 @@ class DataObjectRESTHandler extends xarObject
     public static function getModuleApis($args)
     {
         $module = $args['module'];
+        if (!self::hasModule($module)) {
+            return array('method' => 'getModuleApis', 'args' => $args, 'error' => 'Unknown module');
+        }
         $result = array('module' => $module, 'apilist' => array(), 'count' => 0);
-        xarMod::init();
-        // Get the list of REST API calls supported by this module (if any)
-        $apilist = xarMod::apiFunc($module, 'rest', 'getlist');
+        $apilist = self::$modules[$module]['apilist'];
         foreach ($apilist as $api => $item) {
             $item['name'] = $api;
             $item['path'] = self::getModuleURL($module, $item['path']);
@@ -496,18 +498,14 @@ class DataObjectRESTHandler extends xarObject
     {
         $module = $args['module'];
         $path = $args['path'];
-        xarMod::init();
-        // Find the REST API call corresponding to this path and method
-        $apilist = xarMod::apiFunc($module, 'rest', 'getlist');
-        foreach ($apilist as $api => $item) {
-            if ($item['path'] == $path && $item['method'] == 'get') {
-                $type = empty($item['type']) ? 'rest' : $item['type'];
-                // @checkme pass all args from handler here?
-                return xarMod::apiFunc($module, $type, $api, $args);
-            }
+        $func = self::getModuleApiFunc($module, $path, 'get');
+        if (empty($func)) {
+            return array('method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api');
         }
-        $result = array('module' => $module, 'path' => $path, 'args' => $args, 'apilist' => $apilist);
-        return $result;
+        xarMod::init();
+        $type = empty($func['type']) ? 'rest' : $func['type'];
+        // @checkme pass all args from handler here?
+        return xarMod::apiFunc($module, $type, $func['name'], $args);
     }
 
     public static function postModuleCall($args)
@@ -518,18 +516,37 @@ class DataObjectRESTHandler extends xarObject
         if (empty($args['input'])) {
             $args['input'] = array();
         }
+        $func = self::getModuleApiFunc($module, $path, 'post');
+        if (empty($func)) {
+            return array('method' => 'postModuleCall', 'args' => $args, 'error' => 'Unknown module api');
+        }
         xarMod::init();
-        // Find the REST API call corresponding to this path and method
-        $apilist = xarMod::apiFunc($module, 'rest', 'getlist');
+        $type = empty($func['type']) ? 'rest' : $func['type'];
+        // @checkme handle POSTed args by passing $args['input'] only in handler?
+        return xarMod::apiFunc($module, $type, $func['name'], $args['input']);
+    }
+
+    public static function hasModule($module)
+    {
+        self::loadConfig();
+        if (empty(self::$config) || empty(self::$config['modules']) || empty(self::$config['modules'][$module])) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function getModuleApiFunc($module, $path, $method = 'get')
+    {
+        if (!self::hasModule($module)) {
+            return;
+        }
+        $apilist = self::$modules[$module]['apilist'];
         foreach ($apilist as $api => $item) {
-            if ($item['path'] == $path && $item['method'] == 'post') {
-                $type = empty($item['type']) ? 'rest' : $item['type'];
-                // @checkme handle POSTed args by passing $args['input'] only in handler?
-                return xarMod::apiFunc($module, $type, $api, $args['input']);
+            if ($item['path'] == $path && $item['method'] == $method) {
+                $item['name'] = $api;
+                return $item;
             }
         }
-        $result = array('module' => $module, 'path' => $path, 'args' => $args, 'apilist' => $apilist);
-        return $result;
     }
 
     /**

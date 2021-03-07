@@ -31,7 +31,7 @@ function dynamicdata_restapi_getlist($args = array())
         'method' => 'post',
         'description' => 'Call REST API post_hello() in module dynamicdata',
         // @checkme verify/expand how POSTed values are defined
-        'requestBody' => array('application/json' => array('name'))
+        'requestBody' => array('application/json' => array('name', 'score'))
     );
     $apilist['getobjects'] = array(
         'type' => 'user',
