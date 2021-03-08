@@ -22,7 +22,9 @@ class DataObjectRESTHandler extends xarObject
     public static $config = [];
     public static $modules = [];
     public static $expires = 12 * 60 * 60;  // 12 hours
+    public static $storageType = 'database';
     public static $cacheStorage;
+    public static $userId;
 
     public static function getOpenAPI($args = null)
     {
@@ -327,6 +329,9 @@ class DataObjectRESTHandler extends xarObject
                 }
                 self::$config['modules'] = self::$modules;
             }
+            if (!empty(self::$config['storage'])) {
+                self::$storageType = self::$config['storage'];
+            }
         }
     }
 
@@ -517,8 +522,14 @@ class DataObjectRESTHandler extends xarObject
     public static function getCacheStorage()
     {
         if (!isset(self::$cacheStorage)) {
+            self::loadConfig();
             // @checkme access cachestorage directly here
-            self::$cacheStorage = xarCache::getStorage(['storage' => 'database', 'type' => 'token', 'expire' => self::$expires, 'sizelimit' => 2000000]);
+            self::$cacheStorage = xarCache::getStorage([
+                'storage' => self::$storageType,
+                'type' => 'token',
+                'expire' => self::$expires,
+                'sizelimit' => 2000000,
+            ]);
         }
         return self::$cacheStorage;
     }
@@ -557,6 +568,9 @@ class DataObjectRESTHandler extends xarObject
         $result = ['module' => $module, 'apilist' => [], 'count' => 0];
         $apilist = self::getModuleApiList($module);
         foreach ($apilist as $api => $item) {
+            if (isset($item['enabled']) && empty($item['enabled'])) {
+                continue;
+            }
             $item['name'] = $api;
             $item['path'] = self::getModuleURL($module, $item['path']);
             $result['apilist'][] = $item;
@@ -629,6 +643,9 @@ class DataObjectRESTHandler extends xarObject
         }
         $apilist = self::getModuleApiList($module);
         foreach ($apilist as $api => $item) {
+            if (isset($item['enabled']) && empty($item['enabled'])) {
+                continue;
+            }
             if ($item['path'] == $path && $item['method'] == $method) {
                 $item['name'] = $api;
                 return $item;

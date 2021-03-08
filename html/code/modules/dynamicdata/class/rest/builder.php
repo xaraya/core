@@ -29,6 +29,7 @@ class DataObjectRESTBuilder extends xarObject
     protected static $securitySchemes = [];
     protected static $tags = [];
     protected static $modules = [];
+    protected static $storage = 'database';
 
     public static function init(array $args = [])
     {
@@ -55,12 +56,13 @@ class DataObjectRESTBuilder extends xarObject
         return $doc;
     }
 
-    public static function create_openapi($objectList = [])
+    public static function create_openapi($selectedList = [], $storage = 'database')
     {
+        self::$storage = $storage;
         self::init_openapi();
-        self::add_objects($objectList);
+        self::add_objects($selectedList);
         self::add_whoami();
-        self::add_modules();
+        self::add_modules($selectedList);
         self::add_token();
         self::dump_openapi();
     }
@@ -96,6 +98,7 @@ class DataObjectRESTBuilder extends xarObject
         $configData['start'] = ['objects', 'whoami', 'modules'];
         $configData['objects'] = self::$objects;
         $configData['modules'] = self::$modules;
+        $configData['storage'] = self::$storage;
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
     }
 
@@ -677,7 +680,7 @@ class DataObjectRESTBuilder extends xarObject
         self::add_operation_security($path, $method);
     }
 
-    public static function add_modules()
+    public static function add_modules($selectedList = [])
     {
         $path = '/modules';
         $method = 'get';
@@ -705,15 +708,7 @@ class DataObjectRESTBuilder extends xarObject
         $listproperties = self::get_list_properties($properties);
         self::add_operation_response($path, $method, $schema, $listproperties);
         if (empty(self::$modules)) {
-            $modulelist = ['dynamicdata'];
-            self::$modules = [];
-            xarMod::init();
-            foreach ($modulelist as $module) {
-                self::$modules[$module] = [
-                    'module' => $module,
-                    'apilist' => xarMod::apiFunc($module, 'rest', 'getlist'),
-                ];
-            }
+            self::$modules = self::get_potential_modules($selectedList);
         }
         foreach (self::$modules as $itemid => $item) {
             self::add_module_apilist($item['module'], $item['apilist']);
@@ -807,6 +802,9 @@ class DataObjectRESTBuilder extends xarObject
             ],
         ];
         foreach ($apilist as $api => $item) {
+            if (isset($item['enabled']) && empty($item['enabled'])) {
+                continue;
+            }
             self::add_module_api($module, $api, $item);
         }
         self::$tags[] = ['name' => $module . '_module', 'description' => $module . ' module operations'];
@@ -879,13 +877,52 @@ class DataObjectRESTBuilder extends xarObject
         self::$schemas[$schema] = $item['response'];
     }
 
+    public static function get_potential_modules($selectedList = [])
+    {
+        $moduleList = ['dynamicdata'];
+        $allowed = [];
+        foreach ($selectedList as $item) {
+            if (strpos($item, '.') === false) {
+                continue;
+            }
+            list($module, $api) = explode('.', $item);
+            if (!in_array($module, $moduleList)) {
+                $moduleList[] = $module;
+            }
+            if (!array_key_exists($module, $allowed)) {
+                $allowed[$module] = [];
+            }
+            $allowed[$module][] = $api;
+        }
+        xarMod::init();
+        $items = [];
+        foreach ($moduleList as $module) {
+            $items[$module] = [
+                'module' => $module,
+                'apilist' => [],
+            ];
+            $apiList = xarMod::apiFunc($module, 'rest', 'getlist');
+            foreach ($apiList as $api => $info) {
+                if (empty($allowed)) {
+                    $info['enabled'] = true;
+                } elseif (!empty($allowed[$module]) && in_array($api, $allowed[$module])) {
+                    $info['enabled'] = true;
+                } else {
+                    $info['enabled'] = false;
+                }
+                $items[$module]['apilist'][$api] = $info;
+            }
+        }
+        return $items;
+    }
+
     public static function add_token()
     {
         $path = '/token';
         $method = 'post';
         $schema = 'access-token';
         $operationId = str_replace('-', '_', $schema);
-        $description = 'Get API access token (TODO)';
+        $description = 'Get API access token';
         self::$paths[$path] = [
             $method => [
                 'tags' => ['start'],
@@ -904,7 +941,7 @@ class DataObjectRESTBuilder extends xarObject
             'access' => [
                 'type' => 'string',
                 'default' => 'display',
-                'enum' => ['view', 'display', 'update', 'create', 'delete', 'admin'],
+                'enum' => ['view', 'display', 'update', 'create', 'delete', 'config', 'admin'],
             ],
         ];
         self::add_operation_requestBody($path, $method, $schema, $properties);
