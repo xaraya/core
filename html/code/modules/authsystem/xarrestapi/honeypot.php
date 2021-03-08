@@ -1,7 +1,7 @@
 <?php
 /**
- * @package modules\dynamicdata
- * @subpackage dynamicdata
+ * @package modules\authsystem
+ * @subpackage authsystem
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -15,11 +15,14 @@
  *
  * @return array of info
  */
-function dynamicdata_restapi_get_hello($args = [])
+function authsystem_restapi_honeypot($args = [])
 {
-    // @checkme pass all args from handler here?
+    // @checkme handle POSTed args by passing $args['input'] only in handler?
     //extract($args);
-    $result = 'World';
-    //xarVar::fetch('name', 'isset', $name, null, xarVar::NOT_REQUIRED);
-    return !empty($args['name']) ? $args['name'] : $result;
+    if (empty($args['username']) || empty($args['password'])) {
+        $result = 'Missing username or password.';
+    } else {
+        $result = 'Wanna have a cookie?';
+    }
+    return $result;
 }
