@@ -706,7 +706,7 @@ class xarGraphQLBuildType
                 // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
                 $values = $objectitem->getFieldValues(array(), 1);
             } catch (Exception $e) {
-                print_r($e-getMessage());
+                //print_r($e->getMessage());
                 $values = array('id' => $args['id']);
             }
             // see objecttype

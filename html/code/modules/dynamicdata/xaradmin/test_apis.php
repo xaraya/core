@@ -44,6 +44,8 @@ function dynamicdata_admin_test_apis(array $args=[])
         }
     }
     xarVar::fetch('tokenstorage', 'isset', $tokenstorage, 'database', xarVar::NOT_REQUIRED);
+    xarVar::fetch('querycomplexity', 'isset', $queryComplexity, 0, xarVar::NOT_REQUIRED);
+    xarVar::fetch('querydepth', 'isset', $queryDepth, 0, xarVar::NOT_REQUIRED);
     $restapilist = [];
     $graphqllist = [];
     if (!empty($restapi) && !empty($graphql) && xarSec::confirmAuthKey()) {
@@ -52,6 +54,8 @@ function dynamicdata_admin_test_apis(array $args=[])
         $graphqllist = array_keys($graphql);
         xarModVars::set('dynamicdata', 'graphql_object_list', serialize($graphqllist));
         xarModVars::set('dynamicdata', 'restapi_token_storage', $tokenstorage);
+        xarModVars::set('dynamicdata', 'graphql_query_complexity', intval($queryComplexity));
+        xarModVars::set('dynamicdata', 'graphql_query_depth', intval($queryDepth));
     } else {
         $restapiserial = xarModVars::get('dynamicdata', 'restapi_object_list');
         if (!empty($restapiserial)) {
@@ -63,6 +67,8 @@ function dynamicdata_admin_test_apis(array $args=[])
             $graphqllist = unserialize($graphqlserial);
         }
         $tokenstorage = xarModVars::get('dynamicdata', 'restapi_token_storage');
+        $queryComplexity = xarModVars::get('dynamicdata', 'graphql_query_complexity');
+        $queryDepth = xarModVars::get('dynamicdata', 'graphql_query_depth');
     }
 
     DataObjectRESTBuilder::init();
@@ -98,7 +104,7 @@ function dynamicdata_admin_test_apis(array $args=[])
                 $extraTypes[] = $type;
             }
         }
-        xarGraphQL::dump_schema($extraTypes);
+        xarGraphQL::dump_schema($extraTypes, $queryComplexity, $queryDepth);
         xarController::redirect(xarServer::getCurrentURL(['create_gql'=> null]));
         return true;
     }
@@ -155,6 +161,8 @@ function dynamicdata_admin_test_apis(array $args=[])
             'enabled' => function_exists('apcu_fetch') ? true : false,
         ],
     ];
+    $data['querycomplexity'] = $queryComplexity;
+    $data['querydepth'] = $queryDepth;
 
     xarTpl::setPageTemplateName('admin');
 

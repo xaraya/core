@@ -40,8 +40,8 @@ use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
 use GraphQL\Type\Definition\Type;
 
-// use GraphQL\Validator\Rules;
-// use GraphQL\Validator\DocumentValidator;
+use GraphQL\Validator\Rules;
+use GraphQL\Validator\DocumentValidator;
 
 /**
  * See xardocs/graphql.txt for class structure
@@ -73,6 +73,8 @@ class xarGraphQL extends xarObject
     public static $cache_plan = false;
     public static $cache_data = false;
     public static $object_type = [];
+    public static $query_complexity = 0;
+    public static $query_depth = 0;
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -346,8 +348,12 @@ class xarGraphQL extends xarObject
         }
         
         // Add to standard set of rules globally (values from GraphQL Playground IntrospectionQuery)
-        // DocumentValidator::addRule(new Rules\QueryComplexity(181));
-        // DocumentValidator::addRule(new Rules\QueryDepth(11));
+        if (!empty(self::$query_complexity)) {
+            DocumentValidator::addRule(new Rules\QueryComplexity(self::$query_complexity));  // 181
+        }
+        if (!empty(self::$query_depth)) {
+            DocumentValidator::addRule(new Rules\QueryDepth(self::$query_depth));  // 11
+        }
         // DocumentValidator::addRule(new Rules\DisableIntrospection());
 
         $rootValue = ['prefix' => 'You said: message='];
@@ -413,13 +419,15 @@ class xarGraphQL extends xarObject
         echo $data;
     }
 
-    public static function dump_schema($extraTypes = null)
+    public static function dump_schema($extraTypes = null, $queryComplexity = 0, $queryDepth = 0)
     {
         $configFile = sys::varpath() . '/cache/api/graphql_config.json';
         $configData = array();
         $configData['generated'] = date('c');
         $configData['caution'] = 'This file is updated when you rebuild the schema.graphql document in Dynamic Data - Utilities - Test APIs';
         $configData['extraTypes'] = $extraTypes;
+        $configData['queryComplexity'] = intval($queryComplexity);
+        $configData['queryDepth'] = intval($queryDepth);
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         $content = self::get_data('{schema}', [], null, $extraTypes);

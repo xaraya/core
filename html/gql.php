@@ -65,8 +65,17 @@ $configFile = sys::varpath() . '/cache/api/graphql_config.json';
 if (file_exists($configFile)) {
     $contents = file_get_contents($configFile);
     $configData = json_decode($contents, true);
-    if (!empty($configData) && !empty($configData['extraTypes'])) {
+    if (empty($configData)) {
+        $configData = [];
+    }
+    if (!empty($configData['extraTypes'])) {
         $extraTypes = $configData['extraTypes'];
+    }
+    if (!empty($configData['queryComplexity'])) {
+        xarGraphQL::$query_complexity = $configData['queryComplexity'];
+    }
+    if (!empty($configData['queryDepth'])) {
+        xarGraphQL::$query_depth = $configData['queryDepth'];
     }
 }
 $data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);

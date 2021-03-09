@@ -172,6 +172,22 @@
                         </select>
                     </div>
                 </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                       GraphQL Query Complexity Limit
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" name="querycomplexity" id="querycomplexity" size="3" value="#$querycomplexity#"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                       GraphQL Query Depth Limit
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" name="querydepth" id="querydepth" size="3" value="#$querydepth#"/>
+                    </div>
+                </div>
                 <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
                 <xar:var name="label">Update List</xar:var>
                 <xar:button type="submit" label="$label"/>
