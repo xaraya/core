@@ -589,7 +589,20 @@ class DataObjectRESTHandler extends xarObject
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkUser();
+            $userId = self::checkUser();
+            // @checkme assume we have a security mask here
+            if (is_string($func['security'])) {
+                $role = xarRoles::getRole($userId);
+                $rolename = $role->getName();
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $module, $rolename);
+            // @todo verify access for user based on what?
+            } else {
+                $pass = true;
+            }
+            if (!$pass) {
+                http_response_code(403);
+                exit;
+            }
         }
         xarMod::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
@@ -611,7 +624,20 @@ class DataObjectRESTHandler extends xarObject
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkUser();
+            $userId = self::checkUser();
+            // @checkme assume we have a security mask here
+            if (is_string($func['security'])) {
+                $role = xarRoles::getRole($userId);
+                $rolename = $role->getName();
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $module, $rolename);
+            // @todo verify access for user based on what?
+            } else {
+                $pass = true;
+            }
+            if (!$pass) {
+                http_response_code(403);
+                exit;
+            }
         }
         xarMod::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
