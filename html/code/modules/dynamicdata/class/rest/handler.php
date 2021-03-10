@@ -21,9 +21,9 @@ class DataObjectRESTHandler extends xarObject
     public static $schemas = [];
     public static $config = [];
     public static $modules = [];
-    public static $expires = 12 * 60 * 60;  // 12 hours
-    public static $storageType = 'database';
-    public static $cacheStorage;
+    public static $tokenExpires = 12 * 60 * 60;  // 12 hours
+    public static $storageType = 'database';  // database or apcu
+    public static $tokenStorage;
     public static $userId;
 
     public static function getOpenAPI($args = null)
@@ -332,6 +332,9 @@ class DataObjectRESTHandler extends xarObject
             if (!empty(self::$config['storage'])) {
                 self::$storageType = self::$config['storage'];
             }
+            if (!empty(self::$config['expires'])) {
+                self::$tokenExpires = intval(self::$config['expires']);
+            }
         }
     }
 
@@ -431,7 +434,7 @@ class DataObjectRESTHandler extends xarObject
         $userInfo = self::checkToken();
         if (!empty($userInfo)) {
             $userInfo = @json_decode($userInfo, true);
-            if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$expires))) {
+            if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$tokenExpires))) {
                 http_response_code(401);
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
                 header('WWW-Authenticate: Token realm="Xaraya Site Login", created=');
@@ -472,10 +475,10 @@ class DataObjectRESTHandler extends xarObject
     private static function checkToken()
     {
         $token = !empty($_SERVER['HTTP_X_AUTH_TOKEN']) ? $_SERVER['HTTP_X_AUTH_TOKEN'] : '';
-        if (empty($token) || !(self::getCacheStorage()->isCached($token))) {
+        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
             return;
         }
-        return self::getCacheStorage()->getCached($token);
+        return self::getTokenStorage()->getCached($token);
     }
 
     public static function postToken($args)
@@ -513,25 +516,25 @@ class DataObjectRESTHandler extends xarObject
             return ['method' => 'postToken', 'error' => 'no decent token generator'];
         }
         // @checkme clean up cachestorage occasionally based on size
-        self::getCacheStorage()->sizeLimitReached();
-        self::getCacheStorage()->setCached($token, json_encode(['userId' => $userId, 'access' => $access, 'created' => time()]));
-        $expiration = date('c', time() + self::$expires);
-        return ['access_token' => $token, 'expiration' => $expiration, 'error' => 'TODO'];
+        self::getTokenStorage()->sizeLimitReached();
+        self::getTokenStorage()->setCached($token, json_encode(['userId' => $userId, 'access' => $access, 'created' => time()]));
+        $expiration = date('c', time() + self::$tokenExpires);
+        return ['access_token' => $token, 'expiration' => $expiration];
     }
 
-    public static function getCacheStorage()
+    public static function getTokenStorage()
     {
-        if (!isset(self::$cacheStorage)) {
+        if (!isset(self::$tokenStorage)) {
             self::loadConfig();
             // @checkme access cachestorage directly here
-            self::$cacheStorage = xarCache::getStorage([
+            self::$tokenStorage = xarCache::getStorage([
                 'storage' => self::$storageType,
                 'type' => 'token',
-                'expire' => self::$expires,
+                'expire' => self::$tokenExpires,
                 'sizelimit' => 2000000,
             ]);
         }
-        return self::$cacheStorage;
+        return self::$tokenStorage;
     }
 
     public static function getModuleURL($module = null, $api = null, $args = [])

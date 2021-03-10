@@ -29,7 +29,8 @@ class DataObjectRESTBuilder extends xarObject
     protected static $securitySchemes = [];
     protected static $tags = [];
     protected static $modules = [];
-    protected static $storage = 'database';
+    protected static $storage = 'database';  // database or apcu
+    protected static $expires = 12 * 60 * 60;  // 12 hours
 
     public static function init(array $args = [])
     {
@@ -56,9 +57,10 @@ class DataObjectRESTBuilder extends xarObject
         return $doc;
     }
 
-    public static function create_openapi($selectedList = [], $storage = 'database')
+    public static function create_openapi($selectedList = [], $storage = 'database', $expires = 12 * 60 * 60)
     {
         self::$storage = $storage;
+        self::$expires = intval($expires);
         self::init_openapi();
         self::add_objects($selectedList);
         self::add_whoami();
@@ -99,6 +101,7 @@ class DataObjectRESTBuilder extends xarObject
         $configData['objects'] = self::$objects;
         $configData['modules'] = self::$modules;
         $configData['storage'] = self::$storage;
+        $configData['expires'] = self::$expires;
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
     }
 

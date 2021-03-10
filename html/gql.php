@@ -72,10 +72,16 @@ if (file_exists($configFile)) {
         $extraTypes = $configData['extraTypes'];
     }
     if (!empty($configData['queryComplexity'])) {
-        xarGraphQL::$query_complexity = $configData['queryComplexity'];
+        xarGraphQL::$queryComplexity = $configData['queryComplexity'];
     }
     if (!empty($configData['queryDepth'])) {
-        xarGraphQL::$query_depth = $configData['queryDepth'];
+        xarGraphQL::$queryDepth = $configData['queryDepth'];
+    }
+    if (!empty($configData['tokenExpires'])) {
+        xarGraphQL::$tokenExpires = $configData['tokenExpires'];
+    }
+    if (!empty($configData['storageType'])) {
+        xarGraphQL::$storageType = $configData['storageType'];
     }
 }
 $data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);

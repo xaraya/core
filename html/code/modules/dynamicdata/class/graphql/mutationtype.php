@@ -16,6 +16,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 class xarGraphQLMutationType extends ObjectType
 {
     public static $mutation_mapper = [
+        'getToken'     => 'tokentype',
         'createSample' => 'sampletype',
         'updateSample' => 'sampletype',
         'deleteSample' => 'sampletype',
