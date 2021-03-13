@@ -798,8 +798,15 @@ class xarGraphQLBuildType
                 //$params = array('name' => $object, 'itemid' => $args['input']['id']);
                 unset($args['input']['id']);
             }
+            $userId = xarGraphQL::checkUser($context);
+            if (empty($userId)) {
+                throw new Exception('Invalid user');
+            }
             $params = array('name' => $object);
             $objectitem = DataObjectMaster::getObject($params);
+            if (!$objectitem->checkAccess('create', 0, $userId)) {
+                throw new Exception('Invalid user access');
+            }
             $itemid = $objectitem->createItem($args['input']);
             if (!empty($params['itemid']) && $itemid != $params['itemid']) {
                 throw new Exception('Unknown item ' . $type);
@@ -842,8 +849,15 @@ class xarGraphQLBuildType
             if (empty($args['input']) || empty($args['input']['id'])) {
                 throw new Exception('Unknown input ' . $type);
             }
+            $userId = xarGraphQL::checkUser($context);
+            if (empty($userId)) {
+                throw new Exception('Invalid user');
+            }
             $params = array('name' => $object, 'itemid' => $args['input']['id']);
             $objectitem = DataObjectMaster::getObject($params);
+            if (!$objectitem->checkAccess('update', $params['itemid'], $userId)) {
+                throw new Exception('Invalid user access');
+            }
             $itemid = $objectitem->updateItem($args['input']);
             if ($itemid != $params['itemid']) {
                 throw new Exception('Unknown item ' . $type);
@@ -886,8 +900,15 @@ class xarGraphQLBuildType
             if (empty($args['id'])) {
                 throw new Exception('Unknown id ' . $type);
             }
+            $userId = xarGraphQL::checkUser($context);
+            if (empty($userId)) {
+                throw new Exception('Invalid user');
+            }
             $params = array('name' => $object, 'itemid' => $args['id']);
             $objectitem = DataObjectMaster::getObject($params);
+            if (!$objectitem->checkAccess('delete', $params['itemid'], $userId)) {
+                throw new Exception('Invalid user access');
+            }
             $itemid = $objectitem->deleteItem();
             if ($itemid != $params['itemid']) {
                 throw new Exception('Unknown item ' . $type);

@@ -125,7 +125,7 @@ class DataObjectRESTBuilder extends xarObject
             'name' => 'id',
             'in' => 'path',
             'schema' => [
-                'type' => 'string',
+                'type' => 'integer',
             ],
             'description' => 'itemid value',
             'required' => true,
@@ -189,7 +189,7 @@ class DataObjectRESTBuilder extends xarObject
             'content' => [
                 'application/json' => [
                     'schema' => [
-                        'type' => 'string',
+                        'type' => 'integer',
                     ],
                 ],
             ],
@@ -203,6 +203,9 @@ class DataObjectRESTBuilder extends xarObject
                     ],
                 ],
             ],
+        ];
+        self::$responses['forbidden'] = [
+            'description' => 'Access to the requested resource is forbidden',
         ];
     }
 
@@ -238,6 +241,9 @@ class DataObjectRESTBuilder extends xarObject
         if (!$add_auth) {
             return;
         }
+        self::$paths[$path][$method]['responses']['403'] = [
+            '$ref' => '#/components/responses/forbidden',
+        ];
         self::$paths[$path][$method]['security'] = [
             ['cookieAuth' => []],
             //['bearerAuth' => []],

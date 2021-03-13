@@ -83,9 +83,10 @@ class DataObjectRESTHandler extends xarObject
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectList', 'args' => $args, 'error' => 'Unknown operation'];
         }
+        $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkUser();
+            $userId = self::checkUser();
             //$args['access'] = 'view';
         }
         // @checkme always count here
@@ -97,7 +98,7 @@ class DataObjectRESTHandler extends xarObject
         $loader = new DataObjectLoader($object, $fieldlist);
         $loader->parseQueryArgs($args);
         $objectlist = $loader->getObjectList();
-        if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view')) {
+        if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view', 0, $userId)) {
             http_response_code(403);
             exit;
         }
@@ -142,7 +143,7 @@ class DataObjectRESTHandler extends xarObject
     public static function getObjectItem($args)
     {
         $object = $args['object'];
-        $itemid = $args['itemid'];
+        $itemid = intval($args['itemid']);
         $method = 'display';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -150,15 +151,16 @@ class DataObjectRESTHandler extends xarObject
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
+        $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkUser();
+            $userId = self::checkUser();
             //$args['access'] = 'display';
         }
         $fieldlist = self::getDisplayProperties($object);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
         $objectitem = DataObjectMaster::getObject($params);
-        if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display')) {
+        if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
             http_response_code(403);
             exit;
         }
@@ -199,7 +201,7 @@ class DataObjectRESTHandler extends xarObject
             return ['method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        self::checkUser();
+        $userId = self::checkUser();
         $fieldlist = self::getCreateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -210,7 +212,7 @@ class DataObjectRESTHandler extends xarObject
         }
         $params = ['name' => $object];
         $objectitem = DataObjectMaster::getObject($params);
-        if (!$objectitem->checkAccess('create')) {
+        if (!$objectitem->checkAccess('create', 0, $userId)) {
             http_response_code(403);
             exit;
         }
@@ -225,7 +227,7 @@ class DataObjectRESTHandler extends xarObject
     public static function updateObjectItem($args)
     {
         $object = $args['object'];
-        $itemid = $args['itemid'];
+        $itemid = intval($args['itemid']);
         $method = 'update';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'updateObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -234,7 +236,7 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        self::checkUser();
+        $userId = self::checkUser();
         $fieldlist = self::getUpdateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -245,7 +247,7 @@ class DataObjectRESTHandler extends xarObject
         }
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
-        if (!$objectitem->checkAccess('update')) {
+        if (!$objectitem->checkAccess('update', $itemid, $userId)) {
             http_response_code(403);
             exit;
         }
@@ -260,7 +262,7 @@ class DataObjectRESTHandler extends xarObject
     public static function deleteObjectItem($args)
     {
         $object = $args['object'];
-        $itemid = $args['itemid'];
+        $itemid = intval($args['itemid']);
         $method = 'delete';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'deleteObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -269,10 +271,10 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        self::checkUser();
+        $userId = self::checkUser();
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
-        if (!$objectitem->checkAccess('delete')) {
+        if (!$objectitem->checkAccess('delete', $itemid, $userId)) {
             http_response_code(403);
             exit;
         }
