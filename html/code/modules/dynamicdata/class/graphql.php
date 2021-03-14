@@ -65,6 +65,8 @@ class xarGraphQL extends xarObject
         'serial'   => 'serialtype',
         'mixed'    => 'mixedtype',
         'mutation' => 'mutationtype',
+        //'node'     => 'nodetype',
+        //'ddnode'   => 'ddnodetype',
     ];
     public static $extra_types = [];
     public static $trace_path = false;
@@ -80,6 +82,7 @@ class xarGraphQL extends xarObject
     public static $storageType = 'database';  // database or apcu
     public static $tokenStorage;
     public static $userId;
+    public static $objectSecurity = [];
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -97,6 +100,7 @@ class xarGraphQL extends xarObject
         $schema = new Schema([
             'query' => $queryType,
             'mutation' => $mutationType,
+            //'types' => [self::get_type("ddnode")],  // invisible types
             'typeLoader' => function ($name) {
                 return self::get_type($name);
             }
@@ -114,6 +118,9 @@ class xarGraphQL extends xarObject
             $clazz = self::get_type_class($type);
             if (property_exists($clazz, '_xar_object') && !empty($clazz::$_xar_object)) {
                 self::$object_type[$clazz::$_xar_object] = $name;
+                if (property_exists($clazz, '_xar_security') && isset($clazz::$_xar_security)) {
+                    self::$objectSecurity[$clazz::$_xar_object] = $clazz::$_xar_security;
+                }
             }
         }
         $clazz = self::get_type_class("buildtype");
@@ -278,6 +285,8 @@ class xarGraphQL extends xarObject
             'serialtype' => xarGraphQLSerialType::class,
             'mixedtype' => xarGraphQLMixedType::class,
             'mutationtype' => xarGraphQLMutationType::class,
+            //'nodetype' => xarGraphQLNodeType::class,
+            //'ddnodetype' => xarGraphQLDDNodeType::class,
         ];
         if (!array_key_exists($type, $class_mapper) && array_key_exists($type, self::$type_mapper)) {
             $type = self::$type_mapper[$type];
@@ -493,6 +502,11 @@ class xarGraphQL extends xarObject
             ]);
         }
         return self::$tokenStorage;
+    }
+
+    public static function hasSecurity($object, $method = null)
+    {
+        return !empty(self::$objectSecurity[$object]) ? true : false;
     }
 
     public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0)

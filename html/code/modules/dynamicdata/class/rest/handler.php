@@ -491,8 +491,14 @@ class DataObjectRESTHandler extends xarObject
         }
         $uname = $args['input']['uname'];
         $pass = $args['input']['pass'];
+        if (empty($uname) || empty($pass)) {
+            http_response_code(401);
+            //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
+            header('WWW-Authenticate: Token realm="Xaraya Site Login", uname=, pass=');
+            exit;
+        }
         $access = $args['input']['access'];
-        if (!in_array($access, ['display', 'update', 'create', 'delete', 'admin'])) {
+        if (empty($access) || !in_array($access, ['display', 'update', 'create', 'delete', 'admin'])) {
             http_response_code(401);
             //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
             header('WWW-Authenticate: Token realm="Xaraya Site Login", access=');

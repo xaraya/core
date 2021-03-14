@@ -22,6 +22,7 @@ class xarGraphQLTokenType extends ObjectType
     {
         $config = [
             'name' => 'Token',
+            'description' => 'API access token',
             'fields' => [
                 'access_token' => ['type' => Type::string()],
                 'expiration' => ['type' => Type::string()],
@@ -35,15 +36,19 @@ class xarGraphQLTokenType extends ObjectType
     {
         return [
             'name' => 'getToken',
+            'description' => 'Get API access token',
             'type' => xarGraphQL::get_type('token'),
             'args' => [
                 'uname' => ['type' => Type::string()],
                 'pass' => ['type' => Type::string()],
-                'access' => ['type' => Type::string()],
+                'access' => ['type' => Type::string(), 'defaultValue' => 'display'],
             ],
             'resolve' => function ($rootValue, $args) {
                 if (empty($args['uname']) || empty($args['pass'])) {
                     throw new Exception('Invalid username or password');
+                }
+                if (empty($args['access']) || !in_array($args['access'], ['display', 'update', 'create', 'delete', 'admin'])) {
+                    throw new Exception('Invalid access');
                 }
                 //xarSession::init();
                 xarMod::init();
@@ -54,7 +59,7 @@ class xarGraphQLTokenType extends ObjectType
                 if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
                     throw new Exception('Invalid username or password');
                 }
-                $userInfo = ['userId' => $userId, 'access' => $access, 'created' => time()];
+                $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];
                 $token = xarGraphQL::createToken($userInfo);
                 $expiration = date('c', time() + xarGraphQL::$tokenExpires);
                 return ['access_token' => $token, 'expiration' => $expiration];

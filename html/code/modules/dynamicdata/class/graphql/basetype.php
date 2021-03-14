@@ -25,6 +25,7 @@ class xarGraphQLBaseType extends ObjectType
     public static $_xar_list   = '';
     public static $_xar_item   = '';
     protected static $_xar_deferred = array();
+    public static $_xar_security = true;
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
@@ -34,6 +35,7 @@ class xarGraphQLBaseType extends ObjectType
         if (empty($config)) {
             $config = [
                 'name' => static::$_xar_name,
+                'description' => 'DD ' . static::$_xar_object . ' item',
                 'fields' => static::_xar_get_object_fields(static::$_xar_object),
             ];
         }
@@ -59,7 +61,7 @@ class xarGraphQLBaseType extends ObjectType
     public static function _xar_get_input_type()
     {
         $input = static::$_xar_name . '_Input';
-        $description = "$input: input " . static::$_xar_type . " type for " . static::$_xar_object . " objects";
+        $description = "Input for DD " . static::$_xar_object . " item";
         $fields = static::_xar_get_object_fields(static::$_xar_object);
         if (!empty($fields['id'])) {
             //unset($fields['id']);
@@ -98,6 +100,7 @@ class xarGraphQLBaseType extends ObjectType
     {
         return [
             'name' => $list,
+            'description' => 'List DD ' . $object . ' items',
             //'type' => Type::listOf(xarGraphQL::get_type($type)),
             'type' => xarGraphQL::get_type_list($type),
             'args' => [
@@ -112,6 +115,9 @@ class xarGraphQLBaseType extends ObjectType
                 //],
                 'filter' => Type::listOf(Type::string()),
             ],
+            //'extensions' => [
+            //    'access' => 'view',
+            //],
             'resolve' => static::_xar_list_query_resolver($type, $object),
         ];
     }
@@ -134,10 +140,14 @@ class xarGraphQLBaseType extends ObjectType
     {
         return [
             'name' => $item,
+            'description' => 'Get DD ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
                 'id' => Type::nonNull(Type::id())
             ],
+            //'extensions' => [
+            //    'access' => 'display',
+            //],
             'resolve' => static::_xar_item_query_resolver($type, $object),
         ];
     }
@@ -306,10 +316,14 @@ class xarGraphQLBaseType extends ObjectType
     {
         return [
             'name' => $name,
+            'description' => 'Create DD ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
                 'input' => xarGraphQL::get_input_type($type)
             ],
+            //'extensions' => [
+            //    'access' => 'create',
+            //],
             'resolve' => static::_xar_create_mutation_resolver($type, $object),
         ];
     }
@@ -332,10 +346,14 @@ class xarGraphQLBaseType extends ObjectType
     {
         return [
             'name' => $name,
+            'description' => 'Update DD ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
                 'input' => xarGraphQL::get_input_type($type)
             ],
+            //'extensions' => [
+            //    'access' => 'update',
+            //],
             'resolve' => static::_xar_update_mutation_resolver($type, $object),
         ];
     }
@@ -358,10 +376,14 @@ class xarGraphQLBaseType extends ObjectType
     {
         return [
             'name' => $name,
+            'description' => 'Delete DD ' . $object . ' item',
             'type' => Type::nonNull(Type::id()),
             'args' => [
                 'id' => Type::nonNull(Type::id())
             ],
+            //'extensions' => [
+            //    'access' => 'delete',
+            //],
             'resolve' => static::_xar_delete_mutation_resolver($type, $object),
         ];
     }

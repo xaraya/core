@@ -34,7 +34,7 @@ class xarGraphQLBuildType
     {
         // name=Property, type=property, object=properties, list=properties, item=property
         list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
-        $description = "$name: generic $type type for $object objects ($list, $item)";
+        $description = "$object item";
         $fields = self::get_object_fields($object);
         $newType = new ObjectType([
             'name' => $name,
@@ -53,7 +53,7 @@ class xarGraphQLBuildType
         // name=Property, type=property, object=properties, list=properties, item=property
         list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
         $page = $name . '_Page';
-        $description = "$page: paginated list of $list for $object objects";
+        $description = "Paginated list of $object items";
         $fields = [
             'order' => Type::string(),
             'offset' => Type::int(),
@@ -80,7 +80,7 @@ class xarGraphQLBuildType
         // name=Property, type=property, object=properties, list=properties, item=property
         list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
         $input = $name . '_Input';
-        $description = "$input: input $type type for $object objects";
+        $description = "Input for $object item";
         // @todo adapt object fields to InputObjectType where needed, e.g. KeyVal to Mixed?
         $fields = self::get_object_fields($object);
         if (!empty($fields['id'])) {
@@ -511,6 +511,7 @@ class xarGraphQLBuildType
     {
         return [
             'name' => $list . '_page',
+            'description' => 'Page ' . $object . ' items',
             'type' => xarGraphQL::get_page_type($type),
             'args' => [
                 'order' => Type::string(),
@@ -568,12 +569,26 @@ class xarGraphQLBuildType
             } else {
                 $fieldlist = array_keys($fields);
             }
+            // @checkme original query field definition config
+            //$config = $info->fieldDefinition->config;
+            //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
+            //}
+            $userId = 0;
+            if (xarGraphQL::hasSecurity($object)) {
+                $userId = xarGraphQL::checkUser($context);
+                if (empty($userId)) {
+                    throw new Exception('Invalid user');
+                }
+            }
             $loader = new DataObjectLoader($object, $fieldlist);
-            //$loader->parseQueryArgs($args);
-            //$objectlist = $loader->getObjectList();
-            //$params = $loader->addPagingParams();
-            //$items = $objectlist->getItems($params);
-            $args[$list] = $loader->query($args);
+            $loader->parseQueryArgs($args);
+            $objectlist = $loader->getObjectList();
+            if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
+                throw new Exception('Invalid user access');
+            }
+            $params = $loader->addPagingParams();
+            $args[$list] = $objectlist->getItems($params);
+            //$args[$list] = $loader->query($args);
             if (!empty($args['count'])) {
                 $args['count'] = $loader->count;
             }
@@ -589,6 +604,7 @@ class xarGraphQLBuildType
     {
         return [
             'name' => $list,
+            'description' => 'List ' . $object . ' items',
             //'type' => Type::listOf(xarGraphQL::get_type($type)),
             'type' => xarGraphQL::get_type_list($type),
             /**
@@ -612,13 +628,13 @@ class xarGraphQLBuildType
     /**
      * Get the list query resolver for the object type
      */
-    public static function list_query_resolver($type, $object = null, $todo = null)
+    public static function list_query_resolver($type, $object = null)
     {
         // when using type config decorator and object_query_resolver
         if (!isset($object)) {
             list($name, $type, $object, $list, $item) = self::sanitize($type);
         }
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object, $todo) {
+        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (empty(xarGraphQL::$query_plan)) {
                 $queryType = $type . '_list';
                 self::check_query_plan($queryType, $rootValue, $args, $context, $info);
@@ -634,21 +650,31 @@ class xarGraphQLBuildType
             //if (array_key_exists('id', $fields) && count($fields) < 2) {
             //    return array('id' => $values[$prop_name]);
             //}
-            // @checkme if we come from page_query_resolver, $info is still on the page query so we need to drill down
             if (array_key_exists($type, xarGraphQL::$type_fields)) {
                 $fieldlist = xarGraphQL::$type_fields[$type];
-            } elseif (!empty($todo) && array_key_exists($todo, $fields)) {
-                //xarGraphQL::$paths[] = "Return: " . $info->returnType->getField($todo)->getType()->getOfType();
-                $fieldlist = array_keys($fields[$todo]);
             } else {
                 $fieldlist = array_keys($fields);
             }
+            // @checkme original query field definition config
+            //$config = $info->fieldDefinition->config;
+            //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
+            //}
+            $userId = 0;
+            if (xarGraphQL::hasSecurity($object)) {
+                $userId = xarGraphQL::checkUser($context);
+                if (empty($userId)) {
+                    throw new Exception('Invalid user');
+                }
+            }
             $loader = new DataObjectLoader($object, $fieldlist);
-            //$loader->parseQueryArgs($args);
-            //$objectlist = $loader->getObjectList();
-            //$params = $loader->addPagingParams();
-            //$items = $objectlist->getItems($params);
-            $items = $loader->query($args);
+            $loader->parseQueryArgs($args);
+            $objectlist = $loader->getObjectList();
+            if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
+                throw new Exception('Invalid user access');
+            }
+            $params = $loader->addPagingParams();
+            $items = $objectlist->getItems($params);
+            //$items = $loader->query($args);
             return $items;
         };
         return $resolver;
@@ -661,6 +687,7 @@ class xarGraphQLBuildType
     {
         return [
             'name' => $item,
+            'description' => 'Get ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
                 'id' => Type::nonNull(Type::id())
@@ -694,8 +721,22 @@ class xarGraphQLBuildType
             if (empty($args['id'])) {
                 throw new Exception('Unknown ' . $type);
             }
+            // @checkme original query field definition config
+            //$config = $info->fieldDefinition->config;
+            //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
+            //}
+            $userId = 0;
+            if (xarGraphQL::hasSecurity($object)) {
+                $userId = xarGraphQL::checkUser($context);
+                if (empty($userId)) {
+                    throw new Exception('Invalid user');
+                }
+            }
             $params = array('name' => $object, 'itemid' => $args['id']);
             $objectitem = DataObjectMaster::getObject($params);
+            if (xarGraphQL::hasSecurity($object) && !$objectitem->checkAccess('display', $params['itemid'], $userId)) {
+                throw new Exception('Invalid user access');
+            }
             $itemid = $objectitem->getItem();
             if ($itemid != $params['itemid']) {
                 throw new Exception('Unknown ' . $type);
@@ -769,6 +810,7 @@ class xarGraphQLBuildType
     {
         return [
             'name' => $name,
+            'description' => 'Create ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
                 'input' => xarGraphQL::get_input_type($type)
@@ -824,6 +866,7 @@ class xarGraphQLBuildType
     {
         return [
             'name' => $name,
+            'description' => 'Update ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
                 'input' => xarGraphQL::get_input_type($type)
@@ -875,6 +918,7 @@ class xarGraphQLBuildType
     {
         return [
             'name' => $name,
+            'description' => 'Delete ' . $object . ' item',
             'type' => Type::nonNull(Type::id()),
             'args' => [
                 'id' => Type::nonNull(Type::id())
