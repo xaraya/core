@@ -109,13 +109,25 @@ function base_admin_modifyconfig()
             $data['inheritdeny'] = xarModVars::get('privileges', 'inheritdeny');
 
             switch ($data['tab']) {
+                case 'setup':
+                $q = new Query();
+                $q->setstatement('select schema_name from information_schema.schemata');
+                $q->run('select schema_name from information_schema.schemata');
+                $nonxaraya = array('information_schema', 'performance_schema', 'sys', 'mysql');
+                $dbs = $q->output();
+                $data['allowed_dbs'] = array();
+                foreach ($dbs as $k => $row) {
+                	$db = reset($row);
+                	if (in_array($db, $nonxaraya)) continue;
+                	$data['allowed_dbs'][] = array('id' => $db, 'name' => $db);
+                }
+                break;
                 case 'security':
                 break;
                 case 'caching':
                     $data['cache_settings'] = xarCache::getConfig();
                     if (empty($data['cache_settings']['Variable.CacheStorage']))
                         $data['cache_settings']['Variable.CacheStorage'] = 'database';
-//                    var_dump($data['cache_settings']);
                 break;
                 case 'logging':
                     // Delete the log file and create a new, empty one
@@ -146,7 +158,9 @@ function base_admin_modifyconfig()
                 case 'setup':
                     if (!xarVar::fetch('middleware', 'str', $middleware, 'Creole' ,xarVar::NOT_REQUIRED)) return;
                     $variables = array('DB.Middleware' => $middleware);
-                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    $current_database = xarSystemVars::get(sys::CONFIG, 'DB.Name');
+                    if (!xarVar::fetch('database', 'str', $database, $current_database ,xarVar::NOT_REQUIRED)) return;
+                    $variables['DB.Name'] = $database;                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
                     xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'setup')));
                     break;
                 case 'display':
