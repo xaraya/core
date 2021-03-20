@@ -365,24 +365,21 @@ class VariableTableDataStore extends SQLDataStore
             $result->close();
 
             if ($dosort) {
-                $code = '';
-                foreach ($this->object->sort as $sortitem) {
-                    $code .= 'if (!isset($a['.$sortitem['field'].'])) $a['.$sortitem['field'].'] = "";';
-                    $code .= 'if (!isset($b['.$sortitem['field'].'])) $b['.$sortitem['field'].'] = "";';
-                    $code .= 'if ($a['.$sortitem['field'].'] != $b['.$sortitem['field'].']) {';
-                    if (!empty($sortitem['sortorder']) && strtolower($sortitem['sortorder']) == 'desc') {
-                        $code .= 'return ($b['.$sortitem['field'].'] > $a['.$sortitem['field'].']) ? 1 : -1;';
-                    } else {
-                        $code .= 'return ($a['.$sortitem['field'].'] > $b['.$sortitem['field'].']) ? 1 : -1;';
+                $sortlist = $this->object->sort;
+                uasort($items, function ($a, $b) use ($sortlist) {
+                    foreach ($sortlist as $sortitem) {
+                        if (!isset($a[$sortitem['field']])) $a[$sortitem['field']] = "";
+                        if (!isset($b[$sortitem['field']])) $b[$sortitem['field']] = "";
+                        if ($a[$sortitem['field']] != $b[$sortitem['field']]) {
+                            if (!empty($sortitem['sortorder']) && strtolower($sortitem['sortorder']) == 'desc') {
+                                return ($b[$sortitem['field']] > $a[$sortitem['field']]) ? 1 : -1;
+                            } else {
+                                return ($a[$sortitem['field']] > $b[$sortitem['field']]) ? 1 : -1;
+                            }
+                        }
                     }
-                    $code .= '} else {';
-                }
-                $code .= 'return 0;';
-                foreach ($this->object->sort as $sortitem) {
-                    $code .= '}';
-                }
-                $compare = create_function('$a, $b', $code);
-                uasort($items,$compare);
+                    return 0;
+                });
                 foreach ($items as $itemid => $values) {
                     foreach ($values as $propid => $value) {
                         $properties[$propid]->setItemValue($itemid,$value);

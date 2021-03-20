@@ -11,5 +11,18 @@ require_once 'creole/common/PdoIdGeneratorCommon.php';
  */
 class PdoSQLiteIdGenerator extends PdoIdGeneratorCommon {
     
+    // XARAYA MODIFICATION
+    public function getNextId($tableName)
+    {
+        // We dont know it, return null
+        return null;
+    }
+
+    public function getLastId($tableName)
+    {
+        // Same as getId
+        return $this->getId();
+    }
+    // END XARAYA MODIFICATION
 }
 

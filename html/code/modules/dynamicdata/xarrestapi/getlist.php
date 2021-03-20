@@ -15,14 +15,35 @@
  *
  * @return array of info
  */
-function dynamicdata_restapi_getlist($args = array())
+function dynamicdata_restapi_getlist($args = [])
 {
-    $apilist = array();
-    $apilist['get_hello'] = array(
+    $apilist = [];
+    $apilist['get_hello'] = [
+        //'type' => 'rest',  // default
         'path' => 'hello',
         'method' => 'get',
-        'description' => 'Hello World',
-        'parameters' => array('name')
-    );
+        //'security' => false,  // default REST APIs are public
+        'description' => 'Call REST API get_hello() in module dynamicdata',
+        'parameters' => ['name'],
+    ];
+    $apilist['post_hello'] = [
+        //'type' => 'rest',  // default
+        'path' => 'hello',
+        'method' => 'post',
+        'security' => true,
+        'description' => 'Call REST API post_hello() in module dynamicdata',
+        // @checkme verify/expand how POSTed values are defined - assuming simple json object with string props for now
+        'requestBody' => ['application/json' => ['name', 'score']],
+    ];
+    $apilist['getobjects'] = [
+        'type' => 'user',
+        'path' => 'anotherapi',
+        'method' => 'get',
+        'security' => 'ReadDynamicDataItem',  // choose depending on the api
+        'description' => 'Call existing module userapi function (getobjects) via REST API',
+        'parameters' => [],
+        // @todo transform assoc array("$itemid" => $item) to list of $item or not?
+        'response' => ['type' => 'array', 'items' => ['type' => 'object']],
+    ];
     return $apilist;
 }

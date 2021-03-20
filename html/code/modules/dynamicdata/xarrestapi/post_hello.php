@@ -15,9 +15,9 @@
  *
  * @return array of info
  */
-function dynamicdata_restapi_get_hello($args = [])
+function dynamicdata_restapi_post_hello($args = [])
 {
-    // @checkme pass all args from handler here?
+    // @checkme handle POSTed args by passing $args['input'] only in handler?
     //extract($args);
     $result = 'World';
     //xarVar::fetch('name', 'isset', $name, null, xarVar::NOT_REQUIRED);

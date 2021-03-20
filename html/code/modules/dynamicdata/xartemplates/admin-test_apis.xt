@@ -4,30 +4,6 @@
     <xar:style scope="module" file="dd"/>
     <xar:template file="admin-mod-head"/>
 
-    <!-- get the list of api objects -->
-    <xar:set name="restapiserial">xarModVars::get('dynamicdata','restapi_object_list')</xar:set>
-    <xar:if condition="!empty($restapiserial)">
-        <xar:set name="restapilist">unserialize($restapiserial)</xar:set>
-    <xar:else/>
-        <xar:set name="restapilist">array()</xar:set>
-    </xar:if>
-    <xar:set name="graphqlserial">xarModVars::get('dynamicdata','graphql_object_list')</xar:set>
-    <xar:if condition="!empty($graphqlserial)">
-        <xar:set name="graphqllist">unserialize($graphqlserial)</xar:set>
-    <xar:else/>
-        <xar:set name="graphqllist">array()</xar:set>
-    </xar:if>
-
-    <!-- define the list of api objects -->
-    <xar:set name="dummy">xarVar::fetch('restapi','array',$restapi,array(),xarVar::NOT_REQUIRED)</xar:set>
-    <xar:set name="dummy">xarVar::fetch('graphql','array',$graphql,array(),xarVar::NOT_REQUIRED)</xar:set>
-    <xar:if condition="!empty($restapi) and !empty($graphql) and xarSec::confirmAuthKey()">
-        <xar:set name="restapilist">array_keys($restapi)</xar:set>
-        <xar:set name="dummy">xarModVars::set('dynamicdata','restapi_object_list',serialize($restapilist))</xar:set>
-        <xar:set name="graphqllist">array_keys($graphql)</xar:set>
-        <xar:set name="dummy">xarModVars::set('dynamicdata','graphql_object_list',serialize($graphqllist))</xar:set>
-    </xar:if>
-
     <div class="xar-mod-body">
         <h2>Utilities - Test APIs</h2>
         <xar:template type="module" file="utility-menu"/>
@@ -135,12 +111,71 @@
                             </xar:if>
                         </tr>
                     </xar:foreach>
+                    <tr>
+                        <td>Other Object: <select name="object_new" id="object_new">
+                            <option value=""></option>
+                            <xar:foreach in="$otherlist" value="$item">
+                                <option value="#$item['name']#">#$item['label']#</option>
+                            </xar:foreach>
+                        </select></td>
+                        <td><input type="checkbox" name="restapi_new" id="restapi_new"/></td>
+                        <td><input type="checkbox" name="graphql_new" id="graphql_new"/></td>
+                    </tr>
+                    <tr>
+                        <td>Who am I?</td>
+                        <td><input type="checkbox" id="restapi_whoami" checked="checked" disabled="disabled"/></td>
+                        <td><input type="checkbox" id="graphql_whoami" checked="checked" disabled="disabled"/></td>
+                    </tr>
+                    <xar:foreach in="$modules" value="$item">
+                        <xar:foreach in="$item['apilist']" key="$api" value="$info">
+                        <tr>
+                            <xar:if condition="empty($info['type'])">
+                                <xar:set name="dummy">$info['type'] = 'rest'</xar:set>
+                            </xar:if>
+                            <td>Module <a href="#xarServer::getModuleURL($item['module'])#">#$item['module']#</a> #$info['type']# api #$api#()</td>
+                            <xar:if condition="empty($restapilist) or in_array($item['module'].'.'.$api, $restapilist)">
+                                <td><input type="checkbox" name="restapi[#$item['module']#.#$api#]" id="restapi_#$item['module']#.#$api#" checked="checked"/></td>
+                            <xar:else/>
+                                <td><input type="checkbox" name="restapi[#$item['module']#.#$api#]" id="restapi_#$item['module']#.#$api#"/></td>
+                            </xar:if>
+                            <td></td>
+                        </tr>
+                        </xar:foreach>
+                    </xar:foreach>
+                    <tr>
+                        <td>Other Module: <select name="module_new" id="module_new">
+                            <option value=""></option>
+                            <xar:foreach in="$othermodules" value="$item">
+                                <option value="#$item['name']#.any">#$item['displayname']#</option>
+                            </xar:foreach>
+                        </select></td>
+                        <td><input type="checkbox" name="restapi_module" id="restapi_module"/></td>
+                        <td></td>
+                    </tr>
                     </tbody>
                 </table>
+                <div class="xar-row">
+                    <div class="xar-col">
+                       API Token Cache Storage
+                    </div>
+                    <div class="xar-col">
+                        <select name="tokenstorage" id="tokenstorage">
+                            <xar:foreach in="$storagetypes" key="$storagetype" value="$storageinfo">
+                                <xar:if condition="empty($storageinfo['enabled'])">
+                                    <option value="#$storagetype#" disabled="disabled">#$storageinfo.label#</option>
+                                <xar:elseif condition="$tokenstorage eq $storagetype"/>
+                                    <option value="#$storagetype#" selected="selected">#$storageinfo.label#</option>
+                                <xar:else/>
+                                    <option value="#$storagetype#">#$storageinfo.label#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                    </div>
+                </div>
                 <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
                 <xar:var name="label">Update List</xar:var>
                 <xar:button type="submit" label="$label"/>
-                <p>Note: don't forget to &#8635; re-build the API schema document(s) above after updating this object list</p>
+                <p><span style="color:red;">Note: don't forget to &#8635; re-build the API schema document(s) above after updating this object list</span></p>
             </fieldset>
         </form>
     </div>
