@@ -22,6 +22,7 @@ class xarGraphQLKeyValType extends ObjectType
     {
         $config = [
             'name' => 'KeyVal',
+            'description' => 'Key Value combination for assoc arrays',
             'fields' => [
                 'key' => Type::string(),
                 //'value' => Type::string(),
@@ -46,7 +47,7 @@ class xarGraphQLKeyValType extends ObjectType
                 if (empty($object)) {
                     return null;
                 }
-                print_r($object);
+                //print_r($object);
                 if (array_key_exists($info->fieldName, $object)) {
                     return $object[$info->fieldName];
                 }

@@ -116,9 +116,23 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             } else {
                 $fieldlist = array_keys($fields);
             }
+            // @checkme original query field definition config
+            //$config = $info->fieldDefinition->config;
+            //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
+            //}
+            $userId = 0;
+            if (xarGraphQL::hasSecurity($object)) {
+                $userId = xarGraphQL::checkUser($context);
+                if (empty($userId)) {
+                    throw new Exception('Invalid user');
+                }
+            }
             $loader = new DataObjectLoader($object, $fieldlist);
             $loader->parseQueryArgs($args);
             $objectlist = $loader->getObjectList();
+            if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
+                throw new Exception('Invalid user access');
+            }
             $params = $loader->addPagingParams();
             $items = $objectlist->getItems($params);
             //$items = $loader->query($args);
@@ -178,10 +192,24 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             if (empty($args['id'])) {
                 throw new Exception('Unknown ' . $type);
             }
-            $args = array('name' => $object, 'itemid' => $args['id']);
-            $objectref = DataObjectMaster::getObject($args);
+            // @checkme original query field definition config
+            //$config = $info->fieldDefinition->config;
+            //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
+            //}
+            $userId = 0;
+            if (xarGraphQL::hasSecurity($object)) {
+                $userId = xarGraphQL::checkUser($context);
+                if (empty($userId)) {
+                    throw new Exception('Invalid user');
+                }
+            }
+            $params = array('name' => $object, 'itemid' => $args['id']);
+            $objectref = DataObjectMaster::getObject($params);
+            if (xarGraphQL::hasSecurity($object) && !$objectref->checkAccess('display', $params['itemid'], $userId)) {
+                throw new Exception('Invalid user access');
+            }
             $itemid = $objectref->getItem();
-            if ($itemid != $args['itemid']) {
+            if ($itemid != $params['itemid']) {
                 throw new Exception('Unknown ' . $type);
             }
             // pass along the object to field resolvers, e.g. for keys? Doesn't work...

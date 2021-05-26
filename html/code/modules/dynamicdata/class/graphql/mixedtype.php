@@ -18,6 +18,7 @@ use GraphQL\Language\AST\StringValueNode;
 class xarGraphQLMixedType extends ScalarType
 {
     public $name = 'Mixed';
+    public $description = 'Mixed type';
 
     public function serialize($value)
     {

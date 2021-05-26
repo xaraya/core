@@ -21,9 +21,9 @@ class DataObjectRESTHandler extends xarObject
     public static $schemas = [];
     public static $config = [];
     public static $modules = [];
-    public static $expires = 12 * 60 * 60;  // 12 hours
-    public static $storageType = 'database';
-    public static $cacheStorage;
+    public static $tokenExpires = 12 * 60 * 60;  // 12 hours
+    public static $storageType = 'database';  // database or apcu
+    public static $tokenStorage;
     public static $userId;
 
     public static function getOpenAPI($args = null)
@@ -83,9 +83,10 @@ class DataObjectRESTHandler extends xarObject
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectList', 'args' => $args, 'error' => 'Unknown operation'];
         }
+        $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkUser();
+            $userId = self::checkUser();
             //$args['access'] = 'view';
         }
         // @checkme always count here
@@ -97,7 +98,7 @@ class DataObjectRESTHandler extends xarObject
         $loader = new DataObjectLoader($object, $fieldlist);
         $loader->parseQueryArgs($args);
         $objectlist = $loader->getObjectList();
-        if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view')) {
+        if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view', 0, $userId)) {
             http_response_code(403);
             exit;
         }
@@ -142,7 +143,7 @@ class DataObjectRESTHandler extends xarObject
     public static function getObjectItem($args)
     {
         $object = $args['object'];
-        $itemid = $args['itemid'];
+        $itemid = intval($args['itemid']);
         $method = 'display';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -150,15 +151,16 @@ class DataObjectRESTHandler extends xarObject
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
+        $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkUser();
+            $userId = self::checkUser();
             //$args['access'] = 'display';
         }
         $fieldlist = self::getDisplayProperties($object);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
         $objectitem = DataObjectMaster::getObject($params);
-        if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display')) {
+        if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
             http_response_code(403);
             exit;
         }
@@ -199,7 +201,7 @@ class DataObjectRESTHandler extends xarObject
             return ['method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        self::checkUser();
+        $userId = self::checkUser();
         $fieldlist = self::getCreateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -210,7 +212,7 @@ class DataObjectRESTHandler extends xarObject
         }
         $params = ['name' => $object];
         $objectitem = DataObjectMaster::getObject($params);
-        if (!$objectitem->checkAccess('create')) {
+        if (!$objectitem->checkAccess('create', 0, $userId)) {
             http_response_code(403);
             exit;
         }
@@ -225,7 +227,7 @@ class DataObjectRESTHandler extends xarObject
     public static function updateObjectItem($args)
     {
         $object = $args['object'];
-        $itemid = $args['itemid'];
+        $itemid = intval($args['itemid']);
         $method = 'update';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'updateObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -234,7 +236,7 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        self::checkUser();
+        $userId = self::checkUser();
         $fieldlist = self::getUpdateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -245,7 +247,7 @@ class DataObjectRESTHandler extends xarObject
         }
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
-        if (!$objectitem->checkAccess('update')) {
+        if (!$objectitem->checkAccess('update', $itemid, $userId)) {
             http_response_code(403);
             exit;
         }
@@ -260,7 +262,7 @@ class DataObjectRESTHandler extends xarObject
     public static function deleteObjectItem($args)
     {
         $object = $args['object'];
-        $itemid = $args['itemid'];
+        $itemid = intval($args['itemid']);
         $method = 'delete';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'deleteObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -269,10 +271,10 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        self::checkUser();
+        $userId = self::checkUser();
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
-        if (!$objectitem->checkAccess('delete')) {
+        if (!$objectitem->checkAccess('delete', $itemid, $userId)) {
             http_response_code(403);
             exit;
         }
@@ -331,6 +333,9 @@ class DataObjectRESTHandler extends xarObject
             }
             if (!empty(self::$config['storage'])) {
                 self::$storageType = self::$config['storage'];
+            }
+            if (!empty(self::$config['expires'])) {
+                self::$tokenExpires = intval(self::$config['expires']);
             }
         }
     }
@@ -431,7 +436,7 @@ class DataObjectRESTHandler extends xarObject
         $userInfo = self::checkToken();
         if (!empty($userInfo)) {
             $userInfo = @json_decode($userInfo, true);
-            if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$expires))) {
+            if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$tokenExpires))) {
                 http_response_code(401);
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
                 header('WWW-Authenticate: Token realm="Xaraya Site Login", created=');
@@ -472,10 +477,10 @@ class DataObjectRESTHandler extends xarObject
     private static function checkToken()
     {
         $token = !empty($_SERVER['HTTP_X_AUTH_TOKEN']) ? $_SERVER['HTTP_X_AUTH_TOKEN'] : '';
-        if (empty($token) || !(self::getCacheStorage()->isCached($token))) {
+        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
             return;
         }
-        return self::getCacheStorage()->getCached($token);
+        return self::getTokenStorage()->getCached($token);
     }
 
     public static function postToken($args)
@@ -486,8 +491,14 @@ class DataObjectRESTHandler extends xarObject
         }
         $uname = $args['input']['uname'];
         $pass = $args['input']['pass'];
+        if (empty($uname) || empty($pass)) {
+            http_response_code(401);
+            //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
+            header('WWW-Authenticate: Token realm="Xaraya Site Login", uname=, pass=');
+            exit;
+        }
         $access = $args['input']['access'];
-        if (!in_array($access, ['display', 'update', 'create', 'delete', 'admin'])) {
+        if (empty($access) || !in_array($access, ['display', 'update', 'create', 'delete', 'admin'])) {
             http_response_code(401);
             //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
             header('WWW-Authenticate: Token realm="Xaraya Site Login", access=');
@@ -513,25 +524,25 @@ class DataObjectRESTHandler extends xarObject
             return ['method' => 'postToken', 'error' => 'no decent token generator'];
         }
         // @checkme clean up cachestorage occasionally based on size
-        self::getCacheStorage()->sizeLimitReached();
-        self::getCacheStorage()->setCached($token, json_encode(['userId' => $userId, 'access' => $access, 'created' => time()]));
-        $expiration = date('c', time() + self::$expires);
-        return ['access_token' => $token, 'expiration' => $expiration, 'error' => 'TODO'];
+        self::getTokenStorage()->sizeLimitReached();
+        self::getTokenStorage()->setCached($token, json_encode(['userId' => $userId, 'access' => $access, 'created' => time()]));
+        $expiration = date('c', time() + self::$tokenExpires);
+        return ['access_token' => $token, 'expiration' => $expiration];
     }
 
-    public static function getCacheStorage()
+    public static function getTokenStorage()
     {
-        if (!isset(self::$cacheStorage)) {
+        if (!isset(self::$tokenStorage)) {
             self::loadConfig();
             // @checkme access cachestorage directly here
-            self::$cacheStorage = xarCache::getStorage([
+            self::$tokenStorage = xarCache::getStorage([
                 'storage' => self::$storageType,
                 'type' => 'token',
-                'expire' => self::$expires,
+                'expire' => self::$tokenExpires,
                 'sizelimit' => 2000000,
             ]);
         }
-        return self::$cacheStorage;
+        return self::$tokenStorage;
     }
 
     public static function getModuleURL($module = null, $api = null, $args = [])
@@ -589,7 +600,20 @@ class DataObjectRESTHandler extends xarObject
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkUser();
+            $userId = self::checkUser();
+            // @checkme assume we have a security mask here
+            if (is_string($func['security'])) {
+                $role = xarRoles::getRole($userId);
+                $rolename = $role->getName();
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $module, $rolename);
+            // @todo verify access for user based on what?
+            } else {
+                $pass = true;
+            }
+            if (!$pass) {
+                http_response_code(403);
+                exit;
+            }
         }
         xarMod::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
@@ -611,7 +635,20 @@ class DataObjectRESTHandler extends xarObject
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            self::checkUser();
+            $userId = self::checkUser();
+            // @checkme assume we have a security mask here
+            if (is_string($func['security'])) {
+                $role = xarRoles::getRole($userId);
+                $rolename = $role->getName();
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $module, $rolename);
+            // @todo verify access for user based on what?
+            } else {
+                $pass = true;
+            }
+            if (!$pass) {
+                http_response_code(403);
+                exit;
+            }
         }
         xarMod::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];

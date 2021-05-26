@@ -32,6 +32,7 @@ class xarGraphQLDummyType extends ObjectType
         $fields = [
             'hello' => [
                 'name' => 'hello',
+                'description' => 'Hello World!',
                 'type' => Type::string(),
                 'resolve' => function () {
                     return 'Hello World!';
@@ -39,6 +40,7 @@ class xarGraphQLDummyType extends ObjectType
             ],
             'echo' => [
                 'name' => 'echo',
+                'description' => 'Echo Message',
                 'type' => Type::string(),
                 'args' => [
                     'message' => ['type' => Type::string()],
@@ -53,6 +55,7 @@ class xarGraphQLDummyType extends ObjectType
             ],
             'schema' => [
                 'name' => 'schema',
+                'description' => 'Get GraphQL Schema Definition',
                 'type' => Type::string(),
                 'resolve' => function () {
                     return 'Here is the schema';
@@ -60,15 +63,14 @@ class xarGraphQLDummyType extends ObjectType
             ],
             'whoami' => [
                 'name' => 'whoami',
+                'description' => 'Display current user',
                 'type' => xarGraphQL::get_type('user'),
-                'resolve' => function () {
-                    xarSession::init();
-                    //xarUser::init();
-                    if (!xarUser::isLoggedIn()) {
-                        return array('id' => 0, 'name' => 'Anonymous');
+                'resolve' => function ($rootValue, $args, $context) {
+                    $userId = xarGraphQL::checkUser($context);
+                    if (empty($userId)) {
+                        return;
                     }
-                    //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
-                    $role = xarRoles::current();
+                    $role = xarRoles::getRole($userId);
                     $fields = $role->getFieldValues();
                     return array('id' => $fields['id'], 'name' => $fields['name']);
                 }

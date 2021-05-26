@@ -27,6 +27,7 @@ class xarGraphQLQueryType extends ObjectType
         'properties' => 'propertytype',
         'property'   => 'propertytype',
         //'user'       => 'usertype',  // disable querying user directly
+        //'node'       => 'nodetype',
     ];
     //public static $extra_types = [];
 
