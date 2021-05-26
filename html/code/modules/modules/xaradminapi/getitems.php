@@ -21,7 +21,7 @@ function modules_adminapi_getitems(Array $args=array())
     $tables =& xarDB::getTables();
     sys::import('xaraya.structures.query');
     $q = new Query('SELECT', $tables['modules']);
-    $q->addfields("id, regid, name, directory, version, class, category, state,user_capable, admin_capable");
+    $q->addfields("id, regid, name, directory, version, class, category, state, user_capable, admin_capable");
 
     if (!empty($regid)) $q->eq('regid', $regid);
     

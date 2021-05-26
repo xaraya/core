@@ -59,7 +59,12 @@
                 </label>
             </div>
             <div class="xar-col">
-                #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
+            	<xar:if condition="xarSystemVars::get(sys::CONFIG, 'DB.Switching')">
+                	<xar:set name="value">xarSystemVars::get(sys::CONFIG, 'DB.Name')</xar:set>
+	                <xar:data-input type="dropdown" name="database" value="$value" options="$allowed_dbs"/>
+            	<xar:else/>
+	                #xarSystemVars::get(sys::CONFIG, 'DB.Name')#
+            	</xar:if>
             </div>
         </div>
         <div class="xar-row">
