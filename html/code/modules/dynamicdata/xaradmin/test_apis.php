@@ -43,7 +43,16 @@ function dynamicdata_admin_test_apis(array $args=[])
             $restapi[$module_new] = 'on';
         }
     }
-    xarVar::fetch('tokenstorage', 'isset', $tokenstorage, 'database', xarVar::NOT_REQUIRED);
+    xarVar::fetch('tokenstorage', 'isset', $storageType, 'database', xarVar::NOT_REQUIRED);
+    xarVar::fetch('tokenexpires', 'isset', $tokenExpires, '12:00:00', xarVar::NOT_REQUIRED);
+    if (!empty($tokenExpires)) {
+        list($hour, $min, $sec) = explode(':', $tokenExpires);
+        $tokenExpires = (((intval($hour) * 60) + intval($min)) * 60) + intval($sec);
+    } else {
+        $tokenExpires = 12 * 60 * 60;  // 12 hours
+    }
+    xarVar::fetch('querycomplexity', 'isset', $queryComplexity, 0, xarVar::NOT_REQUIRED);
+    xarVar::fetch('querydepth', 'isset', $queryDepth, 0, xarVar::NOT_REQUIRED);
     $restapilist = [];
     $graphqllist = [];
     if (!empty($restapi) && !empty($graphql) && xarSec::confirmAuthKey()) {
@@ -51,7 +60,10 @@ function dynamicdata_admin_test_apis(array $args=[])
         xarModVars::set('dynamicdata', 'restapi_object_list', serialize($restapilist));
         $graphqllist = array_keys($graphql);
         xarModVars::set('dynamicdata', 'graphql_object_list', serialize($graphqllist));
-        xarModVars::set('dynamicdata', 'restapi_token_storage', $tokenstorage);
+        xarModVars::set('dynamicdata', 'restapi_token_storage', $storageType);
+        xarModVars::set('dynamicdata', 'restapi_token_expires', intval($tokenExpires));
+        xarModVars::set('dynamicdata', 'graphql_query_complexity', intval($queryComplexity));
+        xarModVars::set('dynamicdata', 'graphql_query_depth', intval($queryDepth));
     } else {
         $restapiserial = xarModVars::get('dynamicdata', 'restapi_object_list');
         if (!empty($restapiserial)) {
@@ -62,7 +74,10 @@ function dynamicdata_admin_test_apis(array $args=[])
         if (!empty($graphqlserial)) {
             $graphqllist = unserialize($graphqlserial);
         }
-        $tokenstorage = xarModVars::get('dynamicdata', 'restapi_token_storage');
+        $storageType = xarModVars::get('dynamicdata', 'restapi_token_storage');
+        $tokenExpires = xarModVars::get('dynamicdata', 'restapi_token_expires');
+        $queryComplexity = xarModVars::get('dynamicdata', 'graphql_query_complexity');
+        $queryDepth = xarModVars::get('dynamicdata', 'graphql_query_depth');
     }
 
     DataObjectRESTBuilder::init();
@@ -70,7 +85,7 @@ function dynamicdata_admin_test_apis(array $args=[])
         return;
     }
     if (!empty($create_rst)) {
-        DataObjectRESTBuilder::create_openapi($restapilist, $tokenstorage);
+        DataObjectRESTBuilder::create_openapi($restapilist, $storageType, $tokenExpires);
         xarController::redirect(xarServer::getCurrentURL(['create_rst'=> null]));
         return true;
     }
@@ -98,7 +113,7 @@ function dynamicdata_admin_test_apis(array $args=[])
                 $extraTypes[] = $type;
             }
         }
-        xarGraphQL::dump_schema($extraTypes);
+        xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth);
         xarController::redirect(xarServer::getCurrentURL(['create_gql'=> null]));
         return true;
     }
@@ -137,7 +152,7 @@ function dynamicdata_admin_test_apis(array $args=[])
         }
     }
 
-    $data['tokenstorage'] = $tokenstorage;
+    $data['tokenstorage'] = $storageType;
     $data['storagetypes'] = [
         'filesystem' => [
             'name'    => 'filesystem',
@@ -155,6 +170,9 @@ function dynamicdata_admin_test_apis(array $args=[])
             'enabled' => function_exists('apcu_fetch') ? true : false,
         ],
     ];
+    $data['tokenexpires'] = sprintf('%02d:%02d:%02d', floor($tokenExpires / 3600), intval($tokenExpires % 3600) / 60, intval($tokenExpires % 60));
+    $data['querycomplexity'] = $queryComplexity;
+    $data['querydepth'] = $queryDepth;
 
     xarTpl::setPageTemplateName('admin');
 

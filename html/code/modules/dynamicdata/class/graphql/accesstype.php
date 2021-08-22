@@ -22,6 +22,7 @@ class xarGraphQLAccessType extends ObjectType
     {
         $config = [
             'name' => 'Access',
+            'description' => 'Access property for DD objects item',
             'fields' => [
                 'keys' => Type::listOf(Type::string()),
                 //'access' => Type::string(),

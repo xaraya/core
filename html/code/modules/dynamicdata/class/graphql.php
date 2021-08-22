@@ -40,8 +40,8 @@ use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
 use GraphQL\Type\Definition\Type;
 
-// use GraphQL\Validator\Rules;
-// use GraphQL\Validator\DocumentValidator;
+use GraphQL\Validator\Rules;
+use GraphQL\Validator\DocumentValidator;
 
 /**
  * See xardocs/graphql.txt for class structure
@@ -61,9 +61,12 @@ class xarGraphQL extends xarObject
         'keyval'   => 'keyvaltype',
         'multival' => 'multivaltype',
         'user'     => 'usertype',
+        'token'    => 'tokentype',
         'serial'   => 'serialtype',
         'mixed'    => 'mixedtype',
         'mutation' => 'mutationtype',
+        //'node'     => 'nodetype',
+        //'ddnode'   => 'ddnodetype',
     ];
     public static $extra_types = [];
     public static $trace_path = false;
@@ -73,6 +76,13 @@ class xarGraphQL extends xarObject
     public static $cache_plan = false;
     public static $cache_data = false;
     public static $object_type = [];
+    public static $queryComplexity = 0;
+    public static $queryDepth = 0;
+    public static $tokenExpires = 12 * 60 * 60;  // 12 hours
+    public static $storageType = 'database';  // database or apcu
+    public static $tokenStorage;
+    public static $userId;
+    public static $objectSecurity = [];
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -90,6 +100,7 @@ class xarGraphQL extends xarObject
         $schema = new Schema([
             'query' => $queryType,
             'mutation' => $mutationType,
+            //'types' => [self::get_type("ddnode")],  // invisible types
             'typeLoader' => function ($name) {
                 return self::get_type($name);
             }
@@ -107,6 +118,9 @@ class xarGraphQL extends xarObject
             $clazz = self::get_type_class($type);
             if (property_exists($clazz, '_xar_object') && !empty($clazz::$_xar_object)) {
                 self::$object_type[$clazz::$_xar_object] = $name;
+                if (property_exists($clazz, '_xar_security') && isset($clazz::$_xar_security)) {
+                    self::$objectSecurity[$clazz::$_xar_object] = $clazz::$_xar_security;
+                }
             }
         }
         $clazz = self::get_type_class("buildtype");
@@ -267,9 +281,12 @@ class xarGraphQL extends xarObject
             'keyvaltype' => xarGraphQLKeyValType::class,
             'multivaltype' => xarGraphQLMultiValType::class,
             'usertype' => xarGraphQLUserType::class,
+            'tokentype' => xarGraphQLTokenType::class,
             'serialtype' => xarGraphQLSerialType::class,
             'mixedtype' => xarGraphQLMixedType::class,
             'mutationtype' => xarGraphQLMutationType::class,
+            //'nodetype' => xarGraphQLNodeType::class,
+            //'ddnodetype' => xarGraphQLDDNodeType::class,
         ];
         if (!array_key_exists($type, $class_mapper) && array_key_exists($type, self::$type_mapper)) {
             $type = self::$type_mapper[$type];
@@ -346,8 +363,12 @@ class xarGraphQL extends xarObject
         }
         
         // Add to standard set of rules globally (values from GraphQL Playground IntrospectionQuery)
-        // DocumentValidator::addRule(new Rules\QueryComplexity(181));
-        // DocumentValidator::addRule(new Rules\QueryDepth(11));
+        if (!empty(self::$queryComplexity)) {
+            DocumentValidator::addRule(new Rules\QueryComplexity(self::$queryComplexity));  // 181
+        }
+        if (!empty(self::$queryDepth)) {
+            DocumentValidator::addRule(new Rules\QueryDepth(self::$queryDepth));  // 11
+        }
         // DocumentValidator::addRule(new Rules\DisableIntrospection());
 
         $rootValue = ['prefix' => 'You said: message='];
@@ -413,13 +434,92 @@ class xarGraphQL extends xarObject
         echo $data;
     }
 
-    public static function dump_schema($extraTypes = null)
+    public static function checkUser($context)
+    {
+        $userId = self::checkToken($context['server']);
+        if (!empty($userId)) {
+            return $userId;
+        }
+        return self::checkCookie($context['server']);
+    }
+
+    private static function checkToken($serverVars)
+    {
+        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
+            return;
+        }
+        $token = $serverVars['HTTP_X_AUTH_TOKEN'];
+        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
+            return;
+        }
+        $userInfo = self::getTokenStorage()->getCached($token);
+        if (!empty($userInfo)) {
+            $userInfo = @json_decode($userInfo, true);
+            if (!empty($userInfo['userId']) && ($userInfo['created'] > (time() - self::$tokenExpires))) {
+                return $userInfo['userId'];
+            }
+        }
+    }
+
+    private static function checkCookie($serverVars)
+    {
+        if (empty($serverVars) || empty($serverVars['HTTP_COOKIE'])) {
+            return;
+        }
+        xarSession::init();
+        //xarUser::init();
+        if (!xarUser::isLoggedIn()) {
+            return;
+        }
+        return xarSession::getVar('role_id');
+    }
+
+    public static function createToken($userInfo)
+    {
+        if (function_exists('random_bytes')) {
+            $token = bin2hex(random_bytes(32));
+        } elseif (function_exists('openssl_random_pseudo_bytes')) {
+            $token = bin2hex(openssl_random_pseudo_bytes(32));
+        } else {
+            return;
+        }
+        // @checkme clean up cachestorage occasionally based on size
+        self::getTokenStorage()->sizeLimitReached();
+        self::getTokenStorage()->setCached($token, json_encode($userInfo));
+        return $token;
+    }
+
+    public static function getTokenStorage()
+    {
+        if (!isset(self::$tokenStorage)) {
+            //self::loadConfig();
+            // @checkme access cachestorage directly here
+            self::$tokenStorage = xarCache::getStorage([
+                'storage' => self::$storageType,
+                'type' => 'token',
+                'expire' => self::$tokenExpires,
+                'sizelimit' => 2000000,
+            ]);
+        }
+        return self::$tokenStorage;
+    }
+
+    public static function hasSecurity($object, $method = null)
+    {
+        return !empty(self::$objectSecurity[$object]) ? true : false;
+    }
+
+    public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0)
     {
         $configFile = sys::varpath() . '/cache/api/graphql_config.json';
         $configData = array();
         $configData['generated'] = date('c');
         $configData['caution'] = 'This file is updated when you rebuild the schema.graphql document in Dynamic Data - Utilities - Test APIs';
         $configData['extraTypes'] = $extraTypes;
+        $configData['tokenExpires'] = intval($expires);
+        $configData['storageType'] = $storage;
+        $configData['queryComplexity'] = intval($complexity);
+        $configData['queryDepth'] = intval($depth);
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         $content = self::get_data('{schema}', [], null, $extraTypes);

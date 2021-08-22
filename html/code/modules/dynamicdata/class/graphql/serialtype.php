@@ -18,6 +18,7 @@ use GraphQL\Language\AST\StringValueNode;
 class xarGraphQLSerialType extends ScalarType
 {
     public $name = 'Serial';
+    public $description = 'Serialized value';
 
     public function serialize($value)
     {

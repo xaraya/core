@@ -156,6 +156,14 @@
                 </table>
                 <div class="xar-row">
                     <div class="xar-col">
+                       API Token Expiration Time
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" name="tokenexpires" id="tokenexpires" size="8" value="#$tokenexpires#"/> (format hh:mm:ss)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
                        API Token Cache Storage
                     </div>
                     <div class="xar-col">
@@ -170,6 +178,22 @@
                                 </xar:if>
                             </xar:foreach>
                         </select>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                       GraphQL Query Complexity Limit
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" name="querycomplexity" id="querycomplexity" size="3" value="#$querycomplexity#"/> (playground introspection = 181)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                       GraphQL Query Depth Limit
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" name="querydepth" id="querydepth" size="3" value="#$querydepth#"/> (playground introspection = 11)
                     </div>
                 </div>
                 <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
