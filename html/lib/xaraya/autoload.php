@@ -254,7 +254,7 @@ class xarAutoload extends xarObject
             'ideque'                 => 'xaraya.structures.sequences.interfaces',
             'queue'                  => 'xaraya.structures.sequences.queue',
             'sequence'               => 'xaraya.structures.sequences.sequence',
-            'stack'                  => 'xaraya.structures.sequences.blocks.stack',
+            'stack'                  => 'xaraya.structures.sequences.stack',
             'arraysequence'          => 'xaraya.structures.sequences.adapters.array_sequence',
             'dynamicdatasequence'    => 'xaraya.structures.sequences.adapters.dd_sequence',
             'sequenceadapter'        => 'xaraya.structures.sequences.adapters.sequence_adapter',
