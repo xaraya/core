@@ -1452,6 +1452,15 @@ class Query
             $this->groups[] = array('name' => $x);
         }
     }
+    public function addgroups($x = '')
+    {
+        if (!empty($x)) {
+        	$groups = explode(',', $x);
+        	foreach ($groups as $group) {
+	            $this->groups[] = array('name' => trim($group));
+        	}
+        }
+    }
     public function addorder($x = '', $y = 'ASC')
     {
         if ($x != '') {
