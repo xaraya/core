@@ -271,7 +271,7 @@ class DataProperty extends xarObject implements iDataProperty
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
-        // store the fieldname for configurations who need them (e.g. file uploads)
+        // Store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         $this->invalid = '';
         if(!isset($value)) {
@@ -581,6 +581,7 @@ class DataProperty extends xarObject implements iDataProperty
      */
     function showFilter(Array $data=array())
     {
+        // FIXME: Move the valid options as properties to each dataproperty
         // A filter cannot be hidden or disables
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) return "";
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) return "";
@@ -593,6 +594,7 @@ class DataProperty extends xarObject implements iDataProperty
         
         // This is the array of all possible filter options
         $filteroptions = array(
+                            '' => array('id' => '', 'name' => xarML('not used')),
                             '=' => array('id' => 'eq', 'name' => xarML('equals')),
                             '!=' => array('id' => 'ne', 'name' => xarML('not equals')),
                             '>' => array('id' => 'gt', 'name' => xarML('greater than')),
@@ -611,9 +613,16 @@ class DataProperty extends xarObject implements iDataProperty
         // Explicitly cater to the most common basetypes so as to avoid duplication in the extensions
         $numbertypes = array('number','decimal','integer','float');
         $stringtypes = array('string');
+        $datetypes = array('date');
+        $checkboxtypes = array('checkbox');
         if (in_array($this->basetype, $numbertypes)) $data['filters'] = array('=','!=','>','>=','<','<=','like','notlike','null','notnull');
         elseif (in_array($this->basetype, $stringtypes)) $data['filters'] = array('like','notlike','=','!=','null','notnull','regex');
+        elseif (in_array($this->basetype, $datetypes)) $data['filters'] = array('=','!=','>','>=','<','<=');
+        elseif (in_array($this->basetype, $checkboxtypes)) $data['filters'] = array('=');
         elseif (in_array($this->basetype, array('dropdown'))) $data['filters'] = array('=');
+        
+        // Add a blank to any of the arrays to indicate unused operations
+        array_unshift($data['filters'], '');
         
         // Now create the filter options for the dropdown
         $data['options'] = array();
