@@ -620,6 +620,7 @@ class DataProperty extends xarObject implements iDataProperty
         elseif (in_array($this->basetype, $datetypes)) $data['filters'] = array('=','!=','>','>=','<','<=');
         elseif (in_array($this->basetype, $checkboxtypes)) $data['filters'] = array('=');
         elseif (in_array($this->basetype, array('dropdown'))) $data['filters'] = array('=');
+        else die(xarML('The property type #(1) is not among those currently supported in filters'));
         
         // Add a blank to any of the arrays to indicate unused operations
         array_unshift($data['filters'], '');
