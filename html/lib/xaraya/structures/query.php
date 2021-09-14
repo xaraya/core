@@ -697,13 +697,19 @@ class Query
         }
         return false;
     }
-    public function getcondition($mycondition)
+/*
+ * Get the value of a condition on a field 
+ */
+    public function getcondition(String $mycondition)
     {
         foreach ($this->conditions as $condition)
             if ($condition['field1'] == $mycondition) return $condition['field2'];
         return '';
     }
-    public function removecondition($mycondition)
+/*
+ * Remove all conditions on a field 
+ */
+    public function removecondition(String $mycondition)
     {
         foreach($this->conditions as $key => $value)
             if ($value['field1'] == $mycondition) {
