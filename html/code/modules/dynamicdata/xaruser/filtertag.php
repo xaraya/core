@@ -26,7 +26,6 @@ function dynamicdata_user_filtertag(Array $args=array())
         if (!xarVar::fetch('name',       'array', $names,  array(), xarVar::NOT_REQUIRED)) {return;}
         if (!xarVar::fetch('source',     'array', $source,  array(), xarVar::NOT_REQUIRED)) {return;}
         if (!xarVar::fetch('op',         'array', $op,  array(), xarVar::NOT_REQUIRED)) {return;}
-//        if (!xarVar::fetch('value',      'array', $value,  array(), xarVar::NOT_REQUIRED)) {return;}
     	
     	// Get an instance of the dataobject so that we can get at the dataproperties' checkInput() method
     	$object = DataObjectMaster::getObject(array('name' => $objectname));
@@ -39,7 +38,6 @@ function dynamicdata_user_filtertag(Array $args=array())
             $thisvalue = $object->properties[$name]->value;
 
             if (empty($op[$name])) continue;
-//            if (($thisvalue == '') && !in_array($op[$name], array('eqempty','neempty','null','notnull'))) continue;
             
             switch($op[$name]) {
                 case 'eqempty' : 
@@ -54,6 +52,10 @@ function dynamicdata_user_filtertag(Array $args=array())
                     $q->like($source[$name], '%' . $thisvalue . '%'); break;
                 case 'notlike' : 
                     $q->notlike($source[$name], '%' . $thisvalue . '%'); break;
+                case 'regex' : 
+                	// Ignore empty an empty field here
+                	if (empty($thisvalue)) break;
+                    $q->regex($source[$name], $thisvalue); break;
                 default:
                     $q->{$op[$name]}($source[$name], $thisvalue); break;
             }
@@ -62,6 +64,7 @@ function dynamicdata_user_filtertag(Array $args=array())
         // Save the conditions in a session var. Perhaps also in some cache?
         if (empty($filtername)) $filtername = $objectname;
         xarSession::setVar('DynamicData.Filter.' . $filtername, serialize($q));
+
         // Redirect to the next page
         xarController::redirect($return_url);
         return true;
@@ -77,10 +80,9 @@ function dynamicdata_user_filtertag(Array $args=array())
         }
         
         // Check if a fieldlist was passed
-        $fields = '';
         if (isset($args['fieldlist']) && !empty($args['fieldlist'])) {
 			// Support both strings and arrays for the fieldlist
-			if (!is_array($args['fieldlist'])) $args['fieldlist'] = explode(',', $fields);
+			if (!is_array($args['fieldlist'])) $args['fieldlist'] = explode(',', $args['fieldlist']);
 			// Remove any unwanted delimiters, spaces etc.
 			foreach ($args['fieldlist'] as $k => $v) $args['fieldlist'][$k] = trim($v);
         } else {
@@ -96,7 +98,7 @@ function dynamicdata_user_filtertag(Array $args=array())
         if (is_object($filter)) {
             foreach ($filter->conditions as $condition) {
                 $values[$condition['field1']] = trim($condition['field2'], "%");
-                $ops[$condition['field1']]    = $condition['op'];
+                $ops[$condition['field1']]    = transform_operator($condition['op']);
             }
         }
         
@@ -125,6 +127,22 @@ function dynamicdata_user_filtertag(Array $args=array())
         $data['object']     =& $args['object'];
         $data['filtername'] = $args['filtername'];
     }
-    return xarTpl::module('dynamicdata', 'user', 'filtertag', $data);
+    return $data;
+}
+
+function transform_operator($op)
+{
+	$oparray = array(
+		'='        => 'eq',
+		'!='       => 'ne',
+		'>'        => 'gt',
+		'>='       => 'ge',
+		'<'        => 'lt',
+		'<='       => 'le',
+		'LIKE'     => 'like',
+		'NOT LIKE' => 'notlike',
+		'>'        => 'gt',
+	);
+	return $oparray[$op];
 }
 ?>
