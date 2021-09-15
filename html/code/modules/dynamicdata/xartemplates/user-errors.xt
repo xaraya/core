@@ -22,7 +22,7 @@
                 <div style="margin-top: 20px; margin-left: 20px">
                     A dataobject #$name# already exists.
                     <br/>
-                    Try going back, clicking on the "Overwrite if exists" checkbox, and importing again.
+                    If you are importing from a XML file, try going back, clicking on the "Overwrite if exists" checkbox, and importing again.
                 </div>
             <xar:elseif condition="$layout eq 'bad_definition'"/>
                 <div style="margin-top: 20px; margin-left: 20px">
