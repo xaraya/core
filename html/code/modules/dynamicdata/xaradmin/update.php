@@ -144,8 +144,9 @@ function dynamicdata_admin_update(Array $args=array())
             // Check if this object already exists
             try{
                 $testobject = DataObjectMaster::getObject(array('name' => $newname));
-                return xarTpl::module('dynamicdata','user','errors', array('layout' => 'duplicate_name', 'newname' => $newname));
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+                return xarTpl::module('dynamicdata','user','errors', array('layout' => 'duplicate_name', 'name' => $newname));
+            }
             
             $itemtype = $myobject->getNextItemtype(array('moduleid' => $myobject->properties['module_id']->getValue()));
             $myobject->properties['name']->setValue($newname);
