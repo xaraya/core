@@ -28,6 +28,9 @@
  * - default value
  * - configuration
  * The count of each element array must be the same
+ *
+ * Note: to run checkInput you have to add a configuration $this->display_column_definition that corresponds to the dimensions of the array property as displayed on the template.
+ *       Otherwise the code will just fall back to a default 2-column configuration
  */
 
 /* include the base class */
@@ -91,6 +94,10 @@ class ArrayProperty extends DataProperty
             } else {
                 $displayconfig = $this->display_column_definition;
             }
+            
+            // Support both arrays and serialized strings
+            if (!is_array($displayconfig)) $displayconfig = unserialize($displayconfig);
+            
             $columncount = isset($displayconfig) ? count($displayconfig) : 0;
             if (!xarVar::fetch($name,    'array', $elements, array(), xarVar::NOT_REQUIRED)) return;
             // Get the number of rows we are saving
