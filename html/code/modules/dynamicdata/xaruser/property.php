@@ -27,7 +27,7 @@ function dynamicdata_user_property(Array $args=array())
         return true;
     } catch (Exception $e) {
         if(xarModVars::get('dynamicdata','debugmode') && in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-            var_dump($e->__toString());
+            echo "<pre>"; print($e->__toString());
         } else {
             return xarResponse::NotFound();
         }

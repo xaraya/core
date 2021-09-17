@@ -11,9 +11,11 @@
 /**
  * Notes
  *
- * The value array is of the form $value[column][row]
+ * The array value of an array property is an array is of the form $value[column][row]
  * This is done so that we can easily access the set of values of a given column, 
  * which are all of the same property type
+ *
+ * The value of an array property is serialized value of the type above
  * 
  * Column numbers start at 0
  * Row numbers in non associative arrays start at 1 (more readable)
@@ -26,6 +28,9 @@
  * - default value
  * - configuration
  * The count of each element array must be the same
+ *
+ * Note: to run checkInput you have to add a configuration $this->display_column_definition that corresponds to the dimensions of the array property as displayed on the template.
+ *       Otherwise the code will just fall back to a default 2-column configuration
  */
 
 /* include the base class */
@@ -89,6 +94,10 @@ class ArrayProperty extends DataProperty
             } else {
                 $displayconfig = $this->display_column_definition;
             }
+            
+            // Support both arrays and serialized strings
+            if (!is_array($displayconfig)) $displayconfig = unserialize($displayconfig);
+            
             $columncount = isset($displayconfig) ? count($displayconfig) : 0;
             if (!xarVar::fetch($name,    'array', $elements, array(), xarVar::NOT_REQUIRED)) return;
             // Get the number of rows we are saving
@@ -238,7 +247,6 @@ class ArrayProperty extends DataProperty
         } catch(Exception $e) {
             $value = array();
         }
-            
         if(!$this->validation_associative_array) {
             return $value;
         /*
@@ -343,15 +351,23 @@ class ArrayProperty extends DataProperty
         // Number of columns is defined by count($data['column_titles'])
         // Number of rows is defined by $data['rows']
 
-        if (!isset($data['value'])) $value = $this->getValue();
-        else $value = $data['value'];
-
+        if (!isset($data['value'])) {
+        	$value = $this->getValue();
+        } else {
+        	// Support both strings and arrays
+        	if (!is_array($data['value'])) {
+        		$this->value = $data['value'];
+        		$value = $this->getValue();
+        	} else {
+        		$value = $data['value'];
+        	}
+        }
         // Remove this line once legacy  code no longer needed
         if (isset($value['value'])) $value = $value['value'];
 
         // We always show one line at minimum on the form
         // if (empty($value)) foreach ($data['column_titles'] as $column) $value[] = "";
-        
+
         // ------------------------------------------------------------------
         // Adjust the number of rows and columns and the appropriate values
         if (!isset($data['rows'])) {
@@ -453,7 +469,7 @@ class ArrayProperty extends DataProperty
                 // Ignore/remove any empty rows, i.e. those where there is no title
                 if (empty($columns[0])) unset($data['configuration']['display_column_definition'][$row]);
             }
-        }//var_dump($data['configuration']['display_column_definition']);exit;
+        }
         return parent::updateConfiguration($data);
     }
 }

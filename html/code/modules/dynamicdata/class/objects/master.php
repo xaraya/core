@@ -224,7 +224,7 @@ class DataObjectMaster extends xarObject
     }
 
     /**
-     * Show an filter form for this item
+     * Show an filter form for this object
      */
     public function showFilterForm(Array $args = array())
     {
@@ -233,10 +233,6 @@ class DataObjectMaster extends xarObject
 
         // for use in DD tags : preview="yes" - don't use this if you already check the input in the code
         if(!empty($args['preview'])) $this->checkInput();
-
-// CHECKME: this has no real purpose here anymore ???
-        // Set all properties based on what is passed in.
-        $properties = $this->getProperties($args);
 
         if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
             $args['fieldlist'] = explode(',',$args['fieldlist']);

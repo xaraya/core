@@ -271,7 +271,7 @@ class DataProperty extends xarObject implements iDataProperty
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
-        // store the fieldname for configurations who need them (e.g. file uploads)
+        // Store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         $this->invalid = '';
         if(!isset($value)) {
@@ -581,6 +581,7 @@ class DataProperty extends xarObject implements iDataProperty
      */
     function showFilter(Array $data=array())
     {
+        // FIXME: Move the valid options as properties to each dataproperty
         // A filter cannot be hidden or disables
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) return "";
         if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) return "";
@@ -590,20 +591,21 @@ class DataProperty extends xarObject implements iDataProperty
         
         $data['id']    = $this->id;
         $data['name']  = $this->name;
-        
+
         // This is the array of all possible filter options
         $filteroptions = array(
-                            '=' => array('id' => 'eq', 'name' => xarML('equals')),
-                            '!=' => array('id' => 'ne', 'name' => xarML('not equals')),
-                            '>' => array('id' => 'gt', 'name' => xarML('greater than')),
-                            '>=' => array('id' => 'ge', 'name' => xarML('greater than or equal')),
-                            '<' => array('id' => 'lt', 'name' => xarML('less than')),
-                            '<=' => array('id' => 'le', 'name' => xarML('less than or equal')),
-                            'like' => array('id' => 'like', 'name' => xarML('like')),
+                            ''        => array('id' => '', 'name' => xarML('not used')),
+                            '='       => array('id' => 'eq', 'name' => xarML('equals')),
+                            '!='      => array('id' => 'ne', 'name' => xarML('not equals')),
+                            '>'       => array('id' => 'gt', 'name' => xarML('greater than')),
+                            '>='      => array('id' => 'ge', 'name' => xarML('greater than or equal')),
+                            '<'       => array('id' => 'lt', 'name' => xarML('less than')),
+                            '<='      => array('id' => 'le', 'name' => xarML('less than or equal')),
+                            'like'    => array('id' => 'like', 'name' => xarML('like')),
                             'notlike' => array('id' => 'notlike', 'name' => xarML('not like')),
-                            'null' => array('id' => 'null', 'name' => xarML('is null')),
+                            'null'    => array('id' => 'null', 'name' => xarML('is null')),
                             'notnull' => array('id' => 'notnull', 'name' => xarML('is not null')),
-                            'regex' => array('id' => 'regex', 'name' => xarML('regular expression')),
+                            'regex'   => array('id' => 'regex', 'name' => xarML('regular expression')),
                         );
 
         $data['filters'] = isset($data['filters']) ? $data['filters'] : array();
@@ -611,13 +613,21 @@ class DataProperty extends xarObject implements iDataProperty
         // Explicitly cater to the most common basetypes so as to avoid duplication in the extensions
         $numbertypes = array('number','decimal','integer','float');
         $stringtypes = array('string');
+        $datetypes = array('date');
+        $checkboxtypes = array('checkbox');
         if (in_array($this->basetype, $numbertypes)) $data['filters'] = array('=','!=','>','>=','<','<=','like','notlike','null','notnull');
         elseif (in_array($this->basetype, $stringtypes)) $data['filters'] = array('like','notlike','=','!=','null','notnull','regex');
+        elseif (in_array($this->basetype, $datetypes)) $data['filters'] = array('=','!=','>','>=','<','<=');
+        elseif (in_array($this->basetype, $checkboxtypes)) $data['filters'] = array('=');
         elseif (in_array($this->basetype, array('dropdown'))) $data['filters'] = array('=');
+        else die(xarML('The property type #(1) is not among those currently supported in filters'));
+        
+        // Add a blank to any of the arrays to indicate unused operations
+        array_unshift($data['filters'], '');
         
         // Now create the filter options for the dropdown
         $data['options'] = array();
-        foreach ($data['filters'] as $filter) $data['options'][] = $filteroptions[$filter];
+        foreach ($data['filters'] as $filter) $data['options'][] = $filteroptions[strtolower($filter)];
         
         $data['value'] = isset($data['filter']) ? $data['filter'] : $this->filter;
         if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
