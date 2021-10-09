@@ -63,7 +63,7 @@ class xarGraphQLTokenType extends ObjectType
                 $token = xarGraphQL::createToken($userInfo);
                 $expiration = date('c', time() + xarGraphQL::$tokenExpires);
                 return ['access_token' => $token, 'expiration' => $expiration];
-            }
+            },
         ];
     }
 }

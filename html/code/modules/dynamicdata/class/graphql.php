@@ -103,7 +103,7 @@ class xarGraphQL extends xarObject
             //'types' => [self::get_type("ddnode")],  // invisible types
             'typeLoader' => function ($name) {
                 return self::get_type($name);
-            }
+            },
         ]);
 
         if ($validate) {
@@ -125,7 +125,7 @@ class xarGraphQL extends xarObject
         }
         $clazz = self::get_type_class("buildtype");
         foreach (self::$extra_types as $type) {
-            list($name, $type, $object, $list, $item) = $clazz::sanitize($type);
+            [$name, $type, $object, $list, $item] = $clazz::sanitize($type);
             self::$object_type[$object] = $name;
         }
     }
@@ -297,7 +297,7 @@ class xarGraphQL extends xarObject
         }
         return $class_mapper[$type];
     }
- 
+
     /**
      * Build GraphQL Schema based on schema.graphql file and type config decorator
      */
@@ -361,7 +361,7 @@ class xarGraphQL extends xarObject
             return $header . SchemaPrinter::doPrint($schema);
             //return SchemaPrinter::printIntrospectionSchema($schema);
         }
-        
+
         // Add to standard set of rules globally (values from GraphQL Playground IntrospectionQuery)
         if (!empty(self::$queryComplexity)) {
             DocumentValidator::addRule(new Rules\QueryComplexity(self::$queryComplexity));  // 181
@@ -375,7 +375,7 @@ class xarGraphQL extends xarObject
         $context = ['request' => $_REQUEST, 'server' => $_SERVER];
         $fieldResolver = null;
         $validationRules = null;
-        
+
         $result = GraphQL::executeQuery(
             $schema,
             $queryString,
@@ -399,7 +399,7 @@ class xarGraphQL extends xarObject
                 self::setCached($cacheKey, $serializableResult);
             }
         }
-        $extensions = array();
+        $extensions = [];
         if (self::$trace_path) {
             $extensions['paths'] = self::$paths;
         }
@@ -512,7 +512,7 @@ class xarGraphQL extends xarObject
     public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0)
     {
         $configFile = sys::varpath() . '/cache/api/graphql_config.json';
-        $configData = array();
+        $configData = [];
         $configData['generated'] = date('c');
         $configData['caution'] = 'This file is updated when you rebuild the schema.graphql document in Dynamic Data - Utilities - Test APIs';
         $configData['extraTypes'] = $extraTypes;

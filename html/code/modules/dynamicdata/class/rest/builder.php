@@ -894,7 +894,7 @@ class DataObjectRESTBuilder extends xarObject
             if (strpos($item, '.') === false) {
                 continue;
             }
-            list($module, $api) = explode('.', $item);
+            [$module, $api] = explode('.', $item);
             if (!in_array($module, $moduleList)) {
                 $moduleList[] = $module;
             }

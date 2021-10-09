@@ -60,12 +60,12 @@ class xarGraphQLAccessType extends ObjectType
                 }
                 if ($info->fieldName == 'display_access' && !empty($object['display_access']) && is_array($object['display_access'])) {
                     $values = $object[$info->fieldName];
-                    $access = array();
+                    $access = [];
                     foreach ($values as $key => $value) {
                         //if (is_array($value)) {
                         //    $value = json_encode($value);
                         //}
-                        $access[] = array('key' => $key, 'value' => $value);
+                        $access[] = ['key' => $key, 'value' => $value];
                     }
                     return $access;
                 }
@@ -74,7 +74,7 @@ class xarGraphQLAccessType extends ObjectType
                 }
                 //return $info->fieldName;
                 return null;
-            }
+            },
         ];
         parent::__construct($config);
     }

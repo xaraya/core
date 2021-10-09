@@ -36,7 +36,7 @@ class xarGraphQLDummyType extends ObjectType
                 'type' => Type::string(),
                 'resolve' => function () {
                     return 'Hello World!';
-                }
+                },
             ],
             'echo' => [
                 'name' => 'echo',
@@ -51,7 +51,7 @@ class xarGraphQLDummyType extends ObjectType
                     } else {
                         return $rootValue['prefix'] . $args['message'];
                     }
-                }
+                },
             ],
             'schema' => [
                 'name' => 'schema',
@@ -59,7 +59,7 @@ class xarGraphQLDummyType extends ObjectType
                 'type' => Type::string(),
                 'resolve' => function () {
                     return 'Here is the schema';
-                }
+                },
             ],
             'whoami' => [
                 'name' => 'whoami',
@@ -72,8 +72,8 @@ class xarGraphQLDummyType extends ObjectType
                     }
                     $role = xarRoles::getRole($userId);
                     $fields = $role->getFieldValues();
-                    return array('id' => $fields['id'], 'name' => $fields['name']);
-                }
+                    return ['id' => $fields['id'], 'name' => $fields['name']];
+                },
             ],
         ];
         if (!empty($fields[$name])) {

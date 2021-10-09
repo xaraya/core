@@ -33,7 +33,7 @@ class xarGraphQLBuildType
     public static function make_type($name, $type = null, $object = null, $list = null, $item = null)
     {
         // name=Property, type=property, object=properties, list=properties, item=property
-        list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
         $description = "$object item";
         $fields = self::get_object_fields($object);
         $newType = new ObjectType([
@@ -51,7 +51,7 @@ class xarGraphQLBuildType
     public static function make_page_type($name, $type = null, $object = null, $list = null, $item = null)
     {
         // name=Property, type=property, object=properties, list=properties, item=property
-        list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
         $page = $name . '_Page';
         $description = "Paginated list of $object items";
         $fields = [
@@ -78,7 +78,7 @@ class xarGraphQLBuildType
     public static function make_input_type($name, $type = null, $object = null, $list = null, $item = null)
     {
         // name=Property, type=property, object=properties, list=properties, item=property
-        list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
         $input = $name . '_Input';
         $description = "Input for $object item";
         // @todo adapt object fields to InputObjectType where needed, e.g. KeyVal to Mixed?
@@ -126,7 +126,7 @@ class xarGraphQLBuildType
         if ($name === $type) {
             $name = ucfirst($name);
         }
-        return array($name, $type, $object, $list, $item);
+        return [$name, $type, $object, $list, $item];
     }
 
     /**
@@ -176,7 +176,7 @@ class xarGraphQLBuildType
         //$args = array('name' => $object, 'numitems' => 1);
         //$objectlist = DataObjectMaster::getObjectList($args);
         //print_r($objectlist->getItems());
-        $params = array('name' => $object);
+        $params = ['name' => $object];
         $objectref = DataObjectMaster::getObject($params);
         $basetypes = [
             'string' => Type::string(),
@@ -185,15 +185,15 @@ class xarGraphQLBuildType
             'dropdown' => Type::string(),  // @todo use EnumType here?
         ];
         if (empty(self::$known_proptype_ids)) {
-            self::$known_proptype_ids = array(
+            self::$known_proptype_ids = [
                 self::get_property_id('username') => 'user',
                 self::get_property_id('userlist') => 'user',
                 self::get_property_id('object') => 'object',
                 //self::get_property_id('objectref') => 'object',  // @todo look at configuration
                 self::get_property_id('propertyref') => 'property',
                 //self::get_property_id('module') => 'module',
-                self::get_property_id('categories') => 'category'
-            );
+                self::get_property_id('categories') => 'category',
+            ];
         }
         // @todo add fields based on object descriptor?
         foreach ($objectref->getProperties() as $key => $property) {
@@ -381,7 +381,7 @@ class xarGraphQLBuildType
         // when using type config decorator
         if (!isset($object)) {
             $type = self::singularize($type);
-            list($name, $type, $object, $list, $item) = self::sanitize($type);
+            [$name, $type, $object, $list, $item] = self::sanitize($type);
         }
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (xarGraphQL::$trace_path) {
@@ -396,12 +396,12 @@ class xarGraphQLBuildType
                     // see propertytype
                     if ($name == 'configuration' && is_string($values[$name]) && !empty($values[$name])) {
                         $result = @unserialize($values[$name]);
-                        $config = array();
+                        $config = [];
                         foreach ($result as $key => $value) {
                             //if (is_array($value)) {
                             //    $value = json_encode($value);
                             //}
-                            $config[] = array('key' => $key, 'value' => $value);
+                            $config[] = ['key' => $key, 'value' => $value];
                         }
                         return $config;
                     }
@@ -434,7 +434,7 @@ class xarGraphQLBuildType
         if (!is_array($plan)) {
             return $plan;
         }
-        $info = array();
+        $info = [];
         foreach ($plan as $key => $value) {
             if ($key === 'type' && !is_array($value)) {
                 $info[$key] = (string) $value;
@@ -450,7 +450,7 @@ class xarGraphQLBuildType
         xarGraphQL::setTimer('check');
         $queryPlan = $info->lookAhead();
         xarGraphQL::$query_plan = $queryPlan;
-        xarGraphQL::$type_fields = array();
+        xarGraphQL::$type_fields = [];
         foreach ($queryPlan->getReferencedTypes() as $type) {
             xarGraphQL::$type_fields[strtolower($type)] = array_values($queryPlan->subFields($type));
         }
@@ -478,13 +478,13 @@ class xarGraphQLBuildType
             }
         }
         if (xarGraphQL::$trace_path) {
-            xarGraphQL::$paths[] = array(
+            xarGraphQL::$paths[] = [
                 'queryid' => $queryId,
                 'querytype' => $queryType,
                 'queryplan' => $dumpPlan,
                 'rootvalue' => $rootValue,
-                'args' => $args
-            );
+                'args' => $args,
+            ];
         }
         xarGraphQL::setTimer('plan');
     }
@@ -495,7 +495,7 @@ class xarGraphQLBuildType
     public static function get_query_fields($name, $type = null, $object = null, $list = null, $item = null)
     {
         // name=Property, type=property, object=properties, list=properties, item=property
-        list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
         $fields = [
             self::get_page_query($list, $type, $object),
             //self::get_list_query($list, $type, $object),
@@ -536,7 +536,7 @@ class xarGraphQLBuildType
     {
         // when using type config decorator and object_query_resolver
         if (!isset($object)) {
-            list($name, $type, $object, $list, $item) = self::sanitize($type);
+            [$name, $type, $object, $list, $item] = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (empty(xarGraphQL::$query_plan)) {
@@ -632,7 +632,7 @@ class xarGraphQLBuildType
     {
         // when using type config decorator and object_query_resolver
         if (!isset($object)) {
-            list($name, $type, $object, $list, $item) = self::sanitize($type);
+            [$name, $type, $object, $list, $item] = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (empty(xarGraphQL::$query_plan)) {
@@ -690,7 +690,7 @@ class xarGraphQLBuildType
             'description' => 'Get ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
-                'id' => Type::nonNull(Type::id())
+                'id' => Type::nonNull(Type::id()),
             ],
             'resolve' => self::item_query_resolver($type, $object),
         ];
@@ -703,7 +703,7 @@ class xarGraphQLBuildType
     {
         // when using type config decorator and object_query_resolver
         if (!isset($object)) {
-            list($name, $type, $object, $list, $item) = self::sanitize($type);
+            [$name, $type, $object, $list, $item] = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (empty(xarGraphQL::$query_plan)) {
@@ -732,7 +732,7 @@ class xarGraphQLBuildType
                     throw new Exception('Invalid user');
                 }
             }
-            $params = array('name' => $object, 'itemid' => $args['id']);
+            $params = ['name' => $object, 'itemid' => $args['id']];
             $objectitem = DataObjectMaster::getObject($params);
             if (xarGraphQL::hasSecurity($object) && !$objectitem->checkAccess('display', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
@@ -745,10 +745,10 @@ class xarGraphQLBuildType
                 // @checkme this throws exception for userlist property when xarUser::init() is not called first
                 //$values = $objectitem->getFieldValues();
                 // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
-                $values = $objectitem->getFieldValues(array(), 1);
+                $values = $objectitem->getFieldValues([], 1);
             } catch (Exception $e) {
                 //print_r($e->getMessage());
-                $values = array('id' => $args['id']);
+                $values = ['id' => $args['id']];
             }
             // see objecttype
             if ($object == 'objects') {
@@ -757,7 +757,7 @@ class xarGraphQLBuildType
                 }
                 if (array_key_exists('config', $fields) && !empty($objectitem->config)) {
                     //$values['config'] = @unserialize($objectitem->config);
-                    $values['config'] = array($objectitem->config);
+                    $values['config'] = [$objectitem->config];
                 }
             }
             return $values;
@@ -794,7 +794,7 @@ class xarGraphQLBuildType
     public static function get_mutation_fields($name, $type = null, $object = null, $list = null, $item = null)
     {
         // name=Property, type=property, object=properties, list=properties, item=property
-        list($name, $type, $object, $list, $item) = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
         $fields = [
             //self::get_create_mutation('create' . $name, $type, $object),
             //self::get_update_mutation('update' . $name, $type, $object),
@@ -813,7 +813,7 @@ class xarGraphQLBuildType
             'description' => 'Create ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
-                'input' => xarGraphQL::get_input_type($type)
+                'input' => xarGraphQL::get_input_type($type),
             ],
             'resolve' => self::create_mutation_resolver($type, $object),
         ];
@@ -844,7 +844,7 @@ class xarGraphQLBuildType
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }
-            $params = array('name' => $object);
+            $params = ['name' => $object];
             $objectitem = DataObjectMaster::getObject($params);
             if (!$objectitem->checkAccess('create', 0, $userId)) {
                 throw new Exception('Invalid user access');
@@ -869,7 +869,7 @@ class xarGraphQLBuildType
             'description' => 'Update ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
-                'input' => xarGraphQL::get_input_type($type)
+                'input' => xarGraphQL::get_input_type($type),
             ],
             'resolve' => self::update_mutation_resolver($type, $object),
         ];
@@ -896,7 +896,7 @@ class xarGraphQLBuildType
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }
-            $params = array('name' => $object, 'itemid' => $args['input']['id']);
+            $params = ['name' => $object, 'itemid' => $args['input']['id']];
             $objectitem = DataObjectMaster::getObject($params);
             if (!$objectitem->checkAccess('update', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
@@ -921,7 +921,7 @@ class xarGraphQLBuildType
             'description' => 'Delete ' . $object . ' item',
             'type' => Type::nonNull(Type::id()),
             'args' => [
-                'id' => Type::nonNull(Type::id())
+                'id' => Type::nonNull(Type::id()),
             ],
             'resolve' => self::delete_mutation_resolver($type, $object),
         ];
@@ -948,7 +948,7 @@ class xarGraphQLBuildType
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }
-            $params = array('name' => $object, 'itemid' => $args['id']);
+            $params = ['name' => $object, 'itemid' => $args['id']];
             $objectitem = DataObjectMaster::getObject($params);
             if (!$objectitem->checkAccess('delete', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
