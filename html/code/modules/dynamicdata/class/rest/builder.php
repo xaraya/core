@@ -966,6 +966,20 @@ class DataObjectRESTBuilder extends xarObject
         ];
         self::add_operation_response($path, $method, $schema, $properties);
         self::add_operation_security($path, $method, false);
+        $method = 'delete';
+        $schema = 'delete-token';
+        $operationId = str_replace('-', '_', $schema);
+        $description = 'Delete API access token';
+        self::$paths[$path][$method] = [
+            'tags' => ['start'],
+            'operationId' => $operationId,
+            'description' => $description,
+        ];
+        $properties = [
+            'type' => 'boolean',
+        ];
+        self::add_operation_response($path, $method, $schema, $properties);
+        self::add_operation_security($path, $method);
     }
 
     public static function match_proptype($property)
