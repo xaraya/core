@@ -1,3 +1,6 @@
+includes:
+    - phpstan-baseline.neon
+
 parameters:
     level: 0
     paths:
@@ -7,3 +10,6 @@ parameters:
         - phpstan-bootstrap.php
     excludePaths:
         - html/var/*
+        - html/lib/creole/*
+    parallel:
+        processTimeout: 300.0

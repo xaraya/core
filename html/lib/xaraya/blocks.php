@@ -62,7 +62,6 @@ class xarBlock extends xarObject implements ixarBlock
     {
         // Blocks Support Tables
         sys::import('modules.blocks.xartables');
-        /** @phpstan-ignore-next-line */
         $tables = blocks_xartables();
         xarDB::importTables($tables);
         return true;    

@@ -17,7 +17,7 @@ require dirname(dirname(__DIR__)).'/vendor/autoload.php';
 
 class XarayaCodeAnalyzer
 {
-    const PHP_EXT = '/\.php$/';
+    public const PHP_EXT = '/\.php$/';
 
     public $project = null;
     public $functions = array();
@@ -229,6 +229,9 @@ class xarNode implements JsonSerializable
 {
     public static $analyzer;
     public static $formatter;
+    public $name;
+    public $children;
+    public $parent;
 
     public function __construct(string $name)
     {
@@ -632,7 +635,7 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
 
 class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
 {
-    const ALL_EXT = '/\.(php|inc|xt|xml|xsl)$/';
+    public const ALL_EXT = '/\.(php|inc|xt|xml|xsl)$/';
 
     public function check_module_files($inDir, $fixMe = false)
     {
@@ -820,10 +823,13 @@ $analyzer->check_module_files($inDir, $fixMe);
 //$inDir = dirname(dirname(__DIR__)) . '/html/code/modules/' . $modName . '/';
 //$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/xarcachemanager/';
 $inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
+//$inDir = dirname(dirname(__DIR__)) . '/vendor/xaraya/modules/';
 $analyzer = new XarayaModuleAnalyzer($inDir);
 //$analyzer->verbose = true;
 $analyzer->load_project();
 $analyzer->parse_project();
+echo $analyzer->to_json($analyzer->totals);
+echo $analyzer->to_json(array_keys($analyzer->functions));
 // @todo
 //$analyzer->find_module_functions();
 //$analyzer->find_module_classes();
