@@ -443,10 +443,13 @@ class xarGraphQL extends xarObject
         return self::checkCookie($context['server']);
     }
 
-    private static function checkToken($serverVars)
+    public static function checkToken($serverVars)
     {
         if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
             return;
+        }
+        if (self::$trace_path) {
+            self::$paths[] = "checkToken";
         }
         $token = $serverVars['HTTP_X_AUTH_TOKEN'];
         if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
@@ -461,10 +464,13 @@ class xarGraphQL extends xarObject
         }
     }
 
-    private static function checkCookie($serverVars)
+    public static function checkCookie($serverVars)
     {
         if (empty($serverVars) || empty($serverVars['HTTP_COOKIE'])) {
             return;
+        }
+        if (self::$trace_path) {
+            self::$paths[] = "checkCookie";
         }
         xarSession::init();
         //xarUser::init();
@@ -487,6 +493,18 @@ class xarGraphQL extends xarObject
         self::getTokenStorage()->sizeLimitReached();
         self::getTokenStorage()->setCached($token, json_encode($userInfo));
         return $token;
+    }
+
+    public static function deleteToken($serverVars)
+    {
+        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
+            return;
+        }
+        $token = $serverVars['HTTP_X_AUTH_TOKEN'];
+        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
+            return;
+        }
+        self::getTokenStorage()->delCached($token);
     }
 
     public static function getTokenStorage()

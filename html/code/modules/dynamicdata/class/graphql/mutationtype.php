@@ -17,6 +17,7 @@ class xarGraphQLMutationType extends ObjectType
 {
     public static $mutation_mapper = [
         'getToken'     => 'tokentype',
+        'deleteToken'  => 'tokentype',
         'createSample' => 'sampletype',
         'updateSample' => 'sampletype',
         'deleteSample' => 'sampletype',

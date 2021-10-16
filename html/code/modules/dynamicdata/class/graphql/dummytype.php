@@ -35,6 +35,9 @@ class xarGraphQLDummyType extends ObjectType
                 'description' => 'Hello World!',
                 'type' => Type::string(),
                 'resolve' => function () {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = "hello";
+                    }
                     return 'Hello World!';
                 },
             ],
@@ -46,6 +49,9 @@ class xarGraphQLDummyType extends ObjectType
                     'message' => ['type' => Type::string()],
                 ],
                 'resolve' => function ($rootValue, $args) {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = "echo";
+                    }
                     if (empty($args['message'])) {
                         return $rootValue['prefix'] . 'nothing';
                     } else {
@@ -58,6 +64,9 @@ class xarGraphQLDummyType extends ObjectType
                 'description' => 'Get GraphQL Schema Definition',
                 'type' => Type::string(),
                 'resolve' => function () {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = "schema";
+                    }
                     return 'Here is the schema';
                 },
             ],
@@ -66,6 +75,9 @@ class xarGraphQLDummyType extends ObjectType
                 'description' => 'Display current user',
                 'type' => xarGraphQL::get_type('user'),
                 'resolve' => function ($rootValue, $args, $context) {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = "whoami";
+                    }
                     $userId = xarGraphQL::checkUser($context);
                     if (empty($userId)) {
                         return;

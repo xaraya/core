@@ -34,6 +34,23 @@ class xarGraphQLTokenType extends ObjectType
     // @checkme getting an access token is typically done as a mutation, not a query
     public static function _xar_get_mutation_field($name)
     {
+        switch ($name) {
+            case 'getToken':
+                return static::_xar_get_create_mutation($name);
+                break;
+            case 'deleteToken':
+                return static::_xar_get_delete_mutation($name);
+                break;
+            default:
+                throw new Exception('Unknown mutation ' . $name);
+        }
+    }
+
+    /**
+     * Get create mutation field for this object type
+     */
+    public static function _xar_get_create_mutation($name)
+    {
         return [
             'name' => 'getToken',
             'description' => 'Get API access token',
@@ -44,6 +61,9 @@ class xarGraphQLTokenType extends ObjectType
                 'access' => ['type' => Type::string(), 'defaultValue' => 'display'],
             ],
             'resolve' => function ($rootValue, $args) {
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = "getToken";
+                }
                 if (empty($args['uname']) || empty($args['pass'])) {
                     throw new Exception('Invalid username or password');
                 }
@@ -63,6 +83,36 @@ class xarGraphQLTokenType extends ObjectType
                 $token = xarGraphQL::createToken($userInfo);
                 $expiration = date('c', time() + xarGraphQL::$tokenExpires);
                 return ['access_token' => $token, 'expiration' => $expiration];
+            },
+        ];
+    }
+
+    /**
+     * Get delete mutation field for this object type
+     */
+    public static function _xar_get_delete_mutation($name)
+    {
+        return [
+            'name' => $name,
+            'description' => 'Delete API access token',
+            'type' => Type::boolean(),
+            'args' => [
+                'confirm' => ['type' => Type::boolean(), 'defaultValue' => false],
+            ],
+            'resolve' => function ($rootValue, $args, $context) {
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = "deleteToken";
+                }
+                if (empty($args['confirm'])) {
+                    return false;
+                }
+                // see dummytype whoami and graphql checkUser
+                $userId = xarGraphQL::checkToken($context['server']);
+                if (empty($userId)) {
+                    return true;
+                }
+                xarGraphQL::deleteToken($context['server']);
+                return true;
             },
         ];
     }
