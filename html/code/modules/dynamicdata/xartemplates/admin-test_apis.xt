@@ -154,9 +154,12 @@
                     </tr>
                     </tbody>
                 </table>
+            </fieldset>
+            <fieldset class="xar-form-actions">
+                <legend>API Token</legend>
                 <div class="xar-row">
                     <div class="xar-col">
-                       API Token Expiration Time
+                        <label for="tokenexpires" class="xar-form-label">Expiration Time</label>
                     </div>
                     <div class="xar-col">
                         <input type="text" name="tokenexpires" id="tokenexpires" size="8" value="#$tokenexpires#"/> (format hh:mm:ss)
@@ -164,7 +167,7 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                       API Token Cache Storage
+                        <label for="tokenstorage" class="xar-form-label">Cache Storage</label>
                     </div>
                     <div class="xar-col">
                         <select name="tokenstorage" id="tokenstorage">
@@ -180,9 +183,12 @@
                         </select>
                     </div>
                 </div>
+            </fieldset>
+            <fieldset class="xar-form-actions">
+                <legend>GraphQL Configuration</legend>
                 <div class="xar-row">
                     <div class="xar-col">
-                       GraphQL Query Complexity Limit
+                        <label for="querycomplexity" class="xar-form-label">Query Complexity Limit</label>
                     </div>
                     <div class="xar-col">
                         <input type="text" name="querycomplexity" id="querycomplexity" size="3" value="#$querycomplexity#"/> (playground introspection = 181)
@@ -190,12 +196,75 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                       GraphQL Query Depth Limit
+                        <label for="querydepth" class="xar-form-label">Query Depth Limit</label>
                     </div>
                     <div class="xar-col">
                         <input type="text" name="querydepth" id="querydepth" size="3" value="#$querydepth#"/> (playground introspection = 11)
                     </div>
                 </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="enabletimer" class="xar-form-label">Show Query Timer</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($enabletimer)">
+                            <input type="checkbox" name="enabletimer" id="enabletimer" checked="checked"/>
+                        <xar:else/>
+                            <input type="checkbox" name="enabletimer" id="enabletimer"/>
+                        </xar:if>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="tracepath" class="xar-form-label">Trace Query Path</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($tracepath)">
+                            <input type="checkbox" name="tracepath" id="tracepath" checked="checked"/>
+                        <xar:else/>
+                            <input type="checkbox" name="tracepath" id="tracepath"/>
+                        </xar:if>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="enablecache" class="xar-form-label">Enable Cache</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($enablecache)">
+                            <input type="checkbox" name="enablecache" id="enablecache" checked="checked"/>
+                        <xar:else/>
+                            <input type="checkbox" name="enablecache" id="enablecache"/>
+                        </xar:if>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="cacheplan" class="xar-form-label">Cache Query Plan</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($cacheplan)">
+                            <input type="checkbox" name="cacheplan" id="cacheplan" checked="checked"/>
+                        <xar:else/>
+                            <input type="checkbox" name="cacheplan" id="cacheplan"/>
+                        </xar:if>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="cachedata" class="xar-form-label">Cache Query Data</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($cachedata)">
+                            <input type="checkbox" name="cachedata" id="cachedata" checked="checked"/>
+                        <xar:else/>
+                            <input type="checkbox" name="cachedata" id="cachedata"/>
+                        </xar:if>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="xar-form-actions">
+                <legend>Save Configuration</legend>
                 <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
                 <xar:var name="label">Update List</xar:var>
                 <xar:button type="submit" label="$label"/>

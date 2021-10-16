@@ -53,6 +53,11 @@ function dynamicdata_admin_test_apis(array $args=[])
     }
     xarVar::fetch('querycomplexity', 'isset', $queryComplexity, 0, xarVar::NOT_REQUIRED);
     xarVar::fetch('querydepth', 'isset', $queryDepth, 0, xarVar::NOT_REQUIRED);
+    xarVar::fetch('enabletimer', 'isset', $enableTimer, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('tracepath', 'isset', $tracePath, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('enablecache', 'isset', $enableCache, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('cacheplan', 'isset', $cachePlan, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('cachedata', 'isset', $cacheData, false, xarVar::NOT_REQUIRED);
     $restapilist = [];
     $graphqllist = [];
     if (!empty($restapi) && !empty($graphql) && xarSec::confirmAuthKey()) {
@@ -64,6 +69,11 @@ function dynamicdata_admin_test_apis(array $args=[])
         xarModVars::set('dynamicdata', 'restapi_token_expires', intval($tokenExpires));
         xarModVars::set('dynamicdata', 'graphql_query_complexity', intval($queryComplexity));
         xarModVars::set('dynamicdata', 'graphql_query_depth', intval($queryDepth));
+        xarModVars::set('dynamicdata', 'graphql_enable_timer', !empty($enableTimer) ? true : false);
+        xarModVars::set('dynamicdata', 'graphql_trace_path', !empty($tracePath) ? true : false);
+        xarModVars::set('dynamicdata', 'graphql_enable_cache', !empty($enableCache) ? true : false);
+        xarModVars::set('dynamicdata', 'graphql_cache_plan', !empty($cachePlan) ? true : false);
+        xarModVars::set('dynamicdata', 'graphql_cache_data', !empty($cacheData) ? true : false);
     } else {
         $restapiserial = xarModVars::get('dynamicdata', 'restapi_object_list');
         if (!empty($restapiserial)) {
@@ -78,6 +88,11 @@ function dynamicdata_admin_test_apis(array $args=[])
         $tokenExpires = xarModVars::get('dynamicdata', 'restapi_token_expires');
         $queryComplexity = xarModVars::get('dynamicdata', 'graphql_query_complexity');
         $queryDepth = xarModVars::get('dynamicdata', 'graphql_query_depth');
+        $enableTimer = xarModVars::get('dynamicdata', 'graphql_enable_timer');
+        $tracePath = xarModVars::get('dynamicdata', 'graphql_trace_path');
+        $enableCache = xarModVars::get('dynamicdata', 'graphql_enable_cache');
+        $cachePlan = xarModVars::get('dynamicdata', 'graphql_cache_plan');
+        $cacheData = xarModVars::get('dynamicdata', 'graphql_cache_data');
     }
 
     DataObjectRESTBuilder::init();
@@ -113,7 +128,7 @@ function dynamicdata_admin_test_apis(array $args=[])
                 $extraTypes[] = $type;
             }
         }
-        xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth);
+        xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData);
         xarController::redirect(xarServer::getCurrentURL(['create_gql'=> null]));
         return true;
     }
@@ -173,6 +188,11 @@ function dynamicdata_admin_test_apis(array $args=[])
     $data['tokenexpires'] = sprintf('%02d:%02d:%02d', floor($tokenExpires / 3600), intval($tokenExpires % 3600) / 60, intval($tokenExpires % 60));
     $data['querycomplexity'] = $queryComplexity;
     $data['querydepth'] = $queryDepth;
+    $data['enabletimer'] = $enableTimer;
+    $data['tracepath'] = $tracePath;
+    $data['enablecache'] = $enableCache;
+    $data['cacheplan'] = $cachePlan;
+    $data['cachedata'] = $cacheData;
 
     xarTpl::setPageTemplateName('admin');
 

@@ -509,7 +509,7 @@ class xarGraphQL extends xarObject
         return !empty(self::$objectSecurity[$object]) ? true : false;
     }
 
-    public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0)
+    public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0, $timer = false, $trace = false, $cache = false, $plan = false, $data = false)
     {
         $configFile = sys::varpath() . '/cache/api/graphql_config.json';
         $configData = [];
@@ -520,6 +520,11 @@ class xarGraphQL extends xarObject
         $configData['storageType'] = $storage;
         $configData['queryComplexity'] = intval($complexity);
         $configData['queryDepth'] = intval($depth);
+        $configData['enableTimer'] = !empty($timer) ? true : false;
+        $configData['tracePath'] = !empty($trace) ? true : false;
+        $configData['enableCache'] = !empty($cache) ? true : false;
+        $configData['cachePlan'] = !empty($plan) ? true : false;
+        $configData['cacheData'] = !empty($data) ? true : false;
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         $content = self::get_data('{schema}', [], null, $extraTypes);
