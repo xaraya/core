@@ -1,0 +1,14 @@
+query listSamples {
+  samples {
+    id
+    name
+    age
+  }
+}
+query filterSamples($filter: [String]) {
+  samples(filter: $filter) {
+    id
+    name
+    age
+  }
+}

@@ -51,6 +51,7 @@ class xarGraphQL extends xarObject
     use xarCacheTrait;
     use xarTimerTrait;
 
+    public static $endpoint = 'gql.php';
     public static $type_cache = [];
     public static $type_mapper = [
         'query'    => 'querytype',
@@ -545,7 +546,8 @@ class xarGraphQL extends xarObject
         $configData['cacheData'] = !empty($data) ? true : false;
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
-        $content = self::get_data('{schema}', [], null, $extraTypes);
+        $content = '"""GraphQL Endpoint: ' . xarServer::getBaseURL() . self::$endpoint . '"""' . "\n";
+        $content .= self::get_data('{schema}', [], null, $extraTypes);
         $content .= "\n" . '"""Generated: ' . date('c') . '"""';
         file_put_contents($schemaFile, $content);
     }
