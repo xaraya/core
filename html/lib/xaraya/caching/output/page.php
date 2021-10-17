@@ -224,13 +224,15 @@ class xarPageCache extends xarObject
             // jsb:  for some reason, Mozilla based browsers
             // do not re-send an ETag after getting a 304
             // so this only works once per cached page
-            header('HTTP/1.0 304');
+            header('HTTP/1.1 304 Not Modified');
+            header("Cache-Control: public, must-revalidate");
             exit;
         } else {
             $since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ?
                 $_SERVER['HTTP_IF_MODIFIED_SINCE'] : NULL;
             if (!empty($since) && strtotime($since) >= $modtime) {   
-                header('HTTP/1.0 304');
+                header('HTTP/1.1 304 Not Modified');
+                header("Cache-Control: public, must-revalidate");
                 exit;
                 // jsb: according to RFC 2616, if $match isn't empty but is
                 // not equal to the ETag we should send a 412 response
