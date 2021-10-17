@@ -23,6 +23,62 @@ function dynamicdata_admin_test_apis(array $args=[])
 
     extract($args);
 
+    xarVar::fetch('tab', 'isset', $tab, null, xarVar::NOT_REQUIRED);
+    if (!empty($tab) && in_array($tab, ['swagger-ui', 'datatables', 'playground'])) {
+        $testDir = dirname(__DIR__) . '/xartests/';
+        $testFile = $testDir . $tab . '.html';
+        if (file_exists($testFile)) {
+            $contents = file_get_contents($testFile);
+            if (strpos(xarServer::getCurrentURL(), '/dynamicdata/admin/test_apis') !== false) {
+                // using index.php/dynamicdata/admin/test_apis or similar
+                $contents = str_replace('../../../../', '../../../', $contents);
+            } else {
+                // using index.php?module=dynamicdata&type=admin&func=test_apis
+                $contents = str_replace('../../../../', './', $contents);
+            }
+            // use 'passthru' page template to output the contents as is here
+            xarTpl::setPageTemplateName('passthru');
+            return $contents;
+        }
+    }
+    if (!empty($tab) && in_array($tab, ['openapi.json', 'schema.graphql'])) {
+        $apiDir = sys::varpath() . '/cache/api/';
+        $apiFile = $apiDir . $tab;
+        if (file_exists($apiFile)) {
+            //$contents = file_get_contents($apiFile);
+            // use 'passthru' page template to output the contents as is here
+            //xarTpl::setPageTemplateName('passthru');
+            //return $contents;
+            // see session-less page caching
+            //sys::import('xaraya.caching.output.page');
+            $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            //xarPageCache::$cacheCode = $cacheCode;
+            $modtime = filemtime($apiFile);
+            //xarPageCache::sendHeaders($modtime);
+            $etag = $cacheCode.$modtime;
+            $match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?
+                $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
+            if (!empty($match) && $match == $etag) {
+                header('HTTP/1.1 304 Not Modified');
+                header("Cache-Control: public, must-revalidate");
+                exit;
+            }
+            //header("Expires: " .
+            //       gmdate("D, d M Y H:i:s", $modtime + xarPageCache::$cacheTime) .
+            //       " GMT");
+            //header("Cache-Control: public, max-age=" . xarPageCache::$cacheTime);
+            //header("Expires: 0");
+            header("Cache-Control: public, must-revalidate");
+            header("ETag: $etag");
+            header("Last-Modified: " . gmdate("D, d M Y H:i:s", $modtime) . " GMT");
+            header('Content-Type: text/plain; charset=utf-8');
+            //header("Pragma: public");
+            // send the content of the file to the browser
+            @readfile($apiFile);
+            // we're done here !
+            exit;
+        }
+    }
     xarVar::fetch('restapi', 'array', $restapi, [], xarVar::NOT_REQUIRED);
     xarVar::fetch('graphql', 'array', $graphql, [], xarVar::NOT_REQUIRED);
     xarVar::fetch('object_new', 'isset', $object_new, '', xarVar::NOT_REQUIRED);
