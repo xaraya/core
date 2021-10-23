@@ -157,7 +157,7 @@ class OpenApiTest extends TestCase
             //$result = $apiInstance->viewSample($limit, $offset, $order, $filter);
             $result = $apiInstance->viewSample();
             print_r($result);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo 'Exception when calling SampleApi->viewSample: ', $e->getMessage(), PHP_EOL;
         }
         $this->assertEquals($expected, $result);

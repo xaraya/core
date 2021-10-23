@@ -123,7 +123,7 @@ class RestAPITest extends TestCase
             $content = (string) $response->getBody();
             $result = json_decode($content, true);
             print_r($result);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo 'Exception when calling RestAPITest->testViewSample: ', $e->getMessage(), PHP_EOL;
         }
         $this->assertEquals($expected, $result);

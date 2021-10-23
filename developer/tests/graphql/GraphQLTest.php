@@ -113,7 +113,7 @@ class GraphQLTest extends TestCase
             if (is_array($result) and !empty($result['extensions'])) {
                 unset($result['extensions']);
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             echo 'Exception when calling GraphQLTest->testSamplesQuery: ', $e->getMessage(), PHP_EOL;
         }
         $this->assertEquals($expected, $result);
