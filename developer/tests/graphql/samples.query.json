@@ -1,9 +1,10 @@
 {
-    "query": "query listSamples {\n  samples {\n    id\n    name\n    age\n  }\n}\nquery filterSamples($filter: [String]) {\n  samples(filter: $filter) {\n    id\n    name\n    age\n  }\n}",
+    "query": "query listSamples {\n  samples {\n    id\n    name\n    age\n  }\n}\nquery filterSamples($filter: [String], $order: String) {\n  samples(filter: $filter, order: $order) {\n    id\n    name\n    age\n  }\n}\n",
     "variables": {
         "filter": [
             "age,gt,1"
-        ]
+        ],
+        "order": "age"
     },
     "operationName": "filterSamples"
 }

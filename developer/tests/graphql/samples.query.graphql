@@ -5,8 +5,8 @@ query listSamples {
     age
   }
 }
-query filterSamples($filter: [String]) {
-  samples(filter: $filter) {
+query filterSamples($filter: [String], $order: String) {
+  samples(filter: $filter, order: $order) {
     id
     name
     age

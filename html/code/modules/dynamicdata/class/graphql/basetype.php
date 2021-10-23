@@ -104,7 +104,7 @@ class xarGraphQLBaseType extends ObjectType
             //'type' => Type::listOf(xarGraphQL::get_type($type)),
             'type' => xarGraphQL::get_type_list($type),
             'args' => [
-                //'order' => Type::string(),
+                'order' => Type::string(),
                 //'offset' => [
                 //    'type' => Type::int(),
                 //    'defaultValue' => 0,

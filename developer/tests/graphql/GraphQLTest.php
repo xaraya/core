@@ -156,7 +156,7 @@ query filterSamples($filter: [String]) {
             }
             return $body;
         }
-        $variables = $variables ?? ['filter' => ['age,gt,1']];
+        $variables = $variables ?? ['filter' => ['age,gt,1'], 'order' => 'age'];
         $operation = $operation ?? 'filterSamples';
 
         $body = [
@@ -177,8 +177,8 @@ query filterSamples($filter: [String]) {
             return $result;
         }
         $samples = [];
-        $samples[] = ['id' => '1', 'name' => 'Johnny', 'age' => 32];
         $samples[] = ['id' => '2', 'name' => 'Nancy', 'age' => 29];
+        $samples[] = ['id' => '1', 'name' => 'Johnny', 'age' => 32];
         //$samples[] = ['id' => 3, 'name' => 'Baby', 'age' => 1];
         $result = [
             'data' => ['samples' => $samples],

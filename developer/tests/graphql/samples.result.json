@@ -2,14 +2,14 @@
     "data": {
         "samples": [
             {
-                "id": "1",
-                "name": "Johnny",
-                "age": 32
-            },
-            {
-                "id": "2",
+                "id": 2,
                 "name": "Nancy",
                 "age": 29
+            },
+            {
+                "id": 1,
+                "name": "Johnny",
+                "age": 32
             }
         ]
     }
