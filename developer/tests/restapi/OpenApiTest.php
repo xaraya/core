@@ -1,6 +1,6 @@
 <?php
 /**
- * RestApiTest
+ * OpenApiTest
  * PHP version 7.3
  *
  * @category Class
@@ -33,14 +33,14 @@ use \OpenAPI\Client\ObjectSerializer;
 use PHPUnit\Framework\TestCase;
 
 /**
- * RestApiTest Class Doc Comment
+ * OpenApiTest Class Doc Comment
  *
  * @category Class
  * @package  OpenAPI\Client
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  */
-class RestApiTest extends TestCase
+class OpenApiTest extends TestCase
 {
 
     /**
