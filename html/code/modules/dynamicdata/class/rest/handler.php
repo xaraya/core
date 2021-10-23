@@ -729,6 +729,6 @@ class DataObjectRESTHandler extends xarObject
     {
         //http_response_code($status);
         header('Content-Type: application/json; charset=utf-8');
-        echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
     }
 }
