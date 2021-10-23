@@ -1,0 +1,19 @@
+{
+    "method": "GET",
+    "uri": "/objects/sample",
+    "options": {
+        "headers": {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        "query": {
+            "limit": 100,
+            "offset": 0,
+            "order": "age",
+            "filter": [
+                "age,gt,1"
+            ]
+        },
+        "body": null
+    }
+}
