@@ -2,5 +2,7 @@
 *
 # Except these files and directories
 !.gitignore
-!Makefile
+!composer.json
 !RestApiTest.php
+!Makefile
+!OpenApiTest.php
