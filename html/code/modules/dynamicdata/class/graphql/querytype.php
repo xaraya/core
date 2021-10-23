@@ -45,7 +45,7 @@ class xarGraphQLQueryType extends ObjectType
      */
     public static function get_query_fields()
     {
-        $fields = array();
+        $fields = [];
         foreach (static::$query_mapper as $name => $type) {
             $add_field = static::add_query_field($name, $type);
             if (!empty($add_field)) {

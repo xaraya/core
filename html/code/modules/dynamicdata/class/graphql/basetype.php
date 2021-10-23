@@ -24,7 +24,7 @@ class xarGraphQLBaseType extends ObjectType
     public static $_xar_object = '';
     public static $_xar_list   = '';
     public static $_xar_item   = '';
-    protected static $_xar_deferred = array();
+    protected static $_xar_deferred = [];
     public static $_xar_security = true;
 
     /**
@@ -143,7 +143,7 @@ class xarGraphQLBaseType extends ObjectType
             'description' => 'Get DD ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
-                'id' => Type::nonNull(Type::id())
+                'id' => Type::nonNull(Type::id()),
             ],
             //'extensions' => [
             //    'access' => 'display',
@@ -178,7 +178,7 @@ class xarGraphQLBaseType extends ObjectType
                 }
                 $fields = $info->getFieldSelection(0);
                 if (array_key_exists('id', $fields) && count($fields) < 2) {
-                    return array('id' => $values[$prop_name]);
+                    return ['id' => $values[$prop_name]];
                 }
                 $fieldlist = array_keys($fields);
                 if (!empty(xarGraphQL::$object_type[$property->objectname])) {
@@ -204,7 +204,7 @@ class xarGraphQLBaseType extends ObjectType
                     if (xarGraphQL::$trace_path) {
                         xarGraphQL::$paths[] = ["get deferred $type " . $values['id']];
                     }
-                    $data = $property->getDeferredData(array('value' => $values[$prop_name], '_itemid' => $values['id']));
+                    $data = $property->getDeferredData(['value' => $values[$prop_name], '_itemid' => $values['id']]);
                     //print_r($data['value']);
                     // @checkme convert deferred data into assoc array or list of assoc array
                     //if (property_exists($property, 'linkname')) {
@@ -230,7 +230,7 @@ class xarGraphQLBaseType extends ObjectType
             }
             $fields = $info->getFieldSelection(0);
             if (array_key_exists('id', $fields) && count($fields) < 2) {
-                return array('id' => $values[$prop_name]);
+                return ['id' => $values[$prop_name]];
             }
             if (array_key_exists($type, xarGraphQL::$type_fields)) {
                 $fieldlist = xarGraphQL::$type_fields[$type];
@@ -319,7 +319,7 @@ class xarGraphQLBaseType extends ObjectType
             'description' => 'Create DD ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
-                'input' => xarGraphQL::get_input_type($type)
+                'input' => xarGraphQL::get_input_type($type),
             ],
             //'extensions' => [
             //    'access' => 'create',
@@ -349,7 +349,7 @@ class xarGraphQLBaseType extends ObjectType
             'description' => 'Update DD ' . $object . ' item',
             'type' => xarGraphQL::get_type($type),
             'args' => [
-                'input' => xarGraphQL::get_input_type($type)
+                'input' => xarGraphQL::get_input_type($type),
             ],
             //'extensions' => [
             //    'access' => 'update',
@@ -379,7 +379,7 @@ class xarGraphQLBaseType extends ObjectType
             'description' => 'Delete DD ' . $object . ' item',
             'type' => Type::nonNull(Type::id()),
             'args' => [
-                'id' => Type::nonNull(Type::id())
+                'id' => Type::nonNull(Type::id()),
             ],
             //'extensions' => [
             //    'access' => 'delete',

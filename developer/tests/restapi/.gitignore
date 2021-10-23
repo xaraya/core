@@ -1,0 +1,9 @@
+# Ignore everything in this directory
+*
+# Except these files and directories
+!.gitignore
+!composer.json
+!RestApiTest.php
+!phpunit.xml.dist
+!Makefile
+!OpenApiTest.php

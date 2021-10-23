@@ -44,7 +44,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                         return null;
                     }
                     return array_keys($object['_objectref']->descriptor->getArgs());
-                }
+                },
             ],
             'name' => Type::string(),
             'label' => Type::string(),
@@ -64,7 +64,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                     }
                     //print_r($object['access']);
                     return @unserialize($object['access']);
-                }
+                },
             ],
             'datastore' => Type::string(),
             // this is not returned via getFieldValues()
@@ -79,7 +79,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                     }
                     //print_r($object['config']);
                     return @unserialize($object['config']);
-                }
+                },
             ],
             'maxid' => Type::int(),
             'isalias' => Type::boolean(),
@@ -88,7 +88,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                 'type' => Type::string(),
                 'resolve' => function ($object, $args) {
                     return get_class($object['_objectref']);
-                }
+                },
             ],
             //'category' => $clazz::get_deferred_field('category', 'category'),
             //'properties' => Type::listOf(xarGraphQL::get_type("property")),
@@ -203,7 +203,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                     throw new Exception('Invalid user');
                 }
             }
-            $params = array('name' => $object, 'itemid' => $args['id']);
+            $params = ['name' => $object, 'itemid' => $args['id']];
             $objectref = DataObjectMaster::getObject($params);
             if (xarGraphQL::hasSecurity($object) && !$objectref->checkAccess('display', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
