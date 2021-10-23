@@ -4,5 +4,6 @@
 !.gitignore
 !composer.json
 !RestApiTest.php
+!phpunit.xml.dist
 !Makefile
 !OpenApiTest.php
