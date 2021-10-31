@@ -154,8 +154,7 @@ function roles_admin_modifyconfig()
                     $debugadmins = array();
                     $candidates = xarConfigVars::get(null, 'Site.User.DebugAdmins');
                     foreach ($candidates as $candidate) {
-                        //$admin = xarMod::apiFunc('roles','user','get',array('id' => (int)$candidate));
-                        $admin = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
+                        $admin = xarMod::apiFunc('roles','user','get',array('id' => (int)$candidate));
                         if(!empty($admin)) $debugadmins[] = $admin['uname'];
                     }
                     $data['debugadmins'] = implode(',', $debugadmins);
@@ -212,6 +211,9 @@ function roles_admin_modifyconfig()
                 case 'debugging':
                     if (!xarVar::fetch('debugadmins', 'str', $candidates, '', xarVar::NOT_REQUIRED)) return;
 
+                    // Remove unwanted characters
+                    $candidates = trim($candidates, " ,\n\r\t\v\0");
+                    
                     // Get the users to be shown the debug messages
                     if (empty($candidates)) {
                         $candidates = array();
@@ -220,7 +222,7 @@ function roles_admin_modifyconfig()
                     }
                     $debugadmins = array();
                     foreach ($candidates as $candidate) {
-                        $admin = xarMod::apiFunc('roles','user','get',array('uname' => trim($candidate)));
+                        $admin = xarMod::apiFunc('roles','user','get',array('uname' => $candidate));
                         if(!empty($admin)) $debugadmins[] = (int)$admin['id'];
                     }
                     xarConfigVars::set(null, 'Site.User.DebugAdmins', $debugadmins);
