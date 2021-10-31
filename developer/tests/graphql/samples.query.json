@@ -1,0 +1,9 @@
+{
+    "query": "query listSamples {\n  samples {\n    id\n    name\n    age\n  }\n}\nquery filterSamples($filter: [String]) {\n  samples(filter: $filter) {\n    id\n    name\n    age\n  }\n}",
+    "variables": {
+        "filter": [
+            "age,gt,1"
+        ]
+    },
+    "operationName": "filterSamples"
+}

@@ -36,7 +36,7 @@ class xarGraphQLMultiValType extends UnionType
                 }
                 //return Type::listOf(xarGraphQL::get_type("keyval"));
                 return xarGraphQL::get_type_list("keyval");
-            }
+            },
         ];
         parent::__construct($config);
     }

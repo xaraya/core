@@ -51,6 +51,7 @@ class xarGraphQL extends xarObject
     use xarCacheTrait;
     use xarTimerTrait;
 
+    public static $endpoint = 'gql.php';
     public static $type_cache = [];
     public static $type_mapper = [
         'query'    => 'querytype',
@@ -103,7 +104,7 @@ class xarGraphQL extends xarObject
             //'types' => [self::get_type("ddnode")],  // invisible types
             'typeLoader' => function ($name) {
                 return self::get_type($name);
-            }
+            },
         ]);
 
         if ($validate) {
@@ -125,7 +126,7 @@ class xarGraphQL extends xarObject
         }
         $clazz = self::get_type_class("buildtype");
         foreach (self::$extra_types as $type) {
-            list($name, $type, $object, $list, $item) = $clazz::sanitize($type);
+            [$name, $type, $object, $list, $item] = $clazz::sanitize($type);
             self::$object_type[$object] = $name;
         }
     }
@@ -297,7 +298,7 @@ class xarGraphQL extends xarObject
         }
         return $class_mapper[$type];
     }
- 
+
     /**
      * Build GraphQL Schema based on schema.graphql file and type config decorator
      */
@@ -361,7 +362,7 @@ class xarGraphQL extends xarObject
             return $header . SchemaPrinter::doPrint($schema);
             //return SchemaPrinter::printIntrospectionSchema($schema);
         }
-        
+
         // Add to standard set of rules globally (values from GraphQL Playground IntrospectionQuery)
         if (!empty(self::$queryComplexity)) {
             DocumentValidator::addRule(new Rules\QueryComplexity(self::$queryComplexity));  // 181
@@ -375,7 +376,7 @@ class xarGraphQL extends xarObject
         $context = ['request' => $_REQUEST, 'server' => $_SERVER];
         $fieldResolver = null;
         $validationRules = null;
-        
+
         $result = GraphQL::executeQuery(
             $schema,
             $queryString,
@@ -399,7 +400,7 @@ class xarGraphQL extends xarObject
                 self::setCached($cacheKey, $serializableResult);
             }
         }
-        $extensions = array();
+        $extensions = [];
         if (self::$trace_path) {
             $extensions['paths'] = self::$paths;
         }
@@ -443,10 +444,13 @@ class xarGraphQL extends xarObject
         return self::checkCookie($context['server']);
     }
 
-    private static function checkToken($serverVars)
+    public static function checkToken($serverVars)
     {
         if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
             return;
+        }
+        if (self::$trace_path) {
+            self::$paths[] = "checkToken";
         }
         $token = $serverVars['HTTP_X_AUTH_TOKEN'];
         if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
@@ -461,10 +465,13 @@ class xarGraphQL extends xarObject
         }
     }
 
-    private static function checkCookie($serverVars)
+    public static function checkCookie($serverVars)
     {
         if (empty($serverVars) || empty($serverVars['HTTP_COOKIE'])) {
             return;
+        }
+        if (self::$trace_path) {
+            self::$paths[] = "checkCookie";
         }
         xarSession::init();
         //xarUser::init();
@@ -489,6 +496,18 @@ class xarGraphQL extends xarObject
         return $token;
     }
 
+    public static function deleteToken($serverVars)
+    {
+        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
+            return;
+        }
+        $token = $serverVars['HTTP_X_AUTH_TOKEN'];
+        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
+            return;
+        }
+        self::getTokenStorage()->delCached($token);
+    }
+
     public static function getTokenStorage()
     {
         if (!isset(self::$tokenStorage)) {
@@ -509,10 +528,10 @@ class xarGraphQL extends xarObject
         return !empty(self::$objectSecurity[$object]) ? true : false;
     }
 
-    public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0)
+    public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0, $timer = false, $trace = false, $cache = false, $plan = false, $data = false)
     {
         $configFile = sys::varpath() . '/cache/api/graphql_config.json';
-        $configData = array();
+        $configData = [];
         $configData['generated'] = date('c');
         $configData['caution'] = 'This file is updated when you rebuild the schema.graphql document in Dynamic Data - Utilities - Test APIs';
         $configData['extraTypes'] = $extraTypes;
@@ -520,9 +539,15 @@ class xarGraphQL extends xarObject
         $configData['storageType'] = $storage;
         $configData['queryComplexity'] = intval($complexity);
         $configData['queryDepth'] = intval($depth);
+        $configData['enableTimer'] = !empty($timer) ? true : false;
+        $configData['tracePath'] = !empty($trace) ? true : false;
+        $configData['enableCache'] = !empty($cache) ? true : false;
+        $configData['cachePlan'] = !empty($plan) ? true : false;
+        $configData['cacheData'] = !empty($data) ? true : false;
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
-        $content = self::get_data('{schema}', [], null, $extraTypes);
+        $content = '"""GraphQL Endpoint: ' . xarServer::getBaseURL() . self::$endpoint . '"""' . "\n";
+        $content .= self::get_data('{schema}', [], null, $extraTypes);
         $content .= "\n" . '"""Generated: ' . date('c') . '"""';
         file_put_contents($schemaFile, $content);
     }

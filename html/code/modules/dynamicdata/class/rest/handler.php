@@ -530,6 +530,17 @@ class DataObjectRESTHandler extends xarObject
         return ['access_token' => $token, 'expiration' => $expiration];
     }
 
+    public static function deleteToken($args = null)
+    {
+        $userId = self::checkUser();
+        $token = !empty($_SERVER['HTTP_X_AUTH_TOKEN']) ? $_SERVER['HTTP_X_AUTH_TOKEN'] : '';
+        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
+            return false;
+        }
+        self::getTokenStorage()->delCached($token);
+        return true;
+    }
+
     public static function getTokenStorage()
     {
         if (!isset(self::$tokenStorage)) {
@@ -704,6 +715,7 @@ class DataObjectRESTHandler extends xarObject
         //$r->patch('/objects/{object}', ['DataObjectRESTHandler', 'patchObjectDefinition']);
         $r->get('/whoami', ['DataObjectRESTHandler', 'whoami']);
         $r->post('/token', ['DataObjectRESTHandler', 'postToken']);
+        $r->delete('/token', ['DataObjectRESTHandler', 'deleteToken']);
         $r->get('/modules', ['DataObjectRESTHandler', 'getModules']);
         $r->get('/modules/{module}', ['DataObjectRESTHandler', 'getModuleApis']);
         $r->get('/modules/{module}/{path}', ['DataObjectRESTHandler', 'getModuleCall']);

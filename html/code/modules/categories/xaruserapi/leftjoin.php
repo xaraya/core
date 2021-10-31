@@ -224,7 +224,7 @@ function categories_userapi_leftjoin($args)
                 $oldcid = '';
                 foreach ($leftjoin['cids'] as $cid) {
                     if (!empty($oldcid)) {
-                        $where[] .= $oldcid . ' < ' . $cid;
+                        $where[] = $oldcid . ' < ' . $cid;
                     }
                     $oldcid = $cid;
                 }

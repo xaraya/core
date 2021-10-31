@@ -50,7 +50,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                         });
                     }
                     return $property->keys;
-                }
+                },
             ],
             // @checkme name is not returned by getProperties() because it's DISPLAYONLY?
             'name' => Type::string(),
@@ -75,39 +75,39 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                     if (is_array($property) && isset($property['configuration'])) {
                         $values = @unserialize($property['configuration']);
                         if (empty($values)) {
-                            return array();
+                            return [];
                         }
                         if (!is_array($values)) {
-                            $values = array('' => $values);
+                            $values = ['' => $values];
                         }
-                        $config = array();
+                        $config = [];
                         foreach ($values as $key => $value) {
                             //if (is_array($value)) {
                             //    $value = json_encode($value);
                             //}
-                            $config[] = array('key' => $key, 'value' => $value);
+                            $config[] = ['key' => $key, 'value' => $value];
                         }
                         return $config;
                     }
                     if (is_object($property) && property_exists($property, 'configuration') && isset($property->configuration)) {
                         $values = @unserialize($property->configuration);
                         if (empty($values)) {
-                            return array();
+                            return [];
                         }
                         if (!is_array($values)) {
-                            $values = array('' => $values);
+                            $values = ['' => $values];
                         }
-                        $config = array();
+                        $config = [];
                         foreach ($values as $key => $value) {
                             //if (is_array($value)) {
                             //    $value = json_encode($value);
                             //}
-                            $config[] = array('key' => $key, 'value' => $value);
+                            $config[] = ['key' => $key, 'value' => $value];
                         }
                         return $config;
                     }
                     return null;
-                }
+                },
             ],
             //'objectref' => xarGraphQL::get_type("object"),
             'args' => Type::listOf(Type::string()),

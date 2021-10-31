@@ -17,6 +17,7 @@ class xarGraphQLMutationType extends ObjectType
 {
     public static $mutation_mapper = [
         'getToken'     => 'tokentype',
+        'deleteToken'  => 'tokentype',
         'createSample' => 'sampletype',
         'updateSample' => 'sampletype',
         'deleteSample' => 'sampletype',
@@ -37,7 +38,7 @@ class xarGraphQLMutationType extends ObjectType
      */
     public static function get_mutation_fields()
     {
-        $fields = array();
+        $fields = [];
         foreach (static::$mutation_mapper as $name => $type) {
             $add_field = static::add_mutation_field($name, $type);
             if (!empty($add_field)) {

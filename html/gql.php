@@ -83,6 +83,21 @@ if (file_exists($configFile)) {
     if (!empty($configData['storageType'])) {
         xarGraphQL::$storageType = $configData['storageType'];
     }
+    if (!empty($configData['enableTimer'])) {
+        xarGraphQL::$enableTimer = true;
+    }
+    if (!empty($configData['tracePath'])) {
+        xarGraphQL::$trace_path = true;
+    }
+    if (!empty($configData['enableCache'])) {
+        xarGraphQL::$enableCache = true;
+    }
+    if (!empty($configData['cachePlan'])) {
+        xarGraphQL::$cache_plan = true;
+    }
+    if (!empty($configData['cacheData'])) {
+        xarGraphQL::$cache_data = true;
+    }
 }
 $data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';

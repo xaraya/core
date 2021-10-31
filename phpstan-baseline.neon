@@ -1,0 +1,767 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Undefined variable\\: \\$formatter$#"
+			count: 1
+			path: developer/tools/bermuda_cleanup.php
+
+		-
+			message: "#^Call to an undefined method DataContainer\\:\\:getProperty_\\(\\)\\.$#"
+			count: 2
+			path: html/bootstrap.php
+
+		-
+			message: "#^Undefined variable\\: \\$params$#"
+			count: 1
+			path: html/code/modules/base/class/xarCurl.php
+
+		-
+			message: "#^Undefined variable\\: \\$headers$#"
+			count: 1
+			path: html/code/modules/base/class/xarCurl.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 3
+			path: html/code/modules/base/xaradmin/composer.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/base/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Undefined variable\\: \\$encryption$#"
+			count: 1
+			path: html/code/modules/base/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Array has 2 duplicate keys with value 'ý' \\('ý', 'ý'\\)\\.$#"
+			count: 1
+			path: html/code/modules/base/xaradminapi/sanitize_filename.php
+
+		-
+			message: "#^Undefined variable\\: \\$title$#"
+			count: 1
+			path: html/code/modules/base/xarblocks/content_display.php
+
+		-
+			message: "#^Function xarTplGetJavaScript not found\\.$#"
+			count: 1
+			path: html/code/modules/base/xarjavascriptapi/geteventjs.php
+
+		-
+			message: "#^Function xarTplAddJavaScript not found\\.$#"
+			count: 1
+			path: html/code/modules/base/xarjavascriptapi/modulecode.php
+
+		-
+			message: "#^Function xarTplAddJavaScript not found\\.$#"
+			count: 1
+			path: html/code/modules/base/xarjavascriptapi/modulefile.php
+
+		-
+			message: "#^Function xarTplAddJavaScript not found\\.$#"
+			count: 1
+			path: html/code/modules/base/xarjavascriptapi/moduleinline.php
+
+		-
+			message: "#^Undefined variable\\: \\$default_column_definition$#"
+			count: 1
+			path: html/code/modules/base/xarproperties/array.php
+
+		-
+			message: "#^Undefined variable\\: \\$items$#"
+			count: 2
+			path: html/code/modules/base/xarproperties/dropdown.php
+
+		-
+			message: "#^Call to function unset\\(\\) contains undefined variable \\$items\\.$#"
+			count: 1
+			path: html/code/modules/base/xarproperties/dropdown.php
+
+		-
+			message: "#^Undefined variable\\: \\$extraparams$#"
+			count: 1
+			path: html/code/modules/base/xarproperties/dropdown.php
+
+		-
+			message: "#^Undefined variable\\: \\$temp$#"
+			count: 1
+			path: html/code/modules/base/xarproperties/filepicker.php
+
+		-
+			message: "#^Undefined variable\\: \\$value$#"
+			count: 1
+			path: html/code/modules/base/xarproperties/fileupload.php
+
+		-
+			message: "#^Undefined variable\\: \\$name$#"
+			count: 1
+			path: html/code/modules/base/xarproperties/fileupload.php
+
+		-
+			message: "#^Instantiated class BadParameterExceptions not found\\.$#"
+			count: 1
+			path: html/code/modules/base/xaruserapi/getfile.php
+
+		-
+			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
+			count: 1
+			path: html/code/modules/blocks/xaradmin/delete_instance.php
+
+		-
+			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
+			count: 1
+			path: html/code/modules/blocks/xaradmin/delete_type.php
+
+		-
+			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
+			count: 1
+			path: html/code/modules/blocks/xaradmin/modify_instance.php
+
+		-
+			message: "#^Undefined variable\\: \\$blockgroups$#"
+			count: 1
+			path: html/code/modules/blocks/xaradmin/modify_instance.php
+
+		-
+			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
+			count: 1
+			path: html/code/modules/blocks/xaradmin/modify_type.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/blocks/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
+			count: 1
+			path: html/code/modules/blocks/xarinstancesapi/createitem.php
+
+		-
+			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
+			count: 1
+			path: html/code/modules/blocks/xarinstancesapi/deleteitem.php
+
+		-
+			message: "#^Undefined variable\\: \\$type_id$#"
+			count: 1
+			path: html/code/modules/blocks/xartypesapi/deleteitem.php
+
+		-
+			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
+			count: 1
+			path: html/code/modules/blocks/xartypesapi/deleteitem.php
+
+		-
+			message: "#^Instantiated class BasecSet not found\\.$#"
+			count: 1
+			path: html/code/modules/categories/class/categories.php
+
+		-
+			message: "#^Undefined variable\\: \\$collection$#"
+			count: 2
+			path: html/code/modules/categories/class/categories.php
+
+		-
+			message: "#^Static call to instance method Categories\\:\\:get\\(\\)\\.$#"
+			count: 1
+			path: html/code/modules/categories/class/categories.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 8
+			path: html/code/modules/categories/xaradmin/build_tree.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 3
+			path: html/code/modules/categories/xaradmin/clone.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 3
+			path: html/code/modules/categories/xaradmin/create.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 6
+			path: html/code/modules/categories/xaradmin/delete.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 3
+			path: html/code/modules/categories/xaradmin/modify.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/categories/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/categories/xaradmin/new.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/categories/xaradmin/update.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/categories/xaradmin/view.php
+
+		-
+			message: "#^Function Tag not found\\.$#"
+			count: 1
+			path: html/code/modules/categories/xaradminapi/linkcat.php
+
+		-
+			message: "#^Instantiated class BadParameterExcepton not found\\.$#"
+			count: 1
+			path: html/code/modules/categories/xaradminapi/updatecelkolinks.php
+
+		-
+			message: "#^Undefined variable\\: \\$vars$#"
+			count: 7
+			path: html/code/modules/categories/xarblocks/navigation_config.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/categories/xarproperties/categorypicker.php
+
+		-
+			message: "#^Method CelkoPositionProperty\\:\\:unpackValue\\(\\) invoked with 0 parameters, 1 required\\.$#"
+			count: 1
+			path: html/code/modules/categories/xarproperties/celkoposition.php
+
+		-
+			message: "#^Undefined variable\\: \\$parent_id$#"
+			count: 1
+			path: html/code/modules/categories/xarproperties/celkoposition.php
+
+		-
+			message: "#^Undefined variable\\: \\$itemid$#"
+			count: 1
+			path: html/code/modules/categories/xarproperties/celkoposition.php
+
+		-
+			message: "#^Instantiated class FlatTableDataStore not found\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/datastores/master.php
+
+		-
+			message: "#^Instantiated class FunctionDataStore not found\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/datastores/master.php
+
+		-
+			message: "#^Instantiated class UserSettingsDataStore not found\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/datastores/master.php
+
+		-
+			message: "#^Instantiated class LDAPDataStore not found\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/datastores/master.php
+
+		-
+			message: "#^Instantiated class XMLFileDataStore not found\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/datastores/master.php
+
+		-
+			message: "#^Instantiated class CSVFileDataStore not found\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/datastores/master.php
+
+		-
+			message: "#^Undefined variable\\: \\$modulename$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/objects/base.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/dynamicdata/class/objects/list.php
+
+		-
+			message: "#^Undefined variable\\: \\$values$#"
+			count: 2
+			path: html/code/modules/dynamicdata/class/objects/loader.php
+
+		-
+			message: "#^Call to an undefined method object\\:\\:setWhere\\(\\)\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/objects/master.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$where\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/objects/master.php
+
+		-
+			message: "#^Access to an undefined property object\\:\\:\\$visibility\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/objects/master.php
+
+		-
+			message: "#^Call to an undefined method DataObjectMaster\\:\\:checkInput\\(\\)\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/objects/master.php
+
+		-
+			message: "#^Undefined variable\\: \\$value$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/properties/base.php
+
+		-
+			message: "#^Undefined variable\\: \\$info$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/properties/base.php
+
+		-
+			message: "#^Class PropertyRegistration constructor invoked with 0 parameters, 1 required\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/properties/base.php
+
+		-
+			message: "#^Undefined variable\\: \\$this$#"
+			count: 4
+			path: html/code/modules/dynamicdata/class/properties/base.php
+
+		-
+			message: "#^Call to an undefined static method xarController\\:\\:Rredirect\\(\\)\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/ui_handlers/stats.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 3
+			path: html/code/modules/dynamicdata/xaradmin/delete_static.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/dynamicdata/xaradmin/delete_static_table.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/import.php
+
+		-
+			message: "#^Function mysql_list_dbs not found\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/meta.php
+
+		-
+			message: "#^Function mysql_fetch_object not found\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/meta.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 4
+			path: html/code/modules/dynamicdata/xaradmin/modify_static.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Undefined variable\\: \\$args$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/modifyprop.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/dynamicdata/xaradmin/new_static.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 3
+			path: html/code/modules/dynamicdata/xaradmin/rename_static_table.php
+
+		-
+			message: "#^Undefined variable\\: \\$tabindex$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
+
+		-
+			message: "#^Undefined variable\\: \\$maxlength$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
+
+		-
+			message: "#^Undefined variable\\: \\$size$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
+
+		-
+			message: "#^Undefined variable\\: \\$extraparams$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xarproperties/fieldstatus.php
+
+		-
+			message: "#^Undefined variable\\: \\$items$#"
+			count: 2
+			path: html/code/modules/dynamicdata/xarproperties/itemtype.php
+
+		-
+			message: "#^Array has 2 duplicate keys with value '\\>' \\('\\>', '\\>'\\)\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaruser/filtertag.php
+
+		-
+			message: "#^Undefined variable\\: \\$check$#"
+			count: 1
+			path: html/code/modules/installer/upgrades/210/main.php
+
+		-
+			message: "#^Undefined variable\\: \\$check$#"
+			count: 1
+			path: html/code/modules/installer/upgrades/211/main.php
+
+		-
+			message: "#^Undefined variable\\: \\$dbconn$#"
+			count: 1
+			path: html/code/modules/installer/upgrades/220/database/sql_220_10.php
+
+		-
+			message: "#^Undefined variable\\: \\$dbconn$#"
+			count: 1
+			path: html/code/modules/installer/upgrades/220/database/sql_220_11.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/installer/xaradmin/phase2.php
+
+		-
+			message: "#^Function mysql_get_server_info not found\\.$#"
+			count: 1
+			path: html/code/modules/installer/xaradmin/phase5.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/installer/xaradmin/upgrade.php
+
+		-
+			message: "#^Regex pattern is invalid\\: The /e modifier is no longer supported, use preg_replace_callback instead in pattern\\: /\\=\\(\\[a\\-f0\\-9\\]\\{2\\}\\)/ie$#"
+			count: 1
+			path: html/code/modules/mail/class/mimeDecode.php
+
+		-
+			message: "#^Undefined variable\\: \\$PHPMAILER_LANG$#"
+			count: 1
+			path: html/code/modules/mail/class/phpmailer.php
+
+		-
+			message: "#^Function set_magic_quotes_runtime not found\\.$#"
+			count: 2
+			path: html/code/modules/mail/class/phpmailer.php
+
+		-
+			message: "#^Regex pattern is invalid\\: The /e modifier is no longer supported, use preg_replace_callback instead in pattern\\: /\\(\\[\\\\000\\-\\\\010\\\\013\\\\014\\\\016\\-\\\\037\\\\075\\\\177\\-\\\\377\\]\\)/e$#"
+			count: 1
+			path: html/code/modules/mail/class/phpmailer.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/mail/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Class PHPMailer referenced with incorrect case\\: phpmailer\\.$#"
+			count: 1
+			path: html/code/modules/mail/xaradminapi/_sendmail.php
+
+		-
+			message: "#^Result of function var_dump \\(void\\) is used\\.$#"
+			count: 1
+			path: html/code/modules/mail/xaradminapi/_sendmail.php
+
+		-
+			message: "#^Class PHPMailer referenced with incorrect case\\: phpmailer\\.$#"
+			count: 1
+			path: html/code/modules/mail/xaradminapi/_sendmail_new.php
+
+		-
+			message: "#^Function xarOutputFlushCached not found\\.$#"
+			count: 3
+			path: html/code/modules/modules/class/installer.php
+
+		-
+			message: "#^Function xarOutputFlushCached not found\\.$#"
+			count: 3
+			path: html/code/modules/modules/xaradmin/install.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/modules/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Function xarOutputFlushCached not found\\.$#"
+			count: 3
+			path: html/code/modules/modules/xaradminapi/activate.php
+
+		-
+			message: "#^Function xarOutputFlushCached not found\\.$#"
+			count: 3
+			path: html/code/modules/modules/xaradminapi/deactivate.php
+
+		-
+			message: "#^Undefined variable\\: \\$module_id$#"
+			count: 1
+			path: html/code/modules/privileges/class/masks.php
+
+		-
+			message: "#^Undefined variable\\: \\$irreducibleset$#"
+			count: 1
+			path: html/code/modules/privileges/class/masks.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 5
+			path: html/code/modules/privileges/xaradmin/assignprivileges.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/privileges/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Undefined variable\\: \\$show$#"
+			count: 1
+			path: html/code/modules/privileges/xaradmin/modifyprivilege.php
+
+		-
+			message: "#^Function getcomponents not found\\.$#"
+			count: 1
+			path: html/code/modules/privileges/xaradminapi/getcomponents.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 4
+			path: html/code/modules/privileges/xaruser/errors.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 10
+			path: html/code/modules/roles/xaradmin/asknotification.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 4
+			path: html/code/modules/roles/xaradmin/createmail.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 3
+			path: html/code/modules/roles/xaradmin/modify.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/roles/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 5
+			path: html/code/modules/roles/xaradmin/new.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/roles/xaradmin/purge.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 5
+			path: html/code/modules/roles/xaradmin/showusers.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 3
+			path: html/code/modules/roles/xaradmin/updatestate.php
+
+		-
+			message: "#^Undefined variable\\: \\$args$#"
+			count: 5
+			path: html/code/modules/roles/xarblocks/online_config.php
+
+		-
+			message: "#^Undefined variable\\: \\$name$#"
+			count: 1
+			path: html/code/modules/roles/xaruser/account.php
+
+		-
+			message: "#^Function iseet not found\\.$#"
+			count: 1
+			path: html/code/modules/roles/xaruser/email.php
+
+		-
+			message: "#^Call to an undefined static method xarMod\\:\\:getNameFromId\\(\\)\\.$#"
+			count: 1
+			path: html/code/modules/roles/xaruserapi/getdefaultregdata.php
+
+		-
+			message: "#^Undefined variable\\: \\$defaultloginmodname$#"
+			count: 1
+			path: html/code/modules/roles/xaruserapi/usermenu.php
+
+		-
+			message: "#^Instantiated class ForbiddenException not found\\.$#"
+			count: 1
+			path: html/code/modules/themes/class/xarcss.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/themes/xaradmin/delete_config.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/themes/xaradmin/display_config.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 2
+			path: html/code/modules/themes/xaradmin/export_config.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 3
+			path: html/code/modules/themes/xaradmin/modify_config.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 26
+			path: html/code/modules/themes/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/themes/xaradmin/new_config.php
+
+		-
+			message: "#^Function xarThemeDelVar not found\\.$#"
+			count: 1
+			path: html/code/modules/themes/xaradmin/update.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/themes/xaradmin/view_csslibs.php
+
+		-
+			message: "#^Undefined variable\\: \\$data$#"
+			count: 1
+			path: html/code/modules/themes/xaradmin/view_jslibs.php
+
+		-
+			message: "#^Function eaccelerator_get not found\\.$#"
+			count: 2
+			path: html/lib/xaraya/caching/storage/eaccelerator.php
+
+		-
+			message: "#^Function eaccelerator_put not found\\.$#"
+			count: 2
+			path: html/lib/xaraya/caching/storage/eaccelerator.php
+
+		-
+			message: "#^Function eaccelerator_rm not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/storage/eaccelerator.php
+
+		-
+			message: "#^Function eaccelerator_gc not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/storage/eaccelerator.php
+
+		-
+			message: "#^Function eaccelerator not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/storage/eaccelerator.php
+
+		-
+			message: "#^Function mmcache_get not found\\.$#"
+			count: 2
+			path: html/lib/xaraya/caching/storage/mmcache.php
+
+		-
+			message: "#^Function mmcache_put not found\\.$#"
+			count: 2
+			path: html/lib/xaraya/caching/storage/mmcache.php
+
+		-
+			message: "#^Function mmcache_rm not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/storage/mmcache.php
+
+		-
+			message: "#^Function mmcache_gc not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/storage/mmcache.php
+
+		-
+			message: "#^Function mmcache not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/storage/mmcache.php
+
+		-
+			message: "#^Undefined variable\\: \\$fields$#"
+			count: 3
+			path: html/lib/xaraya/datastores/sql/modulevariables.php
+
+		-
+			message: "#^Undefined variable\\: \\$propid$#"
+			count: 1
+			path: html/lib/xaraya/datastores/sql/modulevariables.php
+
+		-
+			message: "#^Undefined variable\\: \\$dynamicdata$#"
+			count: 1
+			path: html/lib/xaraya/datastores/sql/modulevariables.php
+
+		-
+			message: "#^Undefined variable\\: \\$propids$#"
+			count: 3
+			path: html/lib/xaraya/datastores/sql/modulevariables.php
+
+		-
+			message: "#^Call to an undefined static method xarRoles\\:\\:makeGroup\\(\\)\\.$#"
+			count: 1
+			path: html/lib/xaraya/legacy/security.php
+
+		-
+			message: "#^Call to an undefined static method xarRoles\\:\\:makeUser\\(\\)\\.$#"
+			count: 1
+			path: html/lib/xaraya/legacy/security.php
+
+		-
+			message: "#^Instantiated class xarTreeRenderer not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/legacy/security.php
+
+		-
+			message: "#^Inner named functions are not supported by PHPStan\\. Consider refactoring to an anonymous function, class method, or a top\\-level\\-defined function\\. See issue \\#165 \\(https\\://github\\.com/phpstan/phpstan/issues/165\\) for more details\\.$#"
+			count: 1
+			path: html/lib/xaraya/mls.php
+
+		-
+			message: "#^Instantiated class soap_fault not found\\.$#"
+			count: 1
+			path: html/ws.php
+

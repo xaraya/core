@@ -23,6 +23,62 @@ function dynamicdata_admin_test_apis(array $args=[])
 
     extract($args);
 
+    xarVar::fetch('tab', 'isset', $tab, null, xarVar::NOT_REQUIRED);
+    if (!empty($tab) && in_array($tab, ['swagger-ui', 'datatables', 'playground'])) {
+        $testDir = dirname(__DIR__) . '/xartests/';
+        $testFile = $testDir . $tab . '.html';
+        if (file_exists($testFile)) {
+            $contents = file_get_contents($testFile);
+            if (strpos(xarServer::getCurrentURL(), '/dynamicdata/admin/test_apis') !== false) {
+                // using index.php/dynamicdata/admin/test_apis or similar
+                $contents = str_replace('../../../../', '../../../', $contents);
+            } else {
+                // using index.php?module=dynamicdata&type=admin&func=test_apis
+                $contents = str_replace('../../../../', './', $contents);
+            }
+            // use 'passthru' page template to output the contents as is here
+            xarTpl::setPageTemplateName('passthru');
+            return $contents;
+        }
+    }
+    if (!empty($tab) && in_array($tab, ['openapi.json', 'schema.graphql'])) {
+        $apiDir = sys::varpath() . '/cache/api/';
+        $apiFile = $apiDir . $tab;
+        if (file_exists($apiFile)) {
+            //$contents = file_get_contents($apiFile);
+            // use 'passthru' page template to output the contents as is here
+            //xarTpl::setPageTemplateName('passthru');
+            //return $contents;
+            // see session-less page caching
+            //sys::import('xaraya.caching.output.page');
+            $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
+            //xarPageCache::$cacheCode = $cacheCode;
+            $modtime = filemtime($apiFile);
+            //xarPageCache::sendHeaders($modtime);
+            $etag = $cacheCode.$modtime;
+            $match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?
+                $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
+            if (!empty($match) && $match == $etag) {
+                header('HTTP/1.1 304 Not Modified');
+                header("Cache-Control: public, must-revalidate");
+                exit;
+            }
+            //header("Expires: " .
+            //       gmdate("D, d M Y H:i:s", $modtime + xarPageCache::$cacheTime) .
+            //       " GMT");
+            //header("Cache-Control: public, max-age=" . xarPageCache::$cacheTime);
+            //header("Expires: 0");
+            header("Cache-Control: public, must-revalidate");
+            header("ETag: $etag");
+            header("Last-Modified: " . gmdate("D, d M Y H:i:s", $modtime) . " GMT");
+            header('Content-Type: text/plain; charset=utf-8');
+            //header("Pragma: public");
+            // send the content of the file to the browser
+            @readfile($apiFile);
+            // we're done here !
+            exit;
+        }
+    }
     xarVar::fetch('restapi', 'array', $restapi, [], xarVar::NOT_REQUIRED);
     xarVar::fetch('graphql', 'array', $graphql, [], xarVar::NOT_REQUIRED);
     xarVar::fetch('object_new', 'isset', $object_new, '', xarVar::NOT_REQUIRED);
@@ -53,6 +109,11 @@ function dynamicdata_admin_test_apis(array $args=[])
     }
     xarVar::fetch('querycomplexity', 'isset', $queryComplexity, 0, xarVar::NOT_REQUIRED);
     xarVar::fetch('querydepth', 'isset', $queryDepth, 0, xarVar::NOT_REQUIRED);
+    xarVar::fetch('enabletimer', 'isset', $enableTimer, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('tracepath', 'isset', $tracePath, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('enablecache', 'isset', $enableCache, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('cacheplan', 'isset', $cachePlan, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('cachedata', 'isset', $cacheData, false, xarVar::NOT_REQUIRED);
     $restapilist = [];
     $graphqllist = [];
     if (!empty($restapi) && !empty($graphql) && xarSec::confirmAuthKey()) {
@@ -64,6 +125,11 @@ function dynamicdata_admin_test_apis(array $args=[])
         xarModVars::set('dynamicdata', 'restapi_token_expires', intval($tokenExpires));
         xarModVars::set('dynamicdata', 'graphql_query_complexity', intval($queryComplexity));
         xarModVars::set('dynamicdata', 'graphql_query_depth', intval($queryDepth));
+        xarModVars::set('dynamicdata', 'graphql_enable_timer', !empty($enableTimer) ? true : false);
+        xarModVars::set('dynamicdata', 'graphql_trace_path', !empty($tracePath) ? true : false);
+        xarModVars::set('dynamicdata', 'graphql_enable_cache', !empty($enableCache) ? true : false);
+        xarModVars::set('dynamicdata', 'graphql_cache_plan', !empty($cachePlan) ? true : false);
+        xarModVars::set('dynamicdata', 'graphql_cache_data', !empty($cacheData) ? true : false);
     } else {
         $restapiserial = xarModVars::get('dynamicdata', 'restapi_object_list');
         if (!empty($restapiserial)) {
@@ -78,6 +144,11 @@ function dynamicdata_admin_test_apis(array $args=[])
         $tokenExpires = xarModVars::get('dynamicdata', 'restapi_token_expires');
         $queryComplexity = xarModVars::get('dynamicdata', 'graphql_query_complexity');
         $queryDepth = xarModVars::get('dynamicdata', 'graphql_query_depth');
+        $enableTimer = xarModVars::get('dynamicdata', 'graphql_enable_timer');
+        $tracePath = xarModVars::get('dynamicdata', 'graphql_trace_path');
+        $enableCache = xarModVars::get('dynamicdata', 'graphql_enable_cache');
+        $cachePlan = xarModVars::get('dynamicdata', 'graphql_cache_plan');
+        $cacheData = xarModVars::get('dynamicdata', 'graphql_cache_data');
     }
 
     DataObjectRESTBuilder::init();
@@ -113,7 +184,7 @@ function dynamicdata_admin_test_apis(array $args=[])
                 $extraTypes[] = $type;
             }
         }
-        xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth);
+        xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData);
         xarController::redirect(xarServer::getCurrentURL(['create_gql'=> null]));
         return true;
     }
@@ -173,6 +244,11 @@ function dynamicdata_admin_test_apis(array $args=[])
     $data['tokenexpires'] = sprintf('%02d:%02d:%02d', floor($tokenExpires / 3600), intval($tokenExpires % 3600) / 60, intval($tokenExpires % 60));
     $data['querycomplexity'] = $queryComplexity;
     $data['querydepth'] = $queryDepth;
+    $data['enabletimer'] = $enableTimer;
+    $data['tracepath'] = $tracePath;
+    $data['enablecache'] = $enableCache;
+    $data['cacheplan'] = $cachePlan;
+    $data['cachedata'] = $cacheData;
 
     xarTpl::setPageTemplateName('admin');
 
