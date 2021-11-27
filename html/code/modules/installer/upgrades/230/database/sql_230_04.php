@@ -24,7 +24,7 @@ function sql_230_04()
         Success!
     ");    
     
-    // inport the object
+    // import the object
     $dbconn  = xarDB::getConn();
     try {
         $objects = array(
