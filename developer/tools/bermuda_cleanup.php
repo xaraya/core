@@ -20,10 +20,10 @@ class XarayaCodeAnalyzer
     public const PHP_EXT = '/\.php$/';
 
     public $project = null;
-    public $functions = array();
-    public $constants = array();
-    public $classes = array();
-    public $totals = array();
+    public $functions = [];
+    public $constants = [];
+    public $classes = [];
+    public $totals = [];
     public $inDir = null;
     public $fileExt = null;
     public $verbose = false;
@@ -42,10 +42,10 @@ class XarayaCodeAnalyzer
         if (!empty($fileExt)) {
             $this->fileExt = $fileExt;
         }
-        $this->functions = array();
-        $this->constants = array();
-        $this->classes = array();
-        $this->totals = array(
+        $this->functions = [];
+        $this->constants = [];
+        $this->classes = [];
+        $this->totals = [
             'namespaces' => 0,
             'files' => 0,
             'includes' => 0,
@@ -55,8 +55,8 @@ class XarayaCodeAnalyzer
             'interfaces' => 0,
             'traits' => 0,
             'class_const' => 0,
-            'methods' => 0
-        );
+            'methods' => 0,
+        ];
     }
 
     public function log($message, $always = false)
@@ -72,7 +72,7 @@ class XarayaCodeAnalyzer
     }
 
     // See https://github.com/nikic/PHP-Parser/blob/master/doc/2_Usage_of_basic_components.markdown
-    public function load_project($inDir = null, $extraFiles = array(), $fileExt = self::PHP_EXT)
+    public function load_project($inDir = null, $extraFiles = [], $fileExt = self::PHP_EXT)
     {
         $this->initialize($inDir, $fileExt);
 
@@ -81,7 +81,7 @@ class XarayaCodeAnalyzer
         $files = new \RegexIterator($files, $this->fileExt);
 
         $factory = \phpDocumentor\Reflection\Php\ProjectFactory::createInstance();
-        $localFiles = array();
+        $localFiles = [];
         foreach ($files as $file) {
             try {
                 //echo $file->getPathName() . "\n";
@@ -148,7 +148,7 @@ class XarayaCodeAnalyzer
             $this->log('Function Conflict: ' . $name, true);
         }
         $args = $this->get_arguments($function);
-        $this->functions[$lname] = array('file' => $fpath, 'name' => $name, 'args' => $args);
+        $this->functions[$lname] = ['file' => $fpath, 'name' => $name, 'args' => $args];
         $this->functions[$lname]['line'] = $function->getLocation()->getLineNumber();
         $uses = $this->get_docblock_uses($function);
         if (!empty($uses)) {
@@ -158,7 +158,7 @@ class XarayaCodeAnalyzer
 
     public function get_arguments($func_or_meth)
     {
-        $args = array();
+        $args = [];
         foreach ($func_or_meth->getArguments() as $arg) {
             $args[] = ($arg->getType() != 'mixed' ? $arg->getType() . ' ' : '') . ($arg->isVariadic() ? '...' : '') . ($arg->isByReference() ? '&' : '') . '$' . $arg->getName() . ($arg->getDefault() !== null ? ' = ' . $arg->getDefault() : '');
         }
@@ -182,7 +182,7 @@ class XarayaCodeAnalyzer
         if (array_key_exists(strtolower($lname), $this->constants)) {
             $this->log('Constant Conflict: ' . $name, true);
         }
-        $this->constants[$lname] = array('file' => $fpath, 'name' => $name, 'value' => $constant->getValue());
+        $this->constants[$lname] = ['file' => $fpath, 'name' => $name, 'value' => $constant->getValue()];
     }
 
     public function add_class($class, $fpath)
@@ -192,13 +192,13 @@ class XarayaCodeAnalyzer
         if (array_key_exists(strtolower($lname), $this->classes)) {
             $this->log('Class Conflict: ' . $name, true);
         }
-        $this->classes[$lname] = array('file' => $fpath, 'name' => $name, 'methods' => array(), 'const' => array());
+        $this->classes[$lname] = ['file' => $fpath, 'name' => $name, 'methods' => [], 'const' => []];
         $this->classes[$lname]['parent'] = (string) $class->getParent();
         $this->classes[$lname]['line'] = $class->getLocation()->getLineNumber();
         foreach ($class->getMethods() as $method) {
             $mname = $method->getName();
             $args = $this->get_arguments($method);
-            $this->classes[$lname]['methods'][strtolower($mname)] = array('name' => $mname, 'args' => $args);
+            $this->classes[$lname]['methods'][strtolower($mname)] = ['name' => $mname, 'args' => $args];
             $this->classes[$lname]['methods'][strtolower($mname)]['line'] = $method->getLocation()->getLineNumber();
             $uses = $this->get_docblock_uses($method);
             if (!empty($uses)) {
@@ -207,7 +207,7 @@ class XarayaCodeAnalyzer
         }
         foreach ($class->getConstants() as $constant) {
             $cname = $constant->getName();
-            $this->classes[$lname]['const'][strtolower($cname)] = array('name' => $cname, 'value' => $constant->getValue());
+            $this->classes[$lname]['const'][strtolower($cname)] = ['name' => $cname, 'value' => $constant->getValue()];
         }
     }
 
@@ -236,7 +236,7 @@ class xarNode implements JsonSerializable
     public function __construct(string $name)
     {
         $this->name = $name;
-        $this->children = array();
+        $this->children = [];
         $this->parent = null;
     }
 
@@ -281,8 +281,8 @@ class xarNode implements JsonSerializable
 
 class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
 {
-    public $replaced = array();
-    public $missing = array();
+    public $replaced = [];
+    public $missing = [];
     public $classroot = null;
 
     public function load_core_files()
@@ -475,8 +475,8 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
 
     public function find_core_replaced()
     {
-        $this->replaced = array();
-        $this->missing = array();
+        $this->replaced = [];
+        $this->missing = [];
         if (empty($this->functions)) {
             $this->load_core_functions();
         }
@@ -486,7 +486,7 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
             }
             if (empty($function['method'])) {
                 if (!array_key_exists($function['file'], $this->missing)) {
-                    $this->missing[$function['file']] = array();
+                    $this->missing[$function['file']] = [];
                 }
                 $this->missing[$function['file']][$function['name']] = $function['class'] . ':: ? = ' . $function['check'];
                 continue;
@@ -512,7 +512,7 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
             }
             if (empty($constant['const'])) {
                 if (!array_key_exists($constant['file'], $this->missing)) {
-                    $this->missing[$constant['file']] = array();
+                    $this->missing[$constant['file']] = [];
                 }
                 $this->missing[$constant['file']][$constant['name']] = $constant['class'] . ':: ? = ' . $constant['check'];
                 continue;
@@ -551,7 +551,7 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
         file_put_contents('core_replace.json', $this->to_json($this->replaced));
     }
 
-    public function parse_core_files($inDir = null, $extraFiles = array())
+    public function parse_core_files($inDir = null, $extraFiles = [])
     {
         $this->load_project($inDir, $extraFiles);
         $this->parse_project();
@@ -640,8 +640,8 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
     public function check_module_files($inDir, $fixMe = false)
     {
         $this->load_core_replaced();
-        $search = array();
-        $replace = array();
+        $search = [];
+        $replace = [];
         foreach ($this->replaced as $old => $new) {
             // @checkme leave xarML() alone for now...
             if ($old === 'xarML') {
@@ -655,7 +655,7 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
         $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($inDir));
         $files = new \RegexIterator($files, self::ALL_EXT);
 
-        $todo = array();
+        $todo = [];
         foreach ($files as $file) {
             try {
                 $contents = file_get_contents($file->getPathName());
