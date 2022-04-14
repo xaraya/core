@@ -102,7 +102,7 @@ class DataObjectRESTBuilder extends xarObject
         $configData['modules'] = self::$modules;
         $configData['storage'] = self::$storage;
         $configData['expires'] = self::$expires;
-        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
+        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 
     public static function init_openapi()

@@ -100,7 +100,7 @@ class GraphQLTest extends TestCase
         $body = $this->getSamplesBody($query);
 
         $httpBody = json_encode($body);
-        $headers = ['application/json'];
+        $headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json'];
 
         $expected = $this->getSamplesResult();
         $result = true;
@@ -152,11 +152,11 @@ query filterSamples($filter: [String]) {
             $body = json_decode($contents, true);
             if ($body['query'] !== $query) {
                 $body['query'] = $query;
-                file_put_contents($bodyFile, json_encode($body, JSON_PRETTY_PRINT));
+                file_put_contents($bodyFile, json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
             }
             return $body;
         }
-        $variables = $variables ?? ['filter' => ['age,gt,1']];
+        $variables = $variables ?? ['filter' => ['age,gt,1'], 'order' => 'age'];
         $operation = $operation ?? 'filterSamples';
 
         $body = [
@@ -164,7 +164,7 @@ query filterSamples($filter: [String]) {
             'variables' => $variables,
             'operationName' => $operation,
         ];
-        file_put_contents($bodyFile, json_encode($body, JSON_PRETTY_PRINT));
+        file_put_contents($bodyFile, json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
         return $body;
     }
 
@@ -177,13 +177,13 @@ query filterSamples($filter: [String]) {
             return $result;
         }
         $samples = [];
-        $samples[] = ['id' => '1', 'name' => 'Johnny', 'age' => 32];
         $samples[] = ['id' => '2', 'name' => 'Nancy', 'age' => 29];
+        $samples[] = ['id' => '1', 'name' => 'Johnny', 'age' => 32];
         //$samples[] = ['id' => 3, 'name' => 'Baby', 'age' => 1];
         $result = [
             'data' => ['samples' => $samples],
         ];
-        file_put_contents($resultFile, json_encode($result, JSON_PRETTY_PRINT));
+        file_put_contents($resultFile, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK));
         return $result;
     }
 }

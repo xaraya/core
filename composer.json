@@ -8,6 +8,7 @@
     },
     "suggest": {
         "phpstan/phpstan": "PHP Static Analysis Tool - discover bugs in your code without running it",
+        "phpunit/phpunit": "The PHP Unit Testing framework",
         "doctrine/cache": "To use supported Doctrine CacheProviders for caching",
         "doctrine/dbal": "To experiment with JSON data types",
         "phpdocumentor/reflection": "Required to use bermuda_cleanup.php in developer/tools",

@@ -1,6 +1,41 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Instantiated class GuzzleHttp\\\\Client not found\\.$#"
+			count: 1
+			path: developer/tests/graphql/GraphQLTest.php
+
+		-
+			message: "#^Instantiated class OpenAPI\\\\Client\\\\Api\\\\SampleApi not found\\.$#"
+			count: 1
+			path: developer/tests/restapi/OpenApiTest.php
+
+		-
+			message: "#^Instantiated class OpenAPI\\\\Client\\\\Model\\\\ViewSample not found\\.$#"
+			count: 1
+			path: developer/tests/restapi/OpenApiTest.php
+
+		-
+			message: "#^Instantiated class OpenAPI\\\\Client\\\\Model\\\\ViewSampleItems not found\\.$#"
+			count: 3
+			path: developer/tests/restapi/OpenApiTest.php
+
+		-
+			message: "#^Instantiated class GuzzleHttp\\\\Client not found\\.$#"
+			count: 1
+			path: developer/tests/restapi/RestApiTest.php
+
+		-
+			message: "#^Call to static method createInstance\\(\\) on an unknown class phpDocumentor\\\\Reflection\\\\Php\\\\ProjectFactory\\.$#"
+			count: 1
+			path: developer/tools/bermuda_cleanup.php
+
+		-
+			message: "#^Instantiated class phpDocumentor\\\\Reflection\\\\File\\\\LocalFile not found\\.$#"
+			count: 2
+			path: developer/tools/bermuda_cleanup.php
+
+		-
 			message: "#^Undefined variable\\: \\$formatter$#"
 			count: 1
 			path: developer/tools/bermuda_cleanup.php
@@ -11,9 +46,9 @@ parameters:
 			path: html/bootstrap.php
 
 		-
-			message: "#^Undefined variable\\: \\$params$#"
+			message: "#^Function authsystem_admin_createpassword\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
-			path: html/code/modules/base/class/xarCurl.php
+			path: html/code/modules/authsystem/xaradmin/createpassword.php
 
 		-
 			message: "#^Undefined variable\\: \\$headers$#"
@@ -21,9 +56,24 @@ parameters:
 			path: html/code/modules/base/class/xarCurl.php
 
 		-
+			message: "#^Undefined variable\\: \\$params$#"
+			count: 1
+			path: html/code/modules/base/class/xarCurl.php
+
+		-
 			message: "#^Undefined variable\\: \\$data$#"
 			count: 3
 			path: html/code/modules/base/xaradmin/composer.php
+
+		-
+			message: "#^Function mcrypt_list_algorithms not found\\.$#"
+			count: 1
+			path: html/code/modules/base/xaradmin/modifyconfig.php
+
+		-
+			message: "#^Function mcrypt_list_modes not found\\.$#"
+			count: 1
+			path: html/code/modules/base/xaradmin/modifyconfig.php
 
 		-
 			message: "#^Undefined variable\\: \\$data$#"
@@ -71,9 +121,9 @@ parameters:
 			path: html/code/modules/base/xarproperties/array.php
 
 		-
-			message: "#^Undefined variable\\: \\$items$#"
-			count: 2
-			path: html/code/modules/base/xarproperties/dropdown.php
+			message: "#^Method CheckboxListProperty\\:\\:setValue\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: html/code/modules/base/xarproperties/checkboxlist.php
 
 		-
 			message: "#^Call to function unset\\(\\) contains undefined variable \\$items\\.$#"
@@ -81,8 +131,8 @@ parameters:
 			path: html/code/modules/base/xarproperties/dropdown.php
 
 		-
-			message: "#^Undefined variable\\: \\$extraparams$#"
-			count: 1
+			message: "#^Undefined variable\\: \\$items$#"
+			count: 2
 			path: html/code/modules/base/xarproperties/dropdown.php
 
 		-
@@ -91,14 +141,14 @@ parameters:
 			path: html/code/modules/base/xarproperties/filepicker.php
 
 		-
-			message: "#^Undefined variable\\: \\$value$#"
+			message: "#^Undefined variable\\: \\$name$#"
 			count: 1
 			path: html/code/modules/base/xarproperties/fileupload.php
 
 		-
-			message: "#^Undefined variable\\: \\$name$#"
+			message: "#^Method NumberListProperty\\:\\:validateValue\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
-			path: html/code/modules/base/xarproperties/fileupload.php
+			path: html/code/modules/base/xarproperties/integerlist.php
 
 		-
 			message: "#^Instantiated class BadParameterExceptions not found\\.$#"
@@ -136,6 +186,26 @@ parameters:
 			path: html/code/modules/blocks/xaradmin/modifyconfig.php
 
 		-
+			message: "#^Undefined variable\\: \\$block_groups$#"
+			count: 1
+			path: html/code/modules/blocks/xaradmin/new_instance.php
+
+		-
+			message: "#^Undefined variable\\: \\$block_type$#"
+			count: 4
+			path: html/code/modules/blocks/xaradmin/new_instance.php
+
+		-
+			message: "#^Undefined variable\\: \\$instance_states$#"
+			count: 1
+			path: html/code/modules/blocks/xaradmin/new_instance.php
+
+		-
+			message: "#^Undefined variable\\: \\$type$#"
+			count: 4
+			path: html/code/modules/blocks/xaradmin/new_instance.php
+
+		-
 			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
 			count: 1
 			path: html/code/modules/blocks/xarinstancesapi/createitem.php
@@ -146,12 +216,12 @@ parameters:
 			path: html/code/modules/blocks/xarinstancesapi/deleteitem.php
 
 		-
-			message: "#^Undefined variable\\: \\$type_id$#"
+			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
 			count: 1
 			path: html/code/modules/blocks/xartypesapi/deleteitem.php
 
 		-
-			message: "#^Class IDNotFoundException referenced with incorrect case\\: IdNotFoundException\\.$#"
+			message: "#^Undefined variable\\: \\$type_id$#"
 			count: 1
 			path: html/code/modules/blocks/xartypesapi/deleteitem.php
 
@@ -161,12 +231,17 @@ parameters:
 			path: html/code/modules/categories/class/categories.php
 
 		-
+			message: "#^Static call to instance method Categories\\:\\:get\\(\\)\\.$#"
+			count: 1
+			path: html/code/modules/categories/class/categories.php
+
+		-
 			message: "#^Undefined variable\\: \\$collection$#"
 			count: 2
 			path: html/code/modules/categories/class/categories.php
 
 		-
-			message: "#^Static call to instance method Categories\\:\\:get\\(\\)\\.$#"
+			message: "#^Undefined variable\\: \\$o$#"
 			count: 1
 			path: html/code/modules/categories/class/categories.php
 
@@ -241,7 +316,7 @@ parameters:
 			path: html/code/modules/categories/xarproperties/celkoposition.php
 
 		-
-			message: "#^Undefined variable\\: \\$parent_id$#"
+			message: "#^Method CelkoPositionProperty\\:\\:updateValue\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: html/code/modules/categories/xarproperties/celkoposition.php
 
@@ -249,6 +324,16 @@ parameters:
 			message: "#^Undefined variable\\: \\$itemid$#"
 			count: 1
 			path: html/code/modules/categories/xarproperties/celkoposition.php
+
+		-
+			message: "#^Undefined variable\\: \\$parent_id$#"
+			count: 1
+			path: html/code/modules/categories/xarproperties/celkoposition.php
+
+		-
+			message: "#^Instantiated class CSVFileDataStore not found\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/datastores/master.php
 
 		-
 			message: "#^Instantiated class FlatTableDataStore not found\\.$#"
@@ -261,22 +346,17 @@ parameters:
 			path: html/code/modules/dynamicdata/class/datastores/master.php
 
 		-
-			message: "#^Instantiated class UserSettingsDataStore not found\\.$#"
-			count: 1
-			path: html/code/modules/dynamicdata/class/datastores/master.php
-
-		-
 			message: "#^Instantiated class LDAPDataStore not found\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/datastores/master.php
 
 		-
-			message: "#^Instantiated class XMLFileDataStore not found\\.$#"
+			message: "#^Instantiated class UserSettingsDataStore not found\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/datastores/master.php
 
 		-
-			message: "#^Instantiated class CSVFileDataStore not found\\.$#"
+			message: "#^Instantiated class XMLFileDataStore not found\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/datastores/master.php
 
@@ -287,7 +367,7 @@ parameters:
 
 		-
 			message: "#^Undefined variable\\: \\$data$#"
-			count: 2
+			count: 1
 			path: html/code/modules/dynamicdata/class/objects/list.php
 
 		-
@@ -296,7 +376,7 @@ parameters:
 			path: html/code/modules/dynamicdata/class/objects/loader.php
 
 		-
-			message: "#^Call to an undefined method object\\:\\:setWhere\\(\\)\\.$#"
+			message: "#^Access to an undefined property object\\:\\:\\$visibility\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/objects/master.php
 
@@ -306,17 +386,17 @@ parameters:
 			path: html/code/modules/dynamicdata/class/objects/master.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$visibility\\.$#"
-			count: 1
-			path: html/code/modules/dynamicdata/class/objects/master.php
-
-		-
 			message: "#^Call to an undefined method DataObjectMaster\\:\\:checkInput\\(\\)\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/objects/master.php
 
 		-
-			message: "#^Undefined variable\\: \\$value$#"
+			message: "#^Call to an undefined method object\\:\\:setWhere\\(\\)\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/objects/master.php
+
+		-
+			message: "#^Class PropertyRegistration constructor invoked with 0 parameters, 1 required\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/properties/base.php
 
@@ -326,13 +406,13 @@ parameters:
 			path: html/code/modules/dynamicdata/class/properties/base.php
 
 		-
-			message: "#^Class PropertyRegistration constructor invoked with 0 parameters, 1 required\\.$#"
-			count: 1
+			message: "#^Undefined variable\\: \\$this$#"
+			count: 4
 			path: html/code/modules/dynamicdata/class/properties/base.php
 
 		-
-			message: "#^Undefined variable\\: \\$this$#"
-			count: 4
+			message: "#^Undefined variable\\: \\$value$#"
+			count: 1
 			path: html/code/modules/dynamicdata/class/properties/base.php
 
 		-
@@ -356,12 +436,12 @@ parameters:
 			path: html/code/modules/dynamicdata/xaradmin/import.php
 
 		-
-			message: "#^Function mysql_list_dbs not found\\.$#"
+			message: "#^Function mysql_fetch_object not found\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/xaradmin/meta.php
 
 		-
-			message: "#^Function mysql_fetch_object not found\\.$#"
+			message: "#^Function mysql_list_dbs not found\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/xaradmin/meta.php
 
@@ -391,22 +471,7 @@ parameters:
 			path: html/code/modules/dynamicdata/xaradmin/rename_static_table.php
 
 		-
-			message: "#^Undefined variable\\: \\$tabindex$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
-
-		-
-			message: "#^Undefined variable\\: \\$maxlength$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
-
-		-
-			message: "#^Undefined variable\\: \\$size$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
-
-		-
-			message: "#^Undefined variable\\: \\$extraparams$#"
+			message: "#^Method FieldStatusProperty\\:\\:getOption\\(\\) should return if but return statement is missing\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/xarproperties/fieldstatus.php
 
@@ -419,6 +484,11 @@ parameters:
 			message: "#^Array has 2 duplicate keys with value '\\>' \\('\\>', '\\>'\\)\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/xaruser/filtertag.php
+
+		-
+			message: "#^Function dynamicdata_userapi_decode_shorturl\\(\\) should return array but return statement is missing\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaruserapi/decode_shorturl.php
 
 		-
 			message: "#^Undefined variable\\: \\$check$#"
@@ -461,17 +531,17 @@ parameters:
 			path: html/code/modules/mail/class/mimeDecode.php
 
 		-
-			message: "#^Undefined variable\\: \\$PHPMAILER_LANG$#"
-			count: 1
-			path: html/code/modules/mail/class/phpmailer.php
-
-		-
 			message: "#^Function set_magic_quotes_runtime not found\\.$#"
 			count: 2
 			path: html/code/modules/mail/class/phpmailer.php
 
 		-
 			message: "#^Regex pattern is invalid\\: The /e modifier is no longer supported, use preg_replace_callback instead in pattern\\: /\\(\\[\\\\000\\-\\\\010\\\\013\\\\014\\\\016\\-\\\\037\\\\075\\\\177\\-\\\\377\\]\\)/e$#"
+			count: 1
+			path: html/code/modules/mail/class/phpmailer.php
+
+		-
+			message: "#^Undefined variable\\: \\$PHPMAILER_LANG$#"
 			count: 1
 			path: html/code/modules/mail/class/phpmailer.php
 
@@ -496,29 +566,14 @@ parameters:
 			path: html/code/modules/mail/xaradminapi/_sendmail_new.php
 
 		-
-			message: "#^Function xarOutputFlushCached not found\\.$#"
-			count: 3
-			path: html/code/modules/modules/class/installer.php
-
-		-
-			message: "#^Function xarOutputFlushCached not found\\.$#"
-			count: 3
-			path: html/code/modules/modules/xaradmin/install.php
-
-		-
 			message: "#^Undefined variable\\: \\$data$#"
 			count: 1
 			path: html/code/modules/modules/xaradmin/modifyconfig.php
 
 		-
-			message: "#^Function xarOutputFlushCached not found\\.$#"
-			count: 3
-			path: html/code/modules/modules/xaradminapi/activate.php
-
-		-
-			message: "#^Function xarOutputFlushCached not found\\.$#"
-			count: 3
-			path: html/code/modules/modules/xaradminapi/deactivate.php
+			message: "#^Undefined variable\\: \\$irreducibleset$#"
+			count: 1
+			path: html/code/modules/privileges/class/masks.php
 
 		-
 			message: "#^Undefined variable\\: \\$module_id$#"
@@ -526,9 +581,14 @@ parameters:
 			path: html/code/modules/privileges/class/masks.php
 
 		-
-			message: "#^Undefined variable\\: \\$irreducibleset$#"
+			message: "#^Method xarPrivileges\\:\\:external\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
-			path: html/code/modules/privileges/class/masks.php
+			path: html/code/modules/privileges/class/privileges.php
+
+		-
+			message: "#^Method xarPrivileges\\:\\:removeModule\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/code/modules/privileges/class/privileges.php
 
 		-
 			message: "#^Undefined variable\\: \\$data$#"
@@ -549,6 +609,11 @@ parameters:
 			message: "#^Function getcomponents not found\\.$#"
 			count: 1
 			path: html/code/modules/privileges/xaradminapi/getcomponents.php
+
+		-
+			message: "#^Method PrivilegesTree\\:\\:createnodes\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: html/code/modules/privileges/xarproperties/privilegestree.php
 
 		-
 			message: "#^Undefined variable\\: \\$data$#"
@@ -601,6 +666,16 @@ parameters:
 			path: html/code/modules/roles/xarblocks/online_config.php
 
 		-
+			message: "#^Method PassBoxProperty\\:\\:setValue\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: html/code/modules/roles/xarproperties/passwordbox.php
+
+		-
+			message: "#^Method UsernameProperty\\:\\:setValue\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: html/code/modules/roles/xarproperties/username.php
+
+		-
 			message: "#^Undefined variable\\: \\$name$#"
 			count: 1
 			path: html/code/modules/roles/xaruser/account.php
@@ -609,6 +684,11 @@ parameters:
 			message: "#^Function iseet not found\\.$#"
 			count: 1
 			path: html/code/modules/roles/xaruser/email.php
+
+		-
+			message: "#^Function roles_user_usermenu\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: html/code/modules/roles/xaruser/usermenu.php
 
 		-
 			message: "#^Call to an undefined static method xarMod\\:\\:getNameFromId\\(\\)\\.$#"
@@ -624,6 +704,16 @@ parameters:
 			message: "#^Instantiated class ForbiddenException not found\\.$#"
 			count: 1
 			path: html/code/modules/themes/class/xarcss.php
+
+		-
+			message: "#^Method xarCSS\\:\\:refresh\\(\\) should return none but return statement is missing\\.$#"
+			count: 1
+			path: html/code/modules/themes/class/xarcss.php
+
+		-
+			message: "#^Method xarJS\\:\\:refresh\\(\\) should return none but return statement is missing\\.$#"
+			count: 1
+			path: html/code/modules/themes/class/xarjs.php
 
 		-
 			message: "#^Undefined variable\\: \\$data$#"
@@ -671,6 +761,56 @@ parameters:
 			path: html/code/modules/themes/xaradmin/view_jslibs.php
 
 		-
+			message: "#^Call to static method getConnection\\(\\) on an unknown class Doctrine\\\\DBAL\\\\DriverManager\\.$#"
+			count: 1
+			path: html/dbal_db.php
+
+		-
+			message: "#^Instantiated class Doctrine\\\\DBAL\\\\Schema\\\\Schema not found\\.$#"
+			count: 1
+			path: html/dbal_db.php
+
+		-
+			message: "#^Method xarAutoload\\:\\:refreshList\\(\\) should return none but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/autoload.php
+
+		-
+			message: "#^Method xarAutoload\\:\\:registerClassMethod\\(\\) should return none but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/autoload.php
+
+		-
+			message: "#^Method xarAutoload\\:\\:registerFunction\\(\\) should return none but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/autoload.php
+
+		-
+			message: "#^Method xarAutoload\\:\\:saveList\\(\\) should return none but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/autoload.php
+
+		-
+			message: "#^Method xarAutoSessionCache\\:\\:logStatus\\(\\) should return none but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/output/autosession.php
+
+		-
+			message: "#^Method xarSessionLessCache\\:\\:isCached\\(\\) should return none but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/output/sessionless.php
+
+		-
+			message: "#^Function eaccelerator not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/storage/eaccelerator.php
+
+		-
+			message: "#^Function eaccelerator_gc not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/caching/storage/eaccelerator.php
+
+		-
 			message: "#^Function eaccelerator_get not found\\.$#"
 			count: 2
 			path: html/lib/xaraya/caching/storage/eaccelerator.php
@@ -686,14 +826,14 @@ parameters:
 			path: html/lib/xaraya/caching/storage/eaccelerator.php
 
 		-
-			message: "#^Function eaccelerator_gc not found\\.$#"
+			message: "#^Function mmcache not found\\.$#"
 			count: 1
-			path: html/lib/xaraya/caching/storage/eaccelerator.php
+			path: html/lib/xaraya/caching/storage/mmcache.php
 
 		-
-			message: "#^Function eaccelerator not found\\.$#"
+			message: "#^Function mmcache_gc not found\\.$#"
 			count: 1
-			path: html/lib/xaraya/caching/storage/eaccelerator.php
+			path: html/lib/xaraya/caching/storage/mmcache.php
 
 		-
 			message: "#^Function mmcache_get not found\\.$#"
@@ -711,14 +851,9 @@ parameters:
 			path: html/lib/xaraya/caching/storage/mmcache.php
 
 		-
-			message: "#^Function mmcache_gc not found\\.$#"
+			message: "#^Undefined variable\\: \\$dynamicdata$#"
 			count: 1
-			path: html/lib/xaraya/caching/storage/mmcache.php
-
-		-
-			message: "#^Function mmcache not found\\.$#"
-			count: 1
-			path: html/lib/xaraya/caching/storage/mmcache.php
+			path: html/lib/xaraya/datastores/sql/modulevariables.php
 
 		-
 			message: "#^Undefined variable\\: \\$fields$#"
@@ -731,14 +866,29 @@ parameters:
 			path: html/lib/xaraya/datastores/sql/modulevariables.php
 
 		-
-			message: "#^Undefined variable\\: \\$dynamicdata$#"
-			count: 1
-			path: html/lib/xaraya/datastores/sql/modulevariables.php
-
-		-
 			message: "#^Undefined variable\\: \\$propids$#"
 			count: 3
 			path: html/lib/xaraya/datastores/sql/modulevariables.php
+
+		-
+			message: "#^Function mcrypt_generic not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/encryptor.php
+
+		-
+			message: "#^Function mcrypt_generic_deinit not found\\.$#"
+			count: 2
+			path: html/lib/xaraya/encryptor.php
+
+		-
+			message: "#^Function mcrypt_generic_init not found\\.$#"
+			count: 2
+			path: html/lib/xaraya/encryptor.php
+
+		-
+			message: "#^Function mdecrypt_generic not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/encryptor.php
 
 		-
 			message: "#^Call to an undefined static method xarRoles\\:\\:makeGroup\\(\\)\\.$#"
@@ -751,14 +901,84 @@ parameters:
 			path: html/lib/xaraya/legacy/security.php
 
 		-
+			message: "#^Function xarRemovePrivileges\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/legacy/security.php
+
+		-
 			message: "#^Instantiated class xarTreeRenderer not found\\.$#"
 			count: 1
 			path: html/lib/xaraya/legacy/security.php
 
 		-
+			message: "#^Method xarLogger_error_log\\:\\:setConfig\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/error_log.php
+
+		-
+			message: "#^Method xarLogger_html\\:\\:setConfig\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/html.php
+
+		-
+			message: "#^Method xarLogger_javascript\\:\\:notify\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/javascript.php
+
+		-
+			message: "#^Method xarLogger_javascript\\:\\:setConfig\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/javascript.php
+
+		-
+			message: "#^Method xarLogger_mail\\:\\:setConfig\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/mail.php
+
+		-
+			message: "#^Method xarLogger_mozilla\\:\\:notify\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/mozilla.php
+
+		-
+			message: "#^Method xarLogger_mozilla\\:\\:setConfig\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/mozilla.php
+
+		-
+			message: "#^Method xarLogger_simple\\:\\:setConfig\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/simple.php
+
+		-
+			message: "#^Method xarLogger_sql\\:\\:setConfig\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/sql.php
+
+		-
+			message: "#^Method xarLogger_syslog\\:\\:setConfig\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/syslog.php
+
+		-
+			message: "#^Method xarLogger\\:\\:setConfig\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/log/loggers/xarLogger.php
+
+		-
 			message: "#^Inner named functions are not supported by PHPStan\\. Consider refactoring to an anonymous function, class method, or a top\\-level\\-defined function\\. See issue \\#165 \\(https\\://github\\.com/phpstan/phpstan/issues/165\\) for more details\\.$#"
 			count: 1
 			path: html/lib/xaraya/mls.php
+
+		-
+			message: "#^Method XarDateTime\\:\\:setTimestamp\\(\\) should return static\\(XarDateTime\\) but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/structures/datetime.php
+
+		-
+			message: "#^Method xarVar\\:\\:validate\\(\\) should return bool but return statement is missing\\.$#"
+			count: 1
+			path: html/lib/xaraya/variables.php
 
 		-
 			message: "#^Instantiated class soap_fault not found\\.$#"

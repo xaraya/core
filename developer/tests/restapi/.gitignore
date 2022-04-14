@@ -5,5 +5,7 @@
 !composer.json
 !RestApiTest.php
 !phpunit.xml.dist
+!view_sample.request.json
+!view_sample.result.json
 !Makefile
 !OpenApiTest.php

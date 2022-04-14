@@ -68,7 +68,7 @@ function base_adminapi_loadmenuarray(Array $args=array())
             $title     = isset($menuitem['title'])     ? trim((string)$menuitem['title']) : $label;
             $mask      = isset($menuitem['mask'])      ? trim((string)$menuitem['mask']) : null;
             $condition = isset($menuitem['condition']) ? trim((string)$menuitem['condition']) : null;
-            $type      = isset($menuitem['type'])      ? trim((string)$menuitem['type']) : $args['modtype'] != 'user' ? $args['modtype'] : null;
+            $type      = isset($menuitem['type'])      ? trim((string)$menuitem['type']) : ($args['modtype'] != 'user' ? $args['modtype'] : null);
             $value     = isset($menuitem['value'])     ? $menuitem['value'] : null;
             $active    = array();
             if (isset($value)) {
@@ -109,7 +109,7 @@ function base_adminapi_loadmenuarray(Array $args=array())
                 $title     = isset($menuitem->title)     ? trim((string)$menuitem->title) : $label;
                 $mask      = isset($menuitem->mask)      ? trim((string)$menuitem->mask) : null;
                 $condition = isset($menuitem->condition) ? trim((string)$menuitem->condition) : null;
-                $type      = isset($menuitem->type)      ? trim((string)$menuitem->type) : $args['modtype'] != 'user' ? $args['modtype'] : null;
+                $type      = isset($menuitem->type)      ? trim((string)$menuitem->type) : ($args['modtype'] != 'user' ? $args['modtype'] : null);
                 $value     = isset($menuitem->value)     ? (string)$menuitem->value : null;
                 $active    = array();
                 if (isset($menuitem->includes)) {
@@ -197,4 +197,3 @@ function base_adminapi_loadmenuarray(Array $args=array())
     // default, just return the links
     return $menulinks;
 }
-?>

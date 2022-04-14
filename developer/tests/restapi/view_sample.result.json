@@ -1,0 +1,29 @@
+{
+    "items": [
+        {
+            "name": "Nancy",
+            "age": 29,
+            "_links": {
+                "self": {
+                    "href": "https://owncloud.mikespub.net/bermuda/rst.php/v1/objects/sample/2"
+                }
+            }
+        },
+        {
+            "name": "Johnny",
+            "age": 32,
+            "_links": {
+                "self": {
+                    "href": "https://owncloud.mikespub.net/bermuda/rst.php/v1/objects/sample/1"
+                }
+            }
+        }
+    ],
+    "count": 2,
+    "limit": 100,
+    "offset": 0,
+    "order": "age",
+    "filter": [
+        "age,gt,1"
+    ]
+}
