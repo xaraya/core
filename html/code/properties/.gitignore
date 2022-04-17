@@ -3,3 +3,4 @@
 # Except these files
 !.gitignore
 !what_is_this.txt
+!autoload.php

@@ -101,6 +101,14 @@ class xarAutoload extends xarObject
         $propertiesdir = sys::code() . 'properties/';
         if (!file_exists($propertiesdir)) throw new DirectoryNotFoundException($propertiesdir);
 
+        $filepath = $propertiesdir . '/autoload.php';
+        // Check that we have a valid file
+        if (is_file($filepath)) {
+            // Load this valid file; this automatically registers the autoload function for the standalone properties
+            sys::import('properties.autoload');
+            $loaded[] = 'properties.autoload';
+        }
+
         $dir = new RelativeDirectoryIterator($propertiesdir);
         $files = array();
         for ($dir->rewind();$dir->valid();$dir->next()) {
