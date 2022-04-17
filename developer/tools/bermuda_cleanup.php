@@ -656,8 +656,10 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
         $files = new \RegexIterator($files, self::ALL_EXT);
 
         $todo = [];
+        $found = 0;
         foreach ($files as $file) {
             try {
+                $found += 1;
                 $contents = file_get_contents($file->getPathName());
                 if (!preg_match_all($pattern, $contents, $matches)) {
                     continue;
@@ -666,7 +668,11 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
                     $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
                     continue;
                 }
-                if (strpos($file->getPathName(), '/xarayatesting/tests/core/') !== false) {
+                if (strpos($file->getPathName(), 'xarayatesting/tests/core/') !== false) {
+                    $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
+                    continue;
+                }
+                if (strpos($file->getPathName(), '/vendor/composer/') !== false) {
                     $this->log($file->getPathName() . ' - ' . count($matches[0]) . ' SKIP');
                     continue;
                 }
@@ -677,7 +683,7 @@ class XarayaModuleAnalyzer extends XarayaCoreAnalyzer
                 exit;
             }
         }
-        $this->log('Found ' . count($todo) . ' files to fix', true);
+        $this->log('Found ' . count($todo) . ' out of ' . $found . ' files to fix', true);
         if (!$fixMe) {
             $this->log('Set $fixMe = true; to fix', true);
             return;
@@ -813,10 +819,21 @@ $fixMe = false;
 $inDir = dirname(dirname(__DIR__)) . '/html/code/modules/';
 //$inDir = dirname(dirname(__DIR__)) . '/html/code/';
 //$inDir = dirname(dirname(__DIR__)).'/html/themes/';
-//$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/modules/';
+//$inDir = dirname(dirname(__DIR__)).'/vendor/xaraya/';
 $analyzer = new XarayaModuleAnalyzer();
 $analyzer->verbose = true;
 $analyzer->check_module_files($inDir, $fixMe);
+/**
+$contents = file_get_contents('/home/mikespub/xaraya-modules/selected.json');
+$repos = json_decode($contents, true);
+foreach (array_keys($repos) as $repo) {
+    $inDir = "/home/mikespub/xaraya-$repo";
+    echo $inDir . "\n";
+    $analyzer = new XarayaModuleAnalyzer();
+    $analyzer->verbose = true;
+    $analyzer->check_module_files($inDir, $fixMe);
+}
+ */
 
 /**
 //$modName = 'dynamicdata';
