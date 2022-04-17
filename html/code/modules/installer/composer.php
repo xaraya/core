@@ -11,6 +11,10 @@
  * @link http://xaraya.info/index.php/release/200.html
  */
 use Composer\Script\Event;
+use Composer\InstalledVersions;
+use Composer\Installer\PackageEvent;
+
+const MATCHES = '/xaraya/';
 
 class xarInstallComposer extends xarObject
 {
@@ -25,5 +29,57 @@ class xarInstallComposer extends xarObject
         var_dump($extra);
         $arguments = $event->getArguments();
         var_dump($arguments);
+    }
+
+    public static function postPackageInstall(PackageEvent $event)
+    {
+        $package = $event->getOperation()->getPackage();
+        if (!preg_match(MATCHES, $package->getName())) {
+            return;
+        }
+        // @todo create symlink from vendor/xaraya/<name> to html/code/modules/<name>
+        echo "Installed: " . $package->getName() . " " . $package->getType() . "\n";
+    }
+
+    public static function postPackageUpdate(PackageEvent $event)
+    {
+        $package = $event->getOperation()->getTargetPackage();
+        if (!preg_match(MATCHES, $package->getName())) {
+            return;
+        }
+        // @todo update symlink from vendor/xaraya/<name> to html/code/modules/<name>
+        echo "Updated: " . $package->getName() . " " . $package->getType() . "\n";
+    }
+
+    public static function postPackageUninstall(PackageEvent $event)
+    {
+        $package = $event->getOperation()->getPackage();
+        if (!preg_match(MATCHES, $package->getName())) {
+            return;
+        }
+        // @todo remove symlink from vendor/xaraya/<name> to html/code/modules/<name>
+        echo "Uninstalled: " . $package->getName() . " " . $package->getType() . "\n";
+    }
+
+    public static function showModules()
+    {
+        print_r(static::listModules());
+    }
+
+    public static function listModules($type = 'xaraya-module', $matches = MATCHES)
+    {
+        if (!empty($type)) {
+            return array_unique(InstalledVersions::getInstalledPackagesByType($type));
+        }
+        $packages = InstalledVersions::getInstalledPackages();
+        if (!empty($matches)) {
+            return array_values(preg_grep($matches, $packages));
+        }
+        return $packages;
+    }
+
+    public static function listPackages($matches = MATCHES)
+    {
+        return static::listModules(null, $matches);
     }
 }

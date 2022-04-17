@@ -12,7 +12,8 @@
         "doctrine/cache": "To use supported Doctrine CacheProviders for caching",
         "doctrine/dbal": "To experiment with JSON data types",
         "phpdocumentor/reflection": "Required to use bermuda_cleanup.php in developer/tools",
-        "xaraya/modules": "To experiment with adding modules via composer cli"
+        "xaraya/modules": "To experiment with adding modules via composer cli",
+        "xaraya/properties": "To experiment with adding properties via composer cli"
     },
     "license": "GPL-2.0-or-later",
     "config": {
@@ -31,15 +32,36 @@
         ]
     },
     "scripts": {
-        "install-module-todo": "xarInstallComposer::eventHandler"
+        "post-package-install": "xarInstallComposer::postPackageInstall",
+        "post-package-update": "xarInstallComposer::postPackageUpdate",
+        "post-package-uninstall": "xarInstallComposer::postPackageUninstall",
+        "install-module-todo": "xarInstallComposer::eventHandler",
+        "list-modules": "xarInstallComposer::showModules"
     },
     "scripts-descriptions": {
-        "install-module-todo": "Install Xaraya module via composer (TODO)"
+        "install-module-todo": "Install Xaraya module via composer (TODO)",
+        "list-modules": "List Xaraya modules installed via composer"
     },
     "extra": {
+        "installer-paths": {
+            "html/code/modules/{name}/": ["type:xaraya-module"],
+            "html/themes/{name}/": ["type:xaraya-theme"],
+            "html/code/blocks/{name}/": ["type:xaraya-block"],
+            "html/code/properties/{name}/": ["type:xaraya-property"]
+        },
         "xaraya": {
-            "modules": "html/code/modules",
-            "themes": "html/themes"
+            "layout": {
+                "root": "",
+                "web": "",
+                "lib": "lib/",
+                "code": "code/"
+            },
+            "install": {
+                "module": "code/modules",
+                "theme": "web/themes",
+                "block": "code/blocks",
+                "property": "code/properties"
+            }
         }
     }
 }
