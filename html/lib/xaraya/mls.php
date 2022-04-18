@@ -581,10 +581,14 @@ class xarMLS extends xarObject
         }
     
         $domainArray = xarMLSContext::getContextFromPath($path);
+        if(empty($domainArray)) {
+            // some non-standard file from another location, e.g. from var/processes for workflows
+            return true;
+        }
         $domainType = $domainArray[0];
         
         // If this is a core file, get the translations and bail
-        if ($domainArray == xarMLS::DNTYPE_CORE) {
+        if ($domainType == xarMLS::DNTYPE_CORE) {
             $translations = self::_loadTranslations(xarMLS::DNTYPE_CORE, 'xaraya', 'core:', 'core');
             return $translations;        
         }
@@ -830,6 +834,7 @@ class xarMLSContext extends xarObject
     
     static public function getContextFromPath($path='')
     {
+        // @todo be able to handle standard files from other locations, e.g. from /vendor/ with composer
         if (strpos($path, sys::lib()) === 0) {
             $domainType = xarMLS::DNTYPE_CORE;
             $path = substr($path, strlen(sys::lib()));
@@ -846,6 +851,7 @@ class xarMLSContext extends xarObject
                 $domainType = xarMLS::DNTYPE_BLOCK;
             }
         } else {
+            // some non-standard file from another location, e.g. from var/processes for workflows
             $domainType = 0;
             return false;
         }
