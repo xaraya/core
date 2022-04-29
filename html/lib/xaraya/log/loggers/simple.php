@@ -291,19 +291,16 @@ class xarLogger_simple extends xarLogger
         if (!file_exists($this->_filename)) {
             // Create a new file.
             touch($this->_filename);
-            if (!empty($this->_mode)) {
-                // Set the default mode for the file.
-                chmod($this->_filename, $this->_mode);
-            }
         } else {
-            // File exists.
-            // If it is not empty then truncate it.
-            if (filesize($this->_filename) > 0) {
-                if ($this->_fp = fopen($this->_filename, 'w')) {
-                    fclose($this->_fp);
-                }
-            }
+            // File exists. Rename it and create a new, empty one
+			$newname = $this->_filename . "_" . time();
+			rename($this->_filename, $newname);
+			touch($this->_filename);
         }
+		if (!empty($this->_mode)) {
+			// Set the default mode for the file.
+			chmod($this->_filename, $this->_mode);
+		}
     }
 
     // Format a message.
