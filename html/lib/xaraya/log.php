@@ -57,7 +57,7 @@ class xarLog extends xarObject
     {
         $GLOBALS['xarLog_loggers'] = array();
         
-        // Only log if logging is enabled and if the config.system file is presents
+        // Only log if logging is enabled and if the config.system file is present
         try {
             if (!xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) return true;
         } catch (Exception $e) {
