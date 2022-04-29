@@ -155,7 +155,7 @@ class xarDatabase extends xarObject
             // doesnt matter, we assume not encoded
         }
 
-        // Hive off the pport of there is one added as part of the host
+        // Hive off the port if there is one added as part of the host
         $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
         $host_parts = explode(':', $host);
         $host = $host_parts[0];
