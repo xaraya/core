@@ -91,7 +91,7 @@ class xarLogger_simple extends xarLogger
     // Maximum file size
     // TODO: allow formats such as '2M', '100k' etc. That conversion could
     // be a core function, as there are many places it could be used.
-    private $_maxFileSize = 1048576; // 1Mb
+    private $_maxFileSize = 5000000; // 1Mb
 
     // End of line marker for writing to the log file.
     // TODO: automatically determine the OS-specific EOL characters.
