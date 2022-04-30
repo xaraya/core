@@ -65,7 +65,7 @@
 					</div>
 					<div class="xar-row">
 						<div class="xar-col">
-							<label for="logfilename" title="#xarML('The name of the log file')#" class="xar-form-label">                                
+							<label for="Simple_Filename" title="#xarML('The name of the log file')#" class="xar-form-label">                                
 								Log file name:                                
 							</label>
 						</div>
@@ -77,7 +77,7 @@
 					</div>
 					<div class="xar-row">
 						<div class="xar-col">
-							<label for="loglevel" title="#xarML('The information levels tracked in the log')#" class="xar-form-label">                                
+							<label for="Simple_Level" title="#xarML('The information levels tracked in the log')#" class="xar-form-label">                                
 								Log levels:                                
 							</label>
 						</div>
@@ -88,7 +88,7 @@
 					</div>
 					<div class="xar-row">
 						<div class="xar-col">
-							<label for="logmaxfilesize" title="#xarML('The maximum size of the log file in bytes')#" class="xar-form-label">                                
+							<label for="Simple_MaxFileSize" title="#xarML('The maximum size of the log file in bytes')#" class="xar-form-label">                                
 								Maximum file size (bytes):                                
 							</label>
 						</div>
@@ -110,7 +110,40 @@
 					</div>
 					<div class="xar-row">
 						<div class="xar-col">
-							<label for="loglevel" title="#xarML('The information levels tracked in the log')#" class="xar-form-label">                                
+							<label for="Mail_Recipient" title="#xarML('The recipient of the log messages')#" class="xar-form-label">                                
+								Mail recipient:                                
+							</label>
+						</div>
+						<div class="xar-col">
+                        	<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Mail.Recipient')</xar:set>
+							<xar:data-input type="textbox" name="Mail_Recipient" value="$value"/>
+						</div>
+					</div>
+					<div class="xar-row">
+						<div class="xar-col">
+							<label for="Mail_Sender" title="#xarML('The sender of the mail messages')#" class="xar-form-label">                                
+								Mail sender:                                
+							</label>
+						</div>
+						<div class="xar-col">
+                        	<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Mail.Sender')</xar:set>
+							<xar:data-input type="textbox" name="Mail_Sender" value="$value"/>
+						</div>
+					</div>
+					<div class="xar-row">
+						<div class="xar-col">
+							<label for="Mail_Subject" title="#xarML('The subject of the mail messages')#" class="xar-form-label">                                
+								Mail subject:                                
+							</label>
+						</div>
+						<div class="xar-col">
+                        	<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Mail.Subject')</xar:set>
+							<xar:data-input type="textbox" name="Mail_Subject" value="$value"/>
+						</div>
+					</div>
+					<div class="xar-row">
+						<div class="xar-col">
+							<label for="Mail_Level" title="#xarML('The information levels tracked in the log')#" class="xar-form-label">                                
 								Log levels:                                
 							</label>
 						</div>
