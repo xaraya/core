@@ -58,7 +58,7 @@ function base_admin_modifyconfig()
     }
    
     $data['releasenumber'] = xarModVars::get('base','releasenumber');
-
+    
     // TODO: delete after new backend testing
     // $data['translationsBackend'] = xarConfigVars::get(null, 'Site.MLS.TranslationsBackend');
     $data['authid'] = xarSec::genAuthKey();
@@ -99,6 +99,19 @@ function base_admin_modifyconfig()
     $picker->setExtensions('txt,html');
     $picker->display_fullname = true;
     $data['logfiles'] = $picker->getOptions();
+
+    $data['logavailable'] = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+    $data['logavailable']->options = array(
+                                array('id' => 'simple', 'name' => xarML('Simple')),
+                                array('id' => 'email', 'name' => xarML('Email')),
+                                array('id' => 'error_log', 'name' => xarML('Error Log')),
+                                array('id' => 'html', 'name' => xarML('HTML')),
+                                array('id' => 'javascript', 'name' => xarML('Javascript')),
+                                array('id' => 'mozilla', 'name' => xarML('Mozilla')),
+                                array('id' => 'sql', 'name' => xarML('SQL')),
+                                array('id' => 'syslog', 'name' => xarML('Syslog')),
+                                array('id' => 'winsyslog', 'name' => xarML('WinSyslog')),
+                            );
 
     switch (strtolower($phase)) {
         case 'modify':
@@ -150,6 +163,7 @@ function base_admin_modifyconfig()
                     } else {
                         $data['log_data'] = '';
                     }
+    				$data['available_loggers'] = explode(',', xarSystemVars::get(sys::CONFIG, 'Log.Available'));
                 break;
             }
             break;
@@ -281,13 +295,20 @@ function base_admin_modifyconfig()
                     break;
                 case 'caching':                    
                     break;
-                case 'logging':                    
+                case 'logging':
+                	// The overall switch to enable logging
                     if (!xarVar::fetch('logenabled','int',$logenabled,0,xarVar::NOT_REQUIRED)) return;
+                    // The loggers that can be made active
+                    $data['logavailable']->checkInput('available_loggers');
+                    // The overall log levels
                     $checkboxlist = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
                     $checkboxlist->checkInput('loglevel');
                     $loglevel = serialize($checkboxlist->value);
-                    $variables = array('Log.Enabled' => $logenabled, 'Log.Level' => $loglevel, 'Log.Filename' => $data['logfilename']);
+                    
+                    // Update the config.system file
+                    $variables = array('Log.Enabled' => $logenabled, 'Log.Available' => $data['logavailable']->value,'Log.Level' => $loglevel, 'Log.Filename' => $data['logfilename']);
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    
                     xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
                     break;
                 case 'other':
