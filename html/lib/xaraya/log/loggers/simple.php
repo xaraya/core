@@ -318,6 +318,11 @@ class xarLogger_simple extends xarLogger
     {
         return $this->getTime() . ' [' . $this->levels[$level] . '] ' . $message . $this->EOL;
     }
+
+    function getFilename()
+    {
+        return basename($this->_filename);
+    }
 }
 
 ?>

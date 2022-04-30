@@ -3,3 +3,4 @@
 # Except this file
 !.gitignore
 !what_is_this.txt
+!config.log.php

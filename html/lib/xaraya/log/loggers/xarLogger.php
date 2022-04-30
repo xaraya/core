@@ -81,25 +81,23 @@ class xarLogger extends xarObject
      *
      * @param array     $conf               Configuration options for the specific driver.
      *
-     * 
      * @return boolean
      */
     function setConfig(array &$conf)
     {
-        $this->logLevel = $conf['loglevel'];
+        $this->logLevel = isset($conf['loglevel']) ? $conf['loglevel'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
+		$levels = @unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'));
+		if (!empty($levels)) {
+			$this->logLevel = 0;
+			$levels = explode(',', $levels);
+			foreach ($levels as $level) $this->logLevel |= (int)$level;
+		} else {
+			$this->logLevel = self::LEVEL_ALL;
+		}
 
         $microtime = explode(" ", microtime());
         $this->elapsed = ((float)$microtime[0] + (float)$microtime[1]);
 
-/*
-        // If no identity is given yet to this page view, then create it
-        if (!isset($GLOBALS['_xar_loggingident'])) {
-            $GLOBALS['_xar_loggingident'] = md5(microtime());
-        }
-
-        // Assigns the page view identity to be logged as the logger identity
-        $this->ident = $GLOBALS['_xar_loggingident'];
-*/
         $this->ident = '';
 
         // If a custom time format has been provided, use it.
