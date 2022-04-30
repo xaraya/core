@@ -63,8 +63,6 @@ class xarLog extends xarObject
         } catch (Exception $e) {
             return true;
         }
-
-        $xarLogConfig = array();
     
         // Check if we have a log configuration file in the var directory
         if (self::configReadable()) {
@@ -72,7 +70,11 @@ class xarLog extends xarObject
             if (!include (self::configFile())) {
                 throw new LoggerException('xarLog_init: Log configuration file is invalid!');
             }
-    
+            // Get the full path for the filenames
+            foreach ($config as $k => $v) {$config[$k]['config']['fileName'] = realpath(sys::varpath() . '/logs/' . $config[$k]['config']['fileName']);}
+        	self::$config = $config;
+        	
+
         // No file found. Try and fall back
         } elseif (self::fallbackPossible()) {
             //Fallback mechanism to allow some logging in important cases when
@@ -97,7 +99,7 @@ class xarLog extends xarObject
                         );
             }
         }
-    
+  
         // If none of these => do nothing.
          foreach (self::$config as $logger) {
             self::addLogger($logger['type'], $logger['config']);
@@ -200,14 +202,14 @@ class xarLog extends xarObject
     static public function addLogger($type, $config_args)
     {
         sys::import('xaraya.log.loggers.'.$type);
-        $type = 'xarLogger_'.$type;
+        $logger = 'xarLogger_'.$type;
     
-        if (!$observer = new $type()) {
+        if (!$observer = new $logger()) {
             throw new LoggerException('xarLog_init: Unable to instantiate class for logging: '.$type);
         }
 
         $observer->setConfig($config_args);
-        self::$loggers[] = &$observer;
+        self::$loggers[$type] = &$observer;
     }
 }
 
