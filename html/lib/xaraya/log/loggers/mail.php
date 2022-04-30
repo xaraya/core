@@ -88,7 +88,7 @@ class xarLogger_mail extends xarLogger
     {
         parent::setConfig($conf);
 
-        $this->_recipient = $conf['to'];
+        $this->_recipient = $conf['recipient'];
 
         if (!empty($conf['from'])) {
             $this->_from = $conf['from'];

@@ -311,7 +311,7 @@ function base_admin_modifyconfig()
                     
                     // Update the config.log file
 					$variables = array();
-					$vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode'];
+            		$vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode', 'Recipient', 'Sender', 'Subject'];
                     foreach ($data['available_loggers'] as $available) {
 						foreach ($vararray as $thisvar) {
 							// Get the values from the template
@@ -329,7 +329,7 @@ function base_admin_modifyconfig()
     						unset($thisvalue);
 						}
                     }
-                    //var_dump($variables);exit;
+//                    var_dump($variables);exit;
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables' => $variables, 'scope' => 'Log'));
 
                     xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
