@@ -85,14 +85,14 @@ class xarLogger extends xarObject
      */
     function setConfig(array &$conf)
     {
-        $this->logLevel = isset($conf['loglevel']) ? $conf['loglevel'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
-		$levels = @unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'));
+        $this->logLevel = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
+		$levels = @unserialize($this->logLevel);
 		if (!empty($levels)) {
 			$this->logLevel = 0;
 			$levels = explode(',', $levels);
 			foreach ($levels as $level) $this->logLevel |= (int)$level;
 		} else {
-			$this->logLevel = self::LEVEL_ALL;
+			$this->logLevel = xarLog::LEVEL_ALL;
 		}
 
         $microtime = explode(" ", microtime());

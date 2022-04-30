@@ -113,8 +113,8 @@ class xarLogger_simple extends xarLogger
         }
 
         // If a maximum size has been supplied, use it.
-        if (!empty($conf['maxFileSize'])) {
-            $this->_maxFileSize = $conf['maxFileSize'];
+        if (!empty($conf['maxfilesize'])) {
+            $this->_maxFileSize = $conf['maxfilesize'];
         }
 
         // Start with a horizontal rule.
@@ -129,7 +129,7 @@ class xarLogger_simple extends xarLogger
             $this->_buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
         }
 
-        $this->_filename = $conf['fileName'];
+        $this->_filename = $conf['filename'];
 
         // Set the log file up for writing.
         $this->_prepareLogfile();

@@ -37,6 +37,7 @@ class xarSystemVars extends xarVars implements IxarVars
         if (!isset(self::$systemVars[$scope]))
             self::preload($scope);
 
+        // We need the system variable; complain if it's not there
         if (!isset(self::$systemVars[$scope][$name]))
             throw new Exception("xarSystemVars: Unknown system variable: '$name'.");
 
@@ -57,8 +58,12 @@ class xarSystemVars extends xarVars implements IxarVars
 
     private static function preload($scope)
     {
-        $fileName = sys::varpath() . '/' . $scope;
-        if (!file_exists($fileName))
+        $fileName = sys::varpath() . '/';
+        if ($scope == sys::LOG)  $fileName .= 'logs/';
+        $fileName .= $scope;
+
+        // We need the file; complain if it's not there
+		if (!file_exists($fileName))
             throw new Exception("The system config file '$fileName' could not be found.");
 
         // Make stuff from config.system.php available

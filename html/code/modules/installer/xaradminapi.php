@@ -63,8 +63,15 @@ function installer_adminapi_modifyconfig(Array $args=array())
 
 function installer_adminapi_modifysystemvars(Array $args=array())
 {
+    // We need variables to save
     if (!isset($args['variables'])) throw new BadParameterException('variables');
-    $configfile = sys::varpath() . '/config.system.php';
+    
+    // Get the path to the file we are updating
+    if (!isset($args['scope'])) $args['scope'] = 'System';
+    if ($args['scope'] == 'System') $configfile = sys::varpath() . '/config.system.php';
+    elseif ($args['scope'] == 'Log') $configfile = sys::varpath() . '/logs/config.log.php';
+    else throw new Exception(xarML("xarSystemVars: Unknown scope: '#(1)'.", $scope));
+    
     if (isset($args['filepath'])) $configfile = $args['filepath'];
     try {
         $config_php = join('', file($configfile));
