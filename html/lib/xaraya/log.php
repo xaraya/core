@@ -55,8 +55,6 @@ class xarLog extends xarObject
     
     static public function init(array $args = array())
     {
-        $GLOBALS['xarLog_loggers'] = array();
-        
         // Only log if logging is enabled and if the config.system file is present
         try {
             if (!xarSystemVars::get(sys::CONFIG, 'Log.Available')) return true;
@@ -72,7 +70,7 @@ class xarLog extends xarObject
             }
             
             $config = array();
-            $vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode'];
+            $vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode', 'Recipient', 'Sender', 'Subject'];
             // Get the available loggers as an array
             $availables = explode(',', xarSystemVars::get(sys::CONFIG, 'Log.Available'));
             // Get the full path for the filenames of each of the available loggers
