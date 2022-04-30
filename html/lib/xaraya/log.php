@@ -59,7 +59,7 @@ class xarLog extends xarObject
         
         // Only log if logging is enabled and if the config.system file is present
         try {
-            if (!xarSystemVars::get(sys::CONFIG, 'Log.Enabled')) return true;
+            if (!xarSystemVars::get(sys::CONFIG, 'Log.Available')) return true;
         } catch (Exception $e) {
             return true;
         }
@@ -70,39 +70,27 @@ class xarLog extends xarObject
             if (!include (self::configFile())) {
                 throw new LoggerException('xarLog_init: Log configuration file is invalid!');
             }
-            // Get the full path for the filenames
-            foreach ($config as $k => $v) {$config[$k]['config']['fileName'] = realpath(sys::varpath() . '/logs/' . $config[$k]['config']['fileName']);}
-        	self::$config = $config;
-        	
-
-        // No file found. Try and fall back
-        } elseif (self::fallbackPossible()) {
-            //Fallback mechanism to allow some logging in important cases when
-            //the user might not have logging yet installed, or for some reason we
-            //should be able to have a way to get error messages back => installation?!
-            $logFile = self::fallbackFile();
-            if ($logFile) {
-                $levels = @unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'));
-                if (!empty($levels)) {
-                    $logLevel = 0;
-                    $levels = explode(',', $levels);
-                    foreach ($levels as $level) $logLevel |= (int)$level;
-                } else {
-                    $logLevel = self::LEVEL_ALL;
-                }
-
-                self::$config[] = array(
-                    'type'      => 'simple',
-                    'config'    => array(
-                        'fileName' => $logFile,
-                        'loglevel'  => $logLevel)
-                        );
+            
+            $config = array();
+            $vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode'];
+            // Get the available loggers as an array
+            $availables = explode(',', xarSystemVars::get(sys::CONFIG, 'Log.Available'));
+            // Get the full path for the filenames of each of the available loggers
+            foreach ($availables as $available) {
+				foreach ($vararray as $thisvar) {
+					$varname = 'Log.' . ucwords($available) . '.' . $thisvar;
+					if (isset($systemConfiguration[$varname])) $config[$available][strtolower($thisvar)] = $systemConfiguration[$varname];
+				}
             }
+        	self::$config = $config;
+
+        } else {
+			throw new LoggerException('xarLog_init: Did not find the log configuration file at var/logs/config.log.php!');
         }
   
-        // If none of these => do nothing.
-         foreach (self::$config as $logger) {
-            self::addLogger($logger['type'], $logger['config']);
+        // Activate each of the available loggers
+         foreach (self::$config as $type => $logger) {
+            self::addLogger($type, $logger);
          }
     
         // Subsystem initialized, register a shutdown function
@@ -201,11 +189,11 @@ class xarLog extends xarObject
     **/
     static public function addLogger($type, $config_args)
     {
-        sys::import('xaraya.log.loggers.'.$type);
-        $logger = 'xarLogger_'.$type;
+        sys::import('xaraya.log.loggers.' . $type);
+        $logger = 'xarLogger_' . $type;
     
         if (!$observer = new $logger()) {
-            throw new LoggerException('xarLog_init: Unable to instantiate class for logging: '.$type);
+            throw new LoggerException('xarLog_init: Unable to instantiate class for logging: ' . $type);
         }
 
         $observer->setConfig($config_args);

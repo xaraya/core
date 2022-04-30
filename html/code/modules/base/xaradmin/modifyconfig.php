@@ -103,7 +103,7 @@ function base_admin_modifyconfig()
     $data['logavailable'] = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
     $data['logavailable']->options = array(
                                 array('id' => 'simple', 'name' => xarML('Simple')),
-                                array('id' => 'email', 'name' => xarML('Email')),
+                                array('id' => 'mail', 'name' => xarML('Mail')),
                                 array('id' => 'error_log', 'name' => xarML('Error Log')),
                                 array('id' => 'html', 'name' => xarML('HTML')),
                                 array('id' => 'javascript', 'name' => xarML('Javascript')),
@@ -112,6 +112,7 @@ function base_admin_modifyconfig()
                                 array('id' => 'syslog', 'name' => xarML('Syslog')),
                                 array('id' => 'winsyslog', 'name' => xarML('WinSyslog')),
                             );
+	$data['available_loggers'] = explode(',', xarSystemVars::get(sys::CONFIG, 'Log.Available'));
 
     switch (strtolower($phase)) {
         case 'modify':
@@ -163,7 +164,6 @@ function base_admin_modifyconfig()
                     } else {
                         $data['log_data'] = '';
                     }
-    				$data['available_loggers'] = explode(',', xarSystemVars::get(sys::CONFIG, 'Log.Available'));
                 break;
             }
             break;
@@ -301,14 +301,37 @@ function base_admin_modifyconfig()
                     // The loggers that can be made active
                     $data['logavailable']->checkInput('available_loggers');
                     // The overall log levels
-                    $checkboxlist = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
-                    $checkboxlist->checkInput('loglevel');
-                    $loglevel = serialize($checkboxlist->value);
+                    $levels = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
+                    $levels->checkInput('loglevel');
+                    $loglevel = serialize($levels->value);
                     
                     // Update the config.system file
                     $variables = array('Log.Enabled' => $logenabled, 'Log.Available' => $data['logavailable']->value,'Log.Level' => $loglevel, 'Log.Filename' => $data['logfilename']);
-                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables' => $variables));
                     
+                    // Update the config.log file
+					$variables = array();
+					$vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode'];
+                    foreach ($data['available_loggers'] as $available) {
+						foreach ($vararray as $thisvar) {
+							// Get the values from the template
+							$template_value = ucwords($available) . "_" . $thisvar;
+    						if ($thisvar == 'Level') {
+    							// The levels need some special treatment
+                    			$levels->checkInput($template_value);
+                    			$thisvalue = serialize($levels->value);
+    						} else {
+    							// For the others just get the raw value
+	    						if (!xarVarFetch($template_value,    'isset', $thisvalue,    NULL, XARVAR_NOT_REQUIRED)) return;
+    						}
+							$varname = 'Log.' . ucwords($available) . '.' . $thisvar;
+							$variables[$varname] = $thisvalue;
+    						unset($thisvalue);
+						}
+                    }
+                    //var_dump($variables);exit;
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables' => $variables, 'scope' => 'Log'));
+
                     xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
                     break;
                 case 'other':

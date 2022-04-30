@@ -240,6 +240,7 @@ final class sys extends xarObject
 {
     const CONFIG = 'config.system.php';     // Default system configuration file
     const LAYOUT = 'layout.system.php';     // Default layout configuration file
+    const LOG    = 'config.log.php';        // Default log configuration file
 
     private static $has  = array();         // Keep a list of what we already have
     private static $var  = null;            // Save the var location

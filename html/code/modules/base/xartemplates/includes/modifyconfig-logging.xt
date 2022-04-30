@@ -54,7 +54,7 @@
                     </div>
                 </div>
                 <div class="xar-row">
-                	Currently only the simple and email loggers are supported.
+                	Currently only the simple and mail loggers are supported.
                 </div>
             </fieldset>
             <xar:if condition="in_array('simple', $available_loggers)">
@@ -65,14 +65,13 @@
 					</div>
 					<div class="xar-row">
 						<div class="xar-col">
-							<label for="logfilename" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+							<label for="logfilename" title="#xarML('The name of the log file')#" class="xar-form-label">                                
 								Log file name:                                
 							</label>
 						</div>
 						<div class="xar-col">
-							<xar:var name="firstline">Choose a file</xar:var>
-							<xar:set name="firstline">",$firstline"</xar:set>
-							<xar:data-input type="combobox" name="logfilename" value="$logfilename" options="$logfiles" layout="horizontal" firstline="$firstline"/>
+                        	<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Simple.Filename')</xar:set>
+							<xar:data-input type="textbox" name="Simple_Filename" value="$value"/>
 							<br/>Allowed extensions are txt and html
 						</div>
 					</div>
@@ -83,30 +82,31 @@
 							</label>
 						</div>
 						<div class="xar-col">
-							<xar:set name="value">@unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'))</xar:set>
-							<xar:data-input type="checkboxlist" name="loglevel" value="$value" options="$levels"/>
+							<xar:set name="value">@unserialize(xarSystemVars::get(sys::LOG, 'Log.Simple.Level'))</xar:set>
+							<xar:data-input type="checkboxlist" name="Simple_Level" value="$value" options="$levels"/>
 						</div>
 					</div>
 					<div class="xar-row">
 						<div class="xar-col">
-							<label for="bar" title="#xarML('The name of the file holding the log congtent')#" class="xar-form-label">                                
-								The current log file is:                                
+							<label for="logmaxfilesize" title="#xarML('The maximum size of the log file in bytes')#" class="xar-form-label">                                
+								Maximum file size (bytes):                                
 							</label>
 						</div>
 						<div class="xar-col">
-							#xarSystemVars::get(sys::CONFIG, 'Log.Filename')#
+							<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Simple.MaxFileSize')</xar:set>
+							<xar:data-input type="textbox" name="Simple_MaxFileSize" value="$value"/>
 						</div>
 					</div>
 				</fieldset>
 			</xar:if>
-            <xar:if condition="in_array('email', $available_loggers)">
+            <xar:if condition="in_array('mail', $available_loggers)">
 				<fieldset>
-					<legend>Email Logging</legend>
+					<legend>Mail Logging</legend>
 					<div class="xar-row">
-						This logger sends its output to as email recipient.
+						This logger sends its output to an email recipient.
 					</div>
 					<div class="xar-row">
-						It is recommended to use this logger only for the lowest log levels (e.g., 'Emergency', 'Alert') and not for the highest (e.g., 'Info', 'Debug'), to avoid numbers of emails.
+						It is recommended to use this logger only for the lowest log levels (e.g., 'Emergency', 'Alert') and not for the highest (e.g., 'Info', 'Debug'), to avoid large numbers of emails.
 					</div>
 					<div class="xar-row">
 						<div class="xar-col">
@@ -116,7 +116,7 @@
 						</div>
 						<div class="xar-col">
 							<xar:set name="value">@unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'))</xar:set>
-							<xar:data-input type="checkboxlist" name="loglevel" value="$value" options="$levels"/>
+							<xar:data-input type="checkboxlist" name="Mail_Level" value="$value" options="$levels"/>
 						</div>
 					</div>
 				</fieldset>
