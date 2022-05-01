@@ -64,7 +64,7 @@ class xarLogger extends xarObject
     * in highly frequented sites, the time of the logged message isnt as good to diferenciate
     * different pageviews
     */
-    protected $_ident;
+    protected $ident;
 
     /**
     * String containing the format to use when generating timestamps.
