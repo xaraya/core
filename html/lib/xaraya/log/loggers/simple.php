@@ -69,29 +69,29 @@ class xarLogger_simple extends xarLogger
 {
     // String holding the filename of the logfile.
     // @var string
-    private $_filename;
+    private $filename;
 
     // Integer holding the file handle.
     // NULL if the file is not open.
     // @var integer
-    private $_fp = NULL;
+    private $fp = NULL;
 
     // Integer containing the logfile's permissions mode.
     // Written in octal, the permissions mimic the Unix 'chmod' format.
     // If zero, then no changes are made to the file mode when created.
     // Typical value: 0644
     // @var integer
-    private $_mode = 0;
+    private $mode = 0;
 
     // Output buffer. Log records are buffered before being written to
     // the log file either explicitly, or on destroying the class.
     // @var array
-    private $_buffer;
+    private $buffer;
 
     // Maximum file size
     // TODO: allow formats such as '2M', '100k' etc. That conversion could
     // be a core function, as there are many places it could be used.
-    private $_maxFileSize = 5000000; // 1Mb
+    private $maxFileSize = 5000000; // 5Mb
 
     // End of line marker for writing to the log file.
     // TODO: automatically determine the OS-specific EOL characters.
@@ -102,37 +102,37 @@ class xarLogger_simple extends xarLogger
     // @param $conf['mode'] string File mode of the log file, in Octal (optional)
     // @param $conf['maxFileSize'] integer The maximum size the logfile can be before it is moved or deleted (optional, bytes)
     // 
-    function setConfig(array &$conf)
+    public function setConfig(array &$conf)
     {
         parent::setConfig($conf);
 
         // If a file mode has been provided, use it.
         // Note the mode is passed in as an Octal string.
         if (!empty($conf['mode'])) {
-            $this->_mode = octdec((string)$conf['mode']);
+            $this->mode = octdec((string)$conf['mode']);
         }
 
         // If a maximum size has been supplied, use it.
         if (!empty($conf['maxfilesize'])) {
-            $this->_maxFileSize = $conf['maxfilesize'];
+            $this->maxFileSize = $conf['maxfilesize'];
         }
 
         // Start with a horizontal rule.
-        $this->_buffer = str_repeat('-', 79) . $this->EOL;
+        $this->buffer = str_repeat('-', 79) . $this->EOL;
 
         // Write the request details.
         if (isset($_SERVER['REQUEST_URI'])) {
-            $this->_buffer .= 'REQUEST_URI: ' . $_SERVER['REQUEST_URI'] . $this->EOL;
+            $this->buffer .= 'REQUEST_URI: ' . $_SERVER['REQUEST_URI'] . $this->EOL;
         }
 
         if (isset($_SERVER['HTTP_REFERER'])) {
-            $this->_buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
+            $this->buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
         }
 
-        $this->_filename = $conf['filename'];
+        $this->filename = $conf['filename'];
 
         // Set the log file up for writing.
-        $this->_prepareLogfile();
+        $this->prepareLogfile();
 
         // Register the destructor.
         // Can't do this, it will miss out on the logging of the other subsystems
@@ -141,7 +141,7 @@ class xarLogger_simple extends xarLogger
 
     // Destructor. This will write outstanding records to the logfile.
     // 
-    function _xarLogger_simple_destructor()
+    public function _xarLogger_simple_destructor()
     {
         // Push a final message to the log.
         $this->notify('Shutdown simple logger', xarLog::LEVEL_DEBUG);
@@ -153,7 +153,7 @@ class xarLogger_simple extends xarLogger
     // Add a message, applying appropriate formatting, to the output buffer.
     // @return boolean true on success or false on failure.
     // 
-    function notify($message, $level)
+    public function notify($message, $level)
     {
         // Abort early if the level of priority is above the maximum logging level.
         if (!$this->doLogLevel($level)) {
@@ -161,38 +161,38 @@ class xarLogger_simple extends xarLogger
         }
 
         // Add to loglines array
-        $this->_buffer .= $this->_formatMessage($message, $level);
+        $this->buffer .= $this->formatMessage($message, $level);
         $this->flushBuffer(false);
         return true;
     }
 
     // Clear the output buffer (and optionally stop logging).
     // 
-    function clearBuffer($stop_logging = false)
+    public function clearBuffer($stop_logging=false)
     {
-        $this->_buffer = '';
+        $this->buffer = '';
 
         if ($stop_logging) {
-            $this->_filename = NULL;
+            $this->filename = NULL;
         }
     }
 
     // Flush the current buffer to the log file (and optionally stop logging).
     // Handy for long running processes.
     // 
-    function flushBuffer($stop_logging = false)
+    public function flushBuffer($stop_logging=false)
     {
-        if (!empty($this->_buffer) && $this->_openLogfile()) {
-            fwrite($this->_fp, $this->_buffer);
-            $this->_buffer = '';
+        if (!empty($this->buffer) && $this->openLogfile()) {
+            fwrite($this->fp, $this->buffer);
+            $this->buffer = '';
         }
 
         // Close the log file.
         // It will be opened again if further records need to be written.
-        $this->_closeLogfile();
+        $this->closeLogfile();
 
         if ($stop_logging) {
-            $this->_filename = NULL;
+            $this->filename = NULL;
         }
     }
 
@@ -204,25 +204,25 @@ class xarLogger_simple extends xarLogger
      * @throws LoggerException
      * @return boolean true on success
      **/
-    function _prepareLogfile()
+    private function prepareLogfile()
     {
-        if (file_exists($this->_filename)) {
-            if (!is_writable($this->_filename)) {
+        if (file_exists($this->filename)) {
+            if (!is_writable($this->filename)) {var_dump($this->filename);
                 $err = error_get_last();
-                throw new LoggerException('Unable to write to logger file: ' . $this->_filename
+                throw new LoggerException('Unable to write to logger file: ' . $this->filename
                     .  ' (' . $err['message'] . ')' );
             }
         } else {
-            if (!is_writable(dirname($this->_filename))) {
-                throw new LoggerException('Logger directory is not writeable: ' . dirname($this->_filename));
+            if (!is_writable(dirname($this->filename))) {
+                throw new LoggerException('Logger directory is not writeable: ' . dirname($this->filename));
             }
 
-            $this->_newLogFile();
+            $this->newLogFile();
         }
 
         // The realpath() function requires a file to exist before it will work,
         // so it can not be applied earlier than this point.
-        $this->_filename = realpath($this->_filename);
+        $this->filename = realpath($this->filename);
 
         return true;
     }
@@ -233,34 +233,33 @@ class xarLogger_simple extends xarLogger
      * The file should always exist, as setConfig() will have created it
      * if it did not
      *
-     * 
      * @throws LoggerException
      * @return boolean true on succes, false on failure
      **/
-    function _openLogfile()
+    private function openLogfile()
     {
         // Log file is already open.
-        if (!empty($this->_fp)) {
+        if (!empty($this->fp)) {
             return true;
         }
 
         // The logger has aleady been shut down.
-        if (empty($this->_filename)) {
+        if (empty($this->filename)) {
             return false;
         }
 
         // The config stage will have ensured the file exists and is
         // writable. If the file has exceeded its max size, then
         // start a new logfile.
-        if (filesize($this->_filename) > $this->_maxFileSize) {
+        if (filesize($this->filename) > $this->maxFileSize) {
             // Start a new logfile.
-            $this->_newLogFile();
+            $this->newLogFile();
         }
 
         // Always append - the will be a log file ready.
-        if (($this->_fp = @fopen($this->_filename, 'a')) == false) {
+        if (($this->fp = @fopen($this->filename, 'a')) == false) {
             $err = error_get_last();
-            throw new LoggerException('Unable to open log file for writing: ' . $this->_filename
+            throw new LoggerException('Unable to open log file for writing: ' . $this->filename
                 . ' (' . $err['message']. ')');
         }
 
@@ -270,15 +269,15 @@ class xarLogger_simple extends xarLogger
     // Closes the logfile, if open.
     // @return boolean True if the log file is (or was) closed, false if not
     // 
-    function _closeLogfile()
+    private function closeLogfile()
     {
-        if (empty($this->_fp)) {
+        if (empty($this->fp)) {
             return true;
         }
-        if (!fclose($this->_fp)) {
+        if (!fclose($this->fp)) {
             return false;
         }
-        $this->_fp = NULL;
+        $this->fp = NULL;
         return true;
     }
 
@@ -286,24 +285,24 @@ class xarLogger_simple extends xarLogger
     // In here, truncate the file if it already exists.
     // TODO: if a non-empty file exists, rename it with some
     // timestamp or sequential suffix.
-    function _newLogFile()
+    private function newLogFile()
     {
-        if (!file_exists($this->_filename)) {
+        if (!file_exists($this->filename)) {
             // Create a new file.
-            touch($this->_filename);
-			if (!empty($this->_mode)) {
+            touch($this->filename);
+			if (!empty($this->mode)) {
 				// Set the default mode for the file.
-				chmod($this->_filename, $this->_mode);
+				chmod($this->filename, $this->mode);
 			}
         } else {
-            if (filesize($this->_filename) > 0) {
+            if (filesize($this->filename) > 0) {
             // File exists and is not empty. Rename it and create a new, empty one
-				$newname = $this->_filename . "_" . time();
-				rename($this->_filename, $newname);
-				touch($this->_filename);
-				if (!empty($this->_mode)) {
+				$newname = $this->filename . "_" . time();
+				rename($this->filename, $newname);
+				touch($this->filename);
+				if (!empty($this->mode)) {
 					// Set the default mode for the file.
-					chmod($this->_filename, $this->_mode);
+					chmod($this->filename, $this->mode);
 				}
             }
         }
@@ -314,14 +313,17 @@ class xarLogger_simple extends xarLogger
     // @param integer $level The priority level of this record
     // @return string The formatted log record
     // 
-    function _formatMessage($message, $level)
+    private function formatMessage($message, $level)
     {
         return $this->getTime() . ' [' . $this->levels[$level] . '] ' . $message . $this->EOL;
     }
 
-    function getFilename()
+    // Get the name of the file to which we are writing.
+    // @return string The file name
+    // 
+    public function getFilename()
     {
-        return basename($this->_filename);
+        return basename($this->filename);
     }
 }
 
