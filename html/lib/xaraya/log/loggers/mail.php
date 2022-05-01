@@ -44,30 +44,30 @@ class xarLogger_mail extends xarLogger
      * String holding the recipient's email address.
      * @var string
      */
-    var $_recipient = '';
+    private $recipient = '';
 
     /** 
      * String holding the sender's email address.
      * @var string
      */
-    var $_from = '';
+    private $sender = '';
 
     /** 
      * String holding the email's subject.
      * @var string
      */
-    var $_subject = '[Log_mail] Log message';
+    private $subject = '[Log_mail] Log message';
 
     /**
      * String holding the mail message body.
      * @var string
      */
-    var $_message = '';
+    private $message = '';
 
     /**
      * @var boolean Holds wether the message was already opened or not.
      */
-    var $_opened = false;
+    private $opened = false;
 
 
     /**
@@ -84,24 +84,24 @@ class xarLogger_mail extends xarLogger
      * 
      * 
      */
-    function setConfig(Array &$conf)
+    public function setConfig(Array &$conf)
     {
         parent::setConfig($conf);
 
-        $this->_recipient = $conf['recipient'];
+        $this->recipient = $conf['recipient'];
 
-        if (!empty($conf['from'])) {
-            $this->_from = $conf['from'];
+        if (!empty($conf['sender'])) {
+            $this->sender = $conf['sender'];
         } else {
-            $this->_from = ini_get('sendmail_from');
+            $this->sender = ini_get('sendmail_from');
         }
         
         if (!empty($conf['subject'])) {
-            $this->_subject = $conf['subject'];
+            $this->subject = $conf['subject'];
         }
 
         /* register the destructor */
-        register_shutdown_function(array(&$this, '_destructor'));
+        register_shutdown_function(array(&$this, 'destructor'));
     }
 
     /**
@@ -110,7 +110,7 @@ class xarLogger_mail extends xarLogger
     *
     * 
     */
-    function _destructor()
+    public function destructor()
     {
         $this->close();
     }
@@ -121,11 +121,11 @@ class xarLogger_mail extends xarLogger
      * 
      * 
      */
-    function open()
+    public function open()
     {
-        if (!$this->_opened) {
-            $this->_message = "Log messages:\n\n";
-            $this->_opened = true;
+        if (!$this->opened) {
+            $this->message = "Log messages:\n\n";
+            $this->opened = true;
         }
     }
 
@@ -135,22 +135,22 @@ class xarLogger_mail extends xarLogger
      * 
      * 
      */
-    function close()
+    public function close()
     {
-        if ($this->_opened) {
-            if (!empty($this->_message)) {
-                $headers = "From: $this->_from\r\n";
+        if ($this->opened) {
+            if (!empty($this->message)) {
+                $headers = "From: $this->sender\r\n";
                 $headers .= "User-Agent: Log_mail\r\n";
 
-                if (mail($this->_recipient, $this->_subject, $this->_message,
-                        $headers, "-f".$this->_from) == false) {
+                if (mail($this->recipient, $this->subject, $this->message,
+                        $headers, "-f".$this->sender) == false) {
                     //FIXME: Use xarLog::message, with an extra variable to rule this 
                     // logger out and make it log on the others avaiable
                     error_log("Log_mail: Failure executing mail()", 0);
                     return false;
                 }
             }
-            $this->_opened = false;
+            $this->opened = false;
         }
 
         return true;
@@ -163,18 +163,18 @@ class xarLogger_mail extends xarLogger
      * @return boolean  True on success or false on failure.
      * 
      */
-    function notify($message, $level)
+    public function notify($message, $level)
     {
         if (!$this->doLogLevel($level)) return false;
 
-        if (!$this->_opened) {
+        if (!$this->opened) {
             $this->open();
         }
 
         $entry = sprintf("%s %s [%s] %s\n", $this->getTime(),
             $this->_ident, $this->levels[$level], $message);
 
-        $this->_message .= $entry;
+        $this->message .= $entry;
         
         return true;
     }
