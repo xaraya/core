@@ -158,36 +158,38 @@
             <xar:template file="update-button" module="base" />
         </form>
 
-        <xar:if condition="$log_enabled">
-            <xar:if condition="!empty($log_data)">
-                <fieldset>
-                    <legend>
-                        View Log
-                    </legend>
-                    <xar:data-input type="textarea" style="width: 95%; height: 1000px" name="logfile" value="$log_data"/>
-                </fieldset>
-                <div class="xar-row">
-                    <div class="xar-col">
-                    </div>
-                    <div class="xar-col">
-                        <form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
-                            <xar:var name="label">Clear Log</xar:var>
-                            <xar:button type="submit" name="clear" label="$label"/>
-                            <input type="hidden" name="tab" id="tab" value="#$tab#"/>
-                            <xar:var name="label">Save and Clear Log</xar:var>
-                            <xar:button type="submit" name="clearsave" label="$label"/>
-                        </form>
-                    </div>
-                </div>
-            <xar:else/>
-                <div class="xar-row">
-                    <div class="xar-col">
-                    </div>
-                    <div class="xar-col">
-                        The log is empty
-                    </div>
-                </div>
-            </xar:if>
-        </xar:if>
+        <div style="margin-top: 20px">
+			<xar:if condition="$log_enabled AND in_array('simple', $available_loggers)">
+				<xar:if condition="!empty($log_data)">
+					<fieldset>
+						<legend>
+							Simple Logger Log
+						</legend>
+						<xar:data-input type="textarea" style="width: 95%; height: 1000px" name="logfile" value="$log_data"/>
+					</fieldset>
+					<div class="xar-row">
+						<div class="xar-col">
+						</div>
+						<div class="xar-col">
+							<form action="#xarServer::getCurrentURL()#" method="post" enctype="application/x-www-form-urlencoded">
+								<xar:var name="label">Clear Log</xar:var>
+								<xar:button type="submit" name="clear" label="$label"/>
+								<input type="hidden" name="tab" id="tab" value="#$tab#"/>
+								<xar:var name="label">Save and Clear Log</xar:var>
+								<xar:button type="submit" name="clearsave" label="$label"/>
+							</form>
+						</div>
+					</div>
+				<xar:else/>
+					<div class="xar-row">
+						<div class="xar-col">
+						</div>
+						<div class="xar-col">
+							The Simple Logger Log is empty
+						</div>
+					</div>
+				</xar:if>
+			</xar:if>
+		</div>
     </xar:if>
 </xar:template>
