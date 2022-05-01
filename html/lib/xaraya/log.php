@@ -180,7 +180,7 @@ class xarLog extends xarObject
     }
 
     /**
-     * Add a logger to active loggers
+     * Add a logger to the active loggers
      *
      * @return void
      * @throws LoggerException
