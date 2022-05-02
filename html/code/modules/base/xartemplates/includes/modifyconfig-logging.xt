@@ -54,106 +54,45 @@
                     </div>
                 </div>
                 <div class="xar-row">
+                	<div>
+                		To configure any of the activated loggers above you need to install the LogConfig module (recommended) or modify the configuration file at <br/>
+                		var/logs/config.log.php (only a good idea if you know what you're doing).
+                	</div>
                 	Currently only the simple and mail loggers are supported.
                 </div>
             </fieldset>
-            <xar:if condition="in_array('simple', $available_loggers)">
-				<fieldset>
-					<legend>Simple Logging</legend>
-					<div class="xar-row">
-						This logger sends its output to a text file in plain text, similar to a server log.
-					</div>
-					<div class="xar-row">
-						<div class="xar-col">
-							<label for="Simple_Filename" title="#xarML('The name of the log file')#" class="xar-form-label">                                
-								Log file name:                                
-							</label>
-						</div>
-						<div class="xar-col">
-                        	<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Simple.Filename')</xar:set>
-							<xar:data-input type="textbox" name="Simple_Filename" value="$value"/>
-							<br/>Allowed extensions are txt and html
-						</div>
-					</div>
-					<div class="xar-row">
-						<div class="xar-col">
-							<label for="Simple_Level" title="#xarML('The information levels tracked in the log')#" class="xar-form-label">                                
-								Log levels:                                
-							</label>
-						</div>
-						<div class="xar-col">
-							<xar:set name="value">@unserialize(xarSystemVars::get(sys::LOG, 'Log.Simple.Level'))</xar:set>
-							<xar:data-input type="checkboxlist" name="Simple_Level" value="$value" options="$levels"/>
-						</div>
-					</div>
-					<div class="xar-row">
-						<div class="xar-col">
-							<label for="Simple_MaxFileSize" title="#xarML('The maximum size of the log file in bytes')#" class="xar-form-label">                                
-								Maximum file size (bytes):                                
-							</label>
-						</div>
-						<div class="xar-col">
-							<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Simple.MaxFileSize')</xar:set>
-							<xar:data-input type="textbox" name="Simple_MaxFileSize" value="$value"/>
-						</div>
-					</div>
-				</fieldset>
-			</xar:if>
-            <xar:if condition="in_array('mail', $available_loggers)">
-				<fieldset>
-					<legend>Mail Logging</legend>
-					<div class="xar-row">
-						This logger sends its output to an email recipient.
-					</div>
-					<div class="xar-row">
-						It is recommended to use this logger only for the lowest log levels (e.g., 'Emergency', 'Alert') and not for the highest (e.g., 'Info', 'Debug'), to avoid large numbers of emails.
-					</div>
-					<div class="xar-row">
-						<div class="xar-col">
-							<label for="Mail_Recipient" title="#xarML('The recipient of the log messages')#" class="xar-form-label">                                
-								Mail recipient:                                
-							</label>
-						</div>
-						<div class="xar-col">
-                        	<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Mail.Recipient')</xar:set>
-							<xar:data-input type="textbox" name="Mail_Recipient" value="$value"/>
-						</div>
-					</div>
-					<div class="xar-row">
-						<div class="xar-col">
-							<label for="Mail_Sender" title="#xarML('The sender of the mail messages')#" class="xar-form-label">                                
-								Mail sender:                                
-							</label>
-						</div>
-						<div class="xar-col">
-                        	<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Mail.Sender')</xar:set>
-							<xar:data-input type="textbox" name="Mail_Sender" value="$value"/>
-						</div>
-					</div>
-					<div class="xar-row">
-						<div class="xar-col">
-							<label for="Mail_Subject" title="#xarML('The subject of the mail messages')#" class="xar-form-label">                                
-								Mail subject:                                
-							</label>
-						</div>
-						<div class="xar-col">
-                        	<xar:set name="value">xarSystemVars::get(sys::LOG, 'Log.Mail.Subject')</xar:set>
-							<xar:data-input type="textbox" name="Mail_Subject" value="$value"/>
-						</div>
-					</div>
-					<div class="xar-row">
-						<div class="xar-col">
-							<label for="Mail_Level" title="#xarML('The information levels tracked in the log')#" class="xar-form-label">                                
-								Log levels:                                
-							</label>
-						</div>
-						<div class="xar-col">
-							<xar:set name="value">@unserialize(xarSystemVars::get(sys::LOG, 'Log.Mail.Level'))</xar:set>
-							<xar:data-input type="checkboxlist" name="Mail_Level" value="$value" options="$levels"/>
-						</div>
-					</div>
-				</fieldset>
-			</xar:if>
+            <fieldset>
+                <legend>Fallback Logger</legend>
+                <div class="xar-row">
+                	<div>
+                		This logger is a basic version of the Simple logger. Xaraya will create it if you have enabled logging but haven't activated any of the loggers above.
+                	</div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="logfilename" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                            Log file name:                                
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:set name="value">xarSystemVars::get(sys::CONFIG, 'Log.Filename')</xar:set>
+                        <xar:data-input type="textbox" name="logfilename" value="$value"/>
+                        <br/>Allowed extensions are txt and html
+                        <br/>If the file does not exist, Xaraya will try to create it
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="loglevel" title="#xarML('The cipher we are using')#" class="xar-form-label">                                
+                            Log level:                                
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:set name="value">@unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'))</xar:set>
+                        <xar:data-input type="checkboxlist" name="loglevel" value="$value" options="$levels"/>
+                    </div>
+                </div>
+            </fieldset>
             <input type="hidden" name="tab" id="tab" value="#$tab#"/>
             <xar:template file="update-button" module="base" />
         </form>

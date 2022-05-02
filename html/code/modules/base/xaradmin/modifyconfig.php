@@ -89,11 +89,6 @@ function base_admin_modifyconfig()
         $data['modes'] = $modes;
     }
 
-    sys::import('modules.dynamicdata.class.properties.master');
-    $combobox = DataPropertyMaster::getProperty(array('name' => 'combobox'));
-    $combobox->checkInput('logfilename');
-    $data['logfilename'] = !empty($combobox->value) ? $combobox->value : xarSystemVars::get(sys::CONFIG, 'Log.Filename');
-
     $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
     $picker->initialization_basedirectory = sys::varpath() . "/logs/";
     $picker->setExtensions('txt,html');
@@ -112,7 +107,7 @@ function base_admin_modifyconfig()
                                 array('id' => 'syslog', 'name' => xarML('Syslog')),
                                 array('id' => 'winsyslog', 'name' => xarML('WinSyslog')),
                             );
-	$data['available_loggers'] = explode(',', xarSystemVars::get(sys::CONFIG, 'Log.Available'));
+	$data['available_loggers'] = xarLog::availables();
 
     switch (strtolower($phase)) {
         case 'modify':
@@ -144,16 +139,15 @@ function base_admin_modifyconfig()
                         $data['cache_settings']['Variable.CacheStorage'] = 'database';
                 break;
                 case 'logging':
+                    $filepath = $picker->initialization_basedirectory . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
                     // Delete the log file and create a new, empty one
                     if (!xarVar::fetch('clear','isset',$clear,NULL,xarVar::NOT_REQUIRED)) return;
-                    $filepath = $picker->initialization_basedirectory . $data['logfilename'];
                     if (isset($clear)) {
                         unlink($filepath);
                         touch($filepath);
                     }
                     // Rename the log file and create a new, empty one
                     if (!xarVar::fetch('clearsave','isset',$clear,NULL,xarVar::NOT_REQUIRED)) return;
-                    $filepath = $picker->initialization_basedirectory . $data['logfilename'];
                     if (isset($clear)) {
                         $newname = $filepath . "_" . time();
                         rename($filepath, $newname);
@@ -174,7 +168,8 @@ function base_admin_modifyconfig()
                     $variables = array('DB.Middleware' => $middleware);
                     $current_database = xarSystemVars::get(sys::CONFIG, 'DB.Name');
                     if (!xarVar::fetch('database', 'str', $database, $current_database ,xarVar::NOT_REQUIRED)) return;
-                    $variables['DB.Name'] = $database;                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
+                    $variables['DB.Name'] = $database;                    
+                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables'=> $variables));
                     xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'setup')));
                     break;
                 case 'display':
@@ -297,41 +292,20 @@ function base_admin_modifyconfig()
                     break;
                 case 'logging':
                 	// The overall switch to enable logging
-                    if (!xarVar::fetch('logenabled','int',$logenabled,0,xarVar::NOT_REQUIRED)) return;
+                    if (!xarVar::fetch('logenabled', 'int', $logenabled, 0, xarVar::NOT_REQUIRED)) return;
                     // The loggers that can be made active
                     $data['logavailable']->checkInput('available_loggers');
-                    // The overall log levels
+                    // The log levels for the fallback logger
                     $levels = DataPropertyMaster::getProperty(array('name' => 'checkboxlist'));
                     $levels->checkInput('loglevel');
                     $loglevel = serialize($levels->value);
+                	// The file name for the fallback logger
+                    if (!xarVar::fetch('logfilename','str', $logfilename, '', xarVar::NOT_REQUIRED)) return;
                     
                     // Update the config.system file
-                    $variables = array('Log.Enabled' => $logenabled, 'Log.Available' => $data['logavailable']->value,'Log.Level' => $loglevel, 'Log.Filename' => $data['logfilename']);
+                    $variables = array('Log.Enabled' => $logenabled, 'Log.Available' => $data['logavailable']->value,'Log.Level' => $loglevel, 'Log.Filename' => $logfilename);
                     xarMod::apiFunc('installer','admin','modifysystemvars', array('variables' => $variables));
                     
-                    // Update the config.log file
-					$variables = array();
-            		$vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode', 'Recipient', 'Sender', 'Subject'];
-                    foreach ($data['available_loggers'] as $available) {
-						foreach ($vararray as $thisvar) {
-							// Get the values from the template
-							$template_value = ucwords($available) . "_" . $thisvar;
-    						if ($thisvar == 'Level') {
-    							// The levels need some special treatment
-                    			$levels->checkInput($template_value);
-                    			$thisvalue = serialize($levels->value);
-    						} else {
-    							// For the others just get the raw value
-	    						if (!xarVarFetch($template_value,    'isset', $thisvalue,    NULL, XARVAR_NOT_REQUIRED)) return;
-    						}
-							$varname = 'Log.' . ucwords($available) . '.' . $thisvar;
-							$variables[$varname] = $thisvalue;
-    						unset($thisvalue);
-						}
-                    }
-//                    var_dump($variables);exit;
-                    xarMod::apiFunc('installer','admin','modifysystemvars', array('variables' => $variables, 'scope' => 'Log'));
-
                     xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'logging')));
                     break;
                 case 'other':
