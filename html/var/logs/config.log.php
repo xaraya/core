@@ -45,7 +45,7 @@ $systemConfiguration['Log.Html.Timeformat'] = '%Y/%m/%d %H:%M:%S';         // St
 // Simple logger
 $systemConfiguration['Log.Simple.Level'] = '1,2,4,8';                      // The levels of messages this logger tracks.
 $systemConfiguration['Log.Simple.Timeformat'] = '%Y/%m/%d %H:%M:%S';              // String containing the format for the log's timestamps.
-$systemConfiguration['Log.Simple.Filename'] = 'simplelog.txt1';            // The name of the logfile of this logger
+$systemConfiguration['Log.Simple.Filename'] = 'simplelog.txt';             // The name of the logfile of this logger
 $systemConfiguration['Log.Simple.MaxFileSize'] = '50000000';               // The maximum size of a log file in bytes. Once this value is reached Xaraya creates a new log file
 $systemConfiguration['Log.Simple.Mode'] = '644';                           // Integer containing the logfile's permissions mode.
 
