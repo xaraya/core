@@ -92,6 +92,16 @@
                         <xar:data-input type="checkboxlist" name="loglevel" value="$value" options="$levels"/>
                     </div>
                 </div>
+                <xar:if condition="(int)xarSystemVars::get(sys::CONFIG, 'Log.Enabled') AND empty(xarLog::availables()) AND xarLog::fallbackPossible()">
+					<div style="color: green">
+						Fallback logging is currently active.
+					</div>
+                <xar:else/>
+					<div style="color: red">
+						Fallback logging is currently not active.
+					</div>
+                </xar:if>
+
             </fieldset>
             <input type="hidden" name="tab" id="tab" value="#$tab#"/>
             <xar:template file="update-button" module="base" />
