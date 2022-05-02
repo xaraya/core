@@ -129,7 +129,9 @@ class xarLogger_simple extends xarLogger
             $this->buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
         }
 
-        $this->filename = $conf['filename'];
+        if (!empty($conf['filename'])) {
+	        $this->filename = $conf['filename'];
+        }
 
         // Set the log file up for writing.
         $this->prepareLogfile();
