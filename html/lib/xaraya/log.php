@@ -240,11 +240,11 @@ class xarLog extends xarObject
         sys::import('xaraya.log.loggers.' . $type);
         $logger = 'xarLogger_' . $type;
     
-        if (!$observer = new $logger()) {
+        if (!$observer = new $logger($config_args)) {
             throw new LoggerException('xarLog_init: Unable to instantiate class for logging: ' . $type);
         }
 
-        $observer->setConfig($config_args);
+        $observer->start();
         self::$loggers[$type] = &$observer;
     }
 }
