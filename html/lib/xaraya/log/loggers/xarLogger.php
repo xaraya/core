@@ -55,7 +55,7 @@ class xarLogger extends xarObject
     *
     * The level of the messages which will be logged.
     */
-    private $logLevel;
+    protected $logLevel;
 
     /**
     * Identity of the logger.
@@ -71,10 +71,10 @@ class xarLogger extends xarObject
     * @var string
     */
     // Note: before changing this, check windows support for the specifiers
-    private $timeFormat = '%b %d %H:%M:%S';
+    protected $timeFormat = '%b %d %H:%M:%S';
 
     // Elapsed time.
-    private $elapsed = 0;
+    protected $elapsed = 0;
 
     /**
      * Sets up the configuration specific parameters for each driver
@@ -83,7 +83,7 @@ class xarLogger extends xarObject
      *
      * @return boolean
      */
-    function setConfig(array &$conf)
+    public function __construct(Array $conf)
     {
         $this->logLevel = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
 		$levels = @unserialize($this->logLevel);
@@ -106,6 +106,15 @@ class xarLogger extends xarObject
         }
     }
 
+    /**
+      * Start the logger
+      *
+      * This method gets overwritten
+     **/
+    public function start()
+    {
+    }
+    
     /**
      * Returns if the logger should log the given level or not.
      *

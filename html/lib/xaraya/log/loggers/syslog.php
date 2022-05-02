@@ -63,9 +63,9 @@ class xarLogger_syslog extends xarLogger
      * 
      * @return boolean
      */
-    function setConfig(array &$conf) 
+    public function __construct(Array $conf)
     {
-        parent::setConfig($conf);
+        parent::__construct($conf);
         
         /* If it is given a logging facility to be used, then use it. */
         if (isset($conf['facility'])) {
@@ -78,7 +78,7 @@ class xarLogger_syslog extends xarLogger
         }
 
         /* register the destructor */
-        register_shutdown_function(array(&$this, '_destructor'));
+        register_shutdown_function(array(&$this, 'destructor'));
     }
 
     /**
@@ -87,7 +87,7 @@ class xarLogger_syslog extends xarLogger
     *
     * 
     */
-    function _destructor()
+    private function destructor()
     {
         $this->close();
     }

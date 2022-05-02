@@ -84,9 +84,9 @@ class xarLogger_mail extends xarLogger
      * 
      * 
      */
-    public function setConfig(Array &$conf)
+    public function __construct(Array $conf)
     {
-        parent::setConfig($conf);
+        parent::__construct($conf);
 
         $this->recipient = $conf['recipient'];
 
@@ -110,7 +110,7 @@ class xarLogger_mail extends xarLogger
     *
     * 
     */
-    public function destructor()
+    private function destructor()
     {
         $this->close();
     }
@@ -118,7 +118,6 @@ class xarLogger_mail extends xarLogger
     /**
      * Starts a new mail message.
      * This is implicitly called by log(), if necessary.
-     * 
      * 
      */
     public function open()
@@ -132,7 +131,6 @@ class xarLogger_mail extends xarLogger
     /**
      * Closes the message, if it is open, and sends the mail.
      * This is implicitly called by the destructor, if necessary.
-     * 
      * 
      */
     public function close()

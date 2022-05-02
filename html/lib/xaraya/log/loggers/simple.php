@@ -69,29 +69,33 @@ class xarLogger_simple extends xarLogger
 {
     // String holding the filename of the logfile.
     // @var string
-    private $filename;
+    protected $filename;
 
     // Integer holding the file handle.
     // NULL if the file is not open.
     // @var integer
-    private $fp = NULL;
+    protected $fp = NULL;
 
     // Integer containing the logfile's permissions mode.
     // Written in octal, the permissions mimic the Unix 'chmod' format.
     // If zero, then no changes are made to the file mode when created.
     // Typical value: 0644
     // @var integer
-    private $mode = 0;
+    protected $mode = 0;
 
+    // Strings that are written at the beginning and end of each buffer
+    protected $header;
+    protected $footer;
+    
     // Output buffer. Log records are buffered before being written to
     // the log file either explicitly, or on destroying the class.
     // @var array
-    private $buffer;
+    protected $buffer;
 
     // Maximum file size
     // TODO: allow formats such as '2M', '100k' etc. That conversion could
     // be a core function, as there are many places it could be used.
-    private $maxFileSize = 5000000; // 5Mb
+    protected $maxFileSize = 5000000; // 5Mb
 
     // End of line marker for writing to the log file.
     // TODO: automatically determine the OS-specific EOL characters.
@@ -102,9 +106,9 @@ class xarLogger_simple extends xarLogger
     // @param $conf['mode'] string File mode of the log file, in Octal (optional)
     // @param $conf['maxFileSize'] integer The maximum size the logfile can be before it is moved or deleted (optional, bytes)
     // 
-    public function setConfig(array &$conf)
+    public function __construct(Array $conf)
     {
-        parent::setConfig($conf);
+        parent::__construct($conf);
 
         // If a file mode has been provided, use it.
         // Note the mode is passed in as an Octal string.
@@ -117,9 +121,29 @@ class xarLogger_simple extends xarLogger
             $this->maxFileSize = $conf['maxfilesize'];
         }
 
-        // Start with a horizontal rule.
-        $this->buffer = str_repeat('-', 79) . $this->EOL;
+        if (!empty($conf['filename'])) {
+	        $this->filename = $conf['filename'];
+        }
 
+		// Make the header a horizontal rule.
+		$this->header = str_repeat('-', 79) . $this->EOL;
+         
+
+        // Register the destructor.
+        // Can't do this, it will miss out on the logging of the other subsystems
+        //register_shutdown_function(array(&$this, '_xarLogger_simple_destructor'));
+    }
+
+    /**
+      * Start the logger
+      *
+      * Begin filling the buffer and ready the log file for writing
+      * 
+     **/
+    public function start()
+    {
+         $this->buffer = $this->header;
+         
         // Write the request details.
         if (isset($_SERVER['REQUEST_URI'])) {
             $this->buffer .= 'REQUEST_URI: ' . $_SERVER['REQUEST_URI'] . $this->EOL;
@@ -129,24 +153,18 @@ class xarLogger_simple extends xarLogger
             $this->buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
         }
 
-        if (!empty($conf['filename'])) {
-	        $this->filename = $conf['filename'];
-        }
-
         // Set the log file up for writing.
         $this->prepareLogfile();
-
-        // Register the destructor.
-        // Can't do this, it will miss out on the logging of the other subsystems
-        //register_shutdown_function(array(&$this, '_xarLogger_simple_destructor'));
     }
-
+    
     // Destructor. This will write outstanding records to the logfile.
     // 
     public function _xarLogger_simple_destructor()
     {
         // Push a final message to the log.
         $this->notify('Shutdown simple logger', xarLog::LEVEL_DEBUG);
+
+		$this->buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
 
         // Flush any remaining records and stop logging.
         $this->flushBuffer(true);
@@ -206,10 +224,10 @@ class xarLogger_simple extends xarLogger
      * @throws LoggerException
      * @return boolean true on success
      **/
-    private function prepareLogfile()
+    protected function prepareLogfile()
     {
         if (file_exists($this->filename)) {
-            if (!is_writable($this->filename)) {var_dump($this->filename);
+            if (!is_writable($this->filename)) {
                 $err = error_get_last();
                 throw new LoggerException('Unable to write to logger file: ' . $this->filename
                     .  ' (' . $err['message'] . ')' );
@@ -218,7 +236,6 @@ class xarLogger_simple extends xarLogger
             if (!is_writable(dirname($this->filename))) {
                 throw new LoggerException('Logger directory is not writeable: ' . dirname($this->filename));
             }
-
             $this->newLogFile();
         }
 
@@ -258,7 +275,7 @@ class xarLogger_simple extends xarLogger
             $this->newLogFile();
         }
 
-        // Always append - the will be a log file ready.
+        // Always append - there will be a log file ready.
         if (($this->fp = @fopen($this->filename, 'a')) == false) {
             $err = error_get_last();
             throw new LoggerException('Unable to open log file for writing: ' . $this->filename

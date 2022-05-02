@@ -64,13 +64,12 @@ class xarLogger_sql extends xarLogger
     *               'table  '     => string      The name of the logger table.
     * 
     */
-    function setConfig(array &$conf)
+    public function __construct(Array $conf)
     {
-        parent::setConfig($conf);
+        parent::__construct($conf);
         $this->_dbconn = xarDB::getConn();
         $this->_table = $conf['table'];
     }
-
 
     /**
      * Inserts $message to the currently open database.  Calls open(),

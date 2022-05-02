@@ -55,10 +55,18 @@ class xarLogger_javascript extends xarLogger
      * 
      * @return boolean
      */
-    function setConfig(array &$conf)
+    public function __construct(Array $conf)
     {
-        parent::setConfig($conf);
-        $this->_buffer = $this->getCommonCode();
+        parent::__construct($conf);
+    }
+
+    /**
+      * Start the logger
+      * 
+     **/
+    public function start()
+    {
+        $this->buffer = $this->getCommonCode();
     }
 
     /**

@@ -53,12 +53,20 @@ class xarLogger_mozilla extends xarLogger
      * 
      * @return boolean
      */
-    function setConfig(Array &$conf)
+    public function __construct(Array $conf)
     {
-        parent::setConfig($conf);
-        $this->_buffer = $this->getCommonCode();
+        parent::__construct($conf);
     }
 
+    /**
+      * Start the logger
+      * 
+     **/
+    public function start()
+    {
+        $this->buffer = $this->getCommonCode();
+    }
+    
     function getCommonCode()
     {
         // Common javascript to get a variable which has the logmessage method

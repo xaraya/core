@@ -61,9 +61,9 @@ class xarLogger_error_log extends xarLogger
      * 
      * @return boolean
      */
-    function setConfig(array &$conf)
+    public function __construct(Array $conf)
     {
-        parent::setConfig($conf);
+        parent::__construct($conf);
 
         /* If it is given a destionation, then use it. */
         if (!empty($conf['destination'])) {

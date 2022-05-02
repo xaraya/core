@@ -33,16 +33,17 @@ class xarLogger_html extends xarLogger_simple
       * Set up the configuration of the specific Log Observer.
       *
       * @param  array $conf  with
-      *               'name'         => string      The filename of the logfile.
+      *               'filename'     => string      The filename of the logfile.
       *               'maxLevel'     => int         Maximum level at which to log.
       *               'mode'         => string      File mode of te log file (optional)
       *               'timeFormat'   => string      Time format to be used in the file (optional)
       * 
      **/
-     function setConfig (Array &$conf) 
-     {
-         parent::setConfig($conf);
-         $this->_fileheader = '<?xml version="1.0" encoding="utf-8"?>
+    public function __construct(Array $conf)
+    {
+        parent::__construct($conf);
+		
+		$this->header = '<?xml version="1.0" encoding="utf-8"?>
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -54,9 +55,24 @@ class xarLogger_html extends xarLogger_simple
                         <th>Logging Level</th>
                         <th>Message</th>
                     </tr>';
-        $this->_buffer     = "\r\n".'<tr style="background-color:#e3e3e3;"><th>New Page View</th><th colspan="2">'.$_SERVER["REQUEST_URI"].'</th></tr>';
     }
     
+    /**
+      * Start the logger
+      *
+      * Begin filling the buffer and ready the log file for writing
+      * 
+     **/
+    public function start()
+    {
+		$this->buffer = $this->header;
+         
+        $this->buffer .= "\r\n".'<tr style="background-color:#e3e3e3;"><th>New Page View</th><th colspan="2">'.$_SERVER["REQUEST_URI"].'</th></tr>';
+
+        // Set the log file up for writing.
+        $this->prepareLogfile();
+    }
+
     /**
      * Writes a line to the logfile
      *
@@ -64,7 +80,7 @@ class xarLogger_html extends xarLogger_simple
      * @param  integer $level     The level of priority of this line/msg
      * 
     **/
-    function _formatMessage($message, $level)
+    private function formatMessage($message, $level)
     {
         return sprintf("\r\n<tr align=\"center\"><td>%s</td><td>%s</td><td>%s</td></tr>",
                                      $this->getTime(),
