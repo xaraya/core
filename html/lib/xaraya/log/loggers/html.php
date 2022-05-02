@@ -51,8 +51,8 @@ class xarLogger_html extends xarLogger_simple
             <body><br />
                 <table border="1" width="100%" cellpadding="2" cellspacing="0">
                     <tr align="center">
-                        <th>Time</th>
-                        <th>Logging Level</th>
+                        <th style="width: 250px">Time</th>
+                        <th style="width: 80px">Logging Level</th>
                         <th>Message</th>
                     </tr>';
     }
@@ -67,12 +67,37 @@ class xarLogger_html extends xarLogger_simple
     {
 		$this->buffer = $this->header;
          
-        $this->buffer .= "\r\n".'<tr style="background-color:#e3e3e3;"><th>New Page View</th><th colspan="2">'.$_SERVER["REQUEST_URI"].'</th></tr>';
+        // Write the request details.
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $this->buffer .= '<tr style="background-color:#e3e3e3;"><td colspan="3">REQUEST_URI: '.$_SERVER["REQUEST_URI"].'</td></tr>';
+        }
+
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $this->buffer .= '<tr style="background-color:#e3e3e3;"><td colspan="3">HTTP_REFERER: '.$_SERVER["HTTP_REFERER"].'</td></tr>';
+        }
 
         // Set the log file up for writing.
         $this->prepareLogfile();
     }
 
+    // Destructor. This will write outstanding records to the logfile.
+    // 
+    public function __destruct()
+    {
+        // Push a final message to the log.
+        $this->notify('Shutdown HTML logger', xarLog::LEVEL_DEBUG);
+
+		$this->buffer .= '</tr>' . $this->EOL;
+		$this->buffer .= '<tr>
+							<td colspan="3">HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . '</td>
+							</tr>
+							</table>
+							</body>
+							</html>';
+
+        // Flush any remaining records and stop logging.
+        $this->flushBuffer(true);
+    }
     /**
      * Writes a line to the logfile
      *
@@ -80,12 +105,12 @@ class xarLogger_html extends xarLogger_simple
      * @param  integer $level     The level of priority of this line/msg
      * 
     **/
-    private function formatMessage($message, $level)
+    public function formatMessage($message, $level)
     {
-        return sprintf("\r\n<tr align=\"center\"><td>%s</td><td>%s</td><td>%s</td></tr>",
+        return sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",
                                      $this->getTime(),
                                      $this->levels[$level],
-                                     nl2br(htmlspecialchars($message)).'<br />');
+                                     nl2br(htmlspecialchars($message)));
     }
 }
 
