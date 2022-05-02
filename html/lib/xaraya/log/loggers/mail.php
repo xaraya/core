@@ -110,7 +110,7 @@ class xarLogger_mail extends xarLogger
     *
     * 
     */
-    private function destructor()
+    public function __destruct()
     {
         $this->close();
     }

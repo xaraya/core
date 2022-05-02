@@ -76,9 +76,6 @@ class xarLogger_syslog extends xarLogger
         if (isset($conf['options'])) {
             $this->_options = $conf['options'];
         }
-
-        /* register the destructor */
-        register_shutdown_function(array(&$this, 'destructor'));
     }
 
     /**
@@ -87,7 +84,7 @@ class xarLogger_syslog extends xarLogger
     *
     * 
     */
-    private function destructor()
+    public function __destruct()
     {
         $this->close();
     }

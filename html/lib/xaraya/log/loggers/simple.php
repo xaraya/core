@@ -127,11 +127,6 @@ class xarLogger_simple extends xarLogger
 
 		// Make the header a horizontal rule.
 		$this->header = str_repeat('-', 79) . $this->EOL;
-         
-
-        // Register the destructor.
-        // Can't do this, it will miss out on the logging of the other subsystems
-        //register_shutdown_function(array(&$this, '_xarLogger_simple_destructor'));
     }
 
     /**
@@ -159,7 +154,7 @@ class xarLogger_simple extends xarLogger
     
     // Destructor. This will write outstanding records to the logfile.
     // 
-    public function _xarLogger_simple_destructor()
+    public function __destruct()
     {
         // Push a final message to the log.
         $this->notify('Shutdown simple logger', xarLog::LEVEL_DEBUG);
@@ -332,7 +327,7 @@ class xarLogger_simple extends xarLogger
     // @param integer $level The priority level of this record
     // @return string The formatted log record
     // 
-    private function formatMessage($message, $level)
+    public function formatMessage($message, $level)
     {
         return $this->getTime() . ' [' . $this->levels[$level] . '] ' . $message . $this->EOL;
     }
