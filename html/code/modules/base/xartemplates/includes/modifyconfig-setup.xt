@@ -86,4 +86,73 @@
             </div>
         </div>
     </fieldset>
+    <fieldset>
+        <legend>                        
+            Path Information                        
+        </legend>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Web Entry Point</xar:var>
+                <label title="#$label#" class="xar-form-label">                            
+                    Web Entry Point:                            
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">realpath('index.php')</xar:set>
+                <xar:if condition="$value === false">
+                	Cannot display this path
+                <xar:else/>
+	                #$value#
+                </xar:if>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Bootstrap File</xar:var>
+                <label title="#$label#" class="xar-form-label">                            
+                    Bootstrap File:                            
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">realpath('bootstrap.php')</xar:set>
+                <xar:if condition="$value === false">
+                	Cannot display this path
+                <xar:else/>
+	                #$value#
+                </xar:if>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">System Configuration File</xar:var>
+                <label title="#$label#" class="xar-form-label">                            
+                    System Configuration File:                            
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">realpath(sys::varpath() . '/' . 'config.system.php')</xar:set>
+                <xar:if condition="$value === false">
+                	Cannot display this path
+                <xar:else/>
+	                #$value#
+                </xar:if>
+            </div>
+        </div>
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:var name="label">Log Configuration File</xar:var>
+                <label title="#$label#" class="xar-form-label">                            
+                    Log Configuration File:                            
+                </label>
+            </div>
+            <div class="xar-col">
+                <xar:set name="value">realpath(sys::varpath() . '/logs/' . 'config.log.php')</xar:set>
+                <xar:if condition="$value === false">
+                	Cannot display this path
+                <xar:else/>
+	                #$value#
+                </xar:if>
+            </div>
+        </div>
+    </fieldset>
 </xar:template>
