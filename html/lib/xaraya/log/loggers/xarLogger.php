@@ -83,7 +83,7 @@ class xarLogger extends xarObject
      *
      * @return boolean
      */
-    public function __construct(Array $conf)
+    public function __construct()
     {
         $this->logLevel = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
 		$levels = @unserialize($this->logLevel);
