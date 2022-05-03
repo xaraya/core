@@ -85,8 +85,6 @@ class xarLogger extends xarObject
      */
     public function __construct(Array $conf)
     {
-        
-        echo "<pre>";var_dump($conf);
         if ($conf['fallback'] == true) {
 			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
         } else {
