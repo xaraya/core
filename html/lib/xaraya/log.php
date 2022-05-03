@@ -78,7 +78,7 @@ class xarLog extends xarObject
             // Get the  each of the available loggers
             foreach ($availables as $available) {
             	
-            	$config = array();
+            	$config = array('type' => $available, 'fallback' => false);
 				foreach ($vararray as $thisvar) {
 					$varname = 'Log.' . ucwords($available) . '.' . $thisvar;
 					if (isset($systemConfiguration[$varname])) {
@@ -115,10 +115,12 @@ class xarLog extends xarObject
                 }
 
                 self::$config[] = array(
-                    'type'      => 'simple',
-                    'config'    => array(
-                        'filename' => $logFile,
-                        'loglevel'  => $logLevel)
+                    'type'          => 'simple',
+                    'config'        => array(
+                        'filename'  => $logFile,
+                        'loglevel'  => $logLevel,
+                        'type'  => 'simple',
+                        'fallback'  => true)
                         );
             }
         }
