@@ -40,7 +40,7 @@ class xarLogger extends xarObject
     /**
     * The array of logging levels
     */
-	public $levels = array(
+	static public $levels = array(
 		xarLog::LEVEL_EMERGENCY => 'EMERGENCY',
 		xarLog::LEVEL_ALERT     => 'ALERT',
 		xarLog::LEVEL_CRITICAL  => 'CRITICAL',
@@ -83,10 +83,17 @@ class xarLogger extends xarObject
      *
      * @return boolean
      */
-    public function __construct()
+    public function __construct(Array $conf)
     {
-        $this->logLevel = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
-		$levels = @unserialize($this->logLevel);
+        
+        echo "<pre>";var_dump($conf);
+        if ($conf['fallback'] == true) {
+			$this->logLevel = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
+			$levels = @unserialize($this->logLevel);
+        } else {
+			$this->logLevel = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::LOG, 'Log.' . ucwords($conf['type']) . '.Level');
+			$levels = $this->logLevel;
+        }
 		if (!empty($levels)) {
 			$this->logLevel = 0;
 			$levels = explode(',', $levels);

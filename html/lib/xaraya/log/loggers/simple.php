@@ -177,7 +177,7 @@ class xarLogger_simple extends xarLogger
             return false;
         }
 
-        // Add to loglines array
+        // Add to the loglines array
         $this->buffer .= $this->formatMessage($message, $level);
         $this->flushBuffer(false);
         return true;
@@ -331,7 +331,7 @@ class xarLogger_simple extends xarLogger
     // 
     public function formatMessage($message, $level)
     {
-        return $this->getTime() . ' [' . $this->levels[$level] . '] ' . $message . $this->EOL;
+        return $this->getTime() . ' [' . self::$levels[$level] . '] ' . $message . $this->EOL;
     }
 
     // Get the name of the file to which we are writing.

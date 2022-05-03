@@ -102,7 +102,7 @@ class xarLogger_error_log extends xarLogger
         if (!$this->doLogLevel($level)) return false;
 
         $entry = sprintf("%s %s [%s] %s\n", $this->getTime(),
-            $this->_ident, $this->levels[$level], $message);
+            $this->_ident, self::$levels[$level], $message);
 
         if (!error_log($entry, $this->_type, $this->_destination, $this->_extra_headers)) {
             return false;

@@ -109,7 +109,7 @@ class xarLogger_html extends xarLogger_simple
     {
         return sprintf("<tr><td>%s</td><td>%s</td><td>%s</td></tr>",
                                      $this->getTime(),
-                                     $this->levels[$level],
+                                     self::$levels[$level],
                                      nl2br(htmlspecialchars($message)));
     }
 }
