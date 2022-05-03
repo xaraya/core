@@ -106,20 +106,13 @@ class xarLog extends xarObject
             $logFile = self::fallbackFile();
             if ($logFile) {
                 $levels = @unserialize(xarSystemVars::get(sys::CONFIG, 'Log.Level'));
-                if (!empty($levels)) {
-                    $logLevel = 0;
-                    $levels = explode(',', $levels);
-                    foreach ($levels as $level) $logLevel |= (int)$level;
-                } else {
-                    $logLevel = self::LEVEL_ALL;
-                }
 
                 self::$config[] = array(
                     'type'          => 'simple',
                     'config'        => array(
                         'filename'  => $logFile,
-                        'loglevel'  => $logLevel,
-                        'type'  => 'simple',
+                        'level'     => $levels,
+                        'type'      => 'simple',
                         'fallback'  => true)
                         );
             }
@@ -173,7 +166,7 @@ class xarLog extends xarObject
     
         $logFile = sys::varpath() . '/logs/' . xarSystemVars::get(sys::CONFIG, 'Log.Filename');
         if (!file_exists($logFile)) touch($logFile);
-        self::$logFile = realpath($logFile);
+        self::$logFile = $logFile;
         return self::$logFile;
     }
 

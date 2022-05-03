@@ -88,11 +88,9 @@ class xarLogger extends xarObject
         
         echo "<pre>";var_dump($conf);
         if ($conf['fallback'] == true) {
-			$this->logLevel = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
-			$levels = @unserialize($this->logLevel);
+			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
         } else {
-			$this->logLevel = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::LOG, 'Log.' . ucwords($conf['type']) . '.Level');
-			$levels = $this->logLevel;
+			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::LOG, 'Log.' . ucwords($conf['type']) . '.Level');
         }
 		if (!empty($levels)) {
 			$this->logLevel = 0;
