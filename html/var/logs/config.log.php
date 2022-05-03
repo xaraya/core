@@ -35,12 +35,12 @@ $systemConfiguration['Log.Html.MaxFileSize'] = '50000000';                 // Th
 $systemConfiguration['Log.Html.Mode'] = '644';                             // Integer containing the logfile's permissions mode.
 
 // Javascript logger
-$systemConfiguration['Log.Html.Level'] = '1,2,4,8';                        // The levels of messages this logger tracks.
-$systemConfiguration['Log.Html.Timeformat'] = '%Y/%m/%d %H:%M:%S';         // String containing the format for the log's timestamps.
+$systemConfiguration['Log.Javascript.Level'] = '1,2,4,8';                  // The levels of messages this logger tracks.
+$systemConfiguration['Log.Javascript.Timeformat'] = '%Y/%m/%d %H:%M:%S';   // String containing the format for the log's timestamps.
 
 // Mozilla logger
-$systemConfiguration['Log.Html.Level'] = '1,2,4,8';                        // The levels of messages this logger tracks.
-$systemConfiguration['Log.Html.Timeformat'] = '%Y/%m/%d %H:%M:%S';         // String containing the format for the log's timestamps.
+$systemConfiguration['Log.Mozilla.Level'] = '1,2,4,8';                     // The levels of messages this logger tracks.
+$systemConfiguration['Log.Mozilla.Timeformat'] = '%Y/%m/%d %H:%M:%S';      // String containing the format for the log's timestamps.
 
 // Simple logger
 $systemConfiguration['Log.Simple.Level'] = '1,2,4,8';                      // The levels of messages this logger tracks.
