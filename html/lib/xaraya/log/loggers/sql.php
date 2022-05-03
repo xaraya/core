@@ -85,6 +85,14 @@ class xarLogger_sql extends xarLogger
      * @return boolean  True on success or false on failure.
      * 
      */
+     
+    /**
+     * Writes $message to the currently open mail message.
+     * Calls open(), if necessary.
+     * 
+     * @return boolean  True on success or false on failure.
+     * 
+     */
     public function notify($message, $priority)
     {
         if (!$this->doLogLevel($priority)) return false;

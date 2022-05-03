@@ -101,15 +101,6 @@ class xarLogger_mail extends xarLogger
     }
 
     /**
-    * Destructor. This will write out any lines to the logfile
-    *
-    */
-    public function __destruct()
-    {
-        $this->close();
-    }
-
-    /**
      * Starts a new mail message.
      * This is implicitly called by log(), if necessary.
      * 

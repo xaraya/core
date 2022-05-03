@@ -152,9 +152,7 @@ class xarLogger_simple extends xarLogger
         $this->prepareLogfile();
     }
     
-    // Destructor. This will write outstanding records to the logfile.
-    // 
-    public function __destruct()
+    public function close()
     {
         // Push a final message to the log.
         $this->notify('Shutdown simple logger', xarLog::LEVEL_DEBUG);

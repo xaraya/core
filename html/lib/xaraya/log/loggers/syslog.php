@@ -79,17 +79,6 @@ class xarLogger_syslog extends xarLogger
     }
 
     /**
-    * Destructor. This will write out any lines to the logfile, UNLESS the dontLog()
-    * method has been called, in which case it won't.
-    *
-    * 
-    */
-    public function __destruct()
-    {
-        $this->close();
-    }
-
-    /**
      * Opens a connection to the system logger, if it has not already
      * been opened.  This is implicitly called by log(), if necessary.
      * 

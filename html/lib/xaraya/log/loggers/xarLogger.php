@@ -119,6 +119,15 @@ class xarLogger extends xarObject
     }
     
     /**
+    * Destructor. This calls the logger specific close function
+    *
+    */
+    public function __destruct()
+    {
+        $this->close();
+    }
+
+    /**
      * Returns if the logger should log the given level or not.
      *
      * @param int $level        A xarLog::$LEVEL_* integer constant mix.

@@ -39,19 +39,19 @@ class xarLogger_error_log extends xarLogger
     * Integer holding the log facility to use.
     * @var int
     */
-    var $_type = 0; //SYSTEM_LOG = 0, TCP_LOG = 1, FILE_LOG = 2, MAIL_LOG = 3
+    private $type = 0; //SYSTEM_LOG = 0, TCP_LOG = 1, FILE_LOG = 2, MAIL_LOG = 3
 
     /**
     * String holding destination of the logged message.
     * @var string
     */
-    var $_destination;
+    private $destination;
 
     /**
     * String hold extra headers in case of using the mail logger.
     * @var int
     */
-    var $_extra_headers;
+    private $extra_headers;
 
     /**
      * Sets up the configuration specific parameters for each driver
@@ -67,19 +67,19 @@ class xarLogger_error_log extends xarLogger
 
         /* If it is given a destionation, then use it. */
         if (!empty($conf['destination'])) {
-            $this->_destination = $conf['destination'];
+            $this->destination = $conf['destination'];
         }
 
         /* If it is given a logging type to be used, then use it. */
         //This should be useful only when 0.
         //The rest of the options will have better coverage from other loggers.
         if (!empty($conf['type'])) {
-            $this->_type = $conf['type'];
+            $this->type = $conf['type'];
         }
 
         /* If it is given a logging type to be used, then use it. */
         if (!empty($conf['extra_headers'])) {
-            $this->_extra_headers = $conf['extra_headers'];
+            $this->extra_headers = $conf['extra_headers'];
         }
     }
 
@@ -104,7 +104,7 @@ class xarLogger_error_log extends xarLogger
         $entry = sprintf("%s %s [%s] %s\n", $this->getTime(),
             $this->_ident, self::$levels[$level], $message);
 
-        if (!error_log($entry, $this->_type, $this->_destination, $this->_extra_headers)) {
+        if (!error_log($entry, $this->type, $this->destination, $this->extra_headers)) {
             return false;
         }
 
