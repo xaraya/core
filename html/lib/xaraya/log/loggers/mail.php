@@ -82,7 +82,6 @@ class xarLogger_mail extends xarLogger
      *   $conf['from']      : the mail's "From" header line,
      *   $conf['subject']   : the mail's "Subject" line.
      * 
-     * 
      */
     public function __construct(Array $conf)
     {
@@ -99,16 +98,11 @@ class xarLogger_mail extends xarLogger
         if (!empty($conf['subject'])) {
             $this->subject = $conf['subject'];
         }
-
-        /* register the destructor */
-        register_shutdown_function(array(&$this, 'destructor'));
     }
 
     /**
-    * Destructor. This will write out any lines to the logfile, UNLESS the dontLog()
-    * method has been called, in which case it won't.
+    * Destructor. This will write out any lines to the logfile
     *
-    * 
     */
     public function __destruct()
     {
