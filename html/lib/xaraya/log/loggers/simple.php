@@ -159,7 +159,9 @@ class xarLogger_simple extends xarLogger
         // Push a final message to the log.
         $this->notify('Shutdown simple logger', xarLog::LEVEL_DEBUG);
 
-		$this->buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $this->buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
+        }
 
         // Flush any remaining records and stop logging.
         $this->flushBuffer(true);
