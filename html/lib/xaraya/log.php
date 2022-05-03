@@ -73,7 +73,7 @@ class xarLog extends xarObject
                 throw new LoggerException('xarLog_init: Log configuration file is invalid!');
             }
             
-            $vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode', 'Recipient', 'Sender', 'Subject'];
+            $vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode', 'Recipient', 'Sender', 'Subject', 'Timeformat','SQLTable', 'Facility', 'Options', 'SQLTable'];
 
             // Get the  each of the available loggers
             foreach ($availables as $available) {
