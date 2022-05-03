@@ -23,8 +23,8 @@
 // Mail logger
 $systemConfiguration['Log.Mail.Level'] = '1,2,4,8';                        // The levels of messages this logger tracks.
 $systemConfiguration['Log.Mail.Timeformat'] = '%Y/%m/%d %H:%M:%S';         // String containing the format for the log's timestamps.
-$systemConfiguration['Log.Mail.Recipient'] = 'noone@no.comxarayalog.txt';  // The recipient that this logger sends emails to
-$systemConfiguration['Log.Mail.Sender'] = 'Xaraya Logger';                 // The sender that this logger uses to send emails
+$systemConfiguration['Log.Mail.Recipient'] = 'occupant@here.com';          // The recipient that this logger sends emails to
+$systemConfiguration['Log.Mail.Sender'] = 'xaraya-log@site.com';           // The sender that this logger uses to send emails
 $systemConfiguration['Log.Mail.Subject'] = 'Log Message';                  // The subject of the emails
 
 // HTML logger
@@ -44,7 +44,7 @@ $systemConfiguration['Log.Html.Timeformat'] = '%Y/%m/%d %H:%M:%S';         // St
 
 // Simple logger
 $systemConfiguration['Log.Simple.Level'] = '1,2,4,8';                      // The levels of messages this logger tracks.
-$systemConfiguration['Log.Simple.Timeformat'] = '%Y/%m/%d %H:%M:%S';              // String containing the format for the log's timestamps.
+$systemConfiguration['Log.Simple.Timeformat'] = '%Y/%m/%d %H:%M:%S';       // String containing the format for the log's timestamps.
 $systemConfiguration['Log.Simple.Filename'] = 'simplelog.txt';             // The name of the logfile of this logger
 $systemConfiguration['Log.Simple.MaxFileSize'] = '50000000';               // The maximum size of a log file in bytes. Once this value is reached Xaraya creates a new log file
 $systemConfiguration['Log.Simple.Mode'] = '644';                           // Integer containing the logfile's permissions mode.
