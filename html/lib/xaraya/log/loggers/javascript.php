@@ -74,7 +74,7 @@ class xarLogger_javascript extends xarLogger
     *
     * 
     */
-    function getCommonCode()
+    public function getCommonCode()
     {
         $header = "<hr size=\\\"1\\\"></hr><span style=\\\"font-face: Verdana,arial; font-size: 10pt;\\\">".
                   date("Y-m-d H:i:s").
@@ -96,7 +96,7 @@ class xarLogger_javascript extends xarLogger
     * @return boolean  True on success or false on failure.
     * 
     */
-    function notify($message, $level)
+    public function notify($message, $level)
     {
         $strings = array ("\r\n", "\r", "\n");
         $replace = array ("<br />", "<br />", "<br />");

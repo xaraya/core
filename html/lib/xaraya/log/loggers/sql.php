@@ -49,13 +49,13 @@ class xarLogger_sql extends xarLogger
      * String holding the database table to use.
      * @var string
      */
-    var $_table;
+    private $table;
 
     /**
      * Pointer holding the database connection to be used.
      * @var string
      */
-    var $_dbconn;
+    private $dbconn;
 
     /**
     * Set up the configuration of the specific Log Observer.
@@ -67,8 +67,8 @@ class xarLogger_sql extends xarLogger
     public function __construct(Array $conf)
     {
         parent::__construct($conf);
-        $this->_dbconn = xarDB::getConn();
-        $this->_table = $conf['table'];
+        $this->dbconn = xarDB::getConn();
+        $this->table = $conf['table'];
     }
 
     /**
@@ -85,7 +85,7 @@ class xarLogger_sql extends xarLogger
      * @return boolean  True on success or false on failure.
      * 
      */
-    function notify($message, $priority)
+    public function notify($message, $priority)
     {
         if (!$this->doLogLevel($priority)) return false;
 
@@ -93,8 +93,8 @@ class xarLogger_sql extends xarLogger
         $q = sprintf('INSERT INTO %s (ident, logtime, priority, message)' .
                      'VALUES(?, ?, ?, ?)',
                      $this->_table);
-        $bindvars = array($this->_ident, $this->getTime(), $priority, $message);
-        $stmt =& $this->_dbconn->prepareStatement($q);
+        $bindvars = array($this->ident, $this->getTime(), $priority, $message);
+        $stmt =& $this->dbconn->prepareStatement($q);
         $stmt->executeUpdate($bindvars);
 
         return true;

@@ -33,17 +33,17 @@ class xarLogger_mozilla extends xarLogger
     /**
     * Buffer for logging messages
     */
-    var $_buffer;
+    private $buffer;
 
     /**
     * Write out the buffer if it is possible (the template system is already loaded)
     * 
     */
-    function writeOut()
+    public function writeOut()
     {
         xarMod::apiFunc('themes', 'user', 'registerjs',
-            array('position' => 'head', 'type' => 'code', 'code' => $this->_buffer));
-        $this->_buffer = '';
+            array('position' => 'head', 'type' => 'code', 'code' => $this->buffer));
+        $this->buffer = '';
         return true;
     }
 
@@ -67,11 +67,11 @@ class xarLogger_mozilla extends xarLogger
         $this->buffer = $this->getCommonCode();
     }
     
-    function getCommonCode()
+    public function getCommonCode()
     {
         // Common javascript to get a variable which has the logmessage method
         $code="
-function mozConsole(msg, level)
+public function mozConsole(msg, level)
 {
     // Only relevant for moz engine
     if(navigator.appName.indexOf('Netscape') != -1) {
@@ -102,7 +102,7 @@ function mozConsole(msg, level)
     * @return boolean  True on success or false on failure.
     * 
     */
-    function notify($message, $level)
+    public function notify($message, $level)
     {
         if (!$this->doLogLevel($level)) return false;
 
@@ -123,7 +123,7 @@ function mozConsole(msg, level)
         $logentry = addslashes($logentry);
         $trans = array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
         $logentry = strtr($logentry,$trans);
-        $this->_buffer .= "mozConsole('$logentry', $level);\n";
+        $this->buffer .= "mozConsole('$logentry', $level);\n";
         $this->writeOut();
     }
  }

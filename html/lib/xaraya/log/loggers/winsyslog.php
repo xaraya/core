@@ -40,7 +40,7 @@ class xarLogger_winsyslog extends xarLogger_syslog
      *
      * 
      */
-    function _toSyslog($level)
+    public function toSyslog($level)
     {
         static $levels = array(
             xarLog::LEVEL_EMERGENCY => 1, //ERROR

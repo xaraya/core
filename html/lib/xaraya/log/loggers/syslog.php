@@ -41,19 +41,19 @@ class xarLogger_syslog extends xarLogger
     * Integer holding the log facility to use.
     * @var int
     */
-    var $_facility = LOG_USER;
+    protected $facility = LOG_USER;
 
     /**
     * Integer holding the log options to use.
     * @var int
     */
-    var $_options = LOG_PID;
+    protected $options = LOG_PID;
 
     /**
     * Boolean holding if the log was already open or not
     * @var bool
     */
-    var $_opened = false;
+    protected $opened = false;
 
     /**
      * Sets up the configuration specific parameters for each driver
@@ -69,12 +69,12 @@ class xarLogger_syslog extends xarLogger
         
         /* If it is given a logging facility to be used, then use it. */
         if (isset($conf['facility'])) {
-            $this->_facility = $conf['facility'];
+            $this->facility = $conf['facility'];
         }
 
         /* If it is given a logging facility to be used, then use it. */
         if (isset($conf['options'])) {
-            $this->_options = $conf['options'];
+            $this->options = $conf['options'];
         }
     }
 
@@ -94,11 +94,11 @@ class xarLogger_syslog extends xarLogger
      * been opened.  This is implicitly called by log(), if necessary.
      * 
      */
-    function open()
+    public function open()
     {
-        if (!$this->_opened) {
-            openlog($this->_ident, $this->_options, $this->_facility);
-            $this->_opened = true;
+        if (!$this->opened) {
+            openlog($this->_ident, $this->options, $this->facility);
+            $this->opened = true;
         }
     }
 
@@ -106,11 +106,11 @@ class xarLogger_syslog extends xarLogger
      * Closes the connection to the system logger, if it is open.
      *      
      */
-    function close()
+    public function close()
     {
-        if ($this->_opened) {
+        if ($this->opened) {
             closelog();
-            $this->_opened = false;
+            $this->opened = false;
         }
     }
 
@@ -128,15 +128,15 @@ class xarLogger_syslog extends xarLogger
      * @return boolean  True on success or false on failure.
      *      
      */
-    function notify($message, $level)
+    public function notify($message, $level)
     {
         if (!$this->doLogLevel($level)) return false;
 
-        if (!$this->_opened) {
+        if (!$this->opened) {
             $this->open();
         }
 
-        if (!syslog($this->_toSyslog($level), $message)) {
+        if (!syslog($this->toSyslog($level), $message)) {
             return false;
         }
 
@@ -157,7 +157,7 @@ class xarLogger_syslog extends xarLogger
      *
      * 
      */
-    function _toSyslog($level)
+    protected function toSyslog($level)
     {
         static $levels = array(
             xarLog::LEVEL_EMERGENCY => LOG_EMERG,
