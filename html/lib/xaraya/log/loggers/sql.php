@@ -31,12 +31,12 @@ sys::import('xaraya.log.loggers.xarLogger');
  * Create on activation of the logger module
  *
  *
- * CREATE TABLE log_table (
- *  id          INT NOT NULL,
- *  ident       VARCHAR(32) NOT NULL,
- *  logtime     TIMESTAMP NOT NULL,
- *  priority    TINYINT NOT NULL,
- *  message     TINYTEXT
+ * CREATE TABLE `xar_log_messages` (
+ *   `ident` varchar(32) NOT NULL,
+ *   `logtime` varchar(255) NOT NULL DEFAULT '',
+ *   `priority` tinyint(4) NOT NULL DEFAULT '0',
+ *   `message` text NOT NULL
+ *   PRIMARY KEY  (`id`)
  * );
  *
  * @author  Jon Parise <jon@php.net>
