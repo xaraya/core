@@ -32,20 +32,7 @@ class xarLogger_javascript extends xarLogger
     /**
     * Buffer for logging messages
     */
-    private $buffer;
-
-    /**
-    * Write out the buffer if it is possible (the template system is already loaded)
-    *
-    * 
-    */
-    function writeOut()
-    {
-        xarMod::apiFunc('themes', 'user', 'registerjs',
-            array('position' => 'head', 'type' => 'code', 'code' => $this->buffer));
-        $this->buffer = '';
-        return true;
-    }
+    protected $buffer;
 
     /**
      * Sets up the configuration specific parameters for each driver
@@ -67,6 +54,11 @@ class xarLogger_javascript extends xarLogger
     public function start()
     {
         $this->buffer = $this->getCommonCode();
+    }
+
+    public function close()
+    {
+        $this->writeOut();
     }
 
     /**
@@ -98,11 +90,11 @@ class xarLogger_javascript extends xarLogger
     */
     public function notify($message, $level)
     {
-        $strings = array ("\r\n", "\r", "\n");
-        $replace = array ("<br />", "<br />", "<br />");
-
         // Abort early if the level of priority is above the maximum logging level.
         if (!$this->doLogLevel($level)) return false;
+
+        $strings = array ("\r\n", "\r", "\n");
+        $replace = array ("<br />", "<br />", "<br />");
 
         $this->buffer .= "if (debugWindow) {\n".
                 "    debugWindow.document.write('".$this->getTime().
@@ -110,9 +102,31 @@ class xarLogger_javascript extends xarLogger
                 addslashes(str_replace($strings, $replace, $message) ). "<br/><br/>');\n".
                 "    debugWindow.scrollBy(0,100000);\n".
                 "}\n";
-
-        $this->writeOut();
     }
+    
+    /**
+    * Write out the buffer if it is possible (the template system is already loaded)
+    *
+    */
+    function writeOut()
+    {
+		$this->buffer = '';
+        xarMod::apiFunc('themes', 'user', 'registerjs',
+            array('position' => 'head', 'type' => 'code', 'code' => $this->buffer));
+        $this->buffer = '';
+        return true;
+		$args['position'] = 'head';
+		$args['type']     = 'code';
+		$args['index']    = null;
+		$args['code']     = $this->buffer;
+		sys::import('modules.themes.class.xarjs');
+		$javascript = xarJS::getInstance();
+		$javascript->register($args);     
+        return true;
+		  
+        
+    }
+
 }
 
 ?>

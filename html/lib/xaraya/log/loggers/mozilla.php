@@ -18,7 +18,7 @@
  * Make sure the base class is available
  *
  */
-sys::import('xaraya.log.loggers.xarLogger');
+sys::import('xaraya.log.loggers.javascript');
 
 /**
  * MozJSConsoleLogger
@@ -26,47 +26,8 @@ sys::import('xaraya.log.loggers.xarLogger');
  * Uses Mozillas Javascript Console to log messages
  *
  */
-class xarLogger_mozilla extends xarLogger
+class xarLogger_mozilla extends xarLogger_javascript
 {
-    var $loggerdesc = "Mozilla Javascript Console Logger";
-
-    /**
-    * Buffer for logging messages
-    */
-    private $buffer;
-
-    /**
-    * Write out the buffer if it is possible (the template system is already loaded)
-    * 
-    */
-    public function writeOut()
-    {
-        xarMod::apiFunc('themes', 'user', 'registerjs',
-            array('position' => 'head', 'type' => 'code', 'code' => $this->buffer));
-        $this->buffer = '';
-        return true;
-    }
-
-    /**
-     * Sets up the configuration specific parameters for each driver
-     * @param array     $conf               Configuration options for the specific driver.
-     * 
-     * @return boolean
-     */
-    public function __construct(Array $conf)
-    {
-        parent::__construct($conf);
-    }
-
-    /**
-      * Start the logger
-      * 
-     **/
-    public function start()
-    {
-        $this->buffer = $this->getCommonCode();
-    }
-    
     public function getCommonCode()
     {
         // Common javascript to get a variable which has the logmessage method
@@ -104,6 +65,7 @@ public function mozConsole(msg, level)
     */
     public function notify($message, $level)
     {
+        // Abort early if the level of priority is above the maximum logging level.
         if (!$this->doLogLevel($level)) return false;
 
         // FIXME: this code depends on a user setting to use principal codebase support (same origin policy)
@@ -117,14 +79,13 @@ public function mozConsole(msg, level)
         // it should be done with a signed script eventually, but this is rather complex
         // TODO: check on windows and browsers other than mozilla, to fall back gracefully
 
-        $logentry = $this->getTime(). " - (" .self::$levels[$level].") ".$message;
+        $logentry = $this->getTime(). " - (" . self::$levels[$level] .") ".$message;
 
         // Add \ for problematic chars and for each newline format unix, mac and windows
         $logentry = addslashes($logentry);
         $trans = array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
         $logentry = strtr($logentry,$trans);
         $this->buffer .= "mozConsole('$logentry', $level);\n";
-        $this->writeOut();
     }
  }
 
