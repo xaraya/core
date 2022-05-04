@@ -165,22 +165,6 @@ class xarLogger_simple extends xarLogger
         $this->flushBuffer(true);
     }
 
-    // Add a message, applying appropriate formatting, to the output buffer.
-    // @return boolean true on success or false on failure.
-    // 
-    public function notify($message, $level)
-    {
-        // Abort early if the level of priority is above the maximum logging level.
-        if (!$this->doLogLevel($level)) {
-            return false;
-        }
-
-        // Add to the loglines array
-        $this->buffer .= $this->formatMessage($message, $level);
-        $this->flushBuffer(false);
-        return true;
-    }
-
     // Clear the output buffer (and optionally stop logging).
     // 
     public function clearBuffer($stop_logging=false)
@@ -320,6 +304,22 @@ class xarLogger_simple extends xarLogger
 				}
             }
         }
+    }
+
+    // Add a message, applying appropriate formatting, to the output buffer.
+    // @return boolean true on success or false on failure.
+    // 
+    public function notify($message, $level)
+    {
+        // Abort early if the level of priority is above the maximum logging level.
+        if (!$this->doLogLevel($level)) {
+            return false;
+        }
+
+        // Add to the loglines array
+        $this->buffer .= $this->formatMessage($message, $level);
+        $this->flushBuffer(false);
+        return true;
     }
 
     // Format a message.
