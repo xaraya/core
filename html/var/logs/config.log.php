@@ -20,12 +20,9 @@
  * You should not remove this file!
  */
 
-// Mail logger
-$systemConfiguration['Log.Mail.Level'] = '1,2,4,8';                          // The levels of messages this logger tracks.
-$systemConfiguration['Log.Mail.Timeformat'] = '%Y/%m/%d %H:%M:%S';           // String containing the format for the log's timestamps.
-$systemConfiguration['Log.Mail.Recipient'] = 'occupant@here.com';            // The recipient that this logger sends emails to
-$systemConfiguration['Log.Mail.Sender'] = 'xaraya-log@site.com';             // The sender that this logger uses to send emails
-$systemConfiguration['Log.Mail.Subject'] = 'Log Message';                    // The subject of the emails
+// Errorlog logger
+$systemConfiguration['Log.Errorlog.Level'] = '1,2,4,8';                      // The levels of messages this logger tracks.
+$systemConfiguration['Log.Errorlog.Timeformat'] = '%Y/%m/%d %H:%M:%S';       // String containing the format for the log's timestamps.
 
 // HTML logger
 $systemConfiguration['Log.Html.Level'] = '1,2,4,8';                          // The levels of messages this logger tracks.
@@ -37,6 +34,13 @@ $systemConfiguration['Log.Html.Mode'] = '644';                               // 
 // Javascript logger
 $systemConfiguration['Log.Javascript.Level'] = '1,2,4,8';                    // The levels of messages this logger tracks.
 $systemConfiguration['Log.Javascript.Timeformat'] = '%Y/%m/%d %H:%M:%S';     // String containing the format for the log's timestamps.
+
+// Mail logger
+$systemConfiguration['Log.Mail.Level'] = '1,2,4,8';                          // The levels of messages this logger tracks.
+$systemConfiguration['Log.Mail.Timeformat'] = '%Y/%m/%d %H:%M:%S';           // String containing the format for the log's timestamps.
+$systemConfiguration['Log.Mail.Recipient'] = 'occupant@here.com';            // The recipient that this logger sends emails to
+$systemConfiguration['Log.Mail.Sender'] = 'xaraya-log@site.com';             // The sender that this logger uses to send emails
+$systemConfiguration['Log.Mail.Subject'] = 'Log Message';                    // The subject of the emails
 
 // Mozilla logger
 $systemConfiguration['Log.Mozilla.Level'] = '1,2,4,8';                       // The levels of messages this logger tracks.
