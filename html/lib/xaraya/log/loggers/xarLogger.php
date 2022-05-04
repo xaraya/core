@@ -61,10 +61,10 @@ class xarLogger extends xarObject
     * Identity of the logger.
     *
     * Randomly generated to distinguish between 2 different logging processes,
-    * in highly frequented sites, the time of the logged message isnt as good to diferenciate
+    * in highly frequented sites, the time of the logged message isnt as good to diferentiate
     * different pageviews
     */
-    protected $ident;
+    protected $uuid;
 
     /**
     * String containing the format to use when generating timestamps.
@@ -86,8 +86,10 @@ class xarLogger extends xarObject
     public function __construct(Array $conf)
     {
         if ($conf['fallback'] == true) {
+        	// The levels defined in the system configuration file
 			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
         } else {
+        	// The levels defined in the log configuration file
 			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::LOG, 'Log.' . ucwords($conf['type']) . '.Level');
         }
 		if (!empty($levels)) {
@@ -101,7 +103,8 @@ class xarLogger extends xarObject
         $microtime = explode(" ", microtime());
         $this->elapsed = ((float)$microtime[0] + (float)$microtime[1]);
 
-        $this->ident = '';
+        // Create a UUID
+        $this->uuid = bin2hex(random_bytes(16));
 
         // If a custom time format has been provided, use it.
         if (!empty($conf['timeFormat'])) {

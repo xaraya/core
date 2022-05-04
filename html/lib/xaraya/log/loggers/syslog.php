@@ -86,7 +86,7 @@ class xarLogger_syslog extends xarLogger
     public function open()
     {
         if (!$this->opened) {
-            openlog($this->_ident, $this->options, $this->facility);
+            openlog($this->uuid, $this->options, $this->facility);
             $this->opened = true;
         }
     }

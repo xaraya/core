@@ -32,7 +32,7 @@ sys::import('xaraya.log.loggers.xarLogger');
  *
  *
  * CREATE TABLE `xar_log_messages` (
- *   `ident` varchar(32) NOT NULL,
+ *   `uuid` varchar(32) NOT NULL,
  *   `logtime` varchar(255) NOT NULL DEFAULT '',
  *   `priority` tinyint(4) NOT NULL DEFAULT '0',
  *   `message` text NOT NULL
@@ -86,10 +86,10 @@ class xarLogger_sql extends xarLogger
         	$line = explode('|||', $line);
 
 			/* Build the SQL query for this log entry insertion. */
-			$q = sprintf('INSERT INTO %s (ident, logtime, priority, message)' .
+			$q = sprintf('INSERT INTO %s (uuid, logtime, priority, message)' .
 						 'VALUES(?, ?, ?, ?)',
 						 $this->table);
-			$bindvars = array(42, $line[0], $line[1], $line[2]);
+			$bindvars = array($this->uuid, $line[0], $line[1], $line[2]);
 			$stmt = $this->dbconn->prepareStatement($q);
 			$stmt->executeUpdate($bindvars);
         }

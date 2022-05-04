@@ -155,7 +155,7 @@ class xarLogger_mail extends xarLogger
         }
 
         $entry = sprintf("%s %s [%s] %s\n", $this->getTime(),
-            $this->ident, self::$levels[$level], $message);
+            $this->uuid, self::$levels[$level], $message);
 
         $this->message .= $entry;
         
