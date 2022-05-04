@@ -130,6 +130,11 @@ class xarLogger extends xarObject
         $this->close();
     }
 
+    public function close()
+    {
+        // This is overwritten by the subclasses
+    }
+
     /**
      * Returns if the logger should log the given level or not.
      *
