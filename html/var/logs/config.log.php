@@ -55,7 +55,7 @@ $systemConfiguration['Log.Sql.Timeformat'] = '%Y/%m/%d %H:%M:%S';            // 
 $systemConfiguration['Log.Sql.SQLTable'] = 'xar_log_messages';               // The name of the SQL table of this logger
 
 // Syslog logger
-$systemConfiguration['Log.Syslog.Level'] = '1,2,4,8,64';                     // The levels of messages this logger tracks.
+$systemConfiguration['Log.Syslog.Level'] = '1,2,4,8';                        // The levels of messages this logger tracks.
 $systemConfiguration['Log.Syslog.Timeformat'] = '%Y/%m/%d %H:%M:%S';         // String containing the format for the log's timestamps.
 $systemConfiguration['Log.Syslog.Facility'] = 'LOG_USER';                    // The constant representing this logfile in PHP
 $systemConfiguration['Log.Syslog.Options'] = 'LOG_CONS|LOG_ODELAY|LOG_PID';  // The maximum size of a log file in bytes. Once this value is reached Xaraya creates a new log file
