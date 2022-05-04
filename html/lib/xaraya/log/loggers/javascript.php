@@ -32,7 +32,7 @@ class xarLogger_javascript extends xarLogger
     /**
     * Buffer for logging messages
     */
-    var $_buffer;
+    private $buffer;
 
     /**
     * Write out the buffer if it is possible (the template system is already loaded)
@@ -42,8 +42,8 @@ class xarLogger_javascript extends xarLogger
     function writeOut()
     {
         xarMod::apiFunc('themes', 'user', 'registerjs',
-            array('position' => 'head', 'type' => 'code', 'code' => $this->_buffer));
-        $this->_buffer = '';
+            array('position' => 'head', 'type' => 'code', 'code' => $this->buffer));
+        $this->buffer = '';
         return true;
     }
 
@@ -104,7 +104,7 @@ class xarLogger_javascript extends xarLogger
         // Abort early if the level of priority is above the maximum logging level.
         if (!$this->doLogLevel($level)) return false;
 
-        $this->_buffer .= "if (debugWindow) {\n".
+        $this->buffer .= "if (debugWindow) {\n".
                 "    debugWindow.document.write('".$this->getTime().
                 ' - ('.self::$levels[$level].')<br/>'.
                 addslashes(str_replace($strings, $replace, $message) ). "<br/><br/>');\n".
