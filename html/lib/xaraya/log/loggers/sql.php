@@ -49,7 +49,7 @@ class xarLogger_sql extends xarLogger
      * String holding the database table to use.
      * @var string
      */
-    private $table;
+    private $sqltable;
 
     /**
      * Pointer holding the database connection to be used.
@@ -61,14 +61,38 @@ class xarLogger_sql extends xarLogger
     * Set up the configuration of the specific Log Observer.
     *
     * @param  array $conf  with
-    *               'table  '     => string      The name of the logger table.
+    *               'sqltable  '     => string      The name of the logger table.
     * 
     */
     public function __construct(Array $conf)
     {
         parent::__construct($conf);
+        
+        if (!empty($conf['sqltable'])) {
+	        $this->table = $conf['sqltable'];
+        }
+
+        // Initialise the buffer
+        $this->buffer = array();
+    }
+
+    public function close()
+    {
+        // Create the database connection
         $this->dbconn = xarDB::getConn();
-        $this->table = $conf['table'];
+        
+        // Write the records to the database and stop logging.
+        foreach ($this->buffer as $line) {
+        	$line = explode('|||', $line);
+
+			/* Build the SQL query for this log entry insertion. */
+			$q = sprintf('INSERT INTO %s (ident, logtime, priority, message)' .
+						 'VALUES(?, ?, ?, ?)',
+						 $this->table);
+			$bindvars = array(42, $line[0], $line[1], $line[2]);
+			$stmt = $this->dbconn->prepareStatement($q);
+			$stmt->executeUpdate($bindvars);
+        }
     }
 
     /**
@@ -85,26 +109,19 @@ class xarLogger_sql extends xarLogger
      * @return boolean  True on success or false on failure.
      * 
      */
-     
-    /**
-     * Writes $message to the currently open mail message.
-     * Calls open(), if necessary.
-     * 
-     * @return boolean  True on success or false on failure.
-     * 
-     */
-    public function notify($message, $priority)
+    public function notify($message, $level)
     {
-        if (!$this->doLogLevel($priority)) return false;
+        // Abort early if the level of priority is above the maximum logging level.
+        if (!$this->doLogLevel($level)) return false;
 
-        /* Build the SQL query for this log entry insertion. */
-        $q = sprintf('INSERT INTO %s (ident, logtime, priority, message)' .
-                     'VALUES(?, ?, ?, ?)',
-                     $this->_table);
-        $bindvars = array($this->ident, $this->getTime(), $priority, $message);
-        $stmt =& $this->dbconn->prepareStatement($q);
-        $stmt->executeUpdate($bindvars);
+        // Add to the loglines array
+        $this->buffer[] = $this->formatMessage($message, $level);
 
         return true;
+    }
+    
+    public function formatMessage($message, $level)
+    {
+        return $this->getTime() . '|||' . $level . '|||' . $message;
     }
 }
