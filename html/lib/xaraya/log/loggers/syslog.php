@@ -67,14 +67,28 @@ class xarLogger_syslog extends xarLogger
     {
         parent::__construct($conf);
         
-        /* If it is given a logging facility to be used, then use it. */
+        /* If a logging facility is passed, then use it. */
         if (isset($conf['facility'])) {
-            $this->facility = $conf['facility'];
+        	try {
+				// Convert the string to a constant expression
+				$const = $conf['facility'];
+				eval("\$facility = $const;");
+				$this->facility = $facility;
+        	} catch (Exception $e) {
+        		die("The value " . $conf['facility'] . " does not correspond to a recognized constant and will be ignored.");
+        	}
         }
 
-        /* If it is given a logging facility to be used, then use it. */
+        /* If logging facility options are given, then use them. */
         if (isset($conf['options'])) {
-            $this->options = $conf['options'];
+        	try {
+				// Convert the string to a constant expression
+				$const = $conf['options'];
+				eval("\$options = $const;");
+				$this->options = $options;
+        	} catch (Exception $e) {
+        		die("The value " . $conf['options'] . " does not correspond to an expression of recognized constants and will be ignored.");
+        	}
         }
     }
 

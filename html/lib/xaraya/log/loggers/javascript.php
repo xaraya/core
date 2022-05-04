@@ -115,6 +115,7 @@ class xarLogger_javascript extends xarLogger
             array('position' => 'head', 'type' => 'code', 'code' => $this->buffer));
         $this->buffer = '';
         return true;
+        
 		$args['position'] = 'head';
 		$args['type']     = 'code';
 		$args['index']    = null;
