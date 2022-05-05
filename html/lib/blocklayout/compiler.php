@@ -73,7 +73,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
 
     public function compileFile($fileName)
     {
-        xarLog::message(xarML("BL: Compiling the file '#(1)'", $fileName), xarLog::LEVEL_INFO);
+        xarLog::message(xarML("BL: Compiling the file '#(1)'", $fileName), xarLog::LEVEL_DEBUG);
         $this->lastFile = $fileName;
         // The @ makes the code better to handle, leave it.
         if (!($fp = @fopen($fileName, 'r'))) {
@@ -113,7 +113,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
     
     protected function getProcessor($xslFile='')
     {
-        xarLog::message(xarML("BL: Creating a new XSLT processor"), xarLog::LEVEL_INFO);
+        xarLog::message(xarML("BL: Creating a new XSLT processor"), xarLog::LEVEL_DEBUG);
         sys::import('blocklayout.xsltransformer');
         if (empty($xslFile)) {
             $xslProc = new BlockLayoutXSLTProcessor();
@@ -195,11 +195,11 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
 
     protected function compile(&$templateSource)
     {
-        xarLog::message(xarML("BL: Checking for an XSLT processor"), xarLog::LEVEL_INFO);
+        xarLog::message(xarML("BL: Checking for an XSLT processor"), xarLog::LEVEL_DEBUG);
         if (!isset($this->processor)) {
             $this->processor = $this->getProcessor();
             $xslDoc = new DOMDocument;
-        	xarLog::message(xarML("BL: Creating the compiler as a stylesheet"), xarLog::LEVEL_INFO);
+        	xarLog::message(xarML("BL: Creating the compiler as a stylesheet"), xarLog::LEVEL_DEBUG);
             $xslDoc->loadXML($this->boot());
             $this->processor->importStyleSheet($xslDoc);
         }
