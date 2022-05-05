@@ -69,6 +69,8 @@ class PassBoxProperty extends TextBoxProperty
 	 */
     public function validateValue($value = null)
     {
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+
         if (!isset($value)) $value = "";
 
         if ($this->validation_password_confirm) {

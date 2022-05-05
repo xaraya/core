@@ -35,6 +35,7 @@ class StaticTextProperty extends DataProperty
     public function validateValue($value = null)
     {
         xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+        
         if (isset($value) && $value != $this->value) {
             $this->invalid = xarML('static text: #(1)', $this->name);
             xarLog::message($this->invalid, xarLog::LEVEL_ERROR);

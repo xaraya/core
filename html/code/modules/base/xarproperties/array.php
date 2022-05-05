@@ -140,6 +140,8 @@ class ArrayProperty extends DataProperty
 	 */
     public function validateValue($value = null)
     {
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+
 //        if (!parent::validateValue($value)) return false;
 
         // Check if we have an array. We don't really have an error message here

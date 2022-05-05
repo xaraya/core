@@ -45,6 +45,8 @@ class UsernameProperty extends TextBoxProperty
 	 */
     public function validateValue($value = null)
     {
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+
         // Save the current value of this property for comparison below
         $previousvalue = $this->value;
         

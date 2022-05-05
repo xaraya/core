@@ -141,6 +141,8 @@ class FileUploadProperty extends DataProperty
 	 */
     public function validateValue($value = null)
     {
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+
         // the variable corresponding to the file upload field is no longer set in PHP 4.2.1+
         // but we're using a hidden field to keep track of any previously uploaded file here
         if (!parent::validateValue($value)) return false;

@@ -300,10 +300,10 @@ class DataProperty extends xarObject implements iDataProperty
      */
     public function validateValue($value = null)
     {
+        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
+
         if(!isset($value)) $value = $this->getValue();
         else $this->setValue($value);
-
-        xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
 
         if ($this->validation_notequals != null && $value == $this->validation_notequals) {
             if (!empty($this->validation_notequals_invalid)) {
