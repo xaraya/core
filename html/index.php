@@ -80,7 +80,7 @@ function xarMain()
     // Create the object that models this request
     $request = xarController::getRequest();
     xarController::normalizeRequest();
-    xarLog::message('Retrieved a request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_INFO);
+    xarLog::message('Retrieved a request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_NOTICE);
 
     // Default Page Title
     $SiteSlogan = xarModVars::get('themes', 'SiteSlogan');
@@ -124,7 +124,7 @@ function xarMain()
             xarVar::setCached('Themes.name','CurrentTheme', $themeName);
         }
     }    
-    xarLog::message('The theme is set: ' . xarTpl::getThemeName(), xarLog::LEVEL_INFO);
+    xarLog::message('The theme is set: ' . xarTpl::getThemeName(), xarLog::LEVEL_NOTICE);
 
     // Get a cache key for this page if it's suitable for page caching
     $cacheKey = xarCache::getPageKey();
@@ -171,7 +171,7 @@ function xarMain()
         if (!empty($pageName)){
             xarTpl::setPageTemplateName($pageName);
         }
-        xarLog::message('The page template is set: ' . xarTpl::getPageTemplateName(), xarLog::LEVEL_INFO);
+        xarLog::message('The page template is set: ' . xarTpl::getPageTemplateName(), xarLog::LEVEL_NOTICE);
 
         // if the debugger is active, start it
         if (xarCore::isDebuggerActive()) {
@@ -201,7 +201,7 @@ function xarMain()
         }
 
         // We're all done, one ServerRequest made
-        xarLog::message('Notifying listeners of this request', xarLog::LEVEL_INFO);
+        xarLog::message('Notifying listeners of this request', xarLog::LEVEL_NOTICE);
         xarEvents::notify('ServerRequest');
         
         // Render page with the output
