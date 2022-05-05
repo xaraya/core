@@ -318,7 +318,7 @@ abstract class ConnectionCommon {
     // to prevent changing all execute statements
     public function &Execute($sql,$bindvars = array(), $fetchmode = null)
     {
-        xarLog::message("DB: Executing $sql", xarLog::LEVEL_INFO);
+        xarLog::message("DB: Executing $sql", xarLog::LEVEL_DEBUG);
         $stmt = $this->prepareStatement($sql);
         if($stmt) {
             if($this->isSelect($sql)) {
@@ -350,7 +350,7 @@ abstract class ConnectionCommon {
 
     public function &SelectLimit($sql,$limit=0 ,$offset=0 , $bindvars = array(),$fetchmode = null)
     {
-        xarLog::message("DB: Executing $sql", xarLog::LEVEL_INFO);
+        xarLog::message("DB: Executing $sql", xarLog::LEVEL_DEBUG);
         $stmt = $this->prepareStatement($sql);
         $stmt->setLimit($limit);
         $stmt->setOffset($offset);

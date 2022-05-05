@@ -328,7 +328,7 @@ class xarPDO extends PDO
      */
     public function ExecuteQuery($string='', $flag=0)
     {
-        xarLog::message("xarPDO::executeQuery: Executing $string", xarLog::LEVEL_INFO);
+        xarLog::message("xarPDO::executeQuery: Executing $string", xarLog::LEVEL_DEBUG);
         try {
 			if (empty($flag)) $flag = PDO::FETCH_NUM;
 
@@ -457,7 +457,7 @@ class xarPDOStatement extends xarObject
 
     public function executeQuery($bindvars=array(), $flag=0)
     {
-        xarLog::message("xarPDOStatement::executeQuery: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        xarLog::message("xarPDOStatement::executeQuery: Preparing " . $this->pdo->queryString, xarLog::LEVEL_DEBUG);
         if (empty($flag)) $flag = PDO::FETCH_NUM;
 
         // We need to check whether we still have to add limit and offset
@@ -480,7 +480,7 @@ class xarPDOStatement extends xarObject
         }
 
         // Run the query
-        xarLog::message("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        xarLog::message("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString, xarLog::LEVEL_DEBUG);
         try {
             $success = $this->pdostmt->execute();
         } catch (Exception $e) {
@@ -516,7 +516,7 @@ class xarPDOStatement extends xarObject
     /* Be insistent and enforce types here */
     public function executeUpdate($bindvars=array(), $flag=0)
     {
-        xarLog::message("xarPDOStatement::executeUpdate: Preparing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        xarLog::message("xarPDOStatement::executeUpdate: Preparing " . $this->pdo->queryString, xarLog::LEVEL_DEBUG);
 
         // Add the bindvars to the prepared statement
         $index = 0;
@@ -531,7 +531,7 @@ class xarPDOStatement extends xarObject
             }
         }
 
-        xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_INFO);
+        xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_DEBUG);
         try {
             $success = $this->pdostmt->execute();
         } catch (Exception $e) {
