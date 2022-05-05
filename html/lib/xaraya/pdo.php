@@ -231,7 +231,7 @@ class xarPDO extends PDO
     // Note that commit() and rollback() are the same as in Creole
     public function begin()
     {
-        xarLog::message("xarPDO::begin: starting transaction", xarLog::LEVEL_INFO);
+        xarLog::message("xarPDO::begin: starting transaction", xarLog::LEVEL_DEBUG);
         // Only start a transaction of we need to
         if (!PDO::inTransaction())
             parent::beginTransaction();
@@ -259,7 +259,7 @@ class xarPDO extends PDO
      */
     public function executeUpdate($string='')
     {
-        xarLog::message("xarPDO::executeUpdate: Executing $string", xarLog::LEVEL_INFO);
+        xarLog::message("xarPDO::executeUpdate: Executing $string", xarLog::LEVEL_DEBUG);
         try {
 	        $affected_rows = $this->exec($string);
         } catch (Exception $e) {
@@ -287,7 +287,7 @@ class xarPDO extends PDO
      */
     public function Execute($string, $bindvars=array(), $flag=0)
     {
-        xarLog::message("xarPDO::Execute: Executing $string", xarLog::LEVEL_INFO);
+        xarLog::message("xarPDO::Execute: Executing $string", xarLog::LEVEL_DEBUG);
         try {
 			if (empty($flag)) $flag = PDO::FETCH_NUM;
 				   
@@ -363,7 +363,7 @@ class xarPDO extends PDO
                 $bindvars[] = $offset;
             }
         }
-        xarLog::message("xarPDO::SelectLimit: Executing $string", xarLog::LEVEL_INFO);
+        xarLog::message("xarPDO::SelectLimit: Executing $string", xarLog::LEVEL_DEBUG);
         if (empty($bindvars)) {
 			try {
 	            $stmt = $this->query($string, $flag);
