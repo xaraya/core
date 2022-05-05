@@ -85,7 +85,7 @@ function xarMain()
     // Default Page Title
     $SiteSlogan = xarModVars::get('themes', 'SiteSlogan');
     xarTpl::setPageTitle(xarVar::prepForDisplay($SiteSlogan));
-    xarLog::message('The page title is set: ' . xarTpl::getPageTitle(), xarLog::LEVEL_INFO);
+    xarLog::message('The page title is set: ' . xarTpl::getPageTitle(), xarLog::LEVEL_NOTICE);
     
     // Check the Installation
     if (($request->getModule() != 'installer') && (xarSystemVars::get(sys::CONFIG, 'DB.Installation') != 3))
@@ -144,7 +144,7 @@ function xarMain()
     } else {
         $message = 'The page is cached. Using the cached page.';
     }
-    xarLog::message($message, xarLog::LEVEL_INFO);
+    xarLog::message($message, xarLog::LEVEL_NOTICE);
 
     if ($run) {
 
