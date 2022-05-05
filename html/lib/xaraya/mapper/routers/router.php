@@ -57,7 +57,7 @@ class xarRouter extends xarObject
                 $publicproperties = $request->getPublicProperties();
                 $request->setRoute($name);
                 $this->currentRoute = $name;
-                xarLog::message('The route is set: ' . $name, xarLog::LEVEL_INFO);
+                xarLog::message('The route is set: ' . $name, xarLog::LEVEL_NOTICE);
                 return true;
             }
         }

@@ -126,7 +126,7 @@ class DataPropertyMaster extends xarObject
         if(!isset($objectref) || empty($args['name']) || empty($args['type']))
             return;
 
-        xarLog::message("DataPropertyMaster::addProperty: Adding a new property " . $args['name'], xarLog::LEVEL_INFO);
+        xarLog::message("DataPropertyMaster::addProperty: Adding a new property " . $args['name'], xarLog::LEVEL_DEBUG);
         
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.
@@ -198,7 +198,7 @@ class DataPropertyMaster extends xarObject
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['class'];
 
-            xarLog::message("DataPropertyMaster::getProperty: Getting a new property " . $propertyClass, xarLog::LEVEL_INFO);
+            xarLog::message("DataPropertyMaster::getProperty: Getting a new property " . $propertyClass, xarLog::LEVEL_DEBUG);
 
             // If we don't have the class yet, get it now
             if (!class_exists($propertyClass)) {

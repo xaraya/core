@@ -1141,7 +1141,7 @@ class xarTpl extends xarObject
             // Load translations for the template
             xarMLS::loadTranslations($sourceFileName);
 
-            xarLog::message("xarTpl::executeFromFile: Using template $sourceFileName", xarLog::LEVEL_INFO);
+            xarLog::message("xarTpl::executeFromFile: Using template $sourceFileName", xarLog::LEVEL_DEBUG);
             $templateCode = null;
 
             // Determine if we need to compile this template

@@ -64,7 +64,7 @@ class xarDB_PDO extends xarObject
         } catch (Exception $e) {
             throw $e;
         }
-        xarLog::message("New connection created, now serving " . self::$count . " connections", xarLog::LEVEL_INFO);
+        xarLog::message("New connection created, now serving " . self::$count . " connections", xarLog::LEVEL_NOTICE);
         return $conn;
     }
     /**

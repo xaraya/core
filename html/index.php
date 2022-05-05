@@ -90,7 +90,7 @@ function xarMain()
     // Check the Installation
     if (($request->getModule() != 'installer') && (xarSystemVars::get(sys::CONFIG, 'DB.Installation') != 3))
         die('Xaraya was not properly installed. The exact error cannot be diagnosed.<br/>Please rerun the installer. If you have important data in your database please make a backup first.');
-    xarLog::message('The installation is checked', xarLog::LEVEL_INFO);
+    xarLog::message('The installation is checked', xarLog::LEVEL_NOTICE);
 
     // Theme Override
     xarVar::fetch('theme','str:1:',$themeName,'',xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY);
@@ -179,11 +179,11 @@ function xarMain()
         }
 
         // Process the request
-        xarLog::message('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_INFO);
+        xarLog::message('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_NOTICE);
         xarController::dispatch($request);
 
         // Retrieve the output to send to the browser
-        xarLog::message('Processing request ' . $request->getModule() . "_"  . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_INFO);
+        xarLog::message('Processing request ' . $request->getModule() . "_"  . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_NOTICE);
         $mainModuleOutput = xarController::$response->getOutput();
 
         if (xarCore::isDebuggerActive()) {
@@ -205,7 +205,7 @@ function xarMain()
         xarEvents::notify('ServerRequest');
         
         // Render page with the output
-        xarLog::message('Creating the page output', xarLog::LEVEL_INFO);
+        xarLog::message('Creating the page output', xarLog::LEVEL_NOTICE);
         $pageOutput = xarTpl::renderPage($mainModuleOutput);
 
         // Set the output of the page in cache
@@ -214,7 +214,7 @@ function xarMain()
             xarPageCache::setCached($cacheKey, $pageOutput);
         }
 
-        xarLog::message('Rendering the result page', xarLog::LEVEL_INFO);
+        xarLog::message('Rendering the result page', xarLog::LEVEL_NOTICE);
         echo $pageOutput;
     }
 

@@ -489,7 +489,7 @@ class xarMLS extends xarObject
         static $loadedCommons = array();
         static $loadedTranslations = array();
     
-        xarLog::message("MLS: Loading translations for the context ". "$domainType,$domainName,$contextType,$contextName", xarLog::LEVEL_INFO);
+        xarLog::message("MLS: Loading translations for the context ". "$domainType,$domainName,$contextType,$contextName", xarLog::LEVEL_DEBUG);
 
         if (!isset(self::$backend)) {
             xarLog::message("xarMLS: No translation backend was selected for ". "$domainType,$domainName,$contextType,$contextName", xarLog::LEVEL_WARNING);
@@ -573,7 +573,7 @@ class xarMLS extends xarObject
      **/
     static public function loadTranslations($path)
     {
-        xarLog::message("MLS: Loading translations for the path: $path", xarLog::LEVEL_INFO);
+        xarLog::message("MLS: Loading translations for the path: $path", xarLog::LEVEL_DEBUG);
         if(!file_exists($path)) {
             xarLog::message("MLS: Failed loading translations for a non-existing path ($path)", xarLog::LEVEL_WARNING);
             //die($path);

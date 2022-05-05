@@ -294,6 +294,8 @@ class xarCore extends xarCoreCache
         sys::import('xaraya.events');
         xarEvents::init();
 
+        xarLog::message("The basic subsystems are loaded", xarLog::LEVEL_NOTICE);
+
         /**
          * Start Configuration System
          *
@@ -483,7 +485,7 @@ class xarCore extends xarCoreCache
             self::$build = $rev;
         }
 
-        xarLog::message("The core is loaded", xarLog::LEVEL_INFO);
+        xarLog::message("The core is loaded", xarLog::LEVEL_NOTICE);
 
         // Make the current load level == the new load level
         self::$runLevel = $new_SYSTEM_level;

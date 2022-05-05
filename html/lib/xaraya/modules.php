@@ -343,7 +343,7 @@ class xarMod extends xarObject implements IxarMod
             throw new BadParameterException('module/theme type');
         }
         // Log it when it doesn't come from the cache
-        xarLog::message("xarMod::getInfo: Getting database info of ID '". $modRegId ."' (a " . $type . ")", xarLog::LEVEL_INFO);
+        xarLog::message("xarMod::getInfo: Getting database info of ID '". $modRegId ."' (a " . $type . ")", xarLog::LEVEL_DEBUG);
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -500,7 +500,7 @@ class xarMod extends xarObject implements IxarMod
             return xarCoreCache::getCached($cacheCollection, $modName);
         }
         // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::getBaseInfo: Getting database info of '". $modName ."' (a ". $type. ")", xarLog::LEVEL_INFO);
+        xarLog::message("xarMod::getBaseInfo: Getting database info of '". $modName ."' (a ". $type. ")", xarLog::LEVEL_DEBUG);
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
@@ -582,7 +582,7 @@ class xarMod extends xarObject implements IxarMod
             return xarCoreCache::getCached('Mod.getFileInfos', $modOsDir ." / " . $type);
         }
         // Log it when it didnt came from cache
-        xarLog::message("xarMod::getFileInfo: Getting file info of '". $modOsDir ."' (a " . $type . ")", xarLog::LEVEL_INFO);
+        xarLog::message("xarMod::getFileInfo: Getting file info of '". $modOsDir ."' (a " . $type . ")", xarLog::LEVEL_DEBUG);
 
 
         // TODO redo legacy support via type.
@@ -916,8 +916,8 @@ class xarMod extends xarObject implements IxarMod
         $cacheKey = strtolower($modName.$modType);
         if (isset($loadedModuleCache[$cacheKey])) return true;
 
-        // Log it when it doesnt come from the cache
-        xarLog::message("xarMod::load: Loading $modName:$modType", xarLog::LEVEL_INFO);
+        // Log it when it doesn't come from the cache
+        xarLog::message("xarMod::load: Loading $modName:$modType", xarLog::LEVEL_DEBUG);
 
         $modBaseInfo = self::getBaseInfo($modName);
         // Not a valid module - throw exception
