@@ -25,6 +25,8 @@ class CheckboxProperty extends DataProperty
     public $desc       = 'Checkbox';
     public $reqmodules = array('base');
 
+    public $basetype   = 'checkbox';
+
 /**
  * Create an instance of this dataproperty<br/>
  * - It belongs to the base module<br/>
@@ -69,9 +71,9 @@ class CheckboxProperty extends DataProperty
         xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_INFO);
 
         if (empty($value) || $value == 'false') {
-            $this->value = false;
+            $this->value = 0;
         } else {
-            $this->value = true;
+            $this->value = 1;
         }
         return true;
     }
