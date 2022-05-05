@@ -51,6 +51,12 @@ class xarLogger extends xarObject
 		xarLog::LEVEL_DEBUG     => 'DEBUG'
 	 );
     /**
+    * The name of this logger
+    *
+    */
+    protected $name;
+
+    /**
     * The level of logging.
     *
     * The level of the messages which will be logged.
@@ -85,12 +91,14 @@ class xarLogger extends xarObject
      */
     public function __construct(Array $conf)
     {
+        $this->name = $conf['type'];
+        
         if ($conf['fallback'] == true) {
         	// The levels defined in the system configuration file
 			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::CONFIG, 'Log.Level');
         } else {
         	// The levels defined in the log configuration file
-			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::LOG, 'Log.' . ucwords($conf['type']) . '.Level');
+			$levels = isset($conf['level']) ? $conf['level'] : xarSystemVars::get(sys::LOG, 'Log.' . ucwords($this->name) . '.Level');
         }
 		if (!empty($levels)) {
 			$this->logLevel = 0;
@@ -132,7 +140,8 @@ class xarLogger extends xarObject
 
     public function close()
     {
-        // This is overwritten by the subclasses
+        // Push a final message to the log.
+        $this->notify(xarML('Shutdown #(1) logger', $this->name), xarLog::LEVEL_NOTICE);
     }
 
     /**

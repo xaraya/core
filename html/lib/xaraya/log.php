@@ -276,7 +276,7 @@ function xarLog__shutdown_handler()
          $lmtime = explode(' ', microtime());
          $endTime = $lmtime[1] + $lmtime[0];
          $totalTime = ($endTime - xarDebug::$startTime);
-         xarLog::message("xarLog: Response was served in $totalTime seconds.", xarLog::LEVEL_DEBUG);
+         xarLog::message("xarLog: Response was served in $totalTime seconds.", xarLog::LEVEL_NOTICE);
      }
 
 //During register_shutdown, it's already too late.

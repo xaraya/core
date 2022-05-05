@@ -78,6 +78,8 @@ class xarLogger_sql extends xarLogger
 
     public function close()
     {
+        parent::close();
+
         // Create the database connection
         $this->dbconn = xarDB::getConn();
         

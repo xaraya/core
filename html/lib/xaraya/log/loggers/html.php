@@ -82,8 +82,7 @@ class xarLogger_html extends xarLogger_simple
 
     public function close()
     {
-        // Push a final message to the log.
-        $this->notify('Shutdown HTML logger', xarLog::LEVEL_DEBUG);
+        xarLogger::close();
 
 		$this->buffer .= '</tr>' . $this->EOL;
 		$this->buffer .= '<tr>

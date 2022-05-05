@@ -120,6 +120,8 @@ class xarLogger_mail extends xarLogger
      */
     public function close()
     {
+        parent::close();
+
         if ($this->opened) {
             if (!empty($this->message)) {
                 $headers = "From: $this->sender\r\n";

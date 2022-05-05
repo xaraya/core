@@ -111,6 +111,8 @@ class xarLogger_syslog extends xarLogger
      */
     public function close()
     {
+        parent::close();
+
         if ($this->opened) {
             closelog();
             $this->opened = false;

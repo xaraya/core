@@ -154,8 +154,7 @@ class xarLogger_simple extends xarLogger
     
     public function close()
     {
-        // Push a final message to the log.
-        $this->notify('Shutdown simple logger', xarLog::LEVEL_DEBUG);
+        parent::close();
 
         if (isset($_SERVER['HTTP_REFERER'])) {
             $this->buffer .= 'HTTP_REFERER: ' . $_SERVER['HTTP_REFERER'] . $this->EOL;
