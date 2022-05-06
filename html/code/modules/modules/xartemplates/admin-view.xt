@@ -14,7 +14,7 @@
                         <tr>
                             <th><label for="state">State</label></th>
                             <th><label for="modtype">Type</label></th>
-                            <!-- <th><label for="apply">Action</label></th> -->
+                            <th><label for="apply"></label></th>
                         </tr>
                     </thead>
                     <tbody>
