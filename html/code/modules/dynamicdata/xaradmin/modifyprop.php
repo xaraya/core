@@ -103,7 +103,11 @@ function dynamicdata_admin_modifyprop()
         $data['fields'] = array();
     }
 
-    $data['sources'] = DataStoreFactory::getDataSources($object->datasources);
+    try {
+    	$data['sources'] = DataStoreFactory::getDataSources($object->datasources);
+    } catch (Exception $e) {
+    	return xarResponse::NotFound($e->getMessage());
+    }
 
     $isprimary = 0;
     foreach (array_keys($data['fields']) as $field) {

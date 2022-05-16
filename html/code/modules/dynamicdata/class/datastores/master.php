@@ -186,12 +186,17 @@ class DataStoreFactory extends xarObject
         if (!empty($args)) {
             foreach ($args as $key => $value) {
                 if (is_array($value)){
-                    $tableobject = $dbInfo->getTable(current($value));
+                	$tablename = current($value);
+                    $tableobject = $dbInfo->getTable($tablename);
                 } else {
-                    $tableobject = $dbInfo->getTable($value);
+                	$tablename = $value;
+                    $tableobject = $dbInfo->getTable($tablename);
                 }
                 // Bail if we don't have an object
-                if (!is_object($tableobject)) break;
+                if (!is_object($tableobject)) {
+                	$message = xarML("'#(1)' is not a valid table name. Go back and change it.", $tablename);
+					throw new Exception($message);
+                }
                 
                 $fields = $tableobject->getColumns();
                 foreach ($fields as $field) {
