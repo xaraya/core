@@ -190,6 +190,9 @@ class DataStoreFactory extends xarObject
                 } else {
                     $tableobject = $dbInfo->getTable($value);
                 }
+                // Bail if we don't have an object
+                if (!is_object($tableobject)) break;
+                
                 $fields = $tableobject->getColumns();
                 foreach ($fields as $field) {
                     $sources[] = array('id'=> $key . "." . $field->getName(), 'name' => $key . "." . $field->getName());
