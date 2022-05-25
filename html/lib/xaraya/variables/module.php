@@ -64,7 +64,7 @@ class xarModVars extends xarVars implements IxarModVars
 
         // Still no luck, let's do the hard work then
         $modBaseInfo = xarMod::getBaseInfo($scope);
-        assert(isset($scope));
+        if (!isset($modBaseInfo)) return;
 
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
