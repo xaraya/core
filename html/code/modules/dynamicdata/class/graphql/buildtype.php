@@ -137,7 +137,7 @@ class xarGraphQLBuildType
     {
         if (substr($type, -1) === "y") {
             $object = substr($type, 0, strlen($type) - 1) . "ies";
-        } elseif ($type !== "sample" && $type !== "api_people" && $type !== "api_species") {
+        } elseif (!in_array($type, ["sample", "api_people", "api_species", "deferchildren", "deferparentchild", "cdcollection"])) {
             $object = $type . "s";
         } else {
             $object = $type;
@@ -178,10 +178,14 @@ class xarGraphQLBuildType
         //print_r($objectlist->getItems());
         $params = ['name' => $object];
         $objectref = DataObjectMaster::getObject($params);
+        if (!is_object($objectref)) {
+            throw new Exception('Invalid object ' . $object);
+        }
         $basetypes = [
             'string' => Type::string(),
             'integer' => Type::int(),
             'decimal' => Type::float(),
+            'checkbox' => Type::boolean(),
             'dropdown' => Type::string(),  // @todo use EnumType here?
         ];
         if (empty(self::$known_proptype_ids)) {
