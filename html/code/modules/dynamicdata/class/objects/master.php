@@ -1304,7 +1304,7 @@ class DataObjectMaster extends xarObject
         $this->hookvalues['returnurl'] = xarServer::getCurrentURL();
 
         // Use the standard method to call hooks 
-        $hooks = xarModHooks::call('item', $action, $this->itemid, $this->hookvalues);
+        $hooks = xarModHooks::call('item', $action, $this->itemid, $this->hookvalues, $modname, $this->itemtype);
         // FIXME: we don't need two distinct properties to store gui and api hook responses
         // A response is a response, it's up to the caller to decide if it's appropriate
         // For now we'll populate both with the same data
