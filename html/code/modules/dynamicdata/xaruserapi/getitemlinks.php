@@ -26,15 +26,23 @@ function dynamicdata_userapi_getitemlinks(Array $args=array())
     $itemlinks = array();
     if (empty($itemtype)) $itemtype = null;
     if (empty($itemids)) $itemids = null;
+    // for items managed by DD itself only
+    $module_id = xarMod::getRegID('dynamicdata');
+    $args = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype));
+    if (empty($args['objectid'])) return $itemlinks;
     $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-    list($properties,$items) = xarMod::apiFunc('dynamicdata','user','getitemsforview',
-                                                   // for items managed by DD itself only
-                                             array('module_id' => xarMod::getRegID('dynamicdata'),
-                                                   'itemtype' => $itemtype,
-                                                   'itemids' => $itemids,
-                                                   'status' => $status,
-                                                  )
-                                            );
+    $object = DataObjectMaster::getObjectList(array('objectid'  => $args['objectid'],
+                                           'itemids' => $itemids,
+                                           'status' => $status));
+    if (!isset($object) || (empty($object->objectid) && empty($object->table))) return $itemlinks;
+    if (!$object->checkAccess('view'))
+        return $itemlinks;
+
+    $object->getItems();
+
+    $properties = & $object->getProperties();
+    $items = & $object->items;
     if (!isset($items) || !is_array($items) || count($items) == 0) {
        return $itemlinks;
     }
@@ -60,8 +68,9 @@ function dynamicdata_userapi_getitemlinks(Array $args=array())
         } else {
             $label = xarML('Item #(1)',$itemid);
         }
+        // $object->getActionURL('display', $itemid)
         $itemlinks[$itemid] = array('url'   => xarController::URL('dynamicdata', 'user', 'display',
-                                                         array('itemtype' => $itemtype,
+                                                         array('name' => $args['name'],
                                                                'itemid' => $itemid)),
                                     'title' => xarML('Display Item'),
                                     'label' => $label);
