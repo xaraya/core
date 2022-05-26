@@ -992,6 +992,7 @@ class DataObjectRESTBuilder extends xarObject
             case 'itemid':
             case 'itemtype':
             case 'userlist':
+            case 'username':
             //case 'integer':
                 $datatype = ['type' => 'integer'];
                 break;

@@ -127,7 +127,7 @@ class DataObjectRESTHandler extends xarObject
             }
             foreach ($deferred as $key) {
                 $data = $objectlist->properties[$key]->getDeferredData(['value' => $item[$key], '_itemid' => $itemid]);
-                if ($data['value'] && in_array(get_class($objectlist->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty'])) {
+                if ($data['value'] && in_array(get_class($objectlist->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty']) && is_array($data['value'])) {
                     $item[$key] = array_values($data['value']);
                 } else {
                     $item[$key] = $data['value'];

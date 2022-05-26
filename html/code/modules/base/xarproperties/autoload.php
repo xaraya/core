@@ -38,7 +38,7 @@ function base_properties_autoload($class)
         'hiddenproperty'           => 'modules.base.xarproperties.hidden',
         'imageproperty'            => 'modules.base.xarproperties.image',
         'imagelistproperty'        => 'modules.base.xarproperties.imagelist',
-        'numberboxroperty'         => 'modules.base.xarproperties.integrerbox',
+        'numberboxproperty'        => 'modules.base.xarproperties.integerbox',
         'integerlistproperty'      => 'modules.base.xarproperties.integerlist',
         'languagelistproperty'     => 'modules.base.xarproperties.language',
         'multiselectproperty'      => 'modules.base.xarproperties.multiselect',
