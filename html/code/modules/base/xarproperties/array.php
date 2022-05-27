@@ -265,6 +265,9 @@ class ArrayProperty extends DataProperty
             $temp = array();
             foreach($value as $key => $row) {
                 $newrow[] = $key;
+                if (!is_array($row)) {
+                    $row = [$row];
+                }
                 foreach ($row as $item) $newrow[] = $item;
                 $temp[] = $newrow;
                 unset($newrow);
