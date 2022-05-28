@@ -1,0 +1,380 @@
+{
+    "data": {
+        "objects": [
+            {
+                "objectid": 2,
+                "name": "properties",
+                "config_kv": [],
+                "datastore": "relational",
+                "sources": {
+                    "dynamic_properties": [
+                        "xar_dynamic_properties",
+                        "internal"
+                    ]
+                },
+                "properties": [
+                    {
+                        "id": 18,
+                        "name": "id",
+                        "type": 21,
+                        "source": "dynamic_properties.id",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 19,
+                        "name": "name",
+                        "type": 2,
+                        "source": "dynamic_properties.name",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 20,
+                        "name": "label",
+                        "type": 2,
+                        "source": "dynamic_properties.label",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 21,
+                        "name": "objectid",
+                        "type": 24,
+                        "source": "dynamic_properties.object_id",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 22,
+                        "name": "type",
+                        "type": 22,
+                        "source": "dynamic_properties.type",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 23,
+                        "name": "defaultvalue",
+                        "type": 3,
+                        "source": "dynamic_properties.defaultvalue",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 24,
+                        "name": "source",
+                        "type": 23,
+                        "source": "dynamic_properties.source",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 25,
+                        "name": "status",
+                        "type": 25,
+                        "source": "dynamic_properties.status",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 26,
+                        "name": "translatable",
+                        "type": 25,
+                        "source": "dynamic_properties.translatable",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 27,
+                        "name": "seq",
+                        "type": 15,
+                        "source": "dynamic_properties.seq",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 28,
+                        "name": "configuration",
+                        "type": 998,
+                        "source": "dynamic_properties.configuration",
+                        "configuration_kv": []
+                    }
+                ]
+            },
+            {
+                "objectid": 4,
+                "name": "sample",
+                "config_kv": [],
+                "datastore": "dynamicdata",
+                "sources": [],
+                "properties": [
+                    {
+                        "id": 36,
+                        "name": "id",
+                        "type": 21,
+                        "source": "dynamicdata",
+                        "configuration_kv": [
+                            {
+                                "key": "display_size",
+                                "value": 10
+                            },
+                            {
+                                "key": "display_maxlength",
+                                "value": 30
+                            },
+                            {
+                                "key": "display_layout",
+                                "value": "default"
+                            },
+                            {
+                                "key": "display_tooltip",
+                                "value": "A unique identifier for each person"
+                            }
+                        ]
+                    },
+                    {
+                        "id": 37,
+                        "name": "name",
+                        "type": 2,
+                        "source": "dynamicdata",
+                        "configuration_kv": [
+                            {
+                                "key": "display_size",
+                                "value": 50
+                            },
+                            {
+                                "key": "display_maxlength",
+                                "value": 254
+                            },
+                            {
+                                "key": "display_layout",
+                                "value": "default"
+                            },
+                            {
+                                "key": "display_tooltip",
+                                "value": "The person's name"
+                            },
+                            {
+                                "key": "validation_min_length",
+                                "value": 1
+                            },
+                            {
+                                "key": "validation_max_length",
+                                "value": 30
+                            }
+                        ]
+                    },
+                    {
+                        "id": 38,
+                        "name": "age",
+                        "type": 15,
+                        "source": "dynamicdata",
+                        "configuration_kv": [
+                            {
+                                "key": "display_size",
+                                "value": 10
+                            },
+                            {
+                                "key": "display_maxlength",
+                                "value": 30
+                            },
+                            {
+                                "key": "display_layout",
+                                "value": "default"
+                            },
+                            {
+                                "key": "display_tooltip",
+                                "value": "The person's age"
+                            },
+                            {
+                                "key": "validation_min_value",
+                                "value": 0
+                            },
+                            {
+                                "key": "validation_max_value",
+                                "value": 125
+                            }
+                        ]
+                    },
+                    {
+                        "id": 39,
+                        "name": "location",
+                        "type": 12,
+                        "source": "dynamicdata",
+                        "configuration_kv": [
+                            {
+                                "key": "display_size",
+                                "value": 50
+                            },
+                            {
+                                "key": "display_maxlength",
+                                "value": 254
+                            },
+                            {
+                                "key": "display_layout",
+                                "value": "default"
+                            },
+                            {
+                                "key": "display_tooltip",
+                                "value": "The person's favorite place"
+                            },
+                            {
+                                "key": "validation_file_extensions",
+                                "value": "gif,jpg,jpeg,png,bmp"
+                            },
+                            {
+                                "key": "initialization_image_source",
+                                "value": "url"
+                            },
+                            {
+                                "key": "initialization_basedirectory",
+                                "value": "var/uploads"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "objectid": 9,
+                "name": "roles_groups",
+                "config_kv": [
+                    {
+                        "key": "where",
+                        "value": [
+                            "itemtype eq 2"
+                        ]
+                    }
+                ],
+                "datastore": "relational",
+                "sources": {
+                    "roles": [
+                        "xar_roles",
+                        "internal"
+                    ]
+                },
+                "properties": [
+                    {
+                        "id": 76,
+                        "name": "id",
+                        "type": 21,
+                        "source": "roles.id",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 77,
+                        "name": "name",
+                        "type": 2,
+                        "source": "roles.name",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 78,
+                        "name": "role_type",
+                        "type": 20,
+                        "source": "roles.itemtype",
+                        "configuration_kv": [
+                            {
+                                "key": "display_combo_mode",
+                                "value": 1
+                            },
+                            {
+                                "key": "display_layout",
+                                "value": "default"
+                            },
+                            {
+                                "key": "validation_override",
+                                "value": 1
+                            },
+                            {
+                                "key": "initialization_module",
+                                "value": 27
+                            },
+                            {
+                                "key": "initialization_itemtype",
+                                "value": 0
+                            }
+                        ]
+                    },
+                    {
+                        "id": 79,
+                        "name": "users",
+                        "type": 15,
+                        "source": "roles.users",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 80,
+                        "name": "uname",
+                        "type": 2,
+                        "source": "roles.uname",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 81,
+                        "name": "regdate",
+                        "type": 8,
+                        "source": "roles.date_reg",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 82,
+                        "name": "valcode",
+                        "type": 2,
+                        "source": "roles.valcode",
+                        "configuration_kv": []
+                    },
+                    {
+                        "id": 83,
+                        "name": "state",
+                        "type": 6,
+                        "source": "roles.state",
+                        "configuration_kv": [
+                            {
+                                "key": "display_rows",
+                                "value": 0
+                            },
+                            {
+                                "key": "display_layout",
+                                "value": "default"
+                            },
+                            {
+                                "key": "display_tooltip",
+                                "value": ""
+                            },
+                            {
+                                "key": "validation_notequals",
+                                "value": ""
+                            },
+                            {
+                                "key": "validation_equals",
+                                "value": ""
+                            },
+                            {
+                                "key": "initialization_firstline",
+                                "value": ""
+                            },
+                            {
+                                "key": "initialization_function",
+                                "value": "xarMod::apiFunc('roles','user','getstates')"
+                            },
+                            {
+                                "key": "initialization_file",
+                                "value": ""
+                            },
+                            {
+                                "key": "initialization_collection",
+                                "value": ""
+                            },
+                            {
+                                "key": "initialization_options",
+                                "value": ""
+                            },
+                            {
+                                "key": "initialization_other_rule",
+                                "value": ""
+                            }
+                        ]
+                    },
+                    {
+                        "id": 84,
+                        "name": "authmodule",
+                        "type": 15,
+                        "source": "roles.auth_module_id",
+                        "configuration_kv": []
+                    }
+                ]
+            }
+        ]
+    }
+}

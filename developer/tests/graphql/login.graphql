@@ -1,0 +1,7 @@
+mutation login($uname: String, $pass: String) {
+  getToken(uname: $uname, pass: $pass) {
+    access_token
+    expiration
+  }
+}
+

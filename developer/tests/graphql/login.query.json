@@ -1,0 +1,8 @@
+{
+    "query": "mutation login($uname: String, $pass: String) {\n  getToken(uname: $uname, pass: $pass) {\n    access_token\n    expiration\n  }\n}\n\n",
+    "variables": {
+        "uname": "admin",
+        "pass": "password"
+    },
+    "operationName": "login"
+}

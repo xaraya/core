@@ -69,18 +69,31 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'datastore' => Type::string(),
             // this is not returned via getFieldValues()
             'config' => xarGraphQL::get_type("serial"),
-            'config_l' => [
-                'type' => Type::listOf(Type::string()),
+            'config_kv' => [
+                'type' => xarGraphQL::get_type_list("keyval"),
                 'resolve' => function ($object, $args) {
                     // Note: this may not be filled in by object(s) resolve above
-                    //print_r("config resolve");
                     if (empty($object['config'])) {
                         return null;
                     }
-                    //print_r($object['config']);
-                    return @unserialize($object['config']);
+                    $values = @unserialize($object['config']);
+                    if (empty($values)) {
+                        return [];
+                    }
+                    if (!is_array($values)) {
+                        $values = ['' => $values];
+                    }
+                    $config = [];
+                    foreach ($values as $key => $value) {
+                        //if (is_array($value)) {
+                        //    $value = json_encode($value);
+                        //}
+                        $config[] = ['key' => $key, 'value' => $value];
+                    }
+                    return $config;
                 },
             ],
+            'sources' => xarGraphQL::get_type("serial"),
             'maxid' => Type::int(),
             'isalias' => Type::boolean(),
             'category' => Type::string(),
@@ -108,13 +121,16 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
         //return $clazz::list_query_resolver($type, $object);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object list query"]);
+                xarGraphQL::$paths[] = array_merge($info->path, ["object list query", $args]);
             }
             $fields = $info->getFieldSelection(1);
             if (array_key_exists($type, xarGraphQL::$type_fields)) {
                 $fieldlist = xarGraphQL::$type_fields[$type];
             } else {
                 $fieldlist = array_keys($fields);
+            }
+            if (in_array('config_kv', $fieldlist) && !in_array('config', $fieldlist)) {
+                $fieldlist[] = 'config';
             }
             // @checkme original query field definition config
             //$config = $info->fieldDefinition->config;
@@ -165,7 +181,10 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                 }
                  */
                 foreach ($items as $key => $item) {
-                    $items[$key]['properties'] = $properties;
+                    //$items[$key]['properties'] = $properties;
+                    // @todo optimize retrieving properties for several objects, see above
+                    $params = ['objectid' => $key];
+                    $items[$key]['properties'] = DataPropertyMaster::getProperties($params);
                 }
             }
             //if (in_array('config', $fields)) {
@@ -230,7 +249,9 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             $values['_objectref'] = &$objectref;
             //$values['fieldlist'] = $objectref->fieldlist;
             if (array_key_exists('properties', $fields)) {
-                $properties = $objectref->getProperties();
+                //$properties = $objectref->getProperties();
+                $params = ['objectid' => $itemid];
+                $properties = DataPropertyMaster::getProperties($params);
                 /**
                 if (is_array($fields['properties']) && in_array('keys', $fields['properties'])) {
                     foreach ($properties as $property) {
@@ -250,10 +271,10 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                 }
             }
             // this is not returned via getFieldValues()
-            if (in_array('config', $fields)) {
-                if (!empty($objectref->config)) {
+            if (in_array('config', $fields) || in_array('config_kv', $fields)) {
+                if (!empty($objectref->properties['config'])) {
                     //$values['config'] = @unserialize($objectref->config);
-                    $values['config'] = $objectref->config;
+                    $values['config'] = $objectref->properties['config']->value;
                 } else {
                     $values['config'] = null;
                 }

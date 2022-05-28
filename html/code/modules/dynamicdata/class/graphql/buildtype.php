@@ -188,6 +188,7 @@ class xarGraphQLBuildType
             'checkbox' => Type::boolean(),
             'dropdown' => Type::string(),  // @todo use EnumType here?
         ];
+        $basetypes['time'] = $basetypes['integer'];
         if (empty(self::$known_proptype_ids)) {
             self::$known_proptype_ids = [
                 self::get_property_id('username') => 'user',

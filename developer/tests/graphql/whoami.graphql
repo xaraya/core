@@ -1,0 +1,6 @@
+query {
+  whoami {
+    id
+    name
+  }
+}

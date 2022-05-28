@@ -109,45 +109,81 @@ class RestAPITest extends TestCase
     }
 
     /**
-     * Test case for viewSample
+     * Data provider for testRequestFiles
      */
-    public function testViewSample()
+    public function provideRequestFiles()
     {
-        // TODO: implement
-        //$this->markTestIncomplete('Not implemented');
-        $operation = $this->viewSampleOperation();
+        return [
+            // "Get schema" => [],
+            // "Check login" => ["access_token", "login.request.json", "login.result.json"],
+            // "Test whoami" => ["show_whoami"],
+            "Test samples with filter" => ["view_sample"],
+            "Test display sample" => ["display_sample"],
+        ];
+    }
 
-        $request = $this->viewSampleRequest($operation);
-        $expected = $this->viewSampleResult($operation);
+    /**
+     * Test case for request files
+     * @dataProvider provideRequestFiles
+     */
+    public function testRequestFiles($operationId = "", $requestFile = "", $resultFile = "", $authToken = false)
+    {
+        $operation = self::$operations[$operationId];
+        $request = $this->getOperationRequest($operation, $requestFile);
+        $expected = $this->getOperationResult($operation, $resultFile);
         $result = true;
+
+        // @todo evaluate openapi.json for parameters, body and security
+        if (empty($request['options'])) {
+            //$request['options'] = ['headers' => $headers, 'query' => $params, 'body' => $httpBody];
+            $request['options'] = [];
+        }
+        if (empty($request['options']['headers'])) {
+            $headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json'];
+            $request['options']['headers'] = $headers;
+        }
+        if (empty($request['options']['query'])) {
+            //$params = ['limit' => 100, 'offset' => 0, 'order' => 'age', 'filter' => ['age,gt,1']];
+            $params = null;
+            $request['options']['query'] = $params;
+        }
+        if (empty($request['options']['body'])) {
+            //$httpBody = json_encode($body);
+            $httpBody = null;
+            $request['options']['body'] = $httpBody;
+        }
 
         try {
             $response = $this->client->request($request['method'], self::$endpoint . $request['uri'], $request['options']);
             $content = (string) $response->getBody();
             $result = json_decode($content, true);
-            print_r($result);
+            //print_r($result);
+            if (!empty($operationId) && empty($resultFile)) {
+                $resultFile = $operation['operationId'] . '.result.json';
+            }
+            if (!empty($resultFile) && !file_exists($resultFile)) {
+                file_put_contents($resultFile, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK));
+            }
         } catch (\Exception $e) {
-            echo 'Exception when calling RestAPITest->testViewSample: ', $e->getMessage(), PHP_EOL;
+            echo 'Exception when calling RestAPITest->testRequestFiles: ', $e->getMessage(), PHP_EOL;
         }
         $this->assertEquals($expected, $result);
     }
 
-    public function viewSampleOperation()
+    public function getOperationRequest($operation, $requestFile = "")
     {
-        $operationId = 'view_sample';
-        return self::$operations[$operationId];
-    }
-
-    public function viewSampleRequest($operation)
-    {
-        $requestFile = $operation['operationId'] . '.request.json';
+        if (empty($requestFile)) {
+            $requestFile = $operation['operationId'] . '.request.json';
+        }
         if (file_exists($requestFile)) {
             $contents = file_get_contents($requestFile);
             $request = json_decode($contents, true);
             return $request;
         }
 
-        $params = ['limit' => 100, 'offset' => 0, 'order' => 'age', 'filter' => ['age,gt,1']];
+        // @todo evaluate openapi.json for parameters, body and security
+        //$params = ['limit' => 100, 'offset' => 0, 'order' => 'age', 'filter' => ['age,gt,1']];
+        $params = null;
         //$httpBody = json_encode($body);
         $httpBody = null;
         $headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json'];
@@ -161,33 +197,18 @@ class RestAPITest extends TestCase
         return $request;
     }
 
-    public function viewSampleResult($operation)
+    public function getOperationResult($operation, $resultFile = "")
     {
-        $resultFile = $operation['operationId'] . '.result.json';
+        if (empty($resultFile)) {
+            $resultFile = $operation['operationId'] . '.result.json';
+        }
         if (file_exists($resultFile)) {
             $contents = file_get_contents($resultFile);
             $result = json_decode($contents, true);
             return $result;
         }
-        $samples = [];
-        $samples[] = ['id' => 2, 'name' => 'Nancy', 'age' => 29];
-        $samples[] = ['id' => 1, 'name' => 'Johnny', 'age' => 32];
-        //$samples[] = ['id' => 3, 'name' => 'Baby', 'age' => 1];
-        $items = [];
-        foreach ($samples as $sample) {
-            $sample['_links'] = ['self' => ['href' => self::$endpoint . $operation['path'] . '/' . $sample['id']]];
-            unset($sample['id']);
-            $items[] = $sample;
-        }
-        $result = [
-            'items' => $items,
-            'count' => count($items),
-            'limit' => 100,
-            'offset' => 0,
-            'order' => 'age',
-            'filter' => ['age,gt,1'],
-        ];
-        file_put_contents($resultFile, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK));
+        // @todo evaluate openapi.json for response
+        $result = [];
         return $result;
     }
 }

@@ -998,6 +998,8 @@ class DataObjectRESTBuilder extends xarObject
                 break;
             case 'textbox':
             case 'textarea':
+            case 'textarea_medium':
+            case 'textarea_large':
             case 'objectref':
             case 'propertyref':
             case 'object':
@@ -1007,6 +1009,7 @@ class DataObjectRESTBuilder extends xarObject
             case 'datasource':
             case 'fieldstatus':
             case 'dropdown':
+            case 'crontab':
             //case 'string':
                 $datatype = ['type' => 'string'];
                 break;
@@ -1021,6 +1024,7 @@ class DataObjectRESTBuilder extends xarObject
             case 'deferlist':
                 $datatype = ['type' => 'array', 'items' => ['type' => 'object']];
                 break;
+            case 'datetime':
             case 'calendar':
                 $datatype = ['type' => 'string', 'format' => 'date-time'];
                 break;
