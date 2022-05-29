@@ -43,6 +43,7 @@ class DataPropertyMaster extends xarObject
      */
     static function getProperties(Array $args=array())
     {
+        xarLog::message(xarML("DataPropertyMaster::getProperties: Getting all properties"), xarLog::LEVEL_DEBUG);
         // we can't use our own classes here, because we'd have an endless loop :-)
 
         $dbconn = xarDB::getConn();
@@ -126,7 +127,7 @@ class DataPropertyMaster extends xarObject
         if(!isset($objectref) || empty($args['name']) || empty($args['type']))
             return;
 
-        xarLog::message("DataPropertyMaster::addProperty: Adding a new property " . $args['name'], xarLog::LEVEL_DEBUG);
+        xarLog::message(xarML("DataPropertyMaster::addProperty: Adding a new property #(1)", $args['name']), xarLog::LEVEL_DEBUG);
         
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.

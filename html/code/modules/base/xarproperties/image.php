@@ -27,7 +27,7 @@ class ImageProperty extends TextBoxProperty
     public $imagealt   = 'Image';
 
     public $initialization_image_source  = 'url';
-    public $initialization_basedirectory = 'var/uploads';
+    public $initialization_basedirectory;
     public $validation_file_extensions   = 'gif,jpg,jpeg,png,bmp';
     public $validation_file_extensions_invalid;    // TODO: not yet implemented
 
@@ -43,6 +43,7 @@ class ImageProperty extends TextBoxProperty
         $this->initialization_basedirectory = $this->getThemeDir();
         // FIXME: baseurl is no longer initialized - could be different from basedir !
 
+    	$this->initialization_basedirectory = sys::varpath() . '/uploads';
         if ($this->initialization_image_source == 'upload') $this->upload = true;
     }
 
@@ -99,7 +100,7 @@ class ImageProperty extends TextBoxProperty
     }
 
 	/**
-	 * Display a field for input
+	 * Display the property for input
 	 * 
 	 * @param  array data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
@@ -117,7 +118,7 @@ class ImageProperty extends TextBoxProperty
     }
 
 	/**
-	 * Display a field for output
+	 * Display the property for output
 	 * 
 	 * @param  array data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
