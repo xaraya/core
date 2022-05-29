@@ -43,7 +43,7 @@ class DataPropertyMaster extends xarObject
      */
     static function getProperties(Array $args=array())
     {
-        xarLog::message(xarML("DataPropertyMaster::getProperties: Getting all properties"), xarLog::LEVEL_DEBUG);
+        xarLog::message(xarMLS::translate("DataPropertyMaster::getProperties: Getting all properties"), xarLog::LEVEL_DEBUG);
         // we can't use our own classes here, because we'd have an endless loop :-)
 
         $dbconn = xarDB::getConn();
@@ -127,7 +127,7 @@ class DataPropertyMaster extends xarObject
         if(!isset($objectref) || empty($args['name']) || empty($args['type']))
             return;
 
-        xarLog::message(xarML("DataPropertyMaster::addProperty: Adding a new property #(1)", $args['name']), xarLog::LEVEL_DEBUG);
+        xarLog::message(xarMLS::translate("DataPropertyMaster::addProperty: Adding a new property #(1)", $args['name']), xarLog::LEVEL_DEBUG);
         
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.
@@ -168,7 +168,7 @@ class DataPropertyMaster extends xarObject
     static function &getProperty(Array $args=array())
     {
         if(!isset($args['name']) && !isset($args['type'])) {
-            throw new BadParameterException(null,xarML('The getProperty method needs either a name or type parameter.'));
+            throw new BadParameterException(null,xarMLS::translate('The getProperty method needs either a name or type parameter.'));
         }
 
         if(isset($args['name']) || !is_numeric($args['type']))
