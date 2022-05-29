@@ -166,7 +166,7 @@ class ArrayProperty extends DataProperty
             $temp = array();
             foreach($keycol as $keyvalue) $temp[$keyvalue] = 1;
             
-            if (count($temp) != $initial_count) {
+            if (count($temp) != $initial_count && $initial_count > 0 && !empty($value[0][0])) {
                 if (!empty($this->validation_associative_array_invalid)) {
                     $this->invalid = xarML($this->validation_associative_array_invalid);
                 } else {
@@ -263,8 +263,15 @@ class ArrayProperty extends DataProperty
         */
         } else {
             $temp = array();
+            if (empty($value)) $value = array();
+            if (!is_array($value)) {
+                $value = [$value];
+            }
             foreach($value as $key => $row) {
                 $newrow[] = $key;
+                if (!is_array($row)) {
+                    $row = [$row];
+                }
                 foreach ($row as $item) $newrow[] = $item;
                 $temp[] = $newrow;
                 unset($newrow);

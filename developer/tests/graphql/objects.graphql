@@ -1,0 +1,29 @@
+query getObjects {
+  objects(filter: "objectid,in,2,4,9") {
+    ...objectFields
+  }
+}
+fragment objectFields on Object {
+  objectid
+  name
+  config_kv {
+    key
+    value
+  }
+  datastore
+  sources
+  properties {
+    ...propertyFields
+  }
+}
+fragment propertyFields on Property {
+  id
+  name
+  type
+  source
+  configuration_kv {
+    key
+    value
+  }
+}
+

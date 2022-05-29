@@ -55,7 +55,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             // @checkme name is not returned by getProperties() because it's DISPLAYONLY?
             'name' => Type::string(),
             'label' => Type::string(),
-            'objectid' => Type::string(),
+            '_objectid' => Type::string(),
             //'objectid' => xarGraphQL::get_type('object'),
             //'object_id' => $clazz::get_deferred_field('object_id', 'object'),
             'type' => Type::string(),
@@ -110,7 +110,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                 },
             ],
             //'objectref' => xarGraphQL::get_type("object"),
-            'args' => Type::listOf(Type::string()),
+            //'args' => Type::listOf(Type::string()),
         ];
         return $fields;
     }

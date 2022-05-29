@@ -1,0 +1,17 @@
+query getChildren {
+  deferchildren_page(limit: 100) {
+    deferchildren {
+      id
+      name
+      parentitem {
+        name
+      }
+      siblinglist {
+        name
+        parentitem {
+          name
+        }
+      }
+    }
+  }
+}

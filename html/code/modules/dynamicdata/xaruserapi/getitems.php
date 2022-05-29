@@ -96,13 +96,13 @@ function &dynamicdata_userapi_getitems(Array $args=array())
     }
 
     if (empty($sort)) {
-        $sort = null;
+        $sort = array();
     }
     if (empty($where)) {
-        $where = null;
+        $where = '';
     }
     if (empty($groupby)) {
-        $groupby = null;
+        $groupby = array();
     }
 
     // join a module table to a dynamic object

@@ -330,33 +330,36 @@ class DataObjectLoader
                 continue;
             }
             $clause = '';
-            if (is_numeric($value)) {
-                $clause = $mapop[$op] . " " . $value;
-            } elseif (is_string($value)) {
-                if ($op !== 'in') {
-                    $value = str_replace("'", "\\'", $value);
-                    $clause = $mapop[$op] . " '" . $value . "'";
-                } else {
-                    // keep only the third variable with the rest of the string, e.g. itemid,in,3,7,11
-                    list(, , $value) = explode(',', $where, 3);
-                    $value = str_replace("'", "\\'", $value);
-                    $value = explode(',', $value);
-                    if (count($value) > 0) {
-                        if (is_numeric($value[0])) {
-                            $clause = $mapop[$op] . " (" . implode(", ", $value) . ")";
-                        } elseif (is_string($value[0])) {
-                            $clause = $mapop[$op] . " ('" . implode("', '", $value) . "')";
-                        }
+            if ($op === 'in') {
+                // keep only the third variable with the rest of the string, e.g. itemid,in,3,7,11
+                list(, , $value) = explode(',', $where, 3);
+                $value = str_replace("'", "\\'", $value);
+                $value = explode(',', $value);
+                if (count($value) > 0) {
+                    if (is_numeric($value[0])) {
+                        $clause = $mapop[$op] . " (" . implode(", ", $value) . ")";
+                    } elseif (is_string($value[0])) {
+                        $clause = $mapop[$op] . " ('" . implode("', '", $value) . "')";
                     }
                 }
+            } elseif (is_numeric($value)) {
+                $clause = $mapop[$op] . " " . $value;
+            } elseif (is_string($value)) {
+                $value = str_replace("'", "\\'", $value);
+                $clause = $mapop[$op] . " '" . $value . "'";
             }
             if (!empty($clause)) {
                 $objectlist->addWhere($field, $clause, $join);
+                // @checkme setWhere() in objects/master.php expects 'field in val1,val2' not 'field in (val1, val2)'
+                if ($op === 'in') {
+                    $clause = str_replace([", ", "(", ")"], [","], $clause);
+                }
                 $wherestring .= $join . ' ' . $field . ' ' . trim($clause);
                 $join = 'AND';
             }
         }
         if (!empty($wherestring) && is_object($objectlist->datastore) && get_class($objectlist->datastore) !== 'VariableTableDataStore') {
+            // @todo support string values in setWhere() 'field in val1,val2'
             $conditions = $objectlist->setWhere($wherestring);
             $objectlist->dataquery->addconditions($conditions);
         }

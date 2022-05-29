@@ -52,6 +52,11 @@ class GraphQLTest extends TestCase
     protected static $endpoint;
 
     /**
+     * @var string
+     */
+    protected static $token;
+
+    /**
      * Setup before running any test cases
      */
     public static function setUpBeforeClass(): void
@@ -90,100 +95,117 @@ class GraphQLTest extends TestCase
     }
 
     /**
-     * Test case for samples
+     * Get API auth token
      */
-    public function testSamplesQuery()
+    public function getAuthToken()
+    {
+        if (!empty(self::$token)) {
+            return self::$token;
+        }
+        $tokenFile = 'login.result.json';
+        if (!file_exists($tokenFile)) {
+            $this->testQueryFiles("login.graphql", "login.query.json", "login.result.json");
+        }
+        $contents = file_get_contents($tokenFile);
+        $result = json_decode($contents, true);
+        if (empty($result) || empty($result['data']) || empty($result['data']['getToken']) || $result['data']['getToken']['expiration'] < date('c')) {
+            unlink($tokenFile);
+            $this->testQueryFiles("login.graphql", "login.query.json", "login.result.json");
+            $contents = file_get_contents($tokenFile);
+            $result = json_decode($contents, true);
+        }
+        self::$token = $result['data']['getToken']['access_token'];
+        return self::$token;
+    }
+
+    /**
+     * Data provider for testQueryFiles
+     */
+    public function provideQueryFiles()
+    {
+        return [
+            "Get schema" => [],
+            // "Check login" => ["login.graphql", "login.query.json", "login.result.json"],
+            "Test whoami" => ["whoami.graphql", "", "whoami.result.json", true],
+            "Test samples with filter" => ["samples.graphql", "samples.query.json", "samples.result.json"],
+            "Test objects" => ["objects.graphql", "", "objects.result.json", true],
+        ];
+    }
+
+    /**
+     * Test case for query files
+     * @dataProvider provideQueryFiles
+     */
+    public function testQueryFiles($queryFile = "", $bodyFile = "", $resultFile = "", $authToken = false)
     {
         // TODO: implement
         //$this->markTestIncomplete('Not implemented');
-        $query = $this->getSamplesQuery();
-        $body = $this->getSamplesBody($query);
-
-        $httpBody = json_encode($body);
-        $headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json'];
-
-        $expected = $this->getSamplesResult();
-        $result = true;
-
-        try {
-            $response = $this->client->request('POST', self::$endpoint, ['headers' => $headers, 'body' => $httpBody]);
-            $content = (string) $response->getBody();
-            $result = json_decode($content, true);
-            print_r($result);
-            if (is_array($result) and !empty($result['extensions'])) {
-                unset($result['extensions']);
-            }
-        } catch (\Exception $e) {
-            echo 'Exception when calling GraphQLTest->testSamplesQuery: ', $e->getMessage(), PHP_EOL;
-        }
-        $this->assertEquals($expected, $result);
-    }
-
-    public function getSamplesQuery()
-    {
-        $queryFile = 'samples.query.graphql';
-        if (file_exists($queryFile)) {
+        if (!empty($queryFile) && file_exists($queryFile)) {
             $query = file_get_contents($queryFile);
-            return $query;
+        } else {
+            $query = "{schema}";
         }
-        $query = 'query listSamples {
-  samples {
-    id
-    name
-    age
-  }
-}
-query filterSamples($filter: [String]) {
-  samples(filter: $filter) {
-    id
-    name
-    age
-  }
-}';
-        file_put_contents($queryFile, $query);
-        return $query;
-    }
 
-    public function getSamplesBody($query, $variables = null, $operation = null)
-    {
-        $bodyFile = 'samples.query.json';
-        if (file_exists($bodyFile)) {
+        if (!empty($bodyFile) && file_exists($bodyFile)) {
             $contents = file_get_contents($bodyFile);
             $body = json_decode($contents, true);
             if ($body['query'] !== $query) {
                 $body['query'] = $query;
                 file_put_contents($bodyFile, json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
             }
-            return $body;
+        } else {
+            $variables = $variables ?? null;
+            $operation = $operation ?? null;
+            $body = [
+                'query' => $query,
+                'variables' => $variables,
+                'operationName' => $operation,
+            ];
         }
-        $variables = $variables ?? ['filter' => ['age,gt,1'], 'order' => 'age'];
-        $operation = $operation ?? 'filterSamples';
 
-        $body = [
-            'query' => $query,
-            'variables' => $variables,
-            'operationName' => $operation,
-        ];
-        file_put_contents($bodyFile, json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        return $body;
-    }
+        $httpBody = json_encode($body);
+        $headers = ['Content-Type' => 'application/json', 'Accept' => 'application/json'];
+        if (!empty($authToken)) {
+            $headers['X-Auth-Token'] = $this->getAuthToken();
+        }
 
-    public function getSamplesResult()
-    {
-        $resultFile = 'samples.result.json';
-        if (file_exists($resultFile)) {
+        if (!empty($resultFile) && file_exists($resultFile)) {
             $contents = file_get_contents($resultFile);
-            $result = json_decode($contents, true);
-            return $result;
+            $expected = json_decode($contents, true);
+        } elseif ($query === "{schema}") {
+            $schemaFile = '../../../html/var/cache/api/schema.graphql';
+            $contents = file_get_contents($schemaFile);
+            $expected = implode("\n", array_slice(explode("\n", $contents), 1, -1));
+        } else {
+            $expected = [
+                'data' => [],
+            ];
         }
-        $samples = [];
-        $samples[] = ['id' => '2', 'name' => 'Nancy', 'age' => 29];
-        $samples[] = ['id' => '1', 'name' => 'Johnny', 'age' => 32];
-        //$samples[] = ['id' => 3, 'name' => 'Baby', 'age' => 1];
-        $result = [
-            'data' => ['samples' => $samples],
-        ];
-        file_put_contents($resultFile, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK));
-        return $result;
+
+        $result = true;
+
+        try {
+            $response = $this->client->request('POST', self::$endpoint, ['headers' => $headers, 'body' => $httpBody]);
+            $content = (string) $response->getBody();
+            if ($query !== "{schema}") {
+                $result = json_decode($content, true);
+                // print_r($result);
+                if (is_array($result) and !empty($result['extensions'])) {
+                    unset($result['extensions']);
+                }
+                if (empty($resultFile) && !empty($queryFile)) {
+                    $resultFile = str_replace(".graphql", ".result.json", $queryFile);
+                }
+                if (!empty($resultFile) && !file_exists($resultFile)) {
+                    file_put_contents($resultFile, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK));
+                }
+            } else {
+                $result = $content;
+            }
+        } catch (\Exception $e) {
+            echo 'Exception when calling GraphQLTest->testQueryFiles: ', $e->getMessage(), PHP_EOL;
+        }
+
+        $this->assertEquals($expected, $result);
     }
 }
