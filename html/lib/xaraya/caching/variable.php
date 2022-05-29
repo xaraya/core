@@ -47,6 +47,7 @@ class xarVariableCache extends xarObject
                                                 // can't serialize schema with closures
                                                 'GraphQLAPI.Schema' => 0,
                                                 'GraphQLAPI.QueryPlan' => 1,
+                                                'RestAPI.Operation' => 1,
                                                 'RestAPI.Objects' => 0,
                                                 'RestAPI.ObjectList' => array('sample' => 1)
                                                 );

@@ -156,7 +156,7 @@ function dynamicdata_admin_test_apis(array $args=[])
         return;
     }
     if (!empty($create_rst)) {
-        DataObjectRESTBuilder::create_openapi($restapilist, $storageType, $tokenExpires);
+        DataObjectRESTBuilder::create_openapi($restapilist, $storageType, $tokenExpires, $enableTimer, $enableCache);
         xarController::redirect(xarServer::getCurrentURL(['create_rst'=> null]));
         return true;
     }

@@ -59,8 +59,12 @@ function get_dispatcher()
 
 function dispatch_request($method, $path)
 {
+    // DataObjectRESTHandler::$enableTimer = true;
+    // DataObjectRESTHandler::setTimer('start');
     $dispatcher = get_dispatcher();
+    // DataObjectRESTHandler::setTimer('register');
     $routeInfo = $dispatcher->dispatch($method, $path);
+    // DataObjectRESTHandler::setTimer('dispatch');
     switch ($routeInfo[0]) {
         case FastRoute\Dispatcher::NOT_FOUND:
             // ... 404 Not Found
@@ -85,7 +89,8 @@ function dispatch_request($method, $path)
             if (!empty($rawInput)) {
                 $vars['input'] = json_decode($rawInput, true);
             }
-            $result = call_user_func($handler, $vars);
+            // DataObjectRESTHandler::setTimer('parse');
+            $result = DataObjectRESTHandler::getResult($handler, $vars);
             DataObjectRESTHandler::output($result);
             break;
     }

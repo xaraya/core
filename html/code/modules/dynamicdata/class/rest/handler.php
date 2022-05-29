@@ -10,12 +10,17 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.timertrait');
+sys::import('xaraya.caching.cachetrait');
 
 /**
  * Class to handle DataObject REST API calls
  */
 class DataObjectRESTHandler extends xarObject
 {
+    use xarTimerTrait;
+    use xarCacheTrait;
+
     public static $endpoint = 'rst.php/v1';
     public static $objects = [];
     public static $schemas = [];
@@ -337,6 +342,19 @@ class DataObjectRESTHandler extends xarObject
             if (!empty(self::$config['expires'])) {
                 self::$tokenExpires = intval(self::$config['expires']);
             }
+            // use xarTimerTrait
+            if (isset(self::$config['timer'])) {
+                self::$enableTimer = !empty(self::$config['timer']) ? true : false;
+            }
+            // use xarCacheTrait
+            if (isset(self::$config['cache'])) {
+                self::$enableCache = !empty(self::$config['cache']) ? true : false;
+            }
+            if (self::$enableCache) {
+                $cacheScope = 'RestAPI.Operation';
+                self::setCacheScope($cacheScope);
+            }
+            self::setTimer('config');
         }
     }
 
@@ -723,10 +741,48 @@ class DataObjectRESTHandler extends xarObject
     }
 
     /**
+     * Handle request and get result
+     */
+    public static function getResult($handler, $vars)
+    {
+        self::setTimer('handle');
+        $tryCachedResult = false;
+        if (is_array($handler) && $handler[0] === "DataObjectRESTHandler" && substr($handler[1], 0 , 3) === "get") {
+            self::loadConfig();
+            $tryCachedResult = true;
+        }
+        if ($tryCachedResult && self::$enableCache) {
+            $queryId = $handler[1] . '-' . md5(json_encode($vars));
+            $cacheKey = self::getCacheKey($queryId);
+            if (!empty($cacheKey) && self::isCached($cacheKey)) {
+                $result = self::getCached($cacheKey);
+                if (is_array($result)) {
+                    $result['x-cached'] = true;
+                }
+                self::setTimer('cached');
+                return $result;
+            }
+        }
+        $result = call_user_func($handler, $vars);
+        // if (is_array($result)) {
+        //     $result['x-debug'] = ['handler' => $handler, 'vars' => $vars];
+        // }
+        if ($tryCachedResult && self::$enableCache && self::hasCacheKey()) {
+            $cacheKey = self::getCacheKey();
+            self::setCached($cacheKey, $result);
+        }
+        self::setTimer('result');
+        return $result;
+    }
+
+    /**
      * Send Content-Type and JSON result to the browser
      */
     public static function output($result, $status = 200)
     {
+        if (is_array($result) && self::$enableTimer) {
+            $result['x-times'] = self::getTimers();
+        }
         //http_response_code($status);
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
