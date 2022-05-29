@@ -140,11 +140,16 @@ function dynamicdata_utilapi_import(Array $args=array())
 #
 # Now process the objects's properties
 #
-		// Get $proptypes = DataPropertyMaster::getPropertyTypes();
-		$name2id = array();
-		foreach ($proptypes as $propid => $proptype) {
-			$name2id[$proptype['name']] = $propid;
-		}
+        // @checkme if you need to import new property types as part of module install to create objects,
+        // please have a look at ./modules/class/eventobservers/modactivate.php and
+        // ./modules/class/installer.php - properties are only imported during activate now, not at install
+        // Don't use $proptypes = PropertyRegistration::importPropertyTypes(); here since this would be
+        // called again & again when creating every object in Xaraya for core, modules, tables, ...
+        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $name2id = array();
+        foreach ($proptypes as $propid => $proptype) {
+            $name2id[$proptype['name']] = $propid;
+        }
 
         $propertyproperties = array_keys($dataproperty->properties);
         $propertieshead = $xmlobject->properties;
