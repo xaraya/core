@@ -44,21 +44,16 @@ function dynamicdata_utilapi_import(Array $args=array())
     $objectcache = array();
     $objectmaxid = array();
 
-    $proptypes = DataPropertyMaster::getPropertyTypes();
-    $name2id = array();
-    foreach ($proptypes as $propid => $proptype) {
-        $name2id[$proptype['name']] = $propid;
-    }
-
     if (!empty($file)) {
         $xmlobject = simplexml_load_file($file);
-        xarLog::message('DD: import file ' . $file, xarLog::LEVEL_INFO);
+        xarLog::message(xarML('DD: Importing file #(1)', $file), xarLog::LEVEL_INFO);
         
     } elseif (!empty($xml)) {
         // remove garbage from the end
         $xml = preg_replace('/>[^<]+$/s','>', $xml);
         $xmlobject = new SimpleXMLElement($xml);
     }
+
     // No better way of doing this?
     $dom = dom_import_simplexml ($xmlobject);
     $roottag = $dom->tagName;
@@ -145,6 +140,12 @@ function dynamicdata_utilapi_import(Array $args=array())
 #
 # Now process the objects's properties
 #
+		// Get $proptypes = DataPropertyMaster::getPropertyTypes();
+		$name2id = array();
+		foreach ($proptypes as $propid => $proptype) {
+			$name2id[$proptype['name']] = $propid;
+		}
+
         $propertyproperties = array_keys($dataproperty->properties);
         $propertieshead = $xmlobject->properties;
         foreach($propertieshead->children() as $property) {

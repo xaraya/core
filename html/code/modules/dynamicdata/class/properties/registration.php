@@ -217,6 +217,8 @@ class PropertyRegistration extends DataContainer
      */
     static public function importPropertyTypes($flush = true, $dirs = array())
     {
+		xarLog::message(xarML('DynamicData: Flushing the property cache'), xarLog::LEVEL_NOTICE);
+		
         sys::import('xaraya.structures.relativedirectoryiterator');
 
         $dbconn = xarDB::getConn(); // Need this for the transaction
@@ -230,6 +232,8 @@ class PropertyRegistration extends DataContainer
 #
 # Get the list of properties directories in the active modules
 #
+			xarLog::message(xarML('DynamicData: Searching for property directories'), xarLog::LEVEL_NOTICE);
+			
             if (!empty($dirs) && is_array($dirs)) {
                 // We got an array of directories passed in for which to import properties
                 // typical usecase: a module which has its own property, during install phase needs that property before
@@ -245,10 +249,12 @@ class PropertyRegistration extends DataContainer
                     $dat_file = sys::code() . 'modules/dynamicdata/xardata/configurations-dat.xml';
                     $data = array('file' => $dat_file);
                     $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
-                }
-
+ 	              }
+                
+				xarLog::message(xarML('DynamicData: Looking for active modules'), xarLog::LEVEL_NOTICE);
                 $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => xarMod::STATE_ACTIVE)));
                 assert(!empty($activeMods)); // this should never happen
+				xarLog::message(xarML('DynamicData: There are #(1) active modules', count($activeMods)), xarLog::LEVEL_DEBUG);
 
                 foreach($activeMods as $modInfo) {
                     // FIXME: the modinfo directory does NOT end with a /
@@ -275,6 +281,8 @@ class PropertyRegistration extends DataContainer
                 // Clear the cache
                 self::ClearCache();
             }
+            
+			xarLog::message(xarML('DynamicData: Retrieved the list of directories to be searched'), xarLog::LEVEL_NOTICE);
 
 # --------------------------------------------------------
 #
@@ -307,6 +315,7 @@ class PropertyRegistration extends DataContainer
                     }
                 } // loop over the files in a directory
             } // loop over the directories
+			xarLog::message(xarML('DynamicData: Retrieved the list of properties in modules'), xarLog::LEVEL_NOTICE);
 
 # --------------------------------------------------------
 #
@@ -337,6 +346,7 @@ class PropertyRegistration extends DataContainer
                     $loaded[$file] = true;
                 }
             }
+			xarLog::message(xarML('DynamicData: Retrieved the list of standalone properties'), xarLog::LEVEL_NOTICE);
 
 # --------------------------------------------------------
 #
@@ -377,6 +387,8 @@ class PropertyRegistration extends DataContainer
             // Now sort the properties in the order they need to be installed
             $sortedClasses = self::topological_sort($classesToSort, $edges);
             
+			xarLog::message(xarML('DynamicData: Checked and sorted the property classes to register'), xarLog::LEVEL_NOTICE);
+
             // Process the sorted classes
             $i=0;
             foreach($sortedClasses as $index => $propertyClass) {
@@ -387,9 +399,12 @@ class PropertyRegistration extends DataContainer
                 if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
                 $descriptor = new ObjectDescriptor(array());
                 $baseInfo = new PropertyRegistration($descriptor);
+				
                 try {
                     $property = new $propertyClass($descriptor);
+					xarLog::message(xarML('DynamicData: Registering the property #(1)', $propertyClass), xarLog::LEVEL_DEBUG);
                 } catch (Exception $e) {
+					xarLog::message(xarML('DynamicData: The property #(1) could not be instantiated', $propertyClass), xarLog::LEVEL_DEBUG);
                     throw new Exception(xarML('The property #(1) could not be instantiated', $propertyClass));
                 }
                 if (empty($property->id)) continue;   // Don't register the base property
@@ -454,6 +469,8 @@ class PropertyRegistration extends DataContainer
         // Sort the property types
         ksort($proptypes);
         return $proptypes;
+
+		xarLog::message(xarML('DynamicData: Property cache successfully flushed'), xarLog::LEVEL_NOTICE);
     }
     
     static public function installproperty($propertyname) 
