@@ -44,6 +44,10 @@ class PassBoxProperty extends TextBoxProperty
 	 */
     function aliases()
     {
+        if (get_class($this) !== 'PassBoxProperty') {
+            return array();
+	}
+
         $a1['id']   = 461;
         $a1['name'] = 'password';
         $a1['desc'] = 'Password Text Box';
@@ -148,4 +152,3 @@ class PassBoxProperty extends TextBoxProperty
 
 
 }
-?>

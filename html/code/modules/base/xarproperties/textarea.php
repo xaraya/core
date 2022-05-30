@@ -46,6 +46,10 @@ class TextAreaProperty extends DataProperty
  */
     function aliases()
     {
+        if (get_class($this) !== 'TextAreaProperty') {
+            return array();
+	}
+
         $a1['id']   = 4;
         $a1['name'] = 'textarea_medium';
         $a1['desc'] = 'Medium Text Area';
@@ -76,5 +80,3 @@ class TextAreaProperty extends DataProperty
         return parent::showInput($data);
     }
 }
-
-?>
