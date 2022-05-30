@@ -220,7 +220,7 @@
     <name>initialization_image_source</name>
     <description>The source type where this field gets its input</description>
     <property_id>34</property_id>
-    <label>Image Source</label>
+    <label>File Source</label>
     <ignore_empty>1</ignore_empty>
     <configuration>a:2:{s:14:"display_layout";s:7:"default";s:22:"initialization_options";s:48:"local,local location;url,url;upload,file upload;";}</configuration>
   </configurations>
