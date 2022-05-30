@@ -476,18 +476,19 @@ class xarGraphQLBuildType
                     // @checkme add current arguments to cacheKey to cache results
                     if (!empty($args)) {
                         $cacheKey .= '-' . md5(json_encode($args));
+                    } else {
+                        $cacheKey .= '-result';
                     }
-                    $cacheKey .= '-result';
                     xarGraphQL::setCacheKey($cacheKey);
                 }
             }
         }
         if (xarGraphQL::$trace_path) {
             xarGraphQL::$paths[] = [
-                'queryid' => $queryId,
-                'querytype' => $queryType,
-                'queryplan' => $dumpPlan,
-                'rootvalue' => $rootValue,
+                'queryId' => $queryId,
+                'queryType' => $queryType,
+                'queryPlan' => $dumpPlan,
+                'rootValue' => $rootValue,
                 'args' => $args,
             ];
         }

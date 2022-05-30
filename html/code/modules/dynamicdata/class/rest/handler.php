@@ -747,7 +747,7 @@ class DataObjectRESTHandler extends xarObject
     {
         self::setTimer('handle');
         $tryCachedResult = false;
-        if (is_array($handler) && $handler[0] === "DataObjectRESTHandler" && substr($handler[1], 0 , 3) === "get") {
+        if (is_array($handler) && $handler[0] === "DataObjectRESTHandler" && substr($handler[1], 0, 3) === "get") {
             self::loadConfig();
             $tryCachedResult = true;
         }
@@ -757,7 +757,8 @@ class DataObjectRESTHandler extends xarObject
             if (!empty($cacheKey) && self::isCached($cacheKey)) {
                 $result = self::getCached($cacheKey);
                 if (is_array($result)) {
-                    $result['x-cached'] = true;
+                    $result['x-cached'] = self::keyCached($cacheKey);
+                    // $result['x-cached'] = true;
                 }
                 self::setTimer('cached');
                 return $result;

@@ -391,16 +391,18 @@ class xarGraphQL extends xarObject
         //$serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE | DebugFlag::INCLUDE_TRACE);
         $serializableResult = $result->toArray(DebugFlag::INCLUDE_DEBUG_MESSAGE);
         self::setTimer('array');
+        $extensions = [];
         if (self::$cache_data && self::hasCacheKey()) {
             $cacheKey = self::getCacheKey();
             if (self::isCached($cacheKey)) {
                 $serializableResult = self::getCached($cacheKey);
+                $extensions['cached'] = self::keyCached($cacheKey);
+                // $extensions['cached'] = true;
                 self::setTimer('cache');
             } else {
                 self::setCached($cacheKey, $serializableResult);
             }
         }
-        $extensions = [];
         if (self::$trace_path) {
             $extensions['paths'] = self::$paths;
         }
