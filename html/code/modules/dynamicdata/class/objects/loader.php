@@ -47,6 +47,7 @@ class DataObjectLoader
     public $filter = [];
     public $count = false;
     public $access = null;
+    // public $expand = null;
     public static $loaders = array();
 
     public static function getItemLoader(string $objectname = 'sample', array $fieldlist = ['id', 'name'])
@@ -177,6 +178,8 @@ class DataObjectLoader
         $params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist);
         //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         $objectlist = DataObjectMaster::getObjectList($params);
+        // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
+        $objectlist->setFieldList($this->fieldlist);
         $params = array('itemids' => $itemids);
         $result = $objectlist->getItems($params);
         // return array("$itemid" => assoc array of $fields)
@@ -214,6 +217,8 @@ class DataObjectLoader
             throw new Exception('No access to object ' . $this->objectname);
             return;
         }
+        // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
+        $objectlist->setFieldList($this->fieldlist);
         $this->applyObjectFilter($objectlist);
         $this->getCount($objectlist);
         return $objectlist;
@@ -288,6 +293,7 @@ class DataObjectLoader
     public function parseQueryArgs(array $args)
     {
         $allowed = array_flip(['order', 'offset', 'limit', 'filter', 'count', 'access']);
+        // $allowed = array_flip(['order', 'offset', 'limit', 'filter', 'count', 'access', 'expand']);
         $args = array_intersect_key($args, $allowed);
         if (!empty($args['order'])) {
             $this->setOrder($args['order']);
@@ -312,6 +318,9 @@ class DataObjectLoader
         if (!empty($args['access'])) {
             $this->access = $args['access'];
         }
+        // if (!empty($args['expand'])) {
+        //     $this->expand = $args['expand'];
+        // }
     }
 
     public function applyObjectFilter($objectlist)
@@ -377,7 +386,7 @@ class DataObjectLoader
     {
         if (!empty($this->order)) {
             $params['sort'] = array();
-            $sorted = explode(',', $this->order);
+            $sorted = array_filter(explode(',', $this->order));
             foreach ($sorted as $sortme) {
                 if (substr($sortme, 0, 1) === '-') {
                     $params['sort'][] = substr($sortme, 1) . ' DESC';
@@ -428,13 +437,13 @@ class DataObjectItemLoader extends DataObjectLoader
 {
     public function add($value)
     {
-        assert(is_int($values));
+        assert(is_int($value));
         $this->addItem($value);
     }
 
     public function get($value)
     {
-        assert(is_int($values));
+        assert(is_int($value));
         if (!empty($this->todo)) {
             $this->load();
         }
@@ -496,6 +505,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         $params = array('name' => $this->linkname, 'fieldlist' => $fieldlist);
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         $objectlist = DataObjectMaster::getObjectList($params);
+        // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         // @todo make this query work for relational datastores: select where caller_id in $values
         //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
         //$result = $objectlist->getItems($params);
@@ -522,6 +532,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         }
         $objectlist = DataObjectMaster::getObjectList($params);
+        // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         return $objectlist;
     }
 

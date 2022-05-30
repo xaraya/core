@@ -99,7 +99,7 @@ class DataObjectRESTHandler extends xarObject
         if (empty($args['limit']) || !is_numeric($args['limit'])) {
             $args['limit'] = 100;
         }
-        $fieldlist = self::getViewProperties($object);
+        $fieldlist = self::getViewProperties($object, $args);
         $loader = new DataObjectLoader($object, $fieldlist);
         $loader->parseQueryArgs($args);
         $objectlist = $loader->getObjectList();
@@ -162,7 +162,7 @@ class DataObjectRESTHandler extends xarObject
             $userId = self::checkUser();
             //$args['access'] = 'display';
         }
-        $fieldlist = self::getDisplayProperties($object);
+        $fieldlist = self::getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
         $objectitem = DataObjectMaster::getObject($params);
         if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
@@ -406,18 +406,20 @@ class DataObjectRESTHandler extends xarObject
         return $operation['properties'];
     }
 
-    public static function getViewProperties($object)
+    public static function getViewProperties($object, $args = null)
     {
         // schema (object) -> properties -> items (array) -> items (object) -> properties
         //return self::$schemas[$schema]['properties']['items']['items']['properties'];
-        return self::getProperties($object, 'view');
+        $properties = self::getProperties($object, 'view');
+        return self::expandProperties($object, $properties, $args);
     }
 
-    public static function getDisplayProperties($object)
+    public static function getDisplayProperties($object, $args = null)
     {
         // schema (object) -> properties
         //return self::$schemas[$schema]['properties'];
-        return self::getProperties($object, 'display');
+        $properties = self::getProperties($object, 'display');
+        return self::expandProperties($object, $properties, $args);
     }
 
     public static function getCreateProperties($object)
@@ -432,6 +434,27 @@ class DataObjectRESTHandler extends xarObject
         // schema (object) -> properties
         //return self::$schemas[$schema]['properties'];
         return self::getProperties($object, 'update');
+    }
+
+    public static function expandProperties($object, $fieldlist, $args = null)
+    {
+        if (empty($args) || empty($args['expand'])) {
+            return $fieldlist;
+        }
+        $expand = $args['expand'];
+        if (!is_array($expand)) {
+            // Clean up arrays by removing false values (= empty, false, null, 0)
+            $expand = array_filter(explode(',', $expand));
+        }
+        $allowed = array_keys(self::$config['objects'][$object]['properties']);
+        foreach ($expand as $key) {
+            // @todo support multi-level expand fields e.g. objects/api_people?expand=vehicles.manufacturer
+            $field = explode('.', $key)[0];
+            if (!in_array($field, $fieldlist) && in_array($field, $allowed)) {
+                $fieldlist[] = $field;
+            }
+        }
+        return $fieldlist;
     }
 
     /**

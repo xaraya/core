@@ -186,6 +186,22 @@ class DataObjectRESTBuilder extends xarObject
             'explode' => true,
             'description' => 'Filters to be applied. Each filter consists of a property, an operator and a value (comma separated)',
         ];
+        // style = form + explode = false
+        // Value: expand = array('sources', 'config')
+        // Query: expand=sources,config
+        self::$parameters['expand'] = [
+            'name' => 'expand',
+            'in' => 'query',
+            'schema' => [
+                'type' => 'array',
+                'items' => [
+                    'type' => 'string',
+                ],
+            ],
+            'style' => 'form',
+            'explode' => false,
+            'description' => 'Properties to expand in items (comma separated)',
+        ];
     }
 
     public static function add_responses()
@@ -340,6 +356,9 @@ class DataObjectRESTBuilder extends xarObject
                 'items' => [
                     'type' => 'string',
                 ],
+            ],
+            'expand' => [
+                'type' => 'string',
             ],
             'items' => [
                 'type' => 'array',
@@ -538,6 +557,7 @@ class DataObjectRESTBuilder extends xarObject
                     ['$ref' => '#/components/parameters/offset'],
                     ['$ref' => '#/components/parameters/order'],
                     ['$ref' => '#/components/parameters/filter'],
+                    ['$ref' => '#/components/parameters/expand'],
                 ],
                 'tags' => [$objectname],
                 'operationId' => $operationId,
@@ -559,7 +579,7 @@ class DataObjectRESTBuilder extends xarObject
                 'properties' => array_keys($properties),
                 'security' => $do_security,
                 'caching' => $do_cache,
-                'parameters' => ['object', 'limit', 'offset', 'order', 'filter'],
+                'parameters' => ['object', 'limit', 'offset', 'order', 'filter', 'expand'],
                 'timeout' => 7200,
             ];
         }
@@ -576,6 +596,7 @@ class DataObjectRESTBuilder extends xarObject
             $method => [
                 'parameters' => [
                     ['$ref' => '#/components/parameters/itemid'],
+                    ['$ref' => '#/components/parameters/expand'],
                 ],
                 'tags' => [$objectname],
                 'operationId' => $operationId,
@@ -595,7 +616,7 @@ class DataObjectRESTBuilder extends xarObject
             'properties' => array_keys($properties),
             'security' => $do_security,
             'caching' => $do_cache,
-            'parameters' => ['object', 'itemid'],
+            'parameters' => ['object', 'itemid', 'expand'],
             'timeout' => 7200,
         ];
     }
