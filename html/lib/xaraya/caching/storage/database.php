@@ -19,6 +19,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
     public $lastid = null;
     public $value = null;
     private $dbconn = null;
+    private $lastinfo = null;
 
     public function __construct(Array $args = array())
     {
@@ -75,6 +76,11 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         // TODO: process $size and $check if compressed ?
 
         $this->lastid = $id;
+        $this->lastinfo = array('key'   => $key,
+                                'code'  => $this->code,
+                                'time'  => $time,
+                                'size'  => $size,
+                                'check' => $check);
         if (!empty($expire) && $time < time() - $expire) {
             $this->value = null;
             if ($log) $this->logStatus('MISS', $key);
@@ -199,6 +205,21 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         $stmt = $this->dbconn->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
         $this->lastkey = null;
+    }
+
+    /**
+     * Get detailed information about the cache key (not supported by all storage)
+     */
+    public function keyInfo($key = '')
+    {
+        if ($key == $this->lastkey && !empty($this->lastinfo)) {
+            return $this->lastinfo;
+        }
+        return array('key'   => $key,
+                     'code'  => $this->code,
+                     'time'  => time(),
+                     'size'  => 0,
+                     'check' => '');
     }
 
     public function flushCached($key = '')
@@ -342,4 +363,3 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
     }
 }
 
-?>

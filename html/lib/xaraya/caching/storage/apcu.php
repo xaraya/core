@@ -77,6 +77,33 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
         apcu_delete($cache_key);
     }
 
+    /**
+     * Get detailed information about the cache key (not supported by all storage)
+     */
+    public function keyInfo($key = '')
+    {
+        $cache_key = $this->getCacheKey($key);
+        // filter out the keys that don't start with the right type/namespace prefix
+        if (!empty($this->prefix) && strpos($cache_key, $this->prefix) !== 0) return $cache_key;
+        // CHECKME: this assumes the code is always hashed
+        if (preg_match('/^(.*)-(\w*)$/',$cache_key,$matches)) {
+            $key = $matches[1];
+            $code = $matches[2];
+        } else {
+            $key = $cache_key;
+            $code = '';
+        }
+        // remove the prefix from the key
+        if (!empty($this->prefix)) $key = str_replace($this->prefix,'',$key);
+        $info = apcu_key_info($cache_key);
+        return array('key'   => $key,
+                     'code'  => $code,
+                     'time'  => $info['mtime'],
+                     'size'  => 0,
+                     'hits'  => $info['hits'],
+                     'check' => $info['ttl']);
+    }
+
     public function doGarbageCollection($expire = 0)
     {
         // we rely on the built-in garbage collector here

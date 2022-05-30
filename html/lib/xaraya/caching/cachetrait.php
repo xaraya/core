@@ -96,6 +96,11 @@ trait xarCacheTrait
         xarVariableCache::delCached($cacheKey);
     }
 
+    public static function keyCached($cacheKey)
+    {
+        return xarVariableCache::keyCached($cacheKey);
+    }
+
     public static function getCachedValue($id, $callback, ...$args)
     {
         $cacheKey = static::getCacheKey($id);

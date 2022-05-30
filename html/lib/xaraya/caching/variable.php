@@ -249,6 +249,21 @@ class xarVariableCache extends xarObject
     }
 
     /**
+     * Get information about a cache key
+     *
+     * @param string $cacheKey the key you want information about
+     * @return mixed key information, or null if not available
+    **/
+    public static function keyCached($cacheKey)
+    {
+        if (empty(self::$cacheStorage)) {
+            return;
+        }
+        // get the key info from cache
+        return self::$cacheStorage->keyInfo($cacheKey);
+    }
+
+    /**
      * Flush a particular cache scope
      *
      * @param string $scope the scope identifying which part of the cache you want to wipe out
