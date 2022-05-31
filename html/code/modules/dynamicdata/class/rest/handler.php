@@ -782,6 +782,17 @@ class DataObjectRESTHandler extends xarObject
                 if (is_array($result)) {
                     $result['x-cached'] = self::keyCached($cacheKey);
                     // $result['x-cached'] = true;
+                } else {
+                    $keyInfo = self::keyCached($cacheKey);
+                    if (!empty($keyInfo) && is_array($keyInfo)) {
+                        header('X-Cache-Key: ' . $keyInfo['key']);
+                        header('X-Cache-Code: ' . $keyInfo['code']);
+                        header('X-Cache-Time: ' . $keyInfo['time']);
+                        if (isset($keyInf['hits'])) {
+                            header('X-Cache-Hits: ' . $keyInfo['hits']);
+                        }
+                    }
+                    // header('X-Cache-Hit: true');
                 }
                 self::setTimer('cached');
                 return $result;
@@ -808,7 +819,7 @@ class DataObjectRESTHandler extends xarObject
             $result['x-times'] = self::getTimers();
         }
         //http_response_code($status);
-	if (is_string($result) && substr($result, 0, 5) === '<?xml') {
+        if (is_string($result) && substr($result, 0, 5) === '<?xml') {
             header('Content-Type: application/xml; charset=utf-8');
             echo $result;
         } else {
