@@ -86,83 +86,33 @@ function dynamicdata_admin_export(Array $args=array())
     } elseif (is_numeric($itemid)) {
         $data['label'] = xarML('Export Data for #(1) # #(2)', $myobject->label, $itemid);
 
-        $myobject->getItem();
-
-        $xml .= '<'.$myobject->name.' itemid="'.$itemid.'">'."\n";
-        foreach (array_keys($myobject->properties) as $name) {
-            $xml .= "  <$name>" . xarVar::prepForDisplay($myobject->properties[$name]->value) . "</$name>\n";
-        }
-        $xml .= '</'.$myobject->name.">\n";
+        $xml = xarMod::apiFunc('dynamicdata','util','export_item',
+                               array('objectid' => $myobject->objectid,
+                                     'itemid'   => $itemid));
 
     // export all items (better save this to file, e.g. in var/cache/...)
     } elseif ($itemid == 'all') {
         $data['label'] = xarML('Export Data for all #(1) Items', $myobject->label);
 
-        $mylist = DataObjectMaster::getObjectList(array('objectid' => $objectid,
-                                                'moduleid' => $moduleid,
-                                                'itemtype' => $itemtype,
-                                                'prelist' => false));     // don't run preList method
-        
-        // Export all properties that are not disabled
-        foreach ($mylist->properties as $name => $property) {
-            $status = $property->getDisplayStatus();
-            if ($status == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
-                // Remove this property if it is disabled
-                unset($mylist->properties[$name]);
-            } else {
-                // Anything else: set to active
-                $mylist->properties[$name]->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
-            }
-        }
-        $mylist->getItems(array('getvirtuals' => 1));
+        $xml = xarMod::apiFunc('dynamicdata','util','export_items',
+                               array('objectid' => $myobject->objectid));
 
-        if (empty($tofile)) {
-            $xml .= "<items>\n";
-            foreach ($mylist->items as $itemid => $item) {
-                $xml .= '  <'.$mylist->name.' itemid="'.$itemid.'">'."\n";
-                foreach ($mylist->properties as $name => $property) {
-                    if (isset($item[$name])) {
-                        if ($name == 'configuration') {
-                        // don't replace anything in the serialized value
-                            $xml .= "    <$name>" . $item[$name];
-                        } else {
-                            $xml .= "    <$name>";
-                            $xml .= $property->exportValue($itemid, $item);
-                        }
-                    } else {
-                        $xml .= "    <$name>";
-                    }
-                    $xml .= "</$name>\n";
-                }
-                $xml .= '  </'.$mylist->name.">\n";
-            }
-            $xml .= "</items>\n";
-
-        } else {
+        if (!empty($tofile)) {
             $varDir = sys::varpath();
-            $outfile = $varDir . '/uploads/' . xarVar::prepForOS($mylist->name) . '.data.' . xarLocale::formatDate('%Y%m%d%H%M%S',time()) . '.xml';
+            $outfile = $varDir . '/uploads/' . xarVar::prepForOS($myobject->name) . '.data.' . xarLocale::formatDate('%Y%m%d%H%M%S',time()) . '.xml';
             $fp = @fopen($outfile,'w');
             if (!$fp) {
                 $data['xml'] = xarML('Unable to open file #(1)',$outfile);
                 return $data;
             }
-            fputs($fp, "<items>\n");
-            foreach ($mylist->items as $itemid => $item) {
-                fputs($fp, "  <".$mylist->name." itemid=\"$itemid\">\n");
-                foreach (array_keys($mylist->properties) as $name) {
-                    if (isset($item[$name])) {
-                        fputs($fp, "    <$name>" . xarVar::prepForDisplay($item[$name]) . "</$name>\n");
-                    } else {
-                        fputs($fp, "    <$name></$name>\n");
-                    }
-                }
-                fputs($fp, "  </".$mylist->name.">\n");
-            }
-            fputs($fp, "</items>\n");
+            $written = fwrite($fp, $xml);
             fclose($fp);
-            $xml .= xarML('Data saved to #(1)',$outfile);
+            $towrite = strlen($xml);
+            if ($written < $towrite) {
+                throw new RuntimeException("could only write {$written}/{$towrite} bytes!");
+            }
+            $xml = xarML('Data saved to #(1)',$outfile);
         }
-
     } else {
         $data['label'] = xarML('Unknown Request for #(1)', $label);
         $xml = '';
@@ -176,4 +126,3 @@ function dynamicdata_admin_export(Array $args=array())
     return $data;
 }
 
-?>

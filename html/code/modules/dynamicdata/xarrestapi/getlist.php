@@ -48,5 +48,16 @@ function dynamicdata_restapi_getlist($args = [])
         // @todo transform assoc array("$itemid" => $item) to list of $item or not?
         'response' => ['type' => 'array', 'items' => ['type' => 'object']],  // optional response schema
     ];
+    // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+    $apilist['export'] = [
+        'type' => 'util',  // default = rest, other options are user, admin, ... as usual
+        'path' => 'export',  // path to use in REST API operation /modules/{module}/{path}
+        'method' => 'get',  // method to use in REST API operation
+        'security' => 'AdminDynamicDataItem',  // optional security mask depending on the api
+        'description' => 'Call dynamicdata utilapi export function via REST API with optional parameter(s)',
+        'parameters' => ['objectid', 'itemid'],  // optional parameter(s)
+        // @todo handle application/xml response instead of application/json
+        'response' => ['type' => 'string'],  // optional response schema
+    ];
     return $apilist;
 }

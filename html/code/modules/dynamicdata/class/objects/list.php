@@ -511,7 +511,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 if (empty($this->properties[$fieldname]->source) || !empty($this->properties[$fieldname]->is_virtual)) {
 //                    if (method_exists($this->properties[$fieldname],'getItemValue')) {echo "<pre>";echo $fieldname;var_dump($this->items);//exit;
                     foreach ($this->items as $key => $value) {
-                        $this->items[$key][$fieldname] = $this->properties[$fieldname]->getItemValue($key);
+                        try {
+                            $this->items[$key][$fieldname] = $this->properties[$fieldname]->getItemValue($key);
+                        } catch (Exception $e) {
+                            $this->items[$key][$fieldname] = null;
+                        }
                     }
 //                }
                 }
