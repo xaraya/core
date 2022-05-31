@@ -808,7 +808,12 @@ class DataObjectRESTHandler extends xarObject
             $result['x-times'] = self::getTimers();
         }
         //http_response_code($status);
-        header('Content-Type: application/json; charset=utf-8');
-        echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+	if (is_string($result) && substr($result, 0, 5) === '<?xml') {
+            header('Content-Type: application/xml; charset=utf-8');
+            echo $result;
+        } else {
+            header('Content-Type: application/json; charset=utf-8');
+            echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+        }
     }
 }

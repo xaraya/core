@@ -894,11 +894,14 @@ class DataObjectRESTBuilder extends xarObject
                 self::add_operation_requestBody($path, $item['method'], $schema, $properties, $mediatype);
             }
         }
+        if (empty($item['mediatype'])) {
+            $item['mediatype'] = 'application/json';
+        }
         //self::add_operation_response($path, $method, $schema, $properties);
         self::$responses[$schema] = [
             'description' => $item['description'],
             'content' => [
-                'application/json' => [
+                $item['mediatype'] => [
                     'schema' => [
                         '$ref' => '#/components/schemas/' . $schema,
                     ],

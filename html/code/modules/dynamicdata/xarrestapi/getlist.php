@@ -56,7 +56,7 @@ function dynamicdata_restapi_getlist($args = [])
         'security' => 'AdminDynamicDataItem',  // optional security mask depending on the api
         'description' => 'Call dynamicdata utilapi export function via REST API with optional parameter(s)',
         'parameters' => ['objectid', 'itemid'],  // optional parameter(s)
-        // @todo handle application/xml response instead of application/json
+        'mediatype' => 'application/xml',  // optional response media type (instead of default application/json)
         'response' => ['type' => 'string'],  // optional response schema
     ];
     return $apilist;

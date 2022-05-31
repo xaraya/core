@@ -44,8 +44,7 @@ function dynamicdata_utilapi_export_objectdef(array $args=[])
     $prefix = xarDB::getPrefix();
     $prefix .= '_';
 
-    $xml = '';
-
+    $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
     $xml .= '<object name="'.$myobject->properties['name']->value.'">'."\n";
     foreach (array_keys($object_properties) as $name) {
         if ($name != 'name' && isset($myobject->properties[$name]->value)) {
