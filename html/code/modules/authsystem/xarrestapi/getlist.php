@@ -18,13 +18,14 @@
 function authsystem_restapi_getlist($args = [])
 {
     $apilist = [];
+    // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
     $apilist['honeypot'] = [
-        //'type' => 'rest',  // default
-        'path' => 'login',
-        'method' => 'post',
-        //'security' => false,  // default REST APIs are public
-        'description' => 'Call REST API honeypot() in module authsystem',
-        'requestBody' => ['application/json' => ['username', 'password']],
+        //'type' => 'rest',  // default = rest, other $type options are user, admin, ... as usual
+        'path' => 'login',  // path to use in REST API operation /modules/{module}/{path}
+        'method' => 'post',  // method to use in REST API operation
+        //'security' => false,  // default = false REST APIs are public, if true check for authenticated user
+        'description' => 'Call REST API honeypot() in module authsystem defined in code/modules/authsystem/xarrestapi/honeypot.php',
+        'requestBody' => ['application/json' => ['username', 'password']],  // optional requestBody
     ];
     return $apilist;
 }

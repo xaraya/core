@@ -722,7 +722,7 @@ class DataObjectRESTBuilder extends xarObject
         $method = 'get';
         $schema = 'list-modules';
         $operationId = str_replace('-', '_', $schema);
-        $description = 'Show available REST API calls for modules';
+        $description = 'Show available REST API calls for modules defined in code/modules/{module}/xarrestapi/getlist.php';
         self::$paths[$path] = [
             $method => [
                 'tags' => ['start'],
@@ -757,7 +757,7 @@ class DataObjectRESTBuilder extends xarObject
         $method = 'get';
         $schema = $module . '-apilist';
         $operationId = str_replace('-', '_', $schema);
-        $description = 'Show REST API calls for module ' . $module;
+        $description = 'Show REST API calls for module ' . $module . ' defined in code/modules/' . $module . '/xarrestapi/getlist.php';
         self::$paths[$path] = [
             $method => [
                 'tags' => [$module . '_module'],
