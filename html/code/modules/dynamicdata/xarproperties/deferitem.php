@@ -1,4 +1,5 @@
 <?php
+
 /* Include parent class */
 sys::import('modules.dynamicdata.class.properties.base');
 sys::import('modules.dynamicdata.class.objects.loader');
@@ -29,7 +30,7 @@ sys::import('modules.dynamicdata.class.objects.loader');
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
- 
+
  /**
   * This property displays a deferred item for a value (experimental - do not use in production)
   *
@@ -41,14 +42,14 @@ class DeferredItemProperty extends DataProperty
     public $id         = 18281;
     public $name       = 'deferitem';
     public $desc       = 'Deferred Item';
-    public $reqmodules = array('dynamicdata');
-    public $options    = array();
+    public $reqmodules = ['dynamicdata'];
+    public $options    = [];
     public $defername  = null;
     public $objectname = null;
     public $fieldlist  = null;
     public $displaylink = null;
     public $singlevalue = false;
-    public static $deferred = array();  // array of $name with deferred data object item loader
+    public static $deferred = [];  // array of $name with deferred data object item loader
 
     public function __construct(ObjectDescriptor $descriptor)
     {
@@ -86,7 +87,7 @@ class DeferredItemProperty extends DataProperty
         }
         $objectpart = substr($value, 11);
         $this->defername = $objectpart;
-        list($object, $field) = explode('.', $objectpart);
+        [$object, $field] = explode('.', $objectpart);
         // @checkme support dataobject:<objectname>.<propname>,<propname2>,<propname3> here too
         $fieldlist = explode(',', $field);
         static::init_deferred($this->defername);
@@ -94,7 +95,7 @@ class DeferredItemProperty extends DataProperty
         $this->fieldlist = $fieldlist;
         //$this->getDeferredLoader();
         // see if we can use a fixed template for display links here
-        $this->displaylink = xarServer::getObjectURL($object, 'display', array('itemid' => '[itemid]'));
+        $this->displaylink = xarServer::getObjectURL($object, 'display', ['itemid' => '[itemid]']);
         if (strpos($this->displaylink, '[itemid]') === false) {
             // sorry, you'll have to deal with it directly in the template
             $this->displaylink = null;
@@ -193,7 +194,7 @@ class DeferredItemProperty extends DataProperty
      *
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showInput(array $data = array())
+    public function showInput(array $data = [])
     {
         if (!isset($data['options'])) {
             $data['options'] = $this->getOptions();
@@ -211,7 +212,7 @@ class DeferredItemProperty extends DataProperty
      * @param mixed $data['value'] value of the property (default is the current value)
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showOutput(array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!$this->singlevalue && !empty($this->fieldlist) && count($this->fieldlist) == 1) {
             $this->singlevalue = true;
@@ -242,7 +243,7 @@ class DeferredItemProperty extends DataProperty
     /**
      * Get the actual deferred data here
      */
-    public function getDeferredData(array $data = array())
+    public function getDeferredData(array $data = [])
     {
         if (empty($this->objectname)) {
             return $data;
@@ -279,13 +280,13 @@ class DeferredItemProperty extends DataProperty
             return $this->options;
         }
 
-        $this->options = array();
+        $this->options = [];
         if (empty($this->objectname)) {
             return $this->options;
         }
         //print_r('Getting options: ' . $this->defername);
         // @checkme (ab)use the resolver to retrieve all items here
-        $items = $this->getDeferredLoader()->getValues(array());
+        $items = $this->getDeferredLoader()->getValues([]);
         $first = reset($items);
         $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
         if ($first !== false && !array_key_exists($field, $first)) {
@@ -294,7 +295,7 @@ class DeferredItemProperty extends DataProperty
             $field = array_shift($fieldlist);
         }
         foreach ($items as $id => $value) {
-            $this->options[] = array('id' => $id, 'name' => $value[$field]);
+            $this->options[] = ['id' => $id, 'name' => $value[$field]];
         }
         return $this->options;
     }

@@ -1,4 +1,5 @@
 <?php
+
 /* Include parent class */
 sys::import('modules.dynamicdata.xarproperties.deferitem');
 sys::import('modules.dynamicdata.class.objects.loader');
@@ -35,7 +36,7 @@ sys::import('modules.dynamicdata.class.objects.loader');
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
- 
+
  /**
   * This property displays deferred related objects for an item (experimental - do not use in production)
   *
@@ -47,8 +48,8 @@ class DeferredManyProperty extends DeferredItemProperty
     public $id         = 18283;
     public $name       = 'defermany';
     public $desc       = 'Deferred Many';
-    public $reqmodules = array('dynamicdata');
-    public $options    = array();
+    public $reqmodules = ['dynamicdata'];
+    public $options    = [];
     public $defername  = null;
     public $linkname   = null;
     public $caller_id  = null;
@@ -56,7 +57,7 @@ class DeferredManyProperty extends DeferredItemProperty
     public $targetname = null;
     public $displaylink = null;
     public $singlevalue = false;
-    public static $deferred = array();  // array of $name with deferred link object item loader
+    public static $deferred = [];  // array of $name with deferred link object item loader
 
     public function __construct(ObjectDescriptor $descriptor)
     {
@@ -85,9 +86,9 @@ class DeferredManyProperty extends DeferredItemProperty
             return;
         }
         // make sure we always have at least two parts here
-        list($linkpart, $targetpart) = explode(':', substr($value, 11) . ':');
+        [$linkpart, $targetpart] = explode(':', substr($value, 11) . ':');
         $this->defername = $linkpart;
-        list($linkname, $caller_id, $called_id) = explode('.', $linkpart);
+        [$linkname, $caller_id, $called_id] = explode('.', $linkpart);
         static::init_deferred($this->defername);
         $this->linkname = $linkname;
         $this->caller_id = $caller_id;
@@ -97,7 +98,7 @@ class DeferredManyProperty extends DeferredItemProperty
         $this->displaylink = null;
         if (!empty($targetpart)) {
             // make sure we always have at least two parts here
-            list($object, $field) = explode('.', $targetpart . '.');
+            [$object, $field] = explode('.', $targetpart . '.');
             // @checkme support <objectname>.<propname>,<propname2>,<propname3> here too
             $fieldlist = explode(',', $field);
             // add and call resolver for target dataobject once we loaded all links
@@ -110,7 +111,7 @@ class DeferredManyProperty extends DeferredItemProperty
             $this->objectname = $object;
             $this->fieldlist = $fieldlist;
             // see if we can use a fixed template for display links here
-            $this->displaylink = xarServer::getObjectURL($object, 'display', array('itemid' => '[itemid]'));
+            $this->displaylink = xarServer::getObjectURL($object, 'display', ['itemid' => '[itemid]']);
             if (strpos($this->displaylink, '[itemid]') === false) {
                 // sorry, you'll have to deal with it directly in the template
                 $this->displaylink = null;
@@ -180,7 +181,7 @@ class DeferredManyProperty extends DeferredItemProperty
         if (empty($itemid) || empty($this->linkname)) {
             return;
         }
-        $this->getDeferredLoader()->save($itemid, array());
+        $this->getDeferredLoader()->save($itemid, []);
     }
 
     /**
@@ -246,7 +247,7 @@ class DeferredManyProperty extends DeferredItemProperty
      *
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showInput(array $data = array())
+    public function showInput(array $data = [])
     {
         if (!$this->singlevalue && !empty($this->fieldlist) && count($this->fieldlist) == 1) {
             $this->singlevalue = true;
@@ -262,7 +263,7 @@ class DeferredManyProperty extends DeferredItemProperty
      * @param mixed $data['value'] value of the property (default is the current value)
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showOutput(array $data = array())
+    public function showOutput(array $data = [])
     {
         return parent::showOutput($data);
     }
@@ -281,7 +282,7 @@ class DeferredManyProperty extends DeferredItemProperty
     {
         // return xarVar::prepForDisplay($item[$this->name]);
         // @checkme set the targetLoader to null to avoid retrieving the propname values first - see export_items
-        $data = $this->getDeferredData(['value' => $item[$this->name], '_itemid' => $itemid]);
+        $data = $this->getDeferredData(['value' => $item[$this->name] ?? null, '_itemid' => $itemid]);
         $item[$this->name] = $data['value'];
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             $item[$this->name] = json_encode($item[$this->name], JSON_NUMERIC_CHECK);
@@ -292,7 +293,7 @@ class DeferredManyProperty extends DeferredItemProperty
     /**
      * Get the actual deferred data here - based on the object itemid here
      */
-    public function getDeferredData(array $data = array())
+    public function getDeferredData(array $data = [])
     {
         if (empty($this->linkname)) {
             return $data;
@@ -318,7 +319,7 @@ class DeferredManyProperty extends DeferredItemProperty
         $data['value'] = $this->getDeferredLoader()->get($itemid);
         if ($this->singlevalue && is_array($data['value']) && !empty($data['value']) && array_key_exists($this->fieldlist[0], reset($data['value']))) {
             $field = $this->fieldlist[0];
-            $values = array();
+            $values = [];
             foreach ($data['value'] as $key => $props) {
                 $values[$key] = $props[$field];
             }
@@ -337,7 +338,7 @@ class DeferredManyProperty extends DeferredItemProperty
             return $this->options;
         }
 
-        $this->options = array();
+        $this->options = [];
         if (empty($this->targetname)) {
             return $this->options;
         }
@@ -347,7 +348,7 @@ class DeferredManyProperty extends DeferredItemProperty
         if (empty($target)) {
             return $this->options;
         }
-        $items = $target->getValues(array());
+        $items = $target->getValues([]);
         $first = reset($items);
         $field = isset($this->fieldlist) ? reset($this->fieldlist) : 'name';
         if ($first !== false && !array_key_exists($field, $first)) {
@@ -356,7 +357,7 @@ class DeferredManyProperty extends DeferredItemProperty
             $field = array_shift($fieldlist);
         }
         foreach ($items as $id => $value) {
-            $this->options[] = array('id' => $id, 'name' => $value[$field]);
+            $this->options[] = ['id' => $id, 'name' => $value[$field]];
         }
         /** */
         return $this->options;

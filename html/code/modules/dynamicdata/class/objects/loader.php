@@ -34,9 +34,9 @@ sys::import('modules.dynamicdata.class.objects.master');
 class DataObjectLoader
 {
     public $objectname = '';
-    public $fieldlist = array();
-    public $todo = array();
-    public $cache = array();
+    public $fieldlist = [];
+    public $todo = [];
+    public $cache = [];
     public $resolver = null;
     public $preLoader = null;
     public $postLoader = null;
@@ -48,7 +48,7 @@ class DataObjectLoader
     public $count = false;
     public $access = null;
     // public $expand = null;
-    public static $loaders = array();
+    public static $loaders = [];
 
     public static function getItemLoader(string $objectname = 'sample', array $fieldlist = ['id', 'name'])
     {
@@ -70,8 +70,8 @@ class DataObjectLoader
     {
         $this->objectname = $objectname;
         $this->fieldlist = $fieldlist;
-        $this->todo = array();
-        $this->cache = array();
+        $this->todo = [];
+        $this->cache = [];
         $this->resolver = $resolver;
         $this->preLoader = null;
         $this->postLoader = null;
@@ -90,9 +90,7 @@ class DataObjectLoader
 
     public function addItem(int $value)
     {
-        if (!empty($value) &&
-            !in_array($value, $this->todo) &&
-            !array_key_exists("$value", $this->cache)) {
+        if (!$this->hasItem($value)) {
             $this->todo[] = $value;
         }
     }
@@ -127,12 +125,23 @@ class DataObjectLoader
 
     public function getList(array $values)
     {
-        $items = array();
+        $items = [];
         foreach ($values as $value) {
             $key = (string) $value;
             $items[$key] = $this->getItem($value);
         }
         return $items;
+    }
+
+    public function hasItem(int $value)
+    {
+        if (empty($value)) {
+            return false;
+        } elseif (!in_array($value, $this->todo) &&
+            !array_key_exists("$value", $this->cache)) {
+            return false;
+        }
+        return true;
     }
 
     public function load()
@@ -153,7 +162,7 @@ class DataObjectLoader
             $this->cache = array_replace($this->cache, $this->getValues($this->todo));
         }
         $this->postLoad();
-        $this->todo = array();
+        $this->todo = [];
     }
 
     public function preLoad()
@@ -173,19 +182,19 @@ class DataObjectLoader
     public function getValues(array $itemids)
     {
         if (empty($this->objectname)) {
-            return array();
+            return [];
         }
-        $params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist);
+        $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
         //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         $objectlist = DataObjectMaster::getObjectList($params);
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         $objectlist->setFieldList($this->fieldlist);
-        $params = array('itemids' => $itemids);
+        $params = ['itemids' => $itemids];
         $result = $objectlist->getItems($params);
         // return array("$itemid" => assoc array of $fields)
         // @checkme variabletable returns all fields at the moment - filter here for now
         //return $result;
-        $values = array();
+        $values = [];
         // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
         $allowed = array_flip($this->fieldlist);
         $allowed['id'] = true;
@@ -205,10 +214,10 @@ class DataObjectLoader
         return $values;
     }
 
-    public function getObjectList(array $params = array())
+    public function getObjectList(array $params = [])
     {
         if (empty($params)) {
-            $params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist);
+            $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
             //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         }
         $objectlist = DataObjectMaster::getObjectList($params);
@@ -268,7 +277,7 @@ class DataObjectLoader
         $objectlist = $this->getObjectList();
         $params = $this->addPagingParams();
         $result = $objectlist->getItems($params);
-        $values = array();
+        $values = [];
         // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
         $allowed = array_flip($this->fieldlist);
         $allowed['id'] = true;
@@ -307,7 +316,7 @@ class DataObjectLoader
         if (!empty($args['filter'])) {
             $filter = $args['filter'];
             if (!is_array($filter)) {
-                $filter = array($filter);
+                $filter = [$filter];
             }
             // Clean up arrays by removing false values (= empty, false, null, 0)
             $this->setFilter(array_filter($filter));
@@ -332,16 +341,16 @@ class DataObjectLoader
         // See code/modules/dynamicdata/class/ui_handlers/search.php
         $wherestring = '';
         $join = '';
-        $mapop = array('eq' => '=', 'ne' => '!=', 'gt' => '>', 'lt' => '<', 'le' => '>=', 'ge' => '<=', 'in' => 'IN');
+        $mapop = ['eq' => '=', 'ne' => '!=', 'gt' => '>', 'lt' => '<', 'le' => '>=', 'ge' => '<=', 'in' => 'IN'];
         foreach ($this->filter as $where) {
-            list($field, $op, $value) = explode(',', $where . ',,');
+            [$field, $op, $value] = explode(',', $where . ',,');
             if (empty($field) || empty($objectlist->properties[$field]) || empty($op) || empty($mapop[$op])) {
                 continue;
             }
             $clause = '';
             if ($op === 'in') {
                 // keep only the third variable with the rest of the string, e.g. itemid,in,3,7,11
-                list(, , $value) = explode(',', $where, 3);
+                [, , $value] = explode(',', $where, 3);
                 $value = str_replace("'", "\\'", $value);
                 $value = explode(',', $value);
                 if (count($value) > 0) {
@@ -382,10 +391,10 @@ class DataObjectLoader
         return $this->count;
     }
 
-    public function addPagingParams(array $params = array())
+    public function addPagingParams(array $params = [])
     {
         if (!empty($this->order)) {
-            $params['sort'] = array();
+            $params['sort'] = [];
             $sorted = array_filter(explode(',', $this->order));
             foreach ($sorted as $sortme) {
                 if (substr($sortme, 0, 1) === '-') {
@@ -501,8 +510,8 @@ class LinkObjectItemLoader extends DataObjectItemLoader
 
     public function getValues(array $itemids)
     {
-        $fieldlist = array($this->caller_id, $this->called_id);
-        $params = array('name' => $this->linkname, 'fieldlist' => $fieldlist);
+        $fieldlist = [$this->caller_id, $this->called_id];
+        $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         $objectlist = DataObjectMaster::getObjectList($params);
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
@@ -513,22 +522,22 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         $objectlist->addWhere($this->caller_id, 'IN (' . implode(',', $itemids) . ')');
         $result = $objectlist->getItems();
         // return array("$caller_id" => list of $called_ids)
-        $values = array();
+        $values = [];
         foreach ($result as $itemid => $props) {
             $key = (string) $props[$this->caller_id];
             if (!array_key_exists($key, $values)) {
-                $values[$key] = array();
+                $values[$key] = [];
             }
             $values[$key][] = $props[$this->called_id];
         }
         return $values;
     }
 
-    public function getObjectList(array $params = array())
+    public function getObjectList(array $params = [])
     {
         if (empty($params)) {
-            $fieldlist = array($this->caller_id, $this->called_id);
-            $params = array('name' => $this->linkname, 'fieldlist' => $fieldlist);
+            $fieldlist = [$this->caller_id, $this->called_id];
+            $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
             //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         }
         $objectlist = DataObjectMaster::getObjectList($params);
@@ -559,7 +568,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         //    $this->targetLoader->add($values);
         //}
         // @checkme we need to find the unique itemids across all values here - this is probably more memory-efficient
-        $distinct = array();
+        $distinct = [];
         foreach ($this->cache as $key => $values) {
             // @checkme slice array based on limit and offset here?
             if (!empty($this->limit) || !empty($this->offset)) {
@@ -588,7 +597,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             if (empty($this->targetLoader)) {
                 return $oldvalues;
             }
-            $newvalues = array();
+            $newvalues = [];
             foreach ($oldvalues as $itemid) {
                 $id = (string) $itemid;
                 $newvalues[$id] = $this->targetLoader->get($itemid);
@@ -619,11 +628,11 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         if (empty($itemid)) {
             return;
         }
-        $params = array('name' => $this->linkname);
+        $params = ['name' => $this->linkname];
         $objectlist = DataObjectMaster::getObjectList($params);
         $objectlist->addWhere($this->caller_id, '= ' . $itemid);
         $result = $objectlist->getItems();
-        $oldlinks = array();
+        $oldlinks = [];
         foreach ($result as $linkid => $props) {
             $oldlinks[intval($props[$this->called_id])] = $linkid;
         }
@@ -634,10 +643,10 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         }
         $objectref = DataObjectMaster::getObject($params);
         foreach ($delvalues as $called_id) {
-            $objectref->deleteItem(array('itemid' => $oldlinks[$called_id]));
+            $objectref->deleteItem(['itemid' => $oldlinks[$called_id]]);
         }
         foreach ($newvalues as $called_id) {
-            $objectref->createItem(array($this->caller_id => $itemid, $this->called_id => $called_id));
+            $objectref->createItem([$this->caller_id => $itemid, $this->called_id => $called_id]);
         }
     }
 }

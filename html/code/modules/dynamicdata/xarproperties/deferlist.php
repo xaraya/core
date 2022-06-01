@@ -1,4 +1,5 @@
 <?php
+
 /* Include parent class */
 sys::import('modules.dynamicdata.xarproperties.deferitem');
 sys::import('modules.dynamicdata.class.objects.loader');
@@ -40,14 +41,14 @@ class DeferredListProperty extends DeferredItemProperty
     public $id         = 18282;
     public $name       = 'deferlist';
     public $desc       = 'Deferred List';
-    public $reqmodules = array('dynamicdata');
-    public $options    = array();
+    public $reqmodules = ['dynamicdata'];
+    public $options    = [];
     public $defername  = null;
     public $objectname = null;
     public $fieldlist  = null;
     public $displaylink = null;
     public $singlevalue = false;
-    public static $deferred = array();  // array of $name with deferred data object list loader
+    public static $deferred = [];  // array of $name with deferred data object list loader
 
     public function __construct(ObjectDescriptor $descriptor)
     {
@@ -130,7 +131,7 @@ class DeferredListProperty extends DeferredItemProperty
                 $values = json_decode($values, true);
             }
             if (!is_array($values)) {
-                $values = array($values);
+                $values = [$values];
             }
             $values = array_filter($values);
             $this->getDeferredLoader()->add($values);
@@ -151,7 +152,7 @@ class DeferredListProperty extends DeferredItemProperty
      *
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showInput(array $data = array())
+    public function showInput(array $data = [])
     {
         // 1. in showForm() get value from property - not set via setValue in datastore, except in preview - decode
         if (!isset($data['value']) && !empty($this->value)) {
@@ -167,7 +168,7 @@ class DeferredListProperty extends DeferredItemProperty
      * @param mixed $data['value'] value of the property (default is the current value)
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showOutput(array $data = array())
+    public function showOutput(array $data = [])
     {
         // 1. in showView() get value from data = from objectlist via getItemValue/setItemValue - skip
         // 2. in showDisplay() get value from property - not set via setValue in datastore - decode
@@ -200,7 +201,7 @@ class DeferredListProperty extends DeferredItemProperty
     /**
      * Get the actual deferred data here
      */
-    public function getDeferredData(array $data = array())
+    public function getDeferredData(array $data = [])
     {
         if (empty($this->objectname)) {
             return $data;
@@ -209,7 +210,7 @@ class DeferredListProperty extends DeferredItemProperty
         if (isset($data['value'])) {
             $values = $data['value'];
             if (!is_array($values)) {
-                $values = array($values);
+                $values = [$values];
             }
             $values = array_filter($values);
         } elseif (!empty($this->value)) {
@@ -228,7 +229,7 @@ class DeferredListProperty extends DeferredItemProperty
         $data['value'] = $this->getDeferredLoader()->get($values);
         if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], reset($data['value']))) {
             $field = $this->fieldlist[0];
-            $values = array();
+            $values = [];
             foreach ($data['value'] as $key => $props) {
                 $values[$key] = $props[$field];
             }
