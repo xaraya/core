@@ -150,5 +150,11 @@ class PassBoxProperty extends TextBoxProperty
         return parent::showOutput($data);
     }
 
-
+    /**
+     * Export empty password here
+     */
+    public function exportValue($itemid, $item)
+    {
+        return '';
+    }
 }

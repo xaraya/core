@@ -61,15 +61,8 @@ function dynamicdata_utilapi_export_items(array $args=[])
         $xml .= '  <'.$mylist->name.' itemid="'.$itemid.'">'."\n";
         foreach ($mylist->properties as $name => $property) {
             if (isset($item[$name]) || in_array($name, $deferred)) {
-                if ($name == 'configuration' && $mylist->name == 'properties') {
-                    // don't replace anything in the serialized value
-                    $xml .= "    <$name>" . $item[$name];
-                } elseif ($name == 'password' && $mylist->name == 'roles_users') {
-                    $xml .= "    <$name>";
-                } else {
-                    $xml .= "    <$name>";
-                    $xml .= $property->exportValue($itemid, $item);
-                }
+                $xml .= "    <$name>";
+                $xml .= $property->exportValue($itemid, $item);
             } else {
                 $xml .= "    <$name>";
             }

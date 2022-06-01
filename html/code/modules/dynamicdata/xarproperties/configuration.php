@@ -108,5 +108,17 @@ class ConfigurationProperty extends TextAreaProperty
         if (!isset($data['value'])) $data['value'] = $this->value;
         return parent::showOutput($data);
     }
+
+    /**
+     * Export the serialized value as is here
+     */
+    public function exportValue($itemid, $item)
+    {
+        // return xarVar::prepForDisplay($item[$this->name]);
+        if (isset($item[$this->name]) && is_array($item[$this->name])) {
+            return serialize($item[$this->name]);
+        }
+        // don't replace anything in the serialized value
+        return $item[$this->name];
+    }
 }
-?>

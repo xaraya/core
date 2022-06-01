@@ -34,14 +34,20 @@ function dynamicdata_utilapi_export_item(array $args=[])
     }
 
     $myobject->getItem();
+    $item = $myobject->getFieldValues();
 
     $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
     $xml .= '<'.$myobject->name.' itemid="'.$itemid.'">'."\n";
-    foreach (array_keys($myobject->properties) as $name) {
-        if ($name == 'password' && $myobject->name == 'roles_users') {
-            $xml .= "  <$name></$name>\n";
+    foreach ($myobject->properties as $name => $property) {
+        if (method_exists($property, 'getDeferredData')) {
+            $property->setDataToDefer($itemid, $item[$name]);
+            // @checkme set the targetLoader to null to avoid retrieving the propname values
+            if (!empty($property->targetname)) {
+                $property->getDeferredLoader()->targetLoader = null;
+            }
+            $xml .= "  <$name>" . $property->exportValue($itemid, $item) . "</$name>\n";
         } else {
-            $xml .= "  <$name>" . xarVar::prepForDisplay($myobject->properties[$name]->value) . "</$name>\n";
+            $xml .= "  <$name>" . $property->exportValue($itemid, $item) . "</$name>\n";
         }
     }
     $xml .= '</'.$myobject->name.">\n";

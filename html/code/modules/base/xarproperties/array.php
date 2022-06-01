@@ -465,8 +465,21 @@ class ArrayProperty extends DataProperty
         }
         return parent::showOutput($data);
     }
-    
-	/**
+
+    /**
+     * Export the serialized value as is here
+     */
+    public function exportValue($itemid, $item)
+    {
+        // return xarVar::prepForDisplay($item[$this->name]);
+        if (isset($item[$this->name]) && is_array($item[$this->name])) {
+            return serialize($item[$this->name]);
+        }
+        // don't replace anything in the serialized value
+        return $item[$this->name];
+    }
+
+    /**
      * Update the current configuration rule in a specific way for this property type
      *
      * @param  array data An array of input parameters
