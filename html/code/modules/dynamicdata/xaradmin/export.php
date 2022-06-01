@@ -48,13 +48,13 @@ function dynamicdata_admin_export(Array $args=array())
     if (!$myobject->checkAccess('config'))
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $myobject->label));
 
-
     $proptypes = DataPropertyMaster::getPropertyTypes();
 
     $prefix = xarDB::getPrefix();
     $prefix .= '_';
 
     $xml = '';
+    $ext = '';
 
     // export object definition
     if (empty($itemid)) {
@@ -62,14 +62,7 @@ function dynamicdata_admin_export(Array $args=array())
 
         $xml = xarMod::apiFunc('dynamicdata','util','export',
                              array('objectref' => &$myobject));
-
-        $data['formlink'] = xarController::URL('dynamicdata','admin','export',
-                                      array('objectid' => $myobject->objectid,
-                                            'itemid'   => 'all'));
-        $data['filelink'] = xarController::URL('dynamicdata','admin','export',
-                                      array('objectid' => $myobject->objectid,
-                                            'itemid'   => 'all',
-                                            'tofile'   => 1));
+        $ext = '-def';
 
         if (!empty($myobject->datastores) && count($myobject->datastores) == 1 && !empty($myobject->datastores['_dynamic_data_'])) {
             $data['convertlink'] = xarController::URL('dynamicdata','admin','export',
@@ -89,6 +82,7 @@ function dynamicdata_admin_export(Array $args=array())
         $xml = xarMod::apiFunc('dynamicdata','util','export_item',
                                array('objectid' => $myobject->objectid,
                                      'itemid'   => $itemid));
+        $ext = '-dat.' . $itemid;
 
     // export all items (better save this to file, e.g. in var/cache/...)
     } elseif ($itemid == 'all') {
@@ -96,26 +90,39 @@ function dynamicdata_admin_export(Array $args=array())
 
         $xml = xarMod::apiFunc('dynamicdata','util','export_items',
                                array('objectid' => $myobject->objectid));
+        $ext = '-dat';
 
-        if (!empty($tofile)) {
-            $varDir = sys::varpath();
-            $outfile = $varDir . '/uploads/' . xarVar::prepForOS($myobject->name) . '.data.' . xarLocale::formatDate('%Y%m%d%H%M%S',time()) . '.xml';
-            $fp = @fopen($outfile,'w');
-            if (!$fp) {
-                $data['xml'] = xarML('Unable to open file #(1)',$outfile);
-                return $data;
-            }
-            $written = fwrite($fp, $xml);
-            fclose($fp);
-            $towrite = strlen($xml);
-            if ($written < $towrite) {
-                throw new RuntimeException("could only write {$written}/{$towrite} bytes!");
-            }
-            $xml = xarML('Data saved to #(1)',$outfile);
-        }
     } else {
         $data['label'] = xarML('Unknown Request for #(1)', $label);
         $xml = '';
+    }
+
+    $data['formlink'] = xarController::URL('dynamicdata','admin','export',
+                                  array('objectid' => $myobject->objectid,
+                                        'itemid'   => 'all'));
+    $data['filelink'] = xarController::URL('dynamicdata','admin','export',
+                                  array('objectid' => $myobject->objectid,
+                                        'itemid'   => 'all',
+                                        'tofile'   => 1));
+    $data['savelink'] = xarController::URL('dynamicdata','admin','export',
+                                  array('objectid' => $myobject->objectid,
+                                        'tofile'   => 1));
+
+    if (!empty($tofile) && !empty($ext)) {
+        $varDir = sys::varpath();
+        $outfile = $varDir . '/uploads/' . xarVar::prepForOS($myobject->name) . $ext . '.' . xarLocale::formatDate('%Y%m%d%H%M%S',time()) . '.xml';
+        $fp = @fopen($outfile,'w');
+        if (!$fp) {
+            $data['xml'] = xarML('Unable to open file #(1)',$outfile);
+            return $data;
+        }
+        $written = fwrite($fp, $xml);
+        fclose($fp);
+        $towrite = strlen($xml);
+        if ($written < $towrite) {
+            throw new RuntimeException("could only write {$written}/{$towrite} bytes!");
+        }
+        $xml = xarML('Data saved to #(1)',$outfile);
     }
 
     $data['objectid'] = $objectid;
