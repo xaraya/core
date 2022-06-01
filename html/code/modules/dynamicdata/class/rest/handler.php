@@ -780,8 +780,8 @@ class DataObjectRESTHandler extends xarObject
             if (!empty($cacheKey) && self::isCached($cacheKey)) {
                 $result = self::getCached($cacheKey);
                 if (is_array($result)) {
-                    $result['x-cached'] = self::keyCached($cacheKey);
                     // $result['x-cached'] = true;
+                    $result['x-cached'] = self::keyCached($cacheKey);
                 } else {
                     $keyInfo = self::keyCached($cacheKey);
                     if (!empty($keyInfo) && is_array($keyInfo)) {
@@ -818,6 +818,9 @@ class DataObjectRESTHandler extends xarObject
         if (is_array($result) && self::$enableTimer) {
             $result['x-times'] = self::getTimers();
         }
+        if (!empty($_SERVER['HTTP_ORIGIN'])) {
+            header('Access-Control-Allow-Origin: *');
+        }
         //http_response_code($status);
         if (is_string($result) && substr($result, 0, 5) === '<?xml') {
             header('Content-Type: application/xml; charset=utf-8');
@@ -826,5 +829,19 @@ class DataObjectRESTHandler extends xarObject
             header('Content-Type: application/json; charset=utf-8');
             echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
         }
+    }
+
+    /**
+     * Send CORS options to the browser in preflight checks
+     */
+    public static function sendCORSOptions()
+    {
+        // See https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+        http_response_code(204);
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        header('Access-Control-Allow-Headers: X-Auth-Token, Content-Type');
+        // header('Access-Control-Allow-Credentials: true');
+        exit(0);
     }
 }

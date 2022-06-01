@@ -21,6 +21,11 @@ require dirname(__DIR__).'/vendor/autoload.php';
 //use FastRoute\RouteCollector;
 //use function FastRoute\simpleDispatcher;
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    DataObjectRESTHandler::sendCORSOptions();
+    exit(0);
+}
+
 // initialize bootstrap
 sys::init();
 // initialize caching

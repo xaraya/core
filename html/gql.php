@@ -20,6 +20,11 @@ require dirname(__DIR__).'/vendor/autoload.php';
 // use the GraphQL PHP library here
 use GraphQL\GraphQL;
 
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    xarGraphQL::send_cors_options();
+    exit(0);
+}
+
 // initialize bootstrap
 sys::init();
 // initialize caching

@@ -438,6 +438,21 @@ class xarGraphQL extends xarObject
         echo $data;
     }
 
+    /**
+     * Send CORS options to the browser in preflight checks
+     */
+    public static function send_cors_options()
+    {
+        // See https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
+        http_response_code(204);
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+        // @checkme X-Apollo-Tracing is used in the GraphQL Playground
+        header('Access-Control-Allow-Headers: X-Auth-Token, Content-Type, X-Apollo-Tracing');
+        // header('Access-Control-Allow-Credentials: true');
+        exit(0);
+    }
+
     public static function checkUser($context)
     {
         $userId = self::checkToken($context['server']);
