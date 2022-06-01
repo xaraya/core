@@ -148,7 +148,7 @@ class DeferredManyProperty extends DeferredItemProperty
                 $this->getDeferredLoader()->set($this->_itemid, $value);
             }
             // @checkme not really needed here, since we use itemid + linkobject
-            $value = json_encode($value);
+            $value = json_encode($value, JSON_NUMERIC_CHECK);
         }
         parent::setValue($value);
     }
@@ -265,6 +265,28 @@ class DeferredManyProperty extends DeferredItemProperty
     public function showOutput(array $data = array())
     {
         return parent::showOutput($data);
+    }
+
+    public function importValue(SimpleXMLElement $element)
+    {
+        // return $this->castType((string)$element->{$this->name});
+        // @checkme the list of called_id is added to LinkName1 in updateValue if necessary
+        return parent::importValue($element);
+    }
+
+    /**
+     * Export the list of called_id from LinkName1 here, but don't return the propname values from Called1
+     */
+    public function exportValue($itemid, $item)
+    {
+        // return xarVar::prepForDisplay($item[$this->name]);
+        // @checkme set the targetLoader to null to avoid retrieving the propname values first - see export_items
+        $data = $this->getDeferredData(['value' => $item[$this->name], '_itemid' => $itemid]);
+        $item[$this->name] = $data['value'];
+        if (isset($item[$this->name]) && is_array($item[$this->name])) {
+            $item[$this->name] = json_encode($item[$this->name], JSON_NUMERIC_CHECK);
+        }
+        return parent::exportValue($itemid, $item);
     }
 
     /**

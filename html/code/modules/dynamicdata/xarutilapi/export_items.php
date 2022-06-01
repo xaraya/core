@@ -40,13 +40,28 @@ function dynamicdata_utilapi_export_items(array $args=[])
     }
     $mylist->getItems(['getvirtuals' => 1]);
 
+    $fieldlist = array_keys($mylist->properties);
+    $deferred = [];
+    foreach ($fieldlist as $key) {
+        if (!empty($mylist->properties[$key]) && method_exists($mylist->properties[$key], 'getDeferredData')) {
+            array_push($deferred, $key);
+            // @checkme set the targetLoader to null to avoid retrieving the propname values
+            if (!empty($mylist->properties[$key]->targetname)) {
+                $mylist->properties[$key]->getDeferredLoader()->targetLoader = null;
+            }
+            foreach ($mylist->items as $itemid => $item) {
+                $mylist->properties[$key]->setItemValue($itemid, $item[$key] ?? null);
+            }
+        }
+    }
+
     $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
     $xml .= "<items>\n";
     foreach ($mylist->items as $itemid => $item) {
         $xml .= '  <'.$mylist->name.' itemid="'.$itemid.'">'."\n";
         foreach ($mylist->properties as $name => $property) {
-            if (isset($item[$name])) {
-                if ($name == 'configuration') {
+            if (isset($item[$name]) || in_array($name, $deferred)) {
+                if ($name == 'configuration' && $mylist->name == 'properties') {
                     // don't replace anything in the serialized value
                     $xml .= "    <$name>" . $item[$name];
                 } elseif ($name == 'password' && $mylist->name == 'roles_users') {

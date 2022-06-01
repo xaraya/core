@@ -585,6 +585,9 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             if (!empty($this->limit) || !empty($this->offset)) {
                 $oldvalues = array_slice($oldvalues, $this->offset, $this->limit);
             }
+            if (empty($this->targetLoader)) {
+                return $oldvalues;
+            }
             $newvalues = array();
             foreach ($oldvalues as $itemid) {
                 $id = (string) $itemid;

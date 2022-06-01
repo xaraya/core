@@ -223,6 +223,22 @@ class DeferredItemProperty extends DataProperty
         return parent::showOutput($data);
     }
 
+    public function importValue(SimpleXMLElement $element)
+    {
+        // return $this->castType((string)$element->{$this->name});
+        return parent::importValue($element);
+    }
+
+    /**
+     * Export the value of itemprop1 here, but don't return the propname values from Called1
+     */
+    public function exportValue($itemid, $item)
+    {
+        // return xarVar::prepForDisplay($item[$this->name]);
+        // $data = $this->getDeferredData(['value' => $item[$this->name], '_itemid' => $itemid]);
+        return parent::exportValue($itemid, $item);
+    }
+
     /**
      * Get the actual deferred data here
      */

@@ -78,7 +78,7 @@ class DeferredListProperty extends DeferredItemProperty
         // 1. in construct() set to defaultvalue - skip
         // 2. in showForm() set for input preview and update - encode
         if (!empty($value) && is_array($value)) {
-            $value = json_encode($value);
+            $value = json_encode($value, JSON_NUMERIC_CHECK);
         }
         parent::setValue($value);
     }
@@ -176,6 +176,25 @@ class DeferredListProperty extends DeferredItemProperty
             $data['value'] = $this->setDataToDefer($this->_itemid, $this->value);
         }
         return parent::showOutput($data);
+    }
+
+    public function importValue(SimpleXMLElement $element)
+    {
+        // return $this->castType((string)$element->{$this->name});
+        return parent::importValue($element);
+    }
+
+    /**
+     * Export the list of listprop1 here, but don't return the propname values from Called1
+     */
+    public function exportValue($itemid, $item)
+    {
+        // return xarVar::prepForDisplay($item[$this->name]);
+        // $data = $this->getDeferredData(['value' => $item[$this->name], '_itemid' => $itemid]);
+        if (isset($item[$this->name]) && is_array($item[$this->name])) {
+            $item[$this->name] = json_encode($item[$this->name], JSON_NUMERIC_CHECK);
+        }
+        return parent::exportValue($itemid, $item);
     }
 
     /**
