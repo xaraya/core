@@ -116,7 +116,11 @@ class DeferredListProperty extends DeferredItemProperty
     {
         //static::init_deferred($this->defername);
         if (empty(static::$deferred[$this->defername])) {
-            static::$deferred[$this->defername] = new DataObjectListLoader($this->objectname, $this->fieldlist);
+            if (!empty($this->fieldlist)) {
+                static::$deferred[$this->defername] = new DataObjectListLoader($this->objectname, $this->fieldlist);
+            } else {
+                static::$deferred[$this->defername] = new DataObjectDummyLoader($this->objectname, $this->fieldlist);
+            }
         }
         return static::$deferred[$this->defername];
     }
@@ -126,7 +130,7 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function setDataToDefer($itemid, $values)
     {
-        if (!empty($values) && !empty($this->objectname)) {
+        if (!empty($values)) {
             if (is_string($values) && !is_numeric($values)) {
                 $values = json_decode($values, true);
             }
@@ -203,9 +207,6 @@ class DeferredListProperty extends DeferredItemProperty
      */
     public function getDeferredData(array $data = [])
     {
-        if (empty($this->objectname)) {
-            return $data;
-        }
         $values = null;
         if (isset($data['value'])) {
             $values = $data['value'];

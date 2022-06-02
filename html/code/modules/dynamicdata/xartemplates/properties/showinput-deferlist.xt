@@ -7,7 +7,7 @@
         <xar:set name="value">array($value)</xar:set>
     </xar:if>
     <xar:if condition="empty($options)">
-        <input type="text" id="#$id#" name="#$name#" value="#implode(',', $value)#"/>
+        <input type="text" id="#$id#" name="#$name#" value="[#implode(',', $value)#]"/>
     <xar:else />
         <!-- TODO: adapt from multiselect here -->
         <xar:if condition="!isset($size)">

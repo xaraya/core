@@ -87,8 +87,15 @@ class DeferredManyProperty extends DeferredItemProperty
         }
         // make sure we always have at least two parts here
         [$linkpart, $targetpart] = explode(':', substr($value, 11) . ':');
+        if (empty($linkpart)) {
+            return;
+        }
+        // make sure we always have at least three parts here
+        [$linkname, $caller_id, $called_id] = explode('.', $linkpart . '..');
+        if (empty($linkname) || empty($caller_id) || empty($called_id)) {
+            return;
+        }
         $this->defername = $linkpart;
-        [$linkname, $caller_id, $called_id] = explode('.', $linkpart);
         static::init_deferred($this->defername);
         $this->linkname = $linkname;
         $this->caller_id = $caller_id;
@@ -100,7 +107,7 @@ class DeferredManyProperty extends DeferredItemProperty
             // make sure we always have at least two parts here
             [$object, $field] = explode('.', $targetpart . '.');
             // @checkme support <objectname>.<propname>,<propname2>,<propname3> here too
-            $fieldlist = explode(',', $field);
+            $fieldlist = array_filter(explode(',', $field));
             // add and call resolver for target dataobject once we loaded all links
             if (!empty($fieldlist)) {
                 // @todo delay creating target resolver until we know which fields to retrieve (if coming from GraphQL)
@@ -116,6 +123,14 @@ class DeferredManyProperty extends DeferredItemProperty
                 // sorry, you'll have to deal with it directly in the template
                 $this->displaylink = null;
             }
+        } else {
+            // $this->displaylink = xarServer::getObjectURL($linkname, 'view', ['where[' . $called_id . ']' => '[itemid]']);
+            $this->displaylink = xarServer::getObjectURL($linkname, 'query', ['field[' . $called_id . ']' => '[itemid]', 'match[' . $called_id . ']' => 'eq']);
+        }
+        // @checkme don't update links for complete child objects here
+        if (!empty($this->targetname) && $this->objectname === $this->linkname) {
+            //$this->setInputStatus(DataPropertyMaster::DD_INPUTSTATE_NOINPUT);
+            $this->setInputStatus(DataPropertyMaster::DD_INPUTSTATE_IGNORED);
         }
         // reset default value and current value after config parsing
         $this->defaultvalue = '';
@@ -173,7 +188,10 @@ class DeferredManyProperty extends DeferredItemProperty
         if (!is_array($value)) {
             throw new Exception("DeferMany Value: " + var_export($value, true));
         }
-        $this->getDeferredLoader()->save($itemid, $value);
+        // @checkme don't update links for complete child objects here
+        if (empty($this->targetname) || $this->objectname !== $this->linkname) {
+            $this->getDeferredLoader()->save($itemid, $value);
+        }
     }
 
     public function deleteValue($itemid=0)
@@ -181,7 +199,10 @@ class DeferredManyProperty extends DeferredItemProperty
         if (empty($itemid) || empty($this->linkname)) {
             return;
         }
-        $this->getDeferredLoader()->save($itemid, []);
+        // @checkme don't update links for complete child objects here
+        if (empty($this->targetname) || $this->objectname !== $this->linkname) {
+            $this->getDeferredLoader()->save($itemid, []);
+        }
     }
 
     /**
@@ -216,7 +237,11 @@ class DeferredManyProperty extends DeferredItemProperty
     {
         //static::init_deferred($this->defername);
         if (empty(static::$deferred[$this->defername])) {
-            static::$deferred[$this->defername] = new LinkObjectItemLoader($this->linkname, $this->caller_id, $this->called_id);
+            if (!empty($this->linkname)) {
+                static::$deferred[$this->defername] = new LinkObjectItemLoader($this->linkname, $this->caller_id, $this->called_id);
+            } else {
+                static::$deferred[$this->defername] = new DataObjectDummyLoader($this->linkname, [$this->caller_id, $this->called_id]);
+            }
         }
         return static::$deferred[$this->defername];
     }
@@ -249,6 +274,10 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function showInput(array $data = [])
     {
+        // @checkme don't update links for complete child objects here
+        if (!empty($this->targetname) && $this->objectname === $this->linkname) {
+            return parent::showOutput($data);
+        }
         if (!$this->singlevalue && !empty($this->fieldlist) && count($this->fieldlist) == 1) {
             $this->singlevalue = true;
         }
@@ -295,9 +324,6 @@ class DeferredManyProperty extends DeferredItemProperty
      */
     public function getDeferredData(array $data = [])
     {
-        if (empty($this->linkname)) {
-            return $data;
-        }
         // @checkme we use the itemid as value here
         $itemid = null;
         if (isset($data['_itemid'])) {

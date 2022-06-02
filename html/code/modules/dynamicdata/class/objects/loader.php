@@ -181,9 +181,11 @@ class DataObjectLoader
 
     public function getValues(array $itemids)
     {
+        // Note: itemids may be empty here, e.g. when called from getOptions() in deferitem property
         if (empty($this->objectname)) {
             return [];
         }
+        xarLog::message("DataObjectLoader::getValues: get " . count($itemids) . " items from " . $this->objectname, xarLog::LEVEL_INFO);
         $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
         //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         $objectlist = DataObjectMaster::getObjectList($params);
@@ -210,6 +212,7 @@ class DataObjectLoader
             $key = (string) $itemid;
             $values[$key] = array_intersect_key($props, $allowed);
         }
+        xarLog::message("DataObjectLoader::getValues: got " . count($values) . " values from " . $this->objectname, xarLog::LEVEL_INFO);
         // return array("$itemid" => single $field value) - see defer* properties
         return $values;
     }
@@ -479,6 +482,24 @@ class DataObjectListLoader extends DataObjectLoader
     }
 }
 
+class DataObjectDummyLoader extends DataObjectLoader
+{
+    public function add($values)
+    {
+        // pass
+    }
+
+    public function get($values)
+    {
+        return $values;
+    }
+
+    public function getValues(array $itemids)
+    {
+        return [];
+    }
+}
+
 class LinkObjectItemLoader extends DataObjectItemLoader
 {
     public $linkname = '';
@@ -497,6 +518,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
 
     public function setTarget(string $objectname = 'sample', array $fieldlist = ['id', 'name'])
     {
+        // @todo if objectname is the same as linkname here, we could retrieve all fields at once below
         // @checkme we could use a DataObjectListLoader and pass all the values to it, but that's less efficient
         //$this->targetLoader = new DataObjectListLoader($objectname, $fieldlist, $resolver);
         //$this->targetLoader = new DataObjectItemLoader($objectname, $fieldlist);
@@ -510,6 +532,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
 
     public function getValues(array $itemids)
     {
+        xarLog::message("LinkObjectItemLoader::getValues: get links for " . count($itemids) . " items from " . $this->linkname, xarLog::LEVEL_INFO);
         $fieldlist = [$this->caller_id, $this->called_id];
         $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
@@ -518,8 +541,13 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         // @todo make this query work for relational datastores: select where caller_id in $values
         //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
         //$result = $objectlist->getItems($params);
-        //print_r('Query ' . $linkname . ' with ' . $caller_id . ' IN (' . implode(',', $values) . ')');
         $objectlist->addWhere($this->caller_id, 'IN (' . implode(',', $itemids) . ')');
+        if (is_object($objectlist->datastore) && get_class($objectlist->datastore) !== 'VariableTableDataStore') {
+            $wherestring = $this->caller_id . ' IN ' . implode(',', $itemids);
+            // @todo support string values in setWhere() 'field in val1,val2'
+            $conditions = $objectlist->setWhere($wherestring);
+            $objectlist->dataquery->addconditions($conditions);
+        }
         $result = $objectlist->getItems();
         // return array("$caller_id" => list of $called_ids)
         $values = [];
@@ -530,6 +558,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             }
             $values[$key][] = $props[$this->called_id];
         }
+        xarLog::message("LinkObjectItemLoader::getValues: got " . count($values) . " values from " . $this->linkname, xarLog::LEVEL_INFO);
         return $values;
     }
 
@@ -613,7 +642,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
     {
         if (!empty($itemid)) {
             $this->cache["$itemid"] = $values;
-            if (!empty($values)) {
+            if (!empty($values) && !empty($this->targetLoader)) {
                 $this->targetLoader->addList($values);
                 $this->targetLoader->load();
             }
@@ -628,9 +657,20 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         if (empty($itemid)) {
             return;
         }
+        if (!empty($this->targetLoader) && $this->targetLoader->objectname === $this->linkname) {
+            throw new Exception('No saving links to complete child object ' . $this->linkname);
+        }
         $params = ['name' => $this->linkname];
         $objectlist = DataObjectMaster::getObjectList($params);
         $objectlist->addWhere($this->caller_id, '= ' . $itemid);
+        if (is_object($objectlist->datastore) && get_class($objectlist->datastore) !== 'VariableTableDataStore') {
+            $wherestring = $this->caller_id . ' = ' . $itemid;
+            $conditions = $objectlist->setWhere($wherestring);
+            $objectlist->dataquery->addconditions($conditions);
+            // @todo make sure we don't delete the wrong items here
+            throw new Exception('TODO: No saving links to relational object ' . $this->linkname);
+            return;
+        }
         $result = $objectlist->getItems();
         $oldlinks = [];
         foreach ($result as $linkid => $props) {
@@ -641,6 +681,9 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         if (empty($newvalues) && empty($delvalues)) {
             return;
         }
+        // xarLog::message("LinkObjectItemLoader::save: old links " . implode(', ', $oldlinks), xarLog::LEVEL_INFO);
+        // xarLog::message("LinkObjectItemLoader::save: new values " . implode(', ', $newvalues), xarLog::LEVEL_INFO);
+        // xarLog::message("LinkObjectItemLoader::save: del values " . implode(', ', $delvalues), xarLog::LEVEL_INFO);
         $objectref = DataObjectMaster::getObject($params);
         foreach ($delvalues as $called_id) {
             $objectref->deleteItem(['itemid' => $oldlinks[$called_id]]);

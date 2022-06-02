@@ -72,6 +72,7 @@ class DeferredItemProperty extends DataProperty
      * The defaultvalue can be set to automatically load an object property if the value contains its itemid
      *
      * Format:
+     *     dataobject:<objectname> (= for display link only)
      *     dataobject:<objectname>.<propname>
      *  or dataobject:<objectname>.<propname>,<propname2>,<propname3>
      * Example:
@@ -86,11 +87,17 @@ class DeferredItemProperty extends DataProperty
             return;
         }
         $objectpart = substr($value, 11);
+        // make sure we always have at least two parts here
+        [$object, $field] = explode('.', $objectpart . '.');
+        if (empty($object)) {
+            return;
+        }
         $this->defername = $objectpart;
-        [$object, $field] = explode('.', $objectpart);
-        // @checkme support dataobject:<objectname>.<propname>,<propname2>,<propname3> here too
-        $fieldlist = explode(',', $field);
         static::init_deferred($this->defername);
+        // dataobject:<objectname> (= for display link only) uses empty fieldlist []
+        // dataobject:<objectname>.<propname> uses fieldlist ['propname']
+        // dataobject:<objectname>.<propname>,<propname2>,<propname3> uses fieldlist ['propname', 'propname2', ...]
+        $fieldlist = array_filter(explode(',', $field));
         $this->objectname = $object;
         $this->fieldlist = $fieldlist;
         //$this->getDeferredLoader();
@@ -165,7 +172,11 @@ class DeferredItemProperty extends DataProperty
     {
         //static::init_deferred($this->defername);
         if (empty(static::$deferred[$this->defername])) {
-            static::$deferred[$this->defername] = new DataObjectItemLoader($this->objectname, $this->fieldlist);
+            if (!empty($this->fieldlist)) {
+                static::$deferred[$this->defername] = new DataObjectItemLoader($this->objectname, $this->fieldlist);
+            } else {
+                static::$deferred[$this->defername] = new DataObjectDummyLoader($this->objectname, $this->fieldlist);
+            }
         }
         return static::$deferred[$this->defername];
     }
@@ -175,7 +186,7 @@ class DeferredItemProperty extends DataProperty
      */
     public function setDataToDefer($itemid, $value)
     {
-        if (!empty($value) && !empty($this->objectname)) {
+        if (!empty($value)) {
             $this->getDeferredLoader()->add($value);
         }
         return $value;
@@ -224,6 +235,22 @@ class DeferredItemProperty extends DataProperty
         return parent::showOutput($data);
     }
 
+    /**
+     * Show a hidden field for this property
+     *
+     * @param $data['name'] name of the field (default is 'dd_NN' with NN the property id)
+     * @param $data['value'] value of the field (default is the current value)
+     * @param $data['id'] id of the field
+     * @return string containing the HTML (or other) text to output in the BL template
+     */
+    public function showHidden(array $data = [])
+    {
+        if (!empty($data['value']) && is_array($data['value'])) {
+            $data['value'] = json_encode($data['value'], JSON_NUMERIC_CHECK);
+        }
+        return parent::showHidden($data);
+    }
+
     public function importValue(SimpleXMLElement $element)
     {
         // return $this->castType((string)$element->{$this->name});
@@ -245,9 +272,6 @@ class DeferredItemProperty extends DataProperty
      */
     public function getDeferredData(array $data = [])
     {
-        if (empty($this->objectname)) {
-            return $data;
-        }
         $value = null;
         if (isset($data['value'])) {
             $value = $data['value'];
@@ -281,9 +305,6 @@ class DeferredItemProperty extends DataProperty
         }
 
         $this->options = [];
-        if (empty($this->objectname)) {
-            return $this->options;
-        }
         //print_r('Getting options: ' . $this->defername);
         // @checkme (ab)use the resolver to retrieve all items here
         $items = $this->getDeferredLoader()->getValues([]);
