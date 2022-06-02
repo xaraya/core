@@ -280,6 +280,8 @@ class DeferredItemProperty extends DataProperty
             $value = $this->setDataToDefer($this->_itemid, $this->value);
         }
         if (empty($value)) {
+            $data['value'] = '';
+            $this->value = $data['value'];
             return $data;
         }
         //$data['link'] = xarServer::getObjectURL($this->objectname, 'display', array('itemid' => $value));
@@ -292,6 +294,7 @@ class DeferredItemProperty extends DataProperty
         if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], $data['value'])) {
             $data['value'] = $data['value'][$this->fieldlist[0]];
         }
+        $this->value = $data['value'];
         return $data;
     }
 

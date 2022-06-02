@@ -220,6 +220,7 @@ class DeferredListProperty extends DeferredItemProperty
         }
         if (empty($values)) {
             $data['value'] = '';
+            $this->value = $data['value'];
             return $data;
         }
         //$data['link'] = xarServer::getObjectURL($this->objectname, 'display', array('itemid' => $value));
@@ -236,6 +237,7 @@ class DeferredListProperty extends DeferredItemProperty
             }
             $data['value'] = $values;
         }
+        $this->value = $data['value'];
         return $data;
     }
 }
