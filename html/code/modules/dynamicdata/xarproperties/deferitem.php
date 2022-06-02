@@ -186,7 +186,7 @@ class DeferredItemProperty extends DataProperty
      */
     public function setDataToDefer($itemid, $value)
     {
-        if (!empty($value)) {
+        if (!empty($value) && is_numeric($value)) {
             $this->getDeferredLoader()->add($value);
         }
         return $value;
@@ -279,8 +279,8 @@ class DeferredItemProperty extends DataProperty
             // @checkme for showDisplay(), set data['value'] here
             $value = $this->setDataToDefer($this->_itemid, $this->value);
         }
-        if (empty($value)) {
-            $data['value'] = '';
+        if (empty($value) || !is_numeric($value)) {
+            $data['value'] = $value;
             $this->value = $data['value'];
             return $data;
         }
@@ -294,7 +294,7 @@ class DeferredItemProperty extends DataProperty
         if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], $data['value'])) {
             $data['value'] = $data['value'][$this->fieldlist[0]];
         }
-        $this->value = $data['value'];
+        // $this->value = $data['value'];
         return $data;
     }
 

@@ -252,7 +252,7 @@ class DeferredManyProperty extends DeferredItemProperty
     public function setDataToDefer($itemid, $value)
     {
         // @checkme we use the itemid as value here
-        if (!empty($itemid) && !empty($this->linkname)) {
+        if (!empty($itemid) && is_numeric($itemid) && !empty($this->linkname)) {
             $this->getDeferredLoader()->add($itemid);
         }
         //return $value;
@@ -332,8 +332,8 @@ class DeferredManyProperty extends DeferredItemProperty
             // @checkme for showDisplay(), set data['value'] here
             $itemid = $this->setDataToDefer($this->_itemid, $this->value);
         }
-        if (empty($itemid)) {
-            $data['value'] = '';
+        if (empty($itemid) || !is_numeric($itemid)) {
+            $data['value'] = $itemid;
             $this->value = $data['value'];
             return $data;
         }
@@ -351,7 +351,7 @@ class DeferredManyProperty extends DeferredItemProperty
             }
             $data['value'] = $values;
         }
-        $this->value = $data['value'];
+        // $this->value = $data['value'];
         return $data;
     }
 

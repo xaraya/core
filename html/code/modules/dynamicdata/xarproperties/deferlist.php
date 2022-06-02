@@ -219,7 +219,7 @@ class DeferredListProperty extends DeferredItemProperty
             $values = $this->setDataToDefer($this->_itemid, $this->value);
         }
         if (empty($values)) {
-            $data['value'] = '';
+            $data['value'] = $values;
             $this->value = $data['value'];
             return $data;
         }
@@ -237,7 +237,7 @@ class DeferredListProperty extends DeferredItemProperty
             }
             $data['value'] = $values;
         }
-        $this->value = $data['value'];
+        // $this->value = $data['value'];
         return $data;
     }
 }
