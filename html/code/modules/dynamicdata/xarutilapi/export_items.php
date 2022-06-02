@@ -49,6 +49,7 @@ function dynamicdata_utilapi_export_items(array $args=[])
             if (!empty($mylist->properties[$key]->targetname)) {
                 $mylist->properties[$key]->getDeferredLoader()->targetLoader = null;
             }
+            // @checkme we need to set the item values for relational objects here
             foreach ($mylist->items as $itemid => $item) {
                 $mylist->properties[$key]->setItemValue($itemid, $item[$key] ?? null);
             }

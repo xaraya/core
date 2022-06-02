@@ -122,6 +122,10 @@ class DataObjectRESTHandler extends xarObject
         foreach ($fieldlist as $key) {
             if (!empty($objectlist->properties[$key]) && method_exists($objectlist->properties[$key], 'getDeferredData')) {
                 array_push($deferred, $key);
+                // @checkme we need to set the item values for relational objects here
+                foreach ($items as $itemid => $item) {
+                    $objectlist->properties[$key]->setItemValue($itemid, $item[$key] ?? null);
+                }
             }
         }
         foreach ($items as $itemid => $item) {
@@ -131,7 +135,7 @@ class DataObjectRESTHandler extends xarObject
                 unset($item[$key]);
             }
             foreach ($deferred as $key) {
-                $data = $objectlist->properties[$key]->getDeferredData(['value' => $item[$key], '_itemid' => $itemid]);
+                $data = $objectlist->properties[$key]->getDeferredData(['value' => $item[$key] ?? null, '_itemid' => $itemid]);
                 if ($data['value'] && in_array(get_class($objectlist->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty']) && is_array($data['value'])) {
                     $item[$key] = array_values($data['value']);
                 } else {
