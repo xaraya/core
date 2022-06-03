@@ -24,6 +24,7 @@ sys::import('xaraya.datastores.sql');
 class VariableTableDataStore extends SQLDataStore
 {
     protected $table = 'dynamic_data';
+    private static $_deferred_property = 'DeferredItemProperty';
     
     /**
      * Get the field name used to identify this property (we use the property id here)

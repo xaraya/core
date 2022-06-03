@@ -1014,7 +1014,7 @@ class DataProperty extends xarObject implements iDataProperty
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
             return serialize($item[$this->name]);
         }
-        return xarVar::prepForDisplay($item[$this->name]);
+        return xarVar::prepForDisplay($item[$this->name] ?? null);
     }
     
     public function preCreate() { return true; }

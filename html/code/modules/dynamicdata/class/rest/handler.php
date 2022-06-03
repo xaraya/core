@@ -123,9 +123,9 @@ class DataObjectRESTHandler extends xarObject
             if (!empty($objectlist->properties[$key]) && method_exists($objectlist->properties[$key], 'getDeferredData')) {
                 array_push($deferred, $key);
                 // @checkme we need to set the item values for relational objects here
-                foreach ($items as $itemid => $item) {
-                    $objectlist->properties[$key]->setItemValue($itemid, $item[$key] ?? null);
-                }
+                // foreach ($items as $itemid => $item) {
+                //     $objectlist->properties[$key]->setItemValue($itemid, $item[$key] ?? null);
+                // }
             }
         }
         foreach ($items as $itemid => $item) {
