@@ -236,6 +236,11 @@ class DeferredListProperty extends DeferredItemProperty
                 $values[$key] = $props[$field];
             }
             $data['value'] = $values;
+            $data['singlevalue'] = true;
+        } else {
+            $data['singlevalue'] = false;
+            $data['object'] =& $this->getDeferredLoader()->objectlist;
+            $data['fieldlist'] = $this->getDeferredLoader()->fieldlist;
         }
         // $this->value = $data['value'];
         return $data;

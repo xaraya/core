@@ -3,6 +3,10 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="isset($value)">
         <xar:if condition="is_array($value)">
+        <xar:if condition="!empty($object) and empty($singlevalue)">
+            <xar:set name="values">array($source => $value)</xar:set>
+            <xar:data-view object="$object" items="$values" fieldlist="$fieldlist" linktype="object" newlink=""/>
+        <xar:else/>
         <div class="xar-form-container">
             <xar:if condition="!empty($link) and !empty($source)">
                 <div class="xar-row">
@@ -20,6 +24,7 @@
                 </div>
             </xar:foreach>
         </div>
+        </xar:if>
         <xar:elseif condition="!empty($link)"/>
             <a href="#$link#">#$value#</a>
         <xar:else/>

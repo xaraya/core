@@ -48,6 +48,7 @@ class DataObjectLoader
     public $count = false;
     public $access = null;
     // public $expand = null;
+    public $objectlist = null;
     public static $loaders = [];
 
     public static function getItemLoader(string $objectname = 'sample', array $fieldlist = ['id', 'name'])
@@ -188,11 +189,11 @@ class DataObjectLoader
         xarLog::message("DataObjectLoader::getValues: get " . count($itemids) . " items from " . $this->objectname, xarLog::LEVEL_INFO);
         $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
         //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $this->objectlist = DataObjectMaster::getObjectList($params);
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
-        $objectlist->setFieldList($this->fieldlist);
+        $this->objectlist->setFieldList($this->fieldlist);
         $params = ['itemids' => $itemids];
-        $result = $objectlist->getItems($params);
+        $result = $this->objectlist->getItems($params);
         // return array("$itemid" => assoc array of $fields)
         // @checkme variabletable returns all fields at the moment - filter here for now
         //return $result;
@@ -201,13 +202,13 @@ class DataObjectLoader
         $allowed = array_flip($this->fieldlist);
         $allowed['id'] = true;
         //$addPrimary = false;
-        //if (!empty($objectlist->primary) && !in_array($objectlist->primary, $this->fieldlist)) {
-        //    $allowed[$objectlist->primary] = true;
+        //if (!empty($this->objectlist->primary) && !in_array($this->objectlist->primary, $this->fieldlist)) {
+        //    $allowed[$this->objectlist->primary] = true;
         //    $addPrimary = true;
         //}
         foreach ($result as $itemid => $props) {
             //if ($addPrimary) {
-            //    $props[$objectlist->primary] = $itemid;
+            //    $props[$this->objectlist->primary] = $itemid;
             //}
             $key = (string) $itemid;
             $values[$key] = array_intersect_key($props, $allowed);
@@ -223,17 +224,17 @@ class DataObjectLoader
             $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
             //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         }
-        $objectlist = DataObjectMaster::getObjectList($params);
-        if (!empty($this->access) && !$objectlist->checkAccess($this->access)) {
+        $this->objectlist = DataObjectMaster::getObjectList($params);
+        if (!empty($this->access) && !$this->objectlist->checkAccess($this->access)) {
             //http_response_code(403);
             throw new Exception('No access to object ' . $this->objectname);
             return;
         }
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
-        $objectlist->setFieldList($this->fieldlist);
-        $this->applyObjectFilter($objectlist);
-        $this->getCount($objectlist);
-        return $objectlist;
+        $this->objectlist->setFieldList($this->fieldlist);
+        $this->applyObjectFilter($this->objectlist);
+        $this->getCount($this->objectlist);
+        return $this->objectlist;
     }
 
     public function setFieldlist(array $fieldlist)
@@ -536,19 +537,19 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         $fieldlist = [$this->caller_id, $this->called_id];
         $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $this->objectlist = DataObjectMaster::getObjectList($params);
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         // @todo make this query work for relational datastores: select where caller_id in $values
         //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
-        //$result = $objectlist->getItems($params);
-        $objectlist->addWhere($this->caller_id, 'IN (' . implode(',', $itemids) . ')');
-        if (is_object($objectlist->datastore) && get_class($objectlist->datastore) !== 'VariableTableDataStore') {
+        //$result = $this->objectlist->getItems($params);
+        $this->objectlist->addWhere($this->caller_id, 'IN (' . implode(',', $itemids) . ')');
+        if (is_object($this->objectlist->datastore) && get_class($this->objectlist->datastore) !== 'VariableTableDataStore') {
             $wherestring = $this->caller_id . ' IN ' . implode(',', $itemids);
             // @todo support string values in setWhere() 'field in val1,val2'
-            $conditions = $objectlist->setWhere($wherestring);
-            $objectlist->dataquery->addconditions($conditions);
+            $conditions = $this->objectlist->setWhere($wherestring);
+            $this->objectlist->dataquery->addconditions($conditions);
         }
-        $result = $objectlist->getItems();
+        $result = $this->objectlist->getItems();
         // return array("$caller_id" => list of $called_ids)
         $values = [];
         foreach ($result as $itemid => $props) {
@@ -569,9 +570,9 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
             //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         }
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $this->objectlist = DataObjectMaster::getObjectList($params);
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
-        return $objectlist;
+        return $this->objectlist;
     }
 
     public function mergeFieldlist(array $fieldlist)

@@ -350,6 +350,15 @@ class DeferredManyProperty extends DeferredItemProperty
                 $values[$key] = $props[$field];
             }
             $data['value'] = $values;
+            $data['singlevalue'] = true;
+        } else {
+            $data['singlevalue'] = false;
+            $target = $this->getDeferredLoader()->getTarget();
+            if (!empty($target)) {
+                $data['object'] =& $target->objectlist;
+                $data['fieldlist'] = $target->fieldlist;
+                // $data['linkfield'] = 'N/A';
+            }
         }
         // if value is null, the base DataProperty showOutput uses the value as fallback
         $this->value = $data['value'];

@@ -5,18 +5,21 @@
         <xar:if condition="is_array($value)">
             <xar:set name="first">reset($value)</xar:set>
             <xar:if condition="!is_numeric($first)">
+                <xar:if condition="!empty($object) and empty($singlevalue)">
+                    <xar:data-view object="$object" items="$value" fieldlist="$fieldlist" linktype="object" newlink=""/>
+                <xar:else/>
             <div class="xar-form-container">
                 <!-- TODO: show related item details -->
                 <xar:foreach in="$value" key="$key" value="$val">
                     <div class="xar-row">
                         <div class="xar-col">
+                        <xar:if condition="is_array($val)">
                         <xar:if condition="!empty($link)">
                             <xar:set name="itemlink">str_replace('[itemid]', $key, $link)</xar:set>
                             <label title="" style=""><a href="#$itemlink#">#$key#</a>:</label>&#160;
                         <xar:else/>
-                            <label title="" style="">#$key#:</label>&#160;
+                            <label title="" style="">#$key#.</label>&#160;
                         </xar:if>
-                        <xar:if condition="is_array($val)">
                             <div class="xar-form-container">
                                 <xar:foreach in="$val" key="$k" value="$v">
                                     <div class="xar-row">
@@ -27,6 +30,15 @@
                                     </div>
                                 </xar:foreach>
                             </div>
+                        <xar:elseif condition="!empty($link)"/>
+                            <label title="" style="">#$key#.</label>&#160;
+                            <xar:set name="itemlink">str_replace('[itemid]', $key, $link)</xar:set>
+                            <xar:if condition="!empty($val)">
+                                <a href="#$itemlink#">#$val#</a>
+                            <xar:else/>
+                                <label title="" style=""><a href="#$itemlink#">#$key#</a>:</label>&#160;
+                                <xar:var name="val"/>
+                            </xar:if>
                         <xar:else/>
                             <xar:var name="val"/>
                         </xar:if>
@@ -34,6 +46,7 @@
                     </div>
                 </xar:foreach>
             </div>
+                </xar:if>
             <xar:elseif condition="!empty($link)"/>
                 <xar:foreach in="$value" value="$val">
                      <xar:set name="itemlink">str_replace('[itemid]', $val, $link)</xar:set>
