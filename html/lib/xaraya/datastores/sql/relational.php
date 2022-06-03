@@ -20,6 +20,8 @@ sys::import('xaraya.datastores.sql');
 class RelationalDataStore extends SQLDataStore
 {
     private $encryptor;
+    private static $_subitems_types = array(30069, 30120);
+    private static $_deferred_property = 'DeferredItemProperty';
     
     function __construct($name=null)
     {
@@ -111,7 +113,7 @@ class RelationalDataStore extends SQLDataStore
                     $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
 
                 // Subitem properties get special treatment
-                if (in_array($this->object->properties[$fieldname]->type,array(30069,30120))) {
+                if (in_array($this->object->properties[$fieldname]->type, self::$_subitems_types)) {
                     $this->setItemValue($itemid, $row, $fieldname, $this->object);
                 } elseif ($index < 1) {
                     $this->setValue($row, $fieldname);
@@ -484,7 +486,7 @@ class RelationalDataStore extends SQLDataStore
     private function setValue($value, $field)
     {
     // Is this a subitems property?
-        if (in_array($this->object->properties[$field]->type,array(30069,30120))) {
+        if (in_array($this->object->properties[$field]->type, self::$_subitems_types)) {
 
     // Ignore if we don't have an object
             $subitemsobjectname = $this->object->properties[$field]->initialization_refobject;
@@ -498,7 +500,7 @@ class RelationalDataStore extends SQLDataStore
             $subfieldlist = $subitemsobject->getFieldList();
             foreach ($subfieldlist as $subfield) {
     // If the property is again a subitems property, recall the function
-                if (in_array($subitemsobject->properties[$subfield]->type,array(30069,30120))) {
+                if (in_array($subitemsobject->properties[$subfield]->type, self::$_subitems_types)) {
                     $this->setValue($value, $field);
                 } else {
     // Convert the source field name to this property's name and assign
@@ -521,7 +523,7 @@ class RelationalDataStore extends SQLDataStore
     private function setItemValue($itemid, $row, $field, $object, $fordisplay=0, $row_output='associative')
     {
     // Is this a subitems property?
-        if (in_array($object->properties[$field]->type,array(30069,30120))) {
+        if (in_array($object->properties[$field]->type, self::$_subitems_types)) {
 
     // Ignore if we don't have an object
             $subitemsobjectname = $object->properties[$field]->initialization_refobject;
@@ -536,7 +538,7 @@ class RelationalDataStore extends SQLDataStore
             $subfieldlist = $subitemsobject->getFieldList();
             foreach ($subfieldlist as $subfield) {
     // If the property is again a subitems property, call the function again for the subitemsobject
-                if (in_array($subitemsobject->properties[$subfield]->type,array(30069,30120))) {
+                if (in_array($subitemsobject->properties[$subfield]->type, self::$_subitems_types)) {
                     // First get the value of the primary index, make sure it has been assigned
                     $primary = $subitemsobject->primary;
                     $subitemsobject->properties[$primary]->setValue($row[$subitemsobject->name . "_" . $subitemsobject->properties[$primary]->name]);
@@ -558,6 +560,9 @@ class RelationalDataStore extends SQLDataStore
                     }
                 }
              }
+	} elseif ($object->properties[$field] instanceof self::$_deferred_property) {
+    // Is this a deferred item property or one of its subclasses?
+            $object->properties[$field]->setItemValue($itemid,$row[$object->properties[$field]->name] ?? null,$fordisplay);
         } elseif (empty($object->properties[$field]->source)){
     // This is some other property with a virtual datasource, ignore it
         } else {

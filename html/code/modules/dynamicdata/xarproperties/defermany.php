@@ -333,7 +333,7 @@ class DeferredManyProperty extends DeferredItemProperty
             $itemid = $this->setDataToDefer($this->_itemid, $this->value);
         }
         if (empty($itemid) || !is_numeric($itemid)) {
-            $data['value'] = $itemid;
+            $data['value'] = '';
             $this->value = $data['value'];
             return $data;
         }
@@ -351,7 +351,8 @@ class DeferredManyProperty extends DeferredItemProperty
             }
             $data['value'] = $values;
         }
-        // $this->value = $data['value'];
+        // if value is null, the base DataProperty showOutput uses the value as fallback
+        $this->value = $data['value'];
         return $data;
     }
 
