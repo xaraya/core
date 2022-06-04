@@ -47,6 +47,18 @@ class DataObjectRESTBuilder extends xarObject
             $contents = file_get_contents($configFile);
             self::$config = json_decode($contents, true);
         }
+        $configFile = sys::varpath() . '/cache/api/restapi_objects.json';
+        if (empty(self::$config['objects']) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+            self::$config['objects'] = $config['objects'];
+        }
+        $configFile = sys::varpath() . '/cache/api/restapi_modules.json';
+        if (empty(self::$config['modules']) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+            self::$config['modules'] = $config['modules'];
+        }
     }
 
     public static function parse_openapi()
@@ -97,17 +109,24 @@ class DataObjectRESTBuilder extends xarObject
         $doc['tags'] = self::$tags;
         $content = json_encode($doc, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         file_put_contents(self::$openapi, $content);
+        $infoData = [];
+        $infoData['generated'] = date('c');
+        $infoData['caution'] = 'This file is updated when you rebuild the openapi.json document in Dynamic Data - Utilities - Test APIs';
         $configFile = sys::varpath() . '/cache/api/restapi_config.json';
-        $configData = [];
-        $configData['generated'] = date('c');
-        $configData['caution'] = 'This file is updated when you rebuild the openapi.json document in Dynamic Data - Utilities - Test APIs';
+        $configData = $infoData;
         $configData['start'] = ['objects', 'whoami', 'modules'];
-        $configData['objects'] = self::$objects;
-        $configData['modules'] = self::$modules;
         $configData['storage'] = self::$storage;
         $configData['expires'] = self::$expires;
         $configData['timer'] = self::$timer;
         $configData['cache'] = self::$cache;
+        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $configFile = sys::varpath() . '/cache/api/restapi_objects.json';
+        $configData = $infoData;
+        $configData['objects'] = self::$objects;
+        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        $configFile = sys::varpath() . '/cache/api/restapi_modules.json';
+        $configData = $infoData;
+        $configData['modules'] = self::$modules;
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 

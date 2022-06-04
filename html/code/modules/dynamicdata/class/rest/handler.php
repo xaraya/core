@@ -65,9 +65,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getObjects($args)
     {
-        if (empty(self::$objects)) {
-            self::loadConfig();
-        }
+        self::loadObjects();
         $result = ['items' => [], 'count' => count(self::$objects)];
         foreach (self::$objects as $itemid => $item) {
             if ($item['datastore'] !== 'dynamicdata') {
@@ -128,12 +126,10 @@ class DataObjectRESTHandler extends xarObject
                 // }
             }
         }
+        $allowed = array_flip($fieldlist);
         foreach ($items as $itemid => $item) {
             // @todo filter out fieldlist in dynamic_data datastore
-            $diff = array_diff(array_keys($item), $fieldlist);
-            foreach ($diff as $key) {
-                unset($item[$key]);
-            }
+            $item = array_intersect_key($item, $allowed);
             foreach ($deferred as $key) {
                 $data = $objectlist->properties[$key]->getDeferredData(['value' => $item[$key] ?? null, '_itemid' => $itemid]);
                 if ($data['value'] && in_array(get_class($objectlist->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty']) && is_array($data['value'])) {
@@ -181,11 +177,9 @@ class DataObjectRESTHandler extends xarObject
         //$result = $objectitem->getFieldValues();
         // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
         $item = $objectitem->getFieldValues([], 1);
+        $allowed = array_flip($fieldlist);
         // @todo filter out fieldlist in dynamic_data datastore
-        $diff = array_diff(array_keys($item), $fieldlist);
-        foreach ($diff as $key) {
-            unset($item[$key]);
-        }
+        $item = array_intersect_key($item, $allowed);
         foreach ($fieldlist as $key) {
             if (!empty($objectitem->properties[$key]) && method_exists($objectitem->properties[$key], 'getDeferredData')) {
                 // @checkme take value and itemid directly from the property here, to set deferred data if needed
@@ -304,42 +298,6 @@ class DataObjectRESTHandler extends xarObject
                 $contents = file_get_contents($configFile);
                 self::$config = json_decode($contents, true);
             }
-            $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
-            $allowed = array_flip($fieldlist);
-            if (!empty(self::$config['objects'])) {
-                self::$objects = [];
-                foreach (self::$config['objects'] as $name => $item) {
-                    $item = array_intersect_key($item, $allowed);
-                    self::$objects[$name] = $item;
-                }
-            } else {
-                $object = 'objects';
-                $params = ['name' => $object, 'fieldlist' => $fieldlist];
-                $objectlist = DataObjectMaster::getObjectList($params);
-                self::$objects = $objectlist->getItems();
-                self::$config['objects'] = [];
-                foreach (self::$objects as $itemid => $item) {
-                    if ($item['datastore'] !== 'dynamicdata') {
-                        continue;
-                    }
-                    $item = array_intersect_key($item, $allowed);
-                    self::$config['objects'][$item['name']] = $item;
-                }
-            }
-            if (!empty(self::$config['modules'])) {
-                self::$modules = self::$config['modules'];
-            } else {
-                $modulelist = ['dynamicdata'];
-                self::$modules = [];
-                xarMod::init();
-                foreach ($modulelist as $module) {
-                    self::$modules[$module] = [
-                        'module' => $module,
-                        'apilist' => xarMod::apiFunc($module, 'rest', 'getlist'),
-                    ];
-                }
-                self::$config['modules'] = self::$modules;
-            }
             if (!empty(self::$config['storage'])) {
                 self::$storageType = self::$config['storage'];
             }
@@ -359,12 +317,81 @@ class DataObjectRESTHandler extends xarObject
                 self::setCacheScope($cacheScope);
             }
             self::setTimer('config');
+            // @deprecated for existing _config files before rebuild
+            if (!empty(self::$config['objects'])) {
+                self::loadObjects(self::$config);
+            }
+            if (!empty(self::$config['modules'])) {
+                self::loadModules(self::$config);
+            }
+        }
+    }
+
+    public static function loadObjects($config = [])
+    {
+        if (empty(self::$objects)) {
+            $configFile = sys::varpath() . '/cache/api/restapi_objects.json';
+            if (empty($config) && file_exists($configFile)) {
+                $contents = file_get_contents($configFile);
+                $config = json_decode($contents, true);
+            }
+            $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
+            $allowed = array_flip($fieldlist);
+            if (!empty($config['objects'])) {
+                self::$config['objects'] = $config['objects'];
+                self::$objects = [];
+                foreach (self::$config['objects'] as $name => $item) {
+                    $item = array_intersect_key($item, $allowed);
+                    self::$objects[$name] = $item;
+                }
+            } else {
+                $object = 'objects';
+                $params = ['name' => $object, 'fieldlist' => $fieldlist];
+                $objectlist = DataObjectMaster::getObjectList($params);
+                self::$objects = $objectlist->getItems();
+                self::$config['objects'] = [];
+                foreach (self::$objects as $itemid => $item) {
+                    if ($item['datastore'] !== 'dynamicdata') {
+                        continue;
+                    }
+                    $item = array_intersect_key($item, $allowed);
+                    self::$config['objects'][$item['name']] = $item;
+                }
+            }
+            self::setTimer('objects');
+        }
+    }
+
+    public static function loadModules($config = [])
+    {
+        if (empty(self::$modules)) {
+            $configFile = sys::varpath() . '/cache/api/restapi_modules.json';
+            if (empty($config) && file_exists($configFile)) {
+                $contents = file_get_contents($configFile);
+                $config = json_decode($contents, true);
+            }
+            if (!empty($config['modules'])) {
+                self::$config['modules'] = $config['modules'];
+                self::$modules = self::$config['modules'];
+            } else {
+                $modulelist = ['dynamicdata'];
+                self::$modules = [];
+                xarMod::init();
+                foreach ($modulelist as $module) {
+                    self::$modules[$module] = [
+                        'module' => $module,
+                        'apilist' => xarMod::apiFunc($module, 'rest', 'getlist'),
+                    ];
+                }
+                self::$config['modules'] = self::$modules;
+            }
+            self::setTimer('modules');
         }
     }
 
     public static function hasObject($object)
     {
-        self::loadConfig();
+        self::loadObjects();
         if (empty(self::$config) || empty(self::$config['objects']) || empty(self::$config['objects'][$object])) {
             return false;
         }
@@ -614,9 +641,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getModules($args)
     {
-        if (empty(self::$modules)) {
-            self::loadConfig();
-        }
+        self::loadModules();
         $result = ['items' => [], 'count' => count(self::$modules)];
         foreach (self::$modules as $itemid => $item) {
             $item['apilist'] = array_keys($item['apilist']);
@@ -714,7 +739,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function hasModule($module)
     {
-        self::loadConfig();
+        self::loadModules();
         if (empty(self::$config) || empty(self::$config['modules']) || empty(self::$config['modules'][$module])) {
             return false;
         }
