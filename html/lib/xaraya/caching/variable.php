@@ -53,7 +53,7 @@ class xarVariableCache extends xarObject
                                                 );
 
         $storage = !empty($config['Variable.CacheStorage']) ?
-            $config['Variable.CacheStorage'] : 'database';
+            $config['Variable.CacheStorage'] : 'apcu';
         $provider = !empty($config['Variable.CacheProvider']) ?
             $config['Variable.CacheProvider'] : null;
         self::$cacheDir = isset($config['Variable.CacheDir']) ?
@@ -136,7 +136,10 @@ class xarVariableCache extends xarObject
                 foreach (self::$cacheScopes as $scope => $value) {
                     $settings[$scope] = $value;
                 }
-                xarConfigVars::set(null, 'Site.Variable.CacheSettings', $settings);
+                try {
+                    xarConfigVars::set(null, 'Site.Variable.CacheSettings', $settings);
+                } catch (Exception $e) {
+                }
             }
             self::$cacheSettings = $settings;
         }

@@ -27,7 +27,7 @@ class DataObjectRESTHandler extends xarObject
     public static $config = [];
     public static $modules = [];
     public static $tokenExpires = 12 * 60 * 60;  // 12 hours
-    public static $storageType = 'database';  // database or apcu
+    public static $storageType = 'apcu';  // database or apcu
     public static $tokenStorage;
     public static $userId;
 
@@ -797,15 +797,17 @@ class DataObjectRESTHandler extends xarObject
      */
     public static function getResult($handler, $vars)
     {
-        self::setTimer('handle');
+        // initialize caching - delay until we need results
+        xarCache::init();
+        self::loadConfig();
         $tryCachedResult = false;
         if (is_array($handler) && $handler[0] === "DataObjectRESTHandler" && substr($handler[1], 0, 3) === "get") {
-            self::loadConfig();
             $tryCachedResult = true;
         }
         if ($tryCachedResult && self::$enableCache) {
             $queryId = $handler[1] . '-' . md5(json_encode($vars));
             $cacheKey = self::getCacheKey($queryId);
+            // @checkme we need to initialize the database here too if variable caching uses database instead of apcu
             if (!empty($cacheKey) && self::isCached($cacheKey)) {
                 $result = self::getCached($cacheKey);
                 if (is_array($result)) {
@@ -827,6 +829,13 @@ class DataObjectRESTHandler extends xarObject
                 return $result;
             }
         }
+        // initialize database - delay until caching fails
+        xarDatabase::init();
+        // initialize modules
+        //xarMod::init();
+        // initialize users
+        //xarUser::init();
+        self::setTimer('handle');
         $result = call_user_func($handler, $vars);
         // if (is_array($result)) {
         //     $result['x-debug'] = ['handler' => $handler, 'vars' => $vars];

@@ -28,10 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // initialize bootstrap
 sys::init();
-// initialize caching
-xarCache::init();
-// initialize database
-xarDatabase::init();
+// initialize caching - delay until we need results
+//xarCache::init();
+// initialize database - delay until caching fails
+//xarDatabase::init();
 // initialize modules
 //xarMod::init();
 // initialize users
