@@ -50,7 +50,47 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
             'name' => Type::string(),
             'age' => Type::int(),
             'location' => Type::string(),
+            // @checkme use deferred field or property resolver here with default load resolver = DataObjectLoader
+            'partner' => [
+                'type' => xarGraphQL::get_type('sample'),
+                //'resolve' => self::_xar_deferred_field_resolver('sample', 'partner'),
+                'resolve' => self::_xar_deferred_property_resolver('sample', 'partner', $object),
+            ],
+            'parents' => [
+                'type' => xarGraphQL::get_type_list('sample'),
+                //'resolve' => self::_xar_deferred_field_resolver('sample', 'parents'),
+                'resolve' => self::_xar_deferred_property_resolver('sample', 'parents', $object),
+            ],
+            'children' => [
+                'type' => xarGraphQL::get_type_list('sample'),
+                //'resolve' => self::_xar_deferred_field_resolver('sample', 'children'),
+                'resolve' => self::_xar_deferred_property_resolver('sample', 'children', $object),
+            ],
         ];
         return $fields;
+    }
+
+    /**
+     * Get the object field resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_object_field_resolver($type, $object = null)
+    {
+        // $clazz = xarGraphQL::get_type_class("buildtype");
+        // return $clazz::object_field_resolver($type, $object);
+    }
+
+    /**
+     * Load values for a deferred field - looking up the user names for example
+     *
+     * This method *should* be overridden for each specific object type - unless we rely on the DataObjectLoader
+     *
+     * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
+     */
+    public static function _xar_load_deferred($type)
+    {
+        // Note: we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
+        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
     }
 }

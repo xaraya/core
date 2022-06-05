@@ -331,12 +331,12 @@ class xarGraphQLBuildType
         return $typename;
     }
 
-    public static function get_deferred_field($fieldname, $typename)
+    public static function get_deferred_field($fieldname, $typename, $islist = false)
     {
         // xarGraphQL::setTimer('get deferred field ' . $fieldname);
         return [
             'name' => $fieldname,
-            'type' => xarGraphQL::get_type($typename),
+            'type' => ($islist ? xarGraphQL::get_type_list($typename) : xarGraphQL::get_type($typename)),
             // @todo move to resolveField?
             // @todo should we pass along the object instead of the type here?
             'resolve' => self::deferred_field_resolver($typename, $fieldname),
