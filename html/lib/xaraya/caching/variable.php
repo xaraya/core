@@ -51,6 +51,8 @@ class xarVariableCache extends xarObject
                                                 'RestAPI.Objects' => 0,
                                                 'RestAPI.ObjectList' => array('sample' => 1)
                                                 );
+        self::$cacheSettings = isset($config['Variable.CacheSettings']) ?
+            $config['Variable.CacheSettings'] : self::$cacheScopes;
 
         $storage = !empty($config['Variable.CacheStorage']) ?
             $config['Variable.CacheStorage'] : 'apcu';
@@ -121,10 +123,9 @@ class xarVariableCache extends xarObject
     {
         if (!isset(self::$cacheSettings)) {
             // TODO: make things configurable in xarcachemanager
-            try {
-                $settings = xarConfigVars::get(null, 'Site.Variable.CacheSettings');
-            } catch (Exception $e) {
-            }
+            // Load the caching configuration
+            $config = xarCache::getConfig();
+            $settings = $config['Variable.CacheSettings'] ?? array();
             if (empty($settings)) {
                 $settings = array();
                 // CHECKME: get a list of potential scopes from xarCoreCache as examples?
@@ -135,10 +136,6 @@ class xarVariableCache extends xarObject
                 // CHECKME: we only cache some default scopes for now
                 foreach (self::$cacheScopes as $scope => $value) {
                     $settings[$scope] = $value;
-                }
-                try {
-                    xarConfigVars::set(null, 'Site.Variable.CacheSettings', $settings);
-                } catch (Exception $e) {
                 }
             }
             self::$cacheSettings = $settings;

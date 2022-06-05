@@ -792,6 +792,19 @@ class DataObjectRESTHandler extends xarObject
         $r->post('/modules/{module}/{path}', ['DataObjectRESTHandler', 'postModuleCall']);
     }
 
+    public static function getQueryId($method, $vars)
+    {
+        $queryId = $method;
+        if (!empty($vars['object'])) {
+            $queryId .= '-' . $vars['object'];
+        }
+        if (!empty($vars['itemid'])) {
+            $queryId .= '-' . $vars['itemid'];
+        }
+        $queryId .= '-' . md5(json_encode($vars));
+        return $queryId;
+    }
+
     /**
      * Handle request and get result
      */
@@ -805,7 +818,7 @@ class DataObjectRESTHandler extends xarObject
             $tryCachedResult = true;
         }
         if ($tryCachedResult && self::$enableCache) {
-            $queryId = $handler[1] . '-' . md5(json_encode($vars));
+            $queryId = self::getQueryId($handler[1], $vars);
             $cacheKey = self::getCacheKey($queryId);
             // @checkme we need to initialize the database here too if variable caching uses database instead of apcu
             if (!empty($cacheKey) && self::isCached($cacheKey)) {
