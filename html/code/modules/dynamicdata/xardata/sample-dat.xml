@@ -5,17 +5,26 @@
     <name>Johnny</name>
     <age>32</age>
     <location>https://owncloud.mikespub.net/images/cuernos1.jpg</location>
+    <partner>2</partner>
+    <children>[3]</children>
+    <parents></parents>
   </sample>
   <sample itemid="2">
     <id>2</id>
     <name>Nancy</name>
     <age>29</age>
     <location>https://owncloud.mikespub.net/images/agra1.jpg</location>
+    <partner>1</partner>
+    <children>[3]</children>
+    <parents></parents>
   </sample>
   <sample itemid="3">
     <id>3</id>
     <name>Baby</name>
     <age>1</age>
     <location>https://owncloud.mikespub.net/images/sydney1.jpg</location>
+    <partner></partner>
+    <children>[]</children>
+    <parents>[1,2]</parents>
   </sample>
 </items>
