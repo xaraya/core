@@ -32,16 +32,21 @@ class xarGraphQLBuildType
      */
     public static function make_type($name, $type = null, $object = null, $list = null, $item = null)
     {
+        xarGraphQL::setTimer('make type ' . $name);
         // name=Property, type=property, object=properties, list=properties, item=property
         [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
         $description = "$object item";
-        $fields = self::get_object_fields($object);
+        // $fields = self::get_object_fields($object);
         $newType = new ObjectType([
             'name' => $name,
             'description' => $description,
-            'fields' => $fields,
+            // 'fields' => $fields,
+            'fields' => function () use ($object) {
+                return self::get_object_fields($object);
+            },
             'resolveField' => self::object_field_resolver($type, $object),
         ]);
+        // xarGraphQL::setTimer('made type ' . $name);
         return $newType;
     }
 
@@ -50,6 +55,7 @@ class xarGraphQLBuildType
      */
     public static function make_page_type($name, $type = null, $object = null, $list = null, $item = null)
     {
+        // xarGraphQL::setTimer('make page type ' . $name);
         // name=Property, type=property, object=properties, list=properties, item=property
         [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
         $page = $name . '_Page';
@@ -69,6 +75,7 @@ class xarGraphQLBuildType
             'fields' => $fields,
             //'resolveField' => self::object_field_resolver($type, $object),
         ]);
+        // xarGraphQL::setTimer('made page type ' . $name);
         return $newType;
     }
 
@@ -77,6 +84,7 @@ class xarGraphQLBuildType
      */
     public static function make_input_type($name, $type = null, $object = null, $list = null, $item = null)
     {
+        // xarGraphQL::setTimer('make input type ' . $name);
         // name=Property, type=property, object=properties, list=properties, item=property
         [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
         $input = $name . '_Input';
@@ -96,6 +104,7 @@ class xarGraphQLBuildType
             'fields' => $fields,
             //'resolveField' => self::object_field_resolver($type, $object),
         ]);
+        // xarGraphQL::setTimer('made input type ' . $name);
         return $newType;
     }
 
@@ -165,22 +174,19 @@ class xarGraphQLBuildType
 
     /**
      * Get the object type fields for this dynamicdata object type
+     * @checkme when the query contains some fragments from other types, those are loaded too even if they're unused
+     * Using resolve in each object field instead of the overall resolveField means we can't cache this information here
+     * before the query plan is even checked
      */
     public static function get_object_fields($object)
     {
+        // xarGraphQL::setTimer('get object fields ' . $object);
+        $fieldspecs = self::find_object_fieldspecs($object);
         $fields = [
             'id' => Type::nonNull(Type::id()),
             'name' => Type::string(),
             'keys' => Type::listOf(Type::string()),
         ];
-        //$args = array('name' => $object, 'numitems' => 1);
-        //$objectlist = DataObjectMaster::getObjectList($args);
-        //print_r($objectlist->getItems());
-        $params = ['name' => $object];
-        $objectref = DataObjectMaster::getObject($params);
-        if (!is_object($objectref)) {
-            throw new Exception('Invalid object ' . $object);
-        }
         $basetypes = [
             'string' => Type::string(),
             'integer' => Type::int(),
@@ -189,49 +195,43 @@ class xarGraphQLBuildType
             'dropdown' => Type::string(),  // @todo use EnumType here?
         ];
         $basetypes['time'] = $basetypes['integer'];
-        if (empty(self::$known_proptype_ids)) {
-            self::$known_proptype_ids = [
-                self::get_property_id('username') => 'user',
-                self::get_property_id('userlist') => 'user',
-                self::get_property_id('object') => 'object',
-                //self::get_property_id('objectref') => 'object',  // @todo look at configuration
-                self::get_property_id('propertyref') => 'property',
-                //self::get_property_id('module') => 'module',
-                self::get_property_id('categories') => 'category',
-            ];
-        }
-        // @todo add fields based on object descriptor?
-        foreach ($objectref->getProperties() as $key => $property) {
-            if (array_key_exists($property->type, self::$known_proptype_ids)) {
+        foreach ($fieldspecs as $fieldname => $fieldspec) {
+            $fieldtype = array_shift($fieldspec);
+            $typename = array_shift($fieldspec);
+            if ($fieldtype == 'deferred') {
                 // @todo should we pass along the object too?
-                $fields[$property->name] = self::get_deferred_field($property->name, self::$known_proptype_ids[$property->type]);
+                $fields[$fieldname] = self::get_deferred_field($fieldname, $typename);
                 continue;
             }
-            if ($property->type == self::get_property_id('deferitem')) {
-                // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
-                $fields[$property->name] = self::get_deferred_item($property->name, $property);
+            if ($fieldtype == 'deferitem') {
+                $defername = array_shift($fieldspec);
+                $fields[$fieldname] = self::get_deferred_item($fieldname, $typename, $defername, $object);
                 continue;
             }
-            if ($property->type == self::get_property_id('deferlist')) {
-                // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
-                $fields[$property->name] = self::get_deferred_list($property->name, $property);
+            if ($fieldtype == 'deferlist') {
+                $defername = array_shift($fieldspec);
+                $fields[$fieldname] = self::get_deferred_list($fieldname, $typename, $defername, $object);
                 continue;
             }
-            if ($property->type == self::get_property_id('defermany')) {
-                // @todo check if we can identify the type from the objectname and possibly re-use the resolver here
-                $fields[$property->name] = self::get_deferred_many($property->name, $property);
+            if ($fieldtype == 'defermany') {
+                $defername = array_shift($fieldspec);
+                // @checkme we need the itemid here!
+                $fields[$fieldname] = self::get_deferred_many($fieldname, $typename, $defername, $object);
                 continue;
             }
-            if ($property->name == 'configuration') {
-                //$fields[$property->name] = Type::listOf(xarGraphQL::get_type("keyval"));
-                $fields[$property->name] = xarGraphQL::get_type_list("keyval");
-                //$fields[$property->name] = xarGraphQL::get_type_list("mixed");
+            if ($fieldtype == 'typelist') {
+                //$fields[$fieldname] = Type::listOf(xarGraphQL::get_type($typename));
+                $fields[$fieldname] = xarGraphQL::get_type_list($typename);
+                //$fields[$fieldname] = xarGraphQL::get_type_list("mixed");
                 continue;
             }
-            if (!array_key_exists($property->name, $fields)) {
-                $fields[$property->name] = $basetypes[$property->basetype];
+            if ($fieldtype == 'basetype') {
+                $fields[$fieldname] = $basetypes[$typename];
+                continue;
             }
+            throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
         }
+        // xarGraphQL::setTimer('got object fields ' . $object);
         return $fields;
     }
 
@@ -249,62 +249,134 @@ class xarGraphQLBuildType
         return self::$property_id[$name];
     }
 
-    public static function get_deferred_field($fieldname, $type)
+    public static function find_object_fieldspecs($object)
     {
+        xarGraphQL::loadObjects();
+        if (!empty(xarGraphQL::$objectFieldSpecs[$object])) {
+            return xarGraphQL::$objectFieldSpecs[$object];
+        }
+        xarGraphQL::setTimer('find object fieldspecs ' . $object);
+        //$args = array('name' => $object, 'numitems' => 1);
+        //$objectlist = DataObjectMaster::getObjectList($args);
+        //print_r($objectlist->getItems());
+        $params = ['name' => $object];
+        $objectref = DataObjectMaster::getObject($params);
+        if (!is_object($objectref)) {
+            throw new Exception('Invalid object ' . $object);
+        }
+        if (empty(self::$known_proptype_ids)) {
+            self::$known_proptype_ids = [
+                self::get_property_id('username') => 'user',
+                self::get_property_id('userlist') => 'user',
+                self::get_property_id('object') => 'object',
+                //self::get_property_id('objectref') => 'object',  // @todo look at configuration
+                self::get_property_id('propertyref') => 'property',
+                //self::get_property_id('module') => 'module',
+                self::get_property_id('categories') => 'category',
+            ];
+        }
+        $fieldspecs = array();
+        // @todo add fields based on object descriptor?
+        foreach ($objectref->getProperties() as $key => $property) {
+            if (array_key_exists($property->type, self::$known_proptype_ids)) {
+                // @todo should we pass along the object too?
+                $typename = self::$known_proptype_ids[$property->type];
+                $fieldspecs[$property->name] = array('deferred', $typename);
+                continue;
+            }
+            if ($property->type == self::get_property_id('deferitem')) {
+                $typename = self::find_property_typename($property);
+                $fieldspecs[$property->name] = array('deferitem', $typename, $property->defername);
+                continue;
+            }
+            if ($property->type == self::get_property_id('deferlist')) {
+                $typename = self::find_property_typename($property);
+                $fieldspecs[$property->name] = array('deferlist', $typename, $property->defername);
+                continue;
+            }
+            if ($property->type == self::get_property_id('defermany')) {
+                $typename = self::find_property_typename($property);
+                // @checkme we need the itemid here!
+                $fieldspecs[$property->name] = array('defermany', $typename, $property->defername);
+                continue;
+            }
+            if ($property->type == self::get_property_id('configuration')) {
+                $typename = "keyval";
+                $fieldspecs[$property->name] = array('typelist', $typename);
+                continue;
+            }
+            if (!array_key_exists($property->name, $fieldspecs)) {
+                $typename = $property->basetype;
+                $fieldspecs[$property->name] = array('basetype', $typename);
+            }
+        }
+        xarGraphQL::$objectFieldSpecs[$object] = $fieldspecs;
+        xarGraphQL::setTimer('found object fieldspecs ' . $object);
+        return $fieldspecs;
+    }
+
+    public static function find_property_typename($property)
+    {
+        if (empty($property->objectname)) {
+            return "mixed";
+        }
+        if (!empty(xarGraphQL::$object_type[$property->objectname])) {
+            $typename = xarGraphQL::$object_type[$property->objectname];
+        } else {
+            $typename = self::singularize($property->objectname);
+        }
+        if (!xarGraphQL::has_type($typename)) {
+            $typename = "mixed";
+        }
+        return $typename;
+    }
+
+    public static function get_deferred_field($fieldname, $typename)
+    {
+        // xarGraphQL::setTimer('get deferred field ' . $fieldname);
         return [
             'name' => $fieldname,
-            'type' => xarGraphQL::get_type($type),
+            'type' => xarGraphQL::get_type($typename),
+            // @todo move to resolveField?
             // @todo should we pass along the object instead of the type here?
-            'resolve' => self::deferred_field_resolver($type, $fieldname),
+            'resolve' => self::deferred_field_resolver($typename, $fieldname),
         ];
     }
 
-    public static function get_deferred_item($fieldname, $property)
+    public static function get_deferred_item($fieldname, $typename, $defername, $object)
     {
+        // xarGraphQL::setTimer('get deferred item ' . $fieldname);
         // check if we can identify the type from the objectname and possibly re-use the resolver here
         //$type = "mixed";
         //$type = $property->objectname;
         //if (count($property->fieldlist) > 1) {
-        if (!empty(xarGraphQL::$object_type[$property->objectname])) {
-            $type = xarGraphQL::$object_type[$property->objectname];
-        } else {
-            $type = self::singularize($property->objectname);
-        }
-        if (xarGraphQL::has_type($type)) {
-            $type = xarGraphQL::get_type($type);
-        } else {
-            $type = xarGraphQL::get_type("mixed");
-        }
+        //$typename = self::find_property_typename($property);
+        $type = xarGraphQL::get_type($typename);
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         return [
             'name' => $fieldname,
             'type' => $type,
-            'resolve' => self::deferred_field_resolver($property->defername, $fieldname, $property),
+            // @todo move to resolveField?
+            'resolve' => self::deferred_field_resolver($defername, $fieldname, $object),
         ];
     }
 
-    public static function get_deferred_list($fieldname, $property)
+    public static function get_deferred_list($fieldname, $typename, $defername, $object)
     {
+        // xarGraphQL::setTimer('get deferred list ' . $fieldname);
         // check if we can identify the type from the objectname and possibly re-use the resolver here
         //$type = "mixed";
         //$type = $property->objectname;
         //if (count($property->fieldlist) > 1) {
-        if (!empty(xarGraphQL::$object_type[$property->objectname])) {
-            $type = xarGraphQL::$object_type[$property->objectname];
-        } else {
-            $type = self::singularize($property->objectname);
-        }
-        if (xarGraphQL::has_type($type)) {
-            $typelist = xarGraphQL::get_type_list($type);
+        //$typename = self::find_property_typename($property);
+        //$type = xarGraphQL::get_type($typename);
+        $typelist = xarGraphQL::get_type_list($typename);
         //$typelist = xarGraphQL::get_page_type($type);
-        } else {
-            $typelist = xarGraphQL::get_type_list("mixed");
-        }
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         return [
             'name' => $fieldname,
             // @checkme we get back a list of deferred items here
-            //'type' => Type::listOf($type),
+            //'type' => Type::listOf($typename),
             'type' => $typelist,
             // @checkme limit the # of children per itemid when we use data loader?
             'args' => [
@@ -317,33 +389,22 @@ class xarGraphQLBuildType
                     'defaultValue' => 20,
                 ],
             ],
-            'resolve' => self::deferred_field_resolver($property->defername, $fieldname, $property),
+            // @todo move to resolveField?
+            'resolve' => self::deferred_field_resolver($defername, $fieldname, $object),
         ];
     }
 
-    public static function get_deferred_many($fieldname, $property)
+    public static function get_deferred_many($fieldname, $typename, $defername, $object)
     {
+        // xarGraphQL::setTimer('get deferred many ' . $fieldname);
         // check if we can identify the type from the objectname and possibly re-use the resolver here
         //$type = "mixed";
         //$type = $property->targetname;
         //if (!empty($property->targetname) && count($property->fieldlist) > 1) {
-        if (!empty($property->objectname)) {
-            if (!empty(xarGraphQL::$object_type[$property->objectname])) {
-                $type = xarGraphQL::$object_type[$property->objectname];
-            } else {
-                $type = self::singularize($property->objectname);
-            }
-        } else {
-            $type = "mixed";
-        }
-        if (xarGraphQL::has_type($type)) {
-            //$type = xarGraphQL::get_type($type);
-            $typelist = xarGraphQL::get_type_list($type);
+        //$typename = self::find_property_typename($property);
+        //$type = xarGraphQL::get_type($typename);
+        $typelist = xarGraphQL::get_type_list($typename);
         //$typelist = xarGraphQL::get_page_type($type);
-        } else {
-            //$type = xarGraphQL::get_type("mixed");
-            $typelist = xarGraphQL::get_type_list("mixed");
-        }
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         return [
             'name' => $fieldname,
@@ -361,21 +422,23 @@ class xarGraphQLBuildType
                     'defaultValue' => 20,
                 ],
             ],
-            // @checkme we need the itemid here!
-            'resolve' => self::deferred_field_resolver($property->defername, 'id', $property),
+            // @todo move to resolveField?
+            // @checkme we use the itemid here, but we need the fieldname to find the property
+            //'resolve' => self::deferred_field_resolver($defername, 'id', $object),
+            'resolve' => self::deferred_field_resolver($defername, $fieldname, $object),
         ];
     }
 
-    public static function deferred_field_resolver($type, $prop_name, $property = null)
+    public static function deferred_field_resolver($typename, $prop_name, $object = null)
     {
         // we only need the type class here, not the type instance
-        if (!empty($property)) {
+        if (!empty($object)) {
             $clazz = xarGraphQL::get_type_class('basetype');
         } else {
-            $clazz = xarGraphQL::get_type_class($type);
+            $clazz = xarGraphQL::get_type_class($typename);
         }
         // @todo should we pass along the object instead of the type here?
-        return $clazz::_xar_deferred_field_resolver($type, $prop_name, $property);
+        return $clazz::_xar_deferred_field_resolver($typename, $prop_name, $object);
     }
 
     /**
@@ -383,6 +446,7 @@ class xarGraphQLBuildType
      */
     public static function object_field_resolver($type, $object = null)
     {
+        // xarGraphQL::setTimer('object field resolver ' . $type);
         // when using type config decorator
         if (!isset($object)) {
             $type = self::singularize($type);
@@ -390,13 +454,18 @@ class xarGraphQLBuildType
         }
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object field"]);
+                xarGraphQL::$paths[] = array_merge($info->path, ["object field " . $type, gettype($values), $args]);
             }
             $name = $info->fieldName;
             if (is_array($values)) {
                 if ($name == 'keys') {
                     return array_keys($values);
                 }
+                // @checkme are we sure we'll always have this available?
+                // if (empty(xarGraphQL::$object_ref[$object])) {
+                //     xarGraphQL::$object_ref[$object] = DataObjectMaster::getObjectList(['name' => $object]);
+                // }
+                // $property = (xarGraphQL::$object_ref[$object])->properties[$name];
                 if (array_key_exists($name, $values)) {
                     // see propertytype
                     if ($name == 'configuration' && is_string($values[$name]) && !empty($values[$name])) {
@@ -567,6 +636,7 @@ class xarGraphQLBuildType
             if (empty($todo)) {
                 return $args;
             }
+            // @checkme we assume that the first field other than the allowed ones is the list we need
             $list = $todo[0];
             if (array_key_exists($type, xarGraphQL::$type_fields)) {
                 $fieldlist = xarGraphQL::$type_fields[$type];
@@ -595,9 +665,32 @@ class xarGraphQLBuildType
             $params = $loader->addPagingParams();
             $args[$list] = $objectlist->getItems($params);
             //$args[$list] = $loader->query($args);
+            /**
+            $deferred = [];
+            foreach ($fieldlist as $key) {
+                if (!empty($objectlist->properties[$key]) && method_exists($objectlist->properties[$key], 'getDeferredData')) {
+                    array_push($deferred, $key);
+                    // @todo set the fieldlist of the loaders to match what we need here!?
+                }
+            }
+            $allowed = array_flip($fieldlist);
+            foreach ($args[$list] as $itemid => $item) {
+                // @todo filter out fieldlist in dynamic_data datastore
+                //$item = array_intersect_key($item, $allowed);
+                foreach ($deferred as $key) {
+                    $data = $objectlist->properties[$key]->getDeferredData(['value' => $item[$key] ?? null, '_itemid' => $itemid]);
+                    if ($data['value'] && in_array(get_class($objectlist->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty']) && is_array($data['value'])) {
+                        $args[$list][$itemid][$key] = array_values($data['value']);
+                    } else {
+                        $args[$list][$itemid][$key] = $data['value'];
+                    }
+                }
+            }
+             */
             if (!empty($args['count'])) {
                 $args['count'] = $loader->count;
             }
+            xarGraphQL::$object_ref[$object] =& $objectlist;
             return $args;
         };
         return $resolver;
@@ -681,6 +774,7 @@ class xarGraphQLBuildType
             $params = $loader->addPagingParams();
             $items = $objectlist->getItems($params);
             //$items = $loader->query($args);
+            xarGraphQL::$object_ref[$object] =& $objectlist;
             return $items;
         };
         return $resolver;
@@ -766,6 +860,7 @@ class xarGraphQLBuildType
                     $values['config'] = [$objectitem->config];
                 }
             }
+            xarGraphQL::$object_ref[$object] =& $objectitem;
             return $values;
         };
         return $resolver;

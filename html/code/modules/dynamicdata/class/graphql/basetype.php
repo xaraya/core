@@ -37,8 +37,10 @@ class xarGraphQLBaseType extends ObjectType
                 'name' => static::$_xar_name,
                 'description' => 'DD ' . static::$_xar_object . ' item',
                 'fields' => static::_xar_get_object_fields(static::$_xar_object),
+                'resolveField' => static::_xar_object_field_resolver(static::$_xar_type, static::$_xar_object),
             ];
         }
+        xarGraphQL::setTimer('new ' . $config['name']);
         // you need to pass the type config to the parent here, if you want to override the constructor
         parent::__construct($config);
     }
@@ -53,6 +55,17 @@ class xarGraphQLBaseType extends ObjectType
             'name' => Type::string(),
         ];
         return $fields;
+    }
+
+    /**
+     * Get the object field resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_object_field_resolver($type, $object = null)
+    {
+        // $clazz = xarGraphQL::get_type_class("buildtype");
+        // return $clazz::object_field_resolver($type, $object);
     }
 
     /**
@@ -164,56 +177,81 @@ class xarGraphQLBaseType extends ObjectType
     }
 
     /**
+     * Get the property resolver for a deferred field - looking up the user names for example
+     *
+     * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
+     */
+    public static function _xar_deferred_property_resolver($type, $prop_name, $object)
+    {
+        // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name, $object) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["deferred property " . $type, $args]);
+            }
+            // @checkme this will be empty for defermany properties, since we use the id to defer
+            // if (empty($values[$prop_name])) {
+            //     return;
+            // }
+            // @checkme are we sure we'll always have this available?
+            if (empty(xarGraphQL::$object_ref[$object])) {
+                xarGraphQL::$object_ref[$object] = DataObjectMaster::getObjectList(['name' => $object]);
+            }
+            $property = (xarGraphQL::$object_ref[$object])->properties[$prop_name];
+            if (get_class($property) === 'DeferredManyProperty') {
+                // $prop_name = 'id';
+            }
+            $fields = $info->getFieldSelection(0);
+            if (array_key_exists('id', $fields) && count($fields) < 2) {
+                return ['id' => $values[$prop_name]];
+            }
+            $fieldlist = array_keys($fields);
+            if (!empty(xarGraphQL::$object_type[$property->objectname])) {
+                $objtype = strtolower(xarGraphQL::$object_type[$property->objectname]);
+                if (array_key_exists($objtype, xarGraphQL::$type_fields)) {
+                    $fieldlist = xarGraphQL::$type_fields[$objtype];
+                }
+            } else {
+                throw new Exception('Unknown object ' . $property->objectname);
+            }
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = ["add deferred $type " . $values['id'] . " " . implode(',', $fieldlist)];
+            }
+            $loader = $property->getDeferredLoader();
+            // @checkme limit the # of children per itemid when we use data loader?
+            // @checkme preserve fieldlist to optimize loading afterwards too
+            if ($loader->checkFieldlist && !empty($fieldlist)) {
+                $loader->mergeFieldlist($fieldlist);
+                $loader->parseQueryArgs($args);
+            }
+            // @todo  how to avoid setting this twice for lists?
+            $value = $property->setDataToDefer($values['id'], $values[$prop_name] ?? null);
+
+            return new GraphQL\Deferred(function () use ($type, $values, $prop_name, $property) {
+                if (xarGraphQL::$trace_path) {
+                    xarGraphQL::$paths[] = ["get deferred $type " . $values['id']];
+                }
+                $data = $property->getDeferredData(['value' => ($values[$prop_name] ?? null), '_itemid' => $values['id']]);
+                //print_r($data['value']);
+                // @checkme convert deferred data into assoc array or list of assoc array
+                //if (property_exists($property, 'linkname')) {
+                //    return array('count' => 0, 'filter' => array("$type,eq,".$values['id']), $property->objectname => $data['value']);
+                //}
+                return $data['value'];
+            });
+        };
+        return $resolver;
+    }
+
+    /**
      * Get the field resolver for a deferred field - looking up the user names for example
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_deferred_field_resolver($type, $prop_name, $property = null)
+    public static function _xar_deferred_field_resolver($type, $prop_name, $object = null)
     {
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
-        if (!empty($property)) {
-            $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name, $property) {
-                if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = array_merge($info->path, ["deferred property " . $type, $args]);
-                }
-                $fields = $info->getFieldSelection(0);
-                if (array_key_exists('id', $fields) && count($fields) < 2) {
-                    return ['id' => $values[$prop_name]];
-                }
-                $fieldlist = array_keys($fields);
-                if (!empty(xarGraphQL::$object_type[$property->objectname])) {
-                    $objtype = strtolower(xarGraphQL::$object_type[$property->objectname]);
-                    if (array_key_exists($objtype, xarGraphQL::$type_fields)) {
-                        $fieldlist = xarGraphQL::$type_fields[$objtype];
-                    }
-                }
-                if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = ["add deferred $type " . $values['id'] . " " . implode(',', $fieldlist)];
-                }
-                $loader = $property->getDeferredLoader();
-                // @checkme limit the # of children per itemid when we use data loader?
-                // @checkme preserve fieldlist to optimize loading afterwards too
-                if ($loader->checkFieldlist && !empty($fieldlist)) {
-                    $loader->mergeFieldlist($fieldlist);
-                    $loader->parseQueryArgs($args);
-                }
-                // @todo  how to avoid setting this twice for lists?
-                $value = $property->setDataToDefer($values['id'], $values[$prop_name]);
-
-                return new GraphQL\Deferred(function () use ($type, $values, $prop_name, $property) {
-                    if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = ["get deferred $type " . $values['id']];
-                    }
-                    $data = $property->getDeferredData(['value' => $values[$prop_name], '_itemid' => $values['id']]);
-                    //print_r($data['value']);
-                    // @checkme convert deferred data into assoc array or list of assoc array
-                    //if (property_exists($property, 'linkname')) {
-                    //    return array('count' => 0, 'filter' => array("$type,eq,".$values['id']), $property->objectname => $data['value']);
-                    //}
-                    return $data['value'];
-                });
-            };
-            return $resolver;
+        if (!empty($object)) {
+            return static::_xar_deferred_property_resolver($type, $prop_name, $object);
         }
         if (!array_key_exists($type, static::$_xar_deferred)) {
             static::$_xar_deferred[$type] = new DataObjectLoader(static::$_xar_object, ['id']);
@@ -227,6 +265,9 @@ class xarGraphQLBaseType extends ObjectType
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $prop_name) {
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["deferred field " . $type, $args]);
+            }
+            if (empty($values[$prop_name])) {
+                return;
             }
             $fields = $info->getFieldSelection(0);
             if (array_key_exists('id', $fields) && count($fields) < 2) {

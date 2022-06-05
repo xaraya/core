@@ -63,48 +63,9 @@ if (!empty($variables) && is_string($variables)) {
 //xarGraphQL::$cache_plan = true;
 //xarGraphQL::$cache_data = true;
 //xarGraphQL::$enableCache = true;
-//$data = xarGraphQL::get_data($query, $variables, $operationName);
-$extraTypes = ['module', 'theme', 'category', 'configuration'];
-//$extraTypes = ['module', 'theme', 'category', 'configuration', 'categories_linkage', 'extra', 'api_film', 'api_people', 'api_planet', 'api_species', 'api_starship', 'api_vehicle'];
-$configFile = sys::varpath() . '/cache/api/graphql_config.json';
-if (file_exists($configFile)) {
-    $contents = file_get_contents($configFile);
-    $configData = json_decode($contents, true);
-    if (empty($configData)) {
-        $configData = [];
-    }
-    if (!empty($configData['extraTypes'])) {
-        $extraTypes = $configData['extraTypes'];
-    }
-    if (!empty($configData['queryComplexity'])) {
-        xarGraphQL::$queryComplexity = $configData['queryComplexity'];
-    }
-    if (!empty($configData['queryDepth'])) {
-        xarGraphQL::$queryDepth = $configData['queryDepth'];
-    }
-    if (!empty($configData['tokenExpires'])) {
-        xarGraphQL::$tokenExpires = $configData['tokenExpires'];
-    }
-    if (!empty($configData['storageType'])) {
-        xarGraphQL::$storageType = $configData['storageType'];
-    }
-    if (!empty($configData['enableTimer'])) {
-        xarGraphQL::$enableTimer = true;
-    }
-    if (!empty($configData['tracePath'])) {
-        xarGraphQL::$trace_path = true;
-    }
-    if (!empty($configData['enableCache'])) {
-        xarGraphQL::$enableCache = true;
-    }
-    if (!empty($configData['cachePlan'])) {
-        xarGraphQL::$cache_plan = true;
-    }
-    if (!empty($configData['cacheData'])) {
-        xarGraphQL::$cache_data = true;
-    }
-}
-$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);
+$data = xarGraphQL::get_data($query, $variables, $operationName);
+//$extraTypes = ['module', 'theme', 'category', 'configuration'];
+//$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
 //$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes, $schemaFile);
 

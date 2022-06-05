@@ -173,17 +173,7 @@ function dynamicdata_admin_test_apis(array $args=[])
         }
         require_once $vendor .'/autoload.php';
         sys::import('modules.dynamicdata.class.graphql');
-        $extraTypes = [];
-        if (!empty($graphqllist)) {
-            $clazz = xarGraphQL::get_type_class("buildtype");
-            foreach ($graphqllist as $name) {
-                $type = $clazz::singularize($name);
-                if (xarGraphQL::has_type($type)) {
-                    continue;
-                }
-                $extraTypes[] = $type;
-            }
-        }
+        $extraTypes = xarGraphQL::find_extra_types($graphqllist);
         xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData);
         xarController::redirect(xarServer::getCurrentURL(['create_gql'=> null]));
         return true;

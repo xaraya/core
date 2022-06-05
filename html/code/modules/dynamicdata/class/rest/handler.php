@@ -18,8 +18,8 @@ sys::import('xaraya.caching.cachetrait');
  */
 class DataObjectRESTHandler extends xarObject
 {
-    use xarTimerTrait;
-    use xarCacheTrait;
+    use xarTimerTrait;  // activate with self::$enableTimer = true
+    use xarCacheTrait;  // activate with self::$enableCache = true
 
     public static $endpoint = 'rst.php/v1';
     public static $objects = [];
@@ -291,102 +291,105 @@ class DataObjectRESTHandler extends xarObject
 
     public static function loadConfig()
     {
-        if (empty(self::$config)) {
-            self::$config = [];
-            $configFile = sys::varpath() . '/cache/api/restapi_config.json';
-            if (file_exists($configFile)) {
-                $contents = file_get_contents($configFile);
-                self::$config = json_decode($contents, true);
-            }
-            if (!empty(self::$config['storage'])) {
-                self::$storageType = self::$config['storage'];
-            }
-            if (!empty(self::$config['expires'])) {
-                self::$tokenExpires = intval(self::$config['expires']);
-            }
-            // use xarTimerTrait
-            if (isset(self::$config['timer'])) {
-                self::$enableTimer = !empty(self::$config['timer']) ? true : false;
-            }
-            // use xarCacheTrait
-            if (isset(self::$config['cache'])) {
-                self::$enableCache = !empty(self::$config['cache']) ? true : false;
-            }
-            if (self::$enableCache) {
-                $cacheScope = 'RestAPI.Operation';
-                self::setCacheScope($cacheScope);
-            }
-            self::setTimer('config');
-            // @deprecated for existing _config files before rebuild
-            if (!empty(self::$config['objects'])) {
-                self::loadObjects(self::$config);
-            }
-            if (!empty(self::$config['modules'])) {
-                self::loadModules(self::$config);
-            }
+        if (!empty(self::$config)) {
+            return;
+        }
+        self::$config = [];
+        $configFile = sys::varpath() . '/cache/api/restapi_config.json';
+        if (file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            self::$config = json_decode($contents, true);
+        }
+        if (!empty(self::$config['storage'])) {
+            self::$storageType = self::$config['storage'];
+        }
+        if (!empty(self::$config['expires'])) {
+            self::$tokenExpires = intval(self::$config['expires']);
+        }
+        // use xarTimerTrait
+        if (isset(self::$config['timer'])) {
+            self::$enableTimer = !empty(self::$config['timer']) ? true : false;
+        }
+        // use xarCacheTrait
+        if (isset(self::$config['cache'])) {
+            self::$enableCache = !empty(self::$config['cache']) ? true : false;
+        }
+        if (self::$enableCache) {
+            $cacheScope = 'RestAPI.Operation';
+            self::setCacheScope($cacheScope);
+        }
+        self::setTimer('config');
+        // @deprecated for existing _config files before rebuild
+        if (!empty(self::$config['objects'])) {
+            self::loadObjects(self::$config);
+        }
+        if (!empty(self::$config['modules'])) {
+            self::loadModules(self::$config);
         }
     }
 
     public static function loadObjects($config = [])
     {
-        if (empty(self::$objects)) {
-            $configFile = sys::varpath() . '/cache/api/restapi_objects.json';
-            if (empty($config) && file_exists($configFile)) {
-                $contents = file_get_contents($configFile);
-                $config = json_decode($contents, true);
-            }
-            $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
-            $allowed = array_flip($fieldlist);
-            if (!empty($config['objects'])) {
-                self::$config['objects'] = $config['objects'];
-                self::$objects = [];
-                foreach (self::$config['objects'] as $name => $item) {
-                    $item = array_intersect_key($item, $allowed);
-                    self::$objects[$name] = $item;
-                }
-            } else {
-                $object = 'objects';
-                $params = ['name' => $object, 'fieldlist' => $fieldlist];
-                $objectlist = DataObjectMaster::getObjectList($params);
-                self::$objects = $objectlist->getItems();
-                self::$config['objects'] = [];
-                foreach (self::$objects as $itemid => $item) {
-                    if ($item['datastore'] !== 'dynamicdata') {
-                        continue;
-                    }
-                    $item = array_intersect_key($item, $allowed);
-                    self::$config['objects'][$item['name']] = $item;
-                }
-            }
-            self::setTimer('objects');
+        if (!empty(self::$objects)) {
+            return;
         }
+        $configFile = sys::varpath() . '/cache/api/restapi_objects.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
+        $allowed = array_flip($fieldlist);
+        if (!empty($config['objects'])) {
+            self::$config['objects'] = $config['objects'];
+            self::$objects = [];
+            foreach (self::$config['objects'] as $name => $item) {
+                $item = array_intersect_key($item, $allowed);
+                self::$objects[$name] = $item;
+            }
+        } else {
+            $object = 'objects';
+            $params = ['name' => $object, 'fieldlist' => $fieldlist];
+            $objectlist = DataObjectMaster::getObjectList($params);
+            self::$objects = $objectlist->getItems();
+            self::$config['objects'] = [];
+            foreach (self::$objects as $itemid => $item) {
+                if ($item['datastore'] !== 'dynamicdata') {
+                    continue;
+                }
+                $item = array_intersect_key($item, $allowed);
+                self::$config['objects'][$item['name']] = $item;
+            }
+        }
+        self::setTimer('objects');
     }
 
     public static function loadModules($config = [])
     {
-        if (empty(self::$modules)) {
-            $configFile = sys::varpath() . '/cache/api/restapi_modules.json';
-            if (empty($config) && file_exists($configFile)) {
-                $contents = file_get_contents($configFile);
-                $config = json_decode($contents, true);
-            }
-            if (!empty($config['modules'])) {
-                self::$config['modules'] = $config['modules'];
-                self::$modules = self::$config['modules'];
-            } else {
-                $modulelist = ['dynamicdata'];
-                self::$modules = [];
-                xarMod::init();
-                foreach ($modulelist as $module) {
-                    self::$modules[$module] = [
-                        'module' => $module,
-                        'apilist' => xarMod::apiFunc($module, 'rest', 'getlist'),
-                    ];
-                }
-                self::$config['modules'] = self::$modules;
-            }
-            self::setTimer('modules');
+        if (!empty(self::$modules)) {
+            return;
         }
+        $configFile = sys::varpath() . '/cache/api/restapi_modules.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        if (!empty($config['modules'])) {
+            self::$config['modules'] = $config['modules'];
+            self::$modules = self::$config['modules'];
+        } else {
+            $modulelist = ['dynamicdata'];
+            self::$modules = [];
+            xarMod::init();
+            foreach ($modulelist as $module) {
+                self::$modules[$module] = [
+                    'module' => $module,
+                    'apilist' => xarMod::apiFunc($module, 'rest', 'getlist'),
+                ];
+            }
+            self::$config['modules'] = self::$modules;
+        }
+        self::setTimer('modules');
     }
 
     public static function hasObject($object)

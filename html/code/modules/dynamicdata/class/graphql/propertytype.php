@@ -37,7 +37,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
                     if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = array_merge($info->path, ["property keys"]);
+                        xarGraphQL::$paths[] = array_merge($info->path, ["property keys", gettype($property)]);
                     }
                     //print_r("property keys resolve");
                     if (is_array($property)) {

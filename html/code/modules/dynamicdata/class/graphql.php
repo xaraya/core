@@ -48,10 +48,11 @@ use GraphQL\Validator\DocumentValidator;
  */
 class xarGraphQL extends xarObject
 {
-    use xarCacheTrait;
-    use xarTimerTrait;
+    use xarTimerTrait;  // activate with self::$enableTimer = true
+    use xarCacheTrait;  // activate with self::$enableCache = true
 
     public static $endpoint = 'gql.php';
+    public static $config = [];
     public static $type_cache = [];
     public static $type_mapper = [
         'query'    => 'querytype',
@@ -80,10 +81,12 @@ class xarGraphQL extends xarObject
     public static $queryComplexity = 0;
     public static $queryDepth = 0;
     public static $tokenExpires = 12 * 60 * 60;  // 12 hours
-    public static $storageType = 'database';  // database or apcu
+    public static $storageType = 'apcu';  // database or apcu
     public static $tokenStorage;
     public static $userId;
     public static $objectSecurity = [];
+    public static $objectFieldSpecs = [];
+    public static $object_ref = [];
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
@@ -93,7 +96,8 @@ class xarGraphQL extends xarObject
         if (!empty($extraTypes)) {
             self::$extra_types = $extraTypes;
         }
-        self::map_objects();
+        // self::map_objects();
+        self::loadObjects();
         // Schema doesn't accept lazy loading of query type (besides typeLoader)
         $queryType = self::get_type("query");
         $mutationType = self::get_type("mutation");
@@ -115,6 +119,9 @@ class xarGraphQL extends xarObject
 
     public static function map_objects()
     {
+        if (!empty(self::$object_type)) {
+            return;
+        }
         foreach (self::$type_mapper as $name => $type) {
             $clazz = self::get_type_class($type);
             if (property_exists($clazz, '_xar_object') && !empty($clazz::$_xar_object)) {
@@ -129,6 +136,7 @@ class xarGraphQL extends xarObject
             [$name, $type, $object, $list, $item] = $clazz::sanitize($type);
             self::$object_type[$object] = $name;
         }
+        self::setTimer('mapped');
     }
 
     /**
@@ -340,16 +348,7 @@ class xarGraphQL extends xarObject
      */
     public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null)
     {
-        if (self::$trace_path) {
-            self::$enableTimer = true;
-        }
-        if (self::$cache_plan || self::$cache_data) {
-            self::$enableCache = true;
-        }
-        if (self::$enableCache) {
-            $cacheScope = 'GraphQLAPI.QueryPlan';
-            self::setCacheScope($cacheScope);
-        }
+        self::loadConfig();
         self::setTimer('start');
         if (!empty($schemaFile)) {
             $schema = self::build_schema($schemaFile, $extraTypes);
@@ -364,10 +363,10 @@ class xarGraphQL extends xarObject
         }
 
         // Add to standard set of rules globally (values from GraphQL Playground IntrospectionQuery)
-        if (!empty(self::$queryComplexity)) {
+        if (!empty(self::$queryComplexity) && false) {
             DocumentValidator::addRule(new Rules\QueryComplexity(self::$queryComplexity));  // 181
         }
-        if (!empty(self::$queryDepth)) {
+        if (!empty(self::$queryDepth) && false) {
             DocumentValidator::addRule(new Rules\QueryDepth(self::$queryDepth));  // 11
         }
         // DocumentValidator::addRule(new Rules\DisableIntrospection());
@@ -376,7 +375,17 @@ class xarGraphQL extends xarObject
         $context = ['request' => $_REQUEST, 'server' => $_SERVER];
         $fieldResolver = null;
         $validationRules = null;
+        $validationRules = [];
+        // $validationRules = array_merge(
+        //     GraphQL::getStandardValidationRules(),
+        //     [
+        //         // new Rules\QueryComplexity(self::$queryComplexity),
+        //         // new Rules\QueryDepth(self::$queryDepth),
+        //         // new Rules\DisableIntrospection()
+        //     ]
+        // );
 
+        self::setTimer('ready');
         $result = GraphQL::executeQuery(
             $schema,
             $queryString,
@@ -546,12 +555,113 @@ class xarGraphQL extends xarObject
         return !empty(self::$objectSecurity[$object]) ? true : false;
     }
 
+    public static function loadConfig()
+    {
+        if (!empty(self::$config)) {
+            return;
+        }
+        self::$config = [];
+        $configFile = sys::varpath() . '/cache/api/graphql_config.json';
+        if (file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            self::$config = json_decode($contents, true);
+        }
+        if (!empty(self::$config['extraTypes'])) {
+            self::$extra_types = self::$config['extraTypes'];
+        }
+        if (!empty(self::$config['queryComplexity'])) {
+            self::$queryComplexity = self::$config['queryComplexity'];
+        }
+        if (!empty(self::$config['queryDepth'])) {
+            self::$queryDepth = self::$config['queryDepth'];
+        }
+        if (!empty(self::$config['tokenExpires'])) {
+            self::$tokenExpires = self::$config['tokenExpires'];
+        }
+        if (!empty(self::$config['storageType'])) {
+            self::$storageType = self::$config['storageType'];
+        }
+        // use xarTimerTrait
+        if (!empty(self::$config['enableTimer'])) {
+            self::$enableTimer = true;
+        }
+        if (!empty(self::$config['tracePath'])) {
+            self::$trace_path = true;
+        }
+        if (self::$trace_path) {
+            self::$enableTimer = true;
+        }
+        // use xarCacheTrait
+        if (!empty(self::$config['enableCache'])) {
+            self::$enableCache = true;
+        }
+        if (!empty(self::$config['cachePlan'])) {
+            self::$cache_plan = true;
+        }
+        if (!empty(self::$config['cacheData'])) {
+            self::$cache_data = true;
+        }
+        if (self::$cache_plan || self::$cache_data) {
+            self::$enableCache = true;
+        }
+        if (self::$enableCache) {
+            $cacheScope = 'GraphQLAPI.QueryPlan';
+            self::setCacheScope($cacheScope);
+        }
+        self::setTimer('config');
+        // @deprecated for existing _config files before rebuild
+        if (!empty(self::$config['objects'])) {
+            self::loadObjects(self::$config);
+        }
+    }
+
+    public static function loadObjects($config = [])
+    {
+        if (!empty(self::$config['objects'])) {
+            return;
+        }
+        $configFile = sys::varpath() . '/cache/api/graphql_objects.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        if (!empty($config['objects'])) {
+            self::$config['objects'] = $config['objects'];
+        } else {
+            self::$config['objects'] = [];
+        }
+        foreach (self::$config['objects'] as $object => $info) {
+            self::$object_type[$object] = $info['name'];
+            self::$objectSecurity[$object] = $info['security'];
+            self::$objectFieldSpecs[$object] = $info['fieldspecs'] ?? false;
+        }
+        self::setTimer('objects');
+    }
+
+    public static function find_extra_types($objectNames = null)
+    {
+        $extraTypes = [];
+        if (!empty($objectNames)) {
+            $clazz = self::get_type_class("buildtype");
+            foreach ($objectNames as $name) {
+                $type = $clazz::singularize($name);
+                if (self::has_type($type)) {
+                    continue;
+                }
+                $extraTypes[] = $type;
+            }
+        }
+        return $extraTypes;
+    }
+
     public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0, $timer = false, $trace = false, $cache = false, $plan = false, $data = false)
     {
+        $infoData = [];
+        $infoData['generated'] = date('c');
+        $infoData['caution'] = 'This file is updated when you rebuild the schema.graphql document in Dynamic Data - Utilities - Test APIs';
+
         $configFile = sys::varpath() . '/cache/api/graphql_config.json';
-        $configData = [];
-        $configData['generated'] = date('c');
-        $configData['caution'] = 'This file is updated when you rebuild the schema.graphql document in Dynamic Data - Utilities - Test APIs';
+        $configData = $infoData;
         $configData['extraTypes'] = $extraTypes;
         $configData['tokenExpires'] = intval($expires);
         $configData['storageType'] = $storage;
@@ -563,6 +673,43 @@ class xarGraphQL extends xarObject
         $configData['cachePlan'] = !empty($plan) ? true : false;
         $configData['cacheData'] = !empty($data) ? true : false;
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
+
+        $configFile = sys::varpath() . '/cache/api/graphql_objects.json';
+        $configData = $infoData;
+        $configData['objects'] = [];
+        self::$extra_types = $extraTypes;
+        self::$object_type = [];
+        self::map_objects();
+        foreach (self::$object_type as $object => $name) {
+            $configData['objects'][$object] = [];
+            $configData['objects'][$object]['name'] = $name;
+            $name = strtolower($name);
+            $type = self::$type_mapper[$name] ?? $name;
+            $configData['objects'][$object]['type'] = $type;
+            $configData['objects'][$object]['security'] = self::$objectSecurity[$object] ?? false;
+            $configData['objects'][$object]['class'] = self::get_type_class($type);
+            if (!empty(self::$type_mapper[$name])) {
+                $configData['objects'][$object]['fieldspecs'] = [];
+                $objectType = self::load_lazy_type($name);
+                foreach ($objectType->getFields() as $field) {
+                    $configData['objects'][$object]['fieldspecs'][$field->getName()] = ['fieldtype', $field->getType()->toString()];
+                }
+            } else {
+                $configData['objects'][$object]['maketype'] = true;
+            }
+        }
+        self::$objectFieldSpecs = [];
+        $clazz = self::get_type_class("buildtype");
+        $fieldspecs = [];
+        foreach (self::$extra_types as $type) {
+            [$name, $type, $object, $list, $item] = $clazz::sanitize($type);
+            $fieldspecs[$object] = $clazz::find_object_fieldspecs($object);
+        }
+        foreach ($fieldspecs as $object => $fieldspec) {
+            $configData['objects'][$object]['fieldspecs'] = $fieldspec;
+        }
+        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
+
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         $content = '"""GraphQL Endpoint: ' . xarServer::getBaseURL() . self::$endpoint . '"""' . "\n";
         $content .= self::get_data('{schema}', [], null, $extraTypes);
