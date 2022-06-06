@@ -33,11 +33,19 @@ class xarGraphQLQueryType extends ObjectType
 
     public function __construct()
     {
-        $config = [
-            'name' => 'Query',
-            'fields' => static::get_query_fields(),
-        ];
+        $config = static::_xar_get_type_config();
         parent::__construct($config);
+    }
+
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_get_type_config()
+    {
+        return [
+            'name' => 'Query',
+            'fields' => function () { return static::get_query_fields(); },
+        ];
     }
 
     /**

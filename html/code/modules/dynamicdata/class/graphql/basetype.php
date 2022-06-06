@@ -33,16 +33,24 @@ class xarGraphQLBaseType extends ObjectType
     public function __construct($config = null)
     {
         if (empty($config)) {
-            $config = [
-                'name' => static::$_xar_name,
-                'description' => 'DD ' . static::$_xar_object . ' item',
-                'fields' => static::_xar_get_object_fields(static::$_xar_object),
-                'resolveField' => static::_xar_object_field_resolver(static::$_xar_type, static::$_xar_object),
-            ];
+            $config = static::_xar_get_type_config();
         }
         xarGraphQL::setTimer('new ' . $config['name']);
         // you need to pass the type config to the parent here, if you want to override the constructor
         parent::__construct($config);
+    }
+
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_get_type_config()
+    {
+        return [
+            'name' => static::$_xar_name,
+            'description' => 'DD ' . static::$_xar_object . ' item',
+            'fields' => function () { return static::_xar_get_object_fields(static::$_xar_object); },
+            'resolveField' => static::_xar_object_field_resolver(static::$_xar_type, static::$_xar_object),
+        ];
     }
 
     /**

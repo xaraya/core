@@ -20,7 +20,16 @@ class xarGraphQLTokenType extends ObjectType
 {
     public function __construct()
     {
-        $config = [
+        $config = static::_xar_get_type_config();
+        parent::__construct($config);
+    }
+
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_get_type_config()
+    {
+        return [
             'name' => 'Token',
             'description' => 'API access token',
             'fields' => [
@@ -28,7 +37,6 @@ class xarGraphQLTokenType extends ObjectType
                 'expiration' => ['type' => Type::string()],
             ],
         ];
-        parent::__construct($config);
     }
 
     // @checkme getting an access token is typically done as a mutation, not a query

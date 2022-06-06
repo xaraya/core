@@ -23,7 +23,16 @@ class xarGraphQLKeyValType extends ObjectType
 
     public function __construct()
     {
-        $config = [
+        $config = static::_xar_get_type_config();
+        parent::__construct($config);
+    }
+
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_get_type_config()
+    {
+        return [
             'name' => static::$_xar_name,
             'description' => 'Key Value combination for assoc arrays',
             'fields' => [
@@ -59,7 +68,6 @@ class xarGraphQLKeyValType extends ObjectType
             }
              */
         ];
-        parent::__construct($config);
     }
 
     /**

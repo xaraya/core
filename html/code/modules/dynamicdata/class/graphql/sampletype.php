@@ -31,12 +31,22 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
     /**
     public function __construct()
     {
-        $config = [
-            'name' => static::$_xar_name,
-            'fields' => static::_xar_get_object_fields(static::$_xar_object),
-        ];
+        $config = static::_xar_get_type_config();
         // you need to pass the type config to the parent here, if you want to override the constructor
         parent::__construct($config);
+    }
+     */
+
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    /**
+    public static function _xar_get_type_config()
+    {
+        return [
+            'name' => static::$_xar_name,
+            'fields' => function () { return static::_xar_get_object_fields(static::$_xar_object); },
+        ];
     }
      */
 

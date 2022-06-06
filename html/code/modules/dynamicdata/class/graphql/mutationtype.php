@@ -26,11 +26,19 @@ class xarGraphQLMutationType extends ObjectType
 
     public function __construct()
     {
-        $config = [
-            'name' => 'Mutation',
-            'fields' => static::get_mutation_fields(),
-        ];
+        $config = static::_xar_get_type_config();
         parent::__construct($config);
+    }
+
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_get_type_config()
+    {
+        return [
+            'name' => 'Mutation',
+            'fields' => function () { return static::get_mutation_fields(); },
+        ];
     }
 
     /**

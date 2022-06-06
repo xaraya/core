@@ -919,16 +919,24 @@ class xarGraphQLBuildType
     }
 
     /**
-     * Add to the query resolver for the object type (list, item) - when using BuildSchema
+     * Add to the query resolver for the object type (page, list, item) - when using BuildSchema
      */
     public static function object_query_resolver($name)
     {
         // call either list_query_resolver or item_query_resolver here depending on $args['id']
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
             if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object query"]);
+                xarGraphQL::$paths[] = array_merge($info->path, ["object query", $args]);
             }
-            $type = self::singularize($info->fieldName);
+            $name = strtolower($info->fieldName);
+            $page_ext = '_page';
+            if (substr($name, -strlen($page_ext)) === $page_ext) {
+                $type = substr($name, 0, strlen($name) - strlen($page_ext));
+                $type = self::singularize($type);
+                $page_resolver = self::page_query_resolver($type);
+                return call_user_func($page_resolver, $rootValue, $args, $context, $info);
+            }
+            $type = self::singularize($name);
             if (!empty($args['id'])) {
                 //print_r($info->parentType->name . "." . $info->fieldName . "[" . $args['id'] . "]");
                 $item_resolver = self::item_query_resolver($type);
@@ -977,7 +985,7 @@ class xarGraphQLBuildType
      */
     public static function create_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
+        // when using type config decorator and object_mutation_resolver
         //if (!isset($object)) {
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
@@ -1033,7 +1041,7 @@ class xarGraphQLBuildType
      */
     public static function update_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
+        // when using type config decorator and object_mutation_resolver
         //if (!isset($object)) {
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
@@ -1085,7 +1093,7 @@ class xarGraphQLBuildType
      */
     public static function delete_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
+        // when using type config decorator and object_mutation_resolver
         //if (!isset($object)) {
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
@@ -1113,5 +1121,84 @@ class xarGraphQLBuildType
             return $itemid;
         };
         return $resolver;
+    }
+
+    /**
+     * Add to the mutation resolver for the object type (create, update, delete) - when using BuildSchema
+     */
+    public static function object_mutation_resolver($name)
+    {
+        // call the right mutation resolver based on the first part of the field name <action><Object>
+        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["object mutation", $args]);
+            }
+            $name = $info->fieldName;
+            $action = substr($name, 0, 6);
+            $type = strtolower(substr($name, 6));
+            if ($action === "create") {
+                $create_resolver = self::create_mutation_resolver($type);
+                return call_user_func($create_resolver, $rootValue, $args, $context, $info);
+            }
+            if ($action === "update") {
+                $update_resolver = self::update_mutation_resolver($type);
+                return call_user_func($update_resolver, $rootValue, $args, $context, $info);
+            }
+            if ($action === "delete") {
+                $delete_resolver = self::delete_mutation_resolver($type);
+                return call_user_func($delete_resolver, $rootValue, $args, $context, $info);
+            }
+            throw new Exception('Invalid action ' . $action . ' for mutation ' . $info->fieldName);
+        };
+        return $resolver;
+    }
+
+    /**
+     * Add to the type resolver for the object type - when using BuildSchema
+     */
+    public static function object_type_resolver($name)
+    {
+        static $field_resolver = [];
+        xarGraphQL::$paths[] = "type resolver $name";
+        return self::object_field_resolver($name);
+
+        // call the right resolver based on the type
+        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($name, &$field_resolver) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, ["object type $name", $args]);
+            }
+            if (!isset($field_resolver[$name])) {
+                $field_resolver[$name] = self::object_field_resolver($name);
+            }
+            $field = $info->fieldName;
+            if (!empty($field_resolver[$name])) {
+                return call_user_func($field_resolver[$name], $rootValue, $args, $context, $info);
+            }
+            // throw new Exception('Invalid type ' . $name . ' for type ' . $info->fieldName);
+        };
+        return $resolver;
+    }
+
+    /**
+     * Get the type definition for the object type - when using BuildSchema
+     */
+    public static function object_type_definition($name)
+    {
+        $found = xarGraphQL::get_type($name);
+        if (!empty($found)) {
+            if (is_string($found)) {
+                $type = $found();
+            } else {
+                $type = $found;
+            }
+            //$type->getFields();
+            //$field_resolver = self::object_field_resolver($name);
+        } else {
+            $type = false;
+        }
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = "object type $name = " . (string) $type;
+        }
+        return $type;
     }
 }
