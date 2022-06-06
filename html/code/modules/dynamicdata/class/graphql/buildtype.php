@@ -90,19 +90,15 @@ class xarGraphQLBuildType
         $input = $name . '_Input';
         $description = "Input for $object item";
         // @todo adapt object fields to InputObjectType where needed, e.g. KeyVal to Mixed?
-        $fields = self::get_object_fields($object);
-        if (!empty($fields['id'])) {
-            //unset($fields['id']);
-            $fields['id'] = Type::id();  // allow null for create here
-        }
-        if (!empty($fields['keys'])) {
-            unset($fields['keys']);
-        }
+        // $fields = self::get_input_fields($object);
         $newType = new InputObjectType([
             'name' => $input,
             'description' => $description,
-            'fields' => $fields,
-            //'resolveField' => self::object_field_resolver($type, $object),
+            //'fields' => $fields,
+            'fields' => function () use ($object) {
+                return self::get_input_fields($object);
+            },
+            //'parseValue' => self::input_value_parser($type, $object),
         ]);
         // xarGraphQL::setTimer('made input type ' . $name);
         return $newType;
@@ -187,14 +183,7 @@ class xarGraphQLBuildType
             'name' => Type::string(),
             'keys' => Type::listOf(Type::string()),
         ];
-        $basetypes = [
-            'string' => Type::string(),
-            'integer' => Type::int(),
-            'decimal' => Type::float(),
-            'checkbox' => Type::boolean(),
-            'dropdown' => Type::string(),  // @todo use EnumType here?
-        ];
-        $basetypes['time'] = $basetypes['integer'];
+        $basetypes = self::get_field_basetypes();
         foreach ($fieldspecs as $fieldname => $fieldspec) {
             $fieldtype = array_shift($fieldspec);
             $typename = array_shift($fieldspec);
@@ -232,6 +221,69 @@ class xarGraphQLBuildType
             throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
         }
         // xarGraphQL::setTimer('got object fields ' . $object);
+        return $fields;
+    }
+
+    public static function get_field_basetypes()
+    {
+        return [
+            'string' => Type::string(),
+            'integer' => Type::int(),
+            'decimal' => Type::float(),
+            'checkbox' => Type::boolean(),
+            'dropdown' => Type::string(),  // @todo use EnumType here?
+            'time' => Type::int(),
+            //'array' => xarGraphQL::get_type("serial"),
+        ];
+    }
+
+    /**
+     * Get the input type fields for this dynamicdata object type
+     */
+    public static function get_input_fields($object)
+    {
+        // return self::_xar_get_object_fields($object);
+        $fieldspecs = self::find_object_fieldspecs($object);
+        $fields = [
+            'id' => Type::id(),  // allow null for create here
+            'name' => Type::string(),
+        ];
+        $basetypes = self::get_field_basetypes();
+        foreach ($fieldspecs as $fieldname => $fieldspec) {
+            $fieldtype = array_shift($fieldspec);
+            $typename = array_shift($fieldspec);
+            if ($fieldtype == 'deferred') {
+                $fields[$fieldname] = xarGraphQL::get_input_type($typename);
+                continue;
+            }
+            if ($fieldtype == 'deferitem') {
+                $defername = array_shift($fieldspec);
+                $fields[$fieldname] = xarGraphQL::get_input_type($typename);
+                continue;
+            }
+            if ($fieldtype == 'deferlist') {
+                $defername = array_shift($fieldspec);
+                $fields[$fieldname] = xarGraphQL::get_input_type_list($typename);
+                continue;
+            }
+            if ($fieldtype == 'defermany') {
+                $defername = array_shift($fieldspec);
+                // @checkme we need the itemid here!
+                $fields[$fieldname] = xarGraphQL::get_input_type_list($typename);
+                continue;
+            }
+            if ($fieldtype == 'typelist') {
+                //$fields[$fieldname] = Type::listOf(xarGraphQL::get_type($typename));
+                $fields[$fieldname] = xarGraphQL::get_input_type_list($typename);
+                //$fields[$fieldname] = xarGraphQL::get_type_list("mixed");
+                continue;
+            }
+            if ($fieldtype == 'basetype') {
+                $fields[$fieldname] = $basetypes[$typename];
+                continue;
+            }
+            throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in input ' . $object);
+        }
         return $fields;
     }
 

@@ -114,4 +114,17 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
         ];
         return $fields;
     }
+
+    /**
+     * This method *should* be overridden for each specific object type
+     */
+    public static function _xar_get_input_fields($object, &$newType)
+    {
+        // return static::_xar_get_object_fields($object);
+        $fields = [
+            'id' => Type::id(),  // allow null for create here
+            'name' => Type::string(),
+        ];
+        return $fields;
+    }
 }

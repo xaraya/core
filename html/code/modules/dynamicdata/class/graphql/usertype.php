@@ -56,6 +56,19 @@ class xarGraphQLUserType extends xarGraphQLBaseType
     }
 
     /**
+     * This method *should* be overridden for each specific object type
+     */
+    public static function _xar_get_input_fields($object, &$newType)
+    {
+        // return static::_xar_get_object_fields($object);
+        $fields = [
+            'id' => Type::id(),  // allow null for create here
+            'name' => Type::string(),
+        ];
+        return $fields;
+    }
+
+    /**
      * Get the list query resolver for the object type
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be

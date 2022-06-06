@@ -58,6 +58,19 @@ class xarGraphQLBaseType extends ObjectType
     }
 
     /**
+     * This method *should* be overridden for each specific object type
+     */
+    public static function _xar_get_input_fields($object, &$newType)
+    {
+        // return static::_xar_get_object_fields($object);
+        $fields = [
+            'id' => Type::id(),  // allow null for create here
+            'name' => Type::string(),
+        ];
+        return $fields;
+    }
+
+    /**
      * Get the object field resolver for the object type
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
@@ -75,19 +88,15 @@ class xarGraphQLBaseType extends ObjectType
     {
         $input = static::$_xar_name . '_Input';
         $description = "Input for DD " . static::$_xar_object . " item";
-        $fields = static::_xar_get_object_fields(static::$_xar_object);
-        if (!empty($fields['id'])) {
-            //unset($fields['id']);
-            $fields['id'] = Type::id();  // allow null for create here
-        }
-        if (!empty($fields['keys'])) {
-            unset($fields['keys']);
-        }
+        // https://webonyx.github.io/graphql-php/type-definitions/object-types/#recurring-and-circular-types
+        // $fields = static::_xar_get_input_fields(static::$_xar_object);
         $newType = new InputObjectType([
             'name' => $input,
             'description' => $description,
-            'fields' => $fields,
-            //'resolveField' => self::object_field_resolver($type, $object),
+            'fields' => function () use (&$newType) {
+                return static::_xar_get_input_fields(static::$_xar_object, $newType);
+            },
+            //'parseValue' => self::input_value_parser(static::$_xar_type, static::$_xar_object),
         ]);
         return $newType;
     }

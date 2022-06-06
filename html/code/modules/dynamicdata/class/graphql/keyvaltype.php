@@ -12,16 +12,19 @@
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\InputObjectType;
 
 /**
  * GraphQL ObjectType and (no) query fields for assoc array configuration = unserialized in "propertie(s)"
  */
 class xarGraphQLKeyValType extends ObjectType
 {
+    public static $_xar_name   = 'KeyVal';
+
     public function __construct()
     {
         $config = [
-            'name' => 'KeyVal',
+            'name' => static::$_xar_name,
             'description' => 'Key Value combination for assoc arrays',
             'fields' => [
                 'key' => Type::string(),
@@ -57,5 +60,27 @@ class xarGraphQLKeyValType extends ObjectType
              */
         ];
         parent::__construct($config);
+    }
+
+    /**
+     * Make a generic Input Object Type for create/update mutations
+     */
+    public static function _xar_get_input_type()
+    {
+        $input = static::$_xar_name . '_Input';
+        $description = "Input for DD " . static::$_xar_name . " field";
+        // https://webonyx.github.io/graphql-php/type-definitions/object-types/#recurring-and-circular-types
+        // $fields = static::_xar_get_input_fields(static::$_xar_object);
+        $newType = new InputObjectType([
+            'name' => $input,
+            'description' => $description,
+            'fields' => [
+                'key' => Type::string(),
+                //'value' => Type::string(),
+                'value' => xarGraphQL::get_type('mixed'),  // Scalar Type doesn't need an equivalent Input Type
+            ],
+            //'parseValue' => self::input_value_parser($type, $object),
+        ]);
+        return $newType;
     }
 }

@@ -53,6 +53,7 @@ class xarGraphQL extends xarObject
 
     public static $endpoint = 'gql.php';
     public static $config = [];
+    public static $schemaFile = null;
     public static $type_cache = [];
     public static $type_mapper = [
         'query'    => 'querytype',
@@ -177,6 +178,18 @@ class xarGraphQL extends xarObject
         // See https://github.com/webonyx/graphql-php/pull/557
         return function () use ($name) {
             return Type::listOf(self::load_lazy_type($name));
+        };
+    }
+
+    // 'type' => Type::listOf(xarGraphQL::get_input_type(static::$_xar_type)), doesn't accept lazy loading
+    public static function get_input_type_list($name)
+    {
+        $name = strtolower($name);
+        $input = $name . '_input';
+        // See https://github.com/webonyx/graphql-php/pull/557
+        return function () use ($name) {
+            // return Type::listOf(self::load_lazy_type($input));
+            return Type::listOf(self::get_input_type($name));
         };
     }
 
@@ -351,6 +364,9 @@ class xarGraphQL extends xarObject
         self::loadConfig();
         self::setTimer('start');
         if (!empty($schemaFile)) {
+            self::$schemaFile = $schemaFile;
+        }
+        if (!empty($schemaFile)) {
             $schema = self::build_schema($schemaFile, $extraTypes);
         } else {
             $schema = self::get_schema($extraTypes);
@@ -363,10 +379,10 @@ class xarGraphQL extends xarObject
         }
 
         // Add to standard set of rules globally (values from GraphQL Playground IntrospectionQuery)
-        if (!empty(self::$queryComplexity) && false) {
+        if (!empty(self::$queryComplexity)) {
             DocumentValidator::addRule(new Rules\QueryComplexity(self::$queryComplexity));  // 181
         }
-        if (!empty(self::$queryDepth) && false) {
+        if (!empty(self::$queryDepth)) {
             DocumentValidator::addRule(new Rules\QueryDepth(self::$queryDepth));  // 11
         }
         // DocumentValidator::addRule(new Rules\DisableIntrospection());
@@ -608,6 +624,7 @@ class xarGraphQL extends xarObject
             $cacheScope = 'GraphQLAPI.QueryPlan';
             self::setCacheScope($cacheScope);
         }
+        self::$schemaFile = sys::varpath() . '/cache/api/schema.graphql';
         self::setTimer('config');
         // @deprecated for existing _config files before rebuild
         if (!empty(self::$config['objects'])) {
@@ -711,9 +728,9 @@ class xarGraphQL extends xarObject
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
 
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
-        $content = '"""GraphQL Endpoint: ' . xarServer::getBaseURL() . self::$endpoint . '"""' . "\n";
+        $content = '# GraphQL Endpoint: ' . xarServer::getBaseURL() . self::$endpoint . "\n";
         $content .= self::get_data('{schema}', [], null, $extraTypes);
-        $content .= "\n" . '"""Generated: ' . date('c') . '"""';
+        $content .= '# Generated: ' . date('c') . "\n";
         file_put_contents($schemaFile, $content);
     }
 }
