@@ -157,7 +157,7 @@ class xarGraphQL extends xarObject
         //    throw new Exception("Unknown graphql type: " . $name);
         //}
         // See https://github.com/webonyx/graphql-php/pull/557
-        return function () use ($name) {
+        return static function () use ($name) {
             return self::load_lazy_type($name);
         };
     }
@@ -176,7 +176,8 @@ class xarGraphQL extends xarObject
     {
         $name = strtolower($name);
         // See https://github.com/webonyx/graphql-php/pull/557
-        return function () use ($name) {
+        return static function () use ($name) {
+            // return Type::listOf(self::get_type($name));
             return Type::listOf(self::load_lazy_type($name));
         };
     }
@@ -187,7 +188,7 @@ class xarGraphQL extends xarObject
         $name = strtolower($name);
         $input = $name . '_input';
         // See https://github.com/webonyx/graphql-php/pull/557
-        return function () use ($name) {
+        return static function () use ($name) {
             // return Type::listOf(self::load_lazy_type($input));
             return Type::listOf(self::get_input_type($name));
         };
@@ -327,8 +328,8 @@ class xarGraphQL extends xarObject
     {
         $contents = file_get_contents($schemaFile);
         // @todo add extraTypes to schema contents if needed?
-        $typeConfigDecorator = function ($typeConfig, $typeDefinitionNode) {
-            return self::type_config_decorator($typeConfig, $typeDefinitionNode);
+        $typeConfigDecorator = static function ($typeConfig, $typeDefinitionNode, $allNodesMap) {
+            return self::type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap);
         };
         $schema = BuildSchema::build($contents, $typeConfigDecorator);
         return $schema;
@@ -337,21 +338,43 @@ class xarGraphQL extends xarObject
     /**
      * Type config decorator for Query and Object types when using BuildSchema
      */
-    public static function type_config_decorator($typeConfig, $typeDefinitionNode)
+    public static function type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap)
     {
         $name = $typeConfig['name'];
-        //var_dump($name);
-        //var_dump(implode(":", array_keys($typeConfig['fields'])));
-        //print_r($typeDefinitionNode);
         // https://github.com/diasfs/graphql-php-resolvers/blob/master/src/FieldResolver.php
         // $typeConfig['resolveField'] = function($value, $args, $ctx, $info) use ($resolver) {
         //     return static::ResolveField($value, $args, $ctx, $info, $resolver);
         // };
+        if (self::has_type($name)) {
+            $type = strtolower($name);
+            $clazz = self::get_type_class($type);
+            if ($clazz !== "xarGraphQLBaseType" && method_exists($clazz, "_xar_get_type_config")) {
+                self::$paths[] = "type config $name defined in $clazz";
+                $classConfig = $clazz::_xar_get_type_config();
+                //return $classConfig;
+            }
+        }
         $clazz = self::get_type_class("buildtype");
         if ($name == 'Query') {
+            self::$paths[] = "query config $name";
+            //$fields = $typeConfig['fields']();
+            //self::$paths[] = "query config fields " . implode(',', array_keys($fields));
+            //$typeConfig['fields'] = static function () use ($clazz, $name) {
+            //    $typeDef = $clazz::object_type_definition($name);
+            //    //return $typeDef->getFields();
+            //    return $typeDef;
+            //};
             $typeConfig['resolveField'] = $clazz::object_query_resolver($name);
+        } elseif ($name == 'Mutation') {
+            self::$paths[] = "mutation config $name";
+            $typeConfig['resolveField'] = $clazz::object_mutation_resolver($name);
         } else {
-            $typeConfig['resolveField'] = $clazz::object_field_resolver($name);
+            self::$paths[] = "type config $name";
+            //$typeConfig['fields'] = static function () use ($clazz, $name) {
+            //    $typeDef = $clazz::object_type_definition($name);
+            //    return $typeDef->getFields();
+            //};
+            $typeConfig['resolveField'] = $clazz::object_type_resolver($name);
         }
         return $typeConfig;
     }
@@ -517,6 +540,7 @@ class xarGraphQL extends xarObject
             self::$paths[] = "checkCookie";
         }
         xarSession::init();
+        //xarMLS::init();
         //xarUser::init();
         if (!xarUser::isLoggedIn()) {
             return;
@@ -728,9 +752,10 @@ class xarGraphQL extends xarObject
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
 
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';
+        self::$schemaFile = null;
         $content = '# GraphQL Endpoint: ' . xarServer::getBaseURL() . self::$endpoint . "\n";
-        $content .= self::get_data('{schema}', [], null, $extraTypes);
         $content .= '# Generated: ' . date('c') . "\n";
+        $content .= self::get_data('{schema}', [], null, $extraTypes);
         file_put_contents($schemaFile, $content);
     }
 }
