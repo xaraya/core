@@ -37,7 +37,9 @@ class xarGraphQLMutationType extends ObjectType
     {
         return [
             'name' => 'Mutation',
-            'fields' => function () { return static::get_mutation_fields(); },
+            'fields' => function () {
+                return static::get_mutation_fields();
+            },
         ];
     }
 

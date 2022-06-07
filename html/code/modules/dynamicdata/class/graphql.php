@@ -318,6 +318,10 @@ class xarGraphQL extends xarObject
         if (!array_key_exists($type, $class_mapper) && in_array($type, self::$extra_types)) {
             $type = 'basetype';
         }
+        // from deferred_field_resolver() for unknown type e.g. category
+        if (!array_key_exists($type, $class_mapper)) {
+            $type = 'basetype';
+        }
         return $class_mapper[$type];
     }
 
@@ -345,15 +349,17 @@ class xarGraphQL extends xarObject
         // $typeConfig['resolveField'] = function($value, $args, $ctx, $info) use ($resolver) {
         //     return static::ResolveField($value, $args, $ctx, $info, $resolver);
         // };
+        // @checkme forget about trying to override individual field resolve functions here - use fieldspecs later
         if (self::has_type($name)) {
             $type = strtolower($name);
-            $clazz = self::get_type_class($type);
-            if ($clazz !== "xarGraphQLBaseType" && method_exists($clazz, "_xar_get_type_config")) {
-                self::$paths[] = "type config $name defined in $clazz";
-                $classConfig = $clazz::_xar_get_type_config();
-                //return $classConfig;
-            }
+            //$clazz = self::get_type_class($type);
+            //if ($clazz !== "xarGraphQLBaseType" && method_exists($clazz, "_xar_get_type_config")) {
+            //    self::$paths[] = "type config $name defined in $clazz";
+            //    $classConfig = $clazz::_xar_get_type_config();
+            //    //return $classConfig;
+            //}
         }
+        // @todo skip this and override default field resolver in executeQuery, or use one in basetype?
         $clazz = self::get_type_class("buildtype");
         if ($name == 'Query') {
             self::$paths[] = "query config $name";
@@ -374,6 +380,7 @@ class xarGraphQL extends xarObject
             //    $typeDef = $clazz::object_type_definition($name);
             //    return $typeDef->getFields();
             //};
+            // $typeConfig['resolveField'] = $clazz::object_type_resolver($name);
             $typeConfig['resolveField'] = $clazz::object_type_resolver($name);
         }
         return $typeConfig;
@@ -391,8 +398,10 @@ class xarGraphQL extends xarObject
         }
         if (!empty($schemaFile)) {
             $schema = self::build_schema($schemaFile, $extraTypes);
+            $fieldResolver = null;  // @todo try out default object field resolver instead of type config decorator
         } else {
             $schema = self::get_schema($extraTypes);
+            $fieldResolver = null;
         }
         self::setTimer('schema');
         if ($queryString == '{schema}') {
@@ -412,7 +421,7 @@ class xarGraphQL extends xarObject
 
         $rootValue = ['prefix' => 'You said: message='];
         $context = ['request' => $_REQUEST, 'server' => $_SERVER];
-        $fieldResolver = null;
+        // $fieldResolver = null;
         $validationRules = null;
         $validationRules = [];
         // $validationRules = array_merge(
@@ -721,6 +730,8 @@ class xarGraphQL extends xarObject
         self::$extra_types = $extraTypes;
         self::$object_type = [];
         self::map_objects();
+        self::$objectFieldSpecs = [];
+        $clazz = self::get_type_class("buildtype");
         foreach (self::$object_type as $object => $name) {
             $configData['objects'][$object] = [];
             $configData['objects'][$object]['name'] = $name;
@@ -735,16 +746,22 @@ class xarGraphQL extends xarObject
                 foreach ($objectType->getFields() as $field) {
                     $configData['objects'][$object]['fieldspecs'][$field->getName()] = ['fieldtype', $field->getType()->toString()];
                 }
+                $fieldspecs = $clazz::find_object_fieldspecs($object, true);
+                foreach ($fieldspecs as $prop_name => $fieldspec) {
+                    if (array_key_exists($prop_name, $configData['objects'][$object]['fieldspecs'])) {
+                        $configData['objects'][$object]['fieldspecs'][$prop_name] = array_merge($configData['objects'][$object]['fieldspecs'][$prop_name], $fieldspec);
+                    } else {
+                        $configData['objects'][$object]['fieldspecs'][$prop_name] = $fieldspec;
+                    }
+                }
             } else {
                 $configData['objects'][$object]['maketype'] = true;
             }
         }
-        self::$objectFieldSpecs = [];
-        $clazz = self::get_type_class("buildtype");
         $fieldspecs = [];
         foreach (self::$extra_types as $type) {
             [$name, $type, $object, $list, $item] = $clazz::sanitize($type);
-            $fieldspecs[$object] = $clazz::find_object_fieldspecs($object);
+            $fieldspecs[$object] = $clazz::find_object_fieldspecs($object, true);
         }
         foreach ($fieldspecs as $object => $fieldspec) {
             $configData['objects'][$object]['fieldspecs'] = $fieldspec;

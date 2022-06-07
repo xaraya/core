@@ -48,7 +48,9 @@ class xarGraphQLBaseType extends ObjectType
         return [
             'name' => static::$_xar_name,
             'description' => 'DD ' . static::$_xar_object . ' item',
-            'fields' => function () { return static::_xar_get_object_fields(static::$_xar_object); },
+            'fields' => function () {
+                return static::_xar_get_object_fields(static::$_xar_object);
+            },
             'resolveField' => static::_xar_object_field_resolver(static::$_xar_type, static::$_xar_object),
         ];
     }
@@ -311,13 +313,13 @@ class xarGraphQLBaseType extends ObjectType
                 $loader->parseQueryArgs($args);
             }
             if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = ["add deferred $type $prop_name " . $values['id'], ($values[$prop_name] ?? null), implode(',', $fieldlist)];
+                xarGraphQL::$paths[] = ["add deferred $type $prop_name " . ($values['id'] ?? null), ($values[$prop_name] ?? null), implode(',', $fieldlist)];
             }
             static::_xar_add_deferred($type, $values[$prop_name], $fieldlist);
 
             return new GraphQL\Deferred(function () use ($type, $values, $prop_name) {
                 if (xarGraphQL::$trace_path) {
-                    xarGraphQL::$paths[] = ["get deferred $type $prop_name " . $values['id'], ($values[$prop_name] ?? null)];
+                    xarGraphQL::$paths[] = ["get deferred $type $prop_name " . ($values['id'] ?? null), ($values[$prop_name] ?? null)];
                 }
                 return static::_xar_get_deferred($type, $values[$prop_name]);
             });

@@ -44,7 +44,9 @@ class xarGraphQLQueryType extends ObjectType
     {
         return [
             'name' => 'Query',
-            'fields' => function () { return static::get_query_fields(); },
+            'fields' => function () {
+                return static::get_query_fields();
+            },
         ];
     }
 
