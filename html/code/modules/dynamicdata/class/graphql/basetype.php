@@ -22,10 +22,13 @@ class xarGraphQLBaseType extends ObjectType
     public static $_xar_name   = '';
     public static $_xar_type   = '';
     public static $_xar_object = '';
+    public static $_xar_page   = '';
     public static $_xar_list   = '';
     public static $_xar_item   = '';
     protected static $_xar_deferred = [];
     public static $_xar_security = true;
+    public static $_xar_queries = [];
+    public static $_xar_mutations = [];
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
@@ -111,18 +114,50 @@ class xarGraphQLBaseType extends ObjectType
         return $newType;
     }
 
+    public static function _xar_get_query_fields()
+    {
+        $fields = [];
+        foreach (static::$_xar_queries as $name) {
+            $fields[] = static::_xar_get_query_field($name);
+        }
+        return $fields;
+    }
+
     /**
      * This method will be inherited by all specific object types, so it's important to use "static"
      * instead of "self" here - see https://www.php.net/manual/en/language.oop5.late-static-bindings.php
      */
     public static function _xar_get_query_field($name)
     {
+        if (!empty(static::$_xar_page) && $name == static::$_xar_page) {
+            return static::_xar_get_page_query(static::$_xar_page, static::$_xar_type, static::$_xar_object);
+        }
         if (!empty(static::$_xar_list) && $name == static::$_xar_list) {
             return static::_xar_get_list_query(static::$_xar_list, static::$_xar_type, static::$_xar_object);
         }
         if (!empty(static::$_xar_item) && $name == static::$_xar_item) {
             return static::_xar_get_item_query(static::$_xar_item, static::$_xar_type, static::$_xar_object);
         }
+    }
+
+    /**
+     * Get paginated list query field for this object type - see also relay connection for cursor-based
+     */
+    public static function _xar_get_page_query($list, $type, $object)
+    {
+        $clazz = xarGraphQL::get_type_class("buildtype");
+        return $clazz::get_page_query($list, $type, $object);
+    }
+
+    /**
+     * Get the paginated list query resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_page_query_resolver($type, $object = null)
+    {
+        $clazz = xarGraphQL::get_type_class("buildtype");
+        return $clazz::page_query_resolver($type, $object);
     }
 
     /**
@@ -348,6 +383,15 @@ class xarGraphQLBaseType extends ObjectType
     {
         // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
         return static::$_xar_deferred[$type]->get($id);
+    }
+
+    public static function _xar_get_mutation_fields()
+    {
+        $fields = [];
+        foreach (static::$_xar_mutations as $name) {
+            $fields[] = static::_xar_get_mutation_field($name);
+        }
+        return $fields;
     }
 
     /**

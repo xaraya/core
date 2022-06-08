@@ -240,7 +240,7 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="cacheplan" class="xar-form-label">Cache Query Plan</label>
+                        <label for="cacheplan" class="xar-form-label">Cache Query Plan</label> (no gain)
                     </div>
                     <div class="xar-col">
                         <xar:if condition="!empty($cacheplan)">
@@ -252,13 +252,25 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="cachedata" class="xar-form-label">Cache Query Data</label>
+                        <label for="cachedata" class="xar-form-label">Cache Query Data</label> (faster)
                     </div>
                     <div class="xar-col">
                         <xar:if condition="!empty($cachedata)">
                             <input type="checkbox" name="cachedata" id="cachedata" checked="checked"/>
                         <xar:else/>
                             <input type="checkbox" name="cachedata" id="cachedata"/>
+                        </xar:if>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="cacheoperation" class="xar-form-label">Cache Operation</label> (fastest)
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($cacheoperation)">
+                            <input type="checkbox" name="cacheoperation" id="cacheoperation" checked="checked"/>
+                        <xar:else/>
+                            <input type="checkbox" name="cacheoperation" id="cacheoperation"/>
                         </xar:if>
                     </div>
                 </div>

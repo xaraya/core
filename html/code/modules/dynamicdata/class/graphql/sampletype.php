@@ -21,9 +21,12 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
     public static $_xar_name   = 'Sample';
     public static $_xar_type   = 'sample';
     public static $_xar_object = 'sample';
+    public static $_xar_page   = 'samples_page';
     public static $_xar_list   = 'samples';
     public static $_xar_item   = 'sample';
     public static $_xar_security = false;
+    public static $_xar_queries = ['samples_page', 'samples', 'sample'];
+    public static $_xar_mutations = ['createSample', 'updateSample', 'deleteSample'];
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be

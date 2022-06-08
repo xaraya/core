@@ -36,9 +36,12 @@
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 use GraphQL\Error\DebugFlag;
+use GraphQL\Language\Parser;
+use GraphQL\Utils\AST;
 use GraphQL\Utils\BuildSchema;
 use GraphQL\Utils\SchemaPrinter;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 
 use GraphQL\Validator\Rules;
 use GraphQL\Validator\DocumentValidator;
@@ -78,6 +81,7 @@ class xarGraphQL extends xarObject
     public static $type_fields = [];
     public static $cache_plan = false;
     public static $cache_data = false;
+    public static $cache_operation = false;
     public static $object_type = [];
     public static $queryComplexity = 0;
     public static $queryDepth = 0;
@@ -330,12 +334,19 @@ class xarGraphQL extends xarObject
      */
     public static function build_schema($schemaFile, $extraTypes = null, $validate = false)
     {
-        $contents = file_get_contents($schemaFile);
+        $parsedFile = $schemaFile . '_parsed.php';
+        if (file_exists($parsedFile) && filemtime($parsedFile) > filemtime($schemaFile)) {
+            $document = AST::fromArray(require $parsedFile);  // fromArray() is a lazy operation as well
+        } else {
+            $document = Parser::parse(file_get_contents($schemaFile));
+            file_put_contents($parsedFile, "<?php\nreturn " . var_export(AST::toArray($document), true) . ";\n");
+        }
         // @todo add extraTypes to schema contents if needed?
-        $typeConfigDecorator = static function ($typeConfig, $typeDefinitionNode, $allNodesMap) {
-            return self::type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap);
-        };
-        $schema = BuildSchema::build($contents, $typeConfigDecorator);
+        //$typeConfigDecorator = static function ($typeConfig, $typeDefinitionNode, $allNodesMap) {
+        //    return self::type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap);
+        //};
+        //$schema = BuildSchema::build($contents, $typeConfigDecorator);
+        $schema = BuildSchema::build($document);
         return $schema;
     }
 
@@ -396,9 +407,39 @@ class xarGraphQL extends xarObject
         if (!empty($schemaFile)) {
             self::$schemaFile = $schemaFile;
         }
-        if (!empty($schemaFile)) {
+        $cacheOperationKey = null;
+        if (self::$cache_operation) {
+            $queryId = md5($queryString) . '-' . ($operationName ?? 'null');
+            if (!empty($variableValues) && is_array($variableValues)) {
+                ksort($variableValues);
+            }
+            if (!empty($variableValues)) {
+                $queryId .= '-' . md5(json_encode($variableValues));
+            } else {
+                $queryId .= '-empty';
+            }
+            $cacheOperationKey = self::getCacheKey($queryId);
+            if (!empty($cacheOperationKey) && self::isCached($cacheOperationKey)) {
+                $serializableResult = self::getCached($cacheOperationKey);
+                $extensions = [];
+                $extensions['cached'] = self::keyCached($cacheOperationKey);
+                // $extensions['cached'] = true;
+                self::setTimer('cache');
+                if (self::$enableTimer) {
+                    $extensions['times'] = self::getTimers();
+                }
+                if (!empty($extensions)) {
+                    $serializableResult['extensions'] = $extensions;
+                }
+                return $serializableResult;
+            }
+        }
+        if (!empty($schemaFile) && file_exists($schemaFile)) {
+            // @checkme try out default object field resolver instead of type config decorator
             $schema = self::build_schema($schemaFile, $extraTypes);
-            $fieldResolver = null;  // @todo try out default object field resolver instead of type config decorator
+            //$fieldResolver = null;
+            $clazz = self::get_type_class("buildtype");
+            $fieldResolver = $clazz::default_field_resolver();
         } else {
             $schema = self::get_schema($extraTypes);
             $fieldResolver = null;
@@ -470,6 +511,9 @@ class xarGraphQL extends xarObject
         if (!empty($extensions)) {
             $serializableResult['extensions'] = $extensions;
         }
+        if (self::$cache_operation && !empty($cacheOperationKey)) {
+            self::setCached($cacheOperationKey, $serializableResult);
+        }
         return $serializableResult;
     }
 
@@ -508,6 +552,83 @@ class xarGraphQL extends xarObject
         header('Access-Control-Allow-Headers: X-Auth-Token, Content-Type, X-Apollo-Tracing');
         // header('Access-Control-Allow-Credentials: true');
         exit(0);
+    }
+
+    public static function dump_query_plan($plan)
+    {
+        if (!is_array($plan)) {
+            return $plan;
+        }
+        $info = [];
+        foreach ($plan as $key => $value) {
+            if ($key === 'type' && !is_array($value)) {
+                $info[$key] = (string) $value;
+            } else {
+                $info[$key] = self::dump_query_plan($value);
+            }
+        }
+        return $info;
+    }
+
+    public static function has_cached_data($queryType, $rootValue, $args, $context, ResolveInfo $info)
+    {
+        if (!empty(self::$query_plan)) {
+            return false;
+        }
+        self::setTimer('check');
+        // disable caching for mutations
+        if ($info->operation->operation === 'mutation') {
+            self::$enableCache = false;
+            self::$cache_plan = false;
+            self::$cache_data = false;
+        }
+        $operationName = $info->operation->name->value;
+        $queryPlan = $info->lookAhead();
+        self::$query_plan = $queryPlan;
+        self::$type_fields = [];
+        foreach ($queryPlan->getReferencedTypes() as $type) {
+            self::$type_fields[strtolower($type)] = array_values($queryPlan->subFields($type));
+        }
+        //self::$paths[] = self::$type_fields;
+        $dumpPlan = self::dump_query_plan($queryPlan->queryPlan());
+        $queryId = $queryType . '-' . md5(json_encode($dumpPlan));
+        if (!empty($args) && is_array($args)) {
+            ksort($args);
+        }
+        // @checkme cache query plan + (later) perhaps result based on args
+        if (self::$cache_plan) {
+            $cacheKey = self::getCacheKey($queryId);
+            if (!empty($cacheKey)) {
+                if (!self::isCached($cacheKey)) {
+                    self::setCached($cacheKey, $dumpPlan);
+                }
+                if (self::$cache_data) {
+                    // @checkme add current arguments to cacheKey to cache results
+                    if (!empty($args)) {
+                        $cacheKey .= '-' . md5(json_encode($args));
+                    } else {
+                        $cacheKey .= '-result';
+                    }
+                    self::setCacheKey($cacheKey);
+                }
+            }
+        }
+        if (self::$trace_path) {
+            self::$paths[] = [
+                'queryId' => $queryId,
+                'queryType' => $queryType,
+                'queryPlan' => $dumpPlan,
+                'operationName' => $operationName,
+                'rootValue' => $rootValue,
+                'args' => $args,
+            ];
+        }
+        self::setTimer('plan');
+        // @checkme don't try to resolve anything further if the result is already cached?
+        if (self::$cache_data && self::hasCacheKey() && self::isCached(self::getCacheKey())) {
+            return true;
+        }
+        return false;
     }
 
     public static function checkUser($context)
@@ -649,8 +770,13 @@ class xarGraphQL extends xarObject
         }
         if (!empty(self::$config['cacheData'])) {
             self::$cache_data = true;
+            // this is needed for cache_data to work
+            self::$cache_plan = true;
         }
-        if (self::$cache_plan || self::$cache_data) {
+        if (!empty(self::$config['cacheOperation'])) {
+            self::$cache_operation = true;
+        }
+        if (self::$cache_plan || self::$cache_data || self::$cache_operation) {
             self::$enableCache = true;
         }
         if (self::$enableCache) {
@@ -704,7 +830,7 @@ class xarGraphQL extends xarObject
         return $extraTypes;
     }
 
-    public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0, $timer = false, $trace = false, $cache = false, $plan = false, $data = false)
+    public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0, $timer = false, $trace = false, $cache = false, $plan = false, $data = false, $operation = false)
     {
         $infoData = [];
         $infoData['generated'] = date('c');
@@ -722,6 +848,7 @@ class xarGraphQL extends xarObject
         $configData['enableCache'] = !empty($cache) ? true : false;
         $configData['cachePlan'] = !empty($plan) ? true : false;
         $configData['cacheData'] = !empty($data) ? true : false;
+        $configData['cacheOperation'] = !empty($operation) ? true : false;
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
 
         $configFile = sys::varpath() . '/cache/api/graphql_objects.json';

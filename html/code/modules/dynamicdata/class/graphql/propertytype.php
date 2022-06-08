@@ -21,8 +21,10 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
     public static $_xar_name   = 'Property';
     public static $_xar_type   = 'property';
     public static $_xar_object = 'properties';
+    public static $_xar_page   = 'properties_page';
     public static $_xar_list   = 'properties';
     public static $_xar_item   = 'property';
+    public static $_xar_queries = ['properties', 'property'];
 
     /**
      * This method *should* be overridden for each specific object type

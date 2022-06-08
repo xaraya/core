@@ -18,6 +18,8 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 class xarGraphQLDummyType extends ObjectType
 {
+    public static $_xar_queries = ['hello', 'echo', 'schema', 'whoami'];
+
     public function __construct()
     {
         $config = static::_xar_get_type_config();

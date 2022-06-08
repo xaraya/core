@@ -14,6 +14,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Deferred;
+use GraphQL\Executor\Executor;
 
 /**
  * Build GraphQL ObjectType, query fields and resolvers for generic dynamicdata object type
@@ -493,7 +494,7 @@ class xarGraphQLBuildType
         ];
     }
 
-    public static function deferred_field_resolver($typename, $prop_name, $object = null)
+    public static function deferred_field_resolver($typename, $fieldname, $object = null)
     {
         // we only need the type class here, not the type instance
         if (!empty($object)) {
@@ -502,7 +503,7 @@ class xarGraphQLBuildType
             $clazz = xarGraphQL::get_type_class($typename);
         }
         // @todo should we pass along the object instead of the type here?
-        return $clazz::_xar_deferred_field_resolver($typename, $prop_name, $object);
+        return $clazz::_xar_deferred_field_resolver($typename, $fieldname, $object);
     }
 
     /**
@@ -521,12 +522,22 @@ class xarGraphQLBuildType
         }
         $field_resolvers[$object] = [];
 
-        # @todo use this as default field resolver based on $info->parentType->name instead of $type and $object
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($type, $object, &$field_resolvers) {
             if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, [(string) $info->parentType, "object field " . $object, gettype($values), $args]);
+                xarGraphQL::$paths[] = array_merge($info->path, [$info->parentType->name, "object field " . $object, gettype($values), $args]);
             }
+
+            // @checkme use standard default field resolver for any known types - will we need this?
+            if ($info->parentType->isBuiltInType()) {
+                $field_resolver = self::find_field_resolver();
+                return call_user_func($field_resolver, $values, $args, $context, $info);
+            }
+            $typename = $info->parentType->name;
             $fieldname = $info->fieldName;
+            // @checkme try finding field resolver for any other types and fields - will we need this?
+            //$field_resolver = self::find_field_resolver($typename, $fieldname);
+            //return call_user_func($field_resolver, $values, $args, $context, $info);
+
             $fieldspecs = self::find_object_fieldspecs($object);
             if (is_array($values)) {
                 if ($fieldname == 'keys') {
@@ -560,9 +571,9 @@ class xarGraphQLBuildType
                             $fieldtype = array_shift($fieldspecs[$fieldname]);
                             $fieldtype = array_shift($fieldspecs[$fieldname]);
                         }
-                        $typename = array_shift($fieldspecs[$fieldname]);
+                        $objecttype = array_shift($fieldspecs[$fieldname]);
                         if ($fieldtype == 'deferred') {
-                            $field_resolvers[$object][$fieldname] = self::deferred_field_resolver($typename, $fieldname);
+                            $field_resolvers[$object][$fieldname] = self::deferred_field_resolver($objecttype, $fieldname);
                         } elseif (in_array($fieldtype, ['deferitem', 'deferlist', 'defermany'])) {
                             $defername = array_shift($fieldspecs[$fieldname]);
                             $field_resolvers[$object][$fieldname] = self::deferred_field_resolver($defername, $fieldname, $object);
@@ -609,65 +620,270 @@ class xarGraphQLBuildType
         return $resolver;
     }
 
-    public static function dump_query_plan($plan)
+    /**
+     * Get a default field resolver for all type fields
+     */
+    public static function default_field_resolver()
     {
-        if (!is_array($plan)) {
-            return $plan;
-        }
-        $info = [];
-        foreach ($plan as $key => $value) {
-            if ($key === 'type' && !is_array($value)) {
-                $info[$key] = (string) $value;
-            } else {
-                $info[$key] = self::dump_query_plan($value);
+        $resolver = function ($values, $args, $context, ResolveInfo $info) {
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = array_merge($info->path, [$info->parentType->name . '.' . $info->fieldName, gettype($values), $args]);
             }
-        }
-        return $info;
+
+            // @checkme use standard default field resolver for any known types - will we need this?
+            if ($info->parentType->isBuiltInType()) {
+                $field_resolver = self::find_field_resolver();
+                return call_user_func($field_resolver, $values, $args, $context, $info);
+            }
+
+            $typename = $info->parentType->name;
+            $fieldname = $info->fieldName;
+            // @checkme try finding field resolver for any other types and fields - will we need this?
+            $field_resolver = self::find_field_resolver($typename, $fieldname);
+            return call_user_func($field_resolver, $values, $args, $context, $info);
+        };
+        return $resolver;
     }
 
-    public static function check_query_plan($queryType, $rootValue, $args, $context, ResolveInfo $info)
+    public static function keys_field_resolver($typename, $fieldname)
     {
-        xarGraphQL::setTimer('check');
-        $queryPlan = $info->lookAhead();
-        xarGraphQL::$query_plan = $queryPlan;
-        xarGraphQL::$type_fields = [];
-        foreach ($queryPlan->getReferencedTypes() as $type) {
-            xarGraphQL::$type_fields[strtolower($type)] = array_values($queryPlan->subFields($type));
-        }
-        //xarGraphQL::$paths[] = xarGraphQL::$type_fields;
-        $dumpPlan = self::dump_query_plan($queryPlan->queryPlan());
-        $queryId = $queryType . '-' . md5(json_encode($dumpPlan));
-        if (!empty($args) && is_array($args)) {
-            ksort($args);
-        }
-        // @checkme cache query plan + (later) perhaps result based on args
-        if (xarGraphQL::$cache_plan) {
-            $cacheKey = xarGraphQL::getCacheKey($queryId);
-            if (!empty($cacheKey)) {
-                if (!xarGraphQL::isCached($cacheKey)) {
-                    xarGraphQL::setCached($cacheKey, $dumpPlan);
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
+            if (empty($values)) {
+                return;
+            }
+            if (is_array($values)) {
+                if (isset($values[$fieldname])) {
+                    return $values[$fieldname];
                 }
-                if (xarGraphQL::$cache_data) {
-                    // @checkme add current arguments to cacheKey to cache results
-                    if (!empty($args)) {
-                        $cacheKey .= '-' . md5(json_encode($args));
-                    } else {
-                        $cacheKey .= '-result';
+                return array_keys($values);
+            }
+            if (is_object($values)) {
+                if (property_exists($values, $fieldname)) {
+                    return $values->{$fieldname};
+                }
+                if (property_exists($values, 'descriptor')) {
+                    return array_keys($values->descriptor->getArgs());
+                }
+                return $values->getPublicProperties();
+            }
+            return ["???", gettype($values), "???"];
+        };
+        return $resolver;
+    }
+
+    public static function serial_field_resolver($typename, $fieldname)
+    {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
+            // @todo handle case where values is object
+            if (is_string($values[$fieldname]) && !empty($values[$fieldname])) {
+                $result = @unserialize($values[$fieldname]);
+                if ($result !== false) {
+                    return $result;
+                }
+            }
+            return $values[$fieldname];
+        };
+        return $resolver;
+    }
+
+    public static function alias_field_resolver($typename, $fieldname, $fieldalias)
+    {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname, $fieldalias) {
+            if (is_array($values)) {
+                return $values[$fieldname] ?? ($values[$fieldalias] ?? null);
+            }
+            if (is_object($values)) {
+                return $values->{$fieldname} ?? ($values->{$fieldalias} ?? null);
+            }
+        };
+        return $resolver;
+    }
+
+    public static function keyval_field_resolver($typename, $fieldname, $fieldalias)
+    {
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname, $fieldalias) {
+            if (is_array($values)) {
+                $result = $values[$fieldname] ?? ($values[$fieldalias] ?? null);
+            }
+            if (is_object($values)) {
+                $result = $values->{$fieldname} ?? ($values->{$fieldalias} ?? null);
+            }
+            if (is_string($result) && !empty($result)) {
+                $values = @unserialize($result);
+            } else {
+                $values = $result;
+            }
+            if (empty($values)) {
+                return [];
+            }
+            if (!is_array($values)) {
+                $values = ['' => $values];
+            }
+            $result = [];
+            foreach ($values as $key => $value) {
+                //if (is_array($value)) {
+                //    $value = json_encode($value);
+                //}
+                $result[] = ['key' => $key, 'value' => $value];
+            }
+            return $result;
+        };
+        return $resolver;
+    }
+
+    /**
+     * Find the appropriate field resolver for a particular type and field
+     */
+    public static function find_field_resolver($typename = '*', $fieldname = '*')
+    {
+        // initialize with the standard default field resolver
+        static $field_resolvers = [
+            // default typename
+            '*' => [
+                // default fieldname
+                '*' => [Executor::class, 'defaultFieldResolver']
+            ]
+        ];
+        static $type_checked = [];
+
+        $typename = strtolower($typename);
+        $field_resolvers[$typename] ??= [];
+
+        // use the same field resolver for all fields of this type, e.g. _page
+        if (!empty($field_resolvers[$typename]['*'])) {
+            return $field_resolvers[$typename]['*'];
+        }
+
+        // use known field resolver
+        //$fieldname = strtolower($fieldname);
+        if (isset($field_resolvers[$typename][$fieldname])) {
+            return $field_resolvers[$typename][$fieldname];
+        }
+
+        // use object query resolver for query type
+        if ($typename == 'query') {
+            $field_resolver = self::object_query_resolver($typename);
+            $field_resolvers[$typename]['*'] = $field_resolver;
+            return $field_resolver;
+        }
+
+        // use object mutation resolver for mutation type
+        if ($typename == 'mutation') {
+            $field_resolver = self::object_mutation_resolver($typename);
+            $field_resolvers[$typename]['*'] = $field_resolver;
+            return $field_resolver;
+        }
+
+        // use standard default field resolver for _page types: order, offset, ..., [list items]
+        $page_ext = '_page';
+        if (substr($typename, -strlen($page_ext)) === $page_ext) {
+            $field_resolver = $field_resolvers['*']['*'];
+            $field_resolvers[$typename]['*'] = $field_resolver;
+            return $field_resolver;
+        }
+
+        // @todo check for existing class with field resolver(s)?
+        if (empty($type_checked[$typename]) && array_key_exists($typename, xarGraphQL::$type_mapper)) {
+            $type_checked[$typename] = true;
+            $clazz = xarGraphQL::get_type_class($typename);
+            if (!is_subclass_of($clazz, ObjectType::class)) {
+                $field_resolver = $field_resolvers['*']['*'];
+                $field_resolvers[$typename]['*'] = $field_resolver;
+                xarGraphQL::$paths[] = ["use default field resolver for type $typename = " . $clazz];
+                return $field_resolver;
+            //} elseif (method_exists($clazz, '_xar_get_type_config')) {
+            } else {
+                //$type_config = $clazz::_xar_get_type_config();
+                $type_def = self::object_type_definition($typename);
+                if ($type_def) {
+                    if ($type_def->resolveFieldFn) {
+                        $field_resolver = $type_def->resolveFieldFn;
+                        $field_resolvers[$typename]['*'] = $field_resolver;
+                        xarGraphQL::$paths[] = ["use type field resolver for type $typename = " . (string) $type_def];
+                        return $field_resolver;
                     }
-                    xarGraphQL::setCacheKey($cacheKey);
+                    try {
+                        foreach ($type_def->getFields() as $field_def) {
+                            if ($field_def->resolveFn) {
+                                $field_resolvers[$typename][$field_def->name] = $field_def->resolveFn;
+                                xarGraphQL::$paths[] = ["set field resolver for type $typename . " . (string) $type_def . " field " . $field_def->name];
+                            }
+                        }
+                        if (isset($field_resolvers[$typename][$fieldname])) {
+                            return $field_resolvers[$typename][$fieldname];
+                        }
+                    } catch (Exception $e) {
+                        xarGraphQL::$paths[] = ["Unknown fields for type $typename = " . (string) $type_def . ": " . $e-getMessage()];
+                    }
                 }
             }
         }
-        if (xarGraphQL::$trace_path) {
-            xarGraphQL::$paths[] = [
-                'queryId' => $queryId,
-                'queryType' => $queryType,
-                'queryPlan' => $dumpPlan,
-                'rootValue' => $rootValue,
-                'args' => $args,
-            ];
+
+        // @checkme handle keys field
+        if ($fieldname == 'keys') {
+            $field_resolver = self::keys_field_resolver($typename, $fieldname);
+            $field_resolvers[$typename][$fieldname] = $field_resolver;
+            return $field_resolver;
         }
-        xarGraphQL::setTimer('plan');
+
+        // look in field specs for corresponding object
+        $object = self::pluralize($typename);
+        try {
+            $fieldspecs = self::find_object_fieldspecs($object);
+        } catch (Exception $e) {
+            $field_resolver = $field_resolvers['*']['*'];
+            $field_resolvers[$typename]['*'] = $field_resolver;
+            xarGraphQL::$paths[] = ["Unknown object $object - use default field resolver for type $typename"];
+            return $field_resolver;
+        }
+        if (empty($fieldspecs)) {
+            throw new Exception("FieldResolver: Unknown object $object for type $typename");
+        }
+        if (empty($fieldspecs[$fieldname])) {
+            throw new Exception("FieldResolver: Unknown field $fieldname in object $object for type $typename");
+        }
+
+        // see resolvers used by get_object_fields
+        $fieldtype = array_shift($fieldspecs[$fieldname]);
+        if ($fieldtype == 'fieldtype') {
+            $fieldtype = array_shift($fieldspecs[$fieldname]);
+            $fieldtype = array_shift($fieldspecs[$fieldname]);
+        }
+        $objecttype = array_shift($fieldspecs[$fieldname]);
+
+        if ($fieldtype == 'deferred') {
+            $field_resolver = self::deferred_field_resolver($objecttype, $fieldname);
+        } elseif (in_array($fieldtype, ['deferitem', 'deferlist', 'defermany'])) {
+            $defername = array_shift($fieldspecs[$fieldname]);
+            $field_resolver = self::deferred_field_resolver($defername, $fieldname, $object);
+        } elseif ($fieldtype == 'typelist') {
+            $field_resolver = self::serial_field_resolver($typename, $fieldname);
+        } elseif ($fieldtype == 'basetype' || (empty($fieldtype) && $fieldname == "properties")) {
+            // @checkme use standard default field resolver here?
+            $field_resolver = static function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
+                // @todo handle case where values is object
+                return $values[$fieldname] ?? null;
+            };
+        // this field contains a _ which typically means it refers to another field
+        } elseif (empty($fieldtype) && strpos($fieldname, '_') !== false) {
+            // fieldname starts with _
+            if (substr($fieldname, 0, 1) === '_' && !empty($fieldspecs[substr($fieldname, 1)])) {
+                $fieldalias = substr($fieldname, 1);
+                $field_resolver = self::alias_field_resolver($typename, $fieldname, $fieldalias);
+            // fieldname ends with _kv
+            } elseif (substr($fieldname, -3) === '_kv' && !empty($fieldspecs[substr($fieldname, 0, -3)])) {
+                $fieldalias = substr($fieldname, 0, -3);
+                $field_resolver = self::keyval_field_resolver($typename, $fieldname, $fieldalias);
+            } else {
+                throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
+            }
+        } else {
+            xarGraphQL::$paths[] = ["object field $object.$fieldname", $fieldspecs[$fieldname]];
+            throw new Exception('Invalid fieldtype ' . $fieldtype . ' for field ' . $fieldname . ' in object ' . $object);
+        }
+
+        $field_resolvers[$typename][$fieldname] = $field_resolver;
+        return $field_resolver;
     }
 
     /**
@@ -720,13 +936,9 @@ class xarGraphQLBuildType
             [$name, $type, $object, $list, $item] = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (empty(xarGraphQL::$query_plan)) {
-                $queryType = $type . '_page';
-                self::check_query_plan($queryType, $rootValue, $args, $context, $info);
-                // @checkme don't try to resolve anything further if the result is already cached?
-                if (xarGraphQL::$cache_data && xarGraphQL::hasCacheKey() && xarGraphQL::isCached(xarGraphQL::getCacheKey())) {
-                    return;
-                }
+            // @checkme don't try to resolve anything further if the result is already cached?
+            if (xarGraphQL::has_cached_data($type . '_page', $rootValue, $args, $context, $info)) {
+                return;
             }
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["page query " . $type, $args]);
@@ -840,21 +1052,14 @@ class xarGraphQLBuildType
             [$name, $type, $object, $list, $item] = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (empty(xarGraphQL::$query_plan)) {
-                $queryType = $type . '_list';
-                self::check_query_plan($queryType, $rootValue, $args, $context, $info);
-                // @checkme don't try to resolve anything further if the result is already cached?
-                if (xarGraphQL::$cache_data && xarGraphQL::hasCacheKey() && xarGraphQL::isCached(xarGraphQL::getCacheKey())) {
-                    return;
-                }
+            // @checkme don't try to resolve anything further if the result is already cached?
+            if (xarGraphQL::has_cached_data($type . '_list', $rootValue, $args, $context, $info)) {
+                return;
             }
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["list query " . $type, $args]);
             }
             $fields = $info->getFieldSelection(1);
-            //if (array_key_exists('id', $fields) && count($fields) < 2) {
-            //    return array('id' => $values[$prop_name]);
-            //}
             if (array_key_exists($type, xarGraphQL::$type_fields)) {
                 $fieldlist = xarGraphQL::$type_fields[$type];
             } else {
@@ -912,13 +1117,9 @@ class xarGraphQLBuildType
             [$name, $type, $object, $list, $item] = self::sanitize($type);
         }
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            if (empty(xarGraphQL::$query_plan)) {
-                $queryType = $type . '_item';
-                self::check_query_plan($queryType, $rootValue, $args, $context, $info);
-                // @checkme don't try to resolve anything further if the result is already cached?
-                if (xarGraphQL::$cache_data && xarGraphQL::hasCacheKey() && xarGraphQL::isCached(xarGraphQL::getCacheKey())) {
-                    return;
-                }
+            // @checkme don't try to resolve anything further if the result is already cached?
+            if (xarGraphQL::has_cached_data($type . '_item', $rootValue, $args, $context, $info)) {
+                return;
             }
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["item query"]);
@@ -959,7 +1160,9 @@ class xarGraphQLBuildType
             // see objecttype
             if ($object == 'objects') {
                 if (array_key_exists('properties', $fields)) {
-                    $values['properties'] = $objectitem->getProperties();
+                    //$values['properties'] = $objectitem->getProperties();
+                    $params = ['objectid' => $itemid];
+                    $values['properties'] = DataPropertyMaster::getProperties($params);
                 }
                 if (array_key_exists('config', $fields) && !empty($objectitem->config)) {
                     //$values['config'] = @unserialize($objectitem->config);
@@ -975,7 +1178,7 @@ class xarGraphQLBuildType
     /**
      * Add to the query resolver for the object type (page, list, item) - when using BuildSchema
      */
-    public static function object_query_resolver($name)
+    public static function object_query_resolver($name = 'Query')
     {
         // call either list_query_resolver or item_query_resolver here depending on $args['id']
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
@@ -1044,6 +1247,8 @@ class xarGraphQLBuildType
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            // disable caching for mutations
+            xarGraphQL::$enableCache = false;
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["create mutation"]);
             }
@@ -1100,6 +1305,8 @@ class xarGraphQLBuildType
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            // disable caching for mutations
+            xarGraphQL::$enableCache = false;
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["update mutation"]);
             }
@@ -1152,6 +1359,8 @@ class xarGraphQLBuildType
         //    list($name, $type, $object, $list, $item) = self::sanitize($type);
         //}
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
+            // disable caching for mutations
+            xarGraphQL::$enableCache = false;
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["delete mutation"]);
             }
@@ -1180,10 +1389,12 @@ class xarGraphQLBuildType
     /**
      * Add to the mutation resolver for the object type (create, update, delete) - when using BuildSchema
      */
-    public static function object_mutation_resolver($name)
+    public static function object_mutation_resolver($name = 'Mutation')
     {
         // call the right mutation resolver based on the first part of the field name <action><Object>
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
+            // disable caching for mutations
+            xarGraphQL::$enableCache = false;
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["object mutation", $args]);
             }
@@ -1241,6 +1452,8 @@ class xarGraphQLBuildType
         $found = xarGraphQL::get_type($name);
         if (!empty($found)) {
             if (is_string($found)) {
+                $type = $found();
+            } elseif ($found instanceof Closure) {
                 $type = $found();
             } else {
                 $type = $found;

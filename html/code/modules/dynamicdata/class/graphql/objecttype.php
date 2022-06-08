@@ -21,8 +21,10 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
     public static $_xar_name   = 'Object';
     public static $_xar_type   = 'object';
     public static $_xar_object = 'objects';
+    public static $_xar_page   = 'objects_page';
     public static $_xar_list   = 'objects';
     public static $_xar_item   = 'object';
+    public static $_xar_queries = ['objects', 'object'];
 
     /**
      * This method *should* be overridden for each specific object type

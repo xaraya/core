@@ -114,6 +114,7 @@ function dynamicdata_admin_test_apis(array $args=[])
     xarVar::fetch('enablecache', 'isset', $enableCache, false, xarVar::NOT_REQUIRED);
     xarVar::fetch('cacheplan', 'isset', $cachePlan, false, xarVar::NOT_REQUIRED);
     xarVar::fetch('cachedata', 'isset', $cacheData, false, xarVar::NOT_REQUIRED);
+    xarVar::fetch('cacheoperation', 'isset', $cacheOperation, false, xarVar::NOT_REQUIRED);
     $restapilist = [];
     $graphqllist = [];
     if (!empty($restapi) && !empty($graphql) && xarSec::confirmAuthKey()) {
@@ -130,6 +131,7 @@ function dynamicdata_admin_test_apis(array $args=[])
         xarModVars::set('dynamicdata', 'graphql_enable_cache', !empty($enableCache) ? true : false);
         xarModVars::set('dynamicdata', 'graphql_cache_plan', !empty($cachePlan) ? true : false);
         xarModVars::set('dynamicdata', 'graphql_cache_data', !empty($cacheData) ? true : false);
+        xarModVars::set('dynamicdata', 'graphql_cache_operation', !empty($cacheOperation) ? true : false);
     } else {
         $restapiserial = xarModVars::get('dynamicdata', 'restapi_object_list');
         if (!empty($restapiserial)) {
@@ -149,6 +151,7 @@ function dynamicdata_admin_test_apis(array $args=[])
         $enableCache = xarModVars::get('dynamicdata', 'graphql_enable_cache');
         $cachePlan = xarModVars::get('dynamicdata', 'graphql_cache_plan');
         $cacheData = xarModVars::get('dynamicdata', 'graphql_cache_data');
+        $cacheOperation = xarModVars::get('dynamicdata', 'graphql_cache_operation');
     }
 
     DataObjectRESTBuilder::init();
@@ -174,7 +177,7 @@ function dynamicdata_admin_test_apis(array $args=[])
         require_once $vendor .'/autoload.php';
         sys::import('modules.dynamicdata.class.graphql');
         $extraTypes = xarGraphQL::find_extra_types($graphqllist);
-        xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData);
+        xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
         xarController::redirect(xarServer::getCurrentURL(['create_gql'=> null]));
         return true;
     }
@@ -215,20 +218,20 @@ function dynamicdata_admin_test_apis(array $args=[])
 
     $data['tokenstorage'] = $storageType;
     $data['storagetypes'] = [
-        'filesystem' => [
-            'name'    => 'filesystem',
-            'label'   => 'Filesystem',
-            'enabled' => false,
+        'apcu' => [
+            'name'    => 'apcu',
+            'label'   => 'APC User Cache (APCu)',
+            'enabled' => function_exists('apcu_fetch') ? true : false,
         ],
         'database' => [
             'name'    => 'database',
             'label'   => 'Database',
             'enabled' => true,
         ],
-        'apcu' => [
-            'name'    => 'apcu',
-            'label'   => 'APC User Cache (APCu)',
-            'enabled' => function_exists('apcu_fetch') ? true : false,
+        'filesystem' => [
+            'name'    => 'filesystem',
+            'label'   => 'Filesystem',
+            'enabled' => false,
         ],
     ];
     $data['tokenexpires'] = sprintf('%02d:%02d:%02d', floor($tokenExpires / 3600), intval($tokenExpires % 3600) / 60, intval($tokenExpires % 60));
@@ -239,6 +242,7 @@ function dynamicdata_admin_test_apis(array $args=[])
     $data['enablecache'] = $enableCache;
     $data['cacheplan'] = $cachePlan;
     $data['cachedata'] = $cacheData;
+    $data['cacheoperation'] = $cacheOperation;
 
     xarTpl::setPageTemplateName('admin');
 
