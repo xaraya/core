@@ -257,6 +257,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
         }
         
+        if (empty($args['fieldlist'])) $args['fieldlist'] = array();
         if(count($args['fieldlist']) > 0) {
             $fields = $args['fieldlist'];
         } else {
@@ -273,7 +274,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $args['properties'][$name] =& $this->properties[$name];
         }
 
-        // pass some extra template variables for use in BL tags, API calls etc.
+        // Pass some extra template variables for use in BL tags, API calls etc.
         //FIXME: check these
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
