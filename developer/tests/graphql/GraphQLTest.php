@@ -64,7 +64,7 @@ class GraphQLTest extends TestCase
         $schemaFile = '../../../html/var/cache/api/schema.graphql';
         if (file_exists($schemaFile)) {
             $contents = file_get_contents($schemaFile);
-            $pattern = '/"""GraphQL Endpoint: ([^"]+)"""/';
+            $pattern = '/# GraphQL Endpoint: (\S+)/';
             preg_match($pattern, $contents, $matches);
             if (!empty($matches) && !empty($matches[1])) {
                 self::$endpoint = $matches[1];
@@ -175,7 +175,7 @@ class GraphQLTest extends TestCase
         } elseif ($query === "{schema}") {
             $schemaFile = '../../../html/var/cache/api/schema.graphql';
             $contents = file_get_contents($schemaFile);
-            $expected = implode("\n", array_slice(explode("\n", $contents), 1, -1));
+            $expected = implode("\n", array_slice(explode("\n", $contents), 2));
         } else {
             $expected = [
                 'data' => [],

@@ -200,6 +200,7 @@ class DataObjectLoader
         $values = [];
         // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
         $allowed = array_flip($this->fieldlist);
+        // @checkme GraphQL standardizes on id, but we may need to adapt for other interfaces
         $allowed['id'] = true;
         //$addPrimary = false;
         //if (!empty($this->objectlist->primary) && !in_array($this->objectlist->primary, $this->fieldlist)) {

@@ -47,13 +47,16 @@ class xarVariableCache extends xarObject
                                                 // can't serialize schema with closures
                                                 'GraphQLAPI.Schema' => 0,
                                                 'GraphQLAPI.QueryPlan' => 1,
+                                                'GraphQLAPI.Operation' => 1,
                                                 'RestAPI.Operation' => 1,
                                                 'RestAPI.Objects' => 0,
                                                 'RestAPI.ObjectList' => array('sample' => 1)
                                                 );
+        self::$cacheSettings = isset($config['Variable.CacheSettings']) ?
+            $config['Variable.CacheSettings'] : self::$cacheScopes;
 
         $storage = !empty($config['Variable.CacheStorage']) ?
-            $config['Variable.CacheStorage'] : 'database';
+            $config['Variable.CacheStorage'] : 'apcu';
         $provider = !empty($config['Variable.CacheProvider']) ?
             $config['Variable.CacheProvider'] : null;
         self::$cacheDir = isset($config['Variable.CacheDir']) ?
@@ -121,10 +124,9 @@ class xarVariableCache extends xarObject
     {
         if (!isset(self::$cacheSettings)) {
             // TODO: make things configurable in xarcachemanager
-            try {
-                $settings = xarConfigVars::get(null, 'Site.Variable.CacheSettings');
-            } catch (Exception $e) {
-            }
+            // Load the caching configuration
+            $config = xarCache::getConfig();
+            $settings = $config['Variable.CacheSettings'] ?? array();
             if (empty($settings)) {
                 $settings = array();
                 // CHECKME: get a list of potential scopes from xarCoreCache as examples?
@@ -136,7 +138,6 @@ class xarVariableCache extends xarObject
                 foreach (self::$cacheScopes as $scope => $value) {
                     $settings[$scope] = $value;
                 }
-                xarConfigVars::set(null, 'Site.Variable.CacheSettings', $settings);
             }
             self::$cacheSettings = $settings;
         }

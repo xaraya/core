@@ -16,7 +16,8 @@
  * Note: this assumes you install doctrine/cache with composer
  * and use composer autoload in the entrypoint, see e.g. rst.php
  *
- * $ composer require --dev doctrine/cache
+ * $ composer require --dev 'doctrine/cache:^1.13.0' (including cache drivers)
+ * $ composer require --dev doctrine/cache (using PSR-6 cache library)
  * $ head html/rst.php
  * <?php
  * ...

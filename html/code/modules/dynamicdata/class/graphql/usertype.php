@@ -22,9 +22,10 @@ class xarGraphQLUserType extends xarGraphQLBaseType
     public static $_xar_name   = 'User';
     public static $_xar_type   = 'user';
     public static $_xar_object = 'roles_users';
+    public static $_xar_page   = '';
     public static $_xar_list   = '';
     public static $_xar_item   = '';
-    //protected static $_xar_deferred = [];
+    public static $_xar_queries = [];
 
     /**
      * This method *should* be overridden for each specific object type
@@ -51,6 +52,19 @@ class xarGraphQLUserType extends xarGraphQLBaseType
             //    }
             //],
             //'state' => Type::string(),
+        ];
+        return $fields;
+    }
+
+    /**
+     * This method *should* be overridden for each specific object type
+     */
+    public static function _xar_get_input_fields($object, &$newType)
+    {
+        // return static::_xar_get_object_fields($object);
+        $fields = [
+            'id' => Type::id(),  // allow null for create here
+            'name' => Type::string(),
         ];
         return $fields;
     }

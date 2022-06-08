@@ -21,7 +21,16 @@ class xarGraphQLNodeType extends InterfaceType
 {
     public function __construct()
     {
-        $config = [
+        $config = static::_xar_get_type_config();
+        parent::__construct($config);
+    }
+
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_get_type_config()
+    {
+        return [
             'name' => 'Node',
             'description' => 'Node interface for global object identification',
             'fields' => [
@@ -42,7 +51,6 @@ class xarGraphQLNodeType extends InterfaceType
                 return xarGraphQL::get_type("ddnode");
             },
         ];
-        parent::__construct($config);
     }
 
     public static function _xar_get_query_field($name)

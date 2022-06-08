@@ -16,6 +16,9 @@
 sys::import('xaraya.caching.storage');
 class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storage
 {
+    public $lastkey = null;
+    public $value = null;
+
     public function __construct(Array $args = array())
     {
         parent::__construct($args);
@@ -27,6 +30,9 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
         if (empty($expire)) {
             $expire = $this->expire;
         }
+        if ($key == $this->lastkey && isset($this->value)) {
+            return true;
+        }
         $cache_key = $this->getCacheKey($key);
         // we actually retrieve the value here too - returns FALSE on failure
         $value = apcu_fetch($cache_key);
@@ -34,6 +40,8 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
             // FIXME: APC doesn't keep track of modification times !
             //$this->modtime = 0;
             if ($log) $this->logStatus('HIT', $key);
+            $this->lastkey = $key;
+            $this->value = $value;
             return true;
         } else {
             if ($log) $this->logStatus('MISS', $key);
@@ -45,6 +53,10 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
     {
         if (empty($expire)) {
             $expire = $this->expire;
+        }
+        if ($key == $this->lastkey && isset($this->value)) {
+            $this->lastkey = null;
+            return $this->value;
         }
         $cache_key = $this->getCacheKey($key);
         $value = apcu_fetch($cache_key);
@@ -69,12 +81,14 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
             apcu_store($cache_key, $value);
         }
         $this->modtime = time();
+        $this->lastkey = null;
     }
 
     public function delCached($key = '')
     {
         $cache_key = $this->getCacheKey($key);
         apcu_delete($cache_key);
+        $this->lastkey = null;
     }
 
     /**

@@ -18,9 +18,20 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 class xarGraphQLTokenType extends ObjectType
 {
+    public static $_xar_mutations = ['getToken', 'deleteToken'];
+
     public function __construct()
     {
-        $config = [
+        $config = static::_xar_get_type_config();
+        parent::__construct($config);
+    }
+
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_get_type_config()
+    {
+        return [
             'name' => 'Token',
             'description' => 'API access token',
             'fields' => [
@@ -28,7 +39,15 @@ class xarGraphQLTokenType extends ObjectType
                 'expiration' => ['type' => Type::string()],
             ],
         ];
-        parent::__construct($config);
+    }
+
+    public static function _xar_get_mutation_fields()
+    {
+        $fields = [];
+        foreach (static::$_xar_mutations as $name) {
+            $fields[] = static::_xar_get_mutation_field($name);
+        }
+        return $fields;
     }
 
     // @checkme getting an access token is typically done as a mutation, not a query
@@ -61,6 +80,8 @@ class xarGraphQLTokenType extends ObjectType
                 'access' => ['type' => Type::string(), 'defaultValue' => 'display'],
             ],
             'resolve' => function ($rootValue, $args) {
+                // disable caching for mutations
+                xarGraphQL::$enableCache = false;
                 if (xarGraphQL::$trace_path) {
                     xarGraphQL::$paths[] = "getToken";
                 }
@@ -100,6 +121,8 @@ class xarGraphQLTokenType extends ObjectType
                 'confirm' => ['type' => Type::boolean(), 'defaultValue' => false],
             ],
             'resolve' => function ($rootValue, $args, $context) {
+                // disable caching for mutations
+                xarGraphQL::$enableCache = false;
                 if (xarGraphQL::$trace_path) {
                     xarGraphQL::$paths[] = "deleteToken";
                 }

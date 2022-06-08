@@ -20,7 +20,16 @@ class xarGraphQLAccessType extends ObjectType
 {
     public function __construct()
     {
-        $config = [
+        $config = static::_xar_get_type_config();
+        parent::__construct($config);
+    }
+
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_get_type_config()
+    {
+        return [
             'name' => 'Access',
             'description' => 'Access property for DD objects item',
             'fields' => [
@@ -76,6 +85,5 @@ class xarGraphQLAccessType extends ObjectType
                 return null;
             },
         ];
-        parent::__construct($config);
     }
 }

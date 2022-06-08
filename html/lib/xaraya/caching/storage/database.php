@@ -49,6 +49,9 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         if (empty($expire)) {
             $expire = $this->expire;
         }
+        if ($key == $this->lastkey && isset($this->value)) {
+            return true;
+        }
         $table = $this->getTable();
         if (empty($table)) return false;
 

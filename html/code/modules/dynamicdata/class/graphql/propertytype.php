@@ -21,8 +21,10 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
     public static $_xar_name   = 'Property';
     public static $_xar_type   = 'property';
     public static $_xar_object = 'properties';
+    public static $_xar_page   = 'properties_page';
     public static $_xar_list   = 'properties';
     public static $_xar_item   = 'property';
+    public static $_xar_queries = ['properties', 'property'];
 
     /**
      * This method *should* be overridden for each specific object type
@@ -37,7 +39,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
                 'type' => Type::listOf(Type::string()),
                 'resolve' => function ($property, $args, $context, ResolveInfo $info) {
                     if (xarGraphQL::$trace_path) {
-                        xarGraphQL::$paths[] = array_merge($info->path, ["property keys"]);
+                        xarGraphQL::$paths[] = array_merge($info->path, ["property keys", gettype($property)]);
                     }
                     //print_r("property keys resolve");
                     if (is_array($property)) {
@@ -111,6 +113,19 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             ],
             //'objectref' => xarGraphQL::get_type("object"),
             //'args' => Type::listOf(Type::string()),
+        ];
+        return $fields;
+    }
+
+    /**
+     * This method *should* be overridden for each specific object type
+     */
+    public static function _xar_get_input_fields($object, &$newType)
+    {
+        // return static::_xar_get_object_fields($object);
+        $fields = [
+            'id' => Type::id(),  // allow null for create here
+            'name' => Type::string(),
         ];
         return $fields;
     }

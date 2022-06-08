@@ -61,5 +61,38 @@
       <seq>4</seq>
       <configuration>a:7:{s:12:"display_size";s:2:"50";s:17:"display_maxlength";s:3:"254";s:14:"display_layout";s:7:"default";s:15:"display_tooltip";s:27:"The person's favorite place";s:26:"validation_file_extensions";s:20:"gif,jpg,jpeg,png,bmp";s:27:"initialization_image_source";s:3:"url";s:28:"initialization_basedirectory";s:11:"var/uploads";}</configuration>
     </property>
+    <property name="partner">
+      <id>1518</id>
+      <label>Partner</label>
+      <type>deferitem</type>
+      <defaultvalue>dataobject:sample.name</defaultvalue>
+      <source>dynamicdata</source>
+      <status>33</status>
+      <translatable>0</translatable>
+      <seq>5</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="children">
+      <id>1517</id>
+      <label>Children</label>
+      <type>deferlist</type>
+      <defaultvalue>dataobject:sample.name</defaultvalue>
+      <source>dynamicdata</source>
+      <status>34</status>
+      <translatable>0</translatable>
+      <seq>6</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
+    <property name="parents">
+      <id>1520</id>
+      <label>Parents</label>
+      <type>deferlist</type>
+      <defaultvalue>dataobject:sample.name</defaultvalue>
+      <source>dynamicdata</source>
+      <status>34</status>
+      <translatable>0</translatable>
+      <seq>7</seq>
+      <configuration>a:0:{}</configuration>
+    </property>
   </properties>
 </object>

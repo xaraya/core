@@ -18,8 +18,8 @@ sys::import('xaraya.caching.cachetrait');
  */
 class DataObjectRESTHandler extends xarObject
 {
-    use xarTimerTrait;
-    use xarCacheTrait;
+    use xarTimerTrait;  // activate with self::$enableTimer = true
+    use xarCacheTrait;  // activate with self::$enableCache = true
 
     public static $endpoint = 'rst.php/v1';
     public static $objects = [];
@@ -27,7 +27,7 @@ class DataObjectRESTHandler extends xarObject
     public static $config = [];
     public static $modules = [];
     public static $tokenExpires = 12 * 60 * 60;  // 12 hours
-    public static $storageType = 'database';  // database or apcu
+    public static $storageType = 'apcu';  // database or apcu
     public static $tokenStorage;
     public static $userId;
 
@@ -65,9 +65,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getObjects($args)
     {
-        if (empty(self::$objects)) {
-            self::loadConfig();
-        }
+        self::loadObjects();
         $result = ['items' => [], 'count' => count(self::$objects)];
         foreach (self::$objects as $itemid => $item) {
             if ($item['datastore'] !== 'dynamicdata') {
@@ -128,12 +126,10 @@ class DataObjectRESTHandler extends xarObject
                 // }
             }
         }
+        $allowed = array_flip($fieldlist);
         foreach ($items as $itemid => $item) {
             // @todo filter out fieldlist in dynamic_data datastore
-            $diff = array_diff(array_keys($item), $fieldlist);
-            foreach ($diff as $key) {
-                unset($item[$key]);
-            }
+            $item = array_intersect_key($item, $allowed);
             foreach ($deferred as $key) {
                 $data = $objectlist->properties[$key]->getDeferredData(['value' => $item[$key] ?? null, '_itemid' => $itemid]);
                 if ($data['value'] && in_array(get_class($objectlist->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty']) && is_array($data['value'])) {
@@ -181,11 +177,9 @@ class DataObjectRESTHandler extends xarObject
         //$result = $objectitem->getFieldValues();
         // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
         $item = $objectitem->getFieldValues([], 1);
+        $allowed = array_flip($fieldlist);
         // @todo filter out fieldlist in dynamic_data datastore
-        $diff = array_diff(array_keys($item), $fieldlist);
-        foreach ($diff as $key) {
-            unset($item[$key]);
-        }
+        $item = array_intersect_key($item, $allowed);
         foreach ($fieldlist as $key) {
             if (!empty($objectitem->properties[$key]) && method_exists($objectitem->properties[$key], 'getDeferredData')) {
                 // @checkme take value and itemid directly from the property here, to set deferred data if needed
@@ -297,74 +291,110 @@ class DataObjectRESTHandler extends xarObject
 
     public static function loadConfig()
     {
-        if (empty(self::$config)) {
-            self::$config = [];
-            $configFile = sys::varpath() . '/cache/api/restapi_config.json';
-            if (file_exists($configFile)) {
-                $contents = file_get_contents($configFile);
-                self::$config = json_decode($contents, true);
-            }
-            $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
-            $allowed = array_flip($fieldlist);
-            if (!empty(self::$config['objects'])) {
-                self::$objects = [];
-                foreach (self::$config['objects'] as $name => $item) {
-                    $item = array_intersect_key($item, $allowed);
-                    self::$objects[$name] = $item;
-                }
-            } else {
-                $object = 'objects';
-                $params = ['name' => $object, 'fieldlist' => $fieldlist];
-                $objectlist = DataObjectMaster::getObjectList($params);
-                self::$objects = $objectlist->getItems();
-                self::$config['objects'] = [];
-                foreach (self::$objects as $itemid => $item) {
-                    if ($item['datastore'] !== 'dynamicdata') {
-                        continue;
-                    }
-                    $item = array_intersect_key($item, $allowed);
-                    self::$config['objects'][$item['name']] = $item;
-                }
-            }
-            if (!empty(self::$config['modules'])) {
-                self::$modules = self::$config['modules'];
-            } else {
-                $modulelist = ['dynamicdata'];
-                self::$modules = [];
-                xarMod::init();
-                foreach ($modulelist as $module) {
-                    self::$modules[$module] = [
-                        'module' => $module,
-                        'apilist' => xarMod::apiFunc($module, 'rest', 'getlist'),
-                    ];
-                }
-                self::$config['modules'] = self::$modules;
-            }
-            if (!empty(self::$config['storage'])) {
-                self::$storageType = self::$config['storage'];
-            }
-            if (!empty(self::$config['expires'])) {
-                self::$tokenExpires = intval(self::$config['expires']);
-            }
-            // use xarTimerTrait
-            if (isset(self::$config['timer'])) {
-                self::$enableTimer = !empty(self::$config['timer']) ? true : false;
-            }
-            // use xarCacheTrait
-            if (isset(self::$config['cache'])) {
-                self::$enableCache = !empty(self::$config['cache']) ? true : false;
-            }
-            if (self::$enableCache) {
-                $cacheScope = 'RestAPI.Operation';
-                self::setCacheScope($cacheScope);
-            }
-            self::setTimer('config');
+        if (!empty(self::$config)) {
+            return;
         }
+        self::$config = [];
+        $configFile = sys::varpath() . '/cache/api/restapi_config.json';
+        if (file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            self::$config = json_decode($contents, true);
+        }
+        if (!empty(self::$config['storage'])) {
+            self::$storageType = self::$config['storage'];
+        }
+        if (!empty(self::$config['expires'])) {
+            self::$tokenExpires = intval(self::$config['expires']);
+        }
+        // use xarTimerTrait
+        if (isset(self::$config['timer'])) {
+            self::$enableTimer = !empty(self::$config['timer']) ? true : false;
+        }
+        // use xarCacheTrait
+        if (isset(self::$config['cache'])) {
+            self::$enableCache = !empty(self::$config['cache']) ? true : false;
+        }
+        if (self::$enableCache) {
+            $cacheScope = 'RestAPI.Operation';
+            self::setCacheScope($cacheScope);
+        }
+        self::setTimer('config');
+        // @deprecated for existing _config files before rebuild
+        if (!empty(self::$config['objects'])) {
+            self::loadObjects(self::$config);
+        }
+        if (!empty(self::$config['modules'])) {
+            self::loadModules(self::$config);
+        }
+    }
+
+    public static function loadObjects($config = [])
+    {
+        if (!empty(self::$objects)) {
+            return;
+        }
+        $configFile = sys::varpath() . '/cache/api/restapi_objects.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore', 'properties'];
+        $allowed = array_flip($fieldlist);
+        if (!empty($config['objects'])) {
+            self::$config['objects'] = $config['objects'];
+            self::$objects = [];
+            foreach (self::$config['objects'] as $name => $item) {
+                $item = array_intersect_key($item, $allowed);
+                self::$objects[$name] = $item;
+            }
+        } else {
+            $object = 'objects';
+            $params = ['name' => $object, 'fieldlist' => $fieldlist];
+            $objectlist = DataObjectMaster::getObjectList($params);
+            self::$objects = $objectlist->getItems();
+            self::$config['objects'] = [];
+            foreach (self::$objects as $itemid => $item) {
+                if ($item['datastore'] !== 'dynamicdata') {
+                    continue;
+                }
+                $item = array_intersect_key($item, $allowed);
+                self::$config['objects'][$item['name']] = $item;
+            }
+        }
+        self::setTimer('objects');
+    }
+
+    public static function loadModules($config = [])
+    {
+        if (!empty(self::$modules)) {
+            return;
+        }
+        $configFile = sys::varpath() . '/cache/api/restapi_modules.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        if (!empty($config['modules'])) {
+            self::$config['modules'] = $config['modules'];
+            self::$modules = self::$config['modules'];
+        } else {
+            $modulelist = ['dynamicdata'];
+            self::$modules = [];
+            xarMod::init();
+            foreach ($modulelist as $module) {
+                self::$modules[$module] = [
+                    'module' => $module,
+                    'apilist' => xarMod::apiFunc($module, 'rest', 'getlist'),
+                ];
+            }
+            self::$config['modules'] = self::$modules;
+        }
+        self::setTimer('modules');
     }
 
     public static function hasObject($object)
     {
-        self::loadConfig();
+        self::loadObjects();
         if (empty(self::$config) || empty(self::$config['objects']) || empty(self::$config['objects'][$object])) {
             return false;
         }
@@ -614,9 +644,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getModules($args)
     {
-        if (empty(self::$modules)) {
-            self::loadConfig();
-        }
+        self::loadModules();
         $result = ['items' => [], 'count' => count(self::$modules)];
         foreach (self::$modules as $itemid => $item) {
             $item['apilist'] = array_keys($item['apilist']);
@@ -714,7 +742,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function hasModule($module)
     {
-        self::loadConfig();
+        self::loadModules();
         if (empty(self::$config) || empty(self::$config['modules']) || empty(self::$config['modules'][$module])) {
             return false;
         }
@@ -767,20 +795,35 @@ class DataObjectRESTHandler extends xarObject
         $r->post('/modules/{module}/{path}', ['DataObjectRESTHandler', 'postModuleCall']);
     }
 
+    public static function getQueryId($method, $vars)
+    {
+        $queryId = $method;
+        if (!empty($vars['object'])) {
+            $queryId .= '-' . $vars['object'];
+        }
+        if (!empty($vars['itemid'])) {
+            $queryId .= '-' . $vars['itemid'];
+        }
+        $queryId .= '-' . md5(json_encode($vars));
+        return $queryId;
+    }
+
     /**
      * Handle request and get result
      */
     public static function getResult($handler, $vars)
     {
-        self::setTimer('handle');
+        // initialize caching - delay until we need results
+        xarCache::init();
+        self::loadConfig();
         $tryCachedResult = false;
         if (is_array($handler) && $handler[0] === "DataObjectRESTHandler" && substr($handler[1], 0, 3) === "get") {
-            self::loadConfig();
             $tryCachedResult = true;
         }
         if ($tryCachedResult && self::$enableCache) {
-            $queryId = $handler[1] . '-' . md5(json_encode($vars));
+            $queryId = self::getQueryId($handler[1], $vars);
             $cacheKey = self::getCacheKey($queryId);
+            // @checkme we need to initialize the database here too if variable caching uses database instead of apcu
             if (!empty($cacheKey) && self::isCached($cacheKey)) {
                 $result = self::getCached($cacheKey);
                 if (is_array($result)) {
@@ -802,6 +845,13 @@ class DataObjectRESTHandler extends xarObject
                 return $result;
             }
         }
+        // initialize database - delay until caching fails
+        xarDatabase::init();
+        // initialize modules
+        //xarMod::init();
+        // initialize users
+        //xarUser::init();
+        self::setTimer('handle');
         $result = call_user_func($handler, $vars);
         // if (is_array($result)) {
         //     $result['x-debug'] = ['handler' => $handler, 'vars' => $vars];
