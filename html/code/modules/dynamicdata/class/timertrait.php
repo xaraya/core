@@ -14,7 +14,7 @@
 **/
 trait xarTimerTrait
 {
-    public static $enableTimer = false;
+    public static $enableTimer = false;  // activate with self::$enableTimer = true
     protected static $_timerKeep = array();
     protected static $_timerPrev = 0.0;
     protected static $_timerMult = 1000.0;  // in milliseconds

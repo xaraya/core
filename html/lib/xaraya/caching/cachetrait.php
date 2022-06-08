@@ -40,12 +40,15 @@
 **/
 trait xarCacheTrait
 {
-    public static $enableCache = false;
+    public static $enableCache = false;  // activate with self::$enableCache = true
     public static $_cacheScope = 'CacheTrait';
     public static $_cacheKey = null;
 
     public static function setCacheScope($cacheScope, $allow = 0)
     {
+        if (!static::$enableCache) {
+            return;
+        }
         static::$_cacheScope = $cacheScope;
         // @checkme what to do with unknown cache scopes? Exception, deny or allow by default?
         $settings = xarVariableCache::getCacheSettings();
@@ -57,6 +60,9 @@ trait xarCacheTrait
 
     public static function getCacheKey($id = null)
     {
+        if (!static::$enableCache) {
+            return;
+        }
         if (!empty($id)) {
             static::$_cacheKey = xarCache::getVariableKey(static::$_cacheScope, $id);
         }
@@ -65,39 +71,57 @@ trait xarCacheTrait
 
     public static function setCacheKey($cacheKey)
     {
+        if (!static::$enableCache) {
+            return;
+        }
         static::$_cacheKey = $cacheKey;
     }
 
     public static function hasCacheKey()
     {
-        if (!empty(static::$_cacheKey)) {
-            return true;
+        if (!static::$enableCache || empty(static::$_cacheKey)) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public static function isCached($cacheKey)
     {
+        if (!static::$enableCache || empty($cacheKey)) {
+            return false;
+        }
         return xarVariableCache::isCached($cacheKey);
     }
 
     public static function getCached($cacheKey)
     {
+        if (!static::$enableCache || empty($cacheKey)) {
+            return;
+        }
         return xarVariableCache::getCached($cacheKey);
     }
 
-    public static function setCached($cacheKey, $value)
+    public static function setCached($cacheKey, $value, $expire = null)
     {
-        xarVariableCache::setCached($cacheKey, $value);
+        if (!static::$enableCache || empty($cacheKey)) {
+            return;
+        }
+        xarVariableCache::setCached($cacheKey, $value, $expire);
     }
 
     public static function delCached($cacheKey)
     {
+        if (!static::$enableCache || empty($cacheKey)) {
+            return;
+        }
         xarVariableCache::delCached($cacheKey);
     }
 
     public static function keyCached($cacheKey)
     {
+        if (!static::$enableCache || empty($cacheKey)) {
+            return;
+        }
         return xarVariableCache::keyCached($cacheKey);
     }
 
