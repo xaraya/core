@@ -30,6 +30,7 @@
 //sys::import('modules.dynamicdata.class.graphql.propertytype');
 //sys::import('modules.dynamicdata.class.graphql.accesstype');
 //sys::import('modules.dynamicdata.class.graphql.keyvaltype');
+//sys::import('modules.dynamicdata.class.graphql.inflector');
 //sys::import('xaraya.caching.cachetrait');
 //sys::import('modules.dynamicdata.class.timertrait');
 
@@ -136,9 +137,8 @@ class xarGraphQL extends xarObject
                 }
             }
         }
-        $clazz = self::get_type_class("buildtype");
         foreach (self::$extra_types as $type) {
-            [$name, $type, $object, $list, $item] = $clazz::sanitize($type);
+            [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($type);
             self::$object_type[$object] = $name;
         }
         self::setTimer('mapped');
@@ -283,7 +283,7 @@ class xarGraphQL extends xarObject
         }
         $clazz = self::get_type_class(self::$type_mapper[$name]);
         // get input type from existing type class
-        $type = $clazz::_xar_get_input_type();
+        $type = $clazz::_xar_get_input_type($input);
         if (!$type) {
             throw new Exception("Unknown graphql type: " . $input);
         }
@@ -366,7 +366,7 @@ class xarGraphQL extends xarObject
             //$clazz = self::get_type_class($type);
             //if ($clazz !== "xarGraphQLBaseType" && method_exists($clazz, "_xar_get_type_config")) {
             //    self::$paths[] = "type config $name defined in $clazz";
-            //    $classConfig = $clazz::_xar_get_type_config();
+            //    $classConfig = $clazz::_xar_get_type_config($name);
             //    //return $classConfig;
             //}
         }
@@ -391,7 +391,6 @@ class xarGraphQL extends xarObject
             //    $typeDef = $clazz::object_type_definition($name);
             //    return $typeDef->getFields();
             //};
-            // $typeConfig['resolveField'] = $clazz::object_type_resolver($name);
             $typeConfig['resolveField'] = $clazz::object_type_resolver($name);
         }
         return $typeConfig;
@@ -818,9 +817,8 @@ class xarGraphQL extends xarObject
     {
         $extraTypes = [];
         if (!empty($objectNames)) {
-            $clazz = self::get_type_class("buildtype");
             foreach ($objectNames as $name) {
-                $type = $clazz::singularize($name);
+                $type = xarGraphQLInflector::singularize($name);
                 if (self::has_type($type)) {
                     continue;
                 }
@@ -887,7 +885,7 @@ class xarGraphQL extends xarObject
         }
         $fieldspecs = [];
         foreach (self::$extra_types as $type) {
-            [$name, $type, $object, $list, $item] = $clazz::sanitize($type);
+            [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($type);
             $fieldspecs[$object] = $clazz::find_object_fieldspecs($object, true);
         }
         foreach ($fieldspecs as $object => $fieldspec) {

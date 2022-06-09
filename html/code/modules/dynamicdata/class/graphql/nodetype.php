@@ -15,23 +15,23 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * GraphQL ObjectType and (no) query fields for possibly recursive config value = unserialized in "propertie(s)"
+ * GraphQL InterfaceType for getting DD object items using global object identification
  */
 class xarGraphQLNodeType extends InterfaceType
 {
     public function __construct()
     {
-        $config = static::_xar_get_type_config();
+        $config = static::_xar_get_type_config('Node');
         parent::__construct($config);
     }
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_get_type_config()
+    public static function _xar_get_type_config($typename, $object = null)
     {
         return [
-            'name' => 'Node',
+            'name' => $typename,
             'description' => 'Node interface for global object identification',
             'fields' => [
                 'id' => ['type' => Type::nonNull(Type::id())],

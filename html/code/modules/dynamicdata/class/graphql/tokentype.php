@@ -22,17 +22,17 @@ class xarGraphQLTokenType extends ObjectType
 
     public function __construct()
     {
-        $config = static::_xar_get_type_config();
+        $config = static::_xar_get_type_config('Token');
         parent::__construct($config);
     }
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_get_type_config()
+    public static function _xar_get_type_config($typename, $object = null)
     {
         return [
-            'name' => 'Token',
+            'name' => $typename,
             'description' => 'API access token',
             'fields' => [
                 'access_token' => ['type' => Type::string()],

@@ -22,6 +22,12 @@ use GraphQL\Executor\Executor;
 //class xarGraphQLBuildType extends ObjectType
 class xarGraphQLBuildType
 {
+    use xarGraphQLQueriesTrait;
+    use xarGraphQLMutationsTrait;
+    //use xarGraphQLObjectTrait;
+    //use xarGraphQLDeferredTrait;
+    //use xarGraphQLInputTrait;
+
     public static $property_id = [];
     public static $known_proptype_ids = [];
 
@@ -35,7 +41,7 @@ class xarGraphQLBuildType
     {
         xarGraphQL::setTimer('make type ' . $name);
         // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
         $description = "$object item";
         // $fields = self::get_object_fields($object);
         $newType = new ObjectType([
@@ -58,7 +64,7 @@ class xarGraphQLBuildType
     {
         // xarGraphQL::setTimer('make page type ' . $name);
         // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
         $page = $name . '_Page';
         $description = "Paginated list of $object items";
         $fields = [
@@ -87,7 +93,7 @@ class xarGraphQLBuildType
     {
         // xarGraphQL::setTimer('make input type ' . $name);
         // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
         $input = $name . '_Input';
         $description = "Input for $object item";
         // @todo adapt object fields to InputObjectType where needed, e.g. KeyVal to Mixed?
@@ -103,82 +109,6 @@ class xarGraphQLBuildType
         ]);
         // xarGraphQL::setTimer('made input type ' . $name);
         return $newType;
-    }
-
-    /**
-     * Sanitize name, type, object, list and item based on given name, e.g.:
-     * name=Object, type=object, object=objects, list=objects, item=object
-     * name=Property, type=property, object=properties, list=properties, item=property
-     */
-    public static function sanitize($name, $type = null, $object = null, $list = null, $item = null)
-    {
-        // Object -> object / Property -> property
-        if (!isset($type)) {
-            $type = strtolower($name);
-        }
-        // object -> objects / property -> properties
-        if (!isset($object)) {
-            // Basic pluralize for most common case(s)
-            $object = self::pluralize($type);
-        }
-        // objects -> objects / properties -> properties
-        if (!isset($list)) {
-            $list = $object;
-        }
-        // object -> object / property-> property
-        if (!isset($item)) {
-            $item = $type;
-        }
-        if ($name === $type) {
-            $name = ucfirst($name);
-        }
-        return [$name, $type, $object, $list, $item];
-    }
-
-    /**
-     * Basic pluralize for most common case(s):
-     * object -> objects / property -> properties
-     */
-    public static function pluralize($type)
-    {
-        $page_ext = '_page';
-        if (substr($type, -strlen($page_ext)) === $page_ext) {
-            $type = substr($type, 0, strlen($type) - strlen($page_ext));
-        }
-        if (substr($type, -1) === "y") {
-            $object = substr($type, 0, strlen($type) - 1) . "ies";
-        } elseif ($type === "user") {
-            $object = "roles_users";
-        } elseif (!in_array($type, ["sample", "api_people", "api_species", "deferchildren", "deferparentchild", "cdcollection"])) {
-            $object = $type . "s";
-        } else {
-            $object = $type;
-        }
-        return $object;
-    }
-
-    /**
-     * Basic singularize for most common case(s):
-     * objects -> object / properties -> property
-     */
-    public static function singularize($name)
-    {
-        $page_ext = '_page';
-        if (substr($name, -strlen($page_ext)) === $page_ext) {
-            $name = substr($name, 0, strlen($name) - strlen($page_ext));
-        }
-        if ($name === "api_species") {
-            $type = $name;
-        } elseif ($name === "roles_users") {
-            $type = "user";
-        } elseif (substr($name, -3) === "ies") {
-            $type = substr($name, 0, strlen($name) - 3) . "y";
-        } elseif (substr($name, -1) === "s") {
-            $type = substr($name, 0, strlen($name) - 1);
-        } else {
-            $type = $name;
-        }
-        return $type;
     }
 
     /**
@@ -340,39 +270,39 @@ class xarGraphQLBuildType
                 //self::get_property_id('categories') => 'category',
             ];
         }
-        $fieldspecs = array();
+        $fieldspecs = [];
         // @todo add fields based on object descriptor?
         foreach ($objectref->getProperties() as $key => $property) {
             if (array_key_exists($property->type, self::$known_proptype_ids)) {
                 // @todo should we pass along the object too?
                 $typename = self::$known_proptype_ids[$property->type];
-                $fieldspecs[$property->name] = array('deferred', $typename);
+                $fieldspecs[$property->name] = ['deferred', $typename];
                 continue;
             }
             if ($property->type == self::get_property_id('deferitem')) {
                 $typename = self::find_property_typename($property);
-                $fieldspecs[$property->name] = array('deferitem', $typename, $property->defername);
+                $fieldspecs[$property->name] = ['deferitem', $typename, $property->defername];
                 continue;
             }
             if ($property->type == self::get_property_id('deferlist')) {
                 $typename = self::find_property_typename($property);
-                $fieldspecs[$property->name] = array('deferlist', $typename, $property->defername);
+                $fieldspecs[$property->name] = ['deferlist', $typename, $property->defername];
                 continue;
             }
             if ($property->type == self::get_property_id('defermany')) {
                 $typename = self::find_property_typename($property);
                 // @checkme we need the itemid here!
-                $fieldspecs[$property->name] = array('defermany', $typename, $property->defername);
+                $fieldspecs[$property->name] = ['defermany', $typename, $property->defername];
                 continue;
             }
             if ($property->type == self::get_property_id('configuration')) {
                 $typename = "keyval";
-                $fieldspecs[$property->name] = array('typelist', $typename);
+                $fieldspecs[$property->name] = ['typelist', $typename];
                 continue;
             }
             if (!array_key_exists($property->name, $fieldspecs)) {
                 $typename = $property->basetype;
-                $fieldspecs[$property->name] = array('basetype', $typename);
+                $fieldspecs[$property->name] = ['basetype', $typename];
             }
         }
         xarGraphQL::$objectFieldSpecs[$object] = $fieldspecs;
@@ -388,7 +318,7 @@ class xarGraphQLBuildType
         if (!empty(xarGraphQL::$object_type[$property->objectname])) {
             $typename = xarGraphQL::$object_type[$property->objectname];
         } else {
-            $typename = self::singularize($property->objectname);
+            $typename = xarGraphQLInflector::singularize($property->objectname);
         }
         if (!xarGraphQL::has_type($typename)) {
             $typename = "mixed";
@@ -517,8 +447,8 @@ class xarGraphQLBuildType
         // xarGraphQL::setTimer('object field resolver ' . $type);
         // when using type config decorator
         if (!isset($object)) {
-            $type = self::singularize($type);
-            [$name, $type, $object, $list, $item] = self::sanitize($type);
+            $type = xarGraphQLInflector::singularize($type);
+            [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($type);
         }
         $field_resolvers[$object] = [];
 
@@ -731,6 +661,27 @@ class xarGraphQLBuildType
         return $resolver;
     }
 
+    public static function basetype_field_resolver($typename, $fieldname)
+    {
+        // @checkme use standard default field resolver here?
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
+            if (is_array($values)) {
+                return $values[$fieldname] ?? null;
+            }
+            if (is_object($values)) {
+                if (property_exists($values, 'properties') && in_array($fieldname, $values->properties)) {
+                    // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
+                    //return $values->properties[$fieldname]->getValue();
+                    return $values->properties[$fieldname]->value;
+                }
+                if (property_exists($values, $fieldname)) {
+                    return $values->{$fieldname};
+                }
+            }
+        };
+        return $resolver;
+    }
+
     /**
      * Find the appropriate field resolver for a particular type and field
      */
@@ -741,8 +692,8 @@ class xarGraphQLBuildType
             // default typename
             '*' => [
                 // default fieldname
-                '*' => [Executor::class, 'defaultFieldResolver']
-            ]
+                '*' => [Executor::class, 'defaultFieldResolver'],
+            ],
         ];
         static $type_checked = [];
 
@@ -793,7 +744,7 @@ class xarGraphQLBuildType
                 return $field_resolver;
             //} elseif (method_exists($clazz, '_xar_get_type_config')) {
             } else {
-                //$type_config = $clazz::_xar_get_type_config();
+                //$type_config = $clazz::_xar_get_type_config($typename);
                 $type_def = self::object_type_definition($typename);
                 if ($type_def) {
                     if ($type_def->resolveFieldFn) {
@@ -827,7 +778,7 @@ class xarGraphQLBuildType
         }
 
         // look in field specs for corresponding object
-        $object = self::pluralize($typename);
+        $object = xarGraphQLInflector::pluralize($typename);
         try {
             $fieldspecs = self::find_object_fieldspecs($object);
         } catch (Exception $e) {
@@ -860,10 +811,7 @@ class xarGraphQLBuildType
             $field_resolver = self::serial_field_resolver($typename, $fieldname);
         } elseif ($fieldtype == 'basetype' || (empty($fieldtype) && $fieldname == "properties")) {
             // @checkme use standard default field resolver here?
-            $field_resolver = static function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
-                // @todo handle case where values is object
-                return $values[$fieldname] ?? null;
-            };
+            $field_resolver = self::basetype_field_resolver($typename, $fieldname);
         // this field contains a _ which typically means it refers to another field
         } elseif (empty($fieldtype) && strpos($fieldname, '_') !== false) {
             // fieldname starts with _
@@ -888,11 +836,12 @@ class xarGraphQLBuildType
 
     /**
      * Get the root query fields for this object for the GraphQL Query type (list, item)
+     * @todo Move to queries trait
      */
     public static function get_query_fields($name, $type = null, $object = null, $list = null, $item = null)
     {
         // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
         $fields = [
             self::get_page_query($list, $type, $object),
             //self::get_list_query($list, $type, $object),
@@ -903,316 +852,75 @@ class xarGraphQLBuildType
 
     /**
      * Get paginated list query field for this object type - see also relay connection for cursor-based
+     * @deprecated Moved to queries trait
      */
     public static function get_page_query($list, $type, $object)
     {
-        return [
-            'name' => $list . '_page',
-            'description' => 'Page ' . $object . ' items',
-            'type' => xarGraphQL::get_page_type($type),
-            'args' => [
-                'order' => Type::string(),
-                'offset' => [
-                    'type' => Type::int(),
-                    'defaultValue' => 0,
-                ],
-                'limit' => [
-                    'type' => Type::int(),
-                    'defaultValue' => 20,
-                ],
-                'filter' => Type::listOf(Type::string()),
-            ],
-            'resolve' => self::page_query_resolver($type, $object),
-        ];
+        return static::_xar_get_page_query($list, $type, $object);
     }
 
     /**
      * Get the paginated list query resolver for the object type
+     * @deprecated Moved to queries trait
      */
     public static function page_query_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
-        if (!isset($object)) {
-            [$name, $type, $object, $list, $item] = self::sanitize($type);
-        }
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            // @checkme don't try to resolve anything further if the result is already cached?
-            if (xarGraphQL::has_cached_data($type . '_page', $rootValue, $args, $context, $info)) {
-                return;
-            }
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["page query " . $type, $args]);
-            }
-            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
-            $allowed = array_flip(['order', 'offset', 'limit', 'filter', 'count']);
-            $fields = $info->getFieldSelection(1);
-            $args = array_intersect_key($args, $allowed);
-            $todo = array_keys(array_diff_key($fields, $allowed));
-            if (array_key_exists('count', $fields)) {
-                $args['count'] = true;
-            }
-            if (empty($todo)) {
-                return $args;
-            }
-            // @checkme we assume that the first field other than the allowed ones is the list we need
-            $list = $todo[0];
-            if (array_key_exists($type, xarGraphQL::$type_fields)) {
-                $fieldlist = xarGraphQL::$type_fields[$type];
-            } elseif (!empty($list) && array_key_exists($list, $fields)) {
-                $fieldlist = array_keys($fields[$list]);
-            } else {
-                $fieldlist = array_keys($fields);
-            }
-            // @checkme original query field definition config
-            //$config = $info->fieldDefinition->config;
-            //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
-            //}
-            $userId = 0;
-            if (xarGraphQL::hasSecurity($object)) {
-                $userId = xarGraphQL::checkUser($context);
-                if (empty($userId)) {
-                    throw new Exception('Invalid user');
-                }
-            }
-            $loader = new DataObjectLoader($object, $fieldlist);
-            $loader->parseQueryArgs($args);
-            $objectlist = $loader->getObjectList();
-            if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
-                throw new Exception('Invalid user access');
-            }
-            $params = $loader->addPagingParams();
-            $args[$list] = $objectlist->getItems($params);
-            //$args[$list] = $loader->query($args);
-            /**
-            $deferred = [];
-            foreach ($fieldlist as $key) {
-                if (!empty($objectlist->properties[$key]) && method_exists($objectlist->properties[$key], 'getDeferredData')) {
-                    array_push($deferred, $key);
-                    // @todo set the fieldlist of the loaders to match what we need here!?
-                }
-            }
-            $allowed = array_flip($fieldlist);
-            foreach ($args[$list] as $itemid => $item) {
-                // @todo filter out fieldlist in dynamic_data datastore
-                //$item = array_intersect_key($item, $allowed);
-                foreach ($deferred as $key) {
-                    $data = $objectlist->properties[$key]->getDeferredData(['value' => $item[$key] ?? null, '_itemid' => $itemid]);
-                    if ($data['value'] && in_array(get_class($objectlist->properties[$key]), ['DeferredListProperty', 'DeferredManyProperty']) && is_array($data['value'])) {
-                        $args[$list][$itemid][$key] = array_values($data['value']);
-                    } else {
-                        $args[$list][$itemid][$key] = $data['value'];
-                    }
-                }
-            }
-             */
-            if (!empty($args['count'])) {
-                $args['count'] = $loader->count;
-            }
-            xarGraphQL::$object_ref[$object] =& $objectlist;
-            return $args;
-        };
-        return $resolver;
+        return static::_xar_page_query_resolver($type, $object);
     }
 
     /**
      * Get list query field for this object type
+     * @deprecated Moved to queries trait
      */
     public static function get_list_query($list, $type, $object)
     {
-        return [
-            'name' => $list,
-            'description' => 'List ' . $object . ' items',
-            //'type' => Type::listOf(xarGraphQL::get_type($type)),
-            'type' => xarGraphQL::get_type_list($type),
-            /**
-            'args' => [
-                'order' => Type::string(),
-                'offset' => [
-                    'type' => Type::int(),
-                    'defaultValue' => 0,
-                ],
-                'limit' => [
-                    'type' => Type::int(),
-                    'defaultValue' => 20,
-                ],
-                'filter' => Type::listOf(Type::string()),
-            ],
-             */
-            'resolve' => self::list_query_resolver($type, $object),
-        ];
+        return static::_xar_get_list_query($list, $type, $object);
     }
 
     /**
      * Get the list query resolver for the object type
+     * @deprecated Moved to queries trait
      */
     public static function list_query_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
-        if (!isset($object)) {
-            [$name, $type, $object, $list, $item] = self::sanitize($type);
-        }
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            // @checkme don't try to resolve anything further if the result is already cached?
-            if (xarGraphQL::has_cached_data($type . '_list', $rootValue, $args, $context, $info)) {
-                return;
-            }
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["list query " . $type, $args]);
-            }
-            $fields = $info->getFieldSelection(1);
-            if (array_key_exists($type, xarGraphQL::$type_fields)) {
-                $fieldlist = xarGraphQL::$type_fields[$type];
-            } else {
-                $fieldlist = array_keys($fields);
-            }
-            // @checkme original query field definition config
-            //$config = $info->fieldDefinition->config;
-            //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
-            //}
-            $userId = 0;
-            if (xarGraphQL::hasSecurity($object)) {
-                $userId = xarGraphQL::checkUser($context);
-                if (empty($userId)) {
-                    throw new Exception('Invalid user');
-                }
-            }
-            $loader = new DataObjectLoader($object, $fieldlist);
-            $loader->parseQueryArgs($args);
-            $objectlist = $loader->getObjectList();
-            if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
-                throw new Exception('Invalid user access');
-            }
-            $params = $loader->addPagingParams();
-            $items = $objectlist->getItems($params);
-            //$items = $loader->query($args);
-            xarGraphQL::$object_ref[$object] =& $objectlist;
-            return $items;
-        };
-        return $resolver;
+        return static::_xar_list_query_resolver($type, $object);
     }
 
     /**
      * Get item query field for this object type
+     * @deprecated Moved to queries trait
      */
     public static function get_item_query($item, $type, $object)
     {
-        return [
-            'name' => $item,
-            'description' => 'Get ' . $object . ' item',
-            'type' => xarGraphQL::get_type($type),
-            'args' => [
-                'id' => Type::nonNull(Type::id()),
-            ],
-            'resolve' => self::item_query_resolver($type, $object),
-        ];
+        return static::_xar_get_item_query($item, $type, $object);
     }
 
     /**
      * Get the item query resolver for the object type
+     * @deprecated Moved to queries trait
      */
     public static function item_query_resolver($type, $object = null)
     {
-        // when using type config decorator and object_query_resolver
-        if (!isset($object)) {
-            [$name, $type, $object, $list, $item] = self::sanitize($type);
-        }
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            // @checkme don't try to resolve anything further if the result is already cached?
-            if (xarGraphQL::has_cached_data($type . '_item', $rootValue, $args, $context, $info)) {
-                return;
-            }
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["item query"]);
-            }
-            $fields = $info->getFieldSelection(1);
-            if (empty($args['id'])) {
-                throw new Exception('Unknown ' . $type);
-            }
-            // @checkme original query field definition config
-            //$config = $info->fieldDefinition->config;
-            //if (array_key_exists('extensions', $config) && !empty($config['extensions']['access'])) {
-            //}
-            $userId = 0;
-            if (xarGraphQL::hasSecurity($object)) {
-                $userId = xarGraphQL::checkUser($context);
-                if (empty($userId)) {
-                    throw new Exception('Invalid user');
-                }
-            }
-            $params = ['name' => $object, 'itemid' => $args['id']];
-            $objectitem = DataObjectMaster::getObject($params);
-            if (xarGraphQL::hasSecurity($object) && !$objectitem->checkAccess('display', $params['itemid'], $userId)) {
-                throw new Exception('Invalid user access');
-            }
-            $itemid = $objectitem->getItem();
-            if ($itemid != $params['itemid']) {
-                throw new Exception('Unknown ' . $type);
-            }
-            try {
-                // @checkme this throws exception for userlist property when xarUser::init() is not called first
-                //$values = $objectitem->getFieldValues();
-                // @checkme bypass getValue() and get the raw values from the properties to allow deferred handling
-                $values = $objectitem->getFieldValues([], 1);
-            } catch (Exception $e) {
-                //print_r($e->getMessage());
-                $values = ['id' => $args['id']];
-            }
-            // see objecttype
-            if ($object == 'objects') {
-                if (array_key_exists('properties', $fields)) {
-                    //$values['properties'] = $objectitem->getProperties();
-                    $params = ['objectid' => $itemid];
-                    $values['properties'] = DataPropertyMaster::getProperties($params);
-                }
-                if (array_key_exists('config', $fields) && !empty($objectitem->config)) {
-                    //$values['config'] = @unserialize($objectitem->config);
-                    $values['config'] = [$objectitem->config];
-                }
-            }
-            xarGraphQL::$object_ref[$object] =& $objectitem;
-            return $values;
-        };
-        return $resolver;
+        return static::_xar_item_query_resolver($type, $object);
     }
 
     /**
      * Add to the query resolver for the object type (page, list, item) - when using BuildSchema
+     * @deprecated Moved to queries trait
      */
     public static function object_query_resolver($name = 'Query')
     {
-        // call either list_query_resolver or item_query_resolver here depending on $args['id']
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object query", $args]);
-            }
-            $name = strtolower($info->fieldName);
-            $page_ext = '_page';
-            if (substr($name, -strlen($page_ext)) === $page_ext) {
-                $type = substr($name, 0, strlen($name) - strlen($page_ext));
-                $type = self::singularize($type);
-                $page_resolver = self::page_query_resolver($type);
-                return call_user_func($page_resolver, $rootValue, $args, $context, $info);
-            }
-            $type = self::singularize($name);
-            if (!empty($args['id'])) {
-                //print_r($info->parentType->name . "." . $info->fieldName . "[" . $args['id'] . "]");
-                $item_resolver = self::item_query_resolver($type);
-                return call_user_func($item_resolver, $rootValue, $args, $context, $info);
-            }
-            //print_r($info->parentType->name . "." . $info->fieldName);
-            $list_resolver = self::list_query_resolver($type);
-            return call_user_func($list_resolver, $rootValue, $args, $context, $info);
-        };
-        return $resolver;
+        return static::_xar_query_field_resolver($name);
     }
 
     /**
      * Get the root mutation fields for this object for the GraphQL Mutation type (create..., update..., delete...)
+     * @todo Move to mutations trait
      */
     public static function get_mutation_fields($name, $type = null, $object = null, $list = null, $item = null)
     {
         // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = self::sanitize($name, $type, $object, $list, $item);
+        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
         $fields = [
             //self::get_create_mutation('create' . $name, $type, $object),
             //self::get_update_mutation('update' . $name, $type, $object),
@@ -1223,199 +931,65 @@ class xarGraphQLBuildType
 
     /**
      * Get create mutation field for this object type
+     * @deprecated Moved to mutations trait
      */
     public static function get_create_mutation($name, $type, $object)
     {
-        return [
-            'name' => $name,
-            'description' => 'Create ' . $object . ' item',
-            'type' => xarGraphQL::get_type($type),
-            'args' => [
-                'input' => xarGraphQL::get_input_type($type),
-            ],
-            'resolve' => self::create_mutation_resolver($type, $object),
-        ];
+        return static::_xar_get_create_mutation($name, $type, $object);
     }
 
     /**
      * Get the create mutation resolver for the object type
+     * @deprecated Moved to mutations trait
      */
     public static function create_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_mutation_resolver
-        //if (!isset($object)) {
-        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
-        //}
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            // disable caching for mutations
-            xarGraphQL::$enableCache = false;
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["create mutation"]);
-            }
-            $fields = $info->getFieldSelection(1);
-            if (empty($args['input'])) {
-                throw new Exception('Unknown input ' . $type);
-            }
-            if (!empty($args['input']['id'])) {
-                //$params = array('name' => $object, 'itemid' => $args['input']['id']);
-                unset($args['input']['id']);
-            }
-            $userId = xarGraphQL::checkUser($context);
-            if (empty($userId)) {
-                throw new Exception('Invalid user');
-            }
-            $params = ['name' => $object];
-            $objectitem = DataObjectMaster::getObject($params);
-            if (!$objectitem->checkAccess('create', 0, $userId)) {
-                throw new Exception('Invalid user access');
-            }
-            $itemid = $objectitem->createItem($args['input']);
-            if (!empty($params['itemid']) && $itemid != $params['itemid']) {
-                throw new Exception('Unknown item ' . $type);
-            }
-            $values = $objectitem->getFieldValues();
-            return $values;
-        };
-        return $resolver;
+        return static::_xar_create_mutation_resolver($type, $object);
     }
 
     /**
      * Get update mutation field for this object type
+     * @deprecated Moved to mutations trait
      */
     public static function get_update_mutation($name, $type, $object)
     {
-        return [
-            'name' => $name,
-            'description' => 'Update ' . $object . ' item',
-            'type' => xarGraphQL::get_type($type),
-            'args' => [
-                'input' => xarGraphQL::get_input_type($type),
-            ],
-            'resolve' => self::update_mutation_resolver($type, $object),
-        ];
+        return static::_xar_get_update_mutation($name, $type, $object);
     }
 
     /**
      * Get the update mutation resolver for the object type
+     * @deprecated Moved to mutations trait
      */
     public static function update_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_mutation_resolver
-        //if (!isset($object)) {
-        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
-        //}
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            // disable caching for mutations
-            xarGraphQL::$enableCache = false;
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["update mutation"]);
-            }
-            $fields = $info->getFieldSelection(1);
-            if (empty($args['input']) || empty($args['input']['id'])) {
-                throw new Exception('Unknown input ' . $type);
-            }
-            $userId = xarGraphQL::checkUser($context);
-            if (empty($userId)) {
-                throw new Exception('Invalid user');
-            }
-            $params = ['name' => $object, 'itemid' => $args['input']['id']];
-            $objectitem = DataObjectMaster::getObject($params);
-            if (!$objectitem->checkAccess('update', $params['itemid'], $userId)) {
-                throw new Exception('Invalid user access');
-            }
-            $itemid = $objectitem->updateItem($args['input']);
-            if ($itemid != $params['itemid']) {
-                throw new Exception('Unknown item ' . $type);
-            }
-            $values = $objectitem->getFieldValues();
-            return $values;
-        };
-        return $resolver;
+        return static::_xar_update_mutation_resolver($type, $object);
     }
 
     /**
      * Get delete mutation field for this object type
+     * @deprecated Moved to mutations trait
      */
     public static function get_delete_mutation($name, $type, $object)
     {
-        return [
-            'name' => $name,
-            'description' => 'Delete ' . $object . ' item',
-            'type' => Type::nonNull(Type::id()),
-            'args' => [
-                'id' => Type::nonNull(Type::id()),
-            ],
-            'resolve' => self::delete_mutation_resolver($type, $object),
-        ];
+        return static::_xar_get_delete_mutation($name, $type, $object);
     }
 
     /**
      * Get the delete mutation resolver for the object type
+     * @deprecated Moved to mutations trait
      */
     public static function delete_mutation_resolver($type, $object = null)
     {
-        // when using type config decorator and object_mutation_resolver
-        //if (!isset($object)) {
-        //    list($name, $type, $object, $list, $item) = self::sanitize($type);
-        //}
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
-            // disable caching for mutations
-            xarGraphQL::$enableCache = false;
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["delete mutation"]);
-            }
-            $fields = $info->getFieldSelection(1);
-            if (empty($args['id'])) {
-                throw new Exception('Unknown id ' . $type);
-            }
-            $userId = xarGraphQL::checkUser($context);
-            if (empty($userId)) {
-                throw new Exception('Invalid user');
-            }
-            $params = ['name' => $object, 'itemid' => $args['id']];
-            $objectitem = DataObjectMaster::getObject($params);
-            if (!$objectitem->checkAccess('delete', $params['itemid'], $userId)) {
-                throw new Exception('Invalid user access');
-            }
-            $itemid = $objectitem->deleteItem();
-            if ($itemid != $params['itemid']) {
-                throw new Exception('Unknown item ' . $type);
-            }
-            return $itemid;
-        };
-        return $resolver;
+        return static::_xar_delete_mutation_resolver($type, $object);
     }
 
     /**
      * Add to the mutation resolver for the object type (create, update, delete) - when using BuildSchema
+     * @deprecated Moved to mutations trait
      */
     public static function object_mutation_resolver($name = 'Mutation')
     {
-        // call the right mutation resolver based on the first part of the field name <action><Object>
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {
-            // disable caching for mutations
-            xarGraphQL::$enableCache = false;
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object mutation", $args]);
-            }
-            $name = $info->fieldName;
-            $action = substr($name, 0, 6);
-            $type = strtolower(substr($name, 6));
-            if ($action === "create") {
-                $create_resolver = self::create_mutation_resolver($type);
-                return call_user_func($create_resolver, $rootValue, $args, $context, $info);
-            }
-            if ($action === "update") {
-                $update_resolver = self::update_mutation_resolver($type);
-                return call_user_func($update_resolver, $rootValue, $args, $context, $info);
-            }
-            if ($action === "delete") {
-                $delete_resolver = self::delete_mutation_resolver($type);
-                return call_user_func($delete_resolver, $rootValue, $args, $context, $info);
-            }
-            throw new Exception('Invalid action ' . $action . ' for mutation ' . $info->fieldName);
-        };
-        return $resolver;
+        return static::_xar_mutation_field_resolver($name);
     }
 
     /**

@@ -14,23 +14,23 @@ use GraphQL\Type\Definition\UnionType;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
- * GraphQL ObjectType and (no) query fields for possibly recursive config value = unserialized in "propertie(s)"
+ * GraphQL UnionType for possibly recursive config value = unserialized in "propertie(s)" - NOT USED
  */
 class xarGraphQLMultiValType extends UnionType
 {
     public function __construct()
     {
-        $config = static::_xar_get_type_config();
+        $config = static::_xar_get_type_config('MultiVal');
         parent::__construct($config);
     }
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_get_type_config()
+    public static function _xar_get_type_config($typename, $object = null)
     {
         return [
-            'name' => 'MultiVal',
+            'name' => $typename,
             'types' => [
                 Type::string(),
                 //Type::listOf(xarGraphQL::get_type("keyval")),

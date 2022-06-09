@@ -19,21 +19,23 @@ use GraphQL\Type\Definition\InputObjectType;
  */
 class xarGraphQLKeyValType extends ObjectType
 {
+    use xarGraphQLInputTrait;
+
     public static $_xar_name   = 'KeyVal';
 
     public function __construct()
     {
-        $config = static::_xar_get_type_config();
+        $config = static::_xar_get_type_config(static::$_xar_name);
         parent::__construct($config);
     }
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_get_type_config()
+    public static function _xar_get_type_config($typename, $object = null)
     {
         return [
-            'name' => static::$_xar_name,
+            'name' => $typename,
             'description' => 'Key Value combination for assoc arrays',
             'fields' => [
                 'key' => Type::string(),
@@ -71,24 +73,16 @@ class xarGraphQLKeyValType extends ObjectType
     }
 
     /**
-     * Make a generic Input Object Type for create/update mutations
+     * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_type()
+    public static function _xar_get_input_fields($object, &$newType)
     {
-        $input = static::$_xar_name . '_Input';
-        $description = "Input for DD " . static::$_xar_name . " field";
-        // https://webonyx.github.io/graphql-php/type-definitions/object-types/#recurring-and-circular-types
-        // $fields = static::_xar_get_input_fields(static::$_xar_object);
-        $newType = new InputObjectType([
-            'name' => $input,
-            'description' => $description,
-            'fields' => [
-                'key' => Type::string(),
-                //'value' => Type::string(),
-                'value' => xarGraphQL::get_type('mixed'),  // Scalar Type doesn't need an equivalent Input Type
-            ],
-            //'parseValue' => self::input_value_parser($type, $object),
-        ]);
-        return $newType;
+        // return static::_xar_get_object_fields($object);
+        $fields = [
+            'key' => Type::string(),
+            //'value' => Type::string(),
+            'value' => xarGraphQL::get_type('mixed'),  // Scalar Type doesn't need an equivalent Input Type
+        ];
+        return $fields;
     }
 }

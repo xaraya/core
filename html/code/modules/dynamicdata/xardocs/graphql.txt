@@ -1,3 +1,29 @@
+Introduction
+============
+The library that the GraphQL API relies on [https://github.com/webonyx/graphql-php] allows defining the schema
+in 2 different basic ways:
+1. via code using a Schema() object and type loader where each object type is coded (in-line or as subclass), or
+2. via a schema file and a type config decorator where you can then override the default field resolver in code
+
+There are some complementary tools that allow you to create the schema in other ways like annotations, models etc.
+but the GraphQL API follows the same concept: you can either use code to define the types and how they should be
+handled, or use a schema file as basis for the types and fields and then define how to resolve the fields in code.
+
+In addition, the Xaraya GraphQL API allows you to automatically map dynamic DataObjects into GraphQL types and
+handle them with either approach, using their property types to define and include extra ObjectTypes into the
+overall schema.
+
+When you select extra objects to include in the DynamicData Test APIs web interface and press "rebuild", this
+will generate both a new graphql_objects.json file for inclusion via code, and a new schema.graphql file if
+you prefer to use that approach.
+
+In terms of performance, inclusion via code will be faster to generate the schema and execute each API call.
+Also it makes sense to use a separate ObjectType class if you want to override how a particular DataObject is
+queried and/or its fields are resolved afterwards.
+
+
+Classes and Methods (to update)
+===================
 gql.php
  |- graphql::get_schema
  | |
@@ -23,8 +49,10 @@ gql.php
  |   |   | |
  |   |   | #- basetype::_xar_get_query_field
  |   |   |   |
- |   |   |   |- _xar_get_page_query @todo
- |   |   |   | ...
+ |   |   |   |- _xar_get_page_query
+ |   |   |   | |
+ |   |   |   | #- _xar_page_query_resolver - DataObjectMaster::getObjectList
+ |   |   |   |
  |   |   |   |- _xar_get_list_query
  |   |   |   | |
  |   |   |   | #- _xar_list_query_resolver - DataObjectMaster::getObjectList

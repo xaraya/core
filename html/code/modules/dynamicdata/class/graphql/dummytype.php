@@ -22,14 +22,14 @@ class xarGraphQLDummyType extends ObjectType
 
     public function __construct()
     {
-        $config = static::_xar_get_type_config();
+        $config = static::_xar_get_type_config('Dummy');
         parent::__construct($config);
     }
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_get_type_config()
+    public static function _xar_get_type_config($typename, $object = null)
     {
         return [
             'name' => 'Dummy',
