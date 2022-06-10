@@ -20,10 +20,10 @@ trait xarGraphQLQueryPageTrait
     /**
      * Get paginated list query field for this object type - see also relay connection for cursor-based
      */
-    public static function _xar_get_page_query($listname, $typename, $object)
+    public static function _xar_get_page_query($pagename, $typename, $object)
     {
         return [
-            'name' => $listname . '_page',
+            'name' => $pagename,
             'description' => 'Page ' . $object . ' items',
             'type' => xarGraphQL::get_page_type($typename),
             'args' => [

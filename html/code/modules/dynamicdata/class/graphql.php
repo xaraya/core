@@ -138,7 +138,7 @@ class xarGraphQL extends xarObject
             }
         }
         foreach (self::$extra_types as $type) {
-            [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($type);
+            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
             self::$object_type[$object] = $name;
         }
         self::setTimer('mapped');
@@ -254,8 +254,17 @@ class xarGraphQL extends xarObject
             self::$type_cache[$page] = $type;
             return $type;
         }
-        // @todo get paginated Object Type for existing type classes?
-        throw new Exception("Unknown graphql type: " . $page);
+        if (!array_key_exists($name, self::$type_mapper)) {
+            throw new Exception("Unknown graphql type: " . $input);
+        }
+        $clazz = self::get_type_class(self::$type_mapper[$name]);
+        // get page type from existing type class
+        $type = $clazz::_xar_get_page_type($page);
+        if (!$type) {
+            throw new Exception("Unknown graphql type: " . $page);
+        }
+        self::$type_cache[$page] = $type;
+        return $type;
     }
 
     /**
@@ -885,7 +894,7 @@ class xarGraphQL extends xarObject
         }
         $fieldspecs = [];
         foreach (self::$extra_types as $type) {
-            [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($type);
+            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
             $fieldspecs[$object] = $clazz::find_object_fieldspecs($object, true);
         }
         foreach ($fieldspecs as $object => $fieldspec) {

@@ -26,9 +26,6 @@ class xarGraphQLBaseType extends ObjectType
     public static $_xar_name   = '';
     public static $_xar_type   = '';
     public static $_xar_object = '';
-    public static $_xar_page   = '';
-    public static $_xar_list   = '';
-    public static $_xar_item   = '';
     public static $_xar_security = true;
     public static $_xar_queries = [];
     public static $_xar_mutations = [];
@@ -81,8 +78,6 @@ class xarGraphQLBaseType extends ObjectType
      */
     public static function _xar_object_field_resolver($typename, $object = null)
     {
-        // $clazz = xarGraphQL::get_type_class("buildtype");
-        // return $clazz::object_field_resolver($typename, $object);
     }
 
     /**

@@ -12,7 +12,6 @@
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Type\Definition\InputObjectType;
 
 /**
  * GraphQL ObjectType and (no) query fields for assoc array configuration = unserialized in "propertie(s)"

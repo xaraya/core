@@ -19,11 +19,11 @@ class xarGraphQLInflector
      * name=Object, type=object, object=objects, list=objects, item=object
      * name=Property, type=property, object=properties, list=properties, item=property
      */
-    public static function sanitize($name, $type = null, $object = null, $list = null, $item = null)
+    public static function sanitize($name, $type = null, $object = null)
     {
         // Object -> object / Property -> property
         if (!isset($type)) {
-            $type = strtolower($name);
+            $type = self::normalize($name);
         }
         // object -> objects / property -> properties
         if (!isset($object)) {
@@ -31,18 +31,18 @@ class xarGraphQLInflector
             $object = self::pluralize($type);
         }
         // objects -> objects / properties -> properties
-        if (!isset($list)) {
-            $list = $object;
-        }
-        // object -> object / property-> property
-        if (!isset($item)) {
-            $item = $type;
-        }
+        //if (!isset($list)) {
+        //    $list = $object;
+        //}
+        //object -> object / property-> property
+        //if (!isset($item)) {
+        //    $item = $type;
+        //}
         // samples_page -> Samples_Page / sample_input -> Sample_Input
         if ($name === $type) {
             $name = ucwords($name, '_');
         }
-        return [$name, $type, $object, $list, $item];
+        return [$name, $type, $object];
     }
 
     /**

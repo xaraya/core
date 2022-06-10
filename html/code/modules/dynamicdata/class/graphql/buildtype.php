@@ -37,11 +37,11 @@ class xarGraphQLBuildType
      * Use inline style to define Object Type here instead of inheritance
      * https://webonyx.github.io/graphql-php/type-system/object-types/
      */
-    public static function make_type($name, $type = null, $object = null, $list = null, $item = null)
+    public static function make_type($name, $type = null, $object = null)
     {
         xarGraphQL::setTimer('make type ' . $name);
-        // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
+        // name=Property, type=property, object=properties
+        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
         $description = "$object item";
         // $fields = self::get_object_fields($object);
         $newType = new ObjectType([
@@ -60,12 +60,15 @@ class xarGraphQLBuildType
     /**
      * Make a generic Object Type with pagination
      */
-    public static function make_page_type($name, $type = null, $object = null, $list = null, $item = null)
+    public static function make_page_type($name, $type = null, $object = null)
     {
         // xarGraphQL::setTimer('make page type ' . $name);
-        // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
+        // name=Property, type=property, object=properties
+        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        // page=Property_Page
         $page = $name . '_Page';
+        // list=properties
+        $list = $object;
         $description = "Paginated list of $object items";
         $fields = [
             'order' => Type::string(),
@@ -89,11 +92,12 @@ class xarGraphQLBuildType
     /**
      * Make a generic Input Object Type for create/update mutations
      */
-    public static function make_input_type($name, $type = null, $object = null, $list = null, $item = null)
+    public static function make_input_type($name, $type = null, $object = null)
     {
         // xarGraphQL::setTimer('make input type ' . $name);
-        // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
+        // name=Property, type=property, object=properties
+        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        // page=Property_Input
         $input = $name . '_Input';
         $description = "Input for $object item";
         // @todo adapt object fields to InputObjectType where needed, e.g. KeyVal to Mixed?
@@ -448,7 +452,7 @@ class xarGraphQLBuildType
         // when using type config decorator
         if (!isset($object)) {
             $type = xarGraphQLInflector::singularize($type);
-            [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($type);
+            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
         }
         $field_resolvers[$object] = [];
 
@@ -838,12 +842,18 @@ class xarGraphQLBuildType
      * Get the root query fields for this object for the GraphQL Query type (list, item)
      * @todo Move to queries trait
      */
-    public static function get_query_fields($name, $type = null, $object = null, $list = null, $item = null)
+    public static function get_query_fields($name, $type = null, $object = null)
     {
-        // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
+        // name=Property, type=property, object=properties
+        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        // page=properties_page
+        $page = $object . '_page';
+        // list=properties
+        $list = $object;
+        // item=property
+        $item = $type;
         $fields = [
-            self::get_page_query($list, $type, $object),
+            self::get_page_query($page, $type, $object),
             //self::get_list_query($list, $type, $object),
             self::get_item_query($item, $type, $object),
         ];
@@ -854,9 +864,9 @@ class xarGraphQLBuildType
      * Get paginated list query field for this object type - see also relay connection for cursor-based
      * @deprecated Moved to queries trait
      */
-    public static function get_page_query($list, $type, $object)
+    public static function get_page_query($page, $type, $object)
     {
-        return static::_xar_get_page_query($list, $type, $object);
+        return static::_xar_get_page_query($page, $type, $object);
     }
 
     /**
@@ -917,10 +927,10 @@ class xarGraphQLBuildType
      * Get the root mutation fields for this object for the GraphQL Mutation type (create..., update..., delete...)
      * @todo Move to mutations trait
      */
-    public static function get_mutation_fields($name, $type = null, $object = null, $list = null, $item = null)
+    public static function get_mutation_fields($name, $type = null, $object = null)
     {
-        // name=Property, type=property, object=properties, list=properties, item=property
-        [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($name, $type, $object, $list, $item);
+        // name=Property, type=property, object=properties
+        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
         $fields = [
             //self::get_create_mutation('create' . $name, $type, $object),
             //self::get_update_mutation('update' . $name, $type, $object),
@@ -1000,22 +1010,6 @@ class xarGraphQLBuildType
         static $field_resolver = [];
         //xarGraphQL::$paths[] = "type resolver $name";
         return self::object_field_resolver($name);
-
-        // call the right resolver based on the type
-        $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($name, &$field_resolver) {
-            if (xarGraphQL::$trace_path) {
-                xarGraphQL::$paths[] = array_merge($info->path, ["object type $name", $args]);
-            }
-            if (!isset($field_resolver[$name])) {
-                $field_resolver[$name] = self::object_field_resolver($name);
-            }
-            $field = $info->fieldName;
-            if (!empty($field_resolver[$name])) {
-                return call_user_func($field_resolver[$name], $rootValue, $args, $context, $info);
-            }
-            // throw new Exception('Invalid type ' . $name . ' for type ' . $info->fieldName);
-        };
-        return $resolver;
     }
 
     /**

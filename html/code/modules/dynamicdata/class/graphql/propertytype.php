@@ -21,17 +21,17 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
     public static $_xar_name   = 'Property';
     public static $_xar_type   = 'property';
     public static $_xar_object = 'properties';
-    public static $_xar_page   = 'properties_page';
-    public static $_xar_list   = 'properties';
-    public static $_xar_item   = 'property';
-    public static $_xar_queries = ['properties', 'property'];
+    public static $_xar_queries = [
+        'list' => 'properties',
+        'item' => 'property'
+    ];
+    public static $_xar_mutations = [];
 
     /**
      * This method *should* be overridden for each specific object type
      */
     public static function _xar_get_object_fields($object)
     {
-        //$clazz = xarGraphQL::get_type_class("buildtype");
         $fields = [
             'id' => Type::nonNull(Type::id()),
             //'keys' => Type::listOf(Type::string()),
@@ -59,7 +59,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
             'label' => Type::string(),
             '_objectid' => Type::string(),
             //'objectid' => xarGraphQL::get_type('object'),
-            //'object_id' => $clazz::get_deferred_field('object_id', 'object'),
+            //'object_id' => static::_xar_get_deferred_field('object_id', 'object'),
             'type' => Type::string(),
             'defaultvalue' => Type::string(),
             'source' => Type::string(),

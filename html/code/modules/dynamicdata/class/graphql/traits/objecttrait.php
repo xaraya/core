@@ -18,7 +18,7 @@ use GraphQL\Type\Definition\ObjectType;
 trait xarGraphQLObjectTrait
 {
     /**
-     * Make a generic Object Type for a dynamicdata object type by name = "Module" for modules etc.
+     * Make a generic Object Type for a dynamicdata object type by name = "Sample" for samples etc.
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      *
@@ -71,7 +71,33 @@ trait xarGraphQLObjectTrait
      */
     public static function _xar_object_field_resolver($typename, $object = null)
     {
-        // $clazz = xarGraphQL::get_type_class("buildtype");
-        // return $clazz::object_field_resolver($typename, $object);
+    }
+
+    /**
+     * Make a generic Object Type with pagination for a dynamic object type by name = "Sample_Page" for samples etc.
+     */
+    public static function _xar_get_page_type($name, $type = null, $object = null)
+    {
+        // name=Property_Page, type=property, object=properties
+        [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        // list=properties
+        $list = $object;
+        $description = "Paginated list of DD $object items";
+        $fields = [
+            'order' => Type::string(),
+            'offset' => Type::int(),
+            'limit' => Type::int(),
+            'count' => Type::int(),
+            'filter' => Type::listOf(Type::string()),
+            //$list => Type::listOf(xarGraphQL::get_type($type)),
+            $list => xarGraphQL::get_type_list($type),
+        ];
+        $newType = new ObjectType([
+            'name' => ucwords($name, '_'),
+            'description' => $description,
+            'fields' => $fields,
+            //'resolveField' => self::object_field_resolver($type, $object),
+        ]);
+        return $newType;
     }
 }

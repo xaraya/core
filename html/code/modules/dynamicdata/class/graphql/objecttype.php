@@ -21,17 +21,17 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
     public static $_xar_name   = 'Object';
     public static $_xar_type   = 'object';
     public static $_xar_object = 'objects';
-    public static $_xar_page   = 'objects_page';
-    public static $_xar_list   = 'objects';
-    public static $_xar_item   = 'object';
-    public static $_xar_queries = ['objects', 'object'];
+    public static $_xar_queries = [
+        'list' => 'objects',
+        'item' => 'object'
+    ];
+    public static $_xar_mutations = [];
 
     /**
      * This method *should* be overridden for each specific object type
      */
     public static function _xar_get_object_fields($object)
     {
-        //$clazz = xarGraphQL::get_type_class("buildtype");
         $fields = [
             'objectid' => Type::nonNull(Type::id()),
             //'fieldlist' => Type::listOf(Type::string()),
@@ -51,7 +51,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'name' => Type::string(),
             'label' => Type::string(),
             'module_id' => Type::string(),
-            //'module_id' => $clazz::get_deferred_field('module_id', 'module'),
+            //'module_id' => static::_xar_get_deferred_field('module_id', 'module'),
             'itemtype' => Type::int(),
             'class' => Type::string(),
             'urlparam' => Type::string(),
@@ -60,11 +60,9 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'access' => [
                 'type' => xarGraphQL::get_type("access"),
                 'resolve' => function ($object, $args) {
-                    //print_r("access resolve");
                     if (empty($object['access'])) {
                         return null;
                     }
-                    //print_r($object['access']);
                     return @unserialize($object['access']);
                 },
             ],
@@ -73,7 +71,10 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             'config' => xarGraphQL::get_type("serial"),
             'config_kv' => [
                 'type' => xarGraphQL::get_type_list("keyval"),
-                'resolve' => function ($object, $args) {
+                'resolve' => function ($object, $args, $context, ResolveInfo $info) {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = array_merge($info->path, ["object config_kv", gettype($object)]);
+                    }
                     // Note: this may not be filled in by object(s) resolve above
                     if (empty($object['config'])) {
                         return null;
@@ -105,7 +106,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                     return get_class($object['_objectref']);
                 },
             ],
-            //'category' => $clazz::get_deferred_field('category', 'category'),
+            //'category' => static::_xar_get_deferred_field('category', 'category'),
             //'properties' => Type::listOf(xarGraphQL::get_type("property")),
             'properties' => xarGraphQL::get_type_list("property"),
         ];
@@ -132,8 +133,6 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
      */
     public static function _xar_list_query_resolver($type, $object = null)
     {
-        //$clazz = xarGraphQL::get_type_class("buildtype");
-        //return $clazz::list_query_resolver($type, $object);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["object list query", $args]);
@@ -216,8 +215,6 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
      */
     public static function _xar_item_query_resolver($type, $object = null)
     {
-        //$clazz = xarGraphQL::get_type_class("buildtype");
-        //return $clazz::item_query_resolver($type, $object);
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($type, $object) {
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["object item query"]);

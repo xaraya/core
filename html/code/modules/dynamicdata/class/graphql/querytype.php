@@ -15,21 +15,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class xarGraphQLQueryType extends ObjectType
 {
-    public static $query_mapper = [
-        'hello'      => 'dummytype',
-        'echo'       => 'dummytype',
-        'schema'     => 'dummytype',
-        'whoami'     => 'dummytype',
-        'samples'    => 'sampletype',
-        'sample'     => 'sampletype',
-        'objects'    => 'objecttype',
-        'object'     => 'objecttype',
-        'properties' => 'propertytype',
-        'property'   => 'propertytype',
-        //'user'       => 'usertype',  // disable querying user directly
-        //'node'       => 'nodetype',
-    ];
-    //public static $extra_types = [];
+    public static $query_types = ['dummytype', 'sampletype', 'objecttype', 'propertytype'];  // 'nodetype'
 
     public function __construct()
     {
@@ -45,21 +31,21 @@ class xarGraphQLQueryType extends ObjectType
         return [
             'name' => $typename,
             'fields' => function () {
-                return static::get_query_fields();
+                return static::_xar_get_query_fields();
             },
         ];
     }
 
     /**
-     * Get all root query fields for the GraphQL Query type from the query_mapper above
+     * Get all root query fields for the GraphQL Query type from the query_types above
      */
-    public static function get_query_fields()
+    public static function _xar_get_query_fields()
     {
         $fields = [];
-        foreach (static::$query_mapper as $name => $type) {
-            $add_field = static::add_query_field($name, $type);
-            if (!empty($add_field)) {
-                array_push($fields, $add_field);
+        foreach (static::$query_types as $type) {
+            $add_fields = static::_xar_add_query_fields($type);
+            if (!empty($add_fields)) {
+                $fields = array_merge($fields, $add_fields);
             }
         }
         if (!empty(xarGraphQL::$extra_types)) {
@@ -75,9 +61,18 @@ class xarGraphQLQueryType extends ObjectType
     }
 
     /**
-     * Add a root query field as defined in the GraphQL Object Type class (list, item, other...)
+     * Add the query fields defined in the GraphQL Object Type class (page, list, item, other...)
      */
-    public static function add_query_field($name, $type)
+    public static function _xar_add_query_fields($type)
+    {
+        $clazz = xarGraphQL::get_type_class($type);
+        return $clazz::_xar_get_query_fields();
+    }
+
+    /**
+     * Add a root query field as defined in the GraphQL Object Type class (page, list, item, other...)
+     */
+    public static function _xar_add_query_field($name, $type)
     {
         $clazz = xarGraphQL::get_type_class($type);
         return $clazz::_xar_get_query_field($name);

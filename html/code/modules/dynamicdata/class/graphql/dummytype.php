@@ -37,9 +37,9 @@ class xarGraphQLDummyType extends ObjectType
         ];
     }
 
-    public static function _xar_get_query_field($name)
+    public static function _xar_get_query_fields()
     {
-        $fields = [
+        return [
             'hello' => [
                 'name' => 'hello',
                 'description' => 'Hello World!',
@@ -98,8 +98,14 @@ class xarGraphQLDummyType extends ObjectType
                 },
             ],
         ];
+    }
+
+    public static function _xar_get_query_field($name, $kind = 'dummy')
+    {
+        $fields = static::_xar_get_query_fields();
         if (!empty($fields[$name])) {
             return $fields[$name];
         }
+        throw new Exception("Unknown '$kind' query '$name'");
     }
 }

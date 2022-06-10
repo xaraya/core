@@ -18,6 +18,18 @@ trait xarGraphQLDeferredTrait
 {
     protected static $_xar_deferred = [];
 
+    public static function _xar_get_deferred_field($fieldname, $typename, $islist = false)
+    {
+        // xarGraphQL::setTimer('get deferred field ' . $fieldname);
+        return [
+            'name' => $fieldname,
+            'type' => ($islist ? xarGraphQL::get_type_list($typename) : xarGraphQL::get_type($typename)),
+            // @todo move to resolveField?
+            // @todo should we pass along the object instead of the type here?
+            'resolve' => static::_xar_deferred_field_resolver($typename, $fieldname),
+        ];
+    }
+
     /**
      * Get the property resolver for a deferred field - looking up the user names for example
      *
