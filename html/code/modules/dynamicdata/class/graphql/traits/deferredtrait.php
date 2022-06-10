@@ -61,7 +61,9 @@ trait xarGraphQLDeferredTrait
                 return ['id' => $values[$fieldname]];
             }
             $fieldlist = array_keys($fields);
-            if (!empty(xarGraphQL::$object_type[$property->objectname])) {
+            if (empty($property->objectname)) {
+                // only looking for id's here
+            } elseif (!empty(xarGraphQL::$object_type[$property->objectname])) {
                 $objtype = strtolower(xarGraphQL::$object_type[$property->objectname]);
                 if (array_key_exists($objtype, xarGraphQL::$type_fields)) {
                     $fieldlist = xarGraphQL::$type_fields[$objtype];
