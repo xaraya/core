@@ -74,6 +74,7 @@ class xarGraphQL extends xarObject
         'mutation' => 'mutationtype',
         //'node'     => 'nodetype',
         //'ddnode'   => 'ddnodetype',
+        'module_api' => 'moduleapitype',
     ];
     public static $extra_types = [];
     public static $trace_path = false;
@@ -154,7 +155,7 @@ class xarGraphQL extends xarObject
             return self::$type_cache[$name];
         }
         // Schema doesn't accept lazy loading of query type (besides typeLoader)
-        if (in_array($name, ['query', 'mutation'])) {
+        if (in_array($name, ['query', 'mutation', 'mixed'])) {
             return self::load_lazy_type($name);
         }
         //if (!self::has_type($name)) {
@@ -172,7 +173,18 @@ class xarGraphQL extends xarObject
         if (in_array($name, self::$extra_types) || array_key_exists($name, self::$type_mapper)) {
             return true;
         }
+        // @checkme for dynamically created types like the module api input types per function
+        if (isset(self::$type_cache[$name])) {
+            return true;
+        }
         return false;
+    }
+
+    // @checkme for dynamically created types like the module api input types per function
+    public static function set_type($name, $type)
+    {
+        $name = strtolower($name);
+        self::$type_cache[$name] = $type;
     }
 
     // 'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)), doesn't accept lazy loading
@@ -323,6 +335,7 @@ class xarGraphQL extends xarObject
             'mutationtype' => xarGraphQLMutationType::class,
             //'nodetype' => xarGraphQLNodeType::class,
             //'ddnodetype' => xarGraphQLDDNodeType::class,
+            'moduleapitype' => xarGraphQLModuleApiType::class,
         ];
         if (!array_key_exists($type, $class_mapper) && array_key_exists($type, self::$type_mapper)) {
             $type = self::$type_mapper[$type];
@@ -593,7 +606,10 @@ class xarGraphQL extends xarObject
             self::$cache_plan = false;
             self::$cache_data = false;
         }
-        $operationName = $info->operation->name->value;
+        $operationName = '';
+        if ($info->operation->name) {
+            $operationName = $info->operation->name->value;
+        }
         $queryPlan = $info->lookAhead();
         self::$query_plan = $queryPlan;
         self::$type_fields = [];

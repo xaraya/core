@@ -15,7 +15,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class xarGraphQLMutationType extends ObjectType
 {
-    public static $mutation_types = ['tokentype', 'sampletype'];
+    public static $mutation_types = ['tokentype', 'sampletype', 'moduleapitype'];
 
     public function __construct()
     {

@@ -15,7 +15,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class xarGraphQLQueryType extends ObjectType
 {
-    public static $query_types = ['dummytype', 'sampletype', 'objecttype', 'propertytype'];  // 'nodetype'
+    public static $query_types = ['dummytype', 'sampletype', 'objecttype', 'propertytype', 'moduleapitype'];  // 'nodetype'
 
     public function __construct()
     {
