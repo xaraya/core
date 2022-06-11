@@ -75,6 +75,7 @@ trait xarGraphQLMutationsTrait
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["object mutation", $args]);
             }
+            // @todo check if type class corresponding to fieldname has overridden _xar_*_mutation_resolver
             $name = $info->fieldName;
             $action = substr($name, 0, 6);
             $type = strtolower(substr($name, 6));

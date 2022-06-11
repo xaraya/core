@@ -131,7 +131,7 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
      */
     public static function _xar_load_deferred($type)
     {
-        // Note: we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
         // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
     }
 }

@@ -81,6 +81,7 @@ trait xarGraphQLQueriesTrait
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["object query", $args]);
             }
+            // @todo check if type class corresponding to fieldname has overridden _xar_*_query_resolver
             $name = strtolower($info->fieldName);
             $page_ext = '_page';
             if (substr($name, -strlen($page_ext)) === $page_ext) {

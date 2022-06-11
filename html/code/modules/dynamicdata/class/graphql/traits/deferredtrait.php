@@ -25,7 +25,6 @@ trait xarGraphQLDeferredTrait
             'name' => $fieldname,
             'type' => ($islist ? xarGraphQL::get_type_list($typename) : xarGraphQL::get_type($typename)),
             // @todo move to resolveField?
-            // @todo should we pass along the object instead of the type here?
             'resolve' => static::_xar_deferred_field_resolver($typename, $fieldname),
         ];
     }
@@ -123,7 +122,6 @@ trait xarGraphQLDeferredTrait
                 static::$_xar_deferred[$typename]->setResolver($getValuesFunc);
             }
         }
-        // @todo should we pass along the object instead of the type here?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["deferred field $typename $fieldname", $args]);
@@ -183,6 +181,17 @@ trait xarGraphQLDeferredTrait
     public static function _xar_load_deferred($typename)
     {
         // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
+        //$object = static::$_xar_object;
+        //$fieldlist = ['id', 'name'];
+        // get the DD items for a deferred list of item ids here
+        //$resolver = function ($itemids) use ($object, $fieldlist) {
+        //    $params = ['name' => $object, 'fieldlist' => $fieldlist];
+        //    $objectlist = DataObjectMaster::getObjectList($params);
+        //    $params = ['itemids' => $itemids];
+        //    return $objectlist->getItems($params);
+        //};
+        //return $resolver;
     }
 
     /**

@@ -104,10 +104,12 @@ class xarGraphQLUserType extends xarGraphQLBaseType
      */
     public static function _xar_load_deferred($type)
     {
+        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
         $object = static::$_xar_object;
         $fieldlist = ['id', 'name'];
-        // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
-        $resolver = function ($values) use ($type, $object, $fieldlist) {
+        // get the DD items for a deferred list of item ids here
+        $resolver = function ($itemids) use ($type, $object, $fieldlist) {
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = ["load deferred $type"];
             }
@@ -116,8 +118,7 @@ class xarGraphQLUserType extends xarGraphQLBaseType
             $params = ['name' => $object, 'fieldlist' => $fieldlist];
             //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $itemids);
             $objectlist = DataObjectMaster::getObjectList($params);
-            $params = ['itemids' => $values];
-            //print_r("Loading $type: " . implode(", ", $itemids));
+            $params = ['itemids' => $itemids];
             return $objectlist->getItems($params);
         };
         return $resolver;

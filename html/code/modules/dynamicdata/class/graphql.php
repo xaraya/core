@@ -442,12 +442,15 @@ class xarGraphQL extends xarObject
                 return $serializableResult;
             }
         }
+        //$schemaFile = self::$schemaFile;  // if we want to test build_schema without using $schemaFile in gql.php
         if (!empty($schemaFile) && file_exists($schemaFile)) {
             // @checkme try out default object field resolver instead of type config decorator
             $schema = self::build_schema($schemaFile, $extraTypes);
             //$fieldResolver = null;
             $clazz = self::get_type_class("buildtype");
-            $fieldResolver = $clazz::default_field_resolver();
+            // @checkme don't use type classes by default for BuildSchema?
+            //$fieldResolver = $clazz::default_field_resolver();
+            $fieldResolver = $clazz::default_field_resolver(false);
         } else {
             $schema = self::get_schema($extraTypes);
             $fieldResolver = null;

@@ -48,6 +48,7 @@ trait xarGraphQLObjectTrait
             'fields' => function () use ($object) {
                 return static::_xar_get_object_fields($object);
             },
+            // use specific field resolver for the object type if overridden in the class
             'resolveField' => static::_xar_object_field_resolver($typename, $object),
         ];
     }
@@ -96,7 +97,8 @@ trait xarGraphQLObjectTrait
             'name' => ucwords($name, '_'),
             'description' => $description,
             'fields' => $fields,
-            //'resolveField' => self::object_field_resolver($type, $object),
+            // use standard default field resolver for _page types: order, offset, ..., [list items]
+            //'resolveField' => null,
         ]);
         return $newType;
     }
