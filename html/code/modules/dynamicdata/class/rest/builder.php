@@ -890,26 +890,13 @@ class DataObjectRESTBuilder extends xarObject
             self::add_operation_security($path, $item['method']);
         }
         if (!empty($item['parameters'])) {
-            $parameters = [];
-            foreach ($item['parameters'] as $name) {
-                $parameters[] = [
-                    'name' => $name,
-                    'in' => 'query',
-                    'schema' => [
-                        'type' => 'string',
-                    ],
-                    'description' => $name . ' value',
-                ];
-            }
+            $parameters = self::parse_api_parameters($item['parameters']);
             self::$paths[$path][$item['method']]['parameters'] = $parameters;
         }
         // @checkme verify/expand how POSTed values are defined - assuming simple json object with string props for now
         if (!empty($item['requestBody'])) {
             foreach ($item['requestBody'] as $mediatype => $vars) {
-                $properties = [];
-                foreach ($vars as $name) {
-                    $properties[$name] = ['type' => 'string'];
-                }
+                $properties = self::parse_api_requestBody($vars);
                 self::add_operation_requestBody($path, $item['method'], $schema, $properties, $mediatype);
             }
         }
@@ -933,6 +920,111 @@ class DataObjectRESTBuilder extends xarObject
             ];
         }
         self::$schemas[$schema] = $item['response'];
+    }
+
+    public static function parse_api_parameters($api_parameters)
+    {
+        $parameters = [];
+        // @checkme handle more complex parameters like arrays of itemids for getitemlinks
+        foreach ($api_parameters as $key => $name) {
+            // 'parameters' => ['itemtype', 'itemids'],  // optional parameter(s)
+            if (is_numeric($key)) {
+                $parameters[] = [
+                    'name' => $name,
+                    'in' => 'query',
+                    'schema' => [
+                        'type' => 'string',
+                    ],
+                    'description' => $name . ' value',
+                ];
+            } elseif (is_array($name)) {
+                // => ['itemtype' => ['type' => 'string'], 'itemids' => ['type' => 'array', 'items' => ['type' => 'string']]]
+                if (array_key_exists("type", $name)) {
+                    $parameters[] = [
+                        'name' => $key,
+                        'in' => 'query',
+                        'schema' => $name,
+                        'description' => $key . ' value',
+                    ];
+                // => ['itemtype' => 'string', 'itemids' => ['integer']]
+                } else {
+                    // @checkme use style = form + explode = true here
+                    $parameters[] = [
+                        'name' => $key.'[]',
+                        'in' => 'query',
+                        'schema' => [
+                            'type' => 'array',
+                            'items' => [
+                                'type' => $name[0],
+                            ],
+                        ],
+                        'style' => 'form',
+                        'explode' => true,
+                        'description' => $key . ' value',
+                    ];
+                }
+                // => ['itemtype' => 'string', 'itemids' => 'array']
+            } elseif (in_array($name, ["string", "integer", "boolean"])) {
+                $parameters[] = [
+                    'name' => $key,
+                    'in' => 'query',
+                    'schema' => [
+                        'type' => $name,
+                    ],
+                    'description' => $key . ' value',
+                ];
+            // => ['itemtype' => 'string', 'itemids' => 'array']
+            } elseif ($name === "array") {
+                // @checkme use style = form + explode = true here
+                $parameters[] = [
+                    'name' => $key.'[]',
+                    'in' => 'query',
+                    'schema' => [
+                        'type' => 'array',
+                        'items' => [
+                            'type' => 'string',
+                        ],
+                    ],
+                    'style' => 'form',
+                    'explode' => true,
+                    'description' => $key . ' value (comma separated)',
+                ];
+            //} elseif ($name === "object") {
+            } else {
+            }
+        }
+        return $parameters;
+    }
+
+    public static function parse_api_requestBody($requestBody)
+    {
+        $properties = [];
+        // @checkme handle more complex parameters like arrays of itemids for getitemlinks
+        foreach ($requestBody as $key => $name) {
+            // 'requestBody' => ['application/json' => ['name', 'score']],  // optional requestBody
+            if (is_numeric($key)) {
+                $properties[$name] = ['type' => 'string'];
+            } elseif (is_array($name)) {
+                // => ['itemtype' => ['type' => 'string'], 'itemids' => ['type' => 'array', 'items' => ['type' => 'string']]]
+                if (array_key_exists("type", $name)) {
+                    $properties[$key] = $name;
+                // => ['itemtype' => 'string', 'itemids' => ['integer']]
+                } else {
+                    // @checkme use style = form + explode = true here
+                    $properties[$key] = ['type' => 'array', 'items' => ['type' => $name[0]]];
+                }
+                // => ['itemtype' => 'string', 'itemids' => 'array']
+            } elseif (in_array($name, ["string", "integer", "boolean"])) {
+                $properties[$key] = ['type' => $name];
+            // => ['itemtype' => 'string', 'itemids' => 'array']
+            } elseif ($name === "array") {
+                // @checkme use style = form + explode = true here
+                $properties[$key] = ['type' => 'array', 'items' => ['type' => 'string']];
+            //} elseif ($name === "object") {
+            } else {
+            }
+        }
+        return $properties;
     }
 
     public static function get_potential_modules($selectedList = [])
@@ -959,7 +1051,11 @@ class DataObjectRESTBuilder extends xarObject
                 'module' => $module,
                 'apilist' => [],
             ];
-            $apiList = xarMod::apiFunc($module, 'rest', 'getlist');
+            try {
+                $apiList = xarMod::apiFunc($module, 'rest', 'getlist');
+            } catch (Exception $e) {
+                $apiList = self::find_default_api_functions($module);
+            }
             foreach ($apiList as $api => $info) {
                 if (empty($allowed)) {
                     $info['enabled'] = true;
@@ -972,6 +1068,44 @@ class DataObjectRESTBuilder extends xarObject
             }
         }
         return $items;
+    }
+
+    public static function find_default_api_functions($module)
+    {
+        $apiList = [];
+        $found = xarMod::checkModuleFunction($module, 'userapi', 'getitemtypes');
+        if ($found === $module) {
+            // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+            $apiList['getitemtypes'] = [
+                'type' => 'user',  // default = rest, other options are user, admin, ... as usual
+                'path' => $module.'_itemtypes',  // path to use in REST API operation /modules/{module}/{path}
+                'method' => 'get',  // method to use in REST API operation
+                'security' => true,  // default = false REST APIs are public, if true check for authenticated user
+                'description' => 'Call module userapi getitemtypes function via REST API',
+                'parameters' => [],  // optional parameter(s)
+                // @checkme transform assoc array("$itemid" => $item) to list of $item or not?
+                'response' => ['type' => 'array', 'items' => ['type' => 'object']],  // optional response schema
+            ];
+        }
+        // Note: we can use method = get + paramaters or method = post + requestBody here - both will work
+        $found = xarMod::checkModuleFunction($module, 'userapi', 'getitemlinks');
+        if ($found === $module) {
+            // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+            $apiList['getitemlinks'] = [
+                'type' => 'user',  // default = rest, other options are user, admin, ... as usual
+                'path' => $module.'_itemlinks',  // path to use in REST API operation /modules/{module}/{path}
+                //'method' => 'get',  // method to use in REST API operation
+                'method' => 'post',  // method to use in REST API operation
+                'security' => true,  // default = false REST APIs are public, if true check for authenticated user
+                'description' => 'Call module userapi getitemlinks function via REST API with optional requestBody',
+                //'parameters' => ['itemtype', 'itemids'],  // optional parameter(s)
+                //'parameters' => ['itemtype' => 'integer', 'itemids' => ['integer']],  // optional parameter(s)
+                'requestBody' => ['application/json' => ['itemtype' => 'integer', 'itemids' => ['integer']]],  // optional requestBody
+                // @checkme transform assoc array("$itemid" => $item) to list of $item or not?
+                'response' => ['type' => 'array', 'items' => ['type' => 'object']],  // optional response schema
+            ];
+        }
+        return $apiList;
     }
 
     public static function add_token()
