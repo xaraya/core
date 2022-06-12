@@ -43,7 +43,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                         xarGraphQL::$paths[] = array_merge($info->path, ["object keys"]);
                     }
                     if (empty($object['_objectref'])) {
-                        return null;
+                        return array_keys($object);
                     }
                     return array_keys($object['_objectref']->descriptor->getArgs());
                 },

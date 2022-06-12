@@ -52,6 +52,9 @@ trait xarGraphQLDeferredTrait
             $property = (xarGraphQL::$object_ref[$object])->properties[$fieldname];
             if (get_class($property) === 'DeferredManyProperty') {
                 // $fieldname = 'id';
+                if (empty($values['id'])) {
+                    throw new Exception('Unknown item id for deferred property ' . $fieldname);
+                }
             } elseif (empty($values[$fieldname])) {
                 return null;
             }
