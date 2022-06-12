@@ -41,8 +41,8 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 class xarGraphQLModuleApiType extends ObjectType
 {
-    // @todo add loadModules(), analyze parameters and requestBody + get rid of module, type and func args
-    // @todo add loadModules(), analyze response and mediatype + create result type per function if needed
+    // @todo analyze response and mediatype + create result type per function if needed
+    /**
     public static $_xar_functions = [
         'get_hello' => [
             'module' => 'dynamicdata', 'type' => 'rest', 'func' => 'get_hello', 'args' => 'mixed', 'result' => 'mixed'
@@ -57,12 +57,14 @@ class xarGraphQLModuleApiType extends ObjectType
             'module' => 'authsystem', 'type' => 'rest', 'func' => 'honeypot', 'args' => ['username' => 'string', 'password' => 'string'], 'result' => 'string'
         ],
     ];
-    public static $_xar_queries = ['get_hello', 'anotherapi'];  // 'anotherapi'
-    public static $_xar_mutations = ['post_hello', 'no_login'];  // 'no_login'
+     */
+    public static $_xar_queries = [];
+    public static $_xar_mutations = [];
 
     public function __construct()
     {
         $config = static::_xar_get_type_config('Module_Api');
+        xarGraphQL::setTimer('new ' . $config['name']);
         parent::__construct($config);
     }
 
@@ -77,21 +79,87 @@ class xarGraphQLModuleApiType extends ObjectType
         ];
     }
 
+    public static function _xar_load_config()
+    {
+        xarGraphQL::loadModules();
+        foreach (xarGraphQL::$config['modules'] as $itemid => $info) {
+            $module = $info['module'];
+            foreach ($info['apilist'] as $api => $item) {
+                if (isset($item['enabled']) && empty($item['enabled'])) {
+                    continue;
+                }
+                $item['module'] = $module;
+                $item['type'] ??= 'rest';
+                $item['func'] = $api;
+                $item['method'] ??= 'get';
+                $item['args'] = 'mixed';
+                // @todo parse optional response - and how to match with result type, e.g. DD getobjects -> ['object']
+                $item['result'] = 'mixed';
+                $name = $module . '_' . $item['path'];
+                if ($item['method'] == 'post' || !empty($item['requestBody'])) {
+                    if (!empty($item['requestBody']) && !empty($item['requestBody']['application/json'])) {
+                        $item['args'] = static::_xar_parse_api_parameters($item['requestBody']['application/json']);
+                    }
+                    if (!array_key_exists($name, static::$_xar_mutations)) {
+                        static::$_xar_mutations[$name] = $item;
+                    }
+                } elseif (!array_key_exists($name, static::$_xar_queries)) {
+                    if (isset($item['parameters'])) {
+                        $item['args'] = static::_xar_parse_api_parameters($item['parameters']);
+                    }
+                    static::$_xar_queries[$name] = $item;
+                }
+            }
+        }
+    }
+
+    public static function _xar_parse_api_parameters($parameters)
+    {
+        $properties = [];
+        // @checkme handle more complex parameters like arrays of itemids for getitemlinks
+        foreach ($parameters as $key => $name) {
+            // 'parameters' => ['itemtype', 'itemids'],  // optional parameter(s)
+            // 'requestBody' => ['application/json' => ['name', 'score']],  // optional requestBody
+            if (is_numeric($key)) {
+                $properties[$name] = 'string';
+            } elseif (is_array($name)) {
+                // => ['itemtype' => ['type' => 'string'], 'itemids' => ['type' => 'array', 'items' => ['type' => 'string']]]
+                if (array_key_exists("type", $name)) {
+                    $properties[$key] = $name['type'];
+                // => ['itemtype' => 'string', 'itemids' => ['integer']]
+                } else {
+                    // @checkme use style = form + explode = true here
+                    $properties[$key] = [$name[0]];
+                }
+                // => ['itemtype' => 'string', 'itemids' => 'array']
+            } elseif (in_array($name, ["string", "integer", "boolean"])) {
+                $properties[$key] = $name;
+            // => ['itemtype' => 'string', 'itemids' => 'array']
+            } elseif ($name === "array") {
+                // @checkme use style = form + explode = true here
+                $properties[$key] = ['string'];
+            //} elseif ($name === "object") {
+            } else {
+            }
+        }
+        return $properties;
+    }
+
     public static function _xar_get_query_fields()
     {
+        static::_xar_load_config();
         $fields = [];
-        foreach (static::$_xar_queries as $kind => $name) {
-            $fields[] = static::_xar_get_query_field($name, $kind);
+        foreach (static::$_xar_queries as $name => $func) {
+            $fields[] = static::_xar_get_query_field($name, $func);
         }
         return $fields;
     }
 
-    public static function _xar_get_query_field($name, $kind = 'module_api')
+    public static function _xar_get_query_field($name, $func = [])
     {
-        if (empty(static::$_xar_functions[$name])) {
-            throw new Exception("Unknown '$kind' query '$name'");
+        if (empty($func)) {
+            throw new Exception("Unknown module_api query '$name'");
         }
-        $func = static::$_xar_functions[$name];
         // @todo add loadModules(), analyze parameters and requestBody + get rid of module, type and func args
         //$argstype = static::_xar_get_param_fielddef($func['args']);
         // @todo add loadModules(), analyze response and mediatype + create result type per function if needed
@@ -106,7 +174,7 @@ class xarGraphQLModuleApiType extends ObjectType
             //    'func' => ['type' => Type::string(), 'defaultValue' => $func['func']],
             //    'args' => $argstype,
             //],
-            'args' => static::_xar_get_input_fields($name),
+            'args' => static::_xar_parse_input_args($name, $func),
             'resolve' => static::_xar_call_query_resolver($func),
         ];
     }
@@ -116,16 +184,18 @@ class xarGraphQLModuleApiType extends ObjectType
         if (empty($param)) {
             $typedef = ['type' => xarGraphQL::get_type('mixed')];
         } elseif (is_string($param)) {
-            // @todo see buildtype get_field_basetypes()
+            // @checkme use openapi data types and/or graphql base types + see buildtype get_field_basetypes()
             //if (array_key_exists(ucfirst($param), Type::getStandardTypes())) {
-            if (in_array($param, ['id', 'string', 'boolean', 'int', 'float'])) {
-                $typedef = ['type' => Type::{$param}()];
+            if (in_array($param, ['id', 'string', 'boolean', 'integer', 'number'])) {
+                //$typedef = ['type' => Type::{$param}()];
+                $typedef = ['type' => xarGraphQL::get_type($param)];
             } else {
                 $typedef = ['type' => xarGraphQL::get_type($param)];
             }
         } elseif (is_numeric(array_key_first($param)) && count($param) == 1) {
-            if (in_array($param[0], ['id', 'string', 'boolean', 'int', 'float'])) {
-                $typedef = ['type' => Type::listOf(Type::{$param[0]}())];
+            if (in_array($param[0], ['id', 'string', 'boolean', 'integer', 'number'])) {
+                //$typedef = ['type' => Type::listOf(Type::{$param[0]}())];
+                $typedef = ['type' => xarGraphQL::get_type_list($param[0])];
             } else {
                 $typedef = ['type' => xarGraphQL::get_type_list($param[0])];
             }
@@ -168,19 +238,19 @@ class xarGraphQLModuleApiType extends ObjectType
 
     public static function _xar_get_mutation_fields()
     {
+        static::_xar_load_config();
         $fields = [];
-        foreach (static::$_xar_mutations as $kind => $name) {
-            $fields[] = static::_xar_get_mutation_field($name, $kind);
+        foreach (static::$_xar_mutations as $name => $func) {
+            $fields[] = static::_xar_get_mutation_field($name, $func);
         }
         return $fields;
     }
 
-    public static function _xar_get_mutation_field($name, $kind = 'module_api')
+    public static function _xar_get_mutation_field($name, $func = [])
     {
-        if (empty(static::$_xar_functions[$name])) {
-            throw new Exception("Unknown '$kind' mutation '$name'");
+        if (empty($func)) {
+            throw new Exception("Unknown module_api mutation '$name'");
         }
-        $func = static::$_xar_functions[$name];
         // @todo add loadModules(), analyze parameters and requestBody + get rid of module, type and func args
         // @todo add loadModules(), analyze response and mediatype + create result type per function if needed
         $resulttype = static::_xar_get_param_fielddef($func['result']);
@@ -220,15 +290,18 @@ class xarGraphQLModuleApiType extends ObjectType
     public static function _xar_get_input_type($name, $object = null)
     {
         $input = ucwords($name . '_input', '_');
-        $func = static::$_xar_functions[$name];
+        $func = static::$_xar_mutations[$name];
         $description = 'Input for ' . $func['module'] . ' ' . $func['type'] . 'api ' . $func['func'] . ' function';
         // https://webonyx.github.io/graphql-php/type-definitions/object-types/#recurring-and-circular-types
         // $fields = static::_xar_get_input_fields($object);
         $newType = new InputObjectType([
             'name' => $input,
             'description' => $description,
-            'fields' => function () use ($name, &$newType) {
-                return static::_xar_get_input_fields($name, $newType);
+            //'fields' => function () use ($name, &$newType) {
+            //    return static::_xar_get_input_fields($name, $newType);
+            //},
+            'fields' => function () use ($name, $func) {
+                return static::_xar_parse_input_args($name, $func);
             },
             'parseValue' => static::_xar_input_value_parser($name, $object),
         ]);
@@ -240,7 +313,15 @@ class xarGraphQLModuleApiType extends ObjectType
      */
     public static function _xar_get_input_fields($name, &$newType = null)
     {
-        $func = static::$_xar_functions[$name];
+        $func = static::$_xar_mutations[$name];
+        return static::_xar_parse_input_args($name, $func);
+    }
+
+    public static function _xar_parse_input_args($name, $func)
+    {
+        if (empty($func['args'])) {
+            return [];
+        }
         // @todo add loadModules(), analyze parameters and requestBody + get rid of module, type and func args
         if (is_array($func['args']) && !is_numeric(array_key_first($func['args']))) {
             $fields = [];
@@ -307,6 +388,7 @@ class xarGraphQLModuleApiType extends ObjectType
         //$role = xarRoles::getRole($userId);
         //$rolename = $role->getName();
         xarMod::init();
+        xarUser::init();
         xarGraphQL::$paths[] = ["Calling $module $type $func for user $userId", $args, $fields];
         return xarMod::apiFunc($module, $type, $func, $args);
         $values = ['func_args' => $args];

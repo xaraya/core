@@ -98,6 +98,10 @@ function dynamicdata_admin_test_apis(array $args=[])
         if (!empty($restapi_module)) {
             $restapi[$module_new] = 'on';
         }
+        xarVar::fetch('graphql_module', 'isset', $graphql_module, '', xarVar::NOT_REQUIRED);
+        if (!empty($graphql_module)) {
+            $graphql[$module_new] = 'on';
+        }
     }
     xarVar::fetch('tokenstorage', 'isset', $storageType, 'database', xarVar::NOT_REQUIRED);
     xarVar::fetch('tokenexpires', 'isset', $tokenExpires, '12:00:00', xarVar::NOT_REQUIRED);

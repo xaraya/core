@@ -76,6 +76,13 @@ class xarGraphQL extends xarObject
         //'ddnode'   => 'ddnodetype',
         'module_api' => 'moduleapitype',
     ];
+    public static $base_types = [
+        'id'      => 'id',
+        'string'  => 'string',
+        'integer' => 'int',
+        'boolean' => 'boolean',
+        'number'  => 'float',
+    ];
     public static $extra_types = [];
     public static $trace_path = false;
     public static $paths = [];
@@ -214,6 +221,10 @@ class xarGraphQL extends xarObject
     {
         if (isset(self::$type_cache[$name])) {
             return self::$type_cache[$name];
+        }
+        // @checkme use openapi data types and/or graphql base types + see buildtype get_field_basetypes()
+        if (array_key_exists($name, self::$base_types)) {
+            return Type::{self::$base_types[$name]}();
         }
         //self::$paths[] = ['load_lazy_type', $name];
         $page_ext = '_page';
@@ -841,11 +852,34 @@ class xarGraphQL extends xarObject
         self::setTimer('objects');
     }
 
+    public static function loadModules($config = [])
+    {
+        if (!empty(self::$config['modules'])) {
+            return;
+        }
+        $configFile = sys::varpath() . '/cache/api/graphql_modules.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        if (!empty($config['modules'])) {
+            self::$config['modules'] = $config['modules'];
+        } else {
+            self::$config['modules'] = [];
+        }
+        self::setTimer('modules');
+    }
+
     public static function find_extra_types($objectNames = null)
     {
+        // @checkme set list of modules here before filtering out for $extraTypes - note: dependency on REST API
+        self::$config['modules'] = DataObjectRESTBuilder::get_potential_modules($objectNames);
         $extraTypes = [];
         if (!empty($objectNames)) {
             foreach ($objectNames as $name) {
+                if (strpos($name, '.') !== false) {
+                    continue;
+                }
                 $type = xarGraphQLInflector::singularize($name);
                 if (self::has_type($type)) {
                     continue;
@@ -919,6 +953,11 @@ class xarGraphQL extends xarObject
         foreach ($fieldspecs as $object => $fieldspec) {
             $configData['objects'][$object]['fieldspecs'] = $fieldspec;
         }
+        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
+
+        $configFile = sys::varpath() . '/cache/api/graphql_modules.json';
+        $configData = $infoData;
+        $configData['modules'] = self::$config['modules'] ?? [];
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
 
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';

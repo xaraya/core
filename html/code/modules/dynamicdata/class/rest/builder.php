@@ -1078,7 +1078,7 @@ class DataObjectRESTBuilder extends xarObject
             // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
             $apiList['getitemtypes'] = [
                 'type' => 'user',  // default = rest, other options are user, admin, ... as usual
-                'path' => $module.'_itemtypes',  // path to use in REST API operation /modules/{module}/{path}
+                'path' => 'itemtypes',  // path to use in REST API operation /modules/{module}/{path}
                 'method' => 'get',  // method to use in REST API operation
                 'security' => true,  // default = false REST APIs are public, if true check for authenticated user
                 'description' => 'Call module userapi getitemtypes function via REST API',
@@ -1093,7 +1093,7 @@ class DataObjectRESTBuilder extends xarObject
             // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
             $apiList['getitemlinks'] = [
                 'type' => 'user',  // default = rest, other options are user, admin, ... as usual
-                'path' => $module.'_itemlinks',  // path to use in REST API operation /modules/{module}/{path}
+                'path' => 'itemlinks',  // path to use in REST API operation /modules/{module}/{path}
                 //'method' => 'get',  // method to use in REST API operation
                 'method' => 'post',  // method to use in REST API operation
                 'security' => true,  // default = false REST APIs are public, if true check for authenticated user
