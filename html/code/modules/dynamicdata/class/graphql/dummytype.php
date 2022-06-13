@@ -69,6 +69,26 @@ class xarGraphQLDummyType extends ObjectType
                     }
                 },
             ],
+            /**
+            'parse' => [
+                'name' => 'parse',
+                'description' => 'Parse Arguments',
+                'type' => xarGraphQL::get_type('mixed'),
+                'args' => [
+                    [
+                        'name' => 'args',
+                        'type' => xarGraphQL::get_type('mixed'),  // or 'serial'
+                        'defaultValue' => 'assoc array, string, list, ...',
+                    ],
+                ],
+                'resolve' => function ($rootValue, $args) {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = ["parse"];
+                    }
+                    return $args;
+                },
+            ],
+             */
             'schema' => [
                 'name' => 'schema',
                 'description' => 'Get GraphQL Schema Definition',

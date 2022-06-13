@@ -161,8 +161,8 @@ class xarGraphQL extends xarObject
         if (isset(self::$type_cache[$name])) {
             return self::$type_cache[$name];
         }
-        // Schema doesn't accept lazy loading of query type (besides typeLoader)
-        if (in_array($name, ['query', 'mutation', 'mixed'])) {
+        // Schema doesn't accept lazy loading of query type or scalar type (besides typeLoader)
+        if (in_array($name, ['query', 'mutation', 'mixed', 'serial'])) {
             return self::load_lazy_type($name);
         }
         //if (!self::has_type($name)) {

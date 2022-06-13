@@ -25,22 +25,56 @@ class xarGraphQLSerialType extends ScalarType
         if (xarGraphQL::$trace_path) {
             xarGraphQL::$paths[] = ["serial scalar type"];
         }
+        return $this->tryUnserialized($value);
+    }
+
+    public function tryUnserialized($value)
+    {
         if (empty($value) || !is_string($value)) {
             return $value;
         }
-        return @unserialize($value);
+        $result = @unserialize($value);
+        if ($result !== false) {
+            return $result;
+        }
+        return $value;
     }
 
     public function parseValue($value)
     {
-        return 'value:' . $value;
+        return $this->tryUnserialized($value);
     }
 
     public function parseLiteral($valueNode, array $variables = null)
     {
-        if (!$valueNode instanceof StringValueNode) {
-            throw new Exception('Query error: Can only parse strings got: ' . $valueNode->kind, [$valueNode]);
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["parse literal", $valueNode->kind, $variables];
         }
-        return 'literal:' . $valueNode->value;
+        // @checkme support only top-level serialized values here
+        if ($valueNode->kind === "StringValue") {
+            return $this->tryUnserialized($valueNode->value);
+        }
+        return $this->parseValueNode($valueNode);
+    }
+
+    public function parseValueNode($valueNode)
+    {
+        if ($valueNode->kind === "ObjectValue") {
+            $values = [];
+            foreach ($valueNode->fields as $node) {
+                $values[$node->name->value] = $this->parseValueNode($node->value);
+            }
+            return $values;
+        } elseif ($valueNode->kind === "ListValue") {
+            $values = [];
+            foreach ($valueNode->values as $node) {
+                $values[] = $this->parseValueNode($node);
+            }
+            return $values;
+        } else {
+            // @checkme support only top-level serialized values here
+            //return $this->tryUnserialized($valueNode->value);
+            return $valueNode->value;
+        }
     }
 }
