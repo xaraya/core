@@ -332,7 +332,7 @@ class xarVar extends xarObject
      *
      * 'list' validates if the subject is a list
      * 'list: *other validation*' validates if the subject is an array, and if every element of the array
-     *                            validate in the *other validation*
+     *                            validates in the *other validation*
      *                          Example: xarVar::validate('list:str:1:20', $strings_array);
      *
      * 'enum' validates if the subject is any of the parameters
