@@ -37,9 +37,9 @@ class xarGraphQLDummyType extends ObjectType
         ];
     }
 
-    public static function _xar_get_query_field($name)
+    public static function _xar_get_query_fields()
     {
-        $fields = [
+        return [
             'hello' => [
                 'name' => 'hello',
                 'description' => 'Hello World!',
@@ -69,6 +69,26 @@ class xarGraphQLDummyType extends ObjectType
                     }
                 },
             ],
+            /**
+            'parse' => [
+                'name' => 'parse',
+                'description' => 'Parse Arguments',
+                'type' => xarGraphQL::get_type('mixed'),
+                'args' => [
+                    [
+                        'name' => 'args',
+                        'type' => xarGraphQL::get_type('mixed'),  // or 'serial'
+                        'defaultValue' => 'assoc array, string, list, ...',
+                    ],
+                ],
+                'resolve' => function ($rootValue, $args) {
+                    if (xarGraphQL::$trace_path) {
+                        xarGraphQL::$paths[] = ["parse"];
+                    }
+                    return $args;
+                },
+            ],
+             */
             'schema' => [
                 'name' => 'schema',
                 'description' => 'Get GraphQL Schema Definition',
@@ -98,8 +118,14 @@ class xarGraphQLDummyType extends ObjectType
                 },
             ],
         ];
+    }
+
+    public static function _xar_get_query_field($name, $kind = 'dummy')
+    {
+        $fields = static::_xar_get_query_fields();
         if (!empty($fields[$name])) {
             return $fields[$name];
         }
+        throw new Exception("Unknown '$kind' query '$name'");
     }
 }

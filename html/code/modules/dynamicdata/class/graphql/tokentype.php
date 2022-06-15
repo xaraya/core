@@ -44,14 +44,14 @@ class xarGraphQLTokenType extends ObjectType
     public static function _xar_get_mutation_fields()
     {
         $fields = [];
-        foreach (static::$_xar_mutations as $name) {
-            $fields[] = static::_xar_get_mutation_field($name);
+        foreach (static::$_xar_mutations as $kind => $name) {
+            $fields[] = static::_xar_get_mutation_field($name, $kind);
         }
         return $fields;
     }
 
     // @checkme getting an access token is typically done as a mutation, not a query
-    public static function _xar_get_mutation_field($name)
+    public static function _xar_get_mutation_field($name, $kind = 'token')
     {
         switch ($name) {
             case 'getToken':
@@ -61,7 +61,7 @@ class xarGraphQLTokenType extends ObjectType
                 return static::_xar_get_delete_mutation($name);
                 break;
             default:
-                throw new Exception('Unknown mutation ' . $name);
+                throw new Exception("Unknown '$kind' mutation '$name'");
         }
     }
 

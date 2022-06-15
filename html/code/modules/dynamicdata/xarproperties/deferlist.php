@@ -229,11 +229,20 @@ class DeferredListProperty extends DeferredItemProperty
             $data['link'] = $this->displaylink;
         }
         $data['value'] = $this->getDeferredLoader()->get($values);
-        if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], reset($data['value']))) {
+        if ($this->singlevalue && is_array($data['value'])) {
+            // pick the first non-empty assoc array value in the result
+            $values = array_filter(array_values($data['value']));
+            $first = reset($values);
             $field = $this->fieldlist[0];
             $values = [];
-            foreach ($data['value'] as $key => $props) {
-                $values[$key] = $props[$field];
+            if (!empty($first) && array_key_exists($field, $first)) {
+                foreach ($data['value'] as $key => $props) {
+                    if (is_array($props)) {
+                        $values[$key] = $props[$field] ?? null;
+                    } else {
+                        $values[$key] = null;
+                    }
+                }
             }
             $data['value'] = $values;
             $data['singlevalue'] = true;

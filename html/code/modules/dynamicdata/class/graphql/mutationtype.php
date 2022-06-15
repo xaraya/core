@@ -15,14 +15,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 
 class xarGraphQLMutationType extends ObjectType
 {
-    public static $mutation_mapper = [
-        'getToken'     => 'tokentype',
-        'deleteToken'  => 'tokentype',
-        'createSample' => 'sampletype',
-        'updateSample' => 'sampletype',
-        'deleteSample' => 'sampletype',
-    ];
-    //public static $extra_types = [];
+    public static $mutation_types = ['tokentype', 'sampletype', 'moduleapitype'];
 
     public function __construct()
     {
@@ -38,21 +31,21 @@ class xarGraphQLMutationType extends ObjectType
         return [
             'name' => $typename,
             'fields' => function () {
-                return static::get_mutation_fields();
+                return static::_xar_get_mutation_fields();
             },
         ];
     }
 
     /**
-     * Get all root mutation fields for the GraphQL Mutation type from the mutation_mapper above
+     * Get all root mutation fields for the GraphQL Mutation type from the mutation_types above
      */
-    public static function get_mutation_fields()
+    public static function _xar_get_mutation_fields()
     {
         $fields = [];
-        foreach (static::$mutation_mapper as $name => $type) {
-            $add_field = static::add_mutation_field($name, $type);
-            if (!empty($add_field)) {
-                array_push($fields, $add_field);
+        foreach (static::$mutation_types as $type) {
+            $add_fields = static::_xar_add_mutation_fields($type);
+            if (!empty($add_fields)) {
+                $fields = array_merge($fields, $add_fields);
             }
         }
         // @todo get mutation fields from BuildType for extra dynamicdata object types
@@ -69,9 +62,18 @@ class xarGraphQLMutationType extends ObjectType
     }
 
     /**
+     * Add the mutation fields defined in the GraphQL Object Type class (createSample, updateSample, ...)
+     */
+    public static function _xar_add_mutation_fields($type)
+    {
+        $clazz = xarGraphQL::get_type_class($type);
+        return $clazz::_xar_get_mutation_fields();
+    }
+
+    /**
      * Add a root mutation field as defined in the GraphQL Object Type class (createSample, updateSample, ...)
      */
-    public static function add_mutation_field($name, $type)
+    public static function _xar_add_mutation_field($name, $type)
     {
         $clazz = xarGraphQL::get_type_class($type);
         return $clazz::_xar_get_mutation_field($name);

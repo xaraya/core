@@ -10,6 +10,9 @@
  *
  * composer require --dev phpdocumentor/reflection
  *
+ * + comment out the if (!function_exists('xarML')) {...} part in html/lib/xaraya/mls.php
+ * to avoid Reflection error finding the file for that function, when updating core files
+ *
  */
 require dirname(dirname(__DIR__)).'/vendor/autoload.php';
 //use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
@@ -809,8 +812,7 @@ if ($refresh || !file_exists('core_functions.json') || !file_exists('core_consta
     $analyzer->parse_core_files($inDir, $extraFiles);
 }
 //$analyzer = new XarayaCoreAnalyzer();
-//$analyzer->get_class_tree();
-
+//$analyzer->show_class_tree();
 
 /**
  */

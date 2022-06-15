@@ -74,6 +74,14 @@ class xarGraphQL extends xarObject
         'mutation' => 'mutationtype',
         //'node'     => 'nodetype',
         //'ddnode'   => 'ddnodetype',
+        'module_api' => 'moduleapitype',
+    ];
+    public static $base_types = [
+        'id'      => 'id',
+        'string'  => 'string',
+        'integer' => 'int',
+        'boolean' => 'boolean',
+        'number'  => 'float',
     ];
     public static $extra_types = [];
     public static $trace_path = false;
@@ -138,7 +146,7 @@ class xarGraphQL extends xarObject
             }
         }
         foreach (self::$extra_types as $type) {
-            [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($type);
+            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
             self::$object_type[$object] = $name;
         }
         self::setTimer('mapped');
@@ -153,8 +161,8 @@ class xarGraphQL extends xarObject
         if (isset(self::$type_cache[$name])) {
             return self::$type_cache[$name];
         }
-        // Schema doesn't accept lazy loading of query type (besides typeLoader)
-        if (in_array($name, ['query', 'mutation'])) {
+        // Schema doesn't accept lazy loading of query type or scalar type (besides typeLoader)
+        if (in_array($name, ['query', 'mutation', 'mixed', 'serial'])) {
             return self::load_lazy_type($name);
         }
         //if (!self::has_type($name)) {
@@ -172,7 +180,18 @@ class xarGraphQL extends xarObject
         if (in_array($name, self::$extra_types) || array_key_exists($name, self::$type_mapper)) {
             return true;
         }
+        // @checkme for dynamically created types like the module api input types per function
+        if (isset(self::$type_cache[$name])) {
+            return true;
+        }
         return false;
+    }
+
+    // @checkme for dynamically created types like the module api input types per function
+    public static function set_type($name, $type)
+    {
+        $name = strtolower($name);
+        self::$type_cache[$name] = $type;
     }
 
     // 'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)), doesn't accept lazy loading
@@ -202,6 +221,10 @@ class xarGraphQL extends xarObject
     {
         if (isset(self::$type_cache[$name])) {
             return self::$type_cache[$name];
+        }
+        // @checkme use openapi data types and/or graphql base types + see buildtype get_field_basetypes()
+        if (array_key_exists($name, self::$base_types)) {
+            return Type::{self::$base_types[$name]}();
         }
         //self::$paths[] = ['load_lazy_type', $name];
         $page_ext = '_page';
@@ -254,8 +277,17 @@ class xarGraphQL extends xarObject
             self::$type_cache[$page] = $type;
             return $type;
         }
-        // @todo get paginated Object Type for existing type classes?
-        throw new Exception("Unknown graphql type: " . $page);
+        if (!array_key_exists($name, self::$type_mapper)) {
+            throw new Exception("Unknown graphql type: " . $input);
+        }
+        $clazz = self::get_type_class(self::$type_mapper[$name]);
+        // get page type from existing type class
+        $type = $clazz::_xar_get_page_type($page);
+        if (!$type) {
+            throw new Exception("Unknown graphql type: " . $page);
+        }
+        self::$type_cache[$page] = $type;
+        return $type;
     }
 
     /**
@@ -314,6 +346,7 @@ class xarGraphQL extends xarObject
             'mutationtype' => xarGraphQLMutationType::class,
             //'nodetype' => xarGraphQLNodeType::class,
             //'ddnodetype' => xarGraphQLDDNodeType::class,
+            'moduleapitype' => xarGraphQLModuleApiType::class,
         ];
         if (!array_key_exists($type, $class_mapper) && array_key_exists($type, self::$type_mapper)) {
             $type = self::$type_mapper[$type];
@@ -433,12 +466,15 @@ class xarGraphQL extends xarObject
                 return $serializableResult;
             }
         }
+        //$schemaFile = self::$schemaFile;  // if we want to test build_schema without using $schemaFile in gql.php
         if (!empty($schemaFile) && file_exists($schemaFile)) {
             // @checkme try out default object field resolver instead of type config decorator
             $schema = self::build_schema($schemaFile, $extraTypes);
             //$fieldResolver = null;
             $clazz = self::get_type_class("buildtype");
-            $fieldResolver = $clazz::default_field_resolver();
+            // @checkme don't use type classes by default for BuildSchema?
+            //$fieldResolver = $clazz::default_field_resolver();
+            $fieldResolver = $clazz::default_field_resolver(false);
         } else {
             $schema = self::get_schema($extraTypes);
             $fieldResolver = null;
@@ -581,7 +617,10 @@ class xarGraphQL extends xarObject
             self::$cache_plan = false;
             self::$cache_data = false;
         }
-        $operationName = $info->operation->name->value;
+        $operationName = '';
+        if ($info->operation->name) {
+            $operationName = $info->operation->name->value;
+        }
         $queryPlan = $info->lookAhead();
         self::$query_plan = $queryPlan;
         self::$type_fields = [];
@@ -813,11 +852,34 @@ class xarGraphQL extends xarObject
         self::setTimer('objects');
     }
 
+    public static function loadModules($config = [])
+    {
+        if (!empty(self::$config['modules'])) {
+            return;
+        }
+        $configFile = sys::varpath() . '/cache/api/graphql_modules.json';
+        if (empty($config) && file_exists($configFile)) {
+            $contents = file_get_contents($configFile);
+            $config = json_decode($contents, true);
+        }
+        if (!empty($config['modules'])) {
+            self::$config['modules'] = $config['modules'];
+        } else {
+            self::$config['modules'] = [];
+        }
+        self::setTimer('modules');
+    }
+
     public static function find_extra_types($objectNames = null)
     {
+        // @checkme set list of modules here before filtering out for $extraTypes - note: dependency on REST API
+        self::$config['modules'] = DataObjectRESTBuilder::get_potential_modules($objectNames);
         $extraTypes = [];
         if (!empty($objectNames)) {
             foreach ($objectNames as $name) {
+                if (strpos($name, '.') !== false) {
+                    continue;
+                }
                 $type = xarGraphQLInflector::singularize($name);
                 if (self::has_type($type)) {
                     continue;
@@ -885,12 +947,17 @@ class xarGraphQL extends xarObject
         }
         $fieldspecs = [];
         foreach (self::$extra_types as $type) {
-            [$name, $type, $object, $list, $item] = xarGraphQLInflector::sanitize($type);
+            [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
             $fieldspecs[$object] = $clazz::find_object_fieldspecs($object, true);
         }
         foreach ($fieldspecs as $object => $fieldspec) {
             $configData['objects'][$object]['fieldspecs'] = $fieldspec;
         }
+        file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
+
+        $configFile = sys::varpath() . '/cache/api/graphql_modules.json';
+        $configData = $infoData;
+        $configData['modules'] = self::$config['modules'] ?? [];
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT));
 
         $schemaFile = sys::varpath() . '/cache/api/schema.graphql';

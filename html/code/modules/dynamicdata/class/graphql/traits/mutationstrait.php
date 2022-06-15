@@ -25,11 +25,16 @@ trait xarGraphQLMutationsTrait
     public static $_xar_object = '';  // specify in the class using this trait
     public static $_xar_mutations = [];  // specify in the class using this trait
 
+    /**
+     * Get the mutation fields listed in the $_xar_mutations property of the actual class
+     */
     public static function _xar_get_mutation_fields()
     {
         $fields = [];
-        foreach (static::$_xar_mutations as $name) {
-            $fields[] = static::_xar_get_mutation_field($name);
+        foreach (static::$_xar_mutations as $kind => $name) {
+            if (!empty($name)) {
+                $fields[] = static::_xar_get_mutation_field($name, $kind);
+            }
         }
         return $fields;
     }
@@ -38,10 +43,12 @@ trait xarGraphQLMutationsTrait
      * This method will be inherited by all specific object types, so it's important to use "static"
      * instead of "self" here - see https://www.php.net/manual/en/language.oop5.late-static-bindings.php
      */
-    public static function _xar_get_mutation_field($name)
+    public static function _xar_get_mutation_field($name, $kind = '')
     {
-        $action = strtolower(substr($name, 0, 6));
-        switch ($action) {
+        if (empty($kind) || is_numeric($kind)) {
+            $kind = strtolower(substr($name, 0, 6));
+        }
+        switch ($kind) {
             case 'create':
                 return static::_xar_get_create_mutation($name, static::$_xar_type, static::$_xar_object);
                 break;
@@ -52,7 +59,7 @@ trait xarGraphQLMutationsTrait
                 return static::_xar_get_delete_mutation($name, static::$_xar_type, static::$_xar_object);
                 break;
             default:
-                throw new Exception('Unknown mutation ' . $name);
+                throw new Exception("Unknown '$kind' mutation '$name'");
         }
     }
 
@@ -68,6 +75,7 @@ trait xarGraphQLMutationsTrait
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["object mutation", $args]);
             }
+            // @todo check if type class corresponding to fieldname has overridden _xar_*_mutation_resolver
             $name = $info->fieldName;
             $action = substr($name, 0, 6);
             $type = strtolower(substr($name, 6));

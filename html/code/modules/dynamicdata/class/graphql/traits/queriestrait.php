@@ -23,16 +23,18 @@ trait xarGraphQLQueriesTrait
 
     public static $_xar_type   = '';  // specify in the class using this trait
     public static $_xar_object = '';  // specify in the class using this trait
-    public static $_xar_page   = '';  // specify in the class using this trait
-    public static $_xar_list   = '';  // specify in the class using this trait
-    public static $_xar_item   = '';  // specify in the class using this trait
     public static $_xar_queries = [];  // specify in the class using this trait
 
+    /**
+     * Get the query fields listed in the $_xar_queries property of the actual class
+     */
     public static function _xar_get_query_fields()
     {
         $fields = [];
-        foreach (static::$_xar_queries as $name) {
-            $fields[] = static::_xar_get_query_field($name);
+        foreach (static::$_xar_queries as $kind => $name) {
+            if (!empty($name)) {
+                $fields[] = static::_xar_get_query_field($name, $kind);
+            }
         }
         return $fields;
     }
@@ -41,16 +43,31 @@ trait xarGraphQLQueriesTrait
      * This method will be inherited by all specific object types, so it's important to use "static"
      * instead of "self" here - see https://www.php.net/manual/en/language.oop5.late-static-bindings.php
      */
-    public static function _xar_get_query_field($name)
+    public static function _xar_get_query_field($name, $kind = '')
     {
-        if (!empty(static::$_xar_page) && $name == static::$_xar_page) {
-            return static::_xar_get_page_query(static::$_xar_page, static::$_xar_type, static::$_xar_object);
+        if (empty($kind) || is_numeric($kind)) {
+            $lname = strtolower($name);
+            $ext = '_page';
+            if (substr($lname, -strlen($ext)) === $ext) {
+                $kind = 'page';
+            } elseif ($lname === static::$_xar_object) {
+                $kind = 'list';
+            } elseif ($lname === static::$_xar_type) {
+                $kind = 'item';
+            }
         }
-        if (!empty(static::$_xar_list) && $name == static::$_xar_list) {
-            return static::_xar_get_list_query(static::$_xar_list, static::$_xar_type, static::$_xar_object);
-        }
-        if (!empty(static::$_xar_item) && $name == static::$_xar_item) {
-            return static::_xar_get_item_query(static::$_xar_item, static::$_xar_type, static::$_xar_object);
+        switch ($kind) {
+            case 'page':
+                return static::_xar_get_page_query($name, static::$_xar_type, static::$_xar_object);
+                break;
+            case 'list':
+                return static::_xar_get_list_query($name, static::$_xar_type, static::$_xar_object);
+                break;
+            case 'item':
+                return static::_xar_get_item_query($name, static::$_xar_type, static::$_xar_object);
+                break;
+            default:
+                throw new Exception("Unknown '$kind' query '$name'");
         }
     }
 
@@ -64,6 +81,7 @@ trait xarGraphQLQueriesTrait
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["object query", $args]);
             }
+            // @todo check if type class corresponding to fieldname has overridden _xar_*_query_resolver
             $name = strtolower($info->fieldName);
             $page_ext = '_page';
             if (substr($name, -strlen($page_ext)) === $page_ext) {

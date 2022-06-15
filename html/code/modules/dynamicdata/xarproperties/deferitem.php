@@ -292,7 +292,8 @@ class DeferredItemProperty extends DataProperty
         }
         $data['value'] = $this->getDeferredLoader()->get($value);
         if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], $data['value'])) {
-            $data['value'] = $data['value'][$this->fieldlist[0]];
+            $field = $this->fieldlist[0];
+            $data['value'] = $data['value'][$field];
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;

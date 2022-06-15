@@ -923,7 +923,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/log.php",
         "name": "xarLog__shutdown_handler",
         "args": [],
-        "line": 225,
+        "line": 258,
         "class": "xarLog",
         "check": "_shutdown_handler"
     },
@@ -1837,7 +1837,7 @@
         "args": [
             "$cacheGroups"
         ],
-        "line": 422,
+        "line": 427,
         "class": "xarPage",
         "check": "checkUserCaching"
     },

@@ -53,9 +53,9 @@ class xarGraphQLNodeType extends InterfaceType
         ];
     }
 
-    public static function _xar_get_query_field($name)
+    public static function _xar_get_query_fields()
     {
-        $fields = [
+        return [
             'node' => [
                 'name' => 'node',
                 'description' => 'Get object item using global object identification',
@@ -72,6 +72,11 @@ class xarGraphQLNodeType extends InterfaceType
                 //],
             ],
         ];
+    }
+
+    public static function _xar_get_query_field($name)
+    {
+        $fields = static::_xar_get_query_fields();
         if (!empty($fields[$name])) {
             return $fields[$name];
         }

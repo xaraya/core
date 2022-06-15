@@ -138,7 +138,11 @@
                             <xar:else/>
                                 <td><input type="checkbox" name="restapi[#$item['module']#.#$api#]" id="restapi_#$item['module']#.#$api#"/></td>
                             </xar:if>
-                            <td></td>
+                            <xar:if condition="empty($graphqllist) or in_array($item['module'].'.'.$api, $graphqllist)">
+                                <td><input type="checkbox" name="graphql[#$item['module']#.#$api#]" id="graphql_#$item['module']#.#$api#" checked="checked"/></td>
+                            <xar:else/>
+                                <td><input type="checkbox" name="graphql[#$item['module']#.#$api#]" id="graphql_#$item['module']#.#$api#"/></td>
+                            </xar:if>
                         </tr>
                         </xar:foreach>
                     </xar:foreach>
@@ -150,7 +154,7 @@
                             </xar:foreach>
                         </select></td>
                         <td><input type="checkbox" name="restapi_module" id="restapi_module"/></td>
-                        <td></td>
+                        <td><input type="checkbox" name="graphql_module" id="graphql_module"/></td>
                     </tr>
                     </tbody>
                 </table>

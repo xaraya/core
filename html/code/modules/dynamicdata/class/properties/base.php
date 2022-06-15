@@ -97,17 +97,18 @@ class DataProperty extends xarObject implements iDataProperty
             // a function call that returns some dynamic default value
             // Expression stolen from http://php.net/functions
             if(!empty($this->defaultvalue) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/',$this->defaultvalue)) {
-            	try {
-					eval('$value = ' . $this->defaultvalue .';');
-					if(isset($value)) {
-						$this->defaultvalue = $value;
-					} else {
-						$this->defaultvalue = null;
-					}
-            	} catch (Exception $e) {
-            		$message = xarML("Bad default value for property '#(1)'<br/>", $this->name);
-            		echo $message;
-            	}
+                try {
+                    eval('$value = ' . $this->defaultvalue .';');
+                    if(isset($value)) {
+                        $this->defaultvalue = $value;
+                    } else {
+                        $this->defaultvalue = null;
+                    }
+                } catch (Exception $e) {
+                    //$message = xarML("Bad default value for property '#(1)'<br/>", $this->name);
+                    //echo $message;
+                    throw new BadParameterException([$this->name, $e->getMessage()], "Bad default value for property '#(1)': #(2)");
+                }
             }
             // The try clause is to gracefully exit in those cases where we are just importing properties
             // but don't yet have the full configuration

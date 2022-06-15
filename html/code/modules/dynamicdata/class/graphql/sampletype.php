@@ -21,12 +21,17 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
     public static $_xar_name   = 'Sample';
     public static $_xar_type   = 'sample';
     public static $_xar_object = 'sample';
-    public static $_xar_page   = 'samples_page';
-    public static $_xar_list   = 'samples';
-    public static $_xar_item   = 'sample';
     public static $_xar_security = false;
-    public static $_xar_queries = ['samples_page', 'samples', 'sample'];
-    public static $_xar_mutations = ['createSample', 'updateSample', 'deleteSample'];
+    public static $_xar_queries = [
+        'page' => 'samples_page',
+        'list' => 'samples',
+        'item' => 'sample'
+    ];
+    public static $_xar_mutations = [
+        'create' => 'createSample',
+        'update' => 'updateSample',
+        'delete' => 'deleteSample'
+    ];
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
@@ -52,6 +57,7 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
             'fields' => function () use ($object) {
                 return static::_xar_get_object_fields($object);
             },
+            'resolveField' => static::_xar_object_field_resolver($typename, $object),
         ];
     }
      */
@@ -114,8 +120,6 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
      */
     public static function _xar_object_field_resolver($type, $object = null)
     {
-        // $clazz = xarGraphQL::get_type_class("buildtype");
-        // return $clazz::object_field_resolver($type, $object);
     }
 
     /**
@@ -127,7 +131,7 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
      */
     public static function _xar_load_deferred($type)
     {
-        // Note: we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
         // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
     }
 }

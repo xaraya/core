@@ -18,6 +18,17 @@ trait xarGraphQLDeferredTrait
 {
     protected static $_xar_deferred = [];
 
+    public static function _xar_get_deferred_field($fieldname, $typename, $islist = false)
+    {
+        // xarGraphQL::setTimer('get deferred field ' . $fieldname);
+        return [
+            'name' => $fieldname,
+            'type' => ($islist ? xarGraphQL::get_type_list($typename) : xarGraphQL::get_type($typename)),
+            // @todo move to resolveField?
+            'resolve' => static::_xar_deferred_field_resolver($typename, $fieldname),
+        ];
+    }
+
     /**
      * Get the property resolver for a deferred field - looking up the user names for example
      *
@@ -41,6 +52,9 @@ trait xarGraphQLDeferredTrait
             $property = (xarGraphQL::$object_ref[$object])->properties[$fieldname];
             if (get_class($property) === 'DeferredManyProperty') {
                 // $fieldname = 'id';
+                if (empty($values['id'])) {
+                    throw new Exception('Unknown item id for deferred property ' . $fieldname);
+                }
             } elseif (empty($values[$fieldname])) {
                 return null;
             }
@@ -49,7 +63,9 @@ trait xarGraphQLDeferredTrait
                 return ['id' => $values[$fieldname]];
             }
             $fieldlist = array_keys($fields);
-            if (!empty(xarGraphQL::$object_type[$property->objectname])) {
+            if (empty($property->objectname)) {
+                // only looking for id's here
+            } elseif (!empty(xarGraphQL::$object_type[$property->objectname])) {
                 $objtype = strtolower(xarGraphQL::$object_type[$property->objectname]);
                 if (array_key_exists($objtype, xarGraphQL::$type_fields)) {
                     $fieldlist = xarGraphQL::$type_fields[$objtype];
@@ -109,7 +125,6 @@ trait xarGraphQLDeferredTrait
                 static::$_xar_deferred[$typename]->setResolver($getValuesFunc);
             }
         }
-        // @todo should we pass along the object instead of the type here?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname) {
             if (xarGraphQL::$trace_path) {
                 xarGraphQL::$paths[] = array_merge($info->path, ["deferred field $typename $fieldname", $args]);
@@ -169,6 +184,17 @@ trait xarGraphQLDeferredTrait
     public static function _xar_load_deferred($typename)
     {
         // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
+        // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
+        //$object = static::$_xar_object;
+        //$fieldlist = ['id', 'name'];
+        // get the DD items for a deferred list of item ids here
+        //$resolver = function ($itemids) use ($object, $fieldlist) {
+        //    $params = ['name' => $object, 'fieldlist' => $fieldlist];
+        //    $objectlist = DataObjectMaster::getObjectList($params);
+        //    $params = ['itemids' => $itemids];
+        //    return $objectlist->getItems($params);
+        //};
+        //return $resolver;
     }
 
     /**

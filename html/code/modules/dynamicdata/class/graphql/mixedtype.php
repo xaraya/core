@@ -10,10 +10,9 @@
  */
 
 use GraphQL\Type\Definition\ScalarType;
-use GraphQL\Language\AST\StringValueNode;
 
 /**
- * GraphQL ScalarType for mixed type fields - used in keyval type instead of multival
+ * GraphQL ScalarType for mixed type fields - used in keyval type instead of multival, or as generic args field
  */
 class xarGraphQLMixedType extends ScalarType
 {
@@ -28,16 +27,57 @@ class xarGraphQLMixedType extends ScalarType
         return $value;
     }
 
+    /**
+     * query getAssocArrayVar($arr: Mixed) {
+     *   get_hello(args: $arr)
+     * }
+     *
+     * "variables": {
+     *   "arr": {
+     *     "name": "hi",
+     *     "more": {
+     *       "oops": "hmmm"
+     *     }
+     *   }
+     * }
+     */
     public function parseValue($value)
     {
-        return 'value:' . $value;
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["parse value", gettype($value), $value];
+        }
+        return $value;
     }
 
+    /**
+     * query getAssocArray {
+     *   get_hello(args: {name: "hi", more: {oops: "hmmm"}})
+     * }
+     */
     public function parseLiteral($valueNode, array $variables = null)
     {
-        if (!$valueNode instanceof StringValueNode) {
-            throw new Exception('Query error: Can only parse strings got: ' . $valueNode->kind, [$valueNode]);
+        if (xarGraphQL::$trace_path) {
+            xarGraphQL::$paths[] = ["parse literal", $valueNode->kind, $variables];
         }
-        return 'literal:' . $valueNode->value;
+        return $this->parseValueNode($valueNode);
+    }
+
+    public function parseValueNode($valueNode)
+    {
+        if ($valueNode->kind === "ObjectValue") {
+            $values = [];
+            foreach ($valueNode->fields as $node) {
+                $values[$node->name->value] = $this->parseValueNode($node->value);
+            }
+            return $values;
+        } elseif ($valueNode->kind === "ListValue") {
+            $values = [];
+            foreach ($valueNode->values as $node) {
+                $values[] = $this->parseValueNode($node);
+            }
+            return $values;
+        } else {
+            return $valueNode->value;
+        }
     }
 }
