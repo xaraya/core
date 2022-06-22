@@ -706,7 +706,7 @@ class xarGraphQLBuildType
                         return $field_resolvers[$typename][$fieldname];
                     }
                 } catch (Exception $e) {
-                    xarGraphQL::$paths[] = "Unknown fields for type $typename = " . (string) $type_def . ": " . $e-getMessage();
+                    xarGraphQL::$paths[] = "Unknown fields for type $typename = " . (string) $type_def . ": " . $e->getMessage();
                 }
             }
         }

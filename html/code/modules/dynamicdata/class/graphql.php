@@ -278,7 +278,7 @@ class xarGraphQL extends xarObject
             return $type;
         }
         if (!array_key_exists($name, self::$type_mapper)) {
-            throw new Exception("Unknown graphql type: " . $input);
+            throw new Exception("Unknown graphql type: " . $page);
         }
         $clazz = self::get_type_class(self::$type_mapper[$name]);
         // get page type from existing type class

@@ -144,6 +144,13 @@ class xarLogger extends xarObject
         $this->notify(xarML('Shutdown #(1) logger', $this->name), xarLog::LEVEL_NOTICE);
     }
 
+    public function notify($message, $level)
+    {
+        if (!$this->doLogLevel($level)) return false;
+        // do something appropriate with $message for this logger
+        return true;
+    }
+
     /**
      * Returns if the logger should log the given level or not.
      *
@@ -171,4 +178,3 @@ class xarLogger extends xarObject
     }
 }
 
-?>
