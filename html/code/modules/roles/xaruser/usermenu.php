@@ -51,13 +51,13 @@ function roles_user_usermenu(Array $args=array())
             $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
             $object->getItem(array('itemid' => $id));
 
-            $oldpass = $object->properties['password']->getValue();
-            $oldemail = $object->properties['email']->getValue();
+            $oldpass = $object->properties['password']->value;
+            $oldemail = $object->properties['email']->value;
 
             $isvalid = $object->checkInput();
 
             if ($isvalid) {
-                $email = $object->properties['email']->getValue();
+                $email = $object->properties['email']->value;
                 if ($oldemail != $email){
                     if(xarModVars::get('roles','uniqueemail')) {
                         // check for duplicate email address
@@ -92,7 +92,7 @@ function roles_user_usermenu(Array $args=array())
                     return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
                 }
 
-                $newpass = $object->properties['password']->getValue();
+                $newpass = $object->properties['password']->value;
                 $passchanged = false;
                 if ($oldpass != $newpass) {
                     $passchanged = true;
@@ -104,7 +104,7 @@ function roles_user_usermenu(Array $args=array())
                 if ($passchanged){
                     // @todo CHECKME: Send an email?
                 }
-                $email = $object->properties['email']->getValue();
+                $email = $object->properties['email']->value;
                 if ($oldemail != $email){
                     /* updated steps for changing email address
                        1) Check if validation is required (1a) and if so create confirmation code (1b)
