@@ -85,7 +85,7 @@ class ObjectRefProperty extends SelectProperty
             } elseif (is_string($this->value)) {
                 $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'view', array('where' => $this->initialization_display_prop . " = '" . $this->value . "'"));
             } else {
-                echo xarML('Array values for links are currently not suppoerted in the objectref property');
+                echo xarML('Array values for links are currently not supported in the objectref property');
                 exit;
             }
         }
