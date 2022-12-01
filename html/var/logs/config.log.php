@@ -1,6 +1,6 @@
 <?php
 /**
- * Log Configuration File 
+ * Log Configuration File
  *
  * @package core
  * @subpackage core
@@ -13,7 +13,7 @@
 
 /*
  * These values define the configuration for Xaraya's loggers
- * 
+ *
  * You can change these values to suit your needs, but all of them need to be included.
  * Alternatively, you can configure the loggers using the LogConfig module.
  *
@@ -65,6 +65,5 @@ $systemConfiguration['Log.Syslog.Level'] = '32';                             // 
 $systemConfiguration['Log.Syslog.Timeformat'] = $timestamp;                  // String containing the format for the log's timestamps.
 $systemConfiguration['Log.Syslog.Facility'] = 'LOG_USER';                    // The constant representing this logfile in PHP
 $systemConfiguration['Log.Syslog.Options'] = 'LOG_CONS|LOG_ODELAY|LOG_PID';  // The maximum size of a log file in bytes. Once this value is reached Xaraya creates a new log file
-
 
 ?>
