@@ -9,9 +9,9 @@
         <xar:if condition="empty($modname)">
             Are you sure you want to delete all category links ?
         <xar:elseif condition="empty($itemid)"/>
-            <xar:ml><xar:mlstring>Are you sure you want to delete all category links for module <b>#(1)</b> ?</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar></xar:ml>
+            <xar:ml><xar:mlstring>Are you sure you want to delete all category links for module <strong>#(1)</strong> ?</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar></xar:ml>
         <xar:else/>
-            <xar:ml><xar:mlstring>Are you sure you want to delete all category links for module <b>#(1)</b> item <b>#(2)</b> ?</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar><xar:mlvar>#$itemid#</xar:mlvar></xar:ml>
+            <xar:ml><xar:mlstring>Are you sure you want to delete all category links for module <strong>#(1)</strong> item <strong>#(2)</strong> ?</xar:mlstring><xar:mlvar>#$modname#</xar:mlvar><xar:mlvar>#$itemid#</xar:mlvar></xar:ml>
         </xar:if>
         <br /><br />
         <form method="post" action="&xar-modurl-categories-admin-unlink;">

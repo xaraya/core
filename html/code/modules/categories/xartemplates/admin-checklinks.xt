@@ -8,16 +8,16 @@
             <table class="xar-table" border="0" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                     <th valign="center" width="40%">
-                        <b>Module Name</b>
+                        <strong>Module Name</strong>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b>Module<br />Items</b>
+                        <strong>Module<br />Items</strong>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b>Distinct<br />Categories</b>
+                        <strong>Distinct<br />Categories</strong>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b>Total<br />Links</b>
+                        <strong>Total<br />Links</strong>
                     </th>
                 </tr>
                 <xar:if condition="empty($moditems) or count($moditems) eq 0">
@@ -48,16 +48,16 @@
                     </xar:foreach>
                     <tr>
                         <td valign="center" width="40%">
-                            <b>Grand Total</b>
+                            <strong>Grand Total</strong>
                         </td>
                         <td align="center" valign="center" width="15%">
-                            <b>#$numitems#</b>
+                            <strong>#$numitems#</strong>
                         </td>
                         <td align="center" valign="center" width="15%">
-                            <b>-</b>
+                            <strong>-</strong>
                         </td>
                         <td align="center" valign="center" width="15%">
-                            <b>#$numlinks#</b>
+                            <strong>#$numlinks#</strong>
                         </td>
                     </tr>
                 </xar:if>
@@ -90,7 +90,7 @@
                             Item
                         </th>
                         <th align="center" valign="center" width="30%">
-                            <b>Category Links</b>
+                            <strong>Category Links</strong>
                         </th>
                     </tr>
     
@@ -141,10 +141,10 @@
                         </xar:if>
                         <tr>
                             <td align="left" colspan="2">
-                                <b>Grand Total</b>:
+                                <strong>Grand Total</strong>:
                             </td>
                             <td align="center">
-                                <b>#$numorphans#</b>
+                                <strong>#$numorphans#</strong>
                             </td>
                         </tr>
                     </xar:if>

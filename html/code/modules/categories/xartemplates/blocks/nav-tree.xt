@@ -18,7 +18,7 @@
         <xar:foreach in="$cattree['catitems']" value="$catitem">
             &#149;&#160;
             <xar:if condition="empty($catitem['catlink'])">
-                <b>#$catitem['catlabel']#</b>
+                <strong>#$catitem['catlabel']#</strong>
             <xar:else />
                 <a href="#$catitem['catlink']#">#$catitem['catlabel']#</a>
             </xar:if>
@@ -33,7 +33,7 @@
                 <xar:foreach in="$catitem['catchildren']" value="$catchild">
                     &#160;&#160;&#149;&#160;
                     <xar:if condition="empty($catchild['clink'])">
-                        <b>#$catchild['clabel']#</b>
+                        <strong>#$catchild['clabel']#</strong>
                     <xar:else />
                         <a href="#$catchild['clink']#">#$catchild['clabel']#</a>
                     </xar:if>

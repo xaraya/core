@@ -8,19 +8,19 @@
             <table class="xar-table" border="0" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                     <th valign="center" width="40%">
-                        <b>Module Name</b>
+                        <strong>Module Name</strong>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b>Module<br />Items</b>
+                        <strong>Module<br />Items</strong>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b>Distinct<br />Categories</b>
+                        <strong>Distinct<br />Categories</strong>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b>Total<br />Links</b>
+                        <strong>Total<br />Links</strong>
                     </th>
                     <th align="center" valign="center" width="15%">
-                        <b>Action</b>
+                        <strong>Action</strong>
                     </th>
                 </tr>
                 <xar:if condition="empty($moditems) or count($moditems) eq '0'">
@@ -52,23 +52,23 @@
                                         <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$label"/>
                                     </a>
                                 <xar:else />
-                                    <a href="#$moditem['delete']#"><b>Delete</b></a>
+                                    <a href="#$moditem['delete']#"><strong>Delete</strong></a>
                                 </xar:if>
                             </td>
                         </tr>
                     </xar:foreach>
                     <tr>
                         <td valign="center" width="40%">
-                            <b>Grand Total</b>
+                            <strong>Grand Total</strong>
                         </td>
                         <td align="center" valign="center" width="15%">
-                            <b>#$numitems#</b>
+                            <strong>#$numitems#</strong>
                         </td>
                         <td align="center" valign="center" width="15%">
-                            <b>-</b>
+                            <strong>-</strong>
                         </td>
                         <td align="center" valign="center" width="15%">
-                            <b>#$numlinks#</b>
+                            <strong>#$numlinks#</strong>
                         </td>
                         <td align="center" valign="center" width="15%">
                             <!-- not supported by unlink API at the moment
@@ -81,7 +81,7 @@
                 <tr>
                     <td colspan="5">
                         <div class="xar-accent xar-norm-outline" style="text-align: justify;padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">                            
-                            Click on <b>Delete</b> to remove all category links associated with a particular
+                            Click on <strong>Delete</strong> to remove all category links associated with a particular
                             module. Clicking on a module will take you to that module's statistics page containing
                             the figures for each of that module's items that have category links associated with them.
                             From there you can delete all category links associated with a particular item.
@@ -105,16 +105,16 @@
                     <tr>
                         <th valign="center" width="50%">
                             <xar:if condition="empty($sortlink['itemid'])">
-                                <b>Item Id</b>
+                                <strong>Item Id</strong>
                             <xar:else/>
-                                <a href="#$sortlink['itemid']#"><b>Item Id</b></a>
+                                <a href="#$sortlink['itemid']#"><strong>Item Id</strong></a>
                             </xar:if>
                         </th>
                         <th align="center" valign="center" width="30%">
-                            <b>Category<br/>Links</b>
+                            <strong>Category<br/>Links</strong>
                         </th>
                         <th align="center" valign="center" width="20%">
-                            <b>Action</b>
+                            <strong>Action</strong>
                         </th>
                     </tr>
                     <xar:if condition="empty($moditems) or count($moditems) eq '0'">
@@ -152,7 +152,7 @@
                                             <xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$label"/>
                                         </a>
                                     <xar:else />
-                                        <a href="#$moditem['delete']#"><b>Delete</b></a>
+                                        <a href="#$moditem['delete']#"><strong>Delete</strong></a>
                                     </xar:if>
                                 </td>
                             </tr>
@@ -166,10 +166,10 @@
                     </xar:if>
                         <tr>
                             <td valign="center" width="50%">
-                                <b>Grand Total</b>
+                                <strong>Grand Total</strong>
                             </td>
                             <td align="center" valign="center" width="30%">
-                                <b>#$numlinks#</b>
+                                <strong>#$numlinks#</strong>
                             </td>
                             <td align="center" valign="center" width="20%">
                                 <xar:if condition="empty($catid)">
@@ -183,7 +183,7 @@
                     <tr>
                         <td colspan="3">
                             <div class="xar-accent xar-norm-outline" style="text-align: justify;padding: 0.5em 1em 0.5em 1em; margin-top: 5px;">
-                                Click on <b>Delete</b> to remove all category links associated with a particular
+                                Click on <strong>Delete</strong> to remove all category links associated with a particular
                                 module's item.
                             </div>
                         </td>
