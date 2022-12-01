@@ -179,13 +179,11 @@ function xarMain()
         }
 
         // Process the request
-        xarLog::message('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(),
-        	 xarLog::LEVEL_NOTICE);
+        xarLog::message('Dispatching request: ' . $request->getModule() . "_" . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_NOTICE);
         xarController::dispatch($request);
 
         // Retrieve the output to send to the browser
-        xarLog::message('Processing request ' . $request->getModule() . "_"  . $request->getType() . "_"  . $request->getFunction(),
-        	 xarLog::LEVEL_NOTICE);
+        xarLog::message('Processing request ' . $request->getModule() . "_"  . $request->getType() . "_"  . $request->getFunction(), xarLog::LEVEL_NOTICE);
         $mainModuleOutput = xarController::$response->getOutput();
 
         if (xarCore::isDebuggerActive()) {
