@@ -39,11 +39,11 @@
 
             <h3>Types of Menus</h3>
             <p>
-                Xaraya distinguishes between front end (user) menus and back end (admin) menus. By default your installation contains one of each, but you can add as many as you like. Menus are <i>blocks</i> in Xaraya. You can manage your menu blocks by logging in as an admin and going to the Blocks module administration page <a href="index.php?module=blocks&amp;type=admin&amp;func=view_instances">here</a>.
+                Xaraya distinguishes between front end (user) menus and back end (admin) menus. By default your installation contains one of each, but you can add as many as you like. Menus are <em>blocks</em> in Xaraya. You can manage your menu blocks by logging in as an admin and going to the Blocks module administration page <a href="index.php?module=blocks&amp;type=admin&amp;func=view_instances">here</a>.
             </p>
             <ul>
-                <li>Front end menus are what users see when they navigate the site. The default front end menu is named <i>mainmenu</i></li>
-                <li>Back end menus are used by administrators to configure and manage the site. The default back end menu is named <i>adminpanel</i></li>
+                <li>Front end menus are what users see when they navigate the site. The default front end menu is named <em>mainmenu</em></li>
+                <li>Back end menus are used by administrators to configure and manage the site. The default back end menu is named <em>adminpanel</em></li>
             </ul>
                 
             <h3>Configuring User Menus</h3>

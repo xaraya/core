@@ -22,7 +22,7 @@
             </xar:if>
         </h2>
         <xar:if condition="$object:visibility ne 'public'">
-            <h3 class="xar-align-center">Warning! This is a <i>#$object:visibility#</i> object used
+            <h3 class="xar-align-center">Warning! This is a <em>#$object:visibility#</em> object used
             internally by the #xarMod::getName($object:moduleid)# module.<br/>
             Trying to delete this item here may break the module. Please proceed with caution.</h3>
         </xar:if>

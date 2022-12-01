@@ -34,7 +34,7 @@
         </xar:if>
         <!-- This is where the list of properties shown starts -->
         <xar:if condition="$visibility ne 'public'">
-            <h3 class="xar-align-center">Warning! This is a <i>#$visibility#</i> object used
+            <h3 class="xar-align-center">Warning! This is a <em>#$visibility#</em> object used
             internally by the #xarMod::getName($module_id)# module.<br/>
             Trying to modify the properties of this object here may break the module. Please proceed with caution.</h3>
         </xar:if>
