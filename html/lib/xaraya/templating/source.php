@@ -41,7 +41,7 @@ class XarayaSourceTemplate extends SourceTemplate
             $commentBlock = "<?php\n/*"
                           . "\n * Source:     " . $this->fileName         // redundant
                           . "\n * Theme:      " . xarTpl::getThemeName()  // confusing (can be any theme now, it's the theme during compilation, which is also shown on the above line)
-                          . "\n * Compiled: ~ " . date('Y-m-d H:i:s T') // redundant
+                          . "\n * Compiled: ~ " . date('Y-m-d H:i:s T')   // redundant
                           . "\n */\n?>\n";
             $out .= $commentBlock;
         }
