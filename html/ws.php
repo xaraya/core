@@ -17,10 +17,10 @@ function xarWSLoader()
  */
     $systemConfiguration = array();
     include 'var/layout.system.php';
-    if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
-    if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
-    if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
-    if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+    if (!isset($systemConfiguration['rootDir'])) { $systemConfiguration['rootDir'] = '../'; }
+    if (!isset($systemConfiguration['libDir']))  { $systemConfiguration['libDir'] = 'lib/'; }
+    if (!isset($systemConfiguration['webDir']))  { $systemConfiguration['webDir'] = 'html/'; }
+    if (!isset($systemConfiguration['codeDir'])) { $systemConfiguration['codeDir'] = 'code/'; }
     $GLOBALS['systemConfiguration'] = $systemConfiguration;
     if (!empty($systemConfiguration['rootDir'])) {
         set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
@@ -180,7 +180,7 @@ function xarWebservicesMain()
                     echo $fault->serialize();
                 }
                 // Try to process the request
-                if ($server) $server::handle();
+                if ($server) { $server::handle(); }
             }
             if (!$server) {
                 xarLog::message("Could not load SOAP server, giving up");
