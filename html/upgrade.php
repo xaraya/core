@@ -18,10 +18,10 @@ function xarUpgradeLoader()
  */
     $systemConfiguration = array();
     include 'var/layout.system.php';
-    if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
-    if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
-    if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
-    if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
+    if (!isset($systemConfiguration['rootDir'])) { $systemConfiguration['rootDir'] = '../'; }
+    if (!isset($systemConfiguration['libDir']))  { $systemConfiguration['libDir'] = 'lib/'; }
+    if (!isset($systemConfiguration['webDir']))  { $systemConfiguration['webDir'] = 'html/'; }
+    if (!isset($systemConfiguration['codeDir'])) { $systemConfiguration['codeDir'] = 'code/'; }
     $GLOBALS['systemConfiguration'] = $systemConfiguration;
     if (!empty($systemConfiguration['rootDir'])) {
         set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
@@ -93,8 +93,9 @@ class Upgrader extends xarObject
 
         // Make sure we can render a page
         xarTpl::setPageTitle(xarMLS::translate('Xaraya Upgrade'));
-        if(!xarTpl::setThemeName('installer'))
+        if(!xarTpl::setThemeName('installer')) {
             throw new Exception('You need the installer theme if you want to upgrade Xaraya.');
+        }
 
         // Set the default page title before calling the module function
         xarTpl::setPageTitle(xarMLS::translate("Upgrading Xaraya"));
