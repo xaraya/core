@@ -285,7 +285,7 @@ function xarWebservicesMain()
                 $wsdllocation = xarServer::getBaseURL() . 'modules/soapserver/xaraya.wsdl';
                 if (file_exists($wsdllocation)) {
                     xarLog::message("Moving to wsdl location");
-                    header('Location: ' . $$wsdllocation);
+                    header('Location: ' . $wsdllocation);
                 } else {
                     xarLog::message("No wsdl location available, giving up");
                     // TODO: we need a specific handler for this
