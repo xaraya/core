@@ -45,12 +45,7 @@ class XarayaCompiler extends xarBLCompiler
 
     public function configure()
     {
-        // Compressing excess whitespace
-        try {
-            $this->compresswhitespace = xarConfigVars::get(null, 'Site.BL.CompressWhitespace');
-        } catch (Exception $e) {
-            $this->compresswhitespace = 1;
-        }
+        parent::configure();
 
         // Get the Xaraya tags
         $baseDir = sys::lib() . 'xaraya/templating/tags';
@@ -84,13 +79,6 @@ class XarayaCompiler extends xarBLCompiler
         $xslFiles = array_merge($xslFiles,$this->getBlockTagPaths());
 
         return $xslFiles;
-    }
-
-    public function compileFile($fileName)
-    {
-        xarLog::message(xarML("Xar: Compiling the file '#(1)'", $fileName), xarLog::LEVEL_INFO);
-        $output = parent::compileFile($fileName);
-        return $output;
     }
 
     /**
@@ -224,22 +212,6 @@ class XarayaCompiler extends xarBLCompiler
             }
         }            
         return $files;
-    }
-
-    protected function getProcessor($xslFile='')
-    {   
-        if ($this->legacy_compile) {
-            $xslProc = parent::getProcessor($xslFile);
-        } else {
-            //sys::import('xaraya/templating/xsltransformer');
-            sys::import('blocklayout.xsltransformer');
-            if (empty($xslFile)) {
-                $xslProc = new BlockLayoutXSLTProcessor();
-            } else {
-                $xslProc = new BlockLayoutXSLTProcessor($xslFile);
-            }
-        }
-        return $xslProc;
     }
 }
 
