@@ -3,17 +3,17 @@
   compared to Xaraya 1.2
 */
 
-/* Module user vars table is now module itemvars table */
-/* The primary key index is automatically adapted */
+// Module user vars table is now module itemvars table
+// The primary key index is automatically adapted
 RENAME TABLE xar_module_uservars TO xar_module_itemvars;
 ALTER TABLE xar_module_itemvars CHANGE COLUMN xar_uid xar_itemid INT(11) UNSIGNED NOT NULL DEFAULT '0';
 ALTER TABLE xar_module_itemvars CHANGE COLUMN xar_mvid INT(11) UNSIGNED NOT NULL DEFAULT '0';
 
-/* Hooks table smodule and tmodule changed to smodid and tmodid where the registration is the module id now instead of the name */
-/* First add the two new colum definitions */
+// Hooks table smodule and tmodule changed to smodid and tmodid where the registration is the module id now instead of the name
+// First add the two new colum definitions
 ALTER TABLE xar_hooks ADD COLUMN xar_smodid INT(11) NOT NULL DEFAULT '0';
 ALTER TABLE xar_hooks ADD COLUMN xar_tmodid INT(11) NOT NULL DEFAULT '0';
-/* Make sure we insert the data properly */
+// Make sure we insert the data properly
 UPDATE xar_hooks INNER JOIN xar_modules ON xar_hooks.xar_smodule = xar_modules.xar_name
 SET    xar_hooks.xar_smodid = xar_modules.xar_id;
 UPDATE xar_hooks INNER JOIN xar_modules ON xar_hooks.xar_tmodule = xar_modules.xar_name
@@ -21,33 +21,33 @@ SET    xar_hooks.xar_tmodid = xar_modules.xar_id;
 ALTER TABLE xar_hooks DROP COLUMN xar_smodule;
 ALTER TABLE xar_hooks DROP COLUMN xar_tmodule;
 
-/* Template tags table column xar_module replaced by xar_modid */
+// Template tags table column xar_module replaced by xar_modid
 ALTER TABLE xar_template_tags ADD COLUMN xar_modid INT(11) NOT NULL DEFAULT '0';
 UPDATE xar_template_tags INNER JOIN xar_modules ON xar_template_tags.xar_module = xar_modules.xar_name
 SET    xar_template_tags.xar_modid = xar_modules.xar_id;
 ALTER TABLE xar_template_tags DROP COLUMN xar_module;
 
-/* security_instances table columns xar_module replaced by column xar_modid */
+// security_instances table columns xar_module replaced by column xar_modid
 ALTER TABLE xar_security_instances ADD COLUMN xar_modid INT(11) NOT NULL DEFAULT '0';
 UPDATE xar_security_instances INNER JOIN xar_modules ON xar_security_instances.xar_module = xar_modules.xar_name
 SET    xar_security_instances.xar_modid = xar_modules.xar_id;
 ALTER TABLE xar_security_instances DROP COLUMN xar_module;
 
-/* security_masks table column xar_module replaced by column xar_modid */
-/* NOTE: there were values of 'All' in this column, which are now defined as 0 */
+// security_masks table column xar_module replaced by column xar_modid
+// NOTE: there were values of 'All' in this column, which are now defined as 0
 ALTER TABLE xar_security_masks ADD COLUMN xar_modid INT(11) NOT NULL DEFAULT '0';
 UPDATE xar_security_masks INNER JOIN xar_modules ON xar_security_masks.xar_module = xar_modules.xar_name
 SET    xar_security_masks.xar_modid = xar_modules.xar_id;
 ALTER TABLE xar_security_masks DROP COLUMN xar_module;
 CREATE INDEX i_xar_security_masks_modid ON xar_security_masks (xar_modid);
 
-/* roles table column xar_authmodule replaced by column xar_auth_modid */
+// roles table column xar_authmodule replaced by column xar_auth_modid
 ALTER TABLE xar_roles ADD COLUMN xar_auth_modid INT(11) NOT NULL DEFAULT '0';
 UPDATE xar_roles INNER JOIN xar_modules ON xar_roles.xar_auth_module = xar_modules.xar_name
 SET    xar_roles.xar_auth_modid = xar_modules.xar_id;
 ALTER TABLE xar_roles DROP COLUMN xar_auth_module;
 
-/* block_types table column xar_module replaced by column xar_modid */
+// block_types table column xar_module replaced by column xar_modid
 ALTER TABLE xar_block_types ADD COLUMN xar_modid INT(11) NOT NULL DEFAULT '0';
 UPDATE xar_block_types INNER JOIN xar_modules ON xar_block_types.xar_module = xar_modules.xar_name
 SET    xar_block_types.xar_modid = xar_modules.xar_id;
@@ -55,22 +55,22 @@ DROP INDEX i_xar_block_types2 ON xar_block_types;
 ALTER TABLE xar_block_types DROP COLUMN xar_module;
 CREATE UNIQUE INDEX i_xar_block_types2 ON xar_block_types (xar_modid,xar_type);
 
-/* Themes table gained a xar_state column */
+// Themes table gained a xar_state column
 ALTER TABLE xar_themes ADD COLUMN xar_state INT(11) NOT NULL DEFAULT '0';
 UPDATE xar_themes INNER JOIN xar_theme_states ON xar_themes.xar_regid = xar_theme_states.xar_regid
 SET    xar_themes.xar_state = xar_theme_states.xar_state;
 
-/* Modules table gained a xar_state column */
+// Modules table gained a xar_state column
 ALTER TABLE xar_modules ADD COLUMN xar_state INT(11) NOT NULL DEFAULT '0';
 UPDATE xar_modules INNER JOIN xar_module_states ON xar_modules.xar_regid = xar_module_states.xar_regid
 SET    xar_modules.xar_state = xar_module_states.xar_state;
 
-/* Storage of config_vars and module_vars is consolidated into one table now */
-/* Copy the entries of the config_vars table to the module vars table */
+// Storage of config_vars and module_vars is consolidated into one table now
+// Copy the entries of the config_vars table to the module vars table
 INSERT INTO xar_module_vars (xar_modid, xar_name, xar_value)
 SELECT 0,xar_name,xar_value FROM xar_config_vars
 
-/* Easy ones, tables not needed anymore */
+// Easy ones, tables not needed anymore
 DROP TABLE xar_admin_menu;
 DROP TABLE xar_theme_vars;
 DROP TABLE xar_tables;
@@ -78,7 +78,7 @@ DROP TABLE xar_theme_states;
 DROP TABLE xar_module_states;
 DROP TABLE xar_config_vars;
 
-/* DD extending */
+// DD extending
 ALTER TABLE xar_dynamic_objects ADD COLUMN xar_object_parent INT(11) NOT NULL DEFAULT '0';
 
 /* Defining a primary key for:
@@ -99,13 +99,13 @@ ALTER TABLE xar_cache_blocks ADD PRIMARY KEY (xar_bid);
 
 DROP TABLE xar_security_levels;
 
-/* Replace the data-list handler
-  TODO: might need to be changed again depending on how we handle the new compiler tag registration */
+// Replace the data-list handler
+// TODO: might need to be changed again depending on how we handle the new compiler tag registration
 UPDATE xar_template_tags
 SET xar_handler = 'dynamicdata_userapi_handleViewTag',
     xar_data    = 'O:14:"xarTemplateTag":12:{s:5:"_name";s:9:"data-list";s:11:"_attributes";a:0:{}s:8:"_handler";s:34:"dynamicdata_adminapi_handleListTag";s:7:"_module";s:11:"dynamicdata";s:5:"_type";s:4:"user";s:5:"_func";s:13:"handleViewTag";s:12:"_hasChildren";b:0;s:8:"_hasText";b:0;s:13:"_isAssignable";b:0;s:10:"_isPHPCode";b:1;s:15:"_needAssignment";b:0;s:14:"_needParameter";b:0;}' WHERE `xar_template_tags`.`xar_handler` = 'dynamicdata_adminapi_handleListTag';
 
-/* Revisiting configvars reference in module_vars table */
+// Revisiting configvars reference in module_vars table
 ALTER TABLE xar_module_vars MODIFY COLUMN `xar_modid` INTEGER DEFAULT NULL;
 UPDATE xar_module_vars SET xar_modid=NULL WHERE xar_modid=0;
 
@@ -127,21 +127,21 @@ ALTER TABLE xar_security_masks DROP COLUMN xar_realm;
 
 CREATE UNIQUE INDEX i_xar_privileges_name ON xar_privileges (xar_name);
 
-/* Relations is still todo after N years */
+// Relations is still todo after N years
 DROP TABLE xar_dynamic_relations;
 
-/* properties_def.reqmodules -> modid int not null */
+// properties_def.reqmodules -> modid int not null
 ALTER TABLE xar_dynamic_properties_def ADD COLUMN xar_prop_modid INTEGER DEFAULT NULL;
 UPDATE xar_dynamic_properties_def INNER JOIN xar_modules ON xar_dynamic_properties_def.xar_prop_reqmodules = xar_modules.xar_name
 SET xar_dynamic_properties_def.xar_prop_modid = xar_modules.xar_id;
 ALTER TABLE xar_dynamic_properties_def DROP column xar_prop_reqmodules;
 CREATE INDEX i_xar_dynpropdef_modid ON xar_dynamic_properties_def (xar_prop_modid);
 
-/* Making the hooks table modid columns 'foreign keyable' */
+// Making the hooks table modid columns 'foreign keyable'
 ALTER TABLE xar_hooks MODIFY COLUMN xar_smodid INTEGER DEFAULT NULL;
 ALTER TABLE xar_hooks MODIFY COLUMN xar_tmodid INTEGER NOT NULL;
 
-/* removing unneeded moduleid and itemtype fields for the properties table */
+// removing unneeded moduleid and itemtype fields for the properties table
 ALTER TABLE `xar_dynamic_properties` DROP INDEX `i_xar_dynprops_combo`;
 ALTER TABLE `xar_dynamic_properties` DROP `xar_prop_moduleid` , DROP `xar_prop_itemtype` ;
 DELETE FROM `xar_dynamic_properties` WHERE `xar_dynamic_properties`.`xar_prop_id` =15 LIMIT 1 ;
@@ -150,7 +150,7 @@ ALTER TABLE `xar_dynamic_properties` DROP INDEX `i_xar_dynprops_name`;
 ALTER TABLE `xar_dynamic_properties` DROP INDEX `i_xar_dynprops_objectid`;
 ALTER TABLE `xar_dynamic_properties` ADD UNIQUE `i_xar_dynprops_combo` ( `xar_prop_objectid` , `xar_prop_name` );
 
-/* merging the masks and privileges tables */
+// merging the masks and privileges tables
 /*
  - update the module column values containing "All" to contain 0
  - update the module column values containing "empty" to contain null
@@ -174,18 +174,18 @@ INSERT INTO `xar_privileges` (xar_pid, xar_name, xar_realmid, xar_modid, xar_com
 UPDATE `xar_privileges` SET type = 3 WHERE type IS NULL;
 DROP TABLE `xar_security_masks`;
 
-/* Making the default value in the rolemembers table form 0 to null' */
+// Making the default value in the rolemembers table form 0 to null'
 DROP INDEX i_xar_rolememb_uid ON xar_rolemembers;
 ALTER TABLE `xar_rolemembers` CHANGE `xar_parentid` `xar_parentid` INTEGER DEFAULT NULL;
 UPDATE `xar_rolemembers` SET xar_parentid = NULL WHERE xar_parentid = 0;
 
-/* Making the default value in the privmembers table form 0 to null' */
+// Making the default value in the privmembers table form 0 to null'
 DROP INDEX i_xar_privmembers_pid ON xar_privmembers;
 ALTER TABLE `xar_privmembers` CHANGE `xar_parentid` `xar_parentid` INTEGER DEFAULT NULL;
 UPDATE `xar_privmembers` SET xar_parentid = NULL WHERE xar_parentid = 0;
 
-/* Dropping column prefixes from xar_session_info, session_info is moot, so we take the high road :-) */
-/* Drops the indexes too */
+// Dropping column prefixes from xar_session_info, session_info is moot, so we take the high road :-)
+// Drops the indexes too
 DROP table xar_session_info;
 CREATE TABLE  xar_session_info (
   `id` varchar(32) NOT NULL,
@@ -201,20 +201,20 @@ CREATE TABLE  xar_session_info (
 );
 
 
-/* Dropping column prefixes from xar_module_vars table, need to preserve data */
+// Dropping column prefixes from xar_module_vars table, need to preserve data
 ALTER TABLE `xar_module_vars`
  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
  CHANGE COLUMN `xar_modid` `module_id` INTEGER DEFAULT NULL,
  CHANGE COLUMN `xar_name` `name` VARCHAR(64) NOT NULL,
  CHANGE COLUMN `xar_value` `value` LONGTEXT DEFAULT NULL;
-/* FIXME: incomplete, indexes probably need to be recreated, or at least renamed */
+// FIXME: incomplete, indexes probably need to be recreated, or at least renamed
 
 
 ALTER TABLE `xar_module_itemvars`
  CHANGE COLUMN `xar_mvid` `module_var_id` INTEGER NOT NULL,
  CHANGE COLUMN `xar_itemid` `item_id` INTEGER UNSIGNED NOT NULL,
  CHANGE COLUMN `xar_value` `value` LONGTEXT DEFAULT NULL;
-/* FIXME: incomplete, indexes probably need to be recreated, or at least renamed */
+// FIXME: incomplete, indexes probably need to be recreated, or at least renamed
 
 
 ALTER TABLE `xar_template_tags`
@@ -251,7 +251,7 @@ ALTER TABLE `xar_privileges`
 ALTER TABLE `xar_privmembers`
  CHANGE COLUMN `xar_pid` `id`  INTEGER DEFAULT NULL AUTO_INCREMENT,
  CHANGE COLUMN `xar_parentid` `parentid` INTEGER DEFAULT NULL;
-/* FIXME: rename the pid index */
+// FIXME: rename the pid index
 
 ALTER TABLE `xar_security_realms`
  CHANGE COLUMN `xar_rid` `id` INTEGER NOT NULL AUTO_INCREMENT,
@@ -260,7 +260,7 @@ ALTER TABLE `xar_security_realms`
 ALTER TABLE `xar_security_acl`
  CHANGE COLUMN `xar_partid` `partid` INTEGER NOT NULL DEFAULT 0,
  CHANGE COLUMN `xar_permid` `permid` INTEGER NOT NULL DEFAULT 0;
-/* FIXME: phpmyadmin shows an error on the indexes */
+// FIXME: phpmyadmin shows an error on the indexes
 
 ALTER TABLE `xar_security_instances`
  CHANGE COLUMN `xar_iid` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
@@ -274,7 +274,7 @@ ALTER TABLE `xar_security_instances`
  CHANGE COLUMN `xar_instancechildid` `instancechildid` VARCHAR(100) NOT NULL,
  CHANGE COLUMN `xar_instanceparentid` `instanceparentid` VARCHAR(100) NOT NULL,
  CHANGE COLUMN `xar_description` `description` VARCHAR(255) NOT NULL;
-/* TODO: this table will surely be lightened up */
+// TODO: this table will surely be lightened up
 
 ALTER TABLE `xar_themes`
  CHANGE COLUMN `xar_id` `id` INTEGER NOT NULL DEFAULT NULL AUTO_INCREMENT,
@@ -353,7 +353,7 @@ ALTER TABLE `xar_dynamic_properties_def`
   CHANGE COLUMN `xar_prop_aliases` `prop_aliases` varchar(254) default NULL,
   CHANGE COLUMN `xar_prop_format` `prop_format` INTEGER default '0';
 
-/* Replace property definitions in the properties table */
+// Replace property definitions in the properties table
 UPDATE `xar_dynamic_properties` SET `prop_source` = REPLACE(prop_source, ".xar_", ".");
 UPDATE `xar_dynamic_properties` SET `prop_source` = REPLACE(prop_source, "xar_roles.uid", "xar_roles.id");
 
@@ -364,7 +364,7 @@ ALTER TABLE `xar_block_group_instances`
   CHANGE COLUMN `xar_template` `template` varchar(100) default NULL,
   CHANGE COLUMN `xar_position` `position` INTEGER NOT NULL default '0';
 
-/* TODO: fix these keys */
+// TODO: fix these keys
   KEY `i_xar_block_group_instances` (`xar_group_id`),
   KEY `i_xar_block_group_instances_2` (`xar_instance_id`)
 
@@ -373,7 +373,7 @@ ALTER TABLE `xar_block_groups`
   CHANGE COLUMN `xar_name` `name` varchar(255) NOT NULL default '',
   CHANGE COLUMN `xar_template` `template` varchar(255) NOT NULL default '';
 
-/* TODO: fix these keys */
+// TODO: fix these keys
   UNIQUE KEY `i_xar_block_groups` (`xar_name`)
 
 ALTER TABLE `xar_block_instances`
@@ -387,7 +387,7 @@ ALTER TABLE `xar_block_instances`
   CHANGE COLUMN `xar_refresh` `refresh` INTEGER NOT NULL default '0',
   CHANGE COLUMN `xar_last_update` `last_update` INTEGER NOT NULL default '0';
 
-/* TODO: fix these keys */
+// TODO: fix these keys
   UNIQUE KEY `i_xar_block_instances_u2` (`xar_name`),
   KEY `i_xar_block_instances` (`xar_type_id`)
 
@@ -398,7 +398,7 @@ ALTER TABLE `xar_block_types`
   CHANGE COLUMN `xar_modid` `modid` int(10) unsigned NOT NULL default '0',
   CHANGE COLUMN `xar_info` `info` text;
 
-/* TODO: fix these keys */
+// TODO: fix these keys
   UNIQUE KEY `i_xar_block_types2` (`xar_modid`,`xar_type`)
 
 ALTER TABLE `xar_cache_blocks`
@@ -421,7 +421,7 @@ ALTER TABLE `xar_roles`
   CHANGE COLUMN `xar_state` `state` INTEGER NOT NULL default '3',
   CHANGE COLUMN `xar_auth_modid` `auth_modid` INTEGER NOT NULL default '0';
 
-/* TODO: fix these keys */
+// TODO: fix these keys
   UNIQUE KEY `i_xar_roles_uname` (`xar_uname`),
   KEY `i_xar_roles_type` (`xar_type`),
   KEY `i_xar_roles_name` (`xar_name`),
@@ -432,34 +432,34 @@ ALTER TABLE `xar_rolemembers`
   CHANGE COLUMN `xar_uid` `id` INTEGER default NULL,
   CHANGE COLUMN `xar_parentid` `parentid` INTEGER default NULL;
 
-/* TODO: fix these keys */
+// TODO: fix these keys
   KEY `i_xar_rolememb_uid` (`xar_uid`),
   KEY `i_xar_rolememb_parentid` (`xar_parentid`)
 
-/* TODO: change the uid reference(s) in the roles lockdata modvar to id */
+// TODO: change the uid reference(s) in the roles lockdata modvar to id
 
-/* change date_reg to an int */
+// change date_reg to an int
 ALTER TABLE `xar_roles` CHANGE `date_reg` `date_reg` INT( 11 ) NOT NULL DEFAULT '0';
 
-/* drop mode field from modules and themes table */
+// drop mode field from modules and themes table
 ALTER TABLE `xar_modules` DROP `mode`;
 ALTER TABLE `xar_themes` DROP `mode`;
 
-/* add a filepath to show where a class lives */
+// add a filepath to show where a class lives
 ALTER TABLE xar_dynamic_objects ADD COLUMN object_class VARCHAR(255) NOT NULL DEFAULT '';
 ALTER TABLE xar_dynamic_objects ADD COLUMN object_filepath VARCHAR(255) NOT NULL DEFAULT '';
 UPDATE xar_dynamic_objects SET object_class= 'DataObject' WHERE object_class= '';
 
-/* change the class of the roles objects */
+// change the class of the roles objects
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_roles';
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_users';
 UPDATE `xar_dynamic_objects` SET  `object_class` = 'Role' , `object_filepath` = 'modules/roles/class/role.php' WHERE `object_name` = 'roles_groups';
 
-/* Change the type property in roles obejcts from type to role_type */
+// Change the type property in roles obejcts from type to role_type
 UPDATE `xar_dynamic_properties` SET `prop_name` = 'role_type' WHERE `prop_source` = 'xar_roles.type'
 
-/* Change some configvars to modvars */
-/* FIXME the values put into the modvars need to be unserialized */
+// Change some configvars to modvars
+// FIXME the values put into the modvars need to be unserialized
 INSERT INTO `xar_module_vars` (module_id, name, value)
     SELECT mods.id, 'defaultmoduletype', modvars.value FROM xar_module_vars modvars, xar_modules mods
     WHERE mods.name = 'modules' AND  modvars.name = 'Site.Core.DefaultModuleType';
@@ -484,7 +484,7 @@ INSERT INTO `xar_module_vars` (module_id, name, value)
 ALTER TABLE `xar_privileges`
   CHANGE COLUMN `realmid` `realm_id` INTEGER default NULL;
 
-/* TODO: fix  key */
+// TODO: fix  key
   KEY `i_xar_privileges_realm_id` (`realm_id`),
 
 /* 
@@ -494,7 +494,7 @@ ALTER TABLE `xar_privileges`
     during upgrade
 */
 
-/* DynamicData table changes */
+// DynamicData table changes
 
 ALTER TABLE `xar_dynamic_properties`
   CHANGE COLUMN `prop_id` `id` INTEGER NOT NULL AUTO_INCREMENT,
@@ -657,9 +657,9 @@ DROP TABLE IF EXISTS xar_template_tags;
 ALTER TABLE `xar_dynamic_objects` DROP `property_id`;
 ALTER TABLE `xar_dynamic_objects` DROP `parent_id`;
 
-/* remove the DProperty class */
+// remove the DProperty class
 UPDATE `xar_dynamic_objects` SET  `class` = 'DataObject' , `filepath` = 'auto' WHERE `name` = 'properties';
-/* Add a field to the hooks table */
+// Add a field to the hooks table
 ALTER TABLE `xar_hooks` ADD COLUMN t_file varchar(254) NOT NULL;
 
 /*
