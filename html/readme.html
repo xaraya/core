@@ -84,19 +84,19 @@
                                     Xaraya consists of three main components, each in its own folder:
                                     <ul>
                                         <li>
-                                            <b>html</b> folder: contains all the elements that will be accessible by the web server.
+                                            <strong>html</strong> folder: contains all the elements that will be accessible by the web server.
                                         </li>
                                         <li>
-                                            <b>lib</b> folder: contains Xaraya and third party libraries. These include the Xaraya core code, the Blocklayout templating engine, and the Creole database middleware.
+                                            <strong>lib</strong> folder: contains Xaraya and third party libraries. These include the Xaraya core code, the Blocklayout templating engine, and the Creole database middleware.
                                         </li>
                                         <li>
-                                            <b>code</b> folder: contains code elements, notably the modules your Xaraya installation will run.
+                                            <strong>code</strong> folder: contains code elements, notably the modules your Xaraya installation will run.
                                         </li>
                                     </ul>
                                     The top level of your installation (the xaraya-2.4.0 folder) is called the <em>root directory</em>. For special situations the root directory can be redefined to as different directory on your server (see Custom Installations below).
                                 </p>
                                 <p class="center">
-                                    <b>To run properly your installation requires only the three folders listed above and their contents. All other contents of your unpacked installation file are for information only, or additional functionality for special situations, and can be safely removed.</b>
+                                    <strong>To run properly your installation requires only the three folders listed above and their contents. All other contents of your unpacked installation file are for information only, or additional functionality for special situations, and can be safely removed.</strong>
                                 </p>
                               <a name="solo" style="text-decoration: none;"><h2>Installing in a Solo Environment</h2></a> <a href="#top">top</a>
                                 <p class="center">
@@ -112,7 +112,7 @@
                                             Configure your web server (www.mydomain.com) to make the html directory in your installation its root directory.
                                         </li>
                                         <li>
-                                            Point your web browser to www.mydomain.com/install.php and run the installation routine. The installation process takes 5-10 minutes, and you will be asked to make a number of decisions concerning your Xaraya site's configuration. Apart from defining the database your site will work with, <b>all other configuration settings can be changed later</b>. If you are unsure about a specific configuration, choose the defaults the installer provides.
+                                            Point your web browser to www.mydomain.com/install.php and run the installation routine. The installation process takes 5-10 minutes, and you will be asked to make a number of decisions concerning your Xaraya site's configuration. Apart from defining the database your site will work with, <strong>all other configuration settings can be changed later</strong>. If you are unsure about a specific configuration, choose the defaults the installer provides.
                                         </li>
                                         <li>
                                             Once the installation is successful, be sure to remove the file install.php in the html directory to avoid malicious use.
@@ -140,7 +140,7 @@
                                             Save the file modified var/layout.system.php.
                                         </li>
                                         <li>
-                                            Point your web browser to www.mydomain.com/install.php and run the installation routine. The installation process takes 5-10 minutes, and you will be asked to make a number of decisions concerning your Xaraya site's configuration. Apart from defining the database your site will work with, <b>all other configuration settings can be changed later</b>. If you are unsure about a specific configuration, choose the defaults the installer provides.
+                                            Point your web browser to www.mydomain.com/install.php and run the installation routine. The installation process takes 5-10 minutes, and you will be asked to make a number of decisions concerning your Xaraya site's configuration. Apart from defining the database your site will work with, <strong>all other configuration settings can be changed later</strong>. If you are unsure about a specific configuration, choose the defaults the installer provides.
                                         </li>
                                         <li>
                                             Once the installation is successful, be sure to remove the file install.php in the html directory to avoid malicious use.
@@ -159,7 +159,7 @@
                                             </pre>
                                         </li>
                                         <li>
-                                            The values of $systemConfiguration['webDir'], $systemConfiguration['libDir'] and $systemConfiguration['codeDir'] must correspond to the locations of the html, lib and code directories respectively <b>relative to the root directory</b>.
+                                            The values of $systemConfiguration['webDir'], $systemConfiguration['libDir'] and $systemConfiguration['codeDir'] must correspond to the locations of the html, lib and code directories respectively <strong>relative to the root directory</strong>.
                                         </li>
                                     </ul>
                                 </p>
@@ -224,10 +224,10 @@ $systemConfiguration['codeDir'] = "public_html/code/";
                                             Make sure the appropriate files in the var directory are writable by the web server. The installer will complain if it finds that is not the case. If you are translating, be sure that your locales (files and subdirectories under var/locales) are writable.
                                         </li>
                                         <li>
-                                            <b>code</b> folder: contains code elements, notably the modules your Xaraya installation will run.
+                                            <strong>code</strong> folder: contains code elements, notably the modules your Xaraya installation will run.
                                         </li>
                                         <li>
-                                            Linux installations: if you are using symbolic links, make sure they are used <b>both</b> for the code and lib directories. Otherwise you may get loading exceptions in some situations.
+                                            Linux installations: if you are using symbolic links, make sure they are used <strong>both</strong> for the code and lib directories. Otherwise you may get loading exceptions in some situations.
                                         </li>
                                     </ul>
                                 <a name="legacy" style="text-decoration: none;"><h2>Legacy Support</h2></a> <a href="#top">top</a>
