@@ -17,8 +17,10 @@ function xarLSLoader($argc, $argv)
 /**
  * Load the layout file so we know where to find the Xaraya directories
  */
-    $systemConfiguration = array();
-    include 'var/layout.system.php';
+    if (!isset($systemConfiguration)) {
+		$systemConfiguration = array();
+		include_once 'var/layout.system.php';
+    }
     if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
     if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
     if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
@@ -43,7 +45,9 @@ function xarLSLoader($argc, $argv)
  * Load the bootstrap file for the minimal classes we need
  */
     set_include_path(dirname(dirname(__FILE__)) . PATH_SEPARATOR . get_include_path());
-    include 'bootstrap.php';
+    if (!class_exists('xarObject')) {
+	    include_once 'bootstrap.php';
+    }
 
 /**
  * Set up caching
