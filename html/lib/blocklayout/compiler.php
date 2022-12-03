@@ -67,7 +67,6 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
 
     public function compileString(&$data)
     {
-        
         return $this->compile($data);
     }
 
@@ -108,12 +107,18 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
 
     public function configure()
     {
-        return array();
+        // Compressing excess whitespace
+        try {
+            $this->compresswhitespace = xarConfigVars::get(null, 'Site.BL.CompressWhitespace');
+        } catch (Exception $e) {
+            $this->compresswhitespace = 1;
+        }
     }
     
     protected function getProcessor($xslFile='')
     {
         xarLog::message(xarML("BL: Creating a new XSLT processor"), xarLog::LEVEL_DEBUG);
+        
         sys::import('blocklayout.xsltransformer');
         if (empty($xslFile)) {
             $xslProc = new BlockLayoutXSLTProcessor();
