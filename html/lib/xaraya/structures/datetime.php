@@ -144,6 +144,7 @@ class XarDateTime extends DateTime
                 );
     }
 
+    #[\ReturnTypeWillChange]
     public function getTimestamp()  {  return $this->timestamp; }
     public function getDate($x)     {  return strtotime($x);    }
     public function getYear()       {  return $this->year;      }
@@ -159,6 +160,7 @@ class XarDateTime extends DateTime
     public function getMinute()      { return $this->minute;   }
     public function getSecond()      { return $this->second;   }
 
+    #[\ReturnTypeWillChange]
     public function setTimestamp($x)
     {
         $this->timestamp = $x; $this->extract();
@@ -178,5 +180,3 @@ class XarDateTime extends DateTime
     public function addMinutes($x) { $this->minute += $x; $this->regenerate(); }
     public function addSeconds($x) { $this->second += $x; $this->regenerate(); }
 }
-
-?>

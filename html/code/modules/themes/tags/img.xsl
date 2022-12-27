@@ -59,7 +59,7 @@
           name="nodeset"
           select="@*[name() != 'alt' and name() != 'title' and name() != 'height' and name() != 'width' and  name() != 'class' and name() != 'id' and name() != 'style' and name() != 'onabort' and name() != 'onclick' and name() != 'ondblclick' and name() != 'onmousedown' and  name() != 'onmousemove' and name() != 'onmouseout' and name() != 'onmouseover' and name() != 'onmouseup' and name() != 'onkeydown' and name() != 'onkeypress' and name() != 'onkeyup']"/>
       </xsl:call-template>
-    <xsl:text>));</xsl:text>
+    <xsl:text>) ?? '');</xsl:text>
   </xsl:template>
 
   <!-- attach attributes passed from tag to the element being returned -->

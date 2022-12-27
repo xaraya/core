@@ -210,9 +210,9 @@ class ObjectRefProperty extends SelectProperty
         $store = $object->datastore->name;
         if ($object->datastore->name != "relational") return true;
 
-        // Assemble the links to the object's table
-        $sources     = unserialize($object->sources);
-        $relations   = unserialize($object->relations);
+        // Assemble the links to the object's table - @todo see DataObjectMaster assembleQuery instead
+        $sources     = property_exists($object, "sources") ? unserialize($object->sources ?? '') : array();
+        $relations   = property_exists($object, "relations") ? unserialize($object->relations ?? '') : array();
         
         // Debug display
         if (xarModVars::get('dynamicdata','debugmode') && 
@@ -259,4 +259,3 @@ class ObjectRefProperty extends SelectProperty
         return true;
     }
 }
-?>

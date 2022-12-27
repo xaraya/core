@@ -197,7 +197,7 @@ class xarCSS extends xarObject
         if (!isset(self::$instance)) {
             xarLog::message('xarCSS::getInstance: loading modvars', xarLog::LEVEL_INFO);
             // try unserializing the stored modvar
-            self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE));
+	    self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
             if (empty(self::$instance)) {
                 $c = __CLASS__;

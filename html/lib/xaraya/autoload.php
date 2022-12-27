@@ -38,7 +38,7 @@ class xarAutoload extends xarObject
     public static function initialize($registerlist = array(), $extensions = '')
     {
         // CHECKME: always start from scratch ?
-        spl_autoload_register(null, false);
+        spl_autoload_register(null);
 
         // specify extensions (if not default)
         if (!empty($extensions)) {

@@ -646,7 +646,7 @@ class xarMLS extends xarObject
         $i = 1;
         foreach($args as $var) {
             $search = "#($i)";
-            $string = str_replace($search, $var, $string);
+            $string = str_replace($search, $var ?? '', $string);
             $i++;
         }
         return $string;

@@ -64,6 +64,7 @@ class BasicCollection extends DataContainer implements Collection
 
 class BasicSet extends BasicCollection implements IteratorAggregate
 {
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $arrayobj = new ArrayObject($this->elements);
@@ -92,4 +93,3 @@ interface Collection
     public function toArray();
     public function toString();
 }
-?>

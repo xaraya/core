@@ -525,7 +525,7 @@ class xarTpl extends xarObject
             $tplName = xarVar::prepForOS($tplName);
         if (!empty($tplPart))
             $tplPart = strtr(trim(xarVar::prepForOS($tplPart)), " ", "/");
-        $canTemplateName = strtr($tplName, "-", "/");
+        $canTemplateName = strtr($tplName ?? "", "-", "/");
         $canonical = ($canTemplateName == $tplName) ? false : true;
 
         $cachename = "$scope:$package:$tplBase:$tplName:$tplPart:$callerMod";

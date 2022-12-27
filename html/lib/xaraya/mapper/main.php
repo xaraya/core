@@ -226,7 +226,7 @@ class xarController extends xarObject
         }// if
 
         // default response is temp redirect
-        if (!preg_match('/^301|302|303|307/', $httpResponse)) {
+        if (!preg_match('/^301|302|303|307/', $httpResponse ?? '')) {
             $httpResponse = 302;
         }
 

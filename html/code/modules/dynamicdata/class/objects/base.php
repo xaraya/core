@@ -34,6 +34,9 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Get a reference to each property's value and find the primary's index
         if (!empty($args['config'])) {
         }
+        if (!is_array($this->configuration)) {
+            $this->configuration = array();
+        }
         foreach ($this->properties as $property) {
             $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
         }
@@ -59,7 +62,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->itemid = $args['itemid'];
         }
         if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
-        	$this->properties[$this->primary]->value = $this->itemid;
+            $this->properties[$this->primary]->value = $this->itemid;
             $primarystore = $this->properties[$this->primary]->datastore;
         }
 
@@ -604,4 +607,3 @@ class DataObject extends DataObjectMaster implements iDataObject
         return true;
     }
 }
-?>

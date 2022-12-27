@@ -200,7 +200,7 @@ class xarJS extends xarObject
         if (!isset(self::$instance)) {
             xarLog::message('xarJS::getInstance: loading modvars');
           // try unserializing the stored modvar
-            self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE));
+            self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
             if (empty(self::$instance)) {
                 $c = __CLASS__;

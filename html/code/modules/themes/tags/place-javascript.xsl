@@ -15,7 +15,7 @@
     <xsl:value-of select="@position"/>
     <xsl:text>','type'=&gt;'</xsl:text>
     <xsl:value-of select="@type"/>
-    <xsl:text>')));</xsl:text>
+    <xsl:text>')) ?? '');</xsl:text>
   </xsl:processing-instruction>
 </xsl:template>
 </xsl:stylesheet>

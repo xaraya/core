@@ -53,16 +53,16 @@ class ImageProperty extends TextBoxProperty
      * @param  string basedir Base directory to be replaced
      * @return string         Corresponding theme directory
      */
-    public function getThemeDir($basedir = null)
+    public function getThemeDir($basedir = '')
     {
-        if (!$basedir) $basedir = $this->initialization_basedirectory;
-        if (strpos($basedir, '{user_theme}') !== false) {
+        if (empty($basedir)) $basedir = $this->initialization_basedirectory;
+        if (strpos($basedir ?? '', '{user_theme}') !== false) {
             $basedir = str_replace('{user_theme}',"themes/".xarModVars::get('themes', 'default_theme'),$basedir);
         }
-        if (strpos($basedir, '{admin_theme}') !== false) {
+        if (strpos($basedir ?? '', '{admin_theme}') !== false) {
             $basedir = str_replace('{admin_theme}',"themes/".xarModVars::get('themes', 'admin_theme'),$basedir);
         }
-        if (strpos($basedir, '{theme}') !== false) {
+        if (strpos($basedir ?? '', '{theme}') !== false) {
             $basedir = str_replace('{theme}',xarTpl::getThemeDir(),$basedir);
         }
         return $basedir;

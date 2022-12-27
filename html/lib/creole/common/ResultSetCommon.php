@@ -149,6 +149,7 @@ abstract class ResultSetCommon {
     /**
      * @see ResultSet::getIterator()
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         require_once 'creole/ResultSetIterator.php';

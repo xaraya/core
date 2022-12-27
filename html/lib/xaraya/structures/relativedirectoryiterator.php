@@ -18,6 +18,7 @@ class RelativeDirectoryIterator extends DirectoryIterator
         parent::__construct($realpath);
     }
 
+    #[\ReturnTypeWillChange]
     public function getExtension()
     {
         $filename = $this->GetFilename();
@@ -28,4 +29,3 @@ class RelativeDirectoryIterator extends DirectoryIterator
             return "";
     }
 }
-?>

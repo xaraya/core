@@ -277,7 +277,7 @@ class xarSession extends xarObject implements IsessionHandler
         }
         // Generate a random number, used for
         // some authentication
-        srand((double) microtime() * 1000000);
+        srand((double) microtime() * 1000000.0);
         $this->setVar('rand', rand());
 
         $this->ipAddress = $ipAddress;

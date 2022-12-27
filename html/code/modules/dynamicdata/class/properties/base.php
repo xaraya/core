@@ -119,7 +119,7 @@ class DataProperty extends xarObject implements iDataProperty
             $this->setValue($args['value']);
         }
         // do the minimum for alias info, let the single property do the rest
-        if (!empty($this->args)) {
+        if (!empty($this->args) && is_string($this->args)) {
             try {
                 $this->args = unserialize($this->args);
             } catch (Exception $e) {}

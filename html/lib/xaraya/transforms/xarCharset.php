@@ -14,7 +14,7 @@
  * @author Vladimirs Metenchuks <voll@xaraya.com>
 **/
 
-define ("CONVERT_TABLES_DIR", sys::lib() . 'transforms/convtables/');
+define ("CONVERT_TABLES_DIR", sys::lib() . 'xaraya/transforms/convtables/');
 
 /**
  * Main FEATURES of this class:
@@ -425,8 +425,12 @@ class xarCharset extends xarObject
     function convert ($inString, $fromCharset, $toCharset, $turnOnEntities = false)
     {
         if (function_exists('iconv')) {
-            $outString = @iconv($fromCharset, $toCharset.'//TRANSLIT', $inString);
-            if ($outString === false) $outString = '';
+            try {
+                $outString = @iconv($fromCharset, $toCharset.'//TRANSLIT', $inString);
+                if ($outString === false) $outString = '';
+            } catch (Exception $e) {
+                $outString = '';
+            }
         } else {
             $outString = $this->convertByTable($inString, $fromCharset, $toCharset, $turnOnEntities);
         }
