@@ -203,7 +203,7 @@ class Query
                         for ($i=0;$i< $numfields;$i++) {
                             $tmp = array_slice($result->fields,$i,1);
                             $namefield  = key($tmp);
-                            $this->fields[$namefield]['name'] = strtolower($namefield);
+                            $this->fields[$namefield]['name'] = strtolower($namefield ?? '');
                         }
                         $result->setFetchMode(ResultSet::FETCHMODE_NUM);
                         $result->next(); $result->previous();

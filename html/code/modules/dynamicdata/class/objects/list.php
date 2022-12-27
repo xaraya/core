@@ -52,6 +52,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (isset($this->numitems) && is_numeric($this->numitems)) $this->dataquery->rowstodo = $this->numitems;
         if (isset($this->startnum) && is_numeric($this->startnum)) $this->dataquery->startat = $this->startnum;
 
+        if (!is_array($this->configuration)) {
+            $this->configuration = array();
+        }
         // Get a reference to each property's value
         foreach ($this->properties as $property) {
             $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);

@@ -91,7 +91,7 @@ function dynamicdata_user_filtertag(Array $args=array())
         $data['fieldlist'] = $args['fieldlist'];
 
         if (empty($args['filtername'])) $args['filtername'] = $args['object']->name;
-        $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $args['filtername']));
+        $filter = @unserialize(xarSession::getVar('DynamicData.Filter.' . $args['filtername']) ?? '');
         if (empty($filter)) $filter = array();
         $values = array();
         $ops    = array();
@@ -145,4 +145,3 @@ function transform_operator($op)
 	);
 	return $oparray[$op];
 }
-?>
