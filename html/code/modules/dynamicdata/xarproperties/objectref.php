@@ -211,8 +211,9 @@ class ObjectRefProperty extends SelectProperty
         if ($object->datastore->name != "relational") return true;
 
         // Assemble the links to the object's table - @todo see DataObjectMaster assembleQuery instead
-        $sources     = property_exists($object, "sources") ? unserialize($object->sources ?? '') : array();
-        $relations   = property_exists($object, "relations") ? unserialize($object->relations ?? '') : array();
+        $descriptor  = $object->descriptor;
+        $sources     = $descriptor->exists("sources") ? unserialize($descriptor->get("sources") ?? 'a:0:{}') : array();
+        $relations   = $descriptor->exists("relations") ? unserialize($descriptor->get("relations") ?? 'a:0:{}') : array();
         
         // Debug display
         if (xarModVars::get('dynamicdata','debugmode') && 
