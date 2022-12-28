@@ -376,6 +376,7 @@ class xarVar extends xarObject
             // But not the others (note that this part is redundant)
             throw $e;
         }
+        return false;
     }
 
     /**@+

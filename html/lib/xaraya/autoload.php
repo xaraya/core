@@ -33,7 +33,7 @@ class xarAutoload extends xarObject
      *
      * @param registerlist array list of functions and classname::methods to be registered
      * @param extensions string comma-separated list of file extensions to be checked (instead of the default ones)
-     * @return none
+     * @return void
     **/
     public static function initialize($registerlist = array(), $extensions = '')
     {
@@ -145,7 +145,7 @@ class xarAutoload extends xarObject
     /**
      * TODO: Save the list of registered autoload() functions somewhere
      *
-     * @return none
+     * @return void
     **/
     public static function saveList()
     {
@@ -157,7 +157,7 @@ class xarAutoload extends xarObject
     /**
      * Refresh the internal list based on the actual registered autoload() functions
      *
-     * @return none
+     * @return void
     **/
     private static function refreshList()
     {
@@ -188,7 +188,7 @@ class xarAutoload extends xarObject
      * Register a new function as __autoload()
      *
      * @param function string the name of the function to be registered
-     * @return none
+     * @return void
     **/
     public static function registerFunction($function)
     {
@@ -201,7 +201,7 @@ class xarAutoload extends xarObject
      *
      * @param classname string the name of the class
      * @param method string the name of the method to be registered
-     * @return none
+     * @return void
     **/
     public static function registerClassMethod($classname, $method)
     {

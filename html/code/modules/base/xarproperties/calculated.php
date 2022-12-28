@@ -160,12 +160,13 @@ class CalculatedProperty extends TextBoxProperty
 
         // create a function to handle the calculation for an $item
         try {
-            $this->calcfunction = create_function('$item', 'return ' . implode(' ', $pieces) . ';');
+            // $this->calcfunction = create_function('$item', 'return ' . implode(' ', $pieces) . ';');
+            $this->calcfunction = function ($item) use ($pieces) {
+                 return implode(' ', $pieces);
+            };
         } catch (Exception $e) {
             return false;
         }
         return true;
     }
 }
-
-?>

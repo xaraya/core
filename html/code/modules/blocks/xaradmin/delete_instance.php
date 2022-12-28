@@ -21,7 +21,7 @@
  * 
  * @return array Data array
  * @throws EmptyParameterException Thrown if no block id has been passed
- * @throws IdNotFoundException Thrown if no block with the given block id was found in the API
+ * @throws IDNotFoundException Thrown if no block with the given block id was found in the API
  */
 function blocks_admin_delete_instance()
 {
@@ -42,7 +42,7 @@ function blocks_admin_delete_instance()
     if (!$instance) {
         $msg = 'Block instance id "#(1)" does not exist';
         $vars = array($block_id);
-        throw new IdNotFoundException($vars, $msg);
+        throw new IDNotFoundException($vars, $msg);
     }
 
     // admin access is needed for some operations 
@@ -75,7 +75,7 @@ function blocks_admin_delete_instance()
         try {
             if (!xarMod::apiFunc('blocks', 'instances', 'deleteitem',
                 array('block_id' => $instance['block_id']))) return;
-        } catch (IdNotFoundException $e) {
+        } catch (IDNotFoundException $e) {
             // ok, it's already gone
         } catch (Exception $e) {
             // oops, throw back
@@ -115,4 +115,3 @@ function blocks_admin_delete_instance()
         
     return $data;
 }
-?>

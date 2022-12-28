@@ -509,7 +509,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
     public $called_id = '';
     public $targetLoader = null;
 
-    public function __construct(string $linkname = 'sample', string $caller_id, string $called_id, ?callable $resolver = null)
+    public function __construct(string $linkname = 'sample', string $caller_id = '', string $called_id = '', ?callable $resolver = null)
     {
         $this->linkname = $linkname;
         $this->caller_id = $caller_id;

@@ -18,7 +18,7 @@
  * @param array $args Parameter data array
  * @return integer Returns given type id
  * @throws EmptyParameterException
- * @throws IdNotFoundException
+ * @throws IDNotFoundException
  */
 function blocks_typesapi_deleteitem(Array $args=array())
 {
@@ -34,7 +34,7 @@ function blocks_typesapi_deleteitem(Array $args=array())
     if (!$type) {
         $msg = 'Block type id "#(1)" does not exist';
         $vars = array($type_id);
-        throw new IdNotFoundException($vars, $msg);
+        throw new IDNotFoundException($vars, $msg);
     }
 
     $type_instances = xarMod::apiFunc('blocks', 'instances', 'getitems',
@@ -45,7 +45,7 @@ function blocks_typesapi_deleteitem(Array $args=array())
             try {
                 if (!xarMod::apiFunc('types', 'instances', 'deleteitem',
                     array('block_id' => $block_id))) return;
-            } catch (IdNotFoundException $e) {
+            } catch (IDNotFoundException $e) {
                 // this is ok, it may already have been deleted
                 continue;
             } catch (Exception $e) {
@@ -79,4 +79,3 @@ function blocks_typesapi_deleteitem(Array $args=array())
     
     return $args['type_id'];
 }
-?>

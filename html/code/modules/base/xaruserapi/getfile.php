@@ -162,7 +162,7 @@ function base_userapi_getfile(Array $args=array())
         if (!preg_match('/^\s*HTTP\/[\d\.]+\s+(\d+)/s',$content,$matches)) {
             $header = preg_replace('/\r\n\r\n.*$/s','',$content);
             if (!$superrors)
-                throw new BadParameterExceptions(array($url,$header),'Invalid response headers for URL #(1) : #(2)');
+                throw new BadParameterException(array($url,$header),'Invalid response headers for URL #(1) : #(2)');
         }
         $status = $matches[1];
         switch ($status) {
@@ -246,4 +246,3 @@ function base_userapi_getfile(Array $args=array())
 
     return $content;
 }
-?>

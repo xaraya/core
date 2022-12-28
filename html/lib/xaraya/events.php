@@ -227,7 +227,7 @@ class xarEvents extends xarObject implements ixarEvents
      * xarMod::apiFunc('roles', 'user', 'otherevent');
     **/
     
-    final public static function register($event,$module,$area='class',$type='eventobservers',$func='notify', $itemtype, $scope="") 
+    final public static function register($event,$module,$area='class',$type='eventobservers',$func='notify', $itemtype=0, $scope="")
     {
 
         $info = array(

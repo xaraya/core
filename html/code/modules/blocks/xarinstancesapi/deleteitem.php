@@ -18,7 +18,7 @@
  * @param array $args Parameter data array
  * @return boolean Returns true on success, false on failure
  * @throws EmptyParameterException
- * @throws IdNotFoundException
+ * @throws IDNotFoundException
  */
 function blocks_instancesapi_deleteitem(Array $args=array())
 {
@@ -34,7 +34,7 @@ function blocks_instancesapi_deleteitem(Array $args=array())
     if (!$instance) {
         $msg = 'Block instance id "#(1)" does not exist';
         $vars = array($args['block_id']);
-        throw new IdNotFoundException($vars, $msg);
+        throw new IDNotFoundException($vars, $msg);
     }
     
     try {
@@ -115,4 +115,3 @@ function blocks_instancesapi_deleteitem(Array $args=array())
     return true;
         
 }
-?>

@@ -17,7 +17,7 @@
  * 
  * @param array $args Parameter data array
  * @return boolean|null Returns true on success, null on failure.
- * @throws BadParameterExcepton Thrown is invalid parameters have been given.
+ * @throws BadParameterException Thrown is invalid parameters have been given.
  */
 function categories_adminapi_updatecelkolinks($args)
 {
@@ -26,7 +26,7 @@ function categories_adminapi_updatecelkolinks($args)
     // Argument check
     if (!isset($cid)) {
         $msg = xarML('Invalid Parameter Count');
-        throw new BadParameterExcepton(null,$msg);
+        throw new BadParameterException(null,$msg);
     }
 
     //Get the information on the category and its parent
@@ -115,5 +115,3 @@ function categories_adminapi_updatecelkolinks($args)
     }
     return true;
 }
-
-?>

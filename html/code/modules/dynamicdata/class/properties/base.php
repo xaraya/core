@@ -984,9 +984,11 @@ class DataProperty extends xarObject implements iDataProperty
         return true;
     }
 
+    // @checkme this shouldn't be here at all - see PropertyRegistration instead
     public static function getRegistrationInfo()
     {
-        $info = new PropertyRegistration();
+        $descriptor = new ObjectDescriptor(array());
+        $info = new PropertyRegistration($descriptor);
         $info->reqmodules = $this->reqmodules;
         $info->id   = $this->id;
         $info->name = $this->name;

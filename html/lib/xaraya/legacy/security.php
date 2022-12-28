@@ -282,8 +282,9 @@ function xarIsAncestor($name1, $name2)
 function xarTree()
 {
     // Since the class xarTreeRenderer exists in both roles and privileges this can lead to errors.
-    sys::import('modules.roles.xartreerenderer');
-    $tree = new xarTreeRenderer();
+    // sys::import('modules.roles.xartreerenderer');
+    // $tree = new xarTreeRenderer();
+    $tree = 'See code/modules/roles/xartemplates/scripts/xarTree.js';
     return $tree;
 }
 

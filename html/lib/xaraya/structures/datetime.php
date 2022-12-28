@@ -163,7 +163,9 @@ class XarDateTime extends DateTime
     #[\ReturnTypeWillChange]
     public function setTimestamp($x)
     {
-        $this->timestamp = $x; $this->extract();
+        $this->timestamp = $x;
+        $this->extract();
+        return $this;
     }
 
     public function setYear($x)   { $this->year   = $x; $this->regenerate(); }

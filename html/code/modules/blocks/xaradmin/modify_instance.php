@@ -43,7 +43,7 @@ function blocks_admin_modify_instance()
     if (!$blockinfo) {
         $msg = 'Block instance id "#(1)" does not exist';
         $vars = array($block_id);
-        throw new IdNotFoundException($vars, $msg);
+        throw new IDNotFoundException($vars, $msg);
     }
 
     $data = array();
@@ -705,4 +705,3 @@ function blocks_admin_modify_instance()
     return $data;
 
 }
-?>

@@ -87,7 +87,7 @@ function mail_adminapi__sendmail_new(Array $args=array())
     }
     
 
-    $mail = new phpmailer();
+    $mail = new PHPMailer();
     $mail->PluginDir = sys::code() . 'modules/mail/class/';
     $mail->ClearAllRecipients();
 

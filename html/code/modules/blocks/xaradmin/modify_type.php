@@ -17,7 +17,7 @@
  * @param array $args Optional parameter array
  * @return type Display data array
  * @throws EmptyParameterException
- * @throws IdNotFoundException
+ * @throws IDNotFoundException
  * @throws FunctionNotFoundException
  */
 function blocks_admin_modify_type(Array $args=array())
@@ -41,7 +41,7 @@ function blocks_admin_modify_type(Array $args=array())
     if (!$type) {
         $msg = 'Block type id "#(1)" does not exist';
         $vars = array($type_id);
-        throw new IdNotFoundException($vars, $msg);
+        throw new IDNotFoundException($vars, $msg);
     }
     
     $data = array();
@@ -462,4 +462,3 @@ function blocks_admin_modify_type(Array $args=array())
 
     return $data;
 }
-?>

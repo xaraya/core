@@ -360,7 +360,7 @@ class DataObjectMaster extends xarObject
     /**
      * Set the display status of some properties
      */
-    public function setDisplayStatus($fieldlist=array(), $status)
+    public function setDisplayStatus($fieldlist=array(), $status=1)
     {
         if(!empty($fieldlist)) {
             foreach($fieldlist as $field)
