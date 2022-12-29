@@ -11,5 +11,6 @@ parameters:
     excludePaths:
         - html/var/*
         - html/lib/creole/*
+        - html/lib/xaraya/legacy/*
     parallel:
         processTimeout: 300.0

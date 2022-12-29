@@ -29,6 +29,9 @@
         ],
         "files": [
             "html/var/layout.system.php"
+        ],
+        "exclude-from-classmap": [
+            "html/lib/xaraya/legacy/"
         ]
     },
     "scripts": {

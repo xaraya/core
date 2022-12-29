@@ -558,4 +558,4 @@ class xarModHooks extends xarObject
 }
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.hooks');
+//sys::import('xaraya.legacy.hooks');

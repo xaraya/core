@@ -120,12 +120,12 @@ class xarMLS extends xarObject
         //xarEvents::register('MLSMissingTranslationDomain');
     
         // TODO: reminder for if/when we drop the legacy functions or switch to namespaces someday
-        if (!function_exists('xarML')) {
-            function xarML($rawstring/*, ...*/)
-            {
-                return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
-            }
-	}
+        //if (!function_exists('xarML')) {
+        //    function xarML($rawstring/*, ...*/)
+        //    {
+        //        return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
+        //    }
+        //}
 
         // FIXME: this was previously conditional on User subsystem initialisation,
         // but in the 2.x flow we need it earlier apparently, so made this unconditional
@@ -934,6 +934,13 @@ class xarMLSContext extends xarObject
     }
 }
 
+// TODO: reminder for if/when we drop the legacy functions or switch to namespaces someday
+if (!function_exists('xarML')) {
+    function xarML($rawstring/*, ...*/)
+    {
+        return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
+    }
+}
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.mls');
+//sys::import('xaraya.legacy.mls');

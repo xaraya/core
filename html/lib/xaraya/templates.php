@@ -1335,4 +1335,4 @@ class xarTpl extends xarObject
 
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.templates');
+//sys::import('xaraya.legacy.templates');

@@ -1101,4 +1101,4 @@ class xarModAlias extends xarObject implements IxarModAlias
 }
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.modules');
+//sys::import('xaraya.legacy.modules');

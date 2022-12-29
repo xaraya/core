@@ -659,4 +659,4 @@ class xarUser extends xarObject
 }
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.users');
+//sys::import('xaraya.legacy.users');

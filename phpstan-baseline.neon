@@ -121,6 +121,11 @@ parameters:
 			path: html/code/modules/base/xarproperties/dropdown.php
 
 		-
+			message: "#^Function xar_legacy_validations_dropdown not found\\.$#"
+			count: 1
+			path: html/code/modules/base/xarproperties/dropdown.php
+
+		-
 			message: "#^Undefined variable\\: \\$items$#"
 			count: 2
 			path: html/code/modules/base/xarproperties/dropdown.php
@@ -139,6 +144,11 @@ parameters:
 			message: "#^Method NumberListProperty\\:\\:validateValue\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: html/code/modules/base/xarproperties/integerlist.php
+
+		-
+			message: "#^Function xar_legacy_validations_dropdown not found\\.$#"
+			count: 1
+			path: html/code/modules/base/xarproperties/multiselect.php
 
 		-
 			message: "#^Undefined variable\\: \\$blockgroups$#"
@@ -641,6 +651,11 @@ parameters:
 			path: html/code/modules/themes/xaradmin/view_jslibs.php
 
 		-
+			message: "#^Function xar_legacy_templates_fixLegacy not found\\.$#"
+			count: 1
+			path: html/lib/blocklayout/xsltransformer.php
+
+		-
 			message: "#^Function eaccelerator not found\\.$#"
 			count: 1
 			path: html/lib/xaraya/caching/storage/eaccelerator.php
@@ -711,21 +726,6 @@ parameters:
 			path: html/lib/xaraya/encryptor.php
 
 		-
-			message: "#^Call to an undefined static method xarRoles\\:\\:makeGroup\\(\\)\\.$#"
-			count: 1
-			path: html/lib/xaraya/legacy/security.php
-
-		-
-			message: "#^Call to an undefined static method xarRoles\\:\\:makeUser\\(\\)\\.$#"
-			count: 1
-			path: html/lib/xaraya/legacy/security.php
-
-		-
-			message: "#^Function xarRemovePrivileges\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: html/lib/xaraya/legacy/security.php
-
-		-
 			message: "#^Undefined variable\\: \\$systemConfiguration$#"
 			count: 2
 			path: html/lib/xaraya/log.php
@@ -751,9 +751,9 @@ parameters:
 			path: html/lib/xaraya/log/loggers/syslog.php
 
 		-
-			message: "#^Inner named functions are not supported by PHPStan\\. Consider refactoring to an anonymous function, class method, or a top\\-level\\-defined function\\. See issue \\#165 \\(https\\://github\\.com/phpstan/phpstan/issues/165\\) for more details\\.$#"
+			message: "#^Function xarDBNewDataDict not found\\.$#"
 			count: 1
-			path: html/lib/xaraya/mls.php
+			path: html/lib/xaraya/tableddl/datadict.php
 
 		-
 			message: "#^Instantiated class soap_fault not found\\.$#"
