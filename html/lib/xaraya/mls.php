@@ -218,7 +218,7 @@ class xarMLS extends xarObject
     {
         // if an empty string is passed in, just return an empty string. it's
         // the most sensible thing to do
-        $string = trim($rawstring);
+        $string = trim($rawstring ?? '');
         if($string == '') return $rawstring;
         
         $start = strpos($rawstring, $string);
