@@ -20,6 +20,16 @@
         ],
         "line": 14
     },
+    "bohwaz_strftime": {
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/locales.php",
+        "name": "bohwaz_strftime",
+        "args": [
+            "string $format",
+            "$timestamp = null",
+            "?string $locale = null"
+        ],
+        "line": 778
+    },
     "debug": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/exceptions.php",
         "name": "debug",
@@ -1116,7 +1126,7 @@
             "$module = \"All\"",
             "$component = \"All\""
         ],
-        "line": 344,
+        "line": 345,
         "uses": "xarSecurity::hasMask()",
         "class": "xarSecurity",
         "check": "hasMask",
@@ -1847,7 +1857,7 @@
         "args": [
             "$name"
         ],
-        "line": 330,
+        "line": 331,
         "uses": "xarSecurity::hasPrivilege()",
         "class": "xarSecurity",
         "check": "hasPrivilege",
@@ -1865,7 +1875,7 @@
             "$level",
             "$description = ''"
         ],
-        "line": 391,
+        "line": 392,
         "uses": "xarMasks::register()",
         "class": "xarMasks",
         "check": "register",
@@ -1907,7 +1917,7 @@
         "args": [
             "$module"
         ],
-        "line": 419,
+        "line": 420,
         "uses": "xarMasks::removemasks()",
         "class": "xarMasks",
         "check": "removemasks",
@@ -1998,7 +2008,7 @@
             "$instance",
             "$level"
         ],
-        "line": 302,
+        "line": 303,
         "uses": "xarPrivileges::external()",
         "class": "xarPrivileges",
         "check": "external",
@@ -2012,7 +2022,7 @@
             "$authIdVarName = 'authid'",
             "$catch = false"
         ],
-        "line": 448,
+        "line": 449,
         "uses": "xarSec::confirmAuthKey()",
         "class": "xarSec",
         "check": "confirmAuthKey",
@@ -2024,7 +2034,7 @@
         "args": [
             "$modName = NULL"
         ],
-        "line": 433,
+        "line": 434,
         "uses": "xarSec::genAuthKey()",
         "class": "xarSec",
         "check": "genAuthKey",
@@ -2043,7 +2053,7 @@
             "$pnrealm = 0",
             "$pnlevel = 0"
         ],
-        "line": 365,
+        "line": 366,
         "uses": "xarSecurity::check()",
         "class": "xarSecurity",
         "check": "check",
@@ -2055,7 +2065,7 @@
         "args": [
             "$levelname"
         ],
-        "line": 317,
+        "line": 318,
         "uses": "xarSecurity::getLevel()",
         "class": "xarSecurity",
         "check": "getLevel",
@@ -2708,7 +2718,7 @@
         "args": [
             "$name"
         ],
-        "line": 404,
+        "line": 405,
         "uses": "xarMasks::unregister()",
         "class": "xarMasks",
         "check": "unregister",
@@ -2928,7 +2938,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepEmailDisplay",
         "args": [],
-        "line": 604,
+        "line": 605,
         "class": "xarVar",
         "check": "PrepEmailDisplay",
         "method": "prepEmailDisplay",
@@ -2940,7 +2950,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepForDisplay",
         "args": [],
-        "line": 471,
+        "line": 472,
         "class": "xarVar",
         "check": "PrepForDisplay",
         "method": "prepForDisplay",
@@ -2952,7 +2962,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepForOS",
         "args": [],
-        "line": 654,
+        "line": 655,
         "class": "xarVar",
         "check": "PrepForOS",
         "method": "prepForOS",
@@ -2964,7 +2974,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepHTMLDisplay",
         "args": [],
-        "line": 511,
+        "line": 512,
         "class": "xarVar",
         "check": "PrepHTMLDisplay",
         "method": "prepHTMLDisplay",
@@ -2978,7 +2988,7 @@
         "args": [
             "$matches"
         ],
-        "line": 583,
+        "line": 584,
         "class": "xarVar",
         "check": "PrepHTMLDisplay__callback"
     },

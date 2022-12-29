@@ -1890,79 +1890,79 @@
                 "args": [
                     "$pdo"
                 ],
-                "line": 779
+                "line": 795
             },
             "setdata": {
                 "name": "setData",
                 "args": [
                     "$columndata = array()"
                 ],
-                "line": 784
+                "line": 800
             },
             "gettype": {
                 "name": "getType",
                 "args": [],
-                "line": 789
+                "line": 805
             },
             "getnativetype": {
                 "name": "getNativeType",
                 "args": [],
-                "line": 793
+                "line": 809
             },
             "getpdotype": {
                 "name": "getPDOType",
                 "args": [],
-                "line": 797
+                "line": 813
             },
             "getname": {
                 "name": "getName",
                 "args": [],
-                "line": 801
+                "line": 817
             },
             "getflags": {
                 "name": "getFlags",
                 "args": [],
-                "line": 805
+                "line": 821
             },
             "gettable": {
                 "name": "getTable",
                 "args": [],
-                "line": 809
+                "line": 825
             },
             "getlength": {
                 "name": "getLength",
                 "args": [],
-                "line": 813
+                "line": 829
             },
             "getsize": {
                 "name": "getSize",
                 "args": [],
-                "line": 817
+                "line": 833
             },
             "getprecision": {
                 "name": "getPrecision",
                 "args": [],
-                "line": 821
+                "line": 837
             },
             "isautoincrement": {
                 "name": "isAutoIncrement",
                 "args": [],
-                "line": 825
+                "line": 841
             },
             "getcolumns": {
                 "name": "getColumns",
                 "args": [],
-                "line": 829
+                "line": 845
             },
             "getdefaultvalue": {
                 "name": "getDefaultValue",
                 "args": [],
-                "line": 833
+                "line": 849
             }
         },
         "const": [],
         "parent": "\\xarObject",
-        "line": 771
+        "line": 787
     },
     "pdodatabaseinfo": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/pdo.php",
@@ -1973,41 +1973,41 @@
                 "args": [
                     "$pdo"
                 ],
-                "line": 602
+                "line": 618
             },
             "getpdo": {
                 "name": "getPDO",
                 "args": [],
-                "line": 607
+                "line": 623
             },
             "gettables": {
                 "name": "getTables",
                 "args": [],
-                "line": 616
+                "line": 632
             },
             "gettable": {
                 "name": "getTable",
                 "args": [
                     "$name"
                 ],
-                "line": 623
+                "line": 639
             },
             "inittables": {
                 "name": "initTables",
                 "args": [],
-                "line": 637
+                "line": 653
             },
             "inittable": {
                 "name": "initTable",
                 "args": [
                     "$name"
                 ],
-                "line": 655
+                "line": 671
             }
         },
         "const": [],
         "parent": "\\xarObject",
-        "line": 594
+        "line": 610
     },
     "pdoresultset": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/pdo.php",
@@ -2019,131 +2019,131 @@
                     "$pdostatement = null",
                     "$flag = 0"
                 ],
-                "line": 876
+                "line": 892
             },
             "close": {
                 "name": "close",
                 "args": [],
-                "line": 889
+                "line": 905
             },
             "current": {
                 "name": "current",
                 "args": [],
-                "line": 894
+                "line": 910
             },
             "isafterlast": {
                 "name": "isAfterLast",
                 "args": [],
-                "line": 898
+                "line": 914
             },
             "previous": {
                 "name": "previous",
                 "args": [],
-                "line": 903
+                "line": 919
             },
             "next": {
                 "name": "next",
                 "args": [],
-                "line": 914
+                "line": 930
             },
             "movenext": {
                 "name": "MoveNext",
                 "args": [],
-                "line": 922
+                "line": 938
             },
             "getrow": {
                 "name": "getRow",
                 "args": [],
-                "line": 926
+                "line": 942
             },
             "key": {
                 "name": "key",
                 "args": [],
-                "line": 943
+                "line": 959
             },
             "valid": {
                 "name": "valid",
                 "args": [],
-                "line": 944
+                "line": 960
             },
             "rewind": {
                 "name": "rewind",
                 "args": [],
-                "line": 945
+                "line": 961
             },
             "first": {
                 "name": "first",
                 "args": [],
-                "line": 946
+                "line": 962
             },
             "getall": {
                 "name": "getall",
                 "args": [],
-                "line": 947
+                "line": 963
             },
             "recordcount": {
                 "name": "RecordCount",
                 "args": [],
-                "line": 950
+                "line": 966
             },
             "getrecordcount": {
                 "name": "getRecordCount",
                 "args": [],
-                "line": 953
+                "line": 969
             },
             "setfetchmode": {
                 "name": "setFetchMode",
                 "args": [
                     "$flag"
                 ],
-                "line": 957
+                "line": 973
             },
             "get": {
                 "name": "get",
                 "args": [
                     "$column"
                 ],
-                "line": 968
+                "line": 984
             },
             "getarray": {
                 "name": "getArray",
                 "args": [
                     "$column"
                 ],
-                "line": 973
+                "line": 989
             },
             "getboolean": {
                 "name": "getBoolean",
                 "args": [
                     "$column"
                 ],
-                "line": 980
+                "line": 996
             },
             "getfloat": {
                 "name": "getFloat",
                 "args": [
                     "$column"
                 ],
-                "line": 987
+                "line": 1003
             },
             "getint": {
                 "name": "getInt",
                 "args": [
                     "$column"
                 ],
-                "line": 994
+                "line": 1010
             },
             "getstring": {
                 "name": "getString",
                 "args": [
                     "$column"
                 ],
-                "line": 1001
+                "line": 1017
             },
             "getstatement": {
                 "name": "getStatement",
                 "args": [],
-                "line": 1009
+                "line": 1025
             }
         },
         "const": {
@@ -2161,7 +2161,7 @@
             }
         },
         "parent": "\\xarObject",
-        "line": 860
+        "line": 876
     },
     "pdotable": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/pdo.php",
@@ -2172,46 +2172,46 @@
                 "args": [
                     "$pdo"
                 ],
-                "line": 693
+                "line": 709
             },
             "getname": {
                 "name": "getName",
                 "args": [],
-                "line": 698
+                "line": 714
             },
             "getcolumns": {
                 "name": "getColumns",
                 "args": [],
-                "line": 703
+                "line": 719
             },
             "getprimarykey": {
                 "name": "getPrimaryKey",
                 "args": [],
-                "line": 710
+                "line": 726
             },
             "settablename": {
                 "name": "setTableName",
                 "args": [
                     "$name = ''"
                 ],
-                "line": 728
+                "line": 744
             },
             "settablecolumns": {
                 "name": "setTableColumns",
                 "args": [
                     "$columns = array()"
                 ],
-                "line": 734
+                "line": 750
             },
             "initcolumns": {
                 "name": "initColumns",
                 "args": [],
-                "line": 744
+                "line": 760
             }
         },
         "const": [],
         "parent": "\\xarObject",
-        "line": 684
+        "line": 700
     },
     "phpbackendgenerator": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/mlsbackends/xml2php.php",
@@ -4286,14 +4286,14 @@
                 "name": "logStatus",
                 "args": [
                     "$status = 'MISS'",
-                    "$autoCachePeriod"
+                    "$autoCachePeriod = 0"
                 ],
-                "line": 24
+                "line": 23
             },
             "refreshsessionlesslist": {
                 "name": "refreshSessionLessList",
                 "args": [],
-                "line": 58
+                "line": 56
             }
         },
         "const": [],
@@ -4314,41 +4314,27 @@
                 "args": [],
                 "line": 46
             },
-            "compilefile": {
-                "name": "compileFile",
-                "args": [
-                    "$fileName"
-                ],
-                "line": 89
-            },
             "boot": {
                 "name": "boot",
                 "args": [
                     "$customDoc = ''"
                 ],
-                "line": 99
+                "line": 87
             },
             "getmoduletagpaths": {
                 "name": "getModuleTagPaths",
                 "args": [],
-                "line": 135
+                "line": 123
             },
             "getpropertytagpaths": {
                 "name": "getPropertyTagPaths",
                 "args": [],
-                "line": 165
+                "line": 153
             },
             "getblocktagpaths": {
                 "name": "getBlockTagPaths",
                 "args": [],
-                "line": 199
-            },
-            "getprocessor": {
-                "name": "getProcessor",
-                "args": [
-                    "$xslFile = ''"
-                ],
-                "line": 229
+                "line": 187
             }
         },
         "const": [],
@@ -6330,133 +6316,133 @@
                 "args": [
                     "$x"
                 ],
-                "line": 148
+                "line": 149
             },
             "getyear": {
                 "name": "getYear",
                 "args": [],
-                "line": 149
+                "line": 150
             },
             "getyday": {
                 "name": "getYDay",
                 "args": [],
-                "line": 150
+                "line": 151
             },
             "getmonth": {
                 "name": "getMonth",
                 "args": [],
-                "line": 156
+                "line": 157
             },
             "getday": {
                 "name": "getDay",
                 "args": [],
-                "line": 157
+                "line": 158
             },
             "gethour": {
                 "name": "getHour",
                 "args": [],
-                "line": 158
+                "line": 159
             },
             "getminute": {
                 "name": "getMinute",
                 "args": [],
-                "line": 159
+                "line": 160
             },
             "getsecond": {
                 "name": "getSecond",
                 "args": [],
-                "line": 160
+                "line": 161
             },
             "settimestamp": {
                 "name": "setTimestamp",
                 "args": [
                     "$x"
                 ],
-                "line": 162
+                "line": 163
             },
             "setyear": {
                 "name": "setYear",
                 "args": [
                     "$x"
                 ],
-                "line": 167
+                "line": 171
             },
             "setmonth": {
                 "name": "setMonth",
                 "args": [
                     "$x"
                 ],
-                "line": 168
+                "line": 172
             },
             "setday": {
                 "name": "setDay",
                 "args": [
                     "$x"
                 ],
-                "line": 169
+                "line": 173
             },
             "sethour": {
                 "name": "setHour",
                 "args": [
                     "$x"
                 ],
-                "line": 170
+                "line": 174
             },
             "setminute": {
                 "name": "setMinute",
                 "args": [
                     "$x"
                 ],
-                "line": 171
+                "line": 175
             },
             "setsecond": {
                 "name": "setSecond",
                 "args": [
                     "$x"
                 ],
-                "line": 172
+                "line": 176
             },
             "addyears": {
                 "name": "addYears",
                 "args": [
                     "$x"
                 ],
-                "line": 174
+                "line": 178
             },
             "addmonths": {
                 "name": "addMonths",
                 "args": [
                     "$x"
                 ],
-                "line": 175
+                "line": 179
             },
             "adddays": {
                 "name": "addDays",
                 "args": [
                     "$x"
                 ],
-                "line": 176
+                "line": 180
             },
             "addhours": {
                 "name": "addHours",
                 "args": [
                     "$x"
                 ],
-                "line": 177
+                "line": 181
             },
             "addminutes": {
                 "name": "addMinutes",
                 "args": [
                     "$x"
                 ],
-                "line": 178
+                "line": 182
             },
             "addseconds": {
                 "name": "addSeconds",
                 "args": [
                     "$x"
                 ],
-                "line": 179
+                "line": 183
             }
         },
         "const": [],
@@ -6919,7 +6905,7 @@
                     "$area = 'class'",
                     "$type = 'eventobservers'",
                     "$func = 'notify'",
-                    "$itemtype",
+                    "$itemtype = 0",
                     "$scope = \"\""
                 ],
                 "line": 230
@@ -7138,7 +7124,7 @@
                 "args": [
                     "$locale = NULL"
                 ],
-                "line": 963
+                "line": 1146
             },
             "parsecurrency": {
                 "name": "parseCurrency",
@@ -7146,7 +7132,7 @@
                     "$currency",
                     "$localeData = NULL"
                 ],
-                "line": 967
+                "line": 1150
             },
             "parsenumber": {
                 "name": "parseNumber",
@@ -7155,7 +7141,7 @@
                     "$localeData = NULL",
                     "$isCurrency = false"
                 ],
-                "line": 971
+                "line": 1154
             },
             "formatcurrency": {
                 "name": "formatCurrency",
@@ -7163,7 +7149,7 @@
                     "$currency",
                     "$localeData = NULL"
                 ],
-                "line": 975
+                "line": 1158
             },
             "formatnumber": {
                 "name": "formatNumber",
@@ -7172,7 +7158,7 @@
                     "$localeData = NULL",
                     "$isCurrency = false"
                 ],
-                "line": 979
+                "line": 1162
             },
             "getformattedutcdate": {
                 "name": "getFormattedUTCDate",
@@ -7181,7 +7167,7 @@
                     "$timestamp = null",
                     "$addoffset = false"
                 ],
-                "line": 983
+                "line": 1166
             },
             "getformatteddate": {
                 "name": "getFormattedDate",
@@ -7190,7 +7176,7 @@
                     "$timestamp = null",
                     "$addoffset = true"
                 ],
-                "line": 987
+                "line": 1170
             },
             "getformattedutctime": {
                 "name": "getFormattedUTCTime",
@@ -7199,7 +7185,7 @@
                     "$timestamp = null",
                     "$addoffset = false"
                 ],
-                "line": 991
+                "line": 1174
             },
             "getformattedtime": {
                 "name": "getFormattedTime",
@@ -7208,7 +7194,7 @@
                     "$timestamp = null",
                     "$addoffset = true"
                 ],
-                "line": 995
+                "line": 1178
             },
             "formatutcdate": {
                 "name": "formatUTCDate",
@@ -7217,7 +7203,7 @@
                     "$time = null",
                     "$addoffset = false"
                 ],
-                "line": 999
+                "line": 1182
             },
             "formatdate": {
                 "name": "formatDate",
@@ -7226,12 +7212,12 @@
                     "$timestamp = null",
                     "$addoffset = true"
                 ],
-                "line": 1003
+                "line": 1186
             }
         },
         "const": [],
         "parent": "\\xarObject",
-        "line": 952
+        "line": 1135
     },
     "xarlog": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/log.php",
@@ -7345,34 +7331,42 @@
                 "args": [
                     "array $conf"
                 ],
-                "line": 92
+                "line": 93
             },
             "start": {
                 "name": "start",
                 "args": [],
-                "line": 128
+                "line": 129
             },
             "__destruct": {
                 "name": "__destruct",
                 "args": [],
-                "line": 136
+                "line": 137
             },
             "close": {
                 "name": "close",
                 "args": [],
-                "line": 141
+                "line": 142
+            },
+            "notify": {
+                "name": "notify",
+                "args": [
+                    "$message",
+                    "$level"
+                ],
+                "line": 148
             },
             "dologlevel": {
                 "name": "doLogLevel",
                 "args": [
                     "$level"
                 ],
-                "line": 153
+                "line": 161
             },
             "gettime": {
                 "name": "getTime",
                 "args": [],
-                "line": 161
+                "line": 169
             }
         },
         "const": [],
@@ -7939,12 +7933,12 @@
                 "args": [
                     "$locale"
                 ],
-                "line": 789
+                "line": 972
             },
             "getlocaledata": {
                 "name": "getLocaleData",
                 "args": [],
-                "line": 837
+                "line": 1020
             },
             "beginelement": {
                 "name": "beginElement",
@@ -7953,7 +7947,7 @@
                     "$tag",
                     "$attribs"
                 ],
-                "line": 842
+                "line": 1025
             },
             "endelement": {
                 "name": "endElement",
@@ -7961,7 +7955,7 @@
                     "$parser",
                     "$tag"
                 ],
-                "line": 856
+                "line": 1039
             },
             "characterdata": {
                 "name": "characterData",
@@ -7969,7 +7963,7 @@
                     "$parser",
                     "$data"
                 ],
-                "line": 881
+                "line": 1064
             },
             "maximumtaghandler": {
                 "name": "maximumTagHandler",
@@ -7978,7 +7972,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "line": 887
+                "line": 1070
             },
             "minimumtaghandler": {
                 "name": "minimumTagHandler",
@@ -7987,7 +7981,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "line": 892
+                "line": 1075
             },
             "groupingsizetaghandler": {
                 "name": "groupingSizeTagHandler",
@@ -7996,7 +7990,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "line": 899
+                "line": 1082
             },
             "isdecimalseparatoralwaysshowntaghandler": {
                 "name": "isDecimalSeparatorAlwaysShownTagHandler",
@@ -8005,7 +7999,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "line": 904
+                "line": 1087
             },
             "monthtaghandler": {
                 "name": "monthTagHandler",
@@ -8014,7 +8008,7 @@
                     "$attribs",
                     "$content"
                 ],
-                "line": 916
+                "line": 1099
             },
             "weekdaytaghandler": {
                 "name": "weekdayTagHandler",
@@ -8023,12 +8017,12 @@
                     "$attribs",
                     "$content"
                 ],
-                "line": 932
+                "line": 1115
             }
         },
         "const": [],
         "parent": "\\xarObject",
-        "line": 776
+        "line": 959
     },
     "xarmls__phptranslationsbackend": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/mlsbackends/php.php",
@@ -9360,6 +9354,16 @@
                     "$table = null"
                 ],
                 "line": 414
+            },
+            "commit": {
+                "name": "commit",
+                "args": [],
+                "line": 418
+            },
+            "rollback": {
+                "name": "rollback",
+                "args": [],
+                "line": 426
             }
         },
         "const": [],
@@ -9375,35 +9379,35 @@
                 "args": [
                     "$pdo"
                 ],
-                "line": 428
+                "line": 444
             },
             "haslimits": {
                 "name": "haslimits",
                 "args": [
                     "$haslimits"
                 ],
-                "line": 435
+                "line": 451
             },
             "setlimit": {
                 "name": "setLimit",
                 "args": [
                     "$limit"
                 ],
-                "line": 441
+                "line": 457
             },
             "setoffset": {
                 "name": "setOffset",
                 "args": [
                     "$offset"
                 ],
-                "line": 446
+                "line": 462
             },
             "prepare": {
                 "name": "prepare",
                 "args": [
                     "$string"
                 ],
-                "line": 452
+                "line": 468
             },
             "executequery": {
                 "name": "executeQuery",
@@ -9411,7 +9415,7 @@
                     "$bindvars = array()",
                     "$flag = 0"
                 ],
-                "line": 458
+                "line": 474
             },
             "executeupdate": {
                 "name": "executeUpdate",
@@ -9419,31 +9423,31 @@
                     "$bindvars = array()",
                     "$flag = 0"
                 ],
-                "line": 517
+                "line": 533
             },
             "fetchall": {
                 "name": "fetchAll",
                 "args": [
                     "$flags"
                 ],
-                "line": 557
+                "line": 573
             },
             "fetch": {
                 "name": "fetch",
                 "args": [
                     "$flags"
                 ],
-                "line": 562
+                "line": 578
             },
             "rowcount": {
                 "name": "rowCount",
                 "args": [],
-                "line": 567
+                "line": 583
             },
             "columncount": {
                 "name": "columnCount",
                 "args": [],
-                "line": 572
+                "line": 588
             },
             "applylimit": {
                 "name": "applyLimit",
@@ -9452,12 +9456,12 @@
                     "$offset",
                     "$limit"
                 ],
-                "line": 578
+                "line": 594
             }
         },
         "const": [],
         "parent": "\\xarObject",
-        "line": 420
+        "line": 436
     },
     "xarrequest": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/mapper/request.php",
@@ -10118,7 +10122,7 @@
             "checkcachingrules": {
                 "name": "checkCachingRules",
                 "args": [],
-                "line": 25
+                "line": 24
             },
             "iscached": {
                 "name": "isCached",
@@ -10126,19 +10130,19 @@
                     "$sessionLessList = null",
                     "$autoCachePeriod = 0"
                 ],
-                "line": 49
+                "line": 48
             },
             "getcached": {
                 "name": "getCached",
                 "args": [
                     "$cache_file"
                 ],
-                "line": 103
+                "line": 101
             },
             "setcached": {
                 "name": "setCached",
                 "args": [],
-                "line": 111
+                "line": 109
             }
         },
         "const": [],
@@ -10912,7 +10916,7 @@
                     "$scope",
                     "$name"
                 ],
-                "line": 387
+                "line": 388
             },
             "getcached": {
                 "name": "getCached",
@@ -10920,7 +10924,7 @@
                     "$scope",
                     "$name"
                 ],
-                "line": 392
+                "line": 393
             },
             "setcached": {
                 "name": "setCached",
@@ -10929,7 +10933,7 @@
                     "$name",
                     "$value"
                 ],
-                "line": 397
+                "line": 398
             },
             "delcached": {
                 "name": "delCached",
@@ -10937,42 +10941,42 @@
                     "$scope",
                     "$name"
                 ],
-                "line": 402
+                "line": 403
             },
             "flushcached": {
                 "name": "flushCached",
                 "args": [
                     "$scope"
                 ],
-                "line": 407
+                "line": 408
             },
             "prepfordisplay": {
                 "name": "prepForDisplay",
                 "args": [
                     "...$args"
                 ],
-                "line": 412
+                "line": 413
             },
             "prephtmldisplay": {
                 "name": "prepHTMLDisplay",
                 "args": [
                     "...$args"
                 ],
-                "line": 418
+                "line": 419
             },
             "prepemaildisplay": {
                 "name": "prepEmailDisplay",
                 "args": [
                     "...$args"
                 ],
-                "line": 424
+                "line": 425
             },
             "prepforos": {
                 "name": "prepForOS",
                 "args": [
                     "...$args"
                 ],
-                "line": 430
+                "line": 431
             }
         },
         "const": {
