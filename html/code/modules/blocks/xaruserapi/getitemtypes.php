@@ -36,7 +36,8 @@ function blocks_userapi_getitemtypes(Array $args=array())
     $name = xarML('Block Groups');
     $itemtypes[2] = array('label' => xarVar::prepForDisplay($name),
                           'title' => xarVar::prepForDisplay(xarML('Display #(1)',$name)),
-                          'url'   => $showurl ? xarController::URL('blocks','admin','view_groups') : ''
+                          //'url'   => $showurl ? xarController::URL('blocks','admin','view_groups') : ''
+                          'url'   => ''
                          );
 
     $name = xarML('Block Instances');
@@ -47,5 +48,3 @@ function blocks_userapi_getitemtypes(Array $args=array())
 
     return $itemtypes;
 }
-
-?>

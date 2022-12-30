@@ -27,6 +27,9 @@ function blocks_userapi_getitemlinks(Array $args=array())
     if (empty($itemtype)) {
         $itemtype = 3; // block instances
     }
+    if (!empty($itemids) && is_array($itemids)) {
+        $itemids = array_filter($itemids);
+    }
     $itemlinks = array();
 
     if (xarSecurity::check('EditBlocks',0)) {
@@ -40,9 +43,9 @@ function blocks_userapi_getitemlinks(Array $args=array())
         case 1: // block types
             $param = array();
             if (!empty($itemids) && count($itemids) == 1) {
-                $param['tid'] = $itemids[0];
+                $param['type_id'] = $itemids[0];
             }
-            $types = xarMod::apiFunc('blocks','user','getallblocktypes',$param);
+            $types = xarMod::apiFunc('blocks','types','getitems',$param);
             if (empty($itemids)) {
                 $itemids = array_keys($types);
             }
@@ -50,9 +53,9 @@ function blocks_userapi_getitemlinks(Array $args=array())
                 if (!isset($types[$itemid])) continue;
                 $label = $types[$itemid]['module'] . '/' . $types[$itemid]['type'];
                 $itemlinks[$itemid] = array('label' => xarVar::prepForDisplay($label),
-                                            'title' => xarML('View Block Type'),
-                                            'url'   => $showurl ? xarController::URL('blocks', 'admin', 'view_types',
-                                                                            array('tid' => $itemid)) : '');
+                                            'title' => xarML('Modify Block Type'),
+                                            'url'   => $showurl ? xarController::URL('blocks', 'admin', 'modify_type',
+                                                                            array('type_id' => $itemid)) : '');
             }
             break;
         /*
@@ -79,10 +82,10 @@ function blocks_userapi_getitemlinks(Array $args=array())
         case 3: // block instances
         default:
             $param = array();
-            if (!empty($itemids) && count($itemids) == 1) {
-                $param['bid'] = $itemids[0];
+            if (!empty($itemids)) {
+                $param['block_id'] = $itemids;
             }
-            $instances = xarMod::apiFunc('blocks','user','getall',$param);
+            $instances = xarMod::apiFunc('blocks','instances','getitems',$param);
             if (empty($itemids)) {
                 $itemids = array_keys($instances);
             }
@@ -92,12 +95,10 @@ function blocks_userapi_getitemlinks(Array $args=array())
                 $itemlinks[$itemid] = array('label' => xarVar::prepForDisplay($label),
                                             'title' => xarML('Modify Block Instance'),
                                             'url'   => $showurl ? xarController::URL('blocks', 'admin', 'modify_instance',
-                                                                            array('bid' => $itemid)) : '');
+                                                                            array('block_id' => $itemid)) : '');
             }
             break;
     }
 
     return $itemlinks;
 }
-
-?>

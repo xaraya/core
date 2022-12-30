@@ -700,6 +700,7 @@ class DataObjectRESTHandler extends xarObject
             }
         }
         xarMod::init();
+        xarUser::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
         // @checkme pass all args from handler here?
         return xarMod::apiFunc($module, $type, $func['name'], $args);
@@ -735,6 +736,7 @@ class DataObjectRESTHandler extends xarObject
             }
         }
         xarMod::init();
+        xarUser::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
         // @checkme handle POSTed args by passing $args['input'] only in handler?
         return xarMod::apiFunc($module, $type, $func['name'], $args['input']);
