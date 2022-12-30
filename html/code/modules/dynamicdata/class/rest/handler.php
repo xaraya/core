@@ -691,7 +691,7 @@ class DataObjectRESTHandler extends xarObject
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
-                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $module, $rolename);
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
             // @todo verify access for user based on what?
             } else {
                 $pass = true;
@@ -703,13 +703,12 @@ class DataObjectRESTHandler extends xarObject
         }
         xarMod::init();
         xarUser::init();
-        $type = empty($func['type']) ? 'rest' : $func['type'];
         // @checkme pass all args from handler here?
         if (!empty($more) && !empty($func['args'])) {
             unset($args['more']);
             $args = array_merge($args, $func['args']);
         }
-        return xarMod::apiFunc($module, $type, $func['name'], $args);
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $args);
     }
 
     public static function postModuleCall($args)
@@ -733,7 +732,7 @@ class DataObjectRESTHandler extends xarObject
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
-                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $module, $rolename);
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
             // @todo verify access for user based on what?
             } else {
                 $pass = true;
@@ -745,12 +744,11 @@ class DataObjectRESTHandler extends xarObject
         }
         xarMod::init();
         xarUser::init();
-        $type = empty($func['type']) ? 'rest' : $func['type'];
         // @checkme handle POSTed args by passing $args['input'] only in handler?
         if (!empty($more) && !empty($func['args'])) {
             $args['input'] = array_merge($args['input'], $func['args']);
         }
-        return xarMod::apiFunc($module, $type, $func['name'], $args['input']);
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $args['input']);
     }
 
     public static function hasModule($module)
@@ -781,12 +779,16 @@ class DataObjectRESTHandler extends xarObject
                 continue;
             }
             if (empty($more) && $item['path'] == $path && $item['method'] == $method) {
-                $item['name'] = $api;
+                $item['module'] ??= $module;
+                $item['type'] ??= 'rest';
+                $item['name'] ??= $api;
                 return $item;
             }
             // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
             if (!empty($more) && strncmp($item['path'], $path . '/', strlen($path) + 1) === 0 && $item['method'] == $method) {
-                $item['name'] = $api;
+                $item['module'] ??= $module;
+                $item['type'] ??= 'rest';
+                $item['name'] ??= $api;
                 // @todo assuming only 1 path parameter in module rest api paths for now...
                 $path_param = substr($item['path'], strlen($path) + 1);
                 if (substr($path_param, 0, 1) !== '{' || substr($path_param, -1) !== '}') {

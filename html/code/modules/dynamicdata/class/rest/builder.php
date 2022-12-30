@@ -808,6 +808,9 @@ class DataObjectRESTBuilder extends xarObject
                 'type' => 'string',
                 'default' => 'rest',
             ],
+            'module' => [
+                'type' => 'string',
+            ],
             'path' => [
                 'type' => 'string',
             ],
@@ -1084,6 +1087,9 @@ class DataObjectRESTBuilder extends xarObject
                 } else {
                     $info['enabled'] = false;
                 }
+                $info['module'] ??= $module;
+                $info['type'] ??= 'rest';
+                $info['name'] ??= $api;
                 $items[$module]['apilist'][$api] = $info;
             }
         }
