@@ -81,11 +81,12 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getObjectList($args)
     {
-        $object = $args['object'];
+        $object = $args['path']['object'];
         $method = 'view';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectList', 'args' => $args, 'error' => 'Unknown operation'];
         }
+        $args = $args['query'] ?? [];
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
@@ -147,8 +148,8 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getObjectItem($args)
     {
-        $object = $args['object'];
-        $itemid = intval($args['itemid']);
+        $object = $args['path']['object'];
+        $itemid = intval($args['path']['itemid']);
         $method = 'display';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -156,6 +157,7 @@ class DataObjectRESTHandler extends xarObject
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
+        $args = $args['query'] ?? [];
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
@@ -198,7 +200,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function createObjectItem($args)
     {
-        $object = $args['object'];
+        $object = $args['path']['object'];
         $method = 'create';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -229,8 +231,8 @@ class DataObjectRESTHandler extends xarObject
 
     public static function updateObjectItem($args)
     {
-        $object = $args['object'];
-        $itemid = intval($args['itemid']);
+        $object = $args['path']['object'];
+        $itemid = intval($args['path']['itemid']);
         $method = 'update';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'updateObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -264,8 +266,8 @@ class DataObjectRESTHandler extends xarObject
 
     public static function deleteObjectItem($args)
     {
-        $object = $args['object'];
-        $itemid = intval($args['itemid']);
+        $object = $args['path']['object'];
+        $itemid = intval($args['path']['itemid']);
         $method = 'delete';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'deleteObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -656,7 +658,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getModuleApis($args)
     {
-        $module = $args['module'];
+        $module = $args['path']['module'];
         if (!self::hasModule($module)) {
             return ['method' => 'getModuleApis', 'args' => $args, 'error' => 'Unknown module'];
         }
@@ -676,14 +678,15 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getModuleCall($args)
     {
-        $module = $args['module'];
-        $path = $args['path'];
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-        $more = $args['more'] ?? '';
+        $more = $args['path']['more'] ?? '';
         $func = self::getModuleApiFunc($module, $path, 'get', $more);
         if (empty($func)) {
             return ['method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
+        $args = $args['query'] ?? [];
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = self::checkUser();
@@ -703,9 +706,8 @@ class DataObjectRESTHandler extends xarObject
         }
         xarMod::init();
         xarUser::init();
-        // @checkme pass all args from handler here?
+        // @checkme pass all query args from handler here?
         if (!empty($more) && !empty($func['args'])) {
-            unset($args['more']);
             $args = array_merge($args, $func['args']);
         }
         return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $args);
@@ -713,10 +715,10 @@ class DataObjectRESTHandler extends xarObject
 
     public static function postModuleCall($args)
     {
-        $module = $args['module'];
-        $path = $args['path'];
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-        $more = $args['more'] ?? '';
+        $more = $args['path']['more'] ?? '';
         // this contains any POSTed args from rst.php
         if (empty($args['input'])) {
             $args['input'] = [];
@@ -826,11 +828,13 @@ class DataObjectRESTHandler extends xarObject
     public static function getQueryId($method, $vars)
     {
         $queryId = $method;
-        if (!empty($vars['object'])) {
-            $queryId .= '-' . $vars['object'];
-        }
-        if (!empty($vars['itemid'])) {
-            $queryId .= '-' . $vars['itemid'];
+        if (!empty($vars['path'])) {
+            if (!empty($vars['path']['object'])) {
+                $queryId .= '-' . $vars['path']['object'];
+            }
+            if (!empty($vars['path']['itemid'])) {
+                $queryId .= '-' . $vars['path']['itemid'];
+            }
         }
         $queryId .= '-' . md5(json_encode($vars));
         return $queryId;
