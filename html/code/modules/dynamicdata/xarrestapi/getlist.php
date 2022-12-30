@@ -28,6 +28,7 @@ function dynamicdata_restapi_getlist($args = [])
     $apilist['get_hello'] = [
         //'type' => 'rest',  // default = rest, other $type options are user, admin, ... as usual
         'path' => 'hello',  // path to use in REST API operation /modules/{module}/{path}
+        //'path' => 'hello/{name}',  // path to use in REST API operation /modules/{module}/{path} with path parameter
         'method' => 'get',  // method to use in REST API operation
         //'security' => false,  // default = false REST APIs are public, if true check for authenticated user
         'description' => 'Call REST API get_hello() in module dynamicdata defined in code/modules/dynamicdata/xarrestapi/get_hello.php',

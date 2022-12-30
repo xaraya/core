@@ -877,6 +877,7 @@ class DataObjectRESTBuilder extends xarObject
             self::$paths[$path] = [];
         }
         self::$paths[$path][$item['method']] = [
+            'parameters' => [],
             'tags' => [$module . '_module'],
             'operationId' => $operationId,
             'description' => $item['description'],
@@ -892,6 +893,25 @@ class DataObjectRESTBuilder extends xarObject
         if (!empty($item['parameters'])) {
             $parameters = self::parse_api_parameters($item['parameters']);
             self::$paths[$path][$item['method']]['parameters'] = $parameters;
+        }
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        if (strpos($item['path'], '{') !== false) {
+            $found = preg_match_all('/\{([^}]+)\}/', $item['path'], $matches);
+            if (empty($found)) {
+                throw new Exception('Invalid path parameter in path ' . $item['path'] . ' for rest api ' . $api . ' in module ' . $module);
+            }
+            foreach ($matches[1] as $name) {
+                $parameter = [
+                    'name' => $name,
+                    'in' => 'path',
+                    'schema' => [
+                        'type' => 'string',
+                    ],
+                    'description' => $name . ' value',
+                    'required' => true,
+                ];
+                self::$paths[$path][$item['method']]['parameters'][] = $parameter;
+            }
         }
         // @checkme verify/expand how POSTed values are defined - assuming simple json object with string props for now
         if (!empty($item['requestBody'])) {

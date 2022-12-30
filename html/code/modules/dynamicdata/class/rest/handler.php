@@ -678,7 +678,9 @@ class DataObjectRESTHandler extends xarObject
     {
         $module = $args['module'];
         $path = $args['path'];
-        $func = self::getModuleApiFunc($module, $path, 'get');
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['more'] ?? '';
+        $func = self::getModuleApiFunc($module, $path, 'get', $more);
         if (empty($func)) {
             return ['method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
@@ -703,6 +705,10 @@ class DataObjectRESTHandler extends xarObject
         xarUser::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
         // @checkme pass all args from handler here?
+        if (!empty($more) && !empty($func['args'])) {
+            unset($args['more']);
+            $args = array_merge($args, $func['args']);
+        }
         return xarMod::apiFunc($module, $type, $func['name'], $args);
     }
 
@@ -710,11 +716,13 @@ class DataObjectRESTHandler extends xarObject
     {
         $module = $args['module'];
         $path = $args['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['more'] ?? '';
         // this contains any POSTed args from rst.php
         if (empty($args['input'])) {
             $args['input'] = [];
         }
-        $func = self::getModuleApiFunc($module, $path, 'post');
+        $func = self::getModuleApiFunc($module, $path, 'post', $more);
         if (empty($func)) {
             return ['method' => 'postModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
@@ -739,6 +747,9 @@ class DataObjectRESTHandler extends xarObject
         xarUser::init();
         $type = empty($func['type']) ? 'rest' : $func['type'];
         // @checkme handle POSTed args by passing $args['input'] only in handler?
+        if (!empty($more) && !empty($func['args'])) {
+            $args['input'] = array_merge($args['input'], $func['args']);
+        }
         return xarMod::apiFunc($module, $type, $func['name'], $args['input']);
     }
 
@@ -759,7 +770,7 @@ class DataObjectRESTHandler extends xarObject
         return self::$modules[$module]['apilist'];
     }
 
-    public static function getModuleApiFunc($module, $path, $method = 'get')
+    public static function getModuleApiFunc($module, $path, $method = 'get', $more = null)
     {
         if (!self::hasModule($module)) {
             return;
@@ -769,8 +780,20 @@ class DataObjectRESTHandler extends xarObject
             if (isset($item['enabled']) && empty($item['enabled'])) {
                 continue;
             }
-            if ($item['path'] == $path && $item['method'] == $method) {
+            if (empty($more) && $item['path'] == $path && $item['method'] == $method) {
                 $item['name'] = $api;
+                return $item;
+            }
+            // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+            if (!empty($more) && strncmp($item['path'], $path . '/', strlen($path) + 1) === 0 && $item['method'] == $method) {
+                $item['name'] = $api;
+                // @todo assuming only 1 path parameter in module rest api paths for now...
+                $path_param = substr($item['path'], strlen($path) + 1);
+                if (substr($path_param, 0, 1) !== '{' || substr($path_param, -1) !== '}') {
+                    throw new Exception('Invalid path parameter in ' . $item['path']);
+                }
+                $path_param = substr($path_param, 1, -1);
+                $item['args'] = [$path_param => $more];
                 return $item;
             }
         }
@@ -793,8 +816,9 @@ class DataObjectRESTHandler extends xarObject
         $r->delete('/token', ['DataObjectRESTHandler', 'deleteToken']);
         $r->get('/modules', ['DataObjectRESTHandler', 'getModules']);
         $r->get('/modules/{module}', ['DataObjectRESTHandler', 'getModuleApis']);
-        $r->get('/modules/{module}/{path}', ['DataObjectRESTHandler', 'getModuleCall']);
-        $r->post('/modules/{module}/{path}', ['DataObjectRESTHandler', 'postModuleCall']);
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $r->get('/modules/{module}/{path}[/{more}]', ['DataObjectRESTHandler', 'getModuleCall']);
+        $r->post('/modules/{module}/{path}[/{more}]', ['DataObjectRESTHandler', 'postModuleCall']);
     }
 
     public static function getQueryId($method, $vars)
