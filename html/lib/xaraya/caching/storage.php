@@ -306,13 +306,16 @@ class xarCache_Storage extends xarObject
      */
     public function flushCached($key = '')
     {
-        // add the type/namespace prefix
-        if (!empty($this->prefix)) {
-            $key = $this->prefix . $key;
+        $list = $this->getCachedList();
+        foreach ($list as $item) {
+            if (empty($item['key'])) continue;
+            // check if this cache entry starts with the key
+            if (!empty($key) && strpos($item['key'], $key) !== 0) continue;
+            // set the current code suffix
+            $this->setCode($item['code']);
+            // delete the cache entry
+            $this->delCached($item['key']);
         }
-
-        // CHECKME: we can't really flush part of the cache here, unless we
-        //          keep track of all cache entries, perhaps ?
 
         // check the cache size and clear the lockfile set by sizeLimitReached()
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
@@ -508,9 +511,10 @@ class xarCache_Storage extends xarObject
             if (empty($item['key'])) continue;
             // filter out the keys that don't start with the right type/namespace prefix - if this wasn't done already
             //if (!empty($this->prefix) && strpos($item['key'], $this->prefix) !== 0) continue;
-            $keys[$item['key']] = 1;
+            $keys[$item['key']] ??= 0;
+            $keys[$item['key']] += 1;
         }
-        return array_keys($keys);
+        return $keys;
     }
 }
 

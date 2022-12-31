@@ -323,7 +323,6 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         $table = $this->getTable();
         if (empty($table)) return false;
 
-        // we actually retrieve the value here too
         $query = "SELECT id, time, cache_key, code, size, cache_check
                   FROM $table
                   WHERE type = ?";
@@ -349,17 +348,18 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         $table = $this->getTable();
         if (empty($table)) return false;
 
-        $query = "SELECT DISTINCT cache_key
+        $query = "SELECT cache_key, COUNT(*) as count
                   FROM $table
-                  WHERE type = ?";
+                  WHERE type = ?
+                  GROUP BY cache_key";
         $bindvars = array($this->type);
         $stmt = $this->dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
 
         $list = array();
         while ($result->next()) {
-            list($key) = $result->fields;
-            $list[] = $key;
+            list($key, $count) = $result->fields;
+            $list[$key] = $count;
         }
         $result->close();
         return $list;
