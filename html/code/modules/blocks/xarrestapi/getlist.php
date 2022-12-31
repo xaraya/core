@@ -42,5 +42,17 @@ function blocks_restapi_getlist($args = [])
         'description' => 'Call blocks api function getinfo() in module blocks',
         'parameters' => ['state', 'type_state'],  // optional parameter(s)
     ];
+    // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
+    $apilist['render'] = [
+        //'type' => 'rest',  // default = rest, other $type options are user, admin, ... as usual
+        'path' => 'render/{instance}',  // path to use in REST API operation /modules/{module}/{path} with path parameter
+        'method' => 'get',  // method to use in REST API operation
+        'security' => 'ViewBlocks',  // default = false REST APIs are public, if true check for authenticated user
+        'description' => 'Call REST API render() in module blocks defined in code/modules/blocks/xarrestapi/render.php',
+        //'parameters' => ['name'],  // optional parameter(s)
+        'mediatype' => 'text/html',  // optional response media type (instead of default application/json)
+        'response' => ['type' => 'string'],  // optional response schema
+        'caching' => false,  // @checkme this might overlap with block output caching
+    ];
     return $apilist;
 }

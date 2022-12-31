@@ -30,6 +30,7 @@ class DataObjectRESTHandler extends xarObject
     public static $storageType = 'apcu';  // database or apcu
     public static $tokenStorage;
     public static $userId;
+    public static $mediaType;
 
     public static function getOpenAPI($args = null)
     {
@@ -719,6 +720,10 @@ class DataObjectRESTHandler extends xarObject
         if (self::$enableCache && empty($func['caching'])) {
             self::$enableCache = false;
         }
+        // @checkme how to save this in case of caching?
+        if (!empty($func['mediatype'])) {
+            self::$mediaType = $func['mediatype'];
+        }
         xarMod::init();
         xarUser::init();
         // @checkme pass all query args from handler here?
@@ -734,13 +739,13 @@ class DataObjectRESTHandler extends xarObject
         $path = $args['path']['path'];
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
         $more = $args['path']['more'] ?? '';
-        // this contains any POSTed args from rst.php
-        if (empty($args['input'])) {
-            $args['input'] = [];
-        }
         $func = self::getModuleApiFunc($module, $path, 'post', $more);
         if (empty($func)) {
             return ['method' => 'postModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
+        // this contains any POSTed args from rst.php
+        if (empty($args['input'])) {
+            $args['input'] = [];
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
@@ -759,6 +764,9 @@ class DataObjectRESTHandler extends xarObject
                 exit;
             }
         }
+        if (!empty($func['mediatype'])) {
+            self::$mediaType = $func['mediatype'];
+        }
         xarMod::init();
         xarUser::init();
         // @checkme handle POSTed args by passing $args['input'] only in handler?
@@ -766,6 +774,32 @@ class DataObjectRESTHandler extends xarObject
             $args['input'] = array_merge($args['input'], $func['args']);
         }
         return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $args['input']);
+    }
+
+    public static function putModuleCall($args)
+    {
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = self::getModuleApiFunc($module, $path, 'put', $more);
+        if (empty($func)) {
+            return ['method' => 'putModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
+        throw new Exception('Unsupported method PUT for module api');
+    }
+
+    public static function deleteModuleCall($args)
+    {
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = self::getModuleApiFunc($module, $path, 'delete', $more);
+        if (empty($func)) {
+            return ['method' => 'deleteModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
+        throw new Exception('Unsupported method DELETE for module api');
     }
 
     public static function hasModule($module)
@@ -852,6 +886,8 @@ class DataObjectRESTHandler extends xarObject
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
         $r->get('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'getModuleCall']);
         $r->post('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'postModuleCall']);
+        $r->put('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'putModuleCall']);
+        $r->delete('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'deleteModuleCall']);
     }
 
     public static function getQueryId($method, $vars)
@@ -943,8 +979,14 @@ class DataObjectRESTHandler extends xarObject
             header('Access-Control-Allow-Origin: *');
         }
         //http_response_code($status);
-        if (is_string($result) && substr($result, 0, 5) === '<?xml') {
-            header('Content-Type: application/xml; charset=utf-8');
+        if (is_string($result)) {
+            if (!empty(self::$mediaType)) {
+                 header('Content-Type: ' . self::$mediaType . '; charset=utf-8');
+	    } elseif (substr($result, 0, 5) === '<?xml') {
+                 header('Content-Type: application/xml; charset=utf-8');
+            } else {
+                 header('Content-Type: text/html; charset=utf-8');
+            }
             echo $result;
         } else {
             header('Content-Type: application/json; charset=utf-8');
