@@ -791,13 +791,25 @@ class DataObjectRESTHandler extends xarObject
                 $item['module'] ??= $module;
                 $item['type'] ??= 'rest';
                 $item['name'] ??= $api;
-                // @todo assuming only 1 path parameter in module rest api paths for now...
-                $path_param = substr($item['path'], strlen($path) + 1);
-                if (substr($path_param, 0, 1) !== '{' || substr($path_param, -1) !== '}') {
-                    throw new Exception('Invalid path parameter in ' . $item['path']);
+                // @checkme assuming only more path parameter(s) in module paths for now... {type}/{key}/{code}
+                $more_params = explode('/', substr($item['path'], strlen($path) + 1));
+                $more_values = explode('/', $more);
+                $item['args'] = [];
+                $i = 0;
+                foreach ($more_params as $path_param) {
+                    if (empty($path_param)) {
+                        continue;
+                    }
+                    if (substr($path_param, 0, 1) !== '{' && substr($path_param, -1) !== '}') {
+                        continue;
+                    }
+                    if (substr($path_param, 0, 1) !== '{' || substr($path_param, -1) !== '}') {
+                        throw new Exception('Invalid path parameter in ' . $item['path']);
+                    }
+                    $path_param = substr($path_param, 1, -1);
+                    $item['args'][$path_param] = $more_values[$i];
+                    $i += 1;
                 }
-                $path_param = substr($path_param, 1, -1);
-                $item['args'] = [$path_param => $more];
                 return $item;
             }
         }
@@ -821,8 +833,8 @@ class DataObjectRESTHandler extends xarObject
         $r->get('/modules', ['DataObjectRESTHandler', 'getModules']);
         $r->get('/modules/{module}', ['DataObjectRESTHandler', 'getModuleApis']);
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-        $r->get('/modules/{module}/{path}[/{more}]', ['DataObjectRESTHandler', 'getModuleCall']);
-        $r->post('/modules/{module}/{path}[/{more}]', ['DataObjectRESTHandler', 'postModuleCall']);
+        $r->get('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'getModuleCall']);
+        $r->post('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'postModuleCall']);
     }
 
     public static function getQueryId($method, $vars)
