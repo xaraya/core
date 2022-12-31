@@ -10,17 +10,23 @@
  *
  *     public function __construct()
  *     {
+ *         // ...
+ *         static::$enableCache = true;
  *         static::setCacheScope('myFancyItems');
  *     }
  *
  *     public function getItemCached($id)
  *     {
+ *         // ... get item from cache ...
  *         $cacheKey = static::getCacheKey($id);
  *         if (!empty($cacheKey) && static::isCached($cacheKey)) {
  *             return static::getCached($cacheKey);
  *         }
- *         // ... retrieve item ...
+ *
+ *         // ... retrieve item here in myFancyClass ...
  *         $item = $this->getItem($id);
+ *
+ *         // ... set item in cache ...
  *         if (!empty($cacheKey)) {
  *             static::setCached($cacheKey, $item);
  *         }
@@ -125,6 +131,9 @@ trait xarCacheTrait
         return xarVariableCache::keyCached($cacheKey);
     }
 
+    /**
+     * All-in-one utility method to get cached value if available, or set it based on callback function
+     */
     public static function getCachedValue($id, $callback, ...$args)
     {
         $cacheKey = static::getCacheKey($id);

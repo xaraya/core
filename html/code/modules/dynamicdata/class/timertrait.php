@@ -2,6 +2,35 @@
 /**
  * Trait to trace time
  *
+ * Usage:
+ *
+ * class myFancyClass
+ * {
+ *     use xarTimerTrait;
+ *
+ *     public function __construct()
+ *     {
+ *         self::$enableTimer = true;
+ *         // ...
+ *         self::setTimer('contructed');
+ *     }
+ *
+ *     public function getResultWithTimer($what)
+ *     {
+ *         // ... get result with timer ...
+ *         self::setTimer('start result');
+ *         // some lengthy operation(s) in myFancyClass
+ *         $result = $this->getResult($what);
+ *         self::setTimer('stop result');
+ *
+ *         // ... add timer information to result ...
+ *         if (self::$enableTimer) {
+ *             $result['timer'] = self::getTimers();
+ *         }
+ *         return $result;
+ *     }
+ * }
+ *
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -38,5 +67,16 @@ trait xarTimerTrait
         static::$_timerPrev = !empty($_SERVER['REQUEST_TIME_FLOAT']) ? (float) $_SERVER['REQUEST_TIME_FLOAT'] : 0.0;
         static::setTimer('elapsed');
         return static::$_timerKeep;
+    }
+
+    /**
+     * Utility method to set timer on callback function
+     */
+    public static function wrapTimer($label, $callback, ...$args)
+    {
+        static::setTimer("start $label");
+        $result = call_user_func($callback, ...$args);
+        static::setTimer("stop $label");
+        return $result;
     }
 }
