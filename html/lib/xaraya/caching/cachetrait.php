@@ -27,6 +27,10 @@
  *         $item = $this->getItem($id);
  *
  *         // ... set item in cache ...
+ *         // if you don't know the $cacheKey for item from before (e.g. because it was defined with $id elsewhere)
+ *         // if (static::$enableCache && static::hasCacheKey()) {
+ *         //     $cacheKey = self::getCacheKey();
+ *         // }
  *         if (!empty($cacheKey)) {
  *             static::setCached($cacheKey, $item);
  *         }

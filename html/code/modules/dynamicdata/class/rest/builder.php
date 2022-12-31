@@ -1090,6 +1090,7 @@ class DataObjectRESTBuilder extends xarObject
                 $info['module'] ??= $module;
                 $info['type'] ??= 'rest';
                 $info['name'] ??= $api;
+                $info['caching'] ??= ($info['method'] == 'get') ? true : false;
                 $items[$module]['apilist'][$api] = $info;
             }
         }

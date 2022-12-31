@@ -93,6 +93,9 @@ class DataObjectRESTHandler extends xarObject
             $userId = self::checkUser();
             //$args['access'] = 'view';
         }
+        if (self::$enableCache && !self::hasCaching($object, $method)) {
+            self::$enableCache = false;
+        }
         // @checkme always count here
         $args['count'] = true;
         if (empty($args['limit']) || !is_numeric($args['limit'])) {
@@ -163,6 +166,9 @@ class DataObjectRESTHandler extends xarObject
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = self::checkUser();
             //$args['access'] = 'display';
+        }
+        if (self::$enableCache && !self::hasCaching($object, $method)) {
+            self::$enableCache = false;
         }
         $fieldlist = self::getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
@@ -436,6 +442,12 @@ class DataObjectRESTHandler extends xarObject
         return !empty($operation['security']) ? true : false;
     }
 
+    public static function hasCaching($object, $method)
+    {
+        $operation = self::getOperation($object, $method);
+        return !empty($operation['caching']) ? true : false;
+    }
+
     public static function getProperties($object, $method)
     {
         $operation = self::getOperation($object, $method);
@@ -704,6 +716,9 @@ class DataObjectRESTHandler extends xarObject
                 exit;
             }
         }
+        if (self::$enableCache && empty($func['caching'])) {
+            self::$enableCache = false;
+        }
         xarMod::init();
         xarUser::init();
         // @checkme pass all query args from handler here?
@@ -784,6 +799,7 @@ class DataObjectRESTHandler extends xarObject
                 $item['module'] ??= $module;
                 $item['type'] ??= 'rest';
                 $item['name'] ??= $api;
+                $item['caching'] ??= ($method == 'get') ? true : false;
                 return $item;
             }
             // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
@@ -791,6 +807,7 @@ class DataObjectRESTHandler extends xarObject
                 $item['module'] ??= $module;
                 $item['type'] ??= 'rest';
                 $item['name'] ??= $api;
+                $item['caching'] ??= ($method == 'get') ? true : false;
                 // @checkme assuming only more path parameter(s) in module paths for now... {type}/{key}/{code}
                 $more_params = explode('/', substr($item['path'], strlen($path) + 1));
                 $more_values = explode('/', $more);
@@ -843,9 +860,15 @@ class DataObjectRESTHandler extends xarObject
         if (!empty($vars['path'])) {
             if (!empty($vars['path']['object'])) {
                 $queryId .= '-' . $vars['path']['object'];
+                if (!empty($vars['path']['itemid'])) {
+                    $queryId .= '-' . $vars['path']['itemid'];
+                }
             }
-            if (!empty($vars['path']['itemid'])) {
-                $queryId .= '-' . $vars['path']['itemid'];
+            if (!empty($vars['path']['module'])) {
+                $queryId .= '-' . $vars['path']['module'];
+                if (!empty($vars['path']['path'])) {
+                    $queryId .= '-' . $vars['path']['path'];
+                }
             }
         }
         $queryId .= '-' . md5(json_encode($vars));
