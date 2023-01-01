@@ -358,6 +358,7 @@ function xarLocaleGetFormattedDate($length = 'short', $timestamp = null, $addoff
     // so we no longer need to make it a static in this function
     $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
 
+    // @todo get rid of these double transformations
     // grab the right set of locale data
     $locale_format = $localeData["/dateFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -445,6 +446,7 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     // so we no longer need to make it a static in this function
     $localeData =& xarMLSLoadLocaleData();  // rraymond : assign by reference for large array (memory issues)
 
+    // @todo get rid of these double transformations
     // grab the right set of locale data
     $locale_format = $localeData["/timeFormats/$length"];
     // replace the locale formatting style with valid strftime() style
@@ -459,14 +461,19 @@ function xarLocaleGetFormattedTime($length = 'short',$timestamp = null, $addoffs
     $locale_format = str_replace('z','%Z',$locale_format);
     // format the single digit flags
 
+    $datetime = date_create('@' . $timestamp);
+    // H = %H = Two digit representation of the hour in 24-hour format
     if (strpos($locale_format,'H') !== false)
-        $locale_format = str_replace('%H',sprintf('%1d',gmstrftime('%H',$timestamp)),$locale_format);
+        $locale_format = str_replace('%H',sprintf('%1d',$datetime->format('H')),$locale_format);
+    // h = %I = Two digit representation of the hour in 12-hour format
     if (strpos($locale_format,'h') !== false)
-        $locale_format = str_replace('h',sprintf('%1d',gmstrftime('%I',$timestamp)),$locale_format);
+        $locale_format = str_replace('h',sprintf('%1d',$datetime->format('h')),$locale_format);
+    // i = %M = Two digit representation of the minute
     if (strpos($locale_format,'m') !== false)
-        $locale_format = str_replace('m',sprintf('%1d',gmstrftime('%M',$timestamp)),$locale_format);
+        $locale_format = str_replace('m',sprintf('%1d',$datetime->format('i')),$locale_format);
+    // s = %S = Two digit representation of the second
     if (strpos($locale_format,'s') !== false)
-        $locale_format = str_replace('s',sprintf('%1d',gmstrftime('%S',$timestamp)),$locale_format);
+        $locale_format = str_replace('s',sprintf('%1d',$datetime->format('s')),$locale_format);
 
     return xarLocaleFormatDate($locale_format,$timestamp,$addoffset);
 }
