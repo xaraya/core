@@ -478,6 +478,8 @@ function xarVarPrepForDisplay()
     foreach (func_get_args() as $var) {
         if (is_bool($var)) {
             $var = $var ? 'true' : 'false';
+        } elseif (!isset($var)) {
+            $var = '';
         } else {
             // Prepare var
             try {
