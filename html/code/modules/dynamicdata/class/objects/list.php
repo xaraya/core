@@ -215,9 +215,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->itemids = explode(',',$this->itemids);
             }
         }
-        if (!is_array($this->sort)) $this->sort = explode(',',$this->sort);
-        if (!is_array($this->groupby)) $this->groupby = explode(',',$this->groupby);
-        if (!is_array($this->fieldlist)) $this->fieldlist = explode(',',$this->fieldlist);
+        if (!is_array($this->sort)) $this->sort = explode(',', (string) $this->sort);
+        if (!is_array($this->groupby)) $this->groupby = explode(',', (string) $this->groupby);
+        if (!is_array($this->fieldlist)) $this->fieldlist = explode(',', (string) $this->fieldlist);
         // Clean up arrays by removing false values (= empty, false, null, 0)
         if (!empty($this->itemids)) $this->itemids = array_filter($this->itemids);
         if (!empty($this->sort)) $this->sort = array_filter($this->sort);
