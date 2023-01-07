@@ -986,7 +986,7 @@ class DataObjectRESTBuilder extends xarObject
                         'description' => $key . ' value',
                     ];
                 }
-                // => ['itemtype' => 'string', 'itemids' => 'array']
+            // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif (in_array($name, ["string", "integer", "boolean"])) {
                 $parameters[] = [
                     'name' => $key,
@@ -1036,7 +1036,7 @@ class DataObjectRESTBuilder extends xarObject
                     // @checkme use style = form + explode = true here
                     $properties[$key] = ['type' => 'array', 'items' => ['type' => $name[0]]];
                 }
-                // => ['itemtype' => 'string', 'itemids' => 'array']
+            // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif (in_array($name, ["string", "integer", "boolean"])) {
                 $properties[$key] = ['type' => $name];
             // => ['itemtype' => 'string', 'itemids' => 'array']
@@ -1090,6 +1090,8 @@ class DataObjectRESTBuilder extends xarObject
                 $info['module'] ??= $module;
                 $info['type'] ??= 'rest';
                 $info['name'] ??= $api;
+                // @checkme allow default args to start with
+                $info['args'] ??= [];
                 $info['caching'] ??= ($info['method'] == 'get') ? true : false;
                 $items[$module]['apilist'][$api] = $info;
             }
@@ -1203,7 +1205,7 @@ class DataObjectRESTBuilder extends xarObject
             case 'itemtype':
             case 'userlist':
             case 'username':
-            //case 'integer':
+                //case 'integer':
                 $datatype = ['type' => 'integer'];
                 break;
             case 'textbox':
@@ -1220,7 +1222,7 @@ class DataObjectRESTBuilder extends xarObject
             case 'fieldstatus':
             case 'dropdown':
             case 'crontab':
-            //case 'string':
+                //case 'string':
                 $datatype = ['type' => 'string'];
                 break;
             case 'deferitem':

@@ -727,8 +727,14 @@ class DataObjectRESTHandler extends xarObject
         xarMod::init();
         xarUser::init();
         // @checkme pass all query args from handler here?
-        if (!empty($more) && !empty($func['args'])) {
-            $args = array_merge($args, $func['args']);
+        if (!empty($func['args'])) {
+            if (!empty($more)) {
+                // @checkme path params overwrite query params - but what about default args?
+                $args = array_merge($args, $func['args']);
+            } else {
+                // @checkme query params overwrite default args
+                $args = array_merge($func['args'], $args);
+            }
         }
         return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $args);
     }
@@ -833,6 +839,8 @@ class DataObjectRESTHandler extends xarObject
                 $item['module'] ??= $module;
                 $item['type'] ??= 'rest';
                 $item['name'] ??= $api;
+                // @checkme allow default args to start with
+                $item['args'] ??= [];
                 $item['caching'] ??= ($method == 'get') ? true : false;
                 return $item;
             }
@@ -841,23 +849,26 @@ class DataObjectRESTHandler extends xarObject
                 $item['module'] ??= $module;
                 $item['type'] ??= 'rest';
                 $item['name'] ??= $api;
+                // @checkme allow default args to start with
+                $item['args'] ??= [];
                 $item['caching'] ??= ($method == 'get') ? true : false;
                 // @checkme assuming only more path parameter(s) in module paths for now... {type}/{key}/{code}
                 $more_params = explode('/', substr($item['path'], strlen($path) + 1));
                 $more_values = explode('/', $more);
-                $item['args'] = [];
                 $i = 0;
                 foreach ($more_params as $path_param) {
                     if (empty($path_param)) {
                         continue;
                     }
                     if (substr($path_param, 0, 1) !== '{' && substr($path_param, -1) !== '}') {
+                        // @checkme how do we keep track of fixed parts of the path here?
                         continue;
                     }
                     if (substr($path_param, 0, 1) !== '{' || substr($path_param, -1) !== '}') {
                         throw new Exception('Invalid path parameter in ' . $item['path']);
                     }
                     $path_param = substr($path_param, 1, -1);
+                    // @checkme path params overwrite default args
                     $item['args'][$path_param] = $more_values[$i];
                     $i += 1;
                 }
@@ -981,11 +992,11 @@ class DataObjectRESTHandler extends xarObject
         //http_response_code($status);
         if (is_string($result)) {
             if (!empty(self::$mediaType)) {
-                 header('Content-Type: ' . self::$mediaType . '; charset=utf-8');
-	    } elseif (substr($result, 0, 5) === '<?xml') {
-                 header('Content-Type: application/xml; charset=utf-8');
+                header('Content-Type: ' . self::$mediaType . '; charset=utf-8');
+            } elseif (substr($result, 0, 5) === '<?xml') {
+                header('Content-Type: application/xml; charset=utf-8');
             } else {
-                 header('Content-Type: text/html; charset=utf-8');
+                header('Content-Type: text/html; charset=utf-8');
             }
             echo $result;
         } else {
