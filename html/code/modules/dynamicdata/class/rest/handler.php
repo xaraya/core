@@ -831,6 +831,17 @@ class DataObjectRESTHandler extends xarObject
             return;
         }
         $apilist = self::getModuleApiList($module);
+        if (!empty($more)) {
+            // @checkme sort by decreasing path length
+            uasort($apilist, function ($a, $b) {
+                $lena = strlen($a['path']);
+                $lenb = strlen($b['path']);
+                if ($lena == $lenb) {
+                    return 0;
+                }
+                return ($lena < $lenb) ? 1 : -1;
+            });
+        }
         foreach ($apilist as $api => $item) {
             if (isset($item['enabled']) && empty($item['enabled'])) {
                 continue;
@@ -846,15 +857,18 @@ class DataObjectRESTHandler extends xarObject
             }
             // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
             if (!empty($more) && strncmp($item['path'], $path . '/', strlen($path) + 1) === 0 && $item['method'] == $method) {
+                // @checkme assuming only more path parameter(s) in module paths for now... {type}/{key}/{code}
+                $more_params = explode('/', substr($item['path'], strlen($path) + 1));
+                $more_values = explode('/', $more);
+                if (count($more_values) != count($more_params)) {
+                    continue;
+                }
                 $item['module'] ??= $module;
                 $item['type'] ??= 'rest';
                 $item['name'] ??= $api;
                 // @checkme allow default args to start with
                 $item['args'] ??= [];
                 $item['caching'] ??= ($method == 'get') ? true : false;
-                // @checkme assuming only more path parameter(s) in module paths for now... {type}/{key}/{code}
-                $more_params = explode('/', substr($item['path'], strlen($path) + 1));
-                $more_values = explode('/', $more);
                 $i = 0;
                 foreach ($more_params as $path_param) {
                     if (empty($path_param)) {
