@@ -58,6 +58,7 @@ function dynamicdata_restapi_getlist($args = [])
         // @todo transform assoc array("$itemid" => $item) to list of $item or not?
         'response' => ['type' => 'array', 'items' => ['type' => 'object']],  // optional response schema
         //'caching' => false,  // optional disabling of caching e.g. if it overlaps with variable caching already
+        //'paging' => false,  // add optional paging parameters
     ];
     // $func name as used in xarMod::apiFunc($module, $type, $func, $args)
     $apilist['export'] = [

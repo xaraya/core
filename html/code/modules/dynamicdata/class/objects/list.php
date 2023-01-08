@@ -284,9 +284,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if (empty($criteria)) return true;
             
             // split off trailing ASC or DESC
-            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/',$criteria,$matches)) {
+            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/i',$criteria,$matches)) {
                 $criteria = trim($matches[1]);
-                $sortorder = $matches[2];
+                $sortorder = strtoupper($matches[2]);
+            } elseif (substr($criteria, 0, 1) === '-') {
+                // reverse sort order if criteria starts with '-'
+                $criteria = substr($criteria, 1);
+                $sortorder = 'DESC';
             } else {
                 $sortorder = 'ASC';
             }

@@ -90,12 +90,35 @@ class xarGraphQLModuleApiType extends ObjectType
                 }
                 $item['module'] = $module;
                 $item['type'] ??= 'rest';
-                $item['func'] = $api;
+                // @checkme 'name' is a tricky part for GraphQL type definitions - use 'func' here instead to be sure
+                $item['func'] = $item['name'] ?? $api;
                 $item['method'] ??= 'get';
+                // @checkme handle default args if specified in getlist.php
+                $item['default'] = $item['args'] ?? [];
                 $item['args'] = 'mixed';
+                // @checkme add paging parameters if specified in getlist.php
+                $item['paging'] ??= false;
                 // @todo parse optional response - and how to match with result type, e.g. DD getobjects -> ['object']
-                $item['result'] = 'mixed';
-                $name = $module . '_' . $item['path'];
+                $item['result'] = $item['response'] ?? 'mixed';
+                if (strpos($item['path'], '/') !== false) {
+                    $name = $module . '_' . $api;
+                    // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+                    if (strpos($item['path'], '{') !== false) {
+                        $found = preg_match_all('/\{([^}]+)\}/', $item['path'], $matches);
+                        if (empty($found)) {
+                            throw new Exception('Invalid path parameter in path ' . $item['path'] . ' for rest api ' . $api . ' in module ' . $module);
+                        }
+                        // @checkme assuming we don't have more complex parameters already, we simply add them first
+                        $path_params = [];
+                        foreach ($matches[1] as $part) {
+                            $path_params[] = $part;
+                        }
+                        $item['parameters'] ??= [];
+                        $item['parameters'] = array_merge($path_params, $item['parameters']);
+                    }
+                } else {
+                    $name = $module . '_' . $item['path'];
+                }
                 if ($item['method'] == 'post' || !empty($item['requestBody'])) {
                     if (!empty($item['requestBody']) && !empty($item['requestBody']['application/json'])) {
                         $item['args'] = static::_xar_parse_api_parameters($item['requestBody']['application/json']);
@@ -131,7 +154,7 @@ class xarGraphQLModuleApiType extends ObjectType
                     // @checkme use style = form + explode = true here
                     $properties[$key] = [$name[0]];
                 }
-                // => ['itemtype' => 'string', 'itemids' => 'array']
+            // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif (in_array($name, ["string", "integer", "boolean"])) {
                 $properties[$key] = $name;
             // => ['itemtype' => 'string', 'itemids' => 'array']
@@ -164,9 +187,14 @@ class xarGraphQLModuleApiType extends ObjectType
         //$argstype = static::_xar_get_param_fielddef($func['args']);
         // @todo add loadModules(), analyze response and mediatype + create result type per function if needed
         $resulttype = static::_xar_get_param_fielddef($func['result']);
+        $fields = static::_xar_parse_input_args($name, $func);
+        // @checkme add paging parameters if specified in getlist.php
+        if (!empty($func['paging'])) {
+            $fields = array_merge($fields, static::_xar_get_paging_args());
+        }
         return [
             'name' => $name,
-            'description' => 'Call ' . $func['module'] . ' ' . $func['type'] . 'api ' . $func['func'] . ' function via GraphQL',
+            'description' => 'Call ' . $func['module'] . ' ' . $func['type'] . 'api ' . $func['func'] . ' function via GraphQL for ' . $name,
             'type' => $resulttype['type'],
             //'args' => [
             //    'module' => ['type' => Type::string(), 'defaultValue' => $func['module']],
@@ -174,7 +202,7 @@ class xarGraphQLModuleApiType extends ObjectType
             //    'func' => ['type' => Type::string(), 'defaultValue' => $func['func']],
             //    'args' => $argstype,
             //],
-            'args' => static::_xar_parse_input_args($name, $func),
+            'args' => $fields,
             'resolve' => static::_xar_call_query_resolver($func),
         ];
     }
@@ -185,19 +213,35 @@ class xarGraphQLModuleApiType extends ObjectType
             $typedef = ['type' => xarGraphQL::get_type('mixed')];
         } elseif (is_string($param)) {
             // @checkme use openapi data types and/or graphql base types + see buildtype get_field_basetypes()
+            $name = $param;
             //if (array_key_exists(ucfirst($param), Type::getStandardTypes())) {
-            if (in_array($param, ['id', 'string', 'boolean', 'integer', 'number'])) {
-                //$typedef = ['type' => Type::{$param}()];
-                $typedef = ['type' => xarGraphQL::get_type($param)];
+            if (in_array($name, ['id', 'string', 'boolean', 'integer', 'number'])) {
+                //$typedef = ['type' => Type::{$name}()];
+                $typedef = ['type' => xarGraphQL::get_type($name)];
+            } elseif ($name == 'object') {
+                $typedef = ['type' => xarGraphQL::get_type('mixed')];
             } else {
-                $typedef = ['type' => xarGraphQL::get_type($param)];
+                $typedef = ['type' => xarGraphQL::get_type($name)];
             }
         } elseif (is_numeric(array_key_first($param)) && count($param) == 1) {
-            if (in_array($param[0], ['id', 'string', 'boolean', 'integer', 'number'])) {
-                //$typedef = ['type' => Type::listOf(Type::{$param[0]}())];
-                $typedef = ['type' => xarGraphQL::get_type_list($param[0])];
+            $name = $param[0];
+            if (in_array($name, ['id', 'string', 'boolean', 'integer', 'number'])) {
+                //$typedef = ['type' => Type::listOf(Type::{$name}())];
+                $typedef = ['type' => xarGraphQL::get_type_list($name)];
+            } elseif ($name == 'object') {
+                $typedef = ['type' => xarGraphQL::get_type_list('mixed')];
             } else {
-                $typedef = ['type' => xarGraphQL::get_type_list($param[0])];
+                $typedef = ['type' => xarGraphQL::get_type_list($name)];
+            }
+        } elseif (array_key_exists('type', $param) && $param['type'] == 'array') {
+            $name = $param['items']['type'];
+            if (in_array($name, ['id', 'string', 'boolean', 'integer', 'number'])) {
+                //$typedef = ['type' => Type::listOf(Type::{$name}())];
+                $typedef = ['type' => xarGraphQL::get_type_list($name)];
+            } elseif ($name == 'object') {
+                $typedef = ['type' => xarGraphQL::get_type_list('mixed')];
+            } else {
+                $typedef = ['type' => xarGraphQL::get_type_list($name)];
             }
         } else {
             // @checkme create input type corresponding to $args later?
@@ -229,7 +273,12 @@ class xarGraphQLModuleApiType extends ObjectType
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }
+            // @checkme handle default args if specified in getlist.php
             $args['args'] ??= [];
+            // @checkme actual params overwrite default args
+            if (!empty($func['default'])) {
+                $args['args'] = array_merge($func['default'], $args['args']);
+            }
             // @checkme pass along the $args['args'] part here
             return static::_xar_call_module_function($func['module'], $func['type'], $func['func'], $args['args'], $userId, $fields);
         };
@@ -340,6 +389,23 @@ class xarGraphQLModuleApiType extends ObjectType
         return $fields;
     }
 
+    public static function _xar_get_paging_args()
+    {
+        $fields = [
+            'order' => Type::string(),
+            'offset' => [
+                'type' => Type::int(),
+                'defaultValue' => 0,
+            ],
+            'limit' => [
+                'type' => Type::int(),
+                'defaultValue' => 20,
+            ],
+            'filter' => Type::listOf(Type::string()),
+        ];
+        return $fields;
+    }
+
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
@@ -376,7 +442,12 @@ class xarGraphQLModuleApiType extends ObjectType
             if (empty($userId)) {
                 throw new Exception('Invalid user');
             }
+            // @checkme handle default args if specified in getlist.php
             $args['args'] ??= [];
+            // @checkme actual params overwrite default args
+            if (!empty($func['default'])) {
+                $args['args'] = array_merge($func['default'], $args['args']);
+            }
             // @checkme pass along the $args['args'] part here
             return static::_xar_call_module_function($func['module'], $func['type'], $func['func'], $args['args'], $userId, $fields);
         };
@@ -391,7 +462,7 @@ class xarGraphQLModuleApiType extends ObjectType
         xarUser::init();
         xarGraphQL::$paths[] = ["Calling $module $type $func for user $userId", $args, $fields];
         return xarMod::apiFunc($module, $type, $func, $args);
-        $values = ['func_args' => $args];
-        return $values;
+        //$values = ['func_args' => $args];
+        //return $values;
     }
 }

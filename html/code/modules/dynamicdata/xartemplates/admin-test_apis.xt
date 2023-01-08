@@ -132,7 +132,7 @@
                             <xar:if condition="empty($info['type'])">
                                 <xar:set name="dummy">$info['type'] = 'rest'</xar:set>
                             </xar:if>
-                            <td>Module <a href="#xarServer::getModuleURL($item['module'])#">#$item['module']#</a> #$info['type']# api #$info['name']#() <xar:if condition="!empty($info['caching'])"><span>*</span></xar:if></td>
+                            <td>Module <a href="#xarServer::getModuleURL($item['module'])#">#$item['module']#</a> #$api# with #$info['type']# api #$info['name']#() <xar:if condition="!empty($info['caching'])"><span>*</span></xar:if></td>
                             <xar:if condition="empty($restapilist) or in_array($item['module'].'.'.$api, $restapilist)">
                                 <td><input type="checkbox" name="restapi[#$item['module']#.#$api#]" id="restapi_#$item['module']#.#$api#" checked="checked"/></td>
                             <xar:else/>

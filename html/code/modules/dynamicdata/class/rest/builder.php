@@ -916,6 +916,18 @@ class DataObjectRESTBuilder extends xarObject
                 self::$paths[$path][$item['method']]['parameters'][] = $parameter;
             }
         }
+        if (!empty($item['paging'])) {
+            $paging_params = [
+                ['$ref' => '#/components/parameters/order'],
+                ['$ref' => '#/components/parameters/offset'],
+                ['$ref' => '#/components/parameters/limit'],
+                ['$ref' => '#/components/parameters/filter'],
+                //['$ref' => '#/components/parameters/expand'],
+            ];
+            foreach ($paging_params as $param) {
+                self::$paths[$path][$item['method']]['parameters'][] = $param;
+            }
+        }
         // @checkme verify/expand how POSTed values are defined - assuming simple json object with string props for now
         if (!empty($item['requestBody'])) {
             foreach ($item['requestBody'] as $mediatype => $vars) {
@@ -1093,6 +1105,8 @@ class DataObjectRESTBuilder extends xarObject
                 // @checkme allow default args to start with
                 $info['args'] ??= [];
                 $info['caching'] ??= ($info['method'] == 'get') ? true : false;
+                // @checkme add paging parameters if specified in getlist.php
+                $info['paging'] ??= false;
                 $items[$module]['apilist'][$api] = $info;
             }
         }
