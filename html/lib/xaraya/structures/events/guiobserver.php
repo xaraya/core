@@ -25,8 +25,9 @@ class GuiEventObserver extends EventObserver
     
     public function notify(ixarEventSubject $subject)
     {
+        // function was already imported in events fileLoad, but that doesn't mean the module was loaded
+        xarMod::load($this->module, $this->type);
         // note, no try / catch here, subject notify method should handle exceptions
         return xarMod::guiFunc($this->module, $this->type, $this->func, $subject->getArgs());          
     }
 }
-?>

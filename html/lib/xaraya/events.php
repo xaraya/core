@@ -386,6 +386,8 @@ class xarEvents extends xarObject implements ixarEvents
                 $type = $area == 'gui' ? $type : $type . $area;
                 // define the function name (module_xartype(api)_func);
                 $func = $module .'_' . $type . '_' . $filename;
+                // @checkme by importing the function directly here, we never call xarMod::apiLoad($module, $type)
+                // or xarMod::load($module, $type) in xarMod::callFunc() later when calling the function in observer
                 // import the file (raises exception if file not found) 
                 try {
                     // try for specific file in type folder (eg /module/xaruserapi/eventfunc.php)
