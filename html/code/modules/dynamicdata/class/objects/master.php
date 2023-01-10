@@ -815,8 +815,7 @@ class DataObjectMaster extends xarObject
      * (= the same as creating a new Dynamic Object with itemid = null)
      *
      * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['name'] name of the object you're looking for, or
-     * @param $args['moduleid'] module id of the object to retrieve + $args['itemtype'] item type of the object to retrieve
+     * @param $args['name'] name of the object you're looking for
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
@@ -879,9 +878,7 @@ class DataObjectMaster extends xarObject
      * (= the same as creating a new Dynamic Object List)
      *
      * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['name'] name of the object you're looking for, or
-     * @param $args['moduleid'] module id of the object to retrieve +
-     * @param $args['itemtype'] item type of the object to retrieve
+     * @param $args['name'] name of the object you're looking for
      * @param $args['class'] optional classname (e.g. <module>_DataObject[_List])
      * @return object the requested object definition
      * @todo   automatic sub-classing per module (and itemtype) ?

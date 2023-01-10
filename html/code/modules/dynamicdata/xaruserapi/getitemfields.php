@@ -20,16 +20,19 @@
  *        integer  $args['module_id'] ID of the module
  * @return array containing the item field definitions
  */
-function dynamicdata_userapi_getitemfields(Array $args=array())
+function dynamicdata_userapi_getitemfields(array $args=[])
 {
+    if (empty($args['objectid']) && empty($args['name'])) {
+        $args = DataObjectDescriptor::getObjectID($args);
+    }
     $object = DataObjectMaster::getObject($args);
-    if (!is_object($object)) return array();
+    if (!is_object($object)) {
+        return [];
+    }
     $fields = $object->getProperties();
-    $itemfields = array();
+    $itemfields = [];
     foreach ($fields as $name => $prop) {
         $itemfields[$name] = $prop->label;
     }
     return $itemfields;
 }
-
-?>

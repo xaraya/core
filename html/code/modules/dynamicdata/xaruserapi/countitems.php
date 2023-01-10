@@ -18,12 +18,15 @@
  * @param array    $args array of optional parameters<br/>
  * @return integer number of items held by this module
  */
-function dynamicdata_userapi_countitems(Array $args=array())
+function dynamicdata_userapi_countitems(array $args=[])
 {
+    if (empty($args['objectid']) && empty($args['name'])) {
+        $args = DataObjectDescriptor::getObjectID($args);
+    }
     $mylist = DataObjectMaster::getObjectList($args);
-    if (!isset($mylist)) return;
+    if (!isset($mylist)) {
+        return;
+    }
 
     return $mylist->countItems();
 }
-
-?>

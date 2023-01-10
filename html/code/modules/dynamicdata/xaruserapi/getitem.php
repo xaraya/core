@@ -30,7 +30,7 @@
  * @return array of (name => value), or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function &dynamicdata_userapi_getitem(Array $args=array())
+function &dynamicdata_userapi_getitem(array $args=[])
 {
     extract($args);
 
@@ -38,7 +38,7 @@ function &dynamicdata_userapi_getitem(Array $args=array())
     // need an explicit var to return in case of a null return
     // we define that here. Both the ref return here and the null return in
     // other functions should be investigated.
-    $nullreturn = NULL;
+    $nullreturn = null;
 
     if (empty($module_id) && empty($moduleid)) {
         $modname = empty($module) ? xarMod::getName() : $module;
@@ -48,9 +48,11 @@ function &dynamicdata_userapi_getitem(Array $args=array())
     }
     $modinfo = xarMod::getInfo($module_id);
 
-    if (empty($itemtype)) $itemtype = 0;
+    if (empty($itemtype)) {
+        $itemtype = 0;
+    }
 
-    $invalid = array();
+    $invalid = [];
     if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
         $invalid[] = 'module id';
     }
@@ -62,8 +64,8 @@ function &dynamicdata_userapi_getitem(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'user', 'getall', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'user', 'getall', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     // check the optional field list
@@ -71,34 +73,51 @@ function &dynamicdata_userapi_getitem(Array $args=array())
         $fieldlist = null;
     } elseif (is_string($fieldlist)) {
         // support comma-separated field list
-        $fieldlist = explode(',',$fieldlist);
+        $fieldlist = explode(',', $fieldlist);
     }
 
     // limit to property fields of a certain status (e.g. active)
-    if (!isset($status)) $status = null;
+    if (!isset($status)) {
+        $status = null;
+    }
 
     // join a module table to a dynamic object
-    if (empty($join)) $join = '';
+    if (empty($join)) {
+        $join = '';
+    }
 
     // make some database table available via DD
-    if (empty($table)) $table = '';
+    if (empty($table)) {
+        $table = '';
+    }
 
-    $object = DataObjectMaster::getObject(array('moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype,
+    $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype]);
+    if (empty($args['objectid'])) {
+        return;
+    }
+    $object = DataObjectMaster::getObject(['objectid'  => $args['objectid'],
                                        'itemid'    => $itemid,
                                        'fieldlist' => $fieldlist,
                                        'join'      => $join,
                                        'table'     => $table,
-                                       'status'    => $status));
-    if (!isset($object) || (empty($object->objectid) && empty($object->table))) return $nullreturn;
-    if (!$object->checkAccess('display'))
+                                       'status'    => $status]);
+    if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
         return $nullreturn;
+    }
+    if (!$object->checkAccess('display')) {
+        return $nullreturn;
+    }
 
     // Get the item
-    if (!empty($itemid)) $object->getItem();
+    if (!empty($itemid)) {
+        $object->getItem();
+    }
 
     // ..check it
-    if (!empty($preview)) $object->checkInput(array(),1);
+    if (!empty($preview)) {
+        $object->checkInput([], 1);
+    }
 
     if (!empty($getobject)) {
         return $object;
@@ -106,5 +125,3 @@ function &dynamicdata_userapi_getitem(Array $args=array())
     $objectData = $object->getFieldValues();
     return $objectData;
 }
-
-?>

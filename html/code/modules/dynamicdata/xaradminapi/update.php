@@ -23,11 +23,12 @@
  * @return mixed item id on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_update(Array $args=array())
+function dynamicdata_adminapi_update(array $args=[])
 {
+    $args = DataObjectDescriptor::getObjectID($args);
     extract($args);
 
-    $invalid = array();
+    $invalid = [];
     if (!isset($itemid) || !is_numeric($itemid) || empty($itemid)) { // we can't accept item id 0 here
         $invalid[] = 'item id';
     }
@@ -35,14 +36,14 @@ function dynamicdata_adminapi_update(Array $args=array())
         $invalid[] = 'module id';
     }
     if ((isset($fields) && is_array($fields)) ||
-        (isset($values) && is_array($values)) ) {
+        (isset($values) && is_array($values))) {
     } else {
         $invalid[] = xarML('fields or values');
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'admin', 'update', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'admin', 'update', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     if (!isset($itemtype) || !is_numeric($itemtype)) {
@@ -50,19 +51,21 @@ function dynamicdata_adminapi_update(Array $args=array())
     }
 
     if (!isset($fields) || !is_array($fields)) {
-        $fields = array();
+        $fields = [];
     }
     if (!isset($values) || !is_array($values)) {
-        $values = array();
+        $values = [];
     }
 
-// TODO: test this
-    $myobject = DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                         'itemtype' => $itemtype,
-                                         'itemid'   => $itemid));
-    if (empty($myobject)) return;
-    if (!$myobject->checkAccess('update'))
+    // TODO: test this
+    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+                                         'itemid'   => $itemid]);
+    if (empty($myobject)) {
         return;
+    }
+    if (!$myobject->checkAccess('update')) {
+        return;
+    }
 
     $myobject->getItem();
 
@@ -76,4 +79,3 @@ function dynamicdata_adminapi_update(Array $args=array())
     $itemid = $myobject->updateItem($values);
     return $itemid;
 }
-?>

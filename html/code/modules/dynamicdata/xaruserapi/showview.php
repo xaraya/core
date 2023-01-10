@@ -17,7 +17,7 @@
  * @return string output display string
  */
 
-function dynamicdata_userapi_showview(Array $args=array())
+function dynamicdata_userapi_showview(array $args=[])
 {
     extract($args);
 
@@ -26,33 +26,47 @@ function dynamicdata_userapi_showview(Array $args=array())
     $args = $descriptor->getArgs();
 
     // do we want to count?
-    if(empty($count)) $args['count'] = false;
+    if (empty($count)) {
+        $args['count'] = false;
+    }
 
     // we got everything via template parameters
     if (isset($items) && is_array($items)) {
         $args['count'] = count($items);
-        return xarTpl::module('dynamicdata','user','showview',
-                            $args,
-                            $template);
+        return xarTpl::module(
+            'dynamicdata',
+            'user',
+            'showview',
+            $args,
+            $template
+        );
     }
 
-// Note: fetching input variables doesn't normally belong in APIs, but this is
+    // Note: fetching input variables doesn't normally belong in APIs, but this is
 //       used by the xar:data-view tag when no object or items are specified !
 
     if (!isset($itemids)) {
-        if (!xarVar::fetch('itemids', 'isset', $itemids,  NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('itemids', 'isset', $itemids, null, xarVar::DONT_SET)) {
+            return;
+        }
     }
 
     if (!isset($sort)) {
-        if (!xarVar::fetch('sort', 'isset', $sort,  NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('sort', 'isset', $sort, null, xarVar::DONT_SET)) {
+            return;
+        }
     }
 
     if (!isset($numitems)) {
-        if (!xarVar::fetch('numitems', 'isset', $numitems,  NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('numitems', 'isset', $numitems, null, xarVar::DONT_SET)) {
+            return;
+        }
     }
 
     if (!isset($startnum)) {
-        if (!xarVar::fetch('startnum', 'isset', $startnum,  NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('startnum', 'isset', $startnum, null, xarVar::DONT_SET)) {
+            return;
+        }
     }
 
     if (isset($table)) {
@@ -62,14 +76,18 @@ function dynamicdata_userapi_showview(Array $args=array())
     }
 
     // don't try getting the where clause via input variables, obviously !
-    if (empty($where)) $where = '';
-    if (empty($groupby)) $groupby = '';
+    if (empty($where)) {
+        $where = '';
+    }
+    if (empty($groupby)) {
+        $groupby = '';
+    }
 
     // check the optional field list
     if (!empty($fieldlist)) {
         // support comma-separated field list
         if (is_string($fieldlist)) {
-            $myfieldlist = explode(',',$fieldlist);
+            $myfieldlist = explode(',', $fieldlist);
         // and array of fields
         } elseif (is_array($fieldlist)) {
             $myfieldlist = $fieldlist;
@@ -81,10 +99,11 @@ function dynamicdata_userapi_showview(Array $args=array())
     }
 
     // select in some category
-    if (empty($catid)) $catid = '';
+    if (empty($catid)) {
+        $catid = '';
+    }
 
-    $object = DataObjectMaster::getObjectList(array('moduleid'  => $args ['moduleid'],
-                                           'itemtype'  => $args ['itemtype'],
+    $object = DataObjectMaster::getObjectList(['objectid'  => $args ['objectid'],
                                            'itemids' => $itemids,
                                            'sort' => $sort,
                                            'numitems' => $numitems,
@@ -94,13 +113,16 @@ function dynamicdata_userapi_showview(Array $args=array())
                                            'fieldlist' => $myfieldlist,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status));
-    if (!isset($object)) return;
-    if (!$object->checkAccess('view'))
+                                           'status' => $status]);
+    if (!isset($object)) {
+        return;
+    }
+    if (!$object->checkAccess('view')) {
         return xarML('View #(1) is forbidden', $object->label);
-        
+    }
+
     // We need to get the total count before adding numitems!
-    if($args['count']) {
+    if ($args['count']) {
         $itemcount = $object->countItems();
     }
 
@@ -108,19 +130,29 @@ function dynamicdata_userapi_showview(Array $args=array())
     $object->getItems();
 
     // label to use for the display link (if you don't use linkfield)
-    if (empty($linklabel)) $linklabel = '';
+    if (empty($linklabel)) {
+        $linklabel = '';
+    }
 
     // function to use in the display link
-    if (empty($linkfunc)) $linkfunc = '';
+    if (empty($linkfunc)) {
+        $linkfunc = '';
+    }
 
     // URL parameter for the item id in the display link (e.g. exid, aid, uid, ...)
-    if (empty($param)) $param = '';
+    if (empty($param)) {
+        $param = '';
+    }
 
     // field to add the display link to (otherwise it'll be in a separate column)
-    if (empty($linkfield)) $linkfield = '';
+    if (empty($linkfield)) {
+        $linkfield = '';
+    }
 
     // current URL for the pager (defaults to current URL)
-    if (empty($pagerurl)) $pagerurl = '';
+    if (empty($pagerurl)) {
+        $pagerurl = '';
+    }
 
     // TODO: stopgap: remove once we let the descriptor do this
     if (empty($layout)) {
@@ -132,14 +164,12 @@ function dynamicdata_userapi_showview(Array $args=array())
     if (empty($template)) {
         $template = '';
     }
-    return $object->showView(array('layout'    => $layout,
+    return $object->showView(['layout'    => $layout,
                                    'tplmodule' => $tplmodule,
                                    'template'  => $template,
                                    'linklabel' => $linklabel,
                                    'linkfunc'  => $linkfunc,
                                    'param'     => $param,
                                    'pagerurl'  => $pagerurl,
-                                   'linkfield' => $linkfield));
+                                   'linkfield' => $linkfield]);
 }
-
-?>

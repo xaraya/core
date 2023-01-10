@@ -22,11 +22,12 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_delete(Array $args=array())
+function dynamicdata_adminapi_delete(array $args=[])
 {
+    $args = DataObjectDescriptor::getObjectID($args);
     extract($args);
 
-    $invalid = array();
+    $invalid = [];
     if (!isset($itemid) || !is_numeric($itemid)) {
         $invalid[] = 'item id';
     }
@@ -35,21 +36,22 @@ function dynamicdata_adminapi_delete(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'admin', 'delete', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'admin', 'delete', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     if (!isset($itemtype) || !is_numeric($itemtype)) {
         $itemtype = 0;
     }
 
-    $args = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype));
-    $myobject = DataObjectMaster::getObject(array('objectid' => $args['objectid'],
-                                         'itemid'   => $itemid));
-    if (empty($myobject)) return;
-    if (!$myobject->checkAccess('delete'))
+    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+                                         'itemid'   => $itemid]);
+    if (empty($myobject)) {
         return;
+    }
+    if (!$myobject->checkAccess('delete')) {
+        return;
+    }
 
     $myobject->getItem();
     $itemid = $myobject->deleteItem();
@@ -57,4 +59,3 @@ function dynamicdata_adminapi_delete(Array $args=array())
     unset($myobject);
     return $itemid;
 }
-?>
