@@ -53,7 +53,7 @@ class xarSessionLessCache extends xarObject
         }
 
         if (empty($sessionLessList) || !is_array($sessionLessList)) {
-            $sessionLessList = array();
+            $sessionLessList = [];
         }
 
         // the URL is already in the list for session-less page caching

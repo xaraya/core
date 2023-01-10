@@ -15,14 +15,14 @@
 
 class xarCache_Dummy_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public static $varcache = array();
+    public static $varcache = [];
 
-    public function __construct(Array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
         // use the prefix as array key in self::$varcache here
         if (!isset(self::$varcache[$this->prefix])) {
-            self::$varcache[$this->prefix] = array();
+            self::$varcache[$this->prefix] = [];
         }
         $this->storage = 'dummy';
     }
@@ -32,7 +32,7 @@ class xarCache_Dummy_Storage extends xarCache_Storage implements ixarCache_Stora
         parent::setNamespace($namespace);
         // use the prefix as array key in self::$varcache here
         if (!isset(self::$varcache[$this->prefix])) {
-            self::$varcache[$this->prefix] = array();
+            self::$varcache[$this->prefix] = [];
         }
     }
 
@@ -53,11 +53,15 @@ class xarCache_Dummy_Storage extends xarCache_Storage implements ixarCache_Stora
             // FIXME: dummy doesn't keep track of modification times !
             //$this->modtime = 0;
             $this->hits += 1;
-            if ($log) $this->logStatus('HIT', $key);
+            if ($log) {
+                $this->logStatus('HIT', $key);
+            }
             return true;
         } else {
             $this->misses += 1;
-            if ($log) $this->logStatus('MISS', $key);
+            if ($log) {
+                $this->logStatus('MISS', $key);
+            }
             return false;
         }
     }
@@ -114,21 +118,21 @@ class xarCache_Dummy_Storage extends xarCache_Storage implements ixarCache_Stora
             }
         }
         $this->items = count($keylist);
-        return array('size'    => $this->size,
-                     'items'   => $this->items,
-                     'hits'    => $this->hits,
-                     'misses'  => $this->misses,
-                     'modtime' => $this->modtime);
+        return ['size'    => $this->size,
+                'items'   => $this->items,
+                'hits'    => $this->hits,
+                'misses'  => $this->misses,
+                'modtime' => $this->modtime];
     }
 
     public function getCachedList()
     {
-        $list = array();
+        $list = [];
         // Note: this will probably be empty in most cases, unless you call this right after caching something
         $keylist = array_keys(self::$varcache[$this->prefix]);
         foreach ($keylist as $cache_key) {
-        // CHECKME: this assumes the code is always hashed
-            if (preg_match('/^(.*)-(\w*)$/',$cache_key,$matches)) {
+            // CHECKME: this assumes the code is always hashed
+            if (preg_match('/^(.*)-(\w*)$/', $cache_key, $matches)) {
                 $key = $matches[1];
                 $code = $matches[2];
             } else {
@@ -142,14 +146,12 @@ class xarCache_Dummy_Storage extends xarCache_Storage implements ixarCache_Stora
                 $size = '';
             }
             $check = '';
-            $list[] = array('key'   => $key,
-                            'code'  => $code,
-                            'time'  => $time,
-                            'size'  => $size,
-                            'check' => $check);
+            $list[] = ['key'   => $key,
+                       'code'  => $code,
+                       'time'  => $time,
+                       'size'  => $size,
+                       'check' => $check];
         }
         return $list;
     }
 }
-
-?>

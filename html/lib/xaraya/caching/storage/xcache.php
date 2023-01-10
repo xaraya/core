@@ -14,7 +14,7 @@
  */
 class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public function __construct(Array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
         $this->storage = 'xcache';
@@ -29,10 +29,14 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
         if (xcache_isset($cache_key)) {
             // FIXME: xcache doesn't keep track of modification times, except via xcache_list
             //$this->modtime = 0;
-            if ($log) $this->logStatus('HIT', $key);
+            if ($log) {
+                $this->logStatus('HIT', $key);
+            }
             return true;
         } else {
-            if ($log) $this->logStatus('MISS', $key);
+            if ($log) {
+                $this->logStatus('MISS', $key);
+            }
             return false;
         }
     }
@@ -49,7 +53,7 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
             $classname = $value['_xcache_class_'];
             // Note: this will call __autoload or any spl_autoload_functions() if they are registered
             if (!class_exists($classname)) {
-                // FIXME: do something like this in core ? 
+                // FIXME: do something like this in core ?
                 //sys::import('xaraya.autoload');
                 //xarAutoload::initialize();
             }
@@ -88,8 +92,8 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
             return;
         }
         if (!empty($classname)) {
-            $value = array('_xcache_class_' => $classname,
-                           '_xcache_value_' => serialize($value));
+            $value = ['_xcache_class_' => $classname,
+                           '_xcache_value_' => serialize($value)];
         }
         if (!empty($expire)) {
             xcache_set($cache_key, $value, $expire);
@@ -114,12 +118,13 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
                 $key = $this->prefix . $key;
             }
             xcache_unset_by_prefix($key);
-
         } else {
             $cache_list = $this->getCachedList();
             foreach ($cache_list as $cache_entry) {
                 // check if this cache entry starts with the key
-                if (!empty($key) && strpos($cache_entry['key'], $key) !== 0) continue;
+                if (!empty($key) && strpos($cache_entry['key'], $key) !== 0) {
+                    continue;
+                }
                 // add the type/namespace prefix if necessary
                 if (!empty($this->prefix)) {
                     $cache_entry['key'] = $this->prefix . $cache_entry['key'];
@@ -167,24 +172,26 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
             $this->misses += $info['misses'];
         }
 
-        return array('size'    => $this->size,
-                     'items'   => $this->items,
-                     'hits'    => $this->hits,
-                     'misses'  => $this->misses,
-                     'modtime' => $this->modtime);
+        return ['size'    => $this->size,
+                'items'   => $this->items,
+                'hits'    => $this->hits,
+                'misses'  => $this->misses,
+                'modtime' => $this->modtime];
     }
 
     public function getCachedList()
     {
         $vcnt = xcache_count(XC_TYPE_VAR);
-        $list = array();
+        $list = [];
         for ($i = 0; $i < $vcnt; $i ++) {
             $info = xcache_list(XC_TYPE_VAR, $i);
             foreach ($info['cache_list'] as $entry) {
                 // filter out the keys that don't start with the right type/namespace prefix
-                if (!empty($this->prefix) && strpos($entry['name'], $this->prefix) !== 0) continue;
-            // CHECKME: this assumes the code is always hashed
-                if (preg_match('/^(.*)-(\w*)$/',$entry['name'],$matches)) {
+                if (!empty($this->prefix) && strpos($entry['name'], $this->prefix) !== 0) {
+                    continue;
+                }
+                // CHECKME: this assumes the code is always hashed
+                if (preg_match('/^(.*)-(\w*)$/', $entry['name'], $matches)) {
                     $key = $matches[1];
                     $code = $matches[2];
                 } else {
@@ -195,15 +202,16 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
                 $size = $entry['size'];
                 $check = '';
                 // remove the prefix from the key
-                if (!empty($this->prefix)) $key = str_replace($this->prefix,'',$key);
-                $list[] = array('key'   => $key,
-                                'code'  => $code,
-                                'time'  => $time,
-                                'size'  => $size,
-                                'check' => $check);
+                if (!empty($this->prefix)) {
+                    $key = str_replace($this->prefix, '', $key);
+                }
+                $list[] = ['key'   => $key,
+                           'code'  => $code,
+                           'time'  => $time,
+                           'size'  => $size,
+                           'check' => $check];
             }
         }
         return $list;
     }
 }
-

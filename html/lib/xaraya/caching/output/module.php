@@ -30,23 +30,24 @@ class xarModuleCache extends xarObject
     public static $expireTime     = null;
     public static $funcParams     = '';
 
-    public static $pageTitle      = array();
-    public static $styleList      = array();
-    public static $scriptList     = array();
+    public static $pageTitle      = [];
+    public static $styleList      = [];
+    public static $scriptList     = [];
 
     /**
      * Initialise the module caching options
      *
      * @return boolean true on success, false on failure
      */
-    public static function init(array $args = array())
+    public static function init(array $args = [])
     {
-        self::$cacheTime = isset($args['Module.TimeExpiration']) ?
-            $args['Module.TimeExpiration'] : 7200;
-        self::$cacheSizeLimit = isset($args['Module.SizeLimit']) ?
-            $args['Module.SizeLimit'] : 2097152;
-        self::$cacheFunctions = isset($args['Module.CacheFunctions']) ?
-            $args['Module.CacheFunctions'] : array('main' => 1, 'view' => 1, 'display' => 0);
+        self::$cacheTime = $args['Module.TimeExpiration'] ?? 7200;
+        self::$cacheSizeLimit = $args['Module.SizeLimit'] ?? 2097152;
+        self::$cacheFunctions = $args['Module.CacheFunctions'] ?? [
+            'main' => 1,
+            'view' => 1,
+            'display' => 0,
+        ];
 
         $storage = !empty($args['Module.CacheStorage']) ?
             $args['Module.CacheStorage'] : 'filesystem';
@@ -54,14 +55,16 @@ class xarModuleCache extends xarObject
             $args['Module.CacheProvider'] : null;
         $logfile = !empty($args['Module.LogFile']) ?
             $args['Module.LogFile'] : null;
-        self::$cacheStorage = xarCache::getStorage(array('storage'   => $storage,
-                                                         'type'      => 'module',
-                                                         'provider'  => $provider,
-                                                         // we store output cache files under this
-                                                         'cachedir'  => xarOutputCache::$cacheDir,
-                                                         'expire'    => self::$cacheTime,
-                                                         'sizelimit' => self::$cacheSizeLimit,
-                                                         'logfile'   => $logfile));
+        self::$cacheStorage = xarCache::getStorage([
+            'storage'   => $storage,
+            'type'      => 'module',
+            'provider'  => $provider,
+            // we store output cache files under this
+            'cachedir'  => xarOutputCache::$cacheDir,
+            'expire'    => self::$cacheTime,
+            'sizelimit' => self::$cacheSizeLimit,
+            'logfile'   => $logfile,
+        ]);
         if (empty(self::$cacheStorage)) {
             return false;
         }
@@ -78,7 +81,7 @@ class xarModuleCache extends xarObject
      * @param array  $args arguments to pass to the function
      * @return mixed cacheKey to be used with (is|get|set)Cached, or null if not applicable
      */
-    public static function getCacheKey($modName, $modType = 'user', $funcName = 'main', $args = array())
+    public static function getCacheKey($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
         if (empty(self::$cacheStorage)) {
             return;
@@ -95,14 +98,14 @@ class xarModuleCache extends xarObject
 
         // Check the specified function params
         if (empty(self::$funcParams)) {
-            $params = array();
+            $params = [];
         } else {
-            $params = explode(',',self::$funcParams);
+            $params = explode(',', self::$funcParams);
         }
         // add missing function params to $args
         foreach ($params as $param) {
             if (!isset($args[$param])) {
-                xarVar::fetch($param, 'isset', $args[$param], NULL, xarVar::NOT_REQUIRED);
+                xarVar::fetch($param, 'isset', $args[$param], null, xarVar::NOT_REQUIRED);
             }
         }
 
@@ -116,7 +119,7 @@ class xarModuleCache extends xarObject
         // set the current cacheKey
         self::$cacheKey = $modName . '-' . $funcName . '-';
 
-    // CHECKME: should we detect the param for the itemid here ?
+        // CHECKME: should we detect the param for the itemid here ?
         if (!empty($args['itemid'])) {
             self::$cacheKey .= $args['itemid'];
         }
@@ -132,7 +135,7 @@ class xarModuleCache extends xarObject
             $factors .= 0;
         } elseif (self::$userShared == 1) {
             $gidlist = xarCache::getParents();
-            $factors .= join(';',$gidlist);
+            $factors .= join(';', $gidlist);
         } else {
             $factors .= xarSession::getVar('role_id');
         }
@@ -154,8 +157,8 @@ class xarModuleCache extends xarObject
     public static function getCacheSettings()
     {
         if (!isset(self::$cacheSettings)) {
-            $settings = array();
-            $serialsettings = xarModVars::get('modules','modulecache_settings');
+            $settings = [];
+            $serialsettings = xarModVars::get('modules', 'modulecache_settings');
             if (!empty($serialsettings)) {
                 $settings = unserialize($serialsettings);
             }
@@ -173,7 +176,7 @@ class xarModuleCache extends xarObject
      * @param array  $args arguments to pass to the function
      * @return boolean  true if the module function is suitable for caching, false if not
      */
-    public static function checkCachingRules($modName, $modType = 'user', $funcName = 'main', $args = array())
+    public static function checkCachingRules($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
         // we only cache the top-most module function in case of nested functions
         if (!empty(self::$cacheKey)) {
@@ -190,7 +193,7 @@ class xarModuleCache extends xarObject
         self::$expireTime = null;
         self::$funcParams = '';
 
-    // CHECKME: should we allow POST requests here ?
+        // CHECKME: should we allow POST requests here ?
 
         $settings = self::getCacheSettings();
 
@@ -199,7 +202,6 @@ class xarModuleCache extends xarObject
             self::$userShared = $settings[$modName][$funcName]['usershared'];
             self::$expireTime = $settings[$modName][$funcName]['cacheexpire'];
             self::$funcParams = $settings[$modName][$funcName]['params'];
-
         } else {
             // this module function is not configured for caching
             return false;
@@ -244,8 +246,8 @@ class xarModuleCache extends xarObject
         if (empty($result)) {
             // initialize the title, styles and script arrays for the current cacheKey
             self::$pageTitle = null;
-            self::$styleList = array();
-            self::$scriptList = array();
+            self::$styleList = [];
+            self::$scriptList = [];
         }
 
         return $result;
@@ -280,12 +282,12 @@ class xarModuleCache extends xarObject
         }
         if (!empty($content['styles']) && is_array($content['styles'])) {
             foreach ($content['styles'] as $info) {
-                xarMod::apiFunc('themes','user','register',$info);
+                xarMod::apiFunc('themes', 'user', 'register', $info);
             }
         }
         if (!empty($content['script']) && is_array($content['script'])) {
             foreach ($content['script'] as $info) {
-                xarMod::apiFunc('themes','user','registerjs',$info);
+                xarMod::apiFunc('themes', 'user', 'registerjs', $info);
             }
         }
         return $content['output'];
@@ -315,8 +317,7 @@ class xarModuleCache extends xarObject
             // the cache entry doesn't exist or has expired (no log here) AND
             !(self::$cacheStorage->isCached($cacheKey, self::$expireTime, 0)) &&
             // the cache collection directory hasn't reached its size limit...
-            !(self::$cacheStorage->sizeLimitReached()) ) {
-
+            !(self::$cacheStorage->sizeLimitReached())) {
             // CHECKME: add cacheKey cacheCode in comments if template filenames are already added
             if (xarTpl::outputTemplateFilenames()) {
                 // separate with space here - we must avoid issues with double -- !?
@@ -325,11 +326,11 @@ class xarModuleCache extends xarObject
                          . "<!-- end cache: module/" . $cacheKey . ' ' . self::$cacheCode . " -->\n";
             }
 
-            $content = array('output' => $value,
-                             'link'   => xarServer::getCurrentURL(),
-                             'title'  => self::$pageTitle,
-                             'styles' => self::$styleList,
-                             'script' => self::$scriptList);
+            $content = ['output' => $value,
+                        'link'   => xarServer::getCurrentURL(),
+                        'title'  => self::$pageTitle,
+                        'styles' => self::$styleList,
+                        'script' => self::$scriptList];
             $value = serialize($content);
 
             // Note: we pass along the expiration time here, because it may be different for each module
@@ -357,30 +358,35 @@ class xarModuleCache extends xarObject
      * Keep track of some page title for caching - see xarTpl::setPageTitle()
      * @return void
      */
-    public static function setPageTitle($title = NULL, $module = NULL)
+    public static function setPageTitle($title = null, $module = null)
     {
-        if (empty(self::$cacheKey)) return;
-        self::$pageTitle = array($title, $module);
+        if (empty(self::$cacheKey)) {
+            return;
+        }
+        self::$pageTitle = [$title, $module];
     }
 
     /**
      * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
      * @return void
      */
-    public static function addStyle(Array $args=array())
+    public static function addStyle(array $args=[])
     {
-        if (empty(self::$cacheKey)) return;
+        if (empty(self::$cacheKey)) {
+            return;
+        }
         self::$styleList[] = $args;
     }
 
     /**
      * Keep track of some javascript for caching - see xarMod::apiFunc('themes','user','registerjs')
-     * @return void  
+     * @return void
      */
-    public static function addJavaScript(Array $args=array())
+    public static function addJavaScript(array $args=[])
     {
-        if (empty(self::$cacheKey)) return;
+        if (empty(self::$cacheKey)) {
+            return;
+        }
         self::$scriptList[] = $args;
     }
 }
-

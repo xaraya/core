@@ -22,13 +22,13 @@ sys::import('xaraya.exceptions');
 **/
 interface IxarTemplateCache
 {
-    static function init($dir, $active);
-    static function getKey($fileName);
-    static function saveKey($fileName);
-    static function saveEntry($fileName, $data);
-    static function isDirty($fileName);
-    static function cacheFile($fileName);   // wrong for sure
-    static function sourceFile($key);       // arguably wrong
+    public static function init($dir, $active);
+    public static function getKey($fileName);
+    public static function saveKey($fileName);
+    public static function saveEntry($fileName, $data);
+    public static function isDirty($fileName);
+    public static function cacheFile($fileName);   // wrong for sure
+    public static function sourceFile($key);       // arguably wrong
 }
 
 /**
@@ -64,11 +64,13 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
     **/
     public static function init($dir, $active)
     {
-        if($active === false) self::$active = false;
+        if ($active === false) {
+            self::$active = false;
+        }
 
-        if(!is_writable($dir)) {
+        if (!is_writable($dir)) {
             $msg = "xarTemplateCache::init: Cannot write in the directory '#(1)', ";
-            if(self::isActive()) {
+            if (self::isActive()) {
                 $msg .= "but the setting: 'cache templates' is set to 'On'.\n";
             } else {
                 $msg .= "and the setting: 'cache template ' is set to 'Off.\n"
@@ -90,7 +92,9 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
     public static function getKey($fileName)
     {
         // Simple MD5 hash over the filename determines the key for the cache
-        if(!self::isActive()) $fileName=self::$inactiveKeySeed;
+        if (!self::isActive()) {
+            $fileName=self::$inactiveKeySeed;
+        }
         return md5($fileName);
     }
 
@@ -105,10 +109,14 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
     **/
     public static function saveKey($fileName)
     {
-        if(!self::isActive()) return true;
+        if (!self::isActive()) {
+            return true;
+        }
         // FIXME: this has to be reviewed
-        if($fileName == 'memory') return true;
-        if($fd = fopen(self::$dir . '/CACHEKEYS', 'a')) {
+        if ($fileName == 'memory') {
+            return true;
+        }
+        if ($fd = fopen(self::$dir . '/CACHEKEYS', 'a')) {
             fwrite($fd, self::getKey($fileName).': '.$fileName."\n");
             fclose($fd);
             return true;
@@ -135,9 +143,10 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
     public static function saveEntry($fileName, $data)
     {
         // write data into the cache file
-        $data = str_replace('?><?php','',$data);
-        if($fd = fopen(self::cacheFile($fileName), 'w')) {
-            fwrite($fd, $data); fclose($fd);
+        $data = str_replace('?><?php', '', $data);
+        if ($fd = fopen(self::cacheFile($fileName), 'w')) {
+            fwrite($fd, $data);
+            fclose($fd);
         }
         // Add an entry into CACHEKEYS if needed
         return self::saveKey($fileName);
@@ -151,7 +160,9 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
     **/
     public static function isDirty($fileName)
     {
-        if(!self::isActive()) return true; // always dirty
+        if (!self::isActive()) {
+            return true;
+        } // always dirty
 
         $cacheFile = self::cacheFile($fileName);
         // Logic here is:
@@ -160,10 +171,13 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
         // 3. modification time of source is smaller than modification time of the compiled template AND
         // 4. DEBUG: when the XSL transformation file has NOT been changed more recently than the compiled template
         // THEN we do NOT need to compile the file.
-        if ( file_exists($cacheFile) &&
-             ( !file_exists($fileName) ||
-               ( filemtime($fileName) < filemtime($cacheFile)
-               ) ) ) return false; // not dirty
+        if (file_exists($cacheFile) &&
+             (!file_exists($fileName) ||
+               (
+                   filemtime($fileName) < filemtime($cacheFile)
+               ))) {
+            return false;
+        } // not dirty
 
         return true; // either cache not active of entry needs recompilation
     }
@@ -176,18 +190,18 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
     public static function sourceFile($key)
     {
         $sourceFile = null;
-        if(self::isActive()) {
+        if (self::isActive()) {
             $fileName = $key . '.php';
             // Dont use try/catch here, as this may be called directly from
             // the exception handler (which we probably should avoid then?)
             //
             if ($fd = @fopen(self::$dir . '/CACHEKEYS', 'r')) {
-                while($cache_entry = fscanf($fd, "%s\t%s\n")) {
-                    list($hash, $template) = $cache_entry;
+                while ($cache_entry = fscanf($fd, "%s\t%s\n")) {
+                    [$hash, $template] = $cache_entry;
 
                     // Strip the colon
-                    $hash = substr($hash,0,-1);
-                    if($hash == $key) {
+                    $hash = substr($hash, 0, -1);
+                    if ($hash == $key) {
                         // Found the file, source is $template
                         $sourceFile = $template;
                         break;
@@ -199,4 +213,3 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
         return $sourceFile;
     }
 }
-?>

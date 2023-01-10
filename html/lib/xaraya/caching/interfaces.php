@@ -7,13 +7,13 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- * 
+ *
  * Interfaces for cache storage
  */
 
 interface ixarCache_Storage
 {
-    public function __construct(Array $args = array());
+    public function __construct(array $args = []);
     public function setNamespace($namespace = '');
     public function setProvider($provider = '');
     public function setCode($code = '');
@@ -36,4 +36,3 @@ interface ixarCache_Storage
     public function getCachedList();
     public function getCachedKeys();
 }
-

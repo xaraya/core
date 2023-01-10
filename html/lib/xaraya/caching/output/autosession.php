@@ -62,23 +62,23 @@ class xarAutoSessionCache extends xarObject
         $cachingConfigFile = $xarVarDir.'/cache/config.caching.php';
         if (file_exists($cachingConfigFile) &&
             is_writable($cachingConfigFile)) {
-            $cachingConfiguration = array();
+            $cachingConfiguration = [];
             include $cachingConfigFile;
             if (!empty($cachingConfiguration['AutoCache.MaxPages']) &&
                 file_exists(xarOutputCache::$cacheDir.'/autocache.log') &&
                 filesize(xarOutputCache::$cacheDir.'/autocache.log') > 0) {
                 $logs = @file(xarOutputCache::$cacheDir.'/autocache.log');
-                $autocacheproposed = array();
+                $autocacheproposed = [];
                 if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
-                    $autocachestats = array();
-                    $autocachefirstseen = array();
-                    $autocachelastseen = array();
+                    $autocachestats = [];
+                    $autocachefirstseen = [];
+                    $autocachelastseen = [];
                 }
                 foreach ($logs as $entry) {
                     if (empty($entry)) {
                         continue;
                     }
-                    list($time, $status, $addr, $url) = explode(' ', $entry);
+                    [$time, $status, $addr, $url] = explode(' ', $entry);
                     $url = trim($url);
                     if (!isset($autocacheproposed[$url])) {
                         $autocacheproposed[$url] = 0;
@@ -86,8 +86,8 @@ class xarAutoSessionCache extends xarObject
                     $autocacheproposed[$url]++;
                     if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
                         if (!isset($autocachestats[$url])) {
-                            $autocachestats[$url] = array('HIT' => 0,
-                                                          'MISS' => 0);
+                            $autocachestats[$url] = ['HIT' => 0,
+                                                     'MISS' => 0];
                         }
                         $autocachestats[$url][$status]++;
                         if (!isset($autocachefirstseen[$url])) {
@@ -117,7 +117,7 @@ class xarAutoSessionCache extends xarObject
                 // sort descending by count
                 arsort($autocacheproposed, SORT_NUMERIC);
                 // build the list of URLs proposed for session-less caching
-                $checkurls = array();
+                $checkurls = [];
                 foreach ($autocacheproposed as $url => $count) {
                     if (count($checkurls) >= $cachingConfiguration['AutoCache.MaxPages'] ||
                         $count < $cachingConfiguration['AutoCache.Threshold']) {
@@ -150,11 +150,11 @@ class xarAutoSessionCache extends xarObject
                             if (empty($entry)) {
                                 continue;
                             }
-                            list($url, $hit, $miss, $first, $last) = explode(' ', $entry);
+                            [$url, $hit, $miss, $first, $last] = explode(' ', $entry);
                             $last = trim($last);
                             if (!isset($autocachestats[$url])) {
-                                $autocachestats[$url] = array('HIT' => $hit,
-                                                              'MISS' => $miss);
+                                $autocachestats[$url] = ['HIT' => $hit,
+                                                         'MISS' => $miss];
                                 $autocachefirstseen[$url] = $first;
                                 $autocachelastseen[$url] = $last;
                             } else {

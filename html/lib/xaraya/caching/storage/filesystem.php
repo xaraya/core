@@ -19,17 +19,15 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
     public $blksize = 0;
     public $bsknown = false;
 
-    public function __construct(Array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
 
         if ($this->type == 'template') {
             // CHECKME: this assumes that we create this instance after loading xarTemplate.php
             $this->dir = sys::varpath() . xarConst::TPL_CACHEDIR;
-
         } elseif ($this->type == 'variable') {
             $this->dir = realpath($this->cachedir);
-
         } else {
             $this->dir = realpath($this->cachedir . '/' . $this->type);
         }
@@ -72,13 +70,15 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
             // (cached files don't expire OR this file hasn't expired yet) AND
             ($expire == 0 ||
              filemtime($cache_file) > time() - $expire)) {
-
             $this->modtime = filemtime($cache_file);
-            if ($log) $this->logStatus('HIT', $key);
+            if ($log) {
+                $this->logStatus('HIT', $key);
+            }
             return true;
-
         } else {
-            if ($log) $this->logStatus('MISS', $key);
+            if ($log) {
+                $this->logStatus('MISS', $key);
+            }
             return false;
         }
     }
@@ -95,20 +95,19 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
         if ($this->type == 'template') {
             // CHECKME: the file will be included in xarTemplate.php ?
             $data = '';
-
         } elseif ($output) {
             // output the file directly to the browser
             @readfile($cache_file);
             return true;
-
         } elseif (function_exists('file_get_contents')) {
             $data = file_get_contents($cache_file);
-
         } else {
             $data = '';
             $file = @fopen($cache_file, "rb");
             if ($file) {
-                while (!feof($file)) $data .= fread($file, 1024);
+                while (!feof($file)) {
+                    $data .= fread($file, 1024);
+                }
                 fclose($file);
             }
         }
@@ -201,16 +200,18 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
         $this->modtime = 0;
         $this->size = $this->_getCacheDirSize($this->dir, true);
 
-        return array('size'    => $this->size,
-                     'items'   => $this->items,
-                     'hits'    => $this->hits,
-                     'misses'  => $this->misses,
-                     'modtime' => $this->modtime);
+        return ['size'    => $this->size,
+                'items'   => $this->items,
+                'hits'    => $this->hits,
+                'misses'  => $this->misses,
+                'modtime' => $this->modtime];
     }
 
     public function saveFile($key = '', $filename = '')
     {
-        if (empty($filename)) return;
+        if (empty($filename)) {
+            return;
+        }
 
         $cache_key = $this->getCacheKey($key);
 
@@ -231,7 +232,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
             return;
         }
 
-        if (substr($dir,-1) != "/") $dir .= "/";
+        if (substr($dir, -1) != "/") {
+            $dir .= "/";
+        }
         if ($dirId = opendir($dir)) {
             while (($item = readdir($dirId)) !== false) {
                 if ($item[0] != '.') {
@@ -259,7 +262,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
 
         if ($this->bsknown) {
             if ($dir && is_dir($dir)) {
-                if (substr($dir,-1) != "/") $dir .= "/";
+                if (substr($dir, -1) != "/") {
+                    $dir .= "/";
+                }
                 if ($dirId = opendir($dir)) {
                     while (($item = readdir($dirId)) !== false) {
                         if ($item != "." && $item != "..") {
@@ -280,7 +285,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
             }
         } else {
             if ($dir && is_dir($dir)) {
-                if (substr($dir,-1) != "/") $dir .= "/";
+                if (substr($dir, -1) != "/") {
+                    $dir .= "/";
+                }
                 if ($dirId = opendir($dir)) {
                     while (($item = readdir($dirId)) !== false) {
                         if ($item != "." && $item != "..") {
@@ -310,13 +317,15 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
 
     public function getCachedList()
     {
-        $list = array();
+        $list = [];
         if ($handle = @opendir($this->dir)) {
             while (($file = readdir($handle)) !== false) {
                 // filter out the keys that don't start with the right type/namespace prefix
-                if (!empty($this->prefix) && strpos($file, $this->prefix) !== 0) continue;
-            // CHECKME: this assumes the code is always hashed
-                if (!preg_match('/^(.*)-(\w*)\.php$/',$file,$matches)) {
+                if (!empty($this->prefix) && strpos($file, $this->prefix) !== 0) {
+                    continue;
+                }
+                // CHECKME: this assumes the code is always hashed
+                if (!preg_match('/^(.*)-(\w*)\.php$/', $file, $matches)) {
                     continue;
                 }
                 $key = $matches[1];
@@ -326,17 +335,17 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
                 $size = filesize($cache_file);
                 $check = '';
                 // remove the prefix from the key
-                if (!empty($this->prefix)) $key = str_replace($this->prefix,'',$key);
-                $list[] = array('key'   => $key,
-                                'code'  => $code,
-                                'time'  => $time,
-                                'size'  => $size,
-                                'check' => $check);
+                if (!empty($this->prefix)) {
+                    $key = str_replace($this->prefix, '', $key);
+                }
+                $list[] = ['key'   => $key,
+                           'code'  => $code,
+                           'time'  => $time,
+                           'size'  => $size,
+                           'check' => $check];
             }
             closedir($handle);
         }
         return $list;
     }
 }
-
-?>

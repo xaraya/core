@@ -14,7 +14,7 @@
  */
 class xarCache_eAccelerator_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public function __construct(Array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
         $this->storage = 'eaccelerator';
@@ -31,10 +31,14 @@ class xarCache_eAccelerator_Storage extends xarCache_Storage implements ixarCach
         if (isset($value)) {
             // FIXME: eaccelerator doesn't keep track of modification times !
             //$this->modtime = 0;
-            if ($log) $this->logStatus('HIT', $key);
+            if ($log) {
+                $this->logStatus('HIT', $key);
+            }
             return true;
         } else {
-            if ($log) $this->logStatus('MISS', $key);
+            if ($log) {
+                $this->logStatus('MISS', $key);
+            }
             return false;
         }
     }
@@ -88,24 +92,23 @@ class xarCache_eAccelerator_Storage extends xarCache_Storage implements ixarCach
         eaccelerator();
         $output = ob_get_contents();
         ob_end_clean();
-        if (preg_match('/Memory Allocated<.+?>([0-9,]+) Bytes/',$output,$matches)) {
-            $this->size = strtr($matches[1],array(',' => ''));
+        if (preg_match('/Memory Allocated<.+?>([0-9,]+) Bytes/', $output, $matches)) {
+            $this->size = strtr($matches[1], [',' => '']);
         }
-        if (preg_match('/Cached Keys<.+?>(\d+)/',$output,$matches)) {
+        if (preg_match('/Cached Keys<.+?>(\d+)/', $output, $matches)) {
             $this->items = $matches[1];
         }
         // TODO: extract other values
 
-        return array('size'    => $this->size,
-                     'items'   => $this->items,
-                     'hits'    => $this->hits,
-                     'misses'  => $this->misses,
-                     'modtime' => $this->modtime);
+        return ['size'    => $this->size,
+                'items'   => $this->items,
+                'hits'    => $this->hits,
+                'misses'  => $this->misses,
+                'modtime' => $this->modtime];
     }
 
     public function getCachedList()
     {
-        return array();
+        return [];
     }
 }
-

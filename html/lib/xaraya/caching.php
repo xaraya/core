@@ -44,8 +44,7 @@ class xarCache extends xarObject
                 // initialize the output cache
                 sys::import('xaraya.caching.output');
                 self::$outputCacheIsEnabled = xarOutputCache::init($config);
-                // Note : we may already exit here if session-less page caching is enabled
-
+            // Note : we may already exit here if session-less page caching is enabled
             } else {
                 // if the config file is missing or empty, turn off output caching
                 @unlink(self::$cacheDir . '/output/cache.touch');
@@ -71,7 +70,7 @@ class xarCache extends xarObject
     public static function getConfig()
     {
         // load the caching configuration
-        $cachingConfiguration = array();
+        $cachingConfiguration = [];
         if (file_exists(self::$cacheDir . '/config.caching.php')) {
             @include(self::$cacheDir . '/config.caching.php');
         }
@@ -110,7 +109,7 @@ class xarCache extends xarObject
      * @param string url optional url to be checked if not the current url
      * @return mixed cacheKey to be used with xarModuleCache::(is|get|set)Cached, or null if not applicable
      */
-    public static function getModuleKey($modName, $modType = 'user', $funcName = 'main', $args = array())
+    public static function getModuleKey($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
         if (xarCache::$outputCacheIsEnabled && xarOutputCache::$moduleCacheIsEnabled) {
             return xarModuleCache::getCacheKey($modName, $modType, $funcName, $args);
@@ -123,7 +122,7 @@ class xarCache extends xarObject
      * @param string url optional url to be checked if not the current url
      * @return mixed cacheKey to be used with xarObjectCache::(is|get|set)Cached, or null if not applicable
      */
-    public static function getObjectKey($objectName, $methodName = 'view', $args = array())
+    public static function getObjectKey($objectName, $methodName = 'view', $args = [])
     {
         if (xarCache::$outputCacheIsEnabled && xarOutputCache::$objectCacheIsEnabled) {
             return xarObjectCache::getCacheKey($objectName, $methodName, $args);
@@ -174,12 +173,12 @@ class xarCache extends xarObject
     /**
      * Keep track of some page title for caching - see xarTpl::setPageTitle()
      */
-    public static function setPageTitle($title = NULL, $module = NULL)
+    public static function setPageTitle($title = null, $module = null)
     {
         if (!xarCache::$outputCacheIsEnabled) {
             return;
         }
-    // TODO: refactor common code ?
+        // TODO: refactor common code ?
         if (xarOutputCache::$moduleCacheIsEnabled) {
             // set page title for module output
             xarModuleCache::setPageTitle($title, $module);
@@ -193,12 +192,12 @@ class xarCache extends xarObject
     /**
      * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
      */
-    public static function addStyle(Array $args=array())
+    public static function addStyle(array $args=[])
     {
         if (!xarCache::$outputCacheIsEnabled) {
             return;
         }
-    // TODO: refactor common code ?
+        // TODO: refactor common code ?
         if (xarOutputCache::$moduleCacheIsEnabled) {
             // add stylesheet for module output
             xarModuleCache::addStyle($args);
@@ -212,12 +211,12 @@ class xarCache extends xarObject
     /**
      * Keep track of some javascript for caching - xarMod::apiFunc('themes','user','registerjs')
      */
-    public static function addJavaScript(Array $args=array())
+    public static function addJavaScript(array $args=[])
     {
         if (!xarCache::$outputCacheIsEnabled) {
             return;
         }
-    // TODO: refactor common code ?
+        // TODO: refactor common code ?
         if (xarOutputCache::$moduleCacheIsEnabled) {
             // add javascript for module output
             xarModuleCache::addJavaScript($args);
@@ -231,7 +230,7 @@ class xarCache extends xarObject
     /**
      * Get a storage class instance for some type of cached data
      *
-     * 
+     *
      * @param string  $storage the storage you want (filesystem, database, apcu or doctrine)
      * @param string  $type the type of cached data (page, block, template, ...)
      * @param string  $cachedir the path to the cache directory (for filesystem)
@@ -244,7 +243,7 @@ class xarCache extends xarObject
      * @param object  $provider an instantiated Doctrine CacheProvider (for doctrine)
      * @return object the specified cache storage
      */
-    public static function getStorage(array $args = array())
+    public static function getStorage(array $args = [])
     {
         sys::import('xaraya.caching.storage');
         return xarCache_Storage::getCacheStorage($args);
@@ -253,7 +252,7 @@ class xarCache extends xarObject
     /**
      * Get the parent group ids of the current user (with minimal overhead)
      *
-     * 
+     *
      * @return array of parent gids
      * @todo avoid DB lookup by passing groups via cookies ?
      * @todo Note : don't do this if admins get cached too :)
@@ -270,14 +269,14 @@ class xarCache extends xarObject
         $dbconn = xarDB::getConn();
         $query = "SELECT parent_id FROM $rolemembers WHERE role_id = ?";
         $stmt   = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($currentid));
-    
-        $gidlist = array();
-        while($result->next()) {
+        $result = $stmt->executeQuery([$currentid]);
+
+        $gidlist = [];
+        while ($result->next()) {
             $gidlist[] = $result->getInt(1);
         }
         $result->Close();
-        xarCoreCache::setCached('User.Variables.'.$currentid, 'parentlist',$gidlist);
+        xarCoreCache::setCached('User.Variables.'.$currentid, 'parentlist', $gidlist);
         return $gidlist;
     }
 
@@ -301,4 +300,3 @@ class xarCache extends xarObject
         return xarOutputCache::$cacheDir;
     }
 }
-

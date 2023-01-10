@@ -1,7 +1,7 @@
 <?php
 /**
  * Block caching
- * 
+ *
  * @package core\caching
  * @subpackage caching
  * @category Xaraya Web Applications Framework
@@ -34,12 +34,10 @@ class xarBlockCache extends xarObject
      *
      * @return boolean true on success, false on failure
      */
-    public static function init(array $args = array())
+    public static function init(array $args = [])
     {
-        self::$cacheTime = isset($args['Block.TimeExpiration']) ?
-            $args['Block.TimeExpiration'] : 7200;
-        self::$cacheSizeLimit = isset($args['Block.SizeLimit']) ?
-            $args['Block.SizeLimit'] : 2097152;
+        self::$cacheTime = $args['Block.TimeExpiration'] ?? 7200;
+        self::$cacheSizeLimit = $args['Block.SizeLimit'] ?? 2097152;
 
         $storage = !empty($args['Block.CacheStorage']) ?
             $args['Block.CacheStorage'] : 'filesystem';
@@ -47,14 +45,16 @@ class xarBlockCache extends xarObject
             $args['Block.CacheProvider'] : null;
         $logfile = !empty($args['Block.LogFile']) ?
             $args['Block.LogFile'] : null;
-        self::$cacheStorage = xarCache::getStorage(array('storage'   => $storage,
-                                                         'type'      => 'block',
-                                                         'provider'  => $provider,
-                                                         // we store output cache files under this
-                                                         'cachedir'  => xarOutputCache::$cacheDir,
-                                                         'expire'    => self::$cacheTime,
-                                                         'sizelimit' => self::$cacheSizeLimit,
-                                                         'logfile'   => $logfile));
+        self::$cacheStorage = xarCache::getStorage([
+            'storage'   => $storage,
+            'type'      => 'block',
+            'provider'  => $provider,
+            // we store output cache files under this
+            'cachedir'  => xarOutputCache::$cacheDir,
+            'expire'    => self::$cacheTime,
+            'sizelimit' => self::$cacheSizeLimit,
+            'logfile'   => $logfile,
+        ]);
         if (empty(self::$cacheStorage)) {
             return false;
         }
@@ -108,7 +108,7 @@ class xarBlockCache extends xarObject
             $factors .= 0;
         } elseif (self::$userShared == 1) {
             $gidlist = xarCache::getParents();
-            $factors .= join(';',$gidlist);
+            $factors .= join(';', $gidlist);
         } else {
             $factors .= xarSession::getVar('role_id');
         }
@@ -170,15 +170,16 @@ class xarBlockCache extends xarObject
      * @param  array $blockInfo block information with module, type, id etc.
      * @return boolean  true if the block is suitable for caching, false if not
      */
-    public static function checkCachingRules($blockInfo = array())
+    public static function checkCachingRules($blockInfo = [])
     {
         // we only cache the top-most block in case of nested blocks
         if (!empty(self::$cacheKey)) {
             return false;
         }
-        
-        if (empty($blockInfo['type']))
+
+        if (empty($blockInfo['type'])) {
             return false;
+        }
         /* As of soloblocks we can oly rely on type being present
         if (empty($blockInfo['module']) || empty($blockInfo[''])) {
             return false;
@@ -194,7 +195,7 @@ class xarBlockCache extends xarObject
         $settings = self::getCacheSettings();
 
         $blockid = $blockInfo['bid'];
-        
+
         if (isset($settings[$blockid])) {
             self::$noCache    = $settings[$blockid]['nocache'];
             self::$pageShared = $settings[$blockid]['pageshared'];
@@ -324,8 +325,7 @@ class xarBlockCache extends xarObject
             // the cache entry doesn't exist or has expired (no log here) AND
             !(self::$cacheStorage->isCached($cacheKey, self::$expireTime, 0)) &&
             // the cache collection directory hasn't reached its size limit...
-            !(self::$cacheStorage->sizeLimitReached()) ) {
-
+            !(self::$cacheStorage->sizeLimitReached())) {
             // Note: we pass along the expiration time here, because it may be different for each block
             self::$cacheStorage->setCached($cacheKey, $value, self::$expireTime);
         }
@@ -347,4 +347,3 @@ class xarBlockCache extends xarObject
         self::$cacheStorage->flushCached($cacheKey);
     }
 }
-
