@@ -43,6 +43,9 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
             return;
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
+        if (!empty($args['where']) && is_array($args['where'])) {
+            $args['where'] = array_filter($args['where']);
+        }
 
         if(!empty($args) && is_array($args) && count($args) > 0) 
             $this->args = array_merge($this->args, $args);
@@ -74,6 +77,38 @@ class DataObjectViewHandler extends DataObjectDefaultHandler
 
         if (!$this->object->checkAccess('view'))
             return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+
+        if (!empty($this->args['where']) && is_array($this->args['where']) && is_object($this->object->datastore)) {
+            // key white-list filter - https://www.php.net/manual/en/function.array-intersect-key.php
+            $allowed = array_flip(array_keys($this->object->properties));
+            $this->args['where'] = array_intersect_key($this->args['where'], $allowed);
+            // Need the database connection for quoting strings.
+            $dbconn = xarDB::getConn();
+            if (get_class($this->object->datastore) !== 'VariableTableDataStore') {
+                $wherelist = [];
+                foreach ($this->args['where'] as $key => $value) {
+                    if (is_numeric($value)) {
+                        $wherelist[] = "$key eq $value";
+                    } else {
+                        $wherelist[] = "$key eq " . $dbconn->qstr($value);
+                    }
+                }
+                $wherestring = implode(' and ', $wherelist);
+                $conditions = $this->object->setWhere($wherestring);
+                $this->object->dataquery->addconditions($conditions);
+            } else {
+                $join = '';
+                foreach ($this->args['where'] as $key => $value) {
+                    if (is_numeric($value)) {
+                        $clause = "= $value";
+                    } else {
+                        $clause = "= " . $dbconn->qstr($value);
+                    }
+                    $this->object->addWhere($key, $clause, $join);
+                    $join = 'and';
+                }
+            }
+        }
 
         $this->object->countItems();
 
