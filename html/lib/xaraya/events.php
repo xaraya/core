@@ -125,8 +125,8 @@ class xarEvents extends xarObject implements ixarEvents
                                     default:
                                         // use the defined class for the observer
                                         $obsclass = ucfirst($obsmod) . $obs['event'] . "Observer";
-                                        // attach observer to subject                
-                                        $subject->attach(new $obsclass());
+                                        // attach observer to subject + pass along $obs to constructor here too
+                                        $subject->attach(new $obsclass($obs));
                                     break;
                                     case 'api':
                                         // wrap api function in apiclass observer

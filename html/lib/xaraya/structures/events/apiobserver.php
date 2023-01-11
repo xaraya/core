@@ -10,13 +10,14 @@
  * @link http://www.xaraya.info
 **/
 sys::import('xaraya.structures.events.observer');
+
 class ApiEventObserver extends EventObserver
 {
     public $module;
     public $type;
     public $func;
                 
-    public function __construct($args)
+    public function __construct(array $args = [])
     {
         if (isset($args['module'])) $this->module = $args['module'];
         if (isset($args['type'])) $this->type = $args['type'];

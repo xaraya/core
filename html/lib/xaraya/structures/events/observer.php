@@ -17,6 +17,13 @@
 **/
 class EventObserver extends xarObject implements ixarEventObserver
 {
+    public function __construct(array $args = [])
+    {
+        // native 'class' event and hook subclasses can do whatever they want with $args = $obs array from events.php
+        // in 'api' and 'gui' event subclasses, this will set some properties, and
+        // the same for 'api' and 'gui' hook subclasses extended from HookObserver
+    }
+
     public function notify(ixarEventSubject $subject)
     {
         // observers obtain arguments from the subject
@@ -35,4 +42,3 @@ interface ixarEventObserver
 {
     public function notify(ixarEventSubject $subject);
 }
-?>
