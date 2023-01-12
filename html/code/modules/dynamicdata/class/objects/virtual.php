@@ -12,11 +12,22 @@
 sys::import('modules.dynamicdata.class.objects.descriptor');
 
 /**
- * generate the variables necessary to instantiate a *virtual* DataObject class (= not defined in database)
+ * Generate the variables necessary to instantiate a *virtual* DataObject class (= not defined in database)
  *
+ * By default the virtual dataobjects will use a data store supported by cache storage (transient or persistent)
+ *
+ * // define the object and its properties using the descriptor first
  * $descriptor = new VirtualObjectDescriptor(['name' => 'hello']);
  * $descriptor->addProperty(['name' => 'my_id', 'type' => 'itemid']);
+ * $descriptor->addProperty(['name' => 'my_title', 'type' => 'textbox']);
+ *
+ * // you can use the same descriptor for DataObject & DataObjectList afterwards
  * $object = new DataObject($descriptor);
+ * $object->createItem(['my_id' => 5, 'my_title' => 'Hi there']);
+ * ...
+ * // you can use the same descriptor for DataObject & DataObjectList afterwards
+ * $objectlist = new DataObjectlist($descriptor);
+ * $items = $objectlist->getItems(['itemids' => [5]]);
  */
 class VirtualObjectDescriptor extends DataObjectDescriptor
 {
@@ -27,6 +38,9 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         'itemtype' => 0,
         'module_id' => 182,
         'template' => '',
+        // Data Store is supported by cacheStorage (dummy = 1 request only or apcu = somewhat persistent by default)
+        'datastore' => 'cache',
+        'cachestorage' => 'dummy', // or 'apcu' etc.
         'propertyargs' => [],
     ];
 

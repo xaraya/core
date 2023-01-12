@@ -151,6 +151,10 @@ class DataStoreFactory extends xarObject
                 sys::import('xaraya.datastores.virtual');
                 $datastore = new DummyDataStore($name);
                 break;
+            case 'cache':
+                sys::import('xaraya.datastores.caching');
+                $datastore = new CachingDataStore($name);
+                break;
             default:
                 sys::import('xaraya.datastores.sql.variabletable');
                 $datastore = new VariableTableDataStore($name);

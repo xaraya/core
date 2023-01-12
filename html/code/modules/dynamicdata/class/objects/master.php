@@ -388,6 +388,7 @@ class DataObjectMaster extends xarObject
                     throw new Exception(xarML('Did not find a first property for module variable datastore'));
                 }
                 break;
+            case 'cache': $this->addDataStore($this->name, 'cache'); break;
             case 'dynamicdata': $this->addDataStore('_dynamic_data_', 'data'); break;
         }
     }
