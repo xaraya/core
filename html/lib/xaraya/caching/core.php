@@ -187,7 +187,11 @@ class xarCoreCache extends xarObject
         if (!self::$cacheStorage->isCached('__scopelist__')) {
             return;
         }
-        $scopelist = self::$cacheStorage->getCached('__scopelist__');
+        $scopelist = [];
+        $value = self::$cacheStorage->getCached('__scopelist__');
+        if (!empty($value)) {
+            $scopelist = unserialize($value);
+        }
         if (empty($scopelist)) {
             return;
         }
@@ -211,7 +215,8 @@ class xarCoreCache extends xarObject
         }
         // get the list of scopes
         $scopelist = array_keys(self::$cacheCollection);
-        self::$cacheStorage->setCached('__scopelist__', $scopelist);
+        $value = serialize($scopelist);
+        self::$cacheStorage->setCached('__scopelist__', $value);
         // save each scope to second-level cache
         foreach ($scopelist as $scope) {
             $value = serialize(self::$cacheCollection[$scope]);
