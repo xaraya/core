@@ -112,7 +112,7 @@
         <xar:elseif condition="$export eq 'view'"/>
             <!-- example of using virtual object descriptor to show database table -->
             <xar:set name="dummy">sys::import('modules.dynamicdata.class.objects.virtual')</xar:set>
-	        <xar:set name="descriptor">new VirtualObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
+            <xar:set name="descriptor">new VirtualObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
             <xar:set name="object">new DataObjectList($descriptor)</xar:set>
             <xar:set name="dummy">$object->getItems()</xar:set>
             <h3>
@@ -124,11 +124,11 @@
                     <xar:img scope="theme" file="icons/export-xml.png" class="xar-icon" alt="export"/>
                 </a>
             </h3>
-	        <xar:data-view object="$object" table="$table" layout="meta" newlink=""/>
+            <xar:data-view object="$object" table="$table" layout="meta" newlink=""/>
         <xar:elseif condition="$export eq 'display'"/>
             <!-- example of using virtual object descriptor to show database table -->
             <xar:set name="dummy">sys::import('modules.dynamicdata.class.objects.virtual')</xar:set>
-	        <xar:set name="descriptor">new VirtualObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
+            <xar:set name="descriptor">new VirtualObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
             <xar:set name="object">new DataObject($descriptor)</xar:set>
             <xar:set name="dummy">xarVar::fetch('itemid', 'notempty', $itemid, 1, xarVar::NOT_REQUIRED)</xar:set>
             <xar:set name="dummy">$object->getItem(['itemid' => $itemid])</xar:set>
@@ -144,7 +144,7 @@
                     <xar:img scope="theme" file="icons/export-xml.png" class="xar-icon" alt="export"/>
                 </a>
             </h3>
-	        <xar:data-display object="$object" table="$table"/>
+            <xar:data-display object="$object" table="$table"/>
         <xar:else />
             <h3>
                 Table: #$table#&#160;
