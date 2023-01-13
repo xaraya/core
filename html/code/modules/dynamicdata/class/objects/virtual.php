@@ -28,6 +28,12 @@ sys::import('modules.dynamicdata.class.objects.descriptor');
  * // you can use the same descriptor for DataObject & DataObjectList afterwards
  * $objectlist = new DataObjectlist($descriptor);
  * $items = $objectlist->getItems(['itemids' => [5]]);
+ *
+ * Or you can also use an existing database table as relational data store for the virtual objects
+ *
+ * $descriptor = new VirtualObjectDescriptor(['table' => 'xar_other_table']);
+ * $objectlist = new DataObjectList($descriptor);
+ * $items = $objectlist->getItems();
  */
 class VirtualObjectDescriptor extends DataObjectDescriptor
 {
@@ -57,12 +63,15 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
      * @param $args['config'] some configuration for the object (free to define and use)
      * @param $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
-     * @return object virtual object descriptor for use in $object = new DataObject($descriptor);
+     * @return object virtual object descriptor for use in $object = new DataObject($descriptor); or $objectlist = new DataObjectList($descriptor);
     **/
     public function __construct(array $args=[])
     {
         //$args = self::getObjectID($args);
         ObjectDescriptor::__construct($args);
+        if (!empty($args['table'])) {
+            $this->addTable($args['table'], $args['fields'] ?? []);
+        }
     }
 
     /**
@@ -84,6 +93,29 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
             throw new Exception('You need to specify at least a name and type for each property');
         }
         $this->args['propertyargs'][] = $args;
+    }
+
+    /**
+     * Use an existing database table as relational data store for this virtual object
+     *
+     * @param $table name of the database table (required)
+     * @param $fields list of field specs coming from getmeta() or elsewhere (optional)
+    **/
+    public function addTable(string $table, array $fields = [])
+    {
+        if (empty($fields)) {
+            $meta = xarMod::apiFunc('dynamicdata', 'util', 'getmeta', ['table' => $table]);
+            if (empty($meta[$table])) {
+                throw new Exception("Unknown table $table");
+            }
+            $fields = $meta[$table];
+        }
+        $this->args['name'] = $table;
+        $this->args['datastore'] = 'relational';
+        $this->args['sources'] = serialize([$table => $table]);
+        foreach ($fields as $field) {
+            $this->addProperty($field);
+        }
     }
 
     /**

@@ -38,7 +38,7 @@
                                 #$curtable#</a>
                             </td>
                             <td class="xar-align-center">
-                                <a href="#xarController::URL('dynamicdata','admin','view',array('table'=>$curtable))#">
+                                <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $curtable, 'export' => 'view'])#">
                             View</a>| 
                                 <a href="#xarController::URL('dynamicdata','admin','query',array('table'=>$curtable))#">
                             Query</a>| 
@@ -55,9 +55,17 @@
                     </xar:foreach>
                 </table>
                 <xar:else />
-                <h3>Table: #$table#</h3>
+                <h3>
+                    Table: #$table#&#160;
+                    <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'view'])#" title="View #$table#">
+                        <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="items"/>
+                    </a>&#160;
+                    <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'object'])#" title="Export #$table#">
+                        <xar:img scope="theme" file="icons/export-xml.png" class="xar-icon" alt="export"/>
+                    </a>
+                </h3>
                 <p>
-                <a href="#xarController::URL('dynamicdata','admin','view',array('table'=>$table))#">View</a>| 
+                <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'view'])#">View</a>| 
                 <a href="#xarController::URL('dynamicdata','admin','query',array('table'=>$table))#">Query</a>| 
                     <a href="#xarController::URL('dynamicdata','admin','meta',array('table'=>$table,'export'=>'object'))#">
                 Export Object</a>| 
@@ -101,7 +109,52 @@
             <a href="#xarController::URL('dynamicdata','admin','meta',array('export'=>'ddl'))#">Export all tables to
             DDL</a>| 
             <a href="#xarController::URL('dynamicdata','admin','meta',array('showdb'=>1))#">Show other databases</a></p>
+        <xar:elseif condition="$export eq 'view'"/>
+            <!-- example of using virtual object descriptor to show database table -->
+            <xar:set name="dummy">sys::import('modules.dynamicdata.class.objects.virtual')</xar:set>
+	        <xar:set name="descriptor">new VirtualObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
+            <xar:set name="object">new DataObjectList($descriptor)</xar:set>
+            <xar:set name="dummy">$object->getItems()</xar:set>
+            <h3>
+                Table: #$table#&#160;
+                <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table])#" title="Properties #$table#">
+                    <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="properties"/>
+                </a>&#160;
+                <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'object'])#" title="Export #$table#">
+                    <xar:img scope="theme" file="icons/export-xml.png" class="xar-icon" alt="export"/>
+                </a>
+            </h3>
+	        <xar:data-view object="$object" table="$table" layout="meta" newlink=""/>
+        <xar:elseif condition="$export eq 'display'"/>
+            <!-- example of using virtual object descriptor to show database table -->
+            <xar:set name="dummy">sys::import('modules.dynamicdata.class.objects.virtual')</xar:set>
+	        <xar:set name="descriptor">new VirtualObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
+            <xar:set name="object">new DataObject($descriptor)</xar:set>
+            <xar:set name="dummy">xarVar::fetch('itemid', 'notempty', $itemid, 1, xarVar::NOT_REQUIRED)</xar:set>
+            <xar:set name="dummy">$object->getItem(['itemid' => $itemid])</xar:set>
+            <h3>
+                Table: #$table#&#160;
+                <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table])#" title="Properties #$table#">
+                    <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="properties"/>
+                </a>&#160;
+                <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'view'])#" title="View #$table#">
+                    <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="items"/>
+                </a>&#160;
+                <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'object'])#" title="Export #$table#">
+                    <xar:img scope="theme" file="icons/export-xml.png" class="xar-icon" alt="export"/>
+                </a>
+            </h3>
+	        <xar:data-display object="$object" table="$table"/>
         <xar:else />
+            <h3>
+                Table: #$table#&#160;
+                <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table])#" title="Properties #$table#">
+                    <xar:img scope="theme" file="icons/modify-config.png" class="xar-icon" alt="properties"/>
+                </a>&#160;
+                <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'view'])#" title="View #$table#">
+                    <xar:img scope="theme" file="icons/item-list.png" class="xar-icon" alt="view"/>
+                </a>
+            </h3>
             <form method="post" action="#xarController::URL('dynamicdata','admin','import')#">
                 <fieldset>
                     <xar:if condition="$export eq 'ddl'">
