@@ -863,6 +863,7 @@ class DataObjectMaster extends xarObject
         // Create the object if it was not in cache
         xarLog::message("DataObjectMaster::getObject: Getting a new object " . $data['class'], xarLog::LEVEL_INFO);
 
+        // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
         $descriptor = new DataObjectDescriptor($data);
         $object = new $data['class']($descriptor);
         
@@ -926,6 +927,7 @@ class DataObjectMaster extends xarObject
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
         $data['propertyargs'] =& $info;
 
+        // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
         if(!empty($data['class']))
         {
             if(class_exists($data['class'] . 'List'))
@@ -970,6 +972,7 @@ class DataObjectMaster extends xarObject
         sys::import('modules.dynamicdata.class.userinterface');
 
         $class = 'DataObjectUserInterface';
+        // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
         if(!empty($args['class']))
         {
             if(class_exists($args['class'] . 'UserInterface'))
