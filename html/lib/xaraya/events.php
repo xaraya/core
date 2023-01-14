@@ -106,6 +106,7 @@ class xarEvents extends xarObject implements ixarEvents
             if (!self::fileLoad($info)) return; 
             $module = xarMod::getName($info['module_id']);
             switch (strtolower($info['area'])) {
+                // @todo support namespaces in modules (and core someday)
                 case 'class':
                     // define class (loadFile already checked it exists) 
                     $classname = ucfirst($module) . $info['event'] . "Subject";
@@ -121,6 +122,7 @@ class xarEvents extends xarObject implements ixarEvents
                                 $obsmod = xarMod::getName($obs['module_id']);
                                 $obs['module'] = $obsmod;
                                 switch (strtolower($obs['area'])) {
+                                    // @todo support namespaces in modules (and core someday)
                                     case 'class':
                                     default:
                                         // use the defined class for the observer
@@ -367,6 +369,7 @@ class xarEvents extends xarObject implements ixarEvents
                 $filename = strtolower($event);
                 // import the file (raises exception if file not found) 
                 sys::import("modules.{$module}.class.{$type}.{$filename}");
+                // @todo support namespaces in modules (and core someday)
                 $classname = ucfirst($module) . $event . $suffix;
                 if (!class_exists($classname))
                     throw new ClassNotFoundException($classname);
