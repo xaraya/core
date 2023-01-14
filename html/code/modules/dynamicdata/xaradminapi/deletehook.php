@@ -19,78 +19,36 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_adminapi_deletehook(Array $args=array())
+function dynamicdata_adminapi_deletehook(array $args=[])
 {
     extract($args);
 
-    if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('object id', 'admin', 'createhook', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
-    }
-    if (!isset($extrainfo) || !is_array($extrainfo)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('extrainfo', 'admin', 'createhook', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
-    }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = xarMod::getName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
+    // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
+    $modname = $extrainfo['module'];
+    $itemtype = $extrainfo['itemtype'];
+    $itemid = $extrainfo['itemid'];
+    $module_id = $extrainfo['module_id'];
 
     // don't allow hooking to yourself in DD
     if ($modname == 'dynamicdata') {
         return $extrainfo;
     }
 
-    $module_id = xarMod::getRegID($modname);
-    if (empty($module_id)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module name', 'admin', 'createhook', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
-    }
-
-    if (!empty($extrainfo['itemtype'])) {
-        $itemtype = $extrainfo['itemtype'];
-    } else {
-        $itemtype = null;
-    }
-
-    if (!empty($extrainfo['itemid'])) {
-        $itemid = $extrainfo['itemid'];
-    } else {
-        $itemid = $objectid;
-    }
     if (empty($itemid)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module name', 'admin', 'deletehook', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-        // we *must* return $extrainfo for now, or the next hook will fail
-        // CHECKME: not anymore now, exceptions are either fatal or caught, in this case, we probably want to catch it in the callee.
-        //return $extrainfo;
+        $vars = ['item id', 'admin', 'deletehook', 'dynamicdata'];
+        throw new BadParameterException($vars, $msg);
     }
 
-    if (!xarMod::apiFunc('dynamicdata', 'admin', 'delete',
-                      array('module_id'    => $module_id,
-                            'itemtype' => $itemtype,
-                            'itemid'   => $itemid))) {
-        // we *must* return $extrainfo for now, or the next hook will fail
-        //return false;
+    if (!xarMod::apiFunc(
+        'dynamicdata',
+        'admin',
+        'delete',
+        ['module_id'    => $module_id,
+              'itemtype' => $itemtype,
+              'itemid'   => $itemid]
+    )) {
         return $extrainfo;
     }
     return $extrainfo;
 }
-?>

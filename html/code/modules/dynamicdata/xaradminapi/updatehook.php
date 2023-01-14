@@ -20,7 +20,7 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_adminapi_updatehook(Array $args=array())
+function dynamicdata_adminapi_updatehook(array $args=[])
 {
     $verbose = false;
 
@@ -30,78 +30,49 @@ function dynamicdata_adminapi_updatehook(Array $args=array())
         $dd_function = 'updatehook';
     }
 
-    if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4) (not numeric or not set)';
-        $vars = array('object id', 'admin', $dd_function, 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-    }
-    if (!isset($extrainfo) || !is_array($extrainfo)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('extrainfo', 'admin', $dd_function, 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-    }
-
     // We can exit immediately if the status flag is set because we are just updating
     // the status in the articles or other content module that works on that principle
     // Bug 1960 and 3161
-    if (xarVar::isCached('Hooks.all','noupdate') || !empty($extrainfo['statusflag'])){
+    if (xarVar::isCached('Hooks.all', 'noupdate') || !empty($extrainfo['statusflag'])) {
         return $extrainfo;
     }
 
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (empty($extrainfo['module'])) {
-        $modname = xarMod::getName();
-    } else {
-        $modname = $extrainfo['module'];
-    }
+    // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
+    $modname = $extrainfo['module'];
+    $itemtype = $extrainfo['itemtype'];
+    $itemid = $extrainfo['itemid'];
+    $module_id = $extrainfo['module_id'];
 
     // don't allow hooking to yourself in DD
     if ($modname == 'dynamicdata') {
         return $extrainfo;
     }
 
-    $module_id = xarMod::getRegID($modname);
-    if (empty($module_id)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module name', 'admin', $dd_function, 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-    }
-
-    if (!empty($extrainfo['itemtype'])) {
-        $itemtype = $extrainfo['itemtype'];
-    } else {
-        $itemtype = null;
-    }
-
-    if (!empty($extrainfo['itemid'])) {
-        $itemid = $extrainfo['itemid'];
-    } else {
-        $itemid = $objectid;
-    }
     if (empty($itemid)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('item id', 'admin', $dd_function, 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['item id', 'admin', $dd_function, 'dynamicdata'];
+        throw new BadParameterException($vars, $msg);
     }
 
-    $args = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype));
-    $myobject = DataObjectMaster::getObject(array('objectid' => $args['objectid'],
-                                         'itemid'   => $itemid));
+    $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype]);
+    $myobject = DataObjectMaster::getObject(['name' => $descriptorargs['name'],
+                                         'itemid'   => $itemid]);
 
     // If no object returned, bail and pass the extrainfo to the next hook
-    if (!isset($myobject)) return $extrainfo;
+    if (!isset($myobject)) {
+        return $extrainfo;
+    }
 
     $myobject->getItem();
 
     // use the values passed via $extrainfo if available
     $isvalid = $myobject->checkInput($extrainfo);
     if (!$isvalid) {
-        $vars = array();
+        $vars = [];
         if ($verbose) {
             $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-            $vars = array('input', 'admin', $dd_function, 'dynamicdata');
+            $vars = ['input', 'admin', $dd_function, 'dynamicdata'];
             // Note : we can't use templating here
             $msg .= ' : ';
             $i=5;
@@ -134,10 +105,9 @@ function dynamicdata_adminapi_updatehook(Array $args=array())
 
     if (empty($itemid)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('create/update', 'admin', $dd_function, 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['create/update', 'admin', $dd_function, 'dynamicdata'];
+        throw new BadParameterException($vars, $msg);
     }
     // Return the extra info
     return $extrainfo;
 }
-?>
