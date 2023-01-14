@@ -94,6 +94,9 @@
      <column id="eventsystem.scope" name="scope" required="true" >
       <text size="64" charset="utf8"/>
     </column>
+    <column id="eventsystem.class" name="class" required="true">
+      <text size="255" charset="utf8" default=""/>
+    </column>
     <constraints>
       <primary name="id">
         <column ref="eventsystem.id"/>
