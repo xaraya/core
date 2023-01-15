@@ -142,7 +142,7 @@ class xarLogger extends xarObject
     public function close()
     {
         // Push a final message to the log.
-        $this->notify(xarML('Shutdown #(1) logger', $this->name), xarLog::LEVEL_NOTICE);
+        $this->notify('Shutdown ' . $this->name . ' logger', xarLog::LEVEL_NOTICE);
     }
 
     public function notify($message, $level)
