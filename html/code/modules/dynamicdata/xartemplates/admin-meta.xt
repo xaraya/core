@@ -168,7 +168,10 @@
                         </div>
                         <div class="xar-col">
                                     <xar:if condition="$export eq 'ddl'">
-                                    <xar:template file="exportddl"/>
+                                    <!-- xar:template file="exportddl"/ -->
+                                    <textarea name="xml" id="xml" class="xar-form-textarealarge">
+                                        #htmlspecialchars($xml)#
+                                    </textarea>
                                     <xar:else />
                                     <textarea name="xml" id="xml" class="xar-form-textarealarge">
                                     <xar:foreach in="$tables" key="$curtable" value="$fields">

@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<schema name="#$schemaName#" xmlns="http://xaraya.com/2007/schema"xmlns:xar="http://xaraya.com/2004/blocklayout">
+<schema name="#$schemaName#" xmlns="http://xaraya.com/2007/schema" xmlns:xar="http://xaraya.com/2004/blocklayout">
     <description>Auto generated schema file for development purposes</description>
     <xar:foreach in="$tables" value="$table">
         <table class="xar-table" name="#$table:getName()#">
             <xar:foreach in="#$table:getColumns()#" value="$column">
-                    <xar:set name="value">$column->isAutoIncrement()?'true':'false'</xar:set>
+                <xar:set name="required">!$column->isNullable()?'true':'false'</xar:set>
+                <xar:set name="auto">$column->isAutoIncrement()?'true':'false'</xar:set>
+                <xar:set name="default">$column->getDefaultValue()</xar:set>
+                <xar:set name="size">$column->getSize()</xar:set>
+                <xar:set name="scale">$column->getScale()?$column->getScale():0</xar:set>
                 <column id="#$table:getName()#.#$column:getName()#" name="#$column:getName()#">
                     <!-- Determine the required and auto attribute and add these to the column tag -->
                     <xar:attribute name="required">
-                        #!$column:isNullable()?'true':'false'#
+                        #$required#
                     </xar:attribute>
                     <xar:attribute name="auto">
-                        #$value#
+                        #$auto#
                     </xar:attribute>
                     <xar:if condition="#strtolower($column:getType()) == 'boolean'#">
                         <boolean>
                             <xar:attribute name="defaultvalue">
-                                #$column:getDefaultValue()#
+                                #$default#
                             </xar:attribute>
                         </boolean>
                     <xar:elseif condition="#strtolower($column:getType()) == 'number'#"/>
@@ -24,26 +28,26 @@
                             <number>
                                 <!-- Size should be easy, if Creole has done its job. No number without size -->
                                 <xar:attribute name="size">
-                                    #$column:getSize()#
+                                    #$size#
                                 </xar:attribute>
                                 <!-- We call scale decimals -->
                                 <xar:attribute name="decimals">
-                                    #$column:getScale()?$column:getScale():0#
+                                    #$scale#
                                 </xar:attribute>
                             </number>
                         <xar:else />
                             <number>
                                 <!-- Size should be easy, if creole has done it's job. No number without size -->
                                 <xar:attribute name="size">
-                                    #$column:getSize()#
+                                    #$size#
                                 </xar:attribute>
                                 <!-- This aint right, default value '' is valid but different from no default -->
                                 <xar:attribute name="defaultvalue">
-                                    #$column:getDefaultValue()#
+                                    #$default#
                                 </xar:attribute>
                                 <!-- We call scale decimals -->
                                 <xar:attribute name="decimals">
-                                    #$column:getScale()?$column:getScale():0#
+                                    #$scale#
                                 </xar:attribute>
                             </number>
                         </xar:if>
@@ -51,10 +55,10 @@
                         <xar:if condition="#$column:getSize() ne ''#">
                             <text>
                                 <xar:attribute name="size">
-                                    #$column:getSize()#
+                                    #$size#
                                 </xar:attribute>
                                 <xar:attribute name="defaultvalue">
-                                    #$column:getDefaultValue()#
+                                    #$default#
                                 </xar:attribute>
                             </text>
                         <xar:else />
@@ -65,7 +69,7 @@
                         <!-- for now, we just copy the size attribute -->
                         <time>
                             <xar:attribute name="size">
-                                #$column:getSize()#
+                                #$size#
                             </xar:attribute>
                         </time>
                     <xar:elseif condition="#strtolower($column:getType()) == 'binary'#"/>

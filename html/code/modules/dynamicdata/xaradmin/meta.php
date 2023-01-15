@@ -73,6 +73,7 @@ function dynamicdata_admin_meta(Array $args=array())
             $data['tables'] = array($dbInfo->getTable($table));
         }
         $data['types']  = xarDB::getTypeMap();
+        $data['xml'] = xarTpl::file(sys::code() . 'modules/dynamicdata/xartemplates/includes/exportddl.xt', $data);
     }
 
     $data['table'] = $table;
