@@ -56,9 +56,8 @@ function base_userapi_getfile(Array $args=array())
     if (empty($url)) {
         $invalid = true;
     } elseif (strstr($url,'://')) {
-        // only support http:// and ftp:// for now
-    // TODO: support https:// later ?
-        if (substr($url,0,7) != 'http://' && substr($url,0,6) != 'ftp://') {
+        // only support https:// http:// and ftp:// for now
+        if (substr($url,0,8) != 'https://' && substr($url,0,7) != 'http://' && substr($url,0,6) != 'ftp://') {
             $invalid = true;
         }
         $server = xarServer::getHost();
@@ -201,27 +200,39 @@ function base_userapi_getfile(Array $args=array())
         $curl = new xarCurl(array('url' => $url));
         // check that curl initialised ok
         if ($curl->errno <> 0) {
-          // check for allow fopen if curl returned an error
-          if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
-          if (!ini_get('allow_url_fopen')) {
-             if (!$superrors)
-                throw new ConfigurationException('allow_url_fopen','PHP is not currently configured to allow URL retrieval
-                             of remote files.  Please turn on #(1) to use the base module getfile userapi.');
-          }
-          $lines = @file($url);
+            // check for allow fopen if curl returned an error
+            if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
+            if (!ini_get('allow_url_fopen')) {
+                if (!$superrors)
+                    throw new ConfigurationException('allow_url_fopen','PHP is not currently configured to allow URL retrieval
+                                of remote files.  Please turn on #(1) to use the base module getfile userapi.');
+            }
+            $lines = @file($url);
         // use cURL instead
         } else {
-          $curl->seturl($url);
-          $lines = $curl->exec();
-          // make sure we got a valid file
-          if ($curl->errno <> 0) {
-            // CHECKME: do we want to raise an exception here? or leave for BadParameter to catch later?
-            /*
-             if (!$superrors)
-                throw new BadParameterException(array($curl->error, $url),'cURL could not retrieve the file at #(2). Failed with error #(1)');
-            */
-            $lines = '';
-          }
+            $curl->seturl($url);
+            $lines = $curl->exec();
+            // make sure we got a valid file
+            if ($curl->errno <> 0) {
+                // CHECKME: do we want to raise an exception here? or leave for BadParameter to catch later?
+                /*
+                    if (!$superrors)
+                    throw new BadParameterException(array($curl->error, $url),'cURL could not retrieve the file at #(2). Failed with error #(1)');
+                */
+                $lines = '';
+            } elseif ($curl->info['http_code'] == 302 && $curl->info['redirect_count'] < 1) {
+                $location = $curl->info['redirect_url'];
+                // TODO: handle relative redirects and endless loops (for messy servers)
+                if ($location != $url && strstr($location,'://')) {
+                    return xarMod::apiFunc('base', 'user', 'getfile',
+                    array('url' => $location,
+                        'cached' => $cached,
+                        'cachedir' => $cachedir,
+                        'refresh' => $refresh,
+                        'extension' => $extension,
+                        'archive' => $archive));
+                }
+            }
         }
         if (empty($lines)) {
             if (!$superrors) throw new BadParameterException($url);
