@@ -10,8 +10,7 @@
                 </td>
             </tr>
         </table>
-        <input type="hidden" name="moduleid" id="moduleid" value="#$moduleid#"/>
-        <input type="hidden" name="itemtype" id="itemtype" value="#$itemtype#"/>
+        <input type="hidden" name="objectid" id="objectid" value="#$objectid#"/>
         <input type="hidden" name="itemid" id="itemid" value="0"/>
         <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey('dynamicdata')#"/>
         <input type="hidden" name="return_url" id="return_url"
