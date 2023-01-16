@@ -88,17 +88,11 @@ function blocks_typesapi_createitem(Array $args=array())
     $tables =& xarDB::getTables();
     $types_table = $tables['block_types'];
     
-    // @todo we need to save the actual $classname and $filepath for getitems() - requires UPGRADE due to table change
-    /**
+    // we need to save the actual $classname and $filepath for getitems() - requires UPGRADE due to table change
     $query = "INSERT INTO $types_table
               (module_id, state, type, category, info, class, filepath)
               VALUES (?,?,?,?,?,?,?)";
     $bindvars = array($module_id, $state, $type, $category, $info, $classname, $filepath);
-     */
-    $query = "INSERT INTO $types_table
-              (module_id, state, type, category, info)
-              VALUES (?,?,?,?,?)";
-    $bindvars = array($module_id, $state, $type, $category, $info);        
 
     $result = $dbconn->Execute($query,$bindvars);
     if (!$result) return;

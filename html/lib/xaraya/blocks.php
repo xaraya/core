@@ -182,8 +182,9 @@ class xarBlock extends xarObject implements ixarBlock
             throw new BadParameterException($vars, $msg);        
         }
 
+        // @checkme do we want to foresee anything special for other interfaces, or always let them go through the search process below?
         // @checkme best would be to simply autoload the class, if we do know the actual $classname - otherwise we'll need $filepath too
-        if (!empty($blockinfo['classname']) && strpos($blockinfo['classname'], '\\') !== false && !empty($blockinfo['filepath']) && file_exists($blockinfo['filepath'])) {
+        if ((empty($interface) || $interface == 'display') && !empty($blockinfo['classname']) && strpos($blockinfo['classname'], '\\') !== false && !empty($blockinfo['filepath']) && file_exists($blockinfo['filepath'])) {
             $classname = $blockinfo['classname'];
             $filepath = $blockinfo['filepath'];
             include_once $filepath;
@@ -269,7 +270,7 @@ class xarBlock extends xarObject implements ixarBlock
             $newclasses = get_declared_classes();
             $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
             // assuming new classes in namespaces only have 1 class definition per file as they should...
-            if (count($diffclasses) == 1) {
+            if (count($diffclasses) > 0) {
                 $classname = $diffclasses[0];
             } else {
                 $classname = $cls[$i];

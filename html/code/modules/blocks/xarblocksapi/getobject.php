@@ -99,7 +99,7 @@ function blocks_blocksapi_getobject(Array $args=array())
             $newclasses = get_declared_classes();
             $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
             // assuming new classes in namespaces only have 1 class definition per file as they should...
-            if (count($diffclasses) == 1) {
+            if (count($diffclasses) > 0) {
                 $classname = $diffclasses[0];
             } else {
                 $classname = $typeclass[$i];
