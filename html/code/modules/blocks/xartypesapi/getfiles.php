@@ -77,7 +77,8 @@ function blocks_typesapi_getfiles(Array $args=array())
             } else {
                 continue;
             }
-                
+
+            // $classname does not take into account possible namespace + it is not used in refresh() or blocksapi getobject()
             if (empty($scope)) {
                 // solo block
                 $classname = ucfirst($type) . 'Block';
@@ -112,4 +113,3 @@ function blocks_typesapi_getfiles(Array $args=array())
         
     return $types;
 }
-?>

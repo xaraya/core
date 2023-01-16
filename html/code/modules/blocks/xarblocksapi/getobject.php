@@ -52,7 +52,8 @@ function blocks_blocksapi_getobject(Array $args=array())
             $classname = $loaded[$key];
             return new $classname($args);
         }      
-                
+
+        // $typeclass does not take into account possible namespace + it does not re-use what typesapi getfiles() gave
         if (!empty($args['module'])) {
             // import a block type class belonging to a module
             $basepath = sys::code() . 'modules/'.$args['module'].'/xarblocks/';
@@ -89,11 +90,22 @@ function blocks_blocksapi_getobject(Array $args=array())
         // basepath/type.php (legacy)
         $typepaths[] = $basepath . $args['type'] . '.php';                              
         $typeclass[] = $baseclass;
-        
+
+        // we try to get the actual $classname and $filepath here first - as input for after UPGRADE due to table change
+        $oldclasses = get_declared_classes();
         foreach ($typepaths as $i => $typepath) {
             if (!file_exists($typepath)) continue;
             include_once $typepath;
-            $classname = $typeclass[$i];
+            $newclasses = get_declared_classes();
+            $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
+            // assuming new classes in namespaces only have 1 class definition per file as they should...
+            if (count($diffclasses) == 1) {
+                $classname = $diffclasses[0];
+            } else {
+                $classname = $typeclass[$i];
+            }
+            // we need to set the actual $filepath here before constructing the object
+            $args['filepath'] = $typepath;
             break;
         }
 
@@ -121,4 +133,3 @@ function blocks_blocksapi_getobject(Array $args=array())
         
         return $object;     
 }
-?>

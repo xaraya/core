@@ -215,8 +215,9 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
 
     final public function getTypeInfo()
     {
+        // We need to get the actual $classname and $filepath from getinfo() - requires UPGRADE due to table change
         $allowed = array(
-            'type', 'module', 'tid', 'type_id', 'type_state',
+            'type', 'module', 'tid', 'type_id', 'type_state', 'classname', 'filepath'
         );
         $info = array();
         foreach ($allowed as $p)

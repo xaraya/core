@@ -105,6 +105,7 @@ function blocks_blocksapi_getinfo(Array $args=array())
     if (xarVar::isCached('Block.Info', $key)) {
         $blockinfo = xarVar::getCached('Block.Info', $key);
     } else {
+        // we need to get the actual $classname and $filepath from getitems() - requires UPGRADE due to table change
         // call the types or instances api (both return the same data set)
         $blockinfo = xarMod::apiFunc('blocks', $apitype, 'getitem', $filter);
         // cache it
@@ -190,4 +191,3 @@ function blocks_blocksapi_getinfo(Array $args=array())
 
     return $blockinfo;
 }
-?>

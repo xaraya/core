@@ -181,7 +181,30 @@ class xarBlock extends xarObject implements ixarBlock
             $vars = array(join(', ', $invalid), 'blocks', 'xarBlock', 'getObject');
             throw new BadParameterException($vars, $msg);        
         }
-        
+
+        // @checkme best would be to simply autoload the class, if we do know the actual $classname - otherwise we'll need $filepath too
+        if (!empty($blockinfo['classname']) && strpos($blockinfo['classname'], '\\') !== false && !empty($blockinfo['filepath']) && file_exists($blockinfo['filepath'])) {
+            $classname = $blockinfo['classname'];
+            $filepath = $blockinfo['filepath'];
+            include_once $filepath;
+
+            if (!class_exists($classname))
+                throw new ClassNotFoundException($classname);
+
+            if (!empty($method) && !method_exists($classname, $method))
+                throw new FunctionNotFoundException($classname.'::'.$method);
+
+            // Load the block language files
+            // What to do here? return doesnt seem right
+            if (!xarMLS::loadTranslations($filepath))
+                return;
+
+            $object = new $classname($blockinfo);
+
+            return $object;
+        }
+
+        // $cls does not take into account possible namespace + it does not re-use what blocksapi getinfo() could give
         if (empty($blockinfo['module'])) {
             $baseclass = ucfirst($blockinfo['type']).'Block';
             $basedp = "blocks";
@@ -238,10 +261,21 @@ class xarBlock extends xarObject implements ixarBlock
             $dps[] = "{$basedp}.{$blockinfo['type']}";
         }
 
+        // we try to get the actual $classname and $filepath here again - at least until after UPGRADE due to table change
+        $oldclasses = get_declared_classes();
         foreach ($paths as $i => $filepath) {
             if (!file_exists($filepath)) continue;
             sys::import($dps[$i]);
-            $classname = $cls[$i];
+            $newclasses = get_declared_classes();
+            $diffclasses = array_values(array_diff($newclasses, $oldclasses, ['MenuBlock', 'BasicBlock', 'BlockType']));
+            // assuming new classes in namespaces only have 1 class definition per file as they should...
+            if (count($diffclasses) == 1) {
+                $classname = $diffclasses[0];
+            } else {
+                $classname = $cls[$i];
+            }
+            // we need to set the actual $filepath here before constructing the object
+            $blockinfo['filepath'] = $filepath;
             break;
         }
         

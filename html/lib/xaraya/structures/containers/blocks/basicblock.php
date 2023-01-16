@@ -61,6 +61,8 @@ abstract class BasicBlock extends BlockType implements iBlock
     protected $contact = '';
     protected $credits = '';
     protected $license = '';
+    // We need to get the actual $classname and $filepath from getinfo() - requires UPGRADE due to table change
+    protected $filepath = '';
     
     // blocks subsystem flags
     protected $show_preview = true;  // let the subsystem know if it's ok to show a preview
@@ -153,4 +155,3 @@ abstract class BasicBlock extends BlockType implements iBlock
     */
 
 }
-?>
