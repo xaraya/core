@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div>
+        <ul>
+            <li>
+                The code base has been cleaned up to support PHP 7.4, 8.0 and 8.1+ since the last official release.
+            </li>
+            <li>
+                Support for modules using a namespace (Xaraya\Modules\MyFancyStuff) started with database changes for eventsystem and blocktypes.<br/>
+                The following module components support namespaces:
+                <ol>
+                    <li>DD object classes</li>
+                    <li>DD property classes</li>
+                    <li>block types</li>
+                    <li>hook observers</li>
+                    <li>autoload</li>
+                </ol>
+                The following module components do NOT support namespaces in this version:
+                <ol>
+                    <li>API and GUI functions</li>
+                    <li>initialization functions</li>
+                </ol>
+                Note: inside these "classic" Xaraya functions you can still use other namespaced components of course...
+            </li>
+        </ul>
+    </div>
+</xar:template>

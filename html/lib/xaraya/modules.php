@@ -10,7 +10,7 @@
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -26,7 +26,7 @@
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -42,7 +42,7 @@ class ModuleBaseInfoNotFoundException extends NotFoundExceptions
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -58,7 +58,7 @@ class ModuleNotFoundException extends NotFoundExceptions
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -929,7 +929,7 @@ class xarMod extends xarObject implements IxarMod
         }
         
         // Not the correct version - throw exception unless we are upgrading
-        if (!self::checkVersion($modName) && !xarVar::getCached('Upgrade', 'upgrading')) {
+        if (!self::checkVersion($modName) && !xarVar::getCached('Upgrade', 'upgrading') && $modName != 'modules') {
             die('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
         }
         

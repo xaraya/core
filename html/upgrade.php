@@ -5,7 +5,7 @@
  * @package modules\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -70,7 +70,7 @@ function xarUpgradeLoader()
  *  Please add any special notes for a special upgrade in admin-upgrade3.xd in installer.<br/>
  *  TODO: cleanup and consolidate the upgrade functions in installer
  */
-class Upgrader extends xarObject
+class Upgrader
 {
 /**
  * Constants for current upgrade phases
@@ -86,14 +86,14 @@ class Upgrader extends xarObject
 
     protected function __construct()
     {
+        // Let the system know that we are in the process of installing
+        xarVar::setCached('Upgrade', 'upgrading',1);
+
         // Load the current request
         xarController::getRequest();
         
         // Make sure we see any errors
         error_reporting(E_ALL);
-
-        // Let the system know that we are in the process of installing
-        xarVar::setCached('Upgrade', 'upgrading',1);
 
         // Make sure we can render a page
         xarTpl::setPageTitle(xarMLS::translate('Xaraya Upgrade'));
