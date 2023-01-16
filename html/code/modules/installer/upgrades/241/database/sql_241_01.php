@@ -41,6 +41,10 @@ function sql_241_01()
         ";
         $dbconn->Execute($data['sql']);
         $data['sql'] = "
+        UPDATE $table SET version = '2.4.1' WHERE `name` = 'categories';
+        ";
+        $dbconn->Execute($data['sql']);
+        $data['sql'] = "
         UPDATE $table SET version = '2.4.1' WHERE `name` = 'dynamicdata';
         ";
         $dbconn->Execute($data['sql']);

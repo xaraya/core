@@ -5,7 +5,7 @@
  * @package modules\installer
  * @subpackage installer
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/200.html
@@ -21,7 +21,7 @@
 $modversion = array(
     'name'               => 'Xaraya Installer',
     'id'                 => '200',
-    'version'            => '2.4.0',
+    'version'            => '2.4.1',
     'displayname'        => xarML('Installer'),
     'description'        => 'Install and customize Xaraya.',
     'displaydescription' => xarML('Install and customize Xaraya.'),

@@ -86,6 +86,7 @@ class Upgrader
 
     protected function __construct()
     {
+        //xarConfigVars::set(null, 'System.Core.VersionNum', '2.4.0');
         // Let the system know that we are in the process of installing
         xarVar::setCached('Upgrade', 'upgrading',1);
 
@@ -160,4 +161,3 @@ xarUpgradeLoader();
  * Run the upgrade
  */
 Upgrader::getInstance();
-

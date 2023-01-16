@@ -4,7 +4,7 @@
  *
  * @package core\core
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -83,7 +83,7 @@
 /**
  * @package core\core
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -100,8 +100,8 @@ class xarConst
      *
     **/
     const VERSION_ID        = 'Bermuda';
-    const VERSION_NUM       = '2.4.0';
-    const VERSION_SUB       = 'altius fortius';
+    const VERSION_NUM       = '2.4.1';
+    const VERSION_SUB       = 'communiter';  // continuing the Olympic motto
 
     const BIT_DATABASE      = 1;
     const BIT_CONFIGURATION = 2;
