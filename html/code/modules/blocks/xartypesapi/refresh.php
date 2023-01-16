@@ -81,13 +81,15 @@ function blocks_typesapi_refresh(Array $args=array())
                 } else {
                     unset($type_info);
                 }
-                // we need to save the actual $classname and $filepath for getitems() - requires UPGRADE due to table change
+                // @todo we need to save the actual $classname and $filepath for getitems() - requires UPGRADE due to table change
+                /**
                 $classname = get_class($block);
                 if ($classname != $type['classname'] ?? '')
                     $update['classname'] = $classname;
                 if ($block->filepath != $type['filepath'] ?? '')
                     $update['filepath'] = $block->filepath;
-                       
+                */
+
             } catch (FileNotFoundException $e) {
                 $state = xarBlock::TYPE_STATE_MISSING;
             } catch (Exception $e) {
