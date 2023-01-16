@@ -49,6 +49,12 @@
     <column id="block_types.category" name="category" required="true" >
       <text size="64" charset="utf8"/>
     </column>
+     <column id="block_types.class" name="class" >
+      <text size="255" charset="utf8" default="" />
+    </column>
+    <column id="block_types.filepath" name="filepath" >
+      <text size="255" charset="utf8" default="" />
+    </column>
      <column id="block_types.info" name="info" >
       <text size="" charset="utf8" />
     </column>
