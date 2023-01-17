@@ -20,7 +20,8 @@
  * API type hook, observers should return array of $extrainfo
 **/
 sys::import('xaraya.structures.hooks.subject');
-abstract class ApiHookSubject extends HookSubject implements ixarEventSubject
+
+abstract class ApiHookSubject extends HookSubject
 {
     protected $subject = 'ApiHook';  // change this to the name of your hook subject
     /**

@@ -8,6 +8,13 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+sys::import('xaraya.structures.events.subject');
+
+interface ixarHookSubject extends ixarEventSubject
+{
+    public function getExtrainfo();
+}
+
 /**
  * HookSubject
  *
@@ -16,9 +23,8 @@
  * class and overload the $subject property with their event subject name,
  * the inherited methods will take care of the rest
 **/
-sys::import('xaraya.structures.events.subject');
 // declared abstract to prevent direct instances of this class
-abstract class HookSubject extends EventSubject implements ixarEventSubject, ixarHookSubject
+abstract class HookSubject extends EventSubject implements ixarHookSubject
 {
     // protected $args; // from EventSubject
     protected $subject = 'Hook'; // change this to the name of your hook subject    
@@ -109,16 +115,3 @@ abstract class HookSubject extends EventSubject implements ixarEventSubject, ixa
     }
 }
 
-/**
- * @package core\hooks
- * @subpackage hooks
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- */
-interface ixarHookSubject
-{
-    public function getExtrainfo();
-}

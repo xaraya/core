@@ -9,6 +9,17 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
 **/
+
+/**
+ * Event Observer Interface
+ *
+ * All Event Observers must implement this
+**/
+interface ixarEventObserver
+{
+    public function notify(ixarEventSubject $subject);
+}
+
 /** 
  * Event Observer
  *
@@ -33,12 +44,3 @@ class EventObserver extends xarObject implements ixarEventObserver
     }
 }
 
-/**
- * Event Observer Interface
- *
- * All Event Observers must implement this
-**/
-interface ixarEventObserver
-{
-    public function notify(ixarEventSubject $subject);
-}

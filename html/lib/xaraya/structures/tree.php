@@ -10,6 +10,21 @@
  */
 sys::import('xaraya.structures.sets.collection');
 
+interface ITreeNode
+{
+    public function adddata(array $arr);
+    public function breadthfirstenumeration($arg=null);
+    public function depthfirstenumeration($arg=null);
+    public function getChildCount();
+    public function getDepth();
+    public function getLevel();
+}
+
+interface ITree
+{
+    public function getRoot();
+}
+
 class TreeNode extends xarObject implements ITreeNode
 {
     public $id;
@@ -94,15 +109,6 @@ class TreeNode extends xarObject implements ITreeNode
     }
 }
 
-/**
- * @package core\structures
- * @subpackage structures
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- */
 class Tree extends xarObject implements ITree
 {
     public $root;
@@ -178,36 +184,3 @@ class Tree extends xarObject implements ITree
     }
 }
 
-/**
- * @package core\structures
- * @subpackage structures
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- */
-interface ITreeNode
-{
-    public function adddata(array $arr);
-    public function breadthfirstenumeration($arg=null);
-    public function depthfirstenumeration($arg=null);
-    public function getChildCount();
-    public function getDepth();
-    public function getLevel();
-}
-
-/**
- * @package core\structures
- * @subpackage structures
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- */
-interface ITree
-{
-    public function getRoot();
-}
-?>
