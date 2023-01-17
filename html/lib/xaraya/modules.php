@@ -661,6 +661,7 @@ class xarMod extends xarObject implements IxarMod
             $FileInfo['version'] = $version['xar_version'];
         }
         $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
+        $FileInfo['namespace']      = isset($version['namespace'])      ? $version['namespace'] : '';
 
         xarCoreCache::setCached('Mod.getFileInfos', $modOsDir ." / " . $type, $FileInfo);
         return $FileInfo;
