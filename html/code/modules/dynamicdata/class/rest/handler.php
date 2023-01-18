@@ -1013,9 +1013,14 @@ class DataObjectRESTHandler extends xarObject
                 header('Content-Type: text/html; charset=utf-8');
             }
             echo $result;
-        } else {
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+            return;
+        }
+        header('Content-Type: application/json; charset=utf-8');
+        //echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_PARTIAL_OUTPUT_ON_ERROR);
+        try {
+            echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            echo '{"JSON Exception": ' . json_encode($e->getMessage()) . '}';
         }
     }
 
