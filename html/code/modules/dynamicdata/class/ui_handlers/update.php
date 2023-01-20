@@ -12,12 +12,23 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+namespace Xaraya\DataObject\Handlers;
+
+use xarVar;
+use xarMod;
+use xarController;
+use xarSec;
+use xarTpl;
+use DataObjectMaster;
+use sys;
+
 sys::import('modules.dynamicdata.class.ui_handlers.default');
+
 /**
  * Dynamic Object User Interface Handler
  *
  */
-class DataObjectUpdateHandler extends DataObjectDefaultHandler
+class UpdateHandler extends DefaultHandler
 {
     public $method = 'update';
 
@@ -32,38 +43,44 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
      * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
      * @return string output of xarTpl::object() using 'ui_update'
      */
-    function run(array $args = array())
+    public function run(array $args = [])
     {
-        if(!xarVar::fetch('preview', 'isset', $args['preview'], NULL, xarVar::DONT_SET)) 
+        if (!xarVar::fetch('preview', 'isset', $args['preview'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('confirm', 'isset', $args['confirm'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('confirm', 'isset', $args['confirm'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('values', 'isset', $args['values'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('values', 'isset', $args['values'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('return_url', 'isset', $args['return_url'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('return_url', 'isset', $args['return_url'], null, xarVar::DONT_SET)) {
             return;
+        }
 
-        if(!empty($args) && is_array($args) && count($args) > 0) 
+        if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
+        }
 
-        if(!isset($this->object)) 
-        {
+        if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
-            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
+            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            }
 
-            if(empty($this->tplmodule)) 
-            {
+            if (empty($this->tplmodule)) {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
-        if (!$this->object->checkAccess('update'))
+        if (!$this->object->checkAccess('update')) {
             return xarController::$response->Forbidden(xarML('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+        }
 
         $itemid = $this->object->getItem();
-        if(empty($itemid) || $itemid != $this->object->itemid) 
+        if (empty($itemid) || $itemid != $this->object->itemid) {
             return xarController::$response->NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+        }
 
         if (!empty($this->args['values'])) {
             // always set the properties based on the given values !?
@@ -72,23 +89,23 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
             $this->object->checkInput($this->args['values'], 1);
         }
 
-        if(!empty($args['preview']) || !empty($args['confirm'])) 
-        {
+        if (!empty($args['preview']) || !empty($args['confirm'])) {
             if (!empty($args['confirm']) && !xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
             }
 
             $isvalid = $this->object->checkInput();
 
-            if($isvalid && !empty($args['confirm'])) 
-            {
+            if ($isvalid && !empty($args['confirm'])) {
                 $itemid = $this->object->updateItem();
 
-                if(empty($itemid)) 
-                    return; // throw back
+                if (empty($itemid)) {
+                    return;
+                } // throw back
 
-                if(empty($args['return_url'])) 
+                if (empty($args['return_url'])) {
                     $args['return_url'] = $this->getReturnURL();
+                }
 
                 xarController::redirect($args['return_url']);
                 // Return
@@ -104,15 +121,15 @@ class DataObjectUpdateHandler extends DataObjectDefaultHandler
         $this->object->callHooks('modify');
 
         return xarTpl::object(
-            $this->tplmodule, $this->object->template, 'ui_update',
-            array('object'  => $this->object,
-                  'preview' => $args['preview'],
-                  'authid'  => xarSec::genAuthKey(),
-                  'hooks'   => $this->object->hookoutput,
-                  'tpltitle' => $this->tpltitle,
-                  'return_url' => $args['return_url'])
+            $this->tplmodule,
+            $this->object->template,
+            'ui_update',
+            ['object'  => $this->object,
+             'preview' => $args['preview'],
+             'authid'  => xarSec::genAuthKey(),
+             'hooks'   => $this->object->hookoutput,
+             'tpltitle' => $this->tpltitle,
+             'return_url' => $args['return_url']]
         );
     }
 }
-
-?>

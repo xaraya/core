@@ -12,12 +12,28 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+namespace Xaraya\DataObject\Handlers;
+
+use xarVar;
+use xarCache;
+use xarObjectCache;
+use xarMod;
+use xarModVars;
+use xarController;
+use xarServer;
+use xarResponse;
+use xarTpl;
+use DataObjectMaster;
+use DataPropertyMaster;
+use sys;
+
 sys::import('modules.dynamicdata.class.ui_handlers.default');
+
 /**
  * Dynamic Object User Interface Handler
  *
  */
-class DataObjectStatsHandler extends DataObjectDefaultHandler
+class StatsHandler extends DefaultHandler
 {
     public $method = 'stats';
 
@@ -31,30 +47,39 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
      * @param $args['startnum'] optional start number for the view
      * @return string output of xarTpl::object() using 'ui_stats'
      */
-    function run(array $args = array())
+    public function run(array $args = [])
     {
-        if(!xarVar::fetch('catid',    'isset', $args['catid'],    NULL, xarVar::DONT_SET)) 
+        if (!xarVar::fetch('catid', 'isset', $args['catid'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('sort',     'isset', $args['sort'],     NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('sort', 'isset', $args['sort'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('where',    'isset', $args['where'],    NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('where', 'isset', $args['where'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('startnum', 'isset', $args['startnum'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('startnum', 'isset', $args['startnum'], null, xarVar::DONT_SET)) {
             return;
+        }
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        if(!xarVar::fetch('group',    'isset', $args['group'],    NULL, xarVar::DONT_SET)) 
+        if (!xarVar::fetch('group', 'isset', $args['group'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('field',    'isset', $args['field'],    NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('field', 'isset', $args['field'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('match',    'isset', $args['match'],    NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('match', 'isset', $args['match'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('report',   'isset', $args['report'],   NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('report', 'isset', $args['report'], null, xarVar::DONT_SET)) {
             return;
+        }
 
-        if(!empty($args) && is_array($args) && count($args) > 0) 
+        if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
+        }
 
         // override numitems for groups !?
         $this->args['numitems'] = 0;
@@ -82,11 +107,11 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         return $output;
     }
 
-    function stats()
+    public function stats()
     {
         // set stats criteria
-        $stats = array();
-        $criteria = array('group', 'field', 'match', 'report');
+        $stats = [];
+        $criteria = ['group', 'field', 'match', 'report'];
         foreach ($criteria as $key) {
             if (isset($this->args[$key])) {
                 $stats[$key] = $this->args[$key];
@@ -97,21 +122,23 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         }
         // initialize group values if necessary
         if (empty($stats['group'])) {
-            $stats['group'] = array();
+            $stats['group'] = [];
         }
-        $newgroup = array();
+        $newgroup = [];
         foreach ($stats['group'] as $name) {
-            if (empty($name)) continue;
+            if (empty($name)) {
+                continue;
+            }
             $newgroup[] = $name;
         }
         $stats['group'] = $newgroup;
         // initialize field values if necessary
         if (empty($stats['field'])) {
-            $stats['field'] = array();
+            $stats['field'] = [];
         }
         // initialize match types if necessary
         if (empty($stats['match'])) {
-            $stats['match'] = array();
+            $stats['match'] = [];
         }
         // initialize report if necessary
         if (empty($stats['report'])) {
@@ -120,32 +147,32 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         // prepare for output now
         $stats['report'] = xarVar::prepForDisplay($stats['report']);
 
-        if(!isset($this->object)) 
-        {
+        if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObjectList($this->args);
-            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
+            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            }
 
-            if(empty($this->tplmodule)) 
-            {
+            if (empty($this->tplmodule)) {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
         $title = xarML('Statistics for #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
-/*
+        /**
         // Set page template
         if (xarTpl::getPageTemplateName() == 'default') {
-             // Use the admin-$modName.xt page if available when $modType is admin
+            // Use the admin-$modName.xt page if available when $modType is admin
             // falling back on admin.xt if the former isn't available
             if (!xarTpl::setPageTemplateName('admin-'.$this->tplmodule)) {
                 xarTpl::setPageTemplateName('admin');
             }
         }
-*/
-        if (!$this->object->checkAccess('view'))
+        */
+        if (!$this->object->checkAccess('view')) {
             return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+        }
 
         // load previously defined report if available
         if (!empty($stats['report']) && empty($stats['group']) && empty($stats['field']) && empty($stats['match'])) {
@@ -158,12 +185,13 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         // get the property types in case we want to do more than check the type
         $proptypes = DataPropertyMaster::getPropertyTypes();
 
-        $stats['grouplist'] = array();
+        $stats['grouplist'] = [];
         foreach ($this->object->properties as $name => $property) {
-            if (empty($proptypes[$property->type])) continue;
+            if (empty($proptypes[$property->type])) {
+                continue;
+            }
             $proptype = $proptypes[$property->type]['name'];
-            switch ($proptype)
-            {
+            switch ($proptype) {
                 case 'itemid':
                     // preset to count the items
                     if (empty($stats['field'][$name])) {
@@ -184,26 +212,30 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             }
         }
 
-        $groupby = array();
-        $sort = array();
-        $fieldlist = array();
+        $groupby = [];
+        $sort = [];
+        $fieldlist = [];
         foreach ($stats['group'] as $name) {
-            if (empty($stats['grouplist'][$name])) continue;
+            if (empty($stats['grouplist'][$name])) {
+                continue;
+            }
             if (!empty($this->object->properties[$name])) {
                 $fieldlist[] = $name;
                 $groupby[] = $name;
                 $sort[] = $name;
-            } elseif (strpos($name,':')) {
+            } elseif (strpos($name, ':')) {
                 // TODO: calendar field by year, month or day
-                list($name,$format) = explode(':',$name);
-                if (empty($this->object->properties[$name])) continue;
+                [$name, $format] = explode(':', $name);
+                if (empty($this->object->properties[$name])) {
+                    continue;
+                }
                 $property = $this->object->properties[$name];
                 $proptype = $proptypes[$property->type]['name'];
                 $field = '';
                 if ($proptype == 'calendar' && empty($property->configuration)) {
-                    $field = $this->getTimestampField($name,$format);
+                    $field = $this->getTimestampField($name, $format);
                 } else {
-                    $field = $this->getDateField($name,$format);
+                    $field = $this->getDateField($name, $format);
                 }
                 if (!empty($field)) {
                     // add the custom operation to the fieldlist
@@ -216,9 +248,13 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         }
 
         foreach ($stats['field'] as $name => $operation) {
-            if (empty($this->object->properties[$name])) continue;
+            if (empty($this->object->properties[$name])) {
+                continue;
+            }
             // fields that are already used for grouping can't be used in other operations
-            if (in_array($name, $groupby)) continue;
+            if (in_array($name, $groupby)) {
+                continue;
+            }
             switch ($operation) {
                 case 'hide':
                     break;
@@ -240,7 +276,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
                 case 'sum':
                     $fieldlist[] = "SUM($name)";
                     break;
-                // We use a custom operation here that gets translated to a database-specific one by the datastore
+                    // We use a custom operation here that gets translated to a database-specific one by the datastore
                 case 'distinct':
                     $fieldlist[] = "COUNT_DISTINCT($name)"; // CHECKME in datastores
                     break;
@@ -249,13 +285,14 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             }
         }
 
-        $info = array('fieldlist' => $fieldlist,
-                      'groupby'   => $groupby,
-                      'sort'      => $sort);
+        $info = ['fieldlist' => $fieldlist,
+                 'groupby'   => $groupby,
+                 'sort'      => $sort];
 
         // check if we need to save this report
-        if (!xarVar::fetch('save', 'isset', $save, NULL, xarVar::DONT_SET)) 
+        if (!xarVar::fetch('save', 'isset', $save, null, xarVar::DONT_SET)) {
             return;
+        }
 
         // nothing to show here
         if (empty($fieldlist)) {
@@ -264,41 +301,43 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         // save the report and redirect
         } elseif (!empty($save) && !empty($stats['report']) && $this->object->checkAccess('config')) {
             $this->saveReport($stats['report'], $stats, $info);
-            xarController::redirect(xarServer::getObjectURL($this->object->name, 'report', array('report' => $stats['report'])));
+            xarController::redirect(xarServer::getObjectURL($this->object->name, 'report', ['report' => $stats['report']]));
             return true;
 
         // get the result
         } else {
-        // FIXME: support addFilters() when not grouping
+            // FIXME: support addFilters() when not grouping
             $this->object->getItems($info);
             $result = 1;
         }
 
-        $stats['options'] = array('hide'     => '',
-                                  //'show'     => 'Show', // can't be mixed with group by etc.
-                                  'count'    => 'Count',
-                                  'distinct' => 'Distinct', // CHECKME in datastores
-                                  'min'      => 'Minimum',
-                                  'max'      => 'Maximum',
-                                  'sum'      => 'Sum',
-                                  'avg'      => 'Average');
+        $stats['options'] = ['hide'     => '',
+                             //'show'     => 'Show', // can't be mixed with group by etc.
+                             'count'    => 'Count',
+                             'distinct' => 'Distinct', // CHECKME in datastores
+                             'min'      => 'Minimum',
+                             'max'      => 'Maximum',
+                             'sum'      => 'Sum',
+                             'avg'      => 'Average'];
 
         $output = xarTpl::object(
-            $this->tplmodule, $this->object->template, 'ui_stats',
-            array('object' => $this->object,
-                  'stats'  => $stats,
-                  'result' => $result,
-                  'tpltitle' => $this->tpltitle)
+            $this->tplmodule,
+            $this->object->template,
+            'ui_stats',
+            ['object' => $this->object,
+             'stats'  => $stats,
+             'result' => $result,
+             'tpltitle' => $this->tpltitle]
         );
 
         return $output;
     }
 
-    function report()
+    public function report()
     {
         // set report criteria
-        $report = array();
-        $criteria = array('report');
+        $report = [];
+        $criteria = ['report'];
         foreach ($criteria as $key) {
             if (isset($this->args[$key])) {
                 $report[$key] = $this->args[$key];
@@ -314,14 +353,13 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         // prepare for output now
         $report['report'] = xarVar::prepForDisplay($report['report']);
 
-        if(!isset($this->object)) 
-        {
+        if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObjectList($this->args);
-            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
+            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            }
 
-            if(empty($this->tplmodule)) 
-            {
+            if (empty($this->tplmodule)) {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
@@ -329,8 +367,9 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         $title = xarML('Report for #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
-        if (!$this->object->checkAccess('view'))
+        if (!$this->object->checkAccess('view')) {
             return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+        }
 
         $report['reportlist'] = $this->getReportList();
 
@@ -344,17 +383,19 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         } else {
             // remove stats info
             unset($info['stats']);
-        // FIXME: support addFilters() when not grouping
+            // FIXME: support addFilters() when not grouping
             $this->object->getItems($info);
             $result = 1;
         }
 
         $output = xarTpl::object(
-            $this->tplmodule, $this->object->template, 'ui_report',
-            array('object' => $this->object,
-                  'report' => $report,
-                  'result' => $result,
-                  'tpltitle' => $this->tpltitle)
+            $this->tplmodule,
+            $this->object->template,
+            'ui_report',
+            ['object' => $this->object,
+             'report' => $report,
+             'result' => $result,
+             'tpltitle' => $this->tpltitle]
         );
 
         return $output;
@@ -363,7 +404,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
     /**
      * We use a custom operation here that gets translated to a database-specific one by the datastore
      */
-    function getTimestampField($field,$format) // CHECKME for all database types
+    public function getTimestampField($field, $format) // CHECKME for all database types
     {
         $newfield = '';
         if ($format == 'year') {
@@ -379,7 +420,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
     /**
      * We use a custom operation here that gets translated to a database-specific one by the datastore
      */
-    function getDateField($field,$format) // CHECKME for all database types
+    public function getDateField($field, $format) // CHECKME for all database types
     {
         $newfield = '';
         if ($format == 'year') {
@@ -392,33 +433,33 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         return $newfield;
     }
 
-    function getReportList()
+    public function getReportList()
     {
-        $serialreports = xarModVars::get('dynamicdata','reportlist.'.$this->object->name);
+        $serialreports = xarModVars::get('dynamicdata', 'reportlist.'.$this->object->name);
         if (!empty($serialreports)) {
             $reportlist = unserialize($serialreports);
         } else {
-            $reportlist = array();
+            $reportlist = [];
         }
         return $reportlist;
     }
 
-    function getReport($report)
+    public function getReport($report)
     {
         $key = 'report.'.$this->object->name.'.'.$report;
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
-        $serialinfo = xarModVars::get('dynamicdata',$key);
+        $serialinfo = xarModVars::get('dynamicdata', $key);
         if (!empty($serialinfo)) {
             $info = unserialize($serialinfo);
         } else {
-            $info = array();
+            $info = [];
         }
         return $info;
     }
 
-    function saveReport($report, $stats, $info)
+    public function saveReport($report, $stats, $info)
     {
         $reportlist = $this->getReportList();
         if (empty($reportlist) || !in_array($report, $reportlist)) {
@@ -429,7 +470,7 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
             }
             // add the new report at the front of the list
             array_unshift($reportlist, $report);
-            xarModVars::set('dynamicdata','reportlist.'.$this->object->name,serialize($reportlist));
+            xarModVars::set('dynamicdata', 'reportlist.'.$this->object->name, serialize($reportlist));
         }
         // add stats to info so we can edit it afterwards
         $info['stats'] = $stats;
@@ -437,15 +478,15 @@ class DataObjectStatsHandler extends DataObjectDefaultHandler
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
-        xarModVars::set('dynamicdata',$key,serialize($info));
+        xarModVars::set('dynamicdata', $key, serialize($info));
     }
 
-    function deleteReport($report)
+    public function deleteReport($report)
     {
         $key = 'report.'.$this->object->name.'.'.$report;
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
-        xarModVars::delete('dynamicdata',$key);
+        xarModVars::delete('dynamicdata', $key);
     }
 }

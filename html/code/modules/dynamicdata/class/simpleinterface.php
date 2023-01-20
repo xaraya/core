@@ -12,50 +12,58 @@
  */
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
+use Xaraya\DataObject\Handlers\DefaultHandler;
+
 /**
   * Simple Object Interface
   */
-class SimpleObjectInterface extends DataObjectDefaultHandler
+class SimpleObjectInterface extends DefaultHandler
 {
-    function __construct(array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
-        if (!xarVar::fetch('tplmodule',   'isset', $args['tplmodule'], 'dynamicdata', xarVar::NOT_REQUIRED))
+        if (!xarVar::fetch('tplmodule', 'isset', $args['tplmodule'], 'dynamicdata', xarVar::NOT_REQUIRED)) {
             return;
+        }
 
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
         }
     }
 
-    function handle(array $args = array())
+    public function handle(array $args = [])
     {
-        if (!xarVar::fetch('method', 'str', $args['method'], 'showDisplay', xarVar::NOT_REQUIRED))
+        if (!xarVar::fetch('method', 'str', $args['method'], 'showDisplay', xarVar::NOT_REQUIRED)) {
             return;
-        if (!xarVar::fetch('itemid', 'id', $args['itemid'], NULL, xarVar::DONT_SET))
+        }
+        if (!xarVar::fetch('itemid', 'id', $args['itemid'], null, xarVar::DONT_SET)) {
             return;
+        }
         // @todo maybe this should be done somewhere else ?
-        if (!xarVar::fetch('qparam', 'str', $qparam, NULL, xarVar::DONT_SET))
-           return;
-        if (!xarVar::fetch('qstring', 'str', $qstring, NULL, xarVar::DONT_SET))
-           return;
+        if (!xarVar::fetch('qparam', 'str', $qparam, null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('qstring', 'str', $qstring, null, xarVar::DONT_SET)) {
+            return;
+        }
 
-        if (!empty($qparam) && !empty ($qstring)) {
+        if (!empty($qparam) && !empty($qstring)) {
             $args['where'] = "$qparam LIKE '$qstring%'";
         }
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
         }
         $this->object = DataObjectMaster::getObjectList($this->args);
-        if (method_exists($this->object,$this->args['method'])) {
+        if (method_exists($this->object, $this->args['method'])) {
             $this->object->getItems();
         } else {
             $this->object = DataObjectMaster::getObject($this->args);
         }
 
-        if (empty($this->object)) return;
+        if (empty($this->object)) {
+            return;
+        }
 
         return $this->object->{$this->args['method']}($this->args);
     }
 }
-?>
