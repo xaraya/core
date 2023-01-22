@@ -15,8 +15,10 @@
 namespace Xaraya\DataObject\Handlers;
 
 use xarVar;
+use xarMLS;
 use xarMod;
 use xarController;
+use xarResponse;
 use xarSec;
 use xarTpl;
 use DataObjectMaster;
@@ -61,7 +63,7 @@ class DeleteHandler extends DefaultHandler
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
 
             if (empty($this->tplmodule)) {
@@ -79,12 +81,12 @@ class DeleteHandler extends DefaultHandler
             return true;
         }
         if (!$this->object->checkAccess('delete')) {
-            return xarController::$response->Forbidden(xarML('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+            return xarResponse::Forbidden(xarMLS::translate('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
         }
 
         $itemid = $this->object->getItem();
         if (empty($itemid) || $itemid != $this->object->itemid) {
-            return xarController::$response->NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+            return xarResponse::NotFound(xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
         }
 
         if (!empty($args['confirm'])) {
@@ -107,7 +109,7 @@ class DeleteHandler extends DefaultHandler
             return true;
         }
 
-        $title = xarML('Delete #(1)', $this->object->label);
+        $title = xarMLS::translate('Delete #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         return xarTpl::object(

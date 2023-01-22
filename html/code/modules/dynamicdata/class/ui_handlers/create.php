@@ -15,8 +15,10 @@
 namespace Xaraya\DataObject\Handlers;
 
 use xarVar;
+use xarMLS;
 use xarMod;
 use xarController;
+use xarResponse;
 use xarSec;
 use xarTpl;
 use DataObjectMaster;
@@ -64,7 +66,7 @@ class CreateHandler extends DefaultHandler
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
 
             if (empty($this->tplmodule)) {
@@ -73,7 +75,7 @@ class CreateHandler extends DefaultHandler
             }
         }
         if (!$this->object->checkAccess('create')) {
-            return xarController::$response->Forbidden(xarML('Create #(1) is forbidden', $this->object->label));
+            return xarResponse::Forbidden(xarMLS::translate('Create #(1) is forbidden', $this->object->label));
         }
 
         // there's no item to get here yet
@@ -111,7 +113,7 @@ class CreateHandler extends DefaultHandler
             $args['preview'] = true;
         }
 
-        $title = xarML('New #(1)', $this->object->label);
+        $title = xarMLS::translate('New #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         // call item new hooks for this item

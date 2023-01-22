@@ -17,6 +17,7 @@ namespace Xaraya\DataObject\Handlers;
 use xarVar;
 use xarCache;
 use xarObjectCache;
+use xarMLS;
 use xarMod;
 use xarModVars;
 use xarController;
@@ -150,7 +151,7 @@ class StatsHandler extends DefaultHandler
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
 
             if (empty($this->tplmodule)) {
@@ -158,7 +159,7 @@ class StatsHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        $title = xarML('Statistics for #(1)', $this->object->label);
+        $title = xarMLS::translate('Statistics for #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
         /**
         // Set page template
@@ -171,7 +172,7 @@ class StatsHandler extends DefaultHandler
         }
         */
         if (!$this->object->checkAccess('view')) {
-            return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+            return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
         }
 
         // load previously defined report if available
@@ -356,7 +357,7 @@ class StatsHandler extends DefaultHandler
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
 
             if (empty($this->tplmodule)) {
@@ -364,11 +365,11 @@ class StatsHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        $title = xarML('Report for #(1)', $this->object->label);
+        $title = xarMLS::translate('Report for #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
-            return xarResponse::Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+            return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
         }
 
         $report['reportlist'] = $this->getReportList();

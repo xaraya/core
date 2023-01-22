@@ -15,8 +15,10 @@
 namespace Xaraya\DataObject\Handlers;
 
 use xarVar;
+use xarMLS;
 use xarMod;
 use xarController;
+use xarResponse;
 use xarSec;
 use xarTpl;
 use DataObjectMaster;
@@ -65,7 +67,7 @@ class UpdateHandler extends DefaultHandler
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
 
             if (empty($this->tplmodule)) {
@@ -74,12 +76,12 @@ class UpdateHandler extends DefaultHandler
             }
         }
         if (!$this->object->checkAccess('update')) {
-            return xarController::$response->Forbidden(xarML('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+            return xarResponse::Forbidden(xarMLS::translate('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
         }
 
         $itemid = $this->object->getItem();
         if (empty($itemid) || $itemid != $this->object->itemid) {
-            return xarController::$response->NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+            return xarResponse::NotFound(xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
         }
 
         if (!empty($this->args['values'])) {
@@ -114,7 +116,7 @@ class UpdateHandler extends DefaultHandler
             $args['preview'] = true;
         }
 
-        $title = xarML('Modify #(1)', $this->object->label);
+        $title = xarMLS::translate('Modify #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         // call item modify hooks for this item

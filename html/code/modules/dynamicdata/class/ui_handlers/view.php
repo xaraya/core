@@ -17,8 +17,9 @@ namespace Xaraya\DataObject\Handlers;
 use xarVar;
 use xarCache;
 use xarObjectCache;
+use xarMLS;
 use xarMod;
-use xarController;
+use xarResponse;
 use xarDB;
 use xarTpl;
 use DataObjectMaster;
@@ -81,7 +82,7 @@ class ViewHandler extends DefaultHandler
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
 
             if (empty($this->tplmodule)) {
@@ -89,11 +90,11 @@ class ViewHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        $title = xarML('View #(1)', $this->object->label);
+        $title = xarMLS::translate('View #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
-            return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+            return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
         }
 
         if (!empty($this->args['where']) && is_array($this->args['where']) && is_object($this->object->datastore)) {

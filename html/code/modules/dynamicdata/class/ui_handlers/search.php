@@ -17,6 +17,7 @@ namespace Xaraya\DataObject\Handlers;
 use xarVar;
 use xarCache;
 use xarObjectCache;
+use xarMLS;
 use xarMod;
 use xarResponse;
 use xarTpl;
@@ -132,7 +133,7 @@ class SearchHandler extends DefaultHandler
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
 
             if (empty($this->tplmodule)) {
@@ -140,11 +141,11 @@ class SearchHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        $title = xarML('Search #(1)', $this->object->label);
+        $title = xarMLS::translate('Search #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
-            return xarResponse::Forbidden(xarML('Search #(1) is forbidden', $this->object->label));
+            return xarResponse::Forbidden(xarMLS::translate('Search #(1) is forbidden', $this->object->label));
         }
 
         if (empty($search['field']) || count($search['field']) < 1) {
@@ -179,7 +180,7 @@ class SearchHandler extends DefaultHandler
             // get result list
             $result = DataObjectMaster::getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
@@ -265,7 +266,7 @@ class SearchHandler extends DefaultHandler
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
 
             if (empty($this->tplmodule)) {
@@ -273,11 +274,11 @@ class SearchHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
-        $title = xarML('Query #(1)', $this->object->label);
+        $title = xarMLS::translate('Query #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
-            return xarResponse::Forbidden(xarML('Query #(1) is forbidden', $this->object->label));
+            return xarResponse::Forbidden(xarMLS::translate('Query #(1) is forbidden', $this->object->label));
         }
 
         // get where clauses
@@ -325,7 +326,7 @@ class SearchHandler extends DefaultHandler
             // get result list
             $result = DataObjectMaster::getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';

@@ -185,7 +185,7 @@ class DataObjectUserInterface extends xarObject
         // sanity check on method aliases during setup
         foreach ($this->alias as $alias => $realmethod) {
             if (empty($this->mapper[$realmethod])) {
-                return xarML('Unknown method #(1) for alias #(2)', $realmethod, $alias);
+                return xarMLS::translate('Unknown method #(1) for alias #(2)', $realmethod, $alias);
             }
         }
 

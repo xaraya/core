@@ -16,9 +16,10 @@ namespace Xaraya\DataObject\Handlers;
 
 use xarObject;
 use xarVar;
+use xarMLS;
 use xarMod;
 use xarModVars;
-use xarController;
+use xarResponse;
 use xarTpl;
 use xarDDObject;
 use DataObjectMaster;
@@ -84,7 +85,7 @@ class DefaultHandler extends xarObject
             $this->tpltitle = $args['tpltitle'];
         }
         if (empty($this->tpltitle)) {
-            $this->tpltitle = xarML('Dynamic Data Object Interface');
+            $this->tpltitle = xarMLS::translate('Dynamic Data Object Interface');
         }
 
         // get some common URL parameters
@@ -182,7 +183,7 @@ class DefaultHandler extends xarObject
                 $this->object = DataObjectMaster::getObjectList($this->args);
             }
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
 
             if (empty($this->tplmodule)) {
@@ -192,25 +193,25 @@ class DefaultHandler extends xarObject
         }
 
         if (!method_exists($this->object, $this->method)) {
-            return xarML('Unknown method #(1) for #(2)', xarVar::prepForDisplay($this->method), $this->object->label);
+            return xarMLS::translate('Unknown method #(1) for #(2)', xarVar::prepForDisplay($this->method), $this->object->label);
         }
 
         // Pre-fetch item(s) for some standard dataobject methods
         if (empty($args['itemid']) && $this->method == 'showview') {
             if (!$this->object->checkAccess('view')) {
-                return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+                return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
             }
 
             $this->object->getItems();
         } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform')) {
             if (!$this->object->checkAccess('display')) {
-                return xarController::$response->Forbidden(xarML('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+                return xarResponse::Forbidden(xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
             }
 
             // get the requested item
             $itemid = $this->object->getItem();
             if (empty($itemid) || $itemid != $this->object->itemid) {
-                return xarController::$response->NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+                return xarResponse::NotFound(xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
             }
         }
 
