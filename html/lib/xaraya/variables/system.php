@@ -46,6 +46,11 @@ class xarSystemVars extends xarVars implements IxarVars
 
     public static function set($scope, $name, $value)
     {
+        // Allow overriding system layout if needed
+        if ($scope == sys::LAYOUT) {
+            self::$systemVars[$scope][$name] = $value;
+            return true;
+        }
         // Not supported ?
         return false;
     }
