@@ -806,7 +806,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modName) || empty($funcName)) {
             // This is not a valid function syntax - CHECKME: also for api functions ?
             if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
-            else return xarController::$response->NotFound();
+            else return xarResponse::NotFound();
         }
 
         // good thing this information is cached :)
@@ -814,7 +814,7 @@ class xarMod extends xarObject implements IxarMod
         if (!isset($modBaseInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
             if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
-            else return xarController::$response->NotFound();
+            else return xarResponse::NotFound();
         }
 
         // Call function
@@ -829,7 +829,7 @@ class xarMod extends xarObject implements IxarMod
                 try {
                     xarMod::load($modName,$modType);
                 } catch (Exception $e) {
-                    return xarController::$response->NotFound();
+                    return xarResponse::NotFound();
                 }
             }
 
@@ -842,7 +842,7 @@ class xarMod extends xarObject implements IxarMod
                 if (!file_exists($funcFile)) {
                     // Valid syntax, but the function doesn't exist
                     if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
-                    else return xarController::$response->NotFound();
+                    else return xarResponse::NotFound();
                 } else {
                     ob_start();
                     $r = sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
@@ -864,7 +864,7 @@ class xarMod extends xarObject implements IxarMod
             }
         }
 
-        if (!$found) return xarController::$response->NotFound();
+        if (!$found) return xarResponse::NotFound();
 
         $funcResult = $modFunc($args);
         return $funcResult;
