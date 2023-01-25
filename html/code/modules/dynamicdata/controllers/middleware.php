@@ -29,7 +29,7 @@ use DataObjectUserInterface;
  */
 class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInterface, MiddlewareInterface
 {
-    protected array $attibutes = ['object', 'method', 'itemid'];
+    protected array $attributes = ['object', 'method', 'itemid'];
     protected ResponseFactoryInterface $responseFactory;
 
     /**

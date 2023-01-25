@@ -28,7 +28,7 @@ sys::import('modules.modules.controllers.router');
  */
 class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, MiddlewareInterface
 {
-    protected array $attibutes = ['module', 'type', 'func'];
+    protected array $attributes = ['module', 'type', 'func'];
     protected ResponseFactoryInterface $responseFactory;
 
     /**
