@@ -41,6 +41,7 @@ use xarController;
 use xarServer;
 use xarSystemVars;
 use xarMod;
+use xarBlock;
 use sys;
 use Xaraya\Bridge\CommonBridgeTrait;
 
@@ -64,6 +65,9 @@ class FastRouteBridge
             $r->addRoute(['GET', 'POST'], '/{object}/{itemid:\d+}[/{method}]', [static::class, 'handleObjectRequest']);
             $r->addRoute(['GET', 'POST'], '/{object}/{method}', [static::class, 'handleObjectRequest']);
             //$r->addRoute(['GET', 'POST'], '/', [static::class, 'handleObjectRequest']);
+        });
+        $r->addGroup('/block', function (RouteCollector $r) {
+            $r->addRoute('GET', '/{instance}', [static::class, 'handleBlockRequest']);
         });
         $r->addRoute(['GET', 'POST'], '/{module}[/{type}[/{func}]]', [static::class, 'handleModuleRequest']);
         $r->addRoute(['GET', 'POST'], '/', [static::class, 'handleModuleRequest']);
@@ -174,5 +178,14 @@ class FastRouteBridge
         static::prepareController($vars['module'], static::$baseUri);
 
         return xarMod::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query);
+    }
+
+    public static function handleBlockRequest($vars, $query, $input = null)
+    {
+        static::$baseUri = $_SERVER['SCRIPT_NAME'];
+        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
+        static::prepareController($vars['module'] ?? 'base', static::$baseUri);
+
+        return xarBlock::renderBlock($vars);
     }
 }
