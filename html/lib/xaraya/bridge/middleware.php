@@ -70,6 +70,10 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use sys;
+
+sys::import('xaraya.bridge.commontrait');
+use Xaraya\Bridge\CommonBridgeTrait;
 
 interface DefaultRouterInterface
 {
@@ -91,6 +95,8 @@ interface DefaultRouterInterface
  */
 abstract class DefaultRouter implements DefaultRouterInterface
 {
+    use CommonBridgeTrait;
+
     public static string $baseUri = '';
     public static string $prefix = '';
 

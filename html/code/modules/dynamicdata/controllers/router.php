@@ -61,27 +61,7 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
             $prefix = static::$baseUri . static::$prefix;
         }
         $path = $request->getUri()->getPath();
-        $params = [];
-        if (strlen($path) > strlen($prefix) && strpos($path, $prefix . '/') === 0) {
-            $pieces = explode('/', substr($path, strlen($prefix) + 1));
-            // {prefix}/{object} = view
-            $params['object'] = $pieces[0];
-            if (count($pieces) > 1) {
-                if (!is_numeric($pieces[1])) {
-                    // {prefix}/{object}/{method} = new, query, stats, ...
-                    $params['method'] = $pieces[1];
-                } else {
-                    // {prefix}/{object}/{itemid} = display
-                    $params['itemid'] = $pieces[1];
-                    if (count($pieces) > 2) {
-                        // {prefix}/{object}/{itemid}/{$method} = update, delete, ...
-                        $params['method'] = $pieces[2];
-                    }
-                }
-            }
-        }
-        // add remaining query params to request params
-        $params = array_merge($params, $request->getQueryParams());
+        $params = static::parseDataObjectPath($path, $request->getQueryParams(), $prefix);
         return $params;
     }
 
@@ -90,26 +70,6 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
      */
     public static function buildUri(?string $object = null, ?string $method = null, string|int|null $itemid = null, array $extra = []): string
     {
-        // see xarDDObject::getObjectURL() and xarServer::getObjectURL()
-        $uri = static::$baseUri . static::$prefix;
-        // {prefix}/{object} = view
-        $uri .= '/' . $object;
-        if (empty($itemid)) {
-            if (!empty($method) && $method != 'view') {
-                // {prefix}/{object}/{method} = new, query, stats, ...
-                $uri .= '/' . $method;
-            }
-        } else {
-            // {prefix}/{object}/{itemid} = display
-            $uri .= '/' . $itemid;
-            if (!empty($method) && $method != 'display') {
-                // {prefix}/{object}/{itemid}/{$method} = update, delete, ...
-                $uri .= '/' . $method;
-            }
-        }
-        if (!empty($extra)) {
-            $uri .= '?' . http_build_query($extra);
-        }
-        return $uri;
+        return static::buildDataObjectPath($object, $method, $itemid, $extra);
     }
 }

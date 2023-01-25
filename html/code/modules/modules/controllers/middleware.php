@@ -14,10 +14,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
-use xarController;
 use xarMod;
-use xarServer;
-use xarSystemVars;
 use sys;
 
 sys::import('xaraya.bridge.middleware');
@@ -62,13 +59,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         // @checkme keep track of the current base uri if filtered in router
         static::setBaseUri($request);
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
-        xarController::getRequest()->setModule($attribs['module']);
-        // @checkme override system config here, since xarController does re-init() for each URL() for some reason...
-        $entryPoint = str_replace(xarServer::getBaseURI(), '', static::$baseUri);
-        //xarSystemVars::set(sys::LAYOUT, 'BaseURI');
-        xarSystemVars::set(sys::LAYOUT, 'BaseModURL', $entryPoint);
-        xarController::$entryPoint = $entryPoint;
-        xarController::$buildUri = [static::class, 'buildUri'];
+        static::prepareController($attribs['module'], static::$baseUri);
 
         // filter out request attributes from remaining query params here
         $params = array_diff_key($request->getQueryParams(), $attribs);

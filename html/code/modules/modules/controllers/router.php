@@ -59,23 +59,7 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
             $prefix = static::$baseUri . static::$prefix;
         }
         $path = $request->getUri()->getPath();
-        $params = [];
-        if (strlen($path) > strlen($prefix) && strpos($path, $prefix . '/') === 0) {
-            $pieces = explode('/', substr($path, strlen($prefix) + 1));
-            // {prefix}/{module} = user main
-            $params['module'] = $pieces[0];
-            if (count($pieces) == 2) {
-                // {prefix}/{module}/{func} = user view, display, ...
-                $params['type'] = 'user';
-                $params['func'] = $pieces[1];
-            } elseif (count($pieces) > 2) {
-                $params['type'] = $pieces[1];
-                // {prefix}/{module}/{type}/{func} = admin main, new, config, ...
-                $params['func'] = $pieces[2];
-            }
-        }
-        // add remaining query params to request params
-        $params = array_merge($params, $request->getQueryParams());
+        $params = static::parseModulePath($path, $request->getQueryParams(), $prefix);
         return $params;
     }
 
@@ -84,34 +68,6 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
      */
     public static function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
     {
-        if ($module == 'object') {
-            $itemid = $extra['itemid'] ?? null;
-            unset($extra['itemid']);
-            sys::import('modules.dynamicdata.controllers.router');
-            // @checkme when do we need to do this?
-            DataObjectRouter::setBaseUri(static::$baseUri);
-            return DataObjectRouter::buildUri($type, $func, $itemid, $extra);
-        }
-        // see xarServer::getModuleURL()
-        $uri = static::$baseUri . static::$prefix;
-        // {prefix}/{module} = user main
-        $uri .= '/' . $module;
-        if (empty($type) || $type == 'user') {
-            if (!empty($func) && $func != 'main') {
-                // {prefix}/{module}/{func} = user view, display, ...
-                $uri .= '/' . $func;
-            }
-        } else {
-            $uri .= '/' . $type;
-            if (empty($func)) {
-                $func = 'main';
-            }
-            // {prefix}/{module}/{type}/{func} = admin main, new, config, ...
-            $uri .= '/' . $func;
-        }
-        if (!empty($extra)) {
-            $uri .= '?' . http_build_query($extra);
-        }
-        return $uri;
+        return static::buildModulePath($module, $type, $func, $extra);
     }
 }

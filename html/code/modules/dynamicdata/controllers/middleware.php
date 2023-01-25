@@ -14,9 +14,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
-use xarController;
-use xarServer;
-use xarSystemVars;
 use sys;
 
 sys::import('xaraya.bridge.middleware');
@@ -63,17 +60,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         // @checkme keep track of the current base uri if filtered in router
         static::setBaseUri($request);
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName() in DD list
-        xarController::getRequest()->setModule('object');
-        // @checkme override system config here, since xarController does re-init() for each URL() for some reason...
-        $entryPoint = str_replace(xarServer::getBaseURI(), '', static::$baseUri);
-        //xarSystemVars::set(sys::LAYOUT, 'BaseURI');
-        xarSystemVars::set(sys::LAYOUT, 'BaseModURL', $entryPoint);
-        xarController::$entryPoint = $entryPoint;
-        // @checkme set buildUri for any other links to the ModuleRouter here
-        //xarController::$buildUri = [static::class, 'buildUri'];
-        sys::import('modules.modules.controllers.router');
-        ModuleRouter::setBaseUri(static::$baseUri);
-        xarController::$buildUri = [ModuleRouter::class, 'buildUri'];
+        static::prepareController('object', static::$baseUri);
 
         // add remaining query params to request attributes
         $params = array_merge($attribs, $request->getQueryParams());
