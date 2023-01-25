@@ -1,7 +1,7 @@
 <?php
 /**
- * Experiment with PSR-7 and PSR-15 compatible middleware controller for DataObject
- * Uses request attributes 'object', 'method', 'itemid' from DataObjectRouter::matchRequest()
+ * Experiment with PSR-7 and PSR-15 compatible middleware controller for modules
+ * Uses request attributes 'module', 'type', 'func' from ModuleRouter::matchRequest()
  *
  * Note: single-pass middleware, see https://www.php-fig.org/psr/psr-15/meta/
  */
@@ -15,21 +15,20 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
 use xarController;
+use xarMod;
 use xarServer;
 use xarSystemVars;
 use sys;
 
 sys::import('xaraya.bridge.middleware');
-sys::import('modules.dynamicdata.controllers.router');
-sys::import('modules.dynamicdata.class.userinterface');
-use DataObjectUserInterface;
+sys::import('modules.modules.controllers.router');
 
 /**
- * PSR-15 compatible middleware for DataObject UI methods (view, display, search, ...)
+ * PSR-15 compatible middleware for module GUI functions (user main, admin modifyconfig, ...)
  */
-class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInterface, MiddlewareInterface
+class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, MiddlewareInterface
 {
-    protected array $attibutes = ['object', 'method', 'itemid'];
+    protected array $attibutes = ['module', 'type', 'func'];
     protected ResponseFactoryInterface $responseFactory;
 
     /**
@@ -41,61 +40,50 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
     }
 
     /**
-     * Process the server request - request attributes are set here with DataObjectRouter::matchRequest()
+     * Process the server request - request attributes are set here with ModuleRouter::matchRequest()
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $next): ResponseInterface
     {
-        // identify object requests and set request attributes
+        // identify module requests and set request attributes
         $request = static::matchRequest($request);
 
-        // check only the request attributes relevant for object request
+        // check only the request attributes relevant for module request
         $allowed = array_flip($this->attributes);
         $attribs = array_intersect_key($request->getAttributes(), $allowed);
 
         // pass the request along to the next handler and return its response
-        if (empty($attribs['object'])) {
+        if (empty($attribs['module'])) {
             $response = $next->handle($request);
             return $response;
         }
 
-        // handle the object request here and return our response
+        // handle the module request here and return our response
 
         // @checkme keep track of the current base uri if filtered in router
         static::setBaseUri($request);
-        // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName() in DD list
-        xarController::getRequest()->setModule('object');
+        // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
+        xarController::getRequest()->setModule($attribs['module']);
         // @checkme override system config here, since xarController does re-init() for each URL() for some reason...
         $entryPoint = str_replace(xarServer::getBaseURI(), '', static::$baseUri);
         //xarSystemVars::set(sys::LAYOUT, 'BaseURI');
         xarSystemVars::set(sys::LAYOUT, 'BaseModURL', $entryPoint);
         xarController::$entryPoint = $entryPoint;
-        // @checkme set buildUri for any other links to the ModuleRouter here
-        //xarController::$buildUri = [static::class, 'buildUri'];
-        sys::import('modules.modules.controllers.router');
-        ModuleRouter::setBaseUri(static::$baseUri);
-        xarController::$buildUri = [ModuleRouter::class, 'buildUri'];
+        xarController::$buildUri = [static::class, 'buildUri'];
 
-        // add remaining query params to request attributes
-        $params = array_merge($attribs, $request->getQueryParams());
+        // filter out request attributes from remaining query params here
+        $params = array_diff_key($request->getQueryParams(), $attribs);
 
-        // @checkme pass along buildUri() as link function to DD
-        $params['linktype'] = 'other';
-        $params['linkfunc'] = [static::class, 'buildUri'];
-
-        $interface = new DataObjectUserInterface($params);
         try {
-            $body = $interface->handle($params);
+            $body = xarMod::guiFunc($attribs['module'], $attribs['type'] ?? 'user', $attribs['func'] ?? 'main', $params);
             $response = $this->responseFactory->createResponse();
             $response->getBody()->write($body);
         } catch (Exception $e) {
             $body = "Exception: " . $e->getMessage();
-            $response = $this->responseFactory->createResponse(422, 'DataObject Middleware Exception');
+            $response = $this->responseFactory->createResponse(422, 'Module Middleware Exception');
             $response->getBody()->write($body);
         }
-        // From DataObjectUserInterface:
-        //...
 
-        // clean up routes for object requests in response output
+        // clean up routes for module requests in response output
         //$response = static::cleanResponse($response, $this->responseFactory);
 
         return $response;
