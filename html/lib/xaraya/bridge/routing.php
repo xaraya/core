@@ -11,13 +11,13 @@
  * use Xaraya\Bridge\Routing\FastRouteBridge;
  *
  * // add route collection to your own dispatcher
- * $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
- *     // ...
- *     // FastRouteBridge::addRouteCollection($r);
- *     $r->addGroup('/xaraya', function (FastRoute\RouteCollector $r) {
- *         FastRouteBridge::addRouteCollection($r);
- *     });
- * });
+ * // $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
+ * //     // ...
+ * //     // FastRouteBridge::addRouteCollection($r);
+ * //     $r->addGroup('/mysite', function (FastRoute\RouteCollector $r) {
+ * //         FastRouteBridge::addRouteCollection($r);
+ * //     });
+ * // });
  * // $routeInfo = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
  * // if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
  * //     $handler = $routeInfo[1];
@@ -25,10 +25,16 @@
  * //     // ... call $handler with $vars
  * // }
  *
- * // or simply use the route dispatcher directly
- * $result = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
+ * // or get a route dispatcher to work with yourself, possibly in a group
+ * // $dispatcher = FastRouteBridge::getSimpleDispatcher('/mysite');
+ * // $routeInfo = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
+ *
+ * // or let the route dispatcher handle the request itself and return the result
+ * $result = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/', '/mysite');
  * echo $result;
  *
+ * // or let it really do all the work here...
+ * // FastRouteBridge::run('/mysite');
  */
 
 namespace Xaraya\Bridge\Routing;
@@ -53,7 +59,6 @@ class FastRouteBridge
     use CommonBridgeTrait;
 
     public static string $baseUri = '';
-    public static string $prefix = '';
 
     public static function addRouteCollection(RouteCollector $r)
     {
@@ -94,12 +99,17 @@ class FastRouteBridge
             case Dispatcher::NOT_FOUND:
                 // ... 404 Not Found
                 http_response_code(404);
+                if (!empty($group)) {
+                    return 'Nothing to see here at ' . htmlspecialchars($path) . ' with prefix ' . htmlspecialchars($group);
+                }
+                return 'Nothing to see here at ' . htmlspecialchars($path);
                 break;
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
                 header('Allow: ' . implode(', ', $allowedMethods));
                 http_response_code(405);
+                return 'Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path);
                 break;
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
@@ -111,15 +121,20 @@ class FastRouteBridge
         }
     }
 
+    public static function run(string $group = '')
+    {
+        $method = static::getMethod();
+        $path = static::getPathInfo();
+        $result = static::dispatchRequest($method, $path, $group);
+        echo $result;
+    }
+
     public static function callHandler($handler, $vars)
     {
         if (empty($vars)) {
             $vars = [];
         }
-        $query = [];
-        if (!empty($_SERVER['QUERY_STRING'])) {
-            parse_str($_SERVER['QUERY_STRING'], $query);
-        }
+        $query = static::getQueryParams();
         // handle php://input for POST etc. - let Xaraya handle it
         //$input = file_get_contents('php://input');
         //if (!empty($input)) {
@@ -129,8 +144,30 @@ class FastRouteBridge
         return $result;
     }
 
-    public static function handleObjectRequest($vars, $query, $input = null)
+    public static function handleObjectRequest($vars, $query = null, $input = null)
     {
+        // dispatcher doesn't provide query params by default
+        if (!isset($query)) {
+            $query = static::getQueryParams();
+        }
+        // if coming from module request handler, convert to object request
+        if (empty($vars['object']) && $vars['module'] == 'object') {
+            // path = /object/{object}
+            $vars['object'] = $vars['type'] ?? '';
+            if (!empty($vars['func'])) {
+                if (is_numeric($vars['func'])) {
+                    // path = /object/{object}/{itemid}
+                    $vars['itemid'] = $vars['func'];
+                } else {
+                    // path = /object/{object}/{method}
+                    $vars['method'] = $vars['func'];
+                }
+                unset($vars['func']);
+            }
+            unset($vars['module']);
+            unset($vars['type']);
+        }
+        // path = /{object}[/{itemid}[/{method}]] or /{object}/{method}
         // add remaining query params to path vars
         $params = array_merge($vars, $query);
 
@@ -138,7 +175,7 @@ class FastRouteBridge
         $params['linktype'] = 'other';
         $params['linkfunc'] = [static::class, 'buildDataObjectPath'];
 
-        static::$baseUri = $_SERVER['SCRIPT_NAME'];
+        static::$baseUri = static::getBaseUri();
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController('object', static::$baseUri . '/object');
 
@@ -146,22 +183,16 @@ class FastRouteBridge
         return $interface->handle($params);
     }
 
-    public static function handleModuleRequest($vars, $query, $input = null)
+    public static function handleModuleRequest($vars, $query = null, $input = null)
     {
+        // dispatcher doesn't provide query params by default
+        if (!isset($query)) {
+            $query = static::getQueryParams();
+        }
+        // path = /
         $vars['module'] ??= 'base';
         // path = /object[/...]
         if ($vars['module'] == 'object') {
-            $vars['object'] = $vars['type'] ?? '';
-            if (!empty($vars['func'])) {
-                if (is_numeric($vars['func'])) {
-                    $vars['itemid'] = $vars['func'];
-                } else {
-                    $vars['method'] = $vars['func'];
-                }
-                unset($vars['func']);
-            }
-            unset($vars['module']);
-            unset($vars['type']);
             return static::handleObjectRequest($vars, $query, $input);
         }
         // path = /{module}/{func}
@@ -169,17 +200,18 @@ class FastRouteBridge
             $vars['func'] = $vars['type'];
             $vars['type'] = 'user';
         }
+        // path = /{module}/{type}/{func}
 
-        static::$baseUri = $_SERVER['SCRIPT_NAME'];
+        static::$baseUri = static::getBaseUri();
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'], static::$baseUri);
 
         return xarMod::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query);
     }
 
-    public static function handleBlockRequest($vars, $query, $input = null)
+    public static function handleBlockRequest($vars, $query = null, $input = null)
     {
-        static::$baseUri = $_SERVER['SCRIPT_NAME'];
+        static::$baseUri = static::getBaseUri();
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'] ?? 'base', static::$baseUri);
 

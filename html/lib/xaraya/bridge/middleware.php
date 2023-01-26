@@ -124,34 +124,10 @@ abstract class DefaultRouter implements DefaultRouterInterface
      */
     public static function stripBaseUri(ServerRequestInterface $request): ServerRequestInterface
     {
-        $server = $request->getServerParams();
-        $requestUri = explode('?', $server['REQUEST_URI'] ?? '')[0];
-        if (!empty($server['PATH_INFO'])) {
-            if (!empty($server['SCRIPT_NAME']) && strpos($requestUri, $server['SCRIPT_NAME'] . $server['PATH_INFO']) === 0) {
-                // {request_uri} = {/baseurl/script.php}{/path_info}?{query_string}
-                $uri = $request->getUri()->withPath($server['PATH_INFO']);
-                static::$baseUri = $server['SCRIPT_NAME'];
-                $request = $request->withUri($uri)->withAttribute('baseUri', static::$baseUri);
-            } elseif (strpos($requestUri, $server['PATH_INFO']) !== false) {
-                // {request_uri} = {/otherurl}{/path_info}?{query_string} = mod_rewrite possibly unrelated to {/baseurl/script.php}
-                $uri = $request->getUri()->withPath($server['PATH_INFO']);
-                static::$baseUri = substr($requestUri, 0, strlen($requestUri) - strlen($server['PATH_INFO']));
-                $request = $request->withUri($uri)->withAttribute('baseUri', static::$baseUri);
-            } else {
-                // how did we end up here?
-            }
-        } elseif (!empty($server['SCRIPT_NAME']) && strpos($requestUri, $server['SCRIPT_NAME']) === 0) {
-            // {request_uri} = {/baseurl/script.php}?{query_string}
-            $uri = $request->getUri()->withPath('');
-            static::$baseUri = $server['SCRIPT_NAME'];
-            $request = $request->withUri($uri)->withAttribute('baseUri', static::$baseUri);
-        } else {
-            // {request_uri} = {/otherurl}?{query_string} = mod_rewrite possibly unrelated to {/baseurl/script.php}
-            $uri = $request->getUri()->withPath('');
-            // @checkme could be some other rewrite going on here
-            static::$baseUri = $requestUri;
-            $request = $request->withUri($uri)->withAttribute('baseUri', static::$baseUri);
-        }
+        static::$baseUri = static::getBaseUri($request);
+        $path = static::getPathInfo($request);
+        $uri = $request->getUri()->withPath($path);
+        $request = $request->withUri($uri)->withAttribute('baseUri', static::$baseUri);
         return $request;
     }
 
@@ -165,9 +141,6 @@ abstract class DefaultRouter implements DefaultRouterInterface
             if ($request->getAttribute('baseUri') !== null) {
                 static::$baseUri = $request->getAttribute('baseUri');
             } else {
-                // @todo see above if SCRIPT_NAME is not part of REQUEST_URI
-                //$server = $request->getServerParams();
-                //static::$baseUri = $server['SCRIPT_NAME'] ?? '';
                 // @checkme we don't actually update the request path of the on-going request here
                 static::stripBaseUri($request);
             }
