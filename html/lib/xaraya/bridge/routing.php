@@ -36,10 +36,7 @@ namespace Xaraya\Bridge\Routing;
 // use the FastRoute library here - see https://github.com/nikic/FastRoute
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
-use xarController;
 // use some Xaraya classes
-use xarServer;
-use xarSystemVars;
 use xarMod;
 use xarBlock;
 use sys;
