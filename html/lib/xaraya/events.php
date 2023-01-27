@@ -111,6 +111,8 @@ class xarEvents extends xarObject implements ixarEvents
     protected static $classnames = [];
     // for non-core modules we're only interested in hookobservers for now - this may extend to eventobservers later...
     protected static $classtypes = ['hookobservers'];
+    // allow others to define callback functions without registering observers e.g. for event bridge
+    protected static $callbackFunctions = [];
 
     public static function init(array $args = array())
     {
@@ -212,6 +214,18 @@ class xarEvents extends xarObject implements ixarEvents
             $response = false;
         }
         
+        $info['caller'] = static::class;
+        $info['args'] = $args;
+        if (!empty(static::$callbackFunctions) && !empty(static::$callbackFunctions[$event])) {
+            foreach (static::$callbackFunctions[$event] as $callback) {
+                try {
+                    call_user_func($callback, $info);
+                } catch (Exception $e) {
+                    xarLog::message("xarEvents::notify: callback $event error " . $e->getMessage(), xarLog::LEVEL_INFO);
+                }
+            }
+        }
+
         // now notify Event subject observers that an event was just raised
         // (these are generic listeners that observe every event raised)
         // We only do this if this isn't the generic Event itself...
@@ -244,7 +258,16 @@ class xarEvents extends xarObject implements ixarEvents
         self::$observers[$observertype][$event][$module] = $info;
         return $info['id'];
     }    
-    
+
+    /**
+     * allow others to define callback functions without registering observers e.g. for event bridge (= not saved in database)
+     */
+    public static function registerCallback($event, $callback)
+    {
+        static::$callbackFunctions[$event] ??= [];
+        static::$callbackFunctions[$event][] = $callback;
+    }
+
     /**
      * event registration function
      * used internally by registerSubject and registerObserver methods 

@@ -24,6 +24,9 @@ class xarHooks extends xarEvents
     const HOOK_OBSERVER_TYPE = 4;
     
     protected static $hookobservers = array();
+    // allow others to define callback functions without registering observers e.g. for event bridge
+    protected static $callbackFunctions = [];
+
 /**    
  * required functions, provide event system with late static bindings for these values
 **/
