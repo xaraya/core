@@ -10,6 +10,7 @@
  *
  * By default, any call to xarEvents::notify or xarHooks::notify can trigger an event dispatch as well, so it's up
  * to the event/hook observer bridges and your event subscribers to select which events they want to listen to.
+ * An example of a test event subscriber is available in lib/xaraya/bridge/events/testers.php
  *
  * require dirname(__DIR__).'/vendor/autoload.php';
  * sys::init();
@@ -17,6 +18,7 @@
  * xarCore::xarInit(xarCore::SYSTEM_USER);
  *
  * use Symfony\Component\EventDispatcher\EventDispatcher;
+ * use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * use Xaraya\Bridge\Events\EventObserverBridge;
  * use Xaraya\Bridge\Events\HookObserverBridge;
  * use Xaraya\Bridge\Events\TestObserverBridgeSubscriber;
@@ -28,7 +30,7 @@
  * // set up the hook observer bridge to dispatch a few hooks
  * $hookbridge = new HookObserverBridge($dispatcher, ['ItemUpdate']);
  *
- * // have an event subscriber show interest in a few events and/or hooks
+ * // have an event subscriber show interest in a few events and/or hooks - see testers.php
  * $subscriber = new TestObserverBridgeSubscriber(['Event'], ['ItemUpdate']);
  * // and add it to the event dispatcher to see something happen
  * $dispatcher->addSubscriber($subscriber);
@@ -41,9 +43,8 @@
 
 namespace Xaraya\Bridge\Events;
 
+//use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Exception;
 use sys;
 
 sys::import('xaraya.events');
@@ -178,62 +179,5 @@ class HookObserverBridge extends EventObserverBridge implements ObserverBridgeIn
     public static function getEventList(): array
     {
         return xarHooks::getSubjects();
-    }
-}
-
-/**
- * Test the event observer bridge by subscribing to a few events and/or hooks here
- */
-class TestObserverBridgeSubscriber implements EventSubscriberInterface
-{
-    public static $subscribedEvents = [];
-
-    public function __construct(array $eventList = ['Event'], array $hookList = ['ItemUpdate'])
-    {
-        static::addEventList($eventList);
-        static::addHookList($hookList);
-    }
-
-    public static function onDispatchedEvent($event, string $eventName = '')
-    {
-        $subject = $event->getSubject();
-        echo "Dispatched Event $eventName: " . var_export($subject, true) . "\n";
-    }
-
-    public static function onDispatchedHook($event, string $eventName = '')
-    {
-        $subject = $event->getSubject();
-        echo "Dispatched Hook $eventName: " . var_export($subject, true) . "\n";
-    }
-
-    public static function addEventList(array $eventList = [])
-    {
-        $infoList = EventObserverBridge::getEventList();
-        foreach ($eventList as $event) {
-            if (!array_key_exists($event, $infoList)) {
-                throw new Exception("Unknown event '$event'");
-            }
-            $info = $infoList[$event];
-            $eventName = EventObserverBridge::getEventName($info['scope'], $event);
-            static::$subscribedEvents[$eventName] = 'onDispatchedEvent';
-        }
-    }
-
-    public static function addHookList(array $hookList = [])
-    {
-        $infoList = HookObserverBridge::getEventList();
-        foreach ($hookList as $event) {
-            if (!array_key_exists($event, $infoList)) {
-                throw new Exception("Unknown hook '$event'");
-            }
-            $info = $infoList[$event];
-            $eventName = HookObserverBridge::getEventName($info['scope'], $event);
-            static::$subscribedEvents[$eventName] = 'onDispatchedHook';
-        }
-    }
-
-    public static function getSubscribedEvents()
-    {
-        return static::$subscribedEvents;
     }
 }
