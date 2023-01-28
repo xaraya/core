@@ -19,7 +19,6 @@ use sys;
 sys::import('xaraya.bridge.middleware');
 sys::import('modules.dynamicdata.controllers.router');
 sys::import('modules.dynamicdata.class.userinterface');
-use DataObjectUserInterface;
 
 /**
  * PSR-15 compatible middleware for DataObject UI methods (view, display, search, ...)
@@ -69,22 +68,37 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         $params['linktype'] = 'other';
         $params['linkfunc'] = [static::class, 'buildUri'];
 
-        $interface = new DataObjectUserInterface($params);
-        try {
-            $body = $interface->handle($params);
-            $response = $this->responseFactory->createResponse();
-            $response->getBody()->write($body);
-        } catch (Exception $e) {
-            $body = "Exception: " . $e->getMessage();
-            $response = $this->responseFactory->createResponse(422, 'DataObject Middleware Exception');
-            $response->getBody()->write($body);
-        }
-        // From DataObjectUserInterface:
-        //...
+        $response = $this->run($params);
 
         // clean up routes for object requests in response output
         //$response = static::cleanResponse($response, $this->responseFactory);
 
         return $response;
+    }
+
+    public function run($params)
+    {
+        try {
+            $result = static::runDataObjectGuiRequest($params);
+        } catch (Exception $e) {
+            return $this->createExceptionResponse($e);
+        }
+        return $this->createResponse($result);
+    }
+}
+
+class DataObjectApiMiddleware extends DataObjectMiddleware
+{
+    public $format = 'json';
+
+    public function run($params)
+    {
+        try {
+            $result = static::runDataObjectApiRequest($params);
+        } catch (Exception $e) {
+            return $this->createExceptionResponse($e);
+        }
+        // @todo adapt response based on chosen $format
+        return $this->createJsonResponse($result);
     }
 }

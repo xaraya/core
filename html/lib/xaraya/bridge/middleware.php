@@ -70,10 +70,12 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Exception;
+use JsonException;
 use sys;
 
-sys::import('xaraya.bridge.commontrait');
-use Xaraya\Bridge\CommonBridgeTrait;
+sys::import('xaraya.bridge.requests.commontrait');
+use Xaraya\Bridge\Requests\CommonBridgeTrait;
 
 interface DefaultRouterInterface
 {
@@ -90,12 +92,49 @@ interface DefaultRouterInterface
 
 //interface DefaultMiddlewareInterface extends MiddlewareInterface;
 
+trait DefaultResponseTrait
+{
+    protected ResponseFactoryInterface $responseFactory;
+    protected array $options = [];
+
+    public function createResponse(string $body): ResponseInterface
+    {
+        $response = $this->responseFactory->createResponse();
+        $response->getBody()->write($body);
+        return $response;
+    }
+
+    public function createJsonResponse(mixed $result): ResponseInterface
+    {
+        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        try {
+            //$output = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
+            $body = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            $body = '{"JSON Exception": ' . json_encode($e->getMessage()) . '}';
+        }
+        $response->getBody()->write($body);
+        return $response;
+    }
+
+    public function createExceptionResponse(Exception $e, mixed $result = null): ResponseInterface
+    {
+        $body = "Exception: " . $e->getMessage();
+        $here = explode('\\', static::class);
+        $class = array_pop($here);
+        $response = $this->responseFactory->createResponse(422, $class . ' Exception');
+        $response->getBody()->write($body);
+        return $response;
+    }
+}
+
 /**
  * Middleware should be built by creating a customized router and then adding the processsing - extend this to create your router
  */
 abstract class DefaultRouter implements DefaultRouterInterface
 {
     use CommonBridgeTrait;
+    use DefaultResponseTrait;
 
     public static string $baseUri = '';
     public static string $prefix = '';
@@ -206,14 +245,16 @@ abstract class DefaultRouter implements DefaultRouterInterface
  */
 class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface
 {
-    private ResponseFactoryInterface $responseFactory;
+    protected ResponseFactoryInterface $responseFactory;
+    protected array $options = [];
 
     /**
      * Initialize the middleware with response factory (or container, ...)
      */
-    public function __construct(?ResponseFactoryInterface $responseFactory = null)
+    public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
     {
         $this->responseFactory = $responseFactory;
+        $this->options = $options;
     }
 
     /**

@@ -64,19 +64,37 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         // filter out request attributes from remaining query params here
         $params = array_diff_key($request->getQueryParams(), $attribs);
 
-        try {
-            $body = xarMod::guiFunc($attribs['module'], $attribs['type'] ?? 'user', $attribs['func'] ?? 'main', $params);
-            $response = $this->responseFactory->createResponse();
-            $response->getBody()->write($body);
-        } catch (Exception $e) {
-            $body = "Exception: " . $e->getMessage();
-            $response = $this->responseFactory->createResponse(422, 'Module Middleware Exception');
-            $response->getBody()->write($body);
-        }
+        $response = $this->run($attribs, $params);
 
         // clean up routes for module requests in response output
         //$response = static::cleanResponse($response, $this->responseFactory);
 
         return $response;
+    }
+
+    public function run($attribs, $params)
+    {
+        try {
+            $result = static::runModuleGuiRequest($attribs, $params);
+        } catch (Exception $e) {
+            return $this->createExceptionResponse($e);
+        }
+        return $this->createResponse($result);
+    }
+}
+
+class ModuleApiMiddleware extends ModuleMiddleware
+{
+    public $format = 'json';
+
+    public function run($attribs, $params)
+    {
+        try {
+            $result = static::runModuleApiRequest($attribs, $params);
+        } catch (Exception $e) {
+            return $this->createExceptionResponse($e);
+        }
+        // @todo adapt response based on chosen $format
+        return $this->createJsonResponse($result);
     }
 }

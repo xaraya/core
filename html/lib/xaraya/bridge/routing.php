@@ -44,14 +44,11 @@ use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 // use some Xaraya classes
 use xarMod;
-use xarBlock;
 use sys;
-use Xaraya\Bridge\CommonBridgeTrait;
 
-sys::import('xaraya.bridge.commontrait');
-use DataObjectUserInterface;
+sys::import('xaraya.bridge.requests.commontrait');
+use Xaraya\Bridge\Requests\CommonBridgeTrait;
 
-sys::import('modules.dynamicdata.class.userinterface');
 use function FastRoute\simpleDispatcher;
 
 class FastRouteBridge
@@ -175,12 +172,20 @@ class FastRouteBridge
         $params['linktype'] = 'other';
         $params['linkfunc'] = [static::class, 'buildDataObjectPath'];
 
+        if ($params['object'] == 'roles_users') {
+            $params['fieldlist'] = ['id', 'name', 'uname', 'state'];
+        }
+
         static::$baseUri = static::getBaseUri();
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController('object', static::$baseUri . '/object');
 
-        $interface = new DataObjectUserInterface($params);
-        return $interface->handle($params);
+        return static::runObjectRequest($params);
+    }
+
+    public static function runObjectRequest($params)
+    {
+        return static::runDataObjectGuiRequest($params);
     }
 
     public static function handleModuleRequest($vars, $query = null, $input = null)
@@ -206,7 +211,12 @@ class FastRouteBridge
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'], static::$baseUri);
 
-        return xarMod::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query);
+        return static::runModuleRequest($vars, $query);
+    }
+
+    public static function runModuleRequest($vars, $query)
+    {
+        return static::runModuleGuiRequest($vars, $query);
     }
 
     public static function handleBlockRequest($vars, $query = null, $input = null)
@@ -215,6 +225,37 @@ class FastRouteBridge
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'] ?? 'base', static::$baseUri);
 
-        return xarBlock::renderBlock($vars);
+        return static::runBlockRequest($vars, $query);
+    }
+
+    public static function runBlockRequest($vars, $query = null)
+    {
+        return static::runBlockGuiRequest($vars, $query);
+    }
+}
+
+/**
+ * Same as FastRouteBridge but runs API calls instead of GUI calls
+ *
+ * Note: if you really want to use APIs for DataObject please have a look at the REST API or GraphQL API instead
+ * They can be configured via the admin Back End > Dynamic Data > Utilities > Test APIs
+ */
+class FastRouteApiBridge extends FastRouteBridge
+{
+    public static string $baseUri = '';
+
+    public static function runObjectRequest($params)
+    {
+        return static::runDataObjectApiRequest($params);
+    }
+
+    public static function runModuleRequest($vars, $query)
+    {
+        return static::runModuleApiRequest($vars, $query);
+    }
+
+    public static function runBlockRequest($vars, $query = null)
+    {
+        return static::runBlockApiRequest($vars, $query);
     }
 }
