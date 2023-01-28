@@ -28,7 +28,7 @@
  * $modules = new ModuleMiddleware($psr17Factory);
  *
  * // some other middleware before or after...
- * $router = function ($request, $next) {
+ * $filter = function ($request, $next) {
  *     // @checkme strip baseUri from request path and set 'baseUri' request attribute here?
  *     $request = DefaultMiddleware::stripBaseUri($request);
  *     $response = $next->handle($request);
@@ -43,12 +43,13 @@
  * // ...
  * $notfound = function ($request, $next) {
  *     $response = $next->handle($request);
- *     $response->getBody()->write('Nothing to see here...');
+ *     $path = $request->getUri()->getPath();
+ *     $response->getBody()->write('Nothing to see here at ' . htmlspecialchars($path));
  *     return $response;
  * };
  *
  * $stack = [
- *     $router,
+ *     $filter,
  *     //$cleaner,
  *     $objects,
  *     // Warning: we never get here if there's an object to be handled
@@ -97,16 +98,26 @@ trait DefaultResponseTrait
     protected ResponseFactoryInterface $responseFactory;
     protected array $options = [];
 
+    public function getResponseFactory(): ResponseFactoryInterface
+    {
+        return $this->responseFactory;
+    }
+
+    public function setResponseFactory(ResponseFactoryInterface $responseFactory): void
+    {
+        $this->responseFactory = $responseFactory;
+    }
+
     public function createResponse(string $body): ResponseInterface
     {
-        $response = $this->responseFactory->createResponse();
+        $response = $this->getResponseFactory()->createResponse();
         $response->getBody()->write($body);
         return $response;
     }
 
     public function createJsonResponse(mixed $result): ResponseInterface
     {
-        $response = $this->responseFactory->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
         try {
             //$output = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
             $body = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
@@ -122,7 +133,7 @@ trait DefaultResponseTrait
         $body = "Exception: " . $e->getMessage();
         $here = explode('\\', static::class);
         $class = array_pop($here);
-        $response = $this->responseFactory->createResponse(422, $class . ' Exception');
+        $response = $this->getResponseFactory()->createResponse(422, $class . ' Exception');
         $response->getBody()->write($body);
         return $response;
     }
@@ -253,7 +264,7 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
     {
-        $this->responseFactory = $responseFactory;
+        $this->setResponseFactory($responseFactory);
         $this->options = $options;
     }
 

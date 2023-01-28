@@ -33,7 +33,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null)
     {
-        $this->responseFactory = $responseFactory;
+        $this->setResponseFactory($responseFactory);
     }
 
     /**
@@ -67,7 +67,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         $response = $this->run($attribs, $params);
 
         // clean up routes for module requests in response output
-        //$response = static::cleanResponse($response, $this->responseFactory);
+        //$response = static::cleanResponse($response, $this->getResponseFactory());
 
         return $response;
     }

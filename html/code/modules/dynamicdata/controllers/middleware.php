@@ -33,7 +33,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null)
     {
-        $this->responseFactory = $responseFactory;
+        $this->setResponseFactory($responseFactory);
     }
 
     /**
@@ -71,7 +71,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         $response = $this->run($params);
 
         // clean up routes for object requests in response output
-        //$response = static::cleanResponse($response, $this->responseFactory);
+        //$response = static::cleanResponse($response, $this->getResponseFactory());
 
         return $response;
     }
