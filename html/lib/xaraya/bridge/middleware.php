@@ -110,7 +110,7 @@ trait DefaultResponseTrait
 
     public function createResponse(string $body): ResponseInterface
     {
-        $response = $this->getResponseFactory()->createResponse();
+        $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', 'text/html; charset=utf-8');
         $response->getBody()->write($body);
         return $response;
     }
@@ -133,7 +133,7 @@ trait DefaultResponseTrait
         $body = "Exception: " . $e->getMessage();
         $here = explode('\\', static::class);
         $class = array_pop($here);
-        $response = $this->getResponseFactory()->createResponse(422, $class . ' Exception');
+        $response = $this->getResponseFactory()->createResponse(422, $class . ' Exception')->withHeader('Content-Type', 'text/plain; charset=utf-8');
         $response->getBody()->write($body);
         return $response;
     }
@@ -174,10 +174,15 @@ abstract class DefaultRouter implements DefaultRouterInterface
      */
     public static function stripBaseUri(ServerRequestInterface $request): ServerRequestInterface
     {
-        static::$baseUri = static::getBaseUri($request);
-        $path = static::getPathInfo($request);
-        $uri = $request->getUri()->withPath($path);
-        $request = $request->withUri($uri)->withAttribute('baseUri', static::$baseUri);
+        $baseUri = static::getBaseUri($request);
+        if (!empty($baseUri)) {
+            $path = static::getPathInfo($request);
+            $uri = $request->getUri()->withPath($path);
+            $request = $request->withUri($uri)->withAttribute('baseUri', $baseUri);
+        } else {
+            $request = $request->withAttribute('baseUri', $baseUri);
+        }
+        static::$baseUri = $baseUri;
         return $request;
     }
 

@@ -37,8 +37,7 @@ trait CommonBridgeTrait
         //xarSystemVars::set(sys::LAYOUT, 'BaseURI');
         xarSystemVars::set(sys::LAYOUT, 'BaseModURL', $entryPoint);
         xarController::$entryPoint = $entryPoint;
-        // @checkme set buildUri for any other links to the ModuleRouter here
-        //xarController::$buildUri = [static::class, 'buildUri'];
+        // @todo get xarServer::getBaseURL() working correctly for ReactPHP etc.
         //sys::import('modules.modules.controllers.router');
         //ModuleRouter::setBaseUri($baseUri);
         xarController::$buildUri = [static::class, 'buildModulePath'];

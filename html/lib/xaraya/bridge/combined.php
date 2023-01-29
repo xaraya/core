@@ -2,6 +2,8 @@
 /**
  * Make use of the FastRouteBridge in routing.php for an all-in-one PSR-15 middleware + requesthandler
  *
+ * Note: see also lib/xaraya/bridge/reactphp.php for an example with ReactPHP (not fully functional with links)
+ *
  * require dirname(__DIR__).'/vendor/autoload.php';
  * sys::init();
  * xarCache::init();
@@ -98,6 +100,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
      */
     public function execute(ServerRequestInterface $request, ?RequestHandlerInterface $next = null): ResponseInterface
     {
+        // @checkme not applicable for ReactPHP etc.
         // Strip the base uri for the calling script from the request path and set 'baseUri' request attribute
         $request = DefaultMiddleware::stripBaseUri($request);
         $method = $request->getMethod();
@@ -113,7 +116,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     return $next->handle($request);
                 }
                 $response = $this->getResponseFactory()->createResponse();
-                $response = $response->withStatusCode(404);
+                $response = $response->withStatus(404);
                 $response->getBody()->write('Nothing to see here at ' . htmlspecialchars($path));
                 return $response;
                 break;
@@ -121,7 +124,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
                 $response = $this->getResponseFactory()->createResponse();
-                $response = $response->withStatusCode(405)->withHeader('Allow', implode(', ', $allowedMethods));
+                $response = $response->withStatus(405)->withHeader('Allow', implode(', ', $allowedMethods));
                 $response->getBody()->write('Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path));
                 return $response;
                 break;
@@ -135,7 +138,15 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 //return $next->handle($request);
                 // ... call $handler with $vars
                 try {
-                    $result = FastRouteBridge::callHandler($handler, $vars);
+                    $query = $request->getQueryParams();
+                    $result = call_user_func($handler, $vars, $query);
+                    /**
+                    $result = [
+                        'handler' => $handler,
+                        'vars' => $vars,
+                        'query' => $query,
+                    ];
+                     */
                 } catch (Exception $e) {
                     return $this->createExceptionResponse($e);
                 }

@@ -21,6 +21,9 @@ interface CommonRequestInterface
     public static function getBaseUri($request = null): string;
     public static function getQueryParams($request = null): array;
     public static function getServerParams($request = null): array;
+    public static function getCookieParams($request = null): array;
+    public static function getUploadedFiles($request = null): array;
+    public static function getParsedBody($request = null): mixed;
 }
 
 trait CommonRequestTrait
@@ -40,6 +43,10 @@ trait CommonRequestTrait
     {
         // for PSR-7 compatible server requests and everyone else
         $server = static::getServerParams($request);
+        // no PATH_INFO available for ReactPHP etc.
+        if (is_object($request) && method_exists($request, 'getUri') && empty($server['PATH_INFO'])) {
+            return $request->getUri()->getPath();
+        }
         return $server['PATH_INFO'] ?? '';
     }
 
@@ -48,6 +55,10 @@ trait CommonRequestTrait
         // for PSR-7 compatible server requests and everyone else
         $server = static::getServerParams($request);
         $requestPath = explode('?', $server['REQUEST_URI'] ?? '')[0];
+        // no REQUEST_URI, SCRIPT_NAME or PATH_INFO available for ReactPHP etc.
+        if (empty($requestPath)) {
+            return $requestPath;
+        }
         // {request_uri} = {/baseurl/script.php}{/path_info}?{query_string}
         if (!empty($server['SCRIPT_NAME']) && strpos($requestPath, $server['SCRIPT_NAME']) === 0) {
             return $server['SCRIPT_NAME'];
@@ -83,5 +94,35 @@ trait CommonRequestTrait
         }
         // for everyone else
         return $_SERVER;
+    }
+
+    public static function getCookieParams($request = null): array
+    {
+        // for PSR-7 compatible server requests
+        if (is_object($request) && method_exists($request, 'getCookieParams')) {
+            return $request->getCookieParams();
+        }
+        // for everyone else
+        return $_COOKIE;
+    }
+
+    public static function getUploadedFiles($request = null): array
+    {
+        // for PSR-7 compatible server requests
+        if (is_object($request) && method_exists($request, 'getUploadedFiles')) {
+            return $request->getUploadedFiles();
+        }
+        // for everyone else
+        return $_FILES;
+    }
+
+    public static function getParsedBody($request = null): mixed
+    {
+        // for PSR-7 compatible server requests
+        if (is_object($request) && method_exists($request, 'getParsedBody')) {
+            return $request->getParsedBody();
+        }
+        // for everyone else
+        return $_POST;
     }
 }
