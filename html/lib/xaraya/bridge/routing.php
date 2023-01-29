@@ -48,6 +48,7 @@ use sys;
 
 sys::import('xaraya.bridge.requests.commontrait');
 use Xaraya\Bridge\Requests\CommonBridgeTrait;
+use Xaraya\Bridge\Requests\StaticFileBridgeTrait;
 
 use function FastRoute\simpleDispatcher;
 
@@ -257,5 +258,64 @@ class FastRouteApiBridge extends FastRouteBridge
     public static function runBlockRequest($vars, $query = null)
     {
         return static::runBlockApiRequest($vars, $query);
+    }
+}
+
+/**
+ * Same as FastRouteBridge but handles static files too
+ *
+ * Note: static files should really be handled by a web server or reverse proxy in front of the application
+ */
+class FastRouteStaticBridge extends FastRouteBridge
+{
+    use StaticFileBridgeTrait;
+
+    public static string $baseUri = '';
+
+    public static function addRouteCollection(RouteCollector $r, string $staticFiles = '')
+    {
+        // @checkme use this as group e.g. everything under /static
+        if (!empty($staticFiles)) {
+            $r->addGroup($staticFiles, function (RouteCollector $r) {
+                static::addModuleFileRoutes($r);
+                static::addThemeFileRoutes($r);
+            });
+        } else {
+            static::addModuleFileRoutes($r);
+            static::addThemeFileRoutes($r);
+        }
+        parent::addRouteCollection($r);
+    }
+
+    public static function addThemeFileRoutes(RouteCollector $r)
+    {
+        $r->addGroup('/themes', function (RouteCollector $r) {
+            $r->addRoute('GET', '/{theme}/{folder}/{file:.+}', [static::class, 'handleThemeFileRequest']);
+        });
+    }
+
+    public static function addModuleFileRoutes(RouteCollector $r)
+    {
+        $r->addGroup('/code/modules', function (RouteCollector $r) {
+            $r->addRoute('GET', '/{module}/{folder}/{file:.+}', [static::class, 'handleModuleFileRequest']);
+        });
+    }
+
+    public static function handleThemeFileRequest($vars, $query = null, $input = null)
+    {
+        // path = /themes/{theme}/{folder}/{file:.+}
+        $path = static::getThemeFileRequest($vars);
+        $vars['path'] = $path;
+        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
+        return var_export($vars, true);
+    }
+
+    public static function handleModuleFileRequest($vars, $query = null, $input = null)
+    {
+        // path = /code/modules/{module}/{folder}/{file:.+}
+        $path = static::getModuleFileRequest($vars);
+        $vars['path'] = $path;
+        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
+        return var_export($vars, true);
     }
 }

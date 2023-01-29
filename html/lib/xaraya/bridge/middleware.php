@@ -77,6 +77,7 @@ use sys;
 
 sys::import('xaraya.bridge.requests.commontrait');
 use Xaraya\Bridge\Requests\CommonBridgeTrait;
+use Xaraya\Bridge\Requests\StaticFileBridgeTrait;
 
 interface DefaultRouterInterface
 {
@@ -135,6 +136,15 @@ trait DefaultResponseTrait
         $class = array_pop($here);
         $response = $this->getResponseFactory()->createResponse(422, $class . ' Exception')->withHeader('Content-Type', 'text/plain; charset=utf-8');
         $response->getBody()->write($body);
+        return $response;
+    }
+
+    public function createFileResponse(string $path): ResponseInterface
+    {
+        $response = $this->getResponseFactory()->createResponse();
+        // @todo replace with actual stream factory instead of re-using response factory (= same for nyholm/psr7)
+        $response = $response->withBody($this->getResponseFactory()->createStreamFromFile($path));
+        //$response = $response->withBody($this->getResponseFactory()->createStream(file_get_contents($path)));
         return $response;
     }
 }
@@ -303,5 +313,130 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
     public static function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string
     {
         return '/';
+    }
+}
+
+class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface
+{
+    use StaticFileBridgeTrait;
+
+    protected array $attributes = ['module', 'theme', 'folder', 'file'];
+    protected ResponseFactoryInterface $responseFactory;
+    protected array $options = [];
+    public static string $baseUri = '';
+    public static string $prefix = '/themes';
+    public static array $locations = [
+        'theme' => '/themes',
+        'module' => '/code/modules',
+    ];
+
+    /**
+     * Initialize the middleware with response factory (or container, ...)
+     */
+    public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
+    {
+        $this->setResponseFactory($responseFactory);
+        $this->options = $options;
+    }
+
+    /**
+     * Process the server request - this assumes request attributes have been set in earlier middleware, e.g. router
+     */
+    public function process(ServerRequestInterface $request, RequestHandlerInterface|callable $next): ResponseInterface
+    {
+        // identify static file requests and set request attributes
+        $request = static::matchRequest($request);
+
+        // check only the request attributes relevant for static file request
+        $allowed = array_flip($this->attributes);
+        $attribs = array_intersect_key($request->getAttributes(), $allowed);
+
+        // pass the request along to the next handler and return its response
+        if ((empty($attribs['theme']) && empty($attribs['module'])) || empty($attribs['folder']) || empty($attribs['file'])) {
+            // @checkme signature mismatch for process() with ReactPHP
+            if ($next instanceof RequestHandlerInterface) {
+                $response = $next->handle($request);
+            } else {
+                $response = $next($request);
+            }
+            return $response;
+        }
+
+        // handle the static file request here and return our response
+
+        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
+        $params = [
+            'If-None-Match' => $request->getHeader('If-None-Match'),
+            'If-Modified-Since' => $request->getHeader('If-Modified-Since'),
+        ];
+        $response = $this->run($attribs, $params);
+
+        return $response;
+    }
+
+    public function run($attribs, $params)
+    {
+        try {
+            $result = static::getStaticFileRequest($attribs, $params);
+        } catch (Exception $e) {
+            return $this->createExceptionResponse($e);
+        }
+        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
+        return $this->createFileResponse($result);
+    }
+
+    // @checkme signature mismatch for process() with ReactPHP
+    public function __invoke(ServerRequestInterface $request, callable $next): ResponseInterface
+    {
+        return $this->process($request, $next);
+    }
+
+    /**
+     * Basic route matcher to identify static file requests and set request attributes e.g. in router middleware
+     */
+    public static function matchRequest(ServerRequestInterface $request): ServerRequestInterface
+    {
+        // @checkme keep track of the current base uri if filtered in router
+        static::setBaseUri($request);
+
+        foreach (static::$locations as $type => $prefix) {
+            // parse request uri for path + query params
+            static::setPrefix($prefix);
+            $params = static::parseUri($request, $prefix, $type);
+
+            // identify static file requests and set request attributes
+            if (!empty($params[$type]) && !empty($params['folder']) && !empty($params['file'])) {
+                $request = $request->withAttribute($type, $params[$type]);
+                $request = $request->withAttribute('folder', $params['folder']);
+                $request = $request->withAttribute('file', $params['file']);
+                return $request;
+            }
+        }
+
+        return $request;
+    }
+
+    /**
+     * Basic route parser for static file requests e.g. in route matcher for router middleware
+     */
+    public static function parseUri(ServerRequestInterface $request, string $prefix = '/themes', string $type = 'theme'): array
+    {
+        // did we already filter out the base uri in router middleware?
+        if ($request->getAttribute('baseUri') !== null) {
+            //$prefix = static::$prefix;
+        } else {
+            $prefix = static::$baseUri . $prefix;
+        }
+        $path = $request->getUri()->getPath();
+        $params = static::parseStaticFilePath($path, $request->getQueryParams(), $prefix, $type);
+        return $params;
+    }
+
+    /**
+     * Basic route builder for static file requests e.g. in response output or templates - assuming short url format here
+     */
+    public static function buildUri(?string $source = null, ?string $folder = null, string|int|null $file = null, array $extra = [], string $prefix = ''): string
+    {
+        return static::buildStaticFilePath($source, $folder, $file, $extra, $prefix);
     }
 }
