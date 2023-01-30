@@ -168,6 +168,10 @@ class FastRouteBridge
         // path = /{object}[/{itemid}[/{method}]] or /{object}/{method}
         // add remaining query params to path vars
         $params = array_merge($vars, $query);
+        // add body params to query params
+        if (!empty($input) && is_array($input)) {
+            $params = array_merge($params, $input);
+        }
 
         // @checkme pass along buildUri() as link function to DD
         $params['linktype'] = 'other';
@@ -207,12 +211,18 @@ class FastRouteBridge
             $vars['type'] = 'user';
         }
         // path = /{module}/{type}/{func}
+        // filter out path vars from remaining query params here
+        $params = array_diff_key($query, $vars);
+        // add body params to query params (if any)
+        if (!empty($input) && is_array($input)) {
+            $params = array_merge($params, $input);
+        }
 
         static::$baseUri = static::getBaseUri();
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'], static::$baseUri);
 
-        return static::runModuleRequest($vars, $query);
+        return static::runModuleRequest($vars, $params);
     }
 
     public static function runModuleRequest($vars, $query)
@@ -222,6 +232,8 @@ class FastRouteBridge
 
     public static function handleBlockRequest($vars, $query = null, $input = null)
     {
+        // @checkme limited to renderBlock() or getinfo() for now, so no query params or body params taken into account yet
+
         static::$baseUri = static::getBaseUri();
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'] ?? 'base', static::$baseUri);

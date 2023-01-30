@@ -63,6 +63,13 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
 
         // add remaining query params to request attributes
         $params = array_merge($attribs, $request->getQueryParams());
+        // add body params to query params (if any) - limited to POST requests here
+        if ($request->getMethod() === 'POST') {
+            $input = $request->getParsedBody();
+            if (!empty($input) && is_array($input)) {
+                $params = array_merge($params, $input);
+            }
+        }
 
         // @checkme pass along buildUri() as link function to DD
         $params['linktype'] = 'other';

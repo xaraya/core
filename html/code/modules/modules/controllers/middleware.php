@@ -63,6 +63,13 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
 
         // filter out request attributes from remaining query params here
         $params = array_diff_key($request->getQueryParams(), $attribs);
+        // add body params to query params (if any) - limited to POST requests here
+        if ($request->getMethod() === 'POST') {
+            $input = $request->getParsedBody();
+            if (!empty($input) && is_array($input)) {
+                $params = array_merge($params, $input);
+            }
+        }
 
         $response = $this->run($attribs, $params);
 

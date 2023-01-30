@@ -139,14 +139,12 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 // ... call $handler with $vars
                 try {
                     $query = $request->getQueryParams();
-                    $result = call_user_func($handler, $vars, $query);
-                    /**
-                    $result = [
-                        'handler' => $handler,
-                        'vars' => $vars,
-                        'query' => $query,
-                    ];
-                     */
+                    $input = null;
+                    // pass along body params too (if any) - limited to POST requests here
+                    if ($method === 'POST') {
+                        $input = $request->getParsedBody();
+                    }
+                    $result = call_user_func($handler, $vars, $query, $input);
                 } catch (Exception $e) {
                     return $this->createExceptionResponse($e);
                 }
