@@ -8,7 +8,7 @@ sys::init();
 xarCache::init();
 xarCore::xarInit(xarCore::SYSTEM_USER);
 // @checkme we need to set at least the $basurl here
-xarServer::$baseurl = 'https://owncloud.mikespub.net/test/';
+xarServer::setBaseURL('https://owncloud.mikespub.net/test/');
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -44,6 +44,7 @@ $handler = function (ServerRequestInterface $request) use ($fastrouted) {
     $cookies = DefaultMiddleware::getCookieParams($request);
     $message .= 'Cookies:<pre>' . var_export($cookies, true) . '</pre>' . PHP_EOL;
     //echo $message;
+    xarServer::setVar('REQUEST_URI', $request->getRequestTarget());
     return $fastrouted->handle($request);
 };
 
