@@ -885,6 +885,98 @@ class xarTpl extends xarObject
     }
 
 /**
+ * Get theme/module/property/block file with the right file URL - for non-standard elements
+ *
+ * Example:
+ * $my_module_file = xarTpl::getFile('xardata/config-sample.xml', 'module', 'dynamicdata');
+ *
+ * Note : your module is still responsible for taking care that "files"
+ *        don't contain nasty stuff. Filter as appropriate when using
+ *        this function to generate file URLs...
+ *
+ * @param   string $fileName the fileName relative to the theme/module/property/block folder/
+ * @param   string $scope the scope to check for (theme/module/property/block)
+ * @param   string $package the actual theme/module/property/block we're looking at
+ * @return  string file url if it exists or NULL if not
+*/
+public static function getFile($fileName, $scope=NULL, $package=NULL)
+{
+    // return absolute URIs and URLs "as is"
+    if (empty($fileName) || substr($fileName,0,1) == '/' || preg_match('/^https?\:\/\//',$fileName)) {
+        return $fileName;
+    }
+
+    if ($scope != 'theme' && $scope != 'module' && $scope != 'property' && $scope != 'block') {
+        return;
+    }
+
+    $paths = array();
+    switch ($scope) {
+        case 'theme':
+            // optional theme files to look in passed as third param
+            if (!empty($package)) {
+                $package = xarVar::prepForOS($package);
+                $paths[] = self::getThemeDir($package) . '/' . $fileName;
+            }
+            // current theme files
+            $paths[] = self::getThemeDir() . '/' . $fileName;
+            // common files
+            $paths[] = self::getThemeDir('common') . '/' . $fileName;
+            break;
+        case 'module':
+            if (empty($package))
+                $package = xarMod::getName();
+            // @checkme: modules is a depency of templates, redundant check?
+            if (method_exists('xarMod', 'getBaseInfo')) {
+                $modBaseInfo = xarMod::getBaseInfo($package);
+                if (!isset($modBaseInfo)) return;
+                $modOsDir = $modBaseInfo['osdirectory'];
+            } else {
+                $modOsDir = xarVar::prepForOS($package);
+            }
+            // code/modules/{module}/{file}
+            $paths[] = sys::code() . 'modules/' . $modOsDir . '/' . $fileName;
+            break;
+        case 'property':
+            if (empty($package)) return;
+            $package = xarVar::prepForOS($package);
+            // code/properties/{property}/{file}
+            $paths[] = sys::code() . 'properties/' . $package . '/' . $fileName;
+            break;
+        case 'block':
+            if (empty($package)) return;
+            $package = xarVar::prepForOS($package);
+            // code/blocks/{block}/{file}
+            $paths[] = sys::code() . 'blocks/' . $package . '/' . $fileName;
+            break;
+    }
+    if (empty($paths)) return;
+
+    $filePath = null;
+    foreach ($paths as $path) {
+        if (!file_exists($path)) continue;
+        $filePath = $path;
+        break;
+    }
+    if (empty($filePath)) return;
+
+    // Turn relative path into an absolute URL
+    $webDir = sys::web();
+    if (!empty($webDir) && strpos($filePath, $webDir) === 0) {
+        $filePath = substr($filePath, strlen($webDir));
+    }
+    $filePath = xarServer::getBaseURL() . $filePath;
+
+    // Return as an XML URL if required.
+    // This will generally have little effect, but is here for
+    // completeness to support alternative types of URL.
+    if (isset($filePath) && self::$generateXMLURLs) {
+        $filePath = htmlspecialchars($filePath);
+    }
+    return $filePath;
+}
+
+/**
  * Execute a pre-compiled template string with the supplied template variables
  *
  * @access public
