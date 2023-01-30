@@ -44,7 +44,10 @@ $handler = function (ServerRequestInterface $request) use ($fastrouted) {
     $cookies = DefaultMiddleware::getCookieParams($request);
     $message .= 'Cookies:<pre>' . var_export($cookies, true) . '</pre>' . PHP_EOL;
     //echo $message;
-    xarServer::setVar('REQUEST_URI', $request->getRequestTarget());
+    // setting this makes xarServer::getCurrentURL() work again, but we need to set PATH_INFO too for getBaseURI()
+    $requestUri = $request->getRequestTarget();
+    xarServer::setVar('REQUEST_URI', $requestUri);
+    xarServer::setVar('PATH_INFO', explode('?', $requestUri)[0]);
     return $fastrouted->handle($request);
 };
 
