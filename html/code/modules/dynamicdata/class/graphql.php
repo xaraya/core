@@ -707,7 +707,9 @@ class xarGraphQL extends xarObject
         if (self::$trace_path) {
             self::$paths[] = "checkCookie";
         }
-        xarSession::init();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            xarSession::init();
+        }
         //xarMLS::init();
         //xarUser::init();
         if (!xarUser::isLoggedIn()) {

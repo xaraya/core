@@ -553,7 +553,9 @@ class DataObjectRESTHandler extends xarObject
             return;
         }
         // @checkme see graphql whoami query in dummytype.php
-        xarSession::init();
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            xarSession::init();
+        }
         //xarUser::init();
         if (!xarUser::isLoggedIn()) {
             return;
@@ -1033,7 +1035,8 @@ class DataObjectRESTHandler extends xarObject
         http_response_code(204);
         header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-        header('Access-Control-Allow-Headers: X-Auth-Token, Content-Type');
+        // @checkme X-Apollo-Tracing is used in the GraphQL Playground
+        header('Access-Control-Allow-Headers: X-Auth-Token, Content-Type, X-Apollo-Tracing');
         // header('Access-Control-Allow-Credentials: true');
         exit(0);
     }
