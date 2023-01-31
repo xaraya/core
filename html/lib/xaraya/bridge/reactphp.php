@@ -1,6 +1,8 @@
 <?php
 /**
  * Try out the combined request handler with ReactPHP (work in progress)
+ *
+ * Caution: this does not support sessions or authentication, and is not meant for production (at all)
  */
 
 require dirname(__DIR__).'/vendor/autoload.php';
