@@ -22,7 +22,7 @@ interface StaticFileBridgeInterface extends CommonRequestInterface
 trait StaticFileBridgeTrait
 {
     // @todo check extensions + use mime_content_type() or equivalent
-    protected static array $extensions = ['png', 'jpg', 'gif', 'css', 'js', 'htm', 'html', 'txt', 'ico'];
+    protected static array $extensions = ['png', 'jpg', 'gif', 'css', 'js', 'htm', 'html', 'txt', 'xml', 'json', 'ico'];
 
     public static function parseStaticFilePath(string $path = '/', array $query = [], string $prefix = '', string $type = 'theme'): array
     {

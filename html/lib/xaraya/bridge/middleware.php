@@ -97,6 +97,7 @@ interface DefaultRouterInterface
 trait DefaultResponseTrait
 {
     protected ResponseFactoryInterface $responseFactory;
+    protected StreamFactoryInterface $streamFactory;
     protected array $options = [];
 
     public function getResponseFactory(): ResponseFactoryInterface
@@ -109,16 +110,36 @@ trait DefaultResponseTrait
         $this->responseFactory = $responseFactory;
     }
 
-    public function createResponse(string $body): ResponseInterface
+    public function getStreamFactory(): StreamFactoryInterface
     {
-        $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', 'text/html; charset=utf-8');
+        // @todo replace with actual stream factory instead of re-using response factory (= same for nyholm/psr7)
+        if (empty($this->streamFactory) && $this->responseFactory instanceof StreamFactoryInterface) {
+            return $this->responseFactory;
+        }
+        return $this->streamFactory;
+    }
+
+    public function setStreamFactory(StreamFactoryInterface $streamFactory): void
+    {
+        $this->streamFactory = $streamFactory;
+    }
+
+    public function createResponse(string $body, string $mediaType = 'text/html; charset=utf-8'): ResponseInterface
+    {
+        if (strpos($mediaType, '; charset=') === false) {
+            $mediaType .= '; charset=utf-8';
+        }
+        $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', $mediaType);
         $response->getBody()->write($body);
         return $response;
     }
 
-    public function createJsonResponse(mixed $result): ResponseInterface
+    public function createJsonResponse(mixed $result, string $mediaType = 'application/json; charset=utf-8'): ResponseInterface
     {
-        $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', 'application/json; charset=utf-8');
+        if (strpos($mediaType, '; charset=') === false) {
+            $mediaType .= '; charset=utf-8';
+        }
+        $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', $mediaType);
         try {
             //$output = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
             $body = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
@@ -139,12 +160,19 @@ trait DefaultResponseTrait
         return $response;
     }
 
-    public function createFileResponse(string $path): ResponseInterface
+    public function createFileResponse(string $path, ?string $mediaType = null): ResponseInterface
     {
-        $response = $this->getResponseFactory()->createResponse();
+        if (!empty($mediaType)) {
+            if (strpos($mediaType, '; charset=') === false) {
+                $mediaType .= '; charset=utf-8';
+            }
+            $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', $mediaType);
+        } else {
+            $response = $this->getResponseFactory()->createResponse();
+        }
         // @todo replace with actual stream factory instead of re-using response factory (= same for nyholm/psr7)
-        $response = $response->withBody($this->getResponseFactory()->createStreamFromFile($path));
-        //$response = $response->withBody($this->getResponseFactory()->createStream(file_get_contents($path)));
+        $response = $response->withBody($this->getStreamFactory()->createStreamFromFile($path));
+        //$response = $response->withBody($this->getStreamFactory()->createStream(file_get_contents($path)));
         return $response;
     }
 }
@@ -271,7 +299,6 @@ abstract class DefaultRouter implements DefaultRouterInterface
  */
 class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface
 {
-    protected ResponseFactoryInterface $responseFactory;
     protected array $options = [];
 
     /**
@@ -321,7 +348,6 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     use StaticFileBridgeTrait;
 
     protected array $attributes = ['module', 'theme', 'folder', 'file'];
-    protected ResponseFactoryInterface $responseFactory;
     protected array $options = [];
     public static string $baseUri = '';
     public static string $prefix = '/themes';
