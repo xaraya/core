@@ -278,7 +278,7 @@ class CategoriesProperty extends DataProperty
         if (isset($data['configuration'])) $this->configuration = $data['configuration'];
 
         // Set the module_id: case of a bound property
-        if (isset($this->objectref)) $this->module_id = (int)$this->objectref->module_id;
+        if (isset($this->objectref)) $this->module_id = (int)$this->objectref->moduleid;
         // Override for a standalone property
         if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
         // No hint at all, take the current module
@@ -423,7 +423,7 @@ class CategoriesProperty extends DataProperty
             // Set the module_id: case of a bound property
             $itemid = 0;
             if (isset($this->objectref)) {
-                $this->module_id = (int)$this->objectref->module_id;
+                $this->module_id = (int)$this->objectref->moduleid;
                 // Ignore itemid if this is an object list; need to get the ID from the corresponding attribute
                 if (isset($this->objectref->itemid)) {
                     if (isset($this->objectref->properties['objectid'])) {
@@ -789,4 +789,3 @@ class CategoriesPropertyInstall extends CategoriesProperty implements iDataPrope
         return true;
     }    
 }
-?>

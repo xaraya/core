@@ -12,13 +12,26 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+namespace Xaraya\DataObject\Handlers;
+
+use xarObject;
+use xarVar;
+use xarMLS;
+use xarMod;
+use xarModVars;
+use xarResponse;
+use xarTpl;
+use xarDDObject;
+use DataObjectMaster;
+use sys;
+
 sys::import('xaraya.objects');
 
 /**
  * Dynamic Object User Interface Handler
  *
  */
-class DataObjectDefaultHandler extends xarObject
+class DefaultHandler extends xarObject
 {
     public $method = 'overridden in child classes';
 
@@ -34,7 +47,7 @@ class DataObjectDefaultHandler extends xarObject
     public $tpltitle = null;
 
     // current arguments for the handler
-    public $args = array();
+    public $args = [];
 
     public $object = null;
 
@@ -47,7 +60,7 @@ class DataObjectDefaultHandler extends xarObject
      * @param $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
      * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
      */
-    function __construct(array $args = array())
+    public function __construct(array $args = [])
     {
         // set a specific GUI module for now
         if (!empty($args['tplmodule'])) {
@@ -72,25 +85,45 @@ class DataObjectDefaultHandler extends xarObject
             $this->tpltitle = $args['tpltitle'];
         }
         if (empty($this->tpltitle)) {
-            $this->tpltitle = xarML('Dynamic Data Object Interface');
+            $this->tpltitle = xarMLS::translate('Dynamic Data Object Interface');
         }
 
         // get some common URL parameters
-        if (!xarVar::fetch('object',   'isset', $args['object'],   NULL, xarVar::DONT_SET)) {return;}
-        if (!xarVar::fetch('name',     'isset', $args['name'],     NULL, xarVar::DONT_SET)) {return;}
-        if (!xarVar::fetch('module',   'isset', $args['module'],   NULL, xarVar::DONT_SET)) {return;}
-        if (!xarVar::fetch('itemtype', 'isset', $args['itemtype'], NULL, xarVar::DONT_SET)) {return;}
-        if (!xarVar::fetch('table',    'isset', $args['table'],    NULL, xarVar::DONT_SET)) {return;}
-        if (!xarVar::fetch('layout',   'isset', $args['layout'],   NULL, xarVar::DONT_SET)) {return;}
-        if (!xarVar::fetch('template', 'isset', $args['template'], NULL, xarVar::DONT_SET)) {return;}
-        if (!xarVar::fetch('startnum', 'isset', $args['startnum'], NULL, xarVar::DONT_SET)) {return;}
-        if (!xarVar::fetch('numitems', 'isset', $args['numitems'], NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('object', 'isset', $args['object'], null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('name', 'isset', $args['name'], null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('module', 'isset', $args['module'], null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('itemtype', 'isset', $args['itemtype'], null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('table', 'isset', $args['table'], null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('layout', 'isset', $args['layout'], null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('template', 'isset', $args['template'], null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('startnum', 'isset', $args['startnum'], null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!xarVar::fetch('numitems', 'isset', $args['numitems'], null, xarVar::DONT_SET)) {
+            return;
+        }
 
-         if (!xarVar::fetch('fieldlist', 'isset', $fieldlist, NULL, xarVar::DONT_SET)) {return;}
-        // make fieldlist an array, 
+        if (!xarVar::fetch('fieldlist', 'isset', $fieldlist, null, xarVar::DONT_SET)) {
+            return;
+        }
+        // make fieldlist an array,
         // @todo should the object class do it?
         if (!empty($fieldlist)) {
-            $args['fieldlist'] = explode(',',$fieldlist);
+            $args['fieldlist'] = explode(',', $fieldlist);
         }
 
         // Default number of items per page in object view
@@ -106,17 +139,20 @@ class DataObjectDefaultHandler extends xarObject
         sys::import('modules.dynamicdata.class.objects.master');
 
         // retrieve the object information for this object
-        if(!empty($args['object']))  {
+        if (!empty($args['object'])) {
             $info = DataObjectMaster::getObjectInfo(
-                array('name' => $args['object'])
+                ['name' => $args['object']]
             );
-            if (!empty($info)) $args = array_merge($args,$info);
-
-        } elseif (!empty($args['module']) && empty($args['moduleid'])) { 
+            if (!empty($info)) {
+                $args = array_merge($args, $info);
+            }
+        } elseif (!empty($args['module']) && empty($args['moduleid'])) {
             $args['moduleid'] = xarMod::getRegID($args['module']);
         }
 
-        if (empty($args['layout'])) $args['layout'] = 'default';
+        if (empty($args['layout'])) {
+            $args['layout'] = 'default';
+        }
 
         // save the arguments for the handler (= used to initialize the object there)
         $this->args = $args;
@@ -130,12 +166,13 @@ class DataObjectDefaultHandler extends xarObject
      * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList()
      * @return string output of xarTpl::object() using 'ui_default'
      */
-    function run(array $args = array())
+    public function run(array $args = [])
     {
         // This method is overridden in a child class for standard GUI methods
 
-        if(!empty($args) && is_array($args) && count($args) > 0) 
+        if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
+        }
 
         $this->method = $this->args['method'];
 
@@ -145,35 +182,37 @@ class DataObjectDefaultHandler extends xarObject
             } else {
                 $this->object = DataObjectMaster::getObjectList($this->args);
             }
-            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+            }
 
-            if(empty($this->tplmodule)) 
-            {
+            if (empty($this->tplmodule)) {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
 
         if (!method_exists($this->object, $this->method)) {
-            return xarML('Unknown method #(1) for #(2)', xarVar::prepForDisplay($this->method), $this->object->label);
+            return xarMLS::translate('Unknown method #(1) for #(2)', xarVar::prepForDisplay($this->method), $this->object->label);
         }
 
         // Pre-fetch item(s) for some standard dataobject methods
         if (empty($args['itemid']) && $this->method == 'showview') {
-            if (!$this->object->checkAccess('view'))
-                return xarController::$response->Forbidden(xarML('View #(1) is forbidden', $this->object->label));
+            if (!$this->object->checkAccess('view')) {
+                return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
+            }
 
             $this->object->getItems();
-
         } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform')) {
-            if (!$this->object->checkAccess('display'))
-                return xarController::$response->Forbidden(xarML('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+            if (!$this->object->checkAccess('display')) {
+                return xarResponse::Forbidden(xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+            }
 
             // get the requested item
             $itemid = $this->object->getItem();
-            if(empty($itemid) || $itemid != $this->object->itemid) 
-                return xarController::$response->NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+            if (empty($itemid) || $itemid != $this->object->itemid) {
+                return xarResponse::NotFound(xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+            }
         }
 
         $title = $this->object->label;
@@ -182,15 +221,16 @@ class DataObjectDefaultHandler extends xarObject
         // Here we try to run the requested method directly
         $output = $this->object->{$this->method}($this->args);
 
-       // CHECKME: do we redirect to return_url or nextmethod in some cases here too ?
+        // CHECKME: do we redirect to return_url or nextmethod in some cases here too ?
 
         return xarTpl::object(
-            $this->tplmodule, $this->object->template, 'ui_default',
-            array('object'   => $this->object,
-                  'output'   => $output,
-                  'tpltitle' => $this->tpltitle)
+            $this->tplmodule,
+            $this->object->template,
+            'ui_default',
+            ['object'   => $this->object,
+             'output'   => $output,
+             'tpltitle' => $this->tpltitle]
         );
-
     }
 
     /**
@@ -199,7 +239,7 @@ class DataObjectDefaultHandler extends xarObject
      * @param $url any $args['return_url'] given by the method
      * @return string the return url
      */
-    function getReturnURL($return_url = '')
+    public function getReturnURL($return_url = '')
     {
         // if we already have a return_url, use that
         if (!empty($return_url)) {
@@ -215,5 +255,3 @@ class DataObjectDefaultHandler extends xarObject
         return $return_url;
     }
 }
-
-?>

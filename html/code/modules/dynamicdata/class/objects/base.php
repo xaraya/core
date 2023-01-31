@@ -34,6 +34,9 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Get a reference to each property's value and find the primary's index
         if (!empty($args['config'])) {
         }
+        if (!is_array($this->configuration)) {
+            $this->configuration = array();
+        }
         foreach ($this->properties as $property) {
             $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
         }
@@ -59,7 +62,7 @@ class DataObject extends DataObjectMaster implements iDataObject
             $this->itemid = $args['itemid'];
         }
         if (!empty($this->primary) && !empty($this->properties[$this->primary])) {
-        	$this->properties[$this->primary]->value = $this->itemid;
+            $this->properties[$this->primary]->value = $this->itemid;
             $primarystore = $this->properties[$this->primary]->datastore;
         }
 
@@ -429,6 +432,11 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Set the value of the primary index property
         $this->properties[$this->primary]->value = $this->itemid;
         
+        // call create hooks for this item - let's try this again (but start with stand-alone DD objects for now)
+        if (!empty($this->primary) && is_object($this->datastore) && get_class($this->datastore) == 'VariableTableDataStore') {
+            $this->callHooks('create');
+        }
+
         return $this->itemid;
     }
 
@@ -480,6 +488,11 @@ class DataObject extends DataObjectMaster implements iDataObject
         // CHECKME: flush the variable cache if necessary
         if ($this->objectid == 1) {
             DataObjectMaster::flushVariableCache(array('objectid' => $this->itemid));
+        }
+
+        // call update hooks for this item - let's try this again (but start with stand-alone DD objects for now)
+        if (!empty($this->primary) && is_object($this->datastore) && get_class($this->datastore) == 'VariableTableDataStore') {
+            $this->callHooks('update');
         }
 
         return $this->itemid;
@@ -604,4 +617,3 @@ class DataObject extends DataObjectMaster implements iDataObject
         return true;
     }
 }
-?>

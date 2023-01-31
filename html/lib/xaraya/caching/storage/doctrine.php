@@ -15,7 +15,7 @@
  */
 class xarCache_Doctrine_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public function __construct(array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
         if (empty($this->provider)) {
@@ -135,11 +135,11 @@ class xarCache_Doctrine_Storage extends xarCache_Storage implements ixarCache_St
         $this->hits = $stats['hits'];
         $this->misses = $stats['misses'];
 
-        return array('size'    => $this->size,
-                     'items'   => $this->items,
-                     'hits'    => $this->hits,
-                     'misses'  => $this->misses,
-                     'modtime' => $this->modtime);
+        return ['size'    => $this->size,
+                'items'   => $this->items,
+                'hits'    => $this->hits,
+                'misses'  => $this->misses,
+                'modtime' => $this->modtime];
     }
 
     public function sizeLimitReached()
@@ -149,6 +149,6 @@ class xarCache_Doctrine_Storage extends xarCache_Storage implements ixarCache_St
 
     public function getCachedList()
     {
-        return array();
+        return [];
     }
 }

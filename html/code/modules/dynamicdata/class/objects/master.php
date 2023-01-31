@@ -360,7 +360,7 @@ class DataObjectMaster extends xarObject
     /**
      * Set the display status of some properties
      */
-    public function setDisplayStatus($fieldlist=array(), $status)
+    public function setDisplayStatus($fieldlist=array(), $status=1)
     {
         if(!empty($fieldlist)) {
             foreach($fieldlist as $field)
@@ -388,6 +388,7 @@ class DataObjectMaster extends xarObject
                     throw new Exception(xarML('Did not find a first property for module variable datastore'));
                 }
                 break;
+            case 'cache': $this->addDataStore($this->name, 'cache'); break;
             case 'dynamicdata': $this->addDataStore('_dynamic_data_', 'data'); break;
         }
     }
@@ -815,8 +816,7 @@ class DataObjectMaster extends xarObject
      * (= the same as creating a new Dynamic Object with itemid = null)
      *
      * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['name'] name of the object you're looking for, or
-     * @param $args['moduleid'] module id of the object to retrieve + $args['itemtype'] item type of the object to retrieve
+     * @param $args['name'] name of the object you're looking for
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return object the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
@@ -863,6 +863,7 @@ class DataObjectMaster extends xarObject
         // Create the object if it was not in cache
         xarLog::message("DataObjectMaster::getObject: Getting a new object " . $data['class'], xarLog::LEVEL_INFO);
 
+        // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
         $descriptor = new DataObjectDescriptor($data);
         $object = new $data['class']($descriptor);
         
@@ -879,9 +880,7 @@ class DataObjectMaster extends xarObject
      * (= the same as creating a new Dynamic Object List)
      *
      * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['name'] name of the object you're looking for, or
-     * @param $args['moduleid'] module id of the object to retrieve +
-     * @param $args['itemtype'] item type of the object to retrieve
+     * @param $args['name'] name of the object you're looking for
      * @param $args['class'] optional classname (e.g. <module>_DataObject[_List])
      * @return object the requested object definition
      * @todo   automatic sub-classing per module (and itemtype) ?
@@ -928,6 +927,7 @@ class DataObjectMaster extends xarObject
 // FIXME: clean up redundancy between self:getObjectInfo($args) and new DataObjectDescriptor($args)
         $data['propertyargs'] =& $info;
 
+        // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
         if(!empty($data['class']))
         {
             if(class_exists($data['class'] . 'List'))
@@ -972,6 +972,7 @@ class DataObjectMaster extends xarObject
         sys::import('modules.dynamicdata.class.userinterface');
 
         $class = 'DataObjectUserInterface';
+        // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
         if(!empty($args['class']))
         {
             if(class_exists($args['class'] . 'UserInterface'))
@@ -1304,7 +1305,7 @@ class DataObjectMaster extends xarObject
         $this->hookvalues['returnurl'] = xarServer::getCurrentURL();
 
         // Use the standard method to call hooks 
-        $hooks = xarModHooks::call('item', $action, $this->itemid, $this->hookvalues, $modname, $this->itemtype);
+        $hooks = xarModHooks::call('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype);
         // FIXME: we don't need two distinct properties to store gui and api hook responses
         // A response is a response, it's up to the caller to decide if it's appropriate
         // For now we'll populate both with the same data

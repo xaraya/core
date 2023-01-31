@@ -20,10 +20,9 @@
  * @return boolean true on success, false on failure
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_adminapi_createhook(Array $args=array())
+function dynamicdata_adminapi_createhook(array $args=[])
 {
     // we rely on the updatehook to do the real work here
     $args['dd_function'] = 'createhook';
-    return xarMod::apiFunc('dynamicdata','admin','updatehook',$args);
+    return xarMod::apiFunc('dynamicdata', 'admin', 'updatehook', $args);
 }
-?>

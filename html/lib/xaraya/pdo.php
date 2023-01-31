@@ -415,6 +415,22 @@ class xarPDO extends PDO
     {
         return null;
     }
+    #[\ReturnTypeWillChange]
+    public function commit()
+    {
+        xarLog::message("xarPDO::commit: commit transaction", xarLog::LEVEL_DEBUG);
+        if (PDO::inTransaction())
+            parent::commit();
+        return true;
+    }
+    #[\ReturnTypeWillChange]
+    public function rollback()
+    {
+        xarLog::message("xarPDO::rollback: roll back transaction", xarLog::LEVEL_DEBUG);
+        if (PDO::inTransaction())
+            parent::rollBack();
+        return true;
+    }
 }
 
 class xarPDOStatement extends xarObject

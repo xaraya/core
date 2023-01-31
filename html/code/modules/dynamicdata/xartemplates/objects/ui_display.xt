@@ -4,9 +4,9 @@
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <xar:if condition="!empty($object)">
-            <xar:set name="viewlink">xarDDObject::getActionURL($object, 'view')</xar:set>
+            <xar:set name="viewlink">$object->getActionURL('view')</xar:set>
             <xar:if condition="$object:checkAccess('update')">
-                <xar:set name="modifylink">xarDDObject::getActionURL($object, 'modify', $object->itemid)</xar:set>
+                <xar:set name="modifylink">$object->getActionURL('modify', $object->itemid)</xar:set>
             </xar:if>
             <h2>
                 #$object:label#&#160;

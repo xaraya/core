@@ -199,11 +199,11 @@ class RelationalDataStore extends SQLDataStore
         try {
             $q->run();
         } catch (Exception $e) {
-            echo xarML('The following notional query failed:<br/>');
-            $q->qecho();
-            echo xarML('<br/>The specific message was:<br/>');
-            echo $e->getMessage();
-            exit;
+            $message = xarML('The following notional query failed:<br/>');
+            $message .= $q->tostring();
+            $message .= xarML('<br/>The specific message was:<br/>');
+            $message .= $e->getMessage();
+            throw new Exception($message);
         }
 
         // get the last inserted id
@@ -278,11 +278,11 @@ class RelationalDataStore extends SQLDataStore
         try {
             $q->run();
         } catch (Exception $e) {
-            echo xarML('The following notional query failed:<br/>');
-            $q->qecho();
-            echo xarML('<br/>The specific message was:<br/>');
-            echo $e->getMessage();
-            exit;
+            $message = xarML('The following notional query failed:<br/>');
+            $message .= $q->tostring();
+            $message .= xarML('<br/>The specific message was:<br/>');
+            $message .= $e->getMessage();
+            throw new Exception($message);
         }
         unset($q);
         

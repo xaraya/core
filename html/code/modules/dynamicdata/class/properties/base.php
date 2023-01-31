@@ -119,7 +119,7 @@ class DataProperty extends xarObject implements iDataProperty
             $this->setValue($args['value']);
         }
         // do the minimum for alias info, let the single property do the rest
-        if (!empty($this->args)) {
+        if (!empty($this->args) && is_string($this->args)) {
             try {
                 $this->args = unserialize($this->args);
             } catch (Exception $e) {}
@@ -984,9 +984,11 @@ class DataProperty extends xarObject implements iDataProperty
         return true;
     }
 
+    // @checkme this shouldn't be here at all - see PropertyRegistration instead
     public static function getRegistrationInfo()
     {
-        $info = new PropertyRegistration();
+        $descriptor = new ObjectDescriptor(array());
+        $info = new PropertyRegistration($descriptor);
         $info->reqmodules = $this->reqmodules;
         $info->id   = $this->id;
         $info->name = $this->name;

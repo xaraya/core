@@ -7,7 +7,7 @@
     "convert_tables_dir": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/transforms/xarCharset.php",
         "name": "CONVERT_TABLES_DIR",
-        "value": "\\sys::lib() . 'transforms/convtables/'",
+        "value": "\\sys::lib() . 'xaraya/transforms/convtables/'",
         "class": "CONVERT",
         "check": "TABLES_DIR"
     },

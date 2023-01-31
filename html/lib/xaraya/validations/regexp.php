@@ -26,7 +26,7 @@ class RegExpValidation extends ValueValidations
             $msg = 'There is no parameter to check agains the regular expression validation.';
             // CHECK: this is probably better a BadParameterException ?
             throw new VariableValidationException(null, $msg);
-        } elseif (preg_match($parameters[0], $subject)) {
+        } elseif (preg_match($parameters[0], $subject ?? '')) {
             return true;
         }
 
@@ -34,4 +34,3 @@ class RegExpValidation extends ValueValidations
         throw new VariableValidationException(array($subject, $parameters[0]),$msg);
     }
 }
-?>

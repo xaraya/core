@@ -18,7 +18,7 @@
  * @param array $args Parameter data array
  * @return type Returns the block id of the newly created item
  * @throws BadParameterException
- * @throws IdNotFoundException
+ * @throws IDNotFoundException
  * @throws DuplicateException
  */
 function blocks_instancesapi_createitem(Array $args=array())
@@ -56,7 +56,7 @@ function blocks_instancesapi_createitem(Array $args=array())
     if (!$type = xarMod::apiFunc('blocks', 'types', 'getitem', array('type_id' => $type_id))) {
         $msg = 'Invalid block type id "#(1)", type does not exist';
         $vars = array($type_id);
-        throw new IdNotFoundException($vars, $msg);
+        throw new IDNotFoundException($vars, $msg);
     }    
 
     if (xarMod::apiFunc('blocks', 'instances', 'getitem', array('name' => $name))) {
@@ -86,4 +86,3 @@ function blocks_instancesapi_createitem(Array $args=array())
        
     return $block_id;
 }
-?>

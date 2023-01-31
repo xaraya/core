@@ -57,7 +57,7 @@ class CategoryPickerProperty extends ArrayProperty
     public function createValue($itemid=0)
     {
         // Set the module_id: case of a bound property
-        if (isset($this->objectref)) $this->module_id = (int)$this->objectref->module_id;
+        if (isset($this->objectref)) $this->module_id = (int)$this->objectref->moduleid;
         // Override or a standalone property
         if (isset($data['module'])) $this->module_id = xarMod::getID($data['module']);
         // No hint at all, take the current module
@@ -81,5 +81,3 @@ class CategoryPickerProperty extends ArrayProperty
         return $this->createValue($itemid);
     }
 }
-
-?>

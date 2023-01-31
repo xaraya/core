@@ -33,49 +33,47 @@ class xarVariableCache extends xarObject
      * @param array $config caching configuration from config.caching.php
      * @return boolean true on success, false on failure
      */
-    public static function init(array $config = array())
+    public static function init(array $config = [])
     {
-        self::$cacheTime = isset($config['Variable.TimeExpiration']) ?
-            $config['Variable.TimeExpiration'] : 7200;
-        self::$cacheSizeLimit = isset($config['Variable.SizeLimit']) ?
-            $config['Variable.SizeLimit'] : 2097152;
-        self::$cacheScopes = isset($config['Variable.CacheScopes']) ?
-            $config['Variable.CacheScopes'] : array('DataObject.ByName' => 1,
-                                                'DataObjectList.ByName' => 1,
-                                                'DataObject.ById' => 1,
-                                                'DataObjectList.ById' => 1,
-                                                // can't serialize schema with closures
-                                                'GraphQLAPI.Schema' => 0,
-                                                'GraphQLAPI.QueryPlan' => 1,
-                                                'GraphQLAPI.Operation' => 1,
-                                                'RestAPI.Operation' => 1,
-                                                'RestAPI.Objects' => 0,
-                                                'RestAPI.ObjectList' => array('sample' => 1)
-                                                );
-        self::$cacheSettings = isset($config['Variable.CacheSettings']) ?
-            $config['Variable.CacheSettings'] : self::$cacheScopes;
+        self::$cacheTime = $config['Variable.TimeExpiration'] ?? 7200;
+        self::$cacheSizeLimit = $config['Variable.SizeLimit'] ?? 2097152;
+        self::$cacheScopes = $config['Variable.CacheScopes'] ?? [
+            'DataObject.ByName' => 1,
+            'DataObjectList.ByName' => 1,
+            'DataObject.ById' => 1,
+            'DataObjectList.ById' => 1,
+            // can't serialize schema with closures
+            'GraphQLAPI.Schema' => 0,
+            'GraphQLAPI.QueryPlan' => 1,
+            'GraphQLAPI.Operation' => 1,
+            'RestAPI.Operation' => 1,
+            'RestAPI.Objects' => 0,
+            'RestAPI.ObjectList' => ['sample' => 1],
+        ];
+        self::$cacheSettings = $config['Variable.CacheSettings'] ?? self::$cacheScopes;
 
         $storage = !empty($config['Variable.CacheStorage']) ?
             $config['Variable.CacheStorage'] : 'apcu';
         $provider = !empty($config['Variable.CacheProvider']) ?
             $config['Variable.CacheProvider'] : null;
-        self::$cacheDir = isset($config['Variable.CacheDir']) ?
-            $config['Variable.CacheDir'] : xarCache::$cacheDir . '/variables';
-    // CHECKME: we won't actually support filesystem as storage here for security !?
+        self::$cacheDir = $config['Variable.CacheDir'] ?? xarCache::$cacheDir . '/variables';
+        // CHECKME: we won't actually support filesystem as storage here for security !?
         if ($storage == 'filesystem') {
             return false;
         }
         $logfile = !empty($config['Variable.LogFile']) ?
             $config['Variable.LogFile'] : null;
         // Note: make sure this isn't used before core loading if we use database storage
-        self::$cacheStorage = xarCache::getStorage(array('storage'   => $storage,
-                                                         'type'      => 'variable',
-                                                         'provider'  => $provider,
-                                                         // we (won't) store cache files under this
-                                                         'cachedir'  => self::$cacheDir,
-                                                         'expire'    => self::$cacheTime,
-                                                         'sizelimit' => self::$cacheSizeLimit,
-                                                         'logfile'   => $logfile));
+        self::$cacheStorage = xarCache::getStorage([
+            'storage'   => $storage,
+            'type'      => 'variable',
+            'provider'  => $provider,
+            // we (won't) store cache files under this
+            'cachedir'  => self::$cacheDir,
+            'expire'    => self::$cacheTime,
+            'sizelimit' => self::$cacheSizeLimit,
+            'logfile'   => $logfile,
+        ]);
         if (empty(self::$cacheStorage)) {
             return false;
         }
@@ -126,9 +124,9 @@ class xarVariableCache extends xarObject
             // TODO: make things configurable in xarcachemanager
             // Load the caching configuration
             $config = xarCache::getConfig();
-            $settings = $config['Variable.CacheSettings'] ?? array();
+            $settings = $config['Variable.CacheSettings'] ?? [];
             if (empty($settings)) {
-                $settings = array();
+                $settings = [];
                 // CHECKME: get a list of potential scopes from xarCoreCache as examples?
                 //$scopelist = xarCoreCache::getCachedScopes();
                 //foreach ($scopelist as $scope) {
@@ -163,7 +161,6 @@ class xarVariableCache extends xarObject
             //    // this variable scope & name is not configured for caching
             //    return false;
             //}
-
         } else {
             // this variable scope is not configured for caching
             return false;
@@ -202,7 +199,7 @@ class xarVariableCache extends xarObject
         // check if we serialized it for storage
         if (!empty($value) && is_string($value) && strpos($value, ':serial:') === 0) {
             try {
-                $value = unserialize(substr($value,8));
+                $value = unserialize(substr($value, 8));
             } catch (Exception $e) {
             }
         }
@@ -279,4 +276,3 @@ class xarVariableCache extends xarObject
         self::$cacheStorage->flushCached($scope.':');
     }
 }
-

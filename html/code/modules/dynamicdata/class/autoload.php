@@ -28,6 +28,7 @@ function dynamicdata_classes_autoload($class)
         'dataobjectlist'            => 'modules.dynamicdata.class.objects.list',
         'dataobjectmaster'          => 'modules.dynamicdata.class.objects.master',
         'dataobjectdescriptor'      => 'modules.dynamicdata.class.objects.descriptor',
+        'virtualobjectdescriptor'   => 'modules.dynamicdata.class.objects.virtual',
         'dataobjectlinks'           => 'modules.dynamicdata.class.objects.links',
         'idataobject'               => 'modules.dynamicdata.class.objects.interfaces',
 

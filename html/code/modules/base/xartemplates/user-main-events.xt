@@ -211,6 +211,15 @@ xarEvents::registerSubject('MyOtherAPIEvent','MyOtherItems','mymodule', 'api', '
     ucfirst(module) . event . "Observer", eg RolesSessionCreateObserver
 </pre></code>
 
+<p>Note: starting with version 2.4.1, modules may also use their own naming convention for observer classes with namespaces, as long as they follow the same file structure</p>
+
+<code><pre>
+    E.g. with xarHooks::registerObserver('ItemCreate', 'mymodule')
+    some class with a fully qualified class name "Xaraya\Modules\MyModule\HookObservers\ItemCreateObserver"
+    should still be defined
+    in file code/modules/mymodule/hookobservers/itemcreate.php
+</pre></code>
+
 <p>All observer classes must implement ixarEventObserver interface (see xaraya.structures.events.observer)</p>
 
 <p>It is the responsibility of the observer to be aware of expected parameters from the subject it's observing, and return a valid response (if any) to the subject. It must supply a notify method which will be called by the event subject. </p>
@@ -226,7 +235,7 @@ xarEvents::registerSubject('MyOtherAPIEvent','MyOtherItems','mymodule', 'api', '
 xarEvents::registerObserver('MyEvent','mymodule');
 </pre></code>
 <ul>
-<li>will look for class MymoduleMyEventObserver</li>
+<li>will look for class MymoduleMyEventObserver (or some free namespaced version on that)</li>
 <li>with a method of notify()</li>
 <li>in file code/modules/mymodule/class/eventobservers/myevent.php</li>
 </ul>

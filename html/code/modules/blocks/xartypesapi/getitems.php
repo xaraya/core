@@ -91,6 +91,9 @@ function blocks_typesapi_getitems(Array $args=array())
     $select['type_info'] = 'types.info';
     $select['type_category'] = 'types.category';
     $select['type_state'] = 'types.state';
+    // we need to get the actual $classname and $filepath for getinfo() - requires UPGRADE due to table change
+    $select['classname'] = 'types.class';
+    $select['filepath'] = 'types.filepath';
     $select['module'] = 'mods.name';
         
     $query = "SELECT " . join(',',$select);
@@ -153,6 +156,8 @@ function blocks_typesapi_getitems(Array $args=array())
                     $item[$field] = $val;
                     $item['content'] = $val;
                 break;
+                case 'classname':
+                case 'filepath':
                 case 'module':
                     $item[$field] = !empty($val) ? $val : '';
                 break;
@@ -168,4 +173,3 @@ function blocks_typesapi_getitems(Array $args=array())
     return $types;   
    
 }
-?>

@@ -12,12 +12,25 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+namespace Xaraya\DataObject\Handlers;
+
+use xarVar;
+use xarMLS;
+use xarMod;
+use xarController;
+use xarResponse;
+use xarSec;
+use xarTpl;
+use DataObjectMaster;
+use sys;
+
 sys::import('modules.dynamicdata.class.ui_handlers.default');
+
 /**
  * Dynamic Object User Interface Handler
  *
  */
-class DataObjectDeleteHandler extends DataObjectDefaultHandler
+class DeleteHandler extends DefaultHandler
 {
     public $method = 'delete';
 
@@ -31,76 +44,82 @@ class DataObjectDeleteHandler extends DataObjectDefaultHandler
      * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
      * @return string output of xarTpl::object() using 'ui_delete'
      */
-    function run(array $args = array())
+    public function run(array $args = [])
     {
-        if(!xarVar::fetch('cancel',  'isset', $args['cancel'],  NULL, xarVar::DONT_SET)) 
+        if (!xarVar::fetch('cancel', 'isset', $args['cancel'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('confirm', 'isset', $args['confirm'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('confirm', 'isset', $args['confirm'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('return_url', 'isset', $args['return_url'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('return_url', 'isset', $args['return_url'], null, xarVar::DONT_SET)) {
             return;
+        }
 
-        if(!empty($args) && is_array($args) && count($args) > 0) 
+        if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
+        }
 
-        if(!isset($this->object)) 
-        {
+        if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
-            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+            }
 
-            if(empty($this->tplmodule)) 
-            {
+            if (empty($this->tplmodule)) {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
-        if(!empty($args['cancel'])) 
-        {
-            if(empty($args['return_url'])) 
+        if (!empty($args['cancel'])) {
+            if (empty($args['return_url'])) {
                 $args['return_url'] = $this->getReturnURL();
+            }
 
             xarController::redirect($args['return_url']);
             // Return
             return true;
         }
-        if (!$this->object->checkAccess('delete'))
-            return xarController::$response->Forbidden(xarML('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+        if (!$this->object->checkAccess('delete')) {
+            return xarResponse::Forbidden(xarMLS::translate('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
+        }
 
         $itemid = $this->object->getItem();
-        if(empty($itemid) || $itemid != $this->object->itemid) 
-            return xarController::$response->NotFound(xarML('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+        if (empty($itemid) || $itemid != $this->object->itemid) {
+            return xarResponse::NotFound(xarMLS::translate('Itemid #(1) of #(2) seems to be invalid', $this->args['itemid'], $this->object->label));
+        }
 
-        if(!empty($args['confirm'])) 
-        {
+        if (!empty($args['confirm'])) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-            }        
+                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+            }
 
             $itemid = $this->object->deleteItem();
 
-            if(empty($itemid)) 
-                return; // throw back
+            if (empty($itemid)) {
+                return;
+            } // throw back
 
-            if(empty($args['return_url'])) 
+            if (empty($args['return_url'])) {
                 $args['return_url'] = $this->getReturnURL();
+            }
 
             xarController::redirect($args['return_url']);
             // Return
             return true;
         }
 
-        $title = xarML('Delete #(1)', $this->object->label);
+        $title = xarMLS::translate('Delete #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         return xarTpl::object(
-            $this->tplmodule, $this->object->template, 'ui_delete',
-            array('object' => $this->object,
-                  'authid' => xarSec::genAuthKey(),
-                  'tpltitle' => $this->tpltitle,
-                  'return_url' => $args['return_url'])
+            $this->tplmodule,
+            $this->object->template,
+            'ui_delete',
+            ['object' => $this->object,
+             'authid' => xarSec::genAuthKey(),
+             'tpltitle' => $this->tpltitle,
+             'return_url' => $args['return_url']]
         );
     }
 }
-
-?>

@@ -34,7 +34,7 @@ class xarOutputCache extends xarObject
      * @return boolean
      * @todo consider the use of a shutdownhandler for cache maintenance
      */
-    public static function init(array $config = array())
+    public static function init(array $config = [])
     {
         if (empty($config)) {
             return false;
@@ -45,14 +45,10 @@ class xarOutputCache extends xarObject
             $config['Output.CacheDir'] = xarCache::$cacheDir . '/output';
         }
         self::$cacheDir       = realpath($config['Output.CacheDir']);
-        self::$cacheTheme     = isset($config['Output.DefaultTheme']) ?
-            $config['Output.DefaultTheme'] : '';
-        self::$cacheSizeLimit = isset($config['Output.SizeLimit']) ?
-            $config['Output.SizeLimit'] : 2097152;
-        self::$cacheCookie    = isset($config['Output.CookieName']) ?
-            $config['Output.CookieName'] : 'XARAYASID';
-        self::$cacheLocale    = isset($config['Output.DefaultLocale']) ?
-            $config['Output.DefaultLocale'] : 'en_US.utf-8';
+        self::$cacheTheme     = $config['Output.DefaultTheme'] ?? '';
+        self::$cacheSizeLimit = $config['Output.SizeLimit'] ?? 2097152;
+        self::$cacheCookie    = $config['Output.CookieName'] ?? 'XARAYASID';
+        self::$cacheLocale    = $config['Output.DefaultLocale'] ?? 'en_US.utf-8';
 
         if (file_exists(self::$cacheDir . '/cache.pagelevel')) {
             sys::import('xaraya.caching.output.page');
@@ -77,7 +73,4 @@ class xarOutputCache extends xarObject
 
         return true;
     }
-
 }
-
-?>

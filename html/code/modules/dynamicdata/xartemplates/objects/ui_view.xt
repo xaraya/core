@@ -14,9 +14,9 @@
                 </div>
             <xar:else/>
             	<div class="xar-mod-object-head">
-	                <xar:set name="searchlink">xarDDObject::getActionURL($object, 'search')</xar:set>
+	                <xar:set name="searchlink">$object->getActionURL('search')</xar:set>
 	                <xar:if condition="!empty($object:primary) and $object:checkAccess('create')">
-	                    <xar:set name="newlink">xarDDObject::getActionURL($object, 'new')</xar:set>
+	                    <xar:set name="newlink">$object->getActionURL('new')</xar:set>
 	                </xar:if>
 	                <h2>
 	                    View #$object:label#&#160;

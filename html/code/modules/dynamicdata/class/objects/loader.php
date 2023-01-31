@@ -192,6 +192,10 @@ class DataObjectLoader
         $this->objectlist = DataObjectMaster::getObjectList($params);
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         $this->objectlist->setFieldList($this->fieldlist);
+        // see what DataObjectMaster found with setupFieldList()
+        if (empty($this->fieldlist)) {
+            $this->fieldlist = $this->objectlist->getFieldList();
+        }
         $params = ['itemids' => $itemids];
         $result = $this->objectlist->getItems($params);
         // return array("$itemid" => assoc array of $fields)
@@ -233,6 +237,10 @@ class DataObjectLoader
         }
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         $this->objectlist->setFieldList($this->fieldlist);
+        // see what DataObjectMaster found with setupFieldList()
+        if (empty($this->fieldlist)) {
+            $this->fieldlist = $this->objectlist->getFieldList();
+        }
         $this->applyObjectFilter($this->objectlist);
         $this->getCount($this->objectlist);
         return $this->objectlist;
@@ -509,7 +517,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
     public $called_id = '';
     public $targetLoader = null;
 
-    public function __construct(string $linkname = 'sample', string $caller_id, string $called_id, ?callable $resolver = null)
+    public function __construct(string $linkname = 'sample', string $caller_id = '', string $called_id = '', ?callable $resolver = null)
     {
         $this->linkname = $linkname;
         $this->caller_id = $caller_id;

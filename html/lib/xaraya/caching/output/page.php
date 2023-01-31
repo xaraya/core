@@ -1,7 +1,7 @@
 <?php
 /**
  * Page caching
- * 
+ *
  * @package core\caching
  * @subpackage caching
  * @category Xaraya Web Applications Framework
@@ -36,28 +36,19 @@ class xarPageCache extends xarObject
      * @param array $args cache configuration
      * @return mixed true on success, exit if session-less page caching finds a hit
      */
-    public static function init(array $args = array())
+    public static function init(array $args = [])
     {
-        self::$cacheTime = isset($args['Page.TimeExpiration']) ?
-            $args['Page.TimeExpiration'] : 1800;
-        self::$cacheDisplay = isset($args['Page.DisplayView']) ?
-            $args['Page.DisplayView'] : 0;
-        self::$cacheShowTime = isset($args['Page.ShowTime']) ?
-            $args['Page.ShowTime'] : 1;
-        self::$cacheExpireHeader = isset($args['Page.ExpireHeader']) ?
-            $args['Page.ExpireHeader'] : 0;
-        self::$cacheGroups = isset($args['Page.CacheGroups']) ?
-            $args['Page.CacheGroups'] : '';
-        self::$cacheHookedOnly = isset($args['Page.HookedOnly']) ?
-            $args['Page.HookedOnly'] : 0;
-        self::$cacheSizeLimit = isset($args['Page.SizeLimit']) ?
-            $args['Page.SizeLimit'] : 2097152;
+        self::$cacheTime = $args['Page.TimeExpiration'] ?? 1800;
+        self::$cacheDisplay = $args['Page.DisplayView'] ?? 0;
+        self::$cacheShowTime = $args['Page.ShowTime'] ?? 1;
+        self::$cacheExpireHeader = $args['Page.ExpireHeader'] ?? 0;
+        self::$cacheGroups = $args['Page.CacheGroups'] ?? '';
+        self::$cacheHookedOnly = $args['Page.HookedOnly'] ?? 0;
+        self::$cacheSizeLimit = $args['Page.SizeLimit'] ?? 2097152;
 
         // Check if we need to try session-less page caching here
-        $sessionLessList = isset($args['Page.SessionLess']) ?
-            $args['Page.SessionLess'] : null;
-        $autoCachePeriod = isset($args['AutoCache.Period']) ?
-            $args['AutoCache.Period'] : 0;
+        $sessionLessList = $args['Page.SessionLess'] ?? null;
+        $autoCachePeriod = $args['AutoCache.Period'] ?? 0;
 
         if (!empty($sessionLessList) || !empty($autoCachePeriod)) {
             sys::import('xaraya.caching.output.sessionless');
@@ -72,14 +63,16 @@ class xarPageCache extends xarObject
         $logfile = !empty($args['Page.LogFile']) ?
             $args['Page.LogFile'] : null;
         // Note: make sure this isn't used before core loading if we use database storage
-        self::$cacheStorage = xarCache::getStorage(array('storage'   => $storage,
-                                                         'type'      => 'page',
-                                                         'provider'  => $provider,
-                                                         // we store output cache files under this
-                                                         'cachedir'  => xarOutputCache::$cacheDir,
-                                                         'expire'    => self::$cacheTime,
-                                                         'sizelimit' => self::$cacheSizeLimit,
-                                                         'logfile'   => $logfile));
+        self::$cacheStorage = xarCache::getStorage([
+            'storage'   => $storage,
+            'type'      => 'page',
+            'provider'  => $provider,
+            // we store output cache files under this
+            'cachedir'  => xarOutputCache::$cacheDir,
+            'expire'    => self::$cacheTime,
+            'sizelimit' => self::$cacheSizeLimit,
+            'logfile'   => $logfile,
+        ]);
         if (empty(self::$cacheStorage)) {
             return false;
         }
@@ -119,7 +112,7 @@ class xarPageCache extends xarObject
         // Note : we don't share the cache between groups or with anonymous here
         if (!empty(self::$cacheGroups) && xarUser::isLoggedIn()) {
             $gidlist = xarCache::getParents();
-            $factors .= join(';',$gidlist);
+            $factors .= join(';', $gidlist);
         }
 
         // add page identifier
@@ -143,8 +136,8 @@ class xarPageCache extends xarObject
     public static function getCacheSettings()
     {
         if (!isset(self::$cacheSettings)) {
-            $settings = array();
-        // TODO: make more things configurable ?
+            $settings = [];
+            // TODO: make more things configurable ?
             self::$cacheSettings = $settings;
         }
         return self::$cacheSettings;
@@ -153,7 +146,7 @@ class xarPageCache extends xarObject
     /**
      * Check if this page is suitable for page caching
      *
-     * 
+     *
      * @param  string $url optional url to be checked if not the current url
      * @return boolean   true if the page is suitable for caching, false if not
      */
@@ -161,12 +154,11 @@ class xarPageCache extends xarObject
     {
         if (empty($url)) {
             // get module parameters
-            list($modName, $modType, $funcName) = xarController::getRequest()->getInfo();
+            [$modName, $modType, $funcName] = xarController::getRequest()->getInfo();
             // define the cacheKey
             $cacheKey = "$modName-$modType-$funcName";
             // get the current themeDir
             $themeDir = xarTpl::getThemeDir();
-
         } else {
             $params = parse_url($url);
             // TODO: how far do we want to go here ?
@@ -188,12 +180,10 @@ class xarPageCache extends xarObject
              strpos($themeDir, xarOutputCache::$cacheTheme)) &&
             // the current user is eligible for receiving cached pages AND
             xarPage_checkUserCaching(self::$cacheGroups)) {
-
             // set the current cacheKey
             self::$cacheKey = $cacheKey;
 
             return true;
-
         } else {
             return false;
         }
@@ -202,13 +192,13 @@ class xarPageCache extends xarObject
     /**
      * Send HTTP headers for page caching (or return 304 Not Modified)
      *
-     * 
+     *
      * @return void
      */
     public static function sendHeaders($modtime = 0)
     {
         if (empty($modtime)) {
-        // CHECKME: this means 304 will never apply then - is that what we want here ?
+            // CHECKME: this means 304 will never apply then - is that what we want here ?
             // default to current time
             $modtime = time();
             if (!empty(self::$cacheTime)) {
@@ -218,8 +208,7 @@ class xarPageCache extends xarObject
         }
         // doesn't seem to be taken into account ?
         $etag = self::$cacheCode.$modtime;
-        $match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?
-            $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
+        $match = $_SERVER['HTTP_IF_NONE_MATCH'] ?? null;
         if (!empty($match) && $match == $etag) {
             // jsb:  for some reason, Mozilla based browsers
             // do not re-send an ETag after getting a 304
@@ -228,9 +217,8 @@ class xarPageCache extends xarObject
             header("Cache-Control: public, must-revalidate");
             exit;
         } else {
-            $since = isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) ?
-                $_SERVER['HTTP_IF_MODIFIED_SINCE'] : NULL;
-            if (!empty($since) && strtotime($since) >= $modtime) {   
+            $since = $_SERVER['HTTP_IF_MODIFIED_SINCE'] ?? null;
+            if (!empty($since) && strtotime($since) >= $modtime) {
                 header('HTTP/1.1 304 Not Modified');
                 header("Cache-Control: public, must-revalidate");
                 exit;
@@ -263,8 +251,10 @@ class xarPageCache extends xarObject
         }
         // Specify the charset
         $defaultLocale = !empty(xarOutputCache::$cacheLocale) ? xarOutputCache::$cacheLocale : 'en_US.utf-8';
-        list($lang_country, $charset) = explode('.',$defaultLocale);
-        if (empty($charset)) $charset = 'utf-8';
+        [$lang_country, $charset] = explode('.', $defaultLocale);
+        if (empty($charset)) {
+            $charset = 'utf-8';
+        }
         // CHECKME: what about other content types ?
         header("Content-type: text/html; charset=" . $charset);
     }
@@ -272,7 +262,7 @@ class xarPageCache extends xarObject
     /**
      * check if the content of a page is available in cache or not
      *
-     * 
+     *
      * @param  string $cacheKey the key identifying the particular page you want to access
      * @return boolean   true if the page is available in cache, false if not
      */
@@ -288,14 +278,13 @@ class xarPageCache extends xarObject
 
         if (// the cache entry exists and hasn't expired yet...
             (self::$cacheStorage->isCached($cacheKey))) {
-
             // create another copy for session-less page caching if necessary
             if (!empty(self::$cacheNoSession)) {
                 $cacheKey2 = 'static';
                 $cacheCode2 = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
                 $cache_file2 = xarOutputCache::$cacheDir."/page/$cacheKey2-$cacheCode2.php";
-            // Note that if we get here, the first-time visitor will receive a session cookie,
-            // so he will no longer benefit from this himself ;-)
+                // Note that if we get here, the first-time visitor will receive a session cookie,
+                // so he will no longer benefit from this himself ;-)
                 self::$cacheStorage->saveFile($cacheKey, $cache_file2);
             }
 
@@ -312,7 +301,7 @@ class xarPageCache extends xarObject
     /**
      * get the content of a cached page
      *
-     * 
+     *
      * @param  string $cacheKey the key identifying the particular page you want to access
      * @return boolean   true if succeeded, false otherwise
      */
@@ -335,7 +324,7 @@ class xarPageCache extends xarObject
     /**
      * set the content of a cached page
      *
-     * 
+     *
      * @param  string $cacheKey the key identifying the particular page you want to access
      * @param  string $value    the new content for that page
      * @return void
@@ -360,23 +349,28 @@ class xarPageCache extends xarObject
         // We delay checking this extra caching rule until now
         if (self::$cacheHookedOnly) {
             $modName = substr($cacheKey, 0, strpos($cacheKey, '-'));
-            if (!xarModHooks::isHooked('xarcachemanager', $modName)) { return; }
+            if (!xarModHooks::isHooked('xarcachemanager', $modName)) {
+                return;
+            }
         }
 
         if (// the cache entry doesn't exist or has expired (no log here) AND
-        // CHECKME: do we really want to check this again, or do we ignore it ?
+            // CHECKME: do we really want to check this again, or do we ignore it ?
             !(self::$cacheStorage->isCached($cacheKey, 0, 0)) &&
             // the cache collection directory hasn't reached its size limit...
-            !(self::$cacheStorage->sizeLimitReached()) ) {
-
+            !(self::$cacheStorage->sizeLimitReached())) {
             // if request, modify the end of the file with a time stamp
             if (self::$cacheShowTime == 1) {
-                $now = xarML('Last updated on #(1)',
-                             strftime('%a, %d %B %Y %H:%M:%S %Z', time()));
-                $value = preg_replace('#</body>#',
-                                      // TODO: set this up to be templated
-                                      '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
-                                      $value);
+                $now = xarML(
+                    'Last updated on #(1)',
+                    strftime('%a, %d %B %Y %H:%M:%S %Z', time())
+                );
+                $value = preg_replace(
+                    '#</body>#',
+                    // TODO: set this up to be templated
+                    '<div class="xar-sub" style="text-align: center; padding: 8px; ">'.$now.'</div></body>',
+                    $value
+                );
             }
 
             self::$cacheStorage->setCached($cacheKey, $value);
@@ -386,8 +380,8 @@ class xarPageCache extends xarObject
                 $cacheKey2 = 'static';
                 $cacheCode2 = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
                 $cache_file2 = xarOutputCache::$cacheDir."/page/$cacheKey2-$cacheCode2.php";
-            // Note that if we get here, the first-time visitor will receive a session cookie,
-            // so he will no longer benefit from this himself ;-)
+                // Note that if we get here, the first-time visitor will receive a session cookie,
+                // so he will no longer benefit from this himself ;-)
                 self::$cacheStorage->saveFile($cacheKey, $cache_file2);
             }
 
@@ -412,7 +406,7 @@ class xarPageCache extends xarObject
 
 /**
  * Check if the user can benefit from page caching
- * 
+ *
  * @package core\caching
  * @subpackage caching
  * @category Xaraya Web Applications Framework
@@ -436,12 +430,11 @@ function xarPage_checkUserCaching($cacheGroups)
 
     $gidlist = xarCache::getParents();
 
-    $groups = explode(';',$cacheGroups);
+    $groups = explode(';', $cacheGroups);
     foreach ($groups as $groupid) {
-        if (in_array($groupid,$gidlist)) {
+        if (in_array($groupid, $gidlist)) {
             return true;
         }
     }
     return false;
 }
-

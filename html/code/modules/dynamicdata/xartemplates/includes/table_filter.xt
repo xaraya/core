@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:set name="proptypes">DataPropertyMaster::getPropertyTypes()</xar:set>
+    <xar:set name="currenturl">xarServer::getCurrentURL()</xar:set>
+    <xar:set name="itemcount">$object->itemcount ?: count($items)</xar:set>
+    <xar:set name="where">$object->where ?: []</xar:set>
+    <tr>
+        <form method="post" action="#$currenturl#">
+            <xar:foreach in="$properties" key="$name" value="$property">
+                <xar:set name="proptype">$proptypes[$property->type]</xar:set>
+                <xar:set name="curvalue">!empty($where[$name]) ? $where[$name] : ''</xar:set>
+                <th class="xar-form-textlong">
+                    <xar:if condition="$proptype['name'] eq 'itemid'">
+                        - 
+                    <xar:elseif condition="$proptype['name'] eq 'calendar'"/>
+                        &#160; 
+                    <xar:elseif condition="in_array($proptype['name'], ['dropdown', 'object', 'objectref'])"/>
+                        <xar:set name="dummy">$property->initialization_firstline = ['id' => '', 'name' => '']</xar:set>
+                        <xar:set name="ddname">'dd_' . (string) $property->id</xar:set>
+                        <xar:data-input property="$property" name="where[$name]" value="$curvalue"/>
+                    <xar:elseif condition="in_array($proptype['name'], ['textbox', 'integerbox', 'username'])"/>
+                        <xar:set name="values">[]</xar:set>
+                        <xar:foreach in="$items" key="$itemid" value="$fields">
+                            <xar:set name="values[$fields[$name]]">1</xar:set>
+                        </xar:foreach>
+                        <xar:set name="dummy">ksort($values)</xar:set>
+                        <xar:set name="options">[]</xar:set>
+                        <xar:set name="dummy">$options[] = ['id' => '', 'name' => '']</xar:set>
+                        <xar:foreach in="$values" key="$option" value="$dummy">
+                            <xar:if condition="$proptype['name'] eq 'username'">
+                                <xar:set name="dummy">$options[] = ['id' => $option, 'name' => xarUser::getVar('uname', $option)]</xar:set>
+                            <xar:else />
+                                <xar:set name="dummy">$options[] = ['id' => $option, 'name' => $option]</xar:set>
+                            </xar:if>
+                        </xar:foreach>
+                        <xar:set name="ddname">'dd_' . (string) $property->id</xar:set>
+                        <xar:if condition="$itemcount lt 10 or count($options) lt $itemcount / 2">
+                            <xar:data-input type="dropdown" name="where[$name]" options="$options" value="$curvalue"/>
+                        <xar:else />
+                            <!-- xar:data-input type="textbox" name="where[$name]" value="$curvalue"/ -->&#160;
+                        </xar:if>
+                    <xar:else />
+                        <xar:data-input property="$property" value="$curvalue"/>
+                        #$proptype['name']#
+                    </xar:if>
+                </th>
+            </xar:foreach>
+            <xar:if condition="empty($linkfield) or true">
+                <th class="xar-form-textlong" style="text-align: center;">
+                    <xar:set name="src"><xar:img scope="theme" file="icons/system-search.png"/></xar:set>
+                    <xar:button type="submit" name="filter" src="$src" submittotarget="$currenturl" title="Filter" style="vertical-align: text-bottom;"/>&#160;
+                    <a href="#$currenturl#" title="Reset Filter">
+                        <xar:img scope="theme" file="icons/view-refresh.png" class="xar-button" style="vertical-align: text-bottom;" alt="reset"/>
+                    </a>
+                </th>
+            </xar:if>
+        </form>
+    </tr>
+</xar:template>

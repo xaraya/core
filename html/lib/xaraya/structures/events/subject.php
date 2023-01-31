@@ -8,7 +8,18 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
-**/
+ **/
+
+interface ixarEventSubject
+{
+    public function notify();
+    public function attach(ixarEventObserver $obs);
+    public function detach(ixarEventObserver $obs);
+    public function getSubject();
+    public function getArgs();
+    public function setArgs($args);
+}
+
 /** 
  * Event Subject
  *
@@ -125,14 +136,3 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
 
 }
 
-interface ixarEventSubject
-{
-    public function notify();
-    public function attach(ixarEventObserver $obs);
-    public function detach(ixarEventObserver $obs);
-    public function getSubject();
-    public function getArgs();
-    public function setArgs($args);
-}
-
-?>

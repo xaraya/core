@@ -163,7 +163,7 @@ function blocks_admin_new_instance()
             } catch (DuplicateException $e) {
                 // block instance with supplied name already exists
                 $invalid['name'] = xarML('A block instance named "#(1)" already exists, name must be unique', $data['name']);
-            } catch (IdNotFoundException $e) {
+            } catch (IDNotFoundException $e) {
                 // block type id doesn't exist
                 // for this to happen here, the block type must have been deleted right after
                 // we checked earlier and just before we called createitem, unlikely
@@ -254,4 +254,3 @@ function blocks_admin_new_instance()
     
     return $data;                
 }
-?>

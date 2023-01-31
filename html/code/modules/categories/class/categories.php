@@ -23,7 +23,7 @@ class Categories extends xarObject
      * @param int $id Id of the CategoryTreeNode
      * @return \CategoryTreeNode
      */
-    function get(int $id)
+    public static function get(int $id)
     {
         $dbconn = xarDB::getConn();
         $xartable =& xarDB::getTables();
@@ -108,10 +108,10 @@ class CategoryTreeNode extends TreeNode
         if (!$result) return;
 
         sys::import('xaraya.structures.sets.collection');
-        $set = new BasecSet();
+        $collection = new BasicSet();
         while (!$result->EOF) {
             $c = new CategoryTreeNode();
-            list($c->id, $c->name, $c->description, $c->image, $c->template, $o->child_object, $c->parent, $c->left, $c->right) = $result->fields;
+            list($c->id, $c->name, $c->description, $c->image, $c->template, $c->child_object, $c->parent, $c->left, $c->right) = $result->fields;
             $collection->add($c);
         }
         return $collection;
@@ -280,4 +280,3 @@ class CategoryTree extends Tree
         parent::createnodes($node);
     }
 }
-?>

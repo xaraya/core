@@ -101,7 +101,7 @@ class xarJS extends xarObject
  * @access public
  * @params none
  * @throws none
- * @returns void
+ * @return void
 **/
     public function __wakeup()
     {
@@ -130,7 +130,7 @@ class xarJS extends xarObject
  * @access public
  * @params none
  * @throws none
- * @returns array public object properties to store values for
+ * @return array public object properties to store values for
 **/
     public function __sleep()
     {
@@ -200,7 +200,7 @@ class xarJS extends xarObject
         if (!isset(self::$instance)) {
             xarLog::message('xarJS::getInstance: loading modvars');
           // try unserializing the stored modvar
-            self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE));
+            self::$instance = @unserialize(xarModVars::get(xarJS::STORAGE_MODULE, xarJS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
             if (empty(self::$instance)) {
                 $c = __CLASS__;
@@ -224,7 +224,7 @@ class xarJS extends xarObject
  * @author Marc Lutolf <mfl@netspan.ch>
  * @access public
  * @params none
- * @return none
+ * @return void
  * @throws none
  *
 **/

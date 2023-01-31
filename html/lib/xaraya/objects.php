@@ -212,11 +212,16 @@ class xarDDObject extends xarObject implements IxarDDObject
             case 'current':
                 $link = self::getCurrentURL($object, $action, $itemid);
                 break;
-/*
+
             case 'other':
-                $link = self::getOtherURL($object, $action, $itemid, $extra);
+                //$link = self::getOtherURL($object, $action, $itemid, $extra);
+                if (!empty($object->linkfunc) && is_callable($object->linkfunc)) {
+                    $link = call_user_func($object->linkfunc, $object->name, $action, $itemid, $extra);
+                } else {
+                    $link = self::getObjectURL($object, $action, $itemid, $extra);
+                }
                 break;
-*/
+
             case 'user':
             case 'admin':
             default:

@@ -10,13 +10,14 @@
  * @link http://www.xaraya.info
 **/
 sys::import('xaraya.structures.events.observer');
+
 class GuiEventObserver extends EventObserver
 {
     public $module;
     public $type;
     public $func;
             
-    public function __construct($args)
+    public function __construct(array $args = [])
     {
         if (isset($args['module'])) $this->module = $args['module'];
         if (isset($args['type'])) $this->type = $args['type'];
@@ -25,8 +26,9 @@ class GuiEventObserver extends EventObserver
     
     public function notify(ixarEventSubject $subject)
     {
+        // function was already imported in events fileLoad, but that doesn't mean the module was loaded
+        xarMod::load($this->module, $this->type);
         // note, no try / catch here, subject notify method should handle exceptions
         return xarMod::guiFunc($this->module, $this->type, $this->func, $subject->getArgs());          
     }
 }
-?>

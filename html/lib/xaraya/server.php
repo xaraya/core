@@ -180,6 +180,14 @@ class xarServer extends xarObject
     }
 
     /**
+     * Allow setting server variable if needed
+     */
+    static function setVar($name, $value)
+    {
+        $_SERVER[$name] = $value;
+    }
+
+    /**
      * Get base URI for Xaraya
      *
      * 
@@ -269,7 +277,7 @@ class xarServer extends xarObject
         if (method_exists('xarConfigVars','Get')) {
             try {
                 if (xarConfigVars::get(null, 'Site.Core.EnableSecureServer') == true) {
-                    if (preg_match('/^http:/', self::getVar('REQUEST_URI'))) {
+                    if (preg_match('/^http:/', self::getVar('REQUEST_URI') ?? '')) {
                         return self::PROTOCOL_HTTP;
                     }
                     $serverport = $_SERVER['SERVER_PORT'];
@@ -301,6 +309,24 @@ class xarServer extends xarObject
     }
 
     /**
+     * Allow setting baseurl if needed
+     */
+    static function setBaseURL($baseurl)
+    {
+        self::$baseurl = $baseurl;
+
+        $info = parse_url($baseurl);
+        self::setVar('SERVER_NAME', $info['host']);
+        if ($info['scheme'] === 'https') {
+            self::setVar('SERVER_PORT', $info['port'] ?? 443);
+        } else {
+            self::setVar('SERVER_PORT', $info['port'] ?? 80);
+        }
+        // strip trailing slash for BaseURI here - added again in getBaseURL()
+        xarSystemVars::set(sys::LAYOUT, 'BaseURI', rtrim($info['path'], '/'));
+    }
+
+    /**
      * get the elapsed time since this page started
      *
      * @return seconds and microseconds elapsed since the page started
@@ -325,7 +351,13 @@ class xarServer extends xarObject
         $protocol = self::getProtocol();
         $baseurl  = "$protocol://$server";
 
-        return $baseurl . self::getCurrentRequestString($args, $generateXMLURL, $target);
+        // @checkme what you see is (not always) what you get - BaseURI may be missing here
+        $request  = self::getCurrentRequestString($args, $generateXMLURL, $target);
+        $path     = self::getBaseURI();
+        if (!empty($path) && strpos($request, $path) !== 0) {
+            $baseurl .= $path;
+        }
+        return $baseurl . $request;
     }
 
     static function getCurrentRequestString($args = array(), $generateXMLURL = NULL, $target = NULL)
@@ -415,6 +447,10 @@ class xarServer extends xarObject
      */
     static function getObjectURL($objectName = NULL, $methodName = 'view', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
     {
+        // Allow overriding building URL if needed
+        if (!empty(xarController::$buildUri) && is_callable(xarController::$buildUri)) {
+            return call_user_func(xarController::$buildUri, 'object', $objectName, $methodName, $args);
+        }
         // 1. override any existing 'method' in args, and place before the rest
         if (!empty($methodName)) {
             $args = array('method' => $methodName) + $args;

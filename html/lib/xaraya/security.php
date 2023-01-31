@@ -114,7 +114,7 @@ class xarSec extends xarObject
     //
     //            // We've used up the current random
     //            // number, make up a new one
-    //            srand((double)microtime()*1000000);
+    //            srand((double) microtime(true) * 1000000.0);
     //            xarSession::setVar('rand', rand());
     //
     //            return true;
@@ -122,7 +122,7 @@ class xarSec extends xarObject
     //    }
         if ((md5($partkey)) == $authid) {
             // Match - generate new random number for next key and leave happy
-            srand((double)microtime()*1000000);
+            srand((double) microtime(true) * 1000000.0);
             xarSession::setVar('rand', rand());
             return true;
         }
@@ -133,4 +133,4 @@ class xarSec extends xarObject
 }
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.security');
+//sys::import('xaraya.legacy.security');

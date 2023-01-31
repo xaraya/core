@@ -5,7 +5,7 @@
  * @package modules\categories
  * @subpackage categories
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/147.html
@@ -15,7 +15,7 @@
 $modversion = array(
     'name'           => 'categories',
     'id'             => '147',
-    'version'        => '2.4.0',
+    'version'        => '2.4.1',
     'displayname'    => xarML('Categories'),
     'description'    => 'Categorised data utility',
     'credits'        => 'xardocs/credits.txt',

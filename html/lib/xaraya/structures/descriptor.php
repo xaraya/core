@@ -30,7 +30,7 @@ class ObjectDescriptor extends DataContainer
     public function refresh(xarObject $object)
     {
         $publicproperties = $object->getPublicProperties();
-        foreach ($this->args as $key => $value) if (in_array($key,$publicproperties)) $object->$key = $value;
+        foreach ($this->args as $key => $value) if (array_key_exists($key,$publicproperties)) $object->$key = $value;
     }
 
     public function store(xarObject $object)

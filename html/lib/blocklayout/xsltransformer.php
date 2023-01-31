@@ -171,7 +171,7 @@ class BlockLayoutXSLTProcessor extends xarObject
         */
         $exprPattern = '/%#%(.*?)%#%/';
         $callBack    = array('XsltCallbacks','phpexpressions');
-        $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML);
+        $this->postXML = preg_replace_callback($exprPattern,$callBack,$this->postXML ?? '');
         
         /*
             Expressions in attributes are not handled by the transform because

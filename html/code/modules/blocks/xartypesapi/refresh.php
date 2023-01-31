@@ -27,6 +27,8 @@ function blocks_typesapi_refresh(Array $args=array())
     // first get a list of block type files for all available modules 
     $files = xarMod::apiFunc('blocks', 'types', 'getfiles');
 
+    // no $classname with possible namespace here, and no re-use of what else typesapi getfiles()
+    // found in any of the API calls below
     foreach ($files as $file) {
         if (isset($args['module']) && $file['module'] != $args['module']) continue;
         // nothing fancy here, if a type file exists, see if we have an entry for it in the db
@@ -79,7 +81,13 @@ function blocks_typesapi_refresh(Array $args=array())
                 } else {
                     unset($type_info);
                 }
-                       
+                // we need to save the actual $classname and $filepath for getitems() - requires UPGRADE due to table change
+                $classname = get_class($block);
+                if ($classname != $type['classname'] ?? '')
+                    $update['classname'] = $classname;
+                if ($block->filepath != $type['filepath'] ?? '')
+                    $update['filepath'] = $block->filepath;
+
             } catch (FileNotFoundException $e) {
                 $state = xarBlock::TYPE_STATE_MISSING;
             } catch (Exception $e) {
@@ -101,4 +109,3 @@ function blocks_typesapi_refresh(Array $args=array())
     $runonce = true;
     return true;
 }
-?>

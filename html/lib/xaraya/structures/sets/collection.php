@@ -9,6 +9,19 @@
  * @link http://www.xaraya.info
  */
 
+interface Collection
+{
+    public function add(xarObject $element);
+    public function addAll(BasicCollection $collection);
+    public function clear();
+    public function isEmpty();
+    public function remove(xarObject $element);
+    public function removeAll(BasicCollection $collection);
+    public function size();
+    public function toArray();
+    public function toString();
+}
+
 class BasicCollection extends DataContainer implements Collection
 {
     protected $elements;
@@ -64,6 +77,7 @@ class BasicCollection extends DataContainer implements Collection
 
 class BasicSet extends BasicCollection implements IteratorAggregate
 {
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         $arrayobj = new ArrayObject($this->elements);
@@ -71,25 +85,3 @@ class BasicSet extends BasicCollection implements IteratorAggregate
     }
 }
 
-/**
- * @package core\structures
- * @subpackage structures
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
- */
-interface Collection
-{
-    public function add(xarObject $element);
-    public function addAll(BasicCollection $collection);
-    public function clear();
-    public function isEmpty();
-    public function remove(xarObject $element);
-    public function removeAll(BasicCollection $collection);
-    public function size();
-    public function toArray();
-    public function toString();
-}
-?>

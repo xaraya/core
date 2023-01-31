@@ -20,6 +20,7 @@
  * GUI type hook, observers should return string template data
 **/
 sys::import('xaraya.structures.hooks.subject');
+
 abstract class GuiHookSubject extends HookSubject
 {
     protected $subject = 'GuiHook';  // change this to the name of your event subject
@@ -47,4 +48,4 @@ abstract class GuiHookSubject extends HookSubject
         return $this->hookoutput;
     }
 }
-?>
+

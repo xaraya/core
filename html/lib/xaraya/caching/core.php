@@ -19,7 +19,7 @@
  */
 class xarCoreCache extends xarObject
 {
-    private static $cacheCollection = array();
+    private static $cacheCollection = [];
     private static $cacheStorage = null;
     private static $isBulkStorage = 0;
 
@@ -30,7 +30,7 @@ class xarCoreCache extends xarObject
      * @return boolean
      * @todo configure optional second-level cache here ?
     **/
-    public static function init(array $config = array())
+    public static function init(array $config = [])
     {
         return true;
     }
@@ -46,7 +46,7 @@ class xarCoreCache extends xarObject
     {
         if (!isset(self::$cacheCollection[$scope])) {
             // initialize the cache if necessary
-            self::$cacheCollection[$scope] = array();
+            self::$cacheCollection[$scope] = [];
         }
         if (isset(self::$cacheCollection[$scope][$name])) {
             return true;
@@ -88,7 +88,7 @@ class xarCoreCache extends xarObject
     {
         if (!isset(self::$cacheCollection[$scope])) {
             // initialize cache if necessary
-            self::$cacheCollection[$scope] = array();
+            self::$cacheCollection[$scope] = [];
         }
         self::$cacheCollection[$scope][$name] = $value;
         if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
@@ -123,7 +123,7 @@ class xarCoreCache extends xarObject
     **/
     public static function flushCached($scope)
     {
-        if(isset(self::$cacheCollection[$scope])) {
+        if (isset(self::$cacheCollection[$scope])) {
             unset(self::$cacheCollection[$scope]);
         }
         if (isset(self::$cacheStorage) && empty(self::$isBulkStorage)) {
@@ -159,7 +159,7 @@ class xarCoreCache extends xarObject
             // load from second-level cache storage here
             self::loadBulkStorage();
             // save to second-level cache storage at shutdown
-            register_shutdown_function(array('xarCoreCache','saveBulkStorage'));
+            register_shutdown_function(['xarCoreCache','saveBulkStorage']);
         }
     }
 
@@ -180,11 +180,21 @@ class xarCoreCache extends xarObject
 */
     public static function loadBulkStorage()
     {
-        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
+        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) {
+            return;
+        }
         // get the list of scopes
-        if (!self::$cacheStorage->isCached('__scopelist__')) return;
-        $scopelist = self::$cacheStorage->getCached('__scopelist__');
-        if (empty($scopelist)) return;
+        if (!self::$cacheStorage->isCached('__scopelist__')) {
+            return;
+        }
+        $scopelist = [];
+        $value = self::$cacheStorage->getCached('__scopelist__');
+        if (!empty($value)) {
+            $scopelist = unserialize($value);
+        }
+        if (empty($scopelist)) {
+            return;
+        }
         // load each scope from second-level cache
         foreach ($scopelist as $scope) {
             $value = self::$cacheStorage->getCached($scope);
@@ -196,14 +206,17 @@ class xarCoreCache extends xarObject
 /**
  * CHECKME: work with bulk save per scope instead of individual gets per scope:name ?<br/>
  *          But what about concurrent updates in bulk then (+ unserialize & autosave too early) ?<br/>
- *          It gets the list of scopes and save each scope to second-level cache  
+ *          It gets the list of scopes and save each scope to second-level cache
  */
     public static function saveBulkStorage()
     {
-        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) return;
+        if (!isset(self::$cacheStorage) || empty(self::$isBulkStorage)) {
+            return;
+        }
         // get the list of scopes
         $scopelist = array_keys(self::$cacheCollection);
-        self::$cacheStorage->setCached('__scopelist__', $scopelist);
+        $value = serialize($scopelist);
+        self::$cacheStorage->setCached('__scopelist__', $value);
         // save each scope to second-level cache
         foreach ($scopelist as $scope) {
             $value = serialize(self::$cacheCollection[$scope]);
@@ -211,5 +224,3 @@ class xarCoreCache extends xarObject
         }
     }
 }
-
-?>

@@ -20,7 +20,8 @@
  * API type hook, observers should return array of $extrainfo
 **/
 sys::import('xaraya.structures.hooks.subject');
-abstract class ApiHookSubject extends HookSubject implements ixarEventSubject
+
+abstract class ApiHookSubject extends HookSubject
 {
     protected $subject = 'ApiHook';  // change this to the name of your hook subject
     /**
@@ -44,10 +45,10 @@ abstract class ApiHookSubject extends HookSubject implements ixarEventSubject
                 }
             } catch (Exception $e) {
                 // hooks shouldn't fail, ever!
+                xarLog::message("Failed notifying hook observer $obs->module : " . $e->getMessage(), xarLog::LEVEL_WARNING);
                 continue;
             }
         }
         return $this->getExtrainfo();
     }
 }
-?>

@@ -3,8 +3,8 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
-        <xar:set name="viewlink">xarDDObject::getActionURL($object, 'view')</xar:set>
-        <xar:set name="displaylink">xarDDObject::getActionURL($object, 'display', $object->itemid)</xar:set>
+        <xar:set name="viewlink">$object->getActionURL('view')</xar:set>
+        <xar:set name="displaylink">$object->getActionURL('display', $object->itemid)</xar:set>
         <h2>
             Delete Item #$object:itemid# in #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
@@ -25,7 +25,7 @@
             Trying to delete this item here may break the module. Please proceed with caution.</h3>
         </xar:if>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <xar:set name="postlink">xarDDObject::getActionURL($object, 'delete')</xar:set>
+        <xar:set name="postlink">$object->getActionURL('delete')</xar:set>
         <form method="post" action="#$postlink#">
             <fieldset class="xar-form-actions">
                 <!-- if we use the current URL, the object is already specified -->

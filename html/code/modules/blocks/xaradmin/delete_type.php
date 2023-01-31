@@ -18,7 +18,7 @@
  * @param array $args Set of optional parameters
  * @return array Returns data array
  * @throws EmptyParameterException
- * @throws IdNotFoundException
+ * @throws IDNotFoundException
  */
 function blocks_admin_delete_type(Array $args = array())
 {
@@ -40,7 +40,7 @@ function blocks_admin_delete_type(Array $args = array())
     if (!$type) {
         $msg = 'Block type id "#(1)" does not exist';
         $vars = array($type_id);
-        throw new IdNotFoundException($vars, $msg);
+        throw new IDNotFoundException($vars, $msg);
     }
 
     $data = array();
@@ -72,4 +72,3 @@ function blocks_admin_delete_type(Array $args = array())
    
     return $data;
 }
-?>

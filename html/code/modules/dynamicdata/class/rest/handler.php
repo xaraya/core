@@ -30,6 +30,7 @@ class DataObjectRESTHandler extends xarObject
     public static $storageType = 'apcu';  // database or apcu
     public static $tokenStorage;
     public static $userId;
+    public static $mediaType;
 
     public static function getOpenAPI($args = null)
     {
@@ -81,16 +82,20 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getObjectList($args)
     {
-        $object = $args['object'];
+        $object = $args['path']['object'];
         $method = 'view';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectList', 'args' => $args, 'error' => 'Unknown operation'];
         }
+        $args = $args['query'] ?? [];
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = self::checkUser();
             //$args['access'] = 'view';
+        }
+        if (self::$enableCache && !self::hasCaching($object, $method)) {
+            self::$enableCache = false;
         }
         // @checkme always count here
         $args['count'] = true;
@@ -147,8 +152,8 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getObjectItem($args)
     {
-        $object = $args['object'];
-        $itemid = intval($args['itemid']);
+        $object = $args['path']['object'];
+        $itemid = intval($args['path']['itemid']);
         $method = 'display';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -156,11 +161,15 @@ class DataObjectRESTHandler extends xarObject
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
+        $args = $args['query'] ?? [];
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = self::checkUser();
             //$args['access'] = 'display';
+        }
+        if (self::$enableCache && !self::hasCaching($object, $method)) {
+            self::$enableCache = false;
         }
         $fieldlist = self::getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
@@ -198,7 +207,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function createObjectItem($args)
     {
-        $object = $args['object'];
+        $object = $args['path']['object'];
         $method = 'create';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -229,8 +238,8 @@ class DataObjectRESTHandler extends xarObject
 
     public static function updateObjectItem($args)
     {
-        $object = $args['object'];
-        $itemid = intval($args['itemid']);
+        $object = $args['path']['object'];
+        $itemid = intval($args['path']['itemid']);
         $method = 'update';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'updateObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -264,8 +273,8 @@ class DataObjectRESTHandler extends xarObject
 
     public static function deleteObjectItem($args)
     {
-        $object = $args['object'];
-        $itemid = intval($args['itemid']);
+        $object = $args['path']['object'];
+        $itemid = intval($args['path']['itemid']);
         $method = 'delete';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'deleteObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -432,6 +441,12 @@ class DataObjectRESTHandler extends xarObject
     {
         $operation = self::getOperation($object, $method);
         return !empty($operation['security']) ? true : false;
+    }
+
+    public static function hasCaching($object, $method)
+    {
+        $operation = self::getOperation($object, $method);
+        return !empty($operation['caching']) ? true : false;
     }
 
     public static function getProperties($object, $method)
@@ -656,7 +671,7 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getModuleApis($args)
     {
-        $module = $args['module'];
+        $module = $args['path']['module'];
         if (!self::hasModule($module)) {
             return ['method' => 'getModuleApis', 'args' => $args, 'error' => 'Unknown module'];
         }
@@ -676,12 +691,15 @@ class DataObjectRESTHandler extends xarObject
 
     public static function getModuleCall($args)
     {
-        $module = $args['module'];
-        $path = $args['path'];
-        $func = self::getModuleApiFunc($module, $path, 'get');
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = self::getModuleApiFunc($module, $path, 'get', $more);
         if (empty($func)) {
             return ['method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
+        $args = $args['query'] ?? [];
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = self::checkUser();
@@ -689,7 +707,7 @@ class DataObjectRESTHandler extends xarObject
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
-                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $module, $rolename);
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
             // @todo verify access for user based on what?
             } else {
                 $pass = true;
@@ -699,23 +717,41 @@ class DataObjectRESTHandler extends xarObject
                 exit;
             }
         }
+        if (self::$enableCache && empty($func['caching'])) {
+            self::$enableCache = false;
+        }
+        // @checkme how to save this in case of caching?
+        if (!empty($func['mediatype'])) {
+            self::$mediaType = $func['mediatype'];
+        }
         xarMod::init();
-        $type = empty($func['type']) ? 'rest' : $func['type'];
-        // @checkme pass all args from handler here?
-        return xarMod::apiFunc($module, $type, $func['name'], $args);
+        xarUser::init();
+        // @checkme pass all query args from handler here?
+        if (!empty($func['args'])) {
+            if (!empty($more)) {
+                // @checkme path params overwrite query params - but what about default args?
+                $args = array_merge($args, $func['args']);
+            } else {
+                // @checkme query params overwrite default args
+                $args = array_merge($func['args'], $args);
+            }
+        }
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $args);
     }
 
     public static function postModuleCall($args)
     {
-        $module = $args['module'];
-        $path = $args['path'];
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = self::getModuleApiFunc($module, $path, 'post', $more);
+        if (empty($func)) {
+            return ['method' => 'postModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
         // this contains any POSTed args from rst.php
         if (empty($args['input'])) {
             $args['input'] = [];
-        }
-        $func = self::getModuleApiFunc($module, $path, 'post');
-        if (empty($func)) {
-            return ['method' => 'postModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
@@ -724,7 +760,7 @@ class DataObjectRESTHandler extends xarObject
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
-                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $module, $rolename);
+                $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
             // @todo verify access for user based on what?
             } else {
                 $pass = true;
@@ -734,10 +770,42 @@ class DataObjectRESTHandler extends xarObject
                 exit;
             }
         }
+        if (!empty($func['mediatype'])) {
+            self::$mediaType = $func['mediatype'];
+        }
         xarMod::init();
-        $type = empty($func['type']) ? 'rest' : $func['type'];
+        xarUser::init();
         // @checkme handle POSTed args by passing $args['input'] only in handler?
-        return xarMod::apiFunc($module, $type, $func['name'], $args['input']);
+        if (!empty($more) && !empty($func['args'])) {
+            $args['input'] = array_merge($args['input'], $func['args']);
+        }
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $args['input']);
+    }
+
+    public static function putModuleCall($args)
+    {
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = self::getModuleApiFunc($module, $path, 'put', $more);
+        if (empty($func)) {
+            return ['method' => 'putModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
+        throw new Exception('Unsupported method PUT for module api');
+    }
+
+    public static function deleteModuleCall($args)
+    {
+        $module = $args['path']['module'];
+        $path = $args['path']['path'];
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $more = $args['path']['more'] ?? '';
+        $func = self::getModuleApiFunc($module, $path, 'delete', $more);
+        if (empty($func)) {
+            return ['method' => 'deleteModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
+        }
+        throw new Exception('Unsupported method DELETE for module api');
     }
 
     public static function hasModule($module)
@@ -757,18 +825,67 @@ class DataObjectRESTHandler extends xarObject
         return self::$modules[$module]['apilist'];
     }
 
-    public static function getModuleApiFunc($module, $path, $method = 'get')
+    public static function getModuleApiFunc($module, $path, $method = 'get', $more = null)
     {
         if (!self::hasModule($module)) {
             return;
         }
         $apilist = self::getModuleApiList($module);
+        if (!empty($more)) {
+            // @checkme sort by decreasing path length
+            uasort($apilist, function ($a, $b) {
+                $lena = strlen($a['path']);
+                $lenb = strlen($b['path']);
+                if ($lena == $lenb) {
+                    return 0;
+                }
+                return ($lena < $lenb) ? 1 : -1;
+            });
+        }
         foreach ($apilist as $api => $item) {
             if (isset($item['enabled']) && empty($item['enabled'])) {
                 continue;
             }
-            if ($item['path'] == $path && $item['method'] == $method) {
-                $item['name'] = $api;
+            if (empty($more) && $item['path'] == $path && $item['method'] == $method) {
+                $item['module'] ??= $module;
+                $item['type'] ??= 'rest';
+                $item['name'] ??= $api;
+                // @checkme allow default args to start with
+                $item['args'] ??= [];
+                $item['caching'] ??= ($method == 'get') ? true : false;
+                return $item;
+            }
+            // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+            if (!empty($more) && strncmp($item['path'], $path . '/', strlen($path) + 1) === 0 && $item['method'] == $method) {
+                // @checkme assuming only more path parameter(s) in module paths for now... {type}/{key}/{code}
+                $more_params = explode('/', substr($item['path'], strlen($path) + 1));
+                $more_values = explode('/', $more);
+                if (count($more_values) != count($more_params)) {
+                    continue;
+                }
+                $item['module'] ??= $module;
+                $item['type'] ??= 'rest';
+                $item['name'] ??= $api;
+                // @checkme allow default args to start with
+                $item['args'] ??= [];
+                $item['caching'] ??= ($method == 'get') ? true : false;
+                $i = 0;
+                foreach ($more_params as $path_param) {
+                    if (empty($path_param)) {
+                        continue;
+                    }
+                    if (substr($path_param, 0, 1) !== '{' && substr($path_param, -1) !== '}') {
+                        // @checkme how do we keep track of fixed parts of the path here?
+                        continue;
+                    }
+                    if (substr($path_param, 0, 1) !== '{' || substr($path_param, -1) !== '}') {
+                        throw new Exception('Invalid path parameter in ' . $item['path']);
+                    }
+                    $path_param = substr($path_param, 1, -1);
+                    // @checkme path params overwrite default args
+                    $item['args'][$path_param] = $more_values[$i];
+                    $i += 1;
+                }
                 return $item;
             }
         }
@@ -791,18 +908,29 @@ class DataObjectRESTHandler extends xarObject
         $r->delete('/token', ['DataObjectRESTHandler', 'deleteToken']);
         $r->get('/modules', ['DataObjectRESTHandler', 'getModules']);
         $r->get('/modules/{module}', ['DataObjectRESTHandler', 'getModuleApis']);
-        $r->get('/modules/{module}/{path}', ['DataObjectRESTHandler', 'getModuleCall']);
-        $r->post('/modules/{module}/{path}', ['DataObjectRESTHandler', 'postModuleCall']);
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        $r->get('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'getModuleCall']);
+        $r->post('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'postModuleCall']);
+        $r->put('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'putModuleCall']);
+        $r->delete('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'deleteModuleCall']);
     }
 
     public static function getQueryId($method, $vars)
     {
         $queryId = $method;
-        if (!empty($vars['object'])) {
-            $queryId .= '-' . $vars['object'];
-        }
-        if (!empty($vars['itemid'])) {
-            $queryId .= '-' . $vars['itemid'];
+        if (!empty($vars['path'])) {
+            if (!empty($vars['path']['object'])) {
+                $queryId .= '-' . $vars['path']['object'];
+                if (!empty($vars['path']['itemid'])) {
+                    $queryId .= '-' . $vars['path']['itemid'];
+                }
+            }
+            if (!empty($vars['path']['module'])) {
+                $queryId .= '-' . $vars['path']['module'];
+                if (!empty($vars['path']['path'])) {
+                    $queryId .= '-' . $vars['path']['path'];
+                }
+            }
         }
         $queryId .= '-' . md5(json_encode($vars));
         return $queryId;
@@ -876,12 +1004,23 @@ class DataObjectRESTHandler extends xarObject
             header('Access-Control-Allow-Origin: *');
         }
         //http_response_code($status);
-        if (is_string($result) && substr($result, 0, 5) === '<?xml') {
-            header('Content-Type: application/xml; charset=utf-8');
+        if (is_string($result)) {
+            if (!empty(self::$mediaType)) {
+                header('Content-Type: ' . self::$mediaType . '; charset=utf-8');
+            } elseif (substr($result, 0, 5) === '<?xml') {
+                header('Content-Type: application/xml; charset=utf-8');
+            } else {
+                header('Content-Type: text/html; charset=utf-8');
+            }
             echo $result;
-        } else {
-            header('Content-Type: application/json; charset=utf-8');
-            echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
+            return;
+        }
+        header('Content-Type: application/json; charset=utf-8');
+        //echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_PARTIAL_OUTPUT_ON_ERROR);
+        try {
+            echo json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
+        } catch (JsonException $e) {
+            echo '{"JSON Exception": ' . json_encode($e->getMessage()) . '}';
         }
     }
 

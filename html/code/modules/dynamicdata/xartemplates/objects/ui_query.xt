@@ -3,9 +3,9 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
-        <xar:set name="viewlink">xarDDObject::getActionURL($object, 'view')</xar:set>
-        <xar:set name="searchlink">xarDDObject::getActionURL($object, 'search')</xar:set>
-        <xar:set name="querylink">xarDDObject::getActionURL($object, 'query')</xar:set>
+        <xar:set name="viewlink">$object->getActionURL('view')</xar:set>
+        <xar:set name="searchlink">$object->getActionURL('search')</xar:set>
+        <xar:set name="querylink">$object->getActionURL('query')</xar:set>
         <h2>
             Query #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">

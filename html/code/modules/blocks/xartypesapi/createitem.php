@@ -77,17 +77,22 @@ function blocks_typesapi_createitem(Array $args=array())
         
     $category = $blocktype->type_category;
     $info = serialize($blocktype->storeContent());
-    
+
+    // we need to save the actual $classname and $filepath for getitems()
+    $classname = get_class($blocktype);
+    $filepath = $blocktype->filepath;
+
     unset($blocktype);
 
     $dbconn = xarDB::getConn();
     $tables =& xarDB::getTables();
     $types_table = $tables['block_types'];
     
+    // we need to save the actual $classname and $filepath for getitems() - requires UPGRADE due to table change
     $query = "INSERT INTO $types_table
-              (module_id, state, type, category, info)
-              VALUES (?,?,?,?,?)";
-    $bindvars = array($module_id, $state, $type, $category, $info);        
+              (module_id, state, type, category, info, class, filepath)
+              VALUES (?,?,?,?,?,?,?)";
+    $bindvars = array($module_id, $state, $type, $category, $info, $classname, $filepath);
 
     $result = $dbconn->Execute($query,$bindvars);
     if (!$result) return;
@@ -95,4 +100,3 @@ function blocks_typesapi_createitem(Array $args=array())
     if (empty($id)) return;
     return $id;
 }
-?>

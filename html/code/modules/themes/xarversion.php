@@ -6,7 +6,7 @@
  * @subpackage themes
  * @copyright see the html/credits.html file in this release
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
@@ -24,7 +24,7 @@
 $modversion = array(
     'name'               => 'Themes Administration',
     'id'                 => '70',
-    'version'            => '2.4.0',
+    'version'            => '2.4.1',
     'displayname'        => xarMLS::translate('Themes'),
     'description'        => 'Configure themes, change site appearance',
     'displaydescription' => xarMLS::translate('Configure themes, change site appearance'),

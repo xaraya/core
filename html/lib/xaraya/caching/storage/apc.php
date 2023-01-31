@@ -16,7 +16,7 @@
 sys::import('xaraya.caching.storage');
 class xarCache_APC_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public function __construct(Array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
         $this->storage = 'apc';
@@ -33,10 +33,14 @@ class xarCache_APC_Storage extends xarCache_Storage implements ixarCache_Storage
         if (isset($value) && $value !== false) {
             // FIXME: APC doesn't keep track of modification times !
             //$this->modtime = 0;
-            if ($log) $this->logStatus('HIT', $key);
+            if ($log) {
+                $this->logStatus('HIT', $key);
+            }
             return true;
         } else {
-            if ($log) $this->logStatus('MISS', $key);
+            if ($log) {
+                $this->logStatus('MISS', $key);
+            }
             return false;
         }
     }
@@ -101,23 +105,25 @@ class xarCache_APC_Storage extends xarCache_Storage implements ixarCache_Storage
         $this->hits = $cacheinfo['num_hits'];
         $this->misses = $cacheinfo['num_misses'];
 
-        return array('size'    => $this->size,
-                     'items'   => $this->items,
-                     'hits'    => $this->hits,
-                     'misses'  => $this->misses,
-                     'modtime' => $this->modtime);
+        return ['size'    => $this->size,
+                'items'   => $this->items,
+                'hits'    => $this->hits,
+                'misses'  => $this->misses,
+                'modtime' => $this->modtime];
     }
 
     public function getCachedList()
     {
-        $list = array();
+        $list = [];
         // this is the info for the whole cache
         $cacheinfo = apc_cache_info('user');
         foreach ($cacheinfo['cache_list'] as $entry) {
             // filter out the keys that don't start with the right type/namespace prefix
-            if (!empty($this->prefix) && strpos($entry['info'], $this->prefix) !== 0) continue;
+            if (!empty($this->prefix) && strpos($entry['info'], $this->prefix) !== 0) {
+                continue;
+            }
             // CHECKME: this assumes the code is always hashed
-            if (preg_match('/^(.*)-(\w*)$/',$entry['info'],$matches)) {
+            if (preg_match('/^(.*)-(\w*)$/', $entry['info'], $matches)) {
                 $key = $matches[1];
                 $code = $matches[2];
             } else {
@@ -128,14 +134,15 @@ class xarCache_APC_Storage extends xarCache_Storage implements ixarCache_Storage
             $size = $entry['mem_size'];
             $check = $entry['ttl'];
             // remove the prefix from the key
-            if (!empty($this->prefix)) $key = str_replace($this->prefix,'',$key);
-            $list[] = array('key'   => $key,
-                            'code'  => $code,
-                            'time'  => $time,
-                            'size'  => $size,
-                            'check' => $check);
+            if (!empty($this->prefix)) {
+                $key = str_replace($this->prefix, '', $key);
+            }
+            $list[] = ['key'   => $key,
+                       'code'  => $code,
+                       'time'  => $time,
+                       'size'  => $size,
+                       'check' => $check];
         }
         return $list;
     }
 }
-

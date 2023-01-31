@@ -1,7 +1,7 @@
 <?php
 /**
  * Session-less page caching for first-time visitors
- * 
+ *
  * @package core\caching
  * @subpackage caching
  * @category Xaraya Web Applications Framework
@@ -19,13 +19,12 @@ class xarSessionLessCache extends xarObject
     /**
      * Check if this page is suitable for session-less page caching
      *
-     * 
      * @return boolean true if the page is suitable for session-less caching, false if not
      */
     public static function checkCachingRules()
     {
         if (
-        // we have no session id in a cookie or URL parameter
+            // we have no session id in a cookie or URL parameter
             empty($_REQUEST[xarOutputCache::$cacheCookie]) &&
         // we're dealing with a GET OR a HEAD request
             !empty($_SERVER['REQUEST_METHOD']) &&
@@ -33,11 +32,11 @@ class xarSessionLessCache extends xarObject
         // TODO: make compatible with IIS and https (cfr. xarServer.php)
             !empty($_SERVER['HTTP_HOST']) &&
             !empty($_SERVER['REQUEST_URI'])
-           ) {
-           // the URL is one of the candidates for session-less caching
-           return true;
+        ) {
+            // the URL is one of the candidates for session-less caching
+            return true;
         } else {
-           return false;
+            return false;
         }
     }
 
@@ -54,7 +53,7 @@ class xarSessionLessCache extends xarObject
         }
 
         if (empty($sessionLessList) || !is_array($sessionLessList)) {
-            $sessionLessList = array();
+            $sessionLessList = [];
         }
 
         // the URL is already in the list for session-less page caching
@@ -62,12 +61,11 @@ class xarSessionLessCache extends xarObject
             $cacheKey = 'static';
             $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
             $cache_file = xarOutputCache::$cacheDir . "/page/$cacheKey-" . $cacheCode . ".php";
-        // Note: we stick to filesystem for session-less caching
+            // Note: we stick to filesystem for session-less caching
             if (file_exists($cache_file) &&
                 filesize($cache_file) > 0 &&
                 (xarPageCache::$cacheTime == 0 ||
                  filemtime($cache_file) > time() - xarPageCache::$cacheTime)) {
-
                 // CHECKME: set xarPageCache::$cacheCode for the ETag here or not ???
                 xarPageCache::$cacheCode = $cacheCode;
 
@@ -86,7 +84,6 @@ class xarSessionLessCache extends xarObject
 
                 // we're done here !
                 exit;
-
             } else {
                 // tell xarPageCache::setCached() that we want to save another copy here
                 self::setCached();
@@ -98,13 +95,14 @@ class xarSessionLessCache extends xarObject
             sys::import('xaraya.caching.output.autosession');
             xarAutoSessionCache::logStatus('MISS', $autoCachePeriod);
         }
+        return;
     }
 
     public static function getCached($cache_file)
     {
         // send the content of the cache file to the browser
         @readfile($cache_file);
-    // FIXME: separate cache cleaning for session-less caching if necessary
+        // FIXME: separate cache cleaning for session-less caching if necessary
         //xarCache_CleanCached('Page');
     }
 
@@ -114,5 +112,3 @@ class xarSessionLessCache extends xarObject
         xarPageCache::$cacheNoSession = 1;
     }
 }
-
-?>

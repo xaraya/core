@@ -277,7 +277,7 @@ class xarSession extends xarObject implements IsessionHandler
         }
         // Generate a random number, used for
         // some authentication
-        srand((double) microtime() * 1000000);
+        srand((double) microtime(true) * 1000000.0);
         $this->setVar('rand', rand());
 
         $this->ipAddress = $ipAddress;
@@ -634,4 +634,4 @@ class xarSession extends xarObject implements IsessionHandler
 }
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.sessions');
+//sys::import('xaraya.legacy.sessions');

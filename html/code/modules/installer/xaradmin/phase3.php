@@ -75,7 +75,7 @@ function installer_admin_phase3()
     $memLimit = trim(ini_get('memory_limit'));
     $memLimit = empty($memLimit) ? xarML('Undetermined') : $memLimit;
     $memVal = substr($memLimit,0,strlen($memLimit)-1);
-    switch(strtolower($memLimit{strlen($memLimit)-1})) {
+    switch(strtolower($memLimit[strlen($memLimit)-1])) {
         case 'g': $memVal *= 1024;
         case 'm': $memVal *= 1024;
         case 'k': $memVal *= 1024;
@@ -156,5 +156,3 @@ function check_dir($dirname)
     }
     return true;
 }
-
-?>

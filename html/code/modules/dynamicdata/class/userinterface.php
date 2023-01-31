@@ -1,6 +1,6 @@
 <?php
 /**
- * Dynamic Object User Interface 
+ * Dynamic Object User Interface
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -17,15 +17,15 @@
  *
  * Sample usage in GUI functions:
  *
- * function mymodule_user_test($args = array())
+ * function mymodule_user_test($args = [])
  * {
  *     sys::import('modules.dynamicdata.class.userinterface');
  *
  *     // Add some extra arguments for the interface, e.g. for a non-standard method handler
- *     //$args['mapper'] = array('myname' => array('classname'  => 'MyMethodHandler',
- *     //                                          'classfunc'  => 'run',
- *     //                                          'importname' => 'modules.mymodule.class.myhandler'
- *     //                                          'nextmethod' => 'display'));
+ *     //$args['mapper'] = ['myname' => ['classname'  => 'MyMethodHandler',
+ *     //                                'classfunc'  => 'run',
+ *     //                                'importname' => 'modules.mymodule.class.myhandler'
+ *     //                                'nextmethod' => 'display']];
  *     //$args['tplmodule'] = 'mymodule';
  *     //$args['linktype'] = 'user';
  *     //$args['linkfunc'] = 'test';
@@ -47,7 +47,9 @@
  *
  * Extend & override the default handler, and pass your own method mapper and/or handler to the interface
  *
- * class MyMethodHandler extends DataObjectDefaultHandler
+ * use Xaraya\DataObject\Handlers\DefaultHandler;
+ *
+ * class MyMethodHandler extends DefaultHandler
  * {
  *     ...
  * }
@@ -59,13 +61,16 @@ class DataObjectUserInterface extends xarObject
     public $framework = 'xaraya';
 
     // method mapper
-    public $mapper = array();
+    public $mapper = [];
 
     // method aliases
-    public $alias = array();
+    public $alias = [];
+
+    // class namespace
+    public $namespace = 'Xaraya\DataObject\Handlers';
 
     // current arguments for the handler
-    public $args = array();
+    public $args = [];
 
     // current handler
     private $handler = null;
@@ -85,7 +90,7 @@ class DataObjectUserInterface extends xarObject
      * @param $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
      * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
      */
-    function __construct(array $args = array())
+    public function __construct(array $args = [])
     {
         // set a specific framework
         if (!empty($args['framework'])) {
@@ -96,56 +101,56 @@ class DataObjectUserInterface extends xarObject
         }
 
         // define the method mapper
-        $this->mapper = array(
-            'create'  => array('classname'  => 'DataObjectCreateHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.create',
-                               'nextmethod' => 'view'), // or e.g. 'display' (= with itemid)
+        $this->mapper = [
+            'create'  => ['classname'  => 'CreateHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.create',
+                          'nextmethod' => 'view'], // or e.g. 'display' (= with itemid)
 
-            'update'  => array('classname'  => 'DataObjectUpdateHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.update',
-                               'nextmethod' => 'view'),
+            'update'  => ['classname'  => 'UpdateHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.update',
+                          'nextmethod' => 'view'],
 
-            'delete'  => array('classname'  => 'DataObjectDeleteHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.delete',
-                               'nextmethod' => 'view'),
+            'delete'  => ['classname'  => 'DeleteHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.delete',
+                          'nextmethod' => 'view'],
 
-            'display' => array('classname'  => 'DataObjectDisplayHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.display'),
+            'display' => ['classname'  => 'DisplayHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.display'],
 
-            'view'    => array('classname'  => 'DataObjectViewHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.view'),
+            'view'    => ['classname'  => 'ViewHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.view'],
 
-            'search'  => array('classname'  => 'DataObjectSearchHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.search'),
+            'search'  => ['classname'  => 'SearchHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.search'],
 
-            'config'  => array('classname'  => 'DataObjectConfigHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.config'),
+            'config'  => ['classname'  => 'ConfigHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.config'],
 
-            'stats'   => array('classname'  => 'DataObjectStatsHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.stats'),
+            'stats'   => ['classname'  => 'StatsHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.stats'],
 /*
-            'access'  => array('classname'  => 'DataObjectAccessHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.access'),
+            'access'  => ['classname'  => 'AccessHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.access'],
 */
-            'default' => array('classname'  => 'DataObjectDefaultHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.dynamicdata.class.ui_handlers.default'),
+            'default' => ['classname'  => 'DefaultHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.dynamicdata.class.ui_handlers.default'],
 /*
-            'myname'  => array('classname'  => 'MyMethodHandler',
-                               'classfunc'  => 'run',
-                               'importname' => 'modules.mymodule.class.myhandler',
-                               'nextmethod' => 'display'),
+            'myname'  => ['classname'  => 'MyMethodHandler',
+                          'classfunc'  => 'run',
+                          'importname' => 'modules.mymodule.class.myhandler',
+                          'nextmethod' => 'display'],
 */
-        );
+        ];
 
         // override and/or extend the method mapper if necessary
         if (!empty($args['mapper'])) {
@@ -155,7 +160,7 @@ class DataObjectUserInterface extends xarObject
         }
 
         // specify any aliases for the methods (you can have several aliases for one method)
-        $this->alias = array(
+        $this->alias = [
             'new'      => 'create',
             'modify'   => 'update',
             'remove'   => 'delete', // we don't allow removing all items for an object here
@@ -168,7 +173,7 @@ class DataObjectUserInterface extends xarObject
 /*
             'mystuff'  => 'myname',
 */
-        );
+        ];
 
         // override and/or extend the method aliases if necessary
         if (!empty($args['alias'])) {
@@ -180,7 +185,7 @@ class DataObjectUserInterface extends xarObject
         // sanity check on method aliases during setup
         foreach ($this->alias as $alias => $realmethod) {
             if (empty($this->mapper[$realmethod])) {
-                return xarML('Unknown method #(1) for alias #(2)', $realmethod, $alias);
+                return xarMLS::translate('Unknown method #(1) for alias #(2)', $realmethod, $alias);
             }
         }
 
@@ -201,20 +206,22 @@ class DataObjectUserInterface extends xarObject
      * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
      * @return string output of the handler->run() method
      */
-    function handle(array $args = array())
+    public function handle(array $args = [])
     {
-        if(!xarVar::fetch('method', 'isset', $args['method'], NULL, xarVar::DONT_SET)) 
+        if (!xarVar::fetch('method', 'isset', $args['method'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('itemid', 'isset', $args['itemid'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('itemid', 'isset', $args['itemid'], null, xarVar::DONT_SET)) {
             return;
+        }
 
         // default method is 'view' without itemid, or 'display' with an itemid
-        if(empty($args['method'])) 
-        {
-            if(empty($args['itemid'])) 
+        if (empty($args['method'])) {
+            if (empty($args['itemid'])) {
                 $args['method'] = 'view';
-            else 
+            } else {
                 $args['method'] = 'display';
+            }
         }
 
         // get the right handler based on the method mapper above
@@ -234,7 +241,7 @@ class DataObjectUserInterface extends xarObject
             }
 
             // get the right handler class for this method
-            $handlerclazz = $methodmap['classname'];
+            $handlerclazz = $this->namespace . '\\' . $methodmap['classname'];
 
             // get the right function to call in this handler class (default is 'run')
             if (!empty($methodmap['classfunc'])) {
@@ -266,7 +273,7 @@ class DataObjectUserInterface extends xarObject
     /**
      * Return the current handler, e.g. in case you want to access something or run another time
      */
-    function &getHandler()
+    public function &getHandler()
     {
         return $this->handler;
     }
@@ -274,20 +281,10 @@ class DataObjectUserInterface extends xarObject
     /**
      * Return the current object in the handler, e.g. in case you want to access it afterwards
      */
-    function &getObject()
+    public function &getObject()
     {
         if (isset($this->handler)) {
             return $this->handler->object;
         }
     }
 }
-
-/**
- * Dynamic Object Interface (deprecated)
- *
- */
-class DataObjectInterface extends DataObjectUserInterface
-{
-}
-
-?>

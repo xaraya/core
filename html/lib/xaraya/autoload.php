@@ -33,22 +33,24 @@ class xarAutoload extends xarObject
      *
      * @param registerlist array list of functions and classname::methods to be registered
      * @param extensions string comma-separated list of file extensions to be checked (instead of the default ones)
-     * @return none
+     * @return void
     **/
     public static function initialize($registerlist = array(), $extensions = '')
     {
         // CHECKME: always start from scratch ?
-        spl_autoload_register(null, false);
+        spl_autoload_register(null);
 
         // specify extensions (if not default)
         if (!empty($extensions)) {
             spl_autoload_extensions($extensions);
         }
 
-        // add the __autoload function
+        // add the __autoload function - deprecated as of PHP 7.2.0, and removed as of PHP 8.0.0
+        /**
         if (function_exists('__autoload')) {
             spl_autoload_register('__autoload');
         }
+         */
 
         // add any other specified functions and class methods
         if (!empty($registerlist)) {
@@ -145,7 +147,7 @@ class xarAutoload extends xarObject
     /**
      * TODO: Save the list of registered autoload() functions somewhere
      *
-     * @return none
+     * @return void
     **/
     public static function saveList()
     {
@@ -157,7 +159,7 @@ class xarAutoload extends xarObject
     /**
      * Refresh the internal list based on the actual registered autoload() functions
      *
-     * @return none
+     * @return void
     **/
     private static function refreshList()
     {
@@ -187,8 +189,13 @@ class xarAutoload extends xarObject
     /**
      * Register a new function as __autoload()
      *
+     * When using namespaces, expect to compare against the fully qualified class name:
+     *     $class = str_replace(strtolower(__NAMESPACE__) . "\\", '', strtolower($class));
+     * And please make sure to include the namespace in the function name when you register it:
+     *     xarAutoload::registerFunction(__NAMESPACE__ . '\my_autoload_function');
+     *
      * @param function string the name of the function to be registered
-     * @return none
+     * @return void
     **/
     public static function registerFunction($function)
     {
@@ -199,9 +206,14 @@ class xarAutoload extends xarObject
     /**
      * Register a new class method as __autoload()
      *
+     * When using namespaces, expect to compare against the fully qualified class name:
+     *     $class = str_replace(strtolower(__NAMESPACE__) . "\\", '', strtolower($class));
+     * And please make sure to include the namespace in the class name when you register it:
+     *     xarAutoload::registerClassMethod(__NAMESPACE__ . '\MyClass', 'my_autoload_method');
+     *
      * @param classname string the name of the class
      * @param method string the name of the method to be registered
-     * @return none
+     * @return void
     **/
     public static function registerClassMethod($classname, $method)
     {

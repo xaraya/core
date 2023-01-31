@@ -120,12 +120,12 @@ class xarMLS extends xarObject
         //xarEvents::register('MLSMissingTranslationDomain');
     
         // TODO: reminder for if/when we drop the legacy functions or switch to namespaces someday
-        if (!function_exists('xarML')) {
-            function xarML($rawstring/*, ...*/)
-            {
-                return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
-            }
-	}
+        //if (!function_exists('xarML')) {
+        //    function xarML($rawstring/*, ...*/)
+        //    {
+        //        return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
+        //    }
+        //}
 
         // FIXME: this was previously conditional on User subsystem initialisation,
         // but in the 2.x flow we need it earlier apparently, so made this unconditional
@@ -218,7 +218,7 @@ class xarMLS extends xarObject
     {
         // if an empty string is passed in, just return an empty string. it's
         // the most sensible thing to do
-        $string = trim($rawstring);
+        $string = trim($rawstring ?? '');
         if($string == '') return $rawstring;
         
         $start = strpos($rawstring, $string);
@@ -646,7 +646,7 @@ class xarMLS extends xarObject
         $i = 1;
         foreach($args as $var) {
             $search = "#($i)";
-            $string = str_replace($search, $var, $string);
+            $string = str_replace($search, $var ?? '', $string);
             $i++;
         }
         return $string;
@@ -934,6 +934,13 @@ class xarMLSContext extends xarObject
     }
 }
 
+// TODO: reminder for if/when we drop the legacy functions or switch to namespaces someday
+if (!function_exists('xarML')) {
+    function xarML($rawstring/*, ...*/)
+    {
+        return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
+    }
+}
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.mls');
+//sys::import('xaraya.legacy.mls');

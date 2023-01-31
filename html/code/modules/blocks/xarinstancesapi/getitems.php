@@ -143,6 +143,9 @@ function blocks_instancesapi_getitems(Array $args=array())
     $select['type_info'] = 'types.info';
     $select['type_state'] = 'types.state';
     $select['type_category'] = 'types.category';
+    // we need to get the actual $classname and $filepath for getinfo() - requires UPGRADE due to table change
+    $select['classname'] = 'types.class';
+    $select['filepath'] = 'types.filepath';
     $select['module'] = 'mods.name';
 
     $from[] = "$blocks_table blocks";
@@ -234,6 +237,8 @@ function blocks_instancesapi_getitems(Array $args=array())
                     $val = @unserialize($val);                                      
                     $item[$field] = $val;
                 break;
+                case 'classname':
+                case 'filepath':
                 case 'module':
                     $item[$field] = !empty($val) ? $val : '';
                 break;
@@ -248,4 +253,3 @@ function blocks_instancesapi_getitems(Array $args=array())
     $result->close();
     return $items;  
 }
-?>

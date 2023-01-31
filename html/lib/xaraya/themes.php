@@ -93,4 +93,4 @@ class xarTheme extends xarObject
 
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.themes');
+//sys::import('xaraya.legacy.themes');

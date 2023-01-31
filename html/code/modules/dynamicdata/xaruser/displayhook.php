@@ -17,54 +17,26 @@
  * @return string output display string
  * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
  */
-function dynamicdata_user_displayhook(Array $args=array())
+function dynamicdata_user_displayhook(array $args=[])
 {
     extract($args);
 
-    if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');
+    // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
+    $modname = $extrainfo['module'];
+    $itemtype = $extrainfo['itemtype'];
+    $itemid = $extrainfo['itemid'];
+    $module_id = $extrainfo['module_id'];
 
-    if (!isset($objectid) || !is_numeric($objectid)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('object ID', 'user', 'displayhook', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
+    $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype]);
+    $object = DataObjectMaster::getObject(['name' => $descriptorargs['name'],
+                                       'itemid'   => $itemid]);
+    if (!isset($object)) {
+        return;
     }
-
-    // When called via hooks, the module name may be empty, so we get it from
-    // the current module
-    if (is_array($extrainfo) && !empty($extrainfo['module']) && is_string($extrainfo['module'])) {
-        $modname = $extrainfo['module'];
-    } else {
-        $modname = xarMod::getName();
-    }
-
-    $module_id = xarMod::getRegID($modname);
-    if (empty($module_id)) {
-        $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module name ' . $modname, 'user', 'displayhook', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
-    }
-
-    if (is_array($extrainfo) && isset($extrainfo['itemtype']) && is_numeric($extrainfo['itemtype'])) {
-        $itemtype = $extrainfo['itemtype'];
-// TODO: find some better way to do this !
-    } elseif (xarVar::isCached('Hooks.display','itemtype')) {
-        $itemtype = xarVar::getCached('Hooks.display','itemtype');
-    } else {
-        $itemtype = null;
-    }
-
-    if (is_array($extrainfo) && isset($extrainfo['itemid']) && is_numeric($extrainfo['itemid'])) {
-        $itemid = $extrainfo['itemid'];
-    } else {
-        $itemid = $objectid;
-    }
-
-    $object = DataObjectMaster::getObject(array('moduleid' => $module_id,
-                                       'itemtype' => $itemtype,
-                                       'itemid'   => $itemid));
-    if (!isset($object)) return;
-    if (!$object->checkAccess('display'))
+    if (!$object->checkAccess('display')) {
         return xarML('Display #(1) is forbidden', $object->label);
+    }
 
     $object->getItem();
 
@@ -73,9 +45,11 @@ function dynamicdata_user_displayhook(Array $args=array())
     } else {
         $template = $object->name;
     }
-    return xarTpl::module('dynamicdata','user','displayhook',
-                        array('properties' => & $object->properties),
-                        $template);
+    return xarTpl::module(
+        'dynamicdata',
+        'user',
+        'displayhook',
+        ['properties' => & $object->properties],
+        $template
+    );
 }
-
-?>

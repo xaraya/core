@@ -12,12 +12,26 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+namespace Xaraya\DataObject\Handlers;
+
+use xarVar;
+use xarCache;
+use xarObjectCache;
+use xarMLS;
+use xarMod;
+use xarResponse;
+use xarTpl;
+use DataObjectMaster;
+use DataPropertyMaster;
+use sys;
+
 sys::import('modules.dynamicdata.class.ui_handlers.default');
+
 /**
  * Dynamic Object User Interface Handler
  *
  */
-class DataObjectSearchHandler extends DataObjectDefaultHandler
+class SearchHandler extends DefaultHandler
 {
     public $method = 'search'; // or 'query'
 
@@ -34,28 +48,36 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
      * @param $args['match'] optional match type for the search
      * @return string output of xarTpl::object() using 'ui_search'
      */
-    function run(array $args = array())
+    public function run(array $args = [])
     {
-        if(!xarVar::fetch('catid',    'isset', $args['catid'],    NULL, xarVar::DONT_SET)) 
+        if (!xarVar::fetch('catid', 'isset', $args['catid'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('sort',     'isset', $args['sort'],     NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('sort', 'isset', $args['sort'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('where',    'isset', $args['where'],    NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('where', 'isset', $args['where'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('startnum', 'isset', $args['startnum'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('startnum', 'isset', $args['startnum'], null, xarVar::DONT_SET)) {
             return;
+        }
 
         // Note: $args['where'] could be an array, e.g. index.php?object=sample&where[name]=Baby
 
-        if(!xarVar::fetch('q',        'isset', $args['q'],        NULL, xarVar::DONT_SET)) 
+        if (!xarVar::fetch('q', 'isset', $args['q'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('field',    'isset', $args['field'],    NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('field', 'isset', $args['field'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('match',    'isset', $args['match'],    NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('match', 'isset', $args['match'], null, xarVar::DONT_SET)) {
             return;
+        }
 
-        if(!empty($args) && is_array($args) && count($args) > 0) 
+        if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
+        }
 
         if (!empty($this->args['object']) && !empty($this->args['method'])) {
             // Get a cache key for this object method if it's suitable for object caching
@@ -80,11 +102,11 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         return $output;
     }
 
-    function search()
+    public function search()
     {
         // set search criteria
-        $search = array();
-        $criteria = array('q', 'field', 'match');
+        $search = [];
+        $criteria = ['q', 'field', 'match'];
         foreach ($criteria as $key) {
             if (isset($this->args[$key])) {
                 $search[$key] = $this->args[$key];
@@ -97,7 +119,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         if (!empty($search['field'])) {
             $search['field'] = array_keys($search['field']);
         } else {
-            $search['field'] = array();
+            $search['field'] = [];
         }
         // default match type is 'like' here
         if (empty($search['match'])) {
@@ -108,27 +130,27 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
             $search['sort'] = $this->args['sort'];
         }
 
-        if(!isset($this->object)) 
-        {
+        if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
-            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+            }
 
-            if(empty($this->tplmodule)) 
-            {
+            if (empty($this->tplmodule)) {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
-        $title = xarML('Search #(1)', $this->object->label);
+        $title = xarMLS::translate('Search #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
-        if (!$this->object->checkAccess('view'))
-            return xarResponse::Forbidden(xarML('Search #(1) is forbidden', $this->object->label));
+        if (!$this->object->checkAccess('view')) {
+            return xarResponse::Forbidden(xarMLS::translate('Search #(1) is forbidden', $this->object->label));
+        }
 
         if (empty($search['field']) || count($search['field']) < 1) {
             // some common property types where the content is real text (as opposed to dropdown, object ref etc.)
-            $is_text_type = array(1,2,3,4,5,11,12,13,38);
+            $is_text_type = [1,2,3,4,5,11,12,13,38];
             // preselect some fields here !?
             foreach ($this->object->properties as $name => $property) {
                 if (in_array($property->type, $is_text_type)) {
@@ -141,10 +163,12 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         if (isset($search['q']) && $search['q'] !== '' && !empty($search['field'])) {
             // get the where clause for this value and match type
             $clause = $this->getwhereclause($search['q'], $search['match']);
-            $wherelist = array();
+            $wherelist = [];
             if (!empty($clause)) {
                 foreach ($search['field'] as $field) {
-                    if (!isset($this->object->properties[$field])) continue;
+                    if (!isset($this->object->properties[$field])) {
+                        continue;
+                    }
                     $wherelist[$field] = $clause;
                 }
             }
@@ -155,14 +179,15 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         } else {
             // get result list
             $result = DataObjectMaster::getObjectList($this->args);
-            if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+            }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
             if (!empty($result->where)) {
                 //$wherestring = $result->where;
                 $join = 'and';
-                // TODO: wrap OR statements in (...) below
+            // TODO: wrap OR statements in (...) below
             } else {
                 $join = '';
             }
@@ -192,29 +217,31 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         if (isset($search['q']) && $search['q'] !== '') {
             $search['q'] = xarVar::prepForDisplay($search['q']);
         }
-        $search['options'] = array('like'  => '',
-                                   'start' => 'starts with',
-                                   'end'   => 'ends with',
-                                   'eq'    => 'exact match',
-                                   'in'    => 'in list a,b,c',
-                                   'gt'    => 'greater than',
-                                   'lt'    => 'less than',
-                                   'ne'    => 'not equal to');
+        $search['options'] = ['like'  => '',
+                              'start' => 'starts with',
+                              'end'   => 'ends with',
+                              'eq'    => 'exact match',
+                              'in'    => 'in list a,b,c',
+                              'gt'    => 'greater than',
+                              'lt'    => 'less than',
+                              'ne'    => 'not equal to'];
 
         return xarTpl::object(
-            $this->tplmodule, $this->object->template, 'ui_search',
-            array('object' => $this->object,
-                  'search' => $search,
-                  'result' => $result,
-                  'tpltitle' => $this->tpltitle)
+            $this->tplmodule,
+            $this->object->template,
+            'ui_search',
+            ['object' => $this->object,
+             'search' => $search,
+             'result' => $result,
+             'tpltitle' => $this->tpltitle]
         );
     }
 
-    function query()
+    public function query()
     {
         // set query criteria
-        $query = array();
-        $criteria = array('field', 'match');
+        $query = [];
+        $criteria = ['field', 'match'];
         foreach ($criteria as $key) {
             if (isset($this->args[$key])) {
                 $query[$key] = $this->args[$key];
@@ -225,40 +252,42 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         }
         // initialize field values if necessary
         if (empty($query['field'])) {
-            $query['field'] = array();
+            $query['field'] = [];
         }
         // initialize match types if necessary
         if (empty($query['match'])) {
-            $query['match'] = array();
+            $query['match'] = [];
         }
         $query['sort'] = null;
         if (isset($this->args['sort'])) {
             $query['sort'] = $this->args['sort'];
         }
 
-        if(!isset($this->object)) 
-        {
+        if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
-            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+            }
 
-            if(empty($this->tplmodule)) 
-            {
+            if (empty($this->tplmodule)) {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
-        $title = xarML('Query #(1)', $this->object->label);
+        $title = xarMLS::translate('Query #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
-        if (!$this->object->checkAccess('view'))
-            return xarResponse::Forbidden(xarML('Query #(1) is forbidden', $this->object->label));
+        if (!$this->object->checkAccess('view')) {
+            return xarResponse::Forbidden(xarMLS::translate('Query #(1) is forbidden', $this->object->label));
+        }
 
         // get where clauses
-        $wherelist = array();
-        $extralist = array();
+        $wherelist = [];
+        $extralist = [];
         foreach ($query['field'] as $field => $value) {
-            if (!isset($this->object->properties[$field])) continue;
+            if (!isset($this->object->properties[$field])) {
+                continue;
+            }
             // default match type is 'like' here
             if (empty($query['match'][$field])) {
                 $query['match'][$field] = 'like';
@@ -276,12 +305,14 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
                 foreach ($clauses as $clause) {
                     if (!empty($clause)) {
                         // we can have several clauses for the same field here
-                        $extralist[] = array($field, $clause);
+                        $extralist[] = [$field, $clause];
                     }
                 }
                 continue;
             }
-            if (!isset($value) || $value === '') continue;
+            if (!isset($value) || $value === '') {
+                continue;
+            }
             // get the where clause for this value and match type
             $clause = $this->getwhereclause($value, $query['match'][$field]);
             if (!empty($clause)) {
@@ -294,8 +325,9 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         } else {
             // get result list
             $result = DataObjectMaster::getObjectList($this->args);
-            if(empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) 
-                return xarResponse::NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+            }
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
             if (!empty($result->where)) {
@@ -339,23 +371,25 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
                 }
             }
         }
-        $query['options'] = array('like'  => '',
-                                   'start' => 'starts with',
-                                   'end'   => 'ends with',
-                                   'eq'    => 'exact match',
-                                   'in'    => 'in list a,b,c',
-                                   'gt'    => 'greater than',
-                                   'lt'    => 'less than',
-                                   'ne'    => 'not equal to');
+        $query['options'] = ['like'  => '',
+                             'start' => 'starts with',
+                             'end'   => 'ends with',
+                             'eq'    => 'exact match',
+                             'in'    => 'in list a,b,c',
+                             'gt'    => 'greater than',
+                             'lt'    => 'less than',
+                             'ne'    => 'not equal to'];
         // get the property types in case we want to do more than check the parent class
         $query['proptypes'] = DataPropertyMaster::getPropertyTypes();
 
         return xarTpl::object(
-            $this->tplmodule, $this->object->template, 'ui_query',
-            array('object' => $this->object,
-                  'query'  => $query,
-                  'result' => $result,
-                  'tpltitle' => $this->tpltitle)
+            $this->tplmodule,
+            $this->object->template,
+            'ui_query',
+            ['object' => $this->object,
+             'query'  => $query,
+             'result' => $result,
+             'tpltitle' => $this->tpltitle]
         );
     }
 
@@ -366,7 +400,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
      * @param string $match match type to apply
      * @return string where clause
      */
-    function getwhereclause($value, $match = 'like')
+    public function getwhereclause($value, $match = 'like')
     {
         // default match type is 'like' here
         if (empty($match)) {
@@ -375,8 +409,7 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         // escape single quotes
         $value = str_replace("'", "\\'", $value);
         $clause = '';
-        switch ($match)
-        {
+        switch ($match) {
             case 'start':
                 // escape LIKE wildcards
                 $value = str_replace('%', '\%', $value);
@@ -470,9 +503,9 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
      * @param string $value2 second value
      * @return array where clause(s)
      */
-    function checkrange($value1,$value2)
+    public function checkrange($value1, $value2)
     {
-        $clauses = array();
+        $clauses = [];
         if (isset($value1) && $value1 !== '' && isset($value2) && $value2 !== '') {
             if ($value1 !== $value2) {
                 // greater than or equal to the first value
@@ -509,5 +542,3 @@ class DataObjectSearchHandler extends DataObjectDefaultHandler
         return $clauses;
     }
 }
-
-?>

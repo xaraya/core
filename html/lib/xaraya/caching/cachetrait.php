@@ -10,17 +10,27 @@
  *
  *     public function __construct()
  *     {
+ *         // ...
+ *         static::$enableCache = true;
  *         static::setCacheScope('myFancyItems');
  *     }
  *
  *     public function getItemCached($id)
  *     {
+ *         // ... get item from cache ...
  *         $cacheKey = static::getCacheKey($id);
  *         if (!empty($cacheKey) && static::isCached($cacheKey)) {
  *             return static::getCached($cacheKey);
  *         }
- *         // ... retrieve item ...
+ *
+ *         // ... retrieve item here in myFancyClass ...
  *         $item = $this->getItem($id);
+ *
+ *         // ... set item in cache ...
+ *         // if you don't know the $cacheKey for item from before (e.g. because it was defined with $id elsewhere)
+ *         // if (static::$enableCache && static::hasCacheKey()) {
+ *         //     $cacheKey = self::getCacheKey();
+ *         // }
  *         if (!empty($cacheKey)) {
  *             static::setCached($cacheKey, $item);
  *         }
@@ -28,13 +38,13 @@
  *     }
  * }
  *
- * @package modules\dynamicdata
- * @subpackage dynamicdata
+ * @package core\caching
+ * @subpackage caching
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://xaraya.info/index.php/release/182.html
+ * @link http://www.xaraya.info
  *
  * @author mikespub <mikespub@xaraya.com>
 **/
@@ -125,6 +135,9 @@ trait xarCacheTrait
         return xarVariableCache::keyCached($cacheKey);
     }
 
+    /**
+     * All-in-one utility method to get cached value if available, or set it based on callback function
+     */
     public static function getCachedValue($id, $callback, ...$args)
     {
         $cacheKey = static::getCacheKey($id);

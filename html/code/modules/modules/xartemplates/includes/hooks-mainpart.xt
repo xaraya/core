@@ -12,10 +12,10 @@
                      : #$modinfo['displaydescription']# 
                     [ <a href="javascript:void(0);" title="#$toggletitle#" onclick="return toggleDisplay('hookdetails#$module#');">Details</a> ]
                     <div id="hookdetails#$module#">
-                        <p>The #$modinfo['displayname']# module supplies the following hooks...</p>                    
+                        <p>The #$modinfo['displayname']# module supplies the following hook observers...</p>
                         <ul>
                             <xar:foreach in="$modinfo['scopes']" key="$scope" value="$events">
-                                <li><h4>#$scope# Hooks</h4>
+                                <li><h4>#ucfirst($scope)# Hooks</h4>
                                     <ul>                                
                                     <xar:foreach in="$events" key="$event" value="$hook">
                                         <li>#$event#</li>
@@ -37,7 +37,7 @@
     <xar:else/>
         <h3>Configure modules #$observers[$curhook]['displayname']# is hooked to [ <a href="javascript:void(0);" title="#$toggletitle#" onclick="return toggleDisplay('hookdetails#$curhook#');">Details</a> ]</h3>    
                 <div id="hookdetails#$curhook#">
-                    <p>The #$observers[$curhook]['displayname']# module supplies the following hooks...</p>                    
+                    <p>The #$observers[$curhook]['displayname']# module supplies the following hook observers...</p>
                     <ul>
                         <xar:foreach in="$observers[$curhook]['scopes']" key="$scope" value="$events">
                             <li><h4>#$scope# Hooks</h4>

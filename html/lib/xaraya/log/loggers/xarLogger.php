@@ -78,6 +78,7 @@ class xarLogger extends xarObject
     */
     // Note: before changing this, check windows support for the specifiers
     protected $timeFormat = '%b %d %H:%M:%S';
+    protected $dateFormat = 'M d H:i:s';
 
     // Elapsed time.
     protected $elapsed = 0;
@@ -141,7 +142,7 @@ class xarLogger extends xarObject
     public function close()
     {
         // Push a final message to the log.
-        $this->notify(xarML('Shutdown #(1) logger', $this->name), xarLog::LEVEL_NOTICE);
+        $this->notify('Shutdown ' . $this->name . ' logger', xarLog::LEVEL_NOTICE);
     }
 
     public function notify($message, $level)
@@ -174,7 +175,8 @@ class xarLogger extends xarObject
         // NOTE: when using E_STRICT, and PHP has no 'own' timezone setting
         // strftime() will issue notices on that. But that's what you get with
         // E_STRICT ;-) so we will leave this.  
-        return strftime($this->timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3),3);
+        //return strftime($this->timeFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3),3);
+        return date($this->dateFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3),3);
     }
 }
 

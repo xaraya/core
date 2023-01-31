@@ -58,7 +58,18 @@ function roles_init()
     //Database Initialisation successful
     return true;
 }
+
 function roles_activate()
+{
+    try {
+        roles_create_roles();
+    } catch (Exception $e) {
+        // already there
+    }
+    return true;
+}
+
+function roles_create_roles()
 {
     // Register hooks here, init is too soon
     xarModHooks::register('item', 'search', 'GUI','roles', 'user', 'search');
@@ -156,4 +167,3 @@ function roles_delete()
   //this module cannot be removed
   return false;
 }
-?>

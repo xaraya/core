@@ -24,7 +24,7 @@
  * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_userapi_getfield(Array $args=array())
+function dynamicdata_userapi_getfield(array $args=[])
 {
     extract($args);
 
@@ -35,7 +35,7 @@ function dynamicdata_userapi_getfield(Array $args=array())
         $itemtype = 0;
     }
 
-    $invalid = array();
+    $invalid = [];
     if (!isset($module_id) || !is_numeric($module_id)) {
         $invalid[] = 'module id';
     }
@@ -50,18 +50,26 @@ function dynamicdata_userapi_getfield(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'user', 'get', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'user', 'get', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
-    $object = DataObjectMaster::getObject(array('moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype,
+    $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype]);
+    if (empty($args['objectid'])) {
+        return;
+    }
+    $object = DataObjectMaster::getObject(['objectid'  => $args['objectid'],
                                        'itemid'    => $itemid,
-                                       'fieldlist' => array($name)));
-    if (!isset($object)) return;
+                                       'fieldlist' => [$name]]);
+    if (!isset($object)) {
+        return;
+    }
     $object->getItem();
 
-    if (!isset($object->properties[$name])) return;
+    if (!isset($object->properties[$name])) {
+        return;
+    }
     $property = $object->properties[$name];
 
     // TODO: security check on object level
@@ -74,5 +82,3 @@ function dynamicdata_userapi_getfield(Array $args=array())
 
     return $value;
 }
-
-?>

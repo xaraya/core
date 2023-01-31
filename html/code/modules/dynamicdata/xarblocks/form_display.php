@@ -13,25 +13,24 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+sys::import('modules.dynamicdata.xarblocks.form');
+
 /**
  * Display block
  */
-sys::import('modules.dynamicdata.xarblocks.form');
 class Dynamicdata_FormBlockDisplay extends Dynamicdata_FormBlock implements iBlock
 {
-/**
- * Display func.
- * @param $data array containing title,content
- */
-    function display()
+    /**
+     * Display func.
+     * @param $data array containing title,content
+     */
+    public function display()
     {
         $data = $this->getContent();
-        
+
         if (!empty($data['objectid'])) {
             $object = DataObjectMaster::getObject($data);
             if (!empty($object) && $object->checkAccess('create')) {
-                $data['moduleid'] = $object->moduleid;
-                $data['itemtype'] = $object->itemtype;
                 $data['object'] = $object;
                 return $data;
             }
@@ -39,4 +38,3 @@ class Dynamicdata_FormBlockDisplay extends Dynamicdata_FormBlock implements iBlo
         return;
     }
 }
-?>

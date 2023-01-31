@@ -12,12 +12,25 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+namespace Xaraya\DataObject\Handlers;
+
+use xarVar;
+use xarMLS;
+use xarMod;
+use xarController;
+use xarResponse;
+use xarSec;
+use xarTpl;
+use DataObjectMaster;
+use sys;
+
 sys::import('modules.dynamicdata.class.ui_handlers.default');
+
 /**
  * Dynamic Object User Interface Handler
  *
  */
-class DataObjectCreateHandler extends DataObjectDefaultHandler
+class CreateHandler extends DefaultHandler
 {
     public $method = 'create';
 
@@ -31,34 +44,39 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
      * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
      * @return string output of xarTpl::object() using 'ui_create'
      */
-    function run(array $args = array())
+    public function run(array $args = [])
     {
-        if(!xarVar::fetch('preview', 'isset', $args['preview'], NULL, xarVar::DONT_SET)) 
+        if (!xarVar::fetch('preview', 'isset', $args['preview'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('confirm', 'isset', $args['confirm'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('confirm', 'isset', $args['confirm'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('values', 'isset', $args['values'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('values', 'isset', $args['values'], null, xarVar::DONT_SET)) {
             return;
-        if(!xarVar::fetch('return_url', 'isset', $args['return_url'], NULL, xarVar::DONT_SET)) 
+        }
+        if (!xarVar::fetch('return_url', 'isset', $args['return_url'], null, xarVar::DONT_SET)) {
             return;
+        }
 
-        if(!empty($args) && is_array($args) && count($args) > 0) 
+        if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
+        }
 
-        if(!isset($this->object)) 
-        {
+        if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
-            if(empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) 
-                return xarController::$response->NotFound(xarML('Object #(1) seems to be unknown', $this->args['object']));
+            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+            }
 
-            if(empty($this->tplmodule)) 
-            {
+            if (empty($this->tplmodule)) {
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
         }
-        if (!$this->object->checkAccess('create'))
-            return xarController::$response->Forbidden(xarML('Create #(1) is forbidden', $this->object->label));
+        if (!$this->object->checkAccess('create')) {
+            return xarResponse::Forbidden(xarMLS::translate('Create #(1) is forbidden', $this->object->label));
+        }
 
         // there's no item to get here yet
         //$this->object->getItem();
@@ -70,23 +88,23 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
             $this->object->checkInput($this->args['values'], 1);
         }
 
-        if(!empty($args['preview']) || !empty($args['confirm'])) 
-        {
+        if (!empty($args['preview']) || !empty($args['confirm'])) {
             if (!empty($args['confirm']) && !xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
             }
 
             $isvalid = $this->object->checkInput();
 
-            if($isvalid && !empty($args['confirm'])) 
-            {
+            if ($isvalid && !empty($args['confirm'])) {
                 $itemid = $this->object->createItem();
 
-                if(empty($itemid)) 
-                    return; // throw back
+                if (empty($itemid)) {
+                    return;
+                } // throw back
 
-                if(empty($args['return_url'])) 
+                if (empty($args['return_url'])) {
                     $args['return_url'] = $this->getReturnURL();
+                }
 
                 xarController::redirect($args['return_url']);
                 // Return
@@ -95,22 +113,22 @@ class DataObjectCreateHandler extends DataObjectDefaultHandler
             $args['preview'] = true;
         }
 
-        $title = xarML('New #(1)', $this->object->label);
+        $title = xarMLS::translate('New #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         // call item new hooks for this item
         $this->object->callHooks('new');
 
         return xarTpl::object(
-            $this->tplmodule, $this->object->template, 'ui_create',
-            array('object'  => $this->object,
-                  'preview' => $args['preview'],
-                  'authid'  => xarSec::genAuthKey(),
-                  'hooks'   => $this->object->hookoutput,
-                  'tpltitle' => $this->tpltitle,
-                  'return_url' => $args['return_url'])
+            $this->tplmodule,
+            $this->object->template,
+            'ui_create',
+            ['object'  => $this->object,
+             'preview' => $args['preview'],
+             'authid'  => xarSec::genAuthKey(),
+             'hooks'   => $this->object->hookoutput,
+             'tpltitle' => $this->tpltitle,
+             'return_url' => $args['return_url']]
         );
     }
 }
-
-?>

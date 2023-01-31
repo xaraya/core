@@ -24,7 +24,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
 
     public $memcache   = null;
 
-    public function __construct(Array $args = array())
+    public function __construct(array $args = [])
     {
         parent::__construct($args);
 
@@ -54,10 +54,10 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
             $this->expire = 24 * 60 * 60;
         }
 
-        $this->memcache = new Memcache;
+        $this->memcache = new Memcache();
         // support pooled connections, cfr. attachment in bug 6315 by Mark Frawley
         if (is_array($this->host)) {
-            foreach($this->host as $server) {
+            foreach ($this->host as $server) {
                 if (is_array($server) && !empty($server['host'])) {
                     if (!isset($server['port'])) {
                         $server['port'] = $this->port;
@@ -108,7 +108,9 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
 
     public function isCached($key = '', $expire = 0, $log = 1)
     {
-        if (empty($this->memcache)) return false;
+        if (empty($this->memcache)) {
+            return false;
+        }
 
         if (empty($expire)) {
             $expire = $this->expire;
@@ -119,17 +121,23 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
         if (isset($value) && $value !== false) {
             // FIXME: memcached doesn't keep track of modification times !
             //$this->modtime = 0;
-            if ($log) $this->logStatus('HIT', $key);
+            if ($log) {
+                $this->logStatus('HIT', $key);
+            }
             return true;
         } else {
-            if ($log) $this->logStatus('MISS', $key);
+            if ($log) {
+                $this->logStatus('MISS', $key);
+            }
             return false;
         }
     }
 
     public function getCached($key = '', $output = 0, $expire = 0)
     {
-        if (empty($this->memcache)) return;
+        if (empty($this->memcache)) {
+            return;
+        }
 
         if (empty($expire)) {
             $expire = $this->expire;
@@ -147,7 +155,9 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
 
     public function setCached($key = '', $value = '', $expire = 0)
     {
-        if (empty($this->memcache)) return;
+        if (empty($this->memcache)) {
+            return;
+        }
 
         if (empty($expire)) {
             $expire = $this->expire;
@@ -168,7 +178,9 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
 
     public function delCached($key = '')
     {
-        if (empty($this->memcache)) return;
+        if (empty($this->memcache)) {
+            return;
+        }
 
         $cache_key = $this->getCacheKey($key);
         $this->memcache->delete($cache_key);
@@ -181,7 +193,9 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
 
     public function getCacheInfo()
     {
-        if (empty($this->memcache)) return;
+        if (empty($this->memcache)) {
+            return;
+        }
 
         // this is the size of the whole cache for the current server
         $stats = $this->memcache->getStats();
@@ -191,11 +205,11 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
         $this->hits = $stats['get_hits'];
         $this->misses = $stats['get_misses'];
 
-        return array('size'    => $this->size,
-                     'items'   => $this->items,
-                     'hits'    => $this->hits,
-                     'misses'  => $this->misses,
-                     'modtime' => $this->modtime);
+        return ['size'    => $this->size,
+                'items'   => $this->items,
+                'hits'    => $this->hits,
+                'misses'  => $this->misses,
+                'modtime' => $this->modtime];
     }
 
     public function sizeLimitReached()
@@ -205,7 +219,6 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
 
     public function getCachedList()
     {
-        return array();
+        return [];
     }
 }
-

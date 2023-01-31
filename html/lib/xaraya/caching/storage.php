@@ -39,7 +39,7 @@ class xarCache_Storage extends xarObject
 
     /**
      * Factory class method for cache storage (only 'storage' is semi-required)
-     * 
+     *
      * @param string  $storage the storage you want (filesystem, database, apcu or doctrine)
      * @param string  $type the type of cached data (page, block, template, ...)
      * @param string  $cachedir the path to the cache directory (for filesystem)
@@ -52,13 +52,12 @@ class xarCache_Storage extends xarObject
      * @param object  $provider an instantiated Doctrine CacheProvider (for doctrine)
      * @return object the specified cache storage
      */
-    public static function getCacheStorage(array $args = array())
+    public static function getCacheStorage(array $args = [])
     {
         if (empty($args['storage'])) {
             $args['storage'] = 'filesystem';
         }
-        switch ($args['storage'])
-        {
+        switch ($args['storage']) {
             case 'database':
                 sys::import('xaraya.caching.storage.database');
                 $classname = 'xarCache_Database_Storage';
@@ -144,10 +143,10 @@ class xarCache_Storage extends xarObject
 
     /**
      * Constructor
-     * 
+     *
      * @todo using an args array here is taking the easy way out, lets define a proper interface
      */
-    public function __construct(Array $args = array())
+    public function __construct(array $args = [])
     {
         if (!empty($args['type'])) {
             $this->type = strtolower($args['type']);
@@ -165,7 +164,7 @@ class xarCache_Storage extends xarObject
             $this->sizelimit = $args['sizelimit'];
         }
         if (!empty($args['logfile'])) {
-// CHECKME: this will return false if the file doesn't exist yet - is that what we want here ?
+            // CHECKME: this will return false if the file doesn't exist yet - is that what we want here ?
             $this->logfile = realpath($args['logfile']);
         }
         if (!empty($args['logsize'])) {
@@ -283,9 +282,11 @@ class xarCache_Storage extends xarObject
     {
         $cache_key = $this->getCacheKey($key);
         // filter out the keys that don't start with the right type/namespace prefix
-        if (!empty($this->prefix) && strpos($cache_key, $this->prefix) !== 0) return $cache_key;
+        if (!empty($this->prefix) && strpos($cache_key, $this->prefix) !== 0) {
+            return $cache_key;
+        }
         // CHECKME: this assumes the code is always hashed
-        if (preg_match('/^(.*)-(\w*)$/',$cache_key,$matches)) {
+        if (preg_match('/^(.*)-(\w*)$/', $cache_key, $matches)) {
             $key = $matches[1];
             $code = $matches[2];
         } else {
@@ -293,12 +294,14 @@ class xarCache_Storage extends xarObject
             $code = '';
         }
         // remove the prefix from the key
-        if (!empty($this->prefix)) $key = str_replace($this->prefix,'',$key);
-        return array('key'   => $key,
-                     'code'  => $code,
-                     'time'  => time(),
-                     'size'  => 0,
-                     'check' => '');
+        if (!empty($this->prefix)) {
+            $key = str_replace($this->prefix, '', $key);
+        }
+        return ['key'   => $key,
+                'code'  => $code,
+                'time'  => time(),
+                'size'  => 0,
+                'check' => ''];
     }
 
     /**
@@ -306,13 +309,20 @@ class xarCache_Storage extends xarObject
      */
     public function flushCached($key = '')
     {
-        // add the type/namespace prefix
-        if (!empty($this->prefix)) {
-            $key = $this->prefix . $key;
+        $list = $this->getCachedList();
+        foreach ($list as $item) {
+            if (empty($item['key'])) {
+                continue;
+            }
+            // check if this cache entry starts with the key
+            if (!empty($key) && strpos($item['key'], $key) !== 0) {
+                continue;
+            }
+            // set the current code suffix
+            $this->setCode($item['code']);
+            // delete the cache entry
+            $this->delCached($item['key']);
         }
-
-        // CHECKME: we can't really flush part of the cache here, unless we
-        //          keep track of all cache entries, perhaps ?
 
         // check the cache size and clear the lockfile set by sizeLimitReached()
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
@@ -370,11 +380,11 @@ class xarCache_Storage extends xarObject
      */
     public function getCacheInfo()
     {
-        return array('size'    => $this->size,
-                     'items'   => $this->items,
-                     'hits'    => $this->hits,
-                     'misses'  => $this->misses,
-                     'modtime' => $this->modtime);
+        return ['size'    => $this->size,
+                'items'   => $this->items,
+                'hits'    => $this->hits,
+                'misses'  => $this->misses,
+                'modtime' => $this->modtime];
     }
 
     /**
@@ -406,7 +416,7 @@ class xarCache_Storage extends xarObject
         $lockfile = $this->cachedir . '/cache.' . $this->type . 'full';
         if (file_exists($lockfile)) {
             $value = true;
-        } elseif (mt_rand(1,5) > 1) {
+        } elseif (mt_rand(1, 5) > 1) {
             // on average, 4 out of 5 pages go by without checking
             $value = false;
         } else {
@@ -459,11 +469,15 @@ class xarCache_Storage extends xarObject
      */
     public function saveFile($key = '', $filename = '')
     {
-        if (empty($filename)) return;
+        if (empty($filename)) {
+            return;
+        }
 
         // FIXME: avoid getting the value for the 2nd/3rd time here
         $value = $this->getCached($key);
-        if (empty($value)) return;
+        if (empty($value)) {
+            return;
+        }
 
         $tmp_file = $filename . '.tmp';
 
@@ -483,7 +497,7 @@ class xarCache_Storage extends xarObject
 
     public function getCachedList()
     {
-        $list = array();
+        $list = [];
         //$items = ... get list of items in cache ...
         //foreach ($items as $item) {
         //    // ... get information about this item ...
@@ -503,14 +517,16 @@ class xarCache_Storage extends xarObject
     public function getCachedKeys()
     {
         $list = $this->getCachedList();
-        $keys = array();
+        $keys = [];
         foreach ($list as $item) {
-            if (empty($item['key'])) continue;
+            if (empty($item['key'])) {
+                continue;
+            }
             // filter out the keys that don't start with the right type/namespace prefix - if this wasn't done already
             //if (!empty($this->prefix) && strpos($item['key'], $this->prefix) !== 0) continue;
-            $keys[$item['key']] = 1;
+            $keys[$item['key']] ??= 0;
+            $keys[$item['key']] += 1;
         }
-        return array_keys($keys);
+        return $keys;
     }
 }
-

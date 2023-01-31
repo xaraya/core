@@ -24,6 +24,9 @@ class xarHooks extends xarEvents
     const HOOK_OBSERVER_TYPE = 4;
     
     protected static $hookobservers = array();
+    // allow others to define callback functions without registering observers e.g. for event bridge
+    protected static $callbackFunctions = [];
+
 /**    
  * required functions, provide event system with late static bindings for these values
 **/
@@ -79,7 +82,8 @@ class xarHooks extends xarEvents
         $mtable = $xartable['modules'];
         $bindvars = array();
         $where = array();
-        $query = "SELECT eo.id, eo.event, eo.module_id, eo.area, eo.type, eo.func, eo.itemtype,
+        // support namespaces in modules (and core someday) - we may get back $classname here
+        $query = "SELECT eo.id, eo.event, eo.module_id, eo.area, eo.type, eo.func, eo.itemtype, eo.class,
                          mo.name
                   FROM $htable h, $etable eo, $mtable mo, $etable es";
         // only get observers for the hooks observer itemtype
@@ -129,7 +133,7 @@ class xarHooks extends xarEvents
         if (!$result) return;
         self::$hookobservers[$subject_module][$subject_itemtype][$event] = array();
         while($result->next()) {
-            list($id, $evt, $module_id, $area, $type, $func, $itemtype, $module) = $result->fields;
+            list($id, $evt, $module_id, $area, $type, $func, $itemtype, $classname, $module) = $result->fields;
             self::$hookobservers[$subject_module][$subject_itemtype][$event][$module] = array(
                 'id' => $id,
                 'event' => $evt,
@@ -139,6 +143,7 @@ class xarHooks extends xarEvents
                 'type' => $type,
                 'func' => $func,
                 'itemtype' => $itemtype,
+                'classname' => $classname,
             );
         };
         $result->close();
@@ -558,4 +563,4 @@ class xarModHooks extends xarObject
 }
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.hooks');
+//sys::import('xaraya.legacy.hooks');

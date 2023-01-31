@@ -52,6 +52,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (isset($this->numitems) && is_numeric($this->numitems)) $this->dataquery->rowstodo = $this->numitems;
         if (isset($this->startnum) && is_numeric($this->startnum)) $this->dataquery->startat = $this->startnum;
 
+        if (!is_array($this->configuration)) {
+            $this->configuration = array();
+        }
         // Get a reference to each property's value
         foreach ($this->properties as $property) {
             $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
@@ -212,9 +215,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 $this->itemids = explode(',',$this->itemids);
             }
         }
-        if (!is_array($this->sort)) $this->sort = explode(',',$this->sort);
-        if (!is_array($this->groupby)) $this->groupby = explode(',',$this->groupby);
-        if (!is_array($this->fieldlist)) $this->fieldlist = explode(',',$this->fieldlist);
+        if (!is_array($this->sort)) $this->sort = explode(',', (string) $this->sort);
+        if (!is_array($this->groupby)) $this->groupby = explode(',', (string) $this->groupby);
+        if (!is_array($this->fieldlist)) $this->fieldlist = explode(',', (string) $this->fieldlist);
         // Clean up arrays by removing false values (= empty, false, null, 0)
         if (!empty($this->itemids)) $this->itemids = array_filter($this->itemids);
         if (!empty($this->sort)) $this->sort = array_filter($this->sort);
@@ -281,9 +284,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             if (empty($criteria)) return true;
             
             // split off trailing ASC or DESC
-            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/',$criteria,$matches)) {
+            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/i',$criteria,$matches)) {
                 $criteria = trim($matches[1]);
-                $sortorder = $matches[2];
+                $sortorder = strtoupper($matches[2]);
+            } elseif (substr($criteria, 0, 1) === '-') {
+                // reverse sort order if criteria starts with '-'
+                $criteria = substr($criteria, 1);
+                $sortorder = 'DESC';
             } else {
                 $sortorder = 'ASC';
             }

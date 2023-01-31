@@ -3,8 +3,8 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
-        <xar:set name="viewlink">xarDDObject::getActionURL($object, 'view')</xar:set>
-        <xar:set name="displaylink">xarDDObject::getActionURL($object, 'display', $object->itemid)</xar:set>
+        <xar:set name="viewlink">$object->getActionURL('view')</xar:set>
+        <xar:set name="displaylink">$object->getActionURL('display', $object->itemid)</xar:set>
         <h2>
             Modify Item #$object:itemid# in #$object:label#&#160;
             <a href="#$viewlink#" title="View #$object:label#">
@@ -32,7 +32,7 @@
             Trying to modify this item here may break the module. Please proceed with caution.</h3>
         </xar:if>
         <!-- TODO: distinguish between 'protected' and 'private' ? -->
-        <xar:set name="postlink">xarDDObject::getActionURL($object, 'update')</xar:set>
+        <xar:set name="postlink">$object->getActionURL('update')</xar:set>
         <form method="post" action="#$postlink#" enctype="#$enc_type#">
             <fieldset>
                 <legend>Item Details</legend>

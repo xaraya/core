@@ -132,7 +132,7 @@
                             <xar:if condition="empty($info['type'])">
                                 <xar:set name="dummy">$info['type'] = 'rest'</xar:set>
                             </xar:if>
-                            <td>Module <a href="#xarServer::getModuleURL($item['module'])#">#$item['module']#</a> #$info['type']# api #$api#()</td>
+                            <td>Module <a href="#xarServer::getModuleURL($item['module'])#">#$item['module']#</a> #$api# with #$info['type']# api #$info['name']#() <xar:if condition="!empty($info['caching'])"><span>*</span></xar:if></td>
                             <xar:if condition="empty($restapilist) or in_array($item['module'].'.'.$api, $restapilist)">
                                 <td><input type="checkbox" name="restapi[#$item['module']#.#$api#]" id="restapi_#$item['module']#.#$api#" checked="checked"/></td>
                             <xar:else/>
@@ -189,6 +189,33 @@
                 </div>
             </fieldset>
             <fieldset class="xar-form-actions">
+                <legend>Common Configuration</legend>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="enabletimer" class="xar-form-label">Show Query Timer</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($enabletimer)">
+                            <input type="checkbox" name="enabletimer" id="enabletimer" checked="checked"/>
+                        <xar:else/>
+                            <input type="checkbox" name="enabletimer" id="enabletimer"/>
+                        </xar:if>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="enablecache" class="xar-form-label">Enable Cache</label> <span>*</span>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($enablecache)">
+                            <input type="checkbox" name="enablecache" id="enablecache" checked="checked"/>
+                        <xar:else/>
+                            <input type="checkbox" name="enablecache" id="enablecache"/>
+                        </xar:if>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="xar-form-actions">
                 <legend>GraphQL Configuration</legend>
                 <div class="xar-row">
                     <div class="xar-col">
@@ -208,18 +235,6 @@
                 </div>
                 <div class="xar-row">
                     <div class="xar-col">
-                        <label for="enabletimer" class="xar-form-label">Show Query Timer</label>
-                    </div>
-                    <div class="xar-col">
-                        <xar:if condition="!empty($enabletimer)">
-                            <input type="checkbox" name="enabletimer" id="enabletimer" checked="checked"/>
-                        <xar:else/>
-                            <input type="checkbox" name="enabletimer" id="enabletimer"/>
-                        </xar:if>
-                    </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
                         <label for="tracepath" class="xar-form-label">Trace Query Path</label>
                     </div>
                     <div class="xar-col">
@@ -227,18 +242,6 @@
                             <input type="checkbox" name="tracepath" id="tracepath" checked="checked"/>
                         <xar:else/>
                             <input type="checkbox" name="tracepath" id="tracepath"/>
-                        </xar:if>
-                    </div>
-                </div>
-                <div class="xar-row">
-                    <div class="xar-col">
-                        <label for="enablecache" class="xar-form-label">Enable Cache</label>
-                    </div>
-                    <div class="xar-col">
-                        <xar:if condition="!empty($enablecache)">
-                            <input type="checkbox" name="enablecache" id="enablecache" checked="checked"/>
-                        <xar:else/>
-                            <input type="checkbox" name="enablecache" id="enablecache"/>
                         </xar:if>
                     </div>
                 </div>

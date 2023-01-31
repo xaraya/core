@@ -33,6 +33,7 @@ class xarController extends xarObject
     public static $object    = 'objects';
     public static $method    = 'view';
     public static $entryPoint;
+    public static $buildUri;
     
     /**
      * Initialize
@@ -226,7 +227,7 @@ class xarController extends xarObject
         }// if
 
         // default response is temp redirect
-        if (!preg_match('/^301|302|303|307/', $httpResponse)) {
+        if (!preg_match('/^301|302|303|307/', $httpResponse ?? '')) {
             $httpResponse = 302;
         }
 
@@ -274,6 +275,10 @@ class xarController extends xarObject
      */
     static function URL($modName=NULL, $modType='user', $funcName='main', $args=array(), $generateXMLURL=NULL, $fragment=NULL, $entrypoint=array(), $route=NULL)
     {
+        // Allow overriding building URL if needed
+        if (!empty(self::$buildUri) && is_callable(self::$buildUri)) {
+            return call_user_func(self::$buildUri, $modName, $modType, $funcName, $args);
+        }
         // (Re)initialize the controller
         self::init();
         

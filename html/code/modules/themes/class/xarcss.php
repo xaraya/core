@@ -102,7 +102,7 @@ class xarCSS extends xarObject
  * @access public
  * @params none
  * @throws none
- * @returns void
+ * @return void
 **/
     public function __wakeup()
     {
@@ -131,7 +131,7 @@ class xarCSS extends xarObject
  * @access public
  * @params none
  * @throws none
- * @returns array public object properties to store values for
+ * @return array public object properties to store values for
 **/
     public function __sleep()
     {
@@ -197,7 +197,7 @@ class xarCSS extends xarObject
         if (!isset(self::$instance)) {
             xarLog::message('xarCSS::getInstance: loading modvars', xarLog::LEVEL_INFO);
             // try unserializing the stored modvar
-            self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE));
+	    self::$instance = @unserialize(xarModVars::get(xarCSS::STORAGE_MODULE, xarCSS::STORAGE_VARIABLE) ?? '');
             // fall back to new instance (first run)
             if (empty(self::$instance)) {
                 $c = __CLASS__;
@@ -223,7 +223,7 @@ class xarCSS extends xarObject
  * @author Marc Lutolf <mfl@netspan.ch>
  * @access public
  * @params none
- * @return none
+ * @return void
  * @throws none
  *
 **/
@@ -859,7 +859,7 @@ class xarCSS extends xarObject
     // prevent cloning of singleton instance
     public function __clone()
     {
-        throw new ForbiddenException();
+        throw new ForbiddenOperationException('__clone', 'Not allowed to #(1) this singleton');
     }
 }
 

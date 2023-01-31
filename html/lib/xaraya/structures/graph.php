@@ -13,6 +13,44 @@
  * http://pear.php.net/package/Structures_Graph/docs/latest/li_Structures_Graph.html
  */
  
+interface IGraphNode
+{
+    public function getGraph();
+    public function setGraph(Graph $graph);
+    public function getData();
+    public function setData($data);
+    public function metadataKeyExists($key);
+    public function getMetadata($key, $nullIfNonexistent = false);
+    public function unsetMetadata($key);
+    public function setMetadata($key, $data);
+    function _connectTo(GraphNode $node);
+    public function connectTo(GraphNode $node);
+    public function getNeighbours();
+    public function connectsTo(GraphNode $node);
+    public function inDegree();
+    public function outDegree();
+}
+interface IGraph
+{
+    public function __construct($directed=true);
+    public function isDirected();
+    public function addNode(GraphNode $node);
+    public function removeNode(GraphNode $node);
+    public function &getNodes();
+}
+interface ITopologicalSorter
+{
+    static function _nonVisitedInDegree(GraphNode $node);
+    static function _sort(Graph $graph);
+    static public function sort(Graph $graph);
+}
+interface IAcyclicTest
+{
+    static function _nonVisitedInDegree(GraphNode $node);
+    static function _isAcyclic(&$graph);
+    static public function isAcyclic(Graph $graph);
+}
+
 class GraphNode extends xarObject implements IGraphNode
 {
     private $data = null;           // The data of this node
@@ -285,41 +323,3 @@ class AcyclicTest extends xarObject implements IAcyclicTest
     }
 }
 
-interface IGraphNode
-{
-    public function getGraph();
-    public function setGraph(Graph $graph);
-    public function getData();
-    public function setData($data);
-    public function metadataKeyExists($key);
-    public function getMetadata($key, $nullIfNonexistent = false);
-    public function unsetMetadata($key);
-    public function setMetadata($key, $data);
-    function _connectTo(GraphNode $node);
-    public function connectTo(GraphNode $node);
-    public function getNeighbours();
-    public function connectsTo(GraphNode $node);
-    public function inDegree();
-    public function outDegree();
-}
-interface IGraph
-{
-    public function __construct($directed=true);
-    public function isDirected();
-    public function addNode(GraphNode $node);
-    public function removeNode(GraphNode $node);
-    public function &getNodes();
-}
-interface ITopologicalSorter
-{
-    static function _nonVisitedInDegree(GraphNode $node); 
-    static function _sort(Graph $graph);
-    static public function sort(Graph $graph);
-}
-interface IAcyclicTest
-{
-    static function _nonVisitedInDegree(GraphNode $node);
-    static function _isAcyclic(&$graph);
-    static public function isAcyclic(Graph $graph);
-}
-?>

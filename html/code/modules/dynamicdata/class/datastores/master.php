@@ -107,10 +107,10 @@ class DataStoreFactory extends xarObject
                 sys::import('xaraya.datastores.sql.relational');
                 $datastore = new RelationalDataStore();
                 break;
-            case 'table':
-                sys::import('xaraya.datastores.sql.flattable');
-                $datastore = new FlatTableDataStore($name);
-                break;
+            // case 'table':
+            //     sys::import('xaraya.datastores.sql.flattable');
+            //     $datastore = new FlatTableDataStore($name);
+            //     break;
             case 'data':
                 sys::import('xaraya.datastores.sql.variabletable');
                 $datastore = new VariableTableDataStore($name);
@@ -119,37 +119,41 @@ class DataStoreFactory extends xarObject
                 sys::import('xaraya.datastores.hook');
                 $datastore = new HookDataStore($name);
                 break;
-            case 'function':
-                sys::import('xaraya.datastores.function');
-                $datastore = new FunctionDataStore($name);
-                break;
-            case 'uservars':
-                sys::import('xaraya.datastores.usersettings');
-                // TODO: integrate user variable handling with DD
-                $datastore = new UserSettingsDataStore($name);
-                break;
+            // case 'function':
+            //     sys::import('xaraya.datastores.function');
+            //     $datastore = new FunctionDataStore($name);
+            //     break;
+            // case 'uservars':
+            //     sys::import('xaraya.datastores.usersettings');
+            //     // TODO: integrate user variable handling with DD
+            //     $datastore = new UserSettingsDataStore($name);
+            //     break;
             case 'modulevars':
                 sys::import('xaraya.datastores.sql.modulevariables');
                 // TODO: integrate module variable handling with DD
                 $datastore = new ModuleVariablesDataStore($name);
                 break;
 
-                // TODO: other data stores
-            case 'ldap':
-                sys::import('xaraya.datastores.ldap');
-                $datastore = new LDAPDataStore($name);
-                break;
-            case 'xml':
-                sys::import('xaraya.datastores.file.xml');
-                $datastore = new XMLFileDataStore($name);
-                break;
-            case 'csv':
-                sys::import('xaraya.datastores.file.csv');
-                $datastore = new CSVFileDataStore($name);
-                break;
+            // TODO: other data stores
+            // case 'ldap':
+            //     sys::import('xaraya.datastores.ldap');
+            //     $datastore = new LDAPDataStore($name);
+            //     break;
+            // case 'xml':
+            //     sys::import('xaraya.datastores.file.xml');
+            //     $datastore = new XMLFileDataStore($name);
+            //     break;
+            // case 'csv':
+            //     sys::import('xaraya.datastores.file.csv');
+            //     $datastore = new CSVFileDataStore($name);
+            //     break;
             case 'none':
                 sys::import('xaraya.datastores.virtual');
                 $datastore = new DummyDataStore($name);
+                break;
+            case 'cache':
+                sys::import('xaraya.datastores.caching');
+                $datastore = new CachingDataStore($name);
                 break;
             default:
                 sys::import('xaraya.datastores.sql.variabletable');
@@ -209,4 +213,3 @@ class DataStoreFactory extends xarObject
         return $sources;
     }
 }
-?>

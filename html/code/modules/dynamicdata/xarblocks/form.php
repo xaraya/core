@@ -12,11 +12,11 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+sys::import('xaraya.structures.containers.blocks.basicblock');
+
 /**
  * Initialise block info
  */
-sys::import('xaraya.structures.containers.blocks.basicblock');
-
 class Dynamicdata_FormBlock extends BasicBlock implements iBlock
 {
     protected $type                = 'form';
@@ -28,4 +28,3 @@ class Dynamicdata_FormBlock extends BasicBlock implements iBlock
 
     public $objectid            = 0;
 }
-?>

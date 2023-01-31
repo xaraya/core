@@ -16,6 +16,7 @@ interface iDataProperty
     public function __construct(ObjectDescriptor $descriptor);
     public function checkInput($name = '', $value = null);
     public function fetchValue($name = '');
+    // @checkme this shouldn't be here at all - see PropertyRegistration instead
     public static function getRegistrationInfo();
     public function getValue();
     public function parseConfiguration($configuration = '');
@@ -46,4 +47,3 @@ interface iDataPropertyInstall
 {
     public function install(Array $data=array());
 }
-?>

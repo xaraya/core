@@ -70,6 +70,17 @@ function blocks_typesapi_updateitem(Array $args=array())
         $bindvars[] = serialize($type_info);
     }
     
+    // we need to save the actual $classname and $filepath for getitems() - requires UPGRADE due to table change
+    if (isset($classname)) {
+        $set[] = 'class = ?';
+        $bindvars[] = $classname;
+    }
+
+    if (isset($filepath)) {
+        $set[] = 'filepath = ?';
+        $bindvars[] = $filepath;
+    }
+
     // someone passed us a type_id without params to update, just return the type_id
     if (empty($set)) return $type_id;
     
@@ -87,4 +98,3 @@ function blocks_typesapi_updateitem(Array $args=array())
     return $type_id;
     
 }
-?>

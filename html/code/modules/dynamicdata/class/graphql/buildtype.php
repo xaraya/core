@@ -971,8 +971,8 @@ class xarGraphQLBuildType
             } else {
                 $type = $found;
             }
-            //$type->getFields();
-            //$field_resolver = self::object_field_resolver($name);
+        //$type->getFields();
+        //$field_resolver = self::object_field_resolver($name);
         } else {
             $type = false;
         }

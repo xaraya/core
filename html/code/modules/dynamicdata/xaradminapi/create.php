@@ -23,40 +23,42 @@
  * @return integer item id on success, null on failure
  * @throws BAD_PARAM, NO_PERMISSION
  */
-function dynamicdata_adminapi_create(Array $args=array())
+function dynamicdata_adminapi_create(array $args=[])
 {
-
     $args = DataObjectDescriptor::getObjectID($args);
     extract($args);
 
-    $invalid = array();
+    $invalid = [];
     if (!isset($itemid) || !is_numeric($itemid)) {
         $invalid[] = 'item id';
     }
     if ((isset($fields) && is_array($fields)) ||
-        (isset($values) && is_array($values)) ) {
+        (isset($values) && is_array($values))) {
     } else {
         $invalid[] = xarML('fields or values');
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'admin', 'create', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'admin', 'create', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     if (!isset($fields) || !is_array($fields)) {
-        $fields = array();
+        $fields = [];
     }
     if (!isset($values) || !is_array($values)) {
-        $values = array();
+        $values = [];
     }
 
     // TODO: test this
-    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
-                                         'itemid'   => $itemid));
-    if (empty($myobject)) return;
-    if (!$myobject->checkAccess('create'))
+    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+                                         'itemid'   => $itemid]);
+    if (empty($myobject)) {
         return;
+    }
+    if (!$myobject->checkAccess('create')) {
+        return;
+    }
 
     if (count($values) == 0) {
         foreach ($fields as $field) {
@@ -68,4 +70,3 @@ function dynamicdata_adminapi_create(Array $args=array())
     $itemid = $myobject->createItem($values);
     return $itemid;
 }
-?>

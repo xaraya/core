@@ -402,7 +402,7 @@ class PropertyRegistration extends DataContainer
                     xarLog::message(xarMLS::translate('DynamicData: Registering the property #(1)', $propertyClass), xarLog::LEVEL_DEBUG);
                 } catch (Exception $e) {
                     xarLog::message(xarMLS::translate('DynamicData: The property #(1) could not be instantiated', $propertyClass), xarLog::LEVEL_DEBUG);
-                    throw new Exception(xarMLS::translate('The property #(1) could not be instantiated', $propertyClass));
+                    throw new Exception(xarMLS::translate('The property #(1) could not be instantiated', $propertyClass) . $e->getMessage());
                 }
                 if (empty($property->id)) continue;   // Don't register the base property
                 $baseInfo->getRegistrationInfo($property);

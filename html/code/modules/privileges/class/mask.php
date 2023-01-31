@@ -68,7 +68,7 @@ class xarMask extends xarObject
         $this->instance     = isset($instance) ? $instance : '';
         $this->level        = isset($level) ? (int) $level : 0;
         $this->description  = isset($description) ? $description : '';
-        if (!isset($module_id) || (in_array(strtolower($module), array('all','empty')))) {
+        if (!isset($module_id) || (in_array(strtolower($module ?? ''), array('all','empty')))) {
             $this->setModuleID($this->module);
         } else {
             $this->module_id    = $module_id;
@@ -305,8 +305,8 @@ class xarMask extends xarObject
     function setModule($var)         { $this->module = $var; }
     function setModuleID($var)
     {
-        if (strtolower($var) == 'all') $this->module_id = xarSecurity::PRIVILEGES_ALL;
-        elseif (($var === null) || (strtolower($var) == 'empty')) $this->module_id = null;
+        if (strtolower($var ?? '') == 'all') $this->module_id = xarSecurity::PRIVILEGES_ALL;
+        elseif (($var === null) || (strtolower($var ?? '') == 'empty')) $this->module_id = null;
         else $this->module_id = xarMod::getID($var);
     }
     function setComponent($var)     { $this->component = $var; }
@@ -316,4 +316,3 @@ class xarMask extends xarObject
 
 
 }
-?>

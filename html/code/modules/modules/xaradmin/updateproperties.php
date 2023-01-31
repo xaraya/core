@@ -36,7 +36,7 @@ function modules_admin_updateproperties()
     $admincapable = isset($admincapable) ? true : false;
     $usercapable = isset($usercapable) ? true : false;
 
-    if (empty($displayname)) $displayname = olddisplayname;;
+    if (empty($displayname)) $displayname = $olddisplayname;
 
     // Pass to API
     $updated = xarMod::apiFunc('modules',
@@ -58,5 +58,3 @@ function modules_admin_updateproperties()
 
     return true;
 }
-
-?>

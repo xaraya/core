@@ -26,12 +26,17 @@
  * @return mixed value of the field, or false on failure
  * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
-function dynamicdata_userapi_getprop(Array $args=array())
+function dynamicdata_userapi_getprop(array $args=[])
 {
-    static $propertybag = array();
+    static $propertybag = [];
 
+    if (empty($args['objectid']) && empty($args['name'])) {
+        $args = DataObjectDescriptor::getObjectID($args);
+    }
     $args = DataObjectMaster::getObjectInfo($args);
-    if (empty($args)) return array();
+    if (empty($args)) {
+        return [];
+    }
 
     extract($args);
     $module_id = $args['moduleid'];
@@ -63,7 +68,7 @@ function dynamicdata_userapi_getprop(Array $args=array())
         $static = false;
     }
 
-    $invalid = array();
+    $invalid = [];
     if (!isset($module_id) || !is_numeric($module_id)) {
         $invalid[] = 'module id';
     }
@@ -72,13 +77,13 @@ function dynamicdata_userapi_getprop(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'user', 'getprop', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'user', 'getprop', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     if (empty($static) && isset($propertybag["$module_id:$itemtype"])) {
         if (!empty($fieldlist)) {
-            $myfields = array();
+            $myfields = [];
             foreach ($fieldlist as $name) {
                 if (isset($propertybag["$module_id:$itemtype"][$name])) {
                     $myfields[$name] = $propertybag["$module_id:$itemtype"][$name];
@@ -86,7 +91,7 @@ function dynamicdata_userapi_getprop(Array $args=array())
             }
             return $myfields;
         } elseif (isset($status)) {
-            $myfields = array();
+            $myfields = [];
             foreach ($propertybag["$module_id:$itemtype"] as $name => $field) {
                 if ($field['status'] == $status) {
                     $myfields[$name] = $propertybag["$module_id:$itemtype"][$name];
@@ -98,24 +103,28 @@ function dynamicdata_userapi_getprop(Array $args=array())
         }
     }
 
-    $fields = DataPropertyMaster::getProperties(array('objectid' => $objectid,
+    $fields = DataPropertyMaster::getProperties(['objectid' => $objectid,
                                                            'moduleid' => $module_id,
                                                            'itemtype' => $itemtype,
-                                                           'allprops' => $allprops));
+                                                           'allprops' => $allprops]);
     if (!empty($static)) {
         // get the list of static properties for this module
-        $staticlist = xarMod::apiFunc('dynamicdata','util','getstatic',
-                                    array('module_id' => $module_id,
-                                          'itemtype' => $itemtype));
-// TODO: watch out for conflicting property ids ?
-        $fields = array_merge($staticlist,$fields);
+        $staticlist = xarMod::apiFunc(
+            'dynamicdata',
+            'util',
+            'getstatic',
+            ['module_id' => $module_id,
+                  'itemtype' => $itemtype]
+        );
+        // TODO: watch out for conflicting property ids ?
+        $fields = array_merge($staticlist, $fields);
     }
 
     if (empty($static)) {
         $propertybag["$module_id:$itemtype"] = $fields;
     }
     if (!empty($fieldlist)) {
-        $myfields = array();
+        $myfields = [];
         // this should return the fields in the right order, normally
         foreach ($fieldlist as $name) {
             if (isset($fields[$name])) {
@@ -124,7 +133,7 @@ function dynamicdata_userapi_getprop(Array $args=array())
         }
         return $myfields;
     } elseif (isset($status)) {
-        $myfields = array();
+        $myfields = [];
         foreach ($fields as $name => $field) {
             if ($field['status'] == $status) {
                 $myfields[$name] = $field;
@@ -134,7 +143,4 @@ function dynamicdata_userapi_getprop(Array $args=array())
     } else {
         return $fields;
     }
-
 }
-
-?>

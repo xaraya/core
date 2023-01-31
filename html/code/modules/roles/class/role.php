@@ -160,6 +160,7 @@ class Role extends DataObject
 
         $query = "SELECT * FROM $this->rolememberstable
                  WHERE role_id = ? AND parent_id = ?";
+        $bindvars = array();
 
         $bindvars[] = $member->getID();
         $bindvars[] = $this->getID();
@@ -174,6 +175,7 @@ class Role extends DataObject
 
         $query = "INSERT INTO $this->rolememberstable (role_id, parent_id)
                     values (".$member->getID().", ". $this->getID().")";
+        $bindvars = array();
 
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);

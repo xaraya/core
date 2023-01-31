@@ -10,7 +10,7 @@
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -26,7 +26,7 @@
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -42,7 +42,7 @@ class ModuleBaseInfoNotFoundException extends NotFoundExceptions
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -58,7 +58,7 @@ class ModuleNotFoundException extends NotFoundExceptions
  *
  * @package core\modules
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
@@ -661,6 +661,7 @@ class xarMod extends xarObject implements IxarMod
             $FileInfo['version'] = $version['xar_version'];
         }
         $FileInfo['bl_version']     = isset($version['bl_version'])     ? $version['bl_version'] : false;
+        $FileInfo['namespace']      = isset($version['namespace'])      ? $version['namespace'] : '';
 
         xarCoreCache::setCached('Mod.getFileInfos', $modOsDir ." / " . $type, $FileInfo);
         return $FileInfo;
@@ -805,7 +806,7 @@ class xarMod extends xarObject implements IxarMod
         if (empty($modName) || empty($funcName)) {
             // This is not a valid function syntax - CHECKME: also for api functions ?
             if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
-            else return xarController::$response->NotFound();
+            else return xarResponse::NotFound();
         }
 
         // good thing this information is cached :)
@@ -813,7 +814,7 @@ class xarMod extends xarObject implements IxarMod
         if (!isset($modBaseInfo)) {
             // This is not a valid module - CHECKME: also for api functions ?
             if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
-            else return xarController::$response->NotFound();
+            else return xarResponse::NotFound();
         }
 
         // Call function
@@ -828,7 +829,7 @@ class xarMod extends xarObject implements IxarMod
                 try {
                     xarMod::load($modName,$modType);
                 } catch (Exception $e) {
-                    return xarController::$response->NotFound();
+                    return xarResponse::NotFound();
                 }
             }
 
@@ -841,7 +842,7 @@ class xarMod extends xarObject implements IxarMod
                 if (!file_exists($funcFile)) {
                     // Valid syntax, but the function doesn't exist
                     if ($funcType == "api") throw new FunctionNotFoundException($modFunc);
-                    else return xarController::$response->NotFound();
+                    else return xarResponse::NotFound();
                 } else {
                     ob_start();
                     $r = sys::import('modules.'.$modName.'.xar'.$modType.$funcType.'.'.strtolower($funcName));
@@ -863,7 +864,7 @@ class xarMod extends xarObject implements IxarMod
             }
         }
 
-        if (!$found) return xarController::$response->NotFound();
+        if (!$found) return xarResponse::NotFound();
 
         $funcResult = $modFunc($args);
         return $funcResult;
@@ -929,7 +930,7 @@ class xarMod extends xarObject implements IxarMod
         }
         
         // Not the correct version - throw exception unless we are upgrading
-        if (!self::checkVersion($modName) && !xarVar::getCached('Upgrade', 'upgrading')) {
+        if (!self::checkVersion($modName) && !xarVar::getCached('Upgrade', 'upgrading') && $modName != 'modules') {
             die('The core module "' . $modName . '" does not have the correct version. Please run the upgrade routine by clicking <a href="upgrade.php">here</a>');
         }
         
@@ -1101,4 +1102,4 @@ class xarModAlias extends xarObject implements IxarModAlias
 }
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.modules');
+//sys::import('xaraya.legacy.modules');

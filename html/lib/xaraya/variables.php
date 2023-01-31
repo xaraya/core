@@ -376,6 +376,7 @@ class xarVar extends xarObject
             // But not the others (note that this part is redundant)
             throw $e;
         }
+        return false;
     }
 
     /**@+
@@ -477,6 +478,8 @@ function xarVarPrepForDisplay()
     foreach (func_get_args() as $var) {
         if (is_bool($var)) {
             $var = $var ? 'true' : 'false';
+        } elseif (!isset($var)) {
+            $var = '';
         } else {
             // Prepare var
             try {
@@ -677,4 +680,4 @@ function xarVarPrepForOS()
 }
 
 // Legacy calls - import by default for now...
-sys::import('xaraya.legacy.variables');
+//sys::import('xaraya.legacy.variables');

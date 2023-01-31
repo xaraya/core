@@ -808,6 +808,9 @@ class DataObjectRESTBuilder extends xarObject
                 'type' => 'string',
                 'default' => 'rest',
             ],
+            'module' => [
+                'type' => 'string',
+            ],
             'path' => [
                 'type' => 'string',
             ],
@@ -877,6 +880,7 @@ class DataObjectRESTBuilder extends xarObject
             self::$paths[$path] = [];
         }
         self::$paths[$path][$item['method']] = [
+            'parameters' => [],
             'tags' => [$module . '_module'],
             'operationId' => $operationId,
             'description' => $item['description'],
@@ -892,6 +896,37 @@ class DataObjectRESTBuilder extends xarObject
         if (!empty($item['parameters'])) {
             $parameters = self::parse_api_parameters($item['parameters']);
             self::$paths[$path][$item['method']]['parameters'] = $parameters;
+        }
+        // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
+        if (strpos($item['path'], '{') !== false) {
+            $found = preg_match_all('/\{([^}]+)\}/', $item['path'], $matches);
+            if (empty($found)) {
+                throw new Exception('Invalid path parameter in path ' . $item['path'] . ' for rest api ' . $api . ' in module ' . $module);
+            }
+            foreach ($matches[1] as $name) {
+                $parameter = [
+                    'name' => $name,
+                    'in' => 'path',
+                    'schema' => [
+                        'type' => 'string',
+                    ],
+                    'description' => $name . ' value',
+                    'required' => true,
+                ];
+                self::$paths[$path][$item['method']]['parameters'][] = $parameter;
+            }
+        }
+        if (!empty($item['paging'])) {
+            $paging_params = [
+                ['$ref' => '#/components/parameters/order'],
+                ['$ref' => '#/components/parameters/offset'],
+                ['$ref' => '#/components/parameters/limit'],
+                ['$ref' => '#/components/parameters/filter'],
+                //['$ref' => '#/components/parameters/expand'],
+            ];
+            foreach ($paging_params as $param) {
+                self::$paths[$path][$item['method']]['parameters'][] = $param;
+            }
         }
         // @checkme verify/expand how POSTed values are defined - assuming simple json object with string props for now
         if (!empty($item['requestBody'])) {
@@ -963,7 +998,7 @@ class DataObjectRESTBuilder extends xarObject
                         'description' => $key . ' value',
                     ];
                 }
-                // => ['itemtype' => 'string', 'itemids' => 'array']
+            // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif (in_array($name, ["string", "integer", "boolean"])) {
                 $parameters[] = [
                     'name' => $key,
@@ -1013,7 +1048,7 @@ class DataObjectRESTBuilder extends xarObject
                     // @checkme use style = form + explode = true here
                     $properties[$key] = ['type' => 'array', 'items' => ['type' => $name[0]]];
                 }
-                // => ['itemtype' => 'string', 'itemids' => 'array']
+            // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif (in_array($name, ["string", "integer", "boolean"])) {
                 $properties[$key] = ['type' => $name];
             // => ['itemtype' => 'string', 'itemids' => 'array']
@@ -1064,6 +1099,14 @@ class DataObjectRESTBuilder extends xarObject
                 } else {
                     $info['enabled'] = false;
                 }
+                $info['module'] ??= $module;
+                $info['type'] ??= 'rest';
+                $info['name'] ??= $api;
+                // @checkme allow default args to start with
+                $info['args'] ??= [];
+                $info['caching'] ??= ($info['method'] == 'get') ? true : false;
+                // @checkme add paging parameters if specified in getlist.php
+                $info['paging'] ??= false;
                 $items[$module]['apilist'][$api] = $info;
             }
         }
@@ -1176,7 +1219,7 @@ class DataObjectRESTBuilder extends xarObject
             case 'itemtype':
             case 'userlist':
             case 'username':
-            //case 'integer':
+                //case 'integer':
                 $datatype = ['type' => 'integer'];
                 break;
             case 'textbox':
@@ -1193,7 +1236,7 @@ class DataObjectRESTBuilder extends xarObject
             case 'fieldstatus':
             case 'dropdown':
             case 'crontab':
-            //case 'string':
+                //case 'string':
                 $datatype = ['type' => 'string'];
                 break;
             case 'deferitem':
