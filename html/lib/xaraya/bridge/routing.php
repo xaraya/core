@@ -31,7 +31,7 @@
  *
  * // or let the route dispatcher handle the request itself and return the result
  * $result = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/', '/mysite');
- * echo $result;
+ * FastRouteBridge::output($result);
  *
  * // or let it really do all the work here...
  * // FastRouteBridge::run('/mysite');
@@ -44,11 +44,15 @@ use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 // use some Xaraya classes
 use xarMod;
+use xarServer;
 use sys;
+use JsonException;
 
 sys::import('xaraya.bridge.requests.commontrait');
 use Xaraya\Bridge\Requests\CommonBridgeTrait;
 use Xaraya\Bridge\Requests\StaticFileBridgeTrait;
+use DataObjectRESTHandler;
+use xarGraphQL;
 
 use function FastRoute\simpleDispatcher;
 
@@ -57,6 +61,7 @@ class FastRouteBridge
     use CommonBridgeTrait;
 
     public static string $baseUri = '';
+    public static string $mediaType = '';
 
     public static function addRouteCollection(RouteCollector $r)
     {
@@ -69,6 +74,12 @@ class FastRouteBridge
         $r->addGroup('/block', function (RouteCollector $r) {
             $r->addRoute('GET', '/{instance}', [static::class, 'handleBlockRequest']);
         });
+        $r->addGroup('/restapi', function (RouteCollector $r) {
+            DataObjectRESTHandler::registerRoutes($r);
+            $r->addRoute('GET', '/', [DataObjectRESTHandler::class, 'getOpenAPI']);
+        });
+        $r->addRoute(['GET', 'POST'], '/graphql', [static::class, 'handleGraphQLRequest']);
+        $r->addRoute('OPTIONS', '*', [DataObjectRESTHandler::class, 'sendCORSOptions']);
         $r->addRoute(['GET', 'POST'], '/{module}[/{type}[/{func}]]', [static::class, 'handleModuleRequest']);
         $r->addRoute(['GET', 'POST'], '/', [static::class, 'handleModuleRequest']);
     }
@@ -113,7 +124,13 @@ class FastRouteBridge
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
                 // ... call $handler with $vars
-                $result = static::callHandler($handler, $vars);
+                if (strpos($path, $group . '/restapi/') === 0) {
+                    // different processing for REST API - see rst.php
+                    DataObjectRESTHandler::$endpoint = static::getBaseUri() . $group . '/restapi';
+                    $result = static::callRestApiHandler($handler, $vars);
+                } else {
+                    $result = static::callHandler($handler, $vars);
+                }
                 return $result;
                 break;
         }
@@ -124,7 +141,35 @@ class FastRouteBridge
         $method = static::getMethod();
         $path = static::getPathInfo();
         $result = static::dispatchRequest($method, $path, $group);
-        echo $result;
+        if (strpos($path, $group . '/restapi/') === 0) {
+            // different processing for REST API - see rst.php
+            DataObjectRESTHandler::output($result);
+        } else {
+            static::output($result);
+        }
+    }
+
+    public static function output($result)
+    {
+        if (is_string($result)) {
+            if (!empty(self::$mediaType)) {
+                header('Content-Type: ' . self::$mediaType . '; charset=utf-8');
+            } elseif (substr($result, 0, 5) === '<?xml') {
+                header('Content-Type: application/xml; charset=utf-8');
+            } else {
+                header('Content-Type: text/html; charset=utf-8');
+            }
+            echo $result;
+        } else {
+            header('Content-Type: application/json; charset=utf-8');
+            try {
+                //$output = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
+                $output = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                $output = '{"JSON Exception": ' . json_encode($e->getMessage()) . '}';
+            }
+            echo $output;
+        }
     }
 
     public static function callHandler($handler, $vars)
@@ -139,6 +184,62 @@ class FastRouteBridge
         //    $input = json_decode($input, true);
         //}
         $result = call_user_func($handler, $vars, $query);
+        return $result;
+    }
+
+    // different processing for REST API - see rst.php
+    public static function callRestApiHandler($handler, $vars)
+    {
+        $params = [];
+        $params['path'] = $vars;
+        $params['query'] = static::getQueryParams();
+        // handle php://input for POST etc.
+        $rawInput = file_get_contents('php://input');
+        if (!empty($rawInput)) {
+            $params['input'] = json_decode($rawInput, true);
+        }
+        // DataObjectRESTHandler::setTimer('parse');
+        $result = DataObjectRESTHandler::getResult($handler, $params);
+        if ($handler[1] === 'getOpenAPI') {
+            header('Access-Control-Allow-Origin: *');
+            // @checkme set server url to current path here
+            //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
+            $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
+        }
+        return $result;
+    }
+
+    // different processing for GraphQL API - see gql.php
+    public static function handleGraphQLRequest($vars, $params = null, $input = null)
+    {
+        // dispatcher doesn't provide query params by default
+        if (!isset($params)) {
+            $params = static::getQueryParams();
+        }
+        // handle php://input for POST etc.
+        if (!isset($input)) {
+            $rawInput = file_get_contents('php://input');
+            if (!empty($rawInput)) {
+                $input = json_decode($rawInput, true);
+            }
+        }
+        if (!empty($input)) {
+            $query = $input['query'] ?? '{schema}';
+            $variables = $input['variables'] ?? null;
+            $operationName = $input['operationName'] ?? null;
+        } else {
+            $query = $params['query'] ?? '{schema}';
+            $variables = $params['variables'] ?? null;
+            $operationName = $params['operationName'] ?? null;
+        }
+        // /gql.php?query=query($id:ID!){object(id:$id){name}}&variables={"id":"2"}
+        if (!empty($variables) && is_string($variables)) {
+            $variables = json_decode($variables, true);
+        }
+        $result = xarGraphQL::get_data($query, $variables, $operationName);
+        if ($query == '{schema}') {
+            static::$mediaType = 'text/plain';
+        }
         return $result;
     }
 
@@ -255,8 +356,6 @@ class FastRouteBridge
  */
 class FastRouteApiBridge extends FastRouteBridge
 {
-    public static string $baseUri = '';
-
     public static function runObjectRequest($params)
     {
         return static::runDataObjectApiRequest($params);
@@ -281,8 +380,6 @@ class FastRouteApiBridge extends FastRouteBridge
 class FastRouteStaticBridge extends FastRouteBridge
 {
     use StaticFileBridgeTrait;
-
-    public static string $baseUri = '';
 
     public static function addRouteCollection(RouteCollector $r, string $staticFiles = '')
     {
@@ -318,6 +415,7 @@ class FastRouteStaticBridge extends FastRouteBridge
         // path = /themes/{theme}/{folder}/{file:.+}
         $path = static::getThemeFileRequest($vars);
         $vars['path'] = $path;
+        //static::$mediaType = '';
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
         return var_export($vars, true);
     }
@@ -327,6 +425,7 @@ class FastRouteStaticBridge extends FastRouteBridge
         // path = /code/modules/{module}/{folder}/{file:.+}
         $path = static::getModuleFileRequest($vars);
         $vars['path'] = $path;
+        //static::$mediaType = '';
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
         return var_export($vars, true);
     }
