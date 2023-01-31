@@ -112,7 +112,7 @@ class Tree extends xarObject implements ITree
 
     function __construct(TreeNode $root=null)
     {
-        if(!isset($root)) {
+        if(isset($root)) {
             $this->root = $root;
         }
         $root->tree = $this;
