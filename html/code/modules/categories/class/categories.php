@@ -152,7 +152,7 @@ class CategoryTreeNode extends TreeNode
 
 
     /**
-     * Check is a CategoryTreeNode is a descendant
+     * Check if a CategoryTreeNode is a descendant
      * 
      * @param CategoryTreeNode $n Node to look up
      * @return boolean True if the given CategoryTreeNode is a decendant
@@ -193,7 +193,7 @@ class CategoryTreeNode extends TreeNode
 
     /**
      * Set filter
-     * @param type $args Filter Data aray
+     * @param type $args Filter Data array
      */
     function setfilter($args=array())
     {
