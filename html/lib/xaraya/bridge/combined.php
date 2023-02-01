@@ -45,6 +45,7 @@ use sys;
 sys::import('xaraya.bridge.routing');
 use Xaraya\Bridge\Routing\FastRouteBridge;
 use Xaraya\Bridge\Routing\FastRouteApiBridge;
+use Xaraya\Bridge\Routing\TrackRouteCollector;
 // @checkme rename FastRoute dispatcher as router here to avoid confusion with PSR-15 naming
 use FastRoute\Dispatcher as FastRouter;
 use FastRoute\RouteCollector;
@@ -70,7 +71,9 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     FastRouteApiBridge::addRouteCollection($r);
                 });
                 FastRouteBridge::addRouteCollection($r);
-            });
+            }, [
+                'routeCollector' => TrackRouteCollector::class
+            ]);
         }
         $this->setRouter($router);
     }
@@ -141,11 +144,17 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 try {
                     $query = $request->getQueryParams();
                     $input = null;
-                    // pass along body params too (if any) - limited to POST requests here
-                    if ($method === 'POST') {
-                        $input = $request->getParsedBody();
-                        // @todo for REST API we need to json_decode the raw body here
-                        //$input = json_decode((string) $request->getBody());
+                    // pass along body params too (if any) - limited to POST or PUT requests here
+                    if ($method === 'POST' || $method === 'PUT') {
+                        if (strpos($path, '/restapi/') === false) {
+                            $input = $request->getParsedBody();
+                        } else {
+                            // @checkme for REST API we need to json_decode the raw body here
+                            $rawInput = (string) $request->getBody();
+                            if (!empty($rawInput)) {
+                                $input = json_decode($rawInput, true);
+                            }
+                        }
                     }
                     // @checkme can't really use this here to pass back the mediaType
                     FastRouteBridge::$mediaType = '';

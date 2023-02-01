@@ -56,6 +56,31 @@ use xarGraphQL;
 
 use function FastRoute\simpleDispatcher;
 
+/**
+ * Keep track of collected routes - see https://github.com/nikic/FastRoute/blob/master/src/RouteCollector.php
+ */
+class TrackRouteCollector extends RouteCollector
+{
+    public static array $trackRoutes = [];
+    public static string $groupStarted = 'GROUP STARTED';
+    public static string $groupStopped = 'GROUP STOPPED';
+    //protected string $currentGroupPrefix = '';
+
+    public function addRoute($httpMethod, string $route, $handler): void
+    {
+        static::$trackRoutes[] = [$this->currentGroupPrefix . $route, $httpMethod];
+        //$route = $this->currentGroupPrefix . $route;
+        parent::addRoute($httpMethod, $route, $handler);
+    }
+
+    public function addGroup(string $prefix, callable $callback): void
+    {
+        static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStarted];
+        parent::addGroup($prefix, $callback);
+        static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStopped];
+    }
+}
+
 class FastRouteBridge
 {
     use CommonBridgeTrait;
@@ -79,24 +104,30 @@ class FastRouteBridge
             $r->addRoute('GET', '/', [DataObjectRESTHandler::class, 'getOpenAPI']);
         });
         $r->addRoute(['GET', 'POST'], '/graphql', [static::class, 'handleGraphQLRequest']);
-        $r->addRoute('OPTIONS', '*', [DataObjectRESTHandler::class, 'sendCORSOptions']);
+        $r->addRoute(['GET', 'POST'], '/routes', [static::class, 'handleRoutesRequest']);
         $r->addRoute(['GET', 'POST'], '/{module}[/{type}[/{func}]]', [static::class, 'handleModuleRequest']);
         $r->addRoute(['GET', 'POST'], '/', [static::class, 'handleModuleRequest']);
+        $r->addRoute('OPTIONS', '*', [DataObjectRESTHandler::class, 'sendCORSOptions']);
     }
 
     public static function getSimpleDispatcher(string $group = '')
     {
+        // override standard routeCollector here
         if (empty($group)) {
             $dispatcher = simpleDispatcher(function (RouteCollector $r) {
                 static::addRouteCollection($r);
-            });
+            }, [
+                'routeCollector' => TrackRouteCollector::class
+            ]);
             return $dispatcher;
         }
         $dispatcher = simpleDispatcher(function (RouteCollector $r) use ($group) {
             $r->addGroup($group, function (RouteCollector $r) {
                 static::addRouteCollection($r);
             });
-        });
+        }, [
+            'routeCollector' => TrackRouteCollector::class
+        ]);
         return $dispatcher;
     }
 
@@ -349,6 +380,32 @@ class FastRouteBridge
     {
         return static::runBlockGuiRequest($vars, $query);
     }
+
+    /**
+     * Show available routes
+     */
+    public static function handleRoutesRequest($vars, $query = null, $input = null)
+    {
+        $result = "<ul>";
+        foreach (TrackRouteCollector::$trackRoutes as $info) {
+            if (is_array($info[1])) {
+                $result .= "<li>[" . implode(', ', $info[1]) . "] " . $info[0] . "</li>";
+                continue;
+            }
+            switch ($info[1]) {
+                case TrackRouteCollector::$groupStarted:
+                    $result .= "<li>" . $info[0] . "<ul>";
+                    break;
+                case TrackRouteCollector::$groupStopped:
+                    $result .= "</ul></li>";
+                    break;
+                default:
+                    $result .= "<li>" . $info[1] . " " . $info[0] . "</li>";
+            }
+        }
+        $result .= "</ul>";
+        return $result;
+    }
 }
 
 /**
@@ -359,6 +416,21 @@ class FastRouteBridge
  */
 class FastRouteApiBridge extends FastRouteBridge
 {
+    public static function addRouteCollection(RouteCollector $r)
+    {
+        $r->addGroup('/object', function (RouteCollector $r) {
+            $r->addRoute(['GET', 'POST'], '/{object}', [static::class, 'handleObjectRequest']);
+            $r->addRoute(['GET', 'POST'], '/{object}/{itemid:\d+}[/{method}]', [static::class, 'handleObjectRequest']);
+            $r->addRoute(['GET', 'POST'], '/{object}/{method}', [static::class, 'handleObjectRequest']);
+            //$r->addRoute(['GET', 'POST'], '/', [static::class, 'handleObjectRequest']);
+        });
+        $r->addGroup('/block', function (RouteCollector $r) {
+            $r->addRoute('GET', '/{instance}', [static::class, 'handleBlockRequest']);
+        });
+        $r->addRoute(['GET', 'POST'], '/{module}[/{type}[/{func}]]', [static::class, 'handleModuleRequest']);
+        $r->addRoute(['GET', 'POST'], '/', [static::class, 'handleModuleRequest']);
+    }
+
     public static function runObjectRequest($params)
     {
         return static::runDataObjectApiRequest($params);
