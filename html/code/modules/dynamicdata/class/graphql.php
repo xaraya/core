@@ -586,7 +586,6 @@ class xarGraphQL extends xarObject
         // @checkme X-Apollo-Tracing is used in the GraphQL Playground
         header('Access-Control-Allow-Headers: X-Auth-Token, Content-Type, X-Apollo-Tracing');
         // header('Access-Control-Allow-Credentials: true');
-        exit(0);
     }
 
     public static function dump_query_plan($plan)

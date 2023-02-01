@@ -39,6 +39,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
+use ForbiddenOperationException;
 use sys;
 
 sys::import('xaraya.bridge.routing');
@@ -143,8 +144,30 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     // pass along body params too (if any) - limited to POST requests here
                     if ($method === 'POST') {
                         $input = $request->getParsedBody();
+                        // @todo for REST API we need to json_decode the raw body here
+                        //$input = json_decode((string) $request->getBody());
                     }
+                    // @checkme can't really use this here to pass back the mediaType
+                    FastRouteBridge::$mediaType = '';
                     $result = call_user_func($handler, $vars, $query, $input);
+                    // @checkme can't really handle REST API differently here yet
+                    if ($handler[1] === 'getOpenAPI') {
+                        //header('Access-Control-Allow-Origin: *');
+                        // @checkme set server url to current path here
+                        //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
+                        //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
+                    }
+                } catch (ForbiddenOperationException $e) {
+                    $status = http_response_code();
+                    $response = $this->getResponseFactory()->createResponse();
+                    if ($status === 401) {
+                        $response = $response->withStatus(401)->withHeader('WWW-Authenticate', 'Token realm="Xaraya Site Login", created=');
+                        $response->getBody()->write('This operation is unauthorized, please authenticate.');
+                    } else {
+                        $response = $response->withStatus(403);
+                        $response->getBody()->write('This operation is forbidden.');
+                    }
+                    return $response;
                 } catch (Exception $e) {
                     return $this->createExceptionResponse($e);
                 }

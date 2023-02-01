@@ -151,6 +151,9 @@ class FastRouteBridge
 
     public static function output($result)
     {
+        if (http_response_code() !== 200 && php_sapi_name() !== 'cli') {
+            return;
+        }
         if (is_string($result)) {
             if (!empty(self::$mediaType)) {
                 header('Content-Type: ' . self::$mediaType . '; charset=utf-8');

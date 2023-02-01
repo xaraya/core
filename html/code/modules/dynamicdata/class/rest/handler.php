@@ -108,7 +108,7 @@ class DataObjectRESTHandler extends xarObject
         $objectlist = $loader->getObjectList();
         if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view', 0, $userId)) {
             http_response_code(403);
-            exit;
+            throw new ForbiddenOperationException();
         }
         $params = $loader->addPagingParams();
         $items = $objectlist->getItems($params);
@@ -176,7 +176,7 @@ class DataObjectRESTHandler extends xarObject
         $objectitem = DataObjectMaster::getObject($params);
         if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
             http_response_code(403);
-            exit;
+            throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->getItem();
         if ($itemid != $params['itemid']) {
@@ -226,7 +226,7 @@ class DataObjectRESTHandler extends xarObject
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('create', 0, $userId)) {
             http_response_code(403);
-            exit;
+            throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->createItem($args['input']);
         if (empty($itemid)) {
@@ -261,7 +261,7 @@ class DataObjectRESTHandler extends xarObject
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('update', $itemid, $userId)) {
             http_response_code(403);
-            exit;
+            throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->updateItem($args['input']);
         if ($itemid != $params['itemid']) {
@@ -288,7 +288,7 @@ class DataObjectRESTHandler extends xarObject
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('delete', $itemid, $userId)) {
             http_response_code(403);
-            exit;
+            throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->deleteItem();
         if ($itemid != $params['itemid']) {
@@ -528,17 +528,21 @@ class DataObjectRESTHandler extends xarObject
             $userInfo = @json_decode($userInfo, true);
             if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$tokenExpires))) {
                 http_response_code(401);
-                //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
-                header('WWW-Authenticate: Token realm="Xaraya Site Login", created=');
-                exit;
+                if (!headers_sent()) {
+                    //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
+                    header('WWW-Authenticate: Token realm="Xaraya Site Login", created=');
+                }
+                throw new ForbiddenOperationException();
             }
             return $userInfo['userId'];
         }
         $userId = self::checkCookie();
         if (empty($userId)) {
             http_response_code(401);
-            header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
-            exit;
+            if (!headers_sent()) {
+                header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
+            }
+            throw new ForbiddenOperationException();
         }
         return $userId;
     }
@@ -585,16 +589,20 @@ class DataObjectRESTHandler extends xarObject
         $pass = $args['input']['pass'];
         if (empty($uname) || empty($pass)) {
             http_response_code(401);
-            //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
-            header('WWW-Authenticate: Token realm="Xaraya Site Login", uname=, pass=');
-            exit;
+            if (!headers_sent()) {
+                //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
+                header('WWW-Authenticate: Token realm="Xaraya Site Login", uname=, pass=');
+            }
+            throw new ForbiddenOperationException();
         }
         $access = $args['input']['access'];
         if (empty($access) || !in_array($access, ['display', 'update', 'create', 'delete', 'admin'])) {
             http_response_code(401);
-            //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
-            header('WWW-Authenticate: Token realm="Xaraya Site Login", access=');
-            exit;
+            if (!headers_sent()) {
+                //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
+                header('WWW-Authenticate: Token realm="Xaraya Site Login", access=');
+            }
+            throw new ForbiddenOperationException();
         }
         //xarSession::init();
         xarMod::init();
@@ -604,9 +612,11 @@ class DataObjectRESTHandler extends xarObject
         $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args['input']);
         if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
             http_response_code(401);
-            //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
-            header('WWW-Authenticate: Token realm="Xaraya Site Login"');
-            exit;
+            if (!headers_sent()) {
+                //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
+                header('WWW-Authenticate: Token realm="Xaraya Site Login"');
+            }
+            throw new ForbiddenOperationException();
         }
         if (function_exists('random_bytes')) {
             $token = bin2hex(random_bytes(32));
@@ -716,7 +726,7 @@ class DataObjectRESTHandler extends xarObject
             }
             if (!$pass) {
                 http_response_code(403);
-                exit;
+                throw new ForbiddenOperationException();
             }
         }
         if (self::$enableCache && empty($func['caching'])) {
@@ -769,7 +779,7 @@ class DataObjectRESTHandler extends xarObject
             }
             if (!$pass) {
                 http_response_code(403);
-                exit;
+                throw new ForbiddenOperationException();
             }
         }
         if (!empty($func['mediatype'])) {
@@ -961,11 +971,11 @@ class DataObjectRESTHandler extends xarObject
                     $result['x-cached'] = self::keyCached($cacheKey);
                 } else {
                     $keyInfo = self::keyCached($cacheKey);
-                    if (!empty($keyInfo) && is_array($keyInfo)) {
+                    if (!empty($keyInfo) && is_array($keyInfo) && !headers_sent()) {
                         header('X-Cache-Key: ' . $keyInfo['key']);
                         header('X-Cache-Code: ' . $keyInfo['code']);
                         header('X-Cache-Time: ' . $keyInfo['time']);
-                        if (isset($keyInf['hits'])) {
+                        if (isset($keyInfo['hits'])) {
                             header('X-Cache-Hits: ' . $keyInfo['hits']);
                         }
                     }
@@ -982,7 +992,12 @@ class DataObjectRESTHandler extends xarObject
         // initialize users
         //xarUser::init();
         self::setTimer('handle');
-        $result = call_user_func($handler, $vars);
+        try {
+            $result = call_user_func($handler, $vars);
+        } catch (ForbiddenOperationException $e) {
+            self::setTimer('forbidden');
+            return;
+        }
         // if (is_array($result)) {
         //     $result['x-debug'] = ['handler' => $handler, 'vars' => $vars];
         // }
@@ -999,6 +1014,9 @@ class DataObjectRESTHandler extends xarObject
      */
     public static function output($result, $status = 200)
     {
+        if (http_response_code() !== 200 && php_sapi_name() !== 'cli') {
+            return;
+        }
         if (is_array($result) && self::$enableTimer) {
             $result['x-times'] = self::getTimers();
         }
@@ -1038,6 +1056,5 @@ class DataObjectRESTHandler extends xarObject
         // @checkme X-Apollo-Tracing is used in the GraphQL Playground
         header('Access-Control-Allow-Headers: X-Auth-Token, Content-Type, X-Apollo-Tracing');
         // header('Access-Control-Allow-Credentials: true');
-        exit(0);
     }
 }
