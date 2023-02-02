@@ -68,16 +68,17 @@ class TrackRouteCollector extends RouteCollector
 
     public function addRoute($httpMethod, string $route, $handler): void
     {
-        static::$trackRoutes[] = [$this->currentGroupPrefix . $route, $httpMethod];
+        static::$trackRoutes[] = [$this->currentGroupPrefix . $route, $httpMethod, $handler];
         //$route = $this->currentGroupPrefix . $route;
+        //$routeDatas = $this->routeParser->parse($route);
         parent::addRoute($httpMethod, $route, $handler);
     }
 
     public function addGroup(string $prefix, callable $callback): void
     {
-        static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStarted];
+        static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStarted, null];
         parent::addGroup($prefix, $callback);
-        static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStopped];
+        static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStopped, null];
     }
 }
 
@@ -94,7 +95,7 @@ class FastRouteBridge
             $r->addRoute(['GET', 'POST'], '/{object}', [static::class, 'handleObjectRequest']);
             $r->addRoute(['GET', 'POST'], '/{object}/{itemid:\d+}[/{method}]', [static::class, 'handleObjectRequest']);
             $r->addRoute(['GET', 'POST'], '/{object}/{method}', [static::class, 'handleObjectRequest']);
-            //$r->addRoute(['GET', 'POST'], '/', [static::class, 'handleObjectRequest']);
+            //$r->addRoute('GET', '/', [static::class, 'handleObjectRequest']);
         });
         $r->addGroup('/block', function (RouteCollector $r) {
             $r->addRoute('GET', '/{instance}', [static::class, 'handleBlockRequest']);
@@ -104,9 +105,9 @@ class FastRouteBridge
             $r->addRoute('GET', '/', [DataObjectRESTHandler::class, 'getOpenAPI']);
         });
         $r->addRoute(['GET', 'POST'], '/graphql', [static::class, 'handleGraphQLRequest']);
-        $r->addRoute(['GET', 'POST'], '/routes', [static::class, 'handleRoutesRequest']);
+        $r->addRoute('GET', '/routes', [static::class, 'handleRoutesRequest']);
         $r->addRoute(['GET', 'POST'], '/{module}[/{type}[/{func}]]', [static::class, 'handleModuleRequest']);
-        $r->addRoute(['GET', 'POST'], '/', [static::class, 'handleModuleRequest']);
+        $r->addRoute('GET', '/', [static::class, 'handleModuleRequest']);
         $r->addRoute('OPTIONS', '*', [DataObjectRESTHandler::class, 'sendCORSOptions']);
     }
 
@@ -117,7 +118,7 @@ class FastRouteBridge
             $dispatcher = simpleDispatcher(function (RouteCollector $r) {
                 static::addRouteCollection($r);
             }, [
-                'routeCollector' => TrackRouteCollector::class
+                'routeCollector' => TrackRouteCollector::class,
             ]);
             return $dispatcher;
         }
@@ -126,7 +127,7 @@ class FastRouteBridge
                 static::addRouteCollection($r);
             });
         }, [
-            'routeCollector' => TrackRouteCollector::class
+            'routeCollector' => TrackRouteCollector::class,
         ]);
         return $dispatcher;
     }
@@ -143,14 +144,14 @@ class FastRouteBridge
                     return 'Nothing to see here at ' . htmlspecialchars($path) . ' with prefix ' . htmlspecialchars($group);
                 }
                 return 'Nothing to see here at ' . htmlspecialchars($path);
-                break;
+
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
                 header('Allow: ' . implode(', ', $allowedMethods));
                 http_response_code(405);
                 return 'Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path);
-                break;
+
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
@@ -163,7 +164,6 @@ class FastRouteBridge
                     $result = static::callHandler($handler, $vars);
                 }
                 return $result;
-                break;
         }
     }
 
@@ -389,7 +389,7 @@ class FastRouteBridge
         $result = "<ul>";
         foreach (TrackRouteCollector::$trackRoutes as $info) {
             if (is_array($info[1])) {
-                $result .= "<li>[" . implode(', ', $info[1]) . "] " . $info[0] . "</li>";
+                $result .= "<li>" . $info[0] . " [" . implode(', ', $info[1]) . "]</li>";
                 continue;
             }
             switch ($info[1]) {
@@ -400,7 +400,7 @@ class FastRouteBridge
                     $result .= "</ul></li>";
                     break;
                 default:
-                    $result .= "<li>" . $info[1] . " " . $info[0] . "</li>";
+                    $result .= "<li>" . $info[0] . " [" . $info[1] . "]</li>";
             }
         }
         $result .= "</ul>";
@@ -503,5 +503,107 @@ class FastRouteStaticBridge extends FastRouteBridge
         //static::$mediaType = '';
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
         return var_export($vars, true);
+    }
+}
+
+class FastRouteBuildTest
+{
+    public static function getObjectRoute($params)
+    {
+        static $routes;
+        if (empty($routes)) {
+            $routes = static::getRoutes('handleObjectRequest');
+        }
+        $attributes = ['object', 'method', 'itemid'];
+        $allowed = array_flip($attributes);
+        $vars = array_intersect_key($params, $allowed);
+        return static::matchRoutes($routes, $vars);
+    }
+
+    public static function getModuleRoute($params)
+    {
+        static $routes;
+        if (empty($routes)) {
+            $routes = static::getRoutes('handleModuleRequest');
+        }
+        $attributes = ['module', 'type', 'func'];
+        $allowed = array_flip($attributes);
+        $vars = array_intersect_key($params, $allowed);
+        if (!empty($vars['func']) && empty($vars['type'])) {
+            $vars['type'] = 'user';
+        }
+        return static::matchRoutes($routes, $vars);
+    }
+
+    public static function getBlockRoute($params)
+    {
+        static $routes;
+        if (empty($routes)) {
+            $routes = static::getRoutes('handleBlockRequest');
+        }
+        $attributes = ['instance'];
+        $allowed = array_flip($attributes);
+        $vars = array_intersect_key($params, $allowed);
+        return static::matchRoutes($routes, $vars);
+    }
+
+    public static function matchRoutes($routes, $vars)
+    {
+        $vars = array_filter($vars);
+        $variables = array_keys($vars);
+        sort($variables);
+        $replace = [];
+        foreach ($vars as $key => $value) {
+            $replace['{' . $key . '}'] = $value;
+        }
+        foreach ($routes as $info) {
+            // [$path, $method, $handler, $variables] = $info;
+            sort($info[3]);
+            if ($variables === $info[3]) {
+                return strtr($info[0], $replace);
+            }
+        }
+    }
+
+    /**
+     * Get available routes, optionally by handler method and/or handler class
+     */
+    public static function getRoutes(?string $handlerMethod = null, ?string $handlerClass = null)
+    {
+        //if (empty($handlerMethod) && empty($handlerClass)) {
+        //    return TrackRouteCollector::$trackRoutes;
+        //}
+        $parser = new \FastRoute\RouteParser\Std();
+        $routes = [];
+        foreach (TrackRouteCollector::$trackRoutes as $info) {
+            if (!is_array($info[2]) || count($info[2]) < 2) {
+                continue;
+            }
+            [$class, $method] = $info[2];
+            if (!empty($handlerMethod) && $method !== $handlerMethod) {
+                continue;
+            }
+            if (!empty($handlerClass) && $class !== $handlerClass) {
+                continue;
+            }
+            // @checkme re-using routeParser here - why not call it the first time?
+            [$route, $method, $handler] = $info;
+            $routeDatas = $parser->parse($route);
+            // from longest to shortest routes here for optional variables
+            foreach (array_reverse($routeDatas) as $routeData) {
+                $path = '';
+                $variables = [];
+                foreach ($routeData as $data) {
+                    if (is_string($data)) {
+                        $path .= $data;
+                        continue;
+                    }
+                    $path .= '{' . $data[0] . '}';
+                    $variables[] = $data[0];
+                }
+                $routes[] = [$path, $method, $handler, $variables];
+            }
+        }
+        return $routes;
     }
 }
