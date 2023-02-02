@@ -72,7 +72,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 });
                 FastRouteBridge::addRouteCollection($r);
             }, [
-                'routeCollector' => TrackRouteCollector::class
+                'routeCollector' => TrackRouteCollector::class,
             ]);
         }
         $this->setRouter($router);
@@ -119,11 +119,8 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 if (!empty($next)) {
                     return $next->handle($request);
                 }
-                $response = $this->getResponseFactory()->createResponse();
-                $response = $response->withStatus(404);
-                $response->getBody()->write('Nothing to see here at ' . htmlspecialchars($path));
-                return $response;
-                break;
+                return $this->createNotFoundResponse($path);
+
             case FastRouter::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
@@ -131,7 +128,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 $response = $response->withStatus(405)->withHeader('Allow', implode(', ', $allowedMethods));
                 $response->getBody()->write('Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path));
                 return $response;
-                break;
+
             case FastRouter::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
@@ -168,15 +165,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     }
                 } catch (ForbiddenOperationException $e) {
                     $status = http_response_code();
-                    $response = $this->getResponseFactory()->createResponse();
-                    if ($status === 401) {
-                        $response = $response->withStatus(401)->withHeader('WWW-Authenticate', 'Token realm="Xaraya Site Login", created=');
-                        $response->getBody()->write('This operation is unauthorized, please authenticate.');
-                    } else {
-                        $response = $response->withStatus(403);
-                        $response->getBody()->write('This operation is forbidden.');
-                    }
-                    return $response;
+                    return $this->createForbiddenResponse($status);
                 } catch (Exception $e) {
                     return $this->createExceptionResponse($e);
                 }
@@ -184,11 +173,10 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     return $this->createResponse($result);
                 }
                 return $this->createJsonResponse($result);
-                break;
+
             default:
                 $result = "Unknown result from FastRoute Dispatcher: " . var_export($routeInfo, true);
                 return $this->createResponse($result);
-                break;
         }
     }
 }

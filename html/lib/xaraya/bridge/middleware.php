@@ -150,6 +150,27 @@ trait DefaultResponseTrait
         return $response;
     }
 
+    public function createNotFoundResponse(string $path)
+    {
+        $response = $this->getResponseFactory()->createResponse();
+        $response = $response->withStatus(404);
+        $response->getBody()->write('Nothing to see here at ' . htmlspecialchars($path));
+        return $response;
+    }
+
+    public function createForbiddenResponse($status = 403)
+    {
+        $response = $this->getResponseFactory()->createResponse();
+        if ($status === 401) {
+            $response = $response->withStatus(401)->withHeader('WWW-Authenticate', 'Token realm="Xaraya Site Login", created=');
+            $response->getBody()->write('This operation is unauthorized, please authenticate.');
+        } else {
+            $response = $response->withStatus(403);
+            $response->getBody()->write('This operation is forbidden.');
+        }
+        return $response;
+    }
+
     public function createExceptionResponse(Exception $e, mixed $result = null): ResponseInterface
     {
         $body = "Exception: " . $e->getMessage();
@@ -403,7 +424,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     public function run($attribs, $params)
     {
         try {
-            $result = static::getStaticFileRequest($attribs, $params);
+            $result = static::getStaticFileRequest($attribs);
         } catch (Exception $e) {
             return $this->createExceptionResponse($e);
         }

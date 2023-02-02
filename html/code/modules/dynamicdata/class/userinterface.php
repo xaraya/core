@@ -185,7 +185,7 @@ class DataObjectUserInterface extends xarObject
         // sanity check on method aliases during setup
         foreach ($this->alias as $alias => $realmethod) {
             if (empty($this->mapper[$realmethod])) {
-                return xarMLS::translate('Unknown method #(1) for alias #(2)', $realmethod, $alias);
+                throw new Exception(xarMLS::translate('Unknown method #(1) for alias #(2)', $realmethod, $alias));
             }
         }
 
@@ -204,7 +204,7 @@ class DataObjectUserInterface extends xarObject
      * @param $args['method'] the ui method we are handling here
      * @param $args['itemid'] item id of the object to call the method for, if the method needs it
      * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
-     * @return string output of the handler->run() method
+     * @return string|null output of the handler->run() method
      */
     public function handle(array $args = [])
     {

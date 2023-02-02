@@ -2,10 +2,16 @@
 /**
  * Try out the combined request handler with ReactPHP (work in progress)
  *
+ * $ composer require react/http
+ * $ cp html/lib/xaraya/bridge/reactphp.php developer/bin/react.php
+ * $ php developer/bin/react.php
+ * Listening on http://0.0.0.0:8080
+ * ...
+ *
  * Caution: this does not support sessions or authentication, and is not meant for production (at all)
  */
 
-require dirname(__DIR__).'/vendor/autoload.php';
+require dirname(dirname(__DIR__)).'/vendor/autoload.php';
 sys::init();
 xarCache::init();
 xarCore::xarInit(xarCore::SYSTEM_USER);

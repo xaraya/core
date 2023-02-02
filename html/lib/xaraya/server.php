@@ -166,7 +166,7 @@ class xarServer extends xarObject
      * If the server variable doesn't exist void is returned.
      *
      * 
-     * @param name string the name of the variable
+     * @param string $name the name of the variable
      * @return mixed value of the variable
      */
     static function getVar($name)

@@ -39,6 +39,8 @@
  * $itemid = spl_object_id($subscriber);
  * $args = ['module' => 'dynamicdata', 'itemtype' => 3, 'itemid' => $itemid];
  * xarHooks::notify('ItemUpdate', $args);
+ *
+ * // receive the event via the event dispatcher in the event subscriber
  */
 
 namespace Xaraya\Bridge\Events;
