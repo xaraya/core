@@ -35,7 +35,7 @@ class Category extends DataObject
                     $args['parent_id'] = $this->parentindices[$parentindex];
                 } else {
                     // there could be more than 1 entry point, therefore the array
-                    if (count($entry > 0)) {
+                    if (count($entry) > 0) {
                         $this->parentindices[$parentindex] = array_shift($entry);
                         $args['parent_id'] = $this->parentindices[$parentindex];
                     } else {

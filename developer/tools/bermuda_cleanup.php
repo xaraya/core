@@ -260,7 +260,7 @@ class xarNode implements JsonSerializable
         return $this->children[$name];
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): mixed
     {
         if ($this->name == 'root') {
             return array_values($this->children);
