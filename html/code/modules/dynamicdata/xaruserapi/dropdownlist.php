@@ -42,6 +42,7 @@ function dynamicdata_userapi_dropdownlist(Array $args=array())
     // get back the object
     $args['getobject'] = 1;
 
+    /** @var DataObjectList $object */
     $object = xarMod::apiFunc('dynamicdata','user','getitems',$args);
     if (!isset($object)) return;
 
@@ -68,5 +69,3 @@ function dynamicdata_userapi_dropdownlist(Array $args=array())
     }
     return $list;
 }
-
-?>

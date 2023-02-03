@@ -189,10 +189,10 @@ class xarDDObject extends xarObject implements IxarDDObject
      * Generate URL for a specific action on an object - the format will depend on the linktype
      *
      * 
-     * @param object object the object or object list we want to create an URL for
-     * @param action string the action we want to take on this object (= method or func)
-     * @param itemid mixed the specific item id or null
-     * @param extra array extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @param array $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
     static function getActionURL($object, $action = '', $itemid = null, $extra = array())

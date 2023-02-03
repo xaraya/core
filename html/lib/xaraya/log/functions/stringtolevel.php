@@ -12,7 +12,7 @@
  * Returns the defined integer representation of a string from the configuration.
  *
  * @param string $string   One of the priority level strings.
- * @return constant        The constant representing the $level string.
+ * @return int             The constant representing the $level string.
  */
 function xarLog__stringToLevel($string)
 {

@@ -33,6 +33,7 @@ function blocks_admin_new_instance()
     if (!xarVar::fetch('phase', 'pre:trim:lower:str:1:',
         $phase, 'options', xarVar::NOT_REQUIRED)) return;
 
+    /** @var AccessProperty $accessproperty */
     $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
     
     // always validate type in form and update phase     

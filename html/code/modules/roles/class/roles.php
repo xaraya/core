@@ -216,6 +216,7 @@ class xarRoles extends xarObject
             case 1: $name = "roles_users"; break;
             case 2: $name = "roles_groups"; break;
         }
+        /** @var Role $parent */
         $parent = DataObjectMaster::getObject(array('name' => $name));
         $parent->getItem(array('itemid' => $id));
 
@@ -232,6 +233,7 @@ class xarRoles extends xarObject
             case 1: $name = "roles_users"; break;
             case 2: $name = "roles_groups"; break;
         }
+        /** @var Role $child */
         $child = DataObjectMaster::getObject(array('name' => $name));
         $child->getItem(array('itemid' => $id));
 

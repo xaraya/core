@@ -55,6 +55,11 @@ class xarHooks extends xarEvents
     // this function is called when an event is raised (hook called)
     // it returns all modules hooked to the caller module (+ itemtype) that raised the event
     // NOTE: This function is called by the event module, modify with caution
+    /**
+     * Summary of getObservers
+     * @param ixarHookSubject $subject
+     * @return array|void
+     */
     public static function getObservers(ixarEventSubject $subject)
     {
         $event = $subject->getSubject();

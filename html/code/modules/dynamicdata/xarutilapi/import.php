@@ -284,6 +284,7 @@ function dynamicdata_utilapi_import(Array $args=array())
                 if (!isset($objectcache[$currentobject])) {
                     $objectcache[$currentobject] = DataObjectMaster::getObject(array('name' => $currentobject));
                 }
+                /** @var DataObject $object */
                 $object =& $objectcache[$currentobject];
                 $objectid = $objectcache[$currentobject]->objectid;
                 // Get the properties for this object

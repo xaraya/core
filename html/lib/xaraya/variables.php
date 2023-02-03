@@ -397,17 +397,17 @@ class xarVar extends xarObject
 
     public static function setCached($scope, $name, $value)
     {
-        return xarCoreCache::setCached($scope, $name, $value);
+        xarCoreCache::setCached($scope, $name, $value);
     }
 
     public static function delCached($scope, $name)
     {
-        return xarCoreCache::delCached($scope, $name);
+        xarCoreCache::delCached($scope, $name);
     }
 
     public static function flushCached($scope)
     {
-        return xarCoreCache::flushCached($scope);
+        xarCoreCache::flushCached($scope);
     }
 
     public static function prepForDisplay(...$args)

@@ -35,6 +35,7 @@ function categories_adminapi_updatehook($args)
     }
 
     sys::import('modules.dynamicdata.class.properties.master');
+    /** @var CategoriesProperty $categories */
     $categories = DataPropertyMaster::getProperty(array('name' => 'categories'));
     if ($categories->checkInput('hookedcategories')) {
 // CHECKME: aren't we supposed to save the categories here ?

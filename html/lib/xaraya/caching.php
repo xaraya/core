@@ -26,7 +26,7 @@ class xarCache extends xarObject
      * Initialise the caching options
      *
      * @param string $cacheDir optional cache directory (default is sys::varpath() . '/cache')
-     * @return null or exit if session-less page caching finds a hit
+     * @return void or exit if session-less page caching finds a hit
      */
     public static function init($cacheDir = null)
     {

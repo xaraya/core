@@ -779,10 +779,10 @@ class xarMod extends xarObject implements IxarMod
      * Ex: modName_modTypeapi_modFunc($args);
      *
      * 
-     * @param modName string registered name of module
-     * @param modType string type of function to run
-     * @param funcName string specific function to run
-     * @param args array arguments to pass to the function
+     * @param string $modName registered name of module
+     * @param string $modType type of function to run
+     * @param string $funcName specific function to run
+     * @param array $args arguments to pass to the function
      * @return mixed The output of the function, or false on failure
      * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
      */

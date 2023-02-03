@@ -3,6 +3,8 @@ includes:
 
 parameters:
     level: 0
+    # Dynamic properties emits warnings from PHP 8.2 onwards.
+    # checkDynamicProperties: true
     paths:
         - html
         - developer

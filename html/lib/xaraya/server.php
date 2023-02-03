@@ -329,7 +329,7 @@ class xarServer extends xarObject
     /**
      * get the elapsed time since this page started
      *
-     * @return seconds and microseconds elapsed since the page started
+     * @return float seconds and microseconds elapsed since the page started
      */
     static function getPageTime()
     {

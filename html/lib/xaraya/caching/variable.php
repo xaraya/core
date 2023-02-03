@@ -212,7 +212,7 @@ class xarVariableCache extends xarObject
      * @param string $cacheKey the key identifying the particular variable you want to access
      * @param string $value    the new value for that variable
      * @param string $expire   optional expiration time for the varable (default is cacheTime)
-     * @return null
+     * @return void
     **/
     public static function setCached($cacheKey, $value, $expire = null)
     {
@@ -235,7 +235,7 @@ class xarVariableCache extends xarObject
      * Delete a cached variable
      *
      * @param string $cacheKey the key identifying the particular variable you want to access
-     * @return null
+     * @return void
     **/
     public static function delCached($cacheKey)
     {
@@ -265,7 +265,7 @@ class xarVariableCache extends xarObject
      * Flush a particular cache scope
      *
      * @param string $scope the scope identifying which part of the cache you want to wipe out
-     * @return null
+     * @return void
     **/
     public static function flushCached($scope)
     {

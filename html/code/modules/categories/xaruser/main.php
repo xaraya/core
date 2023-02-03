@@ -136,9 +136,13 @@ function categories_user_main()
         foreach ($modlist as $modid => $itemtypes) {
             $modinfo = xarMod::getInfo($modid);
             // Get the list of all item types for this module (if any)
-            $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                                     // don't throw an exception if this function doesn't exist
-                                     array(), 0);
+            try {
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
+                // don't throw an exception if this function doesn't exist
+                array());
+            } catch (Exception $e) {
+                $mytypes = [];
+            }
             foreach ($itemtypes as $itemtype => $stats) {
                 $moditem = array();
                 if ($itemtype == 0) {
@@ -163,11 +167,15 @@ function categories_user_main()
                                              'cids' => array($catid)));
                 $moditem['items'] = array();
                 if (!empty($links[$catid])) {
-                    $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
-                                               array('itemtype' => $itemtype,
-                                                     'itemids' => $links[$catid]),
-                                               // don't throw an exception if this function doesn't exist
-                                               0);
+                    try {
+                        $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
+                        array('itemtype' => $itemtype,
+                              'itemids' => $links[$catid])
+                        // don't throw an exception if this function doesn't exist
+                        );
+                    } catch (Exception $e) {
+                        $itemlinks = [];
+                    }
                     if (!empty($itemlinks)) {
                         $moditem['items'] = $itemlinks;
                     } else {

@@ -147,9 +147,12 @@ function dynamicdata_utilapi_migrate(Array $args=array())
     }
 
     // get the list of fields for this module+itemtype
-    $fields = xarMod::apiFunc($moduleto,'user','getitemfields',
-                            array('itemtype' => $to['itemtype']),
-                            0);
+    try {
+        $fields = xarMod::apiFunc($moduleto,'user','getitemfields',
+            array('itemtype' => $to['itemtype']));
+    } catch (Exception $e) {
+        $fields = [];
+    }
     if (empty($fields)) {
         // we're done here
         return true;

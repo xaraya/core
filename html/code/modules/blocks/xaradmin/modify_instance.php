@@ -62,6 +62,7 @@ function blocks_admin_modify_instance()
         $method = 'status';
         $phase = 'display';
     } else {
+        /** @var AccessProperty $accessproperty */
         $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
         // check modify access 
         if ($isadmin) {

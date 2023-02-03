@@ -129,8 +129,8 @@ class VariableTableDataStore extends SQLDataStore
 
     /**
      * Update the item
-     * @param id $itemid in array $args
-     * @return id $itemid
+     * @param array $args['itemid'] in array $args
+     * @return int $itemid
      */
     function updateItem(array $args = array())
     {

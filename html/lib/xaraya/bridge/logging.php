@@ -47,7 +47,7 @@ class LoggerBridge extends AbstractLogger implements LoggerInterface
      */
     public function log($level, string|\Stringable $message, array $context = []): void
     {
-        xarLog::message($this->interpolate($message, $context), $mapping[$level] ?? xarLog::LEVEL_INFO);
+        xarLog::message($this->interpolate($message, $context), $this->mapping[$level] ?? xarLog::LEVEL_INFO);
     }
 
     /**

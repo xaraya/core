@@ -43,6 +43,9 @@ class SubFormProperty extends DataProperty
     public $warnings  = '';
     public $layout    = 'default';
 
+    public $fieldname;
+    public $fieldprefix;
+
 /* TODO: replace custom configuration handling with default one ?
     public $initialization_linktype = 'serialized';
     public $initialization_parentselect = 0;

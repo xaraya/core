@@ -164,6 +164,7 @@ class DataPropertyMaster extends xarObject
 
     /**
      * Class method to get a new dynamic property of the right type
+     * @return DataProperty
      */
     static function &getProperty(Array $args=array())
     {

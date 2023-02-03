@@ -43,10 +43,10 @@ function dynamicdata_utilapi_export_items(array $args=[])
     $fieldlist = array_keys($mylist->properties);
     $deferred = [];
     foreach ($fieldlist as $key) {
-        if (!empty($mylist->properties[$key]) && method_exists($mylist->properties[$key], 'getDeferredData')) {
+        if (!empty($mylist->properties[$key]) && $mylist->properties[$key] instanceof DeferredItemProperty) {
             array_push($deferred, $key);
             // @checkme set the targetLoader to null to avoid retrieving the propname values
-            if (!empty($mylist->properties[$key]->targetname)) {
+            if ($mylist->properties[$key] instanceof DeferredManyProperty) {
                 $mylist->properties[$key]->getDeferredLoader()->targetLoader = null;
             }
             // @checkme we need to set the item values for relational objects here

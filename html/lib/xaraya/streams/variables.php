@@ -47,7 +47,7 @@ class VariableStream extends xarObject
         return $ret;
     }
     
-    function stream_write(Array $data=array()) 
+    function stream_write(string $data='') 
     {
         $left = substr($GLOBALS[$this->varname], 0, $this->position);
         $right = substr($GLOBALS[$this->varname], $this->position + strlen($data));

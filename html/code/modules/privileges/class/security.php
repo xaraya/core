@@ -373,7 +373,7 @@ class xarSecurity extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string
-     * @return  mask object
+     * @return  xarMask object
     */
     public static function getMask($name,$modid=0,$component="All",$suppresscache=FALSE)
     {

@@ -78,7 +78,7 @@ function themes_admin_update()
             'description' => $newdesc);
     } 
 
-    if (count($updatevars > 0)) {
+    if (count($updatevars) > 0) {
         $updated = xarMod::apiFunc('themes',
             'admin',
             'update',

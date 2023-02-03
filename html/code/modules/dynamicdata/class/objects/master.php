@@ -56,6 +56,7 @@ class DataObjectMaster extends xarObject
 
     public $class       = 'DataObject'; // the class name of this DD object
     public $filepath    = 'auto';       // the path to the class of this DD object (can be empty or 'auto' for DataObject)
+    /** @var array<string,DataProperty> $properties */
     public $properties  = array();      // list of properties for the DD object
     public $fieldlist   = array();      // array of properties to be displayed
     public $fieldorder  = array();      // displayorder for the properties
@@ -175,7 +176,7 @@ class DataObjectMaster extends xarObject
         }
         
         // Always mark the internal DD objects as 'private' (= items 1-3 in xar_dynamic_objects, see xarinit.php)
-        if (!empty($this->objectid) && $this->objectid == 1 && !empty($this->itemid) && $this->itemid <= 3) {
+        if (!empty($this->objectid) && $this->objectid == 1 && $this instanceof DataObject && !empty($this->itemid) && $this->itemid <= 3) {
             $this->visibility = 'private';
         }
 
@@ -415,6 +416,7 @@ class DataObjectMaster extends xarObject
 
     /**
      * Get the selected dynamic properties for this object
+     * @return array<string,DataProperty>
     **/
     public function &getProperties($args = array())
     {
@@ -729,7 +731,7 @@ class DataObjectMaster extends xarObject
      *
      * @param $args['objectid'] id of the object you're looking for, and/or
      * @param $args['name'] name of the object you're looking for
-     * @return null
+     * @return void
     **/
     public static function flushVariableCache($args=array())
     {
@@ -818,7 +820,7 @@ class DataObjectMaster extends xarObject
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['name'] name of the object you're looking for
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
-     * @return object the requested object definition
+     * @return DataObject the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
     public static function getObject(Array $args=array())
@@ -882,7 +884,7 @@ class DataObjectMaster extends xarObject
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['name'] name of the object you're looking for
      * @param $args['class'] optional classname (e.g. <module>_DataObject[_List])
-     * @return object the requested object definition
+     * @return DataObjectList the requested object definition
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/

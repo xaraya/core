@@ -33,7 +33,12 @@ function categories_userapi_getitemtypes($args)
                           'url'   => xarController::URL('categories','admin','view')
                          );
 
-    if ($extensionitemtypes = xarMod::apiFunc('dynamicdata','user','getmoduleitemtypes',array('moduleid' => 147, 'native' =>false),0)) {
+    try {
+        $extensionitemtypes = xarMod::apiFunc('dynamicdata', 'user', 'getmoduleitemtypes', array('moduleid' => 147, 'native' => false));
+    } catch (Exception $e) {
+        $extensionitemtypes = [];
+    }
+    if ($extensionitemtypes) {
         $types = array();
         foreach ($itemtypes as $key => $value) $types[$key] = $value;
         foreach ($extensionitemtypes as $key => $value) $types[$key] = $value;

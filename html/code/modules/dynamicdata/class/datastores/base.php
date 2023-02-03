@@ -19,6 +19,8 @@ class BasicDataStore extends DDObject implements IBasicDataStore
 
     public $fields = array();   // array of $name => reference to property in DataObject*
     public $_itemids;           // reference to itemids in DataObjectList TODO: investigate public scope
+    /** @var DataObject|DataObjectList $object */
+    public $object;             // reference to DataObject or DataObjectList TODO: investigate public scope
 
     public $cache = 0;
 

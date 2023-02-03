@@ -82,7 +82,7 @@ class xarCoreCache extends xarObject
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param string $name  the name of the variable in that particular scope
      * @param string $value the new value for that variable
-     * @return null
+     * @return void
     **/
     public static function setCached($scope, $name, $value)
     {
@@ -102,7 +102,7 @@ class xarCoreCache extends xarObject
      *
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param string $name  the name of the variable in that particular scope
-     * @return null
+     * @return void
     **/
     public static function delCached($scope, $name)
     {
@@ -119,7 +119,7 @@ class xarCoreCache extends xarObject
      * Flush a particular cache (e.g. for session initialization)
      *
      * @param string $scope the scope identifying which part of the cache you want to wipe out
-     * @return null
+     * @return void
     **/
     public static function flushCached($scope)
     {
@@ -137,8 +137,8 @@ class xarCoreCache extends xarObject
      *
      * @param object $cacheStorage  the cache storage instance you want to use (typically in-memory like apc, memcached, xcache, ...)
      * @param int    $cacheExpire   how long do you want to keep values in second-level cache storage (if the storage supports it)
-     * @param bool   $isBulkStorage do we load/save all variables in bulk by scope or not ?
-     * @return null
+     * @param int   $isBulkStorage do we load/save all variables in bulk by scope or not ?
+     * @return void
     **/
     public static function setCacheStorage($cacheStorage, $cacheExpire = 0, $isBulkStorage = 0)
     {

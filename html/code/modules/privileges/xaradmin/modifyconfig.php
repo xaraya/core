@@ -123,7 +123,7 @@ function privileges_admin_modifyconfig()
                     xarModVars::set('privileges', 'inheritdeny', $inheritdeny);
                     xarModVars::set('privileges', 'lastresort', $lastresort);
                     if (!$lastresort) {
-                        xarModVars::delete('privileges', 'lastresort',$lastresort);
+                        xarModVars::delete('privileges', 'lastresort');
                     }
                     xarModVars::set('privileges', 'exceptionredirect', $data['exceptionredirect']);
 

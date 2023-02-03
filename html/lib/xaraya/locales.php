@@ -513,7 +513,7 @@ function xarLocaleFormatUTCDate($format = null, $time = null, $addoffset = false
  * @param time mixed timestamp or date string (default now)
  * @param format strftime() format to use (TODO: default locale-dependent or configurable ?)
  * @param addoffset bool add user timezone offset (default true)
- * @return date string
+ * @return string date
  *
 **/
 function xarLocaleFormatDate($format = null, $timestamp = null, $addoffset = true)

@@ -105,6 +105,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
         if (empty($link['modname']) || empty($link['visible']) || (bool)xarModVars::get($link['modname'], $this->menumodtype . '_menu_link')) return;
 
         $modname = $link['modname'];
+        /** @var AccessProperty $accessproperty */
         $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
         // check access defined in the module list
         if (!empty($this->modulelist[$modname]['view_access'])) {

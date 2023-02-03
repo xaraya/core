@@ -466,7 +466,7 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   integer
-     * @return  privilege object
+     * @return  xarPrivilege object
     */
     public static function getPrivilege($id)
     {
@@ -519,7 +519,7 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string
-     * @return  privilege object
+     * @return  xarPrivilege object
     */
     public static function findPrivilege($name)
     {
