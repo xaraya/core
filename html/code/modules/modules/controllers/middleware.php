@@ -17,7 +17,7 @@ use Exception;
 use xarMod;
 use sys;
 
-sys::import('xaraya.bridge.middleware');
+sys::import('xaraya.bridge.middleware.router');
 sys::import('modules.modules.controllers.router');
 
 /**

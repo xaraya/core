@@ -16,7 +16,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
 use sys;
 
-sys::import('xaraya.bridge.middleware');
+sys::import('xaraya.bridge.middleware.router');
 sys::import('modules.dynamicdata.controllers.router');
 sys::import('modules.dynamicdata.class.userinterface');
 
