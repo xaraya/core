@@ -31,8 +31,8 @@ class xarAutoload extends xarObject
     /**
      * Initialize the list of autoload functions
      *
-     * @param registerlist array list of functions and classname::methods to be registered
-     * @param extensions string comma-separated list of file extensions to be checked (instead of the default ones)
+     * @param array $registerlist list of functions and classname::methods to be registered
+     * @param string $extensions comma-separated list of file extensions to be checked (instead of the default ones)
      * @return void
     **/
     public static function initialize($registerlist = array(), $extensions = '')
@@ -71,7 +71,7 @@ class xarAutoload extends xarObject
         if (method_exists('xarMod', 'apiFunc')) {
             $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => xarMod::STATE_ACTIVE)));
         } else {
-            return array();
+            return;
         }
         assert(!empty($activeMods)); // this should never happen
 
@@ -140,8 +140,6 @@ class xarAutoload extends xarObject
             $classpathlist[$name] = sys::code() . $proptype['filepath'];
         }
 */
-
-        return true;
     }
 
     /**
@@ -194,7 +192,7 @@ class xarAutoload extends xarObject
      * And please make sure to include the namespace in the function name when you register it:
      *     xarAutoload::registerFunction(__NAMESPACE__ . '\my_autoload_function');
      *
-     * @param function string the name of the function to be registered
+     * @param string $function the name of the function to be registered
      * @return void
     **/
     public static function registerFunction($function)
@@ -211,8 +209,8 @@ class xarAutoload extends xarObject
      * And please make sure to include the namespace in the class name when you register it:
      *     xarAutoload::registerClassMethod(__NAMESPACE__ . '\MyClass', 'my_autoload_method');
      *
-     * @param classname string the name of the class
-     * @param method string the name of the method to be registered
+     * @param string $classname the name of the class
+     * @param string $method the name of the method to be registered
      * @return void
     **/
     public static function registerClassMethod($classname, $method)
@@ -328,7 +326,7 @@ class xarAutoload extends xarObject
 
         return false;
 
-
+        /**
         if (empty(self::$classpathlist)) {
             // add some more typical classes we might be looking for
             // ...
@@ -343,5 +341,6 @@ class xarAutoload extends xarObject
         }
 
         return false;
+         */
     }
 }

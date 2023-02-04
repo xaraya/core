@@ -107,7 +107,6 @@ class DataObjectRESTHandler extends xarObject
         $loader->parseQueryArgs($args);
         $objectlist = $loader->getObjectList();
         if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view', 0, $userId)) {
-            http_response_code(403);
             throw new ForbiddenOperationException();
         }
         $params = $loader->addPagingParams();
@@ -175,7 +174,6 @@ class DataObjectRESTHandler extends xarObject
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
         $objectitem = DataObjectMaster::getObject($params);
         if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
-            http_response_code(403);
             throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->getItem();
@@ -225,7 +223,6 @@ class DataObjectRESTHandler extends xarObject
         $params = ['name' => $object];
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('create', 0, $userId)) {
-            http_response_code(403);
             throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->createItem($args['input']);
@@ -260,7 +257,6 @@ class DataObjectRESTHandler extends xarObject
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('update', $itemid, $userId)) {
-            http_response_code(403);
             throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->updateItem($args['input']);
@@ -287,7 +283,6 @@ class DataObjectRESTHandler extends xarObject
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('delete', $itemid, $userId)) {
-            http_response_code(403);
             throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->deleteItem();
@@ -527,22 +522,20 @@ class DataObjectRESTHandler extends xarObject
         if (!empty($userInfo)) {
             $userInfo = @json_decode($userInfo, true);
             if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$tokenExpires))) {
-                http_response_code(401);
                 if (!headers_sent()) {
                     //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
                     header('WWW-Authenticate: Token realm="Xaraya Site Login", created=');
                 }
-                throw new ForbiddenOperationException();
+                throw new UnauthorizedOperationException();
             }
             return $userInfo['userId'];
         }
         $userId = self::checkCookie();
         if (empty($userId)) {
-            http_response_code(401);
             if (!headers_sent()) {
                 header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
             }
-            throw new ForbiddenOperationException();
+            throw new UnauthorizedOperationException();
         }
         return $userId;
     }
@@ -588,21 +581,19 @@ class DataObjectRESTHandler extends xarObject
         $uname = $args['input']['uname'];
         $pass = $args['input']['pass'];
         if (empty($uname) || empty($pass)) {
-            http_response_code(401);
             if (!headers_sent()) {
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
                 header('WWW-Authenticate: Token realm="Xaraya Site Login", uname=, pass=');
             }
-            throw new ForbiddenOperationException();
+            throw new UnauthorizedOperationException();
         }
         $access = $args['input']['access'];
         if (empty($access) || !in_array($access, ['display', 'update', 'create', 'delete', 'admin'])) {
-            http_response_code(401);
             if (!headers_sent()) {
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
                 header('WWW-Authenticate: Token realm="Xaraya Site Login", access=');
             }
-            throw new ForbiddenOperationException();
+            throw new UnauthorizedOperationException();
         }
         //xarSession::init();
         xarMod::init();
@@ -611,12 +602,11 @@ class DataObjectRESTHandler extends xarObject
         // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
         $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args['input']);
         if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
-            http_response_code(401);
             if (!headers_sent()) {
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
                 header('WWW-Authenticate: Token realm="Xaraya Site Login"');
             }
-            throw new ForbiddenOperationException();
+            throw new UnauthorizedOperationException();
         }
         if (function_exists('random_bytes')) {
             $token = bin2hex(random_bytes(32));
@@ -725,7 +715,6 @@ class DataObjectRESTHandler extends xarObject
                 $pass = true;
             }
             if (!$pass) {
-                http_response_code(403);
                 throw new ForbiddenOperationException();
             }
         }
@@ -778,7 +767,6 @@ class DataObjectRESTHandler extends xarObject
                 $pass = true;
             }
             if (!$pass) {
-                http_response_code(403);
                 throw new ForbiddenOperationException();
             }
         }
@@ -994,6 +982,9 @@ class DataObjectRESTHandler extends xarObject
         self::setTimer('handle');
         try {
             $result = call_user_func($handler, $vars);
+        } catch (UnauthorizedOperationException $e) {
+            self::setTimer('unauthorized');
+            return;
         } catch (ForbiddenOperationException $e) {
             self::setTimer('forbidden');
             return;
@@ -1014,7 +1005,7 @@ class DataObjectRESTHandler extends xarObject
      */
     public static function output($result, $status = 200)
     {
-        if (http_response_code() !== 200 && php_sapi_name() !== 'cli') {
+        if (!isset($result) && php_sapi_name() !== 'cli') {
             return;
         }
         if (is_array($result) && self::$enableTimer) {

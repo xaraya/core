@@ -14,16 +14,16 @@
  * Log a user into the system
  * 
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param  void N/A
- * @return boolean|int Returns true if the user was logged in successfully.<br/>
+ * @param  array $args when called from elsewhere
+ * @return mixed Returns true if the user was logged in successfully.<br/>
  *                     Else it returns an error code:<br/>
  *                     0: Deleted User<br/>
  *                     1: Inactive User<br/>
  *                     2: Not Validated User
  */
-function authsystem_user_login()
+function authsystem_user_login(array $args = [])
 {
-    if (!$_COOKIE) {
+    if (empty($args) && !$_COOKIE) {
         return xarTpl::module('authsystem','user','errors',array('layout' => 'no_cookies'));
     }
 
@@ -34,6 +34,8 @@ function authsystem_user_login()
     if ((time() < $unlockTime) && (xarModVars::get('authsystem','uselockout') == true)) {
         return xarTpl::module('authsystem','user','errors',array('layout' => 'locked_out', 'lockouttime' => $lockouttime));
     }
+
+    extract($args);
 
     if (!xarVar::fetch('uname','str:0:64',$uname,'',xarVar::NOT_REQUIRED)) return;
     if (empty($uname))
@@ -152,13 +154,11 @@ function authsystem_user_login()
 
             // User is deleted by all means.  Return a message that says the same.
             return xarTpl::module('authsystem','user','errors',array('layout' => 'account_deleted'));
-            break;
 
         case xarRoles::ROLES_STATE_INACTIVE:
 
             // User is inactive.  Return message stating.
             return xarTpl::module('authsystem','user','errors',array('layout' => 'account_inactive'));
-            break;
 
         case xarRoles::ROLES_STATE_NOTVALIDATED:
             //User still must validate
@@ -241,7 +241,7 @@ function authsystem_user_login()
 
             $externalurl=false; //used as a flag for userhome external url
             if(isset($redirecturl)) {
-                $redirecturl = $redirecturl;
+                //$redirecturl = $redirecturl;
             } else {
                 if ((bool)xarModVars::get('roles', 'loginredirect')) {
                     $truecurrenturl = xarServer::getCurrentURL(array(), false);
@@ -280,15 +280,13 @@ function authsystem_user_login()
             }
 
             return true;
-            break;
+
         case xarRoles::ROLES_STATE_PENDING:
 
             // User is pending activation
-                return xarTpl::module('authsystem','user','errors',array('layout' => 'account_pending'));
-            break;
+            return xarTpl::module('authsystem','user','errors',array('layout' => 'account_pending'));
     }
 
     return true;
 
 }
-?>

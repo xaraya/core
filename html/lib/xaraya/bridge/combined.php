@@ -40,6 +40,8 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
 use ForbiddenOperationException;
+use UnauthorizedOperationException;
+use xarController;
 use sys;
 
 sys::import('xaraya.bridge.routing');
@@ -99,6 +101,17 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
         return $this->execute($request, $next);
     }
 
+    public function prepareRequestCallback(ServerRequestInterface &$request)
+    {
+        // @checkme we need to somehow update $request here to do any good!?
+        $callback = function (string $redirectURL, int $status = 302) use (&$request) {
+            //$request = $request->withHeader('Location', $redirectURL);
+            $request = $request->withAttribute('redirectURL', $redirectURL);
+            $request = $request->withAttribute('status', $status);
+        };
+        xarController::$redirectTo = $callback;
+    }
+
     /**
      * Execute the server request - this will set request attributes based on path variables + handle the request
      */
@@ -155,7 +168,13 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     }
                     // @checkme can't really use this here to pass back the mediaType
                     FastRouteBridge::$mediaType = '';
+                    // @checkme we need to somehow update $request here to do any good!?
+                    $this->prepareRequestCallback($request);
                     $result = call_user_func($handler, $vars, $query, $input);
+                    if ($request->getAttribute('redirectURL') !== null) {
+                        echo "Location: " . $request->getAttribute('redirectURL') . "\n";
+                        return $this->createRedirectResponse($request->getAttribute('redirectURL'), $request->getAttribute('status') ?? 302);
+                    }
                     // @checkme can't really handle REST API differently here yet
                     if ($handler[1] === 'getOpenAPI') {
                         //header('Access-Control-Allow-Origin: *');
@@ -163,9 +182,10 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                         //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
                         //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
                     }
+                } catch (UnauthorizedOperationException $e) {
+                    return $this->createUnauthorizedResponse();
                 } catch (ForbiddenOperationException $e) {
-                    $status = http_response_code();
-                    return $this->createForbiddenResponse($status);
+                    return $this->createForbiddenResponse();
                 } catch (Exception $e) {
                     return $this->createExceptionResponse($e);
                 }

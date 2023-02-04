@@ -33,7 +33,8 @@ class xarController extends xarObject
     public static $object    = 'objects';
     public static $method    = 'view';
     public static $entryPoint;
-    public static $buildUri;
+    public static $buildUri;     // callable for building URIs when using non-standard entrypoints
+    public static $redirectTo;   // callable for redirecting to when using non-standard entrypoints
     
     /**
      * Initialize
@@ -205,7 +206,6 @@ class xarController extends xarObject
     {
         xarCache::noCache();
         $redirectURL = urldecode($url); // this is safe if called multiple times.
-        if (headers_sent() == true) return false;
 
         // Remove &amp; entities to prevent redirect breakage
         $redirectURL = str_replace('&amp;', '&', $redirectURL);
@@ -220,16 +220,24 @@ class xarController extends xarObject
             $redirectURL = $baseurl.$redirectURL;
         }
 
-        if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE')) ) {
-            $header = "Refresh: 0; URL=$redirectURL";
-        } else {
-            $header = "Location: $redirectURL";
-        }// if
-
         // default response is temp redirect
         if (!preg_match('/^301|302|303|307/', $httpResponse ?? '')) {
             $httpResponse = 302;
         }
+
+        // Pass along redirectURL and bail out if we already sent headers
+        if (headers_sent() == true) {
+            if (!empty(self::$redirectTo) && is_callable(self::$redirectTo)) {
+                call_user_func(self::$redirectTo, $redirectURL, $httpResponse);
+            }
+            return false;
+        }
+
+        if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE') ?? '') && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE') ?? '') ) {
+            $header = "Refresh: 0; URL=$redirectURL";
+        } else {
+            $header = "Location: $redirectURL";
+        }// if
 
         // Start all over again
         header($header, TRUE, $httpResponse);

@@ -41,5 +41,6 @@ trait CommonBridgeTrait
         //sys::import('modules.modules.controllers.router');
         //ModuleRouter::setBaseUri($baseUri);
         xarController::$buildUri = [static::class, 'buildModulePath'];
+        //xarController::$redirectTo = [static::class, 'redirectTo'];
     }
 }

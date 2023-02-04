@@ -158,16 +158,27 @@ trait DefaultResponseTrait
         return $response;
     }
 
+    public function createUnauthorizedResponse($status = 401)
+    {
+        $response = $this->getResponseFactory()->createResponse();
+        $response = $response->withStatus(401)->withHeader('WWW-Authenticate', 'Token realm="Xaraya Site Login", created=');
+        $response->getBody()->write('This operation is unauthorized, please authenticate.');
+        return $response;
+    }
+
     public function createForbiddenResponse($status = 403)
     {
         $response = $this->getResponseFactory()->createResponse();
-        if ($status === 401) {
-            $response = $response->withStatus(401)->withHeader('WWW-Authenticate', 'Token realm="Xaraya Site Login", created=');
-            $response->getBody()->write('This operation is unauthorized, please authenticate.');
-        } else {
-            $response = $response->withStatus(403);
-            $response->getBody()->write('This operation is forbidden.');
-        }
+        $response = $response->withStatus(403);
+        $response->getBody()->write('This operation is forbidden.');
+        return $response;
+    }
+
+    public function createRedirectResponse(string $redirectURL, int $status = 302)
+    {
+        $response = $this->getResponseFactory()->createResponse();
+        $response = $response->withStatus($status)->withHeader('Location', $redirectURL);
+        $response->getBody()->write('Nothing to see here...');
         return $response;
     }
 
