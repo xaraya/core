@@ -371,7 +371,7 @@ class xarUser extends xarObject
         //LEGACY
         if ($name == 'id' || $name == 'uid') return $userId;
     
-        if ($userId == xarSession::$anonId) {
+        if (empty($userId) || $userId == xarSession::$anonId) {
             // Anonymous user => only id, name and uname allowed, for other variable names
             // an exception of type NOT_LOGGED_IN is raised
             // CHECKME: if we're going the route of moditemvars, this doesn need to be the case
@@ -510,7 +510,7 @@ class xarUser extends xarObject
         if (empty($userId)) {
             $userId = xarSession::getVar('role_id');
         }
-        if ($userId == xarSession::$anonId) {
+        if (empty($userId) || $userId == xarSession::$anonId) {
             // Anonymous user
             throw new NotLoggedInException();
         }
