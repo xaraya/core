@@ -106,7 +106,9 @@ class FastRouteBridge
         });
         $r->addRoute(['GET', 'POST'], '/graphql', [static::class, 'handleGraphQLRequest']);
         $r->addRoute('GET', '/routes', [static::class, 'handleRoutesRequest']);
-        $r->addRoute(['GET', 'POST'], '/{module}[/{type}[/{func}]]', [static::class, 'handleModuleRequest']);
+        $r->addRoute(['GET', 'POST'], '/{module}', [static::class, 'handleModuleRequest']);
+        $r->addRoute(['GET', 'POST'], '/{module}/{func}', [static::class, 'handleModuleRequest']);
+        $r->addRoute(['GET', 'POST'], '/{module}/{type}/{func}', [static::class, 'handleModuleRequest']);
         $r->addRoute('GET', '/', [static::class, 'handleModuleRequest']);
         $r->addRoute('OPTIONS', '*', [DataObjectRESTHandler::class, 'sendCORSOptions']);
     }
@@ -341,7 +343,9 @@ class FastRouteBridge
             return static::handleObjectRequest($vars, $query, $input);
         }
         // path = /{module}/{func}
-        if (!empty($vars['type']) && empty($vars['func'])) {
+        if (empty($vars['type']) && !empty($vars['func'])) {
+            $vars['type'] = 'user';
+        } elseif (!empty($vars['type']) && empty($vars['func'])) {
             $vars['func'] = $vars['type'];
             $vars['type'] = 'user';
         }

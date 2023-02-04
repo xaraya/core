@@ -59,7 +59,7 @@ class XarayaCompiler extends xarBLCompiler
         $xslFiles = $this->getTagPaths($baseDir, $baseURI);
         
         // Get any custom tags in themes/common/tags
-        $baseDir = 'themes/common/tags';
+        $baseDir = sys::web() . 'themes/common/tags';
         $baseDir = realpath($baseDir);
         if (strpos($baseDir, '\\') != false) {
             // On Windows, drive letters are preceeded by an extra / [file:///C:/...]

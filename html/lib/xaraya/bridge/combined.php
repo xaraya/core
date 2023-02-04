@@ -38,7 +38,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
+use Throwable;
 use ForbiddenOperationException;
 use UnauthorizedOperationException;
 use xarController;
@@ -186,7 +186,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     return $this->createUnauthorizedResponse();
                 } catch (ForbiddenOperationException $e) {
                     return $this->createForbiddenResponse();
-                } catch (Exception $e) {
+                } catch (Throwable $e) {
                     return $this->createExceptionResponse($e);
                 }
                 if (is_string($result)) {

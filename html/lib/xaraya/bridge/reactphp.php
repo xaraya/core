@@ -26,6 +26,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Xaraya\Bridge\Middleware\DefaultMiddleware;
 use Xaraya\Bridge\Middleware\FastRouteHandler;
 use Xaraya\Bridge\Middleware\StaticFileMiddleware;
+use Xaraya\Bridge\Middleware\SessionMiddleware;
 
 // @todo find some way to re-use React\Http\Message\Response
 $psr17Factory = new Psr17Factory();
@@ -44,14 +45,10 @@ $static = function (ServerRequestInterface $request, callable $next) use ($files
     return $files->process($request, $next);
 };
 
+$session = new SessionMiddleware();
+
 // See https://github.com/php-pm/php-pm/blob/master/src/ProcessSlave.php to set server environment
 $handler = function (ServerRequestInterface $request) use ($fastrouted) {
-    $message = "Request: " . $request->getUri() . PHP_EOL;
-    $server = DefaultMiddleware::getServerParams($request);
-    $message .= 'Server:<pre>' . var_export($server, true) . '</pre>' . PHP_EOL;
-    $cookies = DefaultMiddleware::getCookieParams($request);
-    $message .= 'Cookies:<pre>' . var_export($cookies, true) . '</pre>' . PHP_EOL;
-    //echo $message;
     // setting this makes xarServer::getCurrentURL() work again, but we need to set PATH_INFO too for getBaseURI()
     $requestUri = $request->getRequestTarget();
     xarServer::setVar('REQUEST_URI', $requestUri);
@@ -62,6 +59,7 @@ $handler = function (ServerRequestInterface $request) use ($fastrouted) {
 $http = new React\Http\HttpServer(
     $logger,
     $static,
+    $session,
     $handler
 );
 

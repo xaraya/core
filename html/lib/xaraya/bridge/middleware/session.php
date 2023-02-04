@@ -13,6 +13,7 @@ use xarSession;
 use xarConfigVars;
 use xarServer;
 use xarDB;
+use xarEvents;
 use ResultSet;
 
 class VirtualSession
@@ -55,12 +56,30 @@ class SessionMiddleware implements MiddlewareInterface
     }
 
     /**
+     * Register callback functions for UserLogin and UserLogout events - to update userId in request
+     */
+    public function registerCallbackEvents(ServerRequestInterface &$request)
+    {
+        $login = function ($info) use (&$request) {
+            echo "Event: " . $info['event'] . "\n";
+            $request = $request->withAttribute('userId', $info['args']);
+        };
+        xarEvents::registerCallback('UserLogin', $login);
+        $logout = function ($info) use (&$request) {
+            echo "Event: " . $info['event'] . "\n";
+            $request = $request->withAttribute('userId', 0);
+        };
+        xarEvents::registerCallback('UserLogout', $logout);
+    }
+
+    /**
      * Process the server request - this assumes request attributes have been set in earlier middleware, e.g. router
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface|callable $next): ResponseInterface
     {
         $cookies = $request->getCookieParams();
         echo "Cookies: " . var_export($cookies, true) . "\n";
+        $sessionId = null;
         if (array_key_exists($this->cookieName, $cookies)) {
             $sessionId = $cookies[$this->cookieName];
             $session = $this->lookup($sessionId);
@@ -76,10 +95,11 @@ class SessionMiddleware implements MiddlewareInterface
         $isLogin = false;
         if (strpos($request->getRequestTarget(), '/authsystem/login') !== false) {
             $isLogin = true;
-            $query = $request->getQueryParams();
-            echo "Query: " . var_export($query, true) . "\n";
-            $input = $request->getParsedBody();
-            echo "Input: " . var_export($input, true) . "\n";
+        }
+        $isAuthSystem = false;
+        if (strpos($request->getRequestTarget(), '/authsystem/') !== false) {
+            $this->registerCallbackEvents($request);
+            $isAuthSystem = true;
         }
         // @checkme signature mismatch for process() with ReactPHP
         if ($next instanceof RequestHandlerInterface) {
@@ -87,17 +107,31 @@ class SessionMiddleware implements MiddlewareInterface
         } else {
             $response = $next($request);
         }
+        $sendCookie = false;
+        if ($isAuthSystem && $request->getAttribute('userId') !== null) {
+            $userId = $request->getAttribute('userId');
+            if (!isset($sessionId)) {
+                $sessionId = bin2hex(random_bytes($this->length));
+                $session = new VirtualSession($sessionId, $userId);
+                $this->register($session);
+                $sendCookie = true;
+            } elseif ($userId !== $session->userId) {
+                $session->userId = $userId;
+                $this->update($session);
+                $sendCookie = true;
+            }
+        }
         if (session_status() === PHP_SESSION_ACTIVE) {
             echo "Session: " . var_export($_SESSION, true) . "\n";
             session_write_close();
-            $userId = $this->anonId;
+            $userId = 0;
             foreach (array_keys($_SESSION) as $key) {
                 if (strpos($key, xarSESSION::PREFIX) === 0) {
                     //$session->vars[$key] = $_SESSION[$key];
                     // @checkme successful login without a previous sessionId?
-                    if ($isLogin && $key === xarSession::PREFIX . 'role_id') {
-                        $userId = $_SESSION[$key];
-                    }
+                    //if ($isLogin && $key === xarSession::PREFIX . 'role_id') {
+                    //    $userId = $_SESSION[$key];
+                    //}
                     unset($_SESSION[$key]);
                 }
             }
@@ -105,10 +139,14 @@ class SessionMiddleware implements MiddlewareInterface
                 $sessionId = bin2hex(random_bytes($this->length));
                 $session = new VirtualSession($sessionId, $userId);
                 $this->register($session);
+                $sendCookie = true;
             } elseif ($isLogin && !empty($userId) && $userId !== $this->anonId) {
                 $session->userId = $userId;
                 $this->update($session);
+                $sendCookie = true;
             }
+        }
+        if ($sendCookie && !empty($sessionId)) {
             $cookieString = $this->cookieName . '=' . $sessionId;
             $cookieString .= '; expires=' . gmdate('D, d M Y H:i:s T', intval($this->config['duration']) * 86400 + time());
             $basePath = $this->config['cookiePath'] ?: xarServer::getBaseURI();
@@ -156,7 +194,7 @@ class SessionMiddleware implements MiddlewareInterface
             $session = new VirtualSession($sessionId, $userId, $ipAddress, $lastUsed, $vars);
             $session->isNew = false;
         } else {
-            $userId = $this->anonId;
+            $userId = 0;
             $session = new VirtualSession($sessionId, $userId, $ipAddress, time(), []);
             $this->register($session);
             $session->isNew = true;

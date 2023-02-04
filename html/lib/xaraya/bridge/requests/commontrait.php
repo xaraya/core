@@ -10,7 +10,6 @@ namespace Xaraya\Bridge\Requests;
 use xarController;
 use xarServer;
 use xarSystemVars;
-use xarMod;
 use sys;
 
 /**
