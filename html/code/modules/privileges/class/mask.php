@@ -36,6 +36,7 @@ class xarMask extends xarObject
     public $privmemberstable;
     public $rolestable;
     public $acltable;
+    public $realmstable;
     public $modulestable;
 
     /**
@@ -155,7 +156,7 @@ class xarMask extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   mask object
+     * @param   xarMask object
      * @return  array 2 normalized masks
     */
     function canonical($mask)
@@ -174,7 +175,7 @@ class xarMask extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   mask object
+     * @param   xarMask object
      * @return  boolean
     */
     function matches($mask)
@@ -198,7 +199,7 @@ class xarMask extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   mask object
+     * @param   xarMask object
      * @return  boolean
     */
     function matchesexactly($mask)
@@ -215,7 +216,7 @@ class xarMask extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   mask object
+     * @param   xarMask object
      * @return  boolean
     */
     function includes($mask)
@@ -281,7 +282,7 @@ class xarMask extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   mask object
+     * @param   xarMask object
      * @return  boolean
     */
     function implies($mask)

@@ -25,7 +25,8 @@ class VariableTableDataStore extends SQLDataStore
 {
     protected $table = 'dynamic_data';
     private static $_deferred_property = 'DeferredItemProperty';
-    
+    public $extra;
+
     /**
      * Get the field name used to identify this property (we use the property id here)
      */
@@ -35,7 +36,7 @@ class VariableTableDataStore extends SQLDataStore
     }
     /**
      * Get the item
-     * @param id $args['itemid']
+     * @param array $args['itemid'] item id
      */
     function getItem(array $args = array())
     {
@@ -1018,7 +1019,7 @@ class VariableTableDataStore extends SQLDataStore
      * get next item id (for objects stored only in dynamic data table)
      *
      * @param $args['objectid'] dynamic object id for the item
-     * @return integer value of the next id
+     * @return int|void value of the next id
      * @throws BadParameterException
      */
     function getNextId($objectid)

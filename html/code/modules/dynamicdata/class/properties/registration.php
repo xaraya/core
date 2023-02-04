@@ -395,7 +395,7 @@ class PropertyRegistration extends DataContainer
 
                 // Main part
                 // Call the class method on each property to get the registration info
-                if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
+                //if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
                 $descriptor = new ObjectDescriptor(array());
                 $baseInfo = new PropertyRegistration($descriptor);
                 try {

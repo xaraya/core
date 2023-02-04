@@ -33,6 +33,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     public $fieldsummary = null;       // Do we show a summary for numeric fields (sum, min, max, avg, ...) ?
     public $fieldsummarylabel = null;  // What label should we use in the options for this summary ?
 
+    public $ddwhere;
+    public $ddsort;
+    public $filters;
+    private $cached_allow;
+    public $pagerurl;
+
     /**
      * Inherits from DataObjectMaster and sets the requested item ids, sort, where, ...
      *
@@ -129,6 +135,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         xarLog::message("DataObjectList::checkInput: Checking items of object " . $this->name, xarLog::LEVEL_INFO);
 
+        $data = [];  // = $args; // @checkme is that what we want here?
         // First get the itemids
         if (!xarVar::fetch($this->primary, 'array', $data['id'], array(), xarVar::NOT_REQUIRED)) return;
         if (empty($data['id'])) return true;
@@ -267,7 +274,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Set sort portion of query
      *
-     * @param string sort
+     * @param mixed $sort array or comma-separated string
      */
     public function setSort($sort)
     {
@@ -439,8 +446,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Set categories for an object (work in progress - do not use)
      *
-     * @param cids array of category ids
-     * @param andcids bool get items assigned to all the cids (AND = true) or any of the cids (OR = false)
+     * @param array $cids array of category ids
+     * @param bool $join_by_and get items assigned to all the cids (AND = true) or any of the cids (OR = false)
      */
     public function setCategories($cids, $join_by_and = false)
     {
@@ -551,7 +558,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Show a view of an object
      *
-     * @return xarTpl::object
+     * @return string xarTpl::object
      */
     public function showView(Array $args = array())
     {

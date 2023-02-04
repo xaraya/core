@@ -95,6 +95,10 @@ class DataObjectMaster extends xarObject
 
     public $isgrouped     = 0;          // indicates that we have operations (COUNT, SUM, etc.) on properties
 
+    public $catid;
+    public $table;
+    private $conditions;
+
     /**
      * Default constructor to set the object variables, retrieve the dynamic properties
      * and get the corresponding data stores for those properties
@@ -410,7 +414,7 @@ class DataObjectMaster extends xarObject
         $this->datastore->object = $this;
 
         // for dynamic object lists, put a reference to the $itemids array in the data store
-        if(method_exists($this, 'getItems'))
+        if($this instanceof DataObjectList)
             $this->datastore->_itemids =& $this->itemids;
     }
 
@@ -567,7 +571,7 @@ class DataObjectMaster extends xarObject
      *
      * @param $args['objectid'] id of the object you're looking for, OR
      * @param $args['name'] name of the object you're looking for, OR
-     * @return array containing the name => value pairs for the object
+     * @return array|void containing the name => value pairs for the object
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
@@ -820,7 +824,7 @@ class DataObjectMaster extends xarObject
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['name'] name of the object you're looking for
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
-     * @return DataObject the requested object definition
+     * @return DataObject|void the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
     public static function getObject(Array $args=array())
@@ -828,7 +832,7 @@ class DataObjectMaster extends xarObject
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
         $info = self::_getObjectInfo($args);
         // If we have no such object, just return false for now
-        if (empty($info)) return false;
+        if (empty($info)) return;
         // The info method calls an entry for each of the object's properties. We only need one
         $current = current($info);
         foreach ($current as $key => $value) 
@@ -884,7 +888,7 @@ class DataObjectMaster extends xarObject
      * @param $args['objectid'] id of the object you're looking for, or
      * @param $args['name'] name of the object you're looking for
      * @param $args['class'] optional classname (e.g. <module>_DataObject[_List])
-     * @return DataObjectList the requested object definition
+     * @return DataObjectList|void the requested object definition
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
@@ -1115,7 +1119,7 @@ class DataObjectMaster extends xarObject
     {
         $properties = $this->getProperties($args);
         foreach ($properties as $property) {
-            $fields[$property->name] = $property->clearValue();
+            $property->clearValue();
         }
         return true;
     }
@@ -1208,10 +1212,9 @@ class DataObjectMaster extends xarObject
      * Generate URL for a specific action on an object - the format will depend on the linktype
      *
      * @access public
-     * @param object object the object or object list we want to create an URL for
-     * @param action string the action we want to take on this object (= method or func)
-     * @param itemid mixed the specific item id or null
-     * @param extra array extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @param array $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
     public function getActionURL($action = '', $itemid = null, $extra = array())
@@ -1236,7 +1239,7 @@ class DataObjectMaster extends xarObject
     /**
      * Call $action hooks for this object (= notify observers in observer pattern)
      *
-     * @param $action the hook action ('create', 'display', ...)
+     * @param string $action the hook action ('create', 'display', ...)
      */
     public function callHooks($action = '')
     {
@@ -1306,8 +1309,12 @@ class DataObjectMaster extends xarObject
         // CHECKME: is this sufficient in most cases, or do we need an explicit xarController::URL() ?
         $this->hookvalues['returnurl'] = xarServer::getCurrentURL();
 
-        // Use the standard method to call hooks 
-        $hooks = xarModHooks::call('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype);
+        // Use the standard method to call hooks
+        if ($this instanceof DataObject) {
+            $hooks = xarModHooks::call('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype);
+        } else {
+            $hooks = xarModHooks::call('item', $action, null, $this->hookvalues, $modname, $this->itemtype);
+        }
         // FIXME: we don't need two distinct properties to store gui and api hook responses
         // A response is a response, it's up to the caller to decide if it's appropriate
         // For now we'll populate both with the same data
@@ -1326,8 +1333,8 @@ class DataObjectMaster extends xarObject
     /**
      * Get linked objects (see DataObjectLinks)
      *
-     * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
-     * @param $itemid (optional) for a particular itemid in ObjectList ?
+     * @param string $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
+     * @param mixed $itemid (optional) for a particular itemid in ObjectList ?
      */
     public function getLinkedObjects($linktype = '', $itemid = null)
     {
@@ -1497,10 +1504,10 @@ class DataObjectMaster extends xarObject
      * Check access for a specific action on an object // CHECKME: how about checking *before* the object is loaded ?
      *
      * @access public
-     * @param action string the action we want to take on this object (= method or func)
-     * @param itemid mixed the specific item id or null
-     * @param roleid mixed override the current user or null // CHECKME: do we want this ?
-     * @return boolean true if access
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @param mixed $roleid override the current user or null // CHECKME: do we want this ?
+     * @return bool true if access
      */
     public function checkAccess($action, $itemid = null, $roleid = null)
     {
@@ -1598,7 +1605,7 @@ class DataObjectMaster extends xarObject
 
         // check if we're dealing with a specific item here
         if (empty($itemid)) {
-            if (!empty($this->itemid)) {
+            if ($this instanceof DataObject && !empty($this->itemid)) {
                 $itemid = $this->itemid;
             } else {
                 $itemid = 'All';
@@ -1617,8 +1624,8 @@ class DataObjectMaster extends xarObject
     /**
      * Translate a string containing a SQL WHERE clause into Query conditions
      *
-     * @param mixed where string or array of name => value pairs
-     * @return array of query conditions
+     * @param mixed $where string or array of name => value pairs
+     * @return mixed Query array of query conditions
      */
     public function setWhere($where, $transform=1)
     {
@@ -1646,7 +1653,7 @@ class DataObjectMaster extends xarObject
     /**
      * Transform property names to their source field names in a clause and replace '=' operator with 'eq' etc.
      *
-     * @param mixed where string or array of name => value pairs
+     * @param mixed $clause string or array of name => value pairs
      * @return string representing a SQL where clause
      */
     private function transformClause($clause)
@@ -1727,7 +1734,7 @@ class DataObjectMaster extends xarObject
                 case 'begin' :
                     list($parts, $subclause) = $this->bracketClause($parts);
                     $values[] = $subclause;
-                break;
+                    break;
                 case 'end' :
                     $consistent = true;
                     $this_conjunction = array_shift($conjunctions);
@@ -1741,13 +1748,12 @@ class DataObjectMaster extends xarObject
                         $clause = $this->conditions->qand($values);
                     }
                     return array($parts, $clause);
-                break;
                 case 'operand' :
                     $values[] = $this->parseRelation($part['value']);
-                break;
+                    break;
                 case 'operator' :
                     $conjunctions[] = $part['value'];
-                break;
+                    break;
             }
         }
     }
@@ -1773,4 +1779,3 @@ class DataObjectMaster extends xarObject
         return $relation;
     }
 }
-

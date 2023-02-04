@@ -161,8 +161,7 @@ class xarMod extends xarObject implements IxarMod
      * If regID is passed in, return the name of that module, otherwise use
      * current toplevel module.
      *
-     * 
-     * @param  $regID integer optional regID for module
+     * @param int|null $regID optional regID for module
      * @return string the name of the current top-level module
      */
     static function getName($regID = NULL)
@@ -182,8 +181,8 @@ class xarMod extends xarObject implements IxarMod
      *
      * The displayable name is sensible to user language.
      *
-     * 
-     * @param modName string registered name of module
+     * @param string $modName registered name of module
+     * @param string $type determines theme or module
      * @return string the displayable name
      * @todo   re-evaluate this, i think it causes more harm than joy
      */
@@ -201,8 +200,8 @@ class xarMod extends xarObject implements IxarMod
      *
      * The displayable description is sensible to user language.
      *
-     * 
-     * @param modName string registered name of module
+     * @param string $modName registered name of module
+     * @param string $type determines theme or module
      * @return string the displayable description
      */
     static function getDisplayDescription($modName = NULL, $type = 'module')
@@ -232,10 +231,9 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Get module registry ID by name
      *
-     * 
-     * @param modName string The name of the module
-     * @param type determines theme or module
-     * @return string The module registry ID.
+     * @param string $modName The name of the module
+     * @param string $type determines theme or module
+     * @return int|null The module registry ID.
      */
     static function getRegId($modName, $type = 'module')
     {
@@ -246,10 +244,9 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Get module system ID by name
      *
-     * 
-     * @param modName string The name of the module
-     * @param type determines theme or module
-     * @return string The module registry ID.
+     * @param string $modName The name of the module
+     * @param string $type determines theme or module
+     * @return string|void The module registry ID.
      */
     static function getId($modName)
     {
@@ -260,12 +257,10 @@ class xarMod extends xarObject implements IxarMod
 
     /**
      * Get the module's current state
-     *
      * 
-     * @param  integer the module's registered id
-     * @param type determines theme or module
+     * @param int $modRegId the module's registered id
+     * @param string $type determines theme or module
      * @return mixed the module's current state
-     * @throws DATABASE_ERROR, MODULE_NOT_EXIST
      * @todo implement the xarMod__setState reciproke
      * @todo We dont need this, used nowhere
      */
@@ -278,12 +273,10 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Check if a module is installed and its state is STATE_ACTIVE
      *
-     * 
-     * @static modAvailableCache array
-     * @param modName string registered name of module
-     * @param type determines theme or module
+     * @static $modAvailableCache array
+     * @param string $modName registered name of module
+     * @param string $type determines theme or module
      * @return mixed true if the module is available
-     * @throws DATABASE_ERROR, BAD_PARAM
      */
     static function isAvailable($modName, $type = 'module')
     {
@@ -318,11 +311,12 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Get information on module
      *
-     * 
-     * @param modRegId string module id
-     * @param type determines theme or module
+     * @param int $modRegId module id
+     * @param string $type determines theme or module
      * @return array of module information
-     * @throws DATABASE_ERROR, BAD_PARAM, ID_NOT_EXIST
+     * @throws EmptyParameterException
+     * @throws BadParameterException
+     * @throws IDNotFoundException
      */
     static function getInfo($modRegId, $type = 'module')
     {
@@ -471,11 +465,11 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Load a module's base information
      *
-     * 
-     * @param modName string the module's name
-     * @param type determines theme or module
+     * @param string $modName the module's name
+     * @param string $type determines theme or module
      * @return mixed an array of base module info on success
-     * @throws EmptyParameterException, BadParameterException
+     * @throws EmptyParameterException
+     * @throws BadParameterException
      */
     static function getBaseInfo($modName, $type = 'module')
     {
@@ -567,11 +561,11 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Get info from xarversion.php for module specified by modOsDir
      *
-     * 
-     * @param modOSdir the module's directory
-     * @param type determines theme or module
-     * @return array an array of module file information
-     * @throws MODULE_FILE_NOT_EXIST
+     * @param string $modOSdir the module's directory
+     * @param string $type determines theme or module
+     * @return array|void an array of module file information
+     * @throws EmptyParameterException
+     * @throws BadParameterException
      * @todo <marco> #1 FIXME: admin or admin capable?
      */
     static function getFileInfo($modOsDir, $type = 'module')
@@ -670,13 +664,11 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Load database definition for a module
      *
-     * 
-     * @param modName string name of module to load database definition for
-     * @param modOsDir string directory that module is in
+     * @param string $modName name of module to load database definition for
+     * @param string|null $modOsDir directory that module is in
+     * @param string $type module or theme
      * @return mixed true on success
-     * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST
-     *
-     * @todo make this private again
+     * @throws EmptyParameterException
      */
     static function loadDbInfo($modName, $modDir = NULL, $type = 'module')
     {
@@ -724,13 +716,11 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Call a module GUI function.
      *
-     * 
-     * @param modName string registered name of module
-     * @param modType string type of function to run
-     * @param funcName string specific function to run
-     * @param args array
+     * @param string $modName registered name of module
+     * @param string $modType type of function to run
+     * @param string $funcName specific function to run
+     * @param array $args arguments to pass to the function
      * @return mixed The output of the function, or raise an exception
-     * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
      */
     static function guiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
     {
@@ -778,13 +768,11 @@ class xarMod extends xarObject implements IxarMod
      * like so:
      * Ex: modName_modTypeapi_modFunc($args);
      *
-     * 
      * @param string $modName registered name of module
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
      * @param array $args arguments to pass to the function
      * @return mixed The output of the function, or false on failure
-     * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
      */
     static function apiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
     {
@@ -795,7 +783,6 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Work horse method for the lazy calling of module functions
      *
-     * 
      */
     private static function callFunc($modName,$modType,$funcName,$args,$funcType = '')
     {
@@ -873,11 +860,9 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Load the modType of module identified by modName.
      *
-     * 
-     * @param modName string - name of module to load
-     * @param modType string - type of functions to load
+     * @param string $modName name of module to load
+     * @param string $modType type of functions to load
      * @return mixed
-     * @throws XAR_SYSTEM_EXCEPTION
      */
     static function load($modName, $modType = 'user')
     {
@@ -887,11 +872,9 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Load the modType API for module identified by modName.
      *
-     * 
-     * @param modName string registered name of the module
-     * @param modType string type of functions to load
+     * @param string $modName registered name of the module
+     * @param string $modType type of functions to load
      * @return mixed true on success
-     * @throws XAR_SYSTEM_EXCEPTION
      */
     static function apiLoad($modName, $modType = 'user')
     {
@@ -901,12 +884,14 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Load the modType of module identified by modName.
      *
-     * 
-     * @param modName string - name of module to load
-     * @param modType string - type of functions to load
-     * @param flags number - flags to modify function behaviour
+     * @static $loadedModuleCache
+     * @param string $modName name of module to load
+     * @param string $modType type of functions to load
+     * @param int $flags flags to modify function behaviour
      * @return mixed
-     * @throws DATABASE_ERROR, BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST, MODULE_NOT_ACTIVE
+     * @throws EmptyParameterException
+     * @throws ModuleNotFoundException
+     * @throws ModuleNotActiveException
      */
     static private function privateLoad($modName, $modType, $flags = 0)
     {
@@ -1009,10 +994,11 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Check access for a specific action on module level (see also xarObject and xarBlock)
      * 
-     * @param moduleName string the module we want to check access for
-     * @param action string the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
-     * @param roleid mixed override the current user or null
+     * @param string moduleName the module we want to check access for
+     * @param string ^$action the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
+     * @param mixed $roleid override the current user or null
      * @return boolean true if access
+     * @throws BadParameterException
      */
     static function checkAccess($moduleName, $action, $roleid = null)
     {
@@ -1038,7 +1024,6 @@ class xarMod extends xarObject implements IxarMod
 
             default:
                 throw new BadParameterException('action', "Supported actions on module level are 'view' and 'admin'");
-                break;
         }
 
         if (!empty($roleid)) {

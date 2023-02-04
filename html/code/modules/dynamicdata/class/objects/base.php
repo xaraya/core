@@ -571,7 +571,7 @@ class DataObject extends DataObjectMaster implements iDataObject
      * Get the next available item type (for objects that are assigned to the dynamicdata module)
      *
      * @param $args['moduleid'] module id for the object
-     * @return integer value of the next item type
+     * @return int|void value of the next item type
      *
      * @todo this needs to change into something more safe.
      */

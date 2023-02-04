@@ -73,6 +73,11 @@ class DataProperty extends xarObject implements iDataProperty
     public $validation_notequals            = null;           //  check whether a property value does not equal a given value
     public $validation_equals               = null;           //  check whether a property value equals a given value
     public $validation_allowempty           = null;           // 
+    public $validation_equals_invalid;
+    public $validation_notequals_invalid;
+    public $validation_allowempty_invalid;
+    public $operation;
+    public $fieldname;
 
     /**
      * Default constructor setting the variables
@@ -982,19 +987,6 @@ class DataProperty extends xarObject implements iDataProperty
     public function removeFromObject($data=array())
     {
         return true;
-    }
-
-    // @checkme this shouldn't be here at all - see PropertyRegistration instead
-    public static function getRegistrationInfo()
-    {
-        $descriptor = new ObjectDescriptor(array());
-        $info = new PropertyRegistration($descriptor);
-        $info->reqmodules = $this->reqmodules;
-        $info->id   = $this->id;
-        $info->name = $this->name;
-        $info->desc = $this->desc;
-
-        return $info;
     }
 
     function aliases()

@@ -17,7 +17,6 @@ interface iDataProperty
     public function checkInput($name = '', $value = null);
     public function fetchValue($name = '');
     // @checkme this shouldn't be here at all - see PropertyRegistration instead
-    public static function getRegistrationInfo();
     public function getValue();
     public function parseConfiguration($configuration = '');
     public function showConfiguration(Array $data = array());
