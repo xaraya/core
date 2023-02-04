@@ -137,7 +137,13 @@ class FilePickerProperty extends SelectProperty
         
         $options = array();
         if (empty($this->initialization_basedirectory)) return array();
-        // this works with relative directories
+        // this works with relative directories - but they must be accessible first :-)
+        if (!is_dir($this->initialization_basedirectory)) {
+            $this->initialization_basedirectory = sys::web() . $this->initialization_basedirectory;
+            if (!is_dir($this->initialization_basedirectory)) {
+                return array();
+            }
+        }
         $dir = new RelativeDirectoryIterator($this->initialization_basedirectory);
         if ($dir == false) return array();
         

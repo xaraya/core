@@ -63,7 +63,7 @@ $http = new React\Http\HttpServer(
     $handler
 );
 
-$http->on('error', function (Exception $e) {
+$http->on('error', function (Throwable $e) {
     echo 'Error: ' . $e->getMessage() . PHP_EOL;
     if ($e->getPrevious() !== null) {
         echo 'Previous: ' . $e->getPrevious()->getMessage() . PHP_EOL;

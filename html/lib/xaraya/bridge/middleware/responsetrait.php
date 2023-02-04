@@ -8,7 +8,7 @@ namespace Xaraya\Bridge\Middleware;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
-use Exception;
+use Throwable;
 use JsonException;
 
 trait DefaultResponseTrait
@@ -99,9 +99,13 @@ trait DefaultResponseTrait
         return $response;
     }
 
-    public function createExceptionResponse(Exception $e, mixed $result = null): ResponseInterface
+    public function createExceptionResponse(Throwable $e, mixed $result = null): ResponseInterface
     {
         $body = "Exception: " . $e->getMessage();
+        if ($e->getPrevious() !== null) {
+            $body .= "\nPrevious: " . $e->getPrevious()->getMessage();
+        }
+        $body .= $e->getTraceAsString();
         $here = explode('\\', static::class);
         $class = array_pop($here);
         $response = $this->getResponseFactory()->createResponse(422, $class . ' Exception')->withHeader('Content-Type', 'text/plain; charset=utf-8');

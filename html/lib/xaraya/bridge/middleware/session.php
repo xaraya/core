@@ -32,6 +32,9 @@ class VirtualSession
         $this->userId = $userId;
         $this->ipAddress = $ipAddress;
         $this->lastUsed = $lastUsed;
+        if (empty($vars)) {
+            $vars = ['rand' => rand()];
+        }
         $this->vars = $vars;
     }
 }
@@ -85,7 +88,10 @@ class SessionMiddleware implements MiddlewareInterface
             $session = $this->lookup($sessionId);
             $_SESSION[xarSession::PREFIX . 'role_id'] = $session->userId;
             if (!empty($session->vars)) {
-                // @todo
+                // @checkme - see isAuthKey below
+                foreach ($session->vars as $key => $value) {
+                    $_SESSION[xarSession::PREFIX . $key] = $value;
+                }
             }
             $request = $request->withAttribute('userId', $session->userId);
             echo "Session: " . var_export($session, true) . "\n";
@@ -100,6 +106,16 @@ class SessionMiddleware implements MiddlewareInterface
         if (strpos($request->getRequestTarget(), '/authsystem/') !== false) {
             $this->registerCallbackEvents($request);
             $isAuthSystem = true;
+        }
+        $isAuthKey = false;
+        if (!empty($sessionId) && $request->getMethod() == 'POST') {
+            $input = $request->getParsedBody();
+            if (!empty($input['authid']) && empty($input['preview'])) {
+                //$key = 'rand';
+                //$_SESSION[xarSession::PREFIX . $key] = $session->vars[$key];
+                $_POST['authid'] = $input['authid'];
+                $isAuthKey = true;
+            }
         }
         // @checkme signature mismatch for process() with ReactPHP
         if ($next instanceof RequestHandlerInterface) {
@@ -120,6 +136,9 @@ class SessionMiddleware implements MiddlewareInterface
                 $this->update($session);
                 $sendCookie = true;
             }
+        } elseif ($isAuthKey) {
+            $session->vars['rand'] = rand();
+            $this->update($session);
         }
         if (session_status() === PHP_SESSION_ACTIVE) {
             echo "Session: " . var_export($_SESSION, true) . "\n";
@@ -204,9 +223,9 @@ class SessionMiddleware implements MiddlewareInterface
 
     private function register($session)
     {
-        $query = "INSERT INTO $this->table (id, ip_addr, role_id, first_use, last_use)
-            VALUES (?,?,?,?,?)";
-        $bindvars = [$session->sessionId, $session->ipAddress, $session->userId, time(), time()];
+        $query = "INSERT INTO $this->table (id, ip_addr, role_id, first_use, last_use, vars)
+            VALUES (?,?,?,?,?,?)";
+        $bindvars = [$session->sessionId, $session->ipAddress, $session->userId, time(), time(), serialize($session->vars)];
         $stmt = $this->db->prepareStatement($query);
         $stmt->executeUpdate($bindvars);
     }

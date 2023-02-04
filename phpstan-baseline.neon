@@ -266,11 +266,6 @@ parameters:
 			path: html/code/modules/categories/xarproperties/celkoposition.php
 
 		-
-			message: "#^Undefined variable\\: \\$data$#"
-			count: 1
-			path: html/code/modules/dynamicdata/class/objects/list.php
-
-		-
 			message: "#^Access to an undefined property object\\:\\:\\$where\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/objects/master.php
@@ -288,11 +283,6 @@ parameters:
 		-
 			message: "#^Undefined variable\\: \\$info$#"
 			count: 1
-			path: html/code/modules/dynamicdata/class/properties/base.php
-
-		-
-			message: "#^Undefined variable\\: \\$this$#"
-			count: 4
 			path: html/code/modules/dynamicdata/class/properties/base.php
 
 		-
@@ -569,11 +559,6 @@ parameters:
 			message: "#^Method UsernameProperty\\:\\:setValue\\(\\) should return string but return statement is missing\\.$#"
 			count: 1
 			path: html/code/modules/roles/xarproperties/username.php
-
-		-
-			message: "#^Undefined variable\\: \\$name$#"
-			count: 1
-			path: html/code/modules/roles/xaruser/account.php
 
 		-
 			message: "#^Function iseet not found\\.$#"
