@@ -51,7 +51,7 @@ trait DefaultResponseTrait
         return $response;
     }
 
-    public function createJsonResponse(mixed $result, string $mediaType = 'application/json; charset=utf-8'): ResponseInterface
+    public function createJsonResponse(mixed $result, string $mediaType = 'application/json; charset=utf-8', bool $numeric = true): ResponseInterface
     {
         if (strpos($mediaType, '; charset=') === false) {
             $mediaType .= '; charset=utf-8';
@@ -59,7 +59,12 @@ trait DefaultResponseTrait
         $response = $this->getResponseFactory()->createResponse()->withHeader('Content-Type', $mediaType);
         try {
             //$output = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
-            $body = json_encode($result, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
+            if ($numeric) {
+                $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR;
+            } else {
+                $flags = JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR;
+            }
+            $body = json_encode($result, $flags);
         } catch (JsonException $e) {
             $body = '{"JSON Exception": ' . json_encode($e->getMessage()) . '}';
         }

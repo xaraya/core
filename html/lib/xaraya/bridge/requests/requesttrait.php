@@ -24,6 +24,7 @@ interface CommonRequestInterface
     public static function getCookieParams($request = null): array;
     public static function getUploadedFiles($request = null): array;
     public static function getParsedBody($request = null): mixed;
+    public static function getJsonBody($request = null): mixed;
 }
 
 trait CommonRequestTrait
@@ -124,5 +125,21 @@ trait CommonRequestTrait
         }
         // for everyone else
         return $_POST;
+    }
+
+    public static function getJsonBody($request = null): mixed
+    {
+        // for PSR-7 compatible server requests
+        if (is_object($request) && method_exists($request, 'getBody')) {
+            $rawInput = (string) $request->getBody();
+        } else {
+            // for everyone else
+            $rawInput = file_get_contents('php://input');
+        }
+        $input = null;
+        if (!empty($rawInput)) {
+            $input = json_decode($rawInput, true, 512, JSON_THROW_ON_ERROR);
+        }
+        return $input;
     }
 }

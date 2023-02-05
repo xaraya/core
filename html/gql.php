@@ -36,6 +36,7 @@ xarDatabase::init();
 // initialize users
 //xarUser::init();
 
+/**
 $rawInput = file_get_contents('php://input');
 if (!empty($rawInput)) {
     $input = json_decode($rawInput, true);
@@ -51,6 +52,7 @@ if (!empty($rawInput)) {
 if (!empty($variables) && is_string($variables)) {
     $variables = json_decode($variables, true);
 }
+$context = ['request' => $_REQUEST, 'server' => $_SERVER];
 
 //$query = '{hello}';
 //$query = 'query { echo(message: "Hello World") }';
@@ -68,5 +70,7 @@ $data = xarGraphQL::get_data($query, $variables, $operationName);
 //$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes);
 //$schemaFile = __DIR__ . '/code/modules/dynamicdata/class/graphql/schema.graphql';
 //$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes, $schemaFile);
+ */
 
-xarGraphQL::send_data($data);
+$data = xarGraphQL::handleRequest();
+xarGraphQL::output($data);

@@ -33,6 +33,9 @@
 //sys::import('modules.dynamicdata.class.graphql.inflector');
 //sys::import('xaraya.caching.cachetrait');
 //sys::import('modules.dynamicdata.class.timertrait');
+sys::import('xaraya.bridge.requests.requesttrait');
+use Xaraya\Bridge\Requests\CommonRequestInterface;
+use Xaraya\Bridge\Requests\CommonRequestTrait;
 
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
@@ -50,8 +53,9 @@ use GraphQL\Validator\DocumentValidator;
 /**
  * See xardocs/graphql.txt for class structure
  */
-class xarGraphQL extends xarObject
+class xarGraphQL extends xarObject implements CommonRequestInterface
 {
+    use CommonRequestTrait;
     use xarTimerTrait;  // activate with self::$enableTimer = true
     use xarCacheTrait;  // activate with self::$enableCache = true
 
@@ -432,7 +436,7 @@ class xarGraphQL extends xarObject
     /**
      * Utility function to execute a GraphQL query and get the data
      */
-    public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null)
+    public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null, $context = null)
     {
         self::loadConfig();
         self::setTimer('start');
@@ -496,7 +500,7 @@ class xarGraphQL extends xarObject
         // DocumentValidator::addRule(new Rules\DisableIntrospection());
 
         $rootValue = ['prefix' => 'You said: message='];
-        $context = ['request' => $_REQUEST, 'server' => $_SERVER];
+        //$context ??= ['server' => $_SERVER, 'cookie' => $_COOKIE];
         // $fieldResolver = null;
         $validationRules = null;
         $validationRules = [];
@@ -555,7 +559,7 @@ class xarGraphQL extends xarObject
     /**
      * Utility function to send the data to the browser or app
      */
-    public static function send_data($data)
+    public static function output($data)
     {
         if (is_string($data)) {
             //header('Access-Control-Allow-Origin: *');
@@ -564,6 +568,7 @@ class xarGraphQL extends xarObject
             return;
         }
         try {
+            // @checkme GraphQL playground doesn't like JSON_NUMERIC_CHECK for introspection, e.g. default value for offset = 0 instead of "0"
             //$data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
             $data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         } catch (Exception $e) {
@@ -668,13 +673,46 @@ class xarGraphQL extends xarObject
         return false;
     }
 
+    // different processing for GraphQL API - see gql.php
+    public static function handleRequest($vars = [], &$request = null)
+    {
+        // dispatcher doesn't provide query params by default
+        $params = static::getQueryParams($request);
+        // handle php://input for POST etc.
+        $input = static::getJsonBody($request);
+        if (!empty($input)) {
+            $query = $input['query'] ?? '{schema}';
+            $variables = $input['variables'] ?? null;
+            $operationName = $input['operationName'] ?? null;
+        } else {
+            $query = $params['query'] ?? '{schema}';
+            $variables = $params['variables'] ?? null;
+            $operationName = $params['operationName'] ?? null;
+        }
+        // /gql.php?query=query($id:ID!){object(id:$id){name}}&variables={"id":"2"}
+        if (!empty($variables) && is_string($variables)) {
+            $variables = json_decode($variables, true);
+        }
+        $context = [];
+        $context['server'] = static::getServerParams($request);
+        $context['cookie'] = static::getCookieParams($request);
+        $result = self::get_data($query, $variables, $operationName, [], null, $context);
+        if ($query == '{schema}') {
+            //static::$mediaType = 'text/plain';
+            if (!empty($request)) {
+                $request = $request->withAttribute('mediaType', 'text/plain');
+            }
+        }
+        return $result;
+    }
+
     public static function checkUser($context)
     {
         $userId = self::checkToken($context['server']);
         if (!empty($userId)) {
             return $userId;
         }
-        return self::checkCookie($context['server']);
+        return self::checkCookie($context['cookie']);
     }
 
     public static function checkToken($serverVars)
@@ -698,15 +736,15 @@ class xarGraphQL extends xarObject
         }
     }
 
-    public static function checkCookie($serverVars)
+    public static function checkCookie($cookieVars)
     {
-        if (empty($serverVars) || empty($serverVars['HTTP_COOKIE'])) {
+        if (empty($cookieVars) || empty($cookieVars['XARAYASID'])) {
             return;
         }
         if (self::$trace_path) {
             self::$paths[] = "checkCookie";
         }
-        if (session_status() !== PHP_SESSION_ACTIVE) {
+        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
             xarSession::init();
         }
         //xarMLS::init();

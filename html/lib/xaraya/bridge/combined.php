@@ -48,6 +48,7 @@ sys::import('xaraya.bridge.routing');
 use Xaraya\Bridge\Routing\FastRouteBridge;
 use Xaraya\Bridge\Routing\FastRouteApiBridge;
 use Xaraya\Bridge\Routing\TrackRouteCollector;
+use DataObjectRESTHandler;
 // @checkme rename FastRoute dispatcher as router here to avoid confusion with PSR-15 naming
 use FastRoute\Dispatcher as FastRouter;
 use FastRoute\RouteCollector;
@@ -105,7 +106,6 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
     {
         // @checkme we need to somehow update $request here to do any good!?
         $callback = function (string $redirectURL, int $status = 302) use (&$request) {
-            //$request = $request->withHeader('Location', $redirectURL);
             $request = $request->withAttribute('redirectURL', $redirectURL);
             $request = $request->withAttribute('status', $status);
         };
@@ -151,29 +151,25 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 //return $routeInfo[1]($request)
                 //return $next->handle($request);
                 // ... call $handler with $vars
+                $numeric = true;
                 try {
-                    $query = $request->getQueryParams();
-                    $input = null;
-                    // pass along body params too (if any) - limited to POST or PUT requests here
-                    if ($method === 'POST' || $method === 'PUT') {
-                        if (strpos($path, '/restapi/') === false) {
-                            $input = $request->getParsedBody();
-                        } else {
-                            // @checkme for REST API we need to json_decode the raw body here
-                            $rawInput = (string) $request->getBody();
-                            if (!empty($rawInput)) {
-                                $input = json_decode($rawInput, true);
-                            }
-                        }
-                    }
-                    // @checkme can't really use this here to pass back the mediaType
-                    FastRouteBridge::$mediaType = '';
                     // @checkme we need to somehow update $request here to do any good!?
                     $this->prepareRequestCallback($request);
-                    $result = call_user_func($handler, $vars, $query, $input);
-                    if ($request->getAttribute('redirectURL') !== null) {
-                        echo "Location: " . $request->getAttribute('redirectURL') . "\n";
-                        return $this->createRedirectResponse($request->getAttribute('redirectURL'), $request->getAttribute('status') ?? 302);
+                    // don't use call_user_func here anymore because $request is passed by reference
+                    if (strpos($path, '/restapi/') === 0) {
+                        // different processing for REST API - see rst.php
+                        $result = DataObjectRESTHandler::callHandler($handler, $vars, $request);
+                    } elseif (strpos($path, '/graphql') === 0) {
+                        // different processing for GraphQL API - see gql.php
+                        $result = $handler($vars, $request);
+                        $numeric = false;
+                    } else {
+                        $result = $handler($vars, $request);
+                    }
+                    $redirectURL = $request->getAttribute('redirectURL');
+                    if (!empty($redirectURL)) {
+                        echo "Location: " . $redirectURL . "\n";
+                        return $this->createRedirectResponse($redirectURL, $request->getAttribute('status', 302));
                     }
                     // @checkme can't really handle REST API differently here yet
                     if ($handler[1] === 'getOpenAPI') {
@@ -190,9 +186,10 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     return $this->createExceptionResponse($e);
                 }
                 if (is_string($result)) {
-                    return $this->createResponse($result);
+                    $mediaType = $request->getAttribute('mediaType', 'text/html');
+                    return $this->createResponse($result, $mediaType);
                 }
-                return $this->createJsonResponse($result);
+                return $this->createJsonResponse($result, 'application/json', $numeric);
 
             default:
                 $result = "Unknown result from FastRoute Dispatcher: " . var_export($routeInfo, true);

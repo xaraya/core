@@ -83,20 +83,9 @@ function dispatch_request($method, $path)
             break;
         case FastRoute\Dispatcher::FOUND:
             $handler = $routeInfo[1];
-            $vars = [];
-            $vars['path'] = $routeInfo[2];
+            $vars = $routeInfo[2];
             // ... call $handler with $vars
-            if (!empty($_SERVER['QUERY_STRING'])) {
-                parse_str($_SERVER['QUERY_STRING'], $more);
-                $vars['query'] = $more;
-            }
-            // handle php://input for POST etc.
-            $rawInput = file_get_contents('php://input');
-            if (!empty($rawInput)) {
-                $vars['input'] = json_decode($rawInput, true);
-            }
-            // DataObjectRESTHandler::setTimer('parse');
-            $result = DataObjectRESTHandler::getResult($handler, $vars);
+            $result = DataObjectRESTHandler::callHandler($handler, $vars);
             DataObjectRESTHandler::output($result);
             break;
     }

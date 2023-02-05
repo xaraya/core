@@ -12,12 +12,16 @@
 sys::import('modules.dynamicdata.class.objects.master');
 sys::import('modules.dynamicdata.class.timertrait');
 sys::import('xaraya.caching.cachetrait');
+sys::import('xaraya.bridge.requests.requesttrait');
+use Xaraya\Bridge\Requests\CommonRequestInterface;
+use Xaraya\Bridge\Requests\CommonRequestTrait;
 
 /**
  * Class to handle DataObject REST API calls
  */
-class DataObjectRESTHandler extends xarObject
+class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
 {
+    use CommonRequestTrait;
     use xarTimerTrait;  // activate with self::$enableTimer = true
     use xarCacheTrait;  // activate with self::$enableCache = true
 
@@ -32,7 +36,7 @@ class DataObjectRESTHandler extends xarObject
     public static $userId;
     public static $mediaType;
 
-    public static function getOpenAPI($args = null)
+    public static function getOpenAPI($vars = [], &$request = null)
     {
         $openapi = sys::varpath() . '/cache/api/openapi.json';
         if (!file_exists($openapi)) {
@@ -91,7 +95,7 @@ class DataObjectRESTHandler extends xarObject
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = self::checkUser();
+            $userId = self::checkUser($args);
             //$args['access'] = 'view';
         }
         if (self::$enableCache && !self::hasCaching($object, $method)) {
@@ -164,7 +168,7 @@ class DataObjectRESTHandler extends xarObject
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = self::checkUser();
+            $userId = self::checkUser($args);
             //$args['access'] = 'display';
         }
         if (self::$enableCache && !self::hasCaching($object, $method)) {
@@ -211,7 +215,7 @@ class DataObjectRESTHandler extends xarObject
             return ['method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = self::checkUser();
+        $userId = self::checkUser($args);
         $fieldlist = self::getCreateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -245,7 +249,7 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = self::checkUser();
+        $userId = self::checkUser($args);
         $fieldlist = self::getUpdateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -279,7 +283,7 @@ class DataObjectRESTHandler extends xarObject
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = self::checkUser();
+        $userId = self::checkUser($args);
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
         if (!$objectitem->checkAccess('delete', $itemid, $userId)) {
@@ -504,9 +508,9 @@ class DataObjectRESTHandler extends xarObject
     /**
      * Return the current user or exit with 401 status code
      */
-    public static function whoami($args = null)
+    public static function whoami($args)
     {
-        $userId = self::checkUser();
+        $userId = self::checkUser($args);
         //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
         $role = xarRoles::getRole($userId);
         $user = $role->getFieldValues();
@@ -516,9 +520,9 @@ class DataObjectRESTHandler extends xarObject
     /**
      * Verify that the cookie corresponds to an authorized user (with minimal core load) or exit with 401 status code
      */
-    private static function checkUser()
+    private static function checkUser($context)
     {
-        $userInfo = self::checkToken();
+        $userInfo = self::checkToken($context['server']);
         if (!empty($userInfo)) {
             $userInfo = @json_decode($userInfo, true);
             if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$tokenExpires))) {
@@ -530,7 +534,7 @@ class DataObjectRESTHandler extends xarObject
             }
             return $userInfo['userId'];
         }
-        $userId = self::checkCookie();
+        $userId = self::checkCookie($context['cookie']);
         if (empty($userId)) {
             if (!headers_sent()) {
                 header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
@@ -543,14 +547,13 @@ class DataObjectRESTHandler extends xarObject
     /**
      * Verify that the cookie corresponds to an authorized user (with minimal core load) using xarSession
      */
-    private static function checkCookie()
+    private static function checkCookie($cookieVars)
     {
-        $cookie = !empty($_COOKIE['XARAYASID']) ? $_COOKIE['XARAYASID'] : '';
-        if (empty($cookie)) {
+        if (empty($cookieVars) || empty($cookieVars['XARAYASID'])) {
             return;
         }
         // @checkme see graphql whoami query in dummytype.php
-        if (session_status() !== PHP_SESSION_ACTIVE) {
+        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
             xarSession::init();
         }
         //xarUser::init();
@@ -563,9 +566,12 @@ class DataObjectRESTHandler extends xarObject
     /**
      * Verify that the token corresponds to an authorized user (with minimal core load) using xarCache_Storage
      */
-    private static function checkToken()
+    private static function checkToken($serverVars)
     {
-        $token = !empty($_SERVER['HTTP_X_AUTH_TOKEN']) ? $_SERVER['HTTP_X_AUTH_TOKEN'] : '';
+        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
+            return;
+        }
+        $token = $serverVars['HTTP_X_AUTH_TOKEN'];
         if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
             return;
         }
@@ -622,10 +628,15 @@ class DataObjectRESTHandler extends xarObject
         return ['access_token' => $token, 'expiration' => $expiration];
     }
 
-    public static function deleteToken($args = null)
+    public static function deleteToken($args)
     {
-        $userId = self::checkUser();
-        $token = !empty($_SERVER['HTTP_X_AUTH_TOKEN']) ? $_SERVER['HTTP_X_AUTH_TOKEN'] : '';
+        // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
+        $userId = self::checkUser($args);
+        $serverVars = $args['server'];
+        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
+            return false;
+        }
+        $token = $serverVars['HTTP_X_AUTH_TOKEN'];
         if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
             return false;
         }
@@ -704,7 +715,7 @@ class DataObjectRESTHandler extends xarObject
         $args = $args['query'] ?? [];
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = self::checkUser();
+            $userId = self::checkUser($args);
             // @checkme assume we have a security mask here
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
@@ -756,7 +767,7 @@ class DataObjectRESTHandler extends xarObject
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = self::checkUser();
+            $userId = self::checkUser($args);
             // @checkme assume we have a security mask here
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
@@ -915,6 +926,36 @@ class DataObjectRESTHandler extends xarObject
         $r->delete('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'deleteModuleCall']);
     }
 
+    // different processing for REST API - see rst.php
+    public static function callHandler($handler, $vars, &$request = null)
+    {
+        if (empty($vars)) {
+            $vars = [];
+        }
+        $params = [];
+        $params['path'] = $vars;
+        $params['query'] = static::getQueryParams($request);
+        // handle php://input for POST etc.
+        try {
+            $params['input'] = static::getJsonBody($request);
+        } catch (JsonException $e) {
+            return ["JSON Input Exception" => $e->getMessage()];
+        }
+        $params['server'] = static::getServerParams($request);
+        $params['cookie'] = static::getCookieParams($request);
+        // self::setTimer('parse');
+        $result = self::getResult($handler, $params, $request);
+        /**
+        if ($handler[1] === 'getOpenAPI') {
+            header('Access-Control-Allow-Origin: *');
+            // @checkme set server url to current path here
+            //$result['servers'][0]['url'] = self::getBaseURL();
+            $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . self::$endpoint;
+        }
+         */
+        return $result;
+    }
+
     public static function getQueryId($method, $vars)
     {
         $queryId = $method;
@@ -932,6 +973,9 @@ class DataObjectRESTHandler extends xarObject
                 }
             }
         }
+        unset($vars['server']);
+        // @checkme do we want to make this user-dependent?
+        unset($vars['cookie']);
         $queryId .= '-' . md5(json_encode($vars));
         return $queryId;
     }
@@ -939,7 +983,7 @@ class DataObjectRESTHandler extends xarObject
     /**
      * Handle request and get result
      */
-    public static function getResult($handler, $vars)
+    public static function getResult($handler, $params, &$request = null)
     {
         // initialize caching - delay until we need results
         xarCache::init();
@@ -949,7 +993,7 @@ class DataObjectRESTHandler extends xarObject
             $tryCachedResult = true;
         }
         if ($tryCachedResult && self::$enableCache) {
-            $queryId = self::getQueryId($handler[1], $vars);
+            $queryId = self::getQueryId($handler[1], $params);
             $cacheKey = self::getCacheKey($queryId);
             // @checkme we need to initialize the database here too if variable caching uses database instead of apcu
             if (!empty($cacheKey) && self::isCached($cacheKey)) {
@@ -981,16 +1025,19 @@ class DataObjectRESTHandler extends xarObject
         //xarUser::init();
         self::setTimer('handle');
         try {
-            $result = call_user_func($handler, $vars);
+            $result = call_user_func($handler, $params);
         } catch (UnauthorizedOperationException $e) {
             self::setTimer('unauthorized');
             return;
         } catch (ForbiddenOperationException $e) {
             self::setTimer('forbidden');
             return;
+        } catch (Throwable $e) {
+            self::setTimer('exception');
+            return $e->getMessage();
         }
         // if (is_array($result)) {
-        //     $result['x-debug'] = ['handler' => $handler, 'vars' => $vars];
+        //     $result['x-debug'] = ['handler' => $handler, 'params' => $params];
         // }
         if ($tryCachedResult && self::$enableCache && self::hasCacheKey()) {
             $cacheKey = self::getCacheKey();
@@ -1038,7 +1085,7 @@ class DataObjectRESTHandler extends xarObject
     /**
      * Send CORS options to the browser in preflight checks
      */
-    public static function sendCORSOptions()
+    public static function sendCORSOptions($vars = [], &$request = null)
     {
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
         http_response_code(204);
