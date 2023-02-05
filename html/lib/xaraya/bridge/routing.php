@@ -49,6 +49,7 @@ use sys;
 use JsonException;
 
 sys::import('xaraya.bridge.requests.commontrait');
+use Xaraya\Bridge\Requests\CommonBridgeInterface;
 use Xaraya\Bridge\Requests\CommonBridgeTrait;
 use Xaraya\Bridge\Requests\StaticFileBridgeTrait;
 use DataObjectRESTHandler;
@@ -82,7 +83,7 @@ class TrackRouteCollector extends RouteCollector
     }
 }
 
-class FastRouteBridge
+class FastRouteBridge implements CommonBridgeInterface
 {
     use CommonBridgeTrait;
 

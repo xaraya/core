@@ -23,8 +23,10 @@ sys::import('modules.dynamicdata.class.userinterface');
 /**
  * PSR-15 compatible middleware for DataObject UI methods (view, display, search, ...)
  */
-class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInterface, MiddlewareInterface
+class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInterface, MiddlewareInterface, DefaultResponseInterface
 {
+    use DefaultResponseTrait;
+
     protected array $attributes = ['object', 'method', 'itemid'];
     protected ResponseFactoryInterface $responseFactory;
 

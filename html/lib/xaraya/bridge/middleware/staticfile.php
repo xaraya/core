@@ -16,9 +16,10 @@ use sys;
 sys::import('xaraya.bridge.requests.staticfiletrait');
 use Xaraya\Bridge\Requests\StaticFileBridgeTrait;
 
-class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface
+class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface, DefaultResponseInterface
 {
     use StaticFileBridgeTrait;
+    use DefaultResponseTrait;
 
     protected array $attributes = ['module', 'theme', 'folder', 'file'];
     protected array $options = [];

@@ -74,8 +74,10 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Middleware should be built by creating a customized router and then adding the processsing - do *not* extend this directly
  */
-class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface
+class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface, DefaultResponseInterface
 {
+    use DefaultResponseTrait;
+
     protected array $options = [];
 
     /**

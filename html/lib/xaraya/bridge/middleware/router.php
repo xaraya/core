@@ -12,6 +12,7 @@ use Psr\Http\Message\StreamFactoryInterface;
 use sys;
 
 sys::import('xaraya.bridge.requests.commontrait');
+use Xaraya\Bridge\Requests\CommonBridgeInterface;
 use Xaraya\Bridge\Requests\CommonBridgeTrait;
 
 interface DefaultRouterInterface
@@ -30,10 +31,9 @@ interface DefaultRouterInterface
 /**
  * Middleware should be built by creating a customized router and then adding the processsing - extend this to create your router
  */
-abstract class DefaultRouter implements DefaultRouterInterface
+abstract class DefaultRouter implements DefaultRouterInterface, CommonBridgeInterface
 {
     use CommonBridgeTrait;
-    use DefaultResponseTrait;
 
     public static string $baseUri = '';
     public static string $prefix = '';

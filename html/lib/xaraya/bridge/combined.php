@@ -55,7 +55,7 @@ use FastRoute\RouteCollector;
 
 use function FastRoute\simpleDispatcher;
 
-class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
+class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, DefaultResponseInterface
 {
     use DefaultResponseTrait;
 

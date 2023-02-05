@@ -22,8 +22,10 @@ sys::import('modules.modules.controllers.router');
 /**
  * PSR-15 compatible middleware for module GUI functions (user main, admin modifyconfig, ...)
  */
-class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, MiddlewareInterface
+class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, MiddlewareInterface, DefaultResponseInterface
 {
+    use DefaultResponseTrait;
+
     protected array $attributes = ['module', 'type', 'func'];
     protected ResponseFactoryInterface $responseFactory;
 

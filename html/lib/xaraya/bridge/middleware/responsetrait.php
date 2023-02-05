@@ -11,6 +11,25 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Throwable;
 use JsonException;
 
+/**
+ * For documentation purposes only - available via DefaultResponseTrait
+ */
+interface DefaultResponseInterface
+{
+    public function getResponseFactory(): ResponseFactoryInterface;
+    public function setResponseFactory(ResponseFactoryInterface $responseFactory): void;
+    public function getStreamFactory(): StreamFactoryInterface;
+    public function setStreamFactory(StreamFactoryInterface $streamFactory): void;
+    public function createResponse(string $body, string $mediaType = 'text/html; charset=utf-8'): ResponseInterface;
+    public function createJsonResponse(mixed $result, string $mediaType = 'application/json; charset=utf-8', bool $numeric = true): ResponseInterface;
+    public function createNotFoundResponse(string $path): ResponseInterface;
+    public function createUnauthorizedResponse($status = 401): ResponseInterface;
+    public function createForbiddenResponse($status = 403): ResponseInterface;
+    public function createRedirectResponse(string $redirectURL, int $status = 302): ResponseInterface;
+    public function createExceptionResponse(Throwable $e, mixed $result = null): ResponseInterface;
+    public function createFileResponse(string $path, ?string $mediaType = null): ResponseInterface;
+}
+
 trait DefaultResponseTrait
 {
     protected ResponseFactoryInterface $responseFactory;
@@ -72,7 +91,7 @@ trait DefaultResponseTrait
         return $response;
     }
 
-    public function createNotFoundResponse(string $path)
+    public function createNotFoundResponse(string $path): ResponseInterface
     {
         $response = $this->getResponseFactory()->createResponse();
         $response = $response->withStatus(404);
@@ -80,7 +99,7 @@ trait DefaultResponseTrait
         return $response;
     }
 
-    public function createUnauthorizedResponse($status = 401)
+    public function createUnauthorizedResponse($status = 401): ResponseInterface
     {
         $response = $this->getResponseFactory()->createResponse();
         $response = $response->withStatus(401)->withHeader('WWW-Authenticate', 'Token realm="Xaraya Site Login", created=');
@@ -88,7 +107,7 @@ trait DefaultResponseTrait
         return $response;
     }
 
-    public function createForbiddenResponse($status = 403)
+    public function createForbiddenResponse($status = 403): ResponseInterface
     {
         $response = $this->getResponseFactory()->createResponse();
         $response = $response->withStatus(403);
@@ -96,7 +115,7 @@ trait DefaultResponseTrait
         return $response;
     }
 
-    public function createRedirectResponse(string $redirectURL, int $status = 302)
+    public function createRedirectResponse(string $redirectURL, int $status = 302): ResponseInterface
     {
         $response = $this->getResponseFactory()->createResponse();
         $response = $response->withStatus($status)->withHeader('Location', $redirectURL);
