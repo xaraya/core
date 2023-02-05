@@ -23,10 +23,9 @@ use Psr\Http\Message\ResponseInterface;
 // use some PSR-7 factory and PSR-15 dispatcher
 use Nyholm\Psr7\Factory\Psr17Factory;
 // use Xaraya PSR-15 compatible middleware(s)
-use Xaraya\Bridge\Middleware\DefaultMiddleware;
 use Xaraya\Bridge\Middleware\FastRouteHandler;
 use Xaraya\Bridge\Middleware\StaticFileMiddleware;
-use Xaraya\Bridge\Middleware\SessionMiddleware;
+use Xaraya\Bridge\Middleware\SingleSessionMiddleware;
 
 // @todo find some way to re-use React\Http\Message\Response
 $psr17Factory = new Psr17Factory();
@@ -45,7 +44,7 @@ $static = function (ServerRequestInterface $request, callable $next) use ($files
     return $files->process($request, $next);
 };
 
-$session = new SessionMiddleware();
+$onesession = new SingleSessionMiddleware();
 
 // See https://github.com/php-pm/php-pm/blob/master/src/ProcessSlave.php to set server environment
 $handler = function (ServerRequestInterface $request) use ($fastrouted) {
@@ -59,7 +58,7 @@ $handler = function (ServerRequestInterface $request) use ($fastrouted) {
 $http = new React\Http\HttpServer(
     $logger,
     $static,
-    $session,
+    $onesession,
     $handler
 );
 

@@ -1,6 +1,9 @@
 <?php
 /**
- * Sessions for PSR-7 and PSR-15 compatible middleware controllers
+ * Sessions for PSR-7 and PSR-15 compatible middleware controllers (not functional)
+ *
+ * In general, single-user sessions, authentication and authkey confirmation are ok,
+ * but multi-user sessions clash with use of superglobals in several core classes...
  */
 
 namespace Xaraya\Bridge\Middleware;
@@ -245,4 +248,9 @@ class SessionMiddleware implements MiddlewareInterface
         $query = "DELETE FROM $this->table WHERE id = ?";
         $this->db->execute($query, [$session->sessionId]);
     }
+}
+
+class SingleSessionMiddleware extends SessionMiddleware
+{
+    // clarify we only support a single session here
 }
