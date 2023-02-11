@@ -15,7 +15,7 @@ use sys;
 /**
  * For documentation purposes only - available via CommonBridgeTrait
  */
-interface CommonBridgeInterface extends CommonRequestInterface
+interface CommonBridgeInterface extends CommonRequestInterface, DataObjectBridgeInterface, ModuleBridgeInterface, BlockBridgeInterface
 {
     public static function prepareController(string $module = 'base', string $baseUri = ''): void;
 }

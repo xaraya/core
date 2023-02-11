@@ -23,7 +23,6 @@ interface DefaultRouterInterface
     public static function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string;
     public static function stripBaseUri(ServerRequestInterface $request): ServerRequestInterface;
     public static function setBaseUri(string|ServerRequestInterface $request): void;
-    public static function setPrefix(string $prefix): void;
     public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface;
     public static function emitResponse(ResponseInterface $response): void;
 }
@@ -62,6 +61,10 @@ abstract class DefaultRouter implements DefaultRouterInterface, CommonBridgeInte
      */
     public static function stripBaseUri(ServerRequestInterface $request): ServerRequestInterface
     {
+        // did we already filter out the base uri in router middleware?
+        if ($request->getAttribute('baseUri') !== null) {
+            return $request;
+        }
         $baseUri = static::getBaseUri($request);
         if (!empty($baseUri)) {
             $path = static::getPathInfo($request);
@@ -90,14 +93,6 @@ abstract class DefaultRouter implements DefaultRouterInterface, CommonBridgeInte
         } else {
             static::$baseUri = $request;
         }
-    }
-
-    /**
-     * Set the path prefix used in object/module requests (after the script name if filtered in router)
-     */
-    public static function setPrefix(string $prefix): void
-    {
-        static::$prefix = $prefix;
     }
 
     /**

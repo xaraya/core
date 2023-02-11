@@ -53,6 +53,13 @@ trait CommonRequestTrait
 
     public static function getBaseUri($request = null): string
     {
+        // for PSR-7 compatible requests
+        if (is_object($request) && method_exists($request, 'getAttribute')) {
+            // did we already filter out the base uri in router middleware?
+            if ($request->getAttribute('baseUri') !== null) {
+                return $request->getAttribute('baseUri');
+            }
+        }
         // for PSR-7 compatible server requests and everyone else
         $server = static::getServerParams($request);
         $requestPath = explode('?', $server['REQUEST_URI'] ?? '')[0];

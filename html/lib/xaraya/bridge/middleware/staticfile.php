@@ -24,7 +24,6 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     protected array $attributes = ['module', 'theme', 'folder', 'file'];
     protected array $options = [];
     public static string $baseUri = '';
-    public static string $prefix = '/themes';
     public static array $locations = [
         'theme' => '/themes',
         'module' => '/code/modules',
@@ -101,7 +100,6 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
 
         foreach (static::$locations as $type => $prefix) {
             // parse request uri for path + query params
-            static::setPrefix($prefix);
             $params = static::parseUri($request, $prefix, $type);
 
             // identify static file requests and set request attributes
@@ -123,7 +121,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     {
         // did we already filter out the base uri in router middleware?
         if ($request->getAttribute('baseUri') !== null) {
-            //$prefix = static::$prefix;
+            //$prefix = $prefix;
         } else {
             $prefix = static::$baseUri . $prefix;
         }

@@ -40,6 +40,16 @@ class VirtualSession
         }
         $this->vars = $vars;
     }
+
+    /**
+     * Magic method to re-create session based on result of var_export($session, true)
+    **/
+    public static function __set_state($args)
+    {
+        $c = new static($args['sessionId'], $args['userId'], $args['ipAddress'], $args['lastUsed'], $args['vars']);
+        $c->isNew = $args['isNew'];
+        return $c;
+    }
 }
 
 class SessionMiddleware implements MiddlewareInterface
