@@ -46,7 +46,8 @@ class VirtualSession
     **/
     public static function __set_state($args)
     {
-        $c = new static($args['sessionId'], $args['userId'], $args['ipAddress'], $args['lastUsed'], $args['vars']);
+        // not using new static() here - see https://phpstan.org/blog/solving-phpstan-error-unsafe-usage-of-new-static
+        $c = new self($args['sessionId'], $args['userId'], $args['ipAddress'], $args['lastUsed'], $args['vars']);
         $c->isNew = $args['isNew'];
         return $c;
     }
@@ -93,10 +94,21 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface|callable $next): ResponseInterface
     {
+        $token = null;
+        if ($request->hasHeader('X-Auth-Token')) {
+            $token = $request->getHeaderLine('X-Auth-Token');
+            echo "Token: " . var_export($token, true) . "\n";
+        }
         $cookies = $request->getCookieParams();
         echo "Cookies: " . var_export($cookies, true) . "\n";
         $sessionId = null;
-        if (array_key_exists($this->cookieName, $cookies)) {
+        if (!empty($token)) {
+            $sessionId = $token;
+            $session = $this->lookup($sessionId);
+            $_SESSION[xarSession::PREFIX . 'role_id'] = $session->userId;
+            $request = $request->withAttribute('userId', $session->userId);
+            echo "Token: " . var_export($session, true) . "\n";
+        } elseif (array_key_exists($this->cookieName, $cookies)) {
             $sessionId = $cookies[$this->cookieName];
             $session = $this->lookup($sessionId);
             $_SESSION[xarSession::PREFIX . 'role_id'] = $session->userId;
@@ -119,6 +131,10 @@ class SessionMiddleware implements MiddlewareInterface
         if (strpos($request->getRequestTarget(), '/authsystem/') !== false) {
             $this->registerCallbackEvents($request);
             $isAuthSystem = true;
+        }
+        $isAuthToken = false;
+        if (strpos($request->getRequestTarget(), '/restapi/token') !== false && $request->getMethod() == 'POST') {
+            $isAuthToken = true;
         }
         $isAuthKey = false;
         if (!empty($sessionId) && $request->getMethod() == 'POST') {
@@ -149,6 +165,16 @@ class SessionMiddleware implements MiddlewareInterface
                 $this->update($session);
                 $sendCookie = true;
             }
+        } elseif ($isAuthToken && $response->getStatusCode() === 200) {
+            $body = (string) $response->getBody();
+            $info = json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+            $userId = $info['role_id'];
+            $sessionId = $info['access_token'];
+            //echo "AuthToken: userId=$userId - sessionId=$sessionId\n";
+            $session = new VirtualSession($sessionId, $userId);
+            $session->vars['expiration'] = $info['expiration'];
+            $this->register($session);
+            $sendCookie = false;
         } elseif ($isAuthKey) {
             $session->vars['rand'] = rand();
             $this->update($session);
@@ -177,6 +203,8 @@ class SessionMiddleware implements MiddlewareInterface
                 $this->update($session);
                 $sendCookie = true;
             }
+        } elseif (isset($_SESSION[xarSession::PREFIX . 'role_id'])) {
+            unset($_SESSION[xarSession::PREFIX . 'role_id']);
         }
         if ($sendCookie && !empty($sessionId)) {
             $cookieString = $this->cookieName . '=' . $sessionId;
@@ -228,6 +256,7 @@ class SessionMiddleware implements MiddlewareInterface
         } else {
             $userId = 0;
             $session = new VirtualSession($sessionId, $userId, $ipAddress, time(), []);
+            // @todo only register when we actually have a userId in update
             $this->register($session);
             $session->isNew = true;
         }

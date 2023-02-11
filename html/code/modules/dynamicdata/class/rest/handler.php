@@ -721,6 +721,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
             if (!$pass) {
                 throw new ForbiddenOperationException();
             }
+            // @checkme for security checks inside API functions when using auth token - see also reactphp single session
+            //$_SESSION[xarSession::PREFIX . 'role_id'] = $userId;
         }
         if (self::$enableCache && empty($func['caching'])) {
             self::$enableCache = false;
@@ -777,6 +779,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
             if (!$pass) {
                 throw new ForbiddenOperationException();
             }
+            // @checkme for security checks inside API functions when using auth token - see also reactphp single session
+            //$_SESSION[xarSession::PREFIX . 'role_id'] = $userId;
         }
         if (!empty($func['mediatype'])) {
             self::$mediaType = $func['mediatype'];
