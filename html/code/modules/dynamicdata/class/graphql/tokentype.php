@@ -37,6 +37,7 @@ class xarGraphQLTokenType extends ObjectType
             'fields' => [
                 'access_token' => ['type' => Type::string()],
                 'expiration' => ['type' => Type::string()],
+                'role_id' => ['type' => Type::int()],
             ],
         ];
     }
@@ -56,10 +57,8 @@ class xarGraphQLTokenType extends ObjectType
         switch ($name) {
             case 'getToken':
                 return static::_xar_get_create_mutation($name);
-                break;
             case 'deleteToken':
                 return static::_xar_get_delete_mutation($name);
-                break;
             default:
                 throw new Exception("Unknown '$kind' mutation '$name'");
         }
@@ -103,7 +102,7 @@ class xarGraphQLTokenType extends ObjectType
                 $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];
                 $token = xarGraphQL::createToken($userInfo);
                 $expiration = date('c', time() + xarGraphQL::$tokenExpires);
-                return ['access_token' => $token, 'expiration' => $expiration];
+                return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
             },
         ];
     }
@@ -130,11 +129,11 @@ class xarGraphQLTokenType extends ObjectType
                     return false;
                 }
                 // see dummytype whoami and graphql checkUser
-                $userId = xarGraphQL::checkToken($context['server']);
+                $userId = xarGraphQL::checkToken($context);
                 if (empty($userId)) {
                     return true;
                 }
-                xarGraphQL::deleteToken($context['server']);
+                xarGraphQL::deleteToken($context);
                 return true;
             },
         ];

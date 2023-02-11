@@ -22,6 +22,7 @@ interface CommonRequestInterface
     public static function getQueryParams($request = null): array;
     public static function getServerParams($request = null): array;
     public static function getCookieParams($request = null): array;
+    public static function getAuthToken($request = null): string;
     public static function getUploadedFiles($request = null): array;
     public static function getParsedBody($request = null): mixed;
     public static function getJsonBody($request = null): mixed;
@@ -112,6 +113,22 @@ trait CommonRequestTrait
         }
         // for everyone else
         return $_COOKIE;
+    }
+
+    public static function getAuthToken($request = null): string
+    {
+        // for PSR-7 compatible requests
+        if (is_object($request) && method_exists($request, 'hasHeader')) {
+            if ($request->hasHeader('X-Auth-Token')) {
+                return $request->getHeaderLine('X-Auth-Token');
+            }
+        }
+        // for PSR-7 compatible server requests and everyone else
+        $server = static::getServerParams($request);
+        if (empty($server) || empty($server['HTTP_X_AUTH_TOKEN'])) {
+            return '';
+        }
+        return $server['HTTP_X_AUTH_TOKEN'];
     }
 
     public static function getUploadedFiles($request = null): array

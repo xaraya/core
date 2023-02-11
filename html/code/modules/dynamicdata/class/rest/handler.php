@@ -33,7 +33,6 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
     public static $tokenExpires = 12 * 60 * 60;  // 12 hours
     public static $storageType = 'apcu';  // database or apcu
     public static $tokenStorage;
-    public static $userId;
     public static $mediaType;
 
     public static function getOpenAPI($vars = [], &$request = null)
@@ -522,7 +521,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
      */
     private static function checkUser($context)
     {
-        $userInfo = self::checkToken($context['server']);
+        $userInfo = self::checkToken($context);
         if (!empty($userInfo)) {
             $userInfo = @json_decode($userInfo, true);
             if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$tokenExpires))) {
@@ -566,12 +565,10 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
     /**
      * Verify that the token corresponds to an authorized user (with minimal core load) using xarCache_Storage
      */
-    private static function checkToken($serverVars)
+    private static function checkToken($context)
     {
-        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
-            return;
-        }
-        $token = $serverVars['HTTP_X_AUTH_TOKEN'];
+        $context['request'] ??= null;
+        $token = static::getAuthToken($context['request']);
         if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
             return;
         }
@@ -625,18 +622,15 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
         self::getTokenStorage()->sizeLimitReached();
         self::getTokenStorage()->setCached($token, json_encode(['userId' => $userId, 'access' => $access, 'created' => time()]));
         $expiration = date('c', time() + self::$tokenExpires);
-        return ['access_token' => $token, 'expiration' => $expiration];
+        return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
     }
 
     public static function deleteToken($args)
     {
+        $args['request'] ??= null;
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
         $userId = self::checkUser($args);
-        $serverVars = $args['server'];
-        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
-            return false;
-        }
-        $token = $serverVars['HTTP_X_AUTH_TOKEN'];
+        $token = static::getAuthToken($args['request']);
         if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
             return false;
         }
@@ -712,7 +706,6 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
         if (empty($func)) {
             return ['method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
-        $args = $args['query'] ?? [];
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = self::checkUser($args);
@@ -735,20 +728,24 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
         // @checkme how to save this in case of caching?
         if (!empty($func['mediatype'])) {
             self::$mediaType = $func['mediatype'];
+            if (!empty($args['request'])) {
+                $args['request'] = ($args['request'])->withAttribute('mediaType', $func['mediatype']);
+            }
         }
         xarMod::init();
         xarUser::init();
         // @checkme pass all query args from handler here?
+        $params = $args['query'] ?? [];
         if (!empty($func['args'])) {
             if (!empty($more)) {
                 // @checkme path params overwrite query params - but what about default args?
-                $args = array_merge($args, $func['args']);
+                $params = array_merge($params, $func['args']);
             } else {
                 // @checkme query params overwrite default args
-                $args = array_merge($func['args'], $args);
+                $params = array_merge($func['args'], $params);
             }
         }
-        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $args);
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params);
     }
 
     public static function postModuleCall($args)
@@ -783,14 +780,18 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
         }
         if (!empty($func['mediatype'])) {
             self::$mediaType = $func['mediatype'];
+            if (!empty($args['request'])) {
+                $args['request'] = ($args['request'])->withAttribute('mediaType', $func['mediatype']);
+            }
         }
         xarMod::init();
         xarUser::init();
         // @checkme handle POSTed args by passing $args['input'] only in handler?
+        $params = $args['input'] ?? [];
         if (!empty($more) && !empty($func['args'])) {
-            $args['input'] = array_merge($args['input'], $func['args']);
+            $params = array_merge($params, $func['args']);
         }
-        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $args['input']);
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params);
     }
 
     public static function putModuleCall($args)
@@ -907,23 +908,23 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
      */
     public static function registerRoutes($r)
     {
-        $r->get('/objects', ['DataObjectRESTHandler', 'getObjects']);
-        $r->get('/objects/{object}', ['DataObjectRESTHandler', 'getObjectList']);
-        $r->get('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'getObjectItem']);
-        $r->post('/objects/{object}', ['DataObjectRESTHandler', 'createObjectItem']);
-        $r->put('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'updateObjectItem']);
-        $r->delete('/objects/{object}/{itemid}', ['DataObjectRESTHandler', 'deleteObjectItem']);
-        //$r->patch('/objects/{object}', ['DataObjectRESTHandler', 'patchObjectDefinition']);
-        $r->get('/whoami', ['DataObjectRESTHandler', 'whoami']);
-        $r->post('/token', ['DataObjectRESTHandler', 'postToken']);
-        $r->delete('/token', ['DataObjectRESTHandler', 'deleteToken']);
-        $r->get('/modules', ['DataObjectRESTHandler', 'getModules']);
-        $r->get('/modules/{module}', ['DataObjectRESTHandler', 'getModuleApis']);
+        $r->get('/objects', [static::class, 'getObjects']);
+        $r->get('/objects/{object}', [static::class, 'getObjectList']);
+        $r->get('/objects/{object}/{itemid}', [static::class, 'getObjectItem']);
+        $r->post('/objects/{object}', [static::class, 'createObjectItem']);
+        $r->put('/objects/{object}/{itemid}', [static::class, 'updateObjectItem']);
+        $r->delete('/objects/{object}/{itemid}', [static::class, 'deleteObjectItem']);
+        //$r->patch('/objects/{object}', [static::class, 'patchObjectDefinition']);
+        $r->get('/whoami', [static::class, 'whoami']);
+        $r->post('/token', [static::class, 'postToken']);
+        $r->delete('/token', [static::class, 'deleteToken']);
+        $r->get('/modules', [static::class, 'getModules']);
+        $r->get('/modules/{module}', [static::class, 'getModuleApis']);
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-        $r->get('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'getModuleCall']);
-        $r->post('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'postModuleCall']);
-        $r->put('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'putModuleCall']);
-        $r->delete('/modules/{module}/{path}[/{more:.+}]', ['DataObjectRESTHandler', 'deleteModuleCall']);
+        $r->get('/modules/{module}/{path}[/{more:.+}]', [static::class, 'getModuleCall']);
+        $r->post('/modules/{module}/{path}[/{more:.+}]', [static::class, 'postModuleCall']);
+        $r->put('/modules/{module}/{path}[/{more:.+}]', [static::class, 'putModuleCall']);
+        $r->delete('/modules/{module}/{path}[/{more:.+}]', [static::class, 'deleteModuleCall']);
     }
 
     // different processing for REST API - see rst.php
@@ -1024,14 +1025,19 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
         // initialize users
         //xarUser::init();
         self::setTimer('handle');
+        // don't use call_user_func here anymore because $request is passed by reference
+        self::$mediaType = '';
+        if (!empty($request)) {
+            $params['request'] = &$request;
+        }
         try {
             $result = call_user_func($handler, $params);
         } catch (UnauthorizedOperationException $e) {
             self::setTimer('unauthorized');
-            return;
+            throw new UnauthorizedOperationException();
         } catch (ForbiddenOperationException $e) {
             self::setTimer('forbidden');
-            return;
+            throw new ForbiddenOperationException();
         } catch (Throwable $e) {
             self::setTimer('exception');
             return $e->getMessage();

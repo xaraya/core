@@ -101,7 +101,6 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
     public static $tokenExpires = 12 * 60 * 60;  // 12 hours
     public static $storageType = 'apcu';  // database or apcu
     public static $tokenStorage;
-    public static $userId;
     public static $objectSecurity = [];
     public static $objectFieldSpecs = [];
     public static $object_ref = [];
@@ -696,9 +695,13 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
         $context = [];
         $context['server'] = static::getServerParams($request);
         $context['cookie'] = static::getCookieParams($request);
+        if (!empty($request)) {
+            $context['request'] = &$request;
+        } else {
+            $context['request'] = null;
+        }
         $result = self::get_data($query, $variables, $operationName, [], null, $context);
         if ($query == '{schema}') {
-            //static::$mediaType = 'text/plain';
             if (!empty($request)) {
                 $request = $request->withAttribute('mediaType', 'text/plain');
             }
@@ -708,22 +711,20 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
 
     public static function checkUser($context)
     {
-        $userId = self::checkToken($context['server']);
+        $userId = self::checkToken($context);
         if (!empty($userId)) {
             return $userId;
         }
         return self::checkCookie($context['cookie']);
     }
 
-    public static function checkToken($serverVars)
+    public static function checkToken($context)
     {
-        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
-            return;
-        }
+        $context['request'] ??= null;
+        $token = static::getAuthToken($context['request']);
         if (self::$trace_path) {
             self::$paths[] = "checkToken";
         }
-        $token = $serverVars['HTTP_X_AUTH_TOKEN'];
         if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
             return;
         }
@@ -770,12 +771,10 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
         return $token;
     }
 
-    public static function deleteToken($serverVars)
+    public static function deleteToken($context)
     {
-        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
-            return;
-        }
-        $token = $serverVars['HTTP_X_AUTH_TOKEN'];
+        $context['request'] ??= null;
+        $token = static::getAuthToken($context['request']);
         if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
             return;
         }

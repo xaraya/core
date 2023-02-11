@@ -25,12 +25,12 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
     public static $_xar_queries = [
         'page' => 'samples_page',
         'list' => 'samples',
-        'item' => 'sample'
+        'item' => 'sample',
     ];
     public static $_xar_mutations = [
         'create' => 'createSample',
         'update' => 'updateSample',
-        'delete' => 'deleteSample'
+        'delete' => 'deleteSample',
     ];
 
     /**

@@ -23,7 +23,7 @@ class xarGraphQLPropertyType extends xarGraphQLBaseType
     public static $_xar_object = 'properties';
     public static $_xar_queries = [
         'list' => 'properties',
-        'item' => 'property'
+        'item' => 'property',
     ];
     public static $_xar_mutations = [];
 

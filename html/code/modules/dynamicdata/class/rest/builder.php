@@ -544,7 +544,6 @@ class DataObjectRESTBuilder extends xarObject
                     break;
                 default:
                     throw new Exception('Unsupported display status ' . $property->getDisplayStatus());
-                    break;
             }
             $properties[] = $propinfo;
         }
@@ -1189,6 +1188,9 @@ class DataObjectRESTBuilder extends xarObject
                 'type' => 'string',
                 'format' => 'date-time',
             ],
+            'role_id' => [
+                'type' => 'integer',
+            ],
         ];
         self::add_operation_response($path, $method, $schema, $properties);
         self::add_operation_security($path, $method, false);
@@ -1263,7 +1265,6 @@ class DataObjectRESTBuilder extends xarObject
                 break;
             default:
                 throw new Exception('Unsupported property type ' . $property->type . '=' . self::$proptype_names[$property->type] . ' (' . $property->basetype . ')');
-                break;
         }
         return $datatype;
     }
