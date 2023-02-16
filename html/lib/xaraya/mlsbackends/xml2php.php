@@ -139,7 +139,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
 
             $lines = file($fileName);
             foreach ($lines as $line) {
-                if ($line{0} == '#') continue;
+                if ($line[0] == '#') continue;
                 list($key, $value) = explode('=', $line);
                 $key = trim($key);
                 $value = trim($value);

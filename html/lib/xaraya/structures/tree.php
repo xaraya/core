@@ -101,11 +101,11 @@ class TreeNode extends xarObject implements ITreeNode
 
     private function comparelevels($a, $b)
     {
-       return ($a['nodelevel'] > $b['nodelevel']);
+       return ($a['nodelevel'] <=> $b['nodelevel']);
     }
     private function rcomparelevels($a, $b)
     {
-       return ($a['nodelevel'] < $b['nodelevel']);
+       return ($b['nodelevel'] <=> $a['nodelevel']);
     }
 }
 
