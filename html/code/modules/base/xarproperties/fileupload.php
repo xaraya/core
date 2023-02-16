@@ -447,7 +447,7 @@ class FileUploadProperty extends DataProperty
     }
 
 	/**
-	 * Display a hidcen file upload
+	 * Display a hidden file upload
 	 * 
 	 * @param  array data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page

@@ -404,10 +404,10 @@ class xarMLS extends xarObject
      */
     static public function setCurrentLocale($locale)
     {
-        xarLog::message("Changing the default locale from ". self::getCurrentLocale() . " to " . $locale, xarLog::LEVEL_INFO);
-        
         // Only refresh if we need to
         if (self::getCurrentLocale() == $locale) return true;
+        
+        xarLog::message("Changing the default locale from ". self::getCurrentLocale() . " to " . $locale, xarLog::LEVEL_INFO);
         
         static $called = 0;
     
@@ -434,7 +434,7 @@ class xarMLS extends xarObject
         }
 
         // Set current locale
-	self::$currentLocale = $locale;
+		self::$currentLocale = $locale;
     
         $curCharset = self::getCharsetFromLocale($locale);
         if ($mode == xarMLS::UNBOXED_MULTI_LANGUAGE_MODE) {

@@ -1416,6 +1416,10 @@ class Query
 
     private function _deconstructfield($field)
     {
+    	// A well formed field needs to be a string
+    	// Some fields are numbers or arrays, such as after IN conditions
+    	if (!is_string($field)) { throw new Exception('Field is not a string'); }
+    	
         if (preg_match("/(.*) as (.*)/i", $field, $match)) {
             $field = trim($match[1]);
             $alias = trim($match[2]);
