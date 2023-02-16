@@ -2,10 +2,16 @@
 /**
  * Try out the combined request handler with ReactPHP (work in progress)
  *
+ * $ composer require react/http
+ * $ cp html/lib/xaraya/bridge/reactphp.php developer/bin/react.php
+ * $ php developer/bin/react.php
+ * Listening on http://0.0.0.0:8080
+ * ...
+ *
  * Caution: this does not support sessions or authentication, and is not meant for production (at all)
  */
 
-require dirname(__DIR__).'/vendor/autoload.php';
+require dirname(dirname(__DIR__)).'/vendor/autoload.php';
 sys::init();
 xarCache::init();
 xarCore::xarInit(xarCore::SYSTEM_USER);
@@ -17,9 +23,9 @@ use Psr\Http\Message\ResponseInterface;
 // use some PSR-7 factory and PSR-15 dispatcher
 use Nyholm\Psr7\Factory\Psr17Factory;
 // use Xaraya PSR-15 compatible middleware(s)
-use Xaraya\Bridge\Middleware\DefaultMiddleware;
 use Xaraya\Bridge\Middleware\FastRouteHandler;
 use Xaraya\Bridge\Middleware\StaticFileMiddleware;
+use Xaraya\Bridge\Middleware\SingleSessionMiddleware;
 
 // @todo find some way to re-use React\Http\Message\Response
 $psr17Factory = new Psr17Factory();
@@ -38,14 +44,10 @@ $static = function (ServerRequestInterface $request, callable $next) use ($files
     return $files->process($request, $next);
 };
 
+$onesession = new SingleSessionMiddleware();
+
 // See https://github.com/php-pm/php-pm/blob/master/src/ProcessSlave.php to set server environment
 $handler = function (ServerRequestInterface $request) use ($fastrouted) {
-    $message = "Request: " . $request->getUri() . PHP_EOL;
-    $server = DefaultMiddleware::getServerParams($request);
-    $message .= 'Server:<pre>' . var_export($server, true) . '</pre>' . PHP_EOL;
-    $cookies = DefaultMiddleware::getCookieParams($request);
-    $message .= 'Cookies:<pre>' . var_export($cookies, true) . '</pre>' . PHP_EOL;
-    //echo $message;
     // setting this makes xarServer::getCurrentURL() work again, but we need to set PATH_INFO too for getBaseURI()
     $requestUri = $request->getRequestTarget();
     xarServer::setVar('REQUEST_URI', $requestUri);
@@ -56,10 +58,11 @@ $handler = function (ServerRequestInterface $request) use ($fastrouted) {
 $http = new React\Http\HttpServer(
     $logger,
     $static,
+    $onesession,
     $handler
 );
 
-$http->on('error', function (Exception $e) {
+$http->on('error', function (Throwable $e) {
     echo 'Error: ' . $e->getMessage() . PHP_EOL;
     if ($e->getPrevious() !== null) {
         echo 'Previous: ' . $e->getPrevious()->getMessage() . PHP_EOL;

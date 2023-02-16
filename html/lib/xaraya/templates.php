@@ -444,7 +444,7 @@ class xarTpl extends xarObject
         // 2. Create a page in the themes module with an interface
         // 3. Use 1. to link to 2.
         // @checkme: modules is a depency of templates, redundant check?
-        if (method_exists('xarModVars','Get') && method_exists('xarUser','getVar')) {
+        if (method_exists('xarModVars','get') && method_exists('xarUser','getVar')) {
             if (xarModVars::get('themes', 'variable_dump') &&
                 in_array(xarUser::getVar('uname'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
                 echo '<pre>',var_export($tplData, 1),'</pre>';

@@ -89,6 +89,7 @@ function base_admin_modifyconfig()
         $data['modes'] = $modes;
     }
 
+    /** @var FilePickerProperty $picker */
     $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
     $picker->initialization_basedirectory = sys::varpath() . "/logs/";
     $picker->setExtensions('txt,html');

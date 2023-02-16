@@ -35,6 +35,7 @@ class PropertyRegistration extends DataContainer
     public $args       = array();                // special args needed?
     public $aliases    = array();                // aliases for this property
     public $filepath   = '';                     // path to the directory where the property lives
+    public $template   = '';                     // the template for this property
     public $format     = 0;                      // what format type do we have here?
                                                  // 0 = ? what?
                                                  // 1 =
@@ -394,10 +395,11 @@ class PropertyRegistration extends DataContainer
 
                 // Main part
                 // Call the class method on each property to get the registration info
-                if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
+                //if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
                 $descriptor = new ObjectDescriptor(array());
                 $baseInfo = new PropertyRegistration($descriptor);
                 try {
+                    /** @var DataProperty $property */
                     $property = new $propertyClass($descriptor);
                     xarLog::message(xarMLS::translate('DynamicData: Registering the property #(1)', $propertyClass), xarLog::LEVEL_DEBUG);
                 } catch (Exception $e) {

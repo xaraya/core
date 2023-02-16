@@ -519,7 +519,17 @@ class RelationalDataStore extends SQLDataStore
             }
         }
     }
-
+    /**
+     * Summary of setItemValue
+     * @param mixed $itemid
+     * @param mixed $row
+     * @param mixed $field
+     * @param DataObjectList $object
+     * @param mixed $fordisplay
+     * @param mixed $row_output
+     * @throws Exception
+     * @return void
+     */
     private function setItemValue($itemid, $row, $field, $object, $fordisplay=0, $row_output='associative')
     {
     // Is this a subitems property?
@@ -530,6 +540,7 @@ class RelationalDataStore extends SQLDataStore
             if (empty($subitemsobjectname)) return;
 
     // Ignore if the record is a null (by way of the primary index)
+            /** @var DataObject|DataObjectList $subitemsobject */
             $subitemsobject = $object->properties[$field]->subitemsobject;
             if (!is_object($subitemsobject)) throw new Exception(xarML('The property #(1) has no valid subitems object. Value is: #(2)',$field,$subitemsobject));
             if ($row[$subitemsobjectname . "_" . $subitemsobject->primary] == null) return;

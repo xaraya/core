@@ -38,7 +38,7 @@ class BlocksModRemoveObserver extends EventObserver implements ixarEventObserver
                 xarMod::apiFunc('blocks', 'types', 'deleteitem', $blocktype);
             }
         }
-        xarVar::delCached('Blocks.event','modremove', $modName);
+        xarVar::delCached('Blocks.event','modremove');
 
     }
 }

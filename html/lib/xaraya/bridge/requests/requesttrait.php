@@ -22,8 +22,10 @@ interface CommonRequestInterface
     public static function getQueryParams($request = null): array;
     public static function getServerParams($request = null): array;
     public static function getCookieParams($request = null): array;
+    public static function getAuthToken($request = null): string;
     public static function getUploadedFiles($request = null): array;
     public static function getParsedBody($request = null): mixed;
+    public static function getJsonBody($request = null): mixed;
 }
 
 trait CommonRequestTrait
@@ -52,6 +54,13 @@ trait CommonRequestTrait
 
     public static function getBaseUri($request = null): string
     {
+        // for PSR-7 compatible requests
+        if (is_object($request) && method_exists($request, 'getAttribute')) {
+            // did we already filter out the base uri in router middleware?
+            if ($request->getAttribute('baseUri') !== null) {
+                return $request->getAttribute('baseUri');
+            }
+        }
         // for PSR-7 compatible server requests and everyone else
         $server = static::getServerParams($request);
         $requestPath = explode('?', $server['REQUEST_URI'] ?? '')[0];
@@ -106,6 +115,22 @@ trait CommonRequestTrait
         return $_COOKIE;
     }
 
+    public static function getAuthToken($request = null): string
+    {
+        // for PSR-7 compatible requests
+        if (is_object($request) && method_exists($request, 'hasHeader')) {
+            if ($request->hasHeader('X-Auth-Token')) {
+                return $request->getHeaderLine('X-Auth-Token');
+            }
+        }
+        // for PSR-7 compatible server requests and everyone else
+        $server = static::getServerParams($request);
+        if (empty($server) || empty($server['HTTP_X_AUTH_TOKEN'])) {
+            return '';
+        }
+        return $server['HTTP_X_AUTH_TOKEN'];
+    }
+
     public static function getUploadedFiles($request = null): array
     {
         // for PSR-7 compatible server requests
@@ -124,5 +149,21 @@ trait CommonRequestTrait
         }
         // for everyone else
         return $_POST;
+    }
+
+    public static function getJsonBody($request = null): mixed
+    {
+        // for PSR-7 compatible server requests
+        if (is_object($request) && method_exists($request, 'getBody')) {
+            $rawInput = (string) $request->getBody();
+        } else {
+            // for everyone else
+            $rawInput = file_get_contents('php://input');
+        }
+        $input = null;
+        if (!empty($rawInput)) {
+            $input = json_decode($rawInput, true, 512, JSON_THROW_ON_ERROR);
+        }
+        return $input;
     }
 }

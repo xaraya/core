@@ -110,8 +110,8 @@ class xarSecurity extends xarObject
     /**
      * getLevel: gets a security level based on its name.
      *
-     * @param   integer levelname
-     * @return  security level
+     * @param   int $levelname
+     * @return  int security level
      */
     public static function getLevel($levelname)
     {
@@ -130,8 +130,16 @@ class xarSecurity extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   component string
-     * @return  boolean
+     *
+     * @param string $mask
+     * @param int $catch
+     * @param string $component
+     * @param string $instance
+     * @param string $module
+     * @param string $rolename
+     * @param int $realm
+     * @param int $level
+     * @return bool
     */
     public static function check($mask,$catch=1,$component='',$instance='',$module='',$rolename='',$realm=0,$level=0)
     {
@@ -373,7 +381,7 @@ class xarSecurity extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string
-     * @return  mask object
+     * @return  xarMask|void object
     */
     public static function getMask($name,$modid=0,$component="All",$suppresscache=FALSE)
     {
@@ -415,7 +423,7 @@ class xarSecurity extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   array representing the initial node to start from
-     * @return  nested array containing the role's ancestors and privileges
+     * @return  array nested array containing the role's ancestors and privileges
     */
     public static function irreducibleset($coreset,$module_id=null)
     {
@@ -463,10 +471,11 @@ class xarSecurity extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   mask object
-     * @param   nested array representing the irreducibles set of privileges
-     * @param   boolean false (initial test value)
-     * @return  boolean false if check fails, privilege object if check succeeds
+     * @param   array $mask normalform
+     * @param   array $privilegeset representing the irreducibles set of privileges
+     * @param   bool $pass false (initial test value)
+     * @param   mixed $role
+     * @return  bool false if check fails, privilege object if check succeeds
     */
     public static function testprivileges($mask,$privilegeset,$pass,$role='')
     {
@@ -507,7 +516,6 @@ class xarSecurity extends xarObject
                                 echo "but <font color='blue'>[" . self::present($privilege) . "] wins</font> because directly assigned. Continuing with other checks...<br />";
                             }
                             return false;
-                            break;
                         }
                     }
                     if($thistest) {

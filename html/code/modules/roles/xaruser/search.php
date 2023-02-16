@@ -31,6 +31,7 @@ function roles_user_search()
     if (!isset($q)) {
         if (xarModHooks::isHooked('dynamicdata','roles')) {
             // get the DataObject defined for this module
+            /** @var DataObject $object */
             $object = xarMod::apiFunc('dynamicdata','user','getobject',
                                      array('module' => 'roles'));
             if (isset($object) && !empty($object->objectid)) {

@@ -345,6 +345,11 @@ class DataObjectLoader
         // }
     }
 
+    /**
+     * Summary of applyObjectFilter
+     * @param DataObjectList $objectlist
+     * @return void
+     */
     public function applyObjectFilter($objectlist)
     {
         if (empty($this->filter)) {

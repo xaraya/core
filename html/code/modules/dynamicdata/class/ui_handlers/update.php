@@ -96,7 +96,7 @@ class UpdateHandler extends DefaultHandler
                 return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
             }
 
-            $isvalid = $this->object->checkInput();
+            $isvalid = $this->object->checkInput($args);
 
             if ($isvalid && !empty($args['confirm'])) {
                 $itemid = $this->object->updateItem();

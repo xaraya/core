@@ -38,19 +38,24 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Exception;
+use Throwable;
+use ForbiddenOperationException;
+use UnauthorizedOperationException;
+use xarController;
 use sys;
 
 sys::import('xaraya.bridge.routing');
 use Xaraya\Bridge\Routing\FastRouteBridge;
 use Xaraya\Bridge\Routing\FastRouteApiBridge;
+use Xaraya\Bridge\Routing\TrackRouteCollector;
+use DataObjectRESTHandler;
 // @checkme rename FastRoute dispatcher as router here to avoid confusion with PSR-15 naming
 use FastRoute\Dispatcher as FastRouter;
 use FastRoute\RouteCollector;
 
 use function FastRoute\simpleDispatcher;
 
-class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
+class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, DefaultResponseInterface
 {
     use DefaultResponseTrait;
 
@@ -69,7 +74,9 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                     FastRouteApiBridge::addRouteCollection($r);
                 });
                 FastRouteBridge::addRouteCollection($r);
-            });
+            }, [
+                'routeCollector' => TrackRouteCollector::class,
+            ]);
         }
         $this->setRouter($router);
     }
@@ -95,6 +102,16 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
         return $this->execute($request, $next);
     }
 
+    public function prepareRequestCallback(ServerRequestInterface &$request)
+    {
+        // @checkme we need to somehow update $request here to do any good!?
+        $callback = function (string $redirectURL, int $status = 302) use (&$request) {
+            $request = $request->withAttribute('redirectURL', $redirectURL);
+            $request = $request->withAttribute('status', $status);
+        };
+        xarController::$redirectTo = $callback;
+    }
+
     /**
      * Execute the server request - this will set request attributes based on path variables + handle the request
      */
@@ -115,11 +132,8 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 if (!empty($next)) {
                     return $next->handle($request);
                 }
-                $response = $this->getResponseFactory()->createResponse();
-                $response = $response->withStatus(404);
-                $response->getBody()->write('Nothing to see here at ' . htmlspecialchars($path));
-                return $response;
-                break;
+                return $this->createNotFoundResponse($path);
+
             case FastRouter::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
@@ -127,7 +141,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 $response = $response->withStatus(405)->withHeader('Allow', implode(', ', $allowedMethods));
                 $response->getBody()->write('Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path));
                 return $response;
-                break;
+
             case FastRouter::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
@@ -137,26 +151,49 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
                 //return $routeInfo[1]($request)
                 //return $next->handle($request);
                 // ... call $handler with $vars
+                $numeric = true;
                 try {
-                    $query = $request->getQueryParams();
-                    $input = null;
-                    // pass along body params too (if any) - limited to POST requests here
-                    if ($method === 'POST') {
-                        $input = $request->getParsedBody();
+                    // @checkme we need to somehow update $request here to do any good!?
+                    $this->prepareRequestCallback($request);
+                    // don't use call_user_func here anymore because $request is passed by reference
+                    if (strpos($path, '/restapi/') === 0) {
+                        // different processing for REST API - see rst.php
+                        $result = DataObjectRESTHandler::callHandler($handler, $vars, $request);
+                    } elseif (strpos($path, '/graphql') === 0) {
+                        // different processing for GraphQL API - see gql.php
+                        $result = $handler($vars, $request);
+                        $numeric = false;
+                    } else {
+                        $result = $handler($vars, $request);
                     }
-                    $result = call_user_func($handler, $vars, $query, $input);
-                } catch (Exception $e) {
+                    $redirectURL = $request->getAttribute('redirectURL');
+                    if (!empty($redirectURL)) {
+                        echo "Location: " . $redirectURL . "\n";
+                        return $this->createRedirectResponse($redirectURL, $request->getAttribute('status', 302));
+                    }
+                    // @checkme can't really handle REST API differently here yet
+                    if ($handler[1] === 'getOpenAPI') {
+                        //header('Access-Control-Allow-Origin: *');
+                        // @checkme set server url to current path here
+                        //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
+                        //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
+                    }
+                } catch (UnauthorizedOperationException $e) {
+                    return $this->createUnauthorizedResponse();
+                } catch (ForbiddenOperationException $e) {
+                    return $this->createForbiddenResponse();
+                } catch (Throwable $e) {
                     return $this->createExceptionResponse($e);
                 }
                 if (is_string($result)) {
-                    return $this->createResponse($result);
+                    $mediaType = $request->getAttribute('mediaType', 'text/html');
+                    return $this->createResponse($result, $mediaType);
                 }
-                return $this->createJsonResponse($result);
-                break;
+                return $this->createJsonResponse($result, 'application/json', $numeric);
+
             default:
                 $result = "Unknown result from FastRoute Dispatcher: " . var_export($routeInfo, true);
                 return $this->createResponse($result);
-                break;
         }
     }
 }

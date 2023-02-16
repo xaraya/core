@@ -273,8 +273,7 @@ function xarLog__shutdown_handler()
      }
 
      if (xarDebug::$flags & xarConst::DBG_ACTIVE) {
-         $lmtime = explode(' ', microtime());
-         $endTime = $lmtime[1] + $lmtime[0];
+         $endTime = microtime(true);
          $totalTime = ($endTime - xarDebug::$startTime);
          xarLog::message("xarLog: Response was served in $totalTime seconds.", xarLog::LEVEL_NOTICE);
      }

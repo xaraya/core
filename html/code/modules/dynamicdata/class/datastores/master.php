@@ -18,6 +18,7 @@ class DDObject extends xarObject implements IDDObject
 {
 
     public $name;
+    public $schemaobject;
 
     function __construct($name=null)
     {

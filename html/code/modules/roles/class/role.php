@@ -92,7 +92,7 @@ class Role extends DataObject
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         if ($result->getRow() > 0) {
-            $result = $query->row();
+            $result = $result->row();
             throw new DuplicateException(array('role',($this->itemtype == xarRoles::ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
         }
 

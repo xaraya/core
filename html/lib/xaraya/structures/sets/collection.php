@@ -32,7 +32,7 @@ class BasicCollection extends DataContainer implements Collection
     }
     public function add(xarObject $element)
     {
-        $this->elements[$element->hash()] = $element;
+        $this->elements[$element->hashCode()] = $element;
     }
     public function addAll(BasicCollection $collection)
     {
@@ -48,7 +48,7 @@ class BasicCollection extends DataContainer implements Collection
     }
     public function remove(xarObject $element)
     {
-        unset($this->elements[$element->hash()]);
+        unset($this->elements[$element->hashCode()]);
     }
     public function removeAll(BasicCollection $collection)
     {

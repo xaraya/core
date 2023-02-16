@@ -39,10 +39,10 @@ function dynamicdata_utilapi_export_item(array $args=[])
     $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
     $xml .= '<'.$myobject->name.' itemid="'.$itemid.'">'."\n";
     foreach ($myobject->properties as $name => $property) {
-        if (method_exists($property, 'getDeferredData')) {
+        if ($property instanceof DeferredItemProperty) {
             $property->setDataToDefer($itemid, $item[$name]);
             // @checkme set the targetLoader to null to avoid retrieving the propname values
-            if (!empty($property->targetname)) {
+            if ($property instanceof DeferredManyProperty) {
                 $property->getDeferredLoader()->targetLoader = null;
             }
             $xml .= "  <$name>" . $property->exportValue($itemid, $item) . "</$name>\n";

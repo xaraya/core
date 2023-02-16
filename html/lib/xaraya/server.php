@@ -25,8 +25,8 @@ class xarURL extends xarObject
      * This will encode the path parts, the and GET parameter names
      * and data. It cannot encode a complete URL yet.
      *
-     * @param data string the data to be encoded (see todo)
-     * @param type string the type of string to be encoded ('getname', 'getvalue', 'path', 'url', 'domain')
+     * @param string $data the data to be encoded (see todo)
+     * @param string $type the type of string to be encoded ('getname', 'getvalue', 'path', 'url', 'domain')
      * @return string the encoded URL parts
      * @todo this could be made public
      * @todo support arrays and encode the complete array (keys and values)
@@ -75,8 +75,8 @@ class xarURL extends xarObject
      * Format GET parameters formed by nested arrays, to support xarController::URL().
      * This function will recurse for each level to the arrays.
      *
-     * @param args array the array to be expanded as a GET parameter
-     * @param prefix string the prefix for the GET parameter
+     * @param array $args the array to be expanded as a GET parameter
+     * @param string $prefix the prefix for the GET parameter
      * @return string the expanded GET parameter(s)
      **/
     public static function nested($args, $prefix)
@@ -95,9 +95,10 @@ class xarURL extends xarObject
     /**
      * Add further parameters to the path, ensuring each value is encoded correctly.
      *
-     * @param args array the array to be encoded
-     * @param path string the current path to append parameters to
-     * @param psep string the path seperator to use
+     * @param array $args the array to be encoded
+     * @param string $path the current path to append parameters to
+     * @param string $pini the initial path seperator to use
+     * @param string $psep the path seperator to use
      * @return string the path with encoded parameters
      */
     static function addParametersToPath($args, $path, $pini, $psep)
@@ -166,7 +167,7 @@ class xarServer extends xarObject
      * If the server variable doesn't exist void is returned.
      *
      * 
-     * @param name string the name of the variable
+     * @param string $name the name of the variable
      * @return mixed value of the variable
      */
     static function getVar($name)
@@ -329,7 +330,7 @@ class xarServer extends xarObject
     /**
      * get the elapsed time since this page started
      *
-     * @return seconds and microseconds elapsed since the page started
+     * @return float seconds and microseconds elapsed since the page started
      */
     static function getPageTime()
     {
@@ -339,9 +340,9 @@ class xarServer extends xarObject
     /**
      * Get current URL (and optionally add/replace some parameters)
      *
-     * @param args array additional parameters to be added to/replaced in the URL (e.g. theme, ...)
-     * @param generateXMLURL boolean over-ride Server default setting for generating XML URLs (true/false/NULL)
-     * @param target string add a 'target' component to the URL
+     * @param array $args additional parameters to be added to/replaced in the URL (e.g. theme, ...)
+     * @param bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
+     * @param string $target add a 'target' component to the URL
      * @return string current URL
      * @todo cfr. BaseURI() for other possible ways, or try PHP_SELF
      */

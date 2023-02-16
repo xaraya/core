@@ -43,7 +43,7 @@ class xarSessionLessCache extends xarObject
     /**
      * Check session-less page caching
      *
-     * @return none exit if session-less page caching finds a hit
+     * @return void exit if session-less page caching finds a hit
      */
     public static function isCached($sessionLessList = null, $autoCachePeriod = 0)
     {

@@ -37,6 +37,7 @@ class DataStoreLinks extends xarObject
 
     /**
      * Initialize DataStoreLinks by importing the necessary xml files if necessary
+     * @return DataObjectList|void
      */
     static function initLinks()
     {

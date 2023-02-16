@@ -158,7 +158,7 @@ class xarLogger_syslog extends xarLogger
      *
      * @param int $level     xarLog::LEVEL_* value to convert to LOG_* value.
      *
-     * @return  The LOG_* representation of $priority.
+     * @return int The LOG_* representation of $priority.
      *
      * 
      */

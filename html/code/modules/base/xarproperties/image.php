@@ -89,6 +89,7 @@ class ImageProperty extends TextBoxProperty
             $prop->validateValue($value);
             $this->value = $prop->value;
         } elseif ($this->initialization_image_source == 'upload') {
+            /** @var FileUploadProperty $prop */
             $prop = DataPropertyMaster::getProperty(array('type' => 'fileupload'));
             $prop->initialization_basedirectory = $this->initialization_basedirectory;
             $prop->setExtensions($this->validation_file_extensions);

@@ -10,13 +10,12 @@ namespace Xaraya\Bridge\Requests;
 use xarController;
 use xarServer;
 use xarSystemVars;
-use xarMod;
 use sys;
 
 /**
  * For documentation purposes only - available via CommonBridgeTrait
  */
-interface CommonBridgeInterface extends CommonRequestInterface
+interface CommonBridgeInterface extends CommonRequestInterface, DataObjectBridgeInterface, ModuleBridgeInterface, BlockBridgeInterface
 {
     public static function prepareController(string $module = 'base', string $baseUri = ''): void;
 }
@@ -41,5 +40,6 @@ trait CommonBridgeTrait
         //sys::import('modules.modules.controllers.router');
         //ModuleRouter::setBaseUri($baseUri);
         xarController::$buildUri = [static::class, 'buildModulePath'];
+        //xarController::$redirectTo = [static::class, 'redirectTo'];
     }
 }

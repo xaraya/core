@@ -18,8 +18,9 @@
  * @return array data for the template display
  * @todo   Finish this function.
  */
-function roles_user_account()
+function roles_user_account(array $args = [])
 {
+    extract($args);
     if(!xarVar::fetch('moduleload','str', $moduleload, '', xarVar::NOT_REQUIRED)) {return;}
     if (!xarVar::fetch('tab', 'pre:trim:str:1', $tab, '', xarVar::NOT_REQUIRED)) return;
 
@@ -205,5 +206,3 @@ function roles_user_account()
 
     return $data;
 }
-
-?>

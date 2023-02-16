@@ -143,6 +143,7 @@ function themes_admin_modifyconfig()
             
             // Flush the caches
             $cachestoflush = $caches->getValue();
+            /** @var FilePickerProperty $picker */
             $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
             foreach ($cachestoflush as $cachetoflush) {
                 $picker->initialization_basedirectory = sys::varpath() . "/cache/" . $cachetoflush;

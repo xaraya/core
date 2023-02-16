@@ -186,7 +186,7 @@ class DeferredManyProperty extends DeferredItemProperty
             $value = @json_decode($value, true);
         }
         if (!is_array($value)) {
-            throw new Exception("DeferMany Value: " + var_export($value, true));
+            throw new Exception("DeferMany Value: " . var_export($value, true));
         }
         // @checkme don't update links for complete child objects here
         if (empty($this->targetname) || $this->objectname !== $this->linkname) {

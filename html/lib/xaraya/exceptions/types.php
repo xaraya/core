@@ -180,11 +180,16 @@ class DuplicateException extends DuplicationExceptions
     protected $message = 'The #(1) "#(2)" already exists, no duplicates are allowed'; 
 }
 
-// Forbidden operation
-// FIXME: What is this? validation?
+// Forbidden operation - 403
 class ForbiddenOperationException extends xarExceptions
 { 
     protected $message = 'The operation you are attempting is not allowed in the current circumstances.';
+}
+
+// Unauthorized operation - 401
+class UnauthorizedOperationException extends xarExceptions
+{
+    protected $message = 'This operation is unauthorized, please authenticate with valid credentials.';
 }
 
 // Generic XML parse exception
@@ -193,5 +198,3 @@ class XMLParseException extends xarExceptions
 { 
     protected $message = 'The XML file "#(1)" could not be parsed. At line #(2): #(3)';
 }
-
-?>

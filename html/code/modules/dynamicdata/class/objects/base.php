@@ -571,7 +571,7 @@ class DataObject extends DataObjectMaster implements iDataObject
      * Get the next available item type (for objects that are assigned to the dynamicdata module)
      *
      * @param $args['moduleid'] module id for the object
-     * @return integer value of the next item type
+     * @return int|void value of the next item type
      *
      * @todo this needs to change into something more safe.
      */
@@ -609,7 +609,7 @@ class DataObject extends DataObjectMaster implements iDataObject
     {
         foreach ($this->properties as $name => $property) {
             $nameparts = explode(': ', $this->properties[$name]->source);
-            if (empty($nameparts[1])) throw new Exception(xarML('Incorrect module name: #(1)',$modulename));
+            if (empty($nameparts[1])) throw new Exception(xarML('Incorrect source: #(1)', $this->properties[$name]->source));
             $test = xarModVars::get($nameparts[1],$this->properties[$name]->name);
             if ($test === null)
                 xarModVars::set($nameparts[1],$this->properties[$name]->name,$this->properties[$name]->defaultvalue);

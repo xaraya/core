@@ -37,6 +37,7 @@ function dynamicdata_utilapi_maketable(Array $args=array())
     if(!xarSecurity::check('AdminDynamicData')) return;
 
     if (isset($args['objectref'])) {
+        /** @var DataObject $myobject */
         $myobject =& $args['objectref'];
 
     } else {

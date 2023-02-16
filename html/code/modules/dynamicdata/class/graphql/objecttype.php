@@ -23,7 +23,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
     public static $_xar_object = 'objects';
     public static $_xar_queries = [
         'list' => 'objects',
-        'item' => 'object'
+        'item' => 'object',
     ];
     public static $_xar_mutations = [];
 

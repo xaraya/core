@@ -45,12 +45,11 @@ class xarDDObject extends xarObject implements IxarDDObject
     /**
      * Call a dataobject user interface method (maybe from index.php someday)
      *
-     * 
-     * @param objectName string registered name of object
-     * @param methodName string specific method to run
-     * @param args array arguments to pass to the method
+     * @param string $objectName registered name of object
+     * @param string $methodName specific method to run
+     * @param array $args arguments to pass to the method
      * @return mixed The output of the method, or raise an exception
-     * @throws BAD_PARAM
+     * @throws EmptyParameterException
      */
     static function guiMethod($objectName, $methodName = 'view', $args = array())
     {
@@ -69,13 +68,12 @@ class xarDDObject extends xarObject implements IxarDDObject
     /**
      * Call a dataobject class method directly - CHECKME: do we even want this here ???
      *
-     * 
-     * @param objectName string registered name of object
-     * @param methodName string specific method to run
-     * @param args array arguments to pass to the method
-     * @param roleid mixed override the current user or null
+     * @param string $objectName registered name of object
+     * @param string $methodName specific method to run
+     * @param array $args arguments to pass to the method
+     * @param mixed $roleid override the current user or null
      * @return mixed The output of the method, or false on failure
-     * @throws BAD_PARAM
+     * @throws EmptyParameterException
      */
     static function classMethod($objectName, $methodName = 'showDisplay', $args = array(), $roleid = null)
     {
@@ -94,7 +92,6 @@ class xarDDObject extends xarObject implements IxarDDObject
                     return;
                 }
                 return $objectlist->countItems($args);
-                break;
 
             case 'getitems':
                 $objectlist = DataObjectMaster::getObjectList($args);
@@ -102,7 +99,6 @@ class xarDDObject extends xarObject implements IxarDDObject
                     return;
                 }
                 return $objectlist->getItems($args);
-                break;
 
             case 'showview':
             case 'getviewvalues':
@@ -113,7 +109,6 @@ class xarDDObject extends xarObject implements IxarDDObject
                 // get the items first
                 $objectlist->getItems($args);
                 return $objectlist->{$methodName}($args);
-                break;
 
             // CHECKME: what do we want to return here ?
             case 'getitem':
@@ -126,7 +121,6 @@ class xarDDObject extends xarObject implements IxarDDObject
                     return;
                 }
                 return $object->getFieldValues($args);
-                break;
 
             case 'getfieldvalues':
             case 'getdisplayvalues':
@@ -141,7 +135,6 @@ class xarDDObject extends xarObject implements IxarDDObject
                     return;
                 }
                 return $object->{$methodName}($args);
-                break;
 
             case 'createitem':
             case 'updateitem':
@@ -156,19 +149,17 @@ class xarDDObject extends xarObject implements IxarDDObject
                     return;
                 }
                 return $object->{$methodName}($args);
-                break;
         }
     }
 
     /**
      * Run a dataobject class method via simpleinterface - CHECKME: do we even want this here ???
      *
-     * 
-     * @param objectName string registered name of object
-     * @param methodName string specific method to run
-     * @param args array arguments to pass to the method
+     * @param string $objectName registered name of object
+     * @param string $methodName specific method to run
+     * @param array $args arguments to pass to the method
      * @return mixed The output of the method, or false on failure
-     * @throws BAD_PARAM
+     * @throws EmptyParameterException
      */
     static function simpleMethod($objectName, $methodName = 'showDisplay', $args = array())
     {
@@ -188,11 +179,10 @@ class xarDDObject extends xarObject implements IxarDDObject
     /**
      * Generate URL for a specific action on an object - the format will depend on the linktype
      *
-     * 
-     * @param object object the object or object list we want to create an URL for
-     * @param action string the action we want to take on this object (= method or func)
-     * @param itemid mixed the specific item id or null
-     * @param extra array extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @param array $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
     static function getActionURL($object, $action = '', $itemid = null, $extra = array())
@@ -235,6 +225,12 @@ class xarDDObject extends xarObject implements IxarDDObject
     /**
      * Generate Module URL for a specific action on an object
      * e.g. use module URLs via the dynamicdata or dyn_example module
+     *
+     * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @param array $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @return string the generated URL
      */
     static function getModuleURL($object, $action = '', $itemid = null, $extra=array())
     {
@@ -291,6 +287,12 @@ class xarDDObject extends xarObject implements IxarDDObject
     /**
      * Generate Object URL for a specific action on an object
      * e.g. use object URLs via index.php?object=sample
+     *
+     * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @param array $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @return string the generated URL
      */
     static function getObjectURL($object, $action = '', $itemid = null ,$extra=array())
     {
@@ -330,6 +332,11 @@ class xarDDObject extends xarObject implements IxarDDObject
     /**
      * Generate Current URL for a specific action on an object
      * e.g. use current URLs by putting #xarDDObject::guiMethod('sample', null, array('linktype' => 'current'))# in some page template
+     *
+     * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @return string the generated URL
      */
     static function getCurrentURL($object, $action = '', $itemid = null)
     {
@@ -371,6 +378,11 @@ class xarDDObject extends xarObject implements IxarDDObject
 
     /**
      * Generate Other URL for a specific action on an object (TBD)
+     *
+     * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
+     * @param string $action the action we want to take on this object (= method or func)
+     * @param mixed $itemid the specific item id or null
+     * @return string the generated URL
      */
     static function getOtherURL($object, $action = '', $itemid = null)
     {
@@ -380,11 +392,10 @@ class xarDDObject extends xarObject implements IxarDDObject
     /**
      * Check access for a specific action on object level (see also xarMod and xarBlock)
      *
-     * 
-     * @param object object the object or object list we want to check access for
-     * @param action string the action we want to take on this object (display/update/create/delete/config)
-     * @param itemid mixed the specific item id or null
-     * @param roleid mixed override the current user or null
+     * @param object $object the object or object list we want to check access for
+     * @param string $action the action we want to take on this object (display/update/create/delete/config)
+     * @param mixed $itemid the specific item id or null
+     * @param mixed $roleid override the current user or null
      * @return boolean true if access
      */
     static function checkAccess($object, $action, $itemid = null, $roleid = null)
@@ -392,4 +403,3 @@ class xarDDObject extends xarObject implements IxarDDObject
         return $object->checkAccess($action, $itemid, $roleid);
     }
 }
-

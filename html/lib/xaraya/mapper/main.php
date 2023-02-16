@@ -33,7 +33,8 @@ class xarController extends xarObject
     public static $object    = 'objects';
     public static $method    = 'view';
     public static $entryPoint;
-    public static $buildUri;
+    public static $buildUri;     // callable for building URIs when using non-standard entrypoints
+    public static $redirectTo;   // callable for redirecting to when using non-standard entrypoints
     
     /**
      * Initialize
@@ -67,8 +68,8 @@ class xarController extends xarObject
     /**
      * Get a request variable
      * 
-     * @param name string
-     * @param allowOnlyMethod string
+     * @param string $name
+     * @param string $allowOnlyMethod
      * @return mixed
      * @todo change order (POST normally overrides GET)
      * @todo have a look at raw post data options (xmlhttp postings)
@@ -199,13 +200,12 @@ class xarController extends xarObject
     /**
      * Carry out a redirect
      * 
-     * @param redirectURL string the URL to redirect to
+     * @param string $url the URL to redirect to
      */
     static function redirect($url, $httpResponse=NULL)
     {
         xarCache::noCache();
         $redirectURL = urldecode($url); // this is safe if called multiple times.
-        if (headers_sent() == true) return false;
 
         // Remove &amp; entities to prevent redirect breakage
         $redirectURL = str_replace('&amp;', '&', $redirectURL);
@@ -220,16 +220,24 @@ class xarController extends xarObject
             $redirectURL = $baseurl.$redirectURL;
         }
 
-        if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE')) && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE')) ) {
-            $header = "Refresh: 0; URL=$redirectURL";
-        } else {
-            $header = "Location: $redirectURL";
-        }// if
-
         // default response is temp redirect
         if (!preg_match('/^301|302|303|307/', $httpResponse ?? '')) {
             $httpResponse = 302;
         }
+
+        // Pass along redirectURL and bail out if we already sent headers
+        if (headers_sent() == true) {
+            if (!empty(self::$redirectTo) && is_callable(self::$redirectTo)) {
+                call_user_func(self::$redirectTo, $redirectURL, $httpResponse);
+            }
+            return false;
+        }
+
+        if (preg_match('/IIS/', xarServer::getVar('SERVER_SOFTWARE') ?? '') && preg_match('/CGI/', xarServer::getVar('GATEWAY_INTERFACE') ?? '') ) {
+            $header = "Refresh: 0; URL=$redirectURL";
+        } else {
+            $header = "Location: $redirectURL";
+        }// if
 
         // Start all over again
         header($header, TRUE, $httpResponse);
@@ -264,12 +272,12 @@ class xarController extends xarObject
     /**
      * Generates a URL that references a module function.
      * 
-     * @param modName string registered name of module
-     * @param modType string type of function
-     * @param funcName string module function
-     * @param string fragment document fragment target (e.g. somesite.com/index.php?foo=bar#target)
-     * @param args array of arguments to put on the URL
-     * @param entrypoint array of arguments for different entrypoint than index.php
+     * @param string $modName registered name of module
+     * @param string $modType type of function
+     * @param string $funcName module function
+     * @param string $fragment document fragment target (e.g. somesite.com/index.php?foo=bar#target)
+     * @param array $args array of arguments to put on the URL
+     * @param array $entrypoint array of arguments for different entrypoint than index.php
      * @return mixed absolute URL for call, or false on failure
      * @todo allow for an alternative entry point (e.g. stream.php) without affecting the other parameters
      */

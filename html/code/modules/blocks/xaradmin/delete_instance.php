@@ -47,6 +47,7 @@ function blocks_admin_delete_instance()
 
     // admin access is needed for some operations 
     $isadmin = xarSecurity::check('',0,'Block',"$instance[type]:$instance[name]:$instance[block_id]",$instance['module'],'',0,800);
+    /** @var AccessProperty $accessproperty */
     $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
     // check delete access 
     if ($isadmin) {

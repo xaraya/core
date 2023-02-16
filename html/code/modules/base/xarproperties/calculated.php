@@ -81,7 +81,7 @@ class CalculatedProperty extends TextBoxProperty
      * Calcualtes the properties value
      * 
      * @param float[] $args Holds 'value' parameter
-     * @return null|string|float Returns null or string upon failure or a the calculated float
+     * @return void|string|float Returns null or string upon failure or a the calculated float
      */
     private function calculateValue(Array $args=array())
     {

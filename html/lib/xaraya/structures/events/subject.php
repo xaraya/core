@@ -78,7 +78,7 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * This function is required by the EMS system,
      * and cannot be overloaded
      *
-     * @param ixarEventObserver object
+     * @param EventObserver $obs
      * @return void
      * @access public
      * @throws none
@@ -93,7 +93,7 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * This function is required by the EMS system,
      * and cannot be overloaded
      *
-     * @param ixarEventObserver object
+     * @param EventObserver $obs
      * @return void
      * @access public
      * @throws none
@@ -135,4 +135,3 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
     }
 
 }
-

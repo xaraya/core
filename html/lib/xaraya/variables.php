@@ -116,9 +116,9 @@ class xarVar extends xarObject
      * Sets up allowable html and htmlentities options
      *
      * 
-     * @global xarVar_allowableHTML array
-     * @global xarVar_fixHTMLEntities bool
-     * @param args array
+     * @global array xarVar_allowableHTML
+     * @global bool xarVar_fixHTMLEntities
+     * @param array args
      * @return boolean
      * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
      * @todo revisit naming of config_vars table
@@ -165,7 +165,7 @@ class xarVar extends xarObject
      *
      *
      * 
-     * @param arrays The arrays storing information equivalent to the xarVar::fetch interface
+     * @param array The arrays storing information equivalent to the xarVar::fetch interface
      * @return array With the respective exceptions in case of failure
     **/
     public static function batchFetch()
@@ -236,12 +236,12 @@ class xarVar extends xarObject
      *   xarVar::PREP_TRIM:           trim($value)
      *
      * 
-     * @param name string the variable name
-     * @param validation string the validation to be performed
-     * @param value mixed contains the converted value of fetched variable
-     * @param defaultValue mixed the default value
-     * @param flags integer bitmask which modify the behaviour of function
-     * @param prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
+     * @param string $name the variable name
+     * @param string $validation the validation to be performed
+     * @param mixed $value contains the converted value of fetched variable
+     * @param mixed $defaultValue the default value
+     * @param integer $flags bitmask which modify the behaviour of function
+     * @param integer $prep will prep the value with xarVarPrepForDisplay, xarVarPrepHTMLDisplay, or dbconn->qstr()
      * @return mixed
      * @todo  get rid of the explicit value of xarVar::GET_OR_POST, use the bitmas (i.e. GET_OR_POST = GET + POST)
      * @todo  make dont_set and dont_reuse are too similar (conceptually) which make the code below confusing [phpdoc above implies REUSE is the default]
@@ -346,8 +346,8 @@ class xarVar extends xarObject
      * The $validation parameter can be any of the implemented functions in html/modules/variable/validations/
      *
      * 
-     * @param validation mixed the validation to be performed
-     * @param subject string the subject on which the validation must be performed, will be where the validated value will be returned
+     * @param mixed $validation the validation to be performed
+     * @param string $subject the subject on which the validation must be performed, will be where the validated value will be returned
      * @throws EmptyParameterException
      * @return boolean true if the $subject validates correctly, false otherwise
      */
@@ -397,17 +397,17 @@ class xarVar extends xarObject
 
     public static function setCached($scope, $name, $value)
     {
-        return xarCoreCache::setCached($scope, $name, $value);
+        xarCoreCache::setCached($scope, $name, $value);
     }
 
     public static function delCached($scope, $name)
     {
-        return xarCoreCache::delCached($scope, $name);
+        xarCoreCache::delCached($scope, $name);
     }
 
     public static function flushCached($scope)
     {
-        return xarCoreCache::flushCached($scope);
+        xarCoreCache::flushCached($scope);
     }
 
     public static function prepForDisplay(...$args)

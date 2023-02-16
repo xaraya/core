@@ -36,7 +36,7 @@ class xarLogger_winsyslog extends xarLogger_syslog
      *
      * @param int $level     xarLog::LEVEL_* value to convert to LOG_* value.
      *
-     * @return  The LOG_* representation of $priority.
+     * @return int The LOG_* representation of $priority.
      *
      * 
      */

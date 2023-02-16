@@ -68,9 +68,13 @@ function mail_admin_template(Array $args=array())
             // we have hooks for individual item types here
             if (!isset($value[0])) {
                 // Get the list of all item types for this module (if any)
-                $mytypes = xarMod::apiFunc($modname,'user','getitemtypes',
-                                         // don't throw an exception if this function doesn't exist
-                                         array(), 0);
+                try {
+                    $mytypes = xarMod::apiFunc($modname,'user','getitemtypes',
+                    // don't throw an exception if this function doesn't exist
+                    array());
+                } catch (Exception $e) {
+                    $mytypes = [];
+                }
                 foreach ($value as $itemtype => $val) {
                     if (isset($mytypes[$itemtype])) {
                         $type = $mytypes[$itemtype]['label'];

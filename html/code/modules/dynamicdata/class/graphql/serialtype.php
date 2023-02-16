@@ -9,6 +9,7 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+use GraphQL\Language\AST\ObjectValueNode;
 use GraphQL\Type\Definition\ScalarType;
 use GraphQL\Language\AST\StringValueNode;
 
@@ -51,7 +52,7 @@ class xarGraphQLSerialType extends ScalarType
             xarGraphQL::$paths[] = ["parse literal", $valueNode->kind, $variables];
         }
         // @checkme support only top-level serialized values here
-        if ($valueNode->kind === "StringValue") {
+        if ($valueNode instanceof StringValueNode) {
             return $this->tryUnserialized($valueNode->value);
         }
         return $this->parseValueNode($valueNode);
@@ -59,7 +60,7 @@ class xarGraphQLSerialType extends ScalarType
 
     public function parseValueNode($valueNode)
     {
-        if ($valueNode->kind === "ObjectValue") {
+        if ($valueNode instanceof ObjectValueNode) {
             $values = [];
             foreach ($valueNode->fields as $node) {
                 $values[$node->name->value] = $this->parseValueNode($node->value);

@@ -528,7 +528,7 @@ class xarSession extends xarObject implements IsessionHandler
     /**
      * Get a session variable
      *
-     * @param name name of the session variable to get
+     * @param string $name name of the session variable to get
      */
     static function getVar($name)
     {
@@ -545,8 +545,8 @@ class xarSession extends xarObject implements IsessionHandler
 
     /**
      * Set a session variable
-     * @param name name of the session variable to set
-     * @param value value to set the named session variable
+     * @param string $name name of the session variable to set
+     * @param mixed $value value to set the named session variable
      */
     static function setVar($name, $value)
     {
@@ -561,7 +561,7 @@ class xarSession extends xarObject implements IsessionHandler
 
     /**
      * Delete a session variable
-     * @param name name of the session variable to delete
+     * @param string $name name of the session variable to delete
      */
     static function delVar($name)
     {

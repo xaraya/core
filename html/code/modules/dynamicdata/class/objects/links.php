@@ -40,6 +40,7 @@ class DataObjectLinks extends xarObject
 
     /**
      * Initialize DataObjectLinks by importing the necessary xml files if necessary
+     * @return DataObjectList|void
      */
     static function initLinks()
     {
@@ -287,9 +288,9 @@ class DataObjectLinks extends xarObject
     /**
      * Get linked objects for a DataObject or DataObjectList (work in progress)
      *
-     * @param $object the object we want to get the links for (object or objectlist)
-     * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
-     * @param $itemid (optional) for a particular itemid in ObjectList ?
+     * @param DataObject|DataObjectList $object the object we want to get the links for (object or objectlist)
+     * @param string $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
+     * @param ?int $itemid (optional) for a particular itemid in ObjectList ?
      */
     static function getLinkedObjects($object, $linktype = '', $itemid = null)
     {
@@ -381,9 +382,9 @@ class DataObjectLinks extends xarObject
     /**
      * Count linked object items for a DataObject or DataObjectList (work in progress)
      *
-     * @param $object the object we want to count the linked object items for (object or objectlist)
-     * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
-     * @param $itemid (optional) for a particular itemid in ObjectList ?
+     * @param DataObject|DataObjectList $object the object we want to count the linked object items for (object or objectlist)
+     * @param string $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
+     * @param ?int $itemid (optional) for a particular itemid in ObjectList ?
      */
     static function countLinkedItems($object, $linktype = '', $itemid = null)
     {

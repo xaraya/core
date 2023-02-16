@@ -118,8 +118,7 @@ function dynamicdata_admin_migrate(Array $args=array())
 
             // get the list of itemtypes for this module
             $itemtypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                                       array(),
-                                       0);
+                                       array());
             if (!empty($itemtypes)) {
                 $data['fromitemtypes'] = $itemtypes;
             } else {
@@ -141,13 +140,11 @@ function dynamicdata_admin_migrate(Array $args=array())
                 if (empty($from['itemid'])) {
                     $items = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
                                            array('itemtype' => $from['itemtype'],
-                                                 'itemids'  => null),
-                                           0);
+                                                 'itemids'  => null));
                 } else {
                     $items = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
                                            array('itemtype' => $from['itemtype'],
-                                                 'itemids'  => $from['itemid']),
-                                           0);
+                                                 'itemids'  => $from['itemid']));
                 }
                 if (!empty($items)) {
                     $data['fromitems'] = $items;
@@ -161,8 +158,7 @@ function dynamicdata_admin_migrate(Array $args=array())
 
                 // get the list of fields for this module+itemtype
                 $fields = xarMod::apiFunc($modinfo['name'],'user','getitemfields',
-                                        array('itemtype' => $from['itemtype']),
-                                        0);
+                                        array('itemtype' => $from['itemtype']));
                 if (!empty($fields)) {
                     $data['fromfieldlist'] = $fields;
                 } else {
@@ -227,8 +223,7 @@ function dynamicdata_admin_migrate(Array $args=array())
 
             // get the list of itemtypes for this module
             $itemtypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                                       array(),
-                                       0);
+                                       array());
             if (!empty($itemtypes)) {
                 $data['toitemtypes'] = $itemtypes;
             } else {
@@ -248,8 +243,7 @@ function dynamicdata_admin_migrate(Array $args=array())
 
                 // get the list of fields for this module+itemtype
                 $fields = xarMod::apiFunc($modinfo['name'],'user','getitemfields',
-                                        array('itemtype' => $to['itemtype']),
-                                        0);
+                                        array('itemtype' => $to['itemtype']));
                 if (!empty($fields)) {
                     $data['tofieldlist'] = $fields;
                 } else {

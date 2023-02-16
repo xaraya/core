@@ -165,12 +165,14 @@ class EventListenerProvider implements ListenerProviderInterface
                 // always notify the subject, even if there are no observers
                 //$response = $subject->$method();
                 return $subject;
-                break;
+
             case 'api':
                 //$response = xarMod::apiFunc($module, $info['type'], $info['func'], $args);
                 break;
+
             case 'gui':
                 // not allowed in event subjects
+
             default:
                 //$response = false;
                 break;

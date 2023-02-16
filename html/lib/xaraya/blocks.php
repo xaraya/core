@@ -304,7 +304,7 @@ class xarBlock extends xarObject implements ixarBlock
  *
  * @author Chris Powis 
  * 
- * @param  object $block the block instance supplying the method
+ * @param  BasicBlock $block the block instance supplying the method
  * @param  string $method, name of the method to call
  * @return string output the block to show
  * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
@@ -357,7 +357,7 @@ class xarBlock extends xarObject implements ixarBlock
  *
  * @author Chris Powis 
  * 
- * @param  object $block the block instance supplying the method
+ * @param  BasicBlock $block the block instance supplying the method
  * @param  string $method, name of the method to check
  * @param  bool $strict, flag to indicate if the block must have declared the method
  * @return bool

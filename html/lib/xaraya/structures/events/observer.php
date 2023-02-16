@@ -28,6 +28,8 @@ interface ixarEventObserver
 **/
 class EventObserver extends xarObject implements ixarEventObserver
 {
+    public $module;
+
     public function __construct(array $args = [])
     {
         // native 'class' event and hook subclasses can do whatever they want with $args = $obs array from events.php

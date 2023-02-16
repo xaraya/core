@@ -137,11 +137,18 @@ class FilePickerProperty extends SelectProperty
         
         $options = array();
         if (empty($this->initialization_basedirectory)) return array();
-        // this works with relative directories
-        $iterator = new DirectoryIterator($this->initialization_basedirectory);
-        if ($iterator == false) return array();
 
-		foreach ($iterator as $dir) {
+        // This works with relative directories - but they must be accessible first :-)
+        if (!is_dir($this->initialization_basedirectory)) {
+            $this->initialization_basedirectory = sys::web() . $this->initialization_basedirectory;
+            if (!is_dir($this->initialization_basedirectory)) {
+                return array();
+            }
+        }
+        $dir = new RelativeDirectoryIterator($this->initialization_basedirectory);
+        if ($dir == false) return array();
+        
+        for($dir->rewind();$dir->valid();$dir->next()) {
             if($dir->isDir()) continue; // no dirs
             if(!$this->validateExtension($dir->getExtension())) continue;
             if($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
