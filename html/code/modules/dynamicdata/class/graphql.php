@@ -168,6 +168,9 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
         if (in_array($name, ['query', 'mutation', 'mixed', 'serial'])) {
             return self::load_lazy_type($name);
         }
+        if (in_array($name, ['subscription'])) {
+            return;
+        }
         //if (!self::has_type($name)) {
         //    throw new Exception("Unknown graphql type: " . $name);
         //}
