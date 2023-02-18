@@ -25,6 +25,7 @@ function themes_admin_modifyconfig()
     // Security
     if (!xarSecurity::check('AdminThemes')) return;
 
+    $data = [];
     if (!xarVar::fetch('phase',        'str:1:100', $phase,       'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
     if (!xarVar::fetch('sitename', 'str', $data['sitename'], xarModVars::get('themes', 'SiteName'), xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('separator', 'str:1:', $data['separator'], xarModVars::get('themes', 'SiteTitleSeparator'), xarVar::NOT_REQUIRED)) return;
@@ -154,7 +155,7 @@ function themes_admin_modifyconfig()
             
             xarController::redirect(xarController::URL('themes', 'admin', 'modifyconfig'));
             return true;
-            break;
+
         case 'flush':
             // Flush the cache directories
             sys::import('modules.dynamicdata.class.properties.master');
@@ -163,6 +164,7 @@ function themes_admin_modifyconfig()
             xarModVars::set('themes','flushcaches', $caches->value);
             // Flush the caches
             $cachestoflush = $caches->getValue();
+            /** @var FilePickerProperty $picker */
             $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
             foreach ($cachestoflush as $cachetoflush) {
                 $picker->initialization_basedirectory = sys::varpath() . "/cache/" . $cachetoflush;
@@ -194,4 +196,3 @@ function themes_admin_modifyconfig()
     }
     return $data;
 }
-?>

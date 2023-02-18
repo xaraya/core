@@ -126,8 +126,6 @@ class FilePickerProperty extends SelectProperty
     }
     /**
      * Retrieve the list of options on demand
-     * 
-     * @param void N/A
      */
     function getOptions()
     {
@@ -145,8 +143,11 @@ class FilePickerProperty extends SelectProperty
                 return array();
             }
         }
-        $dir = new RelativeDirectoryIterator($this->initialization_basedirectory);
-        if ($dir == false) return array();
+        try {
+            $dir = new RelativeDirectoryIterator($this->initialization_basedirectory);
+        } catch (DirectoryNotFoundException $e) {
+            return array();
+        }
         
         for($dir->rewind();$dir->valid();$dir->next()) {
             if($dir->isDir()) continue; // no dirs
