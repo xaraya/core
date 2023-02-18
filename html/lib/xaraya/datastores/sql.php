@@ -25,6 +25,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     public $where  = array();
     public $groupby= array();
     public $join   = array();
+    public $extra;
 
     function __construct($name=null)
     {

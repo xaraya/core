@@ -156,7 +156,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             } catch(Exception $e) {
                 // Oh well, forget it then
             }
-            return true; // no need to raise exception
+            return; // no need to raise exception
         }
 
         // Make cached files also display their source file if it's a template
@@ -169,8 +169,8 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
         // Construct the msg in a table like way, so it's easily copy/pasteable
         $spacer= str_repeat(' ',11);
         $msg = "File     : $file\n";
-        if(isset($sourcefile)) {
-        $msg.= $spacer."[$sourceFile]\n";
+        if(isset($sourceFile)) {
+            $msg.= $spacer."[$sourceFile]\n";
         }
         $msg.= "Line     : $line\n";
         $msg.= "Code     : $errorRaised\n";

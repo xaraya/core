@@ -62,8 +62,7 @@ class xarUser extends xarObject
      * Initialise the User System
      *
      * 
-     * @global xarUser_authentication modules array
-     * @param args[authenticationModules] array
+     * @param array $args[authenticationModules] array
      * @return boolean true on success
      */
     static public function init(array $args = array())
@@ -119,7 +118,7 @@ class xarUser extends xarObject
      * @param  string  $userName the name of the user logging in
      * @param  string  $password the password of the user logging in
      * @param  integer $rememberMe whether or not to remember this login
-     * @return boolean true if the user successfully logged in
+     * @return boolean|void true if the user successfully logged in
      * @throws EmptyParameterException, SQLException
      * @todo <marco> #1 here we could also set a last_logon timestamp
      */
@@ -223,7 +222,7 @@ class xarUser extends xarObject
      * Log the user out
      *
      * 
-     * @return boolean true if the user successfully logged out
+     * @return boolean|void true if the user successfully logged out
      */
     static public function logOut()
     {
@@ -494,7 +493,7 @@ class xarUser extends xarObject
      * @param  string  $name  the name of the variable
      * @param  mixed   $value the value of the variable
      * @param  integer $userId integer user's ID
-     * @return boolean true if the set was successful, false if validation fails
+     * @return boolean|void true if the set was successful, false if validation fails
      * @throws EmptyParameterException, BadParameterException, NotLoggedInException, xarExceptions, IDNotFoundException
      * @todo redesign the delegation to auth* modules for handling user variables
      * @todo some securitycheck for retrieving at least other users variables ?
@@ -583,7 +582,7 @@ class xarUser extends xarObject
      * Get user's authentication module
      *
      * 
-     * @param  userId string
+     * @param  int $userId string
      * @todo   what happens for anonymous users ???
      * @todo   check coherence 1 vs. 0 for Anonymous users !!!
      * @todo   this should be somewhere else probably (base class of auth* or roles mebbe)

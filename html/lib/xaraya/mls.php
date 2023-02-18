@@ -197,8 +197,7 @@ class xarMLS extends xarObject
      * Gets the charset component from a locale
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return string the charset name
-     * @throws BAD_PARAM
+     * @return string|void the charset name
      */
     static public function getCharsetFromLocale($locale)
     {
@@ -400,7 +399,7 @@ class xarMLS extends xarObject
      * Sets current locale
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @param locale site locale
+     * @param string $locale site locale
      */
     static public function setCurrentLocale($locale)
     {
@@ -482,7 +481,7 @@ class xarMLS extends xarObject
      * Loads translations for the specified context
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return boolean
+     * @return boolean|void
      */
     static public function _loadTranslations($domainType, $domainName, $contextType, $contextName)
     {
@@ -620,6 +619,7 @@ class xarMLS extends xarObject
         }
         // CHECKME: check this code
         return $var;
+        /**
         // Cookies must contain only US-ASCII characters
         $inputCharset = strtolower(mb_http_input($method));
         $curCharset = self::getCharsetFromLocale(self::getCurrentLocale());
@@ -627,6 +627,7 @@ class xarMLS extends xarObject
             $var = mb_convert_encoding($var, $curCharset, $inputCharset);
         }
         return $var;
+         */
     }
 
     // CHECKME: is this used anywhere?
@@ -657,7 +658,7 @@ class xarMLS extends xarObject
      * The first alternative is the locale itself
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return array alternative locales
+     * @return array|void alternative locales
      */
     static private function getLocaleAlternatives($locale)
     {

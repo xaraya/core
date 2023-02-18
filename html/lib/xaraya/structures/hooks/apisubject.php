@@ -28,8 +28,6 @@ abstract class ApiHookSubject extends HookSubject
      * Notify hooked observers
      * @todo: it shouldn't be necessary to overload this method, make it final?
      *
-     * @params none
-     * @throws none
      * @return array of cumulative extrainfo from observers
     **/
     public function notify()

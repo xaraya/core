@@ -134,7 +134,7 @@ class CachingDataStore extends BasicDataStore
         if (!empty($this->cacheStorage)) {
             return $this->cacheStorage;
         }
-        // Note: we use dummy or apcu by default here
+        // Note: we use dummy or apcu by default here - see VirtualObjectDescriptor
         $this->cacheStorage = xarCache::getStorage([
             'storage'   => $this->object->cachestorage ?? 'dummy',
             'type'      => 'datastore',

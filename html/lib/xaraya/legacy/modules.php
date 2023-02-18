@@ -214,7 +214,7 @@ function xarModDBInfoLoad($modName, $modDir = NULL, $type = 'module')
  * @deprecated
  */
 function xarMod_getState($modRegId, $modMode = XARMOD_MODE_PER_SITE, $type = 'module')
-{   return xarMod::getState($modRegId, $modMode, $type); }
+{   return xarMod::getState($modRegId, $type); }
 
 /**
  * Legacy call
@@ -238,7 +238,7 @@ function xarModFunc($modName, $modType = 'user', $funcName = 'main', $args = arr
  * @deprecated
  */
 function xarModAPIFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
-{   return xarMod::apiFunc($modName, $modType, $funcName, $args,'api'); }
+{   return xarMod::apiFunc($modName, $modType, $funcName, $args); }
 
 /**
  * Legacy call
@@ -279,4 +279,3 @@ function xarModSetAlias($alias, $modName) { return xarModAlias::set($alias,$modN
  * @deprecated
  */
 function xarModDelAlias($alias, $modName) { return xarModAlias::delete($alias,$modName);}
-

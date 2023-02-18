@@ -37,9 +37,9 @@
  * Generate the SQL to create a database
  *
  * @uses xarTableDDL::createDatabase()
- * @param databaseName
- * @param databaseType
- * @return string sql statement for database creation
+ * @param string $databaseName
+ * @param string $databaseType
+ * @return string $databaseCharset
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
@@ -68,9 +68,10 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('xaraya.tableddl.datadict');
-            $sql = xarDB__datadictCreateDatabase($databaseName);
-            break;
+            //sys::import('xaraya.tableddl.datadict');
+            //$sql = xarDB__datadictCreateDatabase($databaseName);
+            //break;
+            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
         // Other DBs go here
         default:
             throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
@@ -83,17 +84,9 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
  * Generate the SQL to create a table
  *
  * @uses xarTableDDL::createTable()
- * @param tableName the table to alter
- * @param args['command'] command to perform on table(add,modify,drop,rename)
- * @param args['field'] name of column to alter
- * @param args['type'] column type
- * @param args['size'] size of column if varying data
- * @param args['default'] default value of data
- * @param args['null'] null or not null (true/false)
- * @param args['unsigned'] allow unsigned data (true/false)
- * @param args['increment'] auto incrementing files
- * @param args['primary_key'] primary key
- * @param databaseType the database type (optional)
+ * @param string $tableName the table to alter
+ * @param array $fields
+ * @param string databaseType the database type (optional)
  * @return string generated sql
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -136,9 +129,10 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('xaraya.tableddl.datadict');
-            $sql = xarDB__datadictCreateTable($tableName, $fields, $charset);
-            break;
+            //sys::import('xaraya.tableddl.datadict');
+            //$sql = xarDB__datadictCreateTable($tableName, $fields, $charset);
+            //break;
+            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
         // Other DBs go here
         default:
             throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
@@ -150,17 +144,17 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
  * Alter database table
  *
  * @uses xarTableDDL::alterTable()
- * @param tableName the table to alter
- * @param args['command'] command to perform on table(add,modify,drop,rename)
- * @param args['field'] name of column to alter
- * @param args['type'] column type
- * @param args['size'] size of column if varying data
- * @param args['default'] default value of data
- * @param args['null'] null or not null (true/false)
- * @param args['unsigned'] allow unsigned data (true/false)
- * @param args['increment'] auto incrementing files
- * @param args['primary_key'] primary key
- * @param databaseType the database type (optional)
+ * @param string $tableName the table to alter
+ * @param array $args['command'] command to perform on table(add,modify,drop,rename)
+ * @param array $args['field'] name of column to alter
+ * @param array $args['type'] column type
+ * @param array $args['size'] size of column if varying data
+ * @param array $args['default'] default value of data
+ * @param array $args['null'] null or not null (true/false)
+ * @param array $args['unsigned'] allow unsigned data (true/false)
+ * @param array $array $args['increment'] auto incrementing files
+ * @param array $args['primary_key'] primary key
+ * @param string $databaseType the database type (optional)
  * @throws EmptyParameterException, BadParameterException
  * @return string generated sql
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -205,9 +199,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('xaraya.tableddl.datadict');
-            $sql = xarDB__datadictAlterTable($tableName, $args);
-            break;
+            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
         // Other DBs go here
         default:
             throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
@@ -219,9 +211,9 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
  * Generate the SQL to delete a table
  *
  * @uses xarTableDDL::dropTable()
- * @param tableName the physical table name
- * @param index an array containing the index name, type and fields array
- * @return data|false the generated SQL statement, or false on failure
+ * @param string $tableName the physical table name
+ * @param array $index an array containing the index name, type and fields array
+ * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDBDropTable($tableName, $databaseType = NULL)
@@ -252,9 +244,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('xaraya.tableddl.datadict');
-            $sql = xarDB__datadictDropTable($tableName);
-            break;
+            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
         // Other DBs go here
         default:
             throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
@@ -267,9 +257,9 @@ function xarDBDropTable($tableName, $databaseType = NULL)
  * Generate the SQL to create a table index
  *
  * @uses xarTableDDL::createIndex()
- * @param tableName the physical table name
- * @param index an array containing the index name, type and fields array
- * @param databaseType is an optional parameter to specify the database type
+ * @param string $tableName the physical table name
+ * @param array $index an array containing the index name, type and fields array
+ * @param string $databaseType is an optional parameter to specify the database type
  * @return string|false the generated SQL statement, or false on failure
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -322,9 +312,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 
         case 'mssql':
         case 'datadict':
-            sys::import('xaraya.tableddl.datadict');
-            $sql = xarDB__datadictCreateIndex($tableName, $index);
-            break;
+            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
 
         // Other DBs go here
         default:
@@ -336,9 +324,9 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
  * Generate the SQL to drop an index
  *
  * @uses xarTableDDL::dropIndex()
- * @param tableName
- * @param name a db index name
- * @param databaseType
+ * @param string $tableName
+ * @param array $index name a db index name
+ * @param string $databaseType
  * @return string|false generated sql to drop an index
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -374,9 +362,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
             break;
         case 'mssql':
         case 'datadict':
-            sys::import('xaraya.tableddl.datadict');
-            $sql = xarDB__datadictDropIndex($tableName, $index);
-            break;
+            throw new BadParameterException($databaseType,'Unsupported database type: "#(1)"');
         // Other DBs go here
         default:
             throw new BadParameterException($databaseType,'Unknown database type: "#(1)"');
@@ -439,8 +425,7 @@ class xarXMLInstaller extends xarObject
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
         $xslProc->setParameter('', 'tableprefix', $tableprefix);
-        $xslProc->xmlFile = $xmlFile;
-        return $xslProc->transform($xslProc->xmlFile);
+        return $xslProc->transform($xmlFile);
     }
     
     static public function createTable($tablefile, $module)
@@ -466,4 +451,3 @@ class xarXMLInstaller extends xarObject
         return true;
     }
 }
-

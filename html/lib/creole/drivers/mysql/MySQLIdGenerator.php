@@ -56,6 +56,7 @@ class MySQLIdGenerator implements IdGenerator {
      * numeric datatypes.
      * 
      * @see IdGenerator::getId()
+     * @deprecated version
      */
     public function getId($unused = null)
     {
@@ -84,4 +85,3 @@ class MySQLIdGenerator implements IdGenerator {
     }
     
 }
-

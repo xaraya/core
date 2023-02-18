@@ -505,7 +505,6 @@ class xarModHooks extends xarObject
      * @param $hookAction string the hook action
      * @param $callerItemType string optional item type for the calling module (default = none)
      * @return array of hook information arrays, or null if database error
-     * @throws DATABASE_ERROR
      */
     public static function getList($callerModName, $hookScope, $hookAction, $callerItemType = '')
     {
@@ -521,7 +520,6 @@ class xarModHooks extends xarObject
      * @param $callerModName string name of the calling module (default = current)
      * @param $callerItemType string optional item type for the calling module (default = none)
      * @return mixed true if the module is hooked
-     * @throws DATABASE_ERROR, BAD_PARAM
      */
     public static function isHooked($hookModName, $callerModName = NULL, $callerItemType = '')
     {
@@ -538,7 +536,7 @@ class xarModHooks extends xarObject
      * @param $hookModName name of the hook module
      * @param $hookModType name of the hook type ('user' / 'admin' / ... for regular functions, or 'class' for hook call handlers)
      * @param $hookModFunc name of the hook function or handler class
-     * @return bool true on success
+     * @return array|void true on success
      * @throws BadParameterException
      */
     public static function register($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)

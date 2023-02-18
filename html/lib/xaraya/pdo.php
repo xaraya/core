@@ -51,7 +51,7 @@ class xarDB_PDO extends xarObject
         // Set flags
         $flags = array();
         $persistent = !empty($args['persistent']) ? true : false;
-        if($persistent) $flags[]  = PDO::ATTR_PERSISTENT;
+        if($persistent) $flags[] = PDO::ATTR_PERSISTENT;
         // if code uses assoc fetching and makes a mess of column names, correct
         // this by forcing returns to be lowercase
         // <mrb> : this is not for nothing a COMPAT flag. the problem still lies
@@ -440,12 +440,12 @@ class xarPDOStatement extends xarObject
     private $limit     = 0;
     private $offset    = 0;
     private $haslimits = false;
+    private $bindvars;
 
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
         $this->prepare($this->pdo->queryString);
-        return true;
     }
     
     public function haslimits($haslimits)
@@ -665,7 +665,6 @@ class PDODatabaseInfo extends xarObject
             $this->tables[strtoupper($row[0])] = $thistable;
         }
         $this->tablesLoaded = true;
-        return true;
     }
     
     private function initTable($name)
@@ -774,7 +773,6 @@ class PDOTable extends xarObject
         }
         $this->columns = $columnarray;
         $this->columnsLoaded = true;
-        return true;
     }
 }
 
@@ -795,7 +793,6 @@ class PDOColumn extends xarObject
     public function __construct($pdo)
     {
         $this->pdo = $pdo;
-        return true;
     }
     public function setData($columndata=array())
     {
@@ -855,7 +852,7 @@ class PDOColumn extends xarObject
             } catch (PDOException $e) {
                 // No default value. Return a descriptive string for now
                 return 'No value';
-                throw new PDOException(xarML('Could not get default value for column #(1) with #(2)', $this->getName(), $sql));
+                //throw new PDOException(xarML('Could not get default value for column #(1) with #(2)', $this->getName(), $sql));
             }
             $value = null;
             while ($row = $pdostatement->fetch()) {
@@ -877,8 +874,8 @@ class PDOResultSet extends xarObject
 {
     const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
     const FETCHMODE_NUM   = PDO::FETCH_NUM;
-    const EOF             = 0;
-    
+    private $EOF           = 0;
+
     private $pdostatement;
     private $fetchflag;
     private $valid  = true;
@@ -892,7 +889,7 @@ class PDOResultSet extends xarObject
     public function __construct($pdostatement=null, $flag=0)
     {
         // We may not have a PDOSTatment
-        if ($pdostatement==null) return $this;
+        if ($pdostatement==null) return;
 
         $this->fetchflag = empty($flag) ? self::FETCHMODE_NUM : $flag;
         $this->pdostatement = $pdostatement;
@@ -941,7 +938,8 @@ class PDOResultSet extends xarObject
     
     function getRow() {   
         if (empty($this->array[$this->cursor])) {
-                return false;
+            return false;
+            /**
             $row = $this->pdostatement->fetch($this->fetchflag);
             if (empty ($row)) {
                 return false;
@@ -950,6 +948,7 @@ class PDOResultSet extends xarObject
                 $this->fields = $row;
                 return $this->fields;
             }
+             */
         } else {
             $this->fields = $this->array[$this->cursor];
             return $this->fields;

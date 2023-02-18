@@ -131,7 +131,6 @@ abstract class BlockType extends ObjectDescriptor implements iBlockType
     }
 /**
  * init
- * @params none
  * @return void
 **/
     // NOTE: since the constructor cannot be overloaded, this method

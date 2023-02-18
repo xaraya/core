@@ -147,7 +147,7 @@ function xarModDelAllVars($modName)                  {   return xarModVars::dele
  * @uses xarModUserVars::get()
  * @deprecated
  */
-function xarModGetUserVar($modName, $name, $id = NULL, $prep = NULL){   return xarModUserVars::get($modName, $name, $id, $prep);  }
+function xarModGetUserVar($modName, $name, $id = NULL, $prep = NULL){   return xarModUserVars::get($modName, $name, $id);  }
 
 /**
  * @package core\legacy
@@ -405,4 +405,3 @@ class Dynamic_Property extends DataProperty
         parent::__construct($args);
     }
 }
-

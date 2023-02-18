@@ -26,6 +26,7 @@ class BlockLayoutXSLTProcessor extends xarObject
     protected $postXml = '';      // The transformed result XML
 
     public  $xmlFile = null;
+    public $postXML;
 
     public function __construct($xslFile=null)
     {

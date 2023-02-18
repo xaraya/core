@@ -50,6 +50,7 @@ class xarLogger_sql extends xarLogger
      * @var string
      */
     private $sqltable;
+    private $buffer;
 
     /**
      * Pointer holding the database connection to be used.
@@ -69,7 +70,7 @@ class xarLogger_sql extends xarLogger
         parent::__construct($conf);
         
         if (!empty($conf['sqltable'])) {
-	        $this->table = $conf['sqltable'];
+	        $this->sqltable = $conf['sqltable'];
         }
 
         // Initialise the buffer
@@ -90,7 +91,7 @@ class xarLogger_sql extends xarLogger
 			/* Build the SQL query for this log entry insertion. */
 			$q = sprintf('INSERT INTO %s (uuid, logtime, priority, message)' .
 						 'VALUES(?, ?, ?, ?)',
-						 $this->table);
+						 $this->sqltable);
 			$bindvars = array($this->uuid, $line[0], $line[1], $line[2]);
 			$stmt = $this->dbconn->prepareStatement($q);
 			$stmt->executeUpdate($bindvars);

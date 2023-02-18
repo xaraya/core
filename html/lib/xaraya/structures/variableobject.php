@@ -49,24 +49,23 @@ abstract class xarVariableObject extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @return Object current instance
- * @throws none
-**/    
+ * @param int|void $rolid
+ * @return object current instance
+**/
     final public static function getInstance($role_id=null)
     {
         if (!isset(static::$instance)) {
             switch (static::$scope) {
                 case 'module':
                     static::$instance = @unserialize(xarModVars::get(static::$module, static::$variable));
-                break;
+                    break;
                 case 'user':
                     $role_id = isset($role_id) ? $role_id : xarSession::getVar('role_id');
                     static::$instance = @unserialize(xarModUserVars::get(static::$module, static::$variable, $role_id));
-                break;
+                    break;
                 case 'session':
                     static::$instance = @unserialize(xarSession::getVar(static::$variable));
-                break;
+                    break;
             }
             // NOTE: if the object unserialized successfully 
             // the __wakeup() method will be called here...
@@ -110,8 +109,6 @@ abstract class xarVariableObject extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @throws none
  * @return void
 **/        
     public function __destruct()
@@ -131,9 +128,7 @@ abstract class xarVariableObject extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @throws none
- * @return void
+ * @return bool
 **/
     public function save($scope=null)
     {
@@ -143,16 +138,16 @@ abstract class xarVariableObject extends xarObject
         switch ($scope) {
             case 'module':
                 xarModVars::set(static::$module, static::$variable, serialize(static::$instance));
-            break;
+                break;
             case 'user':
+                // @checkme where is $this->_role_id supposed to come from?
                 xarModUserVars::set(static::$module, static::$variable, serialize(static::$instance), $this->_role_id);
-            break;
+                break;
             case 'session':
                 xarSession::setVar(static::$variable, serialize(static::$instance));
-            break;
+                break;
             default:
                 return false;
-            break;
         }        
         return true;
     }
@@ -166,8 +161,6 @@ abstract class xarVariableObject extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @throws none
  * @return void
 **/
     public function __wakeup()
@@ -186,8 +179,6 @@ abstract class xarVariableObject extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @throws none
  * @return array names of properties to store when object is serialized
 **/
     public function __sleep()

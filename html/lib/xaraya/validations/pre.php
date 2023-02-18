@@ -170,7 +170,6 @@ class PreValidation extends ValueValidations
                 case 'num' :
                 case 'vtoken' :
                 case 'ftoken' :
-                case 'field' :
                 case 'left' :
                     break;
 
@@ -217,4 +216,3 @@ class PreValidation extends ValueValidations
         return $return;
     }
 }
-?>

@@ -35,6 +35,7 @@ class MySQLPreparedStatement extends PreparedStatementCommon implements Prepared
      * Quotes string using native mysql function (mysql_real_escape_string()).
      * @param string $str
      * @return string
+     * @deprecated version
      */
     protected function escape($str)
     {

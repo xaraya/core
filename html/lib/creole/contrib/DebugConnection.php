@@ -76,8 +76,8 @@ class DebugConnection implements Connection {
 	public function connect($dsninfo, $flags = 0)
 	{
 		if (!($driver = Creole::getDriver($dsninfo['phptype']))) {
-			throw new SQLException("No driver has been registered to handle connection type: $type");
-		}		
+			throw new SQLException("No driver has been registered to handle connection type: $dsninfo[phptype]");
+		}
 		$connectionClass = Creole::import($driver);
 		$this->childConnection = new $connectionClass();
 		$this->log("connect(): DSN: ". var_export($dsninfo, true) . ", FLAGS: " . var_export($flags, true));

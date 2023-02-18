@@ -41,7 +41,7 @@ class xarVersion extends xarObject
  * Parse a version number into an associative array of components
  *
  * @param $args['version'] string version number to parse
- * @return array on success or false on faliure
+ * @return mixed array on success or false on faliure
  */
     public static function parse($version='')
     {

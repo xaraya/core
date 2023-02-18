@@ -1024,7 +1024,7 @@ class xarMLS__LocaleDataLoader extends xarObject
         return true;
     }
 
-    function getLocaleData()
+    function getLocaleData(): array
     {
         return $this->localeData;
     }

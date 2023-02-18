@@ -11,6 +11,7 @@
  * @link http://www.xaraya.info
  *
  * @author Marc Lutolf <mfl@netspan.ch>
+ * @deprecated with the current implementation at least
 **/
 class xarEncryptor extends xarObject
 {
@@ -62,4 +63,3 @@ class xarEncryptor extends xarObject
         return trim($value);
     }
 }
-?>
