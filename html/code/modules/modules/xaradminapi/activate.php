@@ -44,17 +44,6 @@ function modules_adminapi_activate(Array $args=array())
                         array('regid' => $regid,
                               'state' => xarMod::STATE_ACTIVE));
 
-    if (xarCache::$outputCacheIsEnabled && function_exists('xarMod::getName') && xarMod::getName() != 'installer') {
-        if (xarOutputCache::$pageCacheIsEnabled) {
-            xarPageCache::flushCached('modules');
-            // a status update might mean a new menulink and new base homepage
-            xarPageCache::flushCached('base');
-        }
-        if (xarOutputCache::$blockCacheIsEnabled) {
-            // a status update might mean a new menulink and new base homepage
-            xarBlockCache::flushCached('base');
-        }
-    }
     // notify any observers that this module was activated 
     // NOTE: the ModActivate event observer notifies ModuleActivate hooks 
     xarEvents::notify('ModActivate', $modInfo['name']);
