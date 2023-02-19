@@ -67,4 +67,3 @@ function dynamicdata_utilapi_getinfo($args = array())
 
     return $options;
 }
-?>

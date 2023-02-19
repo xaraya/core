@@ -76,5 +76,3 @@ function dynamicdata_admin_view_static(Array $args=array())
 
     return $data;
 }
-
-?>

@@ -296,4 +296,3 @@ class DataPropertyMaster extends xarObject
         return false;
     }
 }
-?>

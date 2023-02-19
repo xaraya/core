@@ -22,4 +22,3 @@
         $interface = new SimpleObjectInterface($args);
         return $interface->handle($args);
     }
-?>

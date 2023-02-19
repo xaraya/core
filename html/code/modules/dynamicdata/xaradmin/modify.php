@@ -146,5 +146,3 @@ function dynamicdata_admin_modify(Array $args=array())
         return xarTpl::module('dynamicdata','admin','modify',$data,$args['template']);
     }
 }
-
-?>

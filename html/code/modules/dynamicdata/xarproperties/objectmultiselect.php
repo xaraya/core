@@ -165,4 +165,3 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
         return $value;
     }
 }
-?>

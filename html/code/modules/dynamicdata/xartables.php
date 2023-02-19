@@ -28,4 +28,3 @@ function dynamicdata_xartables()
     $tables['dynamic_configurations'] = $prefix . '_dynamic_configurations';
     return $tables;
 }
-?>

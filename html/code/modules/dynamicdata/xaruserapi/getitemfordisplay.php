@@ -30,5 +30,3 @@ function dynamicdata_userapi_getitemfordisplay(Array $args=array())
     $item = array(& $properties);
     return $item;
 }
-
-?>

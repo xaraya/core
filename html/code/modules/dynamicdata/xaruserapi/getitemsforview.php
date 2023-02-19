@@ -32,5 +32,3 @@ function dynamicdata_userapi_getitemsforview(Array $args=array())
     $items = & $object->items;
     return array(& $properties, & $items);
 }
-
-?>

@@ -14,5 +14,3 @@
 
 // FIXME: this is redundant
 sys::import('modules.dynamicdata.class.objects');
-
-?>

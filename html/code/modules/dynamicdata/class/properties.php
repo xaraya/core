@@ -23,5 +23,3 @@
 sys::import('modules.dynamicdata.class.properties.master');
 sys::import('modules.dynamicdata.class.properties.base');
 sys::import('modules.dynamicdata.class.properties.registration');
-
-?>

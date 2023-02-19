@@ -470,5 +470,3 @@ function dynamicdata_sync_relations()
     }
 */
 }
-
-?>

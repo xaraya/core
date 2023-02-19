@@ -92,4 +92,3 @@ function dynamicdata_admin_meta(Array $args=array())
 
     return $data;
 }
-?>

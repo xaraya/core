@@ -32,5 +32,3 @@ sys::import('modules.dynamicdata.class.datastores');
 sys::import('modules.dynamicdata.class.objects.master');
 sys::import('modules.dynamicdata.class.objects.list');
 sys::import('modules.dynamicdata.class.objects.base');
-
-?>

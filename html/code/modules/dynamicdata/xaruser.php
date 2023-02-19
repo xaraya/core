@@ -26,5 +26,3 @@ sys::import('modules.dynamicdata.class.objects');
 //  using some common data retrieval function (DD) in the future...
 
 /*  display hook is now disabled by default - use the BL tags or APIs instead */
-
-?>

@@ -53,4 +53,3 @@ interface iDataObjectList
     public function getSortURL($currenturl=null);
     public function getNext(Array $data = array());
 }
-?>

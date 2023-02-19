@@ -23,4 +23,3 @@ function dynamicdata_admin_utilities(Array $args=array())
     xarController::redirect(xarController::URL('dynamicdata', 'admin', 'import'));
     return true;
 }
-?>

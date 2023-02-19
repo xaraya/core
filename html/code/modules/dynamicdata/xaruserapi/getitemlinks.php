@@ -77,5 +77,3 @@ function dynamicdata_userapi_getitemlinks(Array $args=array())
     }
     return $itemlinks;
 }
-
-?>

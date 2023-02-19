@@ -72,4 +72,3 @@ function dynamicdata_admin_new(Array $args=array())
         return xarTpl::module('dynamicdata','admin','new',$data,$args['template']);
     }
 }
-?>

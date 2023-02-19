@@ -101,5 +101,3 @@ function dynamicdata_admin_modifyconfighook(Array $args=array())
     }
     return xarTpl::module('dynamicdata','admin','modifyconfighook',$data,$template);
 }
-
-?>

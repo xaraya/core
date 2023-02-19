@@ -154,5 +154,3 @@ function dynamicdata_admin_delete(Array $args=array())
 
     return true;
 }
-
-?>

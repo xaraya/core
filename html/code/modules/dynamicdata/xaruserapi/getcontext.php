@@ -23,5 +23,3 @@ function dynamicdata_userapi_getcontext($args=array('module' =>'dynamicdata'))
     $context['tplmodule'] = $module;
     return $context;
 }
-
-?>

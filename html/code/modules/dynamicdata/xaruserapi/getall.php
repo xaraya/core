@@ -18,5 +18,3 @@ function dynamicdata_userapi_getall(Array $args=array())
 {
     return xarMod::apiFunc('dynamicdata','user','getitem',$args);
 }
-
-?>

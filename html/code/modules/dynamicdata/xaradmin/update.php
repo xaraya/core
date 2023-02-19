@@ -195,4 +195,3 @@ function dynamicdata_admin_update(Array $args=array())
     }
     return true;
 }
-?>
