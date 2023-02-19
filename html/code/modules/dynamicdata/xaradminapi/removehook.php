@@ -17,8 +17,8 @@
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['objectid'] ID of the object (must be the module name here !!)<br/>
  *        string   $args['extrainfo'] extra information
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @return array true on success, false on failure
+ * @throws BadParameterException
  */
 function dynamicdata_adminapi_removehook(Array $args=array())
 {
@@ -108,5 +108,3 @@ function dynamicdata_adminapi_removehook(Array $args=array())
     // Return the extra info
     return $extrainfo;
 }
-
-?>

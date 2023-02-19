@@ -15,7 +15,8 @@
  * Export an object definition to XML
  *
  * @author mikespub <mikespub@xaraya.com>
- * @param id $args['objectid'] object id of the object to export
+ * @param array $args
+ * @param int $args['objectid'] object id of the object to export
  */
 function dynamicdata_utilapi_export_objectdef(array $args=[])
 {

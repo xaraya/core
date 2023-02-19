@@ -32,8 +32,8 @@
  *        integer  $args['startnum'] start number<br/>
  *        string   $args['where'] WHERE clause to be used as part of the selection<br/>
  *        boolean  $args['getobject'] flag indicating if you want to get the whole object back
- * @return array of (itemid => array of (name => value)), or false on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @return array|DataObjectList|void of (itemid => array of (name => value)), or false on failure
+ * @throws BadParameterException
  */
 function &dynamicdata_userapi_getitems(Array $args=array())
 {
@@ -146,5 +146,3 @@ function &dynamicdata_userapi_getitems(Array $args=array())
         return $result;
     }
 }
-
-?>

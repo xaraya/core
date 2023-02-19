@@ -27,8 +27,8 @@
  *        string   $args['join'] join a module table to the dynamic object (if it extends the table)<br/>
  *        boolean  $args['getobject'] flag indicating if you want to get the whole object back<br/>
  *        boolean  $args['preview'] flag indicating if you're previewing an item
- * @return array of (name => value), or false on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @return array|DataObject|void of (name => value), or false on failure
+ * @throws BadParameterException
  */
 function &dynamicdata_userapi_getitem(array $args=[])
 {

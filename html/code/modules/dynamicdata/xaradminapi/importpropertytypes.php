@@ -18,7 +18,6 @@
  *        boolean  $args[flush] flush the property type table before import true/false (optional)<br/>
  *        array    $args[dirs]
  * @return array an array of the property types currently available
- * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_importpropertytypes(Array $args=array())
 {
@@ -37,4 +36,3 @@ function dynamicdata_adminapi_importpropertytypes(Array $args=array())
     }
     return $proptypes;
 }
-?>

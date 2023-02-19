@@ -22,7 +22,7 @@
  *        integer  $args['itemid'] item id of the item field to get<br/>
  *        string   $args['name'] name of the field to get<br/>
  * @return mixed value of the field, or false on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @throws BadParameterException
  */
 function dynamicdata_userapi_getfield(array $args=[])
 {

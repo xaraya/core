@@ -283,21 +283,23 @@ class xarGraphQLBuildType
                 $fieldspecs[$property->name] = ['deferred', $typename];
                 continue;
             }
-            if ($property->type == self::get_property_id('deferitem')) {
-                $typename = self::find_property_typename($property);
-                $fieldspecs[$property->name] = ['deferitem', $typename, $property->defername];
-                continue;
-            }
-            if ($property->type == self::get_property_id('deferlist')) {
-                $typename = self::find_property_typename($property);
-                $fieldspecs[$property->name] = ['deferlist', $typename, $property->defername];
-                continue;
-            }
-            if ($property->type == self::get_property_id('defermany')) {
-                $typename = self::find_property_typename($property);
-                // @checkme we need the itemid here!
-                $fieldspecs[$property->name] = ['defermany', $typename, $property->defername];
-                continue;
+            if ($property instanceof DeferredItemProperty) {
+                if ($property->type == self::get_property_id('deferitem')) {
+                    $typename = self::find_property_typename($property);
+                    $fieldspecs[$property->name] = ['deferitem', $typename, $property->defername];
+                    continue;
+                }
+                if ($property->type == self::get_property_id('deferlist')) {
+                    $typename = self::find_property_typename($property);
+                    $fieldspecs[$property->name] = ['deferlist', $typename, $property->defername];
+                    continue;
+                }
+                if ($property->type == self::get_property_id('defermany')) {
+                    $typename = self::find_property_typename($property);
+                    // @checkme we need the itemid here!
+                    $fieldspecs[$property->name] = ['defermany', $typename, $property->defername];
+                    continue;
+                }
             }
             if ($property->type == self::get_property_id('configuration')) {
                 $typename = "keyval";
@@ -649,7 +651,7 @@ class xarGraphQLBuildType
         if ($typename == 'query' && !$useTypeClasses) {
             // @todo check if type class corresponding to fieldname has overridden _xar_*_query_resolver (objecttype)
             // @todo check if field type corresponding to fieldname has specific resolve Fn (tokentype)
-            $field_resolver = self::object_query_resolver($typename);
+            $field_resolver = static::_xar_query_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
             xarGraphQL::$paths[] = "use query field resolver for type $typename";
             return $field_resolver;
@@ -659,7 +661,7 @@ class xarGraphQLBuildType
         if ($typename == 'mutation' && !$useTypeClasses) {
             // @todo check if type class corresponding to fieldname has overridden _xar_*_mutation_resolver
             // @todo check if field type corresponding to fieldname has specific resolve Fn (tokentype)
-            $field_resolver = self::object_mutation_resolver($typename);
+            $field_resolver = static::_xar_mutation_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
             xarGraphQL::$paths[] = "use mutation field resolver for type $typename";
             return $field_resolver;
@@ -799,9 +801,9 @@ class xarGraphQLBuildType
         // item=property
         $item = $type;
         $fields = [
-            self::get_page_query($page, $type, $object),
-            //self::get_list_query($list, $type, $object),
-            self::get_item_query($item, $type, $object),
+            static::_xar_get_page_query($page, $type, $object),
+            //static::_xar_get_list_query($list, $type, $object),
+            static::_xar_get_item_query($item, $type, $object),
         ];
         return $fields;
     }

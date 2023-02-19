@@ -22,7 +22,7 @@
  * @param string table
  * @param string template
  * @param string tplmodule
- * @return boolean
+ * @return mixed
  */
 function dynamicdata_admin_create(Array $args=array())
 {
@@ -103,5 +103,3 @@ function dynamicdata_admin_create(Array $args=array())
     }
     return true;
 }
-
-?>

@@ -41,7 +41,7 @@ class DisplayHandler extends DefaultHandler
      * @param $args['itemid'] item id of the object to display, and/or
      * @param $args['preview'] true if you want dd to call checkInput() = standard dd preview using GET/POST params, or
      * @param $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
-     * @return string output of xarTpl::object() using 'ui_display'
+     * @return string|void output of xarTpl::object() using 'ui_display'
      */
     public function run(array $args = [])
     {

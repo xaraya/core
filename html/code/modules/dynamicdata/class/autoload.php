@@ -54,7 +54,7 @@ function dynamicdata_classes_autoload($class)
     return false;
 
     // We still haven't found it, so look at the properties now
-
+    /**
     if (empty($classpathlist)) {
         // add all known property classes we might be looking for
         sys::import('modules.dynamicdata.class.properties.registration');
@@ -75,6 +75,7 @@ function dynamicdata_classes_autoload($class)
     }
 
     return false;
+     */
 }
 
 /**

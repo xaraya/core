@@ -19,8 +19,8 @@
  *        integer  $args['itemid'] item id of the original item<br/>
  *        integer  $args['module_id'] module id for the original item<br/>
  *        string   $args['itemtype'] item type of the original item
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @return boolean|void true on success, false on failure
+ * @throws BadParameterException
  */
 function dynamicdata_adminapi_delete(array $args=[])
 {

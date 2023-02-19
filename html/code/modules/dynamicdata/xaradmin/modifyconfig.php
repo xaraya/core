@@ -23,6 +23,7 @@ function dynamicdata_admin_modifyconfig()
     // Security
     if (!xarSecurity::check('AdminDynamicData')) return;
 
+    $data = [];
     if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
     if (!xarVar::fetch('tab','str:1', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
 
@@ -71,4 +72,3 @@ function dynamicdata_admin_modifyconfig()
     }
     return $data;
 }
-?>

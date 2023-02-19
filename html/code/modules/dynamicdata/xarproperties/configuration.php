@@ -42,7 +42,7 @@ class ConfigurationProperty extends TextAreaProperty
 	* 
 	* @param  string name The name of the textarea
 	* @param  string value The value of the textarea
-	* @return bool   This method returns true if $data configuration updated otherwise returns false 
+	* @return bool|void   This method returns true if $data configuration updated otherwise returns false 
 	*/	
     public function checkInput($name = '', $value = null)
     {

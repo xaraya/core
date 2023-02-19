@@ -13,7 +13,7 @@
 
 /**
  * View items
- * @return string output display string
+ * @return string|void output display string
  */
 function dynamicdata_admin_view(Array $args=array())
 {
@@ -102,5 +102,3 @@ function dynamicdata_admin_view(Array $args=array())
         return xarTpl::module('dynamicdata','admin','view',$data);
     }
 }
-
-?>

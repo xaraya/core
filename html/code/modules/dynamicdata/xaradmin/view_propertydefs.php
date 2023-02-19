@@ -13,7 +13,7 @@
 /**
  * This is a standard function to modify the configuration parameters of the
  * module
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function dynamicdata_admin_view_propertydefs()
 {
@@ -50,4 +50,3 @@ function dynamicdata_admin_view_propertydefs()
 
     return $data;
 }
-?>

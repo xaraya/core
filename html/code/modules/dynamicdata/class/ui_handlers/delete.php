@@ -42,7 +42,7 @@ class DeleteHandler extends DefaultHandler
      * @param $args['cancel'] true if the user cancels
      * @param $args['confirm'] true if the user confirms
      * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string output of xarTpl::object() using 'ui_delete'
+     * @return string|void output of xarTpl::object() using 'ui_delete'
      */
     public function run(array $args = [])
     {

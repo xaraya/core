@@ -1141,6 +1141,7 @@ class DataObjectMaster extends xarObject
     /**
      * Get a module's itemtypes
      *
+     * @param array $args
      * @param int     args[moduleid]
      * @param string args[module]
      * @param bool   args[native]

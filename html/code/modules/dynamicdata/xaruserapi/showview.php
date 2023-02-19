@@ -14,7 +14,7 @@
  * list some items in a template
  *
  * @param array    $args array of optional parameters<br/>
- * @return string output display string
+ * @return string|void output display string
  */
 
 function dynamicdata_userapi_showview(array $args=[])

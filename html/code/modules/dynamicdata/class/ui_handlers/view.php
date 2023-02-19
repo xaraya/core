@@ -43,7 +43,7 @@ class ViewHandler extends DefaultHandler
      * @param $args['sort'] optional sort for the view
      * @param $args['where'] optional where clause(s) for the view
      * @param $args['startnum'] optional start number for the view
-     * @return string output of xarTpl::object() using 'ui_view'
+     * @return string|void output of xarTpl::object() using 'ui_view'
      */
     public function run(array $args = [])
     {

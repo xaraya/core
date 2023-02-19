@@ -61,7 +61,7 @@ class SubFormProperty extends DataProperty
 	 * 
 	 * @param  string name The name of this property type
 	 * @param  string value The value of this property type
-	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	 * @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
 	 */
     public function checkInput($name = '', $value = null)
     {
@@ -78,7 +78,7 @@ class SubFormProperty extends DataProperty
 	/**
 	 * Validate the value of this property type
 	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 * @return bool|void Returns true if the value passes all validation checks; otherwise returns false.
 	 */
     public function validateValue($value = null)
     {
@@ -184,8 +184,8 @@ class SubFormProperty extends DataProperty
                 }
 
                 // Preserve the index in case it has meaning
-                $idx = null;
-                xarVar::fetch("Key_" . $i . "_" . $prefix, 'str', $idx, NULL, xarVar::NOT_REQUIRED);
+                $idx = '';
+                xarVar::fetch("Key_" . $i . "_" . $prefix, 'str', $idx, '', xarVar::NOT_REQUIRED);
                 if (!empty($idx) && !isset($values[$idx])) {
                     $values[$idx] = $value;
                 } else {
@@ -727,7 +727,6 @@ class SubFormProperty extends DataProperty
                     }
                 }
                 return $objects;
-                break;
         }
         if (!isset($this->objectref)) {
             $this->objectref =& $myobject;
@@ -858,4 +857,3 @@ class SubFormProperty extends DataProperty
         return true;
     }
 }
-?>

@@ -15,7 +15,7 @@
  *
  * @param array    $args array of optional parameters<br/>
  * @param array containing the item or fields to show
- * @return string output display string
+ * @return string|void output display string
  */
 function dynamicdata_adminapi_showform(Array $args=array())
 {
@@ -82,4 +82,3 @@ function dynamicdata_adminapi_showform(Array $args=array())
 
     return $object->showForm($args);
 }
-?>

@@ -17,11 +17,11 @@
 // TODO: allow modules to specify their own relationships
  *
  * @author the DynamicData module development team
+ * @param array $args
  * @param $args['module'] module name of the item fields, or
  * @param $args['module_id'] module id of the item field to get
  * @param $args['itemtype'] item type of the item field to get
  * @return mixed value of the field, or false on failure
- * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_utilapi_getrelations(Array $args=array())
 {
@@ -128,6 +128,3 @@ function dynamicdata_utilapi_getrelations(Array $args=array())
     }
     return $relations;
 }
-
-
-?>

@@ -16,8 +16,9 @@
  *
  * @param int $args['objectid'] ID of the object
  * @param array $args['extrainfo'] extra information
- * @return string output display string
- * @throws BAD_PARAM, NO_PERMISSION, DATABASE_ERROR
+ * @return string|void output display string
+ * @throws EmptyParameterException
+ * @throws BadParameterException
  */
 function dynamicdata_admin_modifyconfighook(Array $args=array())
 {

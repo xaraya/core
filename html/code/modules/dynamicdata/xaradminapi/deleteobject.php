@@ -17,11 +17,9 @@
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['objectid'] object id of the object to delete
  * @return integer object ID on success, null on failure
- * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_deleteobject(Array $args=array())
 {
     $objectid = DataObjectMaster::deleteObject($args);
     return $objectid;
 }
-?>

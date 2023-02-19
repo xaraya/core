@@ -14,13 +14,14 @@
  * Migrate module items
  *
  * @author the DynamicData module development team
+ * @param array $args
  * @param $args['from'] the module id, itemtype and itemid(s) for the original item
  * @param $args['to'] the module id, itemtype and itemid preserve flag for the new item
  * @param $args['fieldmap'] the field mapping
  * @param $args['hookmap'] the hook mapping
  * @param $args['debug'] don't actually update anything :-)
  * @return mixed true or debug string on success, null on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @throws BadParameterException
  */
 function dynamicdata_utilapi_migrate(Array $args=array())
 {
@@ -536,4 +537,3 @@ function dynamicdata_utilapi_migrate(Array $args=array())
         return true;
     }
 }
-?>

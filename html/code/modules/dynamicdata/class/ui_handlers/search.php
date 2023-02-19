@@ -46,7 +46,7 @@ class SearchHandler extends DefaultHandler
      * @param $args['q'] optional query string for the search
      * @param $args['field'] optional field selection for the search
      * @param $args['match'] optional match type for the search
-     * @return string output of xarTpl::object() using 'ui_search'
+     * @return string|void output of xarTpl::object() using 'ui_search'
      */
     public function run(array $args = [])
     {

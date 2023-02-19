@@ -233,7 +233,6 @@ class DataObjectLoader
         if (!empty($this->access) && !$this->objectlist->checkAccess($this->access)) {
             //http_response_code(403);
             throw new Exception('No access to object ' . $this->objectname);
-            return;
         }
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         $this->objectlist->setFieldList($this->fieldlist);
@@ -684,7 +683,6 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             $objectlist->dataquery->addconditions($conditions);
             // @todo make sure we don't delete the wrong items here
             throw new Exception('TODO: No saving links to relational object ' . $this->linkname);
-            return;
         }
         $result = $objectlist->getItems();
         $oldlinks = [];

@@ -19,9 +19,9 @@
  * @param int objectid the id of the item to be modified
  * @param int module_id the id of the module where the item comes from
  * @param int itemtype the id of the itemtype of the item
- * @param join
- * @param table
- * @return string output display string
+ * @param string join
+ * @param string table
+ * @return string|void output display string
  */
 function dynamicdata_admin_modify(Array $args=array())
 {

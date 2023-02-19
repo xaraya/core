@@ -71,7 +71,7 @@ class FieldStatusProperty extends SelectProperty
 	* 
 	* @param  string name The name of the dropdown
 	* @param  string value The value of the dropdown
-	* @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	* @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
 	*/	
     public function checkInput($name = '', $value = null)
     {
@@ -120,7 +120,6 @@ class FieldStatusProperty extends SelectProperty
 	/**
 	* Retrieve the list of options
 	*  
-	* @param void N/A
 	*/	
     function getOptions()
     {
@@ -147,4 +146,3 @@ class FieldStatusProperty extends SelectProperty
         //TODO: get this working
     }
 }
-?>

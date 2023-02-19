@@ -13,11 +13,12 @@
 /**
  * Import an object definition or an object item from XML
  *
+ * @param array $args
  * @param $args['file'] location of the .xml file containing the object definition, or
  * @param $args['xml'] XML string containing the object definition
  * @param $args['keepitemid'] (try to) keep the item id of the different items (default false)
  * @param $args['entry'] optional array of external references.
- * @return array object id on success, null on failure
+ * @return array|void object id on success, null on failure
  */
 function dynamicdata_utilapi_import(Array $args=array())
 {
@@ -346,5 +347,3 @@ function dynamicdata_utilapi_import(Array $args=array())
     */
     return $objectid;
 }
-
-?>

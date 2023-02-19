@@ -16,7 +16,7 @@
  *
  * @author the DynamicData module development team
  * @param array    $args array of optional parameters<br/>
- * @return integer number of items held by this module
+ * @return integer|void number of items held by this module
  */
 function dynamicdata_userapi_countitems(array $args=[])
 {

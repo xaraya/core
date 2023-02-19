@@ -27,7 +27,6 @@
  *        integer  $args['seq'] order of the property to create<br/>
  *        string   $args['configuration'] configuration of the property to create
  * @return integer property ID on success, null on failure
- * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_createproperty(Array $args=array())
 {
@@ -75,4 +74,3 @@ function dynamicdata_adminapi_createproperty(Array $args=array())
     $propid = $propertyobject->createItem($values);
     return $propid;
 }
-?>

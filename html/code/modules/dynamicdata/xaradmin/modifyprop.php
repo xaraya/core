@@ -13,17 +13,18 @@
 /**
  * Modify the dynamic properties for a module + itemtype
  *
+ * @param array $args
  * @param int itemid
  * @param int module_id
  * @param int itemtype
- * @param table
- * @param details
+ * @param string table
+ * @param mixed details
  * @param string layout (optional)
- * @throws BAD_PARAM
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
-function dynamicdata_admin_modifyprop()
+function dynamicdata_admin_modifyprop(array $args = [])
 {
+    extract($args);
     $data = xarMod::apiFunc('dynamicdata','admin','menu');
 
     if(!xarVar::fetch('itemid',   'isset', $itemid,   NULL, xarVar::DONT_SET)) {return;}
@@ -203,5 +204,3 @@ function dynamicdata_admin_modifyprop()
 
     return $data;
 }
-
-?>

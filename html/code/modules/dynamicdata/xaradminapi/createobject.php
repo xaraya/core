@@ -24,11 +24,9 @@
  *        integer  $args['objectid'] object id of the object to create (for import only)<br/>
  *        integer  $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
  * @return integer object ID on success, null on failure
- * @throws BAD_PARAM, NO_PERMISSION
  */
 function dynamicdata_adminapi_createobject(Array $args=array())
 {
     $objectid = DataObjectMaster::createObject($args);
     return $objectid;
 }
-?>

@@ -21,7 +21,7 @@
  *        string   $args['defaultvalue'] default for the property (optional)<br/>
  *        string   $args['source'] data source for the property (optional)<br/>
  *        string   $args['configuration'] configuration for the property (optional)
- * @return object a particular DataProperty
+ * @return object|null a particular DataProperty
  */
 function &dynamicdata_userapi_getproperty(Array $args=array())
 {
@@ -31,5 +31,3 @@ function &dynamicdata_userapi_getproperty(Array $args=array())
     }
     return DataPropertyMaster::getProperty($args);
 }
-
-?>

@@ -59,13 +59,10 @@ trait xarGraphQLQueriesTrait
         switch ($kind) {
             case 'page':
                 return static::_xar_get_page_query($name, static::$_xar_type, static::$_xar_object);
-                break;
             case 'list':
                 return static::_xar_get_list_query($name, static::$_xar_type, static::$_xar_object);
-                break;
             case 'item':
                 return static::_xar_get_item_query($name, static::$_xar_type, static::$_xar_object);
-                break;
             default:
                 throw new Exception("Unknown '$kind' query '$name'");
         }

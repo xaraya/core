@@ -172,7 +172,6 @@ function dynamicdata_admin_update(Array $args=array())
             xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modify',
                                       array('itemid' => $newitemid)));
             return true;
-        break;
     }
 
     if (!empty($return_url)) {

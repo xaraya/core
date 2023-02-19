@@ -51,13 +51,10 @@ trait xarGraphQLMutationsTrait
         switch ($kind) {
             case 'create':
                 return static::_xar_get_create_mutation($name, static::$_xar_type, static::$_xar_object);
-                break;
             case 'update':
                 return static::_xar_get_update_mutation($name, static::$_xar_type, static::$_xar_object);
-                break;
             case 'delete':
                 return static::_xar_get_delete_mutation($name, static::$_xar_type, static::$_xar_object);
-                break;
             default:
                 throw new Exception("Unknown '$kind' mutation '$name'");
         }

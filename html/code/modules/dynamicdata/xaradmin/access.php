@@ -17,9 +17,7 @@
  * wishes to modify the access to an object
  *
  * @param int itemid the id of the object to be modified
- * @param join
- * @param table
- * @return string output display string
+ * @return string|void output display string
  */
 function dynamicdata_admin_access(Array $args=array())
 {
@@ -245,5 +243,3 @@ function dynamicdata_admin_access(Array $args=array())
         return xarTpl::module('dynamicdata','admin','access',$data,$data['template']);
     }
 }
-
-?>

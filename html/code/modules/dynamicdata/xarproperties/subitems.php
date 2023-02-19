@@ -45,7 +45,8 @@ class SubItemsProperty extends DataProperty
     public $tocreate          = array();                   // holds the ids of items to create
     public $todelete          = array();                   // holds the ids of items to delete
     public $defaultvalues     = array();                   // holds the default values of the object's properties. allows for overrides
-
+    public $fieldprefix;
+    public $localmodule;
     /*
     *   In this property the "value" ($itemsdata) corresponds to an array of the form
     *       array($subitemkey =>
@@ -82,7 +83,7 @@ class SubItemsProperty extends DataProperty
 	 * 
 	 * @param  string name The name of the subitems
 	 * @param  string value The value of the subitems
-	 * @return bool   This method returns the true or false value.
+	 * @return bool|void   This method returns the true or false value.
 	 */
     public function checkInput($name = '', $value = null)
     {

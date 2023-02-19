@@ -39,7 +39,6 @@ class FieldTypeProperty extends ObjectRefProperty
 	/**
      * Retrieve the list of options on demand
      * 
-     * @param void N/A
      */
     function getOptions()
     {
@@ -71,4 +70,3 @@ class FieldTypeProperty extends ObjectRefProperty
         return true;
     }
 }
-?>

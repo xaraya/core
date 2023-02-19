@@ -14,7 +14,8 @@
  * Export all object items for an object id to XML
  *
  * @author mikespub <mikespub@xaraya.com>
- * @param id $args['objectid'] object id of the object items to export
+ * @param array $args
+ * @param int $args['objectid'] object id of the object items to export
  */
 function dynamicdata_utilapi_export_items(array $args=[])
 {

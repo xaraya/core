@@ -936,6 +936,7 @@ class DataProperty extends xarObject implements iDataProperty
      */
     protected function getModule()
     {
+        // @fixme there is no $info available
         $modulename = empty($this->tplmodule) ? $info['tplmodule'] : $this->tplmodule;
         return $modulename;
     }

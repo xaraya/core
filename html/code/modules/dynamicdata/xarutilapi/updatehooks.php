@@ -14,13 +14,14 @@
  * Update hooks when migrating module items
  *
  * @author the DynamicData module development team
+ * @param array $args
  * @param array $args['from'] the module id and itemtype for the original items
  * @param array $args['to'] the module id and itemtype for the new items
  * @param $args['hookmap'] the hook mapping
  * @param array $args['itemids'] the list of old => new itemids
  * @param $args['debug'] don't actually update anything :-)
  * @return mixed true or debug string on success, null on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @throws BadParameterException
  */
 function dynamicdata_utilapi_updatehooks(Array $args=array())
 {
@@ -120,7 +121,6 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
                 // already done via field mapping
                 $table = '';
                 continue;
-                break;
 
             case 'polls':
                 // load table definitions et al.
@@ -141,7 +141,6 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
                 //       copy DD from old to new object, and update id in subitems_ddids
                 $table = '';
                 continue;
-                break;
 
             case 'uploads':
                 // load table definitions et al.
@@ -161,7 +160,6 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
                 // and especially what kind of information they store about items
                 $table = '';
                 continue;
-                break;
 
             default:
                 $table = '';
@@ -256,4 +254,3 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
         return true;
     }
 }
-?>
