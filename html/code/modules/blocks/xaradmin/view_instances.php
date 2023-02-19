@@ -15,8 +15,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * 
- * @param void N/A
- * @return array Teamplate display data array
+ * @return array|void Teamplate display data array
  */
 function blocks_admin_view_instances()
 {
@@ -431,4 +430,3 @@ function blocks_admin_view_instances()
     return $data;
 
 }
-?>

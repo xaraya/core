@@ -16,7 +16,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * 
  * @param array $args Parameter data array
- * @return type Returns the block id of the newly created item
+ * @return int|void Returns the block id of the newly created item
  * @throws BadParameterException
  * @throws IDNotFoundException
  * @throws DuplicateException

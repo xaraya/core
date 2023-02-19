@@ -16,7 +16,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * 
  * @param array $args Parameter data array
- * @return boolean|integer Returns newly created id on success or falce on failure
+ * @return boolean|integer|void Returns newly created id on success or falce on failure
  * @throws BadParameterException
  * @throws DuplicateException
  */

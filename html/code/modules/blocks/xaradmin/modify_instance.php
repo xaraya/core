@@ -16,8 +16,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * 
- * @param void N/A
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
 function blocks_admin_modify_instance()
 {
@@ -197,7 +196,7 @@ function blocks_admin_modify_instance()
                                 if (!isset($block_groups[$attachgroup])) {
                                     $invalid['attachgroup'] = xarML('Specified block group does not exist');
                                 } elseif (isset($blockinfo_groups[$attachgroup])) {
-                                    $invalid['attachgroup'] = xarML('Instance is already a member of #(1) group', $blockgroups[$attachgroup]['name']);
+                                    $invalid['attachgroup'] = xarML('Instance is already a member of #(1) group', $blockinfo_groups[$attachgroup]['name']);
                                 }
                                 if (!empty($invalid['attachgroup']))
                                     $attachgroup = null;
@@ -484,7 +483,6 @@ function blocks_admin_modify_instance()
                                 break;
                                 default:
                                     continue 2;
-                                break;
                             }
                             $block_params[$k] = array(
                                 'attribute' => $k,
@@ -571,11 +569,11 @@ function blocks_admin_modify_instance()
                         }
                         $blockinfo['groups'] = $groups;
                         $group_options = array();
-                        foreach ($block_groups as $id => $option) {
+                        foreach ($block_groups as $id => $group) {
                             if (isset($groups[$id])) continue;
                             $group_options[$id] = array(
                                 'id' => $id,
-                                'name' => $option['name'],
+                                'name' => $group['name'],
                             );
                         }
                         $data['group_options'] = $group_options;

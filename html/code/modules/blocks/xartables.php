@@ -16,7 +16,6 @@
  * This function is called internally by the core whenever the module is
  * loaded. It adds the table names to a globally accessible array
  * 
- * @param void N/A
  * @return array Registered table names to a globally accessibl array
  */
 function blocks_xartables()
@@ -30,4 +29,3 @@ function blocks_xartables()
     
     return $tables;
 }
-?>

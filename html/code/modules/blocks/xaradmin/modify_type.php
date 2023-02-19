@@ -15,7 +15,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * 
  * @param array $args Optional parameter array
- * @return type Display data array
+ * @return array|string|void Display data array
  * @throws EmptyParameterException
  * @throws IDNotFoundException
  * @throws FunctionNotFoundException
@@ -309,7 +309,6 @@ function blocks_admin_modify_type(Array $args=array())
                                 break;
                                 default:
                                     continue 2;
-                                break;
                             }
                             $type_params[$k] = array(
                                 'attribute' => $k,

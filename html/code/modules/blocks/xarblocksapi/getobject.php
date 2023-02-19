@@ -18,7 +18,7 @@
  * 
  * @staticvar array $loaded Keeps track of clases that have been loaded
  * @param array $args Parameter data array
- * @return object Object to be returned
+ * @return object|void Object to be returned
  * @throws BadParameterException
  * @throws FileNotFoundException
  * @throws ClassNotFoundException

@@ -14,8 +14,7 @@
  * 
  * 
  * @author Chris Powis <crisp@xaraya.com>
- * @param void N/A
- * @return type Returns data display array
+ * @return array|void Returns data display array
  */
 function blocks_admin_refresh_types(Array $args=array())
 {
@@ -70,4 +69,3 @@ function blocks_admin_refresh_types(Array $args=array())
     $data['type_states'] = xarMod::apiFunc('blocks', 'types', 'getstates');
     return $data;
 }
-?>

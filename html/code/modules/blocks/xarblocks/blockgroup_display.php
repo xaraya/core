@@ -25,7 +25,7 @@ class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iB
      * Display the blockgroup block
      * 
      * @param array $data Data array
-     * @return array Display data array or null if nothing is to display.
+     * @return array|void Display data array or null if nothing is to display.
      */ 
     function display(Array $data=array())
     {
@@ -73,4 +73,3 @@ class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iB
         return $data;
     }
 }
-?>

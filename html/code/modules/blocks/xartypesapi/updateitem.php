@@ -16,7 +16,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * 
  * @param array $args Parameter data array
- * @return integer Type id of the block
+ * @return integer|void Type id of the block
  * @throws EmptyParameterException
  * @throws BadParameterException
  */

@@ -16,7 +16,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  *  
  * @param array $args Parameter data array
- * @return integer Item count
+ * @return integer|void Item count
  * @throws BadParameterException
  */
 function blocks_typesapi_countitems(Array $args=array())
@@ -103,4 +103,3 @@ function blocks_typesapi_countitems(Array $args=array())
     
     return $count;    
 }
-?>

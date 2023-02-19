@@ -20,14 +20,14 @@
  *
  * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
- * @param void N/A
- * @return boolean|array data array for the template display or output display string if invalid data submitted
+ * @return boolean|array|string|void data array for the template display or output display string if invalid data submitted
  */
 function blocks_admin_modifyconfig()
 {
     // Security
     if(!xarSecurity::check('AdminBlocks')) return;
     
+    $data = [];
     if (!xarVar::fetch('phase',        'str:1:100', $phase,       'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
     if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
 
@@ -66,8 +66,6 @@ function blocks_admin_modifyconfig()
             xarController::$request->exitAjax();
             xarController::redirect(xarServer::getCurrentURL());
             return true;
-        break;
     }
     return $data;
 }
-?>

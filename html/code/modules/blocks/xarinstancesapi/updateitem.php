@@ -19,7 +19,7 @@
  * Updates an item in the API
  * 
  * @param array $args
- * @return integer Returns block id
+ * @return integer|void Returns block id
  * @throws BadParameterException
  */
 function blocks_instancesapi_updateitem(Array $args=array())
@@ -90,4 +90,3 @@ function blocks_instancesapi_updateitem(Array $args=array())
 
     return $block_id;
 }
-?>
