@@ -56,4 +56,3 @@ class xarLogger_winsyslog extends xarLogger_syslog
         return $levels[$level];
     }
 }
-?>

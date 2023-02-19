@@ -339,5 +339,3 @@ class xarLogger_simple extends xarLogger
         return basename($this->filename);
     }
 }
-
-?>

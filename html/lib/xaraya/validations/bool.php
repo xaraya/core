@@ -33,4 +33,3 @@ class BoolValidation extends ValueValidations
         return true;
     }
 }
-?>

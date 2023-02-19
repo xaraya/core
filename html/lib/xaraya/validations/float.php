@@ -54,4 +54,3 @@ class FloatValidation extends ValueValidations
             return true;
     }
 }
-?>

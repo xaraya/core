@@ -164,5 +164,3 @@ class xarLogger_mail extends xarLogger
         return true;
     }
 }
-
-?>

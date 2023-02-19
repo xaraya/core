@@ -107,4 +107,3 @@ class CompiledTemplate extends xarObject
         return $output;
     }
 }
-?>

@@ -80,4 +80,3 @@ class ShortActionController extends BaseActionController implements iController
         return implode($this->separator, $params);
     }       
 }
-?>

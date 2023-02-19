@@ -437,5 +437,3 @@ class xarCharset extends xarObject
         return $outString;
     }
 }
-
-?>

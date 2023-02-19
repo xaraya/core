@@ -30,4 +30,3 @@ class NotEmptyValidation extends ValueValidations
         return true;
     }
 }
-?>

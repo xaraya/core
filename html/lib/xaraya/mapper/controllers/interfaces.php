@@ -21,5 +21,3 @@ interface iController
     public function getActionString(xarRequest $request);  
     public function getInitialPath(xarRequest $request);
 }
-
-?>

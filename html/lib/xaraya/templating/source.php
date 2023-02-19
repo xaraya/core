@@ -55,4 +55,3 @@ class XarayaSourceTemplate extends SourceTemplate
         return $out;
     }
 }
-?>

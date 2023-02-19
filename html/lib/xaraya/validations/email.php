@@ -29,4 +29,3 @@ class EmailValidation extends ValueValidations
         return true;
     }
 }
-?>

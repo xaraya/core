@@ -44,4 +44,3 @@ class EnumValidation extends ValueValidations
         }
     }
 }
-?>

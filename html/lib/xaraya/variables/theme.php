@@ -51,4 +51,3 @@ class xarThemeVars extends xarObject implements IxarThemeVars
         }
     }
 }
-?>

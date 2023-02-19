@@ -53,4 +53,3 @@ class IntValidation extends ValueValidations
         return true;
     }
 }
-?>

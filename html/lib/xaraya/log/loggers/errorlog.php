@@ -118,4 +118,3 @@ class xarLogger_errorlog extends xarLogger
         return true;
     }
 }
-?>

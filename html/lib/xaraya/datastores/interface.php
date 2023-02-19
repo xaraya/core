@@ -104,4 +104,3 @@ interface ISQLDataStore
     Introduced by VariableTable datastore:
         function getNextId(Array $args=array())
 */
-?>

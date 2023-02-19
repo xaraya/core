@@ -196,4 +196,3 @@ public static function newConn(array $args = null)
         );
     }
 }
-?>

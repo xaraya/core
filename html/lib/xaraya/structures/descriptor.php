@@ -65,4 +65,3 @@ class ObjectDescriptor extends DataContainer
         return true;
     }
 }
-?>

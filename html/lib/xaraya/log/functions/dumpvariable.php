@@ -104,5 +104,3 @@ function xarLog__dumpVariable (array $array)
     $depth -= 1;
     return $str;
 }
-
-?>

@@ -29,4 +29,3 @@ function xarLog__stringToLevel($string)
 
     return $strings[$string];
 }
-?>

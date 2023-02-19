@@ -111,5 +111,3 @@ class ODBCAdapter
         return true;
     }
 }
-
-?>

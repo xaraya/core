@@ -81,4 +81,3 @@ class StrListValidation extends ValueValidations
         return $return;
     }
 }
-?>

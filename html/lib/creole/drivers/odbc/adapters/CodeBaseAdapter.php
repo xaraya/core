@@ -69,5 +69,3 @@ class CodeBaseAdapter extends ODBCAdapter
     }
 
 }
-
-?>

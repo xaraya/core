@@ -153,5 +153,3 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
         return $this->db->getDatabaseInfo();
     }
 }
-
-?>

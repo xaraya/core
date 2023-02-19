@@ -32,4 +32,3 @@ class CheckBoxValidation extends ValueValidations
         return true;
     }
 }
-?>

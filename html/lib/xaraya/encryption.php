@@ -18,4 +18,3 @@ $encryption = array(
     'hint'          => 'favorite song',
     'initvector'    => 'xaraya2x',
 );
-?>

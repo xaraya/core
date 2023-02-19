@@ -74,5 +74,3 @@ class MySQLAdapter extends ODBCAdapter
     }
 
 }
-
-?>

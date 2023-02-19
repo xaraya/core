@@ -51,4 +51,3 @@ class xarDispatcher extends xarObject
     function getController()  { return $this->controller; }
     function getRequest()     { return $this->request; }
 }
-?>

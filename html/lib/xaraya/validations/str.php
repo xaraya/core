@@ -52,4 +52,3 @@ class StrValidation extends ValueValidations
         return true;
     }
 }
-?>

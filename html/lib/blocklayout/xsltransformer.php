@@ -312,4 +312,3 @@ class XsltCallbacks extends xarObject
         return $matches[0];
     }
 }
-?>
