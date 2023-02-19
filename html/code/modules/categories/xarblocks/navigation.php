@@ -41,7 +41,6 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
     /**
      * Display block
      * 
-     * @param void N/A
      */
     function display()
     {
@@ -873,5 +872,3 @@ class Categories_NavigationBlock extends BasicBlock implements iBlock
         
     }
 }
-
-?>

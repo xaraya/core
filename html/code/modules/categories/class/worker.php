@@ -27,7 +27,6 @@ class CategoryWorker extends xarObject
     /**
      * Constructor for CategoryWorker
      * 
-     * @param void N/A
      */
     public function __construct()
     {
@@ -65,10 +64,12 @@ class CategoryWorker extends xarObject
         if (empty($result)) return xarML('Unknown category');
         return $result['name'];
     
+        /**
         // CHECKME: this should be done elsewhere
         $name = rawurlencode($result['name']);
         $name = preg_replace('/%2F/','/',$name);
         return $name;
+         */
     }
     
     /**
@@ -165,7 +166,7 @@ class CategoryWorker extends xarObject
      * 
      * @param int $id ID of the parent category
      * @param boolean $myself
-     * @param varchar $order
+     * @param string $order
      * @return array|null Data array containing descendents of the given category, null if no children were found
      */
     public function getdescendents($id=0, $myself=0, $order='id')
@@ -197,7 +198,7 @@ class CategoryWorker extends xarObject
      * 
      * @param int $id ID of the category to be deleted (along with its children
      * @param boolean $myself
-     * @return array|null Data array containing descendents of the given category, null if no children were found
+     * @return array|bool|null Data array containing descendents of the given category, null if no children were found
      */
     public function delete($id=0)
     {
@@ -268,8 +269,7 @@ class CategoryWorker extends xarObject
     /**
      * Fetch top level categories from the tree in the database
      * 
-     * @param void N/A
-     * @return array Category data array
+     * @return array|void Category data array
      */
     public function gettoplevel()
     {
@@ -283,7 +283,6 @@ class CategoryWorker extends xarObject
     /**
      * Fetch the top level count
      * 
-     * @param void N/A
      * @return int Count of top level categories
      */
     public function gettoplevelcount()
@@ -295,7 +294,7 @@ class CategoryWorker extends xarObject
      * Fetch category bases from database
      * 
      * @param array $args Parameter data array
-     * @return array Category bases data array
+     * @return array|void Category bases data array
      */
     public function getcatbases($args)
     {
@@ -376,10 +375,10 @@ class CategoryWorker extends xarObject
     /**
      * Append a subtree to the tree
      * 
-     * @param itemid the ID of the toplevel node of the subtree to copy
-     * @return true if successful
+     * @param int $itemid the ID of the toplevel node of the subtree to copy
+     * @return true|void if successful
      */
-    public function appendTree($itemid, $args)
+    public function appendTree($itemid, $args = [])
     {
         // Find the last top level category. We'll add the subtree after it
         sys::import('xaraya.structures.query');
@@ -465,4 +464,3 @@ class CategoryWorker extends xarObject
         return $newtoplevel;
     }
 }
-?>

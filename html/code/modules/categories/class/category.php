@@ -60,61 +60,63 @@ class Category extends DataObject
             // This would be when we are coming from a page submit
             // or we may not have a complete position for the new category but only a parent ID to hang it from
             // We then have to complete the information for the new category
-            
+            /** @var CelkoPositionProperty $celkoposition */
+            $celkoposition = $this->properties['position'];
             // First add anything passed to the object. This always takes precedence
             // It is up to the caller passing the values to ensure they are compatible
             if (isset($args['relative_position'])) {
                 // Apply the position passed
                 switch ((int)$args['relative_position']) {
                     case 1: // before - same level
-                        $this->properties['position']->rightorleft = 'left';
-                        $this->properties['position']->inorout = 'out';
+                        $celkoposition->rightorleft = 'left';
+                        $celkoposition->inorout = 'out';
                         break;
                     case 2: // after - same level
-                        $this->properties['position']->rightorleft = 'right';
-                        $this->properties['position']->inorout = 'out';
+                        $celkoposition->rightorleft = 'right';
+                        $celkoposition->inorout = 'out';
                         break;
                     case 3: // last child item
-                        $this->properties['position']->rightorleft = 'right';
-                        $this->properties['position']->inorout = 'in';
+                        $celkoposition->rightorleft = 'right';
+                        $celkoposition->inorout = 'in';
                         break;
                     case 4: // first child item
-                        $this->properties['position']->rightorleft = 'left';
-                        $this->properties['position']->inorout = 'in';
+                        $celkoposition->rightorleft = 'left';
+                        $celkoposition->inorout = 'in';
                         break;
                     default: // any other value
-                        $this->properties['position']->rightorleft = 'right';
-                        $this->properties['position']->inorout = 'in';
+                        $celkoposition->rightorleft = 'right';
+                        $celkoposition->inorout = 'in';
                         break;
                 }
             }
             if (isset($args['parent_id'])) {
-                $this->properties['position']->reference_id = (int)$args['parent_id'];
+                $celkoposition->reference_id = (int)$args['parent_id'];
             }
             
             // Now check if we have a position in the object
-            if (!empty($this->properties['position']->rightorleft) && 
-                !empty($this->properties['position']->inorout) &&
-                isset($this->properties['position']->reference_id)) {
+            if (!empty($celkoposition->rightorleft) && 
+                !empty($celkoposition->inorout) &&
+                isset($celkoposition->reference_id)) {
                 // No position was passed, but checkInput or the code above or something else already loaded one into the object
                 // No need to do anything
             } else {
                 // Nothing was passed or found in the object: define a default position
                 // As default we will make this new category a child of the top level
-                $this->properties['position']->rightorleft = 'right';
-                $this->properties['position']->inorout = 'in';
+                $celkoposition->rightorleft = 'right';
+                $celkoposition->inorout = 'in';
                 
                 // Get top level nodes (there should only be one)
                 sys::import('modules.categories.class.worker');
                 $worker = new CategoryWorker();
-                $worker->setTable($this->properties['position']->initialization_celkotable);
+                $worker->setTable($celkoposition->initialization_celkotable);
                 $toplevels = $worker->gettoplevel();
                 // Take the first one
                 $toplevel = reset($toplevels);
                 if (isset($toplevel) && isset($toplevel['id'])) {
-                    $this->properties['position']->reference_id = (int)$toplevel['id'];
+                    $celkoposition->reference_id = (int)$toplevel['id'];
                 }
             }
+            $this->properties['position'] = $celkoposition;
 
             // Now that we have all the information, run the create
 			// The heavy lifting (i.e. changing all the right and left indices) is done by the position property

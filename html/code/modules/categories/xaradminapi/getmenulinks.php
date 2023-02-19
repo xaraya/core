@@ -17,13 +17,10 @@
  *
  * @author the Example module development team
  * 
- * @param void N/A
- * @return arrau Array containing menulinks for the main menu items.
+ * @return array Array containing menulinks for the main menu items.
  */
 function categories_adminapi_getmenulinks()
 {
     return xarMod::apiFunc('base','admin','menuarray',array('module' => 'categories'));
 
 }
-
-?>

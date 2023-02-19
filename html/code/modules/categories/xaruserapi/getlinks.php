@@ -14,9 +14,10 @@
 
 /**
  * Get links
+ * @param array $args
  * @param $args['cids'] array of ids of categories to get linkage for (OR/AND)
  * @param $args['iids'] array of ids of itens to get linkage for
- * @param $args['modid'] module�s ID
+ * @param $args['modid'] module ID
  * @param $args['itemtype'] item type (if any)
  * @param $args['numitems'] optional number of items to return
  * @param $args['startnum'] optional start at this number (1-based)
@@ -25,7 +26,7 @@
  *                         else the keys are the 'cids'
  * @param $args['andcids'] true means AND-ing categories listed in cids
  * @param $args['groupcids'] the number of categories you want items grouped by
- * @return array Returns item array, or false on failure
+ * @return array|void Returns item array, or false on failure
  */
 function categories_userapi_getlinks($args)
 {
@@ -114,5 +115,3 @@ function categories_userapi_getlinks_sortbycount($a, $b)
     if ($ca == $cb) return 0;
     return ($ca > $cb ? 1 : -1);
 }
-
-?>

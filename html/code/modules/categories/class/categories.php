@@ -21,7 +21,7 @@ class Categories extends xarObject
      * Fetches CategoryTreeNode object from database
      * 
      * @param int $id Id of the CategoryTreeNode
-     * @return \CategoryTreeNode
+     * @return \CategoryTreeNode|void
      */
     public static function get(int $id)
     {
@@ -85,8 +85,7 @@ class CategoryTreeNode extends TreeNode
     /**
      * Fetches a collection of the node's children
      * 
-     * @param void N/A
-     * @return object Collection of \CategoryTreeNode
+     * @return object|void Collection of \CategoryTreeNode
      */
     function getChildren()
     {
@@ -120,7 +119,6 @@ class CategoryTreeNode extends TreeNode
     /**
      * Returns the parent of the CategoryTreeNode
      * 
-     * @param void N/A
      * @return \CategoryTreeNode
      */
     function getParent()
@@ -155,7 +153,7 @@ class CategoryTreeNode extends TreeNode
      * Check if a CategoryTreeNode is a descendant
      * 
      * @param CategoryTreeNode $n Node to look up
-     * @return boolean True if the given CategoryTreeNode is a decendant
+     * @return boolean|void True if the given CategoryTreeNode is a decendant
      */
     function isDescendant(CategoryTreeNode $n)
     {
@@ -193,7 +191,7 @@ class CategoryTreeNode extends TreeNode
 
     /**
      * Set filter
-     * @param type $args Filter Data array
+     * @param array $args Filter Data array
      */
     function setfilter($args=array())
     {
@@ -203,7 +201,6 @@ class CategoryTreeNode extends TreeNode
     /**
      * Return this object as an array
      * 
-     * @param void N/A
      * @return array CategoryTreeNode information as array
      */
     function toArray()
@@ -227,6 +224,9 @@ class CategoryTreeNode extends TreeNode
  */
 class CategoryTree extends Tree
 {
+    /**
+     * @param CategoryTreeNode $node
+     */
     function createnodes(TreeNode $node)
     {
         if ($node->id != null) $node->cid = $node->id;

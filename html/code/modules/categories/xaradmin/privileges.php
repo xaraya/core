@@ -20,7 +20,7 @@
  * Manage definition of instances for privileges (unfinished)
  * 
  * @param array $args Parameter data array
- * @return array|null Return display data array on success, null on failure.
+ * @return array|bool|void Return display data array on success, null on failure.
  */
 function categories_admin_privileges($args)
 {
@@ -44,8 +44,17 @@ function categories_admin_privileges($args)
     if (!xarVar::fetch('extlevel',     'isset', $extlevel,     NULL, xarVar::DONT_SET)) {return;}
 
     sys::import('modules.dynamicdata.class.properties.master');
+    /** @var CategoriesProperty $categories */
     $categories = DataPropertyMaster::getProperty(array('name' => 'categories'));
-    $cids = $categories->returnInput('privcategories');
+    // @checkme is this what you need here?
+    //$cids = $categories->returnInput('privcategories');
+    $cids = [];
+    if ($categories->checkInput('privcategories')) {
+        $value = $categories->value;
+        if (!empty($value) && is_array($value)) {
+            $cids = array_values($value);
+        }
+    }
 
     // 'Category' component = All:cid (catname is unused)
     if (!empty($extcomponent) && $extcomponent == 'Category') {
@@ -155,9 +164,13 @@ function categories_admin_privileges($args)
         $modlist[$modid] = $modinfo['displayname'];
         if (!empty($moduleid) && $moduleid == $modid) {
             // Get the list of all item types for this module (if any)
-            $mytypes = xarMod::apiFunc($modname,'user','getitemtypes',
-                                     // don't throw an exception if this function doesn't exist
-                                     array(), 0);
+            try {
+                $mytypes = xarMod::apiFunc($modname,'user','getitemtypes',
+                // don't throw an exception if this function doesn't exist
+                array());
+            } catch (Exception $e) {
+                $mytypes = [];
+            }
             if (empty($mytypes)) {
                 $mytypes = array();
             }
@@ -291,5 +304,3 @@ function categories_admin_privileges($args)
 
     return $data;
 }
-
-?>

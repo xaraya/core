@@ -32,7 +32,6 @@
  * @param $args['layout'] string layout to use for the navigation (prevnext, trails or tree - default trails)
  * @param $args['template'] string override the template that corresponds to this layout (prevnext, rootcats/trails or tree)
  * @param $args['tplmodule'] string override the module where this template is located (default 'categories')
- * @returns string
  * @return string containing the HTML (or other) text to output in the BL template
  */
 
@@ -1095,7 +1094,7 @@ class CategoryNavigationProperty extends SelectProperty
      * Retrieve or check an individual option on demand
      *
      * @param  $check boolean
-     * @return if check == false:<br/>
+     * @return mixed if check == false:<br/>
      *                - display value, if found, of an option whose store value is $this->value<br/>
      *                - $this->value, if not found<br/>
      *         if check == true:<br/>
@@ -1118,5 +1117,3 @@ class CategoryNavigationProperty extends SelectProperty
     }
 
 }
-
-?>

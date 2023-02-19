@@ -19,8 +19,7 @@
 /**
  * Delete category links of module items.
  * 
- * @param void N/A
- * @return boolean|null Returns true on success, null on failure.
+ * @return boolean|array|string|void Returns true on success, null on failure.
  */
 function categories_admin_unlink()
 { 
@@ -47,9 +46,13 @@ function categories_admin_unlink()
                 $data['modname'] = ucwords($modinfo['displayname']);
             } else {
                 // Get the list of all item types for this module (if any)
-                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                                         // don't throw an exception if this function doesn't exist
-                                         array(), 0);
+                try {
+                    $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
+                    // don't throw an exception if this function doesn't exist
+                    array());
+                } catch (Exception $e) {
+                    $mytypes = array();
+                }
                 if (isset($mytypes) && !empty($mytypes[$itemtype])) {
                     $data['modname'] = ucwords($modinfo['displayname']) . ' ' . $itemtype . ' - ' . $mytypes[$itemtype]['label'];
                 } else {
@@ -82,5 +85,3 @@ function categories_admin_unlink()
     xarController::redirect(xarController::URL('categories', 'admin', 'stats'));
     return true;
 }
-
-?>

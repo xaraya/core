@@ -15,8 +15,7 @@
 /**
  * Hooks shows the configuration of hooks for other modules 
  * 
- * @param void N/A
- * @return array Returns display data array on success, null on security check failure
+ * @return array|void Returns display data array on success, null on security check failure
  */
 function categories_admin_hooks()
 {
@@ -27,5 +26,3 @@ function categories_admin_hooks()
 
     return $data;
 }
-
-?>

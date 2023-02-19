@@ -41,6 +41,8 @@ class CategoryPickerProperty extends ArrayProperty
                                 );
     public $display_minimum_rows      = 1;
     public $initialization_addremove  = 2;
+    public $module_id;
+    public $itemtype;
     
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -56,6 +58,7 @@ class CategoryPickerProperty extends ArrayProperty
      */
     public function createValue($itemid=0)
     {
+        $data = [];
         // Set the module_id: case of a bound property
         if (isset($this->objectref)) $this->module_id = (int)$this->objectref->moduleid;
         // Override or a standalone property

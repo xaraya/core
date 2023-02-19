@@ -14,9 +14,10 @@
 
 /**
  * Get info on a specific (list of) category
+ * @param array $args
  * @param $args['cid'] id of category to get info, or
  * @param $args['cids'] array of category ids to get info
- * @return array Returns category info array, or array of cat info arrays, false on failure
+ * @return array|bool Returns category info array, or array of cat info arrays, false on failure
  */
 function categories_userapi_getcatinfo($args)
 {
@@ -38,5 +39,3 @@ function categories_userapi_getcatinfo($args)
     else $info = $worker->getcatinfo($cids);
     return $info;
 }
-
-?>

@@ -15,8 +15,7 @@
 /**
  * The main user function
  * 
- * @param void N/A
- * @return array Returns display data array
+ * @return array|void Returns display data array
  */
 function categories_user_main()
 {
@@ -194,5 +193,3 @@ function categories_user_main()
     }
     return $data;
 }
-
-?>

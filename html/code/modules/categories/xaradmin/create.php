@@ -15,7 +15,7 @@
 /**
  * Create one or more new categories
  * 
- * @return boolean|string Returns true on success, string on security failure
+ * @return boolean|string|void Returns true on success, string on security failure
  */
 function categories_admin_create()
 {
@@ -24,6 +24,7 @@ function categories_admin_create()
         return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }        
 
+    $data = [];
     //Checkbox work for submit buttons too
     if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}
     if (!xarVar::fetch('reassign', 'checkbox',  $reassign, false, xarVar::NOT_REQUIRED)) return;
@@ -52,4 +53,3 @@ function categories_admin_create()
 //    xarController::redirect(xarController::URL('categories','admin','new',array('repeat' => $data['repeat'])));
     return true;
 }
-?>

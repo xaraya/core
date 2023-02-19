@@ -15,13 +15,13 @@
     /**
      * Function to modify admin configuration
      * 
-     * @param void N/A
-     * @return array|boolean Returns display data array or true on success, null on failure.
+     * @return mixed Returns display data array or true on success, null on failure.
      */
     function categories_admin_modifyconfig()
     {
         // Security Check
         if (!xarSecurity::check('AdminCategories')) return;
+        $data = [];
         if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
         if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
         if (!xarVar::fetch('tabmodule', 'str:1:100', $tabmodule, 'categories', xarVar::NOT_REQUIRED)) return;
@@ -74,10 +74,8 @@
                 xarController::redirect(xarController::URL('categories', 'admin', 'modifyconfig',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 // Return
                 return true;
-                break;
 
         }
         $data['tabmodule'] = $tabmodule;
         return $data;
     }
-?>

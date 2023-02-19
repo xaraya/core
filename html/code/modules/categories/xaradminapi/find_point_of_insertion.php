@@ -18,9 +18,9 @@
  *
  * @param string $args['inorout'] Where the new category should be: IN or OUT
  * @param string $args['rightorleft'] Where the new category should be: RIGHT or LEFT
- * @param type $args['right'] The right value of the reference category
- * @param type $args['left'] The left value of the reference category
- * @return type Returns the point of insertion value
+ * @param int $args['right'] The right value of the reference category
+ * @param int $args['left'] The left value of the reference category
+ * @return int Returns the point of insertion value
  * @throws BadParameterException Thrown if parameters contain invalid values
  */
 function categories_adminapi_find_point_of_insertion($args)
@@ -71,5 +71,3 @@ function categories_adminapi_find_point_of_insertion($args)
     }
     return $point_of_insertion;
 }
-
-?>

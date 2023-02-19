@@ -24,6 +24,7 @@ class CategoryTreeProperty extends DataProperty
     public $name       = 'categorytree';
     public $desc       = 'CategoryTree';
     public $reqmodules = array('categories');
+    public $options;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -70,5 +71,3 @@ class CategoryTreeProperty extends DataProperty
         return parent::showInput($data);
     }
 }
-
-?>

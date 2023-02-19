@@ -15,7 +15,6 @@
 /**
  * View statistics about category links
  * 
- * @param void N/A
  * @return array|null Returns display data array on success, null on failure.
  */
 function categories_admin_stats()
@@ -88,9 +87,13 @@ function categories_admin_stats()
         } else {
             $data['itemtype'] = $itemtype;
             // Get the list of all item types for this module (if any)
-            $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                                     // don't throw an exception if this function doesn't exist
-                                     array(), 0);
+            try {
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
+                // don't throw an exception if this function doesn't exist
+                array());
+            } catch (Exception $e) {
+                $mytypes = [];
+            }
             if (isset($mytypes) && !empty($mytypes[$itemtype])) {
                 $data['modname'] = ucwords($modinfo['displayname']) . ' ' . $itemtype . ' - ' . $mytypes[$itemtype]['label'];
             //    $data['modlink'] = $mytypes[$itemtype]['url'];
@@ -138,11 +141,14 @@ function categories_admin_stats()
                                         'catid' => $catid));
         $showtitle = xarModVars::get('categories','showtitle');
         if (!empty($getitems) && !empty($showtitle)) {
-           $itemids = array_keys($getitems);
-           $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
-                                      array('itemtype' => $itemtype,
-                                            'itemids' => $itemids),
-                                      0); // don't throw an exception here
+            $itemids = array_keys($getitems);
+            try {
+                $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
+                array('itemtype' => $itemtype,
+                      'itemids' => $itemids)); // don't throw an exception here
+            } catch (Exception $e) {
+                $itemlinks = [];
+            }
         } else {
            $itemlinks = array();
         }
@@ -196,5 +202,3 @@ function categories_admin_stats()
 
     return $data;
 }
-
-?>
