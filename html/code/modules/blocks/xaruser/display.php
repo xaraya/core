@@ -36,4 +36,3 @@ function blocks_user_display(Array $args=array())
     $data['name'] = $name;
     return $data;
 }
-?>

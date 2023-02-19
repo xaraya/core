@@ -77,5 +77,3 @@ function categories_userapi_getlinkage($args)
     if (!$q->run()) return array();
     return $q->output();
 }
-
-?>

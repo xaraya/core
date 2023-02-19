@@ -120,5 +120,3 @@ function categories_admin_modifyconfighook($args)
 
     return xarTpl::module('categories','admin','modifyconfighook', $data);
 }
-
-?>

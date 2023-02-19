@@ -226,4 +226,3 @@ class FilePickerProperty extends SelectProperty
         return true;
     }
 }
-?>

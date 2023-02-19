@@ -57,4 +57,3 @@ function modules_adminapi_countitems(Array $args=array())
     $result = $q->output();
     return count($result);
 }
-?>

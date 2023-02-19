@@ -39,4 +39,3 @@ $modversion = array(
     'class'              => 'Authentication',
     'category'           => 'Users & Groups',
 );
-?>

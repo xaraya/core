@@ -23,4 +23,3 @@ function roles_xartables()
     $tables['rolemembers']    = $prefix . '_rolemembers';
     return $tables;
 }
-?>

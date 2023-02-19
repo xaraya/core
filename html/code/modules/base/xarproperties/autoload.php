@@ -72,4 +72,3 @@ if (class_exists('xarAutoload')) {
 } else {
     // guess you'll have to register it yourself :-)
 }
-?>

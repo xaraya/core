@@ -92,5 +92,3 @@ function mail_delete()
   //this module cannot be removed
   return false;
 }
-
-?>

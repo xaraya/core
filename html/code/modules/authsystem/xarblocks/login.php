@@ -34,4 +34,3 @@ class Authsystem_LoginBlock extends BasicBlock implements iBlock
     public $logouttitle         = '';
     
 }
-?>

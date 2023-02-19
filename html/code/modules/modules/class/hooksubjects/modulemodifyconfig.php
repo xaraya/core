@@ -56,4 +56,3 @@ class ModulesModuleModifyconfigSubject extends GuiHookSubject
         // just retrieve extrainfo from $subject->getExtrainfo() 
     } 
 }
-?>

@@ -51,5 +51,3 @@ function base_javascriptapi_handleeventjavascript(Array $args=array())
         echo htmlspecialchars(xarMod::apiFunc('base', 'javascript', 'geteventjs', array('position'=>'$position', 'type'=>'$type')));
     ";
 }
-
-?>

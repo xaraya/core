@@ -55,5 +55,3 @@ function privileges_adminapi_get(Array $args=array())
 
     return $privilege;
 }
-
-?>

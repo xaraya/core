@@ -121,4 +121,3 @@ function mail_adminapi_hookmailcreate(Array $args=array())
     // life goes on, and so do hook calls :)
     return $extrainfo;
 }
-?>

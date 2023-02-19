@@ -52,4 +52,3 @@ class RadioButtonsProperty extends SelectProperty
         return parent::showOutput($data);
     }
 }
-?>

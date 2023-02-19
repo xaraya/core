@@ -19,4 +19,3 @@ class ModulesItemSubmitSubject extends ApiHookSubject
 {
     public $subject = 'ItemSubmit';
 }
-?>

@@ -29,4 +29,3 @@ class BlocksModActivateObserver extends EventObserver implements ixarEventObserv
             array('module' => $modName, 'refresh' => true));
     }
 }
-?>

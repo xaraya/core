@@ -114,4 +114,3 @@ class NumberBoxProperty extends TextBoxProperty
         return 0;
     }
 }
-?>

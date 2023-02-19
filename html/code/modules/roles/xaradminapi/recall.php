@@ -50,5 +50,3 @@ function roles_adminapi_recall(Array $args=array())
     //finished successfully
     return true;
 }
-
-?>

@@ -122,5 +122,3 @@ function mail_adminapi_hookmailchange(Array $args=array())
 // life goes on, and so do hook calls :)
     return $extrainfo;
 }
-
-?>

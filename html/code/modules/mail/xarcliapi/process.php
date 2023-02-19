@@ -75,4 +75,3 @@ function _fatal($msg)
     fwrite(STDERR,'ERROR: '. $msg."\n");
     return 1;
 }
-?>

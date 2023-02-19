@@ -43,4 +43,3 @@ class Themes_SkinBlockDisplay extends Themes_SkinBlock implements iBlock
 
     }
 }
-?>

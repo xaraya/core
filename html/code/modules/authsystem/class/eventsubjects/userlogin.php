@@ -28,4 +28,3 @@ class AuthsystemUserLoginSubject extends EventSubject implements ixarEventSubjec
         parent::__construct($userId);                             
     }
 }
-?>

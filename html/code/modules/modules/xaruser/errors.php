@@ -22,5 +22,3 @@ function modules_user_errors($args)
     $data['message'] = urldecode($args['message']);
     return $data;
 }
-
-?>

@@ -27,4 +27,3 @@ function roles_userapi_getstates()
         array('id' => xarRoles::ROLES_STATE_PENDING, 'name'  => xarML('Pending'))
         );
 }
-?>

@@ -84,5 +84,3 @@ function modules_admin_modifyproperties(Array $args=array())
     }
     return $data;
 }
-
-?>

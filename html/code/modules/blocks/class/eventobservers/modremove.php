@@ -42,4 +42,3 @@ class BlocksModRemoveObserver extends EventObserver implements ixarEventObserver
 
     }
 }
-?>

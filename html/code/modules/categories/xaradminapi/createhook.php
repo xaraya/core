@@ -44,5 +44,3 @@ function categories_adminapi_createhook($args)
     // Return the extra info
     return $extrainfo;
 }
-
-?>

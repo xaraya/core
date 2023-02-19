@@ -60,5 +60,3 @@ function mail_adminapi_getsourcefilename(Array $args=array())
     // assert(isset($sourceFileName), /* The source file for the template has no value in xarTpl::module */);
     return $sourceFileName;
 }
-
-?>

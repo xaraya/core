@@ -56,4 +56,3 @@ function themes_adminapi_countitems(Array $args=array())
     return $count;    
 
 }
-?>

@@ -98,4 +98,3 @@ class MSNProperty extends TextBoxProperty
         return parent::showOutput($data);
     }
 }
-?>

@@ -120,5 +120,3 @@ class StateListProperty extends SelectProperty
         return $options;
     }
 }
-
-?>

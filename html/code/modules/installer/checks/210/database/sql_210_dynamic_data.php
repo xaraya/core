@@ -49,4 +49,3 @@ function sql_210_dynamic_data()
     }
     return $data;
 }
-?>

@@ -84,5 +84,3 @@ function roles_admin_removeprivilege()
         return true;
     }
 }
-
-?>

@@ -46,4 +46,3 @@ function roles_adminapi_getgroupmenulinks()
 
     return $menulinks;
 }
-?>

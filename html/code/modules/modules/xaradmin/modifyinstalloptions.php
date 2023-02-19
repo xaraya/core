@@ -32,5 +32,3 @@ function modules_admin_modifyinstalloptions(Array $args=array())
         throw new Exception('You are not installing this module...aborting');
     }
 }
-
-?>

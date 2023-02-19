@@ -34,5 +34,3 @@ function base_adminapi_read_file($args)
         return '';
     }
 }
-
-?>

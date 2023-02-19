@@ -52,5 +52,3 @@ function mail_adminapi_getmessagestrings(Array $args=array())
 
     return array('subject' => $subject, 'message' => $message);
 }
-
-?>

@@ -26,4 +26,3 @@ class ModulesModActivateObserver extends EventObserver implements ixarEventObser
         xarHooks::notify('ModuleActivate', array('objectid' => $modName, 'module' => $modName));
     }
 }
-?>

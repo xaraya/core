@@ -129,5 +129,3 @@ function modules_admin_hooks(Array $args=array())
     
     return $data;    
 }
-
-?>

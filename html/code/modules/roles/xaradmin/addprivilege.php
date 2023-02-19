@@ -68,4 +68,3 @@ function roles_admin_addprivilege()
     xarController::redirect($return_url);
     return true;
 }
-?>

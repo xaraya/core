@@ -43,4 +43,3 @@ function main_upgrade_240()
     }
     return $data;
 }
-?>

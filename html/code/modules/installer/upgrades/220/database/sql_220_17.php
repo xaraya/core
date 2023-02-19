@@ -72,4 +72,3 @@ INSERT INTO `xar_dynamic_configurations` VALUES(150, 'display_maximum_rows', 'Th
     return $data;   
     
 }
-?>

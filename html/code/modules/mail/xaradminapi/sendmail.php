@@ -176,5 +176,3 @@ function mail_adminapi_sendmail(Array $args=array())
                   'message_envelope' => $message_envelope));
     }
 }
-
-?>

@@ -19,4 +19,3 @@ class ModulesModuleActivateSubject extends ApiHookSubject
 {
     public $subject = 'ModuleActivate';
 }
-?>

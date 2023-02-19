@@ -84,5 +84,3 @@ function privileges_admin_addprivilege()
     xarController::redirect(xarController::URL('privileges', 'admin', 'new'));
     return true;
 }
-
-?>

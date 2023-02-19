@@ -45,4 +45,3 @@ class StaticTextProperty extends DataProperty
         return true;
     }
 }
-?>

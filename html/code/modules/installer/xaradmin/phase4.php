@@ -58,5 +58,3 @@ function installer_admin_phase4()
 
     return $data;
 }
-
-?>

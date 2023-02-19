@@ -23,5 +23,3 @@ function base_wsapi_default(Array $args=array())
     }
     return $result;
 }
-
-?>

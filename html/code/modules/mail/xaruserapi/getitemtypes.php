@@ -57,4 +57,3 @@ function mail_userapi_getitemtypes(Array $args=array())
     }
     return $itemtypes;
 }
-?>

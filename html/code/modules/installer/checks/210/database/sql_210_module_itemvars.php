@@ -48,4 +48,3 @@ function sql_210_module_itemvars()
     }
     return $data;
 }
-?>

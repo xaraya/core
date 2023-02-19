@@ -30,4 +30,3 @@ function themes_adminapi_themedir2name(Array $args=array())
     }
     return false;
 }
-?>

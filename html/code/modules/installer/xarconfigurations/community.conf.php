@@ -173,4 +173,3 @@ function installer_community_readaccess()
 {
         xarPrivileges::register('ReadAccess','All','All','All','All','ACCESS_READ','Read access to all modules');
 }
-?>

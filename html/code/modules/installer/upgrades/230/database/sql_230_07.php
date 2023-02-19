@@ -317,5 +317,3 @@ function normalize_content($defaults, $content)
     }
     return $content;
 }
-
-?>

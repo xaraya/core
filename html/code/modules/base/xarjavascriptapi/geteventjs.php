@@ -74,5 +74,3 @@ function base_javascriptapi_geteventjs(Array $args=array())
     // Note: this is raw JavaScript, and is not yet prepared for use as an attribute value.
     return trim($result);
 }
-
-?>

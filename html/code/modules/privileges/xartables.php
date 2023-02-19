@@ -27,4 +27,3 @@ function privileges_xartables()
     $tables['security_instances'] = $prefix . '_security_instances';
     return $tables;
 }
-?>

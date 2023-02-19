@@ -74,6 +74,3 @@ function privileges_admin_addmember()
                              array('id'=>$id)));
     return true;
 }
-
-
-?>

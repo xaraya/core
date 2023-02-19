@@ -116,5 +116,3 @@ class TextBoxProperty extends DataProperty
         return parent::showInput($data);
     }
 }
-
-?>

@@ -104,5 +104,3 @@ function themes_adminapi_getfilethemes()
     closedir($dh);
     return $fileThemes;
 }
-
-?>

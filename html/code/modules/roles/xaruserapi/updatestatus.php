@@ -43,5 +43,3 @@ function roles_userapi_updatestatus(Array $args=array())
 
     return true;
 }
-
-?>

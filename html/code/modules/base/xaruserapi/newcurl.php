@@ -21,5 +21,3 @@ function base_userapi_newcurl(Array $args=array())
     sys::import('modules.base.class.xarCurl');
     return new xarCurl($args);
 }
-
-?>

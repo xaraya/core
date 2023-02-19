@@ -94,5 +94,3 @@ class EmailProperty extends TextBoxProperty
     }
 
 }
-
-?>

@@ -33,5 +33,3 @@ function roles_user_main()
     }
     return true;
 }
-
-?>

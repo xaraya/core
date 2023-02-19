@@ -35,4 +35,3 @@ function roles_admin_main()
         return true;
     }
 }
-?>

@@ -46,5 +46,3 @@ function authsystem_userapi_login(Array $args=array())
 
     return xarUser::logIn($uname, $pass, $rememberme);
 }
-
-?>

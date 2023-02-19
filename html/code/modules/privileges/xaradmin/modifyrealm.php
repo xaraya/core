@@ -75,4 +75,3 @@ function privileges_admin_modifyrealm()
     $data['authid'] = xarSec::genAuthKey();
     return $data;
 }
-?>

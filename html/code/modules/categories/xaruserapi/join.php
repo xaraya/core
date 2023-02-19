@@ -251,5 +251,3 @@ function __construct($tagged_module_id=null,
     return $leftjoin;
 }
 */
-
-?>

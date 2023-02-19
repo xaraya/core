@@ -41,5 +41,3 @@ function roles_adminapi_getmessageincludestring(Array $args=array())
     fclose($fd);
     return $string;
 }
-
-?>

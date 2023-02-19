@@ -142,4 +142,3 @@ class ImageProperty extends TextBoxProperty
     }
 
 }
-?>

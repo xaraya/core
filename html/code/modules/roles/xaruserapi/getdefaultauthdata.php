@@ -55,5 +55,3 @@ function roles_userapi_getdefaultauthdata()
                               );
     return $defaultauthdata;
 }
-
-?>

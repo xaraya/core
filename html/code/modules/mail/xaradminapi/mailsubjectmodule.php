@@ -33,5 +33,3 @@ function mail_adminapi_mailsubjectmodule(Array $args=array())
     $sourceFileName = xarMod::apiFunc('mail', 'admin', 'getsourcefilename', $params);     
     return xarTpl::file($sourceFileName, $tplData);  
 }
-
-?>

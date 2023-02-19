@@ -27,5 +27,3 @@ function categories_userapi_getallcatbases($args)
     $bases = $worker->getcatbases($args);
     return $bases;
 }
-
-?>

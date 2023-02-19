@@ -115,5 +115,3 @@ function categories_userapi_getitemcats($args)
 
     return $result;
 }
-
-?>

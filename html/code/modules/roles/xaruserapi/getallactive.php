@@ -90,4 +90,3 @@ function roles_userapi_getallactive(Array $args=array())
     }
     return $sessions;
 }
-?>

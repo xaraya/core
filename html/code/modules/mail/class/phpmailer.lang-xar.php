@@ -30,5 +30,3 @@ $PHPMAILER_LANG = array(
     "file_open"             => xarML('File Error: Could not open file: '),
     "encoding"              => xarML('Unknown encoding: '),
 );
-
-?>

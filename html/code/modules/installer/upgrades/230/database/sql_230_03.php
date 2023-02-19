@@ -69,4 +69,3 @@ function sql_230_03()
     return $data;
 
 }
-?>

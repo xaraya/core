@@ -212,4 +212,3 @@ class ExtendedDateProperty extends CalendarProperty
         return parent::showOutput($data);
     }
 }
-?>

@@ -22,4 +22,3 @@ function authsystem_user_password($args = array())
 {
     return xarMod::guiFunc('roles','user','lostpassword',$args);
 }
-?>

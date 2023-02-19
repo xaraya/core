@@ -47,4 +47,3 @@ class ModulesItemDisplaySubject extends GuiHookSubject
     } 
 
 }
-?>

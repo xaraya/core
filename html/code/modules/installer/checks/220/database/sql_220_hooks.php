@@ -49,4 +49,3 @@ function sql_220_hooks()
     }
     return $data;
 }
-?>

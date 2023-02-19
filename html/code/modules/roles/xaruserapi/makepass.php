@@ -112,4 +112,3 @@ function roles_userapi_makepass()
 
     return $result;
 }
-?>

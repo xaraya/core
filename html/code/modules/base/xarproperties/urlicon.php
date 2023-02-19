@@ -55,4 +55,3 @@ class URLIconProperty extends URLProperty
         return parent::showOutput($data);
     }
 }
-?>

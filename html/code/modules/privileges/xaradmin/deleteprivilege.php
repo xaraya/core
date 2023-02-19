@@ -66,5 +66,3 @@ function privileges_admin_deleteprivilege()
     xarController::redirect(xarController::URL('privileges', 'admin', 'viewprivileges'));
     return true;
 }
-
-?>

@@ -60,4 +60,3 @@ function main_upgrade_220()
     }
     return $data;
 }
-?>

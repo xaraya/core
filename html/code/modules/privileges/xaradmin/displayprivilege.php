@@ -55,5 +55,3 @@ function privileges_admin_displayprivilege()
     $data['parents'] = $parents;
     return $data;
 }
-
-?>

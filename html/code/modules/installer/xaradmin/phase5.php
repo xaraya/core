@@ -350,5 +350,3 @@ function installer_admin_phase5()
 
     return $data;
 }
-
-?>

@@ -38,5 +38,3 @@ function themes_admin_main()
         return true;
     }
 }
-
-?>

@@ -285,4 +285,3 @@ class CountryListProperty extends SelectProperty
         return $options;
    }
 }
-?>

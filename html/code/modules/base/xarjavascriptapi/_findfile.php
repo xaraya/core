@@ -93,5 +93,3 @@ function base_javascriptapi__findfile(Array $args=array())
 
     return $filePath . $params;
 }
-
-?>

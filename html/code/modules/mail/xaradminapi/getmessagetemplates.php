@@ -43,5 +43,3 @@ function mail_adminapi_getmessagetemplates(Array $args=array())
 
     return $templates;
 }
-
-?>

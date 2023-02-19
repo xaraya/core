@@ -36,5 +36,3 @@ function roles_userapi_countitems()
     // Return the number of users
     return $numroles;
 }
-
-?>

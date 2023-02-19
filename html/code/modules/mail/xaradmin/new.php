@@ -14,4 +14,3 @@ function mail_admin_new(Array $args=array())
     xarController::redirect(xarController::URL('mail','admin','view'));
     return true;
 }
-?>

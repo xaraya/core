@@ -35,5 +35,3 @@ function base_adminapi_menuarray(Array $args=array())
     // let loadmenuarray do the work
     return xarMod::apiFunc('base', 'admin', 'loadmenuarray', $args);
 }
-
-?>

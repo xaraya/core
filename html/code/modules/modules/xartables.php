@@ -26,4 +26,3 @@ function modules_xartables()
     $tables['eventsystem']     = $prefix . '_eventsystem';
     return $tables;
 }
-?>

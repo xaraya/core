@@ -47,4 +47,3 @@ function sql_210_security_acl()
     }
     return $data;
 }
-?>

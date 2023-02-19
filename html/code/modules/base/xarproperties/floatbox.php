@@ -49,5 +49,3 @@ class FloatBoxProperty extends NumberBoxProperty
         return 0;
     }
 }
-
-?>

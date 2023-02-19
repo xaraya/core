@@ -26,4 +26,3 @@ function themes_xartables()
     $tables['themes_configurations'] = $prefix . '_themes_configurations';
     return $tables;
 }
-?>

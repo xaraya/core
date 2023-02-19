@@ -53,5 +53,3 @@ function mail_adminapi__queuemail(Array $args=array())
 
     return true;
 }
-
-?>

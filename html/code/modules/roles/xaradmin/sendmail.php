@@ -110,4 +110,3 @@ function roles_admin_sendmail()
     xarController::redirect(xarController::URL('roles', 'admin', 'createmail'));
     return true;
 }
-?>

@@ -65,4 +65,3 @@ function sql_220_05()
     return $data;   
     
 }
-?>

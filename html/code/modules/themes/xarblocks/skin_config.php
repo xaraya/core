@@ -49,4 +49,3 @@ class Themes_SkinBlockConfig extends Themes_SkinBlock implements iBlock
         return true;
     }
 }
-?>

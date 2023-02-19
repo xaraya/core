@@ -28,4 +28,3 @@ class AuthsystemUserLogoutSubject extends EventSubject implements ixarEventSubje
         parent::__construct($userId);                              
     }
 }
-?>

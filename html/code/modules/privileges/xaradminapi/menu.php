@@ -27,5 +27,3 @@ function privileges_adminapi_menu()
     // Return the array containing the menu configuration
     return $menu;
 }
-
-?>

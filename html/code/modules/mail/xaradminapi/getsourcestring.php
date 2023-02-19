@@ -33,4 +33,3 @@ function mail_adminapi_getsourcestring(Array $args=array())
                             $message);  
     return $message;
 }
-?>

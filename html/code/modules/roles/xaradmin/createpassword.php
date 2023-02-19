@@ -43,4 +43,3 @@ function roles_admin_createpassword()
     }
     return true;
 }
-?>

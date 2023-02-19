@@ -55,5 +55,3 @@ function categories_userapi_getitemtypes($args)
 
     return $types;
 }
-
-?>

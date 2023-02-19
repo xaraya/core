@@ -20,4 +20,3 @@ class ModulesModuleUpgradeSubject extends ApiHookSubject
     public $subject = 'ModuleUpgrade';
     // methods inherited from parent
 }
-?>

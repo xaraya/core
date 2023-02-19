@@ -77,4 +77,3 @@ class ModulesModuleRemoveSubject extends ApiHookSubject
         return $extrainfo;
    }
 }
-?>

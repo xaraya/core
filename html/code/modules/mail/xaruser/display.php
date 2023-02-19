@@ -16,4 +16,3 @@ function mail_user_display(Array $args=array())
     xarController::redirect(xarController::URL('mail','admin','view',array('itemid' => $itemid)));
     return true;
 }
-?>
