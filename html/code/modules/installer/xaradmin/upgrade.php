@@ -10,7 +10,7 @@
  */
 
 /**
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function installer_admin_upgrade()
 {    

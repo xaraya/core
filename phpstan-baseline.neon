@@ -31,16 +31,6 @@ parameters:
 			path: html/bootstrap.php
 
 		-
-			message: "#^Function authsystem_admin_createpassword\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: html/code/modules/authsystem/xaradmin/createpassword.php
-
-		-
-			message: "#^Array has 2 duplicate keys with value 'ý' \\('ý', 'ý'\\)\\.$#"
-			count: 1
-			path: html/code/modules/base/xaradminapi/sanitize_filename.php
-
-		-
 			message: "#^Undefined variable\\: \\$title$#"
 			count: 1
 			path: html/code/modules/base/xarblocks/content_display.php
@@ -111,11 +101,6 @@ parameters:
 			path: html/code/modules/blocks/xaradmin/new_instance.php
 
 		-
-			message: "#^Function Tag not found\\.$#"
-			count: 1
-			path: html/code/modules/categories/xaradminapi/linkcat.php
-
-		-
 			message: "#^Undefined variable\\: \\$parent_id$#"
 			count: 1
 			path: html/code/modules/categories/xarproperties/celkoposition.php
@@ -161,16 +146,6 @@ parameters:
 			path: html/code/modules/dynamicdata/xarproperties/itemtype.php
 
 		-
-			message: "#^Array has 2 duplicate keys with value '\\>' \\('\\>', '\\>'\\)\\.$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaruser/filtertag.php
-
-		-
-			message: "#^Function dynamicdata_userapi_decode_shorturl\\(\\) should return array but return statement is missing\\.$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaruserapi/decode_shorturl.php
-
-		-
 			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:eventHandler\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
 			count: 1
 			path: html/code/modules/installer/composer.php
@@ -191,16 +166,6 @@ parameters:
 			path: html/code/modules/installer/composer.php
 
 		-
-			message: "#^Undefined variable\\: \\$check$#"
-			count: 1
-			path: html/code/modules/installer/upgrades/210/main.php
-
-		-
-			message: "#^Undefined variable\\: \\$check$#"
-			count: 1
-			path: html/code/modules/installer/upgrades/211/main.php
-
-		-
 			message: "#^Undefined variable\\: \\$dbconn$#"
 			count: 1
 			path: html/code/modules/installer/upgrades/220/database/sql_220_10.php
@@ -214,21 +179,6 @@ parameters:
 			message: "#^Function mysql_get_server_info not found\\.$#"
 			count: 1
 			path: html/code/modules/installer/xaradmin/phase5.php
-
-		-
-			message: "#^Regex pattern is invalid\\: The /e modifier is no longer supported, use preg_replace_callback instead in pattern\\: /\\=\\(\\[a\\-f0\\-9\\]\\{2\\}\\)/ie$#"
-			count: 1
-			path: html/code/modules/mail/class/mimeDecode.php
-
-		-
-			message: "#^Function set_magic_quotes_runtime not found\\.$#"
-			count: 2
-			path: html/code/modules/mail/class/phpmailer.php
-
-		-
-			message: "#^Regex pattern is invalid\\: The /e modifier is no longer supported, use preg_replace_callback instead in pattern\\: /\\(\\[\\\\000\\-\\\\010\\\\013\\\\014\\\\016\\-\\\\037\\\\075\\\\177\\-\\\\377\\]\\)/e$#"
-			count: 1
-			path: html/code/modules/mail/class/phpmailer.php
 
 		-
 			message: "#^Undefined variable\\: \\$PHPMAILER_LANG$#"
@@ -339,16 +289,6 @@ parameters:
 			message: "#^Undefined variable\\: \\$systemConfiguration$#"
 			count: 2
 			path: html/lib/xaraya/log.php
-
-		-
-			message: "#^Method xarLogger_javascript\\:\\:notify\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: html/lib/xaraya/log/loggers/javascript.php
-
-		-
-			message: "#^Method xarLogger_mozilla\\:\\:notify\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: html/lib/xaraya/log/loggers/mozilla.php
 
 		-
 			message: "#^Undefined variable\\: \\$facility$#"

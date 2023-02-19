@@ -17,7 +17,7 @@
  *        string   $args['template'] name of the email type which has apair of -subject and -message files<br/>
  *        string   $args['subject'] new subject<br/>
  *        string   $args['message'] new message
- * @return array of strings of file contents read
+ * @return bool of strings of file contents read
  */
 function mail_adminapi_updatemessagestrings(Array $args=array())
 {
@@ -65,5 +65,3 @@ function mail_adminapi_updatemessagestrings(Array $args=array())
 
     return true;
 }
-
-?>
