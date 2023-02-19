@@ -18,7 +18,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @return none
+ * @return string|void
  */
 function roles_admin_addmember()
 {
@@ -59,5 +59,3 @@ function roles_admin_addmember()
             array('id' => $id)));
     return true;
 }
-
-?>

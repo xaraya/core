@@ -57,7 +57,7 @@ class xarRoles extends xarObject
      * On subsequent calls it just returns the array .
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array of arrays representing all the groups
+     * @return array|void of arrays representing all the groups
      */
     public static function getgroups()
     {
@@ -86,7 +86,7 @@ class xarRoles extends xarObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param integer $id
-     * @return array representing the group
+     * @return array|void representing the group
      */
     public static function getgroup($id)
     {
@@ -103,7 +103,7 @@ class xarRoles extends xarObject
         if(!$result) return;            
         while($result->next()) $group[] = $result->fields;
         if (!empty($group)) return $group;
-        return false;
+        return;
     }
 
     /**
@@ -323,7 +323,7 @@ class xarRoles extends xarObject
      * @param string $field
      * @param mixed  $value
      * @param int    $state
-     * @return object a role
+     * @return object|void a role
      */
     private static function _lookuprole($field,$value,$itemtype=self::ROLES_USERTYPE,$state=self::ROLES_STATE_ALL)
     {
@@ -357,4 +357,3 @@ class xarRoles extends xarObject
         return $role;
     }
 }
-?>

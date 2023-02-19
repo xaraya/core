@@ -15,9 +15,9 @@
  *
  * @author  John Cox
  * @access  public
- * @param   id is the id of the user being sent
+ * @param   array $args id is the id of the user being sent
  * @return mixed data array for the template display or output display string if invalid data submitted
- * @throws  XAR_SYSTEM_EXCEPTION, 'NO_PERMISSION'
+ * @throws  ForbiddenOperationException
  * @todo    handle empty subject and/or message?
  */
 function roles_user_email(Array $args=array())
@@ -90,7 +90,7 @@ function roles_user_email(Array $args=array())
 
             // If the sender details have not been passed in to $args, then
             // fetch them from the current user now.
-            if (!isset($fname) || !iseet($femail)) {
+            if (!isset($fname) || !isset($femail)) {
                 // Get details of the sender.
                 $fname = xarUser::getVar('name');
                 $femail = xarUser::getVar('email');
@@ -123,5 +123,3 @@ function roles_user_email(Array $args=array())
 
     return $data;
 }
-
-?>

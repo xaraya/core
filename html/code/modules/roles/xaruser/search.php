@@ -13,7 +13,7 @@
  * Search
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function roles_user_search()
 {
@@ -64,8 +64,10 @@ function roles_user_search()
         // make sure the DD classes are loaded
         if (!xarMod::apiLoad('dynamicdata','user')) return $data;
 
+        // @todo load the right object for roles here
         // get a new object list for roles
-        $object = new DataObjectList(array('moduleid'  => xarMod::getRegID('roles')));
+        $descriptor = new DataObjectDescriptor(array('moduleid'  => xarMod::getRegID('roles')));
+        $object = new DataObjectList($descriptor);
 
         if (isset($object) && !empty($object->objectid)) {
             // save the properties for the search form
@@ -165,4 +167,3 @@ function roles_user_search()
     }
     return $data;
 }
-?>

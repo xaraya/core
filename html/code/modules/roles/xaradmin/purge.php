@@ -15,13 +15,14 @@
  * @param 'status' the status we are purging
  * @param 'confirmation' confirmation that this item can be purge
  * @todo kinda long, no?
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function roles_admin_purge(Array $args=array())
 {
     // Security
     if(!xarSecurity::check('ManageRoles')) return;
 
+    $data = [];
     // Get parameters from whatever input we need
     if (!xarVar::fetch('operation',    'str', $data['operation'], 'recall', xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('confirmation', 'str', $confirmation,       0,       xarVar::NOT_REQUIRED)) return;
@@ -309,5 +310,3 @@ function roles_admin_purge(Array $args=array())
     // Return
     return $data;
 }
-
-?>

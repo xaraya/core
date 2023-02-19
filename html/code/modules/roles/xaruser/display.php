@@ -15,7 +15,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @param int id
- * @return string output display string
+ * @return string|void output display string
  */
 function roles_user_display(Array $args=array())
 {
@@ -84,5 +84,3 @@ function roles_user_display(Array $args=array())
 
     return xarTpl::module($args['tplmodule'],'user','display',$data,$args['template']);
 }
-
-?>

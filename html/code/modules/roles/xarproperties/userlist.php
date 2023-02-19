@@ -34,6 +34,7 @@ class UserListProperty extends SelectProperty
     public $validation_override                = true;                      // Allow values not in the dropdown
     public $display_showfields = '';
     public $display_showglue = ', ';
+    public $validation_userlist_group_list;
 
     /*
     * Options available to user selection
@@ -153,7 +154,6 @@ class UserListProperty extends SelectProperty
 	/**
      * Retrieve the list of options on demand
      * 
-     * @param void N/A
      */
     public function getOptions()
     {
@@ -226,4 +226,3 @@ class UserListPropertyInstall extends UserListProperty implements iDataPropertyI
     }
     
 }
-?>

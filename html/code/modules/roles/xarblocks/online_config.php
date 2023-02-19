@@ -36,9 +36,9 @@ class Roles_OnlineBlockConfig extends Roles_OnlineBlock
 	/**
      * Update the configuration of the online block
      * 
-     * @return boolean Returns true on success, false on failure
+     * @return boolean|void Returns true on success, false on failure
      */
-    public function configupdate()
+    public function configupdate(array $args = [])
     {
         if (!xarVar::fetch('showusers',     'checkbox', $args['showusers'], false, xarVar::NOT_REQUIRED)) return;
         if (!xarVar::fetch('showusertotal', 'checkbox', $args['showusertotal'], false, xarVar::NOT_REQUIRED)) return;
@@ -48,4 +48,3 @@ class Roles_OnlineBlockConfig extends Roles_OnlineBlock
         return true;
     }
 }
-?>

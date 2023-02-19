@@ -14,7 +14,7 @@
  * viewallgroups - generate all groups listing.
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @return array listing of available groups
+ * @return array|void listing of available groups
  * @todo this code is unreadable
  */
 
@@ -136,4 +136,3 @@ function recursive_getDescendants($ancestor, &$allgroups)
     }
     return $descendants;
 }
-?>

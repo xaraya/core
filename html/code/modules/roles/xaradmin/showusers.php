@@ -10,7 +10,7 @@
  */
 /**
  * Show users of this role
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function roles_admin_showusers()
 {
@@ -24,6 +24,7 @@ function roles_admin_showusers()
     }
     xarVar::setCached('roles', 'defaultgroupid', $defaultgroupid);
 
+    $data = [];
     if (!xarVar::fetch('id',       'int:0:', $id,              $defaultgroupid, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('startnum', 'int:1:', $startnum,         1,   xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('state',    'int:0:', $data['state'],    xarRoles::ROLES_STATE_CURRENT, xarVar::NOT_REQUIRED)) return;
@@ -174,4 +175,3 @@ function roles_admin_showusers()
 
     return $data;
 }
-?>

@@ -27,6 +27,7 @@ function roles_userapi_usermenu(Array $args=array())
     if (!xarUser::isLoggedIn()){
         // redirect user to their account page after login
         $redirecturl = xarController::URL('roles', 'user', 'account');
+        // @fixme where is this supposed to come from?
         xarController::redirect(xarController::URL($defaultloginmodname,'user','showloginform', array('redirecturl' => $redirecturl)));
     }
 
@@ -104,7 +105,6 @@ function roles_userapi_usermenu(Array $args=array())
             $data['authid'] = xarSec::genAuthKey('roles');
             // finally return data to the calling function
             return $data;
-        break;
 
         /**
          * The checkinput phase allows you to perform validations. Use this
@@ -135,7 +135,6 @@ function roles_userapi_usermenu(Array $args=array())
 
             // return the bool result to the calling function
             return $isvalid == true ? true : false;
-        break;
 
         /**
          * The updateitem phase allows you to update user settings. Use this
@@ -158,10 +157,7 @@ function roles_userapi_usermenu(Array $args=array())
             */
             // let the calling function know the update was a success
             return true;
-        break;
     }
     // if we got here, we don't know what went wrong, just return false
-    return false;
+    //return false;
 }
-
-?>

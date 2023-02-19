@@ -16,7 +16,7 @@
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['gid'] group id<br/>
  *        integer  $args['id'] role id
- * @return boolean true on succes, false on failure
+ * @return boolean|void true on succes, false on failure
  */
 function roles_userapi_removemember(Array $args=array())
 {
@@ -36,5 +36,3 @@ function roles_userapi_removemember(Array $args=array())
 
     return true;
 }
-
-?>

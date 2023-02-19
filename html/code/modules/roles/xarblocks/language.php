@@ -30,7 +30,7 @@ class Roles_LanguageBlock extends BasicBlock
 
 	/**
 	 * Display the language block
-	 * @return array Display data array
+	 * @return array|void Display data array
 	 */
     function display()
     {
@@ -71,4 +71,3 @@ class Roles_LanguageBlock extends BasicBlock
         return $data;
     }
 }
-

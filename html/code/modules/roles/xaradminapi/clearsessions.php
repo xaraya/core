@@ -13,8 +13,8 @@
  * Clear sessions 
  * 
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param $args['id']
- * @return boolean true on succes, false on failure
+ * @param array $spared
+ * @return boolean|void true on succes, false on failure
  * @todo Move this to sessions subsystem, doesnt belong here.
  */
 function roles_adminapi_clearsessions($spared)
@@ -56,5 +56,3 @@ function roles_adminapi_clearsessions($spared)
 
     return true;
 }
-
-?>

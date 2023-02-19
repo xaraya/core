@@ -41,7 +41,7 @@ function roles_userapi_getdefaultregdata()
          if (xarMod::isAvailable('registration')) {
            //for now - set the registration module but don't make it the active registration
            //the case where somehow the defautlregmodule modvar is unset or empty
-           $defaultregmodname   = xarMod::getNameFromId('registration');
+           $defaultregmodname   = 'registration';
            $defaultregmodactive = false;
          }
     }
@@ -52,4 +52,3 @@ function roles_userapi_getdefaultregdata()
 
     return $defaultregdata;
 }
-?>

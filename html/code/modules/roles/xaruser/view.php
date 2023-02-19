@@ -12,7 +12,7 @@
 /**
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * view users
- * @return string output display string
+ * @return string|void output display string
  */
 function roles_user_view(Array $args=array())
 {
@@ -69,5 +69,3 @@ function roles_user_view(Array $args=array())
 
     return xarTpl::module($args['tplmodule'],'user','view',$data,$args['template']);
 }
-
-?>

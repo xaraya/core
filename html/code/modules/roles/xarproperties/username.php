@@ -207,8 +207,7 @@ class UsernameProperty extends TextBoxProperty
 	/**
 	 * Set the value of input
 	 * 
-	 * @param  string value The value of the input
-	 * @return string    return a storable representation of a value
+	 * @param  mixed value The value of the input
 	 */	
     public function setValue($value=null)
     {
@@ -229,4 +228,3 @@ class UsernameProperty extends TextBoxProperty
         }
     }
 }
-?>

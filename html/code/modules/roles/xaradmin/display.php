@@ -11,7 +11,7 @@
 
 /**
  * display role
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
 function roles_admin_display()
 {
@@ -62,4 +62,3 @@ function roles_admin_display()
     xarTpl::setPageTitle(xarVar::prepForDisplay($data['name']));
     return $data;
 }
-?>

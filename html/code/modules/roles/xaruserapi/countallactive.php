@@ -17,7 +17,7 @@
  * @param array    $args array of optional parameters<br/>
  *        boolean  $args['include_anonymous'] whether or not to include anonymous user<br/>
  *        string   $args['filter']
- * @return integer the number of users
+ * @return integer|void the number of users
  */
 function roles_userapi_countallactive(Array $args=array())
 {
@@ -82,5 +82,3 @@ function roles_userapi_countallactive(Array $args=array())
     // Return the number of users
     return $numroles;
 }
-
-?>

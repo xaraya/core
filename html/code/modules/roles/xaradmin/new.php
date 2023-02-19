@@ -13,13 +13,14 @@
  *
  * @author Marc Lutolf
  * @author Johnny Robeson
- * @return array data for the template display
+ * @return array|string|bool|void data for the template display
  */
 function roles_admin_new()
 {
     // Security
     if (!xarSecurity::check('AddRoles')) return;
 
+    $data = [];
     if (!xarVar::fetch('parentid',    'id',    $data['parentid'], (int)xarModVars::get('roles','defaultgroup'), xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('itemtype',    'int',   $data['itemtype'], xarRoles::ROLES_USERTYPE, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('duvs',        'array', $data['duvs'], array(), xarVar::NOT_REQUIRED)) return;
@@ -61,4 +62,3 @@ function roles_admin_new()
     }
     return $data;
 }
-?>

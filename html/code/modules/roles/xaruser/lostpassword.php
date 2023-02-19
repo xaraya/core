@@ -14,7 +14,7 @@
  * Sends a new password to the user if they have forgotten theirs.
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @return string output display string
+ * @return string|void output display string
  */
 function roles_user_lostpassword()
 {
@@ -90,4 +90,3 @@ function roles_user_lostpassword()
     }
     return $data;
 }
-?>

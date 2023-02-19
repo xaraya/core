@@ -25,7 +25,7 @@
  *        string   $args['pass'] new password of the user (optionnal)<br/>
  *        string   $args['ip'] ip adress of the user (optionnal)
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @throws EmptyParameterException
  */
 function roles_adminapi_senduseremail(Array $args=array())
 {
@@ -109,5 +109,3 @@ function roles_adminapi_senduseremail(Array $args=array())
     }
     return true;
 }
-
-?>
