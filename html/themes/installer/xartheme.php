@@ -27,4 +27,3 @@ $themeinfo = array(
     'bl_version'    => '1.0',
     'class'         => 4,
 );
-?>
