@@ -14,7 +14,7 @@
  */
 /**
  * addRealm - create a new realm
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
 function privileges_admin_newrealm()
 {
@@ -61,6 +61,3 @@ function privileges_admin_newrealm()
     $data['authid'] = xarSec::genAuthKey();
     return $data;
 }
-
-
-?>

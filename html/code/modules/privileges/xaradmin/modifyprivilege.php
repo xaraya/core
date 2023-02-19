@@ -12,7 +12,7 @@
  */
 /**
  * modifyprivilege - modify privilege details
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function privileges_admin_modifyprivilege()
 {
@@ -109,6 +109,7 @@ function privileges_admin_modifyprivilege()
     if(isset($type)) {$data['ptype'] = $type;}
     else {$data['ptype'] = $priv->isEmpty() ? "empty" : "full";}
 
+    // @checkme where is $show supposed to come from?
     if(isset($show)) {$data['show'] = $show;}
     else {$data['show'] = 'assigned';}
 
@@ -126,5 +127,3 @@ function privileges_admin_modifyprivilege()
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }
-
-?>

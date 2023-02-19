@@ -15,7 +15,6 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  *
  * @return boolean true on success, false on failure
- * @throws DATABASE_ERROR
  */
 function privileges_init()
 {
@@ -52,7 +51,7 @@ function privileges_activate()
 /**
  * Upgrade this module from an old version
  *
- * @param oldVersion
+ * @param string $oldversion
  * @return boolean true on success, false on failure
  */
 function privileges_upgrade($oldversion)
@@ -74,4 +73,3 @@ function privileges_delete()
     // this module cannot be removed
     return false;
 }
-?>

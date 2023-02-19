@@ -13,7 +13,7 @@
 /**
  * new - create a new privilege
  * Takes no parameters
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function privileges_admin_new()
 {
@@ -70,6 +70,3 @@ function privileges_admin_new()
     $data['components'] = xarMod::apiFunc('privileges','admin','getcomponents',array('modid' => xarMod::getRegID($data['pmodule'])));
     return $data;
 }
-
-
-?>

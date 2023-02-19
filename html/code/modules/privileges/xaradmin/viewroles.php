@@ -12,7 +12,7 @@
  */
 /**
  * viewroles - display the roles this privilege is assigned to
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
 function privileges_admin_viewroles()
 {
@@ -60,5 +60,3 @@ function privileges_admin_viewroles()
     $data['groups'] = xarMod::apiFunc('roles','user','getallgroups');
     return $data;
 }
-
-?>

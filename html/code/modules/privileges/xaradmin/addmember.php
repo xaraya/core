@@ -20,7 +20,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @return  none
+ * @return  mixed
  */
 function privileges_admin_addmember()
 {

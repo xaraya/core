@@ -64,7 +64,7 @@
             }
 
             if (preg_match('/^xarMod::apiFunc/i',$selection)) {
-                eval('$dropdown = ' . $this->func .';');
+                eval('$dropdown = ' . $selection .';');
                 if (!isset($dropdown)) $dropdown = array();
             } else {
                 // We cant prepare this outside the loop as we have no idea what it is.

@@ -29,7 +29,7 @@ class xarPrivilege extends xarMask
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   array of values
-     * @return  the privilege object
+     * @return  xarPrivilege object
     */
     function __construct($pargs)
     {
@@ -51,8 +51,8 @@ class xarPrivilege extends xarMask
         if(empty($this->name)) {
             $msg = xarML('You must enter a name.','privileges');
             throw new DuplicateException(null,$msg);
-            xarSession::setVar('errormsg', _MODARGSERROR);
-            return false;
+            //xarSession::setVar('errormsg', _MODARGSERROR);
+            //return false;
         }
 
         $dbconn = xarDB::getConn();
@@ -91,7 +91,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   privilege object
+     * @param   xarPrivilege object
      * @return  boolean
      * @todo    check to make sure the child is not a parent of the parent
     */
@@ -132,7 +132,7 @@ class xarPrivilege extends xarMask
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
-        if (!$result) return;
+        if (!$result) return false;
         // Refresh the privileges cached for the current sessions
         sys::import('modules.privileges.class.security');
         xarMasks::clearCache();
@@ -262,7 +262,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  boolean
+     * @return  array
      * @todo    seems to me this belong in roles module instead?
     */
     function getRoles()
@@ -496,7 +496,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   Object $privilege ???
+     * @param   xarPrivilege object
      * @return  boolean
     */
     function isEqual($privilege)
@@ -539,7 +539,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   Object $privileg ???
+     * @param   xarPrivilege object
      * @return  boolean
     */
     function isParentPrivilege($privilege)
@@ -576,4 +576,3 @@ class xarPrivilege extends xarMask
         return ($result != array());
     }
 }
-?>

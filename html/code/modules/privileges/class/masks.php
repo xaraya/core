@@ -71,7 +71,7 @@ class xarMasks extends xarSecurity
             } else {
                 $query .= "WHERE  module_id = ? AND
                                  component IN (?,?,?) ";
-                $bindvars = array($module_id,$component,'All','None');
+                $bindvars = array($modid,$component,'All','None');
             }
         }
         $query .= " AND itemtype = ? ";
@@ -106,7 +106,7 @@ class xarMasks extends xarSecurity
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   array of mask values
+     * @param   string $name array of mask values
      * @return  boolean
      * @todo    almost the same as privileges register method
     */
@@ -191,7 +191,7 @@ class xarMasks extends xarSecurity
      * *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   module name
+     * @param   string module name
      * @return  boolean
     */
     public static function removemasks($module)
@@ -270,7 +270,7 @@ class xarMasks extends xarSecurity
         $result = $selStmt->executeQuery(array($role->getID()));
 
         if (!$result->first()) {
-            $privileges = self::$irreducibleset(array('roles' => array($role)));
+            $privileges = self::irreducibleset(array('roles' => array($role)));
             $query = "INSERT INTO " . self::$privsetstable . " VALUES (?,?)";
             $bindvars = array($role->getID(), serialize($privileges));
             if(!isset($insStmt)) $insStmt = self::$dbconn->prepareStatement($query);

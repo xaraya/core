@@ -59,11 +59,13 @@ class AccessProperty extends DataProperty
 	 */	
     public function checkInput($name = '', $value = null)
     {
+        /** @var SelectProperty $dropdown */
         $dropdown = DataPropertyMaster::getProperty(array('name' => 'dropdown'));        
         $value = array();
         
         // Check the group
         if ($this->initialization_group_multiselect) {
+            /** @var MultiSelectProperty $multiselect */
             $multiselect = DataPropertyMaster::getProperty(array('name' => 'multiselect'));        
             $multiselect->options = $this->getgroupoptions();
             $multiselect->validation_override = $this->validation_override;
@@ -191,7 +193,7 @@ class AccessProperty extends DataProperty
 	/**
 	 * Get the dropdown options that are on defined levels
 	 * 
-	 * @return string    return the options with key as id and value as name
+	 * @return array    return the options with key as id and value as name
 	 */	
     function getleveloptions()
     {
@@ -220,8 +222,8 @@ class AccessProperty extends DataProperty
 	/**
 	 * Set the value of input
 	 * 
-	 * @param  string value  The value of the input
-	 */	    
+	 * @param  mixed value  The value of the input
+	 */
     function setValue($value=null)
     {
         if (!empty($value) && !is_array($value)) {

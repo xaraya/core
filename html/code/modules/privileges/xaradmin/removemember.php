@@ -18,7 +18,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @return  void
+ * @return  array|string|void
  */
 function privileges_admin_removemember()
 {
@@ -45,4 +45,3 @@ function privileges_admin_removemember()
                              array('id'=>$childid)));
     return true;
 }
-?>

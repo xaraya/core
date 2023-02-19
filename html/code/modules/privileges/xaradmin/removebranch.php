@@ -18,7 +18,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @return  void
+ * @return  array|string|void
  */
 function privileges_admin_removebranch()
 {
@@ -41,4 +41,3 @@ function privileges_admin_removebranch()
                              'viewprivileges'));
     return true;
 }
-?>

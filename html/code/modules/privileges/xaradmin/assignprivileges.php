@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/1098.html
  */
 /**
- * @return array data for the template display
+ * @return array|string|bool|void data for the template display
  */
 
     function privileges_admin_assignprivileges()
@@ -17,6 +17,7 @@
         // Security
         if (!xarSecurity::check('ManagePrivileges')) return;
         
+        $data = [];
         if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
         if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'all', xarVar::NOT_REQUIRED)) return;
         if (!xarVar::fetch('tabmodule', 'str:1:100', $tabmodule, 'All Modules', xarVar::NOT_REQUIRED)) return;
@@ -84,7 +85,7 @@
 
                 xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 return true;
-                break;
+
             case 'remove':
                 if (!xarVar::fetch('assignment', 'str', $assignment, '', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
                 $ids = explode(',',$assignment);
@@ -99,11 +100,9 @@
 
                 xarController::redirect(xarController::URL('privileges', 'admin', 'assignprivileges',array('tabmodule' => $tabmodule, 'tab' => $data['tab'])));
                 return true;
-                break;
         }
         $data['moduletabs'] = $moduletabs;
         $data['tabmodule'] = $tabmodule;
         $data['authid'] = xarSec::genAuthKey();
         return $data;
     }
-?>
