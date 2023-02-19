@@ -509,10 +509,16 @@ class Installer extends xarObject
             // set the target location (anchor) to go to within the page
             //$target = $extInfo['name'];
 
-            if (function_exists('xarOutputFlushCached')) {
-                xarOutputFlushCached('base');
-                xarOutputFlushCached('modules');
-                xarOutputFlushCached('base-block');
+            if (xarCache::$outputCacheIsEnabled) {
+                if (xarOutputCache::$pageCacheIsEnabled) {
+                    xarPageCache::flushCached('modules');
+                    // a status update might mean a new menulink and new base homepage
+                    xarPageCache::flushCached('base');
+                }
+                if (xarOutputCache::$blockCacheIsEnabled) {
+                    // a status update might mean a new menulink and new base homepage
+                    xarBlockCache::flushCached('base');
+                }
             }
 
             xarController::redirect($return_url);

@@ -261,7 +261,7 @@ function xarInstallLoader()
  * Entry function for the installer
  *
  * @access private
- * @param phase integer the install phase to load
+ * @param integer phase the install phase to load
  * @return bool true on success, false on failure
  * @todo <johnny> use non caching templates until they are set to yes
  */

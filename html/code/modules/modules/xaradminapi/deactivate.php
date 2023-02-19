@@ -50,12 +50,16 @@ function modules_adminapi_deactivate(Array $args=array())
                         array('regid' => $regid,
                               'state' => xarMod::STATE_INACTIVE));
 
-
-
-    if (function_exists('xarOutputFlushCached')) {
-        xarOutputFlushCached('base');
-        xarOutputFlushCached('modules');
-        xarOutputFlushCached('base-block');
+    if (xarCache::$outputCacheIsEnabled) {
+        if (xarOutputCache::$pageCacheIsEnabled) {
+            xarPageCache::flushCached('modules');
+            // a status update might mean a new menulink and new base homepage
+            xarPageCache::flushCached('base');
+        }
+        if (xarOutputCache::$blockCacheIsEnabled) {
+            // a status update might mean a new menulink and new base homepage
+            xarBlockCache::flushCached('base');
+        }
     }
     // notify any observers that this module was deactivated 
     // NOTE: the ModDeactivate event observer notifies ModuleDeactivate hooks 
