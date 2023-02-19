@@ -29,7 +29,6 @@ class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBloc
     /**
      * Method to retrieve block content
      * 
-     * @param void N/A
      * @return array Array of block content data
      */
     public function configmodify()
@@ -41,8 +40,7 @@ class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBloc
     /**
      * Updates the Block config from the Blocks Admin
      * 
-     * @param void N/A
-     * @return boolean Returns true if configuation was updated successfully
+     * @return boolean|void Returns true if configuation was updated successfully
      */
     public function configupdate()
     {
@@ -54,4 +52,3 @@ class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBloc
         return true;
     }
 }
-?>

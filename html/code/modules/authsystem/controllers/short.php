@@ -41,7 +41,6 @@ class AuthsystemShortController extends ShortActionController
         switch ($token) {
             case 'admin':
                 return parent::decode($data);
-            break;
 
             case 'login':
                 $data['func'] = 'showloginform';
@@ -103,4 +102,3 @@ class AuthsystemShortController extends ShortActionController
         return parent::encode($request);
     }    
 }
-?>

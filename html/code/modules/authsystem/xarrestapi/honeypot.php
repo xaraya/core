@@ -13,7 +13,7 @@
 /**
  * Sample REST API call supported by this module (if any)
  *
- * @return array of info
+ * @return string of info
  */
 function authsystem_restapi_honeypot($args = [])
 {

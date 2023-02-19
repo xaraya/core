@@ -15,8 +15,7 @@
  * 
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * 
- * @param  void N/A
- * @return boolean Returns true if the user has been logged out successfullly. 
+ * @return boolean|void Returns true if the user has been logged out successfullly.
  * @throws ForbiddenOperationException Thrown if the user could not be logged out.
  */
 function authsystem_user_logout()
@@ -42,4 +41,3 @@ function authsystem_user_logout()
     xarController::redirect($redirecturl);
     return true;
 }
-?>

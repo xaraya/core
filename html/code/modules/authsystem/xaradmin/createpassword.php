@@ -13,8 +13,7 @@
 /**
  * Function to create a password for a user
  * 
- * @param void N/A
- * @return boolean Returns true on success, false upon failure. 
+ * @return boolean|void Returns true on success, false upon failure.
  * @throws BadParameterException Thrown if not all parameters have been given in the GET/POST data
  */
 function authsystem_admin_createpassword()

@@ -20,7 +20,6 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @author  Jo Dalle Nogare<jojodee@xaraya.com>
  * 
- * @param void N/A
  * @return boolean True after redirection
  */
 function authsystem_user_main()
@@ -35,5 +34,3 @@ function authsystem_user_main()
     }
     return true;
 }
-
-?>

@@ -15,8 +15,7 @@
  *
  * Standard GUI function to display and update the configuration settings of the module based on input data.
  * 
- * @param  void N/A
- * @return array|string Returns display template data on success else an output string will be returned. 
+ * @return array|string|void Returns display template data on success else an output string will be returned.
  */
 function authsystem_admin_modifyconfig()
 {
@@ -64,7 +63,6 @@ function authsystem_admin_modifyconfig()
             xarController::$request->exitAjax();
             xarController::redirect(xarServer::getCurrentURL());
             return true;
-            break;
     }
     return $data;
 }
