@@ -14,6 +14,7 @@
  */
 function installer_admin_upgrade()
 {    
+    $data = [];
     if(!xarVar::fetch('phase','int', $data['phase'], 1, xarVar::DONT_SET)) {return;}
 
     // Version information

@@ -23,7 +23,7 @@ function installer_init()
 /**
  * Upgrade this module from an old version
  *
- * @param oldVersion
+ * @param string $oldversion
  * @return boolean true on success, false on failure
  */
 function installer_upgrade($oldversion)
@@ -46,5 +46,3 @@ function installer_delete()
     // this module cannot be removed
     return false;
 }
-
-?>

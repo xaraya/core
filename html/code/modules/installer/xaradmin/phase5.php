@@ -22,14 +22,14 @@
  * Phase 5: Pre-Boot, Modify Configuration
  *
  * @access private
- * @param dbHost
- * @param dbName
- * @param dbUname
- * @param dbPass
- * @param dbPrefix
- * @param dbType
- * @param createDb
- * @return array data for the template display
+ * @param string dbHost
+ * @param string dbName
+ * @param string dbUname
+ * @param string dbPass
+ * @param string dbPrefix
+ * @param string dbType
+ * @param bool createDb
+ * @return array|string|void data for the template display
  */
 function installer_admin_phase5()
 {
@@ -133,6 +133,7 @@ function installer_admin_phase5()
     // Check other database types
     switch ($dbType) {
         case 'mysql':
+            // @fixme no longer available
             $tokens = explode('.',mysql_get_server_info());
             $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
             $data['required_version'] = MYSQL_REQUIRED_VERSION;
@@ -140,6 +141,7 @@ function installer_admin_phase5()
         break;
         case 'mysqli':
             $source = $dbconn->getResource();
+            // @checkme does resource have this property?
             $tokens = explode('.', $source->server_info);
             $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
             $data['required_version'] = MYSQL_REQUIRED_VERSION;
