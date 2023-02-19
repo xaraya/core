@@ -154,8 +154,8 @@ class GraphQLTest extends TestCase
                 file_put_contents($bodyFile, json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
             }
         } else {
-            $variables = $variables ?? null;
-            $operation = $operation ?? null;
+            $variables ??= null;
+            $operation ??= null;
             $body = [
                 'query' => $query,
                 'variables' => $variables,
