@@ -137,7 +137,6 @@ class HTMLPageProperty extends SelectProperty
 	/**
      * Retrieve the list of options on demand
      * 
-     * @param void N/A
      */
     public function getOptions()
     {
@@ -160,4 +159,3 @@ class HTMLPageProperty extends SelectProperty
         return $options;
     }
 }
-?>

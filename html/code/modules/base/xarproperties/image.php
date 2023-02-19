@@ -71,7 +71,7 @@ class ImageProperty extends TextBoxProperty
 	/**
 	 * Validate the value of a field
 	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+	 * @return bool|void Returns true if the value passes all validation checks; otherwise returns false.
 	 */
     public function validateValue($value = null)
     {

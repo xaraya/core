@@ -25,7 +25,6 @@ class LanguageListProperty extends SelectProperty
 /**
      * Retrieve the list of options on demand
      * 
-     * @param void N/A
      * @return array Array of options
      */
     function getOptions()

@@ -13,13 +13,13 @@
  *
  * @author Marc Lutolf
  * 
- * @param void N/A
  */
 function base_admin_composer()
 {
     // Security
     if(!xarSecurity::check('ManageBase')) return;
 
+    $data = [];
     if (!xarVar::fetch('setup',       'isset', $setup,       NULL, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('install',     'isset', $install,     NULL, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('update',      'isset', $update,      NULL, xarVar::NOT_REQUIRED)) return;

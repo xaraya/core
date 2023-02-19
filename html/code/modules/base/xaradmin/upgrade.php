@@ -14,8 +14,7 @@
  *
  * @author John Cox
  *
- * @param void N/A
- * @return array Data for the template display
+ * @return array|void Data for the template display
  */
 function base_admin_upgrade()
 {
@@ -32,4 +31,3 @@ function base_admin_upgrade()
     $data['versioncompare'] = xarVersion::compare($fileversion, $dbversion);
     return $data;
 }
-?>

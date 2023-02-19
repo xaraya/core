@@ -22,7 +22,6 @@
  * @author John Robeson
  * @author Greg Allan
  * 
- * @param void N/A
  * @return mixed Output display string or boolean true if redirected
  */
 function base_admin_main()
@@ -42,5 +41,3 @@ function base_admin_main()
         return true;
     }
 }
-
-?>

@@ -17,8 +17,7 @@
  *
  * @author  Andy Varganov <andyv@xaraya.com>
 
- * @param   void N/A
- * @return  array Data array for display template.
+ * @return  array|void Data array for display template.
 */
 function base_admin_confirmlogout()
 {
@@ -28,4 +27,3 @@ function base_admin_confirmlogout()
     // Template does it all
     return array();
 }
-?>

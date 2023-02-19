@@ -12,8 +12,7 @@
  *
  * This information can be used for support / debugging
  *
- * @param void N/A
- * @return array of info from phpinfo()
+ * @return array|void of info from phpinfo()
  */
 function base_admin_sysinfo()
 {
@@ -39,4 +38,3 @@ function base_admin_sysinfo()
     $data['phpinfo'] = $val_phpinfo;
     return $data;
 }
-?>

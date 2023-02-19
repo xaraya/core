@@ -24,7 +24,6 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
      * Initialize the configuration
      *
      * This method is called by the BasicBlock class constructor
-     * @param void N/A
      */
     public function init()
     {
@@ -51,7 +50,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
      * Update the configuration of the menu block
      * 
      * @param array $data Data array
-     * @return boolean Returns true on success, false on failure
+     * @return boolean|void Returns true on success, false on failure
      */
     public function configupdate(Array $data=array())
     {
@@ -324,7 +323,6 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     /**
      * Admin get userlinks method
      * 
-     * @param void N/A
      * @return string[] Returns user links as array
      */
     public function getUserLinks()
@@ -460,4 +458,3 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     }
 
 }
-?>

@@ -22,6 +22,8 @@ class NumberListProperty extends SelectProperty
     public $id         = 16;
     public $name       = 'integerlist';
     public $desc       = 'Number List';
+    public $min;
+    public $max;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -95,7 +97,6 @@ class NumberListProperty extends SelectProperty
             $this->value = null;
             return false;
         }
+        return false;
     }
 }
-
-?>

@@ -42,7 +42,7 @@
  *        integer  $args['firstitem']<br/>
  *        integer  $args['firstpage']<br/>
  *
- * @return string Output display string
+ * @return string|void Output display string
  */
 function base_userapi_pager(Array $args=array())
 {
@@ -79,4 +79,3 @@ function base_userapi_pager(Array $args=array())
 
     return xarTplPager::getPager($startnum, $total, $urltemplate, $itemsperpage, $blockoptions, $template, $tplmodule);
 }
-?>

@@ -15,7 +15,6 @@
  *
  * @author  John Cox <admin@dinerminor.com>
  *
- * @param void N/A 
  * @return string[] Array containing output and message.
 */
 function base_adminapi_waitingcontent()
@@ -36,5 +35,3 @@ function base_adminapi_waitingcontent()
     return array('output'   => $output,
                  'message'  => $message);
 }
-
-?>

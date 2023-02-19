@@ -33,7 +33,6 @@ class BaseShortController extends ShortActionController
         switch ($token) {
             case 'admin':
                 return parent::decode($data);
-            break;
 
             default:
                 $data['func'] = 'main';
@@ -71,4 +70,3 @@ class BaseShortController extends ShortActionController
         return parent::encode($request);
     }    
 }
-?>

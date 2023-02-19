@@ -25,7 +25,6 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
      * Initialize the block display
      *
      * This method is called by the BasicBlock class constructor
-     * @param void N/A
      */
     public function init()
     {
@@ -36,7 +35,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
      * Display the menu block
      * 
      * @param array $data Data array
-     * @return array Display data array or null if nothing is to display.
+     * @return array|void Display data array or null if nothing is to display.
      */
     function display(Array $data=array())
     {
@@ -102,7 +101,6 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
     /**
      * Method to get user links
      * 
-     * @param void N/A
      * @return string[] Array containing user links.
      */
     public function getUserLinks()
@@ -165,7 +163,6 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
     /**
      * Method to get help content
      * 
-     * @param void N/A
      * @return array Display data array
      */
     public function help()
@@ -173,4 +170,3 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
         return $this->getContent();
     }
 }
-?>

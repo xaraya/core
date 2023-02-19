@@ -98,7 +98,7 @@ class CheckboxListProperty extends SelectProperty
  * Used to show the hidden data
  * 
  * @param  array data An array of input parameters
- * @return bool   Returns true or false 
+ * @return string     HTML markup to display the property for hidden input on a web page
  */	  
     public function showHidden(Array $data = array())
     {
@@ -134,8 +134,7 @@ class CheckboxListProperty extends SelectProperty
 /**
  * Set the value of input
  * 
- * @param  string value The value of the input
- * @return string    return a storable representation of a value
+ * @param  mixed value The value of the input
  */	   
     public function setValue($value=null)
     {
@@ -143,5 +142,3 @@ class CheckboxListProperty extends SelectProperty
         else $this->value = $value;
     }
 }
-
-?>

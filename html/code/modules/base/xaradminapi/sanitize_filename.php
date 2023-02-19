@@ -31,7 +31,7 @@ function base_adminapi_sanitize_filename($args)
      'Û'=>'U', 'Ü'=>'Ue', 'Ý'=>'Y', 'Þ'=>'B', 'ß'=>'Ss','à'=>'a', 'á'=>'a', 'â'=>'a', 'ã'=>'a', 'ä'=>'ae',
      'å'=>'a', 'æ'=>'a', 'ç'=>'c', 'ć'=>'c', 'č'=>'c', 'è'=>'e', 'é'=>'e', 'ê'=>'e', 'ė'=>'e', 'ë'=>'e', 'ì'=>'i', 'í'=>'i', 'î'=>'i',
      'ï'=>'i', 'ð'=>'o', 'ñ'=>'n', 'ò'=>'o', 'ó'=>'o', 'ô'=>'o', 'õ'=>'o', 'ö'=>'oe', 'ø'=>'o', 'ù'=>'u',
-     'ü'=>'ue','ú'=>'u', 'û'=>'u', 'ý'=>'y', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'ƒ'=>'f'
+     'ü'=>'ue','ú'=>'u', 'û'=>'u', 'ý'=>'y', 'þ'=>'b', 'ÿ'=>'y', 'ƒ'=>'f'
      );
      $f = str_replace(array_keys($replace_chars), $replace_chars, $f);
      // convert & to "and", @ to "at", and # to "number"
@@ -43,4 +43,3 @@ function base_adminapi_sanitize_filename($args)
      $f = preg_replace('/[\-]+/', '-', $f); // converts groups of hyphens into one
      return $f;
 }
-?>

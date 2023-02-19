@@ -21,7 +21,6 @@ class Base_FincludeBlockDisplay extends Base_FincludeBlock implements iBlock
     /**
      * Disaply function
      * 
-     * @param void N/A
      * @return array Retursn display data array
      */
     function display()
@@ -39,4 +38,3 @@ class Base_FincludeBlockDisplay extends Base_FincludeBlock implements iBlock
         return $data;
     }
 }
-?>

@@ -35,7 +35,7 @@ sys::import('modules.base.xarproperties.dropdown');
  *  
  * @param  string name The name of the dropdown to be selected
  * @param  string value The value of the on the basis of name if not available from property id
- * @return    This method passes the value gotten to the validateValue method and returns its output.
+ * @return bool|void This method passes the value gotten to the validateValue method and returns its output.
  */	
         public function checkInput($name = '', $value = null)
         {
@@ -84,4 +84,3 @@ sys::import('modules.base.xarproperties.dropdown');
         }
 
     }
-?>

@@ -56,7 +56,7 @@ class CheckboxProperty extends DataProperty
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            if (!xarVar::fetch($name, 'isset', $value,  NULL, xarVar::DONT_SET)) {return;}
+            if (!xarVar::fetch($name, 'isset', $value,  NULL, xarVar::DONT_SET)) {return false;}
         }
         return $this->validateValue($value);
     }
@@ -106,4 +106,3 @@ class CheckboxProperty extends DataProperty
         return ($value === 1 || $value === '1' || $value === true || $value === 'true') ? true : false;
     }
 }
-?>

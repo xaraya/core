@@ -18,7 +18,6 @@
  * @author John Robeson
  * @author Greg Allan
  * 
- * @param void N/A
  * @return mixed Data array for the template display or output display string if invalid data submitted
  */
 function base_admin_modifyconfig()
@@ -26,6 +25,7 @@ function base_admin_modifyconfig()
     // Security
     if(!xarSecurity::check('AdminBase')) return;
     
+    $data = [];
     if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
     if (!xarVar::fetch('tab', 'str:1:100', $data['tab'], 'display', xarVar::NOT_REQUIRED)) return;
 
@@ -67,27 +67,6 @@ function base_admin_modifyconfig()
     $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'base'));
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, enable_short_urls, user_menu_link');
     $data['module_settings']->getItem();
-
-    if (extension_loaded('mcrypt') && 0) {
-        // Don't use sys::import, the scope of the var would be wrong
-        // Use include instead of include_once, in case we have loaded this var in another scope
-        include(sys::lib()."xaraya/encryption.php");
-        $data['encryption'] = $encryption;
-
-        $ciphers = array();
-        $ciphermenu = mcrypt_list_algorithms();
-        sort($ciphermenu);
-        foreach ($ciphermenu as $item)
-            $ciphers[] = array('id' => $item, 'name' => $item);
-        $data['ciphers'] = $ciphers;
-
-        $modes = array();
-        $modemenu = mcrypt_list_modes();
-        sort($modemenu);
-        foreach ($modemenu as $item)
-            $modes[] = array('id' => $item, 'name' => $item);
-        $data['modes'] = $modes;
-    }
 
     /** @var FilePickerProperty $picker */
     $picker = DataPropertyMaster::getProperty(array('name' => 'filepicker'));
@@ -217,6 +196,7 @@ function base_admin_modifyconfig()
                     if (!xarVar::fetch('sslport','int',$sslport,443,xarVar::NOT_REQUIRED)) return;
                     if (!xarVar::fetch('cookietimeout','int:1:',$cookietimeout,'',xarVar::NOT_REQUIRED)) return;
                     sys::import('modules.dynamicdata.class.properties.master');
+                    /** @var OrderSelectProperty $orderselect */
                     $orderselect = DataPropertyMaster::getProperty(array('name' => 'orderselect'));
                     $orderselect->checkInput('authmodules');
 
@@ -347,5 +327,3 @@ function base_admin_modifyconfig()
         }
     return $data;
 }
-
-?>

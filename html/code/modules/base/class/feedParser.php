@@ -139,6 +139,12 @@ class feedParser extends xarObject
         'RDF2' => 'http://my.netscape.com/rdf/simple/0.9/'
     );
 
+    public $data = [];
+    public $xmldata;
+    public $ns2uri = [];
+    public $uri2ns = [];
+    public $unkcnt = 0;
+
     function buildStruct($xmldata) 
     {
         // Define our known namespaces
@@ -664,5 +670,3 @@ class feedParser extends xarObject
     }
 
 }
-        
-?>

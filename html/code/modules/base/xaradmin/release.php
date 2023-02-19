@@ -14,8 +14,7 @@
  *
  * @author John Cox
  * 
- * @param void N/A
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
 function base_admin_release()
 {
@@ -96,4 +95,3 @@ function base_admin_release()
     $data['feedcontent'] = $feedcontent;
     return $data;
 }
-?>

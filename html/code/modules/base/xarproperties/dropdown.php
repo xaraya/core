@@ -143,7 +143,7 @@ class SelectProperty extends DataProperty
 /**
  * (re)define the list of options
  * 
- * @param options array of options
+ * @param array $options array of options
  * 
  * This array should have the form:
  * array (
@@ -162,7 +162,6 @@ class SelectProperty extends DataProperty
  * N.B. the code below is repetitive, but lets leave it clearly separated for 
  * each type of input for the moment
  * 
- * @param void N/A
  */
     public function getOptions()
     {
@@ -263,7 +262,6 @@ class SelectProperty extends DataProperty
 /**
  * Gets the saved first line and returns it as a proper array
  * 
- * @param void N/A
  * @return array Array containing first line
  */
     public function getFirstline()
@@ -299,7 +297,7 @@ class SelectProperty extends DataProperty
  * Retrieve or check an individual option on demand
  *
  * @param  $check boolean
- * @return if check == false:<br/>
+ * @return mixed if check == false:<br/>
  *                - display value, if found, of an option whose store value is $this->value<br/>
  *                - $this->value, if not found<br/>
  *         if check == true:<br/>

@@ -36,10 +36,8 @@ function base_adminapi_getusersettings(Array $args=array())
         foreach ($object->properties as $name => $property) {
             $object->properties[$name]->source = 'module variables: ' . $args['module'];
         }
-        $object->datastores = array();
         $object->getDatastore();
         $object->getItem($args);
     }
     return $object;
 }
-?>

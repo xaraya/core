@@ -55,6 +55,7 @@ function base_javascriptapi_geteventjs(Array $args=array())
         $type = strtolower($type);
     }
 
+    // @fixme replace with right javascript code or drop function
     // Concatenate the JavaScript trigger code fragments.
     // Only pick up the event type JavaScript.
     $positionjs =& xarTplGetJavaScript($position);
