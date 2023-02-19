@@ -43,4 +43,4 @@ function themes_admin_initialise()
 
     xarController::redirect(xarController::URL('themes', 'admin', 'view'));
     return true;
-} 
+}

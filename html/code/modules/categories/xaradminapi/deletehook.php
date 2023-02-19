@@ -62,4 +62,3 @@ function categories_adminapi_deletehook($args)
     // Return the extra info
     return $extrainfo;
 }
-

@@ -25,4 +25,3 @@ class PdoSQLiteIdGenerator extends PdoIdGeneratorCommon {
     }
     // END XARAYA MODIFICATION
 }
-

@@ -74,4 +74,3 @@ class MSSQLIdGenerator implements IdGenerator {
     }
     // END XARAYA MODIFICATION
 }
-

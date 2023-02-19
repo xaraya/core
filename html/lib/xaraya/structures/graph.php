@@ -322,4 +322,3 @@ class AcyclicTest extends xarObject implements IAcyclicTest
         return self::_isAcyclic($graph);
     }
 }
-

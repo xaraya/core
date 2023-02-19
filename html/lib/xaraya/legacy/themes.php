@@ -93,4 +93,3 @@ function xarTheme_getVarsByTheme($themeName)
 {
     return xarTheme::getVarsByTheme($themeName);
 }
-

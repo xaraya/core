@@ -462,4 +462,3 @@ class DataContainer extends xarObject
             $this->$name = $value;
     }
 }
-

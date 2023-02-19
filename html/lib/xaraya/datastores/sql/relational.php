@@ -742,4 +742,3 @@ class RelationalDataStore extends SQLDataStore
     }
 
 }
-

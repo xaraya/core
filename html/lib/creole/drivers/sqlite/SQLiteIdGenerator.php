@@ -70,4 +70,3 @@ class SQLiteIdGenerator implements IdGenerator {
     }
     // END XARAYA MODIFICATION
 }
-

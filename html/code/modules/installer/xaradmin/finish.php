@@ -55,4 +55,3 @@ function installer_admin_finish()
     }
     return true;
 }
-

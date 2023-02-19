@@ -47,4 +47,4 @@ function themes_admin_remove()
         $return_url = xarController::URL('themes', 'admin', 'view');
     xarController::redirect($return_url);
     return true;
-} 
+}

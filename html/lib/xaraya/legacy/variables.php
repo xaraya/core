@@ -130,4 +130,3 @@ function xarVarDelCached($scope, $name)         { return xarCoreCache::delCached
  * @deprecated
  */
 function xarVarFlushCached($scope)              { return xarCoreCache::flushCached($scope);             }
-

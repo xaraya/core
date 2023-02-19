@@ -626,4 +626,3 @@ class Installer extends xarObject
         }
     }
 }
-

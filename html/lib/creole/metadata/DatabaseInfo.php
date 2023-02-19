@@ -205,4 +205,3 @@ abstract class DatabaseInfo {
         return $this->vendorSpecificInfo;
     }
 }
-

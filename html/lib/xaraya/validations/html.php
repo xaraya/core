@@ -53,4 +53,3 @@ class HtmlValidation extends ValueValidations
         return true;
     }
 }
-

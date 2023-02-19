@@ -57,4 +57,3 @@ abstract class PdoIdGeneratorCommon implements IdGenerator {
     }
     
 }
-

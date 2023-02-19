@@ -115,4 +115,3 @@ function xarUserComparePasswords($givenPassword, $realPassword, $userName, $cryp
 {   
     return xarUser::comparePasswords($givenPassword, $realPassword, $userName, $cryptSalt); 
 }
-

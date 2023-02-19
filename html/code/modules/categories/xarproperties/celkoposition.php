@@ -912,4 +912,3 @@ class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDat
         return true;
     }
 }
-

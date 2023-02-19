@@ -61,4 +61,3 @@ $systemConfiguration = array(
  * Comment them out to use Xaraya's built-in/auto values
  */
 //$systemConfiguration['varDir'] = './var';
-?>

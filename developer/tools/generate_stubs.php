@@ -159,4 +159,3 @@ $code = file_get_contents($ROOT_DIR.'/html/bootstrap.php');
 $ast = $parser->parse($code);
 $contents = $prettyPrinter->prettyPrintFile($ast);
 file_put_contents($stubFilePath, $contents);
-

@@ -110,4 +110,3 @@ class PgSQLIdGenerator implements IdGenerator {
     // END XARAYA MODIFICATION
     
 }
-

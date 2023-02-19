@@ -41,4 +41,3 @@ function authsystem_user_showloginform(Array $args = array())
 
     return $data;
 }
-

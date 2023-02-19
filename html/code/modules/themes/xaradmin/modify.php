@@ -49,4 +49,4 @@ function themes_admin_modify()
     $data['savebutton'] = xarML('Save Changes');
 
     return $data;
-} 
+}

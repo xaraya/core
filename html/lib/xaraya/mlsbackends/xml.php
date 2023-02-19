@@ -340,4 +340,3 @@ class xarMLS__XMLTranslationsBackend extends xarMLS__ReferencesBackend implement
     }
 
 }
-

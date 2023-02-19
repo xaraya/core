@@ -107,4 +107,4 @@ function themes_admin_update()
         xarController::redirect(xarController::URL('themes', 'admin', 'view'));
     } 
     return true;
-} 
+}

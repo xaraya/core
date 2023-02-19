@@ -46,4 +46,3 @@ abstract class GuiHookSubject extends HookSubject
         return $this->hookoutput;
     }
 }
-

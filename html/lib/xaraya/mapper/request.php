@@ -340,4 +340,3 @@ class xarRequest extends xarObject
         }
     }
 }
-

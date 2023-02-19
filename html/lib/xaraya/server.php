@@ -503,4 +503,3 @@ class xarServer extends xarObject
         return self::getBaseURL() . $path;
     }
 }
-

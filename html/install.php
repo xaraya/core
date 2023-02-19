@@ -321,4 +321,3 @@ xarInstallLoader();
  * Run  the installer
  */
 xarInstallMain();
-

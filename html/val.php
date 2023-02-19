@@ -96,4 +96,4 @@ xarValidationLoader();
 /**
  * Run the validation
  */
-xarValidationMain();    
+xarValidationMain();

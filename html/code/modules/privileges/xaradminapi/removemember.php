@@ -42,4 +42,3 @@ function privileges_adminapi_removemember(Array $args=array())
                     'privileges'));
     return true;
 }
-

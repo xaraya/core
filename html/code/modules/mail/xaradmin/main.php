@@ -37,4 +37,4 @@ function mail_admin_main()
         xarController::redirect(xarController::URL('mail', 'admin', 'modifyconfig'));
         return true;
     }
-} 
+}

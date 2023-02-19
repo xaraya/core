@@ -129,4 +129,3 @@ class xarMLS__PHPTranslationsBackend extends xarMLS__ReferencesBackend implement
         return $contextNames;
     }
 }
-

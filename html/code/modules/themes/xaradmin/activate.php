@@ -52,4 +52,4 @@ function themes_admin_activate()
         $return_url = xarController::URL('themes', 'admin', 'view', array('state' => xarTheme::STATE_ANY), NULL, $target);
     xarController::redirect($return_url);
     return true;
-} 
+}
