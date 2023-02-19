@@ -15,8 +15,8 @@
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] the id of the module<br/>
  *        string   $args['function'] name of the function to be called
- * @return boolean true on success, false on failure in the called function
- * @throws BAD_PARAM, NO_PERMISSION
+ * @return boolean|void true on success, false on failure in the called function
+ * @throws EmptyParameterException
  */
 function modules_adminapi_executeinitfunction(Array $args=array())
 {
@@ -80,5 +80,3 @@ function modules_adminapi_executeinitfunction(Array $args=array())
     }
     return true;
 }
-
-?>

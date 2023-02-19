@@ -14,7 +14,7 @@
  *
  * @author Marc Lutolf (mfl@netspan.ch)
  * @param array    $args array of optional parameters<br/>
- * @return boolean result of action
+ * @return boolean|void result of action
 **/
 function modules_adminapi_standarddeinstall(Array $args=array())
 {
@@ -106,4 +106,3 @@ function modules_adminapi_standarddeinstall(Array $args=array())
     // Deinstall successful
     return true;
 }
-?>

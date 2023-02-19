@@ -13,7 +13,6 @@
  *
  * @author Xaraya Development Team
  * @return boolean null on exceptions, true on sucess to update
- * @throws NO_PERMISSION
  */
 function modules_adminapi_geteventhandlers()
 {
@@ -74,5 +73,3 @@ function modules_adminapi_geteventhandlers()
 
     return true;
 }
-
-?>

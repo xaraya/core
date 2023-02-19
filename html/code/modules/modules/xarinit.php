@@ -13,8 +13,7 @@
 /**
  * Initialise the modules module
  *
- * @return boolean
- * @throws DATABASE_ERROR
+ * @return boolean|void
  */
 function modules_init()
 {
@@ -203,4 +202,3 @@ function modules_delete()
     // this module cannot be removed
     return false;
 }
-?>

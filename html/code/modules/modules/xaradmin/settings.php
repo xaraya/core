@@ -10,7 +10,7 @@
  */
 /**
  * List modules and current settings
- * @param several params from the associated form in template
+ * @param array several params from the associated form in template
  *
  * @author Xaraya Development Team
  */
@@ -33,5 +33,3 @@ function modules_admin_settings()
     xarController::redirect(xarController::URL('modules', 'admin', 'list', array('regen' => $regen)));
     return true;
 }
-
-?>

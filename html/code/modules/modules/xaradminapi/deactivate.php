@@ -18,8 +18,8 @@
  * @param array    $args array of optional parameters<br/>
  *        string   $args['regid'] module's registered id
  *        string   $args['name'] module's name
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @return boolean|void true on success, false on failure
+ * @throws EmptyParameterException
  */
 function modules_adminapi_deactivate(Array $args=array())
 {
@@ -62,4 +62,3 @@ function modules_adminapi_deactivate(Array $args=array())
     xarEvents::notify('ModDeactivate', $modInfo['name']);
     return true;
 }
-?>

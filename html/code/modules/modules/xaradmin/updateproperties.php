@@ -12,10 +12,10 @@
  * Update a module
  *
  * @author Xaraya Development Team
- * @param id the module's registered id
- * @param newdisplayname the new display name
- * @param admincapable the whether the module shows an admin menu
- * @param usercapable the whether the module shows a user menu
+ * @param int id the module's registered id
+ * @param string newdisplayname the new display name
+ * @param bool admincapable the whether the module shows an admin menu
+ * @param bool usercapable the whether the module shows a user menu
  * @return mixed true on success, error message on failure
  */
 function modules_admin_updateproperties()

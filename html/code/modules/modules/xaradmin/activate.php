@@ -19,8 +19,8 @@
  * then redirects to the list function with a
  * status message and returns true.
  *
- * @param id the module id to activate
- * @return boolean true on success, false on failure
+ * @param int id the module id to activate
+ * @return boolean|string|void true on success, false on failure
  */
 function modules_admin_activate()
 {
@@ -54,5 +54,3 @@ function modules_admin_activate()
     xarController::redirect($return_url);
     return true;
 }
-
-?>

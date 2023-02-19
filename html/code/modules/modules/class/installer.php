@@ -137,7 +137,7 @@ class Installer extends xarObject
                     $msg .= xarML('The current version of the module #(1) is #(2). The required version is #(3).',$dbMods[$module_id]['name'],$dbMods[$module_id]['version'],$conditions['minversion']);
                     die($msg);
                     //Need to add some info for the user
-                    return false; // 1st version is bigger
+                    //return false; // 1st version is bigger
                 }
 
                //Not to be checked, at least not for now

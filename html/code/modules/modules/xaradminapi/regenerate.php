@@ -12,8 +12,7 @@
  * Regenerate module list
  *
  * @author Xaraya Development Team
- * @return boolean true on success, false on failure
- * @throws NO_PERMISSION
+ * @return boolean|void true on success, false on failure
  */
 function modules_adminapi_regenerate()
 {
@@ -266,5 +265,3 @@ function modules_adminapi_regenerate()
 
     return true;
 }
-
-?>

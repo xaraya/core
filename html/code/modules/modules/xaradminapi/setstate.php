@@ -15,8 +15,8 @@
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] the module id<br/>
  *        integer  $args['state'] the state
- * @return integer state
- * @throws BAD_PARAM,NO_PERMISSION
+ * @return integer|void state
+ * @throws EmptyParameterException
  * @todo Do the db changes in a transaction to completely fail or succeed?
  */
 function modules_adminapi_setstate(Array $args=array())
@@ -76,7 +76,6 @@ function modules_adminapi_setstate(Array $args=array())
                 ($oldState != xarMod::STATE_MISSING_FROM_ACTIVE)) {
                 xarSession::setVar('errormsg', xarML('Invalid module state transition'));
                 throw new Exception("Setting from $oldState to $state for module $regid failed");
-                return false;
             }
             break;
         case xarMod::STATE_UPGRADED:
@@ -103,4 +102,3 @@ function modules_adminapi_setstate(Array $args=array())
 
     return $state;
 }
-?>

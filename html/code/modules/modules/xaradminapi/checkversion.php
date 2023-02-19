@@ -12,8 +12,7 @@
  * Checks for change in module versions, and updates the status of them if any is found
  *
  * @author Xaraya Development Team
- * @return boolean null on exceptions, true on sucess to update
- * @throws NO_PERMISSION
+ * @return boolean|void null on exceptions, true on sucess to update
  */
 function modules_adminapi_checkversion()
 {
@@ -106,5 +105,3 @@ function modules_adminapi_checkversion()
 
     return true;
 }
-
-?>

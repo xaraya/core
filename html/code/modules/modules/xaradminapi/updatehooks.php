@@ -15,7 +15,7 @@
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] the id number of the hook module
- * @return boolean true on success, false on failure
+ * @return boolean|void true on success, false on failure
  */
 function modules_adminapi_updatehooks(Array $args=array())
 {
@@ -44,12 +44,10 @@ function modules_adminapi_updatehooks(Array $args=array())
                 case 0:
                     // hooked to none
                     continue;
-                break;
                 case 1:
                     // hooked to all scopes, all items
                     xarHooks::attach($curhook, $module, 0, 0);
                     continue;
-                break;
                 case 2:
                     // hooked to some scopes, all items
                     // see which scopes
@@ -63,7 +61,6 @@ function modules_adminapi_updatehooks(Array $args=array())
                     }
                     
                     continue;
-                break;
                 case 3:
                     // hooked to some scopes, some items
                     // see which items
@@ -74,12 +71,10 @@ function modules_adminapi_updatehooks(Array $args=array())
                                 case 0:
                                     // none
                                     continue;
-                                break;
                                 case 1:
                                     // all scopes, this itemtype
                                     xarHooks::attach($curhook, $module, $itemtype, 0);
                                     continue;
-                                break;
                                 case 2:
                                     // some scopes, this itemtype                                    
                                     // see which scopes
@@ -95,7 +90,6 @@ function modules_adminapi_updatehooks(Array $args=array())
                     }                    
                                     
                     continue;
-                break;
             }
                     
             }  
@@ -158,5 +152,3 @@ function modules_adminapi_updatehooks(Array $args=array())
     return true;
 
 }
-
-?>

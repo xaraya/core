@@ -19,7 +19,7 @@
  *        string   $args['hookAction'] the action on that object (transform, display, ...) (optional)<br/>
  *        string   $args['hookArea'] the area we're dealing with (GUI, API) (optional)
  * @return array modules calling this hook module
- * @throws BAD_PARAM
+ * @throws EmptyParameterException
  */
 function modules_adminapi_gethookedmodules(Array $args=array())
 {
@@ -35,4 +35,3 @@ function modules_adminapi_gethookedmodules(Array $args=array())
     return xarHooks::getObserverSubjects($hookModName);
 
 }
-?>

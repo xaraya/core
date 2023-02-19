@@ -13,9 +13,9 @@
 /**
  * List modules and current settings
  * @author Xaraya Development Team
- * @param several params from the associated form in template
+ * @param array $args several params from the associated form in template
  * @todo  finish cleanup, styles, filters and sort orders
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function modules_admin_view()
 {
@@ -190,4 +190,3 @@ function modules_admin_view()
 
     return $data;    
 }
-?>

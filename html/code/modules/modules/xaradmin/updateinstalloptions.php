@@ -19,7 +19,5 @@
     xarVar::fetch('regid', 'int', $regid, NULL, xarVar::DONT_SET);
     sys::import('modules.modules.class.installer');
     $installer = Installer::getInstance();    
-    if (!$installer->installmodule($regid,1)) return;
+    if (!$installer->installmodule($regid)) return;
 }
-
-?>

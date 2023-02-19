@@ -13,7 +13,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @return array data for the template display
+ * @return array|void data for the template display
  * @todo some facelift
  */
 function modules_admin_tools()
@@ -64,4 +64,3 @@ function modules_admin_tools()
     // done
     return $data;
 }
-?>

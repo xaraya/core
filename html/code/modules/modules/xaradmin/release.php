@@ -13,7 +13,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @return array data for the template display
+ * @return array|void data for the template display
  * @todo change feed url once release module is moved
  */
 function modules_admin_release()
@@ -77,4 +77,3 @@ function modules_admin_release()
     $data['feedcontent'] = $feedcontent;
     return $data;
 }
-?>

@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/1.html
  */
 /**
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 
 function modules_admin_modifyinstalloptions(Array $args=array())
@@ -19,7 +19,7 @@ function modules_admin_modifyinstalloptions(Array $args=array())
     
     sys::import('modules.modules.class.installer');
     $installer = Installer::getInstance();    
-    if (!$installer->modulestack->size()) {
+    if (!$installer->modulestack->size) {
         xarVar::fetch('regid', 'int', $regid, NULL, xarVar::DONT_SET);
         if(!isset($regid)) throw new Exception('Missing id of module for installation options...aborting');
         $modInfo = xarMod::getInfo($regid);

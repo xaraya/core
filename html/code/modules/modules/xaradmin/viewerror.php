@@ -13,7 +13,7 @@
  * View an error with a module
  *
  * @author Xaraya Development Team
- * @param id the module's registered id
+ * @param int id the module's registered id
  * @return mixed true on success, error message on failure
  */
 function modules_admin_viewerror()
@@ -72,5 +72,3 @@ function modules_admin_viewerror()
     // Return the template variables to BL
     return xarTpl::module('modules', 'admin', $template, $data);
 }
-
-?>

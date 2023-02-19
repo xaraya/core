@@ -15,8 +15,8 @@
  * @param array    $args array of optional parameters<br/>
  *        string   $args['regid'] registered module id
  *        string   $args['name'] module's name
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM, MODULE_NOT_EXIST
+ * @return boolean|void true on success, false on failure
+ * @throws EmptyParameterException
  */
 function modules_adminapi_initialise(Array $args=array())
 {
@@ -68,4 +68,3 @@ function modules_adminapi_initialise(Array $args=array())
     // Success
     return true;
 }
-?>

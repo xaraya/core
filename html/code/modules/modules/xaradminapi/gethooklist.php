@@ -14,7 +14,7 @@
  *
  * @param array    $args array of optional parameters<br/>
  *        string   $args['modName'] optional module we're looking for
- * @return array of known hooks
+ * @return array|void of known hooks
  */
 function modules_adminapi_gethooklist(Array $args=array())
 {
@@ -64,4 +64,3 @@ function modules_adminapi_gethooklist(Array $args=array())
     }
     return $hooklist;
 }
-?>

@@ -54,7 +54,6 @@ class ModuleProperty extends ObjectRefProperty
      * N.B. the code below is repetitive, but lets leave it clearly separated for 
      * each type of input for the moment
      * 
-     * @param void N/A
      */
     function getOptions()
     {
@@ -72,4 +71,3 @@ class ModuleProperty extends ObjectRefProperty
         return $options;
     }
 }
-?>

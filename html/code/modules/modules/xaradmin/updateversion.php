@@ -11,8 +11,8 @@
 /**
  * Update the module version in the database
  *
- * @param 'regId' the id number of the module to update
- * @return boolean true on success, false on failure
+ * @param int 'regId' the id number of the module to update
+ * @return bool|string|void true on success, false on failure
  *
  * @author Xaraya Development Team
  */
@@ -41,5 +41,3 @@ function modules_admin_updateversion()
 
     return true;
 }
-
-?>

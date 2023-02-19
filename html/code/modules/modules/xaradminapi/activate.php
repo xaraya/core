@@ -16,7 +16,7 @@
  *        integer  $args['regid'] module's registered id
  *        string   $args['name'] module's name
  * @return boolean
- * @throws BAD_PARAM
+ * @throws EmptyParameterException
  */
 function modules_adminapi_activate(Array $args=array())
 {
@@ -54,4 +54,3 @@ function modules_adminapi_activate(Array $args=array())
     xarEvents::notify('ModActivate', $modInfo['name']);
     return true;
 }
-?>
