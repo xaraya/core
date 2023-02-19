@@ -16,8 +16,7 @@
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
- * @param   no parameters
- * @return array data for the template display
+ * @return array|void data for the template display
 */
 function mail_admin_compose()
 {
@@ -40,4 +39,3 @@ function mail_admin_compose()
     // everything else happens in the template for now
     return $data;
 }
-?>

@@ -11,7 +11,7 @@
 /**
  * Modify the email templates for hooked notifications
  *
- * @return array data for the template display
+ * @return array|string|bool|void data for the template display
  */
 function mail_admin_template(Array $args=array())
 {
@@ -57,7 +57,6 @@ function mail_admin_template(Array $args=array())
             xarController::redirect(xarController::URL('mail', 'admin', 'template',
                                           array('mailtype' => $data['mailtype'])));
             return true;
-            break;
     }
 
     $data['settings'] = array();
@@ -98,4 +97,3 @@ function mail_admin_template(Array $args=array())
     }
     return $data;
 }
-?>

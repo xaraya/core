@@ -1149,6 +1149,7 @@ class PHPMailer extends xarObject
             $this->SetError($this->Lang("file_open") . $path);
             return "";
         }
+        // @fixme deprecated
         $magic_quotes = get_magic_quotes_runtime();
         set_magic_quotes_runtime(0);
         $file_buffer = fread($fd, filesize($path));
@@ -1597,5 +1598,3 @@ class PHPMailer extends xarObject
         $this->CustomHeader[] = explode(":", $custom_header, 2);
     }
 }
-
-?>

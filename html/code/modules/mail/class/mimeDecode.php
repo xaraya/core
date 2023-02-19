@@ -185,7 +185,7 @@ class Mail_mimeDecode extends PEAR
      *              decode_headers - Whether to decode headers
      *              input          - If called statically, this will be treated
      *                               as the input
-     * @return object Decoded results
+     * @return object|bool Decoded results
      * @access public
      */
     function decode($params = null)
@@ -229,7 +229,7 @@ class Mail_mimeDecode extends PEAR
      *
      * @param string Header section
      * @param string Body section
-     * @return object Results of decoding process
+     * @return object|bool Results of decoding process
      * @access private
      */
     function _decode($headers, $body, $default_ctype = 'text/plain')
@@ -396,7 +396,7 @@ class Mail_mimeDecode extends PEAR
      * blank line) and return them.
      *
      * @param string Input to split apart
-     * @return array Contains header and body section
+     * @return array|bool Contains header and body section
      * @access private
      */
     function _splitBodyHeader($input)
@@ -579,15 +579,12 @@ class Mail_mimeDecode extends PEAR
         switch (strtolower($encoding)) {
             case '7bit':
                 return $input;
-                break;
 
             case 'quoted-printable':
                 return $this->_quotedPrintableDecode($input);
-                break;
 
             case 'base64':
                 return base64_decode($input);
-                break;
 
             default:
                 return $input;
@@ -850,4 +847,3 @@ class Mail_mimeDecode extends PEAR
     }
 
 } // End of class
-?>

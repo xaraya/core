@@ -36,7 +36,7 @@ function mail_admin_view(Array $args=array())
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/771.html
  *
- * @return array data for the template display
+ * @return array|string data for the template display
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
  */
@@ -49,4 +49,3 @@ function OfferCreate($qDef = null)
     $data['qdef_choose'] = array(array('id' => 2,'name' => xarML('Use an existing object')));
     return xarTpl::module('mail','admin','queue-newdef',$data);
 }
-?>
