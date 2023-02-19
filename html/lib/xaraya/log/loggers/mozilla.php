@@ -86,7 +86,6 @@ public function mozConsole(msg, level)
         $trans = array("\n" => "\\\n","\r" => "\\\r","\r\n" => "\\\r\n");
         $logentry = strtr($logentry,$trans);
         $this->buffer .= "mozConsole('$logentry', $level);\n";
+        return true;
     }
  }
-
-?>

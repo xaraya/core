@@ -140,7 +140,7 @@ abstract class xarVariableObject extends xarObject
                 xarModVars::set(static::$module, static::$variable, serialize(static::$instance));
                 break;
             case 'user':
-                // @checkme where is $this->_role_id supposed to come from?
+                // @fixme where is $this->_role_id supposed to come from?
                 xarModUserVars::set(static::$module, static::$variable, serialize(static::$instance), $this->_role_id);
                 break;
             case 'session':

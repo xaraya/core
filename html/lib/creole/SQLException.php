@@ -38,7 +38,7 @@ class SQLException extends Exception {
      * Constructs a SQLException.
      * @param string $msg Error message
      * @param string $native Native DB error message.
-     * @param string $userinfo More info, e.g. the SQL statement or the connection string that caused the error.
+     * @param mixed $userinfo More info, e.g. the SQL statement or the connection string that caused the error.
      */
     public function __construct($msg, $native = null, $userinfo = null)
     {
@@ -54,7 +54,7 @@ class SQLException extends Exception {
     /**
      * Sets additional user / debug information for this error.
      *  
-     * @param array $info
+     * @param mixed $info
      * @return void
      */ 
     public function setUserInfo($info)

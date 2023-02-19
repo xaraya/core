@@ -66,7 +66,7 @@ class SQLStatementExtractor {
      * Extract SQL statements from array of lines.
      *
      * @param array $lines Lines of the read-in file.
-     * @return string
+     * @return array
      */
     protected static function extractStatements($lines) {
         

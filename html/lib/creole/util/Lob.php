@@ -60,7 +60,7 @@ abstract class Lob {
     
     /**
      * Construct a new Lob.
-     * @param sttring $data The data contents of the Lob.
+     * @param string $data The data contents of the Lob.
      * @see setContents()
      */
     public function __construct($data = null)
@@ -179,7 +179,7 @@ abstract class Lob {
             $this->setInputFile($file);
         }
         if (!$this->inFile) {
-            throw Exception('No file specified for read.');
+            throw new Exception('No file specified for read.');
         }        
         $data = @file_get_contents($this->inFile);
         if ($data === false) {

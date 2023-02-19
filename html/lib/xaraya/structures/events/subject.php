@@ -42,7 +42,6 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * and from notify method to this object in the constructor
      * @return void
      * @access public
-     * @throws none
     **/     
     public function __construct($args=null)
     {
@@ -53,10 +52,8 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * This function is required by the EMS system,
      * overloading is optional
      *
-     * @param none
      * @return void
      * @access public
-     * @throws none
     **/
     public function notify()
     {
@@ -81,7 +78,6 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * @param EventObserver $obs
      * @return void
      * @access public
-     * @throws none
     **/    
     final public function attach(ixarEventObserver $obs)
     {
@@ -96,7 +92,6 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * @param EventObserver $obs
      * @return void
      * @access public
-     * @throws none
     **/      
     final public function detach(ixarEventObserver $obs)
     {
@@ -109,10 +104,8 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * This function is required by the EMS system,
      * and cannot be overloaded
      *
-     * @param none
      * @return string, name of subject
      * @access public
-     * @throws none
     **/    
     final public function getSubject()
     {
