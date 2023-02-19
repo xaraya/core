@@ -16,7 +16,7 @@
  *
  * @author Marty Vance
  * @access public
- * @return array data for the template display
+ * @return array|string|void data for the template display
  * @todo some facelift
  */
 function themes_admin_themesinfo()
@@ -87,4 +87,3 @@ function themes_admin_themesinfo()
     
     return $data;
 }
-?>

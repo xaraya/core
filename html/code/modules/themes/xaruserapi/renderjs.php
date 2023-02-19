@@ -23,7 +23,6 @@
  *        string  $args[index] index to render, optional<br/>
  *        string  $args[type] type to render, optional
  * @return string templated output of js to render
- * @throws none
 **/    
 function themes_userapi_renderjs($args)
 {    
@@ -31,4 +30,3 @@ function themes_userapi_renderjs($args)
     $javascript = xarJS::getInstance();
     return $javascript->render($args);           
 }
-?>

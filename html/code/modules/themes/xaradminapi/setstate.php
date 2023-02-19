@@ -17,7 +17,7 @@
  *        integer  $args['regid'] the theme id<br/>
  *        string   $args['name'] themes's name
  *        integer  $args['state'] the state
- * @throws BAD_PARAM,NO_PERMISSION
+ * @throws EmptyParameterException
  */
 function themes_adminapi_setstate(Array $args=array())
 {
@@ -83,5 +83,3 @@ function themes_adminapi_setstate(Array $args=array())
     $dbconn->Execute($query,array($state,$regid));
     return true;
 }
-
-?>

@@ -16,6 +16,7 @@ sys::import('modules.dynamicdata.class.objects.master');
 
 function themes_admin_display_config(Array $args=array())
 {
+    $data = [];
     if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
 
@@ -28,5 +29,3 @@ function themes_admin_display_config(Array $args=array())
     $data['object']->getItem(array('itemid' => $data['itemid']));
     return $data;
 }
-
-?>

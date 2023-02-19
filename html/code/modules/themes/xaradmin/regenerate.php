@@ -20,7 +20,7 @@
  *
  * @author Marty Vance
  * @access public
- * @return boolean true on success, false on failure
+ * @return boolean|string|void true on success, false on failure
  */
 function themes_admin_regenerate()
 {
@@ -39,5 +39,3 @@ function themes_admin_regenerate()
     xarController::redirect(xarController::URL('themes', 'admin', 'view'));
     return true;
 }
-
-?>

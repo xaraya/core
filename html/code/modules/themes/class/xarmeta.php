@@ -38,9 +38,7 @@ class xarMeta extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @return Object current instance
- * @throws none
+ * @return object current instance
  *
 **/
     public static function getInstance()
@@ -59,15 +57,14 @@ class xarMeta extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params array  $args array of optional parameters<br/>
+ * @param array  $args array of optional parameters<br/>
  *         string $args[type] the type of meta tag, either name or http-equiv, required<br/>
  *         string $args[value] the value of the type, eg (author, rating, refresh, etc..), required<br/>
  *         string $args[content] the meta content, required<br/>
  *         string $args[lang] the ISO 639-1 language code for the content, optional<br/>
  *         string $args[dir] the text direction of the content (ltr|rtl), optional<br/>
  *         string $args[scheme] the scheme used to interpret the content, optional
- * @throws none
- * @return bool true on success
+ * @return bool|void true on success
 **/
     public function register(Array $args=array())
     {
@@ -125,8 +122,7 @@ class xarMeta extends xarObject
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
  * @param array   $args array of optional parameters (todo)
- * @return string templated output of meta tags to render
- * @throws none
+ * @return string|void templated output of meta tags to render
 **/
     public function render(Array $args=array())
     {
@@ -143,8 +139,7 @@ class xarMeta extends xarObject
  * @param  string $value the value of the http-equiv or name attribute, required
  * @param  array  $tag array of tag attributes, required
  * @param  bool   $append flag to optionally append content to an existing tag (if exists)
- * @throws none
- * @return bool true on success
+ * @return bool|void true on success
 **/
     public function queue($type, $value, $tag, $append=false)
     {
@@ -193,9 +188,7 @@ class xarMeta extends xarObject
  * Returns a list of meta tag types formatted for dropdown lists
  *
  * @author Chris Powis <crisp@xaraya.com>
- * @params none
  * @return array list of types
- * @throws none
 **/
     public static function getTypes()
     {
@@ -212,9 +205,7 @@ class xarMeta extends xarObject
  * Returns a list of text directions formatted for dropdown lists
  *
  * @author Chris Powis <crisp@xaraya.com>
- * @params none
  * @return array list of directions
- * @throws none
 **/
     public static function getDirs()
     {
@@ -233,7 +224,6 @@ class xarMeta extends xarObject
  * @author Chris Powis <crisp@xaraya.com>
  * @param  bool $short optionally return the short description as name default true
  * @return array list of language codes
- * @throws none
 **/
     public static function getLanguages($short=true)
     {

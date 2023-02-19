@@ -18,8 +18,8 @@
  * message and returns true.
  * @author Marty Vance
  * @access public 
- * @param id $ the theme id    to deactivate
- * @return boolean true on success, false on failure
+ * @param int id $ the theme id    to deactivate
+ * @return boolean|string|void true on success, false on failure
  */
 function themes_admin_deactivate()
 { 
@@ -58,4 +58,3 @@ function themes_admin_deactivate()
     xarController::redirect($return_url);
     return true;
 }
-?>

@@ -45,10 +45,6 @@
  *        integer  $args['numItems'] the length of the list<br/>
  *        string   $args['orderBy'] the order type of the list
  * @return array of theme information arrays
- * @throws DATABASE_ERROR, BAD_PARAM
- */
-/**
- * @param array    $args array of optional parameters<br/>
  */
 function themes_userapi_dropdownlist(Array $args=array())
 {
@@ -70,4 +66,3 @@ function themes_userapi_dropdownlist(Array $args=array())
     return $options;
 
 }
-?>

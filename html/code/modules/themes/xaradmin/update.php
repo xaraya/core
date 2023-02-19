@@ -13,10 +13,10 @@
  * Update a theme
  *
  * @author Marty Vance 
- * @param id $ the theme's registered id
- * @param newdisplayname $ the new display name
- * @param newdescription $ the new description
- * @return boolean true on success, false on failure
+ * @param int id $ the theme's registered id
+ * @param string newdisplayname $ the new display name
+ * @param string newdescription $ the new description
+ * @return boolean|string|void true on success, false on failure
  */
 function themes_admin_update()
 { 
@@ -34,6 +34,7 @@ function themes_admin_update()
     $themeInfo = xarTheme::getInfo($regId);
 
     $themename = $themeInfo['name'];
+    // @fixme this does not return all theme variables for a themename
     $themevars = xarTheme::getVarsByTheme($themename);
 
     $updatevars = array();
@@ -88,7 +89,8 @@ function themes_admin_update()
             $msg = xarML('Unable to update theme variable #(1)', $themevar['name']);
             throw new Exception($msg);
         } 
-    } 
+    }
+    // @fixme this does not delete all theme variables for a themename
     foreach($delvars as $d) {
         $deleted = xarThemeDelVar($themename, $d);
         if (!isset($deleted)) {
@@ -106,5 +108,3 @@ function themes_admin_update()
     } 
     return true;
 } 
-
-?>

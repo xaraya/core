@@ -20,7 +20,7 @@
  *        string   $args['regid'] theme's registered id
  *        string   $args['name'] theme's name
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @throws EmptyParameterException
  */
 function themes_adminapi_activate(Array $args=array())
 {
@@ -39,4 +39,3 @@ function themes_adminapi_activate(Array $args=array())
 
     return true;
 }
-?>

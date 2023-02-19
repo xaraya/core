@@ -14,7 +14,7 @@
  *
  * @author Marty Vance
  * @access public
- * @return array data for the template display
+ * @return array|void data for the template display
  * @todo change feed url once release module is moved
  */
 function themes_admin_release()
@@ -79,4 +79,3 @@ function themes_admin_release()
     $data['feedcontent'] = $feedcontent;
     return $data;
 }
-?>

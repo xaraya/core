@@ -17,6 +17,7 @@ function themes_admin_new_config()
 {
     if(!xarSecurity::check('AddThemes')) return;
 
+    $data = [];
     if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,     xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
@@ -45,5 +46,3 @@ function themes_admin_new_config()
     }
     return $data;
 }
-
-?>

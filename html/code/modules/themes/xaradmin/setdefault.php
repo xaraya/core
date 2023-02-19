@@ -16,8 +16,8 @@
  * Sets the module var for the default site theme.
  *
  * @author Marty Vance
- * @param id the theme id to set
- * @return boolean true on success, false on failure
+ * @param int id the theme id to set
+ * @return boolean|string|void true on success, false on failure
  */
 function themes_admin_setdefault()
 {
@@ -63,4 +63,3 @@ function themes_admin_setdefault()
     xarController::redirect(xarController::URL('themes', 'admin', 'view', array('state' => 0), NULL, $target));
     return true;
 }
-?>

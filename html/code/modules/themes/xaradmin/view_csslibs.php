@@ -19,7 +19,8 @@ function themes_admin_view_csslibs()
     // Security
      if(!xarSecurity::check('EditThemes')) return;
 
-    if (!xarVar::fetch('tab',   'str:1:100', $data['tab'], 'remote', xarVar::NOT_REQUIRED)) return;
+     $data = [];
+     if (!xarVar::fetch('tab',   'str:1:100', $data['tab'], 'remote', xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_csslibraries'));
 
@@ -266,5 +267,3 @@ function themes_admin_view_csslibs()
     }
     return $data;
 }
-
-?>

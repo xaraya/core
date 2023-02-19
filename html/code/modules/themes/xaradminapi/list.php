@@ -13,8 +13,7 @@
  * Obtain list of themes
  *
  * @author Marty Vance
- * @return array the known themes
- * @throws NO_PERMISSION
+ * @return array|void the known themes
  */
 function themes_adminapi_list()
 {
@@ -31,5 +30,3 @@ function themes_adminapi_list()
 
     return $themeList;
 }
-
-?>

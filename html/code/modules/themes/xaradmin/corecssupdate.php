@@ -16,7 +16,7 @@
 * Module admin function to update configuration Xaraya core CSS
 *
 * @author AndyV_at_Xaraya_dot_Com
- * @return boolean true on success, false on failure
+ * @return boolean|string|void true on success, false on failure
 */
 function themes_admin_corecssupdate()
 {
@@ -38,5 +38,3 @@ function themes_admin_corecssupdate()
     // Return
     return true;
 }
-
-?>

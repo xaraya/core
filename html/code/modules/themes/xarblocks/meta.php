@@ -43,7 +43,6 @@ class Themes_MetaBlock extends BasicBlock
      * Initialize the block
      *
      * This method is called by the BasicBlock class constructor
-     * @param void N/A
      */
     public function init() 
     {
@@ -207,7 +206,7 @@ class Themes_MetaBlock extends BasicBlock
      * Method to decode urls
      * 
      * @param string $url Url string to decode
-     * @return string[]|string Returns either decoded url as a string or parts array
+     * @return string[]|string|void Returns either decoded url as a string or parts array
      */
     public function _decodeURL($url)
     {
@@ -356,4 +355,3 @@ class Themes_MetaBlock extends BasicBlock
     }
 
 }
-?>

@@ -15,8 +15,8 @@
  * @author Marty Vance
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] registered theme id
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @return boolean|void true on success, false on failure
+ * @throws EmptyParameterException
  */
 function themes_adminapi_upgrade(Array $args=array())
 {
@@ -59,5 +59,3 @@ function themes_adminapi_upgrade(Array $args=array())
     // Success
     return true;
 }
-
-?>

@@ -16,8 +16,8 @@
  * the theme's information.
  *
  * @author Marty Vance 
- * @param id $ theme id
- * @return array data for the template display
+ * @param int id $ theme id
+ * @return array|string|void data for the template display
  */
 function themes_admin_modify()
 {
@@ -50,5 +50,3 @@ function themes_admin_modify()
 
     return $data;
 } 
-
-?>

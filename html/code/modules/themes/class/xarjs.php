@@ -80,8 +80,6 @@ class xarJS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access private prevents direct creation of this singleton, use getInstance()
- * @params none
- * @throws none
  * @return void
 **/
     private function __construct()
@@ -99,8 +97,6 @@ class xarJS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @throws none
  * @return void
 **/
     public function __wakeup()
@@ -128,8 +124,6 @@ class xarJS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @throws none
  * @return array public object properties to store values for
 **/
     public function __sleep()
@@ -190,9 +184,7 @@ class xarJS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @return Object current instance
- * @throws none
+ * @return object current instance
  *
 **/
     public static function getInstance()
@@ -223,9 +215,7 @@ class xarJS extends xarObject
  * @author Chris Powis <crisp@xaraya.com>
  * @author Marc Lutolf <mfl@netspan.ch>
  * @access public
- * @params none
  * @return void
- * @throws none
  *
 **/
     public function refresh()
@@ -400,7 +390,6 @@ class xarJS extends xarObject
  *         string  $args[module] name of module to look for file(s) in, optional, default current module<br/>
  *         string  $args[index] optional index in queue relative to other scripts<br/>
  * @return boolean true on success
- * @throws none
 **/
 /**
  * Catch the following xar:javascript declarations
@@ -707,7 +696,7 @@ class xarJS extends xarObject
  * @param string  $url url to file, or source code to include
  * @param array   $data tag data to queue
  * @param string  $index index to use, optional
- * @return boolean true on success
+ * @return boolean|void true on success
 **/
     public function queue($position, $type, $scope, $data, $tag, $index='')
     {
@@ -745,6 +734,7 @@ class xarJS extends xarObject
         // skip unknown position/type/scope (for now)
         if (!isset(self::$js[$position][$type][$scope])) return;
 
+        // @checkme serialize or json_encode data?
         if (empty($index))
             $index = md5($data);
 
@@ -764,7 +754,6 @@ class xarJS extends xarObject
  *        string  $args[type] type to get JS for, optional
  *        string  $args[scope] scope of data source, optional
  * @return mixed array of queued js, false if none found
- * @throws none
 **/
     public function getQueued($args)
     {
@@ -798,8 +787,7 @@ class xarJS extends xarObject
  *        string  $args[position] position to render, optional<br/>
  *        string  $args[index] index to render, optional<br/>
  *        string  $args[type] type to render, optional
- * @return string templated output of js to render
- * @throws none
+ * @return string|void templated output of js to render
 **/
     public function render($args)
     {
@@ -824,8 +812,7 @@ class xarJS extends xarObject
  * @param  string  $package the name of the theme, module or property to look in<br/>
  *                 Optional in module scope, default current module<br/>
  *                 Required in property scope
- * @return string path to file if found, empty otherwise
- * @throws none
+ * @return string|void path to file if found, empty otherwise
 **/
     public function findFile($scope, $file, $base, $package='')
     {
@@ -926,7 +913,6 @@ class xarJS extends xarObject
  * @param string $vers JS library version
  * @param string $src JS library source
  * @return array library information
- * @throws none
 **/
     private function getLibInfo($lib, $vers='', $src='')
     {
@@ -988,7 +974,6 @@ class xarJS extends xarObject
  * @param string $vers JS library version
  * @param string $src JS library source
  * @return array library information
- * @throws none
 **/
     private function getPluginInfo($lib, $plug, $vers='', $file='', $style='')
     {
