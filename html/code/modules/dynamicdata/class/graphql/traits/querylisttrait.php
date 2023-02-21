@@ -13,6 +13,15 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
+ * For documentation purposes only - available via xarGraphQLQueryListTrait
+ */
+interface xarGraphQLQueryListInterface
+{
+    public static function _xar_get_list_query($listname, $typename, $object): array;
+    public static function _xar_list_query_resolver($typename, $object = null): callable;
+}
+
+/**
  * Trait to handle default list query for dataobjects
  */
 trait xarGraphQLQueryListTrait
@@ -20,7 +29,7 @@ trait xarGraphQLQueryListTrait
     /**
      * Get list query field for this object type
      */
-    public static function _xar_get_list_query($listname, $typename, $object)
+    public static function _xar_get_list_query($listname, $typename, $object): array
     {
         return [
             'name' => $listname,
@@ -51,7 +60,7 @@ trait xarGraphQLQueryListTrait
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_list_query_resolver($typename, $object = null)
+    public static function _xar_list_query_resolver($typename, $object = null): callable
     {
         // when using type config decorator and object_query_resolver
         $object ??= xarGraphQLInflector::pluralize($typename);

@@ -192,7 +192,7 @@ class xarVariableCache extends xarObject
     public static function getCached($cacheKey)
     {
         if (empty(self::$cacheStorage)) {
-            return;
+            return null;
         }
         // get the value from cache
         $value = self::$cacheStorage->getCached($cacheKey);
@@ -255,7 +255,7 @@ class xarVariableCache extends xarObject
     public static function keyCached($cacheKey)
     {
         if (empty(self::$cacheStorage)) {
-            return;
+            return null;
         }
         // get the key info from cache
         return self::$cacheStorage->keyInfo($cacheKey);

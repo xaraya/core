@@ -13,6 +13,16 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
+ * For documentation purposes only - available via xarGraphQLMutationDeleteTrait
+ */
+interface xarGraphQLMutationDeleteInterface
+{
+    public static function _xar_get_delete_mutation($name, $typename, $object): array;
+    public static function _xar_delete_mutation_resolver($typename, $object = null): callable;
+}
+
+
+/**
  * Trait to handle default delete mutation for dataobjects
  */
 trait xarGraphQLMutationDeleteTrait
@@ -20,7 +30,7 @@ trait xarGraphQLMutationDeleteTrait
     /**
      * Get delete mutation field for this object type
      */
-    public static function _xar_get_delete_mutation($name, $typename, $object)
+    public static function _xar_get_delete_mutation($name, $typename, $object): array
     {
         return [
             'name' => $name,
@@ -41,7 +51,7 @@ trait xarGraphQLMutationDeleteTrait
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_delete_mutation_resolver($typename, $object = null)
+    public static function _xar_delete_mutation_resolver($typename, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations

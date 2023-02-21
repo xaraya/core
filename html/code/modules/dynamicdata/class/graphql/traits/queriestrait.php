@@ -13,6 +13,16 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
+ * For documentation purposes only - available via xarGraphQLQueriesTrait
+ */
+interface xarGraphQLQueriesInterface extends xarGraphQLQueryPageInterface, xarGraphQLQueryListInterface, xarGraphQLQueryItemInterface
+{
+    public static function _xar_get_query_fields(): array;
+    public static function _xar_get_query_field($name, $kind = ''): array;
+    public static function _xar_query_field_resolver($typename = 'query'): callable;
+}
+
+/**
  * Trait to handle default query fields for dataobjects (page, list, item)
  */
 trait xarGraphQLQueriesTrait
@@ -28,7 +38,7 @@ trait xarGraphQLQueriesTrait
     /**
      * Get the query fields listed in the $_xar_queries property of the actual class
      */
-    public static function _xar_get_query_fields()
+    public static function _xar_get_query_fields(): array
     {
         $fields = [];
         foreach (static::$_xar_queries as $kind => $name) {
@@ -43,7 +53,7 @@ trait xarGraphQLQueriesTrait
      * This method will be inherited by all specific object types, so it's important to use "static"
      * instead of "self" here - see https://www.php.net/manual/en/language.oop5.late-static-bindings.php
      */
-    public static function _xar_get_query_field($name, $kind = '')
+    public static function _xar_get_query_field($name, $kind = ''): array
     {
         if (empty($kind) || is_numeric($kind)) {
             $lname = strtolower($name);
@@ -71,7 +81,7 @@ trait xarGraphQLQueriesTrait
     /**
      * Add to the query resolver for the object type (page, list, item) - when using BuildSchema
      */
-    public static function _xar_query_field_resolver($typename = 'query')
+    public static function _xar_query_field_resolver($typename = 'query'): callable
     {
         // call either list_query_resolver or item_query_resolver here depending on $args['id']
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {

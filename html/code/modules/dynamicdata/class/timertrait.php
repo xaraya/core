@@ -41,6 +41,17 @@
  *
  * @author mikespub <mikespub@xaraya.com>
 **/
+
+/**
+ * For documentation purposes only - available via xarTimerTrait
+ */
+interface xarTimerTraitInterface
+{
+    public static function setTimer($label): void;
+    public static function getTimers(): array;
+    public static function wrapTimer($label, $callback, ...$args): mixed;
+}
+
 trait xarTimerTrait
 {
     public static $enableTimer = false;  // activate with self::$enableTimer = true
@@ -49,7 +60,7 @@ trait xarTimerTrait
     protected static $_timerMult = 1000.0;  // in milliseconds
     protected static $_timerPrec = 3;
 
-    public static function setTimer($label)
+    public static function setTimer($label): void
     {
         if (static::$enableTimer) {
             $now = microtime(true);
@@ -62,7 +73,7 @@ trait xarTimerTrait
         }
     }
 
-    public static function getTimers()
+    public static function getTimers(): array
     {
         static::$_timerPrev = !empty($_SERVER['REQUEST_TIME_FLOAT']) ? (float) $_SERVER['REQUEST_TIME_FLOAT'] : 0.0;
         static::setTimer('elapsed');
@@ -72,7 +83,7 @@ trait xarTimerTrait
     /**
      * Utility method to set timer on callback function
      */
-    public static function wrapTimer($label, $callback, ...$args)
+    public static function wrapTimer($label, $callback, ...$args): mixed
     {
         static::setTimer("start $label");
         $result = call_user_func($callback, ...$args);

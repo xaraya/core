@@ -11,6 +11,17 @@
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
+/**
+ * For documentation purposes only - available via xarGraphQLObjectTrait
+ */
+interface xarGraphQLObjectInterface
+{
+    public static function _xar_get_object_type($typename, $object = null): ObjectType;
+    public static function _xar_get_type_config($typename, $object = null): array;
+    public static function _xar_get_object_fields($object): array;
+    public static function _xar_object_field_resolver($typename, $object = null): ?callable;
+    public static function _xar_get_page_type($name, $type = null, $object = null): ObjectType;
+}
 
 /**
  * Trait to handle default object types for dataobjects
@@ -25,7 +36,7 @@ trait xarGraphQLObjectTrait
      * Use inline style to define Object Type here instead of inheritance
      * https://webonyx.github.io/graphql-php/type-system/object-types/
      */
-    public static function _xar_get_object_type($typename, $object = null)
+    public static function _xar_get_object_type($typename, $object = null): ObjectType
     {
         $object ??= xarGraphQLInflector::pluralize($typename);
         // https://webonyx.github.io/graphql-php/type-definitions/object-types/#recurring-and-circular-types
@@ -39,7 +50,7 @@ trait xarGraphQLObjectTrait
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_get_type_config($typename, $object = null)
+    public static function _xar_get_type_config($typename, $object = null): array
     {
         $object ??= xarGraphQLInflector::pluralize($typename);
         return [
@@ -56,7 +67,7 @@ trait xarGraphQLObjectTrait
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_object_fields($object)
+    public static function _xar_get_object_fields($object): array
     {
         $fields = [
             'id' => Type::nonNull(Type::id()),
@@ -70,14 +81,14 @@ trait xarGraphQLObjectTrait
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_object_field_resolver($typename, $object = null)
+    public static function _xar_object_field_resolver($typename, $object = null): ?callable
     {
     }
 
     /**
      * Make a generic Object Type with pagination for a dynamic object type by name = "Sample_Page" for samples etc.
      */
-    public static function _xar_get_page_type($name, $type = null, $object = null)
+    public static function _xar_get_page_type($name, $type = null, $object = null): ObjectType
     {
         // name=Property_Page, type=property, object=properties
         [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);

@@ -48,13 +48,30 @@
  *
  * @author mikespub <mikespub@xaraya.com>
 **/
+/**
+ * For documentation purposes only - available via xarCacheTrait
+ */
+interface xarCacheTraitInterface
+{
+    public static function setCacheScope($cacheScope, $allow = 0): void;
+    public static function getCacheKey($id = null): mixed;
+    public static function setCacheKey($cacheKey): void;
+    public static function hasCacheKey(): bool;
+    public static function isCached($cacheKey): bool;
+    public static function getCached($cacheKey): mixed;
+    public static function setCached($cacheKey, $value, $expire = null): void;
+    public static function delCached($cacheKey): void;
+    public static function keyCached($cacheKey): mixed;
+    public static function getCachedValue($id, $callback, ...$args): mixed;
+}
+
 trait xarCacheTrait
 {
     public static $enableCache = false;  // activate with self::$enableCache = true
     public static $_cacheScope = 'CacheTrait';
     public static $_cacheKey = null;
 
-    public static function setCacheScope($cacheScope, $allow = 0)
+    public static function setCacheScope($cacheScope, $allow = 0): void
     {
         if (!static::$enableCache) {
             return;
@@ -68,10 +85,10 @@ trait xarCacheTrait
         }
     }
 
-    public static function getCacheKey($id = null)
+    public static function getCacheKey($id = null): mixed
     {
         if (!static::$enableCache) {
-            return;
+            return null;
         }
         if (!empty($id)) {
             static::$_cacheKey = xarCache::getVariableKey(static::$_cacheScope, $id);
@@ -79,7 +96,7 @@ trait xarCacheTrait
         return static::$_cacheKey;
     }
 
-    public static function setCacheKey($cacheKey)
+    public static function setCacheKey($cacheKey): void
     {
         if (!static::$enableCache) {
             return;
@@ -87,7 +104,7 @@ trait xarCacheTrait
         static::$_cacheKey = $cacheKey;
     }
 
-    public static function hasCacheKey()
+    public static function hasCacheKey(): bool
     {
         if (!static::$enableCache || empty(static::$_cacheKey)) {
             return false;
@@ -95,7 +112,7 @@ trait xarCacheTrait
         return true;
     }
 
-    public static function isCached($cacheKey)
+    public static function isCached($cacheKey): bool
     {
         if (!static::$enableCache || empty($cacheKey)) {
             return false;
@@ -103,15 +120,15 @@ trait xarCacheTrait
         return xarVariableCache::isCached($cacheKey);
     }
 
-    public static function getCached($cacheKey)
+    public static function getCached($cacheKey): mixed
     {
         if (!static::$enableCache || empty($cacheKey)) {
-            return;
+            return null;
         }
         return xarVariableCache::getCached($cacheKey);
     }
 
-    public static function setCached($cacheKey, $value, $expire = null)
+    public static function setCached($cacheKey, $value, $expire = null): void
     {
         if (!static::$enableCache || empty($cacheKey)) {
             return;
@@ -119,7 +136,7 @@ trait xarCacheTrait
         xarVariableCache::setCached($cacheKey, $value, $expire);
     }
 
-    public static function delCached($cacheKey)
+    public static function delCached($cacheKey): void
     {
         if (!static::$enableCache || empty($cacheKey)) {
             return;
@@ -127,10 +144,10 @@ trait xarCacheTrait
         xarVariableCache::delCached($cacheKey);
     }
 
-    public static function keyCached($cacheKey)
+    public static function keyCached($cacheKey): mixed
     {
         if (!static::$enableCache || empty($cacheKey)) {
-            return;
+            return null;
         }
         return xarVariableCache::keyCached($cacheKey);
     }
@@ -138,7 +155,7 @@ trait xarCacheTrait
     /**
      * All-in-one utility method to get cached value if available, or set it based on callback function
      */
-    public static function getCachedValue($id, $callback, ...$args)
+    public static function getCachedValue($id, $callback, ...$args): mixed
     {
         $cacheKey = static::getCacheKey($id);
         if (!empty($cacheKey) && static::isCached($cacheKey)) {
