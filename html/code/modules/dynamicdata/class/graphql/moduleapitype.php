@@ -39,7 +39,7 @@ use GraphQL\Type\Definition\ResolveInfo;
  * Or use specific input type when the arguments are defined as ['field' => 'type', ...] below
  *
  */
-class xarGraphQLModuleApiType extends ObjectType
+class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInterface
 {
     // @todo analyze response and mediatype + create result type per function if needed
     /**
@@ -168,7 +168,7 @@ class xarGraphQLModuleApiType extends ObjectType
         return $properties;
     }
 
-    public static function _xar_get_query_fields()
+    public static function _xar_get_query_fields(): array
     {
         static::_xar_load_config();
         $fields = [];
@@ -178,7 +178,7 @@ class xarGraphQLModuleApiType extends ObjectType
         return $fields;
     }
 
-    public static function _xar_get_query_field($name, $func = [])
+    public static function _xar_get_query_field($name, $func = []): array
     {
         if (empty($func)) {
             throw new Exception("Unknown module_api query '$name'");
@@ -285,7 +285,7 @@ class xarGraphQLModuleApiType extends ObjectType
         return $resolver;
     }
 
-    public static function _xar_get_mutation_fields()
+    public static function _xar_get_mutation_fields(): array
     {
         static::_xar_load_config();
         $fields = [];
@@ -295,7 +295,7 @@ class xarGraphQLModuleApiType extends ObjectType
         return $fields;
     }
 
-    public static function _xar_get_mutation_field($name, $func = [])
+    public static function _xar_get_mutation_field($name, $func = []): array
     {
         if (empty($func)) {
             throw new Exception("Unknown module_api mutation '$name'");
@@ -336,7 +336,7 @@ class xarGraphQLModuleApiType extends ObjectType
     /**
      * Make a generic Input Object Type for create/update mutations - @checkme these are created for each function
      */
-    public static function _xar_get_input_type($name, $object = null)
+    public static function _xar_get_input_type($name, $object = null): InputObjectType
     {
         $input = ucwords($name . '_input', '_');
         $func = static::$_xar_mutations[$name];
@@ -360,7 +360,7 @@ class xarGraphQLModuleApiType extends ObjectType
     /**
      * This method *may* be overridden for a specific module api function, but it doesn't have to be
      */
-    public static function _xar_get_input_fields($name, &$newType = null)
+    public static function _xar_get_input_fields($name, &$newType = null): array
     {
         $func = static::$_xar_mutations[$name];
         return static::_xar_parse_input_args($name, $func);
@@ -409,8 +409,9 @@ class xarGraphQLModuleApiType extends ObjectType
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_input_value_parser($name, $object)
+    public static function _xar_input_value_parser($name, $object): ?callable
     {
+        return null;
     }
 
     /**

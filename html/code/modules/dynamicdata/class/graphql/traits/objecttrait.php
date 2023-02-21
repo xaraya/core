@@ -11,6 +11,7 @@
 
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
+
 /**
  * For documentation purposes only - available via xarGraphQLObjectTrait
  */

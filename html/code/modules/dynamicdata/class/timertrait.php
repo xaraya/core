@@ -55,7 +55,7 @@ interface xarTimerTraitInterface
 trait xarTimerTrait
 {
     public static $enableTimer = false;  // activate with self::$enableTimer = true
-    protected static $_timerKeep = array();
+    protected static $_timerKeep = [];
     protected static $_timerPrev = 0.0;
     protected static $_timerMult = 1000.0;  // in milliseconds
     protected static $_timerPrec = 3;
@@ -66,9 +66,9 @@ trait xarTimerTrait
             $now = microtime(true);
             if (empty(static::$_timerPrev)) {
                 static::$_timerPrev = !empty($_SERVER['REQUEST_TIME_FLOAT']) ? (float) $_SERVER['REQUEST_TIME_FLOAT'] : 0.0;
-                static::$_timerKeep[] = array('request' => static::$_timerPrev);
+                static::$_timerKeep[] = ['request' => static::$_timerPrev];
             }
-            static::$_timerKeep[] = array($label => round(($now - static::$_timerPrev) * self::$_timerMult, self::$_timerPrec));
+            static::$_timerKeep[] = [$label => round(($now - static::$_timerPrev) * self::$_timerMult, self::$_timerPrec)];
             static::$_timerPrev = $now;
         }
     }

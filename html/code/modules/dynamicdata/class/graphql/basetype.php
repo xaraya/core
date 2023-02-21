@@ -15,7 +15,7 @@ use GraphQL\Type\Definition\ObjectType;
 /**
  * GraphQL ObjectType and query fields for "base" dynamicdata object type
  */
-class xarGraphQLBaseType extends ObjectType
+class xarGraphQLBaseType extends ObjectType implements xarGraphQLQueriesInterface, xarGraphQLMutationsInterface, xarGraphQLObjectInterface, xarGraphQLDeferredInterface, xarGraphQLInputInterface
 {
     use xarGraphQLQueriesTrait;
     use xarGraphQLMutationsTrait;
@@ -46,7 +46,7 @@ class xarGraphQLBaseType extends ObjectType
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_get_type_config($typename, $object = null)
+    public static function _xar_get_type_config($typename, $object = null): array
     {
         $object ??= xarGraphQLInflector::pluralize($typename);
         return [
@@ -62,7 +62,7 @@ class xarGraphQLBaseType extends ObjectType
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_object_fields($object)
+    public static function _xar_get_object_fields($object): array
     {
         $fields = [
             'id' => Type::nonNull(Type::id()),
@@ -76,14 +76,15 @@ class xarGraphQLBaseType extends ObjectType
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_object_field_resolver($typename, $object = null)
+    public static function _xar_object_field_resolver($typename, $object = null): ?callable
     {
+        return null;
     }
 
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_fields($object, &$newType)
+    public static function _xar_get_input_fields($object, &$newType): array
     {
         // return static::_xar_get_object_fields($object);
         $fields = [

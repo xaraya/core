@@ -29,7 +29,7 @@ class xarGraphQLDummyType extends ObjectType
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_get_type_config($typename, $object = null)
+    public static function _xar_get_type_config($typename, $object = null): array
     {
         return [
             'name' => 'Dummy',
@@ -37,7 +37,7 @@ class xarGraphQLDummyType extends ObjectType
         ];
     }
 
-    public static function _xar_get_query_fields()
+    public static function _xar_get_query_fields(): array
     {
         return [
             'hello' => [
@@ -120,7 +120,7 @@ class xarGraphQLDummyType extends ObjectType
         ];
     }
 
-    public static function _xar_get_query_field($name, $kind = 'dummy')
+    public static function _xar_get_query_field($name, $kind = 'dummy'): array
     {
         $fields = static::_xar_get_query_fields();
         if (!empty($fields[$name])) {

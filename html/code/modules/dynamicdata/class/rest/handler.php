@@ -19,7 +19,7 @@ use Xaraya\Bridge\Requests\CommonRequestTrait;
 /**
  * Class to handle DataObject REST API calls
  */
-class DataObjectRESTHandler extends xarObject implements CommonRequestInterface
+class DataObjectRESTHandler extends xarObject implements CommonRequestInterface, xarCacheTraitInterface, xarTimerTraitInterface
 {
     use CommonRequestTrait;
     use xarTimerTrait;  // activate with self::$enableTimer = true
