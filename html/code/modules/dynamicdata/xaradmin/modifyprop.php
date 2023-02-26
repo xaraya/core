@@ -34,15 +34,13 @@ function dynamicdata_admin_modifyprop(array $args = [])
     if(!xarVar::fetch('details',  'isset', $details,  NULL, xarVar::DONT_SET)) {return;}
     if(!xarVar::fetch('layout',   'str:1', $layout,   'default', xarVar::NOT_REQUIRED)) {return;}
 
-    if (!isset($args['itemid']) || (is_null($args['itemid']))) {
-        $args = DataObjectDescriptor::getObjectID(
-            array(
-                'objectid' => $itemid,
-                'moduleid' => $module_id,
-                'itemtype' => $itemtype,
-            )
-        );
-    }
+    $args = DataObjectDescriptor::getObjectID(
+        array(
+            'objectid' => $itemid,
+            'moduleid' => $module_id,
+            'itemtype' => $itemtype,
+        )
+    );
     $objectinfo = DataObjectMaster::getObjectInfo($args);
     $data['objectinfo'] =& $objectinfo;
     $object = DataObjectMaster::getObject($args);
