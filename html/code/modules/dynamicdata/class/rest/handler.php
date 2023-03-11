@@ -90,7 +90,6 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectList', 'args' => $args, 'error' => 'Unknown operation'];
         }
-        $args = $args['query'] ?? [];
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
@@ -100,6 +99,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (self::$enableCache && !self::hasCaching($object, $method)) {
             self::$enableCache = false;
         }
+        $args = $args['query'] ?? [];
         // @checkme always count here
         $args['count'] = true;
         if (empty($args['limit']) || !is_numeric($args['limit'])) {
@@ -163,7 +163,6 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (empty($itemid)) {
             throw new Exception('Unknown id ' . $object);
         }
-        $args = $args['query'] ?? [];
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
@@ -173,6 +172,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (self::$enableCache && !self::hasCaching($object, $method)) {
             self::$enableCache = false;
         }
+        $args = $args['query'] ?? [];
         $fieldlist = self::getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
         $objectitem = DataObjectMaster::getObject($params);
@@ -909,6 +909,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
 
     /**
      * Register REST API routes (in FastRoute format)
+     * @param FastRoute\RouteCollector $r
+     * @return void
      */
     public static function registerRoutes($r)
     {
@@ -929,6 +931,19 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $r->post('/modules/{module}/{path}[/{more:.+}]', [static::class, 'postModuleCall']);
         $r->put('/modules/{module}/{path}[/{more:.+}]', [static::class, 'putModuleCall']);
         $r->delete('/modules/{module}/{path}[/{more:.+}]', [static::class, 'deleteModuleCall']);
+    }
+
+    /**
+     * Summary of addRouteGroup
+     * @param FastRoute\RouteCollector $r
+     * @param string $prefix
+     * @param callable $registerCallback
+     * @return void
+     */
+    public static function addRouteGroup($r, $prefix, $registerCallback) {
+        $r->addGroup($prefix, function ($r) use ($registerCallback) {
+            $registerCallback($r);
+        });
     }
 
     // different processing for REST API - see rst.php
@@ -1042,9 +1057,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         } catch (ForbiddenOperationException $e) {
             self::setTimer('forbidden');
             throw new ForbiddenOperationException();
-        } catch (Throwable $e) {
-            self::setTimer('exception');
-            return $e->getMessage();
+        //} catch (Throwable $e) {
+        //    self::setTimer('exception');
+        //    $result = "Exception: " . $e->getMessage();
+        //    if ($e->getPrevious() !== null) {
+        //        $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
+        //    }
+        //    $result .= "\nTrace:\n" . $e->getTraceAsString();
+        //    return $result;
         }
         // if (is_array($result)) {
         //     $result['x-debug'] = ['handler' => $handler, 'params' => $params];
@@ -1068,10 +1088,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (is_array($result) && self::$enableTimer) {
             $result['x-times'] = self::getTimers();
         }
+        if (!headers_sent() && $status !== 200) {
+            http_response_code($status);
+        }
         if (!empty($_SERVER['HTTP_ORIGIN'])) {
             header('Access-Control-Allow-Origin: *');
         }
-        //http_response_code($status);
         if (is_string($result)) {
             if (!empty(self::$mediaType)) {
                 header('Content-Type: ' . self::$mediaType . '; charset=utf-8');
