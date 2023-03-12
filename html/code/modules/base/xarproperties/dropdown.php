@@ -17,7 +17,7 @@ sys::import('modules.dynamicdata.class.properties.base');
  
 /**
  * This property displays a generic dropdown
- * Its extensions are widely used to display drodpwons of specific data
+ * Its extensions are widely used to display dropdowns of specific data
  */
 class SelectProperty extends DataProperty
 {
@@ -408,7 +408,7 @@ class SelectProperty extends DataProperty
     }
     
 /**
- * Helper function to get the data for a dropdwon display
+ * Helper function to get the data for a dropdown display
  * 
  * @param  array data An array of input parameters
  * @return array data An array of output parameters to be sent to the template
