@@ -167,7 +167,7 @@ class ObjectRefProperty extends SelectProperty
     }
 
     /**
-     * Show the current configuration rule for this property type
+     * Show the current configuration rules for this property type
      *
      * @param  array data An array of input parameters
      * @return string containing the HTML (or other) text to output on a web page
