@@ -452,6 +452,9 @@ class SubItemsProperty extends DataProperty
     private function getLinks()
     {
         // Get the link properties of both the parent and the subobject for use in creates and deletes
+        // Bail if we don't have links
+        if (!isset($this->objectref->objects)) die(xarML('No datasource for sublinks of #(1) defined', $this->objectref->name));
+
         $objectarray = unserialize($this->objectref->objects);
         foreach ($objectarray as $value){
             $valueparts = explode('.',$value[1]);
