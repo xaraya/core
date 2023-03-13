@@ -52,7 +52,9 @@ class DataObjectMaster extends xarObject
     public $datastore   = '';             // the datastore for the DD object
     public $datasources = array();        // the db source tables of this object
     public $dataquery;                    // the initialization query of this obect
-    public $isalias     = 0;
+    public $sources     = 'a:0:{}';		  // the source tables of this object (relational datastore)
+    public $relations   = 'a:0:{}';		  // the table relations of this object (relational datastore)
+    public $objects     = 'a:0:{}';		  // the parent child object relations of this object (relational datastore)
 
     public $class       = 'DataObject'; // the class name of this DD object
     public $filepath    = 'auto';       // the path to the class of this DD object (can be empty or 'auto' for DataObject)
