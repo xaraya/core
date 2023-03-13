@@ -213,62 +213,118 @@ function categories_userapi_getcat($args)
             $result = $dbconn->Execute($SQLquery, $bindvars);
         }
     }
-    if (!$result) return;
 
-    if ($result->EOF) return array();
+	$categories = array();
+		
+	// TODO: Ideally this all goes into a Query or similar so we avoid this if statement
+	if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
+		$rows = $result->getall();
+		$index = -1;
+		foreach ($rows as $row) {
+			list($indentation,
+					$cid,
+					$name,
+					$description,
+					$image,
+					$template,
+					$child_object,
+					$parent,
+					$left,
+					$right,
+					$state
+				   ) = $row;
+			if (!xarSecurity::check('ViewCategories',0,'Category',"$name:$cid")) {
+				 continue;
+			}
 
-    $categories = array();
+			if ($indexby == 'cid') {
+				$index = $cid;
+			} else {
+				$index++;
+			}
 
-    $index = -1;
-    while (!$result->EOF) {
-        list($indentation,
-                $cid,
-                $name,
-                $description,
-                $image,
-                $template,
-                $child_object,
-                $parent,
-                $left,
-                $right,
-                $state
-               ) = $result->fields;
-        $result->MoveNext();
+			// are we looking to have the output in the "standard" form?
+			if (!empty($dropdown)) {
+				$categories[$index+1] = Array(
+					'id'         => $cid,
+					'name'        => $name,
+				);
+			} else {
+				$categories[$index] = Array(
+					'indentation' => $indentation,
+					'cid'         => $cid,
+					'id'          => $cid,
+					'name'        => $name,
+					'description' => $description,
+					'image'       => $image,
+					'template'    => $template,
+					'child_object'=> $child_object,
+					'parent'      => $parent,
+					'left'        => $left,
+					'right'       => $right,
+					'state'       => $state
+				);
+			}
+		}
 
-        if (!xarSecurity::check('ViewCategories',0,'Category',"$name:$cid")) {
-             continue;
-        }
+	} else {
+		// Hello, Creole
+	    if (!$result) return;
+		if ($result->EOF) return array();
 
-        if ($indexby == 'cid') {
-            $index = $cid;
-        } else {
-            $index++;
-        }
+		$categories = array();
 
-        // are we looking to have the output in the "standard" form?
-        if (!empty($dropdown)) {
-            $categories[$index+1] = Array(
-                'id'         => $cid,
-                'name'        => $name,
-            );
-        } else {
-            $categories[$index] = Array(
-                'indentation' => $indentation,
-                'cid'         => $cid,
-                'id'          => $cid,
-                'name'        => $name,
-                'description' => $description,
-                'image'       => $image,
-                'template'    => $template,
-                'child_object'=> $child_object,
-                'parent'      => $parent,
-                'left'        => $left,
-                'right'       => $right,
-                'state'       => $state
-            );
-        }
-    }
-    $result->Close();
+		$index = -1;
+		while (!$result->EOF) {
+			list($indentation,
+					$cid,
+					$name,
+					$description,
+					$image,
+					$template,
+					$child_object,
+					$parent,
+					$left,
+					$right,
+					$state
+				   ) = $result->fields;
+			$result->MoveNext();
+
+			if (!xarSecurity::check('ViewCategories',0,'Category',"$name:$cid")) {
+				 continue;
+			}
+
+			if ($indexby == 'cid') {
+				$index = $cid;
+			} else {
+				$index++;
+			}
+
+			// are we looking to have the output in the "standard" form?
+			if (!empty($dropdown)) {
+				$categories[$index+1] = Array(
+					'id'         => $cid,
+					'name'        => $name,
+				);
+			} else {
+				$categories[$index] = Array(
+					'indentation' => $indentation,
+					'cid'         => $cid,
+					'id'          => $cid,
+					'name'        => $name,
+					'description' => $description,
+					'image'       => $image,
+					'template'    => $template,
+					'child_object'=> $child_object,
+					'parent'      => $parent,
+					'left'        => $left,
+					'right'       => $right,
+					'state'       => $state
+				);
+			}
+		}
+		$result->Close();
+	}
 
     if (!empty($dropdown)) {
         $categories[0] = array('id' => 0, 'name' => '');
