@@ -44,4 +44,3 @@ function main_upgrade_212()
     }
     return $data;
 }
-?>

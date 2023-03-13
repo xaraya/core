@@ -23,7 +23,6 @@ function base_user_errors($args)
             if (!xarVar::fetch('message',  'str', $msg,      '',   xarVar::NOT_REQUIRED)) return;
             if (!xarVar::fetch('template', 'str', $template, NULL, xarVar::NOT_REQUIRED)) return;
             return xarResponse::Forbidden($msg, 'base', 'message', 'forbidden', $template);
-            break;
         case 'exception':
         case 'systemerror':
         case 'systeminfo':
@@ -33,8 +32,5 @@ function base_user_errors($args)
             if (!xarVar::fetch('message',  'str', $msg,      '',   xarVar::NOT_REQUIRED)) return;
             if (!xarVar::fetch('template', 'str', $template, NULL, xarVar::NOT_REQUIRED)) return;
             return xarResponse::NotFound($msg, 'base', 'message', 'notfound', $template);
-            break;
     }
 }
-
-?>

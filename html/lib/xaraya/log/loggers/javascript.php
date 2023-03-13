@@ -102,6 +102,7 @@ class xarLogger_javascript extends xarLogger
                 addslashes(str_replace($strings, $replace, $message) ). "<br/><br/>');\n".
                 "    debugWindow.scrollBy(0,100000);\n".
                 "}\n";
+        return true;
     }
     
     /**
@@ -115,7 +116,8 @@ class xarLogger_javascript extends xarLogger
             array('position' => 'head', 'type' => 'code', 'code' => $this->buffer));
         $this->buffer = '';
         return true;
-        
+
+        /**
 		$args['position'] = 'head';
 		$args['type']     = 'code';
 		$args['index']    = null;
@@ -124,10 +126,8 @@ class xarLogger_javascript extends xarLogger
 		$javascript = xarJS::getInstance();
 		$javascript->register($args);     
         return true;
-		  
+         */
         
     }
 
 }
-
-?>

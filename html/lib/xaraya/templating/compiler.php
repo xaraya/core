@@ -214,4 +214,3 @@ class XarayaCompiler extends xarBLCompiler
         return $files;
     }
 }
-

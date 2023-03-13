@@ -35,5 +35,3 @@ function roles_user_changelanguage()
     xarController::redirect($return_url);
     return true;
 }
-
-?>

@@ -70,11 +70,10 @@ class OCI8IdGenerator implements IdGenerator {
     
     function getLastId($tableName)
     {
-        $rs = $this->conn-executeQuery('select ' . $name . '.curval from dual', ResultSet::FETCHMOD_NUM);
+        $rs = $this->conn->executeQuery('select ' . $tableName . '.curval from dual', ResultSet::FETCHMODE_NUM);
         $rs->next();
         return $rs->getInt(1);
     }
     // END XARAYA MODIFICATION
     
 }
-

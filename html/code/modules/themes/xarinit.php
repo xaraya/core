@@ -12,7 +12,6 @@
  * Initialise the themes module
  * @author Marty Vance
  * @return boolean
- * @throws DATABASE_ERROR
  */
 function themes_init()
 {
@@ -71,7 +70,7 @@ function themes_init()
 /**
  * Upgrade this module from an old version
  *
- * @param oldVersion
+ * @param string oldversion
  * @return boolean true on success, false on failure
  */
 function themes_upgrade($oldversion)
@@ -93,4 +92,3 @@ function themes_delete()
     // this module cannot be removed
     return false;
 }
-?>

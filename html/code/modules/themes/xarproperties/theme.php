@@ -53,8 +53,7 @@ class ThemeProperty extends ObjectRefProperty
 	/**
      * Retrieve the list of options on demand
      * 
-     * @param void N/A
-	 * @return string Returns list of options
+	 * @return array Returns list of options
      */
     function getOptions()
     {
@@ -72,4 +71,3 @@ class ThemeProperty extends ObjectRefProperty
         return $options;
     }
 }
-?>

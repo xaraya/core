@@ -999,7 +999,7 @@ class SMTP extends xarObject
      * SMTP CODE FAILURE: 550,551,553
      * SMTP CODE ERROR  : 500,501,502,421
      * @access public
-     * @return integer
+     * @return mixed
      */
     function Verify($name)
     {
@@ -1069,6 +1069,3 @@ class SMTP extends xarObject
     }
 
 }
-
-
- ?>

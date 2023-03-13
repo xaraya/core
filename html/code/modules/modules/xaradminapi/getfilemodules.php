@@ -23,7 +23,7 @@
  *
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] - optional regid to retrieve
- * @return array modules from the file system
+ * @return array|bool modules from the file system
  */
 function modules_adminapi_getfilemodules(Array $args=array())
 {
@@ -161,4 +161,3 @@ function modules_adminapi_getfilemodules(Array $args=array())
 
     return $fileModules;
 }
-?>

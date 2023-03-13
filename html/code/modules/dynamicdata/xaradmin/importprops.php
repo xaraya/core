@@ -46,5 +46,3 @@ function dynamicdata_admin_importprops()
                                   array('module_id' => $module_id,
                                         'itemtype' => $itemtype)));
 }
-
-?>

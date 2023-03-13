@@ -21,5 +21,3 @@ class BaseEventSubject extends EventSubject implements ixarEventSubject
 {
     protected $subject = 'Event';   // name of this event subject
 }
-
-?>

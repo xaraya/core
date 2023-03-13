@@ -608,8 +608,7 @@ class xarEvents extends xarObject implements ixarEvents
     /**
      * Load all subjects from db for current subject type
      * We only ever do this once per page request, results are cached
-     * @param none
-     * @return array containing subjects, indexed by event name
+     * @return array|void containing subjects, indexed by event name
      * used internally by the event system, must not be overloaded 
     **/
     final public static function getSubjects()
@@ -670,7 +669,7 @@ class xarEvents extends xarObject implements ixarEvents
      * Get all observers of an event subject from db
      *
      * @param object $subject ixarEventSubject
-     * @return array containing subject observers
+     * @return array|void containing subject observers
     **/
     public static function getObservers(ixarEventSubject $subject)
     {

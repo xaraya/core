@@ -69,4 +69,3 @@ function base_userapi_timesince(Array $args=array())
     }
     return $print;
 }
-?>

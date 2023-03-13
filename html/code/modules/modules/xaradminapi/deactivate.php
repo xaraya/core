@@ -18,8 +18,8 @@
  * @param array    $args array of optional parameters<br/>
  *        string   $args['regid'] module's registered id
  *        string   $args['name'] module's name
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @return boolean|void true on success, false on failure
+ * @throws EmptyParameterException
  */
 function modules_adminapi_deactivate(Array $args=array())
 {
@@ -50,16 +50,8 @@ function modules_adminapi_deactivate(Array $args=array())
                         array('regid' => $regid,
                               'state' => xarMod::STATE_INACTIVE));
 
-
-
-    if (function_exists('xarOutputFlushCached')) {
-        xarOutputFlushCached('base');
-        xarOutputFlushCached('modules');
-        xarOutputFlushCached('base-block');
-    }
     // notify any observers that this module was deactivated 
     // NOTE: the ModDeactivate event observer notifies ModuleDeactivate hooks 
     xarEvents::notify('ModDeactivate', $modInfo['name']);
     return true;
 }
-?>

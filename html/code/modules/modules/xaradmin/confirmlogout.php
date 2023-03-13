@@ -16,8 +16,7 @@
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
- * @param   no parameters
- * @return  array data for the template display
+ * @return  array|void data for the template display
 */
 function modules_admin_confirmlogout()
 {
@@ -27,4 +26,3 @@ function modules_admin_confirmlogout()
     // Template does it all
     return array();    
 }
-?>

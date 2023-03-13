@@ -18,6 +18,3 @@ function dynamicdata_userapi_get(Array $args=array())
 {
     return xarMod::apiFunc('dynamicdata','user','getfield',$args);
 }
-
-
-?>

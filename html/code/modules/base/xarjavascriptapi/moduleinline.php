@@ -20,7 +20,7 @@
  * @param $args['code'] the JavaScript code fragment
  * @param $args['index'] optional index in the JS array; unique identifier
  * 
- * @return boolean Returns true on success, false on failure
+ * @return boolean|void Returns true on success, false on failure
  */
 function base_javascriptapi_moduleinline(Array $args=array())
 {
@@ -41,7 +41,6 @@ function base_javascriptapi_moduleinline(Array $args=array())
         $position = 'head';
     }
 
+    // @fixme replace with right javascript code or drop function
     return xarTplAddJavaScript($position, 'code', $code, $index);
 }
-
-?>

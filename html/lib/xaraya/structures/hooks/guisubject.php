@@ -29,8 +29,6 @@ abstract class GuiHookSubject extends HookSubject
      * Notify hooked observers
      * @todo: it shouldn't be necessary to overload this method, make it final?
      *
-     * @params none
-     * @throws none
      * @return array of cumulative responses from observers
     **/    
     public function notify()
@@ -48,4 +46,3 @@ abstract class GuiHookSubject extends HookSubject
         return $this->hookoutput;
     }
 }
-

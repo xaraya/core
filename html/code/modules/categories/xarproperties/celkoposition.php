@@ -83,6 +83,8 @@ class CelkoPositionProperty extends DataProperty
 
     public $position_options = array();
     public $atomic_value     = array();    // The atomic values of this property are left, right and parent
+    public $left;
+    public $right;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -103,7 +105,7 @@ class CelkoPositionProperty extends DataProperty
 	 * 
 	 * @param  string name The name of the dropdown
 	 * @param  string value The value of the dropdown
-	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	 * @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
 	 */
     public function checkInput($name = '', $value = null)
     {
@@ -269,7 +271,7 @@ class CelkoPositionProperty extends DataProperty
                     // This item is on he same level as the reference item; the parent is the same as that of the reference item
                     $parent_id = $parentItem[$this->initialization_celkoparent_id];
                 }
-                $itemid = $this->updateposition($itemid, $parent_id, $point_of_insertion);
+                $this->updateposition($itemid, $parent_id, $point_of_insertion);
             }
         } else {
 # --------------------------------------------------------
@@ -280,7 +282,7 @@ class CelkoPositionProperty extends DataProperty
 #
             if ($this->value) {
             // FIXME: this has not been tested!!!
-                $this->unpackValue();
+                $this->unpackValue($this->value);
             } else {
 # --------------------------------------------------------
 #
@@ -314,7 +316,7 @@ class CelkoPositionProperty extends DataProperty
             } else {
                 $parent_id = (int)$parentItem[$this->initialization_celkoparent_id];
             }
-            $itemid = $this->updateposition($itemid, $parent_id, $point_of_insertion);
+            $this->updateposition($itemid, $parent_id, $point_of_insertion);
         }
         return true;
     }
@@ -323,7 +325,7 @@ class CelkoPositionProperty extends DataProperty
      * Updates value for the given item id.
 	 *
      * @param int $itemid ID of the item to be updated
-     * @return boolean Returns true on success, false on failure
+     * @return boolean|void Returns true on success, false on failure
      */
     public function updateValue($itemid=0)
     {
@@ -477,8 +479,8 @@ class CelkoPositionProperty extends DataProperty
 	 * Used to show the hidden data
 	 * 
 	 * @param  array data An array of input parameters
-	 * @return bool   Returns true or false 
-	 */	
+	 * @return string   Returns true or false 
+	 */
     public function showHidden(Array $data = array())
     {
         if (!isset($data['position_options'])) $data['position_options'] = $this->position_options;
@@ -554,7 +556,7 @@ class CelkoPositionProperty extends DataProperty
      * Fetch item from the database
      * 
      * @param int $id ID of the item
-     * @return array Array of fetched item
+     * @return array|void Array of fetched item
      */
     public function getItem($id) 
     {
@@ -570,7 +572,7 @@ class CelkoPositionProperty extends DataProperty
      * Get the value of this property for a particular item
      *
      * @param int $id the id we want the value for
-     * @return array return unserialized value of $id param
+     * @return string return serialized value of $id param
      */
     public function getItemValue($id) 
     {
@@ -843,7 +845,7 @@ class CelkoPositionProperty extends DataProperty
             // We'll still need to resolve this entry later
             // add this parent to the list of known parents for subsequent rounds
             $this->itemindices[$newid] = null;
-            $this->itemsunresolved[$itemid] = $newid;
+            $this->itemsunresolved[$newid] = $oldid;
             $parent_id = 0;
         }
         
@@ -912,4 +914,3 @@ class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDat
         return true;
     }
 }
-

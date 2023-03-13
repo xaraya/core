@@ -944,7 +944,7 @@ class Query
         $this->openconnection();
     }
 
-    private function _getkey()
+    private function _getkey(): int
     {
         $key = $this->key;
         $this->key++;
@@ -1637,7 +1637,7 @@ class Query
     {
         return $this->startat;
     }
-    public function getstatement()
+    public function getstatement(): string
     {
         if ($this->usebinding) $this->bindstatement();
         return $this->statement;

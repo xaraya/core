@@ -45,4 +45,3 @@ function sql_210_05()
     }
     return $data;
 }
-?>

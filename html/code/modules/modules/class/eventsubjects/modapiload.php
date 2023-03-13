@@ -24,4 +24,3 @@ class ModulesModApiLoadSubject extends EventSubject implements ixarEventSubject
         parent::__construct($modName);                               
     }
 }
-?>

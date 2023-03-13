@@ -141,7 +141,6 @@ function transform_operator($op)
 		'<='       => 'le',
 		'LIKE'     => 'like',
 		'NOT LIKE' => 'notlike',
-		'>'        => 'gt',
 	);
 	return $oparray[$op];
 }

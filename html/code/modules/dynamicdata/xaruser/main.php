@@ -18,7 +18,7 @@
  * initiated without defining arguments.  
  * The function displays a list of DD's available modules.
  *
- * @return array empty array of data for the template display
+ * @return array|bool empty array of data for the template display
  */
 function dynamicdata_user_main(Array $args=array())
 {
@@ -32,5 +32,3 @@ function dynamicdata_user_main(Array $args=array())
         return array();
     }
 }
-
-?>

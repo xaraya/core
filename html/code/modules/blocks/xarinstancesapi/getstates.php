@@ -33,4 +33,3 @@ function blocks_instancesapi_getstates(Array $args=array())
             array('id' => xarBlock::BLOCK_STATE_VISIBLE, 'name' => xarML('Visible')),
     );
 }
-?>

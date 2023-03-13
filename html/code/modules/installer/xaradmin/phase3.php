@@ -21,8 +21,8 @@
  * Phase 3: Check system settings
  *
  * @access private
- * @param agree string
- * @return array data for the template display
+ * @param string agree
+ * @return array|void data for the template display
  */
 function installer_admin_phase3()
 {

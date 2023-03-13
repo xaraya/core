@@ -64,6 +64,7 @@ function dynamicdata_admin_export(Array $args=array())
                              array('objectref' => &$myobject));
         $ext = '-def';
 
+        /**
         if (!empty($myobject->datastores) && count($myobject->datastores) == 1 && !empty($myobject->datastores['_dynamic_data_'])) {
             $data['convertlink'] = xarController::URL('dynamicdata','admin','export',
                                              array('objectid' => $myobject->objectid,
@@ -74,6 +75,7 @@ function dynamicdata_admin_export(Array $args=array())
 
             }
         }
+         */
 
     // export specific item
     } elseif (is_numeric($itemid)) {
@@ -132,4 +134,3 @@ function dynamicdata_admin_export(Array $args=array())
 
     return $data;
 }
-

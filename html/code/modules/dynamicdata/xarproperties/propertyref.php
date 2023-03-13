@@ -126,10 +126,10 @@ class PropertyRefProperty extends SelectProperty
      * Retrieve or check an individual option on demand
      *
      * @param  $check boolean
-     * @return if check == false:<br/>
+     * @return mixed if check == false:<br/>
      *                - display value, if found, of an option whose store value is $this->value<br/>
      *                - $this->value, if not found<br/>
-     *         if check == true:<br/>
+     *               if check == true:<br/>
      *                - true, if an option exists whose store value is $this->value<br/>
      *                - false, if no such option exists<br/>
      */
@@ -140,4 +140,3 @@ class PropertyRefProperty extends SelectProperty
         return $this->value;
     }
 }
-?>

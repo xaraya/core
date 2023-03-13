@@ -33,5 +33,3 @@ function themes_admin_view_configs()
 
     return $data;
 }
-
-?>

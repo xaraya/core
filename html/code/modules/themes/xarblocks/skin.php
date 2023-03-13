@@ -29,4 +29,3 @@ class Themes_SkinBlock extends BasicBlock implements iBlock
     protected $text_type_long      = 'User Theme Switcher Selection';
 
 }
-?>

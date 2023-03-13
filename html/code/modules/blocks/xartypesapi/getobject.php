@@ -16,10 +16,9 @@
  * @author Chris Powis <crisp@xaraya.com>
  * 
  * @param array $args Parameter data array
- * @return type Data array
+ * @return array Data array
  */
 function blocks_typesapi_getobject(Array $args=array())
 {
     return xarMod::apiFunc('blocks', 'blocks', 'getobject', $args);    
 }
-?>

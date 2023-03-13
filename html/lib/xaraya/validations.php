@@ -64,4 +64,3 @@ class ValueValidations extends xarObject implements IValidation
         throw new Exception('Must implement');
     }
 }
-?>

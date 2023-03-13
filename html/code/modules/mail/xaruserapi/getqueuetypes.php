@@ -27,4 +27,3 @@ function mail_userapi_getqueuetypes(Array $args=array())
     $qTypes[4] = xarML('Promote (redispatch)');
     return $qTypes;
 }
-?>

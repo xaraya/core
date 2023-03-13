@@ -49,4 +49,3 @@ function sql_210_cache_blocks()
     }
     return $data;
 }
-?>

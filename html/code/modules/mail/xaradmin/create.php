@@ -21,4 +21,3 @@ function mail_admin_create(Array $args=array())
     // If the first fails for some reason, we do not do the second and return to the edit screen if possible
     return xarMod::guiFunc('dynamicdata','admin','create',$args);
 }
-?>

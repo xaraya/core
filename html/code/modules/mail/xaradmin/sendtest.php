@@ -15,8 +15,7 @@
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
- * @param   no parameters
- * @return  boolean true on success or void on failure
+ * @return  bool|void true on success or void on failure
 */
 function mail_admin_sendtest()
 {
@@ -73,4 +72,3 @@ function mail_admin_sendtest()
     xarController::redirect(xarController::URL('mail', 'admin', 'compose', array('confirm' => 1)));
     return true;
 }
-?>

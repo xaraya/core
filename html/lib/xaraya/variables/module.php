@@ -93,7 +93,7 @@ class xarModVars extends xarVars implements IxarModVars
      * @author Michel Dalle
      * 
      * @param  string $scope Module name
-     * @return boolean true on success
+     * @return boolean|void true on success
      * @throws EmptyParameterException
      * @todo  This has some duplication with xarVar.php
      */
@@ -279,7 +279,7 @@ class xarModVars extends xarVars implements IxarModVars
      * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
-     * @return integer identifier for the variable
+     * @return integer|void identifier for the variable
      * @throws EmptyParameterException
      * @see xarModUserVars::set(), xarModUserVars::get(), xarModUserVars::delete()
      */

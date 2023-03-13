@@ -95,5 +95,3 @@ function base_userapi_extractlinks(Array $args=array())
 
     return array_keys($links);
 }
-
-?>

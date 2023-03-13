@@ -316,4 +316,3 @@ xarWSLoader();
  * Process the web service request
  */
 xarWebservicesMain();
-

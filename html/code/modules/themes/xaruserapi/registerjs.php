@@ -27,8 +27,7 @@
  *         string  $args[module] name of module to look for file(s) in, optional, default current module<br/>
  *         string  $args[position] position to render the js, eg head or body, optional, default head<br/>
  *         string  $args[index] optional index in queue relative to other scripts<br/>
- * @return boolean true on success
- * @throws none
+ * @return boolean|void true on success
 **/
 function themes_userapi_registerjs($args)
 {
@@ -42,4 +41,3 @@ function themes_userapi_registerjs($args)
     $javascript = xarJS::getInstance();
     return $javascript->register($args);           
 }
-?>

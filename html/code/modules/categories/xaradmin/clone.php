@@ -17,11 +17,11 @@
 /**
  * Function to modify category
  * 
- * @param void N/A
- * @return array|null Returns display data array on success, null on failure
+ * @return array|string|bool|void Returns display data array on success, null on failure
  */
 function categories_admin_clone()
 {
+    $data = [];
     if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}
     if (!xarVar::fetch('itemid',      'int',    $data['itemid'], 0, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('confirm',     'str:1:', $confirm,'',xarVar::NOT_REQUIRED)) return;
@@ -63,4 +63,3 @@ function categories_admin_clone()
     }  
     return $data;
 }
-?>

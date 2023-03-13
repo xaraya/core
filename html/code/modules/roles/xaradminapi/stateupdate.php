@@ -57,5 +57,3 @@ function roles_adminapi_stateupdate(Array $args=array())
 
     return true;
 }
-
-?>

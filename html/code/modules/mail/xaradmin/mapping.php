@@ -29,4 +29,3 @@ function mail_admin_mapping(Array $args=array())
     }
     return $data;
 }
-?>

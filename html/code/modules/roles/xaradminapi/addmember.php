@@ -22,5 +22,3 @@ function roles_adminapi_addmember(Array $args=array())
 {
     return xarMod::apiFunc('roles','user','addmember',$args);
 }
-
-?>

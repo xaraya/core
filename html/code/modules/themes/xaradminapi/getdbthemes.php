@@ -14,7 +14,7 @@
  * Get all themes in the database
  *
  * @author Marty Vance
- * @return array of themes in the database
+ * @return array|void of themes in the database
  */
 function themes_adminapi_getdbthemes()
 {
@@ -45,4 +45,3 @@ function themes_adminapi_getdbthemes()
 
     return $dbThemes;
 }
-?>

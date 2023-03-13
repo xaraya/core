@@ -25,6 +25,7 @@ class ImageListProperty extends FilePickerProperty
 
     public $imagetext  = 'no image';
     public $imagealt   = 'Image';
+    public $baseurl;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -76,5 +77,3 @@ class ImageListProperty extends FilePickerProperty
         return parent::showOutput($data);
     }
 }
-
-?>

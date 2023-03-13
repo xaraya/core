@@ -48,5 +48,3 @@ function categories_adminapi_unlinkcids($args)
 
     return true;
 }
-
-?>

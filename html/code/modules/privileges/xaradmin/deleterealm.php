@@ -65,5 +65,3 @@ function privileges_admin_deleterealm()
     xarController::redirect(xarController::URL('privileges', 'admin', 'viewrealms'));
     return true;
 }
-
-?>

@@ -73,4 +73,3 @@ function xarLogVariable($name, $var, $level = '')
     if (empty($level)) $level = xarLog::LEVEL_DEBUG;
     return xarLog::variable($name, $var, $level); 
 }
-

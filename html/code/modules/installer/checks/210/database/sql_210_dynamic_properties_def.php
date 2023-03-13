@@ -56,4 +56,3 @@ function sql_210_dynamic_properties_def()
     }
     return $data;
 }
-?>

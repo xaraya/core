@@ -197,7 +197,7 @@ class xarLogger_simple extends xarLogger
     /**
      * Prepare the logfile for writing
      *
-     * @param file $file Path to the logger file
+     * @param string $file Path to the logger file
      * 
      * @throws LoggerException
      * @return boolean true on success
@@ -339,5 +339,3 @@ class xarLogger_simple extends xarLogger
         return basename($this->filename);
     }
 }
-
-?>

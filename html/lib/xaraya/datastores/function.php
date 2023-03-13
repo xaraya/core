@@ -20,6 +20,8 @@ sys::import('modules.dynamicdata.class.datastores.base');
 
 class Dynamic_Function_DataStore extends BasicDataStore
 {
+    public $itemtype;
+
     /**
      * Get the field name used to identify this property (the property validation holds the function name here - for now...)
      */
@@ -127,4 +129,3 @@ class Dynamic_Function_DataStore extends BasicDataStore
         }
     } /* getItems */
 }
-

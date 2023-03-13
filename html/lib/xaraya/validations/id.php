@@ -24,5 +24,3 @@ class IdValidation extends IntValidation
         return parent::validate($subject,array(1));
     }
 }
-
-?>

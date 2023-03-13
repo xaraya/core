@@ -99,7 +99,7 @@ class ArrayProperty extends DataProperty
             if (!is_array($displayconfig)) $displayconfig = unserialize($displayconfig);
             
             $columncount = isset($displayconfig) ? count($displayconfig) : 0;
-            if (!xarVar::fetch($name,    'array', $elements, array(), xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch($name,    'array', $elements, array(), xarVar::NOT_REQUIRED)) return false;
             // Get the number of rows we are saving
             $rows = count($elements);
 
@@ -186,7 +186,7 @@ class ArrayProperty extends DataProperty
 	/**
 	 * Set the value of an array
 	 * 
-	 * @param  string value The value of the input
+	 * @param  string|array value The value of the input
 	 * @return bool Returns true
 	 */	 
     function setValue($value=null)
@@ -447,13 +447,13 @@ class ArrayProperty extends DataProperty
             $types          = array();
             $defaults       = array();
             $configurations = array();
-            foreach ($default_column_definition as $row) {
+            foreach ($this->default_column_definition as $row) {
                 $titles[]         = $row[0];
                 $types[]          = $row[1];
                 $defaults[]       = $row[2];
                 $configurations[] = $row[0];
             }
-        }            
+        }
         $data['column_titles'] = $titles;
         $data['rows'] = isset($data['value'][0]) ? count($data['value'][0]) : 0;
         

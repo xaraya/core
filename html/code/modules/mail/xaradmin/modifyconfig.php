@@ -18,7 +18,6 @@
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
- * @param   no parameters
  * @return mixed data array for the template display or output display string if invalid data submitted
 */
 function mail_admin_modifyconfig()
@@ -26,6 +25,7 @@ function mail_admin_modifyconfig()
     // Security
     if (!xarSecurity::check('AdminMail')) return;
 
+    $data = [];
     if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
     if (!xarVar::fetch('tab','str:1', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
     
@@ -33,7 +33,7 @@ function mail_admin_modifyconfig()
     $data['encoding'] = xarModVars::get('mail', 'encoding');
 
     //redirect address - ensure it's set
-    $address = trim(xarModVars::get('mail', 'redirectaddress'));
+    $address = trim(xarModVars::get('mail', 'redirectaddress') ?? '');
     if (isset($address) && !empty($address)){
         $data['redirectaddress']=xarVar::prepForDisplay($address);
     } else {
@@ -206,8 +206,6 @@ function mail_admin_modifyconfig()
                     }
             }
             break;
-        break;
     }
     return $data;
 }
-?>

@@ -29,7 +29,7 @@ class xarPrivileges extends xarMasks
      * This function should be invoked at module initialisation time
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
-     * @param   array of values to register instance
+     * @param   string $module
      * @return  boolean
      * @todo remove table2 argument
      */
@@ -100,7 +100,7 @@ class xarPrivileges extends xarMasks
      * *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   module name
+     * @param   string $module name
      * @return  boolean
     */
     public static function removeInstances($module)
@@ -129,7 +129,7 @@ class xarPrivileges extends xarMasks
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   array of privilege values
+     * @param   string $name
      * @return  boolean
      * @todo    duplicates parts of $privilege->add() method
     */
@@ -139,7 +139,7 @@ class xarPrivileges extends xarMasks
         // Check if the privilege already exists
         $privilege = self::findPrivilege($name);
         if ($privilege) {
-            return;
+            return true;
         }
 
         $realmid = null;
@@ -466,7 +466,7 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   integer
-     * @return  xarPrivilege object
+     * @return  xarPrivilege|void object
     */
     public static function getPrivilege($id)
     {
@@ -506,7 +506,7 @@ class xarPrivileges extends xarMasks
             xarCoreCache::setCached($cacheKey,$id,$priv);
             return $priv;
         } else {
-            return null;
+            return;
         }
     }
 
@@ -519,7 +519,7 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string
-     * @return  xarPrivilege object
+     * @return  xarPrivilege|void object
     */
     public static function findPrivilege($name)
     {
@@ -558,7 +558,7 @@ class xarPrivileges extends xarMasks
      * @author  Richard Cave<rcave@xaraya.com>
      * @access  public
      * @param   string
-     * @return  privilege object
+     * @return  array of xarPrivilege objects
     */
     public static function findPrivilegesForModule($module)
     {
@@ -598,8 +598,8 @@ class xarPrivileges extends xarMasks
      *
      * This is a wrapper function
      *
-     * @param   string module
-     * @return  bool
+     * @param   string $module
+     * @return  void
      */
     public static function removeModule($module)
     {
@@ -637,9 +637,9 @@ class xarPrivileges extends xarMasks
      * This is a wrapper function
      *
      * @param   integer pid,level
-     * @param   strings pid,name,realm,module,component
+     * @param   string name,realm,module,component
      * @param   array instance
-     * @return  boolean
+     * @return  mixed
      */
     public static function external($pid,$name,$realm,$module,$component,$instance,$level)
     {
@@ -674,6 +674,4 @@ class xarPrivileges extends xarMasks
             if ($priv->update()) return $priv->getID();
         }
     }
-
 }
-

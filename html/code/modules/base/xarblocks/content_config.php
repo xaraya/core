@@ -25,7 +25,6 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
      * Modify Function to the Blocks Admin
      * 
      * @author Jason Judge
-     * @param void N/A
      * @return string Returns display data
      */
     public function configmodify()
@@ -94,4 +93,3 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
     }
 
 }
-?>

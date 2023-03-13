@@ -16,12 +16,9 @@
  * @author the DynamicData module development team
  * @param array    $args array of optional parameters<br/>
  * @return array of object definitions
- * @throws DATABASE_ERROR, NO_PERMISSION
  */
 function dynamicdata_userapi_getobjects($args = array())
 {
     $objects =  DataObjectMaster::getObjects($args);
     return $objects;
 }
-
-?>

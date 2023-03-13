@@ -197,5 +197,3 @@ function base_userapi_browse_files(Array $args=array())
 
     return $filelist;
 }
-
-?>

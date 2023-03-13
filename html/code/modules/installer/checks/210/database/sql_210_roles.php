@@ -56,4 +56,3 @@ function sql_210_roles()
     }
     return $data;
 }
-?>

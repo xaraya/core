@@ -87,7 +87,7 @@ abstract class ResultSetCommon {
 
     /**
      * A an assoc_array of all fields in the result set so we can easily test for their existence with isset(), which is much faster than array_key_exists()
-     * @var assoc_array
+     * @var array
      */
     protected $fieldsInResultSet;
     
@@ -479,7 +479,6 @@ abstract class ResultSetCommon {
             case 'EOF':
                 // Used all over the place, probably needs to stay for a while
                 return $this->isAfterLast();
-                break;
             default:
                 // We leave this in so any api migration error show up in a nice way
                 throw new Exception("Unknown property accessed for connection");
@@ -492,7 +491,6 @@ abstract class ResultSetCommon {
             case 'MoveNext':
                 // Used all over the place, prolly cant go for a while
                 return $this->next();
-                break;
             case 'GetRowAssoc':
                 // We have to reget the current row in associative mode
                 // Only seen in modules, prolly remove it here
@@ -502,19 +500,16 @@ abstract class ResultSetCommon {
                     $this->previous();                
                 }
                 //bah
-                return $this->getRow($args);
-                break;
+                return $this->getRow();
             case 'fetchRow':
                 $res = $this->getRow();
                 $this->next();
                 return $res;
-                break;
             case 'numRows':
             case 'RecordCount':
                 // Used all over the place, migrated core over already,
                 // Can't hurt to leave it in place
                 return $this->getRecordCount();
-                break;
             case 'FieldCount':
                 $count = count($this->fields);
                 return $count;

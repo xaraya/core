@@ -18,6 +18,7 @@ function roles_admin_updatestate()
     // Security
     if (!xarSecurity::check('EditRoles')) return;
     
+    $data = [];
     // Get parameters
     if (!xarVar::fetch('status',      'int:0:', $data['status'],   NULL,    xarVar::DONT_SET)) {return;}
     if (!xarVar::fetch('state',       'int:0:', $data['state'],    0,       xarVar::NOT_REQUIRED)) {return;}
@@ -97,4 +98,3 @@ function roles_admin_updatestate()
      }
      return true;
 }
-?>

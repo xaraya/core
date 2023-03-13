@@ -141,7 +141,9 @@ abstract class xarMLS__ReferencesBackend  extends xarObject implements ITranslat
         //$this->domaincache["$dnType.$dnName"] = false;
         return false;
     }
-
+    /**
+     * @return string|null
+     */
     function getDomainLocation()
     { return $this->domainlocation; }
 

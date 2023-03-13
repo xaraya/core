@@ -44,4 +44,3 @@ class DateFormatProperty extends SelectProperty
         return $options;
     }
 }
-?>

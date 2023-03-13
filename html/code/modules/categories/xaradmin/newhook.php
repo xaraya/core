@@ -153,5 +153,3 @@ function categories_admin_newhook($args)
 
     return $data;
 }
-
-?>

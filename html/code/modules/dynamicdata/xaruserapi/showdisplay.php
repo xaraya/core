@@ -61,5 +61,3 @@ function dynamicdata_userapi_showdisplay(Array $args=array())
 
     return $object->showDisplay($args);
 }
-
-?>

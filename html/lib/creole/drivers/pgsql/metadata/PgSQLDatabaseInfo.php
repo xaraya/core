@@ -110,4 +110,3 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
     }
 
 }
-

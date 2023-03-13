@@ -15,8 +15,7 @@
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] the id of the module
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @return boolean|void true on success, false on failure
  */
 function modules_adminapi_removemissing(Array $args=array())
 {
@@ -48,5 +47,3 @@ function modules_adminapi_removemissing(Array $args=array())
 
     return true;
 }
-
-?>

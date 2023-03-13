@@ -199,4 +199,3 @@ function installer_public_readnoncore2()
     xarPrivileges::makeMember('DenyModules','ReadNonCore');
     xarPrivileges::makeMember('DenyThemes','ReadNonCore');
 }
-?>

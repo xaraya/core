@@ -82,5 +82,3 @@ function blocks_userapi_convertseconds(Array $args=array())
 
     return $convertedtime;
 }
-
-?>

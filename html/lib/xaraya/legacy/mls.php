@@ -213,4 +213,3 @@ function xarMLS__iswritable($directory=NULL)
 {   
     return xarMLS::iswritable($directory=NULL); 
 }
-

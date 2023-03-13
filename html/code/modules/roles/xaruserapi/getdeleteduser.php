@@ -20,7 +20,7 @@
  *        string   $args['uname'] user name of user to get<br/>
  *        string   $args['name'] name of user to get<br/>
  *        string   $args['email'] email of user to get
- * @return array
+ * @return array|bool|void
  */
 function roles_userapi_getdeleteduser(Array $args=array())
 {
@@ -97,4 +97,3 @@ function roles_userapi_getdeleteduser(Array $args=array())
 
     return $user;
 }
-?>

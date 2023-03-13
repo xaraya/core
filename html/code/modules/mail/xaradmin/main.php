@@ -20,7 +20,6 @@
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
- * @param   no parameters
  * @return mixed output display string or boolean true if redirected
 */
 function mail_admin_main()
@@ -38,5 +37,4 @@ function mail_admin_main()
         xarController::redirect(xarController::URL('mail', 'admin', 'modifyconfig'));
         return true;
     }
-} 
-?>
+}

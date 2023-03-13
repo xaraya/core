@@ -432,5 +432,3 @@ function mail_adminapi__sendmail_new(Array $args=array())
 
     return $result;
 }
-
-?>

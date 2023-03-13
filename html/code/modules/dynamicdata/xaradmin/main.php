@@ -38,5 +38,3 @@ function dynamicdata_admin_main()
         return true;
     }
 }
-
-?>

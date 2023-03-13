@@ -28,8 +28,8 @@
  *        integer  $args['module_id'] module id of the item fields to get +<br/>
  *        string   $args['itemtype'] item type of the item fields to get, or<br/>
  *        string   $args['table'] database table to turn into an object
- * @return array of (itemid => fieldvalue), or false on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @return array|void of (itemid => fieldvalue), or false on failure
+ * @throws EmptyParameterException
  */
 function dynamicdata_userapi_dropdownlist(Array $args=array())
 {

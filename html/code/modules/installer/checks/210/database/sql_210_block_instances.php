@@ -54,4 +54,3 @@ function sql_210_block_instances()
     }
     return $data;
 }
-?>

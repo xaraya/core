@@ -20,7 +20,6 @@ class Base_WaitingContentBlock extends BasicBlock implements iBlock
     /**
      * Display method
      * 
-     * @param void N/A
      * @return array Display data array
      */
     function display()
@@ -28,4 +27,3 @@ class Base_WaitingContentBlock extends BasicBlock implements iBlock
         return $data['output'] = xarMod::apiFunc('base', 'admin', 'waitingcontent');
     }
 }
-?>

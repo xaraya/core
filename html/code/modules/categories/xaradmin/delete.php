@@ -18,12 +18,12 @@
  *
  * This function also shows a count on the number of child categories of the current category
  * 
- * @param void N/A
- * @return array|null Returns display data array on success, null on failure
+ * @return array|bool|string|void Returns display data array on success, null on failure
  * @throws BadParameterException Thrown if given category was not found in API
  */
 function categories_admin_delete()
 {
+    $data = [];
     if (!xarVar::fetch('itemid','int:1:',$data['itemid'], 0, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('confirm','str:1:',$confirm,'',xarVar::NOT_REQUIRED)) return;
 
@@ -76,5 +76,3 @@ function categories_admin_delete()
     xarController::redirect(xarController::URL('categories','admin','view', array()));
     return true;
 }
-
-?>

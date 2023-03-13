@@ -17,7 +17,7 @@
  * @param array    $args array of optional parameters<br/>
  *        string   $args ['itemtype'] item type (optional)<br/>
  *        array    $args ['itemids'] array of item ids to get
- * @return array the itemlink(s) for the item(s).
+ * @return array|void the itemlink(s) for the item(s).
  */
 function roles_userapi_getitemlinks(Array $args=array())
 {
@@ -37,5 +37,3 @@ function roles_userapi_getitemlinks(Array $args=array())
     }
     return $itemlinks;
 }
-
-?>

@@ -39,7 +39,7 @@ class xarGraphQLQueryType extends ObjectType
     /**
      * Get all root query fields for the GraphQL Query type from the query_types above
      */
-    public static function _xar_get_query_fields()
+    public static function _xar_get_query_fields(): array
     {
         $fields = [];
         foreach (static::$query_types as $type) {
@@ -49,9 +49,9 @@ class xarGraphQLQueryType extends ObjectType
             }
         }
         if (!empty(xarGraphQL::$extra_types)) {
-            $clazz = xarGraphQL::get_type_class("buildtype");
+            // @checkme not possible to override page/list/item resolvers in child class by type here
             foreach (xarGraphQL::$extra_types as $name) {
-                $add_fields = $clazz::get_query_fields($name);
+                $add_fields = xarGraphQLBuildType::get_query_fields($name);
                 if (!empty($add_fields)) {
                     $fields = array_merge($fields, $add_fields);
                 }

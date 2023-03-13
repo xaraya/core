@@ -20,7 +20,6 @@
  *
  * @author  Jim McDonald, Flavio Botelho <nuncanada@xaraya.com>
  * @author  mikespub <postnuke@mikespub.net>
- * @param   void N/A
  * @return  boolean True on success null/false on failure.
  */
 function categories_init()
@@ -122,7 +121,6 @@ function categories_init()
  * @access  public
  * @param   $oldVersion
  * @return  true on success or false on failure
- * @throws  no exceptions
  * @todo    nothing
 */
 function categories_upgrade($oldversion)
@@ -146,4 +144,3 @@ function categories_delete()
   //this module cannot be removed
   return false;
 }
-?>

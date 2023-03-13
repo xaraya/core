@@ -23,8 +23,7 @@
  *         $args[scope] scope to look in [(theme)|module|property], required<br/>
  *         $args[module] name of module, optional when in module scope, defaults to current module<br/>
  *         $args[property] name of property, required when in property scope
- * @throws none
- * @return string url to image
+ * @return string|void url to image
 **/  
 function themes_userapi_getimage($args)
 {   
@@ -43,4 +42,3 @@ function themes_userapi_getimage($args)
     }
     return xarTpl::getImage($file, $scope, $package);        
 }
-?>

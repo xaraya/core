@@ -16,11 +16,10 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @author  Jo Dalle Nogare <jojodee@xaraya.com>
- * @param   uname users name
- * @param   valcode is the validation code sent to user on registration
- * @param   phase is the point in the function to return
- * @return  true if valcode matches valcode in user status table
- * @throws   exceptions raised valcode does not match
+ * @param   string $uname users name
+ * @param   string $valcode is the validation code sent to user on registration
+ * @param   string phase is the point in the function to return
+ * @return  array|string|bool|void if valcode matches valcode in user status table
  * @TODO jojodee - validation process, duplication of functions and call to registration module needs to be rethought
  *         Rethink to provide cleaner separation between roles, authentication and registration
  */
@@ -224,4 +223,3 @@ function roles_user_getvalidation()
 
     return $data;
 }
-?>

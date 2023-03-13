@@ -14,8 +14,7 @@
  * Regenerate theme list
  *
  * @author Marty Vance
- * @return boolean true on success, false on failure
- * @throws NO_PERMISSION
+ * @return boolean|void true on success, false on failure
  */
 function themes_adminapi_regenerate()
 {
@@ -113,4 +112,3 @@ function themes_adminapi_regenerate()
 
     return true;
 }
-?>

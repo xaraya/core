@@ -53,7 +53,7 @@ use GraphQL\Validator\DocumentValidator;
 /**
  * See xardocs/graphql.txt for class structure
  */
-class xarGraphQL extends xarObject implements CommonRequestInterface
+class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTraitInterface, xarTimerTraitInterface
 {
     use CommonRequestTrait;
     use xarTimerTrait;  // activate with self::$enableTimer = true
@@ -168,6 +168,9 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
         if (in_array($name, ['query', 'mutation', 'mixed', 'serial'])) {
             return self::load_lazy_type($name);
         }
+        if (in_array($name, ['subscription'])) {
+            return;
+        }
         //if (!self::has_type($name)) {
         //    throw new Exception("Unknown graphql type: " . $name);
         //}
@@ -240,8 +243,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
         }
         // make Object Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
-            $clazz = self::get_type_class("buildtype");
-            $type = $clazz::make_type($name);
+            $type = xarGraphQLBuildType::make_type($name);
             if (!$type) {
                 throw new Exception("Unknown graphql type: " . $name);
             }
@@ -272,8 +274,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
         }
         // make Object Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
-            $clazz = self::get_type_class("buildtype");
-            $type = $clazz::make_page_type($name);
+            $type = xarGraphQLBuildType::make_page_type($name);
             if (!$type) {
                 throw new Exception("Unknown graphql type: " . $page);
             }
@@ -305,8 +306,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
         }
         // make Object Type from BuildType for extra dynamicdata object types
         if (in_array($name, self::$extra_types) || in_array(ucfirst($name), self::$extra_types)) {
-            $clazz = self::get_type_class("buildtype");
-            $type = $clazz::make_input_type($name);
+            $type = xarGraphQLBuildType::make_input_type($name);
             if (!$type) {
                 throw new Exception("Unknown graphql type: " . $input);
             }
@@ -407,27 +407,28 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
             //}
         }
         // @todo skip this and override default field resolver in executeQuery, or use one in basetype?
-        $clazz = self::get_type_class("buildtype");
         if ($name == 'Query') {
             self::$paths[] = "query config $name";
             //$fields = $typeConfig['fields']();
             //self::$paths[] = "query config fields " . implode(',', array_keys($fields));
-            //$typeConfig['fields'] = static function () use ($clazz, $name) {
-            //    $typeDef = $clazz::object_type_definition($name);
+            //$typeConfig['fields'] = static function () use ($name) {
+            //    $typeDef = xarGraphQLBuildType::object_type_definition($name);
             //    //return $typeDef->getFields();
             //    return $typeDef;
             //};
-            $typeConfig['resolveField'] = $clazz::object_query_resolver($name);
+            // @checkme not possible to override page/list/item resolvers in child class by type here
+            $typeConfig['resolveField'] = xarGraphQLBuildType::_xar_query_field_resolver($name);
         } elseif ($name == 'Mutation') {
             self::$paths[] = "mutation config $name";
-            $typeConfig['resolveField'] = $clazz::object_mutation_resolver($name);
+            // @checkme not possible to override create/update/delete resolvers in child class by type here
+            $typeConfig['resolveField'] = xarGraphQLBuildType::_xar_mutation_field_resolver($name);
         } else {
             self::$paths[] = "type config $name";
-            //$typeConfig['fields'] = static function () use ($clazz, $name) {
-            //    $typeDef = $clazz::object_type_definition($name);
+            //$typeConfig['fields'] = static function () use ($name) {
+            //    $typeDef = xarGraphQLBuildType::object_type_definition($name);
             //    return $typeDef->getFields();
             //};
-            $typeConfig['resolveField'] = $clazz::object_type_resolver($name);
+            $typeConfig['resolveField'] = xarGraphQLBuildType::object_type_resolver($name);
         }
         return $typeConfig;
     }
@@ -474,10 +475,9 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
             // @checkme try out default object field resolver instead of type config decorator
             $schema = self::build_schema($schemaFile, $extraTypes);
             //$fieldResolver = null;
-            $clazz = self::get_type_class("buildtype");
             // @checkme don't use type classes by default for BuildSchema?
-            //$fieldResolver = $clazz::default_field_resolver();
-            $fieldResolver = $clazz::default_field_resolver(false);
+            //$fieldResolver = xarGraphQLBuildType::default_field_resolver();
+            $fieldResolver = xarGraphQLBuildType::default_field_resolver(false);
         } else {
             $schema = self::get_schema($extraTypes);
             $fieldResolver = null;
@@ -956,7 +956,6 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
         self::$object_type = [];
         self::map_objects();
         self::$objectFieldSpecs = [];
-        $clazz = self::get_type_class("buildtype");
         foreach (self::$object_type as $object => $name) {
             $configData['objects'][$object] = [];
             $configData['objects'][$object]['name'] = $name;
@@ -971,7 +970,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
                 foreach ($objectType->getFields() as $field) {
                     $configData['objects'][$object]['fieldspecs'][$field->getName()] = ['fieldtype', $field->getType()->toString()];
                 }
-                $fieldspecs = $clazz::find_object_fieldspecs($object, true);
+                $fieldspecs = xarGraphQLBuildType::find_object_fieldspecs($object, true);
                 foreach ($fieldspecs as $prop_name => $fieldspec) {
                     if (array_key_exists($prop_name, $configData['objects'][$object]['fieldspecs'])) {
                         $configData['objects'][$object]['fieldspecs'][$prop_name] = array_merge($configData['objects'][$object]['fieldspecs'][$prop_name], $fieldspec);
@@ -986,7 +985,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface
         $fieldspecs = [];
         foreach (self::$extra_types as $type) {
             [$name, $type, $object] = xarGraphQLInflector::sanitize($type);
-            $fieldspecs[$object] = $clazz::find_object_fieldspecs($object, true);
+            $fieldspecs[$object] = xarGraphQLBuildType::find_object_fieldspecs($object, true);
         }
         foreach ($fieldspecs as $object => $fieldspec) {
             $configData['objects'][$object]['fieldspecs'] = $fieldspec;

@@ -77,7 +77,7 @@ function xarLoader()
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  * @author Marco Canini
- * @return void
+ * @return bool|void
  */
 function xarMain()
 {

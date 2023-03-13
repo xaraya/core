@@ -29,7 +29,7 @@ if ($middleware == 'Creole') {
      * connection using the required parameters then it sets
      * the table prefixes and xartables up and returns true
      *
-     * 
+     * @param array $args
      * @param string args[databaseType] database type to use
      * @param string args[databaseHost] database hostname
      * @param string args[databasePort] database port
@@ -89,7 +89,7 @@ if ($middleware == 'Creole') {
      * connection using the required parameters then it sets
      * the table prefixes and xartables up and returns true
      *
-     * 
+     * @param array $args
      * @param string args[databaseType] database type to use
      * @param string args[databaseHost] database hostname
      * @param string args[databasePort] database port
@@ -186,7 +186,7 @@ class xarDatabase extends xarObject
                 $systemArgs['databaseHost'] = $local;
                 try {
                     return xarDB_init($systemArgs);
-                    $connected = true;
+                    //$connected = true;
                 } catch (Exception $e) {}
                 if ($connected) break;
             }
@@ -204,4 +204,3 @@ class xarDatabase extends xarObject
         }
     }
 }
-

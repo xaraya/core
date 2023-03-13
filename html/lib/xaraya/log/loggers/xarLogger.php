@@ -179,4 +179,3 @@ class xarLogger extends xarObject
         return date($this->dateFormat) . ' ' . $microtime[0] . ' +' . number_format(round($secs - $this->elapsed, 3),3);
     }
 }
-

@@ -14,7 +14,7 @@
  *        integer  $args['regid'] the id number of the module to update<br/>
  *        string   $args['displayname'] the new display name of the module<br/>
  *        string   $args['description'] the new description of the module
- * @return boolean true on success, false on failure
+ * @return boolean|void true on success, false on failure
  */
 function modules_adminapi_update(Array $args=array())
 {
@@ -40,5 +40,3 @@ function modules_adminapi_update(Array $args=array())
 
     return true;
 }
-
-?>

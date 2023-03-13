@@ -18,7 +18,7 @@
  *        string   $args['callerItemType'] optional item type for the caller module<br/>
  *        string   $args['hookModName'] hook module
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @throws EmptyParameterException
  */
 function modules_adminapi_enablehooks(Array $args=array())
 {
@@ -45,5 +45,3 @@ function modules_adminapi_enablehooks(Array $args=array())
     return xarHooks::attach($hookModName, $callerModName, $callerItemType);
     
 }
-
-?>

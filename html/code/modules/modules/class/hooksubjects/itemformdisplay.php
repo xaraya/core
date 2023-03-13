@@ -20,4 +20,3 @@ class ModulesItemFormdisplaySubject extends GuiHookSubject
     public $subject = 'ItemFormdisplay';
     // methods inherited from parent...
 }
-?>

@@ -29,5 +29,3 @@ function installer_admin_security()
 
     return $data;
 }
-
-?>

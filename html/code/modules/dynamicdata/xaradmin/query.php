@@ -12,7 +12,7 @@
  */
 /**
  * query items
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function dynamicdata_admin_query(Array $args=array())
 {
@@ -495,5 +495,3 @@ function dynamicdata_admin_query(Array $args=array())
     // Return the template variables defined in this function
     return $data;
 }
-
-?>

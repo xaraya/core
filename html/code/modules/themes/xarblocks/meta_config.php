@@ -27,7 +27,6 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
      * Initialize the configuration
      *
      * This method is called by the BasicBlock class constructor
-     * @param void N/A
      */
     public function init() 
     {
@@ -120,4 +119,3 @@ class Themes_MetaBlockConfig extends Themes_MetaBlock
     }
 
 }
-?>

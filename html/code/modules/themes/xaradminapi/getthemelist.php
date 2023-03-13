@@ -22,7 +22,7 @@
  *        integer  $args['numItems'] the length of the list<br/>
  *        string   $args['orderBy'] the order type of the list
  * @return array array of theme information arrays
- * @throws DATABASE_ERROR, BAD_PARAM
+ * @throws BadParameterException
  */
 function themes_adminapi_getthemelist(Array $args=array())
 {
@@ -67,4 +67,3 @@ function themes_adminapi_getthemelist(Array $args=array())
     return xarMod::apiFunc('themes', 'admin', 'getitems', $get);
 
 }
-?>

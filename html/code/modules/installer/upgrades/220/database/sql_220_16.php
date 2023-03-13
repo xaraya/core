@@ -71,4 +71,3 @@ function sql_220_16()
     return $data;   
     
 }
-?>

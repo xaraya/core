@@ -76,7 +76,6 @@ class Base_MenuBlock extends MenuBlock implements iBlock
      * Initialize the block
      *
      * This method is called by the BasicBlock class constructor
-     * @param void N/A
      */
     public function init()
     {

@@ -18,8 +18,7 @@
  * @param int objectid
  * @param int modid
  * @param int itemtype
- * @throws BAD_PARAM
- * @return boolean true on success and redirect to modifyprop
+ * @return boolean|void true on success and redirect to modifyprop
  */
 function dynamicdata_admin_orderprops()
 {
@@ -122,5 +121,3 @@ function dynamicdata_admin_orderprops()
     // Return
     return true;
 }
-
-?>

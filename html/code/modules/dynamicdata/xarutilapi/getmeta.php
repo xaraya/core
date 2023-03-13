@@ -13,10 +13,10 @@
 /**
  * (try to) get the "meta" properties of tables via db abstraction layer
  *
+ * @param array $args
  * @param $args['table']  optional table you're looking for
  * @param $args['db']  optional database you're looking in (mysql only)
- * @return array of field definitions, or null on failure
- * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @return array|void of field definitions, or null on failure
  * @todo split off the common parts which are also in getstatic.php
  */
 function dynamicdata_utilapi_getmeta(Array $args=array())
@@ -232,4 +232,3 @@ function dynamicdata_utilapi_getmeta(Array $args=array())
 
     return $metadata;
 }
-?>

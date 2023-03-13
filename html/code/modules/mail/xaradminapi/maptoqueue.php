@@ -26,4 +26,3 @@ function mail_adminapi_maptoqueue(Array $args=array())
     $q = new Queue('dd',array('name' => 'masterq'));
     return $q;
 }
-?>

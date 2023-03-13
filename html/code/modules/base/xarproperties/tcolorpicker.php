@@ -23,6 +23,7 @@ class TColorPickerProperty extends DataProperty
     public $size      = 10;
     public $maxlength = 7;
     public $min       = 7;
+    public $max;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -75,4 +76,3 @@ class TColorPickerProperty extends DataProperty
     }
 
 }
-?>

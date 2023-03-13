@@ -114,4 +114,3 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
             return $args['extrainfo'];
     }
 }
-

@@ -212,9 +212,12 @@ function dynamicdata_init()
     // Installation complete; check for upgrades
     return dynamicdata_upgrade('2.0.0');
 }
-    /**
+/**
  * upgrade the dynamicdata module from an old version
  * This function can be called multiple times
+ *
+ * @param string oldversion
+ * @return boolean true on success, false on failure
  */
 function dynamicdata_upgrade($oldversion)
 {
@@ -251,15 +254,12 @@ function dynamicdata_upgrade($oldversion)
     }
     return true;
 }
+
 /**
- * Upgrade this module from an old version
- *
- * @param oldVersion
- * @return boolean true on success, false on failure
+ * Remove this module
  */
 function dynamicdata_delete()
 {
   //this module cannot be removed
   return false;
 }
-?>

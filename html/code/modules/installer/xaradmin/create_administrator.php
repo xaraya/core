@@ -21,7 +21,7 @@
  * Create default administrator
  *
  * @access public
- * @param create
+ * @param string language
  * @return boolean
  * @return mixed boolean after redirect or output display string if invalid data submitted
  * @todo make confirm password work
@@ -36,6 +36,7 @@ function installer_admin_create_administrator()
     xarVar::setCached('installer','installing', true);
     xarTpl::setThemeName('installer');
 
+    $data = [];
     $data['language'] = $install_language;
     $data['phase'] = 6;
     $data['phase_label'] = xarML('Create Administrator');
@@ -131,6 +132,3 @@ function installer_admin_create_administrator()
     xarController::redirect(xarController::URL('installer', 'admin', 'security',array('install_language' => $install_language)));
     return true;
 }
-
-
-?>

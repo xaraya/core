@@ -37,5 +37,3 @@ function categories_userapi_getitemlinks($args)
     }
     return $itemlinks;
 }
-
-?>

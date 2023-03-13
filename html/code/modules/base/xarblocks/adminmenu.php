@@ -39,7 +39,6 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
 /**
  * This method is called by the BasicBlock class constructor
  * 
- * @param void N/A
 **/    
     public function init()
     {
@@ -54,4 +53,3 @@ class Base_AdminmenuBlock extends MenuBlock implements iBlock
     }
     
 }
-?>

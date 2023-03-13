@@ -96,4 +96,3 @@ class AIMProperty extends TextBoxProperty
         return parent::showOutput($data);
     }
 }
-?>

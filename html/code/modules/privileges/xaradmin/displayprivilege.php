@@ -13,7 +13,7 @@
  */
 /**
  *displayprivilege - display privilege details
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function privileges_admin_displayprivilege()
 {
@@ -55,5 +55,3 @@ function privileges_admin_displayprivilege()
     $data['parents'] = $parents;
     return $data;
 }
-
-?>

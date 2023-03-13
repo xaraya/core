@@ -43,4 +43,3 @@ function blocks_instancesapi_getitem(Array $args=array())
         return reset($types);
     }
 }
-?>

@@ -65,7 +65,7 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_object_fields($object)
+    public static function _xar_get_object_fields($object): array
     {
         $fields = [
             'id' => Type::nonNull(Type::id()),
@@ -95,7 +95,7 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_fields($object, &$newType)
+    public static function _xar_get_input_fields($object, &$newType): array
     {
         // return static::_xar_get_object_fields($object);
         $fields = [
@@ -118,8 +118,9 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_object_field_resolver($type, $object = null)
+    public static function _xar_object_field_resolver($type, $object = null): ?callable
     {
+        return null;
     }
 
     /**
@@ -129,9 +130,10 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_load_deferred($type)
+    public static function _xar_load_deferred($type): ?callable
     {
         // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
         // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
+        return null;
     }
 }

@@ -173,5 +173,3 @@ function roles_admin_sitelock(Array $args=array())
 
     return $data;
 }
-
-?>

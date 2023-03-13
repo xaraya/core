@@ -15,10 +15,11 @@
 /**
  * Get parents of a specific (list of) category
  *
+ * @param array $args
  * @param $args['cid'] id of category to get children for, or
  * @param $args['cids'] array of category ids to get children for
  * @param $args['return_itself'] =Boolean= return the cid itself (default true)
- * @return array Returns an array of category info, false on failure
+ * @return array|bool|void Returns an array of category info, false on failure
  */
 function categories_userapi_getparents($args)
 {
@@ -87,5 +88,3 @@ function categories_userapi_getparents($args)
     }
     return $info;
 }
-
-?>

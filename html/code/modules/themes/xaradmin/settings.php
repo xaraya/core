@@ -12,7 +12,7 @@
 /**
  * List themes and current settings
  * @author Marty Vance
- * @param several params from the associated form in template
+ * @param array several params from the associated form in template
  */
 function themes_admin_settings()
 {
@@ -36,5 +36,3 @@ function themes_admin_settings()
     xarController::redirect(xarController::URL('themes', 'admin', 'view', array('regen' => $regen = 1)));
     return true;
 }
-
-?>

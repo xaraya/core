@@ -41,4 +41,3 @@ function blocks_typesapi_getitem(Array $args=array())
         return reset($types);
     }
 }
-?>

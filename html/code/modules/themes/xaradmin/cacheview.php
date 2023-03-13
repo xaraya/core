@@ -106,4 +106,3 @@ function themes_admin_cacheview($args)
     /*  Return */
     return true;
 }
-?>

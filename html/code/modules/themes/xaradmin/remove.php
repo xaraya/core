@@ -18,8 +18,8 @@
  *
  * @author Marty Vance 
  * @access public 
- * @param id $ the theme id
- * @return boolean true on success, false on failure
+ * @param int id $ the theme id
+ * @return boolean|string|void true on success, false on failure
  */
 function themes_admin_remove()
 { 
@@ -47,6 +47,4 @@ function themes_admin_remove()
         $return_url = xarController::URL('themes', 'admin', 'view');
     xarController::redirect($return_url);
     return true;
-} 
-
-?>
+}

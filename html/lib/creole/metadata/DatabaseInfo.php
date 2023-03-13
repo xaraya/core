@@ -96,15 +96,16 @@ abstract class DatabaseInfo {
     function __wakeup()
     {
         // Re-init vars from serialized connection
-        $this->dbname = $conn->database;
-        $this->dblink = $conn->connection;
+        $this->dbname = $this->conn->database;
+        $this->dblink = $this->conn->connection;
 
         // restore chaining
         foreach($this->tables as $tbl) {
             $tbl->database = $this;
             $tbl->dbname = $this->dbname;
             $tbl->dblink = $this->dblink;
-            $tbl->schema = $this->schema;
+            if ($this instanceof OCI8DatabaseInfo && $tbl instanceof OCI8TableInfo)
+                $tbl->schema = $this->schema;
         }
     }
 
@@ -204,4 +205,3 @@ abstract class DatabaseInfo {
         return $this->vendorSpecificInfo;
     }
 }
-

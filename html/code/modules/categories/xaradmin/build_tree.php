@@ -64,6 +64,7 @@ function categories_admin_build_tree()
 
     $verbose = false;
     
+    $data = [];
     if(!xarVar::fetch('table',     'str',  $data['table'],      'xar_categories', xarVar::NOT_REQUIRED)) {return;}
     if(!xarVar::fetch('parent_id', 'str',  $data['parent_id'],  'parent_id',      xarVar::NOT_REQUIRED)) {return;}
     if(!xarVar::fetch('left_id',   'str',  $data['left_id'],    'left_id',        xarVar::NOT_REQUIRED)) {return;}
@@ -618,5 +619,3 @@ function categories_admin_build_tree()
     }
     return $data;
 }
-
-?>

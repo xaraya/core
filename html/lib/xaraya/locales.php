@@ -38,7 +38,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  * of this file
  *
  * @uses xarLocale::loadData()
- * @return array locale data
+ * @return array|bool|null locale data
  * @throws LocaleNotFoundException
  * @todo   figure out why we go through this function for xarMod::isAvailable
  */
@@ -218,7 +218,6 @@ function xarLocaleFormatCurrency($currency, $localeData = NULL)
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  * @return string formatted number
- * @throws BAD_PARAM
  *
 **/
 function xarLocaleFormatNumber($number, $localeData = NULL, $isCurrency = false)
@@ -510,9 +509,9 @@ function xarLocaleFormatUTCDate($format = null, $time = null, $addoffset = false
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- * @param time mixed timestamp or date string (default now)
- * @param format strftime() format to use (TODO: default locale-dependent or configurable ?)
- * @param addoffset bool add user timezone offset (default true)
+ * @param string format strftime() format to use (TODO: default locale-dependent or configurable ?)
+ * @param mixed timestamp or date string (default now)
+ * @param bool addoffset add user timezone offset (default true)
  * @return string date
  *
 **/
@@ -1024,7 +1023,7 @@ class xarMLS__LocaleDataLoader extends xarObject
         return true;
     }
 
-    function getLocaleData()
+    function getLocaleData(): array
     {
         return $this->localeData;
     }

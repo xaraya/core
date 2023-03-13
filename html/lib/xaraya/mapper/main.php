@@ -378,4 +378,3 @@ class xarController extends xarObject
         return $params;
     }
 }
-

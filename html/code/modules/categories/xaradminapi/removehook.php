@@ -17,7 +17,7 @@
  * 
  * @param $args['objectid'] ID of the object (must be the module name here !!)
  * @param $args['extrainfo'] extra information
- * @return array Data array
+ * @return array|void Data array
  * @throws BadParameterException Thrown is invalid parameters have been given
  */
 function categories_adminapi_removehook($args)
@@ -65,5 +65,3 @@ function categories_adminapi_removehook($args)
     // Return the extra info
     return $extrainfo;
 }
-
-?>

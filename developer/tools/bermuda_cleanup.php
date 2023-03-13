@@ -231,7 +231,7 @@ class XarayaCodeAnalyzer
 class xarNode implements JsonSerializable
 {
     public static $analyzer;
-    public static $formatter;
+    //public static $formatter;
     public $name;
     public $children;
     public $parent;
@@ -265,9 +265,9 @@ class xarNode implements JsonSerializable
         if ($this->name == 'root') {
             return array_values($this->children);
         }
-        if (!empty(self::$formatter) && is_callable(self::$formatter)) {
-            return self::$formatter($this);
-        }
+        //if (!empty(self::$formatter) && is_callable(self::$formatter)) {
+        //    return self::$formatter($this);
+        //}
         if (!empty(self::$analyzer)) {
             $lname = strtolower($this->name);
             if (array_key_exists($lname, self::$analyzer->classes)) {

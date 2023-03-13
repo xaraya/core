@@ -58,4 +58,3 @@ function dynamicdata_adminapi_browse(Array $args=array())
     }
     return $filelist;
 }
-?>

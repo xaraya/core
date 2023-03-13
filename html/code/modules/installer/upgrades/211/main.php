@@ -25,7 +25,7 @@ function main_upgrade_211()
             $data['upgrade']['tasks'][] = array(
                 'reply' => xarML('Failed!'),
                 'description' => Upgrader::$errormessage,
-                'reference' => $check,
+                'reference' => $upgrade,
                 'success' => false,
             );
             $data['upgrade']['errormessage'] = xarML('Some checks failed. Check the reference(s) above to determine the cause.');
@@ -45,4 +45,3 @@ function main_upgrade_211()
     }
     return $data;
 }
-?>

@@ -29,4 +29,3 @@ function mail_userapi_getqueues(Array $args=array())
 
     return $queues;
 }
-?>

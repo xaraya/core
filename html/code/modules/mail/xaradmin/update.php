@@ -20,4 +20,3 @@ function mail_admin_update($args = array())
 
     return xarMod::guiFunc('dynamicdata','admin','update',$args);
 }
-?>

@@ -11,7 +11,7 @@
  * @link http://xaraya.info/index.php/release/182.html
  *
  * @author mikespub <mikespub@xaraya.com>
- * @return array empty array for the template display
+ * @return array|void empty array for the template display
  */
 function dynamicdata_admin_importpropertytypes (Array $args=array())
 {
@@ -23,4 +23,3 @@ function dynamicdata_admin_importpropertytypes (Array $args=array())
     
     return array();
 }
-?>

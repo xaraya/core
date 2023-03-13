@@ -137,5 +137,3 @@ function installer_admin_bootstrap()
     xarController::redirect(xarController::URL('installer', 'admin', 'create_administrator',array('install_language' => $install_language)));
     return true;
 }
-
-?>

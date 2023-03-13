@@ -14,7 +14,7 @@
  * count all users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
- * @return integer the number of users matching the selection criteria (cfr. getall)
+ * @return integer|void the number of users matching the selection criteria (cfr. getall)
  */
 function roles_userapi_countall(Array $args=array())
 {
@@ -73,5 +73,3 @@ function roles_userapi_countall(Array $args=array())
     // Return the number of users
     return $numroles;
 }
-
-?>

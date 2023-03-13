@@ -38,7 +38,8 @@ class BasicDataStore extends DDObject implements IBasicDataStore
      */
     function cleanGroupBy()
     {
-        $this->groupby = array();
+        if ($this instanceof DataObjectList)
+            $this->groupby = array();
     }
 
     /**
@@ -46,7 +47,8 @@ class BasicDataStore extends DDObject implements IBasicDataStore
      */
     function cleanWhere()
     {
-        $this->where = array();
+        if ($this instanceof DataObjectList)
+            $this->where = array();
     }
 
     /**
@@ -54,7 +56,8 @@ class BasicDataStore extends DDObject implements IBasicDataStore
      */
     function cleanSort()
     {
-        $this->sort = array();
+        if ($this instanceof DataObjectList)
+            $this->sort = array();
     }
 
     /**

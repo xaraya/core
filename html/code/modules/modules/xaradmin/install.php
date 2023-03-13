@@ -20,7 +20,7 @@
  * status message and returns true.
  * <andyv implementation of JC's request> attempt to activate module immediately after it's inited
  *
- * @param id the module id to initialise
+ * @param int id the module id to initialise
  * @return boolean true on success, false on failure
  */
 sys::import('modules.modules.class.installer');
@@ -126,10 +126,16 @@ function modules_admin_install()
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
 
-    if (function_exists('xarOutputFlushCached')) {
-        xarOutputFlushCached('base');
-        xarOutputFlushCached('modules');
-        xarOutputFlushCached('base-block');
+    if (xarCache::$outputCacheIsEnabled) {
+        if (xarOutputCache::$pageCacheIsEnabled) {
+            xarPageCache::flushCached('modules');
+            // a status update might mean a new menulink and new base homepage
+            xarPageCache::flushCached('base');
+        }
+        if (xarOutputCache::$blockCacheIsEnabled) {
+            // a status update might mean a new menulink and new base homepage
+            xarBlockCache::flushCached('base');
+        }
     }
 
     if (empty($return_url))
@@ -138,5 +144,3 @@ function modules_admin_install()
     xarController::redirect($return_url);
     return true;
 }
-
-?>

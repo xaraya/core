@@ -14,7 +14,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['itemid']
- * @return string representing the user home
+ * @return string|void representing the user home
  */
 function roles_userapi_getuserhome(Array $args=array())
 {
@@ -48,10 +48,8 @@ function roles_userapi_getuserhome(Array $args=array())
             $role = xarRoles::get($itemid);
             foreach ($role->getParents() as $parent) {
                 return xarMod::apiFunc('roles','user','getuserhome',array('itemid' => $parent->getID()));
-                break;
             }
         }
     }
     return $userhome;
 }
-?>

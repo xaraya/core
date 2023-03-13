@@ -34,4 +34,3 @@ function dynamicdata_adminapi_showinput(Array $args=array())
     }
     // TODO: input for some common hook/utility modules
 }
-?>

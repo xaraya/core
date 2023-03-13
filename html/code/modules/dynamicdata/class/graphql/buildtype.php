@@ -20,7 +20,7 @@ use GraphQL\Executor\Executor;
  * Build GraphQL ObjectType, query fields and resolvers for generic dynamicdata object type
  */
 //class xarGraphQLBuildType extends ObjectType
-class xarGraphQLBuildType
+class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutationsInterface
 {
     use xarGraphQLQueriesTrait;
     use xarGraphQLMutationsTrait;
@@ -283,21 +283,23 @@ class xarGraphQLBuildType
                 $fieldspecs[$property->name] = ['deferred', $typename];
                 continue;
             }
-            if ($property->type == self::get_property_id('deferitem')) {
-                $typename = self::find_property_typename($property);
-                $fieldspecs[$property->name] = ['deferitem', $typename, $property->defername];
-                continue;
-            }
-            if ($property->type == self::get_property_id('deferlist')) {
-                $typename = self::find_property_typename($property);
-                $fieldspecs[$property->name] = ['deferlist', $typename, $property->defername];
-                continue;
-            }
-            if ($property->type == self::get_property_id('defermany')) {
-                $typename = self::find_property_typename($property);
-                // @checkme we need the itemid here!
-                $fieldspecs[$property->name] = ['defermany', $typename, $property->defername];
-                continue;
+            if ($property instanceof DeferredItemProperty) {
+                if ($property->type == self::get_property_id('deferitem')) {
+                    $typename = self::find_property_typename($property);
+                    $fieldspecs[$property->name] = ['deferitem', $typename, $property->defername];
+                    continue;
+                }
+                if ($property->type == self::get_property_id('deferlist')) {
+                    $typename = self::find_property_typename($property);
+                    $fieldspecs[$property->name] = ['deferlist', $typename, $property->defername];
+                    continue;
+                }
+                if ($property->type == self::get_property_id('defermany')) {
+                    $typename = self::find_property_typename($property);
+                    // @checkme we need the itemid here!
+                    $fieldspecs[$property->name] = ['defermany', $typename, $property->defername];
+                    continue;
+                }
             }
             if ($property->type == self::get_property_id('configuration')) {
                 $typename = "keyval";
@@ -649,7 +651,8 @@ class xarGraphQLBuildType
         if ($typename == 'query' && !$useTypeClasses) {
             // @todo check if type class corresponding to fieldname has overridden _xar_*_query_resolver (objecttype)
             // @todo check if field type corresponding to fieldname has specific resolve Fn (tokentype)
-            $field_resolver = self::object_query_resolver($typename);
+            // @checkme not possible to override page/list/item resolvers in child class by type here
+            $field_resolver = self::_xar_query_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
             xarGraphQL::$paths[] = "use query field resolver for type $typename";
             return $field_resolver;
@@ -659,7 +662,8 @@ class xarGraphQLBuildType
         if ($typename == 'mutation' && !$useTypeClasses) {
             // @todo check if type class corresponding to fieldname has overridden _xar_*_mutation_resolver
             // @todo check if field type corresponding to fieldname has specific resolve Fn (tokentype)
-            $field_resolver = self::object_mutation_resolver($typename);
+            // @checkme not possible to override create/update/delete resolvers in child class by type here
+            $field_resolver = self::_xar_mutation_field_resolver($typename);
             $field_resolvers[$typename]['*'] = $field_resolver;
             xarGraphQL::$paths[] = "use mutation field resolver for type $typename";
             return $field_resolver;
@@ -798,10 +802,11 @@ class xarGraphQLBuildType
         $list = $object;
         // item=property
         $item = $type;
+        // @checkme not possible to override page/list/item resolvers in child class by type here
         $fields = [
-            self::get_page_query($page, $type, $object),
-            //self::get_list_query($list, $type, $object),
-            self::get_item_query($item, $type, $object),
+            self::_xar_get_page_query($page, $type, $object),
+            //self::_xar_get_list_query($list, $type, $object),
+            self::_xar_get_item_query($item, $type, $object),
         ];
         return $fields;
     }
@@ -812,7 +817,7 @@ class xarGraphQLBuildType
      */
     public static function get_page_query($page, $type, $object)
     {
-        return static::_xar_get_page_query($page, $type, $object);
+        return self::_xar_get_page_query($page, $type, $object);
     }
 
     /**
@@ -821,7 +826,7 @@ class xarGraphQLBuildType
      */
     public static function page_query_resolver($type, $object = null)
     {
-        return static::_xar_page_query_resolver($type, $object);
+        return self::_xar_page_query_resolver($type, $object);
     }
 
     /**
@@ -830,7 +835,7 @@ class xarGraphQLBuildType
      */
     public static function get_list_query($list, $type, $object)
     {
-        return static::_xar_get_list_query($list, $type, $object);
+        return self::_xar_get_list_query($list, $type, $object);
     }
 
     /**
@@ -839,7 +844,7 @@ class xarGraphQLBuildType
      */
     public static function list_query_resolver($type, $object = null)
     {
-        return static::_xar_list_query_resolver($type, $object);
+        return self::_xar_list_query_resolver($type, $object);
     }
 
     /**
@@ -848,7 +853,7 @@ class xarGraphQLBuildType
      */
     public static function get_item_query($item, $type, $object)
     {
-        return static::_xar_get_item_query($item, $type, $object);
+        return self::_xar_get_item_query($item, $type, $object);
     }
 
     /**
@@ -857,7 +862,7 @@ class xarGraphQLBuildType
      */
     public static function item_query_resolver($type, $object = null)
     {
-        return static::_xar_item_query_resolver($type, $object);
+        return self::_xar_item_query_resolver($type, $object);
     }
 
     /**
@@ -866,7 +871,7 @@ class xarGraphQLBuildType
      */
     public static function object_query_resolver($name = 'Query')
     {
-        return static::_xar_query_field_resolver($name);
+        return self::_xar_query_field_resolver($name);
     }
 
     /**
@@ -877,10 +882,11 @@ class xarGraphQLBuildType
     {
         // name=Property, type=property, object=properties
         [$name, $type, $object] = xarGraphQLInflector::sanitize($name, $type, $object);
+        // @checkme not possible to override create/update/delete resolvers in child class by type here
         $fields = [
-            //self::get_create_mutation('create' . $name, $type, $object),
-            //self::get_update_mutation('update' . $name, $type, $object),
-            //self::get_delete_mutation('delete' . $name, $type, $object),
+            //self::_xar_get_create_mutation('create' . $name, $type, $object),
+            //self::_xar_get_update_mutation('update' . $name, $type, $object),
+            //self::_xar_get_delete_mutation('delete' . $name, $type, $object),
         ];
         return $fields;
     }
@@ -891,7 +897,7 @@ class xarGraphQLBuildType
      */
     public static function get_create_mutation($name, $type, $object)
     {
-        return static::_xar_get_create_mutation($name, $type, $object);
+        return self::_xar_get_create_mutation($name, $type, $object);
     }
 
     /**
@@ -900,7 +906,7 @@ class xarGraphQLBuildType
      */
     public static function create_mutation_resolver($type, $object = null)
     {
-        return static::_xar_create_mutation_resolver($type, $object);
+        return self::_xar_create_mutation_resolver($type, $object);
     }
 
     /**
@@ -909,7 +915,7 @@ class xarGraphQLBuildType
      */
     public static function get_update_mutation($name, $type, $object)
     {
-        return static::_xar_get_update_mutation($name, $type, $object);
+        return self::_xar_get_update_mutation($name, $type, $object);
     }
 
     /**
@@ -918,7 +924,7 @@ class xarGraphQLBuildType
      */
     public static function update_mutation_resolver($type, $object = null)
     {
-        return static::_xar_update_mutation_resolver($type, $object);
+        return self::_xar_update_mutation_resolver($type, $object);
     }
 
     /**
@@ -927,7 +933,7 @@ class xarGraphQLBuildType
      */
     public static function get_delete_mutation($name, $type, $object)
     {
-        return static::_xar_get_delete_mutation($name, $type, $object);
+        return self::_xar_get_delete_mutation($name, $type, $object);
     }
 
     /**
@@ -936,7 +942,7 @@ class xarGraphQLBuildType
      */
     public static function delete_mutation_resolver($type, $object = null)
     {
-        return static::_xar_delete_mutation_resolver($type, $object);
+        return self::_xar_delete_mutation_resolver($type, $object);
     }
 
     /**
@@ -945,7 +951,7 @@ class xarGraphQLBuildType
      */
     public static function object_mutation_resolver($name = 'Mutation')
     {
-        return static::_xar_mutation_field_resolver($name);
+        return self::_xar_mutation_field_resolver($name);
     }
 
     /**

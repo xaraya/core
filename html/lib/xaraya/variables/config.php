@@ -89,23 +89,17 @@ class xarConfigVars extends xarVars implements IxarVars
         {
             case 'Site.DB.TablePrefix':
                 return xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
-                break;
             case 'System.Core.Generation':
                 return xarCore::GENERATION;
-                break;
             case 'System.Core.VersionNumber':
                 return xarCore::VERSION_NUM;
-                break;
             case 'System.Core.VersionId':
                 return xarCore::VERSION_ID;
-                break;
             case 'System.Core.VersionSub':
                 return xarCore::VERSION_SUB;
-                break;
             case 'prefix':
                 // FIXME: Can we do this another way (dependency)
                 return xarDB::getPrefix();
-                break;
         }
 
         // From the cache

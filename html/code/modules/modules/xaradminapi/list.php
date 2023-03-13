@@ -13,8 +13,7 @@
  *
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
- * @return array the known modules
- * @throws NO_PERMISSION
+ * @return array|void the known modules
  */
 function modules_adminapi_list(Array $args=array())
 {
@@ -35,5 +34,3 @@ function modules_adminapi_list(Array $args=array())
 
     return $modList;
 }
-
-?>

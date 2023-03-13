@@ -186,5 +186,3 @@ function mail_adminapi_sendhtmlmail(Array $args=array())
               'custom_header'    => $custom_header,
               'message_envelope' => $message_envelope));
 }
-
-?>

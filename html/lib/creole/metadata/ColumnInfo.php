@@ -66,7 +66,7 @@ class ColumnInfo {
 
     /**
      * Additional and optional vendor specific information.
-     * @var vendorSpecificInfo
+     * @var array $vendorSpecificInfo
      */
     protected $vendorSpecificInfo = array();
 
@@ -236,7 +236,6 @@ class ColumnInfo {
         switch($propname) {
             case 'max_length':
                 return $this->size;
-                break;
             default:
                 throw new Exception("Unknown  property accessed for columninfo");
         }

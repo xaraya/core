@@ -85,7 +85,7 @@ class DataObjectLoader
         if (is_array($value)) {
             $this->addList($value);
         } else {
-            $this->addItem($value);
+            $this->addItem((int)$value);
         }
     }
 
@@ -99,7 +99,7 @@ class DataObjectLoader
     public function addList(array $values)
     {
         foreach ($values as $value) {
-            $this->addItem($value);
+            $this->addItem((int)$value);
         }
     }
 
@@ -112,7 +112,7 @@ class DataObjectLoader
         if (is_array($value)) {
             return $this->getList($value);
         } else {
-            return $this->getItem($value);
+            return $this->getItem((int)$value);
         }
     }
 
@@ -129,7 +129,7 @@ class DataObjectLoader
         $items = [];
         foreach ($values as $value) {
             $key = (string) $value;
-            $items[$key] = $this->getItem($value);
+            $items[$key] = $this->getItem((int)$value);
         }
         return $items;
     }
@@ -233,7 +233,6 @@ class DataObjectLoader
         if (!empty($this->access) && !$this->objectlist->checkAccess($this->access)) {
             //http_response_code(403);
             throw new Exception('No access to object ' . $this->objectname);
-            return;
         }
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         $this->objectlist->setFieldList($this->fieldlist);
@@ -464,18 +463,18 @@ class DataObjectItemLoader extends DataObjectLoader
 {
     public function add($value)
     {
-        assert(is_int($value));
-        $this->addItem($value);
+        //assert(is_int($value));
+        $this->addItem((int)$value);
     }
 
     public function get($value)
     {
-        assert(is_int($value));
+        //assert(is_int($value));
         if (!empty($this->todo)) {
             $this->load();
         }
         // @checkme don't slice array based on limit and offset here?
-        return $this->getItem($value);
+        return $this->getItem((int)$value);
     }
 }
 
@@ -483,13 +482,13 @@ class DataObjectListLoader extends DataObjectLoader
 {
     public function add($values)
     {
-        assert(is_array($values));
+        //assert(is_array($values));
         $this->addList($values);
     }
 
     public function get($values)
     {
-        assert(is_array($values));
+        //assert(is_array($values));
         if (!empty($this->todo)) {
             $this->load();
         }
@@ -684,7 +683,6 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             $objectlist->dataquery->addconditions($conditions);
             // @todo make sure we don't delete the wrong items here
             throw new Exception('TODO: No saving links to relational object ' . $this->linkname);
-            return;
         }
         $result = $objectlist->getItems();
         $oldlinks = [];

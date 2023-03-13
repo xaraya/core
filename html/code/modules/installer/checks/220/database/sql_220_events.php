@@ -53,4 +53,3 @@ function sql_220_events()
     }
     return $data;
 }
-?>

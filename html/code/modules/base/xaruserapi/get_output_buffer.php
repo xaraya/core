@@ -16,8 +16,7 @@
  * @author Carl P. Corliss
  * @author the Base module development team
  * 
- * @param void N/A
- * @return Array containing the contents of the different output buffers
+ * @return array containing the contents of the different output buffers
  */
 function base_userapi_get_output_buffer()
 {
@@ -43,4 +42,3 @@ function base_userapi_get_output_buffer()
 
     return $buffer;
 }
-?>

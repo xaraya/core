@@ -16,7 +16,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * 
  * @param array $args Parameter data array
- * @return integer Returns given type id
+ * @return integer|void Returns given type id
  * @throws EmptyParameterException
  * @throws IDNotFoundException
  */
@@ -33,7 +33,7 @@ function blocks_typesapi_deleteitem(Array $args=array())
     
     if (!$type) {
         $msg = 'Block type id "#(1)" does not exist';
-        $vars = array($type_id);
+        $vars = array($args['type_id']);
         throw new IDNotFoundException($vars, $msg);
     }
 

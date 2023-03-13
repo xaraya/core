@@ -129,5 +129,3 @@ function roles_userapi_get(Array $args=array())
     if (empty($user)) return false;
     return $user;
 }
-
-?>

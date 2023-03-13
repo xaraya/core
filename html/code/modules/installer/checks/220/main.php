@@ -57,4 +57,3 @@ function main_check_220()
     }
     return $data;
 }
-?>

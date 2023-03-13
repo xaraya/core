@@ -42,8 +42,6 @@ class PdoPreparedStatementCommon extends PreparedStatementCommon implements Prep
      * 
      * @param object $conn Connection object
      * @param string $sql The SQL to work with.
-     * @param array $positions The positions in SQL of ?'s.
-     * @param restult $stmt If the driver supports prepared queries, then $stmt will contain the statement to use.
      */ 
     public function __construct(Connection $conn, $sql)
     {

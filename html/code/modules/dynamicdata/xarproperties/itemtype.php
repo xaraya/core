@@ -73,7 +73,6 @@ class ItemTypeProperty extends ComboProperty
     /**
      * Retrieve the list of options on demand
 	 * 
-     * @param void N/A
      */
     function getOptions()
     {
@@ -119,6 +118,7 @@ class ItemTypeProperty extends ComboProperty
             } catch (Exception $e) {}
 
         } else {
+            // @todo re-align with initialization_function in combobox
             // we have some specific function to retrieve the items here
             try {
                 eval('$items = ' . $this->func .';');
@@ -135,5 +135,3 @@ class ItemTypeProperty extends ComboProperty
         return $options;
     }
 }
-
-?>

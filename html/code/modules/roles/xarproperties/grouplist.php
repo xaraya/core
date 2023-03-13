@@ -99,7 +99,7 @@ class GroupListProperty extends SelectProperty
      * Create Value
      * 
      * @param int $itemid
-     * @return boolean Returns true
+     * @return boolean|void Returns true
      */
     public function createValue($itemid=0)
     {
@@ -247,7 +247,6 @@ class GroupListProperty extends SelectProperty
 	/**
      * Retrieve the list of options
      * 
-     * @param void N/A
      */
     public function getOptions()
     {
@@ -269,5 +268,3 @@ class GroupListProperty extends SelectProperty
     }
 
 }
-
-?>

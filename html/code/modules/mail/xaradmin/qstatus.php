@@ -68,4 +68,3 @@ function mail_admin_qstatus(Array $args=array())
     $data['measures'] = $measures;
     return $data;
 }
-?>

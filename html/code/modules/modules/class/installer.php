@@ -137,7 +137,7 @@ class Installer extends xarObject
                     $msg .= xarML('The current version of the module #(1) is #(2). The required version is #(3).',$dbMods[$module_id]['name'],$dbMods[$module_id]['version'],$conditions['minversion']);
                     die($msg);
                     //Need to add some info for the user
-                    return false; // 1st version is bigger
+                    //return false; // 1st version is bigger
                 }
 
                //Not to be checked, at least not for now
@@ -509,10 +509,16 @@ class Installer extends xarObject
             // set the target location (anchor) to go to within the page
             //$target = $extInfo['name'];
 
-            if (function_exists('xarOutputFlushCached')) {
-                xarOutputFlushCached('base');
-                xarOutputFlushCached('modules');
-                xarOutputFlushCached('base-block');
+            if (xarCache::$outputCacheIsEnabled) {
+                if (xarOutputCache::$pageCacheIsEnabled) {
+                    xarPageCache::flushCached('modules');
+                    // a status update might mean a new menulink and new base homepage
+                    xarPageCache::flushCached('base');
+                }
+                if (xarOutputCache::$blockCacheIsEnabled) {
+                    // a status update might mean a new menulink and new base homepage
+                    xarBlockCache::flushCached('base');
+                }
             }
 
             xarController::redirect($return_url);
@@ -626,4 +632,3 @@ class Installer extends xarObject
         }
     }
 }
-

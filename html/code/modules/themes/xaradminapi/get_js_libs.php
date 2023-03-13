@@ -35,4 +35,3 @@ function themes_adminapi_get_js_libs(Array $args=array())
         
     return $result;
 }
-?>

@@ -19,4 +19,3 @@ class ModulesItemTransforminputSubject extends ApiHookSubject
 {
     protected $subject = 'ItemTransforminput';
 }
-?>

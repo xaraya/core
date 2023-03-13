@@ -16,7 +16,6 @@
  * 
  * @author Marcel van der Boom
  *
- * @param void N/A 
  * @return boolean True is init was successfull, false if failed.
  * @throws Exception Thrown if database initialization has failed
  */
@@ -140,7 +139,6 @@ function base_upgrade($oldversion)
  *
  * @author Marcel van der Boom
  * 
- * @param void N/A
  * @return boolean Always returns false. This module cannot be removed.
  */
 function base_delete()
@@ -148,5 +146,3 @@ function base_delete()
   //this module cannot be removed
   return false;
 }
-
-?>

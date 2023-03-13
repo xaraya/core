@@ -41,4 +41,3 @@ class ListValidation extends ValueValidations
         return true;
     }
 }
-?>

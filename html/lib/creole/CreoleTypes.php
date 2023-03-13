@@ -174,7 +174,7 @@ abstract class CreoleTypes {
         /**
          * Given the name of a type (e.g. 'VARCHAR') this method will return the corresponding integer.
          * @param string $creoleTypeName The case-sensisive (must be uppercase) name of the Creole type (e.g. 'VARCHAR').
-         * @return int the Creole type.
+         * @return int|null the Creole type.
          */
         public static function getCreoleCode($creoleTypeName)
         {

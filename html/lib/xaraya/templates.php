@@ -166,7 +166,6 @@ class xarTpl extends xarObject
  * Get base dir
  *
  * @access public
- * @params  none
  * @return string
 **/
     public static function getBaseDir()
@@ -250,7 +249,6 @@ class xarTpl extends xarObject
  * Get theme name for the theme in use.
  *
  * @access public
- * @params none
  * @return string themename
  * @todo   the method_exists / function_exists should be in the xaraya scope, so we can deal with it's oddities
  */
@@ -307,7 +305,6 @@ class xarTpl extends xarObject
  * Get page template name
  *
  * @access public
- * @params none
  * @return string page template name
  */
     public static function getPageTemplateName()
@@ -336,7 +333,6 @@ class xarTpl extends xarObject
  * Get doctype declared by page template
  *
  * @access public
- * @params none
  * @return string doctype identifier
  */
     public static function getDoctype()
@@ -397,7 +393,6 @@ class xarTpl extends xarObject
  * Get page title
  *
  * @access public
- * @params none
  * @return string
  */
     public static function getPageTitle()
@@ -563,7 +558,6 @@ class xarTpl extends xarObject
                     $vars = array($scope);
                     $msg = 'Invalid scope "#(1)" for core function xarTpl::getScopeFileName()';
                     throw new BadParameterException($vars, $msg);
-                break;
             }
             if (!empty($callerMod) && $callerMod != $package) {                
                 if ($scope != 'module') {
@@ -773,7 +767,7 @@ class xarTpl extends xarObject
  * 
  * @param   string $modImage the module image url relative to xarimages/
  * @param   string $modName  the module to check for the image <optional>
- * @return  string image url if it exists or module image url if not, or NULL if neither found
+ * @return  string|void image url if it exists or module image url if not, or NULL if neither found
  *
  * @todo    provide examples, improve description, add functionality
  * @todo    provide XML URL override flag
@@ -897,7 +891,7 @@ class xarTpl extends xarObject
  * @param   string $fileName the fileName relative to the theme/module/property/block folder/
  * @param   string $scope the scope to check for (theme/module/property/block)
  * @param   string $package the actual theme/module/property/block we're looking at
- * @return  string file url if it exists or NULL if not
+ * @return  string|void file url if it exists or NULL if not
 */
 public static function getFile($fileName, $scope=NULL, $package=NULL)
 {
@@ -1069,7 +1063,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  * @access public
  * @param  array  $blockInfo  Information on the block
  * @param  string $templateName string
- * @return boolean xarTpl::executeFromFile($sourceFileName, $blockInfo)
+ * @return string xarTpl::executeFromFile($sourceFileName, $blockInfo)
  *
  * @todo the search logic for the templates can perhaps use the private function?
  * @todo implement common templates in cascade 
@@ -1154,7 +1148,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  * @param  string $modName      name of the module from which to include the template
  * @param  string $templateName Basically handler function for <xar:template type="module".../>
  * @param  array  $tplData      template variables
- * @param  array  $propertyName name of the property from which to include the template
+ * @param  string $propertyName name of the property from which to include the template
  * @throws FileNotFoundException
  * @return string
  */

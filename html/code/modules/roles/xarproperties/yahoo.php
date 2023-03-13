@@ -98,4 +98,3 @@ class YahooProperty extends TextBoxProperty
         return parent::showOutput($data);
     }
 }
-?>

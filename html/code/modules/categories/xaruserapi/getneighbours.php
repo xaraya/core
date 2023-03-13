@@ -16,10 +16,11 @@
  * Get info on neighbours based on left/right numbers
  * (easiest is to pass it a category array coming from getcat*)
  *
+ * @param array $args
  * @param $args['left'] left number
  * @param $args['right'] right number
  * @param $args['parent'] parent id (optional)
- * @return array Returns array containing neighbours info
+ * @return array|bool|void Returns array containing neighbours info
  */
 function categories_userapi_getneighbours($args)
 {
@@ -118,5 +119,3 @@ function categories_userapi_getneighbours($args)
     }
     return $info;
 }
-
-?>

@@ -12,4 +12,3 @@ class BaseServerRequestSubject extends EventSubject implements ixarEventSubject
 {
     protected $subject = 'ServerRequest';
 }
-?>

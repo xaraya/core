@@ -27,5 +27,4 @@ $coremodules = array(
     array('name' => "privileges",   'regid' => 1098),
     array('name' => "roles",        'regid' => 27),
     array('name' => "themes",       'regid' => 70)
-)
-?>
+);

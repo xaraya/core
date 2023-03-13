@@ -183,6 +183,7 @@ class PHPMailer extends xarObject
      *  @public bool
      */
     public $SMTPAuth     = false;
+    public $SMTPSecure;
 
     /**
      *  Sets SMTP username.
@@ -208,7 +209,7 @@ class PHPMailer extends xarObject
      *  @public bool
      */
     public $SMTPDebug    = false;
-
+    public $Debugoutput;
     /**
      * Prevents the SMTP connection from being closed after each mail
      * sending.  If this is set to true then to close the connection
@@ -1149,12 +1150,13 @@ class PHPMailer extends xarObject
             $this->SetError($this->Lang("file_open") . $path);
             return "";
         }
-        $magic_quotes = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
+        // @fixme deprecated
+        //$magic_quotes = get_magic_quotes_runtime();
+        //set_magic_quotes_runtime(0);
         $file_buffer = fread($fd, filesize($path));
         $file_buffer = $this->EncodeString($file_buffer, $encoding);
         fclose($fd);
-        set_magic_quotes_runtime($magic_quotes);
+        //set_magic_quotes_runtime($magic_quotes);
 
         return $file_buffer;
     }
@@ -1258,11 +1260,23 @@ class PHPMailer extends xarObject
             $encoded .= $this->LE;
 
         // Replace every high ascii, control and = characters
-        $encoded = preg_replace('/([\000-\010\013\014\016-\037\075\177-\377])/e',
-                  "'='.sprintf('%02X', ord('\\1'))", $encoded);
+        //$encoded = preg_replace('/([\000-\010\013\014\016-\037\075\177-\377])/e',
+        //          "'='.sprintf('%02X', ord('\\1'))", $encoded);
+        $encoded = preg_replace_callback('/([\000-\010\013\014\016-\037\075\177-\377])/',
+            function($matches){
+                foreach($matches as $match){
+                    return '='.sprintf('%02X', ord($match));
+                }
+            }, $encoded);
         // Replace every spaces and tabs when it's the last character on a line
-        $encoded = preg_replace("/([\011\040])".$this->LE."/e",
-                  "'='.sprintf('%02X', ord('\\1')).'".$this->LE."'", $encoded);
+        //$encoded = preg_replace("/([\011\040])".$this->LE."/e",
+        //          "'='.sprintf('%02X', ord('\\1')).'".$this->LE."'", $encoded);
+        $encoded = preg_replace_callback("/([\011\040])".$this->LE."/",
+            function($matches){
+                foreach($matches as $match){
+                    return '='.sprintf('%02X', ord($match));
+                }
+            }, $encoded);
 
         // Maximum line length of 76 characters before CRLF (74 + space + '=')
         $encoded = $this->WrapText($encoded, 74, true);
@@ -1304,7 +1318,7 @@ class PHPMailer extends xarObject
           default:
             // Replace every high ascii, control =, ? and _ characters
 //            $encoded = preg_replace('/([\000-\011\013\014\016-\037\075\077\137\177-\377])/e',
-            $encoded = preg_replace('/([\000-\011\013\014\016-\037\075\077\137\177-\377])/',
+            $encoded = preg_replace_callback('/([\000-\011\013\014\016-\037\075\077\137\177-\377])/',
 				function($matches){
 					foreach($matches as $match){
 						return '='.sprintf('%02X', ord($match));
@@ -1597,5 +1611,3 @@ class PHPMailer extends xarObject
         $this->CustomHeader[] = explode(":", $custom_header, 2);
     }
 }
-
-?>

@@ -28,12 +28,12 @@
  * Generate the PostgreSQL specific SQL to create a table
  *
  * 
- * @param tableName the physical table name
- * @param fields an array containing the fields to create
+ * @param string $tableName the physical table name
+ * @param array $fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
-function xarDB__postgresqlCreateTable($tableName, $fields)
+function xarDB__postgresqlCreateTable($tableName, $fields, $charset = null)
 {
     $sql_fields = array();
     $primary_key = array();
@@ -86,10 +86,10 @@ function xarDB__postgresqlCreateTable($tableName, $fields)
  * Postgres specific function to alter a table
  *
  * 
- * @param tableName the table to alter
- * @param args['command'] command to perform on the table
- * @param args['field'] name of column to modify
- * @param args['new_name'] new name of table
+ * @param string $tableName the table to alter
+ * @param array $args['command'] command to perform on the table
+ * @param array $args['field'] name of column to modify
+ * @param array $args['new_name'] new name of table
  * @return string|false postgres specific sql to alter a table
  * @throws BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -173,8 +173,8 @@ function xarDB__postgresqlAlterTable($tableName, $args)
  * Postgres specific column type generation
  *
  * 
- * @param field_name
- * @param parameters
+ * @param string $field_name
+ * @param array $parameters
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
 function xarDB__postgresColumnDefinition($field_name, $parameters)
@@ -386,5 +386,3 @@ function xarDB__postgresColumnDefinition($field_name, $parameters)
 
     return $this_field;
 }
-
-?>

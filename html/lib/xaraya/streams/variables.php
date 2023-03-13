@@ -73,28 +73,22 @@ class VariableStream extends xarObject
             if ($offset < strlen($GLOBALS[$this->varname]) && $offset >= 0) {
                 $this->position = $offset;
                 return true;
-            } else {
-                return false;
             }
-            break;
+            return false;
             
         case SEEK_CUR:
             if ($offset >= 0) {
                 $this->position += $offset;
                 return true;
-            } else {
-                return false;
             }
-            break;
+            return false;
             
         case SEEK_END:
             if (strlen($GLOBALS[$this->varname]) + $offset >= 0) {
                 $this->position = strlen($GLOBALS[$this->varname]) + $offset;
                 return true;
-            } else {
-                return false;
             }
-            break;
+            return false;
             
         default:
             return false;
@@ -142,4 +136,3 @@ if(!true){
     }
     fclose($fp);
 }
-?>

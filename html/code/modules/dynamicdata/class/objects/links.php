@@ -72,7 +72,7 @@ class DataObjectLinks extends xarObject
      * @param $source the object we want to get the links for (object, objectlist, objectname or objectid)
      * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
      */
-    static function getLinks($source = '', $linktype = '')
+    static function getLinks($source = '', $linktype = '', $itemid = null)
     {
         $linklist = self::initLinks();
         if (empty($linklist) || empty($linklist->objectid)) return array();
@@ -551,4 +551,3 @@ class DataObjectLinks extends xarObject
         return $mapping;
     }
 }
-?>

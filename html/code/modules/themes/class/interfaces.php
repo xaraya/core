@@ -16,4 +16,3 @@ interface iThemeInit
 {
     public function init(Array $data=array());
 }
-?>

@@ -39,4 +39,3 @@ class Base_ContentBlock extends BasicBlock implements iBlock
     public $notes               = "content_type can be 'text', 'html', 'blocklayout', 'php' or 'data'";
 
 }
-?>

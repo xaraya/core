@@ -384,5 +384,3 @@ function dynamicdata_admin_migrate(Array $args=array())
 
     return $data;
 }
-
-?>

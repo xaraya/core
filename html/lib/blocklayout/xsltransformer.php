@@ -26,6 +26,7 @@ class BlockLayoutXSLTProcessor extends xarObject
     protected $postXml = '';      // The transformed result XML
 
     public  $xmlFile = null;
+    public $postXML;
 
     public function __construct($xslFile=null)
     {
@@ -311,4 +312,3 @@ class XsltCallbacks extends xarObject
         return $matches[0];
     }
 }
-?>

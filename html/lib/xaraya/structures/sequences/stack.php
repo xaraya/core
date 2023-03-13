@@ -51,4 +51,3 @@ class Stack extends SequenceAdapter implements iStack
         return parent::load($seq);
     }
 }
-?>

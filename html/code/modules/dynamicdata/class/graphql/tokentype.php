@@ -16,7 +16,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * Token GraphQL ObjectType to get an access token
  */
-class xarGraphQLTokenType extends ObjectType
+class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreateInterface, xarGraphQLMutationDeleteInterface
 {
     public static $_xar_mutations = ['getToken', 'deleteToken'];
 
@@ -67,7 +67,7 @@ class xarGraphQLTokenType extends ObjectType
     /**
      * Get create mutation field for this object type
      */
-    public static function _xar_get_create_mutation($name)
+    public static function _xar_get_create_mutation($name, $typename = '', $object = null): array
     {
         return [
             'name' => 'getToken',
@@ -78,6 +78,8 @@ class xarGraphQLTokenType extends ObjectType
                 'pass' => ['type' => Type::string()],
                 'access' => ['type' => Type::string(), 'defaultValue' => 'display'],
             ],
+            'resolve' => static::_xar_create_mutation_resolver($name),
+            /**
             'resolve' => function ($rootValue, $args) {
                 // disable caching for mutations
                 xarGraphQL::$enableCache = false;
@@ -104,13 +106,51 @@ class xarGraphQLTokenType extends ObjectType
                 $expiration = date('c', time() + xarGraphQL::$tokenExpires);
                 return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
             },
+             */
         ];
+    }
+
+    /**
+     * Get the create mutation resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_create_mutation_resolver($typename, $object = null): callable
+    {
+        //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
+        $resolver = function ($rootValue, $args) {
+            // disable caching for mutations
+            xarGraphQL::$enableCache = false;
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = "getToken";
+            }
+            if (empty($args['uname']) || empty($args['pass'])) {
+                throw new Exception('Invalid username or password');
+            }
+            if (empty($args['access']) || !in_array($args['access'], ['display', 'update', 'create', 'delete', 'admin'])) {
+                throw new Exception('Invalid access');
+            }
+            //xarSession::init();
+            xarMod::init();
+            xarUser::init();
+            // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
+            // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
+            $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args);
+            if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
+                throw new Exception('Invalid username or password');
+            }
+            $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];
+            $token = xarGraphQL::createToken($userInfo);
+            $expiration = date('c', time() + xarGraphQL::$tokenExpires);
+            return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
+        };
+        return $resolver;
     }
 
     /**
      * Get delete mutation field for this object type
      */
-    public static function _xar_get_delete_mutation($name)
+    public static function _xar_get_delete_mutation($name, $typename ='', $object = null): array
     {
         return [
             'name' => $name,
@@ -119,6 +159,8 @@ class xarGraphQLTokenType extends ObjectType
             'args' => [
                 'confirm' => ['type' => Type::boolean(), 'defaultValue' => false],
             ],
+            'resolve' => static::_xar_delete_mutation_resolver($name),
+            /**
             'resolve' => function ($rootValue, $args, $context) {
                 // disable caching for mutations
                 xarGraphQL::$enableCache = false;
@@ -136,6 +178,35 @@ class xarGraphQLTokenType extends ObjectType
                 xarGraphQL::deleteToken($context);
                 return true;
             },
+             */
         ];
+    }
+
+    /**
+     * Get the delete mutation resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     */
+    public static function _xar_delete_mutation_resolver($typename, $object = null): callable
+    {
+        //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
+        $resolver = function ($rootValue, $args, $context) {
+            // disable caching for mutations
+            xarGraphQL::$enableCache = false;
+            if (xarGraphQL::$trace_path) {
+                xarGraphQL::$paths[] = "deleteToken";
+            }
+            if (empty($args['confirm'])) {
+                return false;
+            }
+            // see dummytype whoami and graphql checkUser
+            $userId = xarGraphQL::checkToken($context);
+            if (empty($userId)) {
+                return true;
+            }
+            xarGraphQL::deleteToken($context);
+            return true;
+        };
+        return $resolver;
     }
 }

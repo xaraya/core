@@ -19,6 +19,7 @@ function roles_admin_asknotification(Array $args=array())
     // Security
     if (!xarSecurity::check('EditRoles')) return;
     
+    $data = [];
     // Get parameters
     if (!xarVar::fetch('phase',    'str:0:', $data['phase'],    'display', xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('mailtype', 'str:0:', $data['mailtype'], 'blank', xarVar::NOT_REQUIRED)) return;
@@ -62,7 +63,7 @@ function roles_admin_asknotification(Array $args=array())
                     }
                 }
                 return $data;
-            break;
+
         case 'notify' :
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
@@ -87,7 +88,5 @@ function roles_admin_asknotification(Array $args=array())
             xarController::redirect(xarController::URL('roles', 'admin', 'showusers',
                               array('id' => $data['groupid'], 'state' => $data['state'])));
             return true;
-           break;
     }
 }
-?>

@@ -102,4 +102,3 @@ class ThemeInitialization extends xarObject
         $installer->init(array('name' => $dir));
     }
 }
-?>

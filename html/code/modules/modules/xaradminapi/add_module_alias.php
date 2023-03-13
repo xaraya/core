@@ -17,8 +17,8 @@
  * @param array    $args array of optional parameters<br/>
  *        string   $args['modName'] name of the 'real' module you want to assign it to<br/>
  *        string   $args['aliasModName'] name of the 'fake' module you want to define
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @return boolean|void true on success, false on failure
+ * @throws EmptyParameterException
  */
 function modules_adminapi_add_module_alias(Array $args=array())
 {
@@ -49,5 +49,3 @@ function modules_adminapi_add_module_alias(Array $args=array())
 
     return true;
 }
-
-?>

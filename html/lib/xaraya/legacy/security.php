@@ -19,7 +19,7 @@
  *
  * This is a wrapper function
  *
- * @fixme   this is no longer used and the makeGroup method doesn't exist (anymore)
+ * @todo   this is no longer used and the makeGroup method doesn't exist (anymore)
  * @uses xarRoles::makeGroup()
  * @deprecated
  * @param   string name
@@ -32,7 +32,7 @@ function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname
  *
  * This is a wrapper function
  *
- * @fixme   this is no longer used and the makeUser method doesn't exist (anymore)
+ * @todo   this is no longer used and the makeUser method doesn't exist (anymore)
  * @uses xarRoles::makeUser()
  * @deprecated
  * @param  string name
@@ -168,7 +168,7 @@ function xarAssignPrivilege($privilege,$role)
  * @uses xarPrivileges::removeModule()
  * @deprecated
  * @param   string module
- * @return  bool
+ * @return  void
  */
 function xarRemovePrivileges($module)
 {
@@ -275,9 +275,9 @@ function xarIsAncestor($name1, $name2)
  * @uses xarTreeRenderer
  * @deprecated
  * @param   string name
- * @return  object role
+ * @return  object|string role
  * @todo    what is this doing here?
- * @fixme   ithis seems to be implemented via Javascript now in roles & privileges
+ * @todo   ithis seems to be implemented via Javascript now in roles & privileges
  */
 function xarTree()
 {
@@ -296,7 +296,7 @@ function xarTree()
  * @uses xarPrivileges::external()
  * @deprecated
  * @param   integer pid,level
- * @param   strings pid,name,realm,module,component
+ * @param   string pid,name,realm,module,component
  * @param   array instance
  * @return  boolean
  */
@@ -313,7 +313,7 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
  * @uses xarSecurity::getLevel()
  * @deprecated
  * @param   integer levelname
- * @return  security level
+ * @return  int security level
  */
 function xarSecurityLevel($levelname)
 {
@@ -450,4 +450,3 @@ function xarSecConfirmAuthKey($modName=NULL, $authIdVarName='authid', $catch=fal
 {
     return xarSec::confirmAuthKey($modName, $authIdVarName, $catch);
 }
-

@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/1.html
  */
 /**
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 
     function modules_admin_aliases(Array $args=array())
@@ -30,4 +30,3 @@
         ksort($data['aliasesMap']);
         return $data;
     }
-?>

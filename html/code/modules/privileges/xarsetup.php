@@ -187,4 +187,3 @@ function initializeSetup()
 
     return true;
 }
-?>

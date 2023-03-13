@@ -19,14 +19,14 @@
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
- * @param   no parameters
  * @return  mixed data array for the template display or output display string if invalid data submitted
 */
 function modules_admin_modifyconfig()
 {
     // Security
     if(!xarSecurity::check('AdminModules')) return;
-    
+
+    $data = [];
     if (!xarVar::fetch('phase',        'str:1:100', $phase,       'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
     if(!xarVar::fetch('disableoverview','checkbox', $data['disableoverview'], (bool)xarModVars::get('modules', 'disableoverview'), xarVar::NOT_REQUIRED)) return;
 
@@ -54,4 +54,3 @@ function modules_admin_modifyconfig()
     }
     return $data;
 }
-?>

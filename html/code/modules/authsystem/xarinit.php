@@ -23,8 +23,7 @@
  * @author Gregor Rothfuss
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
  * 
- * @param void N/A
- * @return boolean True on success, false on failure
+ * @return boolean|void True on success, false on failure
  */
 function authsystem_init()
 {
@@ -57,7 +56,6 @@ function authsystem_init()
  * @author Gregor Rothfuss
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
  * 
- * @param void N/A
  * @return boolean True on success, false on failure
  */
 function authsystem_activate()
@@ -114,7 +112,6 @@ function authsystem_upgrade($oldversion)
  * @author Gregor Rothfuss
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
  *
- * @param void N/A 
  * @return boolean Function always returns false. It cannot be deleted.
  */
 function authsystem_delete()
@@ -122,5 +119,3 @@ function authsystem_delete()
   //this module cannot be removed
   return false;
 }
-
-?>

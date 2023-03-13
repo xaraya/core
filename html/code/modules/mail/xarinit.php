@@ -66,7 +66,7 @@ function mail_activate()
 /**
  * Upgrade this module from an old version
  *
- * @param oldVersion
+ * @param string oldversion
  * @return boolean true on success, false on failure
  * @todo create separate xar_mail_queue someday
  * @todo allow mail gateway functionality
@@ -92,5 +92,3 @@ function mail_delete()
   //this module cannot be removed
   return false;
 }
-
-?>

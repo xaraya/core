@@ -24,7 +24,7 @@
  *        integer  $args['status'] status of the field to update (optional)<br/>
  *        string   $args['configuration'] configuration of the field to update (optional)
  * @return boolean
- * @throws BAD_PARAM, NO_PERMISSION
+ * @throws BadParameterException
  */
 function dynamicdata_adminapi_updateprop(Array $args=array())
 {
@@ -100,4 +100,3 @@ function dynamicdata_adminapi_updateprop(Array $args=array())
 
     return true;
 }
-?>

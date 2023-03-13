@@ -13,11 +13,10 @@
  * List themes and current settings
  * @author Marty Vance
  * @author Chris Powis <crisp@xaraya.com>
- * @return array data for the template display
+ * @return array|bool data for the template display
  */
 function themes_admin_list()
 {
     xarController::redirect(xarController::URL('themes', 'admin', 'view'));
     return true;
 }
-?>

@@ -23,8 +23,7 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
 {
     /**
      * Display method
-     * @param void N/A
-     * @return array Returns display data array or null if not available.
+     * @return array|void Returns display data array or null if not available.
      */
     function display()
     {
@@ -96,7 +95,6 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
             if ($data['content_type'] == 'data') {
                 if (is_array($result)) {
                     $data = array_merge($result, $data);
-                    $data = $data;
                 } else {
                     // Structured data not returned.
                     return;
@@ -123,4 +121,3 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
     }
 
 }
-?>

@@ -236,4 +236,3 @@ function roles_userapi_getall(Array $args=array())
     // Return the users
     return $roles;
 }
-?>

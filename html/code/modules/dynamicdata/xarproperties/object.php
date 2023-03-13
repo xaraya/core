@@ -37,5 +37,3 @@ class ObjectProperty extends ObjectRefProperty
 
     public $initialization_store_prop   = 'objectid';       // Name of the property we want to use for storage
 }
-
-?>

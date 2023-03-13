@@ -25,7 +25,7 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
 {
 	/**
 	 * Display method
-	 * @FIXME: this method inefficiently runs db queries, whether required for display or not
+	 * @todo this method inefficiently runs db queries, whether required for display or not
 	 **/
     function display()
     {
@@ -162,4 +162,3 @@ class Roles_OnlineBlockDisplay extends Roles_OnlineBlock
         return $data;
     }
 }
-?>

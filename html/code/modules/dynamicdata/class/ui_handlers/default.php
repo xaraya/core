@@ -164,7 +164,7 @@ class DefaultHandler extends xarObject
      * @param $args['method'] the ui method we are handling here
      * @param $args['itemid'] item id of the object to call the method for, if the method needs it
      * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList()
-     * @return string output of xarTpl::object() using 'ui_default'
+     * @return string|void output of xarTpl::object() using 'ui_default'
      */
     public function run(array $args = [])
     {

@@ -18,6 +18,7 @@ function dynamicdata_admin_import(Array $args=array())
     // Security
     if(!xarSecurity::check('AdminDynamicData')) return;
 
+    $data = [];
     if(!xarVar::fetch('basedir',    'isset', $basedir,     NULL,  xarVar::DONT_SET)) {return;}
     if(!xarVar::fetch('import',     'isset', $import,      NULL,  xarVar::DONT_SET)) {return;}
     if(!xarVar::fetch('xml',        'isset', $xml,         NULL,  xarVar::DONT_SET)) {return;}
@@ -109,5 +110,3 @@ function dynamicdata_admin_import(Array $args=array())
 
     return $data;
 }
-
-?>

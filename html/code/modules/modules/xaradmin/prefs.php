@@ -13,7 +13,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @return array data for the template display
+ * @return array|void data for the template display
  */
 function modules_admin_prefs()
 {
@@ -25,5 +25,3 @@ function modules_admin_prefs()
     // done
     return $data;
 }
-
-?>

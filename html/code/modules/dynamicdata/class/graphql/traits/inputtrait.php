@@ -13,6 +13,16 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\InputObjectType;
 
 /**
+ * For documentation purposes only - available via xarGraphQLInputTrait
+ */
+interface xarGraphQLInputInterface
+{
+    public static function _xar_get_input_type($typename, $object = null): InputObjectType;
+    public static function _xar_get_input_fields($object, &$newType): array;
+    public static function _xar_input_value_parser($typename, $object): ?callable;
+}
+
+/**
  * Trait to handle default input object types for dataobjects
  */
 trait xarGraphQLInputTrait
@@ -20,7 +30,7 @@ trait xarGraphQLInputTrait
     /**
      * Make a generic Input Object Type for create/update mutations
      */
-    public static function _xar_get_input_type($typename, $object = null)
+    public static function _xar_get_input_type($typename, $object = null): InputObjectType
     {
         $object ??= xarGraphQLInflector::pluralize($typename);
         $description = "Input for DD " . $object . " item";
@@ -40,7 +50,7 @@ trait xarGraphQLInputTrait
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_fields($object, &$newType)
+    public static function _xar_get_input_fields($object, &$newType): array
     {
         // return static::_xar_get_object_fields($object);
         $fields = [
@@ -53,7 +63,8 @@ trait xarGraphQLInputTrait
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_input_value_parser($typename, $object)
+    public static function _xar_input_value_parser($typename, $object): ?callable
     {
+        return null;
     }
 }

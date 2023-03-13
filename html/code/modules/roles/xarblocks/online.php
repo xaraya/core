@@ -34,4 +34,3 @@ class Roles_OnlineBlock extends BasicBlock
     public $showlastuser = false;
 
 }
-?>

@@ -17,8 +17,7 @@
  *
  * @author the DynamicData module development team
  * @param array    $args array of optional parameters<br/>
- * @return array of object definitions
- * @raise DATABASE_ERROR, NO_PERMISSION
+ * @return int of object definitions
  * @todo should we wrap this?
  */
 function dynamicdata_adminapi_getnextitemtype($args = array())
@@ -30,9 +29,10 @@ function dynamicdata_adminapi_getnextitemtype($args = array())
     sort($ids);
     $lastid = array_pop($ids);
     return $lastid + 1;
+    /**
     // DD and DD-type modules go one way
     if ($module_id == 182 || $module_id == 27) return $lastid + 1;
     // other module go another
     else return max(1000,$lastid + 1);
+     */
 }
-?>

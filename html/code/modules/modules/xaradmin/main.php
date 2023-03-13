@@ -37,5 +37,3 @@ function modules_admin_main()
         return true;
     }
 }
-
-?>

@@ -53,4 +53,3 @@ function sql_210_13()
     }
     return $data;
 }
-?>

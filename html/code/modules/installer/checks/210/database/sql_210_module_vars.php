@@ -49,4 +49,3 @@ function sql_210_module_vars()
     }
     return $data;
 }
-?>

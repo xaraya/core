@@ -24,4 +24,3 @@ class SourceTemplate extends CompiledTemplate
 {
     public function &compile() {}
 }
-?>

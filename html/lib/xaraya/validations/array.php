@@ -51,4 +51,3 @@ class ArrayValidation extends ValueValidations
         return true;
     }
 }
-?>

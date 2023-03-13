@@ -112,4 +112,3 @@ else
         return parent::showOutput($data);
     }
 }
-?>

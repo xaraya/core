@@ -40,4 +40,3 @@ function roles_userapi_getmenulinks()
     }
     return $menulinks;
 }
-?>

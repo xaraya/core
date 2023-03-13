@@ -13,6 +13,16 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
+ * For documentation purposes only - available via xarGraphQLMutationsTrait
+ */
+interface xarGraphQLMutationsInterface extends xarGraphQLMutationCreateInterface, xarGraphQLMutationUpdateInterface, xarGraphQLMutationDeleteInterface
+{
+    public static function _xar_get_mutation_fields(): array;
+    public static function _xar_get_mutation_field($name, $kind = ''): array;
+    public static function _xar_mutation_field_resolver($typename = 'mutation'): callable;
+}
+
+/**
  * Trait to handle default mutation fields for dataobjects (create, update, delete)
  */
 trait xarGraphQLMutationsTrait
@@ -28,7 +38,7 @@ trait xarGraphQLMutationsTrait
     /**
      * Get the mutation fields listed in the $_xar_mutations property of the actual class
      */
-    public static function _xar_get_mutation_fields()
+    public static function _xar_get_mutation_fields(): array
     {
         $fields = [];
         foreach (static::$_xar_mutations as $kind => $name) {
@@ -43,7 +53,7 @@ trait xarGraphQLMutationsTrait
      * This method will be inherited by all specific object types, so it's important to use "static"
      * instead of "self" here - see https://www.php.net/manual/en/language.oop5.late-static-bindings.php
      */
-    public static function _xar_get_mutation_field($name, $kind = '')
+    public static function _xar_get_mutation_field($name, $kind = ''): array
     {
         if (empty($kind) || is_numeric($kind)) {
             $kind = strtolower(substr($name, 0, 6));
@@ -51,13 +61,10 @@ trait xarGraphQLMutationsTrait
         switch ($kind) {
             case 'create':
                 return static::_xar_get_create_mutation($name, static::$_xar_type, static::$_xar_object);
-                break;
             case 'update':
                 return static::_xar_get_update_mutation($name, static::$_xar_type, static::$_xar_object);
-                break;
             case 'delete':
                 return static::_xar_get_delete_mutation($name, static::$_xar_type, static::$_xar_object);
-                break;
             default:
                 throw new Exception("Unknown '$kind' mutation '$name'");
         }
@@ -66,7 +73,7 @@ trait xarGraphQLMutationsTrait
     /**
      * Add to the mutation resolver for the object type (create, update, delete) - when using BuildSchema
      */
-    public static function _xar_mutation_field_resolver($typename = 'mutation')
+    public static function _xar_mutation_field_resolver($typename = 'mutation'): callable
     {
         // call the right mutation resolver based on the first part of the field name <action><Object>
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) {

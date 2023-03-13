@@ -39,4 +39,3 @@ function sql_210_20()
     }
     return $data;
 }
-?>

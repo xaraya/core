@@ -45,4 +45,3 @@ class EventObserver extends xarObject implements ixarEventObserver
         // developers writing observers should return whatever the subject expects
     }
 }
-

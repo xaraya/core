@@ -94,4 +94,3 @@ function __getFaviconURL($url)
     $favicon_url = $full_url . "/favicon.ico" ;
     return $favicon_url;
 }
-?>

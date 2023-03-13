@@ -101,5 +101,3 @@ function categories_adminapi_unlink($args)
 
     return true;
 }
-
-?>

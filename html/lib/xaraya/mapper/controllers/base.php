@@ -19,7 +19,8 @@ class BaseActionController extends xarObject
 {
     private $controller;
     private $request;
-    
+    private $actionstring;
+    private $separator;
     public $module;
     public $modulealias;
     
@@ -87,4 +88,3 @@ class BaseActionController extends xarObject
     }
     
 }
-

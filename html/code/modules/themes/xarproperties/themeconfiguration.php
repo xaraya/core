@@ -45,7 +45,7 @@ class ThemeConfigurationProperty extends TextBoxProperty
 	 * 
 	 * @param  string name The name of the textbox
 	 * @param  string value The value of the textbox
-	 * @return bool  Returns true
+	 * @return bool|void  Returns true
 	 */
     public function checkInput($name = '', $value = null)
     {
@@ -187,4 +187,3 @@ class ThemeConfigurationProperty extends TextBoxProperty
         return $allconfigurations;
     }
 }
-?>

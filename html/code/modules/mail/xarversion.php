@@ -39,4 +39,3 @@ $modversion = array(
     'class'              => 'Core Complete',
     'category'           => 'System',
 );
-?>

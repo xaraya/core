@@ -13,8 +13,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @return boolean|void true on success, false on failure
  */
 function modules_adminapi_set_pref_defaults()
 {
@@ -31,5 +30,3 @@ function modules_adminapi_set_pref_defaults()
     // all done
     return true;
 }
-
-?>

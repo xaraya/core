@@ -24,4 +24,3 @@ class ModulesModRemoveSubject extends EventSubject implements ixarEventSubject
         parent::__construct($modName);                             
     }
 }
-?>

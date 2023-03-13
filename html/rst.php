@@ -85,8 +85,21 @@ function dispatch_request($method, $path)
             $handler = $routeInfo[1];
             $vars = $routeInfo[2];
             // ... call $handler with $vars
-            $result = DataObjectRESTHandler::callHandler($handler, $vars);
-            DataObjectRESTHandler::output($result);
+            try {
+                $result = DataObjectRESTHandler::callHandler($handler, $vars);
+                DataObjectRESTHandler::output($result);
+            } catch (UnauthorizedOperationException $e) {
+                DataObjectRESTHandler::output('This operation is unauthorized, please authenticate.', 401);
+            } catch (ForbiddenOperationException $e) {
+                DataObjectRESTHandler::output('This operation is forbidden.', 403);
+            } catch (Throwable $e) {
+                $result = "Exception: " . $e->getMessage();
+                if ($e->getPrevious() !== null) {
+                    $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
+                }
+                $result .= "\nTrace:\n" . $e->getTraceAsString();
+                DataObjectRESTHandler::output($result, 422);
+            }
             break;
     }
 }

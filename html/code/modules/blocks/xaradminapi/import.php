@@ -16,7 +16,7 @@
  *
  * @param $args['file'] location of the .xml file containing the object definition, or
  * @param $args['xml'] XML string containing the object definition
- * @return array block id on success, false on failure
+ * @return int|bool block id on success, false on failure
  */
 function blocks_adminapi_import(Array $args=array())
 {
@@ -119,5 +119,3 @@ function blocks_adminapi_import(Array $args=array())
         return false;
     }
 }
-
-?>

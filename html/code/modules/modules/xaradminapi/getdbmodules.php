@@ -68,5 +68,3 @@ function modules_adminapi_getdbmodules(Array $args=array())
 
     return $dbModules;
 }
-
-?>

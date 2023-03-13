@@ -29,4 +29,3 @@ function blocks_adminapi_unregister_block_type(Array $args=array())
 {
     return true;
 }
-?>

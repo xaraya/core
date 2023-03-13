@@ -17,7 +17,6 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * 
- * @param void N/A
  */
 function blocks_init()
 {
@@ -117,4 +116,3 @@ function blocks_delete()
   //this module cannot be removed
   return false;
 }
-?>

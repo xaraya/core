@@ -114,7 +114,6 @@ class xarCurl extends xarObject
      * Constructor: create the PHP curl object.
      * A url can be passed in at this point, or added later.
      * A session will be opened immediately the object is created.
-     * @return array
      */
     public function __construct(Array $args=array())
     {
@@ -123,7 +122,7 @@ class xarCurl extends xarObject
         if (!function_exists('curl_init')) {
             $this->errno = -1;
             $this->error = 'CURL_NOT_AVAILABLE';
-            return false;
+            return;
         }
 
         // Initialize a session.
@@ -147,8 +146,6 @@ class xarCurl extends xarObject
                 )
             );
         }
-
-        return true;
     }
 
     /**
@@ -157,7 +154,6 @@ class xarCurl extends xarObject
      * This only needs to be called to reopen a new session after the initial
      * session is closed. Alternatively, discard the object and create a new one.
      * 
-     * @param void N/A
      */
     public function init()
     {
@@ -206,9 +202,9 @@ class xarCurl extends xarObject
     /**
      * Add GET or POST parameters (name/value pair or an array)
      * 
-     * @param type $name
-     * @param type $value
-     * @param type $type
+     * @param string|array $name
+     * @param string $value
+     * @param string $type
      * @return boolean
      */
     private function param($name = '', $value = '', $type = '')
@@ -277,7 +273,7 @@ class xarCurl extends xarObject
      * 
      * @param string $name Get variable name
      * @param mixed $value Get variable value
-     * @return bollean
+     * @return boolean
      */
     public function get($name = '', $value = '')
     {
@@ -303,7 +299,6 @@ class xarCurl extends xarObject
     /**
      * Execute curl fetch
      * 
-     * @param void N/A
      * @return boolean Returns true on on success, false on failure
      */
     public function exec()
@@ -407,7 +402,7 @@ class xarCurl extends xarObject
                 if (function_exists('gzinflate')) {
                     if ($this->header['Content-Encoding'] == 'deflate' && $degzdata = @gzinflate($result)) {
                         $result = $degzdata;
-                    } elseif ($headers['Content-Encoding'] == 'gzip' && $degzdata = gzinflate(substr($result, 10))){
+                    } elseif ($this->header['Content-Encoding'] == 'gzip' && $degzdata = gzinflate(substr($result, 10))){
                         $result = $degzdata;
                     } else {
                         $this->errno = -1;
@@ -451,8 +446,8 @@ class xarCurl extends xarObject
             // the curl handle is open.
             $this->info = curl_getinfo($this->curl);
             $this->http_code = $this->info['http_code'];
-            if (isset($this->http_descs[$this->http_code])) {
-                $this->http_desc = $this->http_descs[$this->http_code];
+            if (isset($this->http_codes[$this->http_code])) {
+                $this->http_desc = $this->http_codes[$this->http_code];
             }
         }
 
@@ -479,7 +474,6 @@ class xarCurl extends xarObject
     /**
      * Close curl call
      * 
-     * @param void N/A
      * @return boolean Return true on success false on failure
      */
     public function close()
@@ -561,4 +555,3 @@ class xarCurl extends xarObject
         return $new;
     }
 }
-

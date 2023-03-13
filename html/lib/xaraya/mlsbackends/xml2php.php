@@ -35,7 +35,7 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
         $this->backendtype = "php";
 
         $this->gen = new PHPBackendGenerator(xarMLS::getCurrentLocale());
-        if (!isset($this->gen)) return false;
+        if (!isset($this->gen)) return;
     }
 
     function translate($string, $type = 0)
@@ -242,12 +242,14 @@ class xarMLS__XML2PHPTranslationsBackend extends xarMLS__ReferencesBackend imple
  */
 class PHPBackendGenerator extends xarObject
 {
-
     public $locale;
     public $outCharset;
     public $fp;
     public $baseDir;
     public $baseXMLDir;
+    public $isUTF8;
+    public $fileName;
+    public $xmlFileName;
 
     function __construct($locale)
     {
@@ -408,4 +410,3 @@ class PHPBackendGenerator extends xarObject
         return true;
     }
 }
-

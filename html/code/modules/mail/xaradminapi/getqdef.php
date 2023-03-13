@@ -28,4 +28,3 @@ function mail_adminapi_getqdef(Array $args=array())
     }
     return false;
 }
-?>

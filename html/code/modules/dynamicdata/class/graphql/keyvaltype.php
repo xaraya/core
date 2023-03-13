@@ -16,7 +16,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 /**
  * GraphQL ObjectType and (no) query fields for assoc array configuration = unserialized in "propertie(s)"
  */
-class xarGraphQLKeyValType extends ObjectType
+class xarGraphQLKeyValType extends ObjectType implements xarGraphQLInputInterface
 {
     use xarGraphQLInputTrait;
 
@@ -74,7 +74,7 @@ class xarGraphQLKeyValType extends ObjectType
     /**
      * This method *should* be overridden for each specific object type
      */
-    public static function _xar_get_input_fields($object, &$newType)
+    public static function _xar_get_input_fields($object, &$newType): array
     {
         // return static::_xar_get_object_fields($object);
         $fields = [

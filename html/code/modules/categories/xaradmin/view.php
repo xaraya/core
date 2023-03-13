@@ -15,10 +15,11 @@
 /**
  * View admin categories
  * 
- * @return array|null Returns display data array on succes, null on failure
+ * @return array|void Returns display data array on succes, null on failure
  */
 function categories_admin_view()
 {
+    $data = [];
     // Get parameters
     if(!xarVar::fetch('activetab',      'isset', $activetab             , 0, xarVar::NOT_REQUIRED)) {return;}
     if(!xarVar::fetch('startnum',       'isset', $data['startnum']      , 1, xarVar::NOT_REQUIRED)) {return;}
@@ -34,5 +35,3 @@ function categories_admin_view()
 
     return $data;
 }
-
-?>

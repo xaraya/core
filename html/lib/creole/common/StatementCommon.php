@@ -174,7 +174,7 @@ abstract class StatementCommon {
      * This assumes that the last thing done was an executeQuery() or an execute()
      * with SELECT-type query.
      *
-     * @return RestultSet (or null if none)
+     * @return ResultSet (or null if none)
      */
     public function getResultSet()
     {

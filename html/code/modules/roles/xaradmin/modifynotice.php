@@ -12,7 +12,7 @@
  */
 /**
  * modify configuration
- * @return array data for the template display
+ * @return array|string|bool|void data for the template display
  */
 function roles_admin_modifynotice()
 {
@@ -58,9 +58,6 @@ function roles_admin_modifynotice()
             xarController::redirect(xarController::URL('roles', 'admin', 'modifynotice'));
             // Return
             return true;
-
-            break;
     }
     return $data;
 }
-?>

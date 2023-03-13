@@ -26,7 +26,7 @@
  *        string   $args['source'] data source of the field to delete<br/>
  *        string   $args['configuration'] configuration of the field to delete
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @throws BadParameterException
  */
 function dynamicdata_adminapi_deleteprop(Array $args=array())
 {
@@ -69,5 +69,3 @@ function dynamicdata_adminapi_deleteprop(Array $args=array())
     }
     return true;
 }
-
-?>

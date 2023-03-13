@@ -15,11 +15,11 @@
 /**
  * Update item from categories_admin_modify
  * 
- * @param void N/A
- * @return boolean|null Returns true on success, null on failure
+ * @return bool|string|null Returns true on success, null on failure
  */
 function categories_admin_update()
 {
+    $data = [];
     //Checkbox work for submit buttons too
     if (!xarVar::fetch('itemtype', 'int', $itemtype, 0, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('itemid', 'int', $data['itemid'], 0, xarVar::NOT_REQUIRED)) return;
@@ -53,4 +53,3 @@ function categories_admin_update()
     xarController::redirect(xarController::URL('categories','admin','view'));
     return true;
 }
-?>

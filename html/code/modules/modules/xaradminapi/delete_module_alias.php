@@ -18,7 +18,7 @@
  *        string   $args['aliasModName'] name of the 'fake' module you want to remove<br/>
  *        string   $args['modName'] name of the 'real' module it was assigned to
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @throws EmptyParameterException
  */
 function modules_adminapi_delete_module_alias(Array $args=array())
 {
@@ -35,5 +35,3 @@ function modules_adminapi_delete_module_alias(Array $args=array())
 
     return true;
 }
-
-?>

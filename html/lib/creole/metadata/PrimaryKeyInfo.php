@@ -56,7 +56,7 @@ class PrimaryKeyInfo {
     }
 
     /**
-     * @param Column $column
+     * @param ColumnInfo $column
      * @return void
      */
     public function addColumn($column)
@@ -65,7 +65,7 @@ class PrimaryKeyInfo {
     }
 
     /**
-     * @return array Column[]
+     * @return array ColumnInfo[]
      */
     public function getColumns()
     {

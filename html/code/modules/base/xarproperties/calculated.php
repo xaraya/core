@@ -124,7 +124,6 @@ class CalculatedProperty extends TextBoxProperty
     /**
      * Parse calculation rule, e.g. ( price * quantity + 5 ) / 0.95
      * 
-     * @param void N/A
      */
     private function parseCalculation()
     {

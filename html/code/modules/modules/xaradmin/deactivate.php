@@ -18,8 +18,8 @@
  * message and returns true.
  *
  * @access public
- * @param id the mdoule id to deactivate
- * @return boolean true on success, false on failure
+ * @param int id the module id to deactivate
+ * @return boolean|string|void true on success, false on failure
  */
 function modules_admin_deactivate ()
 {
@@ -87,5 +87,3 @@ function modules_admin_deactivate ()
 
     return true;
 }
-
-?>

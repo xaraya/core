@@ -12,4 +12,3 @@ class BaseSessionCreateSubject extends EventSubject implements ixarEventSubject
 {
     protected $subject = 'SessionCreate';
 }
-?>

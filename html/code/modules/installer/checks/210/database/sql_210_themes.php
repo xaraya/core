@@ -51,4 +51,3 @@ function sql_210_themes()
     }
     return $data;
 }
-?>

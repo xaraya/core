@@ -178,4 +178,3 @@ class xarLogger_syslog extends xarLogger
         return $levels[$level];
     }
 }
-?>

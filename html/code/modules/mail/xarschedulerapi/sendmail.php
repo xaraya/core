@@ -87,5 +87,3 @@ function mail_schedulerapi_sendmail(Array $args=array())
 
     return $log;
 }
-
-?>

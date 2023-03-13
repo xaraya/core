@@ -38,7 +38,7 @@ class xarResponse extends xarObject
      *    ...
      *
      * 
-     * @param msg string the message
+     * @param string $msg the message
      * @param ... string template overrides, cfr. xarTpl::module (optional)
      * @return string output display string
      */
@@ -66,7 +66,7 @@ class xarResponse extends xarObject
      *    ...
      *
      * 
-     * @param msg string the message
+     * @param string $msg the message
      * @param ... string template overrides, cfr. xarTpl::module (optional)
      * @return string output display string
      */
@@ -86,7 +86,7 @@ class xarResponse extends xarObject
      * Carry out a redirect - legacy support for Jamaica 2.0 and 2.1
      *
      * @access public
-     * @param redirectURL string the URL to redirect to
+     * @param string $url the URL to redirect to
      */
     static public function Redirect($url = '')
     {

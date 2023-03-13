@@ -78,4 +78,3 @@ function xarSessionGetId()               { return xarSession::getId(); }
  */
 function xarSession_setUserInfo($userId, $rememberSession)
 { return xarSession::setUserInfo($userId, $rememberSession); }
-

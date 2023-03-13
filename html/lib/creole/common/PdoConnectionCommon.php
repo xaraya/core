@@ -42,6 +42,8 @@ abstract class PdoConnectionCommon extends ConnectionCommon {
     
     private $open_result_set_ref = null;
     
+    private $lastQuery;
+
     /**
      * @see Connection::connect()
      */
@@ -138,7 +140,7 @@ abstract class PdoConnectionCommon extends ConnectionCommon {
     }
     
     /**
-     * @returns the PDO statement
+     * @return object the PDO statement
      */
     public function executePdoQuery( $sql ) {
 

@@ -30,4 +30,3 @@ class ModulesModRemoveObserver extends EventObserver implements ixarEventObserve
 
     }
 }
-?>

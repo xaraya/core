@@ -68,7 +68,7 @@ class Role extends DataObject
      * Creates an entry in the repository for a role object that has been created
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return boolean
+     * @return boolean|void
      */
     public function createItem(Array $data = array())
     {
@@ -151,7 +151,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $member
-     * @return boolean
+     * @return boolean|void
      */
     public function addMember($member)
     {
@@ -221,7 +221,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param object $member
-     * @return boolean
+     * @return boolean|void
      * @todo add transaction around the delete and the update
      */
     public function removeMember($member)
@@ -273,7 +273,7 @@ class Role extends DataObject
      * deleteItem: make a role deleted
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return boolean
+     * @return boolean|string|void
      * @todo flag illegal deletes
      */
     public function deleteItem(Array $data = array())
@@ -583,7 +583,7 @@ class Role extends DataObject
      * @param integer state count user in this state
      * @param string selection count user within this selection criteria
      * @param integer itemtype group or user
-     * @return integer
+     * @return integer|void
      */
     public function countChildren($state = xarRoles::ROLES_STATE_CURRENT, $selection = NULL, $itemtype = NULL)
     {
@@ -822,7 +822,7 @@ class Role extends DataObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int $adjust
-     * @return boolean
+     * @return boolean|void
      */
     public function adjustParentUsers($adjust)
     {
@@ -868,10 +868,10 @@ class Role extends DataObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @todo since there are so many a generalized getter (magic __get() ) might be more pleasurable
      */
-    function getID() { return $this->properties['id']->value; }
+    function getID(): int { return $this->properties['id']->value; }
     function getName() { return $this->properties['name']->getValue(); }
     function getUname() { return $this->properties['uname']->value; }
-    function getType() { return $this->properties['role_type']->value; }
+    function getType(): int { return $this->properties['role_type']->value; }
     function getUser() { return $this->properties['uname']->value; }
     function getEmail() { return $this->properties['email']->value; }
     function getPass() { return $this->properties['password']->value; }
@@ -915,5 +915,3 @@ class RoleList extends DataObjectList
 
     // CHECKME: do we want anything special in here ?
 }
-
-?>

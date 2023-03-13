@@ -21,7 +21,6 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * 
- * @param void N/A
  * @return mixed output display string or boolean true if redirected
  */
 
@@ -43,5 +42,3 @@ function blocks_admin_main()
         return true;
     }
 }
-
-?>

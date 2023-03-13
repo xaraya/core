@@ -19,8 +19,8 @@
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
- * @param array    $args array of optional parameters<br/>
- *        string   $args['module']  module name
+     * @param array    $args array of optional parameters<br/>
+     *        string   $args['module']  module name
      * @return  array of component ids and names
     */
 
@@ -34,6 +34,7 @@
         } else {
             $module = xarMod::getName($modid);
 
+            // @checkme where is getcomponents() supposed to come from?
             // Do we have the components in a file?
             try {
                 sys::import('modules.' . $module . '.security');

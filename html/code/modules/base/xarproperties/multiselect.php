@@ -131,8 +131,8 @@ class MultiSelectProperty extends SelectProperty
 	 * Used to show the hidden data
 	 * 
 	 * @param  array data An array of input parameters
-	 * @return bool   Returns true or false 
-	 */	   	
+	 * @return string|void   Returns true or false 
+	 */
     public function showHidden(Array $data = array())
     {
         if (isset($data['single'])) $this->validation_single = $data['single'];

@@ -71,7 +71,8 @@ class xarRouter extends xarObject
         }
         
         $params = array_merge($this->globalParams, $userParams);
-        
+
+        // @fixme what was this supposed to do? There is no assemble method in xarRoute()
         $route = $this->getRoute($name);
         $url   = $route->assemble($params, $reset, $encode);
 
@@ -98,4 +99,3 @@ class xarRouter extends xarObject
     }
 
 }
-?>

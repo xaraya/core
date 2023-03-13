@@ -52,5 +52,3 @@ class xarMailParser extends Mail_mimeDecode
 {
 
 }
-
-?>

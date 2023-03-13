@@ -132,4 +132,3 @@ module'),
               array('name' => 'xslt', 'fullname' => 'Xslt', 'description' => 'Xslt module')
               );
 }
-?>

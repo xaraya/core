@@ -19,7 +19,6 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
     /**
      * Modify Function to the Blocks Admin
      * 
-     * @param void N/A
      * @return array Returns data array
      */
     public function configmodify()
@@ -103,7 +102,7 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
      * @param array $data Parameter data array
      * @return boolean|null Returns true on success and null on failure 
      */
-    public function configupdate(Array $data=array())
+    public function configupdate(Array $vars=array())
     {
         if(!xarVar::fetch('layout',       'isset', $vars['layout'],       $this->layout, xarVar::DONT_SET)) {return;}
         if(!xarVar::fetch('showcatcount', 'isset', $vars['showcatcount'], false, xarVar::NOT_REQUIRED)) {return;}
@@ -126,5 +125,3 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
     }
     */
 }
-
-?>

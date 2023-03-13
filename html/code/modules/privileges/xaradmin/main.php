@@ -37,5 +37,3 @@ function privileges_admin_main()
         return true;
     }
 }
-
-?>

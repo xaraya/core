@@ -72,4 +72,3 @@ function modules_adminapi_standardinstall(Array $args=array())
 
     return true;
 }
-?>

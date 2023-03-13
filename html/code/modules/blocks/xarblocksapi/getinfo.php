@@ -183,7 +183,6 @@ function blocks_blocksapi_getinfo(Array $args=array())
             break;
             default:
                 continue 2;
-            break;
         }
     }         
 

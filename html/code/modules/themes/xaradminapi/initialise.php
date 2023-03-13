@@ -17,7 +17,7 @@
  *        string   $args['regid'] registered theme id
  *        string   $args['name'] theme's name
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM, THEME_NOT_EXIST
+ * @throws EmptyParameterException
  */
 function themes_adminapi_initialise(Array $args=array())
 {
@@ -42,10 +42,7 @@ function themes_adminapi_initialise(Array $args=array())
 
     if (!isset($set)) {
         throw new Exception('Could not set state of theme');
-        xarSession::setVar('errormsg', xarML('Theme state change failed'));
-        return false;
     }
 
     return true;
 }
-?>

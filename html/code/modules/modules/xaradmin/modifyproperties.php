@@ -16,9 +16,9 @@
  * and passes the data to the template.
  *
  * @author Xaraya Development Team
- * @param id registered module id
- * @param return_url optional return URL after setting the hooks
- * @return array data for the template display
+ * @param int id registered module id
+ * @param string return_url optional return URL after setting the hooks
+ * @return array|string|void data for the template display
  */
 function modules_admin_modifyproperties(Array $args=array())
 {
@@ -84,5 +84,3 @@ function modules_admin_modifyproperties(Array $args=array())
     }
     return $data;
 }
-
-?>

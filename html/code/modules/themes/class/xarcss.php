@@ -80,8 +80,6 @@ class xarCSS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access private prevents direct creation of this singleton, use getInstance()
- * @params none
- * @throws none
  * @return void
 **/
 
@@ -100,8 +98,6 @@ class xarCSS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @throws none
  * @return void
 **/
     public function __wakeup()
@@ -129,8 +125,6 @@ class xarCSS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @throws none
  * @return array public object properties to store values for
 **/
     public function __sleep()
@@ -178,9 +172,7 @@ class xarCSS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params none
- * @return Object current instance
- * @throws none
+ * @return object current instance
  *
 **/
     public static function getInstance_old()
@@ -222,9 +214,7 @@ class xarCSS extends xarObject
  * @author Chris Powis <crisp@xaraya.com>
  * @author Marc Lutolf <mfl@netspan.ch>
  * @access public
- * @params none
  * @return void
- * @throws none
  *
 **/
     public function refresh()
@@ -368,7 +358,7 @@ class xarCSS extends xarObject
  * @author Andy Varganov <andyv@xaraya.com>
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params array  $args array of optional parameters<br/>
+ * @param array  $args array of optional parameters<br/>
  *         string $args[scope] scope of style, one of common!theme(default)|module|block|property<br/>
  *         string $args[method] style method, one of link(default)|import|embed<br/>
  *         string $args[alternatedir] alternative base folder to look in, falling back to...<br/>
@@ -387,8 +377,7 @@ class xarCSS extends xarObject
  *         string $args[property] standalone property name, required for property scope
  *         string $args[block] standalone block name, required for block scope
  * @todo: support other W3C standard attributes of link and style tags?
- * @return boolean true on success
- * @throws none
+ * @return boolean|void true on success
  *
 **/
     public function register($args)
@@ -443,7 +432,6 @@ class xarCSS extends xarObject
             case 'embed':
                 // embed method, we're done, queue the source and bail
                 return $this->queue($method, $scope, $tag['source'], $tag);
-                break;
             case 'import':
                 $tag['media'] = str_replace(' ', ', ', $tag['media']);
                 break;
@@ -585,7 +573,7 @@ class xarCSS extends xarObject
  * @param string  $method the method to use (link, import, embed)
  * @param string  $url source, either code to embed or url of file to link or import
  * @param array   $data tag data to cache
- * @return boolean true on success
+ * @return boolean|void true on success
  * @todo make private once xarTpl functions are deprecated
 **/
     public function queue($method, $scope, $url, $data)
@@ -633,11 +621,10 @@ class xarCSS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params array   $args array of optional parameters<br/>
+ * @param array   $args array of optional parameters<br/>
  *         boolean $args[comments] show comments, optional, default false
  * @todo option to turn on/off style comments in UI, cfr template comments
- * @return string templated output of css to render
- * @throws none
+ * @return string|void templated output of css to render
 **/
     public function render($args)
     {
@@ -661,9 +648,7 @@ class xarCSS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access private
- * @params none
- * @throws none
- * @return bool true on success
+ * @return bool|void true on success
  * @todo implement proper caching using xarCache
 **/
     private function combine()
@@ -749,7 +734,6 @@ class xarCSS extends xarObject
  * @author Chris Powis <crisp@xaraya.com>
  * @access private
  * @param  string css to compress
- * @throws none
  * return  string compressed css
 **/
     private function compress($string='', $fileName='')
@@ -779,7 +763,6 @@ class xarCSS extends xarObject
  * @access private
  * @param  string $string the string to look in for replacements
  * @param  string $fileName the name of the file the string belongs to
- * @throws none
  * return  string the string with urls replaced
 **/
     private function fixurlpaths($string, $fileName)
@@ -829,7 +812,6 @@ class xarCSS extends xarObject
  * @access private
  * @param  string $string the string to look in for replacements
  * @param  string $fileName the name of the file the string belongs to
- * @throws none
  * return  string the string with @imports replaced with content
 **/
     private function combineimports($string, $fileName)
@@ -888,6 +870,8 @@ class xarCSSLib extends xarObject
 
     // Library files
     public $styles        = array(); // all styles
+    public $templates;
+    public $scripts;
 
     public function __construct($name)
     {

@@ -16,7 +16,7 @@
  *        integer  $args['regid'] module's registered id
  *        string   $args['name'] module's name
  * @return boolean
- * @throws BAD_PARAM
+ * @throws EmptyParameterException
  */
 function modules_adminapi_activate(Array $args=array())
 {
@@ -44,14 +44,8 @@ function modules_adminapi_activate(Array $args=array())
                         array('regid' => $regid,
                               'state' => xarMod::STATE_ACTIVE));
 
-    if (function_exists('xarOutputFlushCached') && function_exists('xarMod::getName') && xarMod::getName() != 'installer') {
-        xarOutputFlushCached('base');
-        xarOutputFlushCached('modules');
-        xarOutputFlushCached('base-block');
-    }
     // notify any observers that this module was activated 
     // NOTE: the ModActivate event observer notifies ModuleActivate hooks 
     xarEvents::notify('ModActivate', $modInfo['name']);
     return true;
 }
-?>

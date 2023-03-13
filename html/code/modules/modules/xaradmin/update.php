@@ -12,9 +12,9 @@
  * Update a module
  *
  * @author Xaraya Development Team
- * @param id the module's registered id
- * @param newdisplayname the new display name
- * @param newdescription the new description
+ * @param int id the module's registered id
+ * @param string newdisplayname the new display name
+ * @param string newdescription the new description
  * @return mixed true on success, error message on failure
  */
 function modules_admin_update()
@@ -54,5 +54,3 @@ function modules_admin_update()
     
     return true;
 }
-
-?>

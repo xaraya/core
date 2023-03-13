@@ -17,7 +17,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param  id the module id
+ * @param  int id the module id
  * @return mixed true on success
  */
 
@@ -88,5 +88,3 @@ function modules_admin_remove ()
     // Never reached
     return true;
 }
-
-?>

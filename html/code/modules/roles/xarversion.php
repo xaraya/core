@@ -41,4 +41,3 @@ $modversion = array(
     'class'              => 'Core Complete',
     'category'           => 'Users & Groups',
 );
-?>

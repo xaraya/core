@@ -38,5 +38,3 @@ $themevars = array(
     array('name' => 'block_bg', 'value' => '#C6E0FF', 'description' => 'Block background color'),
     array('name' => 'accent_bg', 'value' => '#CDD5F8', 'description' => 'Accent color'),
 );
-
-?>

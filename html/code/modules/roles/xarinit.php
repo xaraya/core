@@ -19,7 +19,6 @@
  *
  * @access public
  * @return boolean
- * @throws DATABASE_ERROR
  */
 function roles_init()
 {
@@ -145,7 +144,7 @@ function roles_create_roles()
 /**
  * Upgrade this module from an old version
  *
- * @param oldVersion
+ * @param string $oldversion
  * @return boolean true on success, false on failure
  */
 function roles_upgrade($oldversion)

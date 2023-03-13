@@ -29,5 +29,3 @@ function roles_schedulerapi_expire(Array $args=array())
 
     return true;
 }
-
-?>

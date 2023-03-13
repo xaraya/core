@@ -19,4 +19,3 @@ class ModulesItemtypeCreateSubject extends ApiHookSubject
 {
     public $subject = 'ItemtypeCreate';
 }
-?>

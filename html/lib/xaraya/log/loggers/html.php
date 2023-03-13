@@ -110,5 +110,3 @@ class xarLogger_html extends xarLogger_simple
                                      nl2br(htmlspecialchars($message)));
     }
 }
-
-?>

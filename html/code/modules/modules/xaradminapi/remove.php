@@ -15,8 +15,7 @@
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] the id of the module
  *        string   $args['name'] module's name
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @return boolean|void true on success, false on failure
  */
 function modules_adminapi_remove(Array $args=array())
 {
@@ -105,4 +104,3 @@ function modules_adminapi_remove(Array $args=array())
 
     return true;
 }
-?>

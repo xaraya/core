@@ -129,7 +129,7 @@ trait DefaultResponseTrait
         if ($e->getPrevious() !== null) {
             $body .= "\nPrevious: " . $e->getPrevious()->getMessage();
         }
-        $body .= $e->getTraceAsString();
+        $body .= "\nTrace:\n" . $e->getTraceAsString();
         $here = explode('\\', static::class);
         $class = array_pop($here);
         $response = $this->getResponseFactory()->createResponse(422, $class . ' Exception')->withHeader('Content-Type', 'text/plain; charset=utf-8');

@@ -172,5 +172,3 @@ function categories_admin_modifyhook($args)
 
     return $data;
 }
-
-?>

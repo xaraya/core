@@ -20,4 +20,3 @@ class ModulesItemFormactionSubject extends GuiHookSubject
     public $subject = 'ItemFormaction';
     // methods inherited from parent...
 }
-?>

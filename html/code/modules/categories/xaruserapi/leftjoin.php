@@ -260,5 +260,3 @@ function categories_userapi_leftjoin($args)
 
     return $leftjoin;
 }
-
-?>

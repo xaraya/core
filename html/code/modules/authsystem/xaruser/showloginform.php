@@ -18,7 +18,7 @@
  * @author  Jo Dalle Nogare <jojodeexaraya.com>
  * 
  * @param array $args Optional 'redirecturl' parameter
- * @return array Returns data for display template.
+ * @return array|bool Returns data for display template.
  */
 function authsystem_user_showloginform(Array $args = array())
 {
@@ -41,4 +41,3 @@ function authsystem_user_showloginform(Array $args = array())
 
     return $data;
 }
-?>

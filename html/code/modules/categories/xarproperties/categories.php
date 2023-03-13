@@ -77,7 +77,7 @@ class CategoriesProperty extends DataProperty
 	 * 
 	 * @param  string name The name of the property
 	 * @param  string value The value of the property
-	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+	 * @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
 	 */
     public function checkInput($name = '', $value = null)
     {
@@ -119,6 +119,7 @@ class CategoriesProperty extends DataProperty
 
         // Make sure they are valid unless we can override
 //        if (!$this->validation_override) {
+        /**
         if (0) {
             if (count($value) > 0) {
                 $checkcats= array();
@@ -136,6 +137,7 @@ class CategoriesProperty extends DataProperty
                 }
             }
         }
+         */
         
         // Check the number of base categories against the number categories we have
         // Remark: some of the selected categories might be empty here!
@@ -181,39 +183,38 @@ class CategoriesProperty extends DataProperty
         if (isset($this->objectref)) {
             // This property is bound
             return $this->updateLinks($itemid);
-        } else {
-            sys::import('xaraya.structures.query');
-            xarMod::apiLoad('categories');
-            $xartable =& xarDB::getTables();
-        
-            // This property is standalone
-            // For both create and update we remove any existing links and create the new ones
-            if (!empty($itemid)) {
-                $q = new Query('DELETE', $xartable['categories_linkage']); 
-                $q->eq('item_id', (int)$itemid);
-                // CHRCKME: shouldn't we force a value for module_id and itemtype?
-                if ($this->module_id) $q->eq('module_id', $this->module_id);
-                if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
-                $q->run();
-            }
+        }
+        sys::import('xaraya.structures.query');
+        xarMod::apiLoad('categories');
+        $xartable =& xarDB::getTables();
+    
+        // This property is standalone
+        // For both create and update we remove any existing links and create the new ones
+        if (!empty($itemid)) {
+            $q = new Query('DELETE', $xartable['categories_linkage']); 
+            $q->eq('item_id', (int)$itemid);
+            // CHRCKME: shouldn't we force a value for module_id and itemtype?
+            if ($this->module_id) $q->eq('module_id', $this->module_id);
+            if ($this->itemtype) $q->eq('itemtype', $this->itemtype);
+            $q->run();
+        }
 
-            // Make sure the categories are in the form of an array
-            if (!is_array($this->categories)) $this->categories = unserialize($this->categories);
+        // Make sure the categories are in the form of an array
+        if (!is_array($this->categories)) $this->categories = unserialize($this->categories);
 
-            foreach ($this->basecategories as $key => $basecategory) {
-                foreach ($this->categories[$key] as $category) {
-                    // Ignore if no category was chosen (value = 0)
-                    if (empty($category)) continue;
-                
-                    $q = new Query('INSERT', $xartable['categories_linkage']); 
-                    $q->addfield('item_id', (int)$itemid);
-                    $q->addfield('module_id', $this->module_id);
-                    $q->addfield('itemtype', $this->itemtype);
+        foreach ($this->basecategories as $key => $basecategory) {
+            foreach ($this->categories[$key] as $category) {
+                // Ignore if no category was chosen (value = 0)
+                if (empty($category)) continue;
+            
+                $q = new Query('INSERT', $xartable['categories_linkage']); 
+                $q->addfield('item_id', (int)$itemid);
+                $q->addfield('module_id', $this->module_id);
+                $q->addfield('itemtype', $this->itemtype);
 //                    $q->addfield('basecategory', $key);
-                    $q->addfield('category_id', $category);
-                    $q->addfield('property_id', $this->id);
-                    $q->run();
-                }
+                $q->addfield('category_id', $category);
+                $q->addfield('property_id', $this->id);
+                $q->run();
             }
         }
         return true;
@@ -230,11 +231,9 @@ class CategoriesProperty extends DataProperty
     {
         if (isset($this->objectref)) {
             return $this->updateLinks($itemid);
-        } else {
-            // This property is standalone
-            return $this->createValue($itemid);
         }
-        return $itemid;
+        // This property is standalone
+        return $this->createValue($itemid);
     }
 
     /**

@@ -19,7 +19,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * @access public
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
 function roles_admin_testprivileges()
 {
@@ -61,6 +61,7 @@ function roles_admin_testprivileges()
         }
         // test returned an object
         else {
+            // @fixme testresult does not contain a privilege id
             $thisprivilege = xarPrivileges::getPrivilege($testresult['id']);
             $resultdisplay = "";
             $data['rname'] = $thisprivilege->getName();
@@ -110,5 +111,3 @@ function roles_admin_testprivileges()
     $data['authid'] = xarSec::genAuthKey();
     return $data;
 }
-
-?>

@@ -33,5 +33,3 @@ function dynamicdata_user_property(Array $args=array())
         }
     }
 }
-
-?>

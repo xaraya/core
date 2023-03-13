@@ -40,4 +40,3 @@ $modversion = array(
     'class'              => 'Core Admin',
     'category'           => 'System',
 );
-

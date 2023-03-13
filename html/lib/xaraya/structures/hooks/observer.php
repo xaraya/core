@@ -80,4 +80,3 @@ class HookObserver extends EventObserver implements ixarEventObserver
         return $extrainfo;
     }
 }
-?>

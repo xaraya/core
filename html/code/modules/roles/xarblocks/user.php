@@ -30,7 +30,7 @@ class Roles_UserBlock extends BasicBlock
      * Display the user info via block
      * 
      * @param array $data Data array
-     * @return array Display data array or null if nothing is to display.
+     * @return array|void Display data array or null if nothing is to display.
      */
     function display(Array $data=array())
     {
@@ -39,4 +39,3 @@ class Roles_UserBlock extends BasicBlock
         return $data;
     }
 }
-?>

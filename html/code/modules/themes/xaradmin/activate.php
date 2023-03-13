@@ -19,8 +19,8 @@
  * then redirects to the list function with a
  * status message and returns true.
  * 
- * @param id $ the theme id to activate
- * @return boolean true on success, false on failure
+ * @param int id $ the theme id to activate
+ * @return boolean|string|void true on success, false on failure
  */
 function themes_admin_activate()
 { 
@@ -52,5 +52,4 @@ function themes_admin_activate()
         $return_url = xarController::URL('themes', 'admin', 'view', array('state' => xarTheme::STATE_ANY), NULL, $target);
     xarController::redirect($return_url);
     return true;
-} 
-?>
+}

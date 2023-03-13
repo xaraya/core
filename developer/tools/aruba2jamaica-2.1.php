@@ -112,7 +112,7 @@ function getFiles($path)
  *
  * @author Chris Powis <crisp@crispcreations.co.uk>
  * @param string $path path to file to convert
- * @return bool true if converted
+ * @return bool|void true if converted
 **/
 function convertFile($path)
 {

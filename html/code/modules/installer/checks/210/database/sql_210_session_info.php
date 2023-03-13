@@ -52,4 +52,3 @@ function sql_210_session_info()
     }
     return $data;
 }
-?>

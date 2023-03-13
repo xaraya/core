@@ -28,8 +28,10 @@ class FileUploadProperty extends DataProperty
     public $validation_file_extensions      = 'gif|jpg|jpeg|png|bmp|pdf|doc|txt';   // Only these file extensions are allowed
     public $validation_allow_duplicates     = 2;     // Overwrite the old instance
     public $validation_sanitize_filename    = false; // Remove or change unacceptable characters in the name
-//    public $initialization_basepath         = null;
-    // TODO: support the different options in code below
+    public $initialization_basepath;
+    public $file_extension_list;
+    public $file_extension_regex;
+// TODO: support the different options in code below
     public $methods = array('trusted'  => false,
                             'external' => false,
                             'upload'   => false,
@@ -43,6 +45,9 @@ class FileUploadProperty extends DataProperty
     // this is used by DataPropertyMaster::addProperty() to set the $object->upload flag
     public $upload = true;
     public $UploadsModule_isHooked          = FALSE;
+
+    public $_moduleid;
+    public $_itemtype;
 
     function __construct(ObjectDescriptor $descriptor)
     {
@@ -388,7 +393,7 @@ class FileUploadProperty extends DataProperty
             }
             // @todo try to get rid of this
             return xarMod::apiFunc('uploads','admin','showinput',
-                                 array('id' => $name, // not $this->id
+                                 array('id' => $data['name'], // not $this->id
                                        'value' => $value,
                                        'multiple' => $this->initialization_multiple,
                                        'format' => 'fileupload',
@@ -533,5 +538,3 @@ class FileUploadProperty extends DataProperty
         return $valid;
     }
 }
-
-?>

@@ -78,4 +78,3 @@ function mail_adminapi_replace(Array $args=array())
                  'htmlmessage'  => $htmlmessage);
 
 }
-?>

@@ -27,10 +27,8 @@
  * @param string   $args['module'] the module name
  * @param string   $args['type'] the block type
  * @return boolean true on success, false on failure
- * @throws DATABASE_ERROR, BAD_PARAM
  */
 function blocks_adminapi_register_block_type(Array $args=array())
 {
     return true;
 }
-?>

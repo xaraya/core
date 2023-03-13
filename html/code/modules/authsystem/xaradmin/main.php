@@ -19,8 +19,7 @@
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>
  * 
- * @param void N/A
- * @return string|boolean If the page redirects true is returned, else a display string.
+ * @return string|boolean|void If the page redirects true is returned, else a display string.
  */
 function authsystem_admin_main()
 {
@@ -38,4 +37,3 @@ function authsystem_admin_main()
         return true;
     }
 }
-?>

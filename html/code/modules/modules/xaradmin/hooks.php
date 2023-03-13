@@ -14,7 +14,7 @@
  * @author Xaraya Development Team
  * @param $args['curhook'] current hook module (optional)
  * @param $args['return_url'] URL to return to after updating the hooks (optional)
- * @return array data for the template display
+ * @return array|void data for the template display
  *
  */
 function modules_admin_hooks(Array $args=array())
@@ -129,5 +129,3 @@ function modules_admin_hooks(Array $args=array())
     
     return $data;    
 }
-
-?>

@@ -18,8 +18,8 @@
  * <andyv implementation of JC's request> attempt to activate module immediately after it's inited
  *
  * @author Xaraya Development Team
- * @param id the module id to initialise
- * @return boolean true on success, false on failure
+ * @param int id the module id to initialise
+ * @return boolean|void true on success, false on failure
  */
 function modules_admin_installall()
 {
@@ -57,5 +57,3 @@ function modules_admin_installall()
     xarController::redirect(xarController::URL('modules', 'admin', 'list', array('state' => 0), NULL));
     return true;
 }
-
-?>

@@ -12,7 +12,7 @@
  */
 /**
  * viewPrivileges - view the current privileges
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
 function privileges_admin_viewprivileges()
 {
@@ -30,6 +30,3 @@ function privileges_admin_viewprivileges()
     $data['refreshlabel'] = xarML('Refresh');
     return $data;
 }
-
-
-?>

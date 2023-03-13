@@ -14,8 +14,8 @@
  * @author Xaraya Development Team
  * @param array    $args array of optional parameters<br/>
  *        integer  $args['regid'] registered module id
- * @return boolean true on success, false on failure
- * @throws BAD_PARAM
+ * @return boolean|void true on success, false on failure
+ * @throws EmptyParameterException
  */
 function modules_adminapi_upgrade(Array $args=array())
 {
@@ -93,5 +93,3 @@ function modules_adminapi_upgrade(Array $args=array())
     // Success
     return true;
 }
-
-?>

@@ -76,7 +76,6 @@ class xarBlock extends xarObject implements ixarBlock
  * 
  * @param  array data block information parameters
  * @return string output the block to show
- * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
  * @todo   this function calls a module function, keep an eye on it.
  */
     public static function render(Array $blockinfo=array())
@@ -307,7 +306,7 @@ class xarBlock extends xarObject implements ixarBlock
  * @param  BasicBlock $block the block instance supplying the method
  * @param  string $method, name of the method to call
  * @return string output the block to show
- * @throws  BAD_PARAM, DATABASE_ERROR, ID_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws  FunctionNotFoundException
  */        
     public static function guiMethod(iBlock $block, $method, $block_tpl=null)
     {
@@ -361,7 +360,6 @@ class xarBlock extends xarObject implements ixarBlock
  * @param  string $method, name of the method to check
  * @param  bool $strict, flag to indicate if the block must have declared the method
  * @return bool
- * @throws none
  */ 
     public static function hasMethod(iBlock $block, $method, $strict=false)
     {
@@ -391,6 +389,7 @@ class xarBlock extends xarObject implements ixarBlock
  *
  * @author John Cox
  * 
+ * @param  array $args
  * @param  string args[instance] id or name of block instance to render
  * @param  string args[module] module that owns the block
  * @param  string args[type] module that owns the block
@@ -442,9 +441,9 @@ class xarBlock extends xarObject implements ixarBlock
     /**
      * Check access for a specific action on block level (see also xarMod and xarObject)
      *
-     * @param block object the block we want to check access for
-     * @param action string the action we want to take on this block (display/modify/delete)
-     * @param roleid mixed override the current user or null
+     * @param object block the block we want to check access for
+     * @param string action the action we want to take on this block (display/modify/delete)
+     * @param mixed roleid override the current user or null
      * @return boolean true if access
      */
     static function checkAccess(iBlock $block, $action, $roleid = null)

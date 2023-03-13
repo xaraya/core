@@ -58,8 +58,7 @@ class PassBoxProperty extends TextBoxProperty
 	/**
 	 * Set the value of input
 	 * 
-	 * @param  string value The value of the input
-	 * @return string    return a encrypted value
+	 * @param  mixed value The value of the input
 	 */	
     function setValue($value=null)
     {

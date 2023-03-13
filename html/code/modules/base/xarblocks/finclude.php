@@ -27,4 +27,3 @@ class Base_FincludeBlock extends BasicBlock implements iBlock
     public $url                 = 'http://www.xaraya.com/';
 
 }
-?>

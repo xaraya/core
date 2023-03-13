@@ -17,7 +17,7 @@
  *        string   $args['displayname'] the new display name of the module<br/>
  *        string   $args['admincapable'] the whether the module shows an admin menu<br/>
  *        string   $args['usercapable'] the whether the module shows a user menu
- * @return boolean true on success, false on failure
+ * @return boolean|void true on success, false on failure
  */
 function modules_adminapi_updateproperties(Array $args=array())
 {
@@ -49,5 +49,3 @@ function modules_adminapi_updateproperties(Array $args=array())
     }
     return true;
 }
-
-?>

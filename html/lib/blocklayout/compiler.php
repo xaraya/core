@@ -113,6 +113,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         } catch (Exception $e) {
             $this->compresswhitespace = 1;
         }
+        return [];
     }
     
     protected function getProcessor($xslFile='')
@@ -278,7 +279,7 @@ class ExpressionTransformer extends xarObject
     /**
      * Transform a PHP expression from a template to a valid piece of PHP code
      *
-     * @return string Valid PHP expression
+     * @return string|void Valid PHP expression
      * @todo if expressions were always between #...# this would be easier
      * @todo if the key / objectmember is a variable, make sure it fits the regex for a valid variable name
      * @todo the convenience operators may conflict in some situations with the MLS ( like 'le' for french)
@@ -352,4 +353,3 @@ class ExpressionTransformer extends xarObject
         return $expr;
     }
 }
-?>

@@ -13,6 +13,15 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
+ * For documentation purposes only - available via xarGraphQLMutationCreateTrait
+ */
+interface xarGraphQLMutationCreateInterface
+{
+    public static function _xar_get_create_mutation($name, $typename, $object): array;
+    public static function _xar_create_mutation_resolver($typename, $object = null): callable;
+}
+
+/**
  * Trait to handle default create mutation for dataobjects
  */
 trait xarGraphQLMutationCreateTrait
@@ -20,7 +29,7 @@ trait xarGraphQLMutationCreateTrait
     /**
      * Get create mutation field for this object type
      */
-    public static function _xar_get_create_mutation($name, $typename, $object)
+    public static function _xar_get_create_mutation($name, $typename, $object): array
     {
         return [
             'name' => $name,
@@ -41,7 +50,7 @@ trait xarGraphQLMutationCreateTrait
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_create_mutation_resolver($typename, $object = null)
+    public static function _xar_create_mutation_resolver($typename, $object = null): callable
     {
         $resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
             // disable caching for mutations

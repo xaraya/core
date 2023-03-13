@@ -14,7 +14,7 @@ class RelativeDirectoryIterator extends DirectoryIterator
     public function __construct($file)
     {
         $realpath = realpath($file);
-        if (!$realpath) return false;
+        if (!$realpath) throw new DirectoryNotFoundException($file);
         parent::__construct($realpath);
     }
 

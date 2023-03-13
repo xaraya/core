@@ -23,5 +23,3 @@ interface iSet
     /*   (bool) sub   */public function subsetOf  (iSet $super);
     /*   (bool) sup   */public function supersetOf(iSet $sub);
 }
-
-?>

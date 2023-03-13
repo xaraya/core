@@ -26,4 +26,3 @@ function mail_adminapi_getmenulinks()
     }
     return $menulinks;
 }
-?>

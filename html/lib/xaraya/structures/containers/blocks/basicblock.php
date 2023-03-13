@@ -37,7 +37,7 @@ interface iBlockModify extends iBlock
 {
     // required
     function modify();
-    function update();
+    function update(array $data = []);
     // optional
     // function checkmodify();
 }
@@ -96,7 +96,7 @@ abstract class BasicBlock extends BlockType implements iBlock
     }
 
     // this method is called by blocks_admin_modify_instance()
-    public function update()
+    public function update(array $data = [])
     {
         $data = $this->getInfo();
         return $data;

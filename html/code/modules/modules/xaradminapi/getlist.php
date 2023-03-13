@@ -49,7 +49,7 @@
  *        integer  $args['numItems'] integer the length of the list<br/>
  *        string   $args['orderBy'] string the order type of the list
  * @return array array of module information arrays
- * @throws DATABASE_ERROR, BAD_PARAM
+ * @throws BadParameterException
  */
 function modules_adminapi_getlist(Array $args=array())
 {
@@ -102,4 +102,3 @@ function modules_adminapi_getlist(Array $args=array())
     $result = xarMod::apiFunc('modules', 'admin', 'getitems', $get);
     return $result;
 }
-?>

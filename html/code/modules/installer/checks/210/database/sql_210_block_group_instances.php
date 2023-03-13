@@ -50,4 +50,3 @@ function sql_210_block_group_instances()
     }
     return $data;
 }
-?>

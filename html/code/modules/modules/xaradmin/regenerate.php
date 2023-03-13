@@ -17,7 +17,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @return boolean true on success, false on failure
+ * @return boolean|string|void true on success, false on failure
  * 
  */
 function modules_admin_regenerate()
@@ -39,5 +39,3 @@ function modules_admin_regenerate()
 
     return true;
 }
-
-?>

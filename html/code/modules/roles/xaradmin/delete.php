@@ -106,4 +106,3 @@ function roles_admin_delete()
         return true;
     }
 }
-?>

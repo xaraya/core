@@ -12,13 +12,26 @@
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
+ * For documentation purposes only - available via xarGraphQLDeferredTrait
+ */
+interface xarGraphQLDeferredInterface
+{
+    public static function _xar_get_deferred_field($fieldname, $typename, $islist = false): array;
+    public static function _xar_deferred_field_resolver($typename, $fieldname, $object = null): callable;
+    public static function _xar_deferred_property_resolver($typename, $fieldname, $object): callable;
+    public static function _xar_add_deferred($typename, $id, $fieldlist = null): void;
+    public static function _xar_load_deferred($typename): ?callable;
+    public static function _xar_get_deferred($typename, $id): mixed;
+}
+
+/**
  * Trait to handle deferred fields and properties for dataobjects (e.g. username, object, deferitem, ...)
  */
 trait xarGraphQLDeferredTrait
 {
     protected static $_xar_deferred = [];
 
-    public static function _xar_get_deferred_field($fieldname, $typename, $islist = false)
+    public static function _xar_get_deferred_field($fieldname, $typename, $islist = false): array
     {
         // xarGraphQL::setTimer('get deferred field ' . $fieldname);
         return [
@@ -34,7 +47,7 @@ trait xarGraphQLDeferredTrait
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_deferred_property_resolver($typename, $fieldname, $object)
+    public static function _xar_deferred_property_resolver($typename, $fieldname, $object): callable
     {
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($typename, $fieldname, $object) {
@@ -110,7 +123,7 @@ trait xarGraphQLDeferredTrait
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_deferred_field_resolver($typename, $fieldname, $object = null)
+    public static function _xar_deferred_field_resolver($typename, $fieldname, $object = null): callable
     {
         // @checkme use deferred load resolver for deferitem, deferlist, defermany properties here!?
         if (!empty($object)) {
@@ -169,7 +182,7 @@ trait xarGraphQLDeferredTrait
     /**
      * Add item id to the deferred list of items to be looked up later
      */
-    public static function _xar_add_deferred($typename, $id, $fieldlist = null)
+    public static function _xar_add_deferred($typename, $id, $fieldlist = null): void
     {
         static::$_xar_deferred[$typename]->add($id);
     }
@@ -181,7 +194,7 @@ trait xarGraphQLDeferredTrait
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
      */
-    public static function _xar_load_deferred($typename)
+    public static function _xar_load_deferred($typename): ?callable
     {
         // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
         // Note: by default we rely on the DataObjectLoader for fields or the DeferredLoader for properties here
@@ -195,12 +208,13 @@ trait xarGraphQLDeferredTrait
         //    return $objectlist->getItems($params);
         //};
         //return $resolver;
+        return null;
     }
 
     /**
      * Get item from the deferred list of items once they're all loaded
      */
-    public static function _xar_get_deferred($typename, $id)
+    public static function _xar_get_deferred($typename, $id): mixed
     {
         // support equivalent of overridden _xar_load_deferred in inheritance (e.g. usertype)
         return static::$_xar_deferred[$typename]->get($id);

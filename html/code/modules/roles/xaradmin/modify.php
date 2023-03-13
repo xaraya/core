@@ -17,6 +17,7 @@
  */
 function roles_admin_modify()
 {
+    $data = [];
     if (!xarVar::fetch('confirm',     'int',   $confirm, 0, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('id', 'id', $id, 0, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('itemid', 'id', $data['itemid'], NULL, xarVar::DONT_SET)) return;
@@ -101,4 +102,3 @@ function roles_admin_modify()
     }
     return $data;
 }
-?>

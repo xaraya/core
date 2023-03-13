@@ -19,4 +19,3 @@ class ModulesItemUpdateSubject extends ApiHookSubject
 {
     public $subject = 'ItemUpdate';
 }
-?>

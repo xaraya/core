@@ -23,10 +23,10 @@
  * the installer later on when xaraya is installed
  *
  * @access public
- * @param funcName specific function to run
- * @param args argument array
- * @return string output display string
- * @throws BAD_PARAM, MODULE_FUNCTION_NOT_EXIST
+ * @param string $funcName specific function to run
+ * @param array $args argument array
+ * @return string|void output display string
+ * @throws FunctionNotFoundException
  */
 function xarInstallFunc($funcName = 'main', $args = array())
 {
@@ -84,10 +84,10 @@ function xarInstallAPIFunc($funcName = 'main', $args = array())
  * Loads the modType API for installer identified by modName.
  *
  * @access public
- * @param modName registered name of the module
- * @param modType type of functions to load
+ * @param string modName registered name of the module
+ * @param string modType type of functions to load
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws FileNotFoundException
  */
 function xarInstallAPILoad()
 {
@@ -120,7 +120,7 @@ function xarInstallAPILoad()
  *
  * @access public
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM, MODULE_NOT_EXIST, MODULE_FILE_NOT_EXIST
+ * @throws EmptyParameterException
  */
 function xarInstallLoad($func)
 {
@@ -174,4 +174,3 @@ class xarInstall extends xarObject
         return xarInstallLoad($func);
     }
 }
-

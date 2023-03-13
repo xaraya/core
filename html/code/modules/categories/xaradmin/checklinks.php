@@ -15,8 +15,7 @@
 /**
  * Check category links for orphans
  * 
- * @param void N/A
- * @return array|boolean Returns data array on success, false|null on failure
+ * @return array|bool|string|void Returns data array on success, false|null on failure
  */
 function categories_admin_checklinks()
 {
@@ -37,9 +36,13 @@ function categories_admin_checklinks()
         foreach ($modlist as $modid => $itemtypes) {
             $modinfo = xarMod::getInfo($modid);
             // Get the list of all item types for this module (if any)
-            $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                                     // don't throw an exception if this function doesn't exist
-                                     array(), 0);
+            try {
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
+                // don't throw an exception if this function doesn't exist
+                array());
+            } catch (Exception $e) {
+                $mytypes = [];
+            }
             foreach ($itemtypes as $itemtype => $stats) {
                 $moditem = array();
                 $moditem['numitems'] = $stats['items'];
@@ -78,9 +81,13 @@ function categories_admin_checklinks()
         } else {
             $data['itemtype'] = $itemtype;
             // Get the list of all item types for this module (if any)
-            $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                                     // don't throw an exception if this function doesn't exist
-                                     array(), 0);
+            try {
+                $mytypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
+                // don't throw an exception if this function doesn't exist
+                array());
+            } catch (Exception $e) {
+                $mytypes = [];
+            }
             if (isset($mytypes) && !empty($mytypes[$itemtype])) {
                 $data['modname'] = ucwords($modinfo['displayname']) . ' ' . $itemtype . ' - ' . $mytypes[$itemtype]['label'];
             //    $data['modlink'] = $mytypes[$itemtype]['url'];
@@ -111,11 +118,14 @@ function categories_admin_checklinks()
         $data['numorphans'] = count($getitems);
         $showtitle = xarModVars::get('categories','showtitle');
         if (!empty($getitems) && !empty($showtitle)) {
-           $itemids = array_keys($getitems);
-           $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
-                                      array('itemtype' => $itemtype,
-                                            'itemids' => $itemids),
-                                      0); // don't throw an exception here
+            $itemids = array_keys($getitems);
+            try {
+                $itemlinks = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
+                                            array('itemtype' => $itemtype,
+                                                    'itemids' => $itemids)); // don't throw an exception here
+            } catch (Exception $e) {
+                $itemlinks = [];
+            }
         } else {
            $itemlinks = array();
         }
@@ -163,5 +173,3 @@ function categories_admin_checklinks()
 
     return $data;
 }
-
-?>

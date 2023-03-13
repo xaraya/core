@@ -70,7 +70,7 @@ function installer_adminapi_modifysystemvars(Array $args=array())
     if (!isset($args['scope'])) $args['scope'] = 'System';
     if ($args['scope'] == 'System') $configfile = sys::varpath() . '/config.system.php';
     elseif ($args['scope'] == 'Log') $configfile = sys::varpath() . '/logs/config.log.php';
-    else throw new Exception(xarML("xarSystemVars: Unknown scope: '#(1)'.", $scope));
+    else throw new Exception(xarML("xarSystemVars: Unknown scope: '#(1)'.", $args['scope']));
     
     if (isset($args['filepath'])) $configfile = $args['filepath'];
     try {
@@ -97,7 +97,8 @@ function installer_adminapi_modifysystemvars(Array $args=array())
  *        string   $args['directory'] the directory to include<br/>
  *        string   $args['initfunc'] init|upgrade|remove
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM, MODULE_FILE_NOT_EXIST, MODULE_FUNCTION_NOT_EXIST
+ * @throws EmptyParameterException
+ * @throws FileNotFoundException
  */
 function installer_adminapi_initialise(Array $args=array())
 {
@@ -141,7 +142,6 @@ function installer_adminapi_initialise(Array $args=array())
  *        string   $args['dbName']<br/>
  *        string   $args['dbType']
  * @return boolean true on success, false on failure
- * @throws BAD_PARAM, DATABASE_ERROR
  */
 function installer_adminapi_createdb(Array $args=array())
 {
@@ -197,7 +197,7 @@ function installer_adminapi_CheckForField(Array $args=array())
 
 
     while($result->next()) {
-        if ($result[Field] == $field_name) {
+        if ($result['Field'] == $field_name) {
             return true;
         }
     }
@@ -212,7 +212,7 @@ function installer_adminapi_CheckForField(Array $args=array())
  * @param array    $args array of optional parameters<br/>
  *        string   $args['field_name']<br/>
  *        string   $args['table_name']
- * @return integer field type
+ * @return integer|void field type
  * @author Sean Finkle
  * @author John Cox
  */
@@ -233,8 +233,8 @@ function installer_adminapi_GetFieldType(Array $args=array())
     $result = $dbconn->executeQuery($query);
 
     while($result->next()) {
-        if ($result[Field] == $field_name) {
-            return ($row[Type]);
+        if ($result['Field'] == $field_name) {
+            return ($row['Type']);
         }
     }
     return;
@@ -262,5 +262,3 @@ function installer_adminapi_CheckTableExists(Array $args=array())
     $dbInfo = $dbconn->getDatabaseInfo();
     return $dbInfo->hasTable($table_name);
 }
-
-?>

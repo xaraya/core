@@ -44,7 +44,7 @@
  * @author andyv <andyv@xaraya.com>
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params array  $args array of optional parameters<br/>
+ * @param array  $args array of optional parameters<br/>
  *         string $args[scope] scope of style, one of common!theme(default)|module|block|property<br/>
  *         string $args[method] style method, one of link(default)|import|embed<br/>
  *         string $args[alternatedir] alternative base folder to look in, falling back to...<br/>
@@ -60,7 +60,6 @@
  *         string $args[condition] conditionals for ie browser, optional, default null<br/>
  *         string $args[module] module for module|block scope, optional, default current module<br/>
  *         string $args[property] property required for property scope 
- * @throws none
  * @return boolean true on success
  */
 
@@ -70,4 +69,3 @@ function themes_userapi_register(Array $args=array())
     $css = xarCSS::getInstance();
     return $css->register($args);
 }
-?>

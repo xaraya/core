@@ -95,5 +95,3 @@ class DummyDataStore extends BasicDataStore
         return $itemid;
     }
 }
-
-?>

@@ -17,7 +17,7 @@
  *        integer  $args['regid'] the id number of the theme to update<br/>
  *        string   $args['displayname'] the new display name of the theme<br/>
  *        string   $args['description'] the new description of the theme
- * @return boolean true on success, false on failure
+ * @return boolean|void true on success, false on failure
  */
 function themes_adminapi_update(Array $args=array())
 {
@@ -41,5 +41,3 @@ function themes_adminapi_update(Array $args=array())
 
     return true;
 }
-
-?>

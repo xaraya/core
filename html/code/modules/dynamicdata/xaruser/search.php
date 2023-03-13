@@ -18,7 +18,7 @@
  * @param int startnum
  * @param array dd_check
  * @param int numitems The number of items to get
- * @return array output of the items found
+ * @return array|void output of the items found
  */
 function dynamicdata_user_search(Array $args=array())
 {
@@ -174,5 +174,3 @@ function dynamicdata_user_search(Array $args=array())
 
     return $data;
 }
-
-?>

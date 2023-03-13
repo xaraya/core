@@ -40,7 +40,6 @@ class DataSourceProperty extends SelectProperty
 	/**
 	* Retrieve the list of options
 	* 
-	* @param void N/A
 	*/	
     function getOptions()
     {
@@ -51,4 +50,3 @@ class DataSourceProperty extends SelectProperty
         return DataStoreFactory::getDataSources($sources);
     }
 }
-?>

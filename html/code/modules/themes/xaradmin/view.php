@@ -13,7 +13,7 @@
  * List themes and current settings
  * @author Marty Vance
  * @author Chris Powis <crisp@xaraya.com>
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
 function themes_admin_view()
 {
@@ -222,4 +222,3 @@ function themes_admin_view()
 
     return $data;
 }
-?>

@@ -83,4 +83,3 @@ function privileges_admin_removerole()
     }
 
 }
-?>

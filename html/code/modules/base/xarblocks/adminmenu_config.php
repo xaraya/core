@@ -24,7 +24,6 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
 /**
  * This method is called by the BasicBlock class constructor
  * 
- * @param void N/A
 **/    
     public function init()
     {
@@ -57,7 +56,7 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
      * Updates the Block config from the Blocks Admin
      * 
      * @param array $data Data array continaing title, content
-     * @return boolean Returns true on success, false on failure
+     * @return boolean|void Returns true on success, false on failure
      */
     public function configupdate(Array $data=array())
     {
@@ -93,4 +92,3 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
         return true;
     }
 }
-?>

@@ -104,4 +104,3 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
         }
     }
 }
-?>

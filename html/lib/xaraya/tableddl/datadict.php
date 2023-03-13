@@ -28,10 +28,11 @@
  * Generate the DataDict specific SQL to create a table
  *
  * 
- * @param tableName the physical table name
- * @param fields an array containing the fields to create
+ * @param string $tableName the physical table name
+ * @param array $fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
+ * @deprecated
  */
 function xarDB__datadictCreateTable($tableName, $fields)
 {
@@ -65,14 +66,15 @@ function xarDB__datadictCreateTable($tableName, $fields)
  * DataDict specific function to alter a table
  *
  * 
- * @param tableName the table to alter
- * @param args['command'] command to perform on the table
- * @param args['field'] name of column to modify
- * @param args['after_field']
- * @param args['new_name'] new name of table
+ * @param string $tableName the table to alter
+ * @param array args['command'] command to perform on the table
+ * @param string args['field'] name of column to modify
+ * @param string args['after_field']
+ * @param string args['new_name'] new name of table
  * @return string|false datadict specific sql to alter a table
  * @throws BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
+ * @deprecated
  */
 function xarDB__datadictAlterTable($tableName, $args)
 {
@@ -148,9 +150,10 @@ function xarDB__datadictAlterTable($tableName, $args)
  * DataDict specific column type generation - adapted from a d o d b-mysql.inc.php mapping
  *
  * 
- * @param field_name
- * @param parameters
+ * @param string field_name
+ * @param array parameters
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
+ * @deprecated
  */
 function xarDB__datadictColumnDefinition($field_name, $parameters)
 {
@@ -380,10 +383,10 @@ function xarDB__datadictColumnDefinition($field_name, $parameters)
  * Generate the SQL to create a database
  *
  * 
- * @param databaseName
+ * @param string $databaseName
  * @return string sql statement for database creation
- * @throws BAD_PARAM
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
+ * @deprecated
  */
 function xarDB__datadictCreateDatabase($databaseName)
 {
@@ -402,9 +405,10 @@ function xarDB__datadictCreateDatabase($databaseName)
  * Generate the DataDict specific SQL to drop a table
  *
  * 
- * @param tableName the physical table name
+ * @param string $tableName the physical table name
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
+ * @deprecated
  */
 function xarDB__datadictDropTable($tableName)
 {
@@ -422,10 +426,11 @@ function xarDB__datadictDropTable($tableName)
 /**
  * Generate the SQL to create a table index
  *
- * @param tableName the physical table name
- * @param index an array containing the index name, type and fields array
+ * @param string $tableName the physical table name
+ * @param array $index an array containing the index name, type and fields array
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
+ * @deprecated
  */
 function xarDB__datadictCreateIndex($tableName, $index)
 {
@@ -444,11 +449,11 @@ function xarDB__datadictCreateIndex($tableName, $index)
  * Generate the SQL to drop an index
  *
  * 
- * @param tableName
- * @param name a db index name
+ * @param string $tableName
+ * @param array $index name a db index name
  * @return string|false generated sql to drop an index
- * @throws BAD_PARAM
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
+ * @deprecated
  */
 function xarDB__datadictDropIndex($tableName, $index)
 {
@@ -465,6 +470,7 @@ function xarDB__datadictDropIndex($tableName, $index)
 
 /**
  * Initialize data dictionary
+ * @deprecated
  */
 function &xarDB__datadictInit()
 {
@@ -482,4 +488,3 @@ function &xarDB__datadictInit()
 
     return $datadict;
 }
-

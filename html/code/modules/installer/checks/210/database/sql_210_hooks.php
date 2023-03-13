@@ -56,4 +56,3 @@ function sql_210_hooks()
     }
     return $data;
 }
-?>

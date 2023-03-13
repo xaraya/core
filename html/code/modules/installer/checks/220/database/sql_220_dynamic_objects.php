@@ -57,4 +57,3 @@ function sql_220_dynamic_objects()
     }
     return $data;
 }
-?>

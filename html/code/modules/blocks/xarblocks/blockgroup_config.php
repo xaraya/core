@@ -131,4 +131,3 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
         return $data;      
     }
 }
-?>

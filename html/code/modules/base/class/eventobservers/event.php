@@ -33,4 +33,3 @@ class BaseEventObserver extends EventObserver implements ixarEventObserver
         }
     }
 }
-?>

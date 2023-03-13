@@ -46,4 +46,3 @@ class ModulesItemNewSubject extends GuiHookSubject
         // just retrieve extrainfo from $subject->getExtrainfo() 
     } 
 }
-?>

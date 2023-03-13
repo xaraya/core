@@ -30,5 +30,3 @@ function categories_adminapi_create($args)
     $id = $category->createItem($args);
     return $id;
 }
-
-?>

@@ -63,4 +63,3 @@ class TimeZoneProperty extends SelectProperty
         return $options;
     }
 }
-?>

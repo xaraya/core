@@ -14,7 +14,7 @@
  */
 /**
  * viewRealms - view the defined realms
- * @return array data for the template display
+ * @return array|string|void data for the template display
  */
 function privileges_admin_viewrealms()
 {
@@ -41,5 +41,3 @@ function privileges_admin_viewrealms()
     }
     return $data;
 }
-
-?>

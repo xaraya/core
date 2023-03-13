@@ -85,5 +85,3 @@ function privileges_admin_updateprivilege()
     xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege', array('id' => $id)));
     return true;
 }
-
-?>

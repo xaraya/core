@@ -31,5 +31,3 @@ function categories_xartables()
     $xartable['categories_basecategories'] = xarDB::getPrefix() . '_categories_basecategories';
     return $xartable;
 }
-
-?>

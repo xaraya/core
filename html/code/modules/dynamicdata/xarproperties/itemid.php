@@ -36,5 +36,3 @@ class ItemIDProperty extends NumberBoxProperty
         $this->defaultvalue = null;
     }
 }
-
-?>

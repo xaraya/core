@@ -20,7 +20,6 @@
  * @access public
  * @param array   $args array of optional parameters (todo)
  * @return string templated output of meta tags to render
- * @throws none
 **/    
 function themes_userapi_rendermeta($args)
 {    
@@ -28,4 +27,3 @@ function themes_userapi_rendermeta($args)
     $meta = xarMeta::getInstance();
     return $meta->render($args);           
 }
-?>

@@ -19,6 +19,7 @@ function themes_admin_view_jslibs()
     // Security
     if(!xarSecurity::check('EditThemes')) return;
 
+    $data = [];
     if (!xarVar::fetch('tab',   'str:1:100', $data['tab'], 'local', xarVar::NOT_REQUIRED)) return;
 
     $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_jslibraries'));
@@ -271,5 +272,3 @@ function themes_admin_view_jslibs()
     }
     return $data;
 }
-
-?>

@@ -16,7 +16,7 @@
  * This is a standard function to update the configuration parameters of the
  * module given the information passed back by the modification form
  *
- * @return boolean and redirect to view_propertydefs
+ * @return boolean|string|void and redirect to view_propertydefs
  */
 function dynamicdata_admin_update_propertydefs(Array $args=array())
 {
@@ -44,4 +44,3 @@ function dynamicdata_admin_update_propertydefs(Array $args=array())
     xarController::redirect(xarController::URL('dynamicdata','admin','view_propertydefs'));
     return true;
 }
-?>

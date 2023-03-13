@@ -16,7 +16,7 @@
  * 
  * @staticvar boolean $runonce
  * @param array $args Parameter data array
- * @return boolean True on success, false on failure
+ * @return boolean|void True on success, false on failure
  */
 function blocks_typesapi_refresh(Array $args=array())
 {

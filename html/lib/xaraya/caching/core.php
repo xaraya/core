@@ -81,7 +81,7 @@ class xarCoreCache extends xarObject
      *
      * @param string $scope the scope identifying which part of the cache you want to access
      * @param string $name  the name of the variable in that particular scope
-     * @param string $value the new value for that variable
+     * @param mixed $value the new value for that variable
      * @return void
     **/
     public static function setCached($scope, $name, $value)

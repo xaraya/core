@@ -14,12 +14,13 @@
  * (try to) get the "static" properties, corresponding to fields in dedicated
  * tables for this module + item type
  *
+ * @param array $args
  * @param $args['module'] module name of table you're looking for, or
  * @param $args['module_id'] module id of table you're looking for
  * @param $args['itemtype'] item type of table you're looking for
  * @param $args['table']  table name of table you're looking for (better)
  * @return mixed value of the field, or false on failure
- * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @throws BadParameterException
  * @todo split off the common parts which are also in getmeta
  */
 function dynamicdata_utilapi_getstatic(Array $args=array())
@@ -213,5 +214,3 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
     $propertybag["$module_id:$itemtype:$table"] = $static;
     return $static;
 }
-
-?>

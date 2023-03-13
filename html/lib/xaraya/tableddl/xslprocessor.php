@@ -5,6 +5,7 @@ class XarayaXSLProcessor extends xarObject
     private $xslProc = null;    // Object representing the processor.
     private $xslDoc  = null;    // Object representing the stylesheet.
     private $xmlDoc  = null;    // Object representing the input XML.
+    private $postXML;
 
     public function __construct($xslFile)
     {
@@ -72,5 +73,3 @@ class XarayaXSLProcessor extends xarObject
         return $this->xslProc->setParameter($namespace, $name, $value);
     }
 }
-
-?>

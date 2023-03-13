@@ -18,14 +18,13 @@
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @params array  $args array of optional parameters<br/>
+ * @param array  $args array of optional parameters<br/>
  *         string $args[type] the type of meta tag, either name or http-equiv, required<br/>
  *         string $args[value] the value of the type, eg (author, rating, refresh, etc..), required<br/>
  *         string $args[content] the meta content, required<br/>
  *         string $args[lang] the ISO 639-1 language code for the content, optional<br/>
  *         string $args[dir] the text direction of the content (ltr|rtl), optional<br/>
  *         string $args[scheme] the scheme used to interpret the content, optional
- * @throws none
  * @return bool true on success
 **/ 
 function themes_userapi_registermeta($args)
@@ -34,4 +33,3 @@ function themes_userapi_registermeta($args)
     $meta = xarMeta::getInstance();
     return $meta->register($args);           
 }
-?>

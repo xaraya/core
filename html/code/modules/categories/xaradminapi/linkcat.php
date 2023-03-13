@@ -135,7 +135,8 @@ function categories_adminapi_linkcat($args)
     foreach ($args['iids'] as $iid)
     {
       sys::import('xaraya.structures.query');
-      sys::import('modules.categories.class.tag');
+      // @checkme where is this coming from?
+      //sys::import('modules.categories.class.tag');
        $i=0;
        foreach ($args['cids'] as $cid)
        {
@@ -152,7 +153,8 @@ function categories_adminapi_linkcat($args)
           $q->addfield('category_id', $cid);
           $q->addfield('child_category_id', $ccid);
           $q->addfield('basecategory', $basecid);
-          $tag = Tag($args['modid'], $itemtype, $iid, $q);
+          // @checkme where is this coming from?
+          //$tag = Tag($args['modid'], $itemtype, $iid, $q);
           
           if (!$q->run()) return;
           
@@ -201,5 +203,3 @@ function categories_adminapi_linkcat($args)
 
     return true;
 }
-
-?>

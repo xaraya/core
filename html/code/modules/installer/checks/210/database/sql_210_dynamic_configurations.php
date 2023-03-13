@@ -52,4 +52,3 @@ function sql_210_dynamic_configurations()
     }
     return $data;
 }
-?>

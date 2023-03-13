@@ -20,4 +20,3 @@ class ModulesItemtypeViewSubject extends GuiHookSubject
     public $subject = 'ItemtypeView';
     // methods inherited from parent...
 }
-?>

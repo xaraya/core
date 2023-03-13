@@ -21,7 +21,7 @@
  *        array    $args['values'] array of id => value, or<br/>
  *        array    $args['fields'] array containing the field definitions and values
  * @return mixed item id on success, null on failure
- * @throws BAD_PARAM, NO_PERMISSION
+ * @throws BadParameterException
  */
 function dynamicdata_adminapi_update(array $args=[])
 {

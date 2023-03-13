@@ -15,7 +15,7 @@
  *
  * This is a standard function that is called whenever an administrator
  * wishes to create a new module item
- * @return string output display string
+ * @return string|void output display string
  */
 function dynamicdata_admin_new(Array $args=array())
 {
@@ -72,4 +72,3 @@ function dynamicdata_admin_new(Array $args=array())
         return xarTpl::module('dynamicdata','admin','new',$data,$args['template']);
     }
 }
-?>

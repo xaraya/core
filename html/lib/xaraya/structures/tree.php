@@ -33,6 +33,7 @@ class TreeNode extends xarObject implements ITreeNode
     public $parent;
     public $children;
     public $allowschildren;
+    public $nodelevel;
 
     function __construct($id=0)
     {
@@ -183,4 +184,3 @@ class Tree extends xarObject implements ITree
         }
     }
 }
-

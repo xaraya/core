@@ -94,4 +94,3 @@ class Blocks_BlockgroupBlock extends BasicBlock implements iBlockGroup
     }
 
 }
-?>

@@ -41,7 +41,6 @@ class RolesShortController extends ShortActionController
         switch ($token1) {
             case 'admin':
                 return parent::decode($data);
-            break;
 
             case 'account':
                 $data['func'] = 'account';
@@ -175,4 +174,3 @@ class RolesShortController extends ShortActionController
         return parent::encode($request);
     }    
 }
-?>

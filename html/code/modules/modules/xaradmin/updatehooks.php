@@ -54,5 +54,3 @@ function modules_admin_updatehooks()
     }
     return true;
 }
-
-?>

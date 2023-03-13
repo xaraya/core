@@ -27,5 +27,3 @@ function roles_userapi_checkprivilege(Array $args=array())
     $role = xarRoles::get($id);
     return $role->hasPrivilege($privilege);
 }
-
-?>

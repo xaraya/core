@@ -17,8 +17,7 @@
  * @author Paul Rosania
  * @author Chris Powis
  * 
- * @param void N/A
- * @return array Data display array
+ * @return array|string|void Data display array
 */
 function blocks_admin_new_instance()
 {

@@ -273,7 +273,7 @@ class xarPageCache extends xarObject
         }
         // we only cache the top-most page in case of nested pages
         if (empty($cacheKey) || $cacheKey != self::$cacheKey) {
-            return;
+            return false;
         }
 
         if (// the cache entry exists and hasn't expired yet...
@@ -303,7 +303,7 @@ class xarPageCache extends xarObject
      *
      *
      * @param  string $cacheKey the key identifying the particular page you want to access
-     * @return boolean   true if succeeded, false otherwise
+     * @return boolean|void   true if succeeded, false otherwise
      */
     public static function getCached($cacheKey)
     {
@@ -363,7 +363,7 @@ class xarPageCache extends xarObject
             if (self::$cacheShowTime == 1) {
                 $now = xarML(
                     'Last updated on #(1)',
-                    strftime('%a, %d %B %Y %H:%M:%S %Z', time())
+                    date(DATE_RFC7231)
                 );
                 $value = preg_replace(
                     '#</body>#',

@@ -20,6 +20,7 @@
         // Security
         if (!xarSecurity::check('EditDynamicData')) return;
 
+        $data = [];
         if (!xarVar::fetch('table',      'str:1',  $data['table'], '',     xarVar::NOT_REQUIRED)) return;
         if (!xarVar::fetch('field' ,     'str:1',  $data['field'] , '' ,          xarVar::NOT_REQUIRED)) return;
         if (!xarVar::fetch('oldname',    'str:1',  $data['oldname'], '',       xarVar::NOT_REQUIRED)) return;
@@ -117,4 +118,3 @@
         }
         return $data;
     }
-?>

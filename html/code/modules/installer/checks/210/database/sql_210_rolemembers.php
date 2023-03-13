@@ -47,4 +47,3 @@ function sql_210_rolemembers()
     }
     return $data;
 }
-?>

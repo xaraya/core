@@ -138,5 +138,3 @@ function roles_userapi_getallroles(Array $args=array())
     }
 */    return $items;
 }
-
-?>

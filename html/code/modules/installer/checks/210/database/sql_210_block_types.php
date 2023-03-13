@@ -58,4 +58,3 @@ function sql_210_block_types()
     }
     return $data;
 }
-?>

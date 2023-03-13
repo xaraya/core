@@ -57,6 +57,7 @@ function base_javascriptapi_modulecode(Array $args=array())
         $code = fread($fp, filesize($filePath));
         fclose($fp);
 
+        // @fixme replace with right javascript code or drop function
         // A failure to find a file is recorded, but does not stop subsequent files.
         $result = $result & xarTplAddJavaScript($position, 'code', $code, $filePath);
     }
@@ -64,5 +65,3 @@ function base_javascriptapi_modulecode(Array $args=array())
     // False if any one file is not found.
     return $result;
 }
-
-?>

@@ -15,9 +15,8 @@
  *
  * It will return true when the parameter isset, false on !isset.
  * When not set, the function will also throw the BAD_PARAM exception
- * @param bool supress_soft_exc
- * @param parameters
- * @param subject The parameter to check for
+ * @param mixed subject The parameter to check for
+ * @param array parameters
  * @return boolean true on isset, false on !isset
  * @throws VariableValidationException
 **/
@@ -33,4 +32,3 @@ class IssetValidation extends ValueValidations
         return true;
     }
 }
-?>

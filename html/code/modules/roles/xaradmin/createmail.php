@@ -11,7 +11,7 @@
  * @link http://xaraya.info/index.php/release/27.html
  */
 /**
- * @return array data for the template display
+ * @return array|void data for the template display
   */
 function roles_admin_createmail()
 {
@@ -19,6 +19,7 @@ function roles_admin_createmail()
     // Security
     if (!xarSecurity::check('MailRoles')) return;
 
+    $data = [];
     if (!xarVar::fetch('id',       'int:0:', $id,        -1, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('ids',      'isset',  $ids,     NULL, xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('state',    'int:0:', $state,      xarRoles::ROLES_STATE_ALL, xarVar::NOT_REQUIRED)) return;
@@ -191,5 +192,3 @@ function roles_admin_createmail()
 
     return $data;
 }
-
-?>

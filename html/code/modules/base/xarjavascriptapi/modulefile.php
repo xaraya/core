@@ -51,5 +51,3 @@ function base_javascriptapi_modulefile(Array $args=array())
 
     return $result;
 }
-
-?>

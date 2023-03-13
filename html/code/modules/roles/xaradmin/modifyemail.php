@@ -10,7 +10,7 @@
  */
 /**
  * Modify the  email for users
- * @return array data for the template display
+ * @return array|bool|void data for the template display
  */
 function roles_admin_modifyemail(Array $args=array())
 {
@@ -100,8 +100,6 @@ function roles_admin_modifyemail(Array $args=array())
             }
             xarController::redirect(xarController::URL('roles', 'admin', 'modifyemail', array('mailtype' => $data['mailtype'])));
             return true;
-            break;
     }
     return $data;
 }
-?>

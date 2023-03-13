@@ -23,9 +23,11 @@ function base_adminapi_write_file($args)
     try {
         $fp = fopen($args['file'], "wb");
     
+        /**
         if (get_magic_quotes_gpc()) {
             $data = stripslashes($args['data']);
         }
+         */
         fwrite($fp, $args['data']);
         fclose ($fp);
         return true;
@@ -33,5 +35,3 @@ function base_adminapi_write_file($args)
         return false;
     }
 }
-
-?>

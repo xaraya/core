@@ -37,4 +37,3 @@ function roles_userapi_getprimaryparent(Array $args=array())
 
     return $parentid;
 }
-?>

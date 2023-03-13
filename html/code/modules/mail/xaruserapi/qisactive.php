@@ -22,4 +22,3 @@ function mail_userapi_qisactive(Array $args=array())
     if(!isset($status)) return false;
     return $status;
 }
-?>

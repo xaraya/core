@@ -39,7 +39,7 @@ class xarGraphQLMutationType extends ObjectType
     /**
      * Get all root mutation fields for the GraphQL Mutation type from the mutation_types above
      */
-    public static function _xar_get_mutation_fields()
+    public static function _xar_get_mutation_fields(): array
     {
         $fields = [];
         foreach (static::$mutation_types as $type) {
@@ -50,9 +50,9 @@ class xarGraphQLMutationType extends ObjectType
         }
         // @todo get mutation fields from BuildType for extra dynamicdata object types
         if (!empty(xarGraphQL::$extra_types)) {
-            $clazz = xarGraphQL::get_type_class("buildtype");
+            // @checkme not possible to override create/update/delete resolvers in child class by type here
             foreach (xarGraphQL::$extra_types as $name) {
-                $add_fields = $clazz::get_mutation_fields($name);
+                $add_fields = xarGraphQLBuildType::get_mutation_fields($name);
                 if (!empty($add_fields)) {
                     $fields = array_merge($fields, $add_fields);
                 }

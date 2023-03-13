@@ -36,4 +36,3 @@ function mail_admin_createqArray(Array $args=array())
     xarController::redirect(xarController::URL('mail','admin','qstatus'));
     return true;
 }
-?>

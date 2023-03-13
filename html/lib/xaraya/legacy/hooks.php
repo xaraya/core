@@ -73,4 +73,3 @@ function xarModUnregisterHook($hookScope, $hookAction, $hookArea,$hookModName, $
 {
     return xarModHooks::unregister($hookScope, $hookAction, $hookArea,$hookModName, $hookModType, $hookModFunc);
 }
-

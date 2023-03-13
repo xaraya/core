@@ -17,6 +17,7 @@
         // Security
         if (!xarSecurity::check('AdminDynamicData')) return;
 
+        $data = [];
         if (!xarVar::fetch('table',      'str:1',  $data['table'],    '',     xarVar::NOT_REQUIRED)) return;
         if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
 
@@ -36,5 +37,3 @@
         }
         return $data;
     }
-
-?>

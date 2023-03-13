@@ -34,7 +34,7 @@ class ForeignKeyInfo {
 
     /**
      * Additional and optional vendor specific information.
-     * @var vendorSpecificInfo
+     * @var array $vendorSpecificInfo
      */
     protected $vendorSpecificInfo = array();
 

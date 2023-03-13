@@ -9,11 +9,12 @@
  * @link http://xaraya.info/index.php/release/1098.html
  */
 /**
- * @return array data for the template display
+ * @return array|bool|void data for the template display
  */
 
     function privileges_user_errors()
     {
+        $data = [];
         if(!xarVar::fetch('layout',   'isset', $data['layout']   , 'default', xarVar::DONT_SET)) {return;}
         if(!xarVar::fetch('redirecturl',   'isset', $data['redirecturl']   , xarServer::getCurrentURL(array(),false), xarVar::DONT_SET)) {return;}
         if (!xarUser::isLoggedIn()) {
@@ -23,4 +24,3 @@
             return true;
         }
     }
-?>

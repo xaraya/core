@@ -19,6 +19,9 @@ class Configurations extends xarObject
     public $configurations    = array();
     public $files             = array();
 
+    public $filename;
+    private $_fd;
+
     function __construct()
     {
         $this->reader = new XMLReader();
@@ -144,4 +147,3 @@ class Configurations extends xarObject
         return true;
     }
 }
-?>

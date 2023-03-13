@@ -50,4 +50,3 @@ function base_user_main(Array $args=array())
      */
     return xarTpl::module('base','user','main',array(),$page);
 }
-?>

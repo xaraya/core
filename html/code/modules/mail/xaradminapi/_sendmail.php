@@ -415,5 +415,3 @@ function mail_adminapi__sendmail(Array $args=array())
 
     return $result;
 }
-
-?>

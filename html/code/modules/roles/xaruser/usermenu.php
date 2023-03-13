@@ -13,7 +13,7 @@
  * Show the user menu
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @return string output display string
+ * @return string|void output display string
  */
 function roles_user_usermenu(Array $args=array())
 {
@@ -265,7 +265,6 @@ function roles_user_usermenu(Array $args=array())
                 $data['submitlabel'] = xarML('Update Settings');
                 return xarTpl::module('roles','user','account', $data);
             }
-        break;
 
         case 'updatesettings':
             $object = xarMod::apiFunc('base', 'admin', 'getusersettings', array('module' => $moduleload, 'itemid' => $id));
@@ -391,9 +390,7 @@ function roles_user_usermenu(Array $args=array())
             $data['tab'] = '';
             if (empty($message)) $data['message'] = '';
             return xarTpl::module('roles', 'user', 'account', $data);
-        break;
 
     }
 
 }
-?>

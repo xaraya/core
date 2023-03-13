@@ -71,5 +71,3 @@ function base_javascriptapi_geteventattributes(Array $args=array())
     // Return the result, in the form of a string containing attributes and values.
     return $result;
 }
-
-?>

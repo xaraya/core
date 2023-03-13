@@ -35,12 +35,10 @@ function privileges_adminapi_removemember(Array $args=array())
     $member = xarPrivileges::getPrivilege($childid);
 
 // assign the child to the parent and bail if an error was thrown
-    if (!$priv->removeMember($member)) return;
+    if (!$priv->removeMember($member)) return false;
 
 // set the session variable
     xarSession::setVar('privileges_statusmsg', xarML('Removed from Privilege',
                     'privileges'));
     return true;
 }
-
-?>

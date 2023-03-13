@@ -29,8 +29,7 @@ class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlo
     /**
      * Method to display the login
      * 
-     * @param void N/A
-     * @return array Returns display data array.
+     * @return array|void Returns display data array.
      */
     function display()
     {
@@ -54,4 +53,3 @@ class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlo
         return $data;
     }
 }
-?>

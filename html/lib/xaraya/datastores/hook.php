@@ -63,5 +63,3 @@ class HookDataStore extends BasicDataStore
     }
 
 }
-
-?>

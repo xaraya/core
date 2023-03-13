@@ -149,5 +149,3 @@ function base_userapi_checklink(Array $args=array())
     }
     return $status;
 }
-
-?>

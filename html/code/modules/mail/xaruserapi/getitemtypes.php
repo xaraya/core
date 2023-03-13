@@ -32,7 +32,7 @@ function mail_userapi_getitemtypes(Array $args=array())
     $qdefName = xarModVars::get('mail','queue-definition');
     if(!$qdefName) {
         return $itemtypes;
-        throw new Exception('Mail queue definition does not exist');
+        //throw new Exception('Mail queue definition does not exist');
     }
     $qdefObjectInfo = DataObjectMaster::getObjectInfo(array('name' => $qdefName));
     if(!$qdefObjectInfo)
@@ -57,4 +57,3 @@ function mail_userapi_getitemtypes(Array $args=array())
     }
     return $itemtypes;
 }
-?>

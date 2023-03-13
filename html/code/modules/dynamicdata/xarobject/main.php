@@ -29,4 +29,3 @@ function dynamicdata_object_main($args = array())
 
     return $interface->handle($args);
 }
-?>

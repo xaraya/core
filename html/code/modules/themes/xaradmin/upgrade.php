@@ -18,8 +18,8 @@
  * true.
  *
  * @author Marty Vance
- * @param id the theme id to upgrade
- * @return boolean true on success, false on failure
+ * @param int id the theme id to upgrade
+ * @return boolean|string|void true on success, false on failure
  */
 function themes_admin_upgrade()
 {
@@ -47,5 +47,3 @@ function themes_admin_upgrade()
     xarController::redirect($return_url);
     return true;
 }
-
-?>

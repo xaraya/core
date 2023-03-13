@@ -146,7 +146,7 @@ class RelationalDataStore extends SQLDataStore
         if (empty($this->object->primary)) throw new Exception(xarML('The object #(1) has no primary key', $this->object->name));
 
         // Bail if the object has no properties
-        if (count($this->object->properties) < 1) return;
+        if (count($this->object->properties) < 1) return true;
         
         $q = clone $this->object->dataquery;
         $q->setType('INSERT');
@@ -742,4 +742,3 @@ class RelationalDataStore extends SQLDataStore
     }
 
 }
-

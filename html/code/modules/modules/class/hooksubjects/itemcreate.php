@@ -43,4 +43,3 @@ class ModulesItemCreateSubject extends ApiHookSubject
         // just retrieve extrainfo from $subject->getExtrainfo() 
     } 
 }
-?>

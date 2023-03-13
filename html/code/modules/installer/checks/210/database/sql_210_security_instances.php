@@ -52,4 +52,3 @@ function sql_210_security_instances()
     }
     return $data;
 }
-?>

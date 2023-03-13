@@ -75,7 +75,7 @@ interface PreparedStatement {
      * This assumes that the last thing done was an executeQuery() or an execute()
      * with SELECT-type query.
      *
-     * @return RestultSet Last ResultSet or <code>null</code> if not applicable.
+     * @return ResultSet Last ResultSet or <code>null</code> if not applicable.
      */
     public function getResultSet();
     

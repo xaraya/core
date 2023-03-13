@@ -29,5 +29,3 @@ function categories_adminapi_updateconfighook($args)
     extract($args);
     return $extrainfo;
 }
-
-?>

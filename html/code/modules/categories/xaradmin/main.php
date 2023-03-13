@@ -15,7 +15,7 @@
  * The main administration function
  * 
  * This function redirects to the view categories function
- * @return bool Returns true on success, false on failure
+ * @return bool|array|void Returns true on success, false on failure
  */
 function categories_admin_main()
 {
@@ -34,5 +34,3 @@ function categories_admin_main()
 
     return true;
 }
-
-?>

@@ -54,7 +54,7 @@ interface Connection {
     
     /**
      * Get the PHP native resource for the database connection/link.
-     * @return resource
+     * @return resource|object
      */
     public function getResource();
         

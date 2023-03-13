@@ -24,7 +24,7 @@
  *        integer  $args['allprops'] skip disabled properties by default<br/>
  *        boolena  $args['static'] include the static properties (= module tables) too (default no)
  * @return mixed value of the field, or false on failure
- * @throws BAD_PARAM, DATABASE_ERROR, NO_PERMISSION
+ * @throws BadParameterException
  */
 function dynamicdata_userapi_getprop(array $args=[])
 {

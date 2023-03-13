@@ -13,5 +13,3 @@
  */
 
 sys::import('modules.dynamicdata.class.objects');
-
-?>

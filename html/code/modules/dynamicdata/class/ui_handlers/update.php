@@ -43,7 +43,7 @@ class UpdateHandler extends DefaultHandler
      * @param $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
      * @param $args['confirm'] true if the user confirms
      * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string output of xarTpl::object() using 'ui_update'
+     * @return string|void output of xarTpl::object() using 'ui_update'
      */
     public function run(array $args = [])
     {

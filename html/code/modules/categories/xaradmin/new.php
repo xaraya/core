@@ -17,11 +17,11 @@
     /**
      * Create new category in admin
      * 
-     * @param void N/A
      * @return array|null Returns display data array on success, null on failure
      */
     function categories_admin_new()
     {
+        $data = [];
         if (!xarVar::fetch('return_url',  'isset',  $data['return_url'], NULL, xarVar::DONT_SET)) {return;}
         if(!xarVar::fetch('repeat','int:1:', $data['repeat'], 1, xarVar::NOT_REQUIRED)) {return;}
 
@@ -73,4 +73,3 @@
         $data['authid'] = xarSec::genAuthKey();
         return $data;
     }
-?>

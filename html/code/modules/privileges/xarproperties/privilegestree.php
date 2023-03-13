@@ -24,7 +24,7 @@ class PrivilegesTreeProperty extends DataProperty
     public $name       = 'privilegestree';
     public $desc       = 'PrivilegesTree';
     public $reqmodules = array('privileges');
-	
+	public $privs;
 	/**
 	 * Create an instance of this dataproperty<br/>
 	 * - It belongs to the privileges module<br/>
@@ -70,8 +70,8 @@ class PrivilegesTree extends Tree
 	*  Give privileges to user to create nodes
 	* 
 	* @param  TreeNode data An array of input parameters
-	* @return string  Returns data of user that have permission to create node 
-	*/	
+	* @return void 
+	*/
     function createnodes(TreeNode $node)
     {
         //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
@@ -102,5 +102,3 @@ class PrivilegesTree extends Tree
         parent::createnodes($node);
     }
 }
-
-?>

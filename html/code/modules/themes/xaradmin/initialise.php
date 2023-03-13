@@ -17,8 +17,8 @@
  * then redirects to the list function with a
  * status message and returns true.
  * @author Marty Vance
- * @param id $ the theme id to initialise
- * @return boolean true on success, false on failure
+ * @param int id $ the theme id to initialise
+ * @return boolean|string|void true on success, false on failure
  */
 function themes_admin_initialise()
 { 
@@ -43,6 +43,4 @@ function themes_admin_initialise()
 
     xarController::redirect(xarController::URL('themes', 'admin', 'view'));
     return true;
-} 
-
-?>
+}

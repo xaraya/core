@@ -13,6 +13,15 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
+ * For documentation purposes only - available via xarGraphQLQueryItemTrait
+ */
+interface xarGraphQLQueryItemInterface
+{
+    public static function _xar_get_item_query($itemname, $typename, $object): array;
+    public static function _xar_item_query_resolver($typename, $object = null): callable;
+}
+
+/**
  * Trait to handle default item query for dataobjects
  */
 trait xarGraphQLQueryItemTrait
@@ -20,7 +29,7 @@ trait xarGraphQLQueryItemTrait
     /**
      * Get item query field for this object type
      */
-    public static function _xar_get_item_query($itemname, $typename, $object)
+    public static function _xar_get_item_query($itemname, $typename, $object): array
     {
         return [
             'name' => $itemname,
@@ -41,7 +50,7 @@ trait xarGraphQLQueryItemTrait
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_item_query_resolver($typename, $object = null)
+    public static function _xar_item_query_resolver($typename, $object = null): callable
     {
         // when using type config decorator and object_query_resolver
         $object ??= xarGraphQLInflector::pluralize($typename);

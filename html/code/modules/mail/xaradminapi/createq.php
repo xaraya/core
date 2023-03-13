@@ -37,4 +37,3 @@ function mail_adminapi_createq(Array $args=array())
     
     return true;
 }
-?>

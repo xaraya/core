@@ -63,5 +63,3 @@ function categories_userapi_deepcount($args)
 
     return $allcounts;   
 }
-
-?>

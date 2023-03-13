@@ -96,4 +96,3 @@ class AfferoProperty extends TextBoxProperty
         return parent::showOutput($data);
     }
 }
-?>

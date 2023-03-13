@@ -13,6 +13,15 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 
 /**
+ * For documentation purposes only - available via xarGraphQLQueryPageTrait
+ */
+interface xarGraphQLQueryPageInterface
+{
+    public static function _xar_get_page_query($pagename, $typename, $object): array;
+    public static function _xar_page_query_resolver($typename, $object = null): callable;
+}
+
+/**
  * Trait to handle default page query for dataobjects
  */
 trait xarGraphQLQueryPageTrait
@@ -20,7 +29,7 @@ trait xarGraphQLQueryPageTrait
     /**
      * Get paginated list query field for this object type - see also relay connection for cursor-based
      */
-    public static function _xar_get_page_query($pagename, $typename, $object)
+    public static function _xar_get_page_query($pagename, $typename, $object): array
     {
         return [
             'name' => $pagename,
@@ -47,7 +56,7 @@ trait xarGraphQLQueryPageTrait
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_page_query_resolver($typename, $object = null)
+    public static function _xar_page_query_resolver($typename, $object = null): callable
     {
         // when using type config decorator and object_query_resolver
         $object ??= xarGraphQLInflector::pluralize($typename);

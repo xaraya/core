@@ -388,11 +388,9 @@ abstract class ConnectionCommon {
             case 'databaseType':
                 // This has no realistic equivalent in creole, probably leave it in
                 return $this->dsn['phptype'];
-                break;
             case 'hasTransactions':
                 // all of em have, from the point of view of the callee
                 return true;
-                break;
             default:
                 // We want to leave this in, so the migration errors show up nicely
                 throw new Exception("Unknown property $propname accessed for connection");
@@ -407,23 +405,17 @@ abstract class ConnectionCommon {
                 // (roles and dd only)
                 // DOH! we dont want this
                 return  "'".str_replace("'","\\'",$args[0])."'";
-                break;
             case 'starttrans':
                 return $this->begin();
-                break;
             case 'completetrans':
                 $this->commit();
                 return true;
-                break;
             case 'affected_rows':
                 return $this->affected_rows;
-                break;
             case 'genid':
                 return $this->getNextId($args[0]);
-                break;
             case 'po_insert_id':
                 return $this->getLastId($args[0]);
-                break;
             default:
                 // We do want to leave this in, so the migration erros show up nicely
                 throw new Exception("Unknown method call $method for connection");

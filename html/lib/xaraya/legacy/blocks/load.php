@@ -122,5 +122,3 @@ function blocks_adminapi_load_legacy($module,$type,$func,$className,$blockDir)
             break;
     }
 }
-
-?>

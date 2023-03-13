@@ -288,5 +288,3 @@ if (is_file("upgrade.php")) echo "<div>Please delete upgrade.php from your web r
 
     return $data;
 }
-
-?>

@@ -84,4 +84,3 @@ class BasicSet extends BasicCollection implements IteratorAggregate
         return $arrayobj->getIterator();
     }
 }
-

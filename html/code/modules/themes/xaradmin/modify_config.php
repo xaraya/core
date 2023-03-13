@@ -17,6 +17,7 @@
     {
         if (!xarSecurity::check('EditThemes')) return;
 
+        $data = [];
         if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
         if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
         if (!xarVar::fetch('update',    'str',   $data['update'], false,       xarVar::NOT_REQUIRED)) return;
@@ -50,4 +51,3 @@
         }
         return $data;
     }
-?>

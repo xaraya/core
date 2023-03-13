@@ -76,4 +76,3 @@ $systemConfiguration['Log.Filename'] = 'xarayalog.txt';
  * If set to 1 allows dynamic switching between databases
  */
  $systemConfiguration['DB.Switching'] = '0';
- ?>

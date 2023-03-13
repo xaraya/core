@@ -21,8 +21,8 @@ class xarMask extends xarObject
     const PRIVILEGES_PRIVILEGETYPE = 2;
     const PRIVILEGES_MASKTYPE = 3;
 
-    public $id;                    //the id of this privilege/mask
-    public $name;                  //the name of this privilege/mask
+    public int $id;                //the id of this privilege/mask
+    public string $name;           //the name of this privilege/mask
     public $realm;                 //the realm of this privilege/mask
     public $module;                //the module name of this privilege/mask
     public $module_id;             //the module ID name of this privilege/mask

@@ -33,4 +33,3 @@ function blocks_typesapi_getstates(Array $args=array())
         );
         
 }
-?>
