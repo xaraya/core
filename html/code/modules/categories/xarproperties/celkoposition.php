@@ -196,7 +196,7 @@ class CelkoPositionProperty extends DataProperty
         } elseif ($n == 1) {
 # --------------------------------------------------------
 #
-# There is one item for this itemid. This means it was already created
+# There is one item for this itemid. This means it was already created by the object this property is bound to.
 # Usually this means the same datasource is used for this property and the other properties of this object item (ex: categories table)
 #
             if ($this->value) {
@@ -238,6 +238,8 @@ class CelkoPositionProperty extends DataProperty
                 }
 
             } else {
+            	// Bound property with the item already created, no XML import: we need to update the celko fields
+
                 if (empty($this->reference_id)) {
                     $point_of_insertion = 1;
                 } else {
