@@ -16,11 +16,15 @@
     {
         $data = [];
         if(!xarVar::fetch('layout',   'isset', $data['layout']   , 'default', xarVar::DONT_SET)) {return;}
-        if(!xarVar::fetch('redirecturl',   'isset', $data['redirecturl']   , xarServer::getCurrentURL(array(),false), xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('redirecturl',   'isset', $data['redirecturl']   , 'local_halt', xarVar::DONT_SET)) {return;}
         if (!xarUser::isLoggedIn()) {
             return $data;
         } else {
-            xarController::redirect($data['redirecturl']);
-            return true;
+            if ($data['redirecturl'] == 'local_halt') {
+            	return $data;
+            } else {
+				xarController::redirect($data['redirecturl']);
+				return true;
+            }
         }
     }
