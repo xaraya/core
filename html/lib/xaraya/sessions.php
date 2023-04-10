@@ -62,6 +62,7 @@ class xarSession extends xarObject implements IsessionHandler
     //private static $cookiePath;
     //private static $cookieDomain;
     //private static $refererCheck;
+    private static $instance;
     private static $lastSaved;
     private $db;               // We store sessioninfo in the database
     private $tbl;              // Container for the session info
@@ -83,6 +84,9 @@ class xarSession extends xarObject implements IsessionHandler
         $tbls     = xarDB::getTables();
         $this->tbl = $tbls['session_info'];
 
+        // Put a reference to this instance into a static property
+        self::$instance = $this;
+        
         // Set up the environment
         $this->setup($args);
 
@@ -630,6 +634,41 @@ class xarSession extends xarObject implements IsessionHandler
     public static function getSecurityLevel()
     {
         return self::$securityLevel;
+    }
+
+    /**
+     * Clear all the sessions in the sessions table
+     *
+     * @param array $spared a list of roles IDs whose sessions are left untouched
+     */
+    public static function clear($spared=[])
+    {
+        if (!is_array($spared)) {
+			$msg = xarML('Not an array: \'$spared\'');
+			throw new BadParameterException($msg);
+        }
+        	
+        $no_spared = empty($spared);
+        try {
+            self::$instance->db->begin();
+            $tbl = self::$instance->tbl;
+			if ($no_spared) {
+				$query = "DELETE FROM $tbl";
+	            self::$instance->db->execute($query);
+			} else {
+				$query = "DELETE FROM $tbl WHERE role_id NOT IN (";
+				$spared_fill = array_fill(0, count($spared), '?');
+				$spared_fill = implode(',', $spared_fill);
+				$query .= $spared_fill;
+				$query .= ")";
+	            self::$instance->db->execute($query,$spared);
+			}
+            self::$instance->db->commit();
+        } catch (SQLException $e) {
+            self::$instance->db->rollback();
+            throw $e;
+        }
+        return true;
     }
 }
 
