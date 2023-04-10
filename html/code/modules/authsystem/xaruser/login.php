@@ -192,7 +192,7 @@ function authsystem_user_login(array $args = [])
                         break;
                     }
                 }
-//var_dump($lockvars);exit;
+
                 if (!$letthru) {
                     // If there is a locked.xt page then use that, otherwise show the default.xt page
                     xarTpl::setPageTemplateName('locked');

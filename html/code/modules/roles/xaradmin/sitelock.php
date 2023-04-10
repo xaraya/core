@@ -171,7 +171,7 @@ function roles_admin_sitelock(Array $args=array())
             $lockdata = unserialize(xarModVars::get('roles', 'lockdata'));
             $lockdata['locked'] = $toggle;
             xarModVars::set('roles', 'lockdata', serialize($lockdata));
-var_dump($lockdata);
+
             if($badmails) {
                 return xarTpl::module('roles','user','errors',array('layout' => 'mail_failed', 'badmails' => $badmails));
             }
