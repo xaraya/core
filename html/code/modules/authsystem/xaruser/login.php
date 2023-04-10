@@ -170,28 +170,19 @@ function authsystem_user_login(array $args = [])
 
             // User is active.
 
-                // TODO: remove this when everybody has moved to 1.0
-                if(!xarModVars::get('roles', 'lockdata')) {
-                    $lockdata = array('roles' => array( array('id' => 4,
-                                                              'name' => 'Administrators',
-                                                              'notify' => TRUE)
-                                                       ),
-                                      'message' => '',
-                                      'locked' => 0,
-                                      'notifymsg' => '');
-                    xarModVars::set('roles', 'lockdata', serialize($lockdata));
-                }
-
             // Check if the site is locked and this user is allowed in
             $lockvars = unserialize(xarModVars::get('roles','lockdata'));
             if ($lockvars['locked'] == 1) {
                 $rolesarray = array();
                 $roles = $lockvars['roles'];
-                for($i=0, $max = count($roles); $i < $max; $i++)
-                        $rolesarray[] = xarRoles::get($roles[$i]['id']);
+                for($i=0, $max = count($roles); $i < $max; $i++) {
+                    $rolesarray[] = xarRoles::get($roles[$i]['id']);
+                }
                 $letin = array();
                 foreach($rolesarray as $roletoletin) {
+                    // If this is a user, add it to the list
                     if ($roletoletin->isUser()) $letin[] = $roletoletin;
+                    // If this is a group, add its users to the list
                     else $letin = array_merge($letin,$roletoletin->getUsers());
                 }
                 $letthru = false;
@@ -201,7 +192,7 @@ function authsystem_user_login(array $args = [])
                         break;
                     }
                 }
-
+//var_dump($lockvars);exit;
                 if (!$letthru) {
                     // If there is a locked.xt page then use that, otherwise show the default.xt page
                     xarTpl::setPageTemplateName('locked');

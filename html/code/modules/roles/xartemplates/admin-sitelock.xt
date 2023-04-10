@@ -15,11 +15,16 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:set name="onclick">xarController::URL('roles', 'admin', 'sitelock', array('cmd' => 'toggle'))</xar:set>
+                        <xar:set name="onclick">xarController::URL('roles', 'admin', 'sitelock')</xar:set>
                         <xar:button type="button" value="$togglelabel" submittotarget="$onclick"/>
                     </div>
                 </div>
             </fieldset>
+	        <input type="hidden" name="cmd" id="cmd" value="toggle"/>
+	        <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
+			<input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
+        </form>
+        <form action="#xarController::URL('roles','admin','sitelock')#" method="post" enctype="application/x-www-form-urlencoded">
             <h3>Configuration</h3>
             <p>On a locked site only the following users and groups will have access.</p>
             <p>
@@ -99,7 +104,6 @@
                     <div class="xar-col"></div>
                     <div class="xar-col">
                         <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
-                        <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
                         <xar:var name="label">Save Site Lock Settings</xar:var>
                         <xar:set name="onclick">xarController::URL('roles', 'admin', 'sitelock', array('cmd' => 'save'))</xar:set>
                         <xar:button type="button" value="$label" tabindex="2" submittotarget="$onclick"/>
