@@ -15,16 +15,11 @@
                         </label>
                     </div>
                     <div class="xar-col">
-                        <xar:set name="onclick">xarController::URL('roles', 'admin', 'sitelock')</xar:set>
+                        <xar:set name="onclick">xarController::URL('roles', 'admin', 'sitelock', array('cmd' => 'toggle'))</xar:set>
                         <xar:button type="button" value="$togglelabel" submittotarget="$onclick"/>
                     </div>
                 </div>
             </fieldset>
-	        <input type="hidden" name="cmd" id="cmd" value="toggle"/>
-	        <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
-			<input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
-        </form>
-        <form action="#xarController::URL('roles','admin','sitelock')#" method="post" enctype="application/x-www-form-urlencoded">
             <h3>Configuration</h3>
             <p>On a locked site only the following users and groups will have access.</p>
             <p>
@@ -35,9 +30,11 @@
                 <xar:loop name="$roles">
                     <div class="xar-row">
                         <div class="xar-col">
+                            <xar:set name="this_name">'notify[' . $loop->item['id'] . ']'</xar:set>
+                            <xar:set name="this_id">'notify_' . $loop->item['id']</xar:set>
                             <label class="xar-form-label">#$loop:item['name']#</label>
-                            <xar:data-input type="checkbox" value="$loop->item['id']"/>
-                            <label for="notify_#$loop:item['id']#" title="xarML('Toggle notifications sent to this Group')#">
+                            <xar:data-input type="checkbox" name="$this_name" id="$this_id" value="$loop->item['notify']"/>
+                            <label for="#$this_id#" title="xarML('Toggle notifications sent to this Group')#">
                                 notify
                             </label>
                             <xar:set name="onclick">xarController::URL('roles', 'admin', 'sitelock', array('cmd' => 'delete', 'id' => $loop->item['id']))</xar:set>
@@ -104,6 +101,7 @@
                     <div class="xar-col"></div>
                     <div class="xar-col">
                         <input type="hidden" name="serialroles" id="serialroles" value="#$serialroles#"/>
+                        <input type="hidden" name="toggle" id="toggle" value="#$toggle#"/>
                         <xar:var name="label">Save Site Lock Settings</xar:var>
                         <xar:set name="onclick">xarController::URL('roles', 'admin', 'sitelock', array('cmd' => 'save'))</xar:set>
                         <xar:button type="button" value="$label" tabindex="2" submittotarget="$onclick"/>

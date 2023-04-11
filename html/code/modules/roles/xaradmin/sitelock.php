@@ -25,16 +25,17 @@ function roles_admin_sitelock(Array $args=array())
     if (!xarVar::fetch('cmd', 'isset', $cmd, NULL, xarVar::DONT_SET)) return;
 
 # --------------------------------------------------------
-# No command; just get the configuration from the modvar
+# Get the configuration from the modvar
 #
-    if(!isset($cmd)) {
-        $lockvars = unserialize(xarModVars::get('roles','lockdata'));
-        $toggle = $lockvars['locked'];
-        $roles = $lockvars['roles'];
-        $lockedoutmsg = (!isset($lockvars['message']) || $lockvars['message'] == '') ? xarML('The site is currently locked. Thank you for your patience.') : $lockvars['message'];
-        $notifymsg = $lockvars['notifymsg'];
+	$lockvars = unserialize(xarModVars::get('roles','lockdata'));
+	$toggle = $lockvars['locked'];
+	$roles = $lockvars['roles'];
+	$lockedoutmsg = (!isset($lockvars['message']) || $lockvars['message'] == '') ? xarML('The site is currently locked. Thank you for your patience.') : $lockvars['message'];
+	$notifymsg = $lockvars['notifymsg'];
+//        echo "<pre>";var_dump($lockvars);
+        
+    if(isset($cmd)) {
 
-    } else {
 # --------------------------------------------------------
 # We have a command; get the data from the template
 #
@@ -46,11 +47,14 @@ function roles_admin_sitelock(Array $args=array())
         $rolesCount = count($roles);
         if (!xarVar::fetch('lockedoutmsg', 'str',   $lockedoutmsg, NULL, xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;
         if (!xarVar::fetch('notifymsg',    'str',   $notifymsg,    NULL, xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;
-        if (!xarVar::fetch('toggle',       'str',   $toggle,       NULL, xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;
-        if (!xarVar::fetch('notify',       'isset', $notify,       NULL, xarVar::DONT_SET)) return;
-        if(!isset($notify)) $notify = array();
-        for($i=0; $i<$rolesCount; $i++) $roles[$i]['notify'] = in_array($roles[$i]['id'],$notify);
+        if (!xarVar::fetch('toggle',       'int',   $toggle,       0,    xarVar::NOT_REQUIRED,xarVar::PREP_FOR_DISPLAY)) return;
+        if (!xarVar::fetch('notify',       'array', $notify,       [],   xarVar::DONT_SET)) return;
 
+        foreach ($roles as $key => $role) {
+        	if (isset($notify[$role['id']])) $roles[$key]['notify'] = true;
+        	else $roles[$key]['notify'] = false;
+        }
+//var_dump($roles);exit;
 # --------------------------------------------------------
 # We are deleting a user from the list of exceptions
 #
@@ -114,10 +118,11 @@ function roles_admin_sitelock(Array $args=array())
 
             // Get the roles
             $lockdata = unserialize(xarModVars::get('roles', 'lockdata'));
+            var_dump($lockdata);
             $rolesarray = $lockdata['roles'];
 			foreach($rolesarray as $thisrole) {
                 $roletoletin = xarRoles::get($thisrole['id']);
-				$notify = $thisrole['notify'];
+				$notify = $thisrole['notify']; var_dump($notify);
 				// If this is a user, add it to the list
 				if ($roletoletin->isUser()) {
 					// Add the notify value so we are only dealing with a single array
