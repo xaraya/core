@@ -173,17 +173,20 @@ function mail_adminapi__sendmail_new(Array $args=array())
         $redirectsending = '';
     }
     if(!isset($redirectaddress)) {
-        $redirectaddress = '';
+        $redirectaddress = [];
     }
     if (xarModVars::get('mail','redirectsending')) {
         $redirectsending = xarModVars::get('mail','redirectsending');
         $redirectaddress = explode(',', xarModVars::get('mail','redirectaddress'));        
     }
+    
     if ($redirectsending) {
         $mail->ClearAddresses();
         $recipients = array();
         if (!empty($redirectaddress)) {
             $name = xarML('Xaraya Mail Debugging');
+            // Make sure we have an array
+            if (!is_array($redirectaddress)) $redirectaddress = [$redirectaddress];
             foreach ($redirectaddress as $address) {
                 $mail->AddAddress(trim($address), $name);
             }
