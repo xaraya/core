@@ -746,13 +746,15 @@ class xarMLS extends xarObject
         $next_path = substr($path, 0, strrpos($path, '/'));
         if (self::mkdirr($next_path)) {
             if (!file_exists($path)) {
-                $madeDir = @mkdir($path, 0700);
-                if (!$madeDir) {
-                    $msg = xarML("The directories under #(1) must be writeable by PHP.", $next_path);
+                try{
+                	$madeDir = mkdir($path, 0700);
+	                return $madeDir;
+                } catch (Exception $e) {
+                    $msg = xarML("Could not create directory #(1). The directories under #(2) must be writeable by PHP.", $path, $next_path);
                     xarLog::message($msg, xarLog::LEVEL_ERROR);
+                    die($msg);
                     // throw new PermissionException?
                 }
-                return $madeDir;
             }
         }
         return false;
