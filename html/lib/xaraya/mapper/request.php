@@ -15,13 +15,13 @@
 
 class xarRequest extends xarObject
 {
-    protected $url;
-    protected $actionstring;
-    protected $dispatched = false;
-    protected $modulekey  = 'module';
-    protected $typekey    = 'type';
-    protected $funckey    = 'func';
-    protected $route      = 'default';
+    protected $url          = '';
+    protected $actionstring = '';
+    protected $dispatched   = false;
+    protected $modulekey    = 'module';
+    protected $typekey      = 'type';
+    protected $funckey      = 'func';
+    protected $route        = 'default';
 
     public $module        = 'base';
     public $modulealias   = '';

@@ -20,7 +20,7 @@ class BaseActionController extends xarObject
     private $controller;
     private $request;
     private $actionstring;
-    private $separator;
+    private $separator      = '/';
     public $module;
     public $modulealias;
     
