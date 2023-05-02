@@ -243,7 +243,7 @@ function categories_userapi_getcat($args)
 				$index++;
 			}
 
-			// are we looking to have the output in the "standard" form?
+			// Are we looking to have the output in the "standard" form?
 			if (!empty($dropdown)) {
 				$categories[$index+1] = Array(
 					'id'         => $cid,
@@ -300,7 +300,7 @@ function categories_userapi_getcat($args)
 				$index++;
 			}
 
-			// are we looking to have the output in the "standard" form?
+			// Are we looking to have the output in the "standard" form?
 			if (!empty($dropdown)) {
 				$categories[$index+1] = Array(
 					'id'         => $cid,

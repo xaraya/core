@@ -754,53 +754,93 @@ class CelkoPositionProperty extends DataProperty
         } else {
             $result = $dbconn->Execute($SQLquery, $bindvars);
         }
-        if (!$result) return;
-        if ($result->EOF) return Array();
 
-        $items = array();
 
-        // FIXME: in PDO the last row appears twice ein the resulting array
-        $index = -1;
-        $result->first();
-        while (!$result->EOF) {
-            list($indentation,
-                    $id,
-                    $name,
-                    $parent,
-                    $left,
-                    $right
-                   ) = $result->fields;
-            $result->next();
+		if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
 
-            if ($indexby == 'cid') {
-                $index = $id;
-            } else {
-                $index++;
-            }
+			$rows = $result->getall();
+			$index = -1;
+			foreach ($rows as $row) {
+				list($indentation,
+						$id,
+						$name,
+						$parent,
+						$left,
+						$right
+					   ) = $row;
 
-            // are we looking to have the output in the "standard" form?
-            if (!empty($dropdown)) {
-                $items[$index+1] = Array(
-                    'id'         => $id,
-                    'name'        => $name,
-                );
-            } else {
-                $items[$index] = Array(
-                    'indentation' => $indentation,
-                    'id'          => $id,
-                    'name'        => $name,
-                    'parent'      => $parent,
-                    'left'        => $left,
-                    'right'       => $right,
-                );
-            }
-        }
-        $result->Close();
+				if ($indexby == 'cid') {
+					$index = $cid;
+				} else {
+					$index++;
+				}
 
-        if (!empty($dropdown)) {
-            $items[0] = array('id' => 0, 'name' => '');
-        }
-        return $items;
+				// are we looking to have the output in the "standard" form?
+				if (!empty($dropdown)) {
+					$items[$index+1] = Array(
+						'id'         => $cid,
+						'name'        => $name,
+					);
+				} else {
+					$items[$index] = Array(
+						'indentation' => $indentation,
+						'id'          => $cid,
+						'name'        => $name,
+						'parent'      => $parent,
+						'left'        => $left,
+						'right'       => $right,
+					);
+				}
+			}
+
+		} else {
+			// Hello, Creole
+			
+			if (!$result) return;
+			if ($result->EOF) return Array();
+			$items = array();
+			$index = -1;
+			$result->first();
+			while (!$result->EOF) {
+				list($indentation,
+						$id,
+						$name,
+						$parent,
+						$left,
+						$right
+					   ) = $result->fields;
+				$result->next();
+
+				if ($indexby == 'cid') {
+					$index = $id;
+				} else {
+					$index++;
+				}
+
+				// Are we looking to have the output in the "standard" form?
+				if (!empty($dropdown)) {
+					$items[$index+1] = Array(
+						'id'         => $id,
+						'name'        => $name,
+					);
+				} else {
+					$items[$index] = Array(
+						'indentation' => $indentation,
+						'id'          => $id,
+						'name'        => $name,
+						'parent'      => $parent,
+						'left'        => $left,
+						'right'       => $right,
+					);
+				}
+			}
+			$result->Close();
+		}
+
+		if (!empty($dropdown)) {
+			$items[0] = array('id' => 0, 'name' => '');
+		}
+		return $items;
     }
 
 /**
