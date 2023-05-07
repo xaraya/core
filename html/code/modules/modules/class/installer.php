@@ -438,7 +438,7 @@ class Installer extends xarObject
     {
         $topid = $this->modulestack->pop();
         if ($this->extType == 'themes'){
-            $extInfo = xarMod::getInfo($regid);
+            $extInfo = xarMod::getInfo($regid, 'theme');
             if (!isset($extInfo)) {
                 throw new ThemeNotFoundException($regid,'Theme (regid: #(1)) does not exist.');
             }
