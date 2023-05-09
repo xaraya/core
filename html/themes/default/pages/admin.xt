@@ -22,34 +22,6 @@
         <body>
             <div id="admin-wrapper">
                 <div id="admin-main">
-
-                    <!-- Hide for now
-                    <![CDATA[
-                    <script type="text/javascript">
-                        function showtab (selectedindex, items)
-                        {
-                            for (i=1;i<=items;i++) {
-                                document.getElementById('docpage-' + i).style.display = "none";
-                                document.getElementById('doctab-' + i).style.display = "block";
-                            }
-                            document.getElementById('docpage-' + selectedindex).style.display = "block";
-                            document.getElementById('doctab-' + selectedindex).style.display = "none";
-                        }
-                    </script>
-                    ]]>
-
-                    <div id="doctab-1" style="display: none">
-                        <a id="href-1" href="javascript:showtab(1,2)">
-                            <xar:img scope="theme" file="icons/toggle.png"/>
-                        </a>
-                    </div>
-                    <div id="doctab-2">
-                        <a id="href-2" href="javascript:showtab(2,2)">
-                            <xar:img scope="theme" file="icons/toggle.png"/>
-                        </a>
-                    </div>
-                    -->
-
                     <div style="text-align: right">
                         <a href="#xarServer::getBaseURL()#" style="text-decoration: none">
                             <xar:var name="SiteName" scope="module" module="themes"/>

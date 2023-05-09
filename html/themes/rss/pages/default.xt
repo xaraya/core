@@ -23,7 +23,7 @@ dtd="rss">
             <sy:updatePeriod>hourly</sy:updatePeriod>
             <sy:updateFrequency>1</sy:updateFrequency>
             <docs>http://backend.userland.com/rss</docs>
-            <xar:module class="modulespace" main="true"/>
+            <xar:module id="modulespace" main="true"/>
         </channel>
     </rss>
 </xar:blocklayout>
