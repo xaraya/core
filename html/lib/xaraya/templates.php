@@ -611,6 +611,7 @@ class xarTpl extends xarObject
         // Debug display
         if ($debug) {
             foreach ($paths as $path) {
+            	$path = preg_replace('%\/\/+%','/',$path);
                 echo xarML('Possible location: ') . $path . "<br/>";                
             }
         }
@@ -618,17 +619,19 @@ class xarTpl extends xarObject
         $sourceFileName = '';
         if (!empty($paths)) {
             foreach ($paths as $file) {
+            
                 if (!file_exists($file)) continue;
-                $sourceFileName = $file;
+                
+        		// Some parts may have been empty, remove extra slashes
+        		$sourceFileName = preg_replace('%\/\/+%','/',$file);
+
                 // Debug display
                 if ($debug) {
-                    echo "<b>" . xarML('Chosen: ') . $file . "</b><br/>";
+                    echo "<b>" . xarML('Chosen: ') . $sourceFileName . "</b><br/>";
                 }
                 break;
             }
         }
-        // Some parts may have been empty, remove extra slashes
-        $sourceFileName = preg_replace('%\/\/+%','/',$sourceFileName);
 
         xarCoreCache::setCached('Templates.Element', $cachename, $sourceFileName);
 
