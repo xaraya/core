@@ -81,15 +81,36 @@ class TrackRouteCollector extends RouteCollector
         parent::addGroup($prefix, $callback);
         static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStopped, null];
     }
+
+    public static function getRoutes(): array
+    {
+        return static::$trackRoutes;
+    }
 }
 
+/**
+ * FastRoute bridge to handle Xaraya object, module and block GUI calls + REST API and GraphQL API requests
+ */
 class FastRouteBridge implements CommonBridgeInterface
 {
     use CommonBridgeTrait;
 
+    /**
+     * Summary of baseUri
+     * @var string
+     */
     public static string $baseUri = '';
+    /**
+     * Summary of mediaType
+     * @var string
+     */
     public static string $mediaType = '';
 
+    /**
+     * Summary of addRouteCollection
+     * @param RouteCollector $r
+     * @return void
+     */
     public static function addRouteCollection(RouteCollector $r)
     {
         $r->addGroup('/object', function (RouteCollector $r) {
@@ -114,6 +135,11 @@ class FastRouteBridge implements CommonBridgeInterface
         $r->addRoute('OPTIONS', '*', [DataObjectRESTHandler::class, 'sendCORSOptions']);
     }
 
+    /**
+     * Summary of getSimpleDispatcher
+     * @param string $group
+     * @return Dispatcher
+     */
     public static function getSimpleDispatcher(string $group = '')
     {
         // override standard routeCollector here
@@ -135,6 +161,13 @@ class FastRouteBridge implements CommonBridgeInterface
         return $dispatcher;
     }
 
+    /**
+     * Summary of dispatchRequest
+     * @param string $method
+     * @param string $path
+     * @param string $group
+     * @return mixed
+     */
     public static function dispatchRequest(string $method, string $path, string $group = '')
     {
         $dispatcher = static::getSimpleDispatcher($group);
@@ -176,6 +209,11 @@ class FastRouteBridge implements CommonBridgeInterface
         }
     }
 
+    /**
+     * Summary of run
+     * @param string $group
+     * @return void
+     */
     public static function run(string $group = '')
     {
         $method = static::getMethod();
@@ -192,6 +230,11 @@ class FastRouteBridge implements CommonBridgeInterface
         }
     }
 
+    /**
+     * Summary of output
+     * @param mixed $result
+     * @return void
+     */
     public static function output($result)
     {
         if (http_response_code() !== 200 && php_sapi_name() !== 'cli') {
@@ -222,6 +265,13 @@ class FastRouteBridge implements CommonBridgeInterface
         }
     }
 
+    /**
+     * Summary of callHandler
+     * @param mixed $handler
+     * @param array $vars
+     * @param mixed $request
+     * @return mixed
+     */
     public static function callHandler($handler, $vars, &$request = null)
     {
         if (empty($vars)) {
@@ -233,6 +283,13 @@ class FastRouteBridge implements CommonBridgeInterface
     }
 
     // different processing for REST API - see rst.php
+    /**
+     * Summary of callRestApiHandler
+     * @param mixed $handler
+     * @param array $vars
+     * @param mixed $request
+     * @return mixed
+     */
     public static function callRestApiHandler($handler, $vars, &$request = null)
     {
         if (empty($vars)) {
@@ -248,6 +305,12 @@ class FastRouteBridge implements CommonBridgeInterface
         return $result;
     }
 
+    /**
+     * Summary of handleObjectRequest
+     * @param array $vars
+     * @param mixed $request
+     * @return string
+     */
     public static function handleObjectRequest($vars, &$request = null)
     {
         // if coming from module request handler, convert to object request
@@ -293,11 +356,22 @@ class FastRouteBridge implements CommonBridgeInterface
         return static::runObjectRequest($params);
     }
 
+    /**
+     * Summary of runObjectRequest
+     * @param array $params
+     * @return string
+     */
     public static function runObjectRequest($params)
     {
         return static::runDataObjectGuiRequest($params);
     }
 
+    /**
+     * Summary of handleModuleRequest
+     * @param array $vars
+     * @param mixed $request
+     * @return string
+     */
     public static function handleModuleRequest($vars, &$request = null)
     {
         // path = /
@@ -331,11 +405,23 @@ class FastRouteBridge implements CommonBridgeInterface
         return static::runModuleRequest($vars, $params);
     }
 
+    /**
+     * Summary of runModuleRequest
+     * @param array $vars
+     * @param mixed $query
+     * @return string
+     */
     public static function runModuleRequest($vars, $query)
     {
         return static::runModuleGuiRequest($vars, $query);
     }
 
+    /**
+     * Summary of handleBlockRequest
+     * @param array $vars
+     * @param mixed $request
+     * @return string
+     */
     public static function handleBlockRequest($vars, &$request = null)
     {
         // @checkme limited to renderBlock() or getinfo() for now, so no query params or body params taken into account yet
@@ -349,6 +435,12 @@ class FastRouteBridge implements CommonBridgeInterface
         return static::runBlockRequest($vars, $query);
     }
 
+    /**
+     * Summary of runBlockRequest
+     * @param array $vars
+     * @param mixed $query
+     * @return string
+     */
     public static function runBlockRequest($vars, $query = null)
     {
         return static::runBlockGuiRequest($vars, $query);
@@ -360,7 +452,7 @@ class FastRouteBridge implements CommonBridgeInterface
     public static function handleRoutesRequest($vars, &$request = null)
     {
         $result = "<ul>";
-        foreach (TrackRouteCollector::$trackRoutes as $info) {
+        foreach (TrackRouteCollector::getRoutes() as $info) {
             if (is_array($info[1])) {
                 $result .= "<li>" . $info[0] . " [" . implode(', ', $info[1]) . "]</li>";
                 continue;
@@ -389,6 +481,11 @@ class FastRouteBridge implements CommonBridgeInterface
  */
 class FastRouteApiBridge extends FastRouteBridge
 {
+    /**
+     * Summary of addRouteCollection
+     * @param RouteCollector $r
+     * @return void
+     */
     public static function addRouteCollection(RouteCollector $r)
     {
         $r->addGroup('/object', function (RouteCollector $r) {
@@ -404,16 +501,33 @@ class FastRouteApiBridge extends FastRouteBridge
         $r->addRoute(['GET', 'POST'], '/', [static::class, 'handleModuleRequest']);
     }
 
+    /**
+     * Summary of runObjectRequest
+     * @param array $params
+     * @return mixed
+     */
     public static function runObjectRequest($params)
     {
         return static::runDataObjectApiRequest($params);
     }
 
+    /**
+     * Summary of runModuleRequest
+     * @param array $vars
+     * @param mixed $query
+     * @return mixed
+     */
     public static function runModuleRequest($vars, $query)
     {
         return static::runModuleApiRequest($vars, $query);
     }
 
+    /**
+     * Summary of runBlockRequest
+     * @param array $vars
+     * @param mixed $query
+     * @return mixed
+     */
     public static function runBlockRequest($vars, $query = null)
     {
         return static::runBlockApiRequest($vars, $query);
@@ -429,6 +543,12 @@ class FastRouteStaticBridge extends FastRouteBridge
 {
     use StaticFileBridgeTrait;
 
+    /**
+     * Summary of addRouteCollection
+     * @param RouteCollector $r
+     * @param string $staticFiles
+     * @return void
+     */
     public static function addRouteCollection(RouteCollector $r, string $staticFiles = '')
     {
         // @checkme use this as group e.g. everything under /static
@@ -444,6 +564,11 @@ class FastRouteStaticBridge extends FastRouteBridge
         parent::addRouteCollection($r);
     }
 
+    /**
+     * Summary of addThemeFileRoutes
+     * @param RouteCollector $r
+     * @return void
+     */
     public static function addThemeFileRoutes(RouteCollector $r)
     {
         $r->addGroup('/themes', function (RouteCollector $r) {
@@ -451,6 +576,11 @@ class FastRouteStaticBridge extends FastRouteBridge
         });
     }
 
+    /**
+     * Summary of addModuleFileRoutes
+     * @param RouteCollector $r
+     * @return void
+     */
     public static function addModuleFileRoutes(RouteCollector $r)
     {
         $r->addGroup('/code/modules', function (RouteCollector $r) {
@@ -458,6 +588,12 @@ class FastRouteStaticBridge extends FastRouteBridge
         });
     }
 
+    /**
+     * Summary of handleThemeFileRequest
+     * @param array $vars
+     * @param mixed $request
+     * @return string
+     */
     public static function handleThemeFileRequest($vars, &$request = null)
     {
         // path = /themes/{theme}/{folder}/{file:.+}
@@ -470,6 +606,12 @@ class FastRouteStaticBridge extends FastRouteBridge
         return var_export($vars, true);
     }
 
+    /**
+     * Summary of handleModuleFileRequest
+     * @param array $vars
+     * @param mixed $request
+     * @return string
+     */
     public static function handleModuleFileRequest($vars, &$request = null)
     {
         // path = /code/modules/{module}/{folder}/{file:.+}
@@ -483,8 +625,16 @@ class FastRouteStaticBridge extends FastRouteBridge
     }
 }
 
+/**
+ * Summary of FastRouteBuildTest
+ */
 class FastRouteBuildTest
 {
+    /**
+     * Summary of getObjectRoute
+     * @param array $params
+     * @return string
+     */
     public static function getObjectRoute($params)
     {
         static $routes;
@@ -497,6 +647,11 @@ class FastRouteBuildTest
         return static::matchRoutes($routes, $vars);
     }
 
+    /**
+     * Summary of getModuleRoute
+     * @param array $params
+     * @return string
+     */
     public static function getModuleRoute($params)
     {
         static $routes;
@@ -512,6 +667,11 @@ class FastRouteBuildTest
         return static::matchRoutes($routes, $vars);
     }
 
+    /**
+     * Summary of getBlockRoute
+     * @param array $params
+     * @return string
+     */
     public static function getBlockRoute($params)
     {
         static $routes;
@@ -524,6 +684,12 @@ class FastRouteBuildTest
         return static::matchRoutes($routes, $vars);
     }
 
+    /**
+     * Summary of matchRoutes
+     * @param array $routes
+     * @param array $vars
+     * @return string
+     */
     public static function matchRoutes($routes, $vars)
     {
         $vars = array_filter($vars);
@@ -540,6 +706,7 @@ class FastRouteBuildTest
                 return strtr($info[0], $replace);
             }
         }
+        return '';
     }
 
     /**
@@ -552,7 +719,7 @@ class FastRouteBuildTest
         //}
         $parser = new \FastRoute\RouteParser\Std();
         $routes = [];
-        foreach (TrackRouteCollector::$trackRoutes as $info) {
+        foreach (TrackRouteCollector::getRoutes() as $info) {
             if (!is_array($info[2]) || count($info[2]) < 2) {
                 continue;
             }

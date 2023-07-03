@@ -175,6 +175,8 @@ function dynamicdata_admin_test_apis(array $args=[])
         // flat install supporting symlinks
         if (empty($root)) {
             $vendor = realpath(dirname(realpath($_SERVER['SCRIPT_FILENAME'])) . '/../vendor');
+        } elseif ($root == sys::web() && is_dir($root . '../vendor')) {
+            $vendor = realpath($root . '../vendor');
         } else {
             $vendor = realpath($root . 'vendor');
         }
