@@ -10,7 +10,6 @@ ul.xar-tabs {
     border-style: solid;
     padding: 0 .5em;
     margin: 1em 0;
-    zoom: 1;                    /* fix for IE */
 }
 ul.xar-tabs li.xar-tabs-label {
     list-style: none;
