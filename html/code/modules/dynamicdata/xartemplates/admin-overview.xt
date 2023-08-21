@@ -424,7 +424,7 @@
                             <xar:data-input type="calendar"/>
                         </td>
                         <td valign="middle">
-                            Displays a popup calendar for dae input:
+                            Displays a popup calendar for data input:
         <pre>
         &lt;xar:data-input type="calendar"/>
         </pre>
