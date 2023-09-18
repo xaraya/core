@@ -94,7 +94,8 @@ class XarDateTime extends DateTime
 
     public function extract()
     {
-        $datearray    = getdate($this->timestamp);
+    	$timestamp    = $this->timestamp == '' ? 0 : $this->timestamp;
+        $datearray    = getdate($timestamp);
         $this->year   = $datearray['year'];
         $this->month  = $datearray['mon'];
         $this->day    = $datearray['mday'];
