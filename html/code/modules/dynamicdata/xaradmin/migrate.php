@@ -14,44 +14,70 @@
 /**
  * migrate module items
  */
-function dynamicdata_admin_migrate(Array $args=array())
+function dynamicdata_admin_migrate(array $args = [])
 {
     // Security
-    if (!xarSecurity::check('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     extract($args);
 
     // the actual from-to mapping
-    if(!xarVar::fetch('from',     'isset', $from,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('to',       'isset', $to,       NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('fieldmap', 'isset', $fieldmap, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('hookmap',  'isset', $hookmap,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('from', 'isset', $from, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('to', 'isset', $to, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('fieldmap', 'isset', $fieldmap, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('hookmap', 'isset', $hookmap, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     // support for the Back and Finish buttons
-    if(!xarVar::fetch('step',     'int',   $step,     0,    xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('back',     'str',   $back,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('test',     'str',   $test,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('confirm',  'str',   $confirm,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('step', 'int', $step, 0, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('back', 'str', $back, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('test', 'str', $test, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('confirm', 'str', $confirm, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     // support for loading/saving mappings
-    if(!xarVar::fetch('load',     'str',   $load,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('save',     'str',   $save,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('map',      'str',   $map,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('load', 'str', $load, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('save', 'str', $save, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('map', 'str', $map, null, xarVar::DONT_SET)) {
+        return;
+    }
 
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     // retrieve past steps and recover if necessary
-    if (!xarModVars::get('dynamicdata','migratesteps')) {
-        xarModVars::set('dynamicdata','migratesteps',serialize(array()));
+    if (!xarModVars::get('dynamicdata', 'migratesteps')) {
+        xarModVars::set('dynamicdata', 'migratesteps', serialize([]));
     }
     if (empty($from) && empty($to)) {
-        $steps = array();
+        $steps = [];
     } else {
-        $steps = xarModUserVars::get('dynamicdata','migratesteps');
+        $steps = xarModUserVars::get('dynamicdata', 'migratesteps');
         if (!empty($steps)) {
             $steps = unserialize($steps);
         } else {
-            $steps = array();
+            $steps = [];
         }
     }
     if (!empty($back)) {
@@ -65,10 +91,10 @@ function dynamicdata_admin_migrate(Array $args=array())
     }
 
     // retrieve existing mappings and recover if necessary
-    $maps = xarModVars::get('dynamicdata','migratemaps');
+    $maps = xarModVars::get('dynamicdata', 'migratemaps');
     if (empty($maps)) {
-        xarModVars::set('dynamicdata','migratemaps',serialize(array()));
-        $maps = array();
+        xarModVars::set('dynamicdata', 'migratemaps', serialize([]));
+        $maps = [];
     } else {
         $maps = unserialize($maps);
     }
@@ -77,7 +103,7 @@ function dynamicdata_admin_migrate(Array $args=array())
         extract($maps[$map]);
         // reset itemid and steps
         $from['itemid'] = null;
-        $steps = array();
+        $steps = [];
         $step = 1;
     }
 
@@ -85,27 +111,27 @@ function dynamicdata_admin_migrate(Array $args=array())
     $modlist = xarMod::apiFunc('modules', 'admin', 'getlist');
 
     // Get the list of all hook modules, and the current hooks enabled for all modules
-    $hooklist = xarMod::apiFunc('modules','admin','gethooklist');
+    $hooklist = xarMod::apiFunc('modules', 'admin', 'gethooklist');
 
-    $data = array();
+    $data = [];
 
-    $data['modulelist'] = array();
+    $data['modulelist'] = [];
     foreach ($modlist as $modinfo) {
         $data['modulelist'][$modinfo['regid']] = $modinfo['displayname'];
     }
 
     // list of modules supported by the migration process (for now)
-    $modsupported = array('articles','dynamicdata','xarbb','xarpages');
+    $modsupported = ['articles','dynamicdata','xarbb','xarpages'];
 
-    $data['modulesupported'] = array();
+    $data['modulesupported'] = [];
     foreach ($modsupported as $modname) {
         $data['modulesupported'][] = xarMod::getRegID($modname);
     }
 
     // list of hooks supported by the migration process (for now)
-    $data['hooksupported'] = array('categories','changelog','comments','dynamicdata','hitcount','keywords','polls','ratings','uploads','xlink');
+    $data['hooksupported'] = ['categories','changelog','comments','dynamicdata','hitcount','keywords','polls','ratings','uploads','xlink'];
 
-    $data['from'] = array();
+    $data['from'] = [];
     if (!empty($from) && is_array($from)) {
         if (!empty($from['objectid'])) {
             // TODO ?
@@ -117,12 +143,16 @@ function dynamicdata_admin_migrate(Array $args=array())
             $modinfo = xarMod::getInfo($from['module']);
 
             // get the list of itemtypes for this module
-            $itemtypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                                       array());
+            $itemtypes = xarMod::apiFunc(
+                $modinfo['name'],
+                'user',
+                'getitemtypes',
+                []
+            );
             if (!empty($itemtypes)) {
                 $data['fromitemtypes'] = $itemtypes;
             } else {
-                $data['fromitemtypes'] = array();
+                $data['fromitemtypes'] = [];
             }
 
             if (isset($from['itemtype'])) {
@@ -131,25 +161,33 @@ function dynamicdata_admin_migrate(Array $args=array())
                 if (!empty($from['itemid'])) {
                     // we have a from itemid
                     if (is_string($from['itemid'])) {
-                        $from['itemid'] = explode(',',$from['itemid']);
+                        $from['itemid'] = explode(',', $from['itemid']);
                     }
-                    $data['from']['itemid'] = join(',',$from['itemid']);
+                    $data['from']['itemid'] = join(',', $from['itemid']);
                 }
 
                 // get the list of items for this module+itemtype
                 if (empty($from['itemid'])) {
-                    $items = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
-                                           array('itemtype' => $from['itemtype'],
-                                                 'itemids'  => null));
+                    $items = xarMod::apiFunc(
+                        $modinfo['name'],
+                        'user',
+                        'getitemlinks',
+                        ['itemtype' => $from['itemtype'],
+                                                 'itemids'  => null]
+                    );
                 } else {
-                    $items = xarMod::apiFunc($modinfo['name'],'user','getitemlinks',
-                                           array('itemtype' => $from['itemtype'],
-                                                 'itemids'  => $from['itemid']));
+                    $items = xarMod::apiFunc(
+                        $modinfo['name'],
+                        'user',
+                        'getitemlinks',
+                        ['itemtype' => $from['itemtype'],
+                                                 'itemids'  => $from['itemid']]
+                    );
                 }
                 if (!empty($items)) {
                     $data['fromitems'] = $items;
                 } else {
-                    $data['fromitems'] = array();
+                    $data['fromitems'] = [];
                 }
 
                 if (!empty($itemtypes[$from['itemtype']])) {
@@ -157,21 +195,27 @@ function dynamicdata_admin_migrate(Array $args=array())
                 }
 
                 // get the list of fields for this module+itemtype
-                $fields = xarMod::apiFunc($modinfo['name'],'user','getitemfields',
-                                        array('itemtype' => $from['itemtype']));
+                $fields = xarMod::apiFunc(
+                    $modinfo['name'],
+                    'user',
+                    'getitemfields',
+                    ['itemtype' => $from['itemtype']]
+                );
                 if (!empty($fields)) {
                     $data['fromfieldlist'] = $fields;
                 } else {
-                    $data['fromfieldlist'] = array();
+                    $data['fromfieldlist'] = [];
                 }
 
                 // get the list of hooks for this module+itemtype
-                $data['fromhooklist'] = array();
+                $data['fromhooklist'] = [];
                 $modname = $modinfo['name'];
                 foreach ($hooklist as $hookmodname => $hooks) {
                     // Fill in the details for the different hooks
                     foreach ($hooks as $hook => $modules) {
-                        if (empty($modules[$modname])) continue;
+                        if (empty($modules[$modname])) {
+                            continue;
+                        }
                         foreach ($modules[$modname] as $itemtype => $val) {
                             if (empty($itemtype)) {
                                 // the module is hooked for all itemtypes
@@ -188,29 +232,35 @@ function dynamicdata_admin_migrate(Array $args=array())
 
                 // add DD properties to field list
                 if (!empty($data['fromhooklist']['dynamicdata'])) {
-                    $props = xarMod::apiFunc('dynamicdata','user','getprop',
-                                           array('module_id'    => $data['from']['module'],
-                                                 'itemtype' => $data['from']['itemtype']));
+                    $props = xarMod::apiFunc(
+                        'dynamicdata',
+                        'user',
+                        'getprop',
+                        ['module_id'    => $data['from']['module'],
+                                                 'itemtype' => $data['from']['itemtype']]
+                    );
                     $proptypes = DataPropertyMaster::getPropertyTypes();
                     foreach ($props as $name => $info) {
-                        if (empty($info['label'])) continue;
+                        if (empty($info['label'])) {
+                            continue;
+                        }
                         if (!empty($proptypes[$info['type']])) {
                             $type = $proptypes[$info['type']]['name'];
                         } else {
                             $type = $info['type'];
                         }
-                    // CHECKME: use dd_NN as field name here ?
+                        // CHECKME: use dd_NN as field name here ?
                         $label = '(dd_' . $info['id'] . ') ' . $info['label'];
-                        $data['fromfieldlist'][$name] = array('name'  => $name,
+                        $data['fromfieldlist'][$name] = ['name'  => $name,
                                                               'label' => $label,
-                                                              'type'  => $type);
+                                                              'type'  => $type];
                     }
                 }
             }
         }
     }
 
-    $data['to'] = array();
+    $data['to'] = [];
     if (!empty($to) && is_array($to)) {
         if (!empty($to['objectid'])) {
             // TODO ?
@@ -222,12 +272,16 @@ function dynamicdata_admin_migrate(Array $args=array())
             $modinfo = xarMod::getInfo($to['module']);
 
             // get the list of itemtypes for this module
-            $itemtypes = xarMod::apiFunc($modinfo['name'],'user','getitemtypes',
-                                       array());
+            $itemtypes = xarMod::apiFunc(
+                $modinfo['name'],
+                'user',
+                'getitemtypes',
+                []
+            );
             if (!empty($itemtypes)) {
                 $data['toitemtypes'] = $itemtypes;
             } else {
-                $data['toitemtypes'] = array();
+                $data['toitemtypes'] = [];
             }
 
             if (isset($to['itemtype'])) {
@@ -242,21 +296,27 @@ function dynamicdata_admin_migrate(Array $args=array())
                 }
 
                 // get the list of fields for this module+itemtype
-                $fields = xarMod::apiFunc($modinfo['name'],'user','getitemfields',
-                                        array('itemtype' => $to['itemtype']));
+                $fields = xarMod::apiFunc(
+                    $modinfo['name'],
+                    'user',
+                    'getitemfields',
+                    ['itemtype' => $to['itemtype']]
+                );
                 if (!empty($fields)) {
                     $data['tofieldlist'] = $fields;
                 } else {
-                    $data['tofieldlist'] = array();
+                    $data['tofieldlist'] = [];
                 }
 
                 // get the list of hooks enabled for this module+itemtype
-                $data['tohooklist'] = array();
+                $data['tohooklist'] = [];
                 $modname = $modinfo['name'];
                 foreach ($hooklist as $hookmodname => $hooks) {
                     // Fill in the details for the different hooks
                     foreach ($hooks as $hook => $modules) {
-                        if (empty($modules[$modname])) continue;
+                        if (empty($modules[$modname])) {
+                            continue;
+                        }
                         foreach ($modules[$modname] as $itemtype => $val) {
                             if (empty($itemtype)) {
                                 // the module is hooked for all itemtypes
@@ -273,22 +333,28 @@ function dynamicdata_admin_migrate(Array $args=array())
 
                 // add DD properties to field list
                 if (!empty($data['tohooklist']['dynamicdata'])) {
-                    $props = xarMod::apiFunc('dynamicdata','user','getprop',
-                                           array('module_id'    => $data['to']['module'],
-                                                 'itemtype' => $data['to']['itemtype']));
+                    $props = xarMod::apiFunc(
+                        'dynamicdata',
+                        'user',
+                        'getprop',
+                        ['module_id'    => $data['to']['module'],
+                                                 'itemtype' => $data['to']['itemtype']]
+                    );
                     $proptypes = DataPropertyMaster::getPropertyTypes();
                     foreach ($props as $name => $info) {
-                        if (empty($info['label'])) continue;
+                        if (empty($info['label'])) {
+                            continue;
+                        }
                         if (!empty($proptypes[$info['type']])) {
                             $type = $proptypes[$info['type']]['name'];
                         } else {
                             $type = $info['type'];
                         }
-                    // CHECKME: use dd_NN as field name here ?
+                        // CHECKME: use dd_NN as field name here ?
                         $label = '(dd_' . $info['id'] . ') ' . $info['label'];
-                        $data['tofieldlist'][$name] = array('name'  => $name,
+                        $data['tofieldlist'][$name] = ['name'  => $name,
                                                             'label' => $label,
-                                                            'type'  => $type);
+                                                            'type'  => $type];
                     }
                 }
             }
@@ -296,10 +362,12 @@ function dynamicdata_admin_migrate(Array $args=array())
     }
 
     // check the field mapping
-    $data['fieldmap'] = array();
+    $data['fieldmap'] = [];
     if (!empty($fieldmap) && !empty($data['fromfieldlist']) && !empty($data['tofieldlist'])) {
         foreach ($fieldmap as $fromfield => $tofield) {
-            if (empty($fromfield)) continue;
+            if (empty($fromfield)) {
+                continue;
+            }
             if (!empty($tofield) && !empty($data['tofieldlist'][$tofield])) {
                 $data['fieldmap'][$fromfield] = $tofield;
             } else {
@@ -309,10 +377,12 @@ function dynamicdata_admin_migrate(Array $args=array())
     }
 
     // check the hook mapping
-    $data['hookmap'] = array();
+    $data['hookmap'] = [];
     if (!empty($hookmap) && !empty($data['fromhooklist']) && !empty($data['tohooklist'])) {
         foreach ($hookmap as $fromhook => $tohook) {
-            if (empty($fromhook)) continue;
+            if (empty($fromhook)) {
+                continue;
+            }
             if (!empty($tohook) && !empty($data['tohooklist'][$tohook])) {
                 $data['hookmap'][$fromhook] = $tohook;
             } else {
@@ -322,9 +392,9 @@ function dynamicdata_admin_migrate(Array $args=array())
     }
 
     // preserve current step
-    $steps[$step] = array('from' => $data['from'], 'to' => $data['to'],
-                          'fieldmap' => $data['fieldmap'], 'hookmap' => $data['hookmap']);
-    xarModUserVars::set('dynamicdata','migratesteps',serialize($steps));
+    $steps[$step] = ['from' => $data['from'], 'to' => $data['to'],
+                          'fieldmap' => $data['fieldmap'], 'hookmap' => $data['hookmap']];
+    xarModUserVars::set('dynamicdata', 'migratesteps', serialize($steps));
     $data['step'] = $step;
 
     // see if we have everything we need to finish if necessary
@@ -338,22 +408,32 @@ function dynamicdata_admin_migrate(Array $args=array())
     // migrate item(s)
     if ((!empty($test) || !empty($confirm)) && !empty($data['check'])) {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-        }        
+            return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+        }
 
         if (!empty($test)) {
             $data['debug'] = xarML('Test Results') . "\n";
         }
-        $result = xarMod::apiFunc('dynamicdata','admin','migrate',
-                                $data);
-        if (!$result) return;
+        $result = xarMod::apiFunc(
+            'dynamicdata',
+            'admin',
+            'migrate',
+            $data
+        );
+        if (!$result) {
+            return;
+        }
         if (!empty($test)) {
             // put test results in debug string
             $data['debug'] = xarVar::prepForDisplay($result);
         } elseif (!empty($confirm)) {
             // return and load the same map again
-            $url = xarController::URL('dynamicdata','admin','migrate',
-                             array('load' => 1, 'map' => $map));
+            $url = xarController::URL(
+                'dynamicdata',
+                'admin',
+                'migrate',
+                ['load' => 1, 'map' => $map]
+            );
             xarController::redirect($url);
             return true;
         }
@@ -361,14 +441,16 @@ function dynamicdata_admin_migrate(Array $args=array())
 
     // save current map
     if (!empty($save)) {
-        if(!xarVar::fetch('newmap', 'str', $newmap, NULL, xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('newmap', 'str', $newmap, null, xarVar::DONT_SET)) {
+            return;
+        }
         if (!empty($newmap)) {
             $map = $newmap;
         }
         if (!empty($map)) {
-            $maps[$map] = array('from' => $data['from'], 'to' => $data['to'],
-                                'fieldmap' => $data['fieldmap'], 'hookmap' => $data['hookmap']);
-            xarModVars::set('dynamicdata','migratemaps',serialize($maps));
+            $maps[$map] = ['from' => $data['from'], 'to' => $data['to'],
+                                'fieldmap' => $data['fieldmap'], 'hookmap' => $data['hookmap']];
+            xarModVars::set('dynamicdata', 'migratemaps', serialize($maps));
         }
     }
 

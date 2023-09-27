@@ -20,81 +20,86 @@
  * @param $args['entry'] optional array of external references.
  * @return array|void object id on success, null on failure
  */
-function dynamicdata_utilapi_import(Array $args=array())
+function dynamicdata_utilapi_import(array $args = [])
 {
     extract($args);
 
-    if (!isset($prefix)) $prefix = xarDB::getPrefix();
+    if (!isset($prefix)) {
+        $prefix = xarDB::getPrefix();
+    }
     $prefix .= '_';
-    if (!isset($overwrite)) $overwrite = false;
+    if (!isset($overwrite)) {
+        $overwrite = false;
+    }
 
     if (empty($xml) && empty($file)) {
         throw new EmptyParameterException('xml or file');
-    } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/',$file)) ) {
+    } elseif (!empty($file) && (!file_exists($file) || !preg_match('/\.xml$/', $file))) {
         // check if we tried to load a file using an old path
         if (xarConfigVars::get(null, 'Site.Core.LoadLegacy') == true && strpos($file, 'modules/') === 0) {
             $file = sys::code() . $file;
             if (!file_exists($file)) {
-                throw new BadParameterException($file,'Invalid importfile "#(1)"');
+                throw new BadParameterException($file, 'Invalid importfile "#(1)"');
             }
         } else {
-            throw new BadParameterException($file,'Invalid importfile "#(1)"');
+            throw new BadParameterException($file, 'Invalid importfile "#(1)"');
         }
     }
 
-    $objectcache = array();
-    $objectmaxid = array();
+    $objectcache = [];
+    $objectmaxid = [];
 
     if (!empty($file)) {
         $xmlobject = simplexml_load_file($file);
         xarLog::message(xarML('DD: Importing file #(1)', $file), xarLog::LEVEL_INFO);
-        
+
     } elseif (!empty($xml)) {
         // remove garbage from the end
-        $xml = preg_replace('/>[^<]+$/s','>', $xml);
+        $xml = preg_replace('/>[^<]+$/s', '>', $xml);
         $xmlobject = new SimpleXMLElement($xml);
     }
 
     // No better way of doing this?
-    $dom = dom_import_simplexml ($xmlobject);
+    $dom = dom_import_simplexml($xmlobject);
     $roottag = $dom->tagName;
 
     sys::import('xaraya.validations');
     $boolean = ValueValidations::get('bool');
     $integer = ValueValidations::get('int');
-    
+
     if ($roottag == 'object') {
-        
-# --------------------------------------------------------
-#
-# Process an object definition (-def.xml file) 
-#
+
+        # --------------------------------------------------------
+        #
+        # Process an object definition (-def.xml file)
+        #
         //FIXME: this unconditionally CLEARS the incoming parameter!!
-        $args = array();
+        $args = [];
         // Get the object's name
         $args['name'] = (string)($xmlobject->attributes()->name);
         xarLog::message('DD: importing ' . $args['name'], xarLog::LEVEL_INFO);
 
         // check if the object exists
-        $info = DataObjectMaster::getObjectInfo(array('name' => $args['name']));
+        $info = DataObjectMaster::getObjectInfo(['name' => $args['name']]);
         $dupexists = !empty($info);
         if ($dupexists && !$overwrite) {
             $msg = 'Duplicate definition for #(1) #(2)';
-            $vars = array('object',xarVar::prepForDisplay($args['name']));
-            throw new DuplicateException(null,$args['name']);
+            $vars = ['object',xarVar::prepForDisplay($args['name'])];
+            throw new DuplicateException(null, $args['name']);
         }
 
-        $object = DataObjectMaster::getObject(array('name' => 'objects'));
+        $object = DataObjectMaster::getObject(['name' => 'objects']);
         $objectproperties = array_keys($object->properties);
         foreach($objectproperties as $property) {
             if (isset($xmlobject->{$property}[0])) {
                 $value = (string)$xmlobject->{$property}[0];
                 try {
-                    $boolean->validate($value, array());
+                    $boolean->validate($value, []);
                 } catch (Exception $e) {
                     try {
-                        $integer->validate($value, array());
-                    } catch (Exception $e) {}
+                        $integer->validate($value, []);
+                    } catch (Exception $e) {
+                    }
                 }
 
                 $args[$property] = $value;
@@ -105,49 +110,56 @@ function dynamicdata_utilapi_import(Array $args=array())
             $args['moduleid'] = $args['module_id'];
         }
         if (empty($args['name']) || empty($args['moduleid'])) {
-            throw new BadParameterException(null,'Missing keys in object definition');
+            throw new BadParameterException(null, 'Missing keys in object definition');
         }
         // Make sure we drop the object id, because it might already exist here
         //TODO: don't define it in the first place?
         unset($args['objectid']);
 
         // Add an item to the object
-            $args['itemtype'] = xarMod::apiFunc('dynamicdata','admin','getnextitemtype',
-                                           array('module_id' => $args['moduleid']));
+        $args['itemtype'] = xarMod::apiFunc(
+            'dynamicdata',
+            'admin',
+            'getnextitemtype',
+            ['module_id' => $args['moduleid']]
+        );
 
         // Create the DataProperty object we will use to create items of
-        $dataproperty = DataObjectMaster::getObject(array('name' => 'properties'));
-        if (empty($dataproperty)) return;
+        $dataproperty = DataObjectMaster::getObject(['name' => 'properties']);
+        if (empty($dataproperty)) {
+            return;
+        }
 
         if ($dupexists && $overwrite) {
             $args['itemid'] = $info['objectid'];
             $args['itemtype'] = $info['itemtype'];
             // Load the object properties directly with the values to bypass their setValue methods
-            $object->setFieldValues($args,1);
-            $objectid = $object->updateItem(array('itemid' => $args['itemid']));
+            $object->setFieldValues($args, 1);
+            $objectid = $object->updateItem(['itemid' => $args['itemid']]);
             $objectid = $object->updateItem();
             // remove the properties, as they will be replaced
-            $duplicateobject = DataObjectMaster::getObject(array('name' => $info['name']));
+            $duplicateobject = DataObjectMaster::getObject(['name' => $info['name']]);
             $oldproperties = $duplicateobject->properties;
-            foreach ($oldproperties as $propertyitem)
-                $dataproperty->deleteItem(array('itemid' => $propertyitem->id));
+            foreach ($oldproperties as $propertyitem) {
+                $dataproperty->deleteItem(['itemid' => $propertyitem->id]);
+            }
         } else {
             // Load the object properties directly with the values to bypass their setValue methods
-            $object->setFieldValues($args,1);
+            $object->setFieldValues($args, 1);
             $objectid = $object->createItem();
         }
 
-# --------------------------------------------------------
-#
-# Now process the objects's properties
-#
+        # --------------------------------------------------------
+        #
+        # Now process the objects's properties
+        #
         // @checkme if you need to import new property types as part of module install to create objects,
         // please have a look at ./modules/class/eventobservers/modactivate.php and
         // ./modules/class/installer.php - properties are only imported during activate now, not at install
         // Don't use $proptypes = PropertyRegistration::importPropertyTypes(); here since this would be
         // called again & again when creating every object in Xaraya for core, modules, tables, ...
         $proptypes = DataPropertyMaster::getPropertyTypes();
-        $name2id = array();
+        $name2id = [];
         foreach ($proptypes as $propid => $proptype) {
             $name2id[$proptype['name']] = $propid;
         }
@@ -155,18 +167,19 @@ function dynamicdata_utilapi_import(Array $args=array())
         $propertyproperties = array_keys($dataproperty->properties);
         $propertieshead = $xmlobject->properties;
         foreach($propertieshead->children() as $property) {
-            $propertyargs = array();
+            $propertyargs = [];
             $propertyname = (string)($property->attributes()->name);
             $propertyargs['name'] = $propertyname;
             foreach($propertyproperties as $prop) {
                 if (isset($property->{$prop}[0])) {
                     $value = (string)$property->{$prop}[0];
                     try {
-                        $boolean->validate($value, array());
+                        $boolean->validate($value, []);
                     } catch (Exception $e) {
                         try {
-                            $integer->validate($value, array());
-                        } catch (Exception $e) {}
+                            $integer->validate($value, []);
+                        } catch (Exception $e) {
+                        }
                     }
                     $propertyargs[$prop] = $value;
                 }
@@ -190,7 +203,7 @@ function dynamicdata_utilapi_import(Array $args=array())
 
             // Now do some checking
             if (empty($propertyargs['name']) || empty($propertyargs['type'])) {
-                throw new BadParameterException(null,'Missing keys in property definition');
+                throw new BadParameterException(null, 'Missing keys in property definition');
             }
             // convert property type to numeric if necessary
             if (!is_numeric($propertyargs['type'])) {
@@ -203,7 +216,7 @@ function dynamicdata_utilapi_import(Array $args=array())
             // TODO: watch out for multi-sites
             // replace default xar_* table prefix with local one
             if (!empty($propertyargs['source'])) {
-                $propertyargs['source'] = preg_replace("/^xar_/",$prefix,$propertyargs['source']);
+                $propertyargs['source'] = preg_replace("/^xar_/", $prefix, $propertyargs['source']);
             } else {
                 $propertyargs['source'] = "";
             }
@@ -223,28 +236,28 @@ function dynamicdata_utilapi_import(Array $args=array())
                 return $objectid;
             }
             $linkshead = $xmlobject->links;
-            $linkprops = array('source','from_prop','target','to_prop','link_type','direction');
+            $linkprops = ['source','from_prop','target','to_prop','link_type','direction'];
             foreach ($linkshead->children() as $link) {
-                $info = array();
+                $info = [];
                 foreach ($linkprops as $prop) {
                     if (!isset($link->{$prop}[0])) {
-                         unset($info);
-                         break;
+                        unset($info);
+                        break;
                     }
                     $info[$prop] = (string)$link->{$prop}[0];
                 }
                 if (!empty($info)) {
                     // add this link and its reverse if it doesn't exist yet
-                    DataObjectLinks::addLink($info['source'],$info['from_prop'],$info['target'],$info['to_prop'],$info['link_type'],$info['direction']);
+                    DataObjectLinks::addLink($info['source'], $info['from_prop'], $info['target'], $info['to_prop'], $info['link_type'], $info['direction']);
                 }
             }
         }
     } elseif ($roottag == 'items') {
 
-# --------------------------------------------------------
-#
-# Process an object's items (-dat.xml file) 
-#
+        # --------------------------------------------------------
+        #
+        # Process an object's items (-dat.xml file)
+        #
         $currentobject = "";
         $index = 1;
         $count = count($xmlobject->children());
@@ -255,17 +268,22 @@ function dynamicdata_utilapi_import(Array $args=array())
         foreach($xmlobject->children() as $child) {
 
             // pass on some generic values so that the class(es) will know where we are
-            if ($index == 1) $args['dd_position'] = 'first';
-            elseif ($index == $count) $args['dd_position'] = 'last';
-            else $args['dd_position'] = '';
+            if ($index == 1) {
+                $args['dd_position'] = 'first';
+            } elseif ($index == $count) {
+                $args['dd_position'] = 'last';
+            } else {
+                $args['dd_position'] = '';
+            }
 
             $thisname = $child->getName();
             $args['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;
 
             // set up the object the first time around in this loop
             if ($thisname != $currentobject) {
-                if (!empty($currentobject))
+                if (!empty($currentobject)) {
                     throw new Exception("The items imported must all belong to the same object");
+                }
                 $currentobject = $thisname;
 
                 /*
@@ -283,10 +301,10 @@ function dynamicdata_utilapi_import(Array $args=array())
                 */
                 // Create the item
                 if (!isset($objectcache[$currentobject])) {
-                    $objectcache[$currentobject] = DataObjectMaster::getObject(array('name' => $currentobject));
+                    $objectcache[$currentobject] = DataObjectMaster::getObject(['name' => $currentobject]);
                 }
                 /** @var DataObject $object */
-                $object =& $objectcache[$currentobject];
+                $object = & $objectcache[$currentobject];
                 $objectid = $objectcache[$currentobject]->objectid;
                 // Get the properties for this object
                 $objectproperties = $object->properties;
@@ -298,13 +316,14 @@ function dynamicdata_utilapi_import(Array $args=array())
                     // Run the import value through the property's validation routine
                     //$check = $property->validateValue((string)$child->$propertyname);
                     $value = $property->importValue($child);
-//                    $value = (string)$child->$propertyname;
+                    //                    $value = (string)$child->$propertyname;
                     try {
-                        $boolean->validate($value, array());
+                        $boolean->validate($value, []);
                     } catch (Exception $e) {
                         try {
-                            $integer->validate($value, array());
-                        } catch (Exception $e) {}
+                            $integer->validate($value, []);
+                        } catch (Exception $e) {
+                        }
                     }
                     $object->properties[$propertyname]->value = $value;
                 }
@@ -322,7 +341,9 @@ function dynamicdata_utilapi_import(Array $args=array())
             // for the moment we only allow creates
             // create the item
             $itemid = $object->createItem($args);
-            if (empty($itemid)) return;
+            if (empty($itemid)) {
+                return;
+            }
 
             // keep track of the highest item id
             //if (empty($objectmaxid[$objectid]) || $objectmaxid[$objectid] < $itemid) {
@@ -332,18 +353,18 @@ function dynamicdata_utilapi_import(Array $args=array())
         }
     }
 
-/* don't think this is needed atm
-    // adjust maxid (for objects stored in the dynamic_data table)
-    if (count($objectcache) > 0 && count($objectmaxid) > 0) {
-        foreach (array_keys($objectcache) as $objectid) {
-            if (!empty($objectmaxid[$objectid]) && $object->maxid < $objectmaxid[$objectid]) {
-                $itemid = DataObjectMaster::updateObject(array('objectid' => $objectid,
-                                                                    'maxid'    => $objectmaxid[$objectid]));
-                if (empty($itemid)) return;
+    /* don't think this is needed atm
+        // adjust maxid (for objects stored in the dynamic_data table)
+        if (count($objectcache) > 0 && count($objectmaxid) > 0) {
+            foreach (array_keys($objectcache) as $objectid) {
+                if (!empty($objectmaxid[$objectid]) && $object->maxid < $objectmaxid[$objectid]) {
+                    $itemid = DataObjectMaster::updateObject(array('objectid' => $objectid,
+                                                                        'maxid'    => $objectmaxid[$objectid]));
+                    if (empty($itemid)) return;
+                }
             }
+            unset($objectcache);
         }
-        unset($objectcache);
-    }
-    */
+        */
     return $objectid;
 }

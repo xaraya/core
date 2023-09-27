@@ -18,7 +18,7 @@
  * @param int $args['objectid'] object id of the object item to export
  * @param int $args['itemid'] item id of the object item to export
  */
-function dynamicdata_utilapi_export_item(array $args=[])
+function dynamicdata_utilapi_export_item(array $args = [])
 {
     extract($args);
 

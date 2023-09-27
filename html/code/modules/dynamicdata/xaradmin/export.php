@@ -16,28 +16,44 @@
  */
 sys::import('modules.dynamicdata.class.objects.master');
 
-function dynamicdata_admin_export(Array $args=array())
+function dynamicdata_admin_export(array $args = [])
 {
     // Security
-    if (!xarSecurity::check('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     extract($args);
 
-    if(!xarVar::fetch('objectid', 'isset', $objectid, 1, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('name',     'isset', $name    , NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('module_id','isset', $moduleid, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemtype', 'isset', $itemtype, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemid',   'isset', $itemid,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('tofile',   'isset', $tofile,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('convert',  'isset', $convert,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'isset', $objectid, 1, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('module_id', 'isset', $moduleid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('tofile', 'isset', $tofile, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('convert', 'isset', $convert, null, xarVar::DONT_SET)) {
+        return;
+    }
 
-    $data = array();
+    $data = [];
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
-    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
+    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
                                          'name'     => $name,
                                          'itemid'   => $itemid,
-                                         'allprops' => true));
+                                         'allprops' => true]);
 
     if (!isset($myobject) || empty($myobject->label)) {
         $data['label'] = xarML('Unknown Object');
@@ -45,8 +61,9 @@ function dynamicdata_admin_export(Array $args=array())
         return $data;
     }
     // check security of the object
-    if (!$myobject->checkAccess('config'))
+    if (!$myobject->checkAccess('config')) {
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $myobject->label));
+    }
 
     $proptypes = DataPropertyMaster::getPropertyTypes();
 
@@ -60,8 +77,12 @@ function dynamicdata_admin_export(Array $args=array())
     if (empty($itemid)) {
         $data['label'] = xarML('Export Object Definition for #(1)', $myobject->label);
 
-        $xml = xarMod::apiFunc('dynamicdata','util','export',
-                             array('objectref' => &$myobject));
+        $xml = xarMod::apiFunc(
+            'dynamicdata',
+            'util',
+            'export',
+            ['objectref' => &$myobject]
+        );
         $ext = '-def';
 
         /**
@@ -77,21 +98,29 @@ function dynamicdata_admin_export(Array $args=array())
         }
          */
 
-    // export specific item
+        // export specific item
     } elseif (is_numeric($itemid)) {
         $data['label'] = xarML('Export Data for #(1) # #(2)', $myobject->label, $itemid);
 
-        $xml = xarMod::apiFunc('dynamicdata','util','export_item',
-                               array('objectid' => $myobject->objectid,
-                                     'itemid'   => $itemid));
+        $xml = xarMod::apiFunc(
+            'dynamicdata',
+            'util',
+            'export_item',
+            ['objectid' => $myobject->objectid,
+                                     'itemid'   => $itemid]
+        );
         $ext = '-dat.' . $itemid;
 
-    // export all items (better save this to file, e.g. in var/cache/...)
+        // export all items (better save this to file, e.g. in var/cache/...)
     } elseif ($itemid == 'all') {
         $data['label'] = xarML('Export Data for all #(1) Items', $myobject->label);
 
-        $xml = xarMod::apiFunc('dynamicdata','util','export_items',
-                               array('objectid' => $myobject->objectid));
+        $xml = xarMod::apiFunc(
+            'dynamicdata',
+            'util',
+            'export_items',
+            ['objectid' => $myobject->objectid]
+        );
         $ext = '-dat';
 
     } else {
@@ -99,23 +128,35 @@ function dynamicdata_admin_export(Array $args=array())
         $xml = '';
     }
 
-    $data['formlink'] = xarController::URL('dynamicdata','admin','export',
-                                  array('objectid' => $myobject->objectid,
-                                        'itemid'   => 'all'));
-    $data['filelink'] = xarController::URL('dynamicdata','admin','export',
-                                  array('objectid' => $myobject->objectid,
+    $data['formlink'] = xarController::URL(
+        'dynamicdata',
+        'admin',
+        'export',
+        ['objectid' => $myobject->objectid,
+                                        'itemid'   => 'all']
+    );
+    $data['filelink'] = xarController::URL(
+        'dynamicdata',
+        'admin',
+        'export',
+        ['objectid' => $myobject->objectid,
                                         'itemid'   => 'all',
-                                        'tofile'   => 1));
-    $data['savelink'] = xarController::URL('dynamicdata','admin','export',
-                                  array('objectid' => $myobject->objectid,
-                                        'tofile'   => 1));
+                                        'tofile'   => 1]
+    );
+    $data['savelink'] = xarController::URL(
+        'dynamicdata',
+        'admin',
+        'export',
+        ['objectid' => $myobject->objectid,
+                                        'tofile'   => 1]
+    );
 
     if (!empty($tofile) && !empty($ext)) {
         $varDir = sys::varpath();
-        $outfile = $varDir . '/uploads/' . xarVar::prepForOS($myobject->name) . $ext . '.' . xarLocale::formatDate('%Y%m%d%H%M%S',time()) . '.xml';
-        $fp = @fopen($outfile,'w');
+        $outfile = $varDir . '/uploads/' . xarVar::prepForOS($myobject->name) . $ext . '.' . xarLocale::formatDate('%Y%m%d%H%M%S', time()) . '.xml';
+        $fp = @fopen($outfile, 'w');
         if (!$fp) {
-            $data['xml'] = xarML('Unable to open file #(1)',$outfile);
+            $data['xml'] = xarML('Unable to open file #(1)', $outfile);
             return $data;
         }
         $written = fwrite($fp, $xml);
@@ -124,7 +165,7 @@ function dynamicdata_admin_export(Array $args=array())
         if ($written < $towrite) {
             throw new RuntimeException("could only write {$written}/{$towrite} bytes!");
         }
-        $xml = xarML('Data saved to #(1)',$outfile);
+        $xml = xarML('Data saved to #(1)', $outfile);
     }
 
     $data['objectid'] = $objectid;

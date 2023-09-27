@@ -16,7 +16,7 @@
  * @param $args['extrainfo'] extra information
  * @return string|void output display string
  */
-function dynamicdata_user_displayhook(array $args=[])
+function dynamicdata_user_displayhook(array $args = [])
 {
     extract($args);
 

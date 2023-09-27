@@ -23,9 +23,9 @@
  * @throws BadParameterException
  * @todo split off the common parts which are also in getmeta
  */
-function dynamicdata_utilapi_getstatic(Array $args=array())
+function dynamicdata_utilapi_getstatic(array $args = [])
 {
-    static $propertybag = array();
+    static $propertybag = [];
 
     extract($args);
 
@@ -40,7 +40,7 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
         $itemtype = 0;
     }
 
-    $invalid = array();
+    $invalid = [];
     if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
         $invalid[] = 'module id ' . xarVar::prepForDisplay($module_id);
     }
@@ -49,8 +49,8 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'util', 'getstatic', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'util', 'getstatic', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
     if (empty($table)) {
         $table = '';
@@ -60,20 +60,20 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
     }
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = & xarDB::getTables();
 
     $dbInfo = $dbconn->getDatabaseInfo();
-    $dbTables = array();
+    $dbTables = [];
 
     if(!empty($table)) {
         // it's easy if the table name is known
         $dbTables[] = $dbInfo->getTable($table);
     } else {
-///        $dbTables = $dbInfo->getTables();
+        ///        $dbTables = $dbInfo->getTables();
         // load the database info for this module
         xarMod::loadDbInfo($modinfo['name'], $modinfo['directory']);
         // try to find any table that approximately matches the module
-        $tables =& xarDB::getTables();
+        $tables = & xarDB::getTables();
         foreach ($tables as $curname => $curtable) {
             // name starts with the modulename, and table is a string (cfr. _column definitions in articles)
             if (preg_match('/^'.$modinfo['name'].'/', $curname) && is_string($curtable)) {
@@ -81,19 +81,21 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
             }
         }
         if (empty($dbTables)) {
-            return array();
+            return [];
         }
     }
 
     // Get the default property types
     $proptypes = DataPropertyMaster::getPropertyTypes();
-    $proptypeid = array();
+    $proptypeid = [];
     foreach ($proptypes as $proptype) {
         $proptypeid[$proptype['name']] = $proptype['id'];
     }
 
     // TODO: we lost the linkage with modules here
-    $static = array(); $order = 1; $seq=1;
+    $static = [];
+    $order = 1;
+    $seq = 1;
     foreach($dbTables as $tblInfo) {
         $tblColumns = $tblInfo->getColumns();
         $table = $tblInfo->getName();
@@ -102,9 +104,9 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
             $id = $seq++;
             $default = $colInfo->getDefaultValue();
             // Construct name and label from the columnname
-            $label = strtr($name,'_',' ');
+            $label = strtr($name, '_', ' ');
             // cosmetic for 1.x style xar_* field names
-            $label = preg_replace('/^xar /','', $label);
+            $label = preg_replace('/^xar /', '', $label);
             $label = ucwords($label);
             if(isset($static[$name])) {
                 $i = 1;
@@ -129,65 +131,65 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
             // = obviously limited to basic data types in this case
             // cfr. creole/CreoleTypes.php
             switch ($datatype) {
-            case 'char':
-            case 'varchar':
-                $proptype = $proptypeid['textbox']; // Text Box
-                if (!empty($size)) {
-                    $configuration = "0:$size";
-                }
-                break;
-            case 'tinyint':
-                if (!empty($size) && $size == 1) {
-                    $proptype = $proptypeid['checkbox']; // Checkbox
-                    $configuration = '';
-                } else {
+                case 'char':
+                case 'varchar':
+                    $proptype = $proptypeid['textbox']; // Text Box
+                    if (!empty($size)) {
+                        $configuration = "0:$size";
+                    }
+                    break;
+                case 'tinyint':
+                    if (!empty($size) && $size == 1) {
+                        $proptype = $proptypeid['checkbox']; // Checkbox
+                        $configuration = '';
+                    } else {
+                        $proptype = $proptypeid['integerbox']; // Number Box
+                    }
+                    break;
+                case 'smallint':
+                case 'bigint':
+                case 'integer':
+                case 'year':
                     $proptype = $proptypeid['integerbox']; // Number Box
-                }
-                break;
-            case 'smallint':
-            case 'bigint':
-            case 'integer':
-            case 'year':
-                $proptype = $proptypeid['integerbox']; // Number Box
-                break;
-            case 'numeric':
-            case 'decimal':
-            case 'double':
-            case 'float':
-                $proptype = $proptypeid['floatbox']; // Number Box (float)
-                break;
-            case 'boolean':
-                $proptype = $proptypeid['checkbox']; // Checkbox
-                break;
-            case 'date':
-            case 'time':
-            case 'timestamp':
-                $proptype = $proptypeid['calendar']; // Calendar
-                break;
-            case 'longvarchar':
-            case 'text':
-            case 'clob':
-                $proptype = $proptypeid['textarea_medium']; // Medium Text Area
-                $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
-                $configuration ='';
-                break;
-            case 'longvarbinary':
-            case 'varbinary':
-            case 'binary':
-            case 'blob':       // caution, could be binary too !
-                $proptype = $proptypeid['textarea_medium']; // Medium Text Area
-                $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
-                break;
-            case 'other':
-            default:
-                // in case we have some leftover bit(1) columns instead of tinyint(1) for boolean in MySQL
-                if (!empty($size) && $size == 1) {
+                    break;
+                case 'numeric':
+                case 'decimal':
+                case 'double':
+                case 'float':
+                    $proptype = $proptypeid['floatbox']; // Number Box (float)
+                    break;
+                case 'boolean':
                     $proptype = $proptypeid['checkbox']; // Checkbox
+                    break;
+                case 'date':
+                case 'time':
+                case 'timestamp':
+                    $proptype = $proptypeid['calendar']; // Calendar
+                    break;
+                case 'longvarchar':
+                case 'text':
+                case 'clob':
+                    $proptype = $proptypeid['textarea_medium']; // Medium Text Area
+                    $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
                     $configuration = '';
-                } else {
-                    $proptype = $proptypeid['static']; // Static Text
-                }
-                break;
+                    break;
+                case 'longvarbinary':
+                case 'varbinary':
+                case 'binary':
+                case 'blob':       // caution, could be binary too !
+                    $proptype = $proptypeid['textarea_medium']; // Medium Text Area
+                    $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
+                    break;
+                case 'other':
+                default:
+                    // in case we have some leftover bit(1) columns instead of tinyint(1) for boolean in MySQL
+                    if (!empty($size) && $size == 1) {
+                        $proptype = $proptypeid['checkbox']; // Checkbox
+                        $configuration = '';
+                    } else {
+                        $proptype = $proptypeid['static']; // Static Text
+                    }
+                    break;
             }
 
             // try to figure out if it's the item id
@@ -196,10 +198,10 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
             if ($colInfo->isAutoIncrement()) {
                 // not allowed to modify primary key !
                 $proptype = $proptypeid['itemid']; // Item ID
-                $configuration ='';
+                $configuration = '';
             }
 
-            $static[$name] = array('name' => $name,
+            $static[$name] = ['name' => $name,
                                    'label' => $label,
                                    'type' => $proptype,
                                    'id' => $id,
@@ -207,7 +209,7 @@ function dynamicdata_utilapi_getstatic(Array $args=array())
                                    'source' => $table . '.' . $name,
                                    'status' => $status,
                                    'seq' => $order,
-                                   'configuration' => $configuration);
+                                   'configuration' => $configuration];
             $order++;
         } // next column
     } // next table

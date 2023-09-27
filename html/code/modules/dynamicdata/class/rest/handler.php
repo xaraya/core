@@ -714,7 +714,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
                 $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
-            // @todo verify access for user based on what?
+                // @todo verify access for user based on what?
             } else {
                 $pass = true;
             }
@@ -772,7 +772,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
                 $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
-            // @todo verify access for user based on what?
+                // @todo verify access for user based on what?
             } else {
                 $pass = true;
             }
@@ -940,7 +940,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
      * @param callable $registerCallback
      * @return void
      */
-    public static function addRouteGroup($r, $prefix, $registerCallback) {
+    public static function addRouteGroup($r, $prefix, $registerCallback)
+    {
         $r->addGroup($prefix, function ($r) use ($registerCallback) {
             $registerCallback($r);
         });
@@ -1057,14 +1058,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         } catch (ForbiddenOperationException $e) {
             self::setTimer('forbidden');
             throw new ForbiddenOperationException();
-        //} catch (Throwable $e) {
-        //    self::setTimer('exception');
-        //    $result = "Exception: " . $e->getMessage();
-        //    if ($e->getPrevious() !== null) {
-        //        $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
-        //    }
-        //    $result .= "\nTrace:\n" . $e->getTraceAsString();
-        //    return $result;
+            //} catch (Throwable $e) {
+            //    self::setTimer('exception');
+            //    $result = "Exception: " . $e->getMessage();
+            //    if ($e->getPrevious() !== null) {
+            //        $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
+            //    }
+            //    $result .= "\nTrace:\n" . $e->getTraceAsString();
+            //    return $result;
         }
         // if (is_array($result)) {
         //     $result['x-debug'] = ['handler' => $handler, 'params' => $params];

@@ -18,29 +18,33 @@
  *
  * @return boolean|string|void and redirect to view_propertydefs
  */
-function dynamicdata_admin_update_propertydefs(Array $args=array())
+function dynamicdata_admin_update_propertydefs(array $args = [])
 {
     extract($args);
 
-    if (!xarVar::fetch('flushPropertyCache', 'isset', $flushPropertyCache,  NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('flushPropertyCache', 'isset', $flushPropertyCache, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     // Security
-    if (!xarSecurity::check('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
+        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+    }
 
-    if ( isset($flushPropertyCache) && ($flushPropertyCache == true) ) {
+    if (isset($flushPropertyCache) && ($flushPropertyCache == true)) {
         $args['flush'] = 'true';
-        if(xarMod::apiFunc('dynamicdata','admin','importpropertytypes', $args)) {
-            xarController::redirect(xarController::URL('dynamicdata','admin','view_propertydefs'));
+        if(xarMod::apiFunc('dynamicdata', 'admin', 'importpropertytypes', $args)) {
+            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_propertydefs'));
             return true;
         } else {
             return 'Unknown error while clearing and reloading Property Definition Cache.';
         }
     }
 
-    xarController::redirect(xarController::URL('dynamicdata','admin','view_propertydefs'));
+    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view_propertydefs'));
     return true;
 }

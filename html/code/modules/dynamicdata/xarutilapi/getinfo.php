@@ -16,51 +16,50 @@
  * @param $args['type'] the type of information you're looking for
  * @return array of info
  */
-function dynamicdata_utilapi_getinfo($args = array())
+function dynamicdata_utilapi_getinfo($args = [])
 {
     if (empty($args)) {
         $args['type'] = 'datastores';
     }
 
-    $options = array();
+    $options = [];
 
-    switch ($args['type'])
-    {
+    switch ($args['type']) {
         case 'datastores':
             $dbconn = xarDB::getConn();
             $dbInfo = $dbconn->getDatabaseInfo();
             $tables = $dbInfo->getTables();
             foreach ($tables as $tblInfo) {
                 $tablename = $tblInfo->getName();
-                $options[] = array('id' => $tablename, 'name' => $tablename);
+                $options[] = ['id' => $tablename, 'name' => $tablename];
             }
             break;
 
         case 'objectlinktypes':
             sys::import('modules.dynamicdata.class.objects.links');
             foreach (DataObjectLinks::$linktypes as $linktype => $descr) {
-                $options[] = array('id' => $linktype, 'name' => $descr);
+                $options[] = ['id' => $linktype, 'name' => $descr];
             }
             break;
 
         case 'objectdirections':
             sys::import('modules.dynamicdata.class.objects.links');
             foreach (DataObjectLinks::$directions as $direction => $descr) {
-                $options[] = array('id' => $direction, 'name' => $descr);
+                $options[] = ['id' => $direction, 'name' => $descr];
             }
             break;
 
         case 'tablelinktypes':
             sys::import('modules.dynamicdata.class.datastores.links');
             foreach (DataStoreLinks::$linktypes as $linktype => $descr) {
-                $options[] = array('id' => $linktype, 'name' => $descr);
+                $options[] = ['id' => $linktype, 'name' => $descr];
             }
             break;
 
         case 'tabledirections':
             sys::import('modules.dynamicdata.class.datastores.links');
             foreach (DataStoreLinks::$directions as $direction => $descr) {
-                $options[] = array('id' => $direction, 'name' => $descr);
+                $options[] = ['id' => $direction, 'name' => $descr];
             }
             break;
     }

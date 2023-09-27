@@ -16,17 +16,19 @@ sys::import('xaraya.structures.descriptor');
 */
 class DataObjectDescriptor extends ObjectDescriptor
 {
-    function __construct(Array $args=array())
+    public function __construct(array $args = [])
     {
         $args = self::getObjectID($args);
         parent::__construct($args);
     }
 
-    static function getModID(Array $args=array())
+    public static function getModID(array $args = [])
     {
         foreach ($args as $key => &$value) {
-            if (in_array($key, array('module','modid','module','moduleid'))) {
-                if (empty($value)) $value = xarMod::getRegID(xarMod::getName());
+            if (in_array($key, ['module','modid','module','moduleid'])) {
+                if (empty($value)) {
+                    $value = xarMod::getRegID(xarMod::getName());
+                }
                 if (is_numeric($value) || is_integer($value)) {
                     $args['moduleid'] = $value;
                 } else {
@@ -46,7 +48,9 @@ class DataObjectDescriptor extends ObjectDescriptor
             //$info = xarMod::getInfo(xarMod::getRegID($args['fallbackmodule']));
             $args['moduleid'] = xarMod::getRegID($args['fallbackmodule']);
         }
-        if (!isset($args['itemtype'])) $args['itemtype'] = 0;
+        if (!isset($args['itemtype'])) {
+            $args['itemtype'] = 0;
+        }
         return $args;
     }
 
@@ -55,10 +59,10 @@ class DataObjectDescriptor extends ObjectDescriptor
      *
      * @return array all parts necessary to describe a DataObject
      */
-    static function getObjectID(Array $args=array())
+    public static function getObjectID(array $args = [])
     {
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartable =& xarDB::getTables();
+        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        $xartable = & xarDB::getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $query = "SELECT id,
@@ -67,7 +71,7 @@ class DataObjectDescriptor extends ObjectDescriptor
                          itemtype
                   FROM $dynamicobjects ";
 
-        $bindvars = array();
+        $bindvars = [];
         if (isset($args['name'])) {
             $query .= " WHERE name = ? ";
             $bindvars[] = $args['name'];
@@ -86,7 +90,7 @@ class DataObjectDescriptor extends ObjectDescriptor
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
         if (!$result->first()) {
-            $row = array();
+            $row = [];
         } else {
             $row = $result->getRow();
         }
@@ -96,7 +100,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             $args['moduleid'] = isset($args['moduleid']) ? (int)$args['moduleid'] : null;
             $args['itemtype'] = isset($args['itemtype']) ? (int)$args['itemtype'] : null;
             $args['objectid'] = isset($args['objectid']) ? (int)$args['objectid'] : null;
-            $args['name'] = isset($args['name']) ? $args['name'] : null;
+            $args['name'] ??= null;
         } else {
             $args['moduleid'] = (int)$row['module_id'];
             $args['itemtype'] = (int)$row['itemtype'];
@@ -105,8 +109,12 @@ class DataObjectDescriptor extends ObjectDescriptor
         }
         // object property is called module_id now instead of moduleid for whatever reason !?
         $args['module_id'] = $args['moduleid'];
-        if (xarCore::isLoaded(xarCore::SYSTEM_TEMPLATES) && empty($args['tplmodule'])) $args['tplmodule'] = xarMod::getName($args['moduleid']);
-        if (empty($args['template'])) $args['template'] = $args['name'];
+        if (xarCore::isLoaded(xarCore::SYSTEM_TEMPLATES) && empty($args['tplmodule'])) {
+            $args['tplmodule'] = xarMod::getName($args['moduleid']);
+        }
+        if (empty($args['template'])) {
+            $args['template'] = $args['name'];
+        }
         return $args;
     }
 }

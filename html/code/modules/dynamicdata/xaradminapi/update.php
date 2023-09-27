@@ -23,7 +23,7 @@
  * @return mixed item id on success, null on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_update(array $args=[])
+function dynamicdata_adminapi_update(array $args = [])
 {
     $args = DataObjectDescriptor::getObjectID($args);
     extract($args);

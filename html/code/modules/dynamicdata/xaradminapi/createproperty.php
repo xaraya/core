@@ -28,12 +28,12 @@
  *        string   $args['configuration'] configuration of the property to create
  * @return integer property ID on success, null on failure
  */
-function dynamicdata_adminapi_createproperty(Array $args=array())
+function dynamicdata_adminapi_createproperty(array $args = [])
 {
     extract($args);
 
     // Required arguments
-    $invalid = array();
+    $invalid = [];
     if (!isset($name) || !is_string($name)) {
         $invalid[] = 'name';
     }
@@ -42,8 +42,8 @@ function dynamicdata_adminapi_createproperty(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'admin', 'createproperty', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'admin', 'createproperty', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     if (empty($moduleid)) {
@@ -58,10 +58,14 @@ function dynamicdata_adminapi_createproperty(Array $args=array())
     // TODO: security check on object level
 
     // get the properties of the 'properties' object
-    $fields = xarMod::apiFunc('dynamicdata','user','getprop',
-                            array('objectid' => 2)); // the properties
+    $fields = xarMod::apiFunc(
+        'dynamicdata',
+        'user',
+        'getprop',
+        ['objectid' => 2]
+    ); // the properties
 
-    $values = array();
+    $values = [];
     // the acceptable arguments correspond to the property names !
     foreach ($fields as $name => $field) {
         if (isset($args[$name])) {
@@ -70,7 +74,7 @@ function dynamicdata_adminapi_createproperty(Array $args=array())
     }
 
     sys::import('modules.dynamicdata.class.objects.master');
-    $propertyobject = DataObjectMaster::getObject(array('name' => 'properties'));
+    $propertyobject = DataObjectMaster::getObject(['name' => 'properties']);
     $propid = $propertyobject->createItem($values);
     return $propid;
 }

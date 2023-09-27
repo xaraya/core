@@ -23,12 +23,12 @@ class PropertyRefProperty extends SelectProperty
     public $id         = 3131;
     public $name       = 'propertyref';
     public $desc       = 'Property Dropdown';
-    public $reqmodules = array('dynamicdata');
+    public $reqmodules = ['dynamicdata'];
 
     public $initialization_refobject = 'objects'; // select the object whose property we want to reference, or
     public $initialization_other_rule = '';       // specify the property in objectref that contains the objectname (e.g. source)
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
@@ -36,49 +36,53 @@ class PropertyRefProperty extends SelectProperty
         $this->include_reference = 1;
     }
 
-	/**
-	 * Display a dropdown of properties for input
-	 * 
-	 * @param  array data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
-    public function showInput(Array $data = array())
+    /**
+     * Display a dropdown of properties for input
+     *
+     * @param  array data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
+    public function showInput(array $data = [])
     {
         // Allow overriding by specific parameters
-        if (isset($data['refobject']))  $this->initialization_refobject = $data['refobject'];
-        if (isset($data['other_rule'])) $this->initialization_other_rule = $data['other_rule'];
+        if (isset($data['refobject'])) {
+            $this->initialization_refobject = $data['refobject'];
+        }
+        if (isset($data['other_rule'])) {
+            $this->initialization_other_rule = $data['other_rule'];
+        }
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a dropdown of properties for output
-	 * 
-	 * @param  array data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
-    public function showOutput(Array $data = array())
+    /**
+     * Display a dropdown of properties for output
+     *
+     * @param  array data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
+    public function showOutput(array $data = [])
     {
         // Override getOption() below
         return parent::showOutput($data);
     }
 
     // Return a list of array(id => value) for the possible options
-    function getOptions()
+    public function getOptions()
     {
-/* we can't cache here if we rely on another property, so override getOption instead
-        // Check configuration and return saved options (e.g. when we're dealing with an object list)
-        if (!empty($this->_items) && $this->isSameConfiguration() && !empty($this->options)) {
-            return $this->options;
-        }
-*/
-        $options = array();
+        /* we can't cache here if we rely on another property, so override getOption instead
+                // Check configuration and return saved options (e.g. when we're dealing with an object list)
+                if (!empty($this->_items) && $this->isSameConfiguration() && !empty($this->options)) {
+                    return $this->options;
+                }
+        */
+        $options = [];
 
         // get the object whose properties we want
         $objectname = '';
         if (!empty($this->initialization_other_rule)) {
             $propname = $this->initialization_other_rule;
             if (!empty($this->objectref) && !empty($this->objectref->properties[$propname])) {
-            // CHECKME: this only works in object lists if this property comes *after* the $propname one -> override getOption instead
+                // CHECKME: this only works in object lists if this property comes *after* the $propname one -> override getOption instead
                 $objectname = $this->objectref->properties[$propname]->getValue();
             }
         } elseif (!empty($this->initialization_refobject)) {
@@ -91,14 +95,18 @@ class PropertyRefProperty extends SelectProperty
         if (is_numeric($objectname)) {
             $objectid = $objectname;
         } else {
-            $info = DataObjectMaster::getObjectInfo(array('name' => $objectname));
+            $info = DataObjectMaster::getObjectInfo(['name' => $objectname]);
             if (empty($info) || empty($info['objectid'])) {
                 // try table name
-                $fields = xarMod::apiFunc('dynamicdata','util','getmeta',
-                                          array('table' => $objectname));
+                $fields = xarMod::apiFunc(
+                    'dynamicdata',
+                    'util',
+                    'getmeta',
+                    ['table' => $objectname]
+                );
                 if (!empty($fields) && !empty($fields[$objectname])) {
                     foreach (array_keys($fields[$objectname]) as $fieldname) {
-                        $options[] = array('id' => $fieldname, 'name' => $fieldname);
+                        $options[] = ['id' => $fieldname, 'name' => $fieldname];
                     }
                 }
                 return $options;
@@ -106,23 +114,23 @@ class PropertyRefProperty extends SelectProperty
             $objectid = $info['objectid'];
         }
 
-        $object = DataObjectMaster::getObjectList(array('name' => 'properties'));
-        $items = $object->getItems(array('where'     => "objectid eq $objectid", // filter on the selected object
-                                         'fieldlist' => array('name','label')));
+        $object = DataObjectMaster::getObjectList(['name' => 'properties']);
+        $items = $object->getItems(['where'     => "objectid eq $objectid", // filter on the selected object
+                                         'fieldlist' => ['name','label']]);
         foreach ($items as $item) {
-            $options[] = array('id' => $item['name'], 'name' => $item['label']);
+            $options[] = ['id' => $item['name'], 'name' => $item['label']];
         }
 
-/* we can't cache here if we rely on another property, so override getOption instead
-        // Save options only when we're dealing with an object list
-        if (!empty($this->_items)) {
-            $this->options = $options;
-        }
-*/
+        /* we can't cache here if we rely on another property, so override getOption instead
+                // Save options only when we're dealing with an object list
+                if (!empty($this->_items)) {
+                    $this->options = $options;
+                }
+        */
         return $options;
     }
 
-	/**
+    /**
      * Retrieve or check an individual option on demand
      *
      * @param  $check boolean
@@ -133,9 +141,11 @@ class PropertyRefProperty extends SelectProperty
      *                - true, if an option exists whose store value is $this->value<br/>
      *                - false, if no such option exists<br/>
      */
-    function getOption($check = false)
+    public function getOption($check = false)
     {
-        if ($check) return true;
+        if ($check) {
+            return true;
+        }
         // override default getOption behaviour to avoid problems in object lists
         return $this->value;
     }

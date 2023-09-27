@@ -20,17 +20,17 @@
  */
 function dynamicdata_userapi_decode_shorturl($params)
 {
-    static $objectcache = array();
+    static $objectcache = [];
 
     if (count($objectcache) == 0) {
-        $objects = xarMod::apiFunc('dynamicdata','user','getobjects');
+        $objects = xarMod::apiFunc('dynamicdata', 'user', 'getobjects');
         foreach ($objects as $object) {
-            $objectcache[$object['name']] = array('module_id'    => $object['moduleid'],
-                                                  'itemtype' => $object['itemtype']);
+            $objectcache[$object['name']] = ['module_id'    => $object['moduleid'],
+                                                  'itemtype' => $object['itemtype']];
         }
     }
 
-    $args = array();
+    $args = [];
 
     $module = 'dynamicdata';
 
@@ -52,36 +52,36 @@ function dynamicdata_userapi_decode_shorturl($params)
         }
     }
 
-    if (empty($params[1]) || preg_match('/^index/i',$params[1])) {
+    if (empty($params[1]) || preg_match('/^index/i', $params[1])) {
         if (count($args) > 0) {
-            return array('view', $args);
+            return ['view', $args];
         } else {
-            return array('main', $args);
+            return ['main', $args];
         }
 
-    } elseif (preg_match('/^c(_?[0-9 +-]+)/',$params[1],$matches)) {
+    } elseif (preg_match('/^c(_?[0-9 +-]+)/', $params[1], $matches)) {
         $catid = $matches[1];
         $args['catid'] = $catid;
-        return array('view', $args);
+        return ['view', $args];
 
-    } elseif (preg_match('/^(\d+)/',$params[1],$matches)) {
+    } elseif (preg_match('/^(\d+)/', $params[1], $matches)) {
         $itemid = $matches[1];
         $args['itemid'] = $itemid;
-        return array('display', $args);
+        return ['display', $args];
 
     } elseif (isset($objectcache[$params[1]])) {
         $args['module_id'] = $objectcache[$params[1]]['module_id'];
         $args['itemtype'] = $objectcache[$params[1]]['itemtype'];
-        if (empty($params[2]) || preg_match('/^index/i',$params[2])) {
-            return array('view', $args);
-        } elseif (preg_match('/^c(_?[0-9 +-]+)/',$params[2],$matches)) {
+        if (empty($params[2]) || preg_match('/^index/i', $params[2])) {
+            return ['view', $args];
+        } elseif (preg_match('/^c(_?[0-9 +-]+)/', $params[2], $matches)) {
             $catid = $matches[1];
             $args['catid'] = $catid;
-            return array('view', $args);
-        } elseif (preg_match('/^(\d+)/',$params[2],$matches)) {
+            return ['view', $args];
+        } elseif (preg_match('/^(\d+)/', $params[2], $matches)) {
             $itemid = $matches[1];
             $args['itemid'] = $itemid;
-            return array('display', $args);
+            return ['display', $args];
         } else {
             // we don't know this one...
         }

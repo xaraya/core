@@ -29,13 +29,13 @@ sys::import('modules.dynamicdata.class.objects.loader');
  * @link http://xaraya.info/index.php/release/68.html
  */
 
- /**
-  * This property displays a deferred item list for a value array (experimental - do not use in production)
-  * In general, $this->value should be encoded, and $data['value'] and *ItemValue should be in decoded format
-  *
-  * Configuration:
-  * the defaultvalue can be set to automatically load object properties if the value includes their itemids,
-  */
+/**
+ * This property displays a deferred item list for a value array (experimental - do not use in production)
+ * In general, $this->value should be encoded, and $data['value'] and *ItemValue should be in decoded format
+ *
+ * Configuration:
+ * the defaultvalue can be set to automatically load object properties if the value includes their itemids,
+ */
 class DeferredListProperty extends DeferredItemProperty
 {
     public $id         = 18282;
@@ -74,7 +74,7 @@ class DeferredListProperty extends DeferredItemProperty
      *
      * @param mixed $value the new value for the property
      */
-    public function setValue($value=null)
+    public function setValue($value = null)
     {
         // 1. in construct() set to defaultvalue - skip
         // 2. in showForm() set for input preview and update - encode
@@ -103,7 +103,7 @@ class DeferredListProperty extends DeferredItemProperty
      * @param mixed value
      * @param integer fordisplay
      */
-    public function setItemValue($itemid, $value, $fordisplay=0)
+    public function setItemValue($itemid, $value, $fordisplay = 0)
     {
         // 1. in getItems() set to value from datastore - decode for deferred lookup and showView()
         parent::setItemValue($itemid, $value, $fordisplay);
@@ -248,7 +248,7 @@ class DeferredListProperty extends DeferredItemProperty
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;
-            $data['object'] =& $this->getDeferredLoader()->objectlist;
+            $data['object'] = & $this->getDeferredLoader()->objectlist;
             $data['fieldlist'] = $this->getDeferredLoader()->fieldlist;
         }
         // $this->value = $data['value'];

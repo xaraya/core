@@ -18,19 +18,19 @@ sys::import('modules.dynamicdata.class.objects.descriptor');
  */
 class DataPropertyMaster extends xarObject
 {
-    const DD_DISPLAYSTATE_DISABLED = 0;
-    const DD_DISPLAYSTATE_ACTIVE = 1;
-    const DD_DISPLAYSTATE_DISPLAYONLY = 2;
-    const DD_DISPLAYSTATE_HIDDEN = 3;
-    const DD_DISPLAYSTATE_VIEWONLY = 4;
+    public const DD_DISPLAYSTATE_DISABLED = 0;
+    public const DD_DISPLAYSTATE_ACTIVE = 1;
+    public const DD_DISPLAYSTATE_DISPLAYONLY = 2;
+    public const DD_DISPLAYSTATE_HIDDEN = 3;
+    public const DD_DISPLAYSTATE_VIEWONLY = 4;
 
-    const DD_INPUTSTATE_ADDMODIFY = 32;
-    const DD_INPUTSTATE_NOINPUT = 64;
-    const DD_INPUTSTATE_ADD = 96;
-    const DD_INPUTSTATE_MODIFY = 128;
-    const DD_INPUTSTATE_IGNORED = 160;
+    public const DD_INPUTSTATE_ADDMODIFY = 32;
+    public const DD_INPUTSTATE_NOINPUT = 64;
+    public const DD_INPUTSTATE_ADD = 96;
+    public const DD_INPUTSTATE_MODIFY = 128;
+    public const DD_INPUTSTATE_IGNORED = 160;
 
-    const DD_DISPLAYMASK = 31;
+    public const DD_DISPLAYMASK = 31;
 
     /**
      * Get the dynamic properties of an object
@@ -41,26 +41,29 @@ class DataPropertyMaster extends xarObject
      * @param $args['objectref'] a reference to the object to add those properties to (optional)
      * @param $args['allprops'] skip disabled properties by default
      */
-    static function getProperties(Array $args=array())
+    public static function getProperties(array $args = [])
     {
         xarLog::message(xarMLS::translate("DataPropertyMaster::getProperties: Getting all properties"), xarLog::LEVEL_DEBUG);
         // we can't use our own classes here, because we'd have an endless loop :-)
 
         $dbconn = xarDB::getConn();
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartable =& xarDB::getTables();
+        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        $xartable = & xarDB::getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 
-        $bindvars = array();
+        $bindvars = [];
         $query = "SELECT name, label, type,
                          id, defaultvalue, source,
                          status, translatable, seq, configuration,
                          object_id FROM $dynamicprop ";
-        if(empty($args['objectid']))
-        {
-            if (empty($args['moduleid'])) throw new EmptyParameterException('moduleid');
-            if (empty($args['itemtype'])) throw new EmptyParameterException('itemtype');
+        if(empty($args['objectid'])) {
+            if (empty($args['moduleid'])) {
+                throw new EmptyParameterException('moduleid');
+            }
+            if (empty($args['itemtype'])) {
+                throw new EmptyParameterException('itemtype');
+            }
             $doargs['moduleid'] = $args['moduleid'];
             $doargs['itemtype'] = $args['itemtype'];
             $info = DataObjectDescriptor::getObjectID($doargs);
@@ -70,20 +73,21 @@ class DataPropertyMaster extends xarObject
         $bindvars[] = (int) $args['objectid'];
 
         $anonymous = empty($args['anonymous']) ? 0 : 1;
-        if(empty($args['allprops']))
+        if(empty($args['allprops'])) {
             $query .= " AND status > 0 ";
+        }
 
         $query .= " ORDER BY seq ASC, id ASC";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
 
-        $properties = array();
+        $properties = [];
         while ($result->next()) {
-            list(
+            [
                 $name, $label, $type, $id, $defaultvalue, $source, $status, $translatable,
                 $seq, $configuration, $_objectid
-                ) = $result->fields;
-            $property = array(
+            ] = $result->fields;
+            $property = [
                 'name'          => $name,
                 'label'         => $label,
                 'type'          => $type,
@@ -97,12 +101,11 @@ class DataPropertyMaster extends xarObject
                 // some internal variables
                 '_objectid'     => $_objectid,
                 'anonymous'     => $anonymous,
-                'class'         => ''
-            );
+                'class'         => '',
+            ];
             if(isset($args['objectref'])) {
-                self::addProperty($property,$args['objectref']);
-            }
-            else {
+                self::addProperty($property, $args['objectref']);
+            } else {
                 $properties[$name] = $property;
             }
         }
@@ -122,17 +125,17 @@ class DataPropertyMaster extends xarObject
      * @todo  this look like it needs to be in object class
      * @todo  if not, we should define an interface for D_Obj and D_Obj_List so we can type hint on it
      */
-    static function addProperty(Array $args, &$objectref)
+    public static function addProperty(array $args, &$objectref)
     {
-        if(!isset($objectref) || empty($args['name']) || empty($args['type']))
+        if(!isset($objectref) || empty($args['name']) || empty($args['type'])) {
             return;
+        }
 
         xarLog::message(xarMLS::translate("DataPropertyMaster::addProperty: Adding a new property #(1)", $args['name']), xarLog::LEVEL_DEBUG);
-        
+
         // "beautify" label based on name if not specified
         // TODO: this is a presentation issue, doesnt belong here.
-        if(!isset($args['label']) && !empty($args['name']))
-        {
+        if(!isset($args['label']) && !empty($args['name'])) {
             $args['label'] = strtr($args['name'], '_', ' ');
             $args['label'] = ucwords($args['label']);
         }
@@ -141,24 +144,27 @@ class DataPropertyMaster extends xarObject
         $args['objectref'] = $objectref;
 
         // Get a new property
-        $property =& self::getProperty($args);
+        $property = & self::getProperty($args);
 
-        if(method_exists($objectref, 'getItems'))
+        if(method_exists($objectref, 'getItems')) {
             // for dynamic object lists, put a reference to the $items array in the property
-            $property->_items =& $objectref->items;
-        elseif(method_exists($objectref, 'getItem'))
+            $property->_items = & $objectref->items;
+        } elseif(method_exists($objectref, 'getItem')) {
             // for dynamic objects, put a reference to the $itemid value in the property
-            $property->_itemid =& $objectref->itemid;
+            $property->_itemid = & $objectref->itemid;
+        }
 
         // add it to the list of properties
-        $objectref->properties[$property->name] =& $property;
+        $objectref->properties[$property->name] = & $property;
 
         // Expose the object configuration to the property
-        $objectref->properties[$property->name]->objectconfiguration =& $objectref->configuration;
+        $objectref->properties[$property->name]->objectconfiguration = & $objectref->configuration;
 
         // if the property involves upload, tell its object
-        if(isset($property->upload)) $objectref->upload = true;
-        
+        if(isset($property->upload)) {
+            $objectref->upload = true;
+        }
+
         return true;
     }
 
@@ -166,24 +172,26 @@ class DataPropertyMaster extends xarObject
      * Class method to get a new dynamic property of the right type
      * @return DataProperty
      */
-    static function &getProperty(Array $args=array())
+    public static function &getProperty(array $args = [])
     {
         if(!isset($args['name']) && !isset($args['type'])) {
-            throw new BadParameterException(null,xarMLS::translate('The getProperty method needs either a name or type parameter.'));
+            throw new BadParameterException(null, xarMLS::translate('The getProperty method needs either a name or type parameter.'));
         }
 
-        if(isset($args['name']) || !is_numeric($args['type']))
-        {
+        if(isset($args['name']) || !is_numeric($args['type'])) {
             // TODO: type takes precedence if it exists. should this be changed?
-            if (!isset($args['type'])) if(isset($args['name'])) $args['type'] = $args['name'];
+            if (!isset($args['type'])) {
+                if(isset($args['name'])) {
+                    $args['type'] = $args['name'];
+                }
+            }
             $proptypes = self::getPropertyTypes();
-            if(!isset($proptypes))
-                $proptypes = array();
+            if(!isset($proptypes)) {
+                $proptypes = [];
+            }
 
-            foreach ($proptypes as $typeid => $proptype)
-            {
-                if($proptype['name'] == $args['type'])
-                {
+            foreach ($proptypes as $typeid => $proptype) {
+                if($proptype['name'] == $args['type']) {
                     $args['type'] = $typeid;
                     break;
                 }
@@ -195,8 +203,7 @@ class DataPropertyMaster extends xarObject
             sys::import('modules.dynamicdata.class.properties.base');
         }
         $clazz = 'DataProperty';
-        if( isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']]) )
-        {
+        if(isset($proptypes[$args['type']]) && is_array($proptypes[$args['type']])) {
             $propertyInfo  = $proptypes[$args['type']];
             $propertyClass = $propertyInfo['class'];
 
@@ -204,18 +211,22 @@ class DataPropertyMaster extends xarObject
 
             // If we don't have the class yet, get it now
             if (!class_exists($propertyClass)) {
-                
+
                 // Make sure we have a property PHP file
                 $propertyfile = sys::code() . $propertyInfo['filepath'];
-                if(!file_exists($propertyfile)) throw new FileNotFoundException($propertyfile);
-                    
+                if(!file_exists($propertyfile)) {
+                    throw new FileNotFoundException($propertyfile);
+                }
+
                 // Import the file to get the property's class
-                $dp = str_replace('/','.',substr($propertyInfo['filepath'],0,-4)); // minus .php
+                $dp = str_replace('/', '.', substr($propertyInfo['filepath'], 0, -4)); // minus .php
                 sys::import($dp);
-                
+
                 // Load the translations for this file
                 $loaded = xarMLS::loadTranslations($propertyfile);
-                if (!$loaded) xarLog::message("Property translations for $propertyClass NOT loaded", xarLog::LEVEL_WARNING);
+                if (!$loaded) {
+                    xarLog::message("Property translations for $propertyClass NOT loaded", xarLog::LEVEL_WARNING);
+                }
             }
 
             $clazz = $propertyClass;
@@ -231,41 +242,44 @@ class DataPropertyMaster extends xarObject
 
         return $property;
     }
-    static function createProperty(Array $args=array())
+    public static function createProperty(array $args = [])
     {
         $object = DataObjectMaster::getObject(
-                                        array(
+            [
                                             'name' => 'properties',
-                                            'itemid'   => $args['itemid']
-                                        )
-                                    );
+                                            'itemid'   => $args['itemid'],
+                                        ]
+        );
         $objectid = $object->createItem($args);
         unset($object);
         return $objectid;
     }
 
-    static function updateProperty(Array $args=array())
+    public static function updateProperty(array $args = [])
     {
         // TODO: what if the property type changes to something incompatible ?
     }
 
-    static function deleteProperty(Array $args=array())
+    public static function deleteProperty(array $args = [])
     {
-        if(empty($args['itemid']))
+        if(empty($args['itemid'])) {
             return;
+        }
 
         // TODO: delete all the (dynamic ?) data for this property as well
         $object = DataObjectMaster::getObject(
-                                        array(
+            [
                 'name'   => 'properties', // the Dynamic Properties = 2
-                'itemid' => $args['itemid']
-                                        )
-                                    );
+                'itemid' => $args['itemid'],
+                                        ]
+        );
         if (!class_exists('DataObject')) {
             sys::import('modules.dynamicdata.class.objects.base');
         }
         $objectid = $object->getItem();
-        if (empty($objectid)) return;
+        if (empty($objectid)) {
+            return;
+        }
 
         $objectid = $object->deleteItem();
         unset($object);
@@ -275,7 +289,7 @@ class DataPropertyMaster extends xarObject
     /**
      * Class method listing all defined property types
      */
-    static function getPropertyTypes()
+    public static function getPropertyTypes()
     {
         if (!class_exists('PropertyRegistration')) {
             sys::import('modules.dynamicdata.class.properties.registration');
@@ -286,12 +300,16 @@ class DataPropertyMaster extends xarObject
     /**
      * Class method to check if a property is available
      */
-    static function isAvailable($name=null)
+    public static function isAvailable($name = null)
     {
-        if (empty($name)) return false;
-        $types= self::getPropertyTypes();
+        if (empty($name)) {
+            return false;
+        }
+        $types = self::getPropertyTypes();
         foreach ($types as $type) {
-            if ($type['name'] == $name) return true;
+            if ($type['name'] == $name) {
+                return true;
+            }
         }
         return false;
     }

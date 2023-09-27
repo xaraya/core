@@ -14,16 +14,16 @@
 interface iDataObject
 {
     public function __construct(DataObjectDescriptor $descriptor);
-    public function getItem(Array $data = array());
-    public function checkInput(Array $data = array());
-    public function showForm(Array $data = array());
-    public function showDisplay(Array $data = array());
-    public function getFieldValues(Array $data = array(), $bypass = 0);
-    public function getDisplayValues(Array $data = array());
-    public function createItem(Array $data = array());
-    public function updateItem(Array $data = array());
-    public function deleteItem(Array $data = array());
-    public function getNextItemtype(Array $data = array());
+    public function getItem(array $data = []);
+    public function checkInput(array $data = []);
+    public function showForm(array $data = []);
+    public function showDisplay(array $data = []);
+    public function getFieldValues(array $data = [], $bypass = 0);
+    public function getDisplayValues(array $data = []);
+    public function createItem(array $data = []);
+    public function updateItem(array $data = []);
+    public function deleteItem(array $data = []);
+    public function getNextItemtype(array $data = []);
 }
 
 /**
@@ -40,16 +40,16 @@ interface iDataObject
 interface iDataObjectList
 {
     public function __construct(DataObjectDescriptor $descriptor);
-    public function setArguments(Array $data = array());
+    public function setArguments(array $data = []);
     public function setSort($data);
     public function setWhere($data);
     public function setGroupBy($data);
     public function setCategories($data);
-    public function &getItems(Array $data = array());
-    public function countItems(Array $data = array());
-    public function showView(Array $data = array());
+    public function &getItems(array $data = []);
+    public function countItems(array $data = []);
+    public function showView(array $data = []);
     public function getViewOptions($itemid = null);
-    public function &getViewValues(Array $data = array());
-    public function getSortURL($currenturl=null);
-    public function getNext(Array $data = array());
+    public function &getViewValues(array $data = []);
+    public function getSortURL($currenturl = null);
+    public function getNext(array $data = []);
 }

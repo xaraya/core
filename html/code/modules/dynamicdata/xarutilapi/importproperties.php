@@ -22,21 +22,23 @@
  * @return boolean|void true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_utilapi_importproperties(Array $args=array())
+function dynamicdata_utilapi_importproperties(array $args = [])
 {
     extract($args);
 
     // Required arguments
-    $invalid = array();
+    $invalid = [];
     if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module id', 'util', 'importproperties', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['module id', 'util', 'importproperties', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     if (empty($itemtype)) {
         $itemtype = 0;
@@ -48,8 +50,9 @@ function dynamicdata_utilapi_importproperties(Array $args=array())
     // search for an object, or create one
     if (empty($objectid)) {
         $object = DataObjectMaster::getObjectInfo(
-                                array('module_id' => $module_id,
-                                      'itemtype' => $itemtype));
+            ['module_id' => $module_id,
+                                      'itemtype' => $itemtype]
+        );
         if (!isset($object)) {
             $modinfo = xarMod::getInfo($module_id);
             $name = $modinfo['name'];
@@ -58,36 +61,49 @@ function dynamicdata_utilapi_importproperties(Array $args=array())
             }
             sys::import('modules.dynamicdata.class.objects.master');
             $objectid = DataObjectMaster::createObject(
-                                      array('moduleid' => $module_id,
+                ['moduleid' => $module_id,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
-                                            'label' => ucfirst($name)));
-            if (!isset($objectid)) return;
+                                            'label' => ucfirst($name)]
+            );
+            if (!isset($objectid)) {
+                return;
+            }
         } else {
             $objectid = $object['objectid'];
         }
     }
 
-    $fields = xarMod::apiFunc('dynamicdata','util','getstatic',
-                            array('module_id' => $module_id,
+    $fields = xarMod::apiFunc(
+        'dynamicdata',
+        'util',
+        'getstatic',
+        ['module_id' => $module_id,
                                   'itemtype' => $itemtype,
-                                  'table' => $table));
-    if (!isset($fields) || !is_array($fields)) return;
+                                  'table' => $table]
+    );
+    if (!isset($fields) || !is_array($fields)) {
+        return;
+    }
 
     // create new properties
     foreach ($fields as $name => $field) {
-        $id = xarMod::apiFunc('dynamicdata','admin','createproperty',
-                                array('name'       => $name,
+        $id = xarMod::apiFunc(
+            'dynamicdata',
+            'admin',
+            'createproperty',
+            ['name'       => $name,
                                       'label'      => $field['label'],
                                       'objectid'   => $objectid,
                                       'moduleid'   => $module_id,
                                       'itemtype'   => $itemtype,
                                       'type'       => $field['type'],
-                                      'defaultvalue'=> $field['default'],
+                                      'defaultvalue' => $field['default'],
                                       'source'     => $field['source'],
                                       'status'     => $field['status'],
                                       'seq'      => $field['seq'],
-                                      'configuration' => $field['configuration']));
+                                      'configuration' => $field['configuration']]
+        );
         if (empty($id)) {
             return;
         }

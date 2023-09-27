@@ -31,35 +31,41 @@
  * @return array|void of (itemid => fieldvalue), or false on failure
  * @throws EmptyParameterException
  */
-function dynamicdata_userapi_dropdownlist(Array $args=array())
+function dynamicdata_userapi_dropdownlist(array $args = [])
 {
-    if (empty($args['field'])) throw new EmptyParameterException('field');
+    if (empty($args['field'])) {
+        throw new EmptyParameterException('field');
+    }
 
 
     // put the field in the required fieldlist
-    $args['fieldlist'] = array($args['field']);
+    $args['fieldlist'] = [$args['field']];
 
     // get back the object
     $args['getobject'] = 1;
 
     /** @var DataObjectList $object */
-    $object = xarMod::apiFunc('dynamicdata','user','getitems',$args);
-    if (!isset($object)) return;
+    $object = xarMod::apiFunc('dynamicdata', 'user', 'getitems', $args);
+    if (!isset($object)) {
+        return;
+    }
 
     $field = $args['field'];
     if (!isset($object->properties[$field])) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('property', 'user', 'dropdownlist', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['property', 'user', 'dropdownlist', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     // Fill in the dropdown list
-    $list = array();
+    $list = [];
     $list[0] = '';
     foreach ($object->items as $itemid => $item) {
-        if (!isset($item[$field])) continue;
+        if (!isset($item[$field])) {
+            continue;
+        }
         if (!empty($args['showoutput'])) {
-            $value = $object->properties[$field]->showOutput(array('value'=>$item[$field]));
+            $value = $object->properties[$field]->showOutput(['value' => $item[$field]]);
             if (isset($value)) {
                 $list[$itemid] = $value;
             }

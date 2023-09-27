@@ -16,34 +16,66 @@
  * Manage definition of instances for privileges (unfinished)
  * @return array|bool|void data for the template display
  */
-function dynamicdata_admin_privileges(Array $args=array())
-{ 
+function dynamicdata_admin_privileges(array $args = [])
+{
     // Security
-    if (!xarSecurity::check('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     extract($args);
 
-    if (!xarVar::fetch('objectid', 'id' , $objectid, NULL, xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('moduleid', 'str', $moduleid, 0, xarVar::NOT_REQUIRED)) return; // empty, 'All', numeric or modulename
-    if (!xarVar::fetch('itemtype', 'str', $itemtype, 0, xarVar::NOT_REQUIRED)) return; // empty, 'All', numeric 
-    if (!xarVar::fetch('itemid', 'str', $itemid, 0, xarVar::NOT_REQUIRED)) return; // empty, 'All', numeric  
-    if (!xarVar::fetch('apply', 'str' , $apply , false, xarVar::NOT_REQUIRED)) return; // boolean?
-    if (!xarVar::fetch('extpid', 'str', $extpid, '', xarVar::NOT_REQUIRED)) return; // empty, 'All', numeric ?
-    if (!xarVar::fetch('extname', 'str', $extname, '', xarVar::NOT_REQUIRED)) return; // ?
-    if (!xarVar::fetch('extrealm', 'str', $extrealm, '', xarVar::NOT_REQUIRED)) return; // ?
-    if (!xarVar::fetch('extmodule','str', $extmodule, '', xarVar::NOT_REQUIRED)) return; // ?
-    if (!xarVar::fetch('extcomponent', 'enum:All:Item:Field:Type', $extcomponent)) return; // FIXME: is 'Type' needed?
-    if (!xarVar::fetch('extinstance', 'str:1', $extinstance, '', xarVar::NOT_REQUIRED)) return; // somthing:somthing:somthing or empty
-    if (!xarVar::fetch('extlevel', 'str:1', $extlevel)) return;
+    if (!xarVar::fetch('objectid', 'id', $objectid, null, xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (!xarVar::fetch('moduleid', 'str', $moduleid, 0, xarVar::NOT_REQUIRED)) {
+        return;
+    } // empty, 'All', numeric or modulename
+    if (!xarVar::fetch('itemtype', 'str', $itemtype, 0, xarVar::NOT_REQUIRED)) {
+        return;
+    } // empty, 'All', numeric
+    if (!xarVar::fetch('itemid', 'str', $itemid, 0, xarVar::NOT_REQUIRED)) {
+        return;
+    } // empty, 'All', numeric
+    if (!xarVar::fetch('apply', 'str', $apply, false, xarVar::NOT_REQUIRED)) {
+        return;
+    } // boolean?
+    if (!xarVar::fetch('extpid', 'str', $extpid, '', xarVar::NOT_REQUIRED)) {
+        return;
+    } // empty, 'All', numeric ?
+    if (!xarVar::fetch('extname', 'str', $extname, '', xarVar::NOT_REQUIRED)) {
+        return;
+    } // ?
+    if (!xarVar::fetch('extrealm', 'str', $extrealm, '', xarVar::NOT_REQUIRED)) {
+        return;
+    } // ?
+    if (!xarVar::fetch('extmodule', 'str', $extmodule, '', xarVar::NOT_REQUIRED)) {
+        return;
+    } // ?
+    if (!xarVar::fetch('extcomponent', 'enum:All:Item:Field:Type', $extcomponent)) {
+        return;
+    } // FIXME: is 'Type' needed?
+    if (!xarVar::fetch('extinstance', 'str:1', $extinstance, '', xarVar::NOT_REQUIRED)) {
+        return;
+    } // somthing:somthing:somthing or empty
+    if (!xarVar::fetch('extlevel', 'str:1', $extlevel)) {
+        return;
+    }
 
-// TODO: combine 'Item' and 'Type' instances someday ?
+    // TODO: combine 'Item' and 'Type' instances someday ?
 
     if (!empty($extinstance)) {
-        $parts = explode(':',$extinstance);
+        $parts = explode(':', $extinstance);
         if ($extcomponent == 'Item') {
-            if (count($parts) > 0 && !empty($parts[0])) $moduleid = $parts[0];
-            if (count($parts) > 1 && !empty($parts[1])) $itemtype = $parts[1];
-            if (count($parts) > 2 && !empty($parts[2])) $itemid = $parts[2];
+            if (count($parts) > 0 && !empty($parts[0])) {
+                $moduleid = $parts[0];
+            }
+            if (count($parts) > 1 && !empty($parts[1])) {
+                $itemtype = $parts[1];
+            }
+            if (count($parts) > 2 && !empty($parts[2])) {
+                $itemid = $parts[2];
+            }
         } else {
         }
     }
@@ -68,7 +100,7 @@ function dynamicdata_admin_privileges(Array $args=array())
         }
 
         // define the new instance
-        $newinstance = array();
+        $newinstance = [];
         $newinstance[] = empty($moduleid) ? 'All' : $moduleid;
         $newinstance[] = empty($itemtype) ? 'All' : $itemtype;
         $newinstance[] = empty($itemid) ? 'All' : $itemid;
@@ -76,27 +108,31 @@ function dynamicdata_admin_privileges(Array $args=array())
     } else {
 
         // define the new instance
-        $newinstance = array();
+        $newinstance = [];
 
     }
 
     if (!empty($apply)) {
         // create/update the privilege
-        $pid = xarMod::apiFunc('privileges','admin','returnprivilege',array(
+        $pid = xarMod::apiFunc('privileges', 'admin', 'returnprivilege', [
             'pid' => $extpid,
             'name' => $extname,
             'realm' => $extrealm,
             'module' => $extmodule,
             'component' => $extcomponent,
             'instance' => $newinstance,
-            'level' => $extlevel));
+            'level' => $extlevel]);
         if (empty($pid)) {
             return; // throw back
         }
 
         // redirect to the privilege
-        xarController::redirect(xarController::URL('privileges', 'admin', 'modifyprivilege',
-                                        array('id' => $pid)));
+        xarController::redirect(xarController::URL(
+            'privileges',
+            'admin',
+            'modifyprivilege',
+            ['id' => $pid]
+        ));
         return true;
     }
 
@@ -106,10 +142,10 @@ function dynamicdata_admin_privileges(Array $args=array())
     // TODO: use object list instead of (or in addition to) module + itemtype
 
     // Get module list
-    $modlist = array();
+    $modlist = [];
     // Get a list of all modules - we just want their IDs
     $all_modules = xarMod::apiFunc('modules', 'admin', 'getlist');
-    $all_module_ids = array();
+    $all_module_ids = [];
     foreach($all_modules as $this_module) {
         $all_module_ids[] = $this_module['regid'];
     }
@@ -126,10 +162,14 @@ function dynamicdata_admin_privileges(Array $args=array())
         if (!empty($itemid)) {
             $numitems = xarML('probably');
         } elseif (!empty($objectid) || !empty($moduleid)) {
-            $numitems = xarMod::apiFunc('dynamicdata','user','countitems',
-                                      array('objectid' => $objectid,
+            $numitems = xarMod::apiFunc(
+                'dynamicdata',
+                'user',
+                'countitems',
+                ['objectid' => $objectid,
                                             'moduleid' => $moduleid,
-                                            'itemtype' => $itemtype));
+                                            'itemtype' => $itemtype]
+            );
             if (empty($numitems)) {
                 $numitems = 0;
             }
@@ -143,7 +183,7 @@ function dynamicdata_admin_privileges(Array $args=array())
 
     }
 
-    $data = array(
+    $data = [
                   'objectid'     => $objectid,
                   'moduleid'     => $moduleid,
                   'itemtype'     => $itemtype,
@@ -157,8 +197,8 @@ function dynamicdata_admin_privileges(Array $args=array())
                   'extmodule'    => $extmodule,
                   'extcomponent' => $extcomponent,
                   'extlevel'     => $extlevel,
-                  'extinstance'  => xarVar::prepForDisplay(join(':',$newinstance)),
-                 );
+                  'extinstance'  => xarVar::prepForDisplay(join(':', $newinstance)),
+                 ];
 
     $data['refreshlabel'] = xarML('Refresh');
     $data['applylabel'] = xarML('Finish and Apply to Privilege');

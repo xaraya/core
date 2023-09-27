@@ -20,7 +20,7 @@
  *        integer  $args['module_id'] ID of the module
  * @return array containing the item field definitions
  */
-function dynamicdata_userapi_getitemfields(array $args=[])
+function dynamicdata_userapi_getitemfields(array $args = [])
 {
     if (empty($args['objectid']) && empty($args['name'])) {
         $args = DataObjectDescriptor::getObjectID($args);

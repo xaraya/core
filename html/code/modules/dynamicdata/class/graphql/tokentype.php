@@ -150,7 +150,7 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
     /**
      * Get delete mutation field for this object type
      */
-    public static function _xar_get_delete_mutation($name, $typename ='', $object = null): array
+    public static function _xar_get_delete_mutation($name, $typename = '', $object = null): array
     {
         return [
             'name' => $name,

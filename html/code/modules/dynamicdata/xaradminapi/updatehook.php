@@ -20,7 +20,7 @@
  * @return array true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_updatehook(array $args=[])
+function dynamicdata_adminapi_updatehook(array $args = [])
 {
     $verbose = false;
 
@@ -75,12 +75,12 @@ function dynamicdata_adminapi_updatehook(array $args=[])
             $vars = ['input', 'admin', $dd_function, 'dynamicdata'];
             // Note : we can't use templating here
             $msg .= ' : ';
-            $i=5;
+            $i = 5;
             foreach ($myobject->properties as $property) {
                 if (!empty($property->invalid)) {
                     $msg .= "#(".$i++.") = invalid #(".$i++.") - ";
-                    $vars[]=$property->label;
-                    $vars[]=$property->invalid;
+                    $vars[] = $property->label;
+                    $vars[] = $property->invalid;
                 }
             }
         } else {

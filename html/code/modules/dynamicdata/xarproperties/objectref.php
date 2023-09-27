@@ -30,7 +30,7 @@ class ObjectRefProperty extends SelectProperty
     public $id         = 507;
     public $name       = 'objectref';
     public $desc       = 'Object Dropdown';
-    public $reqmodules = array('dynamicdata');
+    public $reqmodules = ['dynamicdata'];
 
     // We explicitly use names here instead of id's, so we are independent of
     // how dd assigns them at a given time. Otherwise the configuration is not
@@ -41,49 +41,67 @@ class ObjectRefProperty extends SelectProperty
 
     public $store_prop_is_itemid        = true;        // Check if the store_prop is the itemid - assume true for now
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
     }
 
-	/**
-	 * Display a dropdown of items for input
-	 * 
-	 * @param  array data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
-    public function showInput(Array $data = array())
+    /**
+     * Display a dropdown of items for input
+     *
+     * @param  array data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
+    public function showInput(array $data = [])
     {
         // Allow overriding by specific parameters
-        if (isset($data['refobject']))    $this->initialization_refobject = $data['refobject'];
-        if (isset($data['store_prop']))   $this->initialization_store_prop = $data['store_prop'];
-        if (isset($data['display_prop'])) $this->initialization_display_prop = $data['display_prop'];
-        if (isset($data['firstline']))    $this->initialization_firstline = $data['firstline'];
+        if (isset($data['refobject'])) {
+            $this->initialization_refobject = $data['refobject'];
+        }
+        if (isset($data['store_prop'])) {
+            $this->initialization_store_prop = $data['store_prop'];
+        }
+        if (isset($data['display_prop'])) {
+            $this->initialization_display_prop = $data['display_prop'];
+        }
+        if (isset($data['firstline'])) {
+            $this->initialization_firstline = $data['firstline'];
+        }
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a dropdown of items for output
-	 * 
-	 * @param  array data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
-    public function showOutput(Array $data = array())
+    /**
+     * Display a dropdown of items for output
+     *
+     * @param  array data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
+    public function showOutput(array $data = [])
     {
         // Allow overriding by specific parameters
-        if (isset($data['refobject']))    $this->initialization_refobject = $data['refobject'];
-        if (isset($data['store_prop']))   $this->initialization_store_prop = $data['store_prop'];
-        if (isset($data['display_prop'])) $this->initialization_display_prop = $data['display_prop'];
-        if (isset($data['firstline']))    $this->initialization_firstline = $data['firstline'];
+        if (isset($data['refobject'])) {
+            $this->initialization_refobject = $data['refobject'];
+        }
+        if (isset($data['store_prop'])) {
+            $this->initialization_store_prop = $data['store_prop'];
+        }
+        if (isset($data['display_prop'])) {
+            $this->initialization_display_prop = $data['display_prop'];
+        }
+        if (isset($data['firstline'])) {
+            $this->initialization_firstline = $data['firstline'];
+        }
 
-        if (isset($data['value'])) $this->value = $data['value'];
+        if (isset($data['value'])) {
+            $this->value = $data['value'];
+        }
         if (!empty($this->value) && !isset($data['link'])) {
             // CHECKME: store_prop_is_itemid only gets checked once getOptions() is called later on !
             if (is_numeric($this->value) && $this->store_prop_is_itemid) {
-                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'display', array('itemid' => $this->value));
+                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'display', ['itemid' => $this->value]);
             } elseif (is_string($this->value)) {
-                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'view', array('where' => $this->initialization_display_prop . " = '" . $this->value . "'"));
+                $data['link'] = xarServer::getObjectURL($this->initialization_refobject, 'view', ['where' => $this->initialization_display_prop . " = '" . $this->value . "'"]);
             } else {
                 echo xarML('Array values for links are currently not supported in the objectref property');
                 exit;
@@ -93,11 +111,13 @@ class ObjectRefProperty extends SelectProperty
     }
 
     // Return a list of array(id => value) for the possible options
-    function getOptions()
+    public function getOptions()
     {
-        if (!empty($this->options)) return $this->options;
+        if (!empty($this->options)) {
+            return $this->options;
+        }
 
-        $options = array();
+        $options = [];
 
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
@@ -105,48 +125,54 @@ class ObjectRefProperty extends SelectProperty
         sys::import('modules.dynamicdata.class.objects.master');
         if ($this->initialization_refobject == 'objects') {
             // In this case need to go directly (rather than get a DD object) to avoid recursion
-            if ($this->initialization_display_prop == 'id') $sortprop = "objectid";
-            else $sortprop = $this->initialization_display_prop;
+            if ($this->initialization_display_prop == 'id') {
+                $sortprop = "objectid";
+            } else {
+                $sortprop = $this->initialization_display_prop;
+            }
             $dbconn = xarDB::getConn();
-            $xartable =& xarDB::getTables();
+            $xartable = & xarDB::getTables();
             $q = "SELECT id, name, label, module_id, itemtype, class, filepath,
                 urlparam, maxid, config, isalias FROM " . $xartable['dynamic_objects'] . " ORDER BY " . $sortprop;
             $result = $dbconn->executeQuery($q);
-            $items = array();
+            $items = [];
             while ($result->next()) {
-            list($objectid, $name, $label, $module_id, $itemtype, $class,
-                $filepath, $urlparam, $maxid, $config, $isalias) = $result->fields;
+                [$objectid, $name, $label, $module_id, $itemtype, $class,
+                    $filepath, $urlparam, $maxid, $config, $isalias] = $result->fields;
 
-            $items[] = array('objectid' => $objectid,
-                             'name'    => $name,
-                             'label'   => $label,
-                             'moduleid' => $module_id,
-                             'itemtype' => $itemtype,
-                             'class'   => $class,
-                             'filepath'   => $filepath,
-                             'urlparam'   => $urlparam,
-                             'maxid'   => $maxid,
-                             'config'   => $config,
-                             'isalias'   => $isalias);
+                $items[] = ['objectid' => $objectid,
+                                 'name'    => $name,
+                                 'label'   => $label,
+                                 'moduleid' => $module_id,
+                                 'itemtype' => $itemtype,
+                                 'class'   => $class,
+                                 'filepath'   => $filepath,
+                                 'urlparam'   => $urlparam,
+                                 'maxid'   => $maxid,
+                                 'config'   => $config,
+                                 'isalias'   => $isalias];
             }
-            $object = DataObjectMaster::getObject(array('name' => 'objects'));
+            $object = DataObjectMaster::getObject(['name' => 'objects']);
         } else {
-            $object = DataObjectMaster::getObjectList(array('name' => $this->initialization_refobject));
+            $object = DataObjectMaster::getObjectList(['name' => $this->initialization_refobject]);
 
-            $items =  $object->getItems(array (
+            $items =  $object->getItems(
+                [
                                         'sort'     => $this->initialization_display_prop,
-                                        'fieldlist'=> array($this->initialization_display_prop,$this->initialization_store_prop),
-                                        'fordisplay' => 1)
-                                 );
-            $object = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
+                                        'fieldlist' => [$this->initialization_display_prop,$this->initialization_store_prop],
+                                        'fordisplay' => 1]
+            );
+            $object = DataObjectMaster::getObject(['name' => $this->initialization_refobject]);
         }
-        
+
         // Make sure the display and store fields are valid properties of this object
         $fields = $object->getFieldList();
-        if (!in_array($this->initialization_display_prop,$fields))
+        if (!in_array($this->initialization_display_prop, $fields)) {
             throw new EmptyParameterException('display_prop: ' . $object->name . '.' .$this->initialization_display_prop);
-        if (!in_array($this->initialization_store_prop,$fields))
+        }
+        if (!in_array($this->initialization_store_prop, $fields)) {
             throw new EmptyParameterException('store_prop: ' . $object->name . '.' .$this->initialization_store_prop);
+        }
 
         // Check if the store_prop is the itemid
         if ($object->properties[$this->initialization_store_prop]->type == 21) { // itemid
@@ -156,7 +182,7 @@ class ObjectRefProperty extends SelectProperty
         }
 
         foreach($items as $item) {
-            $options[] = array('id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]);
+            $options[] = ['id' => $item[$this->initialization_store_prop], 'name' => $item[$this->initialization_display_prop]];
         }
 
         // Save options only when we're dealing with an object list
@@ -171,21 +197,25 @@ class ObjectRefProperty extends SelectProperty
      *
      * @param  array data An array of input parameters
      * @return string containing the HTML (or other) text to output on a web page
-     */ 
-    public function showConfiguration(Array $data = array())
+     */
+    public function showConfiguration(array $data = [])
     {
-        if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
+        if (!isset($data['configuration'])) {
+            $data['configuration'] = $this->configuration;
+        }
         $this->parseConfiguration($data['configuration']);
-        if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
+        if (!isset($data['initialization'])) {
+            $data['initialization'] = $this->getConfigProperties('initialization', 1);
+        }
 
         if (!empty($data['initialization']['initialization_store_prop']['configuration'])) {
             $temp = unserialize($data['initialization']['initialization_store_prop']['configuration']);
-            $temp = str_replace  ('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
+            $temp = str_replace('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
             $data['initialization']['initialization_store_prop']['configuration'] = serialize($temp);
         }
         if (!empty($data['initialization']['initialization_display_prop']['configuration'])) {
             $temp = unserialize($data['initialization']['initialization_display_prop']['configuration']);
-            $temp = str_replace  ('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
+            $temp = str_replace('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
             $data['initialization']['initialization_display_prop']['configuration'] = serialize($temp);
         }
         return parent::showConfiguration($data);
@@ -194,44 +224,55 @@ class ObjectRefProperty extends SelectProperty
     public function preList()
     {
         // Bail if there is no parent object
-        if (empty($this->objectref)) return true;
-        
+        if (empty($this->objectref)) {
+            return true;
+        }
+
         // Get the object associated with this property
         if ($this->objectref->name == $this->initialization_refobject) {
             // Case of the same table in the property and its parent object
             $object = $this->objectref;
         } else {
             // Property table is different from the object table
-            $object = DataObjectMaster::getObject(array('name' => $this->initialization_refobject));
+            $object = DataObjectMaster::getObject(['name' => $this->initialization_refobject]);
         }
 
         // We only support relational storage
-        if (!$object || !$object->datastore) return true;
+        if (!$object || !$object->datastore) {
+            return true;
+        }
         $store = $object->datastore->name;
-        if ($object->datastore->name != "relational") return true;
+        if ($object->datastore->name != "relational") {
+            return true;
+        }
 
         // Assemble the links to the object's table - @todo see DataObjectMaster assembleQuery instead
         $descriptor  = $object->descriptor;
-        $sources     = $descriptor->exists("sources") ? unserialize($descriptor->get("sources") ?? 'a:0:{}') : array();
-        $relations   = $descriptor->exists("relations") ? unserialize($descriptor->get("relations") ?? 'a:0:{}') : array();
-        
+        $sources     = $descriptor->exists("sources") ? unserialize($descriptor->get("sources") ?? 'a:0:{}') : [];
+        $relations   = $descriptor->exists("relations") ? unserialize($descriptor->get("relations") ?? 'a:0:{}') : [];
+
         // Debug display
-        if (xarModVars::get('dynamicdata','debugmode') && 
-        in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+        if (xarModVars::get('dynamicdata', 'debugmode') &&
+        in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
             echo "Ref Object: " . $this->objectref->name . "<br/>";
             echo "Property: " . $this->name . "<br/>";
             echo "Prop Object: " . $object->name . "<br/>";
-            echo "Sources: ";var_dump($sources);echo "<br/>";
-            echo "Relations: ";var_dump($relations);echo "<br/>";echo "<br/>";
+            echo "Sources: ";
+            var_dump($sources);
+            echo "<br/>";
+            echo "Relations: ";
+            var_dump($relations);
+            echo "<br/>";
+            echo "<br/>";
         }
-        
+
         // Get the parent object's query;
         $q = $this->objectref->dataquery;
 
         // The tables of this property will be added with a special prefix
         // to make sure all tables are unique
         $tableprefix = $this->id . "_";
-        
+
         // Run through each of the sources and create a table entry
         // The first table is linked with a join to the current object's source table(s)
         // By definition this is an outer join
@@ -245,9 +286,9 @@ class ObjectRefProperty extends SelectProperty
                 $q->leftjoin($this->source, $storeprop);
             } else {
                 if ($value[1] == 'internal') {
-                    $q->join($tableprefix . $relations[$i-1][0], $tableprefix . $relations[$i-1][1]);
+                    $q->join($tableprefix . $relations[$i - 1][0], $tableprefix . $relations[$i - 1][1]);
                 } else {
-                    $q->leftjoin($tableprefix . $relations[$i-1][0], $tableprefix . $relations[$i-1][1]);
+                    $q->leftjoin($tableprefix . $relations[$i - 1][0], $tableprefix . $relations[$i - 1][1]);
                 }
             }
             $i++;

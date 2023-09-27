@@ -24,12 +24,12 @@ class ConfigurationProperty extends TextAreaProperty
     public $id         = 998;
     public $name       = 'configuration';
     public $desc       = 'Configuration';
-    public $reqmodules = array('dynamicdata');
+    public $reqmodules = ['dynamicdata'];
 
     // Default to static text
     public $proptype = 1;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
@@ -37,13 +37,13 @@ class ConfigurationProperty extends TextAreaProperty
         $this->include_reference = 1;
     }
 
-	/**
-	* Get the value of a textarea from a web page
-	* 
-	* @param  string name The name of the textarea
-	* @param  string value The value of the textarea
-	* @return bool|void   This method returns true if $data configuration updated otherwise returns false 
-	*/	
+    /**
+    * Get the value of a textarea from a web page
+    *
+    * @param  string name The name of the textarea
+    * @param  string value The value of the textarea
+    * @return bool|void   This method returns true if $data configuration updated otherwise returns false
+    */
     public function checkInput($name = '', $value = null)
     {
         // set property type from object reference (= dynamic configuration) if possible
@@ -57,24 +57,30 @@ class ConfigurationProperty extends TextAreaProperty
         }
 
         $data['name'] = !empty($name) ? $name : $this->propertyprefix . $this->id;
-        $property =& DataPropertyMaster::getProperty($data);
-        if (empty($property)) return;
+        $property = & DataPropertyMaster::getProperty($data);
+        if (empty($property)) {
+            return;
+        }
 
-        if (!xarVar::fetch($data['name'],'isset',$data['configuration'],NULL,xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch($data['name'], 'isset', $data['configuration'], null, xarVar::NOT_REQUIRED)) {
+            return;
+        }
 
-        if (!$property->updateConfiguration($data)) return false;
+        if (!$property->updateConfiguration($data)) {
+            return false;
+        }
         $this->value = $property->configuration;
 
         return true;
     }
 
-	/**
-	* Display a textarea for input
-	* 
-	* @param  array data An array of input parameters
-	* @return string     HTML markup to display the property for input on a web page
-	*/	
-    public function showInput(Array $data = array())
+    /**
+    * Display a textarea for input
+    *
+    * @param  array data An array of input parameters
+    * @return string     HTML markup to display the property for input on a web page
+    */
+    public function showInput(array $data = [])
     {
         // set property type from object reference (= dynamic configuration) if possible
         if (!empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
@@ -88,8 +94,8 @@ class ConfigurationProperty extends TextAreaProperty
         } else {
             $data['type'] = $this->proptype;
         }
-        
-        $property =& DataPropertyMaster::getProperty($data);
+
+        $property = & DataPropertyMaster::getProperty($data);
         $property->id = $this->id;
         $property->parseConfiguration($this->value);
 
@@ -97,15 +103,17 @@ class ConfigurationProperty extends TextAreaProperty
         return $property->showConfiguration($data);
     }
 
-	/**
-	* Display a textarea for output
-	* 
-	* @param  array data An array of input parameters
-	* @return string     HTML markup to display the property for output on a web page
-	*/	
-    public function showOutput(Array $data = array())
+    /**
+    * Display a textarea for output
+    *
+    * @param  array data An array of input parameters
+    * @return string     HTML markup to display the property for output on a web page
+    */
+    public function showOutput(array $data = [])
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
         return parent::showOutput($data);
     }
 

@@ -24,43 +24,60 @@
  * @param string tplmodule
  * @return mixed
  */
-function dynamicdata_admin_create(Array $args=array())
+function dynamicdata_admin_create(array $args = [])
 {
     extract($args);
 
-// FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
-//        or relies on $myobject or other stuff like that...
+    // FIXME: whatever, as long as it doesn't generate Variable "0" should not be empty exceptions
+    //        or relies on $myobject or other stuff like that...
 
-    if (!xarVar::fetch('objectid',    'isset', $objectid,   NULL, xarVar::DONT_SET)) return;
-    if (!xarVar::fetch('itemid',      'isset', $itemid,     0,    xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('preview',     'isset', $preview,    0,    xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('return_url',  'isset', $return_url, NULL, xarVar::DONT_SET)) {return;}
-    if (!xarVar::fetch('join',        'isset', $join,       NULL, xarVar::DONT_SET)) {return;}
-    if (!xarVar::fetch('table',       'isset', $table,      NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('template',     'isset', $template,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('tplmodule',    'isset', $tplmodule,   'dynamicdata', xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if (!xarVar::fetch('itemid', 'isset', $itemid, 0, xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (!xarVar::fetch('preview', 'isset', $preview, 0, xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (!xarVar::fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if (!xarVar::fetch('join', 'isset', $join, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if (!xarVar::fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('tplmodule', 'isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {
+        return;
+    }
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
+        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+    }
 
-    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
+    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $itemid));
+                                         'itemid'   => $itemid]);
 
-    // Security (Bug: 
-    if (!$myobject->checkAccess('create'))
+    // Security (Bug:
+    if (!$myobject->checkAccess('create')) {
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
+    }
 
     $isvalid = $myobject->checkInput();
 
     // recover any session var information
-    $data = xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule));
+    $data = xarMod::apiFunc('dynamicdata', 'user', 'getcontext', ['module' => $tplmodule]);
     extract($data);
 
     if (!empty($preview) || !$isvalid) {
-        $data = array_merge($data, xarMod::apiFunc('dynamicdata','admin','menu'));
+        $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
 
         $data['object'] = $myobject;
 
@@ -79,27 +96,37 @@ function dynamicdata_admin_create(Array $args=array())
         if(!isset($template)) {
             $template = $myobject->name;
         }
-        return xarTpl::module($tplmodule,'admin','new',$data,$template);
+        return xarTpl::module($tplmodule, 'admin', 'new', $data, $template);
     }
 
     $itemid = $myobject->createItem();
 
-   // If we are here then the create is valid: reset the session var
-    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
+    // If we are here then the create is valid: reset the session var
+    xarSession::setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
 
-    if (empty($itemid)) return; // throw back
+    if (empty($itemid)) {
+        return;
+    } // throw back
 
     if (!empty($return_url)) {
         xarController::redirect($return_url);
     } elseif (!empty($table)) {
-        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
-                                      array('table' => $table)));
+        xarController::redirect(xarController::URL(
+            'dynamicdata',
+            'admin',
+            'view',
+            ['table' => $table]
+        ));
     } else {
-        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
-                                      array(
+        xarController::redirect(xarController::URL(
+            'dynamicdata',
+            'admin',
+            'view',
+            [
                                       'itemid' => $objectid,
-                                      'tplmodule' => $tplmodule
-                                      )));
+                                      'tplmodule' => $tplmodule,
+                                      ]
+        ));
     }
     return true;
 }

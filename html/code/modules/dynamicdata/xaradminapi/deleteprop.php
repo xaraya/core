@@ -28,25 +28,25 @@
  * @return boolean true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_deleteprop(Array $args=array())
+function dynamicdata_adminapi_deleteprop(array $args = [])
 {
     extract($args);
 
     // Required arguments
-    $invalid = array();
+    $invalid = [];
     if (!isset($id) || !is_numeric($id)) {
         $invalid[] = 'property id';
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'admin', 'deleteprop', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'admin', 'deleteprop', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     // TODO: security check on object level
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = & xarDB::getTables();
     // It's good practice to name the table and column definitions you
     // are getting - $table and $column don't cut it in more complex
     // modules
@@ -55,13 +55,13 @@ function dynamicdata_adminapi_deleteprop(Array $args=array())
     try {
         $dbconn->begin();
         $sql = "DELETE FROM $dynamicprop WHERE id = ?";
-        $dbconn->Execute($sql,array($id));
+        $dbconn->Execute($sql, [$id]);
 
         // TODO: don't delete if the data source is not in dynamic_data
         // delete all data too !
         $dynamicdata = $xartable['dynamic_data'];
         $sql = "DELETE FROM $dynamicdata WHERE property_id = ?";
-        $dbconn->Execute($sql,array($id));
+        $dbconn->Execute($sql, [$id]);
         $dbconn->commit();
     } catch (SQLException $e) {
         $dbconn->rollback();

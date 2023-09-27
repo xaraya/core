@@ -20,7 +20,7 @@
 class PropertyRegistration extends DataContainer
 {
     private $stmt;                               // Prepared SqL statement for reuse
-    
+
     public $id         = 0;                      // id of the property, hardcoded to make things easier
     public $name       = 'propertyType';         // what type of property are we dealing with
     public $desc       = 'Property Description'; // description of this type
@@ -30,37 +30,37 @@ class PropertyRegistration extends DataContainer
     public $class      = '';                     // what is the class?
     public $configuration = '';                     // what is its default configuration?
     public $source     = 'dynamic_data';         // what source is default for this type?
-    public $reqfiles   = array();                // do we require some files to be present?
-    public $reqmodules = array();                // do we require some modules to be present?
-    public $args       = array();                // special args needed?
-    public $aliases    = array();                // aliases for this property
+    public $reqfiles   = [];                // do we require some files to be present?
+    public $reqmodules = [];                // do we require some modules to be present?
+    public $args       = [];                // special args needed?
+    public $aliases    = [];                // aliases for this property
     public $filepath   = '';                     // path to the directory where the property lives
     public $template   = '';                     // the template for this property
     public $format     = 0;                      // what format type do we have here?
-                                                 // 0 = ? what?
-                                                 // 1 =
+    // 0 = ? what?
+    // 1 =
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         $args = $descriptor->getArgs();
         if (!empty($args)) {
-            foreach($args as $key=>$value) {
+            foreach($args as $key => $value) {
                 $this->$key = $value;
             }
         }
     }
 
-    static public function clearCache()
+    public static function clearCache()
     {
         $dbconn = xarDB::getConn();
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $tables =& xarDB::getTables();
+        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        $tables = & xarDB::getTables();
         $sql = "DELETE FROM $tables[dynamic_properties_def]";
         $res = $dbconn->ExecuteUpdate($sql);
         return $res;
     }
 
-    public function getRegistrationInfo(xarObject $class)
+    public function getRegistrationInfo(DataProperty $class)
     {
         $this->id   = $class->id;
         $this->name = $class->name;
@@ -78,38 +78,42 @@ class PropertyRegistration extends DataContainer
     public function Register()
     {
         static $stmt = null;
-        static $types = array();
+        static $types = [];
 
         // Sanity checks (silent)
-        foreach($this->reqfiles as $required)
-            if(!file_exists($required))
+        foreach($this->reqfiles as $required) {
+            if(!file_exists($required)) {
                 return false;
+            }
+        }
 
-/*
-        foreach($this->reqmodules as $required)
-            if(!xarMod::isAvailable($required))
-                return false;
-*/
+        /*
+                foreach($this->reqmodules as $required)
+                    if(!xarMod::isAvailable($required))
+                        return false;
+        */
         $dbconn = xarDB::getConn();
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $tables =& xarDB::getTables();
+        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        $tables = & xarDB::getTables();
         $propdefTable = $tables['dynamic_properties_def'];
 
         // Make sure the db is the same as in the old days
-        assert(count($this->reqmodules)<=1);
+        assert(count($this->reqmodules) <= 1);
         $module_id = empty($this->reqmodules) ? 0 : xarMod::getID($this->reqmodules[0]);
 
-        if($this->format == 0) $this->format = $this->id;
+        if($this->format == 0) {
+            $this->format = $this->id;
+        }
 
         if (empty($types)) {
             $sql = "SELECT id FROM $tables[dynamic_properties_def]";
             $res = $dbconn->executeQuery($sql);
             while($res->next()) {
-                list($id) = $res->fields;
+                [$id] = $res->fields;
                 $types[] = $id;
             }
         }
-        
+
         if ($this->stmt == null) {
             $sql = "INSERT INTO $propdefTable
                     (id, name, label,
@@ -120,12 +124,12 @@ class PropertyRegistration extends DataContainer
             $this->stmt = $dbconn->prepareStatement($sql);
         }
 
-        $bindvars = array(
+        $bindvars = [
             (int) $this->id, $this->name, $this->desc,
             $this->filepath, $this->class,
             $this->format, $this->configuration, $this->source,
-            serialize($this->reqfiles), $module_id, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases)
-        );
+            serialize($this->reqfiles), $module_id, is_array($this->args) ? serialize($this->args) : $this->args, serialize($this->aliases),
+        ];
 
         // Ignore if we already have this dataproperty
         if (!in_array($this->id, $types)) {
@@ -135,14 +139,20 @@ class PropertyRegistration extends DataContainer
             $res = true;
         }
 
-        if(!empty($this->aliases))
-        {
-            foreach($this->aliases as $aliasInfo)
-            {
-                if (!isset($aliasInfo['filepath'])) $aliasInfo['filepath'] = $this->filepath;
-                if (!isset($aliasInfo['class'])) $aliasInfo['class'] = $this->class;
-                if (!isset($aliasInfo['format'])) $aliasInfo['format'] = $this->format;
-                if (!isset($aliasInfo['reqmodules'])) $aliasInfo['reqmodules'] = $this->reqmodules;
+        if(!empty($this->aliases)) {
+            foreach($this->aliases as $aliasInfo) {
+                if (!isset($aliasInfo['filepath'])) {
+                    $aliasInfo['filepath'] = $this->filepath;
+                }
+                if (!isset($aliasInfo['class'])) {
+                    $aliasInfo['class'] = $this->class;
+                }
+                if (!isset($aliasInfo['format'])) {
+                    $aliasInfo['format'] = $this->format;
+                }
+                if (!isset($aliasInfo['reqmodules'])) {
+                    $aliasInfo['reqmodules'] = $this->reqmodules;
+                }
                 // Recursive!!
                 $res = $aliasInfo->Register();
             }
@@ -150,18 +160,18 @@ class PropertyRegistration extends DataContainer
         return $res;
     }
 
-    static public function Retrieve()
+    public static function Retrieve()
     {
-        if(xarCoreCache::isCached('DynamicData','PropertyTypes')) {
-            return xarCoreCache::getCached('DynamicData','PropertyTypes');
+        if(xarCoreCache::isCached('DynamicData', 'PropertyTypes')) {
+            return xarCoreCache::getCached('DynamicData', 'PropertyTypes');
         }
         $dbconn = xarDB::getConn();
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
+        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
         // CHECKME: $tables[modules] is defined in xarMod::init()
         if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
-            xarMod::loadDbInfo('modules','modules');
+            xarMod::loadDbInfo('modules', 'modules');
         }
-        $tables =& xarDB::getTables();
+        $tables = & xarDB::getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
                           p.filepath, p.class,
@@ -172,16 +182,15 @@ class PropertyRegistration extends DataContainer
                   ON      p.modid = m.id
                   ORDER BY m.name, p.name";
         $result = $dbconn->executeQuery($query);
-        $proptypes = array();
-        if($result->RecordCount() == 0 ) {
+        $proptypes = [];
+        if($result->RecordCount() == 0) {
             $proptypes = self::importPropertyTypes(false);
         } else {
-            while($result->next())
-            {
-                list(
-                    $id,$name,$label,$filepath,$class,$format,
-                    $configuration,$source,$reqfiles,$modname,$args,$aliases
-                ) = $result->fields;
+            while($result->next()) {
+                [
+                    $id, $name, $label, $filepath, $class, $format,
+                    $configuration, $source, $reqfiles, $modname, $args, $aliases
+                ] = $result->fields;
 
                 $property['id']             = $id;
                 $property['name']           = $name;
@@ -195,16 +204,16 @@ class PropertyRegistration extends DataContainer
                 $property['args']           = $args;
                 $property['class']          = $class;
                 // TODO: this returns a serialized array of objects, does that hurt?
-                try{
+                try {
                     $property['aliases']        = unserialize($aliases);
                 } catch(Exception $e) {
-                    $property['aliases']        = array();
+                    $property['aliases']        = [];
                 }
                 $proptypes[$id] = $property;
             }
         }
         $result->close();
-        xarCoreCache::setCached('DynamicData','PropertyTypes',$proptypes);
+        xarCoreCache::setCached('DynamicData', 'PropertyTypes', $proptypes);
         return $proptypes;
     }
 
@@ -216,22 +225,22 @@ class PropertyRegistration extends DataContainer
      * @return array an array of the property types currently available
      * @todo flush seems to be unused
      */
-    static public function importPropertyTypes($flush = true, $dirs = array())
+    public static function importPropertyTypes($flush = true, $dirs = [])
     {
         xarLog::message(xarMLS::translate('DynamicData: Flushing the property cache'), xarLog::LEVEL_NOTICE);
         sys::import('xaraya.structures.relativedirectoryiterator');
 
         $dbconn = xarDB::getConn(); // Need this for the transaction
-        $propDirs = array();
+        $propDirs = [];
 
         // We do the whole thing, or not at all (given proper db support)
         try {
             $dbconn->begin();
 
-# --------------------------------------------------------
-#
-# Get the list of properties directories in the active modules
-#
+            # --------------------------------------------------------
+            #
+            # Get the list of properties directories in the active modules
+            #
             xarLog::message(xarMLS::translate('DynamicData: Searching for property directories'), xarLog::LEVEL_NOTICE);
             if (!empty($dirs) && is_array($dirs)) {
                 // We got an array of directories passed in for which to import properties
@@ -239,18 +248,18 @@ class PropertyRegistration extends DataContainer
                 // the module is active.
                 $propDirs = $dirs;
             } else {
-                if (!xarVar::getCached('installer','installing')) {
+                if (!xarVar::getCached('installer', 'installing')) {
                     // Repopulate the configurations table
-                    $tables =& xarDB::getTables();
+                    $tables = & xarDB::getTables();
                     $sql = "DELETE FROM $tables[dynamic_configurations]";
                     $res = $dbconn->ExecuteUpdate($sql);
 
                     $dat_file = sys::code() . 'modules/dynamicdata/xardata/configurations-dat.xml';
-                    $data = array('file' => $dat_file);
-                    $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+                    $data = ['file' => $dat_file];
+                    $objectid = xarMod::apiFunc('dynamicdata', 'util', 'import', $data);
                 }
                 xarLog::message(xarMLS::translate('DynamicData: Looking for active modules'), xarLog::LEVEL_NOTICE);
-                $activeMods = xarMod::apiFunc('modules','admin','getlist', array('filter' => array('State' => xarMod::STATE_ACTIVE)));
+                $activeMods = xarMod::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_ACTIVE]]);
                 assert(!empty($activeMods)); // this should never happen
                 xarLog::message(xarMLS::translate('DynamicData: There are #(1) active modules', count($activeMods)), xarLog::LEVEL_DEBUG);
 
@@ -260,19 +269,22 @@ class PropertyRegistration extends DataContainer
                     if(file_exists(sys::code() . $dir)) {
                         $propDirs[] = $dir;
                     }
-                    
+
                     // Ignore the next part if this is dynamicdata, as it was already loaded above
-                    if ($modInfo['osdirectory'] == 'dynamicdata') continue;
-                    
+                    if ($modInfo['osdirectory'] == 'dynamicdata') {
+                        continue;
+                    }
+
                     // If there is a configurations-dat.xml file in this module, then load it now
                     // CHECKME: For more flexibility this could be done through a PropertyInstall class
                     $dir = 'modules/' .$modInfo['osdirectory'] . '/xardata/configurations-dat.xml';
                     if(file_exists(sys::code() . $dir)) {
                         $dat_file = sys::code() . $dir;
-                        $data = array('file' => $dat_file);
+                        $data = ['file' => $dat_file];
                         try {
-                            $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
-                        } catch (Exception $e) {}                        
+                            $objectid = xarMod::apiFunc('dynamicdata', 'util', 'import', $data);
+                        } catch (Exception $e) {
+                        }
                     }
                 }
 
@@ -281,33 +293,42 @@ class PropertyRegistration extends DataContainer
             }
             xarLog::message(xarMLS::translate('DynamicData: Retrieved the list of directories to be searched'), xarLog::LEVEL_NOTICE);
 
-# --------------------------------------------------------
-#
-# Get the list of properties in the various properties directories
-#
-            static $loaded = array();
-            $proptypes = array(); $numLoaded = 0;
+            # --------------------------------------------------------
+            #
+            # Get the list of properties in the various properties directories
+            #
+            static $loaded = [];
+            $proptypes = [];
+            $numLoaded = 0;
             foreach($propDirs as $PropertiesDir) {
                 $propertiesdir = sys::code() . $PropertiesDir;
-                if (!file_exists($propertiesdir)) continue;
+                if (!file_exists($propertiesdir)) {
+                    continue;
+                }
 
                 $dir = new RelativeDirectoryIterator($propertiesdir);
                 // Loop through properties directory
                 for ($dir->rewind();$dir->valid();$dir->next()) {
-                    if ($dir->isDir()) continue; // no dirs
-                    if ($dir->getExtension() != 'php') continue; // only php files
-                    if ($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
+                    if ($dir->isDir()) {
+                        continue;
+                    } // no dirs
+                    if ($dir->getExtension() != 'php') {
+                        continue;
+                    } // only php files
+                    if ($dir->isDot()) {
+                        continue;
+                    } // temp for emacs insanity and skip hidden files while we're at it
 
                     // Include the file into the environment
                     $file = $dir->getPathName();
                     if (!isset($loaded[$file])) {
                         // FIXME: later -> include
-                        $dp = str_replace('/','.',substr($PropertiesDir . "/" . basename($file),0,-4));
+                        $dp = str_replace('/', '.', substr($PropertiesDir . "/" . basename($file), 0, -4));
                         try {
                             sys::import($dp);
                         } catch (Exception $e) {
                             throw new Exception(xarMLS::translate('The file #(1) could not be loaded<br/>', $dp . '.php'));
-                         	// echo $e->getMessage();exit;
+                            // echo $e->getMessage();exit;
                         }
                         $loaded[$file] = true;
                     }
@@ -315,64 +336,75 @@ class PropertyRegistration extends DataContainer
             } // loop over the directories
             xarLog::message(xarMLS::translate('DynamicData: Retrieved the list of properties in modules'), xarLog::LEVEL_NOTICE);
 
-# --------------------------------------------------------
-#
-# Now get the properties in the properties directory
-#
+            # --------------------------------------------------------
+            #
+            # Now get the properties in the properties directory
+            #
             $propertiesdir = sys::code() . 'properties/';
-            if (!file_exists($propertiesdir)) throw new DirectoryNotFoundException($propertiesdir);
+            if (!file_exists($propertiesdir)) {
+                throw new DirectoryNotFoundException($propertiesdir);
+            }
 
             $dir = new RelativeDirectoryIterator($propertiesdir);
             // Loop through properties directory
             for ($dir->rewind();$dir->valid();$dir->next()) {
-                if ($dir->isDot()) continue; // temp for emacs insanity and skip hidden files while we're at it
-                if (!$dir->isDir()) continue; // only dirs
+                if ($dir->isDot()) {
+                    continue;
+                } // temp for emacs insanity and skip hidden files while we're at it
+                if (!$dir->isDir()) {
+                    continue;
+                } // only dirs
 
                 // Include the file into the environment
                 $file = $dir->getPathName();
                 if (!isset($loaded[$file])) {
                     // FIXME: later -> include
-                    $dp = str_replace('/','.','properties/' . basename($file) . "/main");
+                    $dp = str_replace('/', '.', 'properties/' . basename($file) . "/main");
                     try {
                         sys::import($dp);
                     } catch (Exception $e) {
                         // Die silently for now
-                         $debugadmins = xarConfigVars::get(null, 'Site.User.DebugAdmins');
-                         if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUser::getVar('id'),$debugadmins))                       
-                         echo xarMLS::translate('The file #(1) could not be loaded<br/>', $dp . '.php');
-                         // echo $e->getMessage();exit;
+                        $debugadmins = xarConfigVars::get(null, 'Site.User.DebugAdmins');
+                        if (xarModVars::get('dynamicdata', 'debugmode') && in_array(xarUser::getVar('id'), $debugadmins)) {
+                            echo xarMLS::translate('The file #(1) could not be loaded<br/>', $dp . '.php');
+                        }
+                        // echo $e->getMessage();exit;
                     }
                     $loaded[$file] = true;
                 }
             }
             xarLog::message(xarMLS::translate('DynamicData: Retrieved the list of standalone properties'), xarLog::LEVEL_NOTICE);
 
-# --------------------------------------------------------
-#
-# Sort the classes into the proper order for installation
-#
+            # --------------------------------------------------------
+            #
+            # Sort the classes into the proper order for installation
+            #
             // FIXME: this wont work reliable enough, since we have the static now
             // might as well put this directly after the include above.
             $newClasses = get_declared_classes();
 
-            $classesToSort = array();
-            $edges = array();
+            $classesToSort = [];
+            $edges = [];
             foreach ($newClasses as $thisclass) {
                 // Just get properties
-                if (!is_subclass_of($thisclass, 'DataProperty')) continue;
-                
+                if (!is_subclass_of($thisclass, 'DataProperty')) {
+                    continue;
+                }
+
                 // Ignore installer classes of properties (they are extensions)
-                if (substr($thisclass, -7) == 'Install') continue;
-                
+                if (substr($thisclass, -7) == 'Install') {
+                    continue;
+                }
+
                 // Good class: add it to the array
                 $classesToSort[$thisclass] = $thisclass;
-                
+
                 if(property_exists($thisclass, 'deferto')) {
                     $vars = get_class_vars($thisclass);
                     $deferto = $vars['deferto'];
                     if (isset($deferto) && is_array($deferto)) {
                         foreach ($thisclass::$deferto as $defered) {
-                            $edges[$defered] = array($defered,$thisclass);
+                            $edges[$defered] = [$defered,$thisclass];
                         }
                     }
                 }
@@ -380,23 +412,25 @@ class PropertyRegistration extends DataContainer
 
             // Remove any deferments where the class is not loaded
             foreach ($edges as $key => $value) {
-                if (!isset($classesToSort[$key])) unset($edges[$key]);
+                if (!isset($classesToSort[$key])) {
+                    unset($edges[$key]);
+                }
             }
 
             // Now sort the properties in the order they need to be installed
             $sortedClasses = self::topological_sort($classesToSort, $edges);
-            
+
             xarLog::message(xarMLS::translate('DynamicData: Checked and sorted the property classes to register'), xarLog::LEVEL_NOTICE);
 
             // Process the sorted classes
-            $i=0;
+            $i = 0;
             foreach($sortedClasses as $index => $propertyClass) {
                 $processedClasses[] = $propertyClass;
 
                 // Main part
                 // Call the class method on each property to get the registration info
                 //if (!is_callable(array($propertyClass,'getRegistrationInfo'))) continue;
-                $descriptor = new ObjectDescriptor(array());
+                $descriptor = new ObjectDescriptor([]);
                 $baseInfo = new PropertyRegistration($descriptor);
                 try {
                     /** @var DataProperty $property */
@@ -406,13 +440,19 @@ class PropertyRegistration extends DataContainer
                     xarLog::message(xarMLS::translate('DynamicData: The property #(1) could not be instantiated', $propertyClass), xarLog::LEVEL_DEBUG);
                     throw new Exception(xarMLS::translate('The property #(1) could not be instantiated. #(2)', $propertyClass, $e->getMessage()));
                 }
-                if (empty($property->id)) continue;   // Don't register the base property
+                if (empty($property->id)) {
+                    continue;
+                }   // Don't register the base property
                 $baseInfo->getRegistrationInfo($property);
-                
+
                 // If we are adding properties from specific dirs, only look for those
                 // FIXME: the dirs should *always* be passed as an array (random)
-                if (!empty($dirs) && is_array($dirs) && !in_array($baseInfo->filepath,$dirs)) continue;
-                if (!empty($dirs) && !is_array($dirs) && ($baseInfo->filepath != $dirs)) continue;
+                if (!empty($dirs) && is_array($dirs) && !in_array($baseInfo->filepath, $dirs)) {
+                    continue;
+                }
+                if (!empty($dirs) && !is_array($dirs) && ($baseInfo->filepath != $dirs)) {
+                    continue;
+                }
 
                 // Fill in the info we dont have in the registration class yet
                 // TODO: see if we can have it in the registration class
@@ -450,10 +490,10 @@ class PropertyRegistration extends DataContainer
                     $registered = $proptype->Register();
                 }
                 unset($currentproptypes);
-                
+
                 // Run the install function if it exists
                 self::installproperty($baseInfo->name);
-                
+
             } // next property class in the same file
             $dbconn->commit();
         } catch(Exception $e) {
@@ -463,15 +503,15 @@ class PropertyRegistration extends DataContainer
         }
 
         // Clear the property types from cached memory
-        xarCoreCache::delCached('DynamicData','PropertyTypes');
-        
+        xarCoreCache::delCached('DynamicData', 'PropertyTypes');
+
         // Sort the property types
         ksort($proptypes);
         xarLog::message(xarMLS::translate('DynamicData: Property cache successfully flushed'), xarLog::LEVEL_NOTICE);
         return $proptypes;
     }
-    
-    static public function installproperty($propertyname) 
+
+    public static function installproperty($propertyname)
     {
         $class = UCFirst($propertyname) . 'PropertyInstall';
         if (class_exists($class)) {
@@ -486,26 +526,37 @@ class PropertyRegistration extends DataContainer
             $installer = new $class($descriptor);
             $installer->install();
         }
-    }   
+    }
 
     // Taken from http://www.calcatraz.com/blog/php-topological-sort-function-384
-    private static function topological_sort($nodeids, $edges) {
-        $L = $S = $nodes = array();
+    private static function topological_sort($nodeids, $edges)
+    {
+        $L = $S = $nodes = [];
         foreach($nodeids as $id) {
-            $nodes[$id] = array('in'=>array(), 'out'=>array());
+            $nodes[$id] = ['in' => [], 'out' => []];
             foreach($edges as $e) {
-                if ($id==$e[0]) { $nodes[$id]['out'][]=$e[1]; }
-                if ($id==$e[1]) { $nodes[$id]['in'][]=$e[0]; }
+                if ($id == $e[0]) {
+                    $nodes[$id]['out'][] = $e[1];
+                }
+                if ($id == $e[1]) {
+                    $nodes[$id]['in'][] = $e[0];
+                }
             }
         }
-        foreach ($nodes as $id=>$n) { if (empty($n['in'])) $S[]=$id; }
+        foreach ($nodes as $id => $n) {
+            if (empty($n['in'])) {
+                $S[] = $id;
+            }
+        }
         while (!empty($S)) {
             $L[] = $id = array_shift($S);
             foreach($nodes[$id]['out'] as $m) {
-                $nodes[$m]['in'] = array_diff($nodes[$m]['in'], array($id));
-                if (empty($nodes[$m]['in'])) { $S[] = $m; }
+                $nodes[$m]['in'] = array_diff($nodes[$m]['in'], [$id]);
+                if (empty($nodes[$m]['in'])) {
+                    $S[] = $m;
+                }
             }
-            $nodes[$id]['out'] = array();
+            $nodes[$id]['out'] = [];
         }
         foreach($nodes as $n) {
             if (!empty($n['in']) or !empty($n['out'])) {

@@ -23,11 +23,11 @@
  * @return mixed true or debug string on success, null on failure
  * @throws BadParameterException
  */
-function dynamicdata_utilapi_migrate(Array $args=array())
+function dynamicdata_utilapi_migrate(array $args = [])
 {
     extract($args);
 
-    $invalid = array();
+    $invalid = [];
     if (empty($from)) {
         $invalid[] = 'from array';
     } else {
@@ -57,47 +57,54 @@ function dynamicdata_utilapi_migrate(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'admin', 'migrate', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'admin', 'migrate', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     if (is_array($from['itemid'])) {
         $itemids = $from['itemid'];
     } else {
-        $itemids = explode(',',$from['itemid']);
+        $itemids = explode(',', $from['itemid']);
     }
 
     $modinfo = xarMod::getInfo($from['module']);
     if (empty($modinfo)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('from module', 'admin', 'migrate', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['from module', 'admin', 'migrate', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
     $modulefrom = $modinfo['name'];
 
     $modinfo = xarMod::getInfo($to['module']);
     if (empty($modinfo)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('to module', 'admin', 'migrate', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['to module', 'admin', 'migrate', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
     $moduleto = $modinfo['name'];
 
-// TODO: find some easier way to handle migration to/from other modules
+    // TODO: find some easier way to handle migration to/from other modules
 
-    $items = array();
-    switch ($modulefrom)
-    {
+    $items = [];
+    switch ($modulefrom) {
         case 'articles':
-            $articles = xarMod::apiFunc('articles','user','getall',
-                                      array('aids' => $itemids,
+            $articles = xarMod::apiFunc(
+                'articles',
+                'user',
+                'getall',
+                ['aids' => $itemids,
                                             // get the categories and dynamicdata fields too
-                                            'extra' => array('cids','dynamicdata')));
-            if (!isset($articles)) return;
+                                            'extra' => ['cids','dynamicdata']]
+            );
+            if (!isset($articles)) {
+                return;
+            }
             // re-assign by itemid
             foreach ($articles as $article) {
                 $items[$article['aid']] = $article;
@@ -106,17 +113,29 @@ function dynamicdata_utilapi_migrate(Array $args=array())
             break;
 
         case 'dynamicdata':
-            $items = xarMod::apiFunc('dynamicdata','user','getitems',
-                                   array('module_id' => $from['module'],
+            $items = xarMod::apiFunc(
+                'dynamicdata',
+                'user',
+                'getitems',
+                ['module_id' => $from['module'],
                                          'itemtype' => $from['itemtype'],
-                                         'itemids' => $itemids));
-            if (!isset($items)) return;
+                                         'itemids' => $itemids]
+            );
+            if (!isset($items)) {
+                return;
+            }
             break;
 
         case 'xarbb':
-            $topics = xarMod::apiFunc('xarbb','user','getalltopics',
-                                   array('tids' => $itemids));
-            if (!isset($topics)) return;
+            $topics = xarMod::apiFunc(
+                'xarbb',
+                'user',
+                'getalltopics',
+                ['tids' => $itemids]
+            );
+            if (!isset($topics)) {
+                return;
+            }
             // re-assign by itemid
             foreach ($topics as $topic) {
                 $items[$topic['tid']] = $topic;
@@ -130,12 +149,18 @@ function dynamicdata_utilapi_migrate(Array $args=array())
             break;
 
         case 'xarpages':
-            $items = xarMod::apiFunc('xarpages','user','getpages',
-                                   array('itemtype' => $from['itemtype'],
+            $items = xarMod::apiFunc(
+                'xarpages',
+                'user',
+                'getpages',
+                ['itemtype' => $from['itemtype'],
                                          'pids'     => $itemids,
                                          'key'      => 'pid',
-                                         'dd_flag'  => false));
-            if (!isset($items)) return;
+                                         'dd_flag'  => false]
+            );
+            if (!isset($items)) {
+                return;
+            }
             break;
 
         default:
@@ -149,8 +174,12 @@ function dynamicdata_utilapi_migrate(Array $args=array())
 
     // get the list of fields for this module+itemtype
     try {
-        $fields = xarMod::apiFunc($moduleto,'user','getitemfields',
-            array('itemtype' => $to['itemtype']));
+        $fields = xarMod::apiFunc(
+            $moduleto,
+            'user',
+            'getitemfields',
+            ['itemtype' => $to['itemtype']]
+        );
     } catch (Exception $e) {
         $fields = [];
     }
@@ -170,22 +199,27 @@ function dynamicdata_utilapi_migrate(Array $args=array())
     }
 
     $sameid = false;
-    $newitemids = array();
-    switch ($moduleto)
-    {
+    $newitemids = [];
+    switch ($moduleto) {
         case 'articles':
             if ($modulefrom == 'articles') { // only allow updates within articles atm, not copies
                 $sameid = true;
                 foreach ($items as $itemid => $item) {
-                    $article = array('aid' => $itemid);
+                    $article = ['aid' => $itemid];
                     if ($from['itemtype'] != $to['itemtype']) {
                         $article['ptid'] = $to['itemtype'];
                     }
                     foreach ($fieldmap as $fromfield => $tofield) {
-                        if (empty($fromfield) || empty($tofield)) continue;
-                        if (!isset($item[$fromfield])) continue;
+                        if (empty($fromfield) || empty($tofield)) {
+                            continue;
+                        }
+                        if (!isset($item[$fromfield])) {
+                            continue;
+                        }
                         // we only need to pass title + updated fields to the articles update function
-                        if ($fromfield == $tofield && $tofield != 'title') continue;
+                        if ($fromfield == $tofield && $tofield != 'title') {
+                            continue;
+                        }
                         // Note: this will also set any DD fields for the update hooks
                         $article[$tofield] = $item[$fromfield];
                     }
@@ -193,7 +227,9 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                         continue;
                     }
                     if (empty($debug)) {
-                        if (!xarMod::apiFunc('articles','admin','update',$article)) return;
+                        if (!xarMod::apiFunc('articles', 'admin', 'update', $article)) {
+                            return;
+                        }
                     } else {
                         $debug .= xarML('Updating article #(1) :', $itemid);
                         $debug .= "\n";
@@ -205,11 +241,15 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                 }
             } else {
                 foreach ($items as $itemid => $item) {
-                    $article = array();
+                    $article = [];
                     $article['ptid'] = $to['itemtype'];
                     foreach ($fieldmap as $fromfield => $tofield) {
-                        if (empty($fromfield) || empty($tofield)) continue;
-                        if (!isset($item[$fromfield])) continue;
+                        if (empty($fromfield) || empty($tofield)) {
+                            continue;
+                        }
+                        if (!isset($item[$fromfield])) {
+                            continue;
+                        }
                         // Note: this will also set any DD fields for the create hooks
                         $article[$tofield] = $item[$fromfield];
                     }
@@ -220,8 +260,10 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                         $article['aid'] = $itemid; // this may give us trouble with create hooks
                     }
                     if (empty($debug)) {
-                        $newid = xarMod::apiFunc('articles','admin','create',$article);
-                        if (empty($newid)) return;
+                        $newid = xarMod::apiFunc('articles', 'admin', 'create', $article);
+                        if (empty($newid)) {
+                            return;
+                        }
                     } else {
                         $newid = -$itemid; // simulate some new itemid :-)
                         $debug .= xarML('Creating article #(1) :', $newid);
@@ -237,10 +279,14 @@ function dynamicdata_utilapi_migrate(Array $args=array())
 
         case 'dynamicdata':
             foreach ($items as $itemid => $item) {
-                $values = array();
+                $values = [];
                 foreach ($fieldmap as $fromfield => $tofield) {
-                    if (empty($fromfield) || empty($tofield)) continue;
-                    if (!isset($item[$fromfield])) continue;
+                    if (empty($fromfield) || empty($tofield)) {
+                        continue;
+                    }
+                    if (!isset($item[$fromfield])) {
+                        continue;
+                    }
                     // Note: this will also set any DD fields for the update hooks
                     $values[$tofield] = $item[$fromfield];
                 }
@@ -248,12 +294,16 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                     continue;
                 }
                 if (empty($debug)) {
-                    $newid = xarMod::apiFunc('dynamicdata','admin','create',
-                                           array('module_id'    => $to['module'],
+                    $newid = xarMod::apiFunc(
+                        'dynamicdata',
+                        'admin',
+                        'create',
+                        ['module_id'    => $to['module'],
                                                  'itemtype' => $to['itemtype'],
                                                  // try to preset the itemid if necessary
                                                  'itemid'   => !empty($to['itemid']) ? $itemid : 0,
-                                                 'values'   => $values));
+                                                 'values'   => $values]
+                    );
                 } else {
                     $newid = -$itemid; // simulate some new itemid :-)
                     $debug .= xarML('Creating DD item #(1) :', $newid);
@@ -270,15 +320,21 @@ function dynamicdata_utilapi_migrate(Array $args=array())
             if ($modulefrom == 'xarbb') { // only allow updates within xarbb atm, not copies
                 $sameid = true;
                 foreach ($items as $itemid => $item) {
-                    $topic = array('tid' => $itemid);
+                    $topic = ['tid' => $itemid];
                     if ($from['itemtype'] != $to['itemtype']) {
                         $topic['fid'] = $to['itemtype'];
                     }
                     foreach ($fieldmap as $fromfield => $tofield) {
-                        if (empty($fromfield) || empty($tofield)) continue;
-                        if (!isset($item[$fromfield])) continue;
+                        if (empty($fromfield) || empty($tofield)) {
+                            continue;
+                        }
+                        if (!isset($item[$fromfield])) {
+                            continue;
+                        }
                         // we only need to pass updated fields to the xarbb updatetopic function
-                        if ($fromfield == $tofield) continue;
+                        if ($fromfield == $tofield) {
+                            continue;
+                        }
                         // Note: this will also set any DD fields for the update hooks
                         $topic[$tofield] = $item[$fromfield];
                     }
@@ -290,7 +346,9 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                         $topic['time'] = $topic['ttime'];
                     }
                     if (empty($debug)) {
-                        if (!xarMod::apiFunc('xarbb','user','updatetopic',$topic)) return;
+                        if (!xarMod::apiFunc('xarbb', 'user', 'updatetopic', $topic)) {
+                            return;
+                        }
                     } else {
                         $debug .= xarML('Updating topic #(1) :', $itemid);
                         $debug .= "\n";
@@ -307,11 +365,15 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                 }
             } else {
                 foreach ($items as $itemid => $item) {
-                    $topic = array();
+                    $topic = [];
                     $topic['fid'] = $to['itemtype'];
                     foreach ($fieldmap as $fromfield => $tofield) {
-                        if (empty($fromfield) || empty($tofield)) continue;
-                        if (!isset($item[$fromfield])) continue;
+                        if (empty($fromfield) || empty($tofield)) {
+                            continue;
+                        }
+                        if (!isset($item[$fromfield])) {
+                            continue;
+                        }
                         // Note: this will also set any DD fields for the create hooks
                         $topic[$tofield] = $item[$fromfield];
                     }
@@ -322,8 +384,10 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                         $topic['tid'] = $itemid; // this may give us trouble with create hooks
                     }
                     if (empty($debug)) {
-                        $newid = xarMod::apiFunc('xarbb','user','createtopic',$topic);
-                        if (empty($newid)) return;
+                        $newid = xarMod::apiFunc('xarbb', 'user', 'createtopic', $topic);
+                        if (empty($newid)) {
+                            return;
+                        }
                     } else {
                         $newid = -$itemid; // simulate some new itemid :-)
                         $debug .= xarML('Creating topic #(1) :', $newid);
@@ -350,16 +414,22 @@ function dynamicdata_utilapi_migrate(Array $args=array())
             if ($modulefrom == 'xarpages') { // only allow updates within xarpages atm, not copies
                 $sameid = true;
                 foreach ($items as $itemid => $item) {
-                    $page = array('pid' => $itemid);
+                    $page = ['pid' => $itemid];
                     if ($from['itemtype'] != $to['itemtype']) {
-// FIXME: changing itemtype is not supported by xarpages updatepage yet !
+                        // FIXME: changing itemtype is not supported by xarpages updatepage yet !
                         $page['itemtype'] = $to['itemtype'];
                     }
                     foreach ($fieldmap as $fromfield => $tofield) {
-                        if (empty($fromfield) || empty($tofield)) continue;
-                        if (!isset($item[$fromfield])) continue;
+                        if (empty($fromfield) || empty($tofield)) {
+                            continue;
+                        }
+                        if (!isset($item[$fromfield])) {
+                            continue;
+                        }
                         // we only need to pass updated fields to the xarpages updatepage function
-                        if ($fromfield == $tofield) continue;
+                        if ($fromfield == $tofield) {
+                            continue;
+                        }
                         // Note: this will also set any DD fields for the update hooks
                         $page[$tofield] = $item[$fromfield];
                     }
@@ -367,7 +437,9 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                         continue;
                     }
                     if (empty($debug)) {
-                        if (!xarMod::apiFunc('xarpages','admin','updatepage',$page)) return;
+                        if (!xarMod::apiFunc('xarpages', 'admin', 'updatepage', $page)) {
+                            return;
+                        }
                     } else {
                         $debug .= xarML('Updating page #(1) :', $itemid);
                         $debug .= "\n";
@@ -379,11 +451,15 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                 }
             } else {
                 foreach ($items as $itemid => $item) {
-                    $page = array();
+                    $page = [];
                     $page['itemtype'] = $to['itemtype'];
                     foreach ($fieldmap as $fromfield => $tofield) {
-                        if (empty($fromfield) || empty($tofield)) continue;
-                        if (!isset($item[$fromfield])) continue;
+                        if (empty($fromfield) || empty($tofield)) {
+                            continue;
+                        }
+                        if (!isset($item[$fromfield])) {
+                            continue;
+                        }
                         // Note: this will also set any DD fields for the create hooks
                         $page[$tofield] = $item[$fromfield];
                     }
@@ -391,12 +467,14 @@ function dynamicdata_utilapi_migrate(Array $args=array())
                         continue;
                     }
                     if (!empty($to['itemid'])) {
-// FIXME: specifying pid is not supported by xarpages createpage yet !
+                        // FIXME: specifying pid is not supported by xarpages createpage yet !
                         $page['pid'] = $itemid; // this may give us trouble with create hooks
                     }
                     if (empty($debug)) {
-                        $newid = xarMod::apiFunc('xarpages','admin','createpage',$page);
-                        if (empty($newid)) return;
+                        $newid = xarMod::apiFunc('xarpages', 'admin', 'createpage', $page);
+                        if (empty($newid)) {
+                            return;
+                        }
                     } else {
                         $newid = -$itemid; // simulate some new itemid :-)
                         $debug .= xarML('Creating page #(1) :', $newid);
@@ -415,14 +493,18 @@ function dynamicdata_utilapi_migrate(Array $args=array())
     }
 
     // update hook modules
-    $result = xarMod::apiFunc('dynamicdata','util','updatehooks',
-                            array('from'    => $from,
+    $result = xarMod::apiFunc(
+        'dynamicdata',
+        'util',
+        'updatehooks',
+        ['from'    => $from,
                                   'to'      => $to,
                                   'hookmap' => $hookmap,
                                   'itemids' => $newitemids,
-                                  'debug'   => empty($debug) ? '' : $debug));
+                                  'debug'   => empty($debug) ? '' : $debug]
+    );
     if (!$result) {
-         return;
+        return;
     }
     if (!empty($debug)) {
         $debug = $result;
@@ -430,7 +512,9 @@ function dynamicdata_utilapi_migrate(Array $args=array())
 
     // delete old items now
     foreach ($newitemids as $itemid => $newid) {
-        if (empty($itemid) || empty($newid)) continue;
+        if (empty($itemid) || empty($newid)) {
+            continue;
+        }
         if ($from['module'] == $to['module'] && $newid == $itemid &&
             ($moduleto == 'articles' || $moduleto == 'xarbb' || $moduleto == 'xarpages')) {
             // don't delete articles or topics when moving itemtypes
@@ -440,46 +524,67 @@ function dynamicdata_utilapi_migrate(Array $args=array())
             continue;
         }
         // TODO: check itemtype difference for non-articles et al. ?
-        switch ($modulefrom)
-        {
+        switch ($modulefrom) {
             case 'articles':
                 if (empty($debug)) {
-                    if (!xarMod::apiFunc('articles','admin','delete',
-                                       array('ptid' => $from['itemtype'],
-                                             'aid'  => $itemid))) {
+                    if (!xarMod::apiFunc(
+                        'articles',
+                        'admin',
+                        'delete',
+                        ['ptid' => $from['itemtype'],
+                                             'aid'  => $itemid]
+                    )) {
                         return;
                     }
                 } else {
-                    $debug .= xarML('Deleting article #(1) from pubtype #(2)',
-                                    $itemid, $from['itemtype']);
+                    $debug .= xarML(
+                        'Deleting article #(1) from pubtype #(2)',
+                        $itemid,
+                        $from['itemtype']
+                    );
                     $debug .= "\n";
                 }
                 break;
 
             case 'dynamicdata':
                 if (empty($debug)) {
-                    if (!xarMod::apiFunc('dynamicdata','admin','delete',
-                                       array('module_id'    => $from['module'],
+                    if (!xarMod::apiFunc(
+                        'dynamicdata',
+                        'admin',
+                        'delete',
+                        ['module_id'    => $from['module'],
                                              'itemtype' => $from['itemtype'],
-                                             'itemid'   => $itemid))) {
+                                             'itemid'   => $itemid]
+                    )) {
                         return;
                     }
                 } else {
-                    $debug .= xarML('Deleting DD item #(1) from module #(2) itemtype #(3)',
-                                    $itemid, $from['module'], $from['itemtype']);
+                    $debug .= xarML(
+                        'Deleting DD item #(1) from module #(2) itemtype #(3)',
+                        $itemid,
+                        $from['module'],
+                        $from['itemtype']
+                    );
                     $debug .= "\n";
                 }
                 break;
 
             case 'xarbb':
                 if (empty($debug)) {
-                    if (!xarMod::apiFunc('xarbb','admin','deletetopics',
-                                       array('tid'  => $itemid))) {
+                    if (!xarMod::apiFunc(
+                        'xarbb',
+                        'admin',
+                        'deletetopics',
+                        ['tid'  => $itemid]
+                    )) {
                         return;
                     }
                 } else {
-                    $debug .= xarML('Deleting topic #(1) from forum #(2)',
-                                    $itemid, $from['itemtype']);
+                    $debug .= xarML(
+                        'Deleting topic #(1) from forum #(2)',
+                        $itemid,
+                        $from['itemtype']
+                    );
                     $debug .= "\n";
                 }
                 break;
@@ -492,41 +597,63 @@ function dynamicdata_utilapi_migrate(Array $args=array())
     if ($modulefrom == 'xarbb') {
         if (empty($debug)) {
             // re-sync original forum
-            if (!xarMod::apiFunc('xarbb','admin','sync',
-                               array('fid' => $from['itemtype']))) {
+            if (!xarMod::apiFunc(
+                'xarbb',
+                'admin',
+                'sync',
+                ['fid' => $from['itemtype']]
+            )) {
                 return;
             }
         } else {
-            $debug .= xarML('Re-synchronizing forum #(1)',
-                            $from['itemtype']);
+            $debug .= xarML(
+                'Re-synchronizing forum #(1)',
+                $from['itemtype']
+            );
             $debug .= "\n";
         }
     }
     if ($moduleto == 'xarbb' && ($modulefrom != 'xarbb' || $from['itemtype'] != $to['itemtype'])) {
         if (empty($debug)) {
             foreach ($newitemids as $itemid => $newid) {
-                if (empty($itemid) || empty($newid)) continue;
-                if (!xarMod::apiFunc('xarbb','user','updatetopicsview',
-                                   array('tid' => $newid))) {
+                if (empty($itemid) || empty($newid)) {
+                    continue;
+                }
+                if (!xarMod::apiFunc(
+                    'xarbb',
+                    'user',
+                    'updatetopicsview',
+                    ['tid' => $newid]
+                )) {
                     return;
                 }
             }
             // re-sync new forum
-            if (!xarMod::apiFunc('xarbb','admin','sync',
-                               array('fid' => $to['itemtype']))) {
+            if (!xarMod::apiFunc(
+                'xarbb',
+                'admin',
+                'sync',
+                ['fid' => $to['itemtype']]
+            )) {
                 return;
             }
         } else {
-            $itemlist = array();
+            $itemlist = [];
             foreach ($newitemids as $itemid => $newid) {
-                if (empty($itemid) || empty($newid)) continue;
+                if (empty($itemid) || empty($newid)) {
+                    continue;
+                }
                 $itemlist[] = $newid;
             }
-            $debug .= xarML('Updating topic view for items #(1)',
-                            join(',',$itemlist));
+            $debug .= xarML(
+                'Updating topic view for items #(1)',
+                join(',', $itemlist)
+            );
             $debug .= "\n";
-            $debug .= xarML('Re-synchronizing forum #(1)',
-                            $to['itemtype']);
+            $debug .= xarML(
+                'Re-synchronizing forum #(1)',
+                $to['itemtype']
+            );
             $debug .= "\n";
         }
     }

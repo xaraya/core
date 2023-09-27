@@ -19,8 +19,8 @@
  * may lead to inablity of the system to process
  * the file correctly, resulting in unexpected results.
  */
- 
-$modversion = array(
+
+$modversion = [
     'name'               => 'Dynamic Data',
     'id'                 => '182',
     'displayname'        => xarMLS::translate('Dynamic Data'),
@@ -38,4 +38,4 @@ $modversion = array(
     'user'               => true,
     'class'              => 'Core Complete',
     'category'           => 'Content',
-);
+];

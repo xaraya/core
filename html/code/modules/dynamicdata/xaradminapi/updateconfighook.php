@@ -20,10 +20,10 @@
  * @return array true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_updateconfighook(Array $args=array())
+function dynamicdata_adminapi_updateconfighook(array $args = [])
 {
     if (!isset($args['extrainfo'])) {
-        $args['extrainfo'] = array();
+        $args['extrainfo'] = [];
     }
     // Return the extra info
     return $args['extrainfo'];

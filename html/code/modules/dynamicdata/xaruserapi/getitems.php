@@ -35,7 +35,7 @@
  * @return array|DataObjectList|void of (itemid => array of (name => value)), or false on failure
  * @throws BadParameterException
  */
-function &dynamicdata_userapi_getitems(Array $args=array())
+function &dynamicdata_userapi_getitems(array $args = [])
 {
     extract($args);
     $nullreturn = null;
@@ -57,7 +57,7 @@ function &dynamicdata_userapi_getitems(Array $args=array())
         $itemtype = 0;
     }
 
-    $invalid = array();
+    $invalid = [];
     if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
         $invalid[] = 'module id';
     }
@@ -66,21 +66,21 @@ function &dynamicdata_userapi_getitems(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'user', 'getitems', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'user', 'getitems', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     if (empty($itemids)) {
-        $itemids = array();
+        $itemids = [];
     } elseif (!is_array($itemids)) {
-        $itemids = explode(',',$itemids);
+        $itemids = explode(',', $itemids);
     }
 
     // check the optional field list
     if (empty($fieldlist)) {
         $fieldlist = null;
     } elseif (is_string($fieldlist)) {
-        $fieldlist = explode(',',$fieldlist);
+        $fieldlist = explode(',', $fieldlist);
     }
 
     // limit to property fields of a certain status (e.g. active)
@@ -96,13 +96,13 @@ function &dynamicdata_userapi_getitems(Array $args=array())
     }
 
     if (empty($sort)) {
-        $sort = array();
+        $sort = [];
     }
     if (empty($where)) {
         $where = '';
     }
     if (empty($groupby)) {
-        $groupby = array();
+        $groupby = [];
     }
 
     // join a module table to a dynamic object
@@ -118,11 +118,13 @@ function &dynamicdata_userapi_getitems(Array $args=array())
         $catid = '';
     }
 
-    $args = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype));
-    $emptyarray = array();
-    if (empty($args['objectid'])) return $emptyarray;
-    $object = DataObjectMaster::getObjectList(array('objectid'  => $args['objectid'],
+    $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype]);
+    $emptyarray = [];
+    if (empty($args['objectid'])) {
+        return $emptyarray;
+    }
+    $object = DataObjectMaster::getObjectList(['objectid'  => $args['objectid'],
                                            'itemids' => $itemids,
                                            'sort' => $sort,
                                            'numitems' => $numitems,
@@ -133,10 +135,13 @@ function &dynamicdata_userapi_getitems(Array $args=array())
                                            'table' => $table,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status));
-    if (!isset($object) || (empty($object->objectid) && empty($object->table))) return $nullreturn;
-    if (!$object->checkAccess('view'))
+                                           'status' => $status]);
+    if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
         return $nullreturn;
+    }
+    if (!$object->checkAccess('view')) {
+        return $nullreturn;
+    }
 
     if (!empty($getobject)) {
         $object->getItems();

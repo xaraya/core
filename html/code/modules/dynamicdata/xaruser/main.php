@@ -15,20 +15,20 @@
 /**
  * The main user interface function of this module.
  * This function is the default function, and is called whenever the module is
- * initiated without defining arguments.  
+ * initiated without defining arguments.
  * The function displays a list of DD's available modules.
  *
  * @return array|bool empty array of data for the template display
  */
-function dynamicdata_user_main(Array $args=array())
+function dynamicdata_user_main(array $args = [])
 {
-    $redirect = xarModVars::get('dynamicdata','frontend_page');
+    $redirect = xarModVars::get('dynamicdata', 'frontend_page');
     if (!empty($redirect)) {
-        $truecurrenturl = xarServer::getCurrentURL(array(), false);
-        $urldata = xarMod::apiFunc('roles','user','parseuserhome',array('url'=> $redirect,'truecurrenturl'=>$truecurrenturl));
+        $truecurrenturl = xarServer::getCurrentURL([], false);
+        $urldata = xarMod::apiFunc('roles', 'user', 'parseuserhome', ['url' => $redirect,'truecurrenturl' => $truecurrenturl]);
         xarController::redirect($urldata['redirecturl']);
         return true;
     } else {
-        return array();
+        return [];
     }
 }

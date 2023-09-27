@@ -16,7 +16,7 @@
  * Main entry point for the admin interface of this module
  *
  * This function is the default function for the admin interface, and is called whenever the module is
- * initiated with only an admin type but no func parameter passed.  
+ * initiated with only an admin type but no func parameter passed.
  * The function displays the module's overview page, or redirects to another page if overviews are disabled.
  *
  * @return mixed output display string or boolean true if redirected
@@ -25,14 +25,16 @@
 function dynamicdata_admin_main()
 {
     // Security
-    if(!xarSecurity::check('EditDynamicData')) return;
+    if(!xarSecurity::check('EditDynamicData')) {
+        return;
+    }
 
     $refererinfo = xarController::getRequest()->getInfo(xarServer::getVar('HTTP_REFERER'));
     $info = xarController::getRequest()->getInfo();
     $samemodule = $info[0] == $refererinfo[0];
-    
-    if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
-        return xarTpl::module('dynamicdata','admin','overview');
+
+    if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
+        return xarTpl::module('dynamicdata', 'admin', 'overview');
     } else {
         xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view'));
         return true;

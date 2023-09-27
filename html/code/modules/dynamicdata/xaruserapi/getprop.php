@@ -26,7 +26,7 @@
  * @return mixed value of the field, or false on failure
  * @throws BadParameterException
  */
-function dynamicdata_userapi_getprop(array $args=[])
+function dynamicdata_userapi_getprop(array $args = [])
 {
     static $propertybag = [];
 

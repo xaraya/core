@@ -107,7 +107,7 @@ trait xarGraphQLQueryItemTrait
                     $values['config'] = [$objectitem->config];
                 }
             }
-            xarGraphQL::$object_ref[$object] =& $objectitem;
+            xarGraphQL::$object_ref[$object] = & $objectitem;
             return $values;
         };
         return $resolver;

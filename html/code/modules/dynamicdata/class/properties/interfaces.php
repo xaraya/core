@@ -19,15 +19,15 @@ interface iDataProperty
     // @checkme this shouldn't be here at all - see PropertyRegistration instead
     public function getValue();
     public function parseConfiguration($configuration = '');
-    public function showConfiguration(Array $data = array());
-    public function updateConfiguration(Array $data = array());
-    public function setValue($value=null);
-    public function showHidden(Array $args = array());
-    public function showInput(Array $args = array());
-    public function showLabel(Array $args = array());
-//    CHECKME: public  or what?
-//    public function _showPreset(Array $args = array());
-    public function showOutput(Array $args = array());
+    public function showConfiguration(array $data = []);
+    public function updateConfiguration(array $data = []);
+    public function setValue($value = null);
+    public function showHidden(array $args = []);
+    public function showInput(array $args = []);
+    public function showLabel(array $args = []);
+    //    CHECKME: public  or what?
+    //    public function _showPreset(Array $args = array());
+    public function showOutput(array $args = []);
     public function validateValue($value = null);
 }
 
@@ -44,5 +44,5 @@ interface iDataProperty
  */
 interface iDataPropertyInstall
 {
-    public function install(Array $data=array());
+    public function install(array $data = []);
 }

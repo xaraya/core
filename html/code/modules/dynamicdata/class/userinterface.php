@@ -231,11 +231,11 @@ class DataObjectUserInterface extends xarObject
                 $realmethod = $this->alias[$args['method']];
                 $methodmap = $this->mapper[$realmethod];
 
-            // see if the method is defined
+                // see if the method is defined
             } elseif (!empty($this->mapper[$args['method']])) {
                 $methodmap = $this->mapper[$args['method']];
 
-            // run any unknown gui method via the default handler
+                // run any unknown gui method via the default handler
             } else {
                 $methodmap = $this->mapper['default'];
             }

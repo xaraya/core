@@ -187,7 +187,7 @@ class SearchHandler extends DefaultHandler
             if (!empty($result->where)) {
                 //$wherestring = $result->where;
                 $join = 'and';
-            // TODO: wrap OR statements in (...) below
+                // TODO: wrap OR statements in (...) below
             } else {
                 $join = '';
             }

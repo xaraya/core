@@ -16,57 +16,90 @@
  * @param 'itemid' the id of the item to be deleted
  * @param 'confirm' confirm that this item can be deleted
  */
-function dynamicdata_admin_delete(Array $args=array())
+function dynamicdata_admin_delete(array $args = [])
 {
-   extract($args);
+    extract($args);
 
-    if(!xarVar::fetch('objectid',   'isset', $objectid,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('name',       'isset', $name,       NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemid',     'int:1:',    $itemid, 0, xarVar::NOT_REQUIRED)) {return;}
-    if (empty($itemid)) return xarResponse::notFound();
-    if(!xarVar::fetch('confirm',    'isset', $confirm,    NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('noconfirm',  'isset', $noconfirm,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('join',       'isset', $join,       NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('table',      'isset', $table,      NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('tplmodule',  'isset', $tplmodule,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('template',   'isset', $template,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('return_url', 'isset', $return_url, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemid', 'int:1:', $itemid, 0, xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (empty($itemid)) {
+        return xarResponse::notFound();
+    }
+    if(!xarVar::fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('noconfirm', 'isset', $noconfirm, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('join', 'isset', $join, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('tplmodule', 'isset', $tplmodule, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET)) {
+        return;
+    }
 
-    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
+    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
                                          'name'       => $name,
                                          'join'       => $join,
                                          'table'      => $table,
                                          'itemid'     => $itemid,
                                          'tplmodule'  => $tplmodule,
-                                         'template'   => $template));
-    if (empty($myobject)) return;
-    
+                                         'template'   => $template]);
+    if (empty($myobject)) {
+        return;
+    }
+
     // Security
-    if (!$myobject->checkAccess('delete'))
+    if (!$myobject->checkAccess('delete')) {
         return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $myobject->label));
+    }
 
     $data = $myobject->toArray();
 
     // recover any session var information and remove it from the var
-    $data = array_merge($data,xarMod::apiFunc('dynamicdata','user','getcontext',array('module' => $tplmodule)));
-    xarSession::setVar('ddcontext.' . $tplmodule, array('tplmodule' => $tplmodule));
+    $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'user', 'getcontext', ['module' => $tplmodule]));
+    xarSession::setVar('ddcontext.' . $tplmodule, ['tplmodule' => $tplmodule]);
     extract($data);
 
     if (!empty($noconfirm)) {
         if (!empty($return_url)) {
             xarController::redirect($return_url);
         } elseif (!empty($table)) {
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
-                                          array(
+            xarController::redirect(xarController::URL(
+                'dynamicdata',
+                'admin',
+                'view',
+                [
                                             'table'     => $table,
                                             'tplmodule' => $data['tplmodule'],
-                                          )));
+                                          ]
+            ));
         } else {
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
-                                          array(
+            xarController::redirect(xarController::URL(
+                'dynamicdata',
+                'admin',
+                'view',
+                [
                                             'itemid'    => $data['objectid'],
                                             'tplmodule' => $data['tplmodule'],
-                                          )));
+                                          ]
+            ));
         }
         return true;
     }
@@ -77,9 +110,10 @@ function dynamicdata_admin_delete(Array $args=array())
         // handle special cases
         if ($myobject->objectid == 1) {
             // check security of the parent object
-            $tmpobject = DataObjectMaster::getObject(array('objectid' => $myobject->itemid));
-            if (!$tmpobject->checkAccess('config'))
+            $tmpobject = DataObjectMaster::getObject(['objectid' => $myobject->itemid]);
+            if (!$tmpobject->checkAccess('config')) {
                 return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+            }
 
             // if we're editing a dynamic object, check its own visibility
             if ($myobject->itemid > 3) {
@@ -92,17 +126,18 @@ function dynamicdata_admin_delete(Array $args=array())
 
         } elseif ($myobject->objectid == 2) {
             // check security of the parent object
-            $tmpobject = DataObjectMaster::getObject(array('objectid' => $myobject->properties['objectid']->value));
-            if (!$tmpobject->checkAccess('config'))
+            $tmpobject = DataObjectMaster::getObject(['objectid' => $myobject->properties['objectid']->value]);
+            if (!$tmpobject->checkAccess('config')) {
                 return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+            }
             unset($tmpobject);
         }
 
         // TODO: is this needed?
-        $data = array_merge($data,xarMod::apiFunc('dynamicdata','admin','menu'));
+        $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
         $data['object'] = $myobject;
         if ($data['objectid'] == 1) {
-            $mylist = DataObjectMaster::getObjectList(array('objectid' => $data['itemid']));
+            $mylist = DataObjectMaster::getObjectList(['objectid' => $data['itemid']]);
             if (count($mylist->properties) > 0) {
                 $data['related'] = xarML('Warning : there are #(1) properties and #(2) items associated with this object !', count($mylist->properties), $mylist->countItems());
             }
@@ -113,25 +148,25 @@ function dynamicdata_admin_delete(Array $args=array())
 
         if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete.xt') ||
             file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-delete-' . $data['template'] . '.xt')) {
-            return xarTpl::module($data['tplmodule'],'admin','delete',$data,$data['template']);
+            return xarTpl::module($data['tplmodule'], 'admin', 'delete', $data, $data['template']);
         } else {
-            return xarTpl::module('dynamicdata','admin','delete',$data,$data['template']);
+            return xarTpl::module('dynamicdata', 'admin', 'delete', $data, $data['template']);
         }
     }
 
     // If we get here it means that the user has confirmed the action
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
+        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+    }
 
     // special case for a dynamic object : delete its properties too // TODO: and items
-// TODO: extend to any parent-child relation ?
+    // TODO: extend to any parent-child relation ?
     if ($data['objectid'] == 1) {
-        $mylist = DataObjectMaster::getObjectList(array('objectid' => $data['itemid']));
+        $mylist = DataObjectMaster::getObjectList(['objectid' => $data['itemid']]);
         foreach (array_keys($mylist->properties) as $name) {
             $propid = $mylist->properties[$name]->id;
-            $propid = DataPropertyMaster::deleteProperty(array('itemid' => $propid));
+            $propid = DataPropertyMaster::deleteProperty(['itemid' => $propid]);
         }
     }
 
@@ -139,17 +174,25 @@ function dynamicdata_admin_delete(Array $args=array())
     if (!empty($return_url)) {
         xarController::redirect($return_url);
     } elseif (!empty($table)) {
-        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
-                                      array(
+        xarController::redirect(xarController::URL(
+            'dynamicdata',
+            'admin',
+            'view',
+            [
                                       'table'     => $table,
                                       'tplmodule' => $tplmodule,
-                                      )));
+                                      ]
+        ));
     } else {
-        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view',
-                                      array(
+        xarController::redirect(xarController::URL(
+            'dynamicdata',
+            'admin',
+            'view',
+            [
                                       'name' => $myobject->name,
                                       'tplmodule' => $tplmodule,
-                                      )));
+                                      ]
+        ));
     }
 
     return true;

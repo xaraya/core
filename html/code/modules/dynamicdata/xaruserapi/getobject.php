@@ -20,7 +20,7 @@
  *        string   $args['itemtype'] item type of the item field to get
  * @return object a particular DataObject
  */
-function dynamicdata_userapi_getobject(array $args=[])
+function dynamicdata_userapi_getobject(array $args = [])
 {
     if (empty($args['objectid']) && empty($args['name'])) {
         sys::import('modules.dynamicdata.class.objects.descriptor');

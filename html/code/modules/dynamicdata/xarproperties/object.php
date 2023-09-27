@@ -19,7 +19,7 @@ sys::import('modules.dynamicdata.xarproperties.objectref');
 /**
  * * This is a specific version of the objectref property
  * It displays a drodown of defined dataobjects
- * All dataobjects are defined to be items of the "first" dataobject (called "object"), 
+ * All dataobjects are defined to be items of the "first" dataobject (called "object"),
  * so this is nothing more than an objectref property where the object in question is "object"
  *
  * Options available to user selection

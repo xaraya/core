@@ -14,7 +14,7 @@ sys::import('modules.dynamicdata.class.rest.builder');
 /**
  * Test APIs
  */
-function dynamicdata_admin_test_apis(array $args=[])
+function dynamicdata_admin_test_apis(array $args = [])
 {
     // Security
     if (!xarSecurity::check('EditDynamicData')) {
@@ -56,8 +56,7 @@ function dynamicdata_admin_test_apis(array $args=[])
             $modtime = filemtime($apiFile);
             //xarPageCache::sendHeaders($modtime);
             $etag = $cacheCode.$modtime;
-            $match = isset($_SERVER['HTTP_IF_NONE_MATCH']) ?
-                $_SERVER['HTTP_IF_NONE_MATCH'] : NULL;
+            $match = $_SERVER['HTTP_IF_NONE_MATCH'] ?? null;
             if (!empty($match) && $match == $etag) {
                 header('HTTP/1.1 304 Not Modified');
                 header("Cache-Control: public, must-revalidate");
@@ -106,7 +105,7 @@ function dynamicdata_admin_test_apis(array $args=[])
     xarVar::fetch('tokenstorage', 'isset', $storageType, 'database', xarVar::NOT_REQUIRED);
     xarVar::fetch('tokenexpires', 'isset', $tokenExpires, '12:00:00', xarVar::NOT_REQUIRED);
     if (!empty($tokenExpires)) {
-        list($hour, $min, $sec) = explode(':', $tokenExpires);
+        [$hour, $min, $sec] = explode(':', $tokenExpires);
         $tokenExpires = (((intval($hour) * 60) + intval($min)) * 60) + intval($sec);
     } else {
         $tokenExpires = 12 * 60 * 60;  // 12 hours
@@ -164,7 +163,7 @@ function dynamicdata_admin_test_apis(array $args=[])
     }
     if (!empty($create_rst)) {
         DataObjectRESTBuilder::create_openapi($restapilist, $storageType, $tokenExpires, $enableTimer, $enableCache);
-        xarController::redirect(xarServer::getCurrentURL(['create_rst'=> null]));
+        xarController::redirect(xarServer::getCurrentURL(['create_rst' => null]));
         return true;
     }
     if (!xarVar::fetch('create_gql', 'notempty', $create_gql, 0, xarVar::NOT_REQUIRED)) {
@@ -184,7 +183,7 @@ function dynamicdata_admin_test_apis(array $args=[])
         sys::import('modules.dynamicdata.class.graphql');
         $extraTypes = xarGraphQL::find_extra_types($graphqllist);
         xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);
-        xarController::redirect(xarServer::getCurrentURL(['create_gql'=> null]));
+        xarController::redirect(xarServer::getCurrentURL(['create_gql' => null]));
         return true;
     }
 

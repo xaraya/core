@@ -7,7 +7,7 @@
  *       |
  *       |-- DataObject        - base class for all dynamic objects.
  *       |-- DataObjectList   - creates an object with a list of values for a DD object. (weird duckling in here)
- * 
+ *
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework

@@ -21,13 +21,19 @@
 function dynamicdata_admin_modifyconfig()
 {
     // Security
-    if (!xarSecurity::check('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     $data = [];
-    if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) return;
-    if (!xarVar::fetch('tab','str:1', $data['tab'], 'general', xarVar::NOT_REQUIRED)) return;
+    if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
+        return;
+    }
+    if (!xarVar::fetch('tab', 'str:1', $data['tab'], 'general', xarVar::NOT_REQUIRED)) {
+        return;
+    }
 
-    $data['module_settings'] = xarMod::apiFunc('base','admin','getmodulesettings',array('module' => 'dynamicdata'));
+    $data['module_settings'] = xarMod::apiFunc('base', 'admin', 'getmodulesettings', ['module' => 'dynamicdata']);
     $data['module_settings']->setFieldList('items_per_page, use_module_alias, module_alias_name, use_module_icons');
     $data['module_settings']->getItem();
     switch (strtolower($phase)) {
@@ -39,31 +45,39 @@ function dynamicdata_admin_modifyconfig()
         case 'update':
             // Confirm authorisation code
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
             }
-            if (!xarVar::fetch('debugmode',        'checkbox', $debugmode,        xarModVars::get('dynamicdata', 'debugmode'), xarVar::NOT_REQUIRED)) return;
-            if (!xarVar::fetch('show_queries',     'checkbox', $show_queries,     xarConfigVars::get(null, 'Site.BL.ShowQueries'), xarVar::NOT_REQUIRED)) return;
-            if (!xarVar::fetch('suppress_updates', 'checkbox', $suppress_updates, false, xarVar::NOT_REQUIRED)) return;
-//            if (!xarVar::fetch('administrators', 'str', $administrators, '', xarVar::NOT_REQUIRED)) return;
-            if (!xarVar::fetch('caching',    'checkbox', $caching, xarModVars::get('dynamicdata', 'caching'), xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('debugmode', 'checkbox', $debugmode, xarModVars::get('dynamicdata', 'debugmode'), xarVar::NOT_REQUIRED)) {
+                return;
+            }
+            if (!xarVar::fetch('show_queries', 'checkbox', $show_queries, xarConfigVars::get(null, 'Site.BL.ShowQueries'), xarVar::NOT_REQUIRED)) {
+                return;
+            }
+            if (!xarVar::fetch('suppress_updates', 'checkbox', $suppress_updates, false, xarVar::NOT_REQUIRED)) {
+                return;
+            }
+            //            if (!xarVar::fetch('administrators', 'str', $administrators, '', xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch('caching', 'checkbox', $caching, xarModVars::get('dynamicdata', 'caching'), xarVar::NOT_REQUIRED)) {
+                return;
+            }
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
-                return xarTpl::module('dynamicdata','admin','modifyconfig', $data);
+                return xarTpl::module('dynamicdata', 'admin', 'modifyconfig', $data);
             } else {
                 $itemid = $data['module_settings']->updateItem();
             }
 
-/*
-            $admins = explode(',',$administrators);
-            $validadmins = array();
-            foreach ($admins as $admin) {
-                if (empty($admin)) continue;
-                $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($admin)));
-                if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
-            }
-            xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
-*/
+            /*
+                        $admins = explode(',',$administrators);
+                        $validadmins = array();
+                        foreach ($admins as $admin) {
+                            if (empty($admin)) continue;
+                            $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($admin)));
+                            if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
+                        }
+                        xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
+            */
             xarModVars::set('dynamicdata', 'debugmode', $debugmode);
             xarConfigVars::set(null, 'Site.BL.ShowQueries', $show_queries);
             xarModVars::set('dynamicdata', 'suppress_updates', $suppress_updates);

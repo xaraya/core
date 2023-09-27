@@ -98,7 +98,7 @@ trait xarGraphQLQueryListTrait
             $params = $loader->addPagingParams();
             $items = $objectlist->getItems($params);
             //$items = $loader->query($args);
-            xarGraphQL::$object_ref[$object] =& $objectlist;
+            xarGraphQL::$object_ref[$object] = & $objectlist;
             return $items;
         };
         return $resolver;

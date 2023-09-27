@@ -149,19 +149,19 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
                 // => ['itemtype' => ['type' => 'string'], 'itemids' => ['type' => 'array', 'items' => ['type' => 'string']]]
                 if (array_key_exists("type", $name)) {
                     $properties[$key] = $name['type'];
-                // => ['itemtype' => 'string', 'itemids' => ['integer']]
+                    // => ['itemtype' => 'string', 'itemids' => ['integer']]
                 } else {
                     // @checkme use style = form + explode = true here
                     $properties[$key] = [$name[0]];
                 }
-            // => ['itemtype' => 'string', 'itemids' => 'array']
+                // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif (in_array($name, ["string", "integer", "boolean"])) {
                 $properties[$key] = $name;
-            // => ['itemtype' => 'string', 'itemids' => 'array']
+                // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif ($name === "array") {
                 // @checkme use style = form + explode = true here
                 $properties[$key] = ['string'];
-            //} elseif ($name === "object") {
+                //} elseif ($name === "object") {
             } else {
             }
         }
@@ -265,7 +265,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
             // @checkme we only get the relevant 'args' values via the input type here
             if (is_array($func['args']) && !is_numeric(array_key_first($func['args']))) {
                 $args = ['args' => $args];
-            // @todo get rid of module, type and func args later
+                // @todo get rid of module, type and func args later
             } elseif (empty($args['module']) || $args['module'] != $func['module']) {
                 throw new Exception("Invalid module for $func[module] $func[type] $func[func] function");
             }
@@ -435,7 +435,7 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
             // @checkme we only get the relevant 'args' values via the input type here
             if (is_array($func['args']) && !is_numeric(array_key_first($func['args']))) {
                 $args = ['args' => $args];
-            // @todo get rid of module, type and func args later
+                // @todo get rid of module, type and func args later
             } elseif (empty($args['module']) || $args['module'] != $func['module']) {
                 throw new Exception("Invalid module for $func[module] $func[type] $func[func] function");
             }

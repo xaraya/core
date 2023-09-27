@@ -17,9 +17,9 @@
  *        string   $args the function and arguments passed to xarController::URL
  * @return string|void path to be added to index.php for a short URL, or empty if failed
  */
-function dynamicdata_userapi_encode_shorturl(Array $args=array())
+function dynamicdata_userapi_encode_shorturl(array $args = [])
 {
-    static $objectcache = array();
+    static $objectcache = [];
 
     // Get arguments from argument array
     extract($args);
@@ -94,7 +94,7 @@ function dynamicdata_userapi_encode_shorturl(Array $args=array())
     }
     // anything else does not have a short URL equivalent
 
-// TODO: add *any* extra args we didn't use yet here
+    // TODO: add *any* extra args we didn't use yet here
     // add some other module arguments as standard URL parameters
     if (!empty($path)) {
         // search

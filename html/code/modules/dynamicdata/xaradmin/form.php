@@ -16,17 +16,31 @@
  * wishes to create a new module item
  * @return string|void output display string
  */
-function dynamicdata_admin_form(Array $args=array())
+function dynamicdata_admin_form(array $args = [])
 {
     extract($args);
 
-    if(!xarVar::fetch('objectid', 'isset', $objectid,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('module_id',    'isset', $module_id,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemtype', 'isset', $itemtype,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemid',   'isset', $itemid,    NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('preview',  'isset', $preview,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('join',     'isset', $join,      NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('table',    'isset', $table,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('join', 'isset', $join, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     if (empty($module_id)) {
         $module_id = xarMod::getRegID('dynamicdata');
@@ -38,21 +52,22 @@ function dynamicdata_admin_form(Array $args=array())
         $itemid = 0;
     }
 
-    $data = xarMod::apiFunc('dynamicdata','admin','menu');
+    $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
 
-    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
+    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
                                          'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $itemid));
-    
-    // Security
-    if (!$myobject->checkAccess('create'))
-        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
+                                         'itemid'   => $itemid]);
 
-    $data['object'] =& $myobject;
+    // Security
+    if (!$myobject->checkAccess('create')) {
+        return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
+    }
+
+    $data['object'] = & $myobject;
 
     $template = $myobject->name;
-    return xarTpl::module('dynamicdata','admin','form',$data,$template);
+    return xarTpl::module('dynamicdata', 'admin', 'form', $data, $template);
 }

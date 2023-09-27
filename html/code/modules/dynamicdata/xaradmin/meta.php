@@ -13,19 +13,29 @@
 /**
  * Return meta data (test only)
  */
-function dynamicdata_admin_meta(Array $args=array())
+function dynamicdata_admin_meta(array $args = [])
 {
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     extract($args);
 
-    if (!xarVar::fetch('export', 'notempty', $export, '', xarVar::NOT_REQUIRED)) {return;}
-    if (!xarVar::fetch('table', 'notempty', $table, '', xarVar::NOT_REQUIRED)) {return;}
-    if (!xarVar::fetch('showdb', 'notempty', $showdb, 0, xarVar::NOT_REQUIRED)) {return;}
-    if (!xarVar::fetch('db', 'notempty', $db, xarDB::getName(), xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('export', 'notempty', $export, '', xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (!xarVar::fetch('table', 'notempty', $table, '', xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (!xarVar::fetch('showdb', 'notempty', $showdb, 0, xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (!xarVar::fetch('db', 'notempty', $db, xarDB::getName(), xarVar::NOT_REQUIRED)) {
+        return;
+    }
 
-    $data = array();
+    $data = [];
 
     $dbconn = xarDB::getConn();
     $dbtype = xarDB::getType();
@@ -33,13 +43,13 @@ function dynamicdata_admin_meta(Array $args=array())
 
     if ($db != $dbname) {
         $data['db'] = $db;
-    } elseif (!empty($table) && strpos($table,'.') !== false) {
-        list($data['db'],$other) = explode('.', $table);
+    } elseif (!empty($table) && strpos($table, '.') !== false) {
+        [$data['db'], $other] = explode('.', $table);
     } else {
         $data['db'] = $dbname;
     }
 
-    $data['databases'] = array();
+    $data['databases'] = [];
 
     if (!empty($showdb) || $data['db'] != $dbname) {
         // Note: not supported for other database types
@@ -56,21 +66,25 @@ function dynamicdata_admin_meta(Array $args=array())
         }
 
         if (empty($data['databases'])) {
-            $data['databases'] = array($db => $db);
+            $data['databases'] = [$db => $db];
         }
     }
-    $data['tables'] = xarMod::apiFunc('dynamicdata','util','getmeta',
-                                  array('db' => $db, 'table' => $table));
+    $data['tables'] = xarMod::apiFunc(
+        'dynamicdata',
+        'util',
+        'getmeta',
+        ['db' => $db, 'table' => $table]
+    );
 
     if ($export == 'ddl') {
         $dbInfo = $dbconn->getDatabaseInfo();
         $data['schemaName'] = $db;
 
-        $data['tables'] = array();
+        $data['tables'] = [];
         if (empty($table)) {
             $data['tables'] = $dbInfo->getTables();
         } else {
-            $data['tables'] = array($dbInfo->getTable($table));
+            $data['tables'] = [$dbInfo->getTable($table)];
         }
         $data['types']  = xarDB::getTypeMap();
         $data['xml'] = xarTpl::file(sys::code() . 'modules/dynamicdata/xartemplates/includes/exportddl.xt', $data);
@@ -78,11 +92,11 @@ function dynamicdata_admin_meta(Array $args=array())
 
     $data['table'] = $table;
     $data['export'] = $export;
-    $data['prop'] = xarMod::apiFunc('dynamicdata','user','getproperty',array('type' => 'fieldtype', 'name' => 'dummy'));
+    $data['prop'] = xarMod::apiFunc('dynamicdata', 'user', 'getproperty', ['type' => 'fieldtype', 'name' => 'dummy']);
 
     // Get the default property types
     $proptypes = DataPropertyMaster::getPropertyTypes();
-    $proptypenames = array();
+    $proptypenames = [];
     foreach ($proptypes as $proptype) {
         $proptypenames[$proptype['id']] = $proptype['name'];
     }

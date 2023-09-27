@@ -33,6 +33,7 @@ class DataProperty extends xarObject implements iDataProperty
     public $format         = '0'; //<-- eh?
     public $filepath       = 'auto';
     public $class          = '';         // this property's class
+    public $reqmodules     = [];
 
     // Attributes for runtime
     public $descriptor;                  // the description object of this property
@@ -41,7 +42,7 @@ class DataProperty extends xarObject implements iDataProperty
     public $tplmodule = 'dynamicdata';
     public $configuration = 'a:0:{}';
     public $dependancies = '';           // semi-colon seperated list of files that must be present for this property to be available (optional)
-    public $args         = array();      //args that hold alias info
+    public $args         = [];      //args that hold alias info
     public $anonymous = 0;               // if true the name, rather than the dd_xx designation is used in displaying the property
 
     public $datastore = '';              // name of the data store where this property comes from
@@ -61,8 +62,8 @@ class DataProperty extends xarObject implements iDataProperty
     public $_itemid;               // reference to $itemid in DataObject, where the current itemid is kept
     public $_items;                // reference to $items in DataObjectList, where the different item values are kept
 
-    public $configurationtypes = array('display','validation','initialization');
-//    public $display_template                = "";
+    public $configurationtypes = ['display','validation','initialization'];
+    //    public $display_template                = "";
     public $display_layout                  = "default";      // we display the default layout of a template
     public $display_required                = false;          // the field is not tagged as "required" for input
     public $display_tooltip                 = "";             // there is no tooltip text, and so no tooltip
@@ -72,7 +73,7 @@ class DataProperty extends xarObject implements iDataProperty
     public $initialization_other_rule       = null;
     public $validation_notequals            = null;           //  check whether a property value does not equal a given value
     public $validation_equals               = null;           //  check whether a property value equals a given value
-    public $validation_allowempty           = null;           // 
+    public $validation_allowempty           = null;           //
     public $validation_equals_invalid;
     public $validation_notequals_invalid;
     public $validation_allowempty_invalid;
@@ -86,7 +87,7 @@ class DataProperty extends xarObject implements iDataProperty
     {
         // Set the default status for properties
         $this->status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE + DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
-        
+
         $this->descriptor = $descriptor;
         $args = $descriptor->getArgs();
         $this->template = $this->getTemplate();
@@ -101,9 +102,10 @@ class DataProperty extends xarObject implements iDataProperty
             // if the default field looks like <something>(...), we'll assume that this
             // a function call that returns some dynamic default value
             // Expression stolen from http://php.net/functions
-            if(!empty($this->defaultvalue) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/',$this->defaultvalue)) {
+            if(!empty($this->defaultvalue) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/', $this->defaultvalue)) {
                 try {
                     eval('$value = ' . $this->defaultvalue .';');
+                    /** @var mixed|null $value */
                     if(isset($value)) {
                         $this->defaultvalue = $value;
                     } else {
@@ -119,7 +121,8 @@ class DataProperty extends xarObject implements iDataProperty
             // but don't yet have the full configuration
             try {
                 $this->setValue($this->defaultvalue);
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         } else {
             $this->setValue($args['value']);
         }
@@ -127,7 +130,8 @@ class DataProperty extends xarObject implements iDataProperty
         if (!empty($this->args) && is_string($this->args)) {
             try {
                 $this->args = unserialize($this->args);
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
     }
 
@@ -143,12 +147,14 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Return the datasource of this property as per its descriptor
      */
-    public function getSource($format='full')
+    public function getSource($format = 'full')
     {
         $source = $this->descriptor->get('source');
         if ($format == 'field') {
             $parts = explode('.', $source);
-            if (isset($parts[1])) $source = $parts[1];
+            if (isset($parts[1])) {
+                $source = $parts[1];
+            }
         }
         return $source;
     }
@@ -156,9 +162,11 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Set the datasource of this property to a given value, or to its original value
      */
-    public function setSource($source='')
+    public function setSource($source = '')
     {
-        if (empty($source)) $source = $this->descriptor->get('source');
+        if (empty($source)) {
+            $source = $this->descriptor->get('source');
+        }
         $this->source = $source;
         return true;
     }
@@ -166,7 +174,7 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Find the datastore name and type corresponding to the data source of a property
      */
-    function getDataStore()
+    public function getDataStore()
     {
         // Get the module name if we are looking at modvar storage
         $nameparts = explode(': ', $this->source);
@@ -206,8 +214,7 @@ class DataProperty extends xarObject implements iDataProperty
                 break;
             default:
                 // Nothing specific, perhaps a table?
-                if(preg_match('/^(.+)\.(\w+)$/', $source, $matches))
-                {
+                if(preg_match('/^(.+)\.(\w+)$/', $source, $matches)) {
                     // data field coming from some static table : [database.]table.field
                     $table = $matches[1];
                     $field = $matches[2];
@@ -220,7 +227,7 @@ class DataProperty extends xarObject implements iDataProperty
                 $storename = '_todo_';
                 $storetype = 'todo';
         }
-        return array($storename, $storetype);
+        return [$storename, $storetype];
     }
 
     /**
@@ -245,7 +252,7 @@ class DataProperty extends xarObject implements iDataProperty
      *
      * @param mixed $value the new value for the property
      */
-    public function setValue($value=null)
+    public function setValue($value = null)
     {
         $this->value = $value;
     }
@@ -265,12 +272,12 @@ class DataProperty extends xarObject implements iDataProperty
     {
         $found = false;
         $value = null;
-        xarVar::fetch($name, 'isset', $namevalue, NULL, xarVar::DONT_SET);
+        xarVar::fetch($name, 'isset', $namevalue, null, xarVar::DONT_SET);
         if(isset($namevalue)) {
             $found = true;
             $value = $namevalue;
         }
-        return array($found,$value);
+        return [$found,$value];
     }
 
     /**
@@ -286,7 +293,7 @@ class DataProperty extends xarObject implements iDataProperty
         $this->fieldname = $name;
         $this->invalid = '';
         if(!isset($value)) {
-            list($found,$value) = $this->fetchValue($name);
+            [$found, $value] = $this->fetchValue($name);
             if (!$found) {
                 $this->objectref->missingfields[] = $this->name;
                 return null;
@@ -294,12 +301,14 @@ class DataProperty extends xarObject implements iDataProperty
         }
 
         // Check for a filter option if found save it
-//        list($found,$filter) = $this->fetchValue($name. '_filteroption');
-//        if ($found) $this->filter = $filter;
+        //        list($found,$filter) = $this->fetchValue($name. '_filteroption');
+        //        if ($found) $this->filter = $filter;
 
         // Check for a previous if found save it
-        list($found,$previous_value) = $this->fetchValue('previous_value_' . $name);
-        if ($found) $this->previous_value = $previous_value;
+        [$found, $previous_value] = $this->fetchValue('previous_value_' . $name);
+        if ($found) {
+            $this->previous_value = $previous_value;
+        }
 
         return $this->validateValue($value);
     }
@@ -313,14 +322,17 @@ class DataProperty extends xarObject implements iDataProperty
     {
         xarLog::message("DataProperty::validateValue: Validating property " . $this->name, xarLog::LEVEL_DEBUG);
 
-        if(!isset($value)) $value = $this->getValue();
-        else $this->setValue($value);
+        if(!isset($value)) {
+            $value = $this->getValue();
+        } else {
+            $this->setValue($value);
+        }
 
         if ($this->validation_notequals != null && $value == $this->validation_notequals) {
             if (!empty($this->validation_notequals_invalid)) {
                 $this->invalid = xarML($this->validation_notequals_invalid);
             } else {
-                $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name,$this->validation_notequals );
+                $this->invalid = xarML('#(1) cannot have the value #(2)', $this->name, $this->validation_notequals);
             }
             xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
@@ -329,7 +341,7 @@ class DataProperty extends xarObject implements iDataProperty
             if (!empty($this->validation_equals_invalid)) {
                 $this->invalid = xarML($this->validation_equals_invalid);
             } else {
-                $this->invalid = xarML('#(1) must have the value #(2)', $this->name,$this->validation_notequals );
+                $this->invalid = xarML('#(1) must have the value #(2)', $this->name, $this->validation_notequals);
             }
             xarLog::message($this->invalid, xarLog::LEVEL_ERROR);
             $this->value = null;
@@ -353,7 +365,7 @@ class DataProperty extends xarObject implements iDataProperty
      * @param int $itemid the item id we want the value for
      * @return mixed
      */
-    function getItemValue($itemid)
+    public function getItemValue($itemid)
     {
         return $this->_items[$itemid][$this->name];
     }
@@ -365,33 +377,33 @@ class DataProperty extends xarObject implements iDataProperty
      * @param mixed value
      * @param integer fordisplay
      */
-    function setItemValue($itemid, $value, $fordisplay=0)
+    public function setItemValue($itemid, $value, $fordisplay = 0)
     {
         $this->value = $value;
         switch ($fordisplay) {
             case 0:
                 $this->_items[$itemid][$this->name] = $this->value;
-            break;
+                break;
             case 1:
                 $this->_items[$itemid][$this->name] = $this->getValue();
-            break;
+                break;
             case 2:
                 $this->_items[$itemid][$this->label] = $this->value;
-            break;
+                break;
             case 3:
                 $this->_items[$itemid][$this->label] = $this->getValue();
-            break;
+                break;
         }
     }
 
     /**
      * Get and set the value of this property's display status
      */
-    function getDisplayStatus()
+    public function getDisplayStatus()
     {
         return ($this->status & DataPropertyMaster::DD_DISPLAYMASK);
     }
-    function setDisplayStatus($status)
+    public function setDisplayStatus($status)
     {
         $this->status = $status & DataPropertyMaster::DD_DISPLAYMASK;
     }
@@ -399,11 +411,11 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Get and set the value of this property's input status
      */
-    function getInputStatus()
+    public function getInputStatus()
     {
         return $this->status - $this->getDisplayStatus();
     }
-    function setInputStatus($status)
+    public function setInputStatus($status)
     {
         $this->status = $status + $this->getDisplayStatus();
     }
@@ -418,10 +430,10 @@ class DataProperty extends xarObject implements iDataProperty
      * @param $args['module'] which module is responsible for the templating
      * @param $args['template'] what's the partial name of the showinput template.
      * @param $args[*] rest of arguments is passed on to the templating method.
-     * 
+     *
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showInput(Array $data = array())
+    public function showInput(array $data = [])
     {
         if (!empty($data['hidden'])) {
             if ($data['hidden'] == 'active') {
@@ -433,37 +445,63 @@ class DataProperty extends xarObject implements iDataProperty
             }
         }
 
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
             return $this->showHidden($data);
+        }
 
         if($this->getInputStatus() == DataPropertyMaster::DD_INPUTSTATE_NOINPUT) {
             return $this->showOutput($data) . $this->showHidden($data);
         }
 
         // Display directive for the name
-        if ($this->anonymous == true) $name = $this->name;
-        else $name = $this->propertyprefix . $this->id;
+        if ($this->anonymous == true) {
+            $name = $this->name;
+        } else {
+            $name = $this->propertyprefix . $this->id;
+        }
         $id = $name;
 
         // Add the object's field prefix if there is one
         $prefix = '';
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0) {
+            $prefix = $this->_fieldprefix . '_';
+        }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
-        if(!empty($prefix)) $name = $prefix . $name;
-        if(!empty($prefix)) $id = $prefix . $id;
+        if(isset($data['fieldprefix'])) {
+            $prefix = $data['fieldprefix'] . '_';
+        }
+        if(!empty($prefix)) {
+            $name = $prefix . $name;
+        }
+        if(!empty($prefix)) {
+            $id = $prefix . $id;
+        }
 
         // Allow for overrides form the template
-        if(!isset($data['id']))          $data['id']   = $id;
-        if(!isset($data['name']))        $data['name']   = $name;
+        if(!isset($data['id'])) {
+            $data['id']   = $id;
+        }
+        if(!isset($data['name'])) {
+            $data['name']   = $name;
+        }
 
-        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
-        if(!isset($data['template']))    $data['template'] = $this->template;
-        if(!isset($data['layout']))      $data['layout']   = $this->display_layout;
+        if(!isset($data['tplmodule'])) {
+            $data['tplmodule']   = $this->tplmodule;
+        }
+        if(!isset($data['template'])) {
+            $data['template'] = $this->template;
+        }
+        if(!isset($data['layout'])) {
+            $data['layout']   = $this->display_layout;
+        }
 
-        if(!isset($data['tabindex']))    $data['tabindex'] = 0;
-        if(!isset($data['value']))       $data['value']    = $this->value;
+        if(!isset($data['tabindex'])) {
+            $data['tabindex'] = 0;
+        }
+        if(!isset($data['value'])) {
+            $data['value']    = $this->value;
+        }
         if (!empty($this->invalid)) {
             $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : xarML($this->invalid);
         } else {
@@ -477,10 +515,11 @@ class DataProperty extends xarObject implements iDataProperty
         }
         // Now check for overrides from the template
         foreach ($this->configurationtypes as $configtype) {
-            $properties = $this->getConfigProperties($configtype,1);
+            $properties = $this->getConfigProperties($configtype, 1);
             foreach ($properties as $name => $configarg) {
-                if (!isset($data[$configarg['shortname']]))
+                if (!isset($data[$configarg['shortname']])) {
                     $data[$configarg['shortname']] = $this->{$configarg['fullname']};
+                }
             }
         }
         return xarTpl::property($data['tplmodule'], $data['template'], 'showinput', $data);
@@ -492,7 +531,7 @@ class DataProperty extends xarObject implements iDataProperty
      * @param $args['value'] value of the property (default is the current value)
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showOutput(Array $data = array())
+    public function showOutput(array $data = [])
     {
         if (!empty($data['hidden'])) {
             if ($data['hidden'] == 'active') {
@@ -504,28 +543,41 @@ class DataProperty extends xarObject implements iDataProperty
             }
         }
 
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
             return $this->showHidden($data);
+        }
 
         $data['id']   = $this->id;
         $data['name'] = $this->name;
-        if (empty($data['_itemid'])) $data['_itemid'] = 0;
+        if (empty($data['_itemid'])) {
+            $data['_itemid'] = 0;
+        }
 
-        if(!isset($data['value']))     $data['value']    = $this->value;
+        if(!isset($data['value'])) {
+            $data['value']    = $this->value;
+        }
 
         // If we are set up to do so, translate this value
         if ($this->translatable && xarMod::isAvailable('translations')) {
             xarMLS::_loadTranslations(xarMLS::DNTYPE_OBJECT, 'object', 'objects:' . $this->objectref->name, $this->name);
             $data['value'] = xarML($data['value']);
         }
-        
+
         // If this is set, pass only allowed HTML tags
-        if ($this->display_striptags)  $data['value']    = xarVar::prepHTMLDisplay($data['value']);
-        
+        if ($this->display_striptags) {
+            $data['value']    = xarVar::prepHTMLDisplay($data['value']);
+        }
+
         // TODO: does this hurt when it is an array?
-        if(!isset($data['tplmodule'])) $data['tplmodule']   = $this->tplmodule;
-        if(!isset($data['template']))  $data['template'] = $this->template;
-        if(!isset($data['layout']))    $data['layout']   = $this->display_layout;
+        if(!isset($data['tplmodule'])) {
+            $data['tplmodule']   = $this->tplmodule;
+        }
+        if(!isset($data['template'])) {
+            $data['template'] = $this->template;
+        }
+        if(!isset($data['layout'])) {
+            $data['layout']   = $this->display_layout;
+        }
 
         // Add the configuration options defined via UI
         if(isset($data['configuration'])) {
@@ -534,10 +586,11 @@ class DataProperty extends xarObject implements iDataProperty
         }
         // Now check for overrides from the template
         foreach ($this->configurationtypes as $configtype) {
-            $properties = $this->getConfigProperties($configtype,1);
+            $properties = $this->getConfigProperties($configtype, 1);
             foreach ($properties as $name => $configarg) {
-                if (!isset($data[$configarg['shortname']]))
+                if (!isset($data[$configarg['shortname']])) {
                     $data[$configarg['shortname']] = $this->{$configarg['fullname']};
+                }
             }
         }
         return xarTpl::property($data['tplmodule'], $data['template'], 'showoutput', $data);
@@ -550,105 +603,150 @@ class DataProperty extends xarObject implements iDataProperty
      * @param $data['for'] label id to use for this property (id, name or nothing)
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showLabel(Array $data=array())
+    public function showLabel(array $data = [])
     {
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
             return "";
-
-        if(empty($data))
-        {
-            // old syntax was showLabel($label = null)
         }
-        elseif(is_string($data))
+
+        if(empty($data)) {
+            // old syntax was showLabel($label = null)
+        } elseif(is_string($data)) {
             $label = $data;
-        elseif(is_array($data))
+        } elseif(is_array($data)) {
             extract($data);
+        }
 
         $data['name']  = $this->name;
         $data['name']     = !empty($data['name']) ? $data['name'] : $this->propertyprefix . $this->id;
-        $data['id']       = !empty($data['id'])   ? $data['id']   : $this->propertyprefix . $this->id;
-        if(!isset($data['id'])) $data['id']   = $data['name'];
-        
+        $data['id']       = !empty($data['id']) ? $data['id'] : $this->propertyprefix . $this->id;
+        if(!isset($data['id'])) {
+            $data['id']   = $data['name'];
+        }
+
         $data['label'] = isset($data['label']) ? xarVar::prepForDisplay($data['label']) : xarVar::prepForDisplay($this->label);
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0)  $data['fieldprefix'] = $this->_fieldprefix;
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
+            $data['fieldprefix'] = $this->_fieldprefix;
+        }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
-        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
-        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
-        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
-        if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->layout;
-        if(!isset($data['title']))   $data['title']   = $this->display_tooltip;
+        if(isset($data['fieldprefix'])) {
+            $prefix = $data['fieldprefix'] . '_';
+        }
+        if(!empty($prefix)) {
+            $data['name'] = $prefix . $data['name'];
+        }
+        if(!empty($prefix)) {
+            $data['id'] = $prefix . $data['id'];
+        }
+        if(!isset($data['tplmodule'])) {
+            $data['tplmodule']   = $this->tplmodule;
+        }
+        if(!isset($data['template'])) {
+            $data['template'] = $this->template;
+        }
+        if(!isset($data['layout'])) {
+            $data['layout']   = $this->layout;
+        }
+        if(!isset($data['title'])) {
+            $data['title']   = $this->display_tooltip;
+        }
         return xarTpl::property($data['tplmodule'], $data['template'], 'label', $data);
     }
 
     /**
      * Show the filter options for this property
      *
-     * @param $data['filters'] an array of filter options for the property 
+     * @param $data['filters'] an array of filter options for the property
      * @param $data['for'] label id to use for this property (id, name or nothing)
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showFilter(Array $data=array())
+    public function showFilter(array $data = [])
     {
         // FIXME: Move the valid options as properties to each dataproperty
         // A filter cannot be hidden or disables
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) return "";
-        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) return "";
-        
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN) {
+            return "";
+        }
+        if($this->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
+            return "";
+        }
+
         // Make sure we can enter a value here
         $this->setInputStatus(DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY);
-        
+
         $data['id']    = $this->id;
         $data['name']  = $this->name;
 
         // This is the array of all possible filter options
-        $filteroptions = array(
-                            ''        => array('id' => '', 'name' => xarML('not used')),
-                            '='       => array('id' => 'eq', 'name' => xarML('equals')),
-                            '!='      => array('id' => 'ne', 'name' => xarML('not equals')),
-                            '>'       => array('id' => 'gt', 'name' => xarML('greater than')),
-                            '>='      => array('id' => 'ge', 'name' => xarML('greater than or equal')),
-                            '<'       => array('id' => 'lt', 'name' => xarML('less than')),
-                            '<='      => array('id' => 'le', 'name' => xarML('less than or equal')),
-                            'like'    => array('id' => 'like', 'name' => xarML('like')),
-                            'notlike' => array('id' => 'notlike', 'name' => xarML('not like')),
-                            'null'    => array('id' => 'null', 'name' => xarML('is null')),
-                            'notnull' => array('id' => 'notnull', 'name' => xarML('is not null')),
-                            'regex'   => array('id' => 'regex', 'name' => xarML('regular expression')),
-                        );
+        $filteroptions = [
+                            ''        => ['id' => '', 'name' => xarML('not used')],
+                            '='       => ['id' => 'eq', 'name' => xarML('equals')],
+                            '!='      => ['id' => 'ne', 'name' => xarML('not equals')],
+                            '>'       => ['id' => 'gt', 'name' => xarML('greater than')],
+                            '>='      => ['id' => 'ge', 'name' => xarML('greater than or equal')],
+                            '<'       => ['id' => 'lt', 'name' => xarML('less than')],
+                            '<='      => ['id' => 'le', 'name' => xarML('less than or equal')],
+                            'like'    => ['id' => 'like', 'name' => xarML('like')],
+                            'notlike' => ['id' => 'notlike', 'name' => xarML('not like')],
+                            'null'    => ['id' => 'null', 'name' => xarML('is null')],
+                            'notnull' => ['id' => 'notnull', 'name' => xarML('is not null')],
+                            'regex'   => ['id' => 'regex', 'name' => xarML('regular expression')],
+                        ];
 
-        $data['filters'] = isset($data['filters']) ? $data['filters'] : array();
-        
+        $data['filters'] ??= [];
+
         // Explicitly cater to the most common basetypes so as to avoid duplication in the extensions
-        $numbertypes = array('number','decimal','integer','float');
-        $stringtypes = array('string');
-        $datetypes = array('date');
-        $checkboxtypes = array('checkbox');
-        if (in_array($this->basetype, $numbertypes)) $data['filters'] = array('=','!=','>','>=','<','<=','like','notlike','null','notnull');
-        elseif (in_array($this->basetype, $stringtypes)) $data['filters'] = array('like','notlike','=','!=','null','notnull','regex');
-        elseif (in_array($this->basetype, $datetypes)) $data['filters'] = array('=','!=','>','>=','<','<=');
-        elseif (in_array($this->basetype, $checkboxtypes)) $data['filters'] = array('=');
-        elseif (in_array($this->basetype, array('dropdown'))) $data['filters'] = array('=');
-        else die(xarML('The property type #(1) is not among those currently supported in filters'));
-        
+        $numbertypes = ['number','decimal','integer','float'];
+        $stringtypes = ['string'];
+        $datetypes = ['date'];
+        $checkboxtypes = ['checkbox'];
+        if (in_array($this->basetype, $numbertypes)) {
+            $data['filters'] = ['=','!=','>','>=','<','<=','like','notlike','null','notnull'];
+        } elseif (in_array($this->basetype, $stringtypes)) {
+            $data['filters'] = ['like','notlike','=','!=','null','notnull','regex'];
+        } elseif (in_array($this->basetype, $datetypes)) {
+            $data['filters'] = ['=','!=','>','>=','<','<='];
+        } elseif (in_array($this->basetype, $checkboxtypes)) {
+            $data['filters'] = ['='];
+        } elseif (in_array($this->basetype, ['dropdown'])) {
+            $data['filters'] = ['='];
+        } else {
+            die(xarML('The property type #(1) is not among those currently supported in filters'));
+        }
+
         // Add a blank to any of the arrays to indicate unused operations
         array_unshift($data['filters'], '');
-        
+
         // Now create the filter options for the dropdown
-        $data['options'] = array();
-        foreach ($data['filters'] as $filter) $data['options'][] = $filteroptions[strtolower($filter)];
-        
-        $data['value'] = isset($data['filter']) ? $data['filter'] : $this->filter;
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
+        $data['options'] = [];
+        foreach ($data['filters'] as $filter) {
+            $data['options'][] = $filteroptions[strtolower($filter)];
+        }
+
+        $data['value'] = $data['filter'] ?? $this->filter;
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
+            $prefix = $this->_fieldprefix . '_';
+        }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
-        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
-        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
-        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
-        if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->layout;
+        if(isset($data['fieldprefix'])) {
+            $prefix = $data['fieldprefix'] . '_';
+        }
+        if(!empty($prefix)) {
+            $data['name'] = $prefix . $data['name'];
+        }
+        if(!empty($prefix)) {
+            $data['id'] = $prefix . $data['id'];
+        }
+        if(!isset($data['tplmodule'])) {
+            $data['tplmodule']   = $this->tplmodule;
+        }
+        if(!isset($data['template'])) {
+            $data['template'] = $this->template;
+        }
+        if(!isset($data['layout'])) {
+            $data['layout']   = $this->layout;
+        }
         return xarTpl::property($data['tplmodule'], $data['template'], 'filter', $data);
     }
 
@@ -660,36 +758,51 @@ class DataProperty extends xarObject implements iDataProperty
      * @param $data['id'] id of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    function showHidden(Array $data = array())
+    public function showHidden(array $data = [])
     {
         $data['name']     = !empty($data['name']) ? $data['name'] : $this->propertyprefix . $this->id;
-        $data['id']       = !empty($data['id'])   ? $data['id']   : $this->propertyprefix . $this->id;
+        $data['id']       = !empty($data['id']) ? $data['id'] : $this->propertyprefix . $this->id;
 
         // Add the object's field prefix if there is one
         $prefix = '';
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === '0' || $this->_fieldprefix === 0) {
+            $prefix = $this->_fieldprefix . '_';
+        }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
-        if(!empty($prefix)) $data['name'] = $prefix . $data['name'];
-        if(!empty($prefix)) $data['id'] = $prefix . $data['id'];
+        if(isset($data['fieldprefix'])) {
+            $prefix = $data['fieldprefix'] . '_';
+        }
+        if(!empty($prefix)) {
+            $data['name'] = $prefix . $data['name'];
+        }
+        if(!empty($prefix)) {
+            $data['id'] = $prefix . $data['id'];
+        }
 
-        $data['value']    = isset($data['value']) ? $data['value'] : $this->value;
-        
+        $data['value'] ??= $this->value;
+
         // The value might be an array
-        if (is_array($data['value'])){
-            $temp = array();
-            foreach ($data['value'] as $key => $tmp) 
+        if (is_array($data['value'])) {
+            $temp = [];
+            foreach ($data['value'] as $key => $tmp) {
                 $temp[$key] = (!is_array($tmp)) ? xarVar::prepForDisplay($tmp) : $tmp;
+            }
             $data['value'] = $temp;
         } else {
             $data['value'] = xarVar::prepForDisplay($data['value']);
         }
 
         $data['invalid']  = !empty($data['invalid']) ? $data['invalid'] : $this->invalid;
-        if(!isset($data['tplmodule']))   $data['tplmodule']   = $this->tplmodule;
-        if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->layout;
+        if(!isset($data['tplmodule'])) {
+            $data['tplmodule']   = $this->tplmodule;
+        }
+        if(!isset($data['template'])) {
+            $data['template'] = $this->template;
+        }
+        if(!isset($data['layout'])) {
+            $data['layout']   = $this->layout;
+        }
 
         return xarTpl::property($data['tplmodule'], $data['template'], 'showhidden', $data);
     }
@@ -708,14 +821,22 @@ class DataProperty extends xarObject implements iDataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public final function _showPreset(Array $data = array())
+    final public function _showPreset(array $data = [])
     {
-        if(empty($data['name'])) $isvalid = $this->checkInput();
-        else $isvalid = $this->checkInput($data['name']);
-        if(!$isvalid) $isvalid = $this->checkInput($this->name);
+        if(empty($data['name'])) {
+            $isvalid = $this->checkInput();
+        } else {
+            $isvalid = $this->checkInput($data['name']);
+        }
+        if(!$isvalid) {
+            $isvalid = $this->checkInput($this->name);
+        }
 
-        if(!empty($data['hidden'])) return $this->showHidden($data);
-        else return $this->showInput($data);
+        if(!empty($data['hidden'])) {
+            return $this->showHidden($data);
+        } else {
+            return $this->showInput($data);
+        }
     }
 
     /**
@@ -730,25 +851,25 @@ class DataProperty extends xarObject implements iDataProperty
         } elseif (empty($configuration)) {
             return true;
 
-        // fall back to the old N:M validation for text boxes et al. (cfr. utilapi_getstatic/getmeta)
+            // fall back to the old N:M validation for text boxes et al. (cfr. utilapi_getstatic/getmeta)
         } elseif (preg_match('/^(\d+):(\d+)$/', $configuration, $matches)) {
-            $fields = array('validation_min_length' => $matches[1],
+            $fields = ['validation_min_length' => $matches[1],
                             'validation_max_length' => $matches[2],
-                            'display_maxlength'     => $matches[2]);
+                            'display_maxlength'     => $matches[2]];
 
-        // try normal serialized configuration
+            // try normal serialized configuration
         } else {
             try {
                 $fields = unserialize($configuration);
             } catch (Exception $e) {
                 // if the configuration is malformed just return an empty configuration
-                $fields = array();
+                $fields = [];
                 return true;
             }
         }
         if (!empty($fields) && is_array($fields)) {
             foreach ($this->configurationtypes as $configtype) {
-                $properties = $this->getConfigProperties($configtype,1);
+                $properties = $this->getConfigProperties($configtype, 1);
                 foreach ($properties as $name => $configarg) {
                     if (isset($fields[$name])) {
                         $this->$name = $fields[$name];
@@ -789,31 +910,60 @@ class DataProperty extends xarObject implements iDataProperty
      * @param $args['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showConfiguration(Array $data = array())
+    public function showConfiguration(array $data = [])
     {
-        if (!isset($data['configuration'])) $data['configuration'] = $this->configuration;
+        if (!isset($data['configuration'])) {
+            $data['configuration'] = $this->configuration;
+        }
         $fields = $this->parseConfiguration($data['configuration']);
 
-        if (!isset($data['name']))  $data['name'] = $this->propertyprefix . $this->id;
-        if (!isset($data['id']))  $data['id'] = $this->propertyprefix . $this->id;
-        if (!isset($data['tabindex']))  $data['tabindex'] = 0;
-        if (!isset($this->invalid))  $data['invalid'] = xarML('Invalid #(1)', $this->invalid);
-        else $data['invalid'] = '';
-        if (isset($data['required']) && $data['required']) $data['required'] = true;
-        else $data['required'] = false;
-        if(!isset($data['module']))   $data['module']   = $this->tplmodule;
-        if(!isset($data['template'])) $data['template'] = $this->template;
-        if(!isset($data['layout']))   $data['layout']   = $this->display_layout;
+        if (!isset($data['name'])) {
+            $data['name'] = $this->propertyprefix . $this->id;
+        }
+        if (!isset($data['id'])) {
+            $data['id'] = $this->propertyprefix . $this->id;
+        }
+        if (!isset($data['tabindex'])) {
+            $data['tabindex'] = 0;
+        }
+        if (!isset($this->invalid)) {
+            $data['invalid'] = xarML('Invalid #(1)', $this->invalid);
+        } else {
+            $data['invalid'] = '';
+        }
+        if (isset($data['required']) && $data['required']) {
+            $data['required'] = true;
+        } else {
+            $data['required'] = false;
+        }
+        if(!isset($data['module'])) {
+            $data['module']   = $this->tplmodule;
+        }
+        if(!isset($data['template'])) {
+            $data['template'] = $this->template;
+        }
+        if(!isset($data['layout'])) {
+            $data['layout']   = $this->display_layout;
+        }
 
-        if (!isset($data['display'])) $data['display'] = $this->getConfigProperties('display',1);
-        if (!isset($data['validation'])) $data['validation'] = $this->getConfigProperties('validation',1);
-        if (!isset($data['initialization'])) $data['initialization'] = $this->getConfigProperties('initialization',1);
+        if (!isset($data['display'])) {
+            $data['display'] = $this->getConfigProperties('display', 1);
+        }
+        if (!isset($data['validation'])) {
+            $data['validation'] = $this->getConfigProperties('validation', 1);
+        }
+        if (!isset($data['initialization'])) {
+            $data['initialization'] = $this->getConfigProperties('initialization', 1);
+        }
 
         // Collect the invalid messages for the validations
         foreach ($data['validation'] as $validationitem) {
             $msgname = $validationitem['name'] . '_invalid';
-            if (isset($this->$msgname)) $data['validation'][$msgname] = $this->$msgname;
-            else $data['validation'][$msgname] = '';
+            if (isset($this->$msgname)) {
+                $data['validation'][$msgname] = $this->$msgname;
+            } else {
+                $data['validation'][$msgname] = '';
+            }
         }
         return xarTpl::property($data['module'], $data['template'], 'configuration', $data);
     }
@@ -826,7 +976,7 @@ class DataProperty extends xarObject implements iDataProperty
      * @param $args['id'] id of the field
      * @return boolean true if the configuration rule could be processed, false otherwise
      */
-    public function updateConfiguration(Array $data = array())
+    public function updateConfiguration(array $data = [])
     {
         extract($data);
         $valid = false;
@@ -835,12 +985,14 @@ class DataProperty extends xarObject implements iDataProperty
 
         // do something with the configuration and save it in $this->configuration
         if (isset($configuration) && is_array($configuration)) {
-            $storableconfiguration = array();
+            $storableconfiguration = [];
             foreach ($this->configurationtypes as $configtype) {
-                $properties = $this->getConfigProperties($configtype,1);
+                $properties = $this->getConfigProperties($configtype, 1);
                 foreach ($properties as $name => $configarg) {
                     if (isset($configuration[$name])) {
-                        if ($configarg['ignore_empty'] && ($configuration[$name] == '')) continue;
+                        if ($configarg['ignore_empty'] && ($configuration[$name] == '')) {
+                            continue;
+                        }
                         $storableconfiguration[$name] = $configuration[$name];
                     }
                     // Invalid messages only get stored if they are non-empty. For all others we check whether they exist (for now)
@@ -854,7 +1006,7 @@ class DataProperty extends xarObject implements iDataProperty
             $valid = true;
 
         } else {
-            $this->configuration = serialize(array());
+            $this->configuration = serialize([]);
             $valid = true;
         }
         return $valid;
@@ -863,9 +1015,18 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Deprecated methods
      */
-    public function parseValidation($configuration='')  { return $this->parseConfiguration($configuration); }
-    public function showValidation(Array $data = array())   { return $this->showConfiguration($data); }
-    public function updateValidation(Array $data = array()) { return $this->updateConfiguration($data); }
+    public function parseValidation($configuration = '')
+    {
+        return $this->parseConfiguration($configuration);
+    }
+    public function showValidation(array $data = [])
+    {
+        return $this->showConfiguration($data);
+    }
+    public function updateValidation(array $data = [])
+    {
+        return $this->updateConfiguration($data);
+    }
 
     /**
      * Return the configuration options for this property
@@ -874,16 +1035,16 @@ class DataProperty extends xarObject implements iDataProperty
      * @param $fullname: return the full name asa key, e.g. "display_size
      * @return array of configuration options
      */
-    public function getConfigProperties($type="", $fullname=0)
+    public function getConfigProperties($type = "", $fullname = 0)
     {
         // cache configuration for all properties
-        if (xarCoreCache::isCached('DynamicData','Configurations')) {
-             $allconfigproperties = xarCoreCache::getCached('DynamicData','Configurations');
+        if (xarCoreCache::isCached('DynamicData', 'Configurations')) {
+            $allconfigproperties = xarCoreCache::getCached('DynamicData', 'Configurations');
         } else {
-            $xartable =& xarDB::getTables();
+            $xartable = & xarDB::getTables();
             $configurations = $xartable['dynamic_configurations'];
 
-            $bindvars = array();
+            $bindvars = [];
             $query = "SELECT id,
                              name,
                              description,
@@ -897,33 +1058,38 @@ class DataProperty extends xarObject implements iDataProperty
             $stmt = $dbconn->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
 
-            $allconfigproperties = array();
-            while ($result->next())
-            {
+            $allconfigproperties = [];
+            while ($result->next()) {
                 $item = $result->fields;
                 $allconfigproperties[$item['name']] = $item;
             }
-            xarCoreCache::setCached('DynamicData','Configurations', $allconfigproperties);
+            xarCoreCache::setCached('DynamicData', 'Configurations', $allconfigproperties);
             // Can't use DD methods here as we go into a recursion loop
         }
         // if no items found, bail
-        if (empty($allconfigproperties)) return $allconfigproperties;
+        if (empty($allconfigproperties)) {
+            return $allconfigproperties;
+        }
 
-        $configproperties = array();
+        $configproperties = [];
         $properties = $this->getPublicProperties();
         foreach ($properties as $name => $arg) {
             // Ignore properties that are not defined as configs in the configurations table
             // and also those that are flagged as not to be active for this property object
             $flagname = $name . "_ignore";
-            if (!isset($allconfigproperties[$name]) || !empty($this->$flagname)) continue;
+            if (!isset($allconfigproperties[$name]) || !empty($this->$flagname)) {
+                continue;
+            }
             // Ignore properties that are not of the config $type passed
             $pos = strpos($name, "_");
-            if (!$pos || (substr($name,0,$pos) != $type)) continue;
+            if (!$pos || (substr($name, 0, $pos) != $type)) {
+                continue;
+            }
             // This one is good. Make an entry for it
-            $key = $fullname ? $name : substr($name,$pos+1);
+            $key = $fullname ? $name : substr($name, $pos + 1);
             $configproperties[$name] = $allconfigproperties[$name];
             $configproperties[$key]['value'] = $arg;
-            $configproperties[$key]['shortname'] = substr($name,$pos+1);
+            $configproperties[$key]['shortname'] = substr($name, $pos + 1);
             $configproperties[$key]['fullname'] = $name;
         }
         return $configproperties;
@@ -936,8 +1102,7 @@ class DataProperty extends xarObject implements iDataProperty
      */
     protected function getModule()
     {
-        // @fixme there is no $info available
-        $modulename = empty($this->tplmodule) ? $info['tplmodule'] : $this->tplmodule;
+        $modulename = empty($this->tplmodule) ? $this->descriptor->get('requiresmodule') : $this->tplmodule;
         return $modulename;
     }
 
@@ -953,49 +1118,58 @@ class DataProperty extends xarObject implements iDataProperty
         return $template;
     }
 
-    protected function getCanonicalName($data=null)
+    protected function getCanonicalName($data = null)
     {
         if(!isset($data['name'])) {
-            if ($this->anonymous == true) $data['name'] = $this->name;
-            else $data['name'] = $this->propertyprefix . $this->id;
+            if ($this->anonymous == true) {
+                $data['name'] = $this->name;
+            } else {
+                $data['name'] = $this->propertyprefix . $this->id;
+            }
         }
         $data['name'] = $this->getPrefix($data) . $data['name'];
         return $data['name'];
     }
 
-    protected function getCanonicalID($data=null)
+    protected function getCanonicalID($data = null)
     {
-        if(!isset($data['id'])) $data['id']   = $this->getCanonicalName($data);
+        if(!isset($data['id'])) {
+            $data['id']   = $this->getCanonicalName($data);
+        }
         $data['id'] = $this->getPrefix($data) . $data['id'];
         return $data['id'];
     }
 
-    private function getPrefix($data=null)
+    private function getPrefix($data = null)
     {
         // Add the object's field prefix if there is one
         $prefix = '';
         // Allow 0 as a fieldprefix
-        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0)  $prefix = $this->_fieldprefix . '_';
+        if(!empty($this->_fieldprefix) || $this->_fieldprefix === 0) {
+            $prefix = $this->_fieldprefix . '_';
+        }
         // A field prefix added here can override the previous one
-        if(isset($data['fieldprefix']))  $prefix = $data['fieldprefix'] . '_';
+        if(isset($data['fieldprefix'])) {
+            $prefix = $data['fieldprefix'] . '_';
+        }
         return $prefix;
     }
 
-    public function addToObject($data=array())
+    public function addToObject($data = [])
     {
         return true;
     }
-    public function removeFromObject($data=array())
+    public function removeFromObject($data = [])
     {
         return true;
     }
 
-    function aliases()
+    public function aliases()
     {
-        return array();
-    }    
+        return [];
+    }
 
-    public function castType($value=null)
+    public function castType($value = null)
     {
         return (string)$value;
     }
@@ -1012,10 +1186,25 @@ class DataProperty extends xarObject implements iDataProperty
         }
         return xarVar::prepForDisplay($item[$this->name] ?? null);
     }
-    
-    public function preCreate() { return true; }
-    public function preUpdate() { return true; }
-    public function preDelete() { return true; }
-    public function preGet()    { return true; }
-    public function preList()   { return true; }
+
+    public function preCreate()
+    {
+        return true;
+    }
+    public function preUpdate()
+    {
+        return true;
+    }
+    public function preDelete()
+    {
+        return true;
+    }
+    public function preGet()
+    {
+        return true;
+    }
+    public function preList()
+    {
+        return true;
+    }
 }

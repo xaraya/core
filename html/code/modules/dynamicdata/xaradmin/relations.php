@@ -14,34 +14,72 @@
 /**
  * Return relationship information (test only)
  */
-function dynamicdata_admin_relations(Array $args=array())
+function dynamicdata_admin_relations(array $args = [])
 {
     // Security
-    if (!xarSecurity::check('AdminDynamicData')) return;
+    if (!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
-    if(!xarVar::fetch('module',    'isset', $module,    NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('module_id', 'isset', $module_id, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemtype',  'isset', $itemtype,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('objectid',  'isset', $objectid,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('table',     'isset', $table,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('field',     'isset', $field,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('value',     'isset', $value,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('relation',  'isset', $relation,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('direction', 'isset', $direction, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('withobjectid', 'isset', $withobjectid, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('withtable', 'isset', $withtable, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('withfield', 'isset', $withfield, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('withvalue', 'isset', $withvalue, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('confirm',   'isset', $confirm,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('update',    'isset', $update,    NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('delete',    'isset', $delete,    NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('what',      'isset', $what,      NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('extra',     'isset', $extra,     NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module', 'isset', $module, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('field', 'isset', $field, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('value', 'isset', $value, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('relation', 'isset', $relation, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('direction', 'isset', $direction, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('withobjectid', 'isset', $withobjectid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('withtable', 'isset', $withtable, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('withfield', 'isset', $withfield, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('withvalue', 'isset', $withvalue, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('update', 'isset', $update, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('delete', 'isset', $delete, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('what', 'isset', $what, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('extra', 'isset', $extra, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     // filter out invalid tables
-    $xartables =& xarDB::getTables();
+    $xartables = & xarDB::getTables();
     if (!empty($table)) {
-        if ($table == 'dummy' || substr($table,0,15) == 'module variable') {
+        if ($table == 'dummy' || substr($table, 0, 15) == 'module variable') {
             $table = null;
         } elseif ($table == 'dynamic_data') {
             $table = $xartables['dynamic_data'];
@@ -49,7 +87,7 @@ function dynamicdata_admin_relations(Array $args=array())
     }
 
     // prepare template variables
-    $data = array('module_id' => $module_id,
+    $data = ['module_id' => $module_id,
                   'itemtype' => $itemtype,
                   'objectid' => $objectid,
                   'table' => $table,
@@ -61,10 +99,10 @@ function dynamicdata_admin_relations(Array $args=array())
                   'withtable' => $withtable,
                   'withfield' => $withfield,
                   'withvalue' => $withvalue,
-                  'extra' => $extra);
+                  'extra' => $extra];
 
     // get objects
-    $data['objects'] = xarMod::apiFunc('dynamicdata','user','getobjects');
+    $data['objects'] = xarMod::apiFunc('dynamicdata', 'user', 'getobjects');
 
     // import the DataObjectLinks class
     sys::import('modules.dynamicdata.class.objects.links');
@@ -86,8 +124,12 @@ function dynamicdata_admin_relations(Array $args=array())
     //dynamicdata_sync_relations();
 
     if (!empty($objectid)) {
-        $object = xarMod::apiFunc('dynamicdata','user','getobject',
-                                array('objectid' => $objectid));
+        $object = xarMod::apiFunc(
+            'dynamicdata',
+            'user',
+            'getobject',
+            ['objectid' => $objectid]
+        );
         if (!$object->checkAccess('config')) {
             return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
         }
@@ -97,11 +139,11 @@ function dynamicdata_admin_relations(Array $args=array())
         xarTpl::setPageTitle(xarML('Links for #(1)', $object->label));
 
         // get all links, including 'info' for reverse one-way information
-        $links = DataObjectLinks::getLinks($object,'all');
+        $links = DataObjectLinks::getLinks($object, 'all');
         if (!empty($links[$object->name])) {
             $data['relations'] = $links[$object->name];
         } else {
-            $data['relations'] = array();
+            $data['relations'] = [];
         }
         // FIXME: remove initialization of modvar after next release
         xarModVars::set('dynamicdata', 'getlinkedobjects', 0);
@@ -111,20 +153,20 @@ function dynamicdata_admin_relations(Array $args=array())
         if (!empty($data['relations'])) {
             $yuml_spec = '[' . $object->label;
 
-        /* Add the properties to the class diagram
-            $proptypes = DataPropertyMaster::getPropertyTypes();
-            $join = '|';
-            foreach ($object->properties as $property) {
-                $yuml_spec .= $join . $property->name . ': ' . $proptypes[$property->type]['name'];
-                if ($property->defaultvalue !== '') {
-                    $yuml_spec .= ' = ' . $property->defaultvalue;
+            /* Add the properties to the class diagram
+                $proptypes = DataPropertyMaster::getPropertyTypes();
+                $join = '|';
+                foreach ($object->properties as $property) {
+                    $yuml_spec .= $join . $property->name . ': ' . $proptypes[$property->type]['name'];
+                    if ($property->defaultvalue !== '') {
+                        $yuml_spec .= ' = ' . $property->defaultvalue;
+                    }
+                    $join = ';';
                 }
-                $join = ';';
-            }
-        */
+            */
             $yuml_spec .= ']';
 
-            $name2label = array();
+            $name2label = [];
             foreach ($data['objects'] as $info) {
                 $name2label[$info['name']] = $info['label'];
             }
@@ -188,31 +230,37 @@ function dynamicdata_admin_relations(Array $args=array())
             // CHECKME: what if var/processes is not under the web root anymore ?
             if (is_writable(sys::varpath() . '/processes/')) {
                 $yuml_hash = md5($yuml_spec);
-        // CHECKME: what if var/processes is not under the web root anymore ?
+                // CHECKME: what if var/processes is not under the web root anymore ?
                 $filepath = sys::varpath() . '/processes/yuml-' . $yuml_hash . '.png';
                 if (!file_exists($filepath)) {
                     $yuml_url = 'http://yuml.me/diagram/class/' . rawurlencode($yuml_spec);
                     // chris: file_get_contents requires allow_url_fopen=1 in php.ini
-                    // added support for retrieval using curl when available 
+                    // added support for retrieval using curl when available
                     try {
                         sys::import('modules.base.class.xarCurl');
-                        $curl = new xarCurl(array('url' => $yuml_url));
+                        $curl = new xarCurl(['url' => $yuml_url]);
                         if ($curl->errno <> 0) {
-                            throw new BadParameterException(array($yuml_url, $curl->error),
-                                'cURL could not retrieve the file at #(1). Failed with error #(2)');
+                            throw new BadParameterException(
+                                [$yuml_url, $curl->error],
+                                'cURL could not retrieve the file at #(1). Failed with error #(2)'
+                            );
                         } else {
                             $curl->seturl($yuml_url);
                             $image = $curl->exec();
                         }
                     } catch (Exception $e) {
                         // check for allow url fopen if curl returned an error
-                        if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
+                        if (!xarCore::funcIsDisabled('ini_set')) {
+                            ini_set('allow_url_fopen', 1);
+                        }
                         if (!ini_get('allow_url_fopen')) {
-                            throw new ConfigurationException(array('allow_url_fopen', 'cURL'),
-                                'PHP is not currently configured to allow URL retrieval of remote files. You must either enable #(1) in php.ini (not recommended) or install the #(2) module for your server, if available.');
+                            throw new ConfigurationException(
+                                ['allow_url_fopen', 'cURL'],
+                                'PHP is not currently configured to allow URL retrieval of remote files. You must either enable #(1) in php.ini (not recommended) or install the #(2) module for your server, if available.'
+                            );
                         } else {
                             $image = file_get_contents($yuml_url);
-                        }                          
+                        }
                     }
                     if (!empty($image)) {
                         file_put_contents($filepath, $image);
@@ -229,23 +277,27 @@ function dynamicdata_admin_relations(Array $args=array())
         }
 
         if (!empty($withobjectid)) {
-            $withobject = xarMod::apiFunc('dynamicdata','user','getobject',
-                                        array('objectid' => $withobjectid));
+            $withobject = xarMod::apiFunc(
+                'dynamicdata',
+                'user',
+                'getobject',
+                ['objectid' => $withobjectid]
+            );
             $data['withobject'] = $withobject;
             $data['withfields'] = $withobject->properties;
         }
         if (!empty($confirm)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
             }
-/* no longer in use (for now ?)
-            if (!empty($value)) {
-                $field = $value;
-            }
-            if (!empty($withvalue)) {
-                $withfield = $withvalue;
-            }
-*/
+            /* no longer in use (for now ?)
+                        if (!empty($value)) {
+                            $field = $value;
+                        }
+                        if (!empty($withvalue)) {
+                            $withfield = $withvalue;
+                        }
+            */
             if (empty($direction)) {
                 $direction = 'bi';
             }
@@ -255,25 +307,37 @@ function dynamicdata_admin_relations(Array $args=array())
 
             // add link
             DataObjectLinks::addLink($objectid, $field, $withobjectid, $withfield, $relation, $direction, $extra);
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'relations',
-                                            array('objectid' => $objectid)));
+            xarController::redirect(xarController::URL(
+                'dynamicdata',
+                'admin',
+                'relations',
+                ['objectid' => $objectid]
+            ));
             return true;
 
         } elseif (!empty($delete) && !empty($what)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
             }
             // remove selected link(s)
             foreach ($what as $link_id => $val) {
-                if (empty($link_id) || empty($val)) continue;
+                if (empty($link_id) || empty($val)) {
+                    continue;
+                }
                 DataObjectLinks::removeLink($link_id);
             }
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'relations',
-                                            array('objectid' => $objectid)));
+            xarController::redirect(xarController::URL(
+                'dynamicdata',
+                'admin',
+                'relations',
+                ['objectid' => $objectid]
+            ));
             return true;
 
         } elseif (!empty($update)) {
-            if(!xarVar::fetch('getlinkedobjects', 'isset', $getlinkedobjects, NULL, xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('getlinkedobjects', 'isset', $getlinkedobjects, null, xarVar::DONT_SET)) {
+                return;
+            }
             if (!empty($getlinkedobjects)) {
                 xarModItemVars::set('dynamicdata', 'getlinkedobjects', 1, $objectid);
             } else {
@@ -282,13 +346,21 @@ function dynamicdata_admin_relations(Array $args=array())
         }
 
         // get fieldtype property to show object properties
-        $data['prop'] = xarMod::apiFunc('dynamicdata','user','getproperty',
-                                        array('type' => 'fieldtype',
-                                              'name' => 'dummy'));
+        $data['prop'] = xarMod::apiFunc(
+            'dynamicdata',
+            'user',
+            'getproperty',
+            ['type' => 'fieldtype',
+                                              'name' => 'dummy']
+        );
 
     } elseif (!empty($table)) {
-        $object = xarMod::apiFunc('dynamicdata','user','getobject',
-                                array('table' => $table));
+        $object = xarMod::apiFunc(
+            'dynamicdata',
+            'user',
+            'getobject',
+            ['table' => $table]
+        );
         if (!$object->checkAccess('config')) {
             return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
         }
@@ -299,33 +371,37 @@ function dynamicdata_admin_relations(Array $args=array())
         sys::import('modules.dynamicdata.class.datastores.links');
 
         // get all links, including 'info' for reverse one-way information
-        $links = DataStoreLinks::getLinks($table,'all');
+        $links = DataStoreLinks::getLinks($table, 'all');
         if (!empty($links[$table])) {
             $data['relations'] = $links[$table];
         } else {
-            $data['relations'] = array();
+            $data['relations'] = [];
         }
 
         // get foreign keys for tables
         $data['foreignkeys'] = DataStoreLinks::getForeignKeys();
 
         if (!empty($withtable)) {
-            $withobject = xarMod::apiFunc('dynamicdata','user','getobject',
-                                        array('table' => $withtable));
+            $withobject = xarMod::apiFunc(
+                'dynamicdata',
+                'user',
+                'getobject',
+                ['table' => $withtable]
+            );
             $data['withfields'] = $withobject->properties;
         }
         if (!empty($confirm)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-            }        
-/* no longer in use (for now ?)
-            if (!empty($value)) {
-                $field = $value;
+                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
             }
-            if (!empty($withvalue)) {
-                $withfield = $withvalue;
-            }
-*/
+            /* no longer in use (for now ?)
+                        if (!empty($value)) {
+                            $field = $value;
+                        }
+                        if (!empty($withvalue)) {
+                            $withfield = $withvalue;
+                        }
+            */
             if (empty($direction)) {
                 $direction = 'bi';
             }
@@ -335,41 +411,59 @@ function dynamicdata_admin_relations(Array $args=array())
             // CHECKME: always bi-directional for tables ?
             $direction = 'bi';
             DataStoreLinks::addLink($table, $field, $withtable, $withfield, $relation, $direction, $extra);
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'relations',
-                                          array('table' => $table)));
+            xarController::redirect(xarController::URL(
+                'dynamicdata',
+                'admin',
+                'relations',
+                ['table' => $table]
+            ));
             return true;
 
         } elseif (!empty($delete) && !empty($what)) {
             if (!xarSec::confirmAuthKey()) {
-                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-            }        
+                return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+            }
             // remove selected link(s)
             foreach ($what as $link_id => $val) {
-                if (empty($link_id) || empty($val)) continue;
+                if (empty($link_id) || empty($val)) {
+                    continue;
+                }
                 DataStoreLinks::removeLink($link_id);
             }
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'relations',
-                                          array('table' => $table)));
+            xarController::redirect(xarController::URL(
+                'dynamicdata',
+                'admin',
+                'relations',
+                ['table' => $table]
+            ));
             return true;
         }
 
         // get fieldtype property to show table fields
-        $data['prop'] = xarMod::apiFunc('dynamicdata','user','getproperty',
-                                        array('type' => 'fieldtype',
-                                              'name' => 'dummy'));
+        $data['prop'] = xarMod::apiFunc(
+            'dynamicdata',
+            'user',
+            'getproperty',
+            ['type' => 'fieldtype',
+                                              'name' => 'dummy']
+        );
 
     } elseif (!empty($module_id)) {
         $data['module'] = xarMod::getName($module_id);
         // (try to) get the relationships between this module and others
-        $data['relations'] = xarMod::apiFunc('dynamicdata','util','getrelations',
-                                           array('module_id' => $module_id,
-                                                 'itemtype' => $itemtype));
+        $data['relations'] = xarMod::apiFunc(
+            'dynamicdata',
+            'util',
+            'getrelations',
+            ['module_id' => $module_id,
+                                                 'itemtype' => $itemtype]
+        );
     } else {
         xarTpl::setPageTitle(xarML('Links'));
     }
 
     if (!isset($data['relations']) || $data['relations'] == false) {
-        $data['relations'] = array();
+        $data['relations'] = [];
     }
 
     xarTpl::setPageTemplateName('admin');
@@ -379,94 +473,94 @@ function dynamicdata_admin_relations(Array $args=array())
 
 function dynamicdata_sync_relations()
 {
-/*
-    // add foreign keys to table links
+    /*
+        // add foreign keys to table links
 
-    sys::import('modules.dynamicdata.class.datastores.links');
+        sys::import('modules.dynamicdata.class.datastores.links');
 
-    $foreignkeys = DataStoreLinks::getForeignKeys();
-    foreach ($foreignkeys as $info) {
-        DataStoreLinks::addLink($info['source'], $info['from'], $info['target'], $info['to'], 'parents', 'fk');
-    }
-*/
+        $foreignkeys = DataStoreLinks::getForeignKeys();
+        foreach ($foreignkeys as $info) {
+            DataStoreLinks::addLink($info['source'], $info['from'], $info['target'], $info['to'], 'parents', 'fk');
+        }
+    */
 
-/*
-    // sync object links with table links
+    /*
+        // sync object links with table links
 
-    sys::import('modules.dynamicdata.class.objects.links');
+        sys::import('modules.dynamicdata.class.objects.links');
 
-    $tablelinks = DataStoreLinks::getLinks();
+        $tablelinks = DataStoreLinks::getLinks();
 
-    // get source mapping
-    $sourcemapping = DataStoreLinks::getSourceFieldMapping();
+        // get source mapping
+        $sourcemapping = DataStoreLinks::getSourceFieldMapping();
 
-    foreach ($tablelinks as $source => $links) {
-        foreach ($links as $link) {
-            $fromsource = $link['source'].'.'.$link['from_prop'];
-            $totarget = $link['target'].'.'.$link['to_prop'];
-            if (!empty($sourcemapping[$fromsource]) && !empty($sourcemapping[$totarget])) {
-                $fromprop = $sourcemapping[$fromsource];
-                $toprop = $sourcemapping[$totarget];
-                // force bi-directional object relationship for foreign keys
-                if ($link['direction'] == 'fk') {
-                    if ($link['link_type'] == 'parents') {
-                        DataObjectLinks::addLink($fromprop['objectid'], $fromprop['name'], $toprop['objectid'], $toprop['name'], 'parents', 'bi');
+        foreach ($tablelinks as $source => $links) {
+            foreach ($links as $link) {
+                $fromsource = $link['source'].'.'.$link['from_prop'];
+                $totarget = $link['target'].'.'.$link['to_prop'];
+                if (!empty($sourcemapping[$fromsource]) && !empty($sourcemapping[$totarget])) {
+                    $fromprop = $sourcemapping[$fromsource];
+                    $toprop = $sourcemapping[$totarget];
+                    // force bi-directional object relationship for foreign keys
+                    if ($link['direction'] == 'fk') {
+                        if ($link['link_type'] == 'parents') {
+                            DataObjectLinks::addLink($fromprop['objectid'], $fromprop['name'], $toprop['objectid'], $toprop['name'], 'parents', 'bi');
+                        }
+
+                    // CHECKME: assume uni-directional object relationship from child for other table relationships ?
+                    } elseif ($link['dir'] == 'bi') {
+                        if ($link['type'] == 'parents') {
+                            DataObjectLinks::addLink($fromprop['objectid'], $fromprop['name'], $toprop['objectid'], $toprop['name'], 'parents', 'uni');
+                        }
+
+                    // CHECKME: where would this come from ?
+                    } else {
+
                     }
- 
-                // CHECKME: assume uni-directional object relationship from child for other table relationships ?
-                } elseif ($link['dir'] == 'bi') {
-                    if ($link['type'] == 'parents') {
-                        DataObjectLinks::addLink($fromprop['objectid'], $fromprop['name'], $toprop['objectid'], $toprop['name'], 'parents', 'uni');
-                    }
-
-                // CHECKME: where would this come from ?
-                } else {
-
                 }
             }
         }
-    }
-*/
+    */
 
-/*
-    // sync object links with objectref properties
+    /*
+        // sync object links with objectref properties
 
-    // find all properties of type ObjectRef
-    $properties = DataObjectMaster::getObjectList(array('name'  => 'properties',
-                                                        'where' => 'type eq 507', // ObjectRefProperty
-                                                        'fieldlist' => array('id','name','objectid')));
-    $properties->getItems();
-    $objectstocheck = array();
-    foreach ($properties->items as $item) {
-        $objectstocheck[$item['objectid']] = 1;
-    }
-
-    foreach (array_keys($objectstocheck) as $objectid) {
-        $object = DataObjectMaster::getObject(array('objectid' => $objectid));
-        $links = DataObjectLinks::getLinks($object,'all');
-        $source = $object->name;
-        if (empty($links[$source])) {
-            $links[$source] = array();
+        // find all properties of type ObjectRef
+        $properties = DataObjectMaster::getObjectList(array('name'  => 'properties',
+                                                            'where' => 'type eq 507', // ObjectRefProperty
+                                                            'fieldlist' => array('id','name','objectid')));
+        $properties->getItems();
+        $objectstocheck = array();
+        foreach ($properties->items as $item) {
+            $objectstocheck[$item['objectid']] = 1;
         }
-        foreach (array_keys($object->properties) as $propname) {
-            if ($object->properties[$propname]->type != 507) continue;
-            $from_prop = $propname;
-            $target = $object->properties[$propname]->initialization_refobject;
-            $to_prop = $object->properties[$propname]->initialization_store_prop;
-            $found = 0;
-            // see if we already have an object link corresponding to this objectref
-            foreach ($links[$source] as $link) {
-                if ($link['from_prop'] == $from_prop && $link['target'] == $target && $link['to_prop'] == $to_prop) {
-                    $found = 1;
-                    break;
+
+        foreach (array_keys($objectstocheck) as $objectid) {
+            $object = DataObjectMaster::getObject(array('objectid' => $objectid));
+            $links = DataObjectLinks::getLinks($object,'all');
+            $source = $object->name;
+            if (empty($links[$source])) {
+                $links[$source] = array();
+            }
+            foreach (array_keys($object->properties) as $propname) {
+                if ($object->properties[$propname]->type != 507) continue;
+                $from_prop = $propname;
+                $target = $object->properties[$propname]->initialization_refobject;
+                $to_prop = $object->properties[$propname]->initialization_store_prop;
+                $found = 0;
+                // see if we already have an object link corresponding to this objectref
+                foreach ($links[$source] as $link) {
+                    if ($link['from_prop'] == $from_prop && $link['target'] == $target && $link['to_prop'] == $to_prop) {
+                        $found = 1;
+                        break;
+                    }
+                }
+                if (empty($found)) {
+                    // CHECKME: create bi-directional parents link to the other object here ?
+                    //DataObjectLinks::addLink($source, $from_prop, $target, $to_prop, 'linkedto', 'bi');
+                    DataObjectLinks::addLink($source, $from_prop, $target, $to_prop, 'parents', 'bi');
                 }
             }
-            if (empty($found)) {
-                // CHECKME: create bi-directional parents link to the other object here ?
-                //DataObjectLinks::addLink($source, $from_prop, $target, $to_prop, 'linkedto', 'bi');
-                DataObjectLinks::addLink($source, $from_prop, $target, $to_prop, 'parents', 'bi');
-            }
         }
-    }
-*/
+    */
 }

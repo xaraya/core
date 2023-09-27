@@ -22,7 +22,7 @@
  * @return boolean|void true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_delete(array $args=[])
+function dynamicdata_adminapi_delete(array $args = [])
 {
     $args = DataObjectDescriptor::getObjectID($args);
     extract($args);

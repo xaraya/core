@@ -980,7 +980,7 @@ class DataObjectRESTBuilder extends xarObject
                         'schema' => $name,
                         'description' => $key . ' value',
                     ];
-                // => ['itemtype' => 'string', 'itemids' => ['integer']]
+                    // => ['itemtype' => 'string', 'itemids' => ['integer']]
                 } else {
                     // @checkme use style = form + explode = true here
                     $parameters[] = [
@@ -997,7 +997,7 @@ class DataObjectRESTBuilder extends xarObject
                         'description' => $key . ' value',
                     ];
                 }
-            // => ['itemtype' => 'string', 'itemids' => 'array']
+                // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif (in_array($name, ["string", "integer", "boolean"])) {
                 $parameters[] = [
                     'name' => $key,
@@ -1007,7 +1007,7 @@ class DataObjectRESTBuilder extends xarObject
                     ],
                     'description' => $key . ' value',
                 ];
-            // => ['itemtype' => 'string', 'itemids' => 'array']
+                // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif ($name === "array") {
                 // @checkme use style = form + explode = true here
                 $parameters[] = [
@@ -1023,7 +1023,7 @@ class DataObjectRESTBuilder extends xarObject
                     'explode' => true,
                     'description' => $key . ' value (comma separated)',
                 ];
-            //} elseif ($name === "object") {
+                //} elseif ($name === "object") {
             } else {
             }
         }
@@ -1042,19 +1042,19 @@ class DataObjectRESTBuilder extends xarObject
                 // => ['itemtype' => ['type' => 'string'], 'itemids' => ['type' => 'array', 'items' => ['type' => 'string']]]
                 if (array_key_exists("type", $name)) {
                     $properties[$key] = $name;
-                // => ['itemtype' => 'string', 'itemids' => ['integer']]
+                    // => ['itemtype' => 'string', 'itemids' => ['integer']]
                 } else {
                     // @checkme use style = form + explode = true here
                     $properties[$key] = ['type' => 'array', 'items' => ['type' => $name[0]]];
                 }
-            // => ['itemtype' => 'string', 'itemids' => 'array']
+                // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif (in_array($name, ["string", "integer", "boolean"])) {
                 $properties[$key] = ['type' => $name];
-            // => ['itemtype' => 'string', 'itemids' => 'array']
+                // => ['itemtype' => 'string', 'itemids' => 'array']
             } elseif ($name === "array") {
                 // @checkme use style = form + explode = true here
                 $properties[$key] = ['type' => 'array', 'items' => ['type' => 'string']];
-            //} elseif ($name === "object") {
+                //} elseif ($name === "object") {
             } else {
             }
         }

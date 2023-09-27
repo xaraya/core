@@ -18,7 +18,7 @@
  * @param $args['extrainfo'] extra information
  * @return string|void output display string
  */
-function dynamicdata_admin_modifyhook(array $args=[])
+function dynamicdata_admin_modifyhook(array $args = [])
 {
     // Security
     if (!xarSecurity::check('EditDynamicData')) {

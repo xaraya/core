@@ -15,20 +15,40 @@
  * View items
  * @return string|void output display string
  */
-function dynamicdata_admin_view(Array $args=array())
+function dynamicdata_admin_view(array $args = [])
 {
     // Security
-    if(!xarSecurity::check('EditDynamicData')) return;
+    if(!xarSecurity::check('EditDynamicData')) {
+        return;
+    }
 
-    if(!xarVar::fetch('itemid',   'int',   $itemid,    1, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('name',     'isset', $name,      NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('startnum', 'int',   $startnum,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('numitems', 'int',   $numitems,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('sort',     'isset', $sort,      NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('catid',    'isset', $catid,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('layout',   'str:1' ,$layout,    'default', xarVar::NOT_REQUIRED)) {return;}
-    if(!xarVar::fetch('tplmodule','isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {return;}
-    if(!xarVar::fetch('template', 'isset', $template,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid', 'int', $itemid, 1, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('startnum', 'int', $startnum, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('numitems', 'int', $numitems, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('sort', 'isset', $sort, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('catid', 'isset', $catid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('layout', 'str:1', $layout, 'default', xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if(!xarVar::fetch('tplmodule', 'isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if(!xarVar::fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     // Override if needed from argument array
     extract($args);
@@ -40,7 +60,7 @@ function dynamicdata_admin_view(Array $args=array())
 
     // Note: we need to pass all relevant arguments ourselves here
     $object = DataObjectMaster::getObjectList(
-                            array('objectid'  => $itemid,
+        ['objectid'  => $itemid,
                                   'name'      => $name,
                                   'startnum'  => $startnum,
                                   'numitems'  => $numitems,
@@ -49,18 +69,25 @@ function dynamicdata_admin_view(Array $args=array())
                                   'layout'    => $layout,
                                   'tplmodule' => $tplmodule,
                                   'template'  => $template,
-                                  ));
+                                  ]
+    );
 
-    if (!isset($object)) return;
+    if (!isset($object)) {
+        return;
+    }
 
-    if (!$object->checkAccess('view'))
+    if (!$object->checkAccess('view')) {
         return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
+    }
 
     // Check if we are filtering
     try {
         $conditions = unserialize(xarSession::getVar('DynamicData.Filter.' . $object->name));
-        if (!empty($conditions)) $object->dataquery->addconditions($conditions);
-    } catch (Exception $e) {}
+        if (!empty($conditions)) {
+            $object->dataquery->addconditions($conditions);
+        }
+    } catch (Exception $e) {
+    }
 
     // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();
@@ -77,19 +104,31 @@ function dynamicdata_admin_view(Array $args=array())
     // TODO: another stray
     $data['catid'] = $catid;
     // TODO: is this needed?
-    $data = array_merge($data,xarMod::apiFunc('dynamicdata','admin','menu'));
+    $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
 
-    if (xarSecurity::check('AdminDynamicData',0)) {
+    if (xarSecurity::check('AdminDynamicData', 0)) {
         if (!empty($data['table'])) {
-            $data['querylink'] = xarController::URL('dynamicdata','admin','query',
-                                           array('table' => $data['table']));
+            $data['querylink'] = xarController::URL(
+                'dynamicdata',
+                'admin',
+                'query',
+                ['table' => $data['table']]
+            );
         } elseif (!empty($data['join'])) {
-            $data['querylink'] = xarController::URL('dynamicdata','admin','query',
-                                           array('itemid' => $objectid,
-                                                 'join' => $data['join']));
+            $data['querylink'] = xarController::URL(
+                'dynamicdata',
+                'admin',
+                'query',
+                ['itemid' => $objectid,
+                                                 'join' => $data['join']]
+            );
         } else {
-            $data['querylink'] = xarController::URL('dynamicdata','admin','query',
-                                           array('itemid' => $data['objectid']));
+            $data['querylink'] = xarController::URL(
+                'dynamicdata',
+                'admin',
+                'query',
+                ['itemid' => $data['objectid']]
+            );
         }
     }
 
@@ -97,8 +136,8 @@ function dynamicdata_admin_view(Array $args=array())
 
     if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view.xt') ||
         file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-view-' . $data['template'] . '.xt')) {
-        return xarTpl::module($data['tplmodule'],'admin','view',$data,$data['template']);
+        return xarTpl::module($data['tplmodule'], 'admin', 'view', $data, $data['template']);
     } else {
-        return xarTpl::module('dynamicdata','admin','view',$data);
+        return xarTpl::module('dynamicdata', 'admin', 'view', $data);
     }
 }

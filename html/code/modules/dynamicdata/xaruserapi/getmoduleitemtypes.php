@@ -19,7 +19,7 @@
  * @param array    $args array of optional parameters<br/>
  * @return array containing the item types and their description
  */
-function dynamicdata_userapi_getmoduleitemtypes(Array $args=array())
+function dynamicdata_userapi_getmoduleitemtypes(array $args = [])
 {
-    return DataObjectMaster::getModuleItemTypes($args);      
+    return DataObjectMaster::getModuleItemTypes($args);
 }

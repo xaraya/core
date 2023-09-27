@@ -24,7 +24,7 @@
  * @return mixed value of the field, or false on failure
  * @throws BadParameterException
  */
-function dynamicdata_userapi_getfield(array $args=[])
+function dynamicdata_userapi_getfield(array $args = [])
 {
     extract($args);
 

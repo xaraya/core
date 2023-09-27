@@ -20,19 +20,29 @@
  * @param int numitems The number of items to get
  * @return array|void output of the items found
  */
-function dynamicdata_user_search(Array $args=array())
+function dynamicdata_user_search(array $args = [])
 {
-// Security Check
-    if(!xarSecurity::check('ViewDynamicData')) return;
+    // Security Check
+    if(!xarSecurity::check('ViewDynamicData')) {
+        return;
+    }
 
-    $data = array();
+    $data = [];
 
-    if (!xarVar::fetch('q', 'isset', $q, NULL, xarVar::DONT_SET)) {return;}
-    if (!xarVar::fetch('dd_check', 'isset', $dd_check, NULL, xarVar::DONT_SET)) {return;}
-    if (!xarVar::fetch('startnum', 'int:0', $startnum,  NULL, xarVar::NOT_REQUIRED)) {return;}
-    if (!xarVar::fetch('numitems', 'int:0', $numitems,  NULL, xarVar::NOT_REQUIRED)) {return;}
+    if (!xarVar::fetch('q', 'isset', $q, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if (!xarVar::fetch('dd_check', 'isset', $dd_check, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if (!xarVar::fetch('startnum', 'int:0', $startnum, null, xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (!xarVar::fetch('numitems', 'int:0', $numitems, null, xarVar::NOT_REQUIRED)) {
+        return;
+    }
     if (empty($dd_check)) {
-        $dd_check = array();
+        $dd_check = [];
     }
 
     // see if we're coming from the search hook or not
@@ -42,8 +52,12 @@ function dynamicdata_user_search(Array $args=array())
         $data['ishooked'] = 0;
         $data['q'] = isset($q) ? xarVar::prepForDisplay($q) : null;
 
-        if(!xarVar::fetch('module_id',    'int',   $module_id,     NULL, xarVar::DONT_SET)) {return;}
-        if(!xarVar::fetch('itemtype', 'int',   $itemtype,  NULL, xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('module_id', 'int', $module_id, null, xarVar::DONT_SET)) {
+            return;
+        }
+        if(!xarVar::fetch('itemtype', 'int', $itemtype, null, xarVar::DONT_SET)) {
+            return;
+        }
         if (empty($module_id) && empty($itemtype)) {
             $data['gotobject'] = 0;
         } else {
@@ -67,10 +81,11 @@ function dynamicdata_user_search(Array $args=array())
     $label = xarML('Dynamic Data');
     if (empty($data['ishooked']) && !empty($data['gotobject'])) {
         // get the selected object
-        $objects = array();
+        $objects = [];
         $object = DataObjectMaster::getObjectInfo(
-                                array('moduleid' => $module_id,
-                                      'itemtype' => $itemtype));
+            ['moduleid' => $module_id,
+                                      'itemtype' => $itemtype]
+        );
         if (!empty($object)) {
             $objects[$object['objectid']] = $object;
             $label = $object['label'];
@@ -84,7 +99,7 @@ function dynamicdata_user_search(Array $args=array())
         xarTpl::setPageTitle(xarML('Search #(1)', $label));
     }
 
-    $data['items'] = array();
+    $data['items'] = [];
     $mymodid = xarMod::getRegID('dynamicdata');
     if ($data['ishooked']) {
         $myfunc = 'view';
@@ -92,13 +107,15 @@ function dynamicdata_user_search(Array $args=array())
         $myfunc = 'search';
     }
     if (!empty($q)) {
-        $quoted = str_replace("'","\\'",$q);
-        $quoted = str_replace("%","\\%",$quoted);
-        $quoted = str_replace("_","\\_",$quoted);
+        $quoted = str_replace("'", "\\'", $q);
+        $quoted = str_replace("%", "\\%", $quoted);
+        $quoted = str_replace("_", "\\_", $quoted);
     }
     foreach ($objects as $itemid => $object) {
         // skip the internal objects
-        if ($itemid < 3) continue;
+        if ($itemid < 3) {
+            continue;
+        }
         $module_id = $object['moduleid'];
         // don't show data "belonging" to other modules for now
         if ($module_id != $mymodid) {
@@ -106,10 +123,14 @@ function dynamicdata_user_search(Array $args=array())
         }
         $label = $object['label'];
         $itemtype = $object['itemtype'];
-        $fields = xarMod::apiFunc('dynamicdata','user','getprop',
-                                array('module_id' => $module_id,
-                                      'itemtype' => $itemtype));
-        $wherelist = array();
+        $fields = xarMod::apiFunc(
+            'dynamicdata',
+            'user',
+            'getprop',
+            ['module_id' => $module_id,
+                                      'itemtype' => $itemtype]
+        );
+        $wherelist = [];
         foreach ($fields as $name => $field) {
             if (!empty($dd_check[$field['id']])) {
                 $fields[$name]['checked'] = 1;
@@ -121,23 +142,32 @@ function dynamicdata_user_search(Array $args=array())
         if (!empty($q) && count($wherelist) > 0) {
             //$where = join(' or ',$wherelist);
             $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-            $pagerurl = xarController::URL('dynamicdata','user','search',
-                                  array('module_id' => ($module_id == $mymodid) ? null : $module_id,
+            $pagerurl = xarController::URL(
+                'dynamicdata',
+                'user',
+                'search',
+                ['module_id' => ($module_id == $mymodid) ? null : $module_id,
                                         'itemtype' => empty($itemtype) ? null : $itemtype,
                                         'q' => $q,
-                                        'dd_check' => $dd_check));
+                                        'dd_check' => $dd_check]
+            );
             // get the object
-            $object = xarMod::apiFunc('dynamicdata','user','getobjectlist',
-                                    array('module_id' => $module_id,
+            $object = xarMod::apiFunc(
+                'dynamicdata',
+                'user',
+                'getobjectlist',
+                ['module_id' => $module_id,
                                           'itemtype' => $itemtype,
                                           //'where' => $where,
                                           'startnum' => $startnum,
                                           'numitems' => $numitems,
                                           //'pagerurl' => $pagerurl,
                                           'layout' => 'list',
-                                          'status' => $status));
-            if (!$object->checkAccess('view'))
+                                          'status' => $status]
+            );
+            if (!$object->checkAccess('view')) {
                 continue;
+            }
             // add the where clauses directly here to avoid quoting issues
             $join = '';
             foreach ($wherelist as $name => $clause) {
@@ -160,16 +190,20 @@ function dynamicdata_user_search(Array $args=array())
         if ($itemtype == 0) {
             $itemtype = null;
         }
-        $data['items'][] = array(
-                                 'link'     => xarController::URL('dynamicdata','user',$myfunc,
-                                                         array('module_id' => $module_id,
-                                                               'itemtype' => $itemtype)),
+        $data['items'][] = [
+                                 'link'     => xarController::URL(
+                                     'dynamicdata',
+                                     'user',
+                                     $myfunc,
+                                     ['module_id' => $module_id,
+                                                               'itemtype' => $itemtype]
+                                 ),
                                  'label'    => $label,
                                  'module_id'    => $module_id,
                                  'itemtype' => $itemtype,
                                  'fields'   => $fields,
                                  'result'   => $result,
-                                );
+                                ];
     }
 
     return $data;

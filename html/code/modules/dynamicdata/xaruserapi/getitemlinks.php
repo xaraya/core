@@ -19,35 +19,44 @@
  *        array    $args['itemids'] array of item ids to get
  * @return array containing the itemlink(s) for the item(s).
  */
-function dynamicdata_userapi_getitemlinks(Array $args=array())
+function dynamicdata_userapi_getitemlinks(array $args = [])
 {
     extract($args);
 
-    $itemlinks = array();
-    if (empty($itemtype)) $itemtype = null;
-    if (empty($itemids)) $itemids = null;
+    $itemlinks = [];
+    if (empty($itemtype)) {
+        $itemtype = null;
+    }
+    if (empty($itemids)) {
+        $itemids = null;
+    }
     // for items managed by DD itself only
     $module_id = xarMod::getRegID('dynamicdata');
-    $args = DataObjectDescriptor::getObjectID(array('moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype));
-    if (empty($args['objectid'])) return $itemlinks;
-    $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-    $object = DataObjectMaster::getObjectList(array('objectid'  => $args['objectid'],
-                                           'itemids' => $itemids,
-                                           'status' => $status));
-    if (!isset($object) || (empty($object->objectid) && empty($object->table))) return $itemlinks;
-    if (!$object->checkAccess('view'))
+    $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+                                       'itemtype'  => $itemtype]);
+    if (empty($args['objectid'])) {
         return $itemlinks;
+    }
+    $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
+    $object = DataObjectMaster::getObjectList(['objectid'  => $args['objectid'],
+                                           'itemids' => $itemids,
+                                           'status' => $status]);
+    if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
+        return $itemlinks;
+    }
+    if (!$object->checkAccess('view')) {
+        return $itemlinks;
+    }
 
     $object->getItems();
 
     $properties = & $object->getProperties();
     $items = & $object->items;
     if (!isset($items) || !is_array($items) || count($items) == 0) {
-       return $itemlinks;
+        return $itemlinks;
     }
 
-// TODO: make configurable
+    // TODO: make configurable
     $titlefield = '';
     foreach ($properties as $name => $property) {
         // let's use the first textbox property we find for now...
@@ -66,14 +75,18 @@ function dynamicdata_userapi_getitemlinks(Array $args=array())
         if (!empty($titlefield) && isset($items[$itemid][$titlefield])) {
             $label = $items[$itemid][$titlefield];
         } else {
-            $label = xarML('Item #(1)',$itemid);
+            $label = xarML('Item #(1)', $itemid);
         }
         // $object->getActionURL('display', $itemid)
-        $itemlinks[$itemid] = array('url'   => xarController::URL('dynamicdata', 'user', 'display',
-                                                         array('name' => $args['name'],
-                                                               'itemid' => $itemid)),
+        $itemlinks[$itemid] = ['url'   => xarController::URL(
+            'dynamicdata',
+            'user',
+            'display',
+            ['name' => $args['name'],
+                                                               'itemid' => $itemid]
+        ),
                                     'title' => xarML('Display Item'),
-                                    'label' => $label);
+                                    'label' => $label];
     }
     return $itemlinks;
 }

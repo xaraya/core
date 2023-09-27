@@ -28,31 +28,33 @@ class FieldTypeProperty extends ObjectRefProperty
     public $initialization_display_prop = 'label';
     public $initialization_refobject    = null;    // There is no object corresponding to the xar_dynamic_properties_def table
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath   = 'modules/dynamicdata/xarproperties';
         // CHECKME: can we somehow get rid of $this->initialization_refobject here, or
         //          switch back to SelectProperty and use initialization_store_type ?
     }
-	
-	/**
+
+    /**
      * Retrieve the list of options on demand
-     * 
+     *
      */
-    function getOptions()
+    public function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
         }
-        
-        $options = array();
+
+        $options = [];
         $proptypes = DataPropertyMaster::getPropertyTypes();
-        if (!isset($proptypes)) $proptypes = array();
+        if (!isset($proptypes)) {
+            $proptypes = [];
+        }
 
         foreach ($proptypes as $propid => $proptype) {
             // TODO: label isnt guaranteed to be unique, if not, leads to some surprises.
-            $options[$proptype[$this->initialization_display_prop]] = array('id' => $proptype[$this->initialization_store_prop], 'name' => $proptype[$this->initialization_display_prop]);
+            $options[$proptype[$this->initialization_display_prop]] = ['id' => $proptype[$this->initialization_store_prop], 'name' => $proptype[$this->initialization_display_prop]];
         }
         // sort by name
         ksort($options);

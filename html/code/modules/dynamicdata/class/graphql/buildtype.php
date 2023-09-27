@@ -762,17 +762,17 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         } elseif ($fieldtype == 'basetype') {
             // @checkme use standard default field resolver here?
             $field_resolver = self::basetype_field_resolver($typename, $fieldname);
-        // this field doesn't have a field spec because it is added by the object field resolver
+            // this field doesn't have a field spec because it is added by the object field resolver
         } elseif (empty($fieldtype) && in_array($fieldname, ["properties", "_objectref"])) {
             // @checkme use standard default field resolver here?
             $field_resolver = self::basetype_field_resolver($typename, $fieldname);
-        // this field contains a _ which typically means it refers to another field
+            // this field contains a _ which typically means it refers to another field
         } elseif (empty($fieldtype) && strpos($fieldname, '_') !== false) {
             // fieldname starts with _
             if (substr($fieldname, 0, 1) === '_' && !empty($fieldspecs[substr($fieldname, 1)])) {
                 $fieldalias = substr($fieldname, 1);
                 $field_resolver = self::alias_field_resolver($typename, $fieldname, $fieldalias);
-            // fieldname ends with _kv
+                // fieldname ends with _kv
             } elseif (substr($fieldname, -3) === '_kv' && !empty($fieldspecs[substr($fieldname, 0, -3)])) {
                 $fieldalias = substr($fieldname, 0, -3);
                 $field_resolver = self::keyval_field_resolver($typename, $fieldname, $fieldalias);
@@ -977,8 +977,8 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             } else {
                 $type = $found;
             }
-        //$type->getFields();
-        //$field_resolver = self::object_field_resolver($name);
+            //$type->getFields();
+            //$field_resolver = self::object_field_resolver($name);
         } else {
             $type = false;
         }

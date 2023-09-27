@@ -19,14 +19,14 @@
  * @return array containing a reference to the properties of the item
  * @TODO: move this to some common place in Xaraya (base module ?)
  */
-function dynamicdata_userapi_getitemfordisplay(Array $args=array())
+function dynamicdata_userapi_getitemfordisplay(array $args = [])
 {
     $args['getobject'] = 1;
-    $object = xarMod::apiFunc('dynamicdata','user','getitem',$args);
-    $properties = array();
+    $object = xarMod::apiFunc('dynamicdata', 'user', 'getitem', $args);
+    $properties = [];
     if (isset($object)) {
         $properties = & $object->getProperties();
     }
-    $item = array(& $properties);
+    $item = [& $properties];
     return $item;
 }

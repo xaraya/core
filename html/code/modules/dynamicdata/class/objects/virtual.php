@@ -65,7 +65,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
      * @param $args['class'] optional classname (e.g. <module>_DataObject)
      * @return object virtual object descriptor for use in $object = new DataObject($descriptor); or $objectlist = new DataObjectList($descriptor);
     **/
-    public function __construct(array $args=[])
+    public function __construct(array $args = [])
     {
         //$args = self::getObjectID($args);
         ObjectDescriptor::__construct($args);
@@ -87,7 +87,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
      * @param $args['configuration'] the configuration (serialized array) for the dynamic property
      * @param $args['id'] the id for the dynamic property
     **/
-    public function addProperty(array $args=[])
+    public function addProperty(array $args = [])
     {
         if (empty($args['name']) || empty($args['type'])) {
             throw new Exception('You need to specify at least a name and type for each property');

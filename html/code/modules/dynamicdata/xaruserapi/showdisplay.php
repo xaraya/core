@@ -18,7 +18,7 @@
  * @param $args array containing the item or fields to show
  * @return string output display string
  */
-function dynamicdata_userapi_showdisplay(Array $args=array())
+function dynamicdata_userapi_showdisplay(array $args = [])
 {
     extract($args);
 
@@ -28,17 +28,21 @@ function dynamicdata_userapi_showdisplay(Array $args=array())
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {
-        return xarTpl::module('dynamicdata','user','showdisplay',
-                            $args,
-                            $template);
+        return xarTpl::module(
+            'dynamicdata',
+            'user',
+            'showdisplay',
+            $args,
+            $template
+        );
     }
 
     // check the optional field list
     if (!empty($fieldlist)) {
         // support comma-separated field list
         if (is_string($fieldlist)) {
-            $args['fieldlist'] = explode(',',$fieldlist);
-        // and array of fields
+            $args['fieldlist'] = explode(',', $fieldlist);
+            // and array of fields
         } elseif (is_array($fieldlist)) {
             $args['fieldlist'] = $fieldlist;
         }
@@ -47,8 +51,9 @@ function dynamicdata_userapi_showdisplay(Array $args=array())
     }
 
     $object = DataObjectMaster::getObject($args);
-    if (!$object->checkAccess('display'))
+    if (!$object->checkAccess('display')) {
         return xarML('Display #(1) is forbidden', $object->label);
+    }
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {
         $object->getItem();

@@ -17,24 +17,50 @@
  *
  * @return string|void output display string
  */
-function dynamicdata_user_view(Array $args=array())
+function dynamicdata_user_view(array $args = [])
 {
     // Old-style arguments
-    if(!xarVar::fetch('objectid', 'int',   $objectid,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('module_id','int',   $module_id, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('moduleid', 'int',   $moduleid,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemtype', 'int',   $itemtype,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'int', $objectid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('module_id', 'int', $module_id, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('moduleid', 'int', $moduleid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemtype', 'int', $itemtype, null, xarVar::DONT_SET)) {
+        return;
+    }
     // New-style arguments
-    if(!xarVar::fetch('itemid',   'int',   $itemid,    NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('name',     'isset', $name,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid', 'int', $itemid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        return;
+    }
 
-    if(!xarVar::fetch('startnum', 'int',   $startnum,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('numitems', 'int',   $numitems,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('sort',     'isset', $sort,      NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('catid',    'isset', $catid,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('layout',   'str:1' ,$layout,    'default', xarVar::NOT_REQUIRED)) {return;}
-    if(!xarVar::fetch('tplmodule','isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {return;}
-    if(!xarVar::fetch('template', 'isset', $template,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('startnum', 'int', $startnum, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('numitems', 'int', $numitems, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('sort', 'isset', $sort, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('catid', 'isset', $catid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('layout', 'str:1', $layout, 'default', xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if(!xarVar::fetch('tplmodule', 'isset', $tplmodule, 'dynamicdata', xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if(!xarVar::fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     // Override if needed from argument array
     extract($args);
@@ -60,7 +86,7 @@ function dynamicdata_user_view(Array $args=array())
 
     // Note: we need to pass all relevant arguments ourselves here
     $object = DataObjectMaster::getObjectList(
-                            array('objectid'  => $itemid,
+        ['objectid'  => $itemid,
                                   'name'      => $name,
                                   'startnum'  => $startnum,
                                   'numitems'  => $numitems,
@@ -69,10 +95,12 @@ function dynamicdata_user_view(Array $args=array())
                                   'layout'    => $layout,
                                   'tplmodule' => $tplmodule,
                                   'template'  => $template,
-                                  ));
+                                  ]
+    );
 
-    if (!$object->checkAccess('view'))
+    if (!$object->checkAccess('view')) {
         return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
+    }
 
     // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();
@@ -87,7 +115,7 @@ function dynamicdata_user_view(Array $args=array())
     $data['object'] = $object;
 
     // TODO: is this needed?
-    $data = array_merge($data,xarMod::apiFunc('dynamicdata','admin','menu'));
+    $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
     // TODO: remove this when we turn all the moduleid into module_id
     $data['module_id'] = $data['moduleid'];
     // TODO: another stray
@@ -97,8 +125,8 @@ function dynamicdata_user_view(Array $args=array())
 
     if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view.xt') ||
         file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/user-view-' . $data['template'] . '.xt')) {
-        return xarTpl::module($data['tplmodule'],'user','view',$data,$data['template']);
+        return xarTpl::module($data['tplmodule'], 'user', 'view', $data, $data['template']);
     } else {
-        return xarTpl::module('dynamicdata','user','view',$data,$args['template']);
+        return xarTpl::module('dynamicdata', 'user', 'view', $data, $args['template']);
     }
 }

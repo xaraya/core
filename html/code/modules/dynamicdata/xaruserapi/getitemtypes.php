@@ -17,9 +17,9 @@
  * @param array    $args array of optional parameters<br/>
  * @return array the itemtypes of this module and their description *
  */
-function dynamicdata_userapi_getitemtypes(Array $args=array())
+function dynamicdata_userapi_getitemtypes(array $args = [])
 {
-    $itemtypes = array();
+    $itemtypes = [];
 
     // Get objects
     $objects = DataObjectMaster::getObjects();
@@ -27,13 +27,17 @@ function dynamicdata_userapi_getitemtypes(Array $args=array())
     $module_id = xarMod::getRegID('dynamicdata');
     foreach ($objects as $id => $object) {
         // skip any object that doesn't belong to dynamicdata itself
-        if ($module_id != $object['moduleid']) continue;
+        if ($module_id != $object['moduleid']) {
+            continue;
+        }
         // skip the "internal" DD objects
-        if ($object['objectid'] < 3) continue;
-        $itemtypes[$object['itemtype']] = array('label' => xarVar::prepForDisplay($object['label']),
-                                                'title' => xarVar::prepForDisplay(xarML('View #(1)',$object['label'])),
-                                                'url'   => xarController::URL('dynamicdata','user','view',array('itemtype' => $object['itemtype']))
-                                               );
+        if ($object['objectid'] < 3) {
+            continue;
+        }
+        $itemtypes[$object['itemtype']] = ['label' => xarVar::prepForDisplay($object['label']),
+                                                'title' => xarVar::prepForDisplay(xarML('View #(1)', $object['label'])),
+                                                'url'   => xarController::URL('dynamicdata', 'user', 'view', ['itemtype' => $object['itemtype']]),
+                                               ];
     }
     return $itemtypes;
 }

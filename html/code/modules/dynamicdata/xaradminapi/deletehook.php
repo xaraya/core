@@ -19,7 +19,7 @@
  * @return array true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_deletehook(array $args=[])
+function dynamicdata_adminapi_deletehook(array $args = [])
 {
     extract($args);
 

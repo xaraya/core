@@ -26,12 +26,12 @@
  * @return boolean
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_updateprop(Array $args=array())
+function dynamicdata_adminapi_updateprop(array $args = [])
 {
     extract($args);
 
     // Required arguments
-    $invalid = array();
+    $invalid = [];
     if (!isset($id) || !is_numeric($id)) {
         $invalid[] = 'property id';
     }
@@ -43,7 +43,7 @@ function dynamicdata_adminapi_updateprop(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'admin', 'updateprop', 'DynamicData');
+        $vars = [join(', ', $invalid), 'admin', 'updateprop', 'DynamicData'];
         throw new BadParameterException($vars, $msg);
     }
 
@@ -54,16 +54,17 @@ function dynamicdata_adminapi_updateprop(Array $args=array())
     // For xarDB::getConn() we want to keep the entire
     // tables array together for easy reference later on
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = & xarDB::getTables();
 
     // It's good practice to name the table and column definitions you
     // are getting - $table and $column don't cut it in more complex
     // modules
     $dynamicprop = $xartable['dynamic_properties'];
 
-    $bindvars = array();
+    $bindvars = [];
     $sql = "UPDATE $dynamicprop SET label = ?, type = ?";
-    $bindvars[] = $label; $bindvars[] = $type;
+    $bindvars[] = $label;
+    $bindvars[] = $type;
     if (isset($defaultvalue) && is_string($defaultvalue)) {
         $sql .= ", defaultvalue = ?";
         $bindvars[] = $defaultvalue;
@@ -96,7 +97,7 @@ function dynamicdata_adminapi_updateprop(Array $args=array())
 
     $sql .= " WHERE id = ?";
     $bindvars[] = $id;
-    $dbconn->Execute($sql,$bindvars);
+    $dbconn->Execute($sql, $bindvars);
 
     return true;
 }

@@ -14,16 +14,22 @@
 /**
  * @param array    $args array of optional parameters<br/>
  */
-function dynamicdata_adminapi_browse(Array $args=array())
+function dynamicdata_adminapi_browse(array $args = [])
 {
     // Argument check - make sure that all required arguments are present
     // and in the right format, if not then set an appropriate error
     // message and return
-    if (empty($args['basedir'])) throw new EmptyParameterException('basedir');
-    if (empty($args['filetype'])) throw new EmptyParameterException('filetype');
+    if (empty($args['basedir'])) {
+        throw new EmptyParameterException('basedir');
+    }
+    if (empty($args['filetype'])) {
+        throw new EmptyParameterException('filetype');
+    }
 
     // Security check - we require OVERVIEW rights here for now...
-    if(!xarSecurity::check('ViewDynamicData')) return;
+    if(!xarSecurity::check('ViewDynamicData')) {
+        return;
+    }
 
     // Get arguments from argument array
     extract($args);
@@ -35,19 +41,19 @@ function dynamicdata_adminapi_browse(Array $args=array())
         $recursive = true;
     }
 
-    $todo = array();
+    $todo = [];
     $basedir = realpath($basedir);
-    $filelist = array();
+    $filelist = [];
     array_push($todo, $basedir);
     while (count($todo) > 0) {
         $curdir = array_shift($todo);
         if ($dir = @opendir($curdir)) {
             while(($file = @readdir($dir)) !== false) {
                 $curfile = $curdir . '/' . $file;
-                if (preg_match("/$filematch\.$filetype$/",$file) && is_file($curfile)) {
+                if (preg_match("/$filematch\.$filetype$/", $file) && is_file($curfile)) {
                     // ugly fix for Windows boxes
-                    $tmpdir = strtr($basedir,array('\\' => '\\\\'));
-                    $curfile = preg_replace("#$tmpdir/#",'',$curfile);
+                    $tmpdir = strtr($basedir, ['\\' => '\\\\']);
+                    $curfile = preg_replace("#$tmpdir/#", '', $curfile);
                     $filelist[] = $curfile;
                 } elseif ($file != '.' && $file != '..' && is_dir($curfile) && !empty($recursive)) {
                     array_push($todo, $curfile);

@@ -19,7 +19,7 @@
  *        string   $args['extrainfo'] extra information
  * @return array true on success, false on failure
  */
-function dynamicdata_adminapi_createhook(array $args=[])
+function dynamicdata_adminapi_createhook(array $args = [])
 {
     // we rely on the updatehook to do the real work here
     $args['dd_function'] = 'createhook';

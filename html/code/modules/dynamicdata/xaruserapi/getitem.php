@@ -30,7 +30,7 @@
  * @return array|DataObject|void of (name => value), or false on failure
  * @throws BadParameterException
  */
-function &dynamicdata_userapi_getitem(array $args=[])
+function &dynamicdata_userapi_getitem(array $args = [])
 {
     extract($args);
 

@@ -133,7 +133,7 @@ trait xarGraphQLQueryPageTrait
             if (!empty($args['count'])) {
                 $args['count'] = $loader->count;
             }
-            xarGraphQL::$object_ref[$object] =& $objectlist;
+            xarGraphQL::$object_ref[$object] = & $objectlist;
             return $args;
         };
         return $resolver;

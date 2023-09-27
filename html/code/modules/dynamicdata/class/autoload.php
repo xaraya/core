@@ -20,10 +20,10 @@ function dynamicdata_classes_autoload($class)
 {
     $class = strtolower($class);
 
-    $class_array = array(
+    $class_array = [
         // Events
         // Controllers
-        
+
         'dataobject'                => 'modules.dynamicdata.class.objects.base',
         'dataobjectlist'            => 'modules.dynamicdata.class.objects.list',
         'dataobjectmaster'          => 'modules.dynamicdata.class.objects.master',
@@ -36,7 +36,7 @@ function dynamicdata_classes_autoload($class)
         'datapropertymaster'        => 'modules.dynamicdata.class.properties.master',
         'idataproperty'             => 'modules.dynamicdata.class.properties.interfaces',
         'propertyregistration'      => 'modules.dynamicdata.class.properties.registration',
-        
+
         'relationaldatastore'       => 'xaraya.datastores.sql.relational',
         'variabletabledatastore'    => 'xaraya.datastores.sql.variabletable',
         'modulevariablesdatastore'  => 'xaraya.datastores.sql.modulevariables',
@@ -44,9 +44,9 @@ function dynamicdata_classes_autoload($class)
         'hookdatastore'             => 'xaraya.datastores.hook',
         'functiondatastore'         => 'xaraya.datastores.function',
         'datastorelinks'            => 'modules.dynamicdata.class.datastores.links',
-        
-    );
-    
+
+    ];
+
     if (isset($class_array[$class])) {
         sys::import($class_array[$class]);
         return true;

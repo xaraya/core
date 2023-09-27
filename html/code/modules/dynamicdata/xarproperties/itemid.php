@@ -24,15 +24,15 @@ class ItemIDProperty extends NumberBoxProperty
     public $id         = 21;
     public $name       = 'itemid';
     public $desc       = 'Item ID';
-    public $reqmodules = array('dynamicdata');
+    public $reqmodules = ['dynamicdata'];
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'dynamicdata';
         $this->template = 'itemid';
         $this->filepath   = 'modules/dynamicdata/xarproperties';
-        
+
         $this->defaultvalue = null;
     }
 }

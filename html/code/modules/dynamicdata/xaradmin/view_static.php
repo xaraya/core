@@ -14,17 +14,31 @@
 /**
  * Return static table information
  */
-function dynamicdata_admin_view_static(Array $args=array())
+function dynamicdata_admin_view_static(array $args = [])
 {
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
-    if(!xarVar::fetch('module',   'isset', $module,    NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('module_id',    'isset', $module_id,     NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemtype', 'isset', $itemtype,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('table',    'isset', $table,     '', xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('newtable',    'isset', $newtable,     '', xarVar::DONT_SET)) {return;}
-    if (!xarVar::fetch('export',  'isset', $export,       0, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('module', 'isset', $module, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemtype', 'isset', $itemtype, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('table', 'isset', $table, '', xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('newtable', 'isset', $newtable, '', xarVar::DONT_SET)) {
+        return;
+    }
+    if (!xarVar::fetch('export', 'isset', $export, 0, xarVar::DONT_SET)) {
+        return;
+    }
 
     extract($args);
 
@@ -36,26 +50,32 @@ function dynamicdata_admin_view_static(Array $args=array())
         $dbconn->Execute($query);
         $table = $newtable;
     }
-    
-    $data = array();
+
+    $data = [];
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
-    $static = xarMod::apiFunc('dynamicdata','util','getstatic',
-                            array('module'   => $module,
+    $static = xarMod::apiFunc(
+        'dynamicdata',
+        'util',
+        'getstatic',
+        ['module'   => $module,
                                   'module_id'    => $module_id,
                                   'itemtype' => $itemtype,
-                                  'table'    => $table));
+                                  'table'    => $table]
+    );
 
-    $metas = xarMod::apiFunc('dynamicdata','util','getmeta');
-    $data['tables'] = array();
-    foreach ($metas as $name => $value) $data['tables'][] = array('id' => $name, 'name' => $name);
+    $metas = xarMod::apiFunc('dynamicdata', 'util', 'getmeta');
+    $data['tables'] = [];
+    foreach ($metas as $name => $value) {
+        $data['tables'][] = ['id' => $name, 'name' => $name];
+    }
     $data['table'] = $table;
 
     //debug($static);
     if (!isset($static) || $static == false) {
-        $data['tabledata'] = array();
+        $data['tabledata'] = [];
     } else {
-        $data['tabledata'] = array();
+        $data['tabledata'] = [];
         foreach ($static as $field) {
             if (preg_match('/^(\w+)\.(\w+)$/', $field['source'], $matches)) {
                 $table = $matches[1];
@@ -65,7 +85,9 @@ function dynamicdata_admin_view_static(Array $args=array())
     }
 
     $data['export'] = $export;
-    if(!isset($module_id) || $module_id == 0) $module_id = 182;
+    if(!isset($module_id) || $module_id == 0) {
+        $module_id = 182;
+    }
     $data['module_id'] = $module_id;
     $modInfo = xarMod::getInfo($module_id);
     $data['module'] = $modInfo['name'];

@@ -156,7 +156,7 @@ class DataObjectLoader
             //$this->cache = call_user_func($this->resolver, $this->todo);
             // @checkme use replace instead of merge here
             $this->cache = array_replace($this->cache, call_user_func($this->resolver, $this->todo));
-        // 2. get values from objectlist here
+            // 2. get values from objectlist here
         } else {
             //$this->cache = $this->getValues($this->todo);
             // @checkme use replace instead of merge here
@@ -707,6 +707,4 @@ class LinkObjectItemLoader extends DataObjectItemLoader
     }
 }
 
-class LinkObjectListLoader extends DataObjectListLoader
-{
-}
+class LinkObjectListLoader extends DataObjectListLoader {}

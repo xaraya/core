@@ -23,27 +23,39 @@
 function dynamicdata_admin_orderprops()
 {
     // Security
-    if(!xarSecurity::check('EditDynamicData')) return;
+    if(!xarSecurity::check('EditDynamicData')) {
+        return;
+    }
 
     // Get parameters from whatever input we need.  All arguments to this
     // function should be obtained from xarVar::fetch()
-    if(!xarVar::fetch('objectid',          'isset', $objectid,          NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('module_id',         'isset', $module_id,         NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemtype',          'int:1:', $itemtype,         0, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemtype', 'int:1:', $itemtype, 0, xarVar::DONT_SET)) {
+        return;
+    }
 
-    if(!xarVar::fetch('itemid',        'isset', $itemid,         NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('direction',     'isset', $direction,      NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('direction', 'isset', $direction, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     if (empty($direction)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('direction', 'admin', 'orderprops', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['direction', 'admin', 'orderprops', 'dynamicdata'];
+        throw new BadParameterException($vars, $msg);
     }
 
     if (empty($itemid)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('itemid', 'admin', 'orderprops', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['itemid', 'admin', 'orderprops', 'dynamicdata'];
+        throw new BadParameterException($vars, $msg);
     }
 
     if (!xarSec::confirmAuthKey()) {
@@ -51,9 +63,10 @@ function dynamicdata_admin_orderprops()
     }
 
     $objectinfo = DataObjectMaster::getObjectInfo(
-                                    array(
+        [
                                     'objectid' => $objectid,
-                                    ));
+                                    ]
+    );
 
     $objectid = $objectinfo['objectid'];
     $module_id = $objectinfo['moduleid'];
@@ -61,16 +74,20 @@ function dynamicdata_admin_orderprops()
 
     if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module id', 'admin', 'updateprop', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['module id', 'admin', 'updateprop', 'dynamicdata'];
+        throw new BadParameterException($vars, $msg);
     }
 
-    $fields = xarMod::apiFunc('dynamicdata','user','getprop',
-                                   array('objectid' => $objectid,
+    $fields = xarMod::apiFunc(
+        'dynamicdata',
+        'user',
+        'getprop',
+        ['objectid' => $objectid,
                                             'module_id' => $module_id,
                                             'itemtype' => $itemtype,
-                                         'allprops' => true));
-    $orders = array();
+                                         'allprops' => true]
+    );
+    $orders = [];
     $currentpos = null;
     foreach ($fields as $fname => $field) {
         if ($field['id'] == $itemid) {
@@ -81,41 +98,55 @@ function dynamicdata_admin_orderprops()
     }
     $i = 0;
     foreach ($fields as $name => $field) {
-        if ($field['seq'] == $currentpos && $direction == 'up' && isset($orders[$i-1])) {
-            $swapwith = $orders[$i-1];
+        if ($field['seq'] == $currentpos && $direction == 'up' && isset($orders[$i - 1])) {
+            $swapwith = $orders[$i - 1];
             $swappos = $i;
-            $currentpos = $i+1;
-        } elseif ($field['seq'] == $currentpos && $direction == 'down' && isset($orders[$i+1])) {
-            $swapwith = $orders[$i+1];
+            $currentpos = $i + 1;
+        } elseif ($field['seq'] == $currentpos && $direction == 'down' && isset($orders[$i + 1])) {
+            $swapwith = $orders[$i + 1];
             $swappos = $i;
-            $currentpos = $i+1;
+            $currentpos = $i + 1;
         }
-        if (isset($swappos)) break;
+        if (isset($swappos)) {
+            break;
+        }
         $i++;
     }
 
     if (isset($swappos)) {
-        if (!xarMod::apiFunc('dynamicdata','admin','updateprop',
-                          array('id' => $itemid,
+        if (!xarMod::apiFunc(
+            'dynamicdata',
+            'admin',
+            'updateprop',
+            ['id' => $itemid,
                                 'label' => $fields[$move_prop]['label'],
                                 'type' => $fields[$move_prop]['type'],
-                                'seq' => $fields[$swapwith]['seq']))) {
+                                'seq' => $fields[$swapwith]['seq']]
+        )) {
             return;
         }
 
-        if (!xarMod::apiFunc('dynamicdata','admin','updateprop',
-                          array('id' => $fields[$swapwith]['id'],
+        if (!xarMod::apiFunc(
+            'dynamicdata',
+            'admin',
+            'updateprop',
+            ['id' => $fields[$swapwith]['id'],
                                 'label' => $fields[$swapwith]['label'],
                                 'type' => $fields[$swapwith]['type'],
-                                'seq' => $fields[$move_prop]['seq']))) {
+                                'seq' => $fields[$move_prop]['seq']]
+        )) {
             return;
         }
     }
 
-    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modifyprop',
-                        array('module_id'    => $module_id,
+    xarController::redirect(xarController::URL(
+        'dynamicdata',
+        'admin',
+        'modifyprop',
+        ['module_id'    => $module_id,
                               'itemtype' => $itemtype,
-        )));
+        ]
+    ));
 
 
     // Return

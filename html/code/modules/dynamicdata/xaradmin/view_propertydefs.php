@@ -18,26 +18,30 @@
 function dynamicdata_admin_view_propertydefs()
 {
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
-    $data = xarMod::apiFunc('dynamicdata','admin','menu');
+    $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
 
     $data['authid'] = xarSec::genAuthKey();
 
-    if (!xarMod::apiLoad('dynamicdata', 'user')) return;
+    if (!xarMod::apiLoad('dynamicdata', 'user')) {
+        return;
+    }
     $data['fields'] = DataPropertyMaster::getPropertyTypes();
     if (!isset($data['fields']) || $data['fields'] == false) {
-        $data['fields'] = array();
+        $data['fields'] = [];
     }
 
     // FIXME: This may not work when moving property classes around manually !
     //$data['fieldtypeprop'] =& DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
     sys::import('modules.dynamicdata.xarproperties.fieldtype');
 
-    $descriptor = new DataObjectDescriptor(array('type' => 'fieldtype'));
+    $descriptor = new DataObjectDescriptor(['type' => 'fieldtype']);
     $data['fieldtypeprop'] = new FieldTypeProperty($descriptor);
 
-    $data['labels'] = array(
+    $data['labels'] = [
                             'id' => xarML('ID'),
                             'name' => xarML('Name'),
                             'label' => xarML('Description'),
@@ -46,7 +50,7 @@ function dynamicdata_admin_view_propertydefs()
                             'configuration' => xarML('Configuration'),
                         // etc.
                             'new' => xarML('New'),
-                      );
+                      ];
 
     return $data;
 }

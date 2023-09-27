@@ -14,7 +14,7 @@
  * @param array    $args array of optional parameters<br/>
 */
 
-function dynamicdata_userapi_getall(Array $args=array())
+function dynamicdata_userapi_getall(array $args = [])
 {
-    return xarMod::apiFunc('dynamicdata','user','getitem',$args);
+    return xarMod::apiFunc('dynamicdata', 'user', 'getitem', $args);
 }

@@ -17,7 +17,7 @@
  * @param array    $args array of optional parameters<br/>
  * @return array of object definitions
  */
-function dynamicdata_userapi_getobjects($args = array())
+function dynamicdata_userapi_getobjects($args = [])
 {
     $objects =  DataObjectMaster::getObjects($args);
     return $objects;

@@ -31,12 +31,12 @@ sys::import('modules.dynamicdata.class.objects.loader');
  * @link http://xaraya.info/index.php/release/68.html
  */
 
- /**
-  * This property displays a deferred item for a value (experimental - do not use in production)
-  *
-  * Configuration:
-  * the defaultvalue can be set to automatically load an object property if the value contains its itemid,
-  */
+/**
+ * This property displays a deferred item for a value (experimental - do not use in production)
+ *
+ * Configuration:
+ * the defaultvalue can be set to automatically load an object property if the value contains its itemid,
+ */
 class DeferredItemProperty extends DataProperty
 {
     public $id         = 18281;
@@ -129,7 +129,7 @@ class DeferredItemProperty extends DataProperty
      *
      * @param mixed $value the new value for the property
      */
-    public function setValue($value=null)
+    public function setValue($value = null)
     {
         $this->log_trace();
         //$this->value = $value;
@@ -156,7 +156,7 @@ class DeferredItemProperty extends DataProperty
      * @param mixed value
      * @param integer fordisplay
      */
-    public function setItemValue($itemid, $value, $fordisplay=0)
+    public function setItemValue($itemid, $value, $fordisplay = 0)
     {
         $value = $this->setDataToDefer($itemid, $value);
         $this->log_trace();
@@ -297,7 +297,7 @@ class DeferredItemProperty extends DataProperty
             $data['singlevalue'] = true;
         } else {
             $data['singlevalue'] = false;
-            $data['object'] =& $this->getDeferredLoader()->objectlist;
+            $data['object'] = & $this->getDeferredLoader()->objectlist;
             $data['fieldlist'] = $this->getDeferredLoader()->fieldlist;
         }
         // $this->value = $data['value'];

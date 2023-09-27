@@ -20,34 +20,65 @@
  */
 function dynamicdata_admin_updateprop()
 {
-    if(!xarVar::fetch('objectid',          'isset', $objectid,          1, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('module_id',         'isset', $module_id,         NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemtype',          'int:1:', $itemtype,         0, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('table',             'isset', $table,             NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('dd_name',           'isset', $dd_name,           NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('dd_label',          'isset', $dd_label,          NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('dd_type',           'isset', $dd_type,           NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('dd_default',        'isset', $dd_defaultvalue,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('dd_seq',            'isset', $dd_seq,            NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('dd_translatable',   'isset', $dd_translatable,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('dd_source',         'isset', $dd_source,         NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('display_dd_status', 'isset', $display_dd_status, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('input_dd_status',   'isset', $input_dd_status,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('dd_configuration',  'isset', $dd_configuration,  NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'isset', $objectid, 1, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemtype', 'int:1:', $itemtype, 0, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('table', 'isset', $table, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('dd_name', 'isset', $dd_name, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('dd_label', 'isset', $dd_label, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('dd_type', 'isset', $dd_type, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('dd_default', 'isset', $dd_defaultvalue, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('dd_seq', 'isset', $dd_seq, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('dd_translatable', 'isset', $dd_translatable, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('dd_source', 'isset', $dd_source, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('display_dd_status', 'isset', $display_dd_status, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('input_dd_status', 'isset', $input_dd_status, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('dd_configuration', 'isset', $dd_configuration, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     if (!xarSec::confirmAuthKey()) {
-        return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-    }        
+        return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+    }
 
     $objectinfo = DataObjectMaster::getObjectInfo(
-                                    array(
+        [
                                     'objectid' => $objectid,
                                     'moduleid' => $module_id,
                                     'itemtype' => $itemtype,
-                                    ));
+                                    ]
+    );
     if (isset($objectinfo)) {
         $objectid = $objectinfo['objectid'];
         $module_id = $objectinfo['moduleid'];
@@ -61,25 +92,32 @@ function dynamicdata_admin_updateprop()
             }
             sys::import('modules.dynamicdata.class.objects.master');
             $objectid = DataObjectMaster::createObject(
-                                      array('moduleid' => $module_id,
+                ['moduleid' => $module_id,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
-                                            'label' => ucfirst($name)));
-            if (!isset($objectid)) return;
+                                            'label' => ucfirst($name)]
+            );
+            if (!isset($objectid)) {
+                return;
+            }
         }
     }
 
     if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module id', 'admin', 'updateprop', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['module id', 'admin', 'updateprop', 'dynamicdata'];
+        throw new BadParameterException($vars, $msg);
     }
 
-    $fields = xarMod::apiFunc('dynamicdata','user','getprop',
-                           array('objectid' => $objectid,
+    $fields = xarMod::apiFunc(
+        'dynamicdata',
+        'user',
+        'getprop',
+        ['objectid' => $objectid,
                                  'moduleid' => $module_id,
                                  'itemtype' => $itemtype,
-                                 'allprops' => true));
+                                 'allprops' => true]
+    );
 
     $isprimary = 0;
     $i = 0;
@@ -88,22 +126,26 @@ function dynamicdata_admin_updateprop()
         $id = $field['id'];
         $i++;
         if (empty($dd_label[$id])) {
-            $property = DataPropertyMaster::getProperty(array('type' => $field['type']));
-            $res = $property->removeFromObject(array('object_id' => $objectid));
+            $property = DataPropertyMaster::getProperty(['type' => $field['type']]);
+            $res = $property->removeFromObject(['object_id' => $objectid]);
             // delete property (and corresponding data) in xaradminapi.php
-            if (!xarMod::apiFunc('dynamicdata','admin','deleteprop',
-                              array('id' => $id))) {
+            if (!xarMod::apiFunc(
+                'dynamicdata',
+                'admin',
+                'deleteprop',
+                ['id' => $id]
+            )) {
                 return;
             }
         } else {
-             // TODO : only if necessary
+            // TODO : only if necessary
             // update property in xaradminapi.php
             if (!isset($dd_defaultvalue[$id])) {
                 $dd_defaultvalue[$id] = null;
-            } elseif (!empty($dd_defaultvalue[$id]) && preg_match('/\[LF\]/',$dd_defaultvalue[$id])) {
+            } elseif (!empty($dd_defaultvalue[$id]) && preg_match('/\[LF\]/', $dd_defaultvalue[$id])) {
                 // replace [LF] with line-feed again
                 $lf = chr(10);
-                $dd_defaultvalue[$id] = preg_replace('/\[LF\]/',$lf,$dd_defaultvalue[$id]);
+                $dd_defaultvalue[$id] = preg_replace('/\[LF\]/', $lf, $dd_defaultvalue[$id]);
             }
             if (!isset($dd_configuration[$id])) {
                 $dd_configuration[$id] = null;
@@ -118,8 +160,11 @@ function dynamicdata_admin_updateprop()
             if (!isset($dd_translatable[$id])) {
                 $dd_translatable[$id] = 0;
             }
-            if (!xarMod::apiFunc('dynamicdata','admin','updateprop',
-                              array('id'            => $id,
+            if (!xarMod::apiFunc(
+                'dynamicdata',
+                'admin',
+                'updateprop',
+                ['id'            => $id,
                                     'name'          => $dd_name[$id],
                                     'label'         => $dd_label[$id],
                                     'type'          => $dd_type[$id],
@@ -128,19 +173,20 @@ function dynamicdata_admin_updateprop()
                                     'translatable'  => $dd_translatable[$id],
                                     'source'        => $dd_source[$id],
                                     'status'        => $dd_status[$id],
-                                    'configuration' => $dd_configuration[$id]))) {
+                                    'configuration' => $dd_configuration[$id]]
+            )) {
                 return;
             }
             if ($dd_type[$id] == 21) { // item id
                 $isprimary = 1;
             }
-            
+
             // If we changed the property type, run the appropriate methods
             if ($field['type'] != $dd_type[$id]) {
-                $property = DataPropertyMaster::getProperty(array('type' => $field['type']));
-                $res = $property->removeFromObject(array('object_id' => $objectid));
-                $property = DataPropertyMaster::getProperty(array('type' => $dd_type[$id]));
-                $res = $property->addToObject(array('object_id' => $objectid));
+                $property = DataPropertyMaster::getProperty(['type' => $field['type']]);
+                $res = $property->removeFromObject(['object_id' => $objectid]);
+                $property = DataPropertyMaster::getProperty(['type' => $dd_type[$id]]);
+                $res = $property->addToObject(['object_id' => $objectid]);
             }
         }
     }
@@ -149,8 +195,8 @@ function dynamicdata_admin_updateprop()
     if (!empty($dd_label[0]) && !empty($dd_type[0])) {
         // create new property in xaradminapi.php
         $name = strtolower($dd_label[0]);
-        $name = preg_replace('/[^a-z0-9_]+/','_',$name);
-        $name = preg_replace('/_$/','',$name);
+        $name = preg_replace('/[^a-z0-9_]+/', '_', $name);
+        $name = preg_replace('/_$/', '', $name);
         if (!isset($display_dd_status[0])) {
             $display_dd_status[0] = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
         }
@@ -158,8 +204,11 @@ function dynamicdata_admin_updateprop()
             $input_dd_status[0] = DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY;
         }
         $dd_status[0] = $display_dd_status[0] + $input_dd_status[0];
-        $id = xarMod::apiFunc('dynamicdata','admin','createproperty',
-                                array('name' => $name,
+        $id = xarMod::apiFunc(
+            'dynamicdata',
+            'admin',
+            'createproperty',
+            ['name' => $name,
                                       'label' => $dd_label[0],
                                       'objectid' => $objectid,
                                      // 'moduleid' => $module_id,
@@ -168,28 +217,39 @@ function dynamicdata_admin_updateprop()
                                       'defaultvalue' => $dd_defaultvalue[0],
                                       'source' => $dd_source[0],
                                       'status' => $dd_status[0],
-                                      'seq' => $i));
-        if (empty($id)) return;
+                                      'seq' => $i]
+        );
+        if (empty($id)) {
+            return;
+        }
 
         if ($dd_type[0] == 21) { // item id
             $isprimary = 1;
         }
-        $property = DataPropertyMaster::getProperty(array('type' => $dd_type[0]));
-        $res = $property->addToObject(array('object_id' => $objectid));
+        $property = DataPropertyMaster::getProperty(['type' => $dd_type[0]]);
+        $res = $property->addToObject(['object_id' => $objectid]);
     }
 
     // CHECKME: flush the variable cache if necessary
-    DataObjectMaster::flushVariableCache(array('objectid' => $objectid));
+    DataObjectMaster::flushVariableCache(['objectid' => $objectid]);
 
     if ($isprimary) {
         $modinfo = xarMod::getInfo($module_id);
-        xarModHooks::call('module','updateconfig',$modinfo['name'],
-                        array('module' => $modinfo['name'],
-                              'itemtype' => $itemtype));
+        xarModHooks::call(
+            'module',
+            'updateconfig',
+            $modinfo['name'],
+            ['module' => $modinfo['name'],
+                              'itemtype' => $itemtype]
+        );
     }
 
-    xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modifyprop',
-                        array('itemid'    => $objectid,
-                              'table'    => $table)));
+    xarController::redirect(xarController::URL(
+        'dynamicdata',
+        'admin',
+        'modifyprop',
+        ['itemid'    => $objectid,
+                              'table'    => $table]
+    ));
     return true;
 }

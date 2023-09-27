@@ -23,11 +23,11 @@
  * @return mixed true or debug string on success, null on failure
  * @throws BadParameterException
  */
-function dynamicdata_utilapi_updatehooks(Array $args=array())
+function dynamicdata_utilapi_updatehooks(array $args = [])
 {
     extract($args);
 
-    $invalid = array();
+    $invalid = [];
     if (empty($from)) {
         $invalid[] = 'from array';
     } else {
@@ -50,13 +50,15 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
     }
     if (count($invalid) > 0) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array(join(', ',$invalid), 'admin', 'updatehooks', 'DynamicData');
-        throw new BadParameterException($vars,$msg);
+        $vars = [join(', ', $invalid), 'admin', 'updatehooks', 'DynamicData'];
+        throw new BadParameterException($vars, $msg);
     }
 
     // Security check - important to do this as early on as possible to
     // avoid potential security holes or just too much wasted processing
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     if (empty($itemids) || empty($hookmap)) {
         // nothing to do here
@@ -70,14 +72,17 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
 
     $dbconn = xarDB::getConn();
     foreach ($hookmap as $fromhook => $tohook) {
-        if (empty($fromhook) || empty($tohook)) continue;
-        if ($fromhook != $tohook) continue; // no moving of hooked content atm
-        switch ($tohook)
-        {
+        if (empty($fromhook) || empty($tohook)) {
+            continue;
+        }
+        if ($fromhook != $tohook) {
+            continue;
+        } // no moving of hooked content atm
+        switch ($tohook) {
             case 'categories':
                 // load table definitions et al.
-                xarMod::apiLoad('categories','user');
-                $xartable =& xarDB::getTables();
+                xarMod::apiLoad('categories', 'user');
+                $xartable = & xarDB::getTables();
                 if (empty($xartable['categories_linkage'])) {
                     continue;
                 }
@@ -93,8 +98,8 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
             case 'ratings':
             case 'xlink':
                 // load table definitions et al.
-                xarMod::apiLoad($tohook,'user');
-                $xartable =& xarDB::getTables();
+                xarMod::apiLoad($tohook, 'user');
+                $xartable = & xarDB::getTables();
                 if (empty($xartable[$tohook])) {
                     continue;
                 }
@@ -106,8 +111,8 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
 
             case 'comments':
                 // load table definitions et al.
-                xarMod::apiLoad('comments','user');
-                $xartable =& xarDB::getTables();
+                xarMod::apiLoad('comments', 'user');
+                $xartable = & xarDB::getTables();
                 if (empty($xartable['comments'])) {
                     continue;
                 }
@@ -124,8 +129,8 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
 
             case 'polls':
                 // load table definitions et al.
-                xarMod::apiLoad('polls','user');
-                $xartable =& xarDB::getTables();
+                xarMod::apiLoad('polls', 'user');
+                $xartable = & xarDB::getTables();
                 if (empty($xartable['polls'])) {
                     continue;
                 }
@@ -144,8 +149,8 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
 
             case 'uploads':
                 // load table definitions et al.
-                xarMod::apiLoad('uploads','user');
-                $xartable =& xarDB::getTables();
+                xarMod::apiLoad('uploads', 'user');
+                $xartable = & xarDB::getTables();
                 if (empty($xartable['file_associations'])) {
                     continue;
                 }
@@ -173,8 +178,8 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
             if ($from['module'] == $to['module'] && $from['itemtype'] == $to['itemtype']) {
                 continue;
             }
-            $bindvars = array();
-            $set = array();
+            $bindvars = [];
+            $set = [];
             if ($from['module'] != $to['module']) {
                 $bindvars[] = (int) $to['module'];
                 $set[] = $modfield . ' = ?';
@@ -187,21 +192,28 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
             $bindvars[] = (int) $from['itemtype'];
             $markers = 0;
             foreach (array_keys($itemids) as $itemid) {
-                if (empty($itemid)) continue;
+                if (empty($itemid)) {
+                    continue;
+                }
                 $bindvars[] = (int) $itemid;
                 $markers++;
             }
-            $bindmarkers = '?' . str_repeat(',?',$markers - 1);
+            $bindmarkers = '?' . str_repeat(',?', $markers - 1);
             $query = "UPDATE $table
-                         SET " . join(', ',$set) . "
+                         SET " . join(', ', $set) . "
                        WHERE $modfield = ?
                          AND $typefield = ?
                          AND $idfield IN ($bindmarkers)";
             if (empty($debug)) {
                 $dbconn->Execute($query, $bindvars);
             } else {
-                $debug .= xarML('Updating hook #(1) from #(2) to #(3) for items #(4)',
-                                $tohook, "$from[module]:$from[itemtype]", "$to[module]:$to[itemtype]", join(',',array_keys($itemids)));
+                $debug .= xarML(
+                    'Updating hook #(1) from #(2) to #(3) for items #(4)',
+                    $tohook,
+                    "$from[module]:$from[itemtype]",
+                    "$to[module]:$to[itemtype]",
+                    join(',', array_keys($itemids))
+                );
                 $debug .= "\n";
             }
             continue;
@@ -210,13 +222,15 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
         try {
             $dbconn->begin();
             foreach ($itemids as $itemid => $newid) {
-                if (empty($itemid) || empty($newid)) continue;
+                if (empty($itemid) || empty($newid)) {
+                    continue;
+                }
                 if ($from['module'] == $to['module'] && $from['itemtype'] == $to['itemtype'] && $itemid == $newid) {
                     // nothing changes for hooks
                     continue;
                 }
-                $bindvars = array();
-                $set = array();
+                $bindvars = [];
+                $set = [];
                 if ($from['module'] != $to['module']) {
                     $bindvars[] = (int) $to['module'];
                     $set[] = $modfield . ' = ?';
@@ -232,12 +246,16 @@ function dynamicdata_utilapi_updatehooks(Array $args=array())
                 $bindvars[] = (int) $from['module'];
                 $bindvars[] = (int) $from['itemtype'];
                 $bindvars[] = (int) $itemid;
-                $query = "UPDATE $table SET " . join(', ',$set) . " WHERE $modfield = ?  AND $typefield = ? AND $idfield = ?";
+                $query = "UPDATE $table SET " . join(', ', $set) . " WHERE $modfield = ?  AND $typefield = ? AND $idfield = ?";
                 $dbconn->Execute($query, $bindvars);
 
                 if (!empty($debug)) {
-                    $debug .= xarML('Updating hook #(1) from #(2) to #(3)',
-                                    $tohook, "$from[module]:$from[itemtype]:$itemid", "$to[module]:$to[itemtype]:$newid");
+                    $debug .= xarML(
+                        'Updating hook #(1) from #(2) to #(3)',
+                        $tohook,
+                        "$from[module]:$from[itemtype]:$itemid",
+                        "$to[module]:$to[itemtype]:$newid"
+                    );
                     $debug .= "\n";
                 }
             }

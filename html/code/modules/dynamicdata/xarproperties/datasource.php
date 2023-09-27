@@ -14,7 +14,7 @@ sys::import('modules.base.xarproperties.dropdown');
  *
  * @author mikespub <mikespub@xaraya.com>
  */
- 
+
 /**
  * This property displays a dropdown of data sources
  * If a relational datastore is defined, it shows the database fields available as sources
@@ -26,27 +26,27 @@ class DataSourceProperty extends SelectProperty
     public $id         = 23;
     public $name       = 'datasource';
     public $desc       = 'Data Source';
-    public $reqmodules = array('dynamicdata');
+    public $reqmodules = ['dynamicdata'];
 
     public $include_reference   = 1;
     public $validation_override = true;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->filepath = 'modules/dynamicdata/xarproperties';
     }
 
-	/**
-	* Retrieve the list of options
-	* 
-	*/	
-    function getOptions()
+    /**
+    * Retrieve the list of options
+    *
+    */
+    public function getOptions()
     {
         if (count($this->options) > 0) {
             return $this->options;
         }
-        $sources = is_object($this->objectref) ? $this->objectref->datasources : array();
+        $sources = is_object($this->objectref) ? $this->objectref->datasources : [];
         return DataStoreFactory::getDataSources($sources);
     }
 }

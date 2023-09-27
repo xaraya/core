@@ -23,7 +23,7 @@
  * @return integer|void item id on success, null on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_create(array $args=[])
+function dynamicdata_adminapi_create(array $args = [])
 {
     $args = DataObjectDescriptor::getObjectID($args);
     extract($args);

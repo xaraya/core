@@ -22,7 +22,7 @@
  * @param int $args['module_id'] module id of the object to export (deprecated)
  * @param int $args['itemtype'] item type of the object to export (deprecated)
  */
-function dynamicdata_utilapi_export(array $args=[])
+function dynamicdata_utilapi_export(array $args = [])
 {
     if (isset($args['objectref'])) {
         $objectid = $args['objectref']->objectid;

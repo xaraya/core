@@ -16,44 +16,56 @@ sys::import('modules.dynamicdata.class.datastores.master');
  */
 class DataStoreLinks extends xarObject
 {
-    static $linktypes = array(
+    public static $linktypes = [
         'children'   => 'is parent of (one-to-many)',
         'parents'    => 'is child of (many-to-one)',
         'linkedto'   => 'is linked to (one-to-one)',
         'linkedfrom' => 'is linked from (one-to-one)',
-    );
-    static $reverselinktypes = array(
+    ];
+    public static $reverselinktypes = [
         'parents'    => 'children',
         'children'   => 'parents',
         'linkedfrom' => 'linkedto',
         'linkedto'   => 'linkedfrom',
-    );
-    static $directions = array(
+    ];
+    public static $directions = [
         'bi'   => 'two-way',
         'uni'  => 'one-way',
         'info' => 'info',
         'fk'   => 'foreign key',
-    );
+    ];
 
     /**
      * Initialize DataStoreLinks by importing the necessary xml files if necessary
      * @return DataObjectList|void
      */
-    static function initLinks()
+    public static function initLinks()
     {
-        $linklist = DataObjectMaster::getObjectList(array('name' => 'dynamic_table_links'));
+        $linklist = DataObjectMaster::getObjectList(['name' => 'dynamic_table_links']);
         if (empty($linklist) || empty($linklist->objectid)) {
             $def_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_table_links-def.xml';
             $dat_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_table_links-dat.xml';
             if (file_exists($def_file)) {
-                $objectid = xarMod::apiFunc('dynamicdata','util','import',
-                                            array('file' => $def_file));
-                if (empty($objectid)) return;
+                $objectid = xarMod::apiFunc(
+                    'dynamicdata',
+                    'util',
+                    'import',
+                    ['file' => $def_file]
+                );
+                if (empty($objectid)) {
+                    return;
+                }
             }
             if (file_exists($dat_file)) {
-                $objectid = xarMod::apiFunc('dynamicdata','util','import',
-                                            array('file' => $dat_file));
-                if (empty($objectid)) return;
+                $objectid = xarMod::apiFunc(
+                    'dynamicdata',
+                    'util',
+                    'import',
+                    ['file' => $dat_file]
+                );
+                if (empty($objectid)) {
+                    return;
+                }
             } else {
                 // add foreign keys to table links
                 $foreignkeys = self::getForeignKeys();
@@ -61,7 +73,7 @@ class DataStoreLinks extends xarObject
                     DataStoreLinks::addLink($info['source'], $info['from'], $info['target'], $info['to'], 'parents', 'fk');
                 }
             }
-            $linklist = DataObjectMaster::getObjectList(array('name' => 'dynamic_table_links'));
+            $linklist = DataObjectMaster::getObjectList(['name' => 'dynamic_table_links']);
         }
         return $linklist;
     }
@@ -72,14 +84,16 @@ class DataStoreLinks extends xarObject
      * @param $source the table we want to get the links for (tablename)
      * @param $linktype the type of links we're looking for (default, parents, children, linkedto, linkedfrom, info, all)
      */
-    static function getLinks($source = '', $linktype = '')
+    public static function getLinks($source = '', $linktype = '')
     {
         $linklist = self::initLinks();
-        if (empty($linklist) || empty($linklist->objectid)) return array();
+        if (empty($linklist) || empty($linklist->objectid)) {
+            return [];
+        }
 
         $source = self::getName($source);
 
-        $where = array();
+        $where = [];
 
         // CHECKME: do we support getting the links for all tables here ?
         if (!empty($source)) {
@@ -100,16 +114,16 @@ class DataStoreLinks extends xarObject
 
         // get the links for this source, link_type and direction
         if (!empty($where)) {
-            $items = $linklist->getItems(array('where' => implode(' and ', $where)));
+            $items = $linklist->getItems(['where' => implode(' and ', $where)]);
         } else {
             $items = $linklist->getItems();
         }
 
         // return as source => links array
-        $links = array();
+        $links = [];
         foreach ($items as $link) {
             if (empty($links[$link['source']])) {
-                $links[$link['source']] = array();
+                $links[$link['source']] = [];
             }
             $links[$link['source']][] = $link;
         }
@@ -128,24 +142,30 @@ class DataStoreLinks extends xarObject
      * @param $extra additional constraints for this link
      * @param $add_reverse if we want to add a reverse link from target to source too (default is always true)
      */
-    static function addLink($from_table, $from_field, $to_table, $to_field, $link_type, $direction, $extra = '', $add_reverse = true)
+    public static function addLink($from_table, $from_field, $to_table, $to_field, $link_type, $direction, $extra = '', $add_reverse = true)
     {
-        $linkobject = DataObjectMaster::getObject(array('name' => 'dynamic_table_links'));
-        if (empty($linkobject) || empty($linkobject->objectid)) return;
+        $linkobject = DataObjectMaster::getObject(['name' => 'dynamic_table_links']);
+        if (empty($linkobject) || empty($linkobject->objectid)) {
+            return;
+        }
 
         $from_table = self::getName($from_table);
         $to_table = self::getName($to_table);
-        if (empty($from_table) || empty($to_table)) return;
+        if (empty($from_table) || empty($to_table)) {
+            return;
+        }
 
-        $link = array('source'    => $from_table,
+        $link = ['source'    => $from_table,
                       'from_prop' => $from_field,
                       'target'    => $to_table,
                       'to_prop'   => $to_field,
                       'link_type' => $link_type,
                       'direction' => $direction,
-                      'extra'     => $extra);
+                      'extra'     => $extra];
         $link_id = $linkobject->createItem($link);
-        if (empty($link_id)) return;
+        if (empty($link_id)) {
+            return;
+        }
 
         // see if we need to create a reverse link too
         if (empty($add_reverse) || empty(self::$reverselinktypes[$link_type])) {
@@ -167,14 +187,14 @@ class DataStoreLinks extends xarObject
             $reversedir = 'bi';
         }
 
-        $link = array('source'    => $to_table,
+        $link = ['source'    => $to_table,
                       'from_prop' => $to_field,
                       'target'    => $from_table,
                       'to_prop'   => $from_field,
                       'link_type' => $reversetype,
                       'direction' => $reversedir,
                       // CHECKME: probably not the right syntax in reverse !
-                      'extra'     => $extra);
+                      'extra'     => $extra];
 
         $link_id = $linkobject->createItem($link);
         return $link_id;
@@ -183,13 +203,17 @@ class DataStoreLinks extends xarObject
     /**
      * Remove a link between a source table and a target table
      */
-    static function removeLink($link_id, $remove_reverse = true)
+    public static function removeLink($link_id, $remove_reverse = true)
     {
-        $linkobject = DataObjectMaster::getObject(array('name' => 'dynamic_table_links'));
-        if (empty($linkobject) || empty($linkobject->objectid)) return;
+        $linkobject = DataObjectMaster::getObject(['name' => 'dynamic_table_links']);
+        if (empty($linkobject) || empty($linkobject->objectid)) {
+            return;
+        }
 
-        $link_id = $linkobject->getItem(array('itemid' => $link_id));
-        if (empty($link_id)) return;
+        $link_id = $linkobject->getItem(['itemid' => $link_id]);
+        if (empty($link_id)) {
+            return;
+        }
 
         $linkfields = $linkobject->getFieldValues();
 
@@ -201,7 +225,9 @@ class DataStoreLinks extends xarObject
 
         // get all links from the target (= including 'info')
         $links = self::getLinks($linkfields['target'], 'all');
-        if (empty($links[$linkfields['target']])) return $link_id;
+        if (empty($links[$linkfields['target']])) {
+            return $link_id;
+        }
 
         // determine the link_type for the reverse link
         $reversetype = self::$reverselinktypes[$linkfields['link_type']];
@@ -213,8 +239,10 @@ class DataStoreLinks extends xarObject
                 $link['from_prop'] == $linkfields['to_prop'] &&
                 $link['link_type'] == $reversetype) {
 
-                $link_id = $linkobject->getItem(array('itemid' => $link['id']));
-                if (empty($link_id) || $link_id != $link['id']) continue;
+                $link_id = $linkobject->getItem(['itemid' => $link['id']]);
+                if (empty($link_id) || $link_id != $link['id']) {
+                    continue;
+                }
                 $link_id = $linkobject->deleteItem();
             }
         }
@@ -224,7 +252,7 @@ class DataStoreLinks extends xarObject
     /**
      * Get the name of table arguments (tablename)
      */
-    static function getName($object)
+    public static function getName($object)
     {
         return $object;
     }
@@ -234,34 +262,38 @@ class DataStoreLinks extends xarObject
      *
      * @return array of [datastore][objectid] = number of properties
      */
-    static function getMapping()
+    public static function getMapping()
     {
         // load tables for 'dynamic_data'
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartables =& xarDB::getTables();
-    
-        $mapping = array();
-        $properties = xarMod::apiFunc('dynamicdata','user','getobjectlist',
-                                      array('name' => 'properties',
-                                            'fieldlist' => array('name','objectid','source')));
+        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        $xartables = & xarDB::getTables();
+
+        $mapping = [];
+        $properties = xarMod::apiFunc(
+            'dynamicdata',
+            'user',
+            'getobjectlist',
+            ['name' => 'properties',
+                                            'fieldlist' => ['name','objectid','source']]
+        );
         $properties->getItems();
         foreach ($properties->items as $item) {
             if (strpos($item['source'], '.') !== false) {
-                list($store,$name) = explode('.', $item['source']);
+                [$store, $name] = explode('.', $item['source']);
             } elseif ($item['source'] == 'dynamic_data') {
                 $store = $xartables['dynamic_data'];
             } else {
                 $store = $item['source'];
             }
             if (!isset($mapping[$store])) {
-                $mapping[$store] = array();
+                $mapping[$store] = [];
             }
             if (!isset($mapping[$store][$item['objectid']])) {
                 $mapping[$store][$item['objectid']] = 0;
             }
             $mapping[$store][$item['objectid']] += 1;
         }
-    
+
         return $mapping;
     }
 
@@ -270,16 +302,20 @@ class DataStoreLinks extends xarObject
      *
      * @return array of [datasource] = property info
      */
-    static function getSourceFieldMapping()
+    public static function getSourceFieldMapping()
     {
         // load tables for 'dynamic_data'
-        xarMod::loadDbInfo('dynamicdata','dynamicdata');
-        $xartables =& xarDB::getTables();
-    
-        $sourcemapping = array();
-        $properties = xarMod::apiFunc('dynamicdata','user','getobjectlist',
-                                      array('name' => 'properties',
-                                            'fieldlist' => array('name','objectid','source')));
+        xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
+        $xartables = & xarDB::getTables();
+
+        $sourcemapping = [];
+        $properties = xarMod::apiFunc(
+            'dynamicdata',
+            'user',
+            'getobjectlist',
+            ['name' => 'properties',
+                                            'fieldlist' => ['name','objectid','source']]
+        );
         $properties->getItems();
         foreach ($properties->items as $item) {
             if (strpos($item['source'], '.') !== false) {
@@ -291,7 +327,7 @@ class DataStoreLinks extends xarObject
                 // not interested
             }
         }
-    
+
         return $sourcemapping;
     }
 
@@ -300,20 +336,24 @@ class DataStoreLinks extends xarObject
      *
      * @return array of foreign keys
      */
-    static function getForeignKeys()
+    public static function getForeignKeys()
     {
         // get tables
         $dbconn = xarDB::getConn();
         $dbInfo = $dbconn->getDatabaseInfo();
         $tables = $dbInfo->getTables();
 
-        $keylist = array();
+        $keylist = [];
         foreach ($tables as $tableInfo) {
             $foreignkeys = $tableInfo->getForeignKeys();
-            if (empty($foreignkeys)) continue;
+            if (empty($foreignkeys)) {
+                continue;
+            }
             foreach ($foreignkeys as $foreignkey) {
                 $references = $foreignkey->getReferences();
-                if (empty($references)) continue;
+                if (empty($references)) {
+                    continue;
+                }
                 foreach ($references as $reference) {
                     $local = $reference[0];
                     $foreign = $reference[1];
@@ -324,13 +364,13 @@ class DataStoreLinks extends xarObject
                     $fromfield = $local->getName();
                     $target = $foreign->getTable()->getName();
                     $tofield = $foreign->getName();
-    
-                    $keylist[] = array('source'   => $source,
+
+                    $keylist[] = ['source'   => $source,
                                        'from'     => $fromfield,
                                        'target'   => $target,
                                        'to'       => $tofield,
                                        'onupdate' => $onupdate,
-                                       'ondelete' => $ondelete);
+                                       'ondelete' => $ondelete];
                 }
             }
         }

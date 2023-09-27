@@ -13,24 +13,40 @@
 /**
  * Import an object definition or an object item from XML
  */
-function dynamicdata_admin_import(Array $args=array())
+function dynamicdata_admin_import(array $args = [])
 {
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     $data = [];
-    if(!xarVar::fetch('basedir',    'isset', $basedir,     NULL,  xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('import',     'isset', $import,      NULL,  xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('xml',        'isset', $xml,         NULL,  xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('refresh',    'isset', $refresh,     NULL,  xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('keepitemid', 'isset', $keepitemid,  NULL,  xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('overwrite',  'checkbox',  $overwrite,   false, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('prefix', 'isset', $data['prefix'],  xarDB::getPrefix(), xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('basedir', 'isset', $basedir, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('import', 'isset', $import, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('xml', 'isset', $xml, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('refresh', 'isset', $refresh, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('keepitemid', 'isset', $keepitemid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('overwrite', 'checkbox', $overwrite, false, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('prefix', 'isset', $data['prefix'], xarDB::getPrefix(), xarVar::DONT_SET)) {
+        return;
+    }
 
     extract($args);
 
     $data['warning'] = '';
-    $data['options'] = array();
+    $data['options'] = [];
 
     if (empty($basedir)) {
         $basedir = sys::code() . 'modules/dynamicdata';
@@ -39,18 +55,22 @@ function dynamicdata_admin_import(Array $args=array())
     $data['authid'] = xarSec::genAuthKey();
 
     $filetype = 'xml';
-    $files = xarMod::apiFunc('dynamicdata','admin','browse',
-                           array('basedir' => $basedir,
-                                 'filetype' => $filetype));
+    $files = xarMod::apiFunc(
+        'dynamicdata',
+        'admin',
+        'browse',
+        ['basedir' => $basedir,
+                                 'filetype' => $filetype]
+    );
     if (!isset($files) || count($files) < 1) {
-        $data['warning'] = xarML('There are currently no XML files available for import in "#(1)"',$basedir);
+        $data['warning'] = xarML('There are currently no XML files available for import in "#(1)"', $basedir);
         return $data;
     }
 
     if (empty($refresh) && (!empty($import) || !empty($xml))) {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-        }        
+            return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
+        }
 
         if (empty($keepitemid)) {
             $keepitemid = 0;
@@ -64,46 +84,60 @@ function dynamicdata_admin_import(Array $args=array())
                 }
             }
             if (empty($found) || !file_exists($basedir . '/' . $file)) {
-                throw new FileNotFoundException($basedir,'No files were found to import in directory "#(1)"');
+                throw new FileNotFoundException($basedir, 'No files were found to import in directory "#(1)"');
             }
             try {
-                $objectid = xarMod::apiFunc('dynamicdata','util','import',
-                                      array('file' => $basedir . '/' . $file,
+                $objectid = xarMod::apiFunc(
+                    'dynamicdata',
+                    'util',
+                    'import',
+                    ['file' => $basedir . '/' . $file,
                                             'keepitemid' => $keepitemid,
                                             'overwrite' =>  $overwrite,
                                             'prefix' => $data['prefix'],
-                                            ));
+                                            ]
+                );
             } catch (DuplicateException $e) {
-                return xarTpl::module('dynamicdata', 'user', 'errors',array('layout' => 'duplicate_name', 'name' => $e->getMessage()));
+                return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $e->getMessage()]);
             } catch (Exception $e) {
-                return xarTpl::module('dynamicdata', 'user', 'errors',array('layout' => 'bad_definition', 'name' => $e->getMessage()));
+                return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'bad_definition', 'name' => $e->getMessage()]);
             }
         } else {
             try {
-                $objectid = xarMod::apiFunc('dynamicdata','util','import',
-                                      array('xml' => $xml,
+                $objectid = xarMod::apiFunc(
+                    'dynamicdata',
+                    'util',
+                    'import',
+                    ['xml' => $xml,
                                             'keepitemid' => $keepitemid,
                                             'overwrite' =>  $overwrite,
                                             'prefix' => $data['prefix'],
-                                            ));
+                                            ]
+                );
             } catch (DuplicateException $e) {
-                return xarTpl::module('dynamicdata', 'user', 'errors',array('layout' => 'duplicate_name', 'name' => $e->getMessage()));
+                return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $e->getMessage()]);
             } catch (Exception $e) {
-                return xarTpl::module('dynamicdata', 'user', 'errors',array('layout' => 'bad_definition', 'name' => $e->getMessage()));
+                return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'bad_definition', 'name' => $e->getMessage()]);
             }
         }
-        if (empty($objectid)) return;
+        if (empty($objectid)) {
+            return;
+        }
 
-        xarController::redirect(xarController::URL('dynamicdata', 'admin', 'modifyprop',
-                                      array('itemid' => $objectid)));
+        xarController::redirect(xarController::URL(
+            'dynamicdata',
+            'admin',
+            'modifyprop',
+            ['itemid' => $objectid]
+        ));
         return true;
     }
 
     natsort($files);
-    array_unshift($files,'');
+    array_unshift($files, '');
     foreach ($files as $file) {
-         $data['options'][] = array('id' => $file,
-                                    'name' => $file);
+        $data['options'][] = ['id' => $file,
+                                   'name' => $file];
     }
 
     xarTpl::setPageTemplateName('admin');

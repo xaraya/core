@@ -20,7 +20,7 @@ function dynamicdata_properties_autoload($class)
 {
     $class = strtolower($class);
 
-    $class_array = array(
+    $class_array = [
         'subitemsproperty'          => 'modules.dynamicdata.xarproperties.subitems',
         'subformproperty'           => 'modules.dynamicdata.xarproperties.subform',
         'propertyrefproperty'       => 'modules.dynamicdata.xarproperties.propertyref',
@@ -36,8 +36,8 @@ function dynamicdata_properties_autoload($class)
         'deferreditemproperty'      => 'modules.dynamicdata.xarproperties.deferitem',
         'deferredlistproperty'      => 'modules.dynamicdata.xarproperties.deferlist',
         'deferredmanyproperty'      => 'modules.dynamicdata.xarproperties.defermany',
-    );
-    
+    ];
+
     if (isset($class_array[$class])) {
         sys::import($class_array[$class]);
         return true;

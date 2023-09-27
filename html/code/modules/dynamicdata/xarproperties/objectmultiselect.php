@@ -25,20 +25,20 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
     public $validation_single_invalid; // CHECKME: is this a validation or something else?
     public $validation_allowempty_invalid;
 
-    function __construct(ObjectDescriptor $descriptor)
+    public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
         $this->tplmodule = 'dynamicdata';
         $this->template =  'objectmultiselect';
     }
 
-	/**
-	 * Get the value of a multiselect from a web page
-	 * 
-	 * @param  string name The name of the multiselect
-	 * @param  string value The value of the multiselect
-	 * @return bool   This method passes the value gotten to the validateValue method and returns its output.
-	 */
+    /**
+     * Get the value of a multiselect from a web page
+     *
+     * @param  string name The name of the multiselect
+     * @param  string value The value of the multiselect
+     * @return bool   This method passes the value gotten to the validateValue method and returns its output.
+     */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
@@ -46,17 +46,19 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
         $this->fieldname = $name;
         $this->invalid = '';
         if(!isset($value)) {
-            list($found,$value) = $this->fetchValue($name);
-            if (!$found) $value = null;
+            [$found, $value] = $this->fetchValue($name);
+            if (!$found) {
+                $value = null;
+            }
         }
-       return $this->validateValue($value);
+        return $this->validateValue($value);
     }
-    
-	/**
-	 * Validate the value of a multiselect
-	 *
-	 * @return bool Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+
+    /**
+     * Validate the value of a multiselect
+     *
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
         // do NOT call parent validateValue here - it will always fail !!!
@@ -70,15 +72,15 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
         }
 
         $value = $this->getSerializedValue($value);
-        $validlist = array();
+        $validlist = [];
         $options = $this->getOptions();
         foreach ($options as $option) {
-            array_push($validlist,$option['id']);
+            array_push($validlist, $option['id']);
         }
         // check if we allow values other than those in the options
-        if (!$this->validation_override) {        
+        if (!$this->validation_override) {
             foreach ($value as $val) {
-                if (!in_array($val,$validlist)) {
+                if (!in_array($val, $validlist)) {
                     if (!empty($this->validation_override_invalid)) {
                         $this->invalid = xarML($this->validation_override_invalid);
                     } else {
@@ -94,38 +96,48 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
         return true;
     }
 
-	/**
-	 * Display a multiselect for input
-	 * 
-	 * @param  array data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
-    public function showInput(Array $data = array())
+    /**
+     * Display a multiselect for input
+     *
+     * @param  array data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
+    public function showInput(array $data = [])
     {
-        if (isset($data['single'])) $this->validation_single = $data['single'];
-        if (isset($data['allowempty'])) $this->validation_allowempty = $data['allowempty'];
-        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (isset($data['single'])) {
+            $this->validation_single = $data['single'];
+        }
+        if (isset($data['allowempty'])) {
+            $this->validation_allowempty = $data['allowempty'];
+        }
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
         $data['value'] = $this->getSerializedValue($data['value']);
 
         return parent::showInput($data);
     }
 
-	/**
-	 * Display a multiselect for output
-	 * 
-	 * @param  array data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
-    public function showOutput(Array $data = array())
+    /**
+     * Display a multiselect for output
+     *
+     * @param  array data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
+    public function showOutput(array $data = [])
     {
-        if (!isset($data['value'])) $data['value'] = $this->value;
+        if (!isset($data['value'])) {
+            $data['value'] = $this->value;
+        }
 
         $data['value'] = $this->getSerializedValue($data['value']);
-        if (!isset($data['options'])) $data['options'] = $this->getOptions();
+        if (!isset($data['options'])) {
+            $data['options'] = $this->getOptions();
+        }
 
         return parent::showOutput($data);
     }
-	
+
     /**
      * Alias for the getSerializedValue method
      * This make the property consistent with standard usage
@@ -135,7 +147,7 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
         return $this->getSerializedValue($this->value);
     }
 
-	/**
+    /**
      * Alias for the getSerializedValue method
      */
     public function getItemValue($itemid)
@@ -145,18 +157,18 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
 
     /**
      * Unserializes a given value
-     * 
+     *
      * @param string $value Serialized value
      * @return array Return unserialized value of $value param
      */
     public function getSerializedValue($value)
     {
         if (empty($value)) {
-            return array();
+            return [];
         } elseif (!is_array($value)) {
             $tmp = @unserialize($value);
             if ($tmp === false) {
-                $value = array($value);
+                $value = [$value];
             } else {
                 $value = $tmp;
             }

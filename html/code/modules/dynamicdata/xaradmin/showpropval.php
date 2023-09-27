@@ -15,47 +15,64 @@
  * Show configuration of some property
  * @return array|string|void data for the template display
  */
-function dynamicdata_admin_showpropval(Array $args=array())
+function dynamicdata_admin_showpropval(array $args = [])
 {
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     extract($args);
 
     // get the property id
-    if (!xarVar::fetch('itemid',  'id',    $itemid, NULL, xarVar::NOT_REQUIRED)) {return;}
-    if (!xarVar::fetch('exit', 'isset', $exit, NULL, xarVar::DONT_SET)) {return;}
-    if (!xarVar::fetch('confirm', 'isset', $confirm, NULL, xarVar::DONT_SET)) {return;}
-    if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('itemid', 'id', $itemid, null, xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (!xarVar::fetch('exit', 'isset', $exit, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if (!xarVar::fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     if (empty($itemid)) {
         // get the property type for sample configuration
-        if (!xarVar::fetch('proptype', 'isset', $proptype, NULL, xarVar::NOT_REQUIRED)) {return;}
+        if (!xarVar::fetch('proptype', 'isset', $proptype, null, xarVar::NOT_REQUIRED)) {
+            return;
+        }
 
         // show sample configuration for some property type
         return dynamicdata_config_propval($proptype);
     }
 
     // get the object corresponding to this dynamic property
-    $myobject = DataObjectMaster::getObject(array('name'   => 'properties',
-                                                    'itemid' => $itemid));
-    if (empty($myobject)) return;
+    $myobject = DataObjectMaster::getObject(['name'   => 'properties',
+                                                    'itemid' => $itemid]);
+    if (empty($myobject)) {
+        return;
+    }
 
     $newid = $myobject->getItem();
 
     if (empty($newid) || empty($myobject->properties['id']->value)) {
-        throw new BadParameterException(null,'Invalid item id');
+        throw new BadParameterException(null, 'Invalid item id');
     }
     if (empty($myobject->properties['objectid']->value)) {
-        throw new BadParameterException(null,'Invalid object id');
+        throw new BadParameterException(null, 'Invalid object id');
     }
 
     // check security of the parent object
     $parentobjectid = $myobject->properties['objectid']->value;
-    $parentobject = DataObjectMaster::getObject(array('objectid' => $parentobjectid));
-    if (empty($parentobject)) return;
-    if (!$parentobject->checkAccess('config'))
+    $parentobject = DataObjectMaster::getObject(['objectid' => $parentobjectid]);
+    if (empty($parentobject)) {
+        return;
+    }
+    if (!$parentobject->checkAccess('config')) {
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $parentobject->label));
+    }
     unset($parentobject);
 
     // check if the module+itemtype this property belongs to is hooked to the uploads module
@@ -68,7 +85,7 @@ function dynamicdata_admin_showpropval(Array $args=array())
     }
     */
 
-    $data = array();
+    $data = [];
     // get a new property of the right type
     $data['type'] = $myobject->properties['type']->value;
     $id = $myobject->properties['configuration']->id;
@@ -77,17 +94,21 @@ function dynamicdata_admin_showpropval(Array $args=array())
     // pass the actual id for the property here
     $data['id']         = $id;
     // pass the original invalid value here
-    $data['invalid']    = !empty($invalid) ? $invalid :'';
+    $data['invalid']    = !empty($invalid) ? $invalid : '';
     $property = DataPropertyMaster::getProperty($data);
-    if (empty($property)) return;
-    
-    $data['propertytype'] = DataPropertyMaster::getProperty(array('type' => $data['type']));
+    if (empty($property)) {
+        return;
+    }
+
+    $data['propertytype'] = DataPropertyMaster::getProperty(['type' => $data['type']]);
 
     if (!empty($preview) || !empty($confirm) || !empty($exit)) {
-        if (!xarVar::fetch($data['name'], 'isset', $configuration, NULL, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch($data['name'], 'isset', $configuration, null, xarVar::NOT_REQUIRED)) {
+            return;
+        }
 
         // pass the current value as configuration rule
-        $data['configuration'] = isset($configuration) ? $configuration : '';
+        $data['configuration'] = $configuration ?? '';
 
         $isvalid = $property->updateConfiguration($data);
 
@@ -96,24 +117,32 @@ function dynamicdata_admin_showpropval(Array $args=array())
                 // store the updated configuration rule back in the value
                 $myobject->properties['configuration']->value = $property->configuration;
                 if (!xarSec::confirmAuthKey()) {
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                    return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
                 }
 
                 $newid = $myobject->updateItem();
-                if (empty($newid)) return;
+                if (empty($newid)) {
+                    return;
+                }
 
                 if (empty($exit)) {
-                    $return_url = xarController::URL('dynamicdata', 'admin', 'showpropval', array('itemid' => $itemid));
+                    $return_url = xarController::URL('dynamicdata', 'admin', 'showpropval', ['itemid' => $itemid]);
                     xarController::redirect($return_url);
                     return true;
                 }
             }
             if (!empty($exit)) {
-                if (!xarVar::fetch('return_url', 'isset', $return_url,  NULL, xarVar::DONT_SET)) {return;}
+                if (!xarVar::fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET)) {
+                    return;
+                }
                 if (empty($return_url)) {
                     // return to modifyprop
-                    $return_url = xarController::URL('dynamicdata', 'admin', 'modifyprop',
-                                            array('itemid' => $parentobjectid));
+                    $return_url = xarController::URL(
+                        'dynamicdata',
+                        'admin',
+                        'modifyprop',
+                        ['itemid' => $parentobjectid]
+                    );
                 }
                 xarController::redirect($return_url);
                 return true;
@@ -122,9 +151,9 @@ function dynamicdata_admin_showpropval(Array $args=array())
 
         } else {
             $myobject->properties['configuration']->invalid = $property->invalid;
-        }        
+        }
 
-    // pass the current value as configuration rule
+        // pass the current value as configuration rule
     } elseif (!empty($myobject->properties['configuration'])) {
         $data['configuration'] = $myobject->properties['configuration']->value;
 
@@ -141,7 +170,7 @@ function dynamicdata_admin_showpropval(Array $args=array())
     // call its showConfiguration() method and return
     $data['showval'] = $property->showConfiguration($data);
     $data['itemid'] = $itemid;
-    $data['object'] =& $myobject;
+    $data['object'] = & $myobject;
 
     xarTpl::setPageTitle(xarML('Configuration for DataProperty #(1)', $itemid));
 
@@ -155,7 +184,7 @@ function dynamicdata_admin_showpropval(Array $args=array())
  */
 function dynamicdata_config_propval($proptype)
 {
-    $data = array();
+    $data = [];
     if (empty($proptype)) {
         xarTpl::setPageTitle(xarML('Sample Configuration for DataProperty Types'));
         return $data;
@@ -164,41 +193,47 @@ function dynamicdata_config_propval($proptype)
     // get a new property of the right type
     $data['type'] = $proptype;
     $data['name'] = 'dd_' . $proptype;
-    $property =& DataPropertyMaster::getProperty($data);
+    $property = & DataPropertyMaster::getProperty($data);
     if (empty($property)) {
         xarTpl::setPageTitle(xarML('Sample Configuration for DataProperty Types'));
         return $data;
     }
 
-    if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
-    if (!xarVar::fetch('confirm', 'isset', $confirm, NULL, xarVar::DONT_SET)) {return;}
+    if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if (!xarVar::fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
+        return;
+    }
     if (!empty($preview) || !empty($confirm)) {
-        if (!xarVar::fetch($data['name'],'isset',$configuration,NULL,xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch($data['name'], 'isset', $configuration, null, xarVar::NOT_REQUIRED)) {
+            return;
+        }
 
         // pass the current value as configuration rule
-        $data['configuration'] = isset($configuration) ? $configuration : '';
+        $data['configuration'] = $configuration ?? '';
 
         $isvalid = $property->updateConfiguration($data);
 
         if ($isvalid) {
             $data['configuration'] = $property->configuration;
-/*
-// CHECKME: allow updating the default configuration for a property type someday ? See
-//          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
-            if (!empty($confirm)) {
-                if (!xarSec::confirmAuthKey()) {
-                    return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
-                }
-// TODO: we need some method in PropertyRegistration to update a property type ;-)
+            /*
+            // CHECKME: allow updating the default configuration for a property type someday ? See
+            //          also CHECKME in class/properties/master.php DataPropertyMaster::getProperty()
+                        if (!empty($confirm)) {
+                            if (!xarSec::confirmAuthKey()) {
+                                return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+                            }
+            // TODO: we need some method in PropertyRegistration to update a property type ;-)
 
-// TODO: we need some way to avoid overwriting this whenever we flush property types
-            }
-*/
+            // TODO: we need some way to avoid overwriting this whenever we flush property types
+                        }
+            */
         } else {
             $data['invalid'] = $property->invalid;
         }
 
-    // pass the current value as configuration rule
+        // pass the current value as configuration rule
     } elseif (!empty($property->configuration)) {
         $data['configuration'] = $property->configuration;
 
@@ -215,9 +250,9 @@ function dynamicdata_config_propval($proptype)
     // call its showConfiguration() method and return
     $data['showval'] = $property->showConfiguration($data);
     $data['proptype'] = $proptype;
-//    $data['propertytype'] = $property;
-    $data['propinfo'] =& $property;
-    $data['propertytype'] = & DataPropertyMaster::getProperty(array('type' => $proptype));
+    //    $data['propertytype'] = $property;
+    $data['propinfo'] = & $property;
+    $data['propertytype'] = & DataPropertyMaster::getProperty(['type' => $proptype]);
 
     xarTpl::setPageTitle(xarML('Sample Configuration for DataProperty Type #(1)', $proptype));
 

@@ -31,14 +31,16 @@
  *
  * @return boolean|void true on succes
  */
-function dynamicdata_utilapi_maketable(Array $args=array())
+function dynamicdata_utilapi_maketable(array $args = [])
 {
     // restricted to DD Admins
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     if (isset($args['objectref'])) {
         /** @var DataObject $myobject */
-        $myobject =& $args['objectref'];
+        $myobject = & $args['objectref'];
 
     } else {
         extract($args);
@@ -56,11 +58,11 @@ function dynamicdata_utilapi_maketable(Array $args=array())
             $itemid = null;
         }
 
-        $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
+        $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
                                              'moduleid' => $module_id,
                                              'itemtype' => $itemtype,
                                              'itemid'   => $itemid,
-                                             'allprops' => true));
+                                             'allprops' => true]);
     }
 
     if (!isset($myobject) || empty($myobject->label)) {
@@ -68,7 +70,7 @@ function dynamicdata_utilapi_maketable(Array $args=array())
     }
 
     // get the list of properties for a Dynamic Property
-    $property_properties = DataPropertyMaster::getProperties(array('objectid' => 2));
+    $property_properties = DataPropertyMaster::getProperties(['objectid' => 2]);
 
     $proptypes = DataPropertyMaster::getPropertyTypes();
 
@@ -83,18 +85,18 @@ function dynamicdata_utilapi_maketable(Array $args=array())
     $table = $prefix . 'dd_' . $myobject->name;
 
     // check if this table already exists
-    $meta = xarMod::apiFunc('dynamicdata','util','getmeta');
+    $meta = xarMod::apiFunc('dynamicdata', 'util', 'getmeta');
     if (!empty($meta[$table])) {
         return true;
     }
 
     if (!empty($myobject->objectid)) {
         // get the property info directly from the database again to avoid default eval()
-        $properties = DataPropertyMaster::getProperties(array('objectid' => $myobject->objectid));
+        $properties = DataPropertyMaster::getProperties(['objectid' => $myobject->objectid]);
     } else {
-        $properties = array();
+        $properties = [];
         foreach (array_keys($myobject->properties) as $name) {
-            $properties[$name] = array();
+            $properties[$name] = [];
             foreach (array_keys($property_properties) as $key) {
                 if (isset($myobject->properties[$name]->$key)) {
                     $properties[$name][$key] = $myobject->properties[$name]->$key;
@@ -103,24 +105,24 @@ function dynamicdata_utilapi_maketable(Array $args=array())
         }
     }
 
-    $fields = array();
+    $fields = [];
     $isprimary = false;
     foreach (array_keys($properties) as $name) {
         $field = $name;
         $type = $proptypes[$properties[$name]['type']]['name'];
-        $definition = array();
+        $definition = [];
         switch ($type) {
             case 'itemid':
-                $definition = array('type'        => 'integer',
+                $definition = ['type'        => 'integer',
                                     'null'        => false,
                                     'default'     => '0',
                                     'increment'   => true,
-                                    'primary_key' => true);
+                                    'primary_key' => true];
                 $isprimary = true;
                 break;
 
             case 'textbox':
-                if (!empty($properties[$name]['validation']) && preg_match('/^\d*:(\d+)$/',$properties[$name]['validation'],$matches)) {
+                if (!empty($properties[$name]['validation']) && preg_match('/^\d*:(\d+)$/', $properties[$name]['validation'], $matches)) {
                     $maxlength = $matches[1];
                 } else {
                     $maxlength = 254;
@@ -130,53 +132,57 @@ function dynamicdata_utilapi_maketable(Array $args=array())
                 } else {
                     $default = '';
                 }
-                $definition = array('type'        => 'varchar',
+                $definition = ['type'        => 'varchar',
                                     'size'        => $maxlength,
                                     'null'        => false,
-                                    'default'     => $default);
+                                    'default'     => $default];
                 break;
 
             case 'textarea':
             case 'textarea_small':
             case 'textarea_medium':
             case 'textarea_large':
-                $definition = array('type'        => 'text',
+                $definition = ['type'        => 'text',
                                     'size'        => 'medium',
-                                    'null'        => true);
+                                    'null'        => true];
                 break;
 
             default:
-                $definition = array('type'        => 'varchar',
+                $definition = ['type'        => 'varchar',
                                     'size'        => 254,
                                     'null'        => false,
-                                    'default'     => '');
+                                    'default'     => ''];
                 break;
         }
         $fields[$field] = $definition;
     }
     if (!$isprimary) {
-        $fields['itemid'] = array('type'      => 'integer',
+        $fields['itemid'] = ['type'      => 'integer',
                                 'null'        => false,
                                 'default'     => '0',
                                 'increment'   => false, // unique id depends on other object/table here
-                                'primary_key' => true);
+                                'primary_key' => true];
     }
 
     // Create the Table - the function will return the SQL is successful or
     // raise an exception if it fails, in this case $query is empty
-    $query = xarTableDDL::createTable($table,$fields);
-    if (empty($query)) return; // throw back
+    $query = xarTableDDL::createTable($table, $fields);
+    if (empty($query)) {
+        return;
+    } // throw back
     $dbconn->Execute($query);
 
     sys::import('xaraya.structures.query');
-    $objectlist = DataObjectMaster::getObjectList(array('name' => $myobject->name));
+    $objectlist = DataObjectMaster::getObjectList(['name' => $myobject->name]);
     $items = $objectlist->getItems();
     $q = new Query('INSERT', $table);
     foreach ($items as $row) {
         foreach ($row as $key => $value) {
             $q->addfield($key, $value);
         }
-        if (!$q->run()) return;
+        if (!$q->run()) {
+            return;
+        }
     }
 
     return true;

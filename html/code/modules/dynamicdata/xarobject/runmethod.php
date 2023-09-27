@@ -15,10 +15,10 @@
  *
  * @author Marc Lutolf <mfl@netspan.ch>
  */
-    sys::import('modules.dynamicdata.class.simpleinterface');
+sys::import('modules.dynamicdata.class.simpleinterface');
 
-    function dynamicdata_object_runmethod(Array $args=array())
-    {
-        $interface = new SimpleObjectInterface($args);
-        return $interface->handle($args);
-    }
+function dynamicdata_object_runmethod(array $args = [])
+{
+    $interface = new SimpleObjectInterface($args);
+    return $interface->handle($args);
+}

@@ -16,7 +16,7 @@
  *        string   $module  name of the module dynamicdata is working for
  * @return array of data
  */
-function dynamicdata_userapi_getcontext($args=array('module' =>'dynamicdata'))
+function dynamicdata_userapi_getcontext($args = ['module' => 'dynamicdata'])
 {
     extract($args);
     $context = xarSession::getVar('ddcontext.' . $module);

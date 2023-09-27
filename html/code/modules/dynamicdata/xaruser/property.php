@@ -13,21 +13,27 @@
  * @author Marc Lutolf <mfl@netspan.ch>
  */
 
-function dynamicdata_user_property(Array $args=array())
+function dynamicdata_user_property(array $args = [])
 {
-    if (!xarVar::fetch('prop', 'str', $property, '', xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('act',  'str', $act, '', xarVar::NOT_REQUIRED)) return;
-    if (empty($property) || empty($act))
+    if (!xarVar::fetch('prop', 'str', $property, '', xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (!xarVar::fetch('act', 'str', $act, '', xarVar::NOT_REQUIRED)) {
+        return;
+    }
+    if (empty($property) || empty($act)) {
         return xarResponse::NotFound();
-        
+    }
+
     try {
         sys::import('properties.' . $property . '.' . $act);
         $function = $property . "_" . $act;
         $function();
         return true;
     } catch (Exception $e) {
-        if(xarModVars::get('dynamicdata','debugmode') && in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-            echo "<pre>"; print($e->__toString());
+        if(xarModVars::get('dynamicdata', 'debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+            echo "<pre>";
+            print($e->__toString());
         } else {
             return xarResponse::NotFound();
         }

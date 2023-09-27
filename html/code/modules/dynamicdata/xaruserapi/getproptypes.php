@@ -17,7 +17,7 @@
  * @param array    $args array of optional parameters<br/>
  * @return array of property types
  */
-function dynamicdata_userapi_getproptypes(Array $args=array())
+function dynamicdata_userapi_getproptypes(array $args = [])
 {
     return DataPropertyMaster::getPropertyTypes();
 }

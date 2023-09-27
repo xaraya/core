@@ -19,32 +19,47 @@
  * @param $args an array of arguments (if called by other modules)
  * @return string|void output display string
  */
-function dynamicdata_user_display(Array $args=array())
+function dynamicdata_user_display(array $args = [])
 {
     extract($args);
 
-    if(!xarVar::fetch('objectid', 'isset', $objectid,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('name',     'isset', $name,      NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('module_id',    'isset', $moduleid,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('itemid',   'isset', $itemid,    NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('template', 'isset', $template,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('tplmodule','isset', $tplmodule, NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('name', 'isset', $name, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('module_id', 'isset', $moduleid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('tplmodule', 'isset', $tplmodule, null, xarVar::DONT_SET)) {
+        return;
+    }
 
-    $myobject = DataObjectMaster::getObject(array('objectid' => $objectid,
+    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
                                          'name' => $name,
                                          'itemid'   => $itemid,
-                                         'tplmodule' => $tplmodule));
-    if (!isset($myobject)) return;
-    if (!$myobject->checkAccess('display'))
+                                         'tplmodule' => $tplmodule]);
+    if (!isset($myobject)) {
+        return;
+    }
+    if (!$myobject->checkAccess('display')) {
         return xarResponse::Forbidden(xarML('Display #(1) is forbidden', $myobject->label));
+    }
 
     $args = $myobject->toArray();
     $myobject->getItem();
 
-    $data = array();
+    $data = [];
 
     // *Now* we can set the data stuff
-    $data['object'] =& $myobject;
+    $data['object'] = & $myobject;
     $data['objectid'] = $args['objectid'];
     $data['itemid'] = $args['itemid'];
 
@@ -57,8 +72,8 @@ function dynamicdata_user_display(Array $args=array())
     // Return the template variables defined in this function
     if (file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display.xt') ||
         file_exists(sys::code() . 'modules/' . $args['tplmodule'] . '/xartemplates/user-display-' . $args['template'] . '.xt')) {
-        return xarTpl::module($args['tplmodule'],'user','display',$data,$args['template']);
+        return xarTpl::module($args['tplmodule'], 'user', 'display', $data, $args['template']);
     } else {
-        return xarTpl::module('dynamicdata','user','display',$data,$args['template']);
+        return xarTpl::module('dynamicdata', 'user', 'display', $data, $args['template']);
     }
 }

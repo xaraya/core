@@ -19,24 +19,38 @@
  * @param int itemid the id of the object to be modified
  * @return string|void output display string
  */
-function dynamicdata_admin_access(Array $args=array())
+function dynamicdata_admin_access(array $args = [])
 {
     extract($args);
 
-    if(!xarVar::fetch('itemid',   'isset', $itemid,    NULL, xarVar::DONT_SET)) {return;}
-    if (empty($itemid)) return xarResponse::notFound();
-    if(!xarVar::fetch('name',     'isset', $name, 'objects', xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('tplmodule','isset', $tplmodule, NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('template', 'isset', $template,  NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('preview',  'isset', $preview,   NULL, xarVar::DONT_SET)) {return;}
-    if(!xarVar::fetch('confirm',  'isset', $confirm,   NULL, xarVar::DONT_SET)) {return;}
+    if(!xarVar::fetch('itemid', 'isset', $itemid, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if (empty($itemid)) {
+        return xarResponse::notFound();
+    }
+    if(!xarVar::fetch('name', 'isset', $name, 'objects', xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('tplmodule', 'isset', $tplmodule, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('template', 'isset', $template, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+        return;
+    }
+    if(!xarVar::fetch('confirm', 'isset', $confirm, null, xarVar::DONT_SET)) {
+        return;
+    }
 
-    $data = xarMod::apiFunc('dynamicdata','admin','menu');
+    $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
 
-    $object = DataObjectMaster::getObject(array(
+    $object = DataObjectMaster::getObject([
                                          'name' => $name,
                                          'itemid'   => $itemid,
-                                         'tplmodule' => $tplmodule));
+                                         'tplmodule' => $tplmodule]);
     $object->getItem();
 
     $data['object'] = $object;
@@ -47,11 +61,12 @@ function dynamicdata_admin_access(Array $args=array())
     xarTpl::setPageTitle(xarML('Manage Access Rules for #(1)', $data['label']));
 
     // check security of the parent object ... or DD Admin as fail-safe here
-    $tmpobject = DataObjectMaster::getObject(array('objectid' => $object->itemid));
-    
+    $tmpobject = DataObjectMaster::getObject(['objectid' => $object->itemid]);
+
     // Security
-    if (!$tmpobject->checkAccess('config') && !xarSecurity::check('AdminDynamicData',0))
+    if (!$tmpobject->checkAccess('config') && !xarSecurity::check('AdminDynamicData', 0)) {
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
+    }
     unset($tmpobject);
 
     // Get the object's access rules
@@ -59,28 +74,28 @@ function dynamicdata_admin_access(Array $args=array())
         try {
             $objectaccess = unserialize($object->properties['access']->value);
         } catch (Exception $e) {
-            $objectaccess = array();
+            $objectaccess = [];
         }
     } else {
-        $objectaccess = array();
+        $objectaccess = [];
     }
 
     // Specify access levels
-    $data['levels'] = array(//'view'   => array('label' => 'View',
+    $data['levels'] = [//'view'   => array('label' => 'View',
                             //                   'mask'  => 'ViewDynamicDataItems'),
-                            'display' => array('label' => 'Display',
-                                               'mask'  => 'ReadDynamicDataItem'),
-                            'update'  => array('label' => 'Modify',
-                                               'mask'  => 'EditDynamicDataItem'),
-                            'create'  => array('label' => 'Create',
-                                               'mask'  => 'AddDynamicDataItem'),
-                            'delete'  => array('label' => 'Delete',
-                                               'mask'  => 'DeleteDynamicDataItem'),
-                            'config'  => array('label' => 'Configure',
-                                               'mask'  => 'AdminDynamicDataItem'));
+                            'display' => ['label' => 'Display',
+                                               'mask'  => 'ReadDynamicDataItem'],
+                            'update'  => ['label' => 'Modify',
+                                               'mask'  => 'EditDynamicDataItem'],
+                            'create'  => ['label' => 'Create',
+                                               'mask'  => 'AddDynamicDataItem'],
+                            'delete'  => ['label' => 'Delete',
+                                               'mask'  => 'DeleteDynamicDataItem'],
+                            'config'  => ['label' => 'Configure',
+                                               'mask'  => 'AdminDynamicDataItem']];
     // Get list of groups
-    $data['grouplist'] = array();
-    $anonid = xarConfigVars::get(null,'Site.User.AnonymousUID');
+    $data['grouplist'] = [];
+    $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID');
     $anonrole = xarRoles::get($anonid);
     $data['grouplist'][$anonid] = $anonrole->getName();
     $groups = xarRoles::getgroups();
@@ -90,30 +105,34 @@ function dynamicdata_admin_access(Array $args=array())
 
     if (!empty($confirm)) {
         if (!xarSec::confirmAuthKey()) {
-            return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
+            return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
         }
 
         // Get the access information from the template
-/*
-        $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
-        foreach ($data['levels'] as $level => $info) {
-            $isvalid = $accessproperty->checkInput($object->name . '_' . $level);
-            $objectaccess['access'][$level] = $accessproperty->value;
+        /*
+                $accessproperty = DataPropertyMaster::getProperty(array('name' => 'access'));
+                foreach ($data['levels'] as $level => $info) {
+                    $isvalid = $accessproperty->checkInput($object->name . '_' . $level);
+                    $objectaccess['access'][$level] = $accessproperty->value;
+                }
+        */
+        if(!xarVar::fetch('do_access', 'isset', $do_access, null, xarVar::DONT_SET)) {
+            return;
         }
-*/
-        if(!xarVar::fetch('do_access', 'isset', $do_access, NULL, xarVar::DONT_SET)) {return;}
 
         // define the new access list for each level
-        $accesslist = array();
+        $accesslist = [];
         if (!empty($do_access)) {
-            if(!xarVar::fetch('access', 'isset', $access, array(), xarVar::DONT_SET)) {return;}
+            if(!xarVar::fetch('access', 'isset', $access, [], xarVar::DONT_SET)) {
+                return;
+            }
 
             foreach ($data['levels'] as $level => $info) {
                 if (empty($access[$level])) {
                     continue;
                 }
                 if (!isset($accesslist[$level])) {
-                    $accesslist[$level] = array();
+                    $accesslist[$level] = [];
                 }
                 foreach ($data['grouplist'] as $roleid => $rolename) {
                     if (empty($access[$level][$roleid])) {
@@ -131,16 +150,18 @@ function dynamicdata_admin_access(Array $args=array())
         }
 
         // define the new filter list
-        $filterlist = array();
-        if(!xarVar::fetch('filters', 'isset', $filters, array(), xarVar::DONT_SET)) {return;}
+        $filterlist = [];
+        if(!xarVar::fetch('filters', 'isset', $filters, [], xarVar::DONT_SET)) {
+            return;
+        }
         foreach ($filters as $filterid => $filterinfo) {
             if (empty($filterinfo['group']) || empty($filterinfo['prop']) || empty($filterinfo['match'])) {
                 continue;
             }
             if (!isset($filterlist[$filterinfo['group']])) {
-                $filterlist[$filterinfo['group']] = array();
+                $filterlist[$filterinfo['group']] = [];
             }
-            array_push($filterlist[$filterinfo['group']], array($filterinfo['prop'], $filterinfo['match'], $filterinfo['value']));
+            array_push($filterlist[$filterinfo['group']], [$filterinfo['prop'], $filterinfo['match'], $filterinfo['value']]);
         }
         if (!empty($filterlist)) {
             // serialize the filter list first
@@ -152,28 +173,34 @@ function dynamicdata_admin_access(Array $args=array())
 
         // then serialize the access rules for update
         $accessstring = serialize($objectaccess);
-        $itemid = $object->updateItem(array('access' => $accessstring));
+        $itemid = $object->updateItem(['access' => $accessstring]);
 
-        if(!xarVar::fetch('return_url', 'isset', $return_url,  NULL, xarVar::DONT_SET)) {return;}
+        if(!xarVar::fetch('return_url', 'isset', $return_url, null, xarVar::DONT_SET)) {
+            return;
+        }
         if (!empty($return_url)) {
             xarController::redirect($return_url);
         } else {
-            xarController::redirect(xarController::URL('dynamicdata', 'admin', 'access',
-                                            array('itemid' => $itemid,
-                                                  'tplmodule' => $tplmodule)));
+            xarController::redirect(xarController::URL(
+                'dynamicdata',
+                'admin',
+                'access',
+                ['itemid' => $itemid,
+                                                  'tplmodule' => $tplmodule]
+            ));
         }
         return true;
     }
 
     if (!empty($objectaccess['access'])) {
         // unserialize the access list
-        try{
+        try {
             $data['access'] = unserialize($objectaccess['access']);
         } catch (Exception $e) {
-            $data['access'] = array();
+            $data['access'] = [];
         }
     } else {
-        $data['access'] = array();
+        $data['access'] = [];
     }
 
     if (empty($data['access'])) {
@@ -182,9 +209,9 @@ function dynamicdata_admin_access(Array $args=array())
         // Preset the default access rights using privileges
         $instance = $object->properties['module_id']->value.':'.$object->properties['itemtype']->value.':All';
         foreach ($data['levels'] as $level => $info) {
-            $data['access'][$level] = array();
+            $data['access'][$level] = [];
             foreach ($data['grouplist'] as $roleid => $rolename) {
-                if (xarSecurity::check($info['mask'],0,'Item',$instance,'',$rolename,0,0)) {
+                if (xarSecurity::check($info['mask'], 0, 'Item', $instance, '', $rolename, 0, 0)) {
                     // build list of groups that have access at this level
                     array_push($data['access'][$level], $roleid);
                 }
@@ -197,49 +224,49 @@ function dynamicdata_admin_access(Array $args=array())
 
     if (!empty($objectaccess['filters'])) {
         // unserialize the filter list
-        try{
+        try {
             $filterlist = unserialize($objectaccess['filters']);
         } catch (Exception $e) {
-            $filterlist = array();
+            $filterlist = [];
         }
     } else {
-        $filterlist = array();
+        $filterlist = [];
     }
     // rearrange filterlist for template
-    $data['filters'] = array();
+    $data['filters'] = [];
     foreach ($filterlist as $group => $filters) {
         foreach ($filters as $filter) {
-            array_push($data['filters'], array('group' => $group,
+            array_push($data['filters'], ['group' => $group,
                                                'prop'  => $filter[0],
                                                'match' => $filter[1],
                                                'value' => xarVar::prepForDisplay($filter[2]),
-                                               'level' => ''));
+                                               'level' => '']);
         }
     }
     // add blank filter at the bottom
-    array_push($data['filters'], array('group' => '',
+    array_push($data['filters'], ['group' => '',
                                        'prop'  => '',
                                        'match' => '',
                                        'value' => '',
-                                       'level' => ''));
+                                       'level' => '']);
 
     // get the properties of the current object
-    $data['properties'] = DataPropertyMaster::getProperties(array('objectid' => $object->itemid));
-    $data['conditions'] = array('eq'    => 'equals',
+    $data['properties'] = DataPropertyMaster::getProperties(['objectid' => $object->itemid]);
+    $data['conditions'] = ['eq'    => 'equals',
                                 //'start' => 'starts with',
                                 //'end'   => 'ends with',
                                 //'like'  => 'contains',
                                 //'in'    => 'in list a,b,c',
                                 'gt'    => 'greater than',
                                 'lt'    => 'less than',
-                                'ne'    => 'not equal to');
+                                'ne'    => 'not equal to'];
 
     $data['authid'] = xarSec::genAuthKey();
 
     if (file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access.xt') ||
         file_exists(sys::code() . 'modules/' . $data['tplmodule'] . '/xartemplates/admin-access-' . $data['template'] . '.xt')) {
-        return xarTpl::module($data['tplmodule'],'admin','access',$data,$data['template']);
+        return xarTpl::module($data['tplmodule'], 'admin', 'access', $data, $data['template']);
     } else {
-        return xarTpl::module('dynamicdata','admin','access',$data,$data['template']);
+        return xarTpl::module('dynamicdata', 'admin', 'access', $data, $data['template']);
     }
 }

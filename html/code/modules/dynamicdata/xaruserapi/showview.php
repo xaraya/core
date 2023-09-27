@@ -17,7 +17,7 @@
  * @return string|void output display string
  */
 
-function dynamicdata_userapi_showview(array $args=[])
+function dynamicdata_userapi_showview(array $args = [])
 {
     extract($args);
 
@@ -43,7 +43,7 @@ function dynamicdata_userapi_showview(array $args=[])
     }
 
     // Note: fetching input variables doesn't normally belong in APIs, but this is
-//       used by the xar:data-view tag when no object or items are specified !
+    //       used by the xar:data-view tag when no object or items are specified !
 
     if (!isset($itemids)) {
         if (!xarVar::fetch('itemids', 'isset', $itemids, null, xarVar::DONT_SET)) {
@@ -88,7 +88,7 @@ function dynamicdata_userapi_showview(array $args=[])
         // support comma-separated field list
         if (is_string($fieldlist)) {
             $myfieldlist = explode(',', $fieldlist);
-        // and array of fields
+            // and array of fields
         } elseif (is_array($fieldlist)) {
             $myfieldlist = $fieldlist;
         }

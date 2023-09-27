@@ -37,12 +37,12 @@ sys::import('modules.dynamicdata.class.objects.loader');
  * @link http://xaraya.info/index.php/release/68.html
  */
 
- /**
-  * This property displays deferred related objects for an item (experimental - do not use in production)
-  *
-  * Configuration:
-  * the defaultvalue can be set to automatically load related object link properties based on the itemids,
-  */
+/**
+ * This property displays deferred related objects for an item (experimental - do not use in production)
+ *
+ * Configuration:
+ * the defaultvalue can be set to automatically load related object link properties based on the itemids,
+ */
 class DeferredManyProperty extends DeferredItemProperty
 {
     public $id         = 18283;
@@ -153,7 +153,7 @@ class DeferredManyProperty extends DeferredItemProperty
      *
      * @param mixed $value the new value for the property
      */
-    public function setValue($value=null)
+    public function setValue($value = null)
     {
         // 1. in construct() set to defaultvalue - skip
         // 2. in showForm() set for input preview and update - set cache values
@@ -169,13 +169,13 @@ class DeferredManyProperty extends DeferredItemProperty
         parent::setValue($value);
     }
 
-    public function createValue($itemid=0)
+    public function createValue($itemid = 0)
     {
         // @checkme $itemid is still unknown at this point, since this is called before datastore->createItem()
         $this->updateValue($itemid);
     }
 
-    public function updateValue($itemid=0)
+    public function updateValue($itemid = 0)
     {
         if (empty($itemid) || empty($this->value) || empty($this->linkname)) {
             return;
@@ -194,7 +194,7 @@ class DeferredManyProperty extends DeferredItemProperty
         }
     }
 
-    public function deleteValue($itemid=0)
+    public function deleteValue($itemid = 0)
     {
         if (empty($itemid) || empty($this->linkname)) {
             return;
@@ -224,7 +224,7 @@ class DeferredManyProperty extends DeferredItemProperty
      * @param mixed value
      * @param integer fordisplay
      */
-    public function setItemValue($itemid, $value, $fordisplay=0)
+    public function setItemValue($itemid, $value, $fordisplay = 0)
     {
         // 1. in getItems() set to value from datastore - setDataToDefer for deferred lookup and showView()
         parent::setItemValue($itemid, $value, $fordisplay);
@@ -364,7 +364,7 @@ class DeferredManyProperty extends DeferredItemProperty
             $data['singlevalue'] = false;
             $target = $this->getDeferredLoader()->getTarget();
             if (!empty($target)) {
-                $data['object'] =& $target->objectlist;
+                $data['object'] = & $target->objectlist;
                 $data['fieldlist'] = $target->fieldlist;
                 // $data['linkfield'] = 'N/A';
             }

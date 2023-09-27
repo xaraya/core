@@ -20,14 +20,18 @@
  * @throws EmptyParameterException
  * @throws BadParameterException
  */
-function dynamicdata_admin_modifyconfighook(Array $args=array())
+function dynamicdata_admin_modifyconfighook(array $args = [])
 {
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) return;
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
 
     extract($args);
 
-    if (!isset($extrainfo)) throw new EmptyParameterException('extrainfo');
+    if (!isset($extrainfo)) {
+        throw new EmptyParameterException('extrainfo');
+    }
 
     // When called via hooks, the module name may be empty, so we get it from
     // the current module
@@ -45,8 +49,8 @@ function dynamicdata_admin_modifyconfighook(Array $args=array())
     $module_id = xarMod::getRegID($modname);
     if (empty($module_id)) {
         $msg = 'Invalid #(1) for #(2) function #(3)() in module #(4)';
-        $vars = array('module name', 'admin', 'modifyconfighook', 'dynamicdata');
-        throw new BadParameterException($vars,$msg);
+        $vars = ['module name', 'admin', 'modifyconfighook', 'dynamicdata'];
+        throw new BadParameterException($vars, $msg);
     }
 
     if (!empty($extrainfo['itemtype'])) {
@@ -55,19 +59,25 @@ function dynamicdata_admin_modifyconfighook(Array $args=array())
         $itemtype = null;
     }
 
-    if (!xarMod::apiLoad('dynamicdata', 'user')) return;
-
-    sys::import('modules.dynamicdata.class.objects.master');
-    $args = DataObjectDescriptor::getObjectID(array('module'  => $module_id,
-                                       'itemtype'  => $itemtype));
-
-    $fields = xarMod::apiFunc('dynamicdata','user','getprop',
-                           array('objectid' => $args['objectid']));
-    if (!isset($fields) || $fields == false) {
-        $fields = array();
+    if (!xarMod::apiLoad('dynamicdata', 'user')) {
+        return;
     }
 
-    $labels = array(
+    sys::import('modules.dynamicdata.class.objects.master');
+    $args = DataObjectDescriptor::getObjectID(['module'  => $module_id,
+                                       'itemtype'  => $itemtype]);
+
+    $fields = xarMod::apiFunc(
+        'dynamicdata',
+        'user',
+        'getprop',
+        ['objectid' => $args['objectid']]
+    );
+    if (!isset($fields) || $fields == false) {
+        $fields = [];
+    }
+
+    $labels = [
                     'id' => xarML('ID'),
                     'name' => xarML('Name'),
                     'label' => xarML('Label'),
@@ -75,20 +85,24 @@ function dynamicdata_admin_modifyconfighook(Array $args=array())
                     'defaultvalue' => xarML('Default'),
                     'source' => xarML('Data Source'),
                     'configuration' => xarML('Configuration'),
-                   );
+                   ];
 
     $labels['dynamicdata'] = xarML('Dynamic Data Fields');
     $labels['config'] = xarML('modify');
 
-    $data = array();
+    $data = [];
     $data['labels'] = $labels;
-    $data['link'] = xarController::URL('dynamicdata','admin','modifyprop',
-                              array('module_id' => $module_id,
-                                    'itemtype' => $itemtype));
+    $data['link'] = xarController::URL(
+        'dynamicdata',
+        'admin',
+        'modifyprop',
+        ['module_id' => $module_id,
+                                    'itemtype' => $itemtype]
+    );
     $data['fields'] = $fields;
-    $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(array('type' => 'fieldtype'));
+    $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(['type' => 'fieldtype']);
 
-    $object = DataObjectMaster::getObject(array('name' => $args['name']));
+    $object = DataObjectMaster::getObject(['name' => $args['name']]);
 
     if (!empty($object)) {
         if (!empty($object->template)) {
@@ -99,5 +113,5 @@ function dynamicdata_admin_modifyconfighook(Array $args=array())
     } else {
         $template = null;
     }
-    return xarTpl::module('dynamicdata','admin','modifyconfighook',$data,$template);
+    return xarTpl::module('dynamicdata', 'admin', 'modifyconfighook', $data, $template);
 }

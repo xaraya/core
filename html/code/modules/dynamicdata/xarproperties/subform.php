@@ -24,7 +24,7 @@ class SubFormProperty extends DataProperty
     public $id         = 997;
     public $name       = 'subform';
     public $desc       = 'Sub Form';
-    public $reqmodules = array('dynamicdata');
+    public $reqmodules = ['dynamicdata'];
 
     public $objectid  = 0;
     public $objectname  = '';
@@ -39,50 +39,56 @@ class SubFormProperty extends DataProperty
     public $fieldlist = null;
     public $objectref = null;
     public $oldvalue  = null;
-    public $arguments = array('objectname','style','title','link','where','input','display','fieldlist','repeat','editkeys','layout');
+    public $arguments = ['objectname','style','title','link','where','input','display','fieldlist','repeat','editkeys','layout'];
     public $warnings  = '';
     public $layout    = 'default';
 
     public $fieldname;
     public $fieldprefix;
 
-/* TODO: replace custom configuration handling with default one ?
-    public $initialization_linktype = 'serialized';
-    public $initialization_parentselect = 0;
-    public $initialization_fieldlist = null;
-    public $initialization_minimumitems = 1;
-    public $initialization_subiteminput = 1;
-    //allow editing keys on input
-    public $initialization_fixed_keys = 1;
-*/
+    /* TODO: replace custom configuration handling with default one ?
+        public $initialization_linktype = 'serialized';
+        public $initialization_parentselect = 0;
+        public $initialization_fieldlist = null;
+        public $initialization_minimumitems = 1;
+        public $initialization_subiteminput = 1;
+        //allow editing keys on input
+        public $initialization_fixed_keys = 1;
+    */
 
     /**
-	 * Get the value of a this property type from a web page<br/>
-	 * 
-	 * @param  string name The name of this property type
-	 * @param  string value The value of this property type
-	 * @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
-	 */
+     * Get the value of a this property type from a web page<br/>
+     *
+     * @param  string name The name of this property type
+     * @param  string value The value of this property type
+     * @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
+     */
     public function checkInput($name = '', $value = null)
     {
         $name = empty($name) ? $this->propertyprefix . $this->id : $name;
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
         if (!isset($value)) {
-            if (!xarVar::fetch($name, 'isset', $value,  NULL, xarVar::DONT_SET)) {return;}
+            if (!xarVar::fetch($name, 'isset', $value, null, xarVar::DONT_SET)) {
+                return;
+            }
         }
-        if (!xarVar::fetch('fieldprefix', 'isset', $this->fieldprefix,  NULL, xarVar::DONT_SET)) {return;}
+        if (!xarVar::fetch('fieldprefix', 'isset', $this->fieldprefix, null, xarVar::DONT_SET)) {
+            return;
+        }
         return $this->validateValue($value);
     }
 
-	/**
-	 * Validate the value of this property type
-	 *
-	 * @return bool|void Returns true if the value passes all validation checks; otherwise returns false.
-	 */
+    /**
+     * Validate the value of this property type
+     *
+     * @return bool|void Returns true if the value passes all validation checks; otherwise returns false.
+     */
     public function validateValue($value = null)
     {
-        if (!parent::validateValue($value)) return false;
+        if (!parent::validateValue($value)) {
+            return false;
+        }
 
         if (empty($this->objectid)) {
             // nothing to do here
@@ -96,12 +102,12 @@ class SubFormProperty extends DataProperty
 
 
         // retrieve new value for preview + new/modify combinations (in case we miss the preview)
-/*
-        if (xarVar::isCached('DynamicData.SubForm',$name)) {
-            $this->value = xarVar::getCached('DynamicData.SubForm',$name);
-            return true;
-        }
-*/
+        /*
+                if (xarVar::isCached('DynamicData.SubForm',$name)) {
+                    $this->value = xarVar::getCached('DynamicData.SubForm',$name);
+                    return true;
+                }
+        */
         // see if we're still dealing with the same item here
         if ($this->style == 'itemid' && !empty($this->title)) {
             $oldname = $name . '_old';
@@ -110,12 +116,12 @@ class SubFormProperty extends DataProperty
             $oldname = $name . '_old';
             xarVar::fetch($oldname, 'id', $oldvalue, $this->value, xarVar::NOT_REQUIRED);
             $newname = $name . '_new';
-            xarVar::fetch($newname, 'id', $newvalue, NULL, xarVar::NOT_REQUIRED);
+            xarVar::fetch($newname, 'id', $newvalue, null, xarVar::NOT_REQUIRED);
         } elseif ($this->style == 'childlist' && !empty($this->link)) {
             $oldname = $name . '_old';
             xarVar::fetch($oldname, 'id', $oldvalue, $this->value, xarVar::NOT_REQUIRED);
             $newname = $name . '_new';
-            xarVar::fetch($newname, 'id', $newvalue, NULL, xarVar::NOT_REQUIRED);
+            xarVar::fetch($newname, 'id', $newvalue, null, xarVar::NOT_REQUIRED);
         } else {
             $oldvalue = $this->value;
         }
@@ -124,35 +130,35 @@ class SubFormProperty extends DataProperty
             $value = $this->value;
         }
 
-        $object =& $this->getObject($value);
+        $object = & $this->getObject($value);
 
         if ($this->style == 'serialized') {
 
-            $object = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
-                                                                'fieldlist' => $this->fieldlist));
-            $i=0;
-            $values = array();
+            $object = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                                                                'fieldlist' => $this->fieldlist]);
+            $i = 0;
+            $values = [];
             $prefix = empty($this->fieldprefix) ? $name : $this->fieldprefix;
 
-// TODO: support single serialized array for a single object again (with repeat = 1),
-//       e.g. for module variables or config fields
+            // TODO: support single serialized array for a single object again (with repeat = 1),
+            //       e.g. for module variables or config fields
 
-// TODO: see array property for cleaner implementation of repeats
+            // TODO: see array property for cleaner implementation of repeats
             // We need to figure out how many items we need to process
             // FIXME: is there a better way to do this?
             $postarray = array_keys($_POST);
-            $items = array();
+            $items = [];
             foreach ($postarray as $key) {
                 preg_match("/Item_[0-9]+_/", $key, $matches);
                 if (isset($matches[0])) {
-                    $str = explode("_",$matches[0]);
+                    $str = explode("_", $matches[0]);
                     $items[$str[1]] = (int)$str[1];
                 }
             }
 
             foreach ($items as $i) {
                 // check user input for the object item - using the current name as field prefix if non is given
-                $isvalid = $object->checkInput(array('fieldprefix' => "Item_" . $i . "_" . $prefix));
+                $isvalid = $object->checkInput(['fieldprefix' => "Item_" . $i . "_" . $prefix]);
 
                 $keylist = array_keys($object->properties);
 
@@ -161,7 +167,7 @@ class SubFormProperty extends DataProperty
                     $this->invalid = '';
                     foreach ($keylist as $key) {
                         // we ignore errors in any other properties here
-                        if ((empty($this->fieldlist) || in_array($key,$this->fieldlist)) &&
+                        if ((empty($this->fieldlist) || in_array($key, $this->fieldlist)) &&
                             !empty($object->properties[$key]->invalid)) {
                             // pass along the invalid message for this property
                             $this->invalid .= ' [' . $object->properties[$key]->label . '] ' . $object->properties[$key]->invalid;
@@ -175,9 +181,9 @@ class SubFormProperty extends DataProperty
                 }
 
                 // save the values we're interested in
-                $value = array();
+                $value = [];
                 foreach ($keylist as $key) {
-                    if ((empty($this->fieldlist) || in_array($key,$this->fieldlist)) &&
+                    if ((empty($this->fieldlist) || in_array($key, $this->fieldlist)) &&
                         isset($object->properties[$key]->value)) {
                         $value[$key] = $object->properties[$key]->value;
                     }
@@ -195,7 +201,7 @@ class SubFormProperty extends DataProperty
             $this->value = serialize($values);
         } elseif ($this->style == 'itemid' && (empty($value) || $value == $oldvalue) && !empty($this->input)) {
             // check user input for the object item - using the current name as field prefix
-            $isvalid = $object->checkInput(array('fieldprefix' => $name));
+            $isvalid = $object->checkInput(['fieldprefix' => $name]);
 
             $keylist = array_keys($object->properties);
 
@@ -210,8 +216,8 @@ class SubFormProperty extends DataProperty
 
                         // invalid messages for fields will be shown in the object form by default, so
                         // only show explicit warnings for the fields that aren't in the fieldlist here
-                        if (!empty($this->fieldlist) && !in_array($key,$this->fieldlist)) {
-                             $this->warnings .= ' [' . $object->properties[$key]->label . '] ' . $object->properties[$key]->invalid;
+                        if (!empty($this->fieldlist) && !in_array($key, $this->fieldlist)) {
+                            $this->warnings .= ' [' . $object->properties[$key]->label . '] ' . $object->properties[$key]->invalid;
                         }
                     }
                 }
@@ -223,9 +229,10 @@ class SubFormProperty extends DataProperty
             }
 
             // if we don't know we're previewing, we don't really have a choice here
-            if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
-            if (empty($preview))
-            {
+            if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+                return;
+            }
+            if (empty($preview)) {
                 if (empty($value) || empty($object->itemid)) {
                     $itemid = $object->createItem();
                 } else {
@@ -238,34 +245,35 @@ class SubFormProperty extends DataProperty
                 }
                 $value = $itemid;
                 // save new value for preview + new/modify combinations (in case we miss the preview)
-                xarVar::setCached('DynamicData.SubForm',$name,$value);
+                xarVar::setCached('DynamicData.SubForm', $name, $value);
             }
             $this->value = $value;
 
         } elseif ($this->style == 'parentid' && !empty($value) && $value == $oldvalue && !empty($this->input)) {
 
             // check if we want to create new child items or not
-            xarVar::fetch($name . '_dd_create', 'array', $dd_create, NULL, xarVar::NOT_REQUIRED);
+            xarVar::fetch($name . '_dd_create', 'array', $dd_create, null, xarVar::NOT_REQUIRED);
             if (!empty($dd_create) && !empty($dd_create[$this->objectid])) {
                 $docreate = 1;
             } else {
                 $docreate = 0;
             }
 
-            $childitems = array();
-            foreach ($object->properties as $property)
-            {
+            $childitems = [];
+            foreach ($object->properties as $property) {
                 $propertyname = $property->name;
                 $propertyid = $property->id;
                 // check user input for the object item - using the current name as field prefix
                 $propertyid = $name .'_dd_'.$propertyid;
                 unset($propertyvaluearray);
-                xarVar::fetch($propertyid, 'array', $propertyvaluearray, NULL, xarVar::NOT_REQUIRED);
+                xarVar::fetch($propertyid, 'array', $propertyvaluearray, null, xarVar::NOT_REQUIRED);
                 if (!empty($propertyvaluearray)) {
                     foreach ($propertyvaluearray as $id => $val) {
-                        if (empty($id) && !$docreate) continue;
+                        if (empty($id) && !$docreate) {
+                            continue;
+                        }
                         if (!isset($childitems[$id])) {
-                            $childitems[$id] = array();
+                            $childitems[$id] = [];
                         }
                         $childitems[$id][$propertyname] = $val;
                     }
@@ -273,12 +281,12 @@ class SubFormProperty extends DataProperty
             }
 
             // make sure the link field is included in the field list
-            if (!empty($this->fieldlist) && !in_array($this->link,$this->fieldlist)) {
-                array_push($this->fieldlist,$this->link);
+            if (!empty($this->fieldlist) && !in_array($this->link, $this->fieldlist)) {
+                array_push($this->fieldlist, $this->link);
             }
             // check user input for the object item
-            $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
-                                                                'fieldlist' => $this->fieldlist));
+            $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                                                                'fieldlist' => $this->fieldlist]);
             $keylist = array_keys($myobject->properties);
             // report all invalid values here, even the ones we don't see because of the fieldlist
             $this->invalid = '';
@@ -295,7 +303,7 @@ class SubFormProperty extends DataProperty
                     // Note: this also sets new items with id 0 on preview
                     foreach ($keylist as $key) {
                         if (isset($item[$key])) {
-                            $object->properties[$key]->setItemValue($id,$item[$key]);
+                            $object->properties[$key]->setItemValue($id, $item[$key]);
                         }
                     }
                 } else {
@@ -306,7 +314,7 @@ class SubFormProperty extends DataProperty
 
                             // invalid messages for fields will be shown in the object form by default, so
                             // only show explicit warnings for the fields that aren't in the fieldlist here
-                            if (!empty($this->fieldlist) && !in_array($key,$this->fieldlist)) {
+                            if (!empty($this->fieldlist) && !in_array($key, $this->fieldlist)) {
                                 $this->warnings .= ' [' . $myobject->properties[$key]->label . '] ' . $myobject->properties[$key]->invalid;
                             }
                         }
@@ -321,9 +329,10 @@ class SubFormProperty extends DataProperty
             $this->invalid = null;
 
             // if we don't know we're previewing, we don't really have a choice here
-            if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
-            if (empty($preview))
-            {
+            if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+                return;
+            }
+            if (empty($preview)) {
                 foreach ($childitems as $id => $item) {
                     $item['itemid'] = $id;
                     if (!empty($id)) {
@@ -337,31 +346,32 @@ class SubFormProperty extends DataProperty
             // we only store the parent id here
             $this->value = $value;
 
-//        } elseif ($this->style == 'childlist' && (empty($value) || $value == $oldvalue)) {
+            //        } elseif ($this->style == 'childlist' && (empty($value) || $value == $oldvalue)) {
         } elseif ($this->style == 'childlist' && (empty($value) || !empty($newvalue)) && !empty($this->input)) {
 
             // check if we want to create new child items or not
-            xarVar::fetch($name . '_dd_create', 'array', $dd_create, NULL, xarVar::NOT_REQUIRED);
+            xarVar::fetch($name . '_dd_create', 'array', $dd_create, null, xarVar::NOT_REQUIRED);
             if (!empty($dd_create) && !empty($dd_create[$this->objectid])) {
                 $docreate = 1;
             } else {
                 $docreate = 0;
             }
 
-            $childitems = array();
-            foreach ($object->properties as $property)
-            {
+            $childitems = [];
+            foreach ($object->properties as $property) {
                 $propertyname = $property->name;
                 $propertyid = $property->id;
                 // check user input for the object item - using the current name as field prefix
                 $propertyid = $name .'_dd_'.$propertyid;
                 unset($propertyvaluearray);
-                xarVar::fetch($propertyid, 'array', $propertyvaluearray, NULL, xarVar::NOT_REQUIRED);
+                xarVar::fetch($propertyid, 'array', $propertyvaluearray, null, xarVar::NOT_REQUIRED);
                 if (!empty($propertyvaluearray)) {
                     foreach ($propertyvaluearray as $id => $val) {
-                        if (empty($id) && !$docreate) continue;
+                        if (empty($id) && !$docreate) {
+                            continue;
+                        }
                         if (!isset($childitems[$id])) {
-                            $childitems[$id] = array();
+                            $childitems[$id] = [];
                         }
                         $childitems[$id][$propertyname] = $val;
                     }
@@ -369,12 +379,12 @@ class SubFormProperty extends DataProperty
             }
 
             // make sure the link field is included in the field list
-            if (!empty($this->fieldlist) && !in_array($this->link,$this->fieldlist)) {
-                array_push($this->fieldlist,$this->link);
+            if (!empty($this->fieldlist) && !in_array($this->link, $this->fieldlist)) {
+                array_push($this->fieldlist, $this->link);
             }
             // check user input for the object item
-            $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
-                                                                'fieldlist' => $this->fieldlist));
+            $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                                                                'fieldlist' => $this->fieldlist]);
             $keylist = array_keys($myobject->properties);
             // report all invalid values here, even the ones we don't see because of the fieldlist
             $this->invalid = '';
@@ -391,7 +401,7 @@ class SubFormProperty extends DataProperty
                     // Note: this also sets new items with id 0 on preview
                     foreach ($keylist as $key) {
                         if (isset($item[$key])) {
-                            $object->properties[$key]->setItemValue($id,$item[$key]);
+                            $object->properties[$key]->setItemValue($id, $item[$key]);
                         }
                     }
                 } else {
@@ -402,7 +412,7 @@ class SubFormProperty extends DataProperty
 
                             // invalid messages for fields will be shown in the object form by default, so
                             // only show explicit warnings for the fields that aren't in the fieldlist here
-                            if (!empty($this->fieldlist) && !in_array($key,$this->fieldlist)) {
+                            if (!empty($this->fieldlist) && !in_array($key, $this->fieldlist)) {
                                 $this->warnings .= ' [' . $myobject->properties[$key]->label . '] ' . $myobject->properties[$key]->invalid;
                             }
                         }
@@ -416,11 +426,12 @@ class SubFormProperty extends DataProperty
             }
             $this->invalid = null;
 
-            $value = array();
+            $value = [];
             // if we don't know we're previewing, we don't really have a choice here
-            if (!xarVar::fetch('preview', 'isset', $preview, NULL, xarVar::DONT_SET)) {return;}
-            if (empty($preview))
-            {
+            if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+                return;
+            }
+            if (empty($preview)) {
                 foreach ($childitems as $id => $item) {
                     $item['itemid'] = $id;
                     if (!empty($id)) {
@@ -451,20 +462,26 @@ class SubFormProperty extends DataProperty
         return true;
     }
 
-	/**
-	 * Display this property type for input
-	 * 
-	 * @param  array data An array of input parameters
-	 * @return string     HTML markup to display the property for input on a web page
-	 */
-    public function showInput(Array $data = array())
+    /**
+     * Display this property type for input
+     *
+     * @param  array data An array of input parameters
+     * @return string     HTML markup to display the property for input on a web page
+     */
+    public function showInput(array $data = [])
     {
         extract($data);
 
-        if (!empty($configuration)) $this->parseConfiguration($configuration);
+        if (!empty($configuration)) {
+            $this->parseConfiguration($configuration);
+        }
 
-        if (!isset($value)) $value = $this->value;
-        if (!isset($name)) $name = 'dd_'.$this->id;
+        if (!isset($value)) {
+            $value = $this->value;
+        }
+        if (!isset($name)) {
+            $name = 'dd_'.$this->id;
+        }
 
         foreach ($this->arguments as $item) {
             if (isset($$item)) {
@@ -480,7 +497,7 @@ class SubFormProperty extends DataProperty
 
         // invalid messages for fields will be shown in the object form by default, so
         // only show explicit warnings for the fields that aren't in the fieldlist here
-        $data['invalid']   = !empty($this->warnings) ? xarML('Invalid #(1)', $this->warnings) :'';
+        $data['invalid']   = !empty($this->warnings) ? xarML('Invalid #(1)', $this->warnings) : '';
 
         // Prepare the properties for the form
         foreach ($this->arguments as $item) {
@@ -489,18 +506,20 @@ class SubFormProperty extends DataProperty
         $data['value']     = $value;
 
         // use the current property name/dd_[id] as default prefix for the input fields in the sub-object
-        if (!isset($data['fieldprefix'])) $data['fieldprefix'] = $name;
+        if (!isset($data['fieldprefix'])) {
+            $data['fieldprefix'] = $name;
+        }
 
         if (!empty($this->objectid)) {
-            $data['object'] =& $this->getObject($value);
-            $data['emptyobject'] = $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
-                                                                            'fieldlist' => $this->fieldlist));
+            $data['object'] = & $this->getObject($value);
+            $data['emptyobject'] = $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                                                                            'fieldlist' => $this->fieldlist]);
 
             // get the list of available items if requested
             if ($this->style == 'itemid' && !empty($this->title)) {
-                $mylist = DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
-                                                                      'fieldlist' => array($this->title),
-                                                                      'where'     => $this->where));
+                $mylist = DataObjectMaster::getObjectList(['objectid'  => $this->objectid,
+                                                                      'fieldlist' => [$this->title],
+                                                                      'where'     => $this->where]);
                 $data['dropdown'] = $mylist->getItems();
 
             } elseif (($this->style == 'childlist' || $this->style == 'parentid') &&
@@ -524,24 +543,24 @@ class SubFormProperty extends DataProperty
                     $data['count'] = $data['object']->primary;
                 }
                 // get the number of items per link field value
-                $mylist = DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
-                                                                      'fieldlist' => array($this->link),
-                                                                      'groupby'   => array($this->link)));
+                $mylist = DataObjectMaster::getObjectList(['objectid'  => $this->objectid,
+                                                                      'fieldlist' => [$this->link],
+                                                                      'groupby'   => [$this->link]]);
                 $data['dropdown'] = $mylist->getItems();
             } else {
-                $data['dropdown'] = array();
+                $data['dropdown'] = [];
             }
         }
         return parent::showInput($data);
     }
 
-	/**
-	 * Display this property type for output
-	 * 
-	 * @param  array data An array of input parameters
-	 * @return string     HTML markup to display the property for output on a web page
-	 */
-    public function showOutput(Array $args = array())
+    /**
+     * Display this property type for output
+     *
+     * @param  array data An array of input parameters
+     * @return string     HTML markup to display the property for output on a web page
+     */
+    public function showOutput(array $args = [])
     {
         extract($args);
 
@@ -554,13 +573,13 @@ class SubFormProperty extends DataProperty
             }
         }
 
-/*
-        if (!empty($this->objectid) && $this->style == 'parentid' &&
-            empty($value) && !empty($this->title) && !empty($this->_itemid)) {
-            $value = $this->_itemid;
-        }
-*/
-        $data = array();
+        /*
+                if (!empty($this->objectid) && $this->style == 'parentid' &&
+                    empty($value) && !empty($this->title) && !empty($this->_itemid)) {
+                    $value = $this->_itemid;
+                }
+        */
+        $data = [];
         // Prepare the properties for the form
         foreach ($this->arguments as $item) {
             $data[$item]   = $this->$item;
@@ -568,21 +587,22 @@ class SubFormProperty extends DataProperty
         $data['style'] = $this->style;
         $data['value'] = $value;
         if (!empty($this->objectid) && !empty($value)) {
-            $data['object'] =& $this->getObject($value);
+            $data['object'] = & $this->getObject($value);
         }
-        $module    = empty($module)   ? $this->getModule()   : $module;
+        $module    = empty($module) ? $this->getModule() : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
 
         return xarTpl::property($module, $template, 'showoutput', $data);
     }
 
-	/**
+    /**
      * Return the current object in the subform, e.g. in case you want to access it afterwards
      */
-    function &getObject($value)
+    public function &getObject($value)
     {
+        /** @var DataObject|DataObjectList $myobject */
         if (isset($this->objectref)) {
-            $myobject =& $this->objectref;
+            $myobject = & $this->objectref;
             // Note: be careful that serialized values have the same type here (cfr. childlist)
             if ($value == $this->oldvalue) {
                 if (!empty($this->style) && $this->style != 'serialized') {
@@ -601,32 +621,31 @@ class SubFormProperty extends DataProperty
                     } else {
                         $status = null;
                     }
-                    $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
+                    $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist,
-                                                                            'status'    => $status));
+                                                                            'status'    => $status]);
                 } else {
                     // reset the list of item ids
-                    $myobject->itemids = array();
+                    $myobject->itemids = [];
                 }
 
-// FIXME: $objects is never used in this case
+                // FIXME: $objects is never used in this case
                 $repeats = $this->repeat ? $this->repeat : 1;
-                for ($i=0;$i<$repeats;$i++) {
+                for ($i = 0;$i < $repeats;$i++) {
                     $objects[] = $myobject;
                 }
-//                var_dump($this->link);exit;
-//                $data['repeats'] = $this->repeat;
-                if (!empty($this->link) && !empty($value))
-                {
+                //                var_dump($this->link);exit;
+                //                $data['repeats'] = $this->repeat;
+                if (!empty($this->link) && !empty($value)) {
                     if (is_numeric($value)) {
                         $where = $this->link . ' eq ' . $value;
                     } else {
                         $where = $this->link . " eq '" . $value . "'";
                     }
-                    $myobject->getItems(array('where' => $where));
+                    $myobject->getItems(['where' => $where]);
                 } else {
                     // re-initialize the items array
-//                    $myobject->items = array();
+                    //                    $myobject->items = array();
                 }
                 break;
 
@@ -637,72 +656,70 @@ class SubFormProperty extends DataProperty
                     } else {
                         $status = null;
                     }
-                    $myobject = DataObjectMaster::getObjectList(array('objectid'  => $this->objectid,
+                    $myobject = DataObjectMaster::getObjectList(['objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist,
-                                                                            'status'    => $status));
+                                                                            'status'    => $status]);
                 } else {
                     // reset the list of item ids
-                    $myobject->itemids = array();
+                    $myobject->itemids = [];
                 }
                 if (!empty($this->link) && !empty($value)) {
                     if (is_numeric($value)) {
                         $where = $this->link . ' eq ' . $value;
                     } else {
                         $unserializedvalue = unserialize($value);
-                        if( $unserializedvalue === false )
-                        {
+                        if($unserializedvalue === false) {
                             $where = $this->link . " eq '" . $value . "'";
                         } elseif (count($unserializedvalue) > 0) {
-                            if( is_numeric($unserializedvalue[0]) )
-                            {
-                                $where = $this->link . ' IN (' . implode(",",$unserializedvalue) . ')';
+                            if(is_numeric($unserializedvalue[0])) {
+                                $where = $this->link . ' IN (' . implode(",", $unserializedvalue) . ')';
                             } else {
-                                $where = $this->link . " IN ('" . implode('\',\'',$unserializedvalue) . "')";
+                                $where = $this->link . " IN ('" . implode('\',\'', $unserializedvalue) . "')";
                             }
                         }
                     }
                     if(isset($where)) {
-                        $myobject->getItems(array('where' => $where));
+                        $myobject->getItems(['where' => $where]);
                     } else {
                         // re-initialize the items array
-                        $myobject->items = array();
+                        $myobject->items = [];
                     }
                 } else {
                     // re-initialize the items array
-                    $myobject->items = array();
+                    $myobject->items = [];
                 }
                 break;
 
             case 'itemid':
                 if (!isset($myobject)) {
-                    $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
-                                                                        'fieldlist' => $this->fieldlist));
+                    $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                                                                        'fieldlist' => $this->fieldlist]);
                 }
                 if (!empty($value)) {
-                    $myobject->getItem(array('itemid' => $value));
+                    $myobject->getItem(['itemid' => $value]);
                 }
                 break;
 
             case 'serialized':
             default:
                 if (empty($value)) {
-                    $value = array();
+                    $value = [];
                 } elseif (!is_array($value)) {
                     $out = @unserialize($value);
                     if (!empty($out) && is_array($out)) {
                         $value = $out;
                     } else {
-                        $value = array(); // can't do anything with this
+                        $value = []; // can't do anything with this
                     }
                 }
 
-// TODO: support single serialized array for a single object again (with repeat = 1),
-//       e.g. for module variables or config fields
-                $objects = array();
+                // TODO: support single serialized array for a single object again (with repeat = 1),
+                //       e.g. for module variables or config fields
+                $objects = [];
                 if (empty($value)) {
                     if (!isset($myobject)) {
-                        $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
-                                                                            'fieldlist' => $this->fieldlist));
+                        $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                                                                            'fieldlist' => $this->fieldlist]);
                     } else {
                         // initialise the properties again
                         foreach (array_keys($myobject->properties) as $propname) {
@@ -710,14 +727,14 @@ class SubFormProperty extends DataProperty
                         }
                     }
                     $repeats = $this->repeat ? $this->repeat : 1;
-                    for ($i=0;$i<$repeats;$i++) {
+                    for ($i = 0;$i < $repeats;$i++) {
                         $objects[] = $myobject;
                     }
                 } else {
                     // Preserve the index in case it has meaning
                     foreach ($value as $idx => $vals) {
-                        $myobject = DataObjectMaster::getObject(array('objectid'  => $this->objectid,
-                                                                        'fieldlist' => $this->fieldlist));
+                        $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                                                                        'fieldlist' => $this->fieldlist]);
                         foreach ($vals as $key => $val) {
                             if (isset($myobject->properties[$key])) {
                                 $myobject->properties[$key]->setValue($val);
@@ -729,12 +746,12 @@ class SubFormProperty extends DataProperty
                 return $objects;
         }
         if (!isset($this->objectref)) {
-            $this->objectref =& $myobject;
+            $this->objectref = & $myobject;
         }
         return $myobject;
     }
 
-// TODO: replace custom configuration handling with default one ?
+    // TODO: replace custom configuration handling with default one ?
 
     public function parseConfiguration($configuration = '')
     {
@@ -748,7 +765,7 @@ class SubFormProperty extends DataProperty
                 if (isset($fields[$item])) {
                     // FIXME: needs to be a better way to convert between objectname and objectid
                     if ($item == 'objectname') {
-                        $info = DataObjectMaster::getObjectInfo(array('name' => $fields[$item]));
+                        $info = DataObjectMaster::getObjectInfo(['name' => $fields[$item]]);
                         $this->objectid = $info['objectid'];
                     }
                     $this->$item = $fields[$item];
@@ -769,15 +786,15 @@ class SubFormProperty extends DataProperty
      * @param $args['repetitions'] number of repetitions of this subform to be displayed on forms
      * @return string containing the HTML (or other) text to output in the BL template
      */
-    public function showConfiguration(Array $args = array())
+    public function showConfiguration(array $args = [])
     {
         extract($args);
-        $data = array();
+        $data = [];
         $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']         = !empty($id)   ? $id   : 'dd_'.$this->id;
+        $data['id']         = !empty($id) ? $id : 'dd_'.$this->id;
         $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
         $data['size']       = !empty($size) ? $size : 50;
-        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) :'';
+        $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
 
         if (isset($configuration)) {
             $this->configuration = $configuration;
@@ -788,9 +805,9 @@ class SubFormProperty extends DataProperty
         }
         if (!empty($this->objectname)) {
             if (is_numeric($this->objectname)) {
-                $object = DataObjectMaster::getObject(array('objectid' => $this->objectname));
+                $object = DataObjectMaster::getObject(['objectid' => $this->objectname]);
             } else {
-                $object = DataObjectMaster::getObject(array('name' => $this->objectname));
+                $object = DataObjectMaster::getObject(['name' => $this->objectname]);
             }
         }
         if (!empty($object)) {
@@ -800,17 +817,17 @@ class SubFormProperty extends DataProperty
             $this->objectname = '';
             $this->objectid = 0;
             $data['objectid'] = 0;
-            $data['properties'] = array();
+            $data['properties'] = [];
         }
         $data['other']     = '';
 
-        $data['styles']    = array('serialized' => xarML('Local value'),
+        $data['styles']    = ['serialized' => xarML('Local value'),
                                    'itemid'     => xarML('Link to item'),
                                    'childlist'  => xarML('List of children (child ids)'),
-                                   'parentid'   => xarML('List of children (parent id)'));
+                                   'parentid'   => xarML('List of children (parent id)')];
 
         // allow template override by child classes
-        $module    = empty($module)   ? $this->getModule()   : $module;
+        $module    = empty($module) ? $this->getModule() : $module;
         $template  = empty($template) ? $this->getTemplate() : $template;
 
         return xarTpl::property($module, $template, 'configuration', $data);
@@ -824,7 +841,7 @@ class SubFormProperty extends DataProperty
      * @param $args['id'] id of the field
      * @return boolean true if the configuration rule could be processed, false otherwise
      */
-    public function updateConfiguration(Array $args = array())
+    public function updateConfiguration(array $args = [])
     {
         extract($args);
 
@@ -834,12 +851,12 @@ class SubFormProperty extends DataProperty
         // do something with the configuration and save it in $this->configuration
         if (isset($configuration)) {
             if (is_array($configuration)) {
-                $data = array();
+                $data = [];
                 foreach ($this->arguments as $item) {
                     if (isset($configuration[$item])) {
                         // FIXME: needs to be a better way to convert between objectname and objectid
                         if ($item == 'objectname') {
-                            $info = DataObjectMaster::getObjectInfo(array('objectid' => $configuration[$item]));
+                            $info = DataObjectMaster::getObjectInfo(['objectid' => $configuration[$item]]);
                             $configuration[$item] = $info['name'];
                         }
                         $data[$item] = $configuration[$item];

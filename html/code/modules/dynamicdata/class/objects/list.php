@@ -20,14 +20,14 @@ sys::import('modules.dynamicdata.class.objects.interfaces');
 class DataObjectList extends DataObjectMaster implements iDataObjectList
 {
     public $prelist  = true;           // Run preList methods or not
-    public $itemids  = array();        // The list of item ids used in data stores
-    public $sort     = array();
-    public $groupby  = array();        // The list of property names to group by (if any) - see also isgrouped
+    public $itemids  = [];        // The list of item ids used in data stores
+    public $sort     = [];
+    public $groupby  = [];        // The list of property names to group by (if any) - see also isgrouped
     public $numitems = null;
     public $startnum = null;
     public $count    = 0;              // Specify if you want DD to count items before getting them (e.g. for the pager)
 
-    public $items = array();           // The result array of itemid => (property name => value)
+    public $items = [];           // The result array of itemid => (property name => value)
     public $itemcount = 0;             // The number of items given by countItems()
 
     public $fieldsummary = null;       // Do we show a summary for numeric fields (sum, min, max, avg, ...) ?
@@ -53,107 +53,121 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         // get the object type information from our parent class
         $this->loader($descriptor);
-        
+
         // Set limits if required
-        if (isset($this->numitems) && is_numeric($this->numitems)) $this->dataquery->rowstodo = $this->numitems;
-        if (isset($this->startnum) && is_numeric($this->startnum)) $this->dataquery->startat = $this->startnum;
+        if (isset($this->numitems) && is_numeric($this->numitems)) {
+            $this->dataquery->rowstodo = $this->numitems;
+        }
+        if (isset($this->startnum) && is_numeric($this->startnum)) {
+            $this->dataquery->startat = $this->startnum;
+        }
 
         if (!is_array($this->configuration)) {
-            $this->configuration = array();
+            $this->configuration = [];
         }
         // Get a reference to each property's value
         foreach ($this->properties as $property) {
-            $this->configuration['property_' . $property->name] = array('type' => &$property->type, 'value' => &$property->value);
+            $this->configuration['property_' . $property->name] = ['type' => &$property->type, 'value' => &$property->value];
         }
 
         // Get a reference to each property's value
-        $this->configuration['items'] =& $this->items;
+        $this->configuration['items'] = & $this->items;
 
         // Run the preList methods of some properties, if called for
         // By convention we run this when instantiating, rather than in one of the methods
-        if ($this->prelist) $this->runPreList();
+        if ($this->prelist) {
+            $this->runPreList();
+        }
     }
 
     /**
      * Apply as set of filter values to an object's query
      */
 
-    private function addFilterCondition($name,$filter,$value)
+    private function addFilterCondition($name, $filter, $value)
     {
         try {
             switch ($filter) {
                 case '=':
                     $this->dataquery->eq($this->properties[$name]->source, $value);
-                break;
+                    break;
                 case '!=':
                     $this->dataquery->ne($this->properties[$name]->source, $value);
-                break;
+                    break;
                 case '>':
                     $this->dataquery->gt($this->properties[$name]->source, $value);
-                break;
+                    break;
                 case '<':
                     $this->dataquery->lt($this->properties[$name]->source, $value);
-                break;
+                    break;
                 case '>=':
                     $this->dataquery->ge($this->properties[$name]->source, $value);
-                break;
+                    break;
                 case '<=':
                     $this->dataquery->le($this->properties[$name]->source, $value);
-                break;
+                    break;
                 case 'like':
                     $this->dataquery->like($this->properties[$name]->source, $value);
-                break;
+                    break;
                 case 'notlike':
                     $this->dataquery->notlike($this->properties[$name]->source, $value);
-                break;
+                    break;
                 case 'null':
-                    $this->dataquery->eq($this->properties[$name]->source, NULL);
-                break;
+                    $this->dataquery->eq($this->properties[$name]->source, null);
+                    break;
                 case 'notnull':
-                    $this->dataquery->ne($this->properties[$name]->source, NULL);
-                break;
+                    $this->dataquery->ne($this->properties[$name]->source, null);
+                    break;
                 case 'regex':
                     $this->dataquery->regex($this->properties[$name]->source, $value);
-                break;
+                    break;
             }
         } catch (Exception $e) {
             return false;
         }
         return true;
     }
-    
-    public function applyFilters(Array $args = array())
+
+    public function applyFilters(array $args = [])
     {
         $properties = $this->getProperties($args);
         foreach ($args as $key => $value) {
-            $this->addFilterCondition($key,$value['filter'],$value['value']);
+            $this->addFilterCondition($key, $value['filter'], $value['value']);
         }
         return true;
     }
 
-    public function checkInput(Array $args = array())
+    public function checkInput(array $args = [])
     {
         xarLog::message("DataObjectList::checkInput: Checking items of object " . $this->name, xarLog::LEVEL_INFO);
 
         $data = [];  // = $args; // @checkme is that what we want here?
         // First get the itemids
-        if (!xarVar::fetch($this->primary, 'array', $data['id'], array(), xarVar::NOT_REQUIRED)) return;
-        if (empty($data['id'])) return true;
-        
+        if (!xarVar::fetch($this->primary, 'array', $data['id'], [], xarVar::NOT_REQUIRED)) {
+            return;
+        }
+        if (empty($data['id'])) {
+            return true;
+        }
+
         // Clean the itemids found
-        foreach ($data['id'] as $k => $v) $data['id'][$k] = (int)$v;
-        
+        foreach ($data['id'] as $k => $v) {
+            $data['id'][$k] = (int)$v;
+        }
+
         // Get the data from the form
-        $formitems = array();
+        $formitems = [];
         foreach ($data['id'] as $id) {
-            $formitem = array();
+            $formitem = [];
             foreach ($this->properties as $name => $property) {
                 // Only active or list properties will be checked
-                if(!in_array($property->getDisplayStatus(),array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY))) {
+                if(!in_array($property->getDisplayStatus(), [DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY])) {
                     continue;
                 }
                 $isvalid = $this->properties[$name]->checkInput($name . "[" . $id . "]");
-                if ($isvalid) $formitem[$name] = $this->properties[$name]->value;
+                if ($isvalid) {
+                    $formitem[$name] = $this->properties[$name]->value;
+                }
             }
             $formitems[$id] = $formitem;
         }
@@ -162,7 +176,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         return $formitems;
     }
 
-    public function updateItems(Array $args = array())
+    public function updateItems(array $args = [])
     {
         xarLog::message("DataObjectList::updateItems: Updating items of object " . $this->name, xarLog::LEVEL_INFO);
 
@@ -172,15 +186,15 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         } else {
             $items_to_update = $this->items;
         }
-        
+
         // Next, get the items corresponding to the itemids we have to updateq
         $q = $this->dataquery;
         $primarysource = $this->properties[$this->primary]->source;
         $q->in($primarysource, array_keys($items_to_update));
         $db_items = $this->getItems();
-        
+
         // Replace the DB data with the data to be updated
-        $single_object = DataObjectMaster:: getObject(array('name' => $this->name));
+        $single_object = DataObjectMaster::getObject(['name' => $this->name]);
         foreach ($db_items as $key => $db_item) {
             // Check if the data changed
             $unchanged = true;
@@ -194,42 +208,60 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     break;
                 }
             }
-            
+
             // If the data changed, save it
             if (!$unchanged) {
                 $db_items[$key] = $items_to_update[$key] + $db_item;
-                $single_object->setFieldValues($db_items[$key],1);
-                $single_object->updateItem(array('itemid' => $key));
+                $single_object->setFieldValues($db_items[$key], 1);
+                $single_object->updateItem(['itemid' => $key]);
             }
         }
         return true;
     }
-    
+
     /**
      * Set arguments for the DataObjectList class
      *
      * @param array
      */
-    public function setArguments(Array $args = array())
+    public function setArguments(array $args = [])
     {
-        if (empty($args)) return true;
-        foreach ($args as $key => $value) $this->{$key} = $value;
+        if (empty($args)) {
+            return true;
+        }
+        foreach ($args as $key => $value) {
+            $this->{$key} = $value;
+        }
         // Make sure we have an array for itemids, groupings and fieldlist
         if (!is_array($this->itemids)) {
             if(is_numeric($this->itemids)) {
-                $this->itemids = array($this->itemids);
+                $this->itemids = [$this->itemids];
             } elseif(is_string($this->itemids)) {
-                $this->itemids = explode(',',$this->itemids);
+                $this->itemids = explode(',', $this->itemids);
             }
         }
-        if (!is_array($this->sort)) $this->sort = explode(',', (string) $this->sort);
-        if (!is_array($this->groupby)) $this->groupby = explode(',', (string) $this->groupby);
-        if (!is_array($this->fieldlist)) $this->fieldlist = explode(',', (string) $this->fieldlist);
+        if (!is_array($this->sort)) {
+            $this->sort = explode(',', (string) $this->sort);
+        }
+        if (!is_array($this->groupby)) {
+            $this->groupby = explode(',', (string) $this->groupby);
+        }
+        if (!is_array($this->fieldlist)) {
+            $this->fieldlist = explode(',', (string) $this->fieldlist);
+        }
         // Clean up arrays by removing false values (= empty, false, null, 0)
-        if (!empty($this->itemids)) $this->itemids = array_filter($this->itemids);
-        if (!empty($this->sort)) $this->sort = array_filter($this->sort);
-        if (!empty($this->groupby)) $this->groupby = array_filter($this->groupby);
-        if (!empty($this->fieldlist)) $this->fieldlist = array_filter($this->fieldlist);
+        if (!empty($this->itemids)) {
+            $this->itemids = array_filter($this->itemids);
+        }
+        if (!empty($this->sort)) {
+            $this->sort = array_filter($this->sort);
+        }
+        if (!empty($this->groupby)) {
+            $this->groupby = array_filter($this->groupby);
+        }
+        if (!empty($this->fieldlist)) {
+            $this->fieldlist = array_filter($this->fieldlist);
+        }
 
         $this->getDataStore(true);
 
@@ -254,9 +286,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // make sure we don't have some left-over group by fields
             $this->datastore->cleanGroupBy();
         }
-        if(isset($args['cache']))
+        if(isset($args['cache'])) {
             // pass the cache value to the datastores
             $this->datastore->cache = $args['cache'];
+        }
         $this->setSort($this->sort);
         // add content filters before setWhere()
         $this->addFilters();
@@ -278,20 +311,22 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      */
     public function setSort($sort)
     {
-        $this->sort = array();  // FIXME: this should not be necessary
-        
+        $this->sort = [];  // FIXME: this should not be necessary
+
         // Make sure we have an array
         if(is_array($sort)) {
             $this->sort = $sort;
         } elseif (!empty($sort)) {
-            $this->sort = explode(',',$sort);
+            $this->sort = explode(',', $sort);
         }
-        
+
         foreach($this->sort as $criteria) {
-            if (empty($criteria)) return true;
-            
+            if (empty($criteria)) {
+                return true;
+            }
+
             // split off trailing ASC or DESC
-            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/i',$criteria,$matches)) {
+            if(preg_match('/^(.+)\s+(ASC|DESC)\s*$/i', $criteria, $matches)) {
                 $criteria = trim($matches[1]);
                 $sortorder = strtoupper($matches[2]);
             } elseif (substr($criteria, 0, 1) === '-') {
@@ -321,17 +356,17 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             return;
         }
         if (!property_exists($this, 'ddwhere')) {
-            $this->ddwhere = array();
+            $this->ddwhere = [];
         }
         // Result in variabletable:
         // $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
-        $whereitem = array(
+        $whereitem = [
             'join' => $join,
             'pre' => $pre,
             'field' => $this->properties[$name]->id,
             'clause' => $clause,
-            'post' => $post
-        );
+            'post' => $post,
+        ];
         $this->ddwhere[] = $whereitem;
     }
 
@@ -345,7 +380,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             return;
         }
         if (!property_exists($this, 'ddsort')) {
-            $this->ddsort = array();
+            $this->ddsort = [];
         }
         if (!empty($sortorder) && strtoupper($sortorder) == 'DESC') {
             $sortorder = 'DESC';
@@ -354,10 +389,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         // Result in variabletable:
         //  $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
-        $sortitem = array(
+        $sortitem = [
             'field' => $this->properties[$name]->id,
-            'sortorder' => $sortorder
-        );
+            'sortorder' => $sortorder,
+        ];
         $this->ddsort[] = $sortitem;
     }
 
@@ -382,8 +417,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $grouplist = xarCache::getParents();
         } else {
             // check anonymous visitors by themselves
-            $anonid = xarConfigVars::get(null,'Site.User.AnonymousUID');
-            $grouplist = array($anonid);
+            $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID');
+            $grouplist = [$anonid];
         }
 
         foreach ($grouplist as $groupid) {
@@ -402,8 +437,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     $filter[2] = str_replace("'", "\\'", $filter[2]);
                     $filter[2] = "'"  . $filter[2] . "'";
                 }
-                switch ($filter[1])
-                {
+                switch ($filter[1]) {
                     case 'in':
                         $whereclause = ' IN (' . $filter[2] . ')';
                         break;
@@ -439,7 +473,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // If it fails, just ignore it
             try {
                 $this->dataquery->addgroup($this->properties[$name]->source);
-            } catch (Exception $e) {}
+            } catch (Exception $e) {
+            }
         }
     }
 
@@ -453,19 +488,23 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         // Support both a single category ID and an array of same
         if (!empty($cids) && is_numeric($cids)) {
-            $cids = array($cids);
+            $cids = [$cids];
         }
 
         // Sanity check: bail if we don't have an array at this point
-        if (!is_array($cids) || count($cids) == 0) return true;
+        if (!is_array($cids) || count($cids) == 0) {
+            return true;
+        }
 
         // Check the properties to see if any of them are categories
         // If so, set up conjunction clauses for the object's dataquery
-        $conjunctions = array();
+        $conjunctions = [];
         foreach ($this->properties as $property) {
             // If this property is not a category, move on
-            if ($property->type != 100) continue;
-            
+            if ($property->type != 100) {
+                continue;
+            }
+
             $category_idfield = $property->id . "_categories.id";
             if (!$join_by_and) {
                 $conjunctions[] = $this->dataquery->pin($category_idfield, $cids);
@@ -474,7 +513,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 // The assembly is a bit more complicated, but doable
             }
         }
-        
+
         // If we found something, then add the conjunctions to the object's dataquery
         if (!empty($conjunctions)) {
             if (!$join_by_and) {
@@ -492,20 +531,24 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      *
      * @return array
      */
-    public function &getItems(Array $args = array())
+    public function &getItems(array $args = [])
     {
         xarLog::message("DataObjectList::getItems: Retrieving items of object " . $this->name, xarLog::LEVEL_INFO);
 
         // Set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
 
-// CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php
+        // CHECKME: this should filter the fieldlist based on the status as well - cfr. master.php
 
         if(isset($args['count']) && (($args['count'] == 'count') || ($args['count'] == 1))) {
             $itemcount = $this->countitems($args);
         }
-        if(empty($args['numitems'])) $args['numitems'] = $this->numitems;
-        if(empty($args['startnum'])) $args['startnum'] = $this->startnum;
+        if(empty($args['numitems'])) {
+            $args['numitems'] = $this->numitems;
+        }
+        if(empty($args['startnum'])) {
+            $args['startnum'] = $this->startnum;
+        }
 
         // Replace the fieldlist with the fields passed
         if(!empty($args['fieldlist'])) {
@@ -513,9 +556,9 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $this->setFieldList($args['fieldlist']);
         }
 
-        $this->items = array();
+        $this->items = [];
         $this->datastore->getItems($args);
-        
+
         // For now always show the values of properties with virtual datastore
         // CHECKME: the preList method is probably a better solution
         // $args['getvirtuals'] = true;
@@ -523,7 +566,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // Get the values of properties with virtual datastore and add them to the items array
             foreach ($this->getFieldList() as $fieldname) {
                 if (empty($this->properties[$fieldname]->source) || !empty($this->properties[$fieldname]->is_virtual)) {
-//                    if (method_exists($this->properties[$fieldname],'getItemValue')) {echo "<pre>";echo $fieldname;var_dump($this->items);//exit;
+                    //                    if (method_exists($this->properties[$fieldname],'getItemValue')) {echo "<pre>";echo $fieldname;var_dump($this->items);//exit;
                     foreach ($this->items as $key => $value) {
                         try {
                             $this->items[$key][$fieldname] = $this->properties[$fieldname]->getItemValue($key);
@@ -531,13 +574,15 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                             $this->items[$key][$fieldname] = null;
                         }
                     }
-//                }
+                    //                }
                 }
             }
         }
-        
+
         // Reinstate the original fieldlist
-        if(!empty($args['fieldlist'])) $this->setFieldList($fields);
+        if(!empty($args['fieldlist'])) {
+            $this->setFieldList($fields);
+        }
 
         return $this->items;
     }
@@ -547,7 +592,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      *
      * Note : this must be called *before* getItems() if you're using numitems !
      */
-    public function countItems(Array $args = array())
+    public function countItems(array $args = [])
     {
         // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
         $this->setArguments($args);
@@ -560,7 +605,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      *
      * @return string xarTpl::object
      */
-    public function showView(Array $args = array())
+    public function showView(array $args = [])
     {
         xarLog::message("DataObjectList::showView: Listing items of object " . $this->name, xarLog::LEVEL_INFO);
 
@@ -573,10 +618,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         } else {
             $state = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
         }
-        $args['properties'] = array();
+        $args['properties'] = [];
         if (!empty($args['fieldlist']) && !is_array($args['fieldlist'])) {
-            $args['fieldlist'] = explode(',',$args['fieldlist']);
-            if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
+            $args['fieldlist'] = explode(',', $args['fieldlist']);
+            if (!is_array($args['fieldlist'])) {
+                throw new Exception('Badly formed fieldlist attribute');
+            }
         }
         if(count($args['fieldlist']) > 0) {
             foreach($args['fieldlist'] as $field) {
@@ -587,43 +634,56 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                     || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED)
                     ) {
-                        $args['properties'][$name] =& $this->properties[$name];
+                        $args['properties'][$name] = & $this->properties[$name];
                     }
                 }
             }
         } else {
-            foreach($this->properties as $name => $property)
+            foreach($this->properties as $name => $property) {
                 if(($this->properties[$name]->getDisplayStatus() == ($state & DataPropertyMaster::DD_DISPLAYMASK))
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY)
                 || ($this->properties[$name]->getDisplayStatus() == DataPropertyMaster::DD_INPUTSTATE_IGNORED)
                 ) {
-                        $args['properties'][$name] =& $this->properties[$name];
+                    $args['properties'][$name] = & $this->properties[$name];
                 }
+            }
 
             // Order the fields if this is an extended object
             if (!empty($this->fieldorder)) {
-                $tempprops = array();
-                foreach ($this->fieldorder as $field)
-                    if (isset($args['properties'][$field]))
+                $tempprops = [];
+                foreach ($this->fieldorder as $field) {
+                    if (isset($args['properties'][$field])) {
                         $tempprops[$field] = $args['properties'][$field];
+                    }
+                }
                 $args['properties'] = $tempprops;
             }
         }
 
-        // If we have an items parameter, take it as valid 
+        // If we have an items parameter, take it as valid
         if (isset($args['items'])) {
             $this->items = $args['items'];
         } else {
-            $args['items'] =& $this->items;
+            $args['items'] = & $this->items;
         }
 
         // add link to display the item
-        if(empty($args['linktype']))  $args['linktype'] = $this->linktype;
-        if(empty($args['linkfunc']))  $args['linkfunc'] = $this->linkfunc;
-        if(empty($args['linklabel'])) $args['linklabel'] = xarML('Display');
-        if(empty($args['param']))     $args['param'] = $this->urlparam;
-        if(empty($args['linkfield'])) $args['linkfield'] = '';
+        if(empty($args['linktype'])) {
+            $args['linktype'] = $this->linktype;
+        }
+        if(empty($args['linkfunc'])) {
+            $args['linkfunc'] = $this->linkfunc;
+        }
+        if(empty($args['linklabel'])) {
+            $args['linklabel'] = xarML('Display');
+        }
+        if(empty($args['param'])) {
+            $args['param'] = $this->urlparam;
+        }
+        if(empty($args['linkfield'])) {
+            $args['linkfield'] = '';
+        }
 
         // pass some extra template variables for use in BL tags, API calls etc.
         $args['moduleid'] = $this->moduleid;
@@ -638,14 +698,16 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // Don't show link to view items that don't belong to the DD module
         }
 
-        if(empty($itemtype)) $itemtype = 0; // don't add to URL
+        if(empty($itemtype)) {
+            $itemtype = 0;
+        } // don't add to URL
         $args['table'] = !empty($this->table) ? $this->table : null;
         $args['objectname'] = !empty($this->name) ? $this->name : null;
         $args['objectlabel'] = !empty($this->label) ? $this->label : null;
         $args['modname'] = $modname;
         $args['itemtype'] = $itemtype;
         $args['objectid'] = $this->objectid;
-        $args['links'] = array();
+        $args['links'] = [];
 
         if (empty($args['template']) && !empty($args['objectname'])) {
             $args['template'] = $args['objectname'];
@@ -668,7 +730,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         // get view options for each item
         if(empty($this->groupby)) {
             // reset cached urls
-            $this->cached_urls = array();
+            $this->cached_urls = [];
             foreach(array_keys($this->items) as $itemid) {
                 $args['links'][$itemid] = $this->getViewOptions($itemid);
             }
@@ -685,16 +747,17 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 }
                 $this->items[$itemid] = $summary;
                 // add view options for the dummy item - last label wins :-)
-                $args['links'][$itemid] = array('display' => array('otitle' => $this->fieldsummarylabel,
+                $args['links'][$itemid] = ['display' => ['otitle' => $this->fieldsummarylabel,
                                                                    'olink'  => '',
-                                                                   'ojoin'  => ''));
+                                                                   'ojoin'  => '']];
             }
         }
 
         if(!empty($this->groupby)) {
             foreach(array_keys($args['properties']) as $name) {
-                if(!empty($this->properties[$name]->operation))
+                if(!empty($this->properties[$name]->operation)) {
                     $this->properties[$name]->label = $this->properties[$name]->operation . '(' . $this->properties[$name]->label . ')';
+                }
             }
             $args['linkfield'] = 'N/A';
         }
@@ -719,16 +782,18 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         $this->pagerurl = $args['pagerurl'];
         $args['sorturl'] = $this->getSortURL($this->pagerurl);
-        if (!isset($this->startnum)) $this->startnum = 1;
+        if (!isset($this->startnum)) {
+            $this->startnum = 1;
+        }
 
         $args['object'] = $this;
-        return xarTpl::object($args['tplmodule'],$args['template'],'showview',$args);
+        return xarTpl::object($args['tplmodule'], $args['template'], 'showview', $args);
     }
 
-    public function getSortURL($currenturl=null)
+    public function getSortURL($currenturl = null)
     {
         if (empty($currenturl)) {
-            $currenturl = xarServer::getCurrentURL(array('startnum' => null, 'sort' => null));
+            $currenturl = xarServer::getCurrentURL(['startnum' => null, 'sort' => null]);
         } else {
             $currenturl = preg_replace('/&amp;(startnum|sort)=(.*)?(&amp;|$)/', '$3', $currenturl);
             $currenturl = preg_replace('/\?(startnum|sort)=(.*)?&amp;/', '?', $currenturl);
@@ -748,7 +813,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
       */
     public function getViewOptions($itemid = null)
     {
-        $options = array();
+        $options = [];
 
         $is_user = 1;
 
@@ -756,7 +821,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         if (!empty($this->access)) {
             // initialize the access options
             if (empty($this->cached_allow)) {
-                $this->cached_allow = array();
+                $this->cached_allow = [];
                 $this->cached_allow['display'] = $this->checkAccess('display');
                 $this->cached_allow['update'] = $this->checkAccess('update');
                 $this->cached_allow['create'] = $this->checkAccess('create');
@@ -768,23 +833,23 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $allow_edit = $this->cached_allow['update'];
             $allow_read = $this->cached_allow['display'];
 
-        // Assume normal rules for access control, i.e. Delete > Edit > Read
-        } elseif ($is_user && $this->checkAccess('delete',$itemid))  {
+            // Assume normal rules for access control, i.e. Delete > Edit > Read
+        } elseif ($is_user && $this->checkAccess('delete', $itemid)) {
             $allow_delete = 1;
             $allow_add = 1;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif ($is_user && $this->checkAccess('create',$itemid)) {
+        } elseif ($is_user && $this->checkAccess('create', $itemid)) {
             $allow_delete = 0;
             $allow_add = 1;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif ($is_user && $this->checkAccess('update',$itemid)) {
+        } elseif ($is_user && $this->checkAccess('update', $itemid)) {
             $allow_delete = 0;
             $allow_add = 0;
             $allow_edit = 1;
             $allow_read = 1;
-        } elseif ($this->checkAccess('display',$itemid)) {
+        } elseif ($this->checkAccess('display', $itemid)) {
             $allow_delete = 0;
             $allow_add = 0;
             $allow_edit = 0;
@@ -799,50 +864,50 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $modname = xarMod::getName();
         if ($modname == 'dynamicdata' || $modname == 'object') {
             if ($allow_read) {
-                $options['display'] = array('otitle' => xarML('Display'),
+                $options['display'] = ['otitle' => xarML('Display'),
                                             'oicon'  => 'display.png',
                                             'olink'  => $this->getActionURL('display', $itemid),
-                                            'ojoin'  => '');
+                                            'ojoin'  => ''];
             }
             if ($allow_edit) {
-                $options['modify'] = array('otitle' => xarML('Edit'),
+                $options['modify'] = ['otitle' => xarML('Edit'),
                                            'oicon'  => 'modify.png',
                                            'olink'  => $this->getActionURL('modify', $itemid),
-                                           'ojoin'  => '|');
+                                           'ojoin'  => '|'];
             }
             // extra options when showing the dynamic objects themselves
             if ($allow_edit && $this->objectid == 1) {
                 // CHECKME: access should be based on the objects themselves here (but probably too heavy) ?
-                $options['modifyprops'] = array('otitle' => xarML('Properties'),
+                $options['modifyprops'] = ['otitle' => xarML('Properties'),
                                                 'oicon'  => 'modify-config.png',
                                                 'olink'  => $this->getActionURL('modifyprop', $itemid),
-                                                'ojoin'  => '|');
-                $options['access'] = array('otitle' => xarML('Access'),
+                                                'ojoin'  => '|'];
+                $options['access'] = ['otitle' => xarML('Access'),
                                                 'oicon'  => 'privileges.png',
                                                 'olink'  => $this->getActionURL('access', $itemid),
-                                                'ojoin'  => '|');
-                $options['viewitems'] = array('otitle' => xarML('Items'),
+                                                'ojoin'  => '|'];
+                $options['viewitems'] = ['otitle' => xarML('Items'),
                                               'oicon'  => 'item-list.png',
                                               'olink'  => $this->getActionURL('viewitems', $itemid),
-                                              'ojoin'  => '|'
-                                             );
+                                              'ojoin'  => '|',
+                                             ];
             }
             //if ($allow_add)  {
             // CHECKME: and/or skip cloning in object interface ?
             //if ($allow_add && $this->linktype != 'object')  {
             // CHECKME: allow cloning only for the dynamic objects themselves ?
-            if ($allow_add && $this->objectid == 1)  {
+            if ($allow_add && $this->objectid == 1) {
                 // TODO: define 'clone' as a standard action for objects if we want it, instead of overloading 'modify' action
-                $options['clone'] = array('otitle' => xarML('Clone'),
+                $options['clone'] = ['otitle' => xarML('Clone'),
                                            'oicon'  => 'add.png',
-                                           'olink'  => $this->getActionURL('modify', $itemid, array('tab' => 'clone')),
-                                           'ojoin'  => '|');
+                                           'olink'  => $this->getActionURL('modify', $itemid, ['tab' => 'clone']),
+                                           'ojoin'  => '|'];
             }
-            if ($allow_delete)  {
-                $options['delete'] = array('otitle' => xarML('Delete'),
+            if ($allow_delete) {
+                $options['delete'] = ['otitle' => xarML('Delete'),
                                            'oicon'  => 'delete.png',
                                            'olink'  => $this->getActionURL('delete', $itemid),
-                                           'ojoin'  => '|');
+                                           'ojoin'  => '|'];
             }
         }
         return $options;
@@ -853,27 +918,29 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      *
      * @return array
      */
-    public function &getViewValues(Array $args = array())
+    public function &getViewValues(array $args = [])
     {
         if(empty($args['fieldlist'])) {
             $args['fieldlist'] = $this->fieldlist;
         }
         if (!is_array($args['fieldlist'])) {
-            $args['fieldlist'] = explode(',',$args['fieldlist']);
-            if (!is_array($args['fieldlist'])) throw new Exception('Badly formed fieldlist attribute');
+            $args['fieldlist'] = explode(',', $args['fieldlist']);
+            if (!is_array($args['fieldlist'])) {
+                throw new Exception('Badly formed fieldlist attribute');
+            }
         }
-        
+
         if(count($args['fieldlist']) == 0 && empty($this->status)) {
             $args['fieldlist'] = $this->getFieldList();
         }
-        $viewvalues = array();
+        $viewvalues = [];
         foreach($this->itemids as $itemid) {
-            $viewvalues[$itemid] = array();
+            $viewvalues[$itemid] = [];
             foreach($args['fieldlist'] as $name) {
                 if(isset($this->properties[$name])) {
                     $label = xarVar::prepForDisplay($this->properties[$name]->label);
                     if(isset($this->items[$itemid][$name])) {
-                        $value = $this->properties[$name]->showOutput(array('value' => $this->items[$itemid][$name]));
+                        $value = $this->properties[$name]->showOutput(['value' => $this->items[$itemid][$name]]);
                     } else {
                         $value = '';
                     }
@@ -889,13 +956,13 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      *
      * @return array
      */
-    public function getFieldSummary(Array $fieldsummary = array())
+    public function getFieldSummary(array $fieldsummary = [])
     {
         if (!empty($fieldsummary)) {
             $this->fieldsummary = $fieldsummary;
         }
         if (empty($this->fieldsummary)) {
-            return array();
+            return [];
         }
 
         // standardize operations to upper-case
@@ -904,18 +971,19 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         // calculate the field summary
-        $fieldvalues = array();
-        $fieldcount  = array();
+        $fieldvalues = [];
+        $fieldcount  = [];
         foreach(array_keys($this->items) as $itemid) {
             foreach ($this->fieldsummary as $field => $operation) {
-                if (!isset($this->items[$itemid][$field])) continue;
+                if (!isset($this->items[$itemid][$field])) {
+                    continue;
+                }
                 if (!isset($fieldvalues[$field])) {
                     $fieldvalues[$field] = $this->items[$itemid][$field];
                     $fieldcount[$field] = 1;
                     continue;
                 }
-                switch ($operation)
-                {
+                switch ($operation) {
                     case 'AVG':
                         $fieldcount[$field] += 1;
                         $fieldvalues[$field] += $this->items[$itemid][$field];
@@ -938,11 +1006,10 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         // fill in the summary item
-        $item = array();
+        $item = [];
         $label = xarML('Summary');
         foreach ($this->fieldsummary as $field => $operation) {
-            switch ($operation)
-            {
+            switch ($operation) {
                 case 'AVG':
                     if (isset($fieldvalues[$field]) && !empty($fieldcount[$field])) {
                         $item[$field] = $fieldvalues[$field] / $fieldcount[$field];
@@ -981,7 +1048,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      *
      * @return integer
      */
-    public function getNext(Array $args = array())
+    public function getNext(array $args = [])
     {
         static $start = true;
 
@@ -989,10 +1056,12 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // set/override the different arguments (item ids, sort, where, numitems, startnum, ...)
             $this->setArguments($args);
 
-            if(empty($args['numitems']))
+            if(empty($args['numitems'])) {
                 $args['numitems'] = $this->numitems;
-            if(empty($args['startnum']))
+            }
+            if(empty($args['startnum'])) {
                 $args['startnum'] = $this->startnum;
+            }
         }
 
         $itemid = $this->datastore->getNext($args);
@@ -1006,10 +1075,11 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         foreach ($this->getFieldList() as $fieldname) {
             // Only properties that are configured to display in lists
             $display_status = $this->properties[$fieldname]->getDisplayStatus();
-            if (!in_array($display_status, array(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
+            if (!in_array($display_status, [DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,
                                                  DataPropertyMaster::DD_DISPLAYSTATE_VIEWONLY,
-                                                 DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN)))
-            continue;
+                                                 DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN])) {
+                continue;
+            }
             $this->properties[$fieldname]->preList();
         }
     }

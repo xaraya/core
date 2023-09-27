@@ -9,16 +9,20 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
  */
- /*
- * @author John Cox <niceguyeddie@xaraya.com>
- */
-function dynamicdata_admin_utilities(Array $args=array())
+/*
+* @author John Cox <niceguyeddie@xaraya.com>
+*/
+function dynamicdata_admin_utilities(array $args = [])
 {
     // Security
-    if (!xarSecurity::check('EditDynamicData')) return;
-    
+    if (!xarSecurity::check('EditDynamicData')) {
+        return;
+    }
+
     extract($args);
-    if(!xarVar::fetch('q','str', $data['option'], 'query', xarVar::NOT_REQUIRED)) {return;}
+    if(!xarVar::fetch('q', 'str', $data['option'], 'query', xarVar::NOT_REQUIRED)) {
+        return;
+    }
     xarTpl::setPageTitle(xarVar::prepForDisplay(xarML($data['option'])));
     xarController::redirect(xarController::URL('dynamicdata', 'admin', 'import'));
     return true;

@@ -299,13 +299,13 @@ class StatsHandler extends DefaultHandler
         if (empty($fieldlist)) {
             $result = 0;
 
-        // save the report and redirect
+            // save the report and redirect
         } elseif (!empty($save) && !empty($stats['report']) && $this->object->checkAccess('config')) {
             $this->saveReport($stats['report'], $stats, $info);
             xarController::redirect(xarServer::getObjectURL($this->object->name, 'report', ['report' => $stats['report']]));
             return true;
 
-        // get the result
+            // get the result
         } else {
             // FIXME: support addFilters() when not grouping
             $this->object->getItems($info);

@@ -13,13 +13,15 @@
  * @author mikespub <mikespub@xaraya.com>
  * @return array|void empty array for the template display
  */
-function dynamicdata_admin_importpropertytypes (Array $args=array())
+function dynamicdata_admin_importpropertytypes(array $args = [])
 {
     // Security
-    if(!xarSecurity::check('AdminDynamicData')) return;
-    
+    if(!xarSecurity::check('AdminDynamicData')) {
+        return;
+    }
+
     $args['flush'] = 'false';
-    $success = xarMod::apiFunc('dynamicdata','admin','importpropertytypes', $args);
-    
-    return array();
+    $success = xarMod::apiFunc('dynamicdata', 'admin', 'importpropertytypes', $args);
+
+    return [];
 }

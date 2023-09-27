@@ -19,18 +19,18 @@
  *        array    $args[dirs]
  * @return array an array of the property types currently available
  */
-function dynamicdata_adminapi_importpropertytypes(Array $args=array())
+function dynamicdata_adminapi_importpropertytypes(array $args = [])
 {
     sys::import('modules.dynamicdata.class.properties.registration');
     extract($args);
     if(!isset($flush)) {
-       $flush = true;
+        $flush = true;
     }
     if(!isset($dirs)) {
-       $dirs = array();
+        $dirs = [];
     }
     try {
-        $proptypes = PropertyRegistration::importPropertyTypes($flush,$dirs);
+        $proptypes = PropertyRegistration::importPropertyTypes($flush, $dirs);
     } catch (Exception $e) {
         throw $e;
     }

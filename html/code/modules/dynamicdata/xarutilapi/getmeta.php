@@ -19,16 +19,16 @@
  * @return array|void of field definitions, or null on failure
  * @todo split off the common parts which are also in getstatic.php
  */
-function dynamicdata_utilapi_getmeta(Array $args=array())
+function dynamicdata_utilapi_getmeta(array $args = [])
 {
-    static $propertybag = array();
+    static $propertybag = [];
 
     extract($args);
 
     if (empty($table)) {
         $table = '';
     } elseif (isset($propertybag[$table])) {
-        return array($table => $propertybag[$table]);
+        return [$table => $propertybag[$table]];
     }
 
     $dbconn = xarDB::getConn();
@@ -42,8 +42,8 @@ function dynamicdata_utilapi_getmeta(Array $args=array())
     }
 
     // Note: not supported for other database types
-    if ($dbtype == 'mysql' && $db == $dbname && !empty($table) && strpos($table,'.') !== false) {
-        list($db, $table) = explode('.', $table);
+    if ($dbtype == 'mysql' && $db == $dbname && !empty($table) && strpos($table, '.') !== false) {
+        [$db, $table] = explode('.', $table);
     }
 
     // Note: this only works if we use the same database connection
@@ -56,43 +56,45 @@ function dynamicdata_utilapi_getmeta(Array $args=array())
 
     // Build an array of TableInfo objects
     if (!empty($table)) {
-        $tables = array($dbInfo->getTable($table));
+        $tables = [$dbInfo->getTable($table)];
     } else {
         $tables = $dbInfo->getTables();
     }
-    if (!isset($tables)) return;
+    if (!isset($tables)) {
+        return;
+    }
 
     // Get the default property types
     sys::import('modules.dynamicdata.class.properties.master');
     $proptypes = DataPropertyMaster::getPropertyTypes();
-    $proptypeid = array();
+    $proptypeid = [];
     foreach ($proptypes as $proptype) {
         $proptypeid[$proptype['name']] = $proptype['id'];
     }
 
     // Based on this, loop over the table info object and fill the metadata
-    $metadata = array();
+    $metadata = [];
     foreach ($tables as $tblInfo) {
         $curtable = $prefix . $tblInfo->getName();
         if (isset($propertybag[$curtable])) {
-             $metadata[$curtable] = $propertybag[$curtable];
-             continue;
+            $metadata[$curtable] = $propertybag[$curtable];
+            continue;
         }
 
         // Get the columns and the primary keys
         $fields = $tblInfo->getColumns();
         $keyInfo = $tblInfo->getPrimaryKey();
         $id = 1;
-        $columns = array();
+        $columns = [];
         foreach ($fields as $field) {
             $name = $field->getName();
             $datatype = $field->getNativeType();
             $size = $field->getSize();
             $default = $field->getDefaultValue();
 
-            $label = strtr($name,'_',' ');
+            $label = strtr($name, '_', ' ');
             // cosmetic for 1.x style xar_* field names
-            $label = preg_replace('/^xar /','', $label);
+            $label = preg_replace('/^xar /', '', $label);
             $label = ucwords($label);
             if (isset($columns[$name])) {
                 $i = 1;
@@ -112,7 +114,7 @@ function dynamicdata_utilapi_getmeta(Array $args=array())
             // = obviously limited to basic data types in this case
             $dtype = $datatype;
             // skip special definitions (unsigned etc.)
-            $dtype = preg_replace('/\(.*$/','',$dtype);
+            $dtype = preg_replace('/\(.*$/', '', $dtype);
             switch ($dtype) {
                 case 'char':
                 case 'varchar':
@@ -147,7 +149,7 @@ function dynamicdata_utilapi_getmeta(Array $args=array())
                     $proptype = $proptypeid['floatbox']; // Number Box (float)
                     $validation = '';
                     break;
-                // in case we have some leftover bit(1) columns instead of tinyint(1) for boolean in MySQL
+                    // in case we have some leftover bit(1) columns instead of tinyint(1) for boolean in MySQL
                 case 'bit':
                 case 'boolean':
                     $proptype = $proptypeid['checkbox']; // Checkbox
@@ -175,7 +177,7 @@ function dynamicdata_utilapi_getmeta(Array $args=array())
                     break;
                 case 'enum':
                     $proptype = $proptypeid['dropdown']; // Dropdown
-                    $validation = strtr($validation,array('enum(' => '', ')' => '', "'" => '', ',' => ';'));
+                    $validation = strtr($validation, ['enum(' => '', ')' => '', "'" => '', ',' => ';']);
                     break;
                 default:
                     $proptype = $proptypeid['static']; // Static Text
@@ -197,7 +199,7 @@ function dynamicdata_utilapi_getmeta(Array $args=array())
             // It is used by the FlatTable datastore to determine the primary key.
             // Jojodee: is causing probs with sqlite at least in installer
             // made some changes - please review
-            $columns[$name] = array('name' => $name,
+            $columns[$name] = ['name' => $name,
                                    'label' => $label,
                                    'type' => $proptype,
                                    'id' => $id,
@@ -209,14 +211,14 @@ function dynamicdata_utilapi_getmeta(Array $args=array())
                                    'configuration' => $validation,
                                    //'primary' => isset($field->primary_key)?$field->primary_key : '',
                                    //'autoincrement' => isset($field->auto_increment))? $field->auto_increment : ''
-                                   );
+                                   ];
             if (isset($field->primary_key)) {
-               $newelement=array('primary'=>$field->primary_key);
-               array_merge($columns[$name],$newelement);
+                $newelement = ['primary' => $field->primary_key];
+                array_merge($columns[$name], $newelement);
             }
             if (isset($field->auto_increment)) {
-               $newelement=array('autoincrement'=>$field->auto_increment);
-               array_merge($columns[$name],$newelement);
+                $newelement = ['autoincrement' => $field->auto_increment];
+                array_merge($columns[$name], $newelement);
 
             }
             $id++;
