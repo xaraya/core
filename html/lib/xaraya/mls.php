@@ -939,7 +939,13 @@ class xarMLSContext extends xarObject
 
 // TODO: reminder for if/when we drop the legacy functions or switch to namespaces someday
 if (!function_exists('xarML')) {
-    function xarML($rawstring/*, ...*/)
+    /**
+     * Summary of xarML
+     * @param mixed $rawstring
+     * @param array<mixed> $args
+     * @return mixed
+     */
+    function xarML($rawstring, ...$args)
     {
         return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
     }

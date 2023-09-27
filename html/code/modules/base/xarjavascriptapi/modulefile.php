@@ -43,7 +43,9 @@ function base_javascriptapi_modulefile(Array $args=array())
 
         // A failure to find a file is recorded, but does not stop subsequent files.
         if (!empty($filePath)) {
-            $result = $result & xarTplAddJavaScript($position, 'src', xarServer::getBaseURL() . $filePath, $filePath);
+            //$result = $result & xarTplAddJavaScript($position, 'src', xarServer::getBaseURL() . $filePath, $filePath);
+            $result = $result & xarMod::apiFunc('themes','user','registerjs', array('position'=>$position, 'src'=>xarServer::getBaseURL() . $filePath, 'filename'=>$filePath));
+
         } else {
             $result = false;
         }

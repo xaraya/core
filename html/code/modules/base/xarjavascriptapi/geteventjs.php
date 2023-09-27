@@ -20,6 +20,7 @@
  * Add an 'onload' trigger to the page (both examples do the same thing):
  *   <xar:javascript position="body" type="onload" code="alert('hello, world')"/>
  *   xarTplAddJavaScript('body', 'onload', "alert('hello, world')");
+ *   xarMod::apiFunc('themes','user','registerjs', array('position'=>'body', 'type'=>'onload', 'code'=>"alert('hello, world')");
  *
  * Get all the JavaScript for the 'onload' trigger (this can be fetched in a page template):
  *   xarMod::apiFunc('base', 'javascript', 'geteventjs', array('position'=>'body', 'type'=>'onload'));
@@ -58,7 +59,7 @@ function base_javascriptapi_geteventjs(Array $args=array())
     // @fixme replace with right javascript code or drop function
     // Concatenate the JavaScript trigger code fragments.
     // Only pick up the event type JavaScript.
-    $positionjs =& xarTplGetJavaScript($position);
+    $positionjs = xarMod::apiFunc('themes','user','renderjs', array('position'=>$position, 'type'=>$type));
 
     if (!empty($positionjs)) {
         foreach($positionjs as $positionjs_item) {

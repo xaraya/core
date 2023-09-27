@@ -151,6 +151,7 @@ class GraphNode extends xarObject implements IGraphNode
 
 class Graph extends xarObject implements IGraph
 {
+    /** @var array<GraphNode> */
     private $nodes = array();   // References to the nodes of this graph
     private $directed = false;  // Whether thiis a directed graph or not
 

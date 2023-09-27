@@ -694,7 +694,7 @@ class xarJS extends xarObject
  * @param string  $type type of data to queue, [framework|plugin|event|(src)|code], required
  * @param string  $scope scope of data source [(theme)|module|block|property]
  * @param string  $url url to file, or source code to include
- * @param array   $data tag data to queue
+ * @param mixed   $data tag data to queue
  * @param string  $index index to use, optional
  * @return boolean|void true on success
 **/

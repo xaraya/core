@@ -25,7 +25,7 @@ class xarSystemVars extends xarVars implements IxarVars
     /**
      * Gets a core system variable
      *
-     * @param  string $scope base filename which holds the system variables
+     * @param  string|null $scope base filename which holds the system variables
      * @param  string $name name of core system variable to get
      * @throws Exception
      */

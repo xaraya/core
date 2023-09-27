@@ -42,5 +42,6 @@ function base_javascriptapi_moduleinline(Array $args=array())
     }
 
     // @fixme replace with right javascript code or drop function
-    return xarTplAddJavaScript($position, 'code', $code, $index);
+    //return xarTplAddJavaScript($position, 'code', $code, $index);
+    return xarMod::apiFunc('themes','user','registerjs', array('position'=>$position, 'code'=>$code, 'index'=>$index));
 }

@@ -59,7 +59,8 @@ function base_javascriptapi_modulecode(Array $args=array())
 
         // @fixme replace with right javascript code or drop function
         // A failure to find a file is recorded, but does not stop subsequent files.
-        $result = $result & xarTplAddJavaScript($position, 'code', $code, $filePath);
+        //$result = $result & xarTplAddJavaScript($position, 'code', $code, $filePath);
+        $result = $result & xarMod::apiFunc('themes','user','registerjs', array('position'=>$position, 'code'=>$code, 'filename'=>$filePath));
     }
 
     // False if any one file is not found.

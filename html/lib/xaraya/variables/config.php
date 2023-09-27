@@ -30,6 +30,7 @@ class xarConfigVars extends xarVars implements IxarVars
      * Sets a configuration variable.
      *
      * 
+     * @param string|null $scope not used
      * @param  string $name the name of the variable
      * @param  mixed  $value (array,integer or string) the value of the variable
      * @return boolean true on success, or false if you're trying to set unallowed variables
@@ -69,7 +70,7 @@ class xarConfigVars extends xarVars implements IxarVars
     /**
      * Gets a configuration variable.
      *
-     * @param string $scope not used
+     * @param string|null $scope not used
      * @param string $name  the name of the variable
      * @return mixed value of the variable(string), or void if variable doesn't exist
      * @todo do we need these aliases anymore ?
@@ -139,6 +140,12 @@ class xarConfigVars extends xarVars implements IxarVars
         throw new VariableNotFoundException($name, "Variable #(1) not found");
     }
 
+    /**
+     * Summary of delete
+     * @param string|null $scope not used
+     * @param string $name  the name of the variable
+     * @return bool
+     */
     public static function delete($scope, $name)
     {
         $dbconn = xarDB::getConn();

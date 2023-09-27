@@ -1,59 +1,9 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Instantiated class GuzzleHttp\\\\Client not found\\.$#"
-			count: 1
-			path: developer/tests/graphql/GraphQLTest.php
-
-		-
-			message: "#^Instantiated class OpenAPI\\\\Client\\\\Api\\\\SampleApi not found\\.$#"
-			count: 1
-			path: developer/tests/restapi/OpenApiTest.php
-
-		-
-			message: "#^Instantiated class OpenAPI\\\\Client\\\\Model\\\\ViewSample not found\\.$#"
-			count: 1
-			path: developer/tests/restapi/OpenApiTest.php
-
-		-
-			message: "#^Instantiated class OpenAPI\\\\Client\\\\Model\\\\ViewSampleItems not found\\.$#"
-			count: 3
-			path: developer/tests/restapi/OpenApiTest.php
-
-		-
-			message: "#^Instantiated class GuzzleHttp\\\\Client not found\\.$#"
-			count: 1
-			path: developer/tests/restapi/RestApiTest.php
-
-		-
 			message: "#^Call to an undefined method DataContainer\\:\\:getProperty_\\(\\)\\.$#"
 			count: 2
 			path: html/bootstrap.php
-
-		-
-			message: "#^Undefined variable\\: \\$title$#"
-			count: 1
-			path: html/code/modules/base/xarblocks/content_display.php
-
-		-
-			message: "#^Function xarTplGetJavaScript not found\\.$#"
-			count: 1
-			path: html/code/modules/base/xarjavascriptapi/geteventjs.php
-
-		-
-			message: "#^Function xarTplAddJavaScript not found\\.$#"
-			count: 1
-			path: html/code/modules/base/xarjavascriptapi/modulecode.php
-
-		-
-			message: "#^Function xarTplAddJavaScript not found\\.$#"
-			count: 1
-			path: html/code/modules/base/xarjavascriptapi/modulefile.php
-
-		-
-			message: "#^Function xarTplAddJavaScript not found\\.$#"
-			count: 1
-			path: html/code/modules/base/xarjavascriptapi/moduleinline.php
 
 		-
 			message: "#^Call to function unset\\(\\) contains undefined variable \\$items\\.$#"
@@ -214,6 +164,16 @@ parameters:
 			message: "#^Function xar_legacy_templates_fixLegacy not found\\.$#"
 			count: 1
 			path: html/lib/blocklayout/xsltransformer.php
+
+		-
+			message: "#^Instantiated class React\\\\Http\\\\HttpServer not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/bridge/reactphp.php
+
+		-
+			message: "#^Instantiated class React\\\\Socket\\\\SocketServer not found\\.$#"
+			count: 1
+			path: html/lib/xaraya/bridge/reactphp.php
 
 		-
 			message: "#^Function eaccelerator not found\\.$#"

@@ -14,5 +14,6 @@ parameters:
         - html/var/*
         - html/lib/creole/*
         - html/lib/xaraya/legacy/*
+        - developer/tests/*
     parallel:
         processTimeout: 300.0

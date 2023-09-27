@@ -3,7 +3,11 @@
     "description": "Xaraya Core web development framework",
     "type": "project",
     "require-dev": {
-        "nikic/fast-route": "2.0.x-dev",
+        "middlewares/utils": "dev-master",
+        "nikic/fast-route": "dev-master",
+        "nyholm/psr7": "dev-master",
+        "nyholm/psr7-server": "^1.0.2",
+        "phpdocumentor/reflection": "5.x-dev",
         "webonyx/graphql-php": "dev-master"
     },
     "suggest": {
@@ -18,7 +22,10 @@
     "license": "GPL-2.0-or-later",
     "config": {
         "optimize-autoloader": true,
-        "sort-packages": true
+        "sort-packages": true,
+        "preferred-install": {
+            "xaraya/properties": "source"
+        }
     },
     "minimum-stability": "dev",
     "autoload": {
@@ -31,7 +38,8 @@
             "html/var/layout.system.php"
         ],
         "exclude-from-classmap": [
-            "html/lib/xaraya/legacy/"
+            "html/lib/xaraya/legacy/",
+            "vendor/xaraya/properties/"
         ]
     },
     "scripts": {

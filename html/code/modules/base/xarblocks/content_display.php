@@ -101,10 +101,10 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
                 }
             }
 
-            if (isset($title) && is_string($title)) {
+            if (isset($data['title']) && is_string($data['title'])) {
                 // The PHP code can set the title of the block (my treat).
                 // Just include $title='whatever';  in the block code.
-                $this->setTitle($title);
+                $this->setTitle($data['title']);
             }
         }
 

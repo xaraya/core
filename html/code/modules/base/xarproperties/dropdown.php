@@ -175,6 +175,7 @@ class SelectProperty extends DataProperty
         $options = array();
         if (!empty($this->initialization_function)) {
             @eval('$items = ' . $this->initialization_function .';');
+            /** @var array<mixed> $items */
             if (!isset($items) || !is_array($items)) $items = array();
             if (is_array(reset($items))) {
                 foreach($items as $id => $name) {
@@ -238,6 +239,7 @@ class SelectProperty extends DataProperty
             }
         } elseif (!empty($this->initialization_collection)) {
             eval('$items = ' . $this->initialization_collection .';');
+            /** @var array<mixed> $items */
             if (isset($items) && is_object($items)){
                 sys::import('xaraya.structures.sets.collection');
                 $iter = $items->getIterator();
