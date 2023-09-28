@@ -17,17 +17,22 @@ sys::import('xaraya.mapper.controllers.base');
 sys::import('xaraya.mapper.controllers.interfaces');
 
 class DefaultActionController extends BaseActionController implements iController
-{    
-    public $separator = '&';
+{
+    public string $separator = '&';
 
-    function decode(Array $data=array())
+    /**
+     * Summary of decode
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    public function decode(array $data = []): array
     {
-        xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $module, NULL, xarVar::NOT_REQUIRED);
+        xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $module, null, xarVar::NOT_REQUIRED);
         if (null != $module) {
             xarVar::fetch('type', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['type'], xarController::$request->getType(), xarVar::NOT_REQUIRED);
             xarVar::fetch('func', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['func'], xarController::$request->getFunction(), xarVar::NOT_REQUIRED);
         }
-        xarVar::fetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $object, NULL, xarVar::NOT_REQUIRED);
+        xarVar::fetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $object, null, xarVar::NOT_REQUIRED);
         if (null != $object) {
             $data['object'] = $object;
             xarVar::fetch('method', "regexp:/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/:", $data['method'], xarController::$request->getMethod(), xarVar::NOT_REQUIRED);
@@ -40,10 +45,10 @@ class DefaultActionController extends BaseActionController implements iControlle
         }
         return $data;
     }
-    
-    public function encode(xarRequest $request)
+
+    public function encode(xarRequest $request): string
     {
-        if ($request->getModule() =='object') {
+        if ($request->getModule() == 'object') {
             $pathargs['object'] = $request->getType();
             $pathargs['method'] = $request->getFunction();
         } else {
@@ -56,15 +61,15 @@ class DefaultActionController extends BaseActionController implements iControlle
         return $path;
     }
 
-    public function getActionString(xarRequest $request)       
-    { 
+    public function getActionString(xarRequest $request): string
+    {
         $initialpath = xarServer::getBaseURL() . $request->entryPoint;
         $actionstring = substr($request->getURL() ?? '', strlen($initialpath));
         return $actionstring;
     }
 
-    public function getInitialPath(xarRequest $request)
-    {  
+    public function getInitialPath(xarRequest $request): string
+    {
         return '';
-    }           
+    }
 }

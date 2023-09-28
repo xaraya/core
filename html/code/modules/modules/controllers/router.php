@@ -49,6 +49,8 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
 
     /**
      * Basic route parser for module requests e.g. in route matcher for router middleware
+     * @param ServerRequestInterface $request
+     * @return array<string, mixed>
      */
     public static function parseUri(ServerRequestInterface $request): array
     {
@@ -65,6 +67,11 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
 
     /**
      * Basic route builder for module requests e.g. in response output or templates - assuming short url format here
+     * @param ?string $module
+     * @param ?string $type
+     * @param string|int|null $func
+     * @param array<string, mixed> $extra
+     * @return string
      */
     public static function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
     {

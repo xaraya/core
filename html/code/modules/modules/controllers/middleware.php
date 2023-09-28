@@ -26,6 +26,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
 {
     use DefaultResponseTrait;
 
+    /** @var array<string> */
     protected array $attributes = ['module', 'type', 'func'];
     protected ResponseFactoryInterface $responseFactory;
 
@@ -80,6 +81,12 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         return $response;
     }
 
+    /**
+     * Summary of run
+     * @param array<string, mixed> $attribs
+     * @param array<string, mixed> $params
+     * @return ResponseInterface
+     */
     public function run($attribs, $params)
     {
         try {
@@ -93,8 +100,14 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
 
 class ModuleApiMiddleware extends ModuleMiddleware
 {
-    public $format = 'json';
+    public string $format = 'json';
 
+    /**
+     * Summary of run
+     * @param array<string, mixed> $attribs
+     * @param array<string, mixed> $params
+     * @return ResponseInterface
+     */
     public function run($attribs, $params)
     {
         try {

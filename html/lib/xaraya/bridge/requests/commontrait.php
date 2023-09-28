@@ -27,6 +27,12 @@ trait CommonBridgeTrait
     use ModuleBridgeTrait;
     use BlockBridgeTrait;
 
+    /**
+     * Summary of prepareController
+     * @param string $module
+     * @param string $baseUri
+     * @return void
+     */
     public static function prepareController(string $module = 'base', string $baseUri = ''): void
     {
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()

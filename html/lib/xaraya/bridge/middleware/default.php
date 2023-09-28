@@ -78,10 +78,12 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
 {
     use DefaultResponseTrait;
 
+    /** @var array<string, mixed> */
     protected array $options = [];
 
     /**
      * Initialize the middleware with response factory (or container, ...)
+     * @param array<string, mixed> $options
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
     {
@@ -107,6 +109,7 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
 
     /**
      * Basic route parser for object/module requests e.g. in route matcher for router middleware
+     * @return array<string, mixed>
      */
     public static function parseUri(ServerRequestInterface $request): array
     {
@@ -115,6 +118,7 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
 
     /**
      * Basic route builder for object/module requests e.g. in response output or templates - assuming short url format here
+     * @param array<string, mixed> $extra
      */
     public static function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string
     {

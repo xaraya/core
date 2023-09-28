@@ -17,22 +17,23 @@ sys::import('xaraya.mapper.controllers.interfaces');
 
 class BaseActionController extends xarObject
 {
+    /** @var mixed $controller */
     private $controller;
-    private $request;
-    private $actionstring;
-    private $separator      = '/';
-    public $module;
-    public $modulealias;
-    
-    public function __construct(xarRequest $request=null)
+    private xarRequest $request;
+    private string $actionstring;
+    public string $separator      = '/';
+    public string $module;
+    public string $modulealias;
+
+    public function __construct(xarRequest $request = null)
     {
         $this->request = $request;
         $this->actionstring = $request->getActionString();
         $this->module = $this->request->getModule();
         $this->modulealias = $this->request->getModuleAlias();
     }
-        
-    function run(xarRequest $request=null, xarResponse $response=null)          
+
+    public function run(xarRequest $request = null, xarResponse $response = null): void
     {
         // Get the part of the URL we will tokenize and decode
         $this->actionstring = $request->getActionString();
@@ -51,19 +52,46 @@ class BaseActionController extends xarObject
         }
     }
 
-    function decode(Array $data=array())
+    /**
+     * Summary of decode
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    public function decode(array $data = [])
     {
         return $data;
     }
 
-    function getController()   { return $this->controller; }
-    function getRequest()      { return $this->request; }
+    /** @return mixed */
+    public function getController()
+    {
+        return $this->controller;
+    }
+    /** @return xarRequest */
+    public function getRequest()
+    {
+        return $this->request;
+    }
     //function getOutput()       { return $response->output;}
-    function firstToken()      { return strtok($this->actionstring, $this->separator); }
-    function nextToken()       { return strtok($this->separator); }
-    
-    function chargeRequest(xarRequest $request, Array $params=array())       
-    { 
+    /** @return string|bool */
+    public function firstToken()
+    {
+        return strtok($this->actionstring, $this->separator);
+    }
+    /** @return string|bool */
+    public function nextToken()
+    {
+        return strtok($this->separator);
+    }
+
+    /**
+     * Summary of chargeRequest
+     * @param xarRequest $request
+     * @param array<string, mixed> $params
+     * @return void
+     */
+    public function chargeRequest(xarRequest $request, array $params = []): void
+    {
         if (isset($params['module'])) {
             $request->setModule($params['module']);
             unset($params['module']);
@@ -86,5 +114,5 @@ class BaseActionController extends xarObject
         }
         $request->setFunctionArgs($params);
     }
-    
+
 }

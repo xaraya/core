@@ -16,20 +16,84 @@ sys::import('modules.dynamicdata.class.userinterface');
  */
 interface CommonRequestInterface
 {
+    /**
+     * Summary of getMethod
+     * @param mixed $request
+     * @return string
+     */
     public static function getMethod($request = null): string;
+
+    /**
+     * Summary of getPathInfo
+     * @param mixed $request
+     * @return string
+     */
     public static function getPathInfo($request = null): string;
+
+    /**
+     * Summary of getBaseUri
+     * @param mixed $request
+     * @return string
+     */
     public static function getBaseUri($request = null): string;
+
+    /**
+     * Summary of getQueryParams
+     * @param mixed $request
+     * @return array<string, mixed>
+     */
     public static function getQueryParams($request = null): array;
+
+    /**
+     * Summary of getServerParams
+     * @param mixed $request
+     * @return array<string, mixed>
+     */
     public static function getServerParams($request = null): array;
+
+    /**
+     * Summary of getCookieParams
+     * @param mixed $request
+     * @return array<string, mixed>
+     */
     public static function getCookieParams($request = null): array;
+
+    /**
+     * Summary of getAuthToken
+     * @param mixed $request
+     * @return string
+     */
     public static function getAuthToken($request = null): string;
+
+    /**
+     * Summary of getUploadedFiles
+     * @param mixed $request
+     * @return array<string, mixed>
+     */
     public static function getUploadedFiles($request = null): array;
+
+    /**
+     * Summary of getParsedBody
+     * @param mixed $request
+     * @return mixed
+     */
     public static function getParsedBody($request = null): mixed;
+
+    /**
+     * Summary of getJsonBody
+     * @param mixed $request
+     * @return mixed
+     */
     public static function getJsonBody($request = null): mixed;
 }
 
 trait CommonRequestTrait
 {
+    /**
+     * Summary of getMethod
+     * @param mixed $request
+     * @return string
+     */
     public static function getMethod($request = null): string
     {
         // for PSR-7 compatible requests and xarRequest
@@ -41,6 +105,11 @@ trait CommonRequestTrait
         return $server['REQUEST_METHOD'] ?? 'GET';
     }
 
+    /**
+     * Summary of getPathInfo
+     * @param mixed $request
+     * @return string
+     */
     public static function getPathInfo($request = null): string
     {
         // for PSR-7 compatible server requests and everyone else
@@ -52,6 +121,11 @@ trait CommonRequestTrait
         return $server['PATH_INFO'] ?? '';
     }
 
+    /**
+     * Summary of getBaseUri
+     * @param mixed $request
+     * @return string
+     */
     public static function getBaseUri($request = null): string
     {
         // for PSR-7 compatible requests
@@ -80,6 +154,11 @@ trait CommonRequestTrait
         return $requestPath;
     }
 
+    /**
+     * Summary of getQueryParams
+     * @param mixed $request
+     * @return array<string, mixed>
+     */
     public static function getQueryParams($request = null): array
     {
         // for PSR-7 compatible server requests
@@ -95,6 +174,11 @@ trait CommonRequestTrait
         return $query;
     }
 
+    /**
+     * Summary of getServerParams
+     * @param mixed $request
+     * @return array<string, mixed>
+     */
     public static function getServerParams($request = null): array
     {
         // for PSR-7 compatible server requests
@@ -105,6 +189,11 @@ trait CommonRequestTrait
         return $_SERVER;
     }
 
+    /**
+     * Summary of getCookieParams
+     * @param mixed $request
+     * @return array<string, mixed>
+     */
     public static function getCookieParams($request = null): array
     {
         // for PSR-7 compatible server requests
@@ -115,6 +204,11 @@ trait CommonRequestTrait
         return $_COOKIE;
     }
 
+    /**
+     * Summary of getAuthToken
+     * @param mixed $request
+     * @return string
+     */
     public static function getAuthToken($request = null): string
     {
         // for PSR-7 compatible requests
@@ -131,6 +225,11 @@ trait CommonRequestTrait
         return $server['HTTP_X_AUTH_TOKEN'];
     }
 
+    /**
+     * Summary of getUploadedFiles
+     * @param mixed $request
+     * @return array<string, mixed>
+     */
     public static function getUploadedFiles($request = null): array
     {
         // for PSR-7 compatible server requests
@@ -141,6 +240,11 @@ trait CommonRequestTrait
         return $_FILES;
     }
 
+    /**
+     * Summary of getParsedBody
+     * @param mixed $request
+     * @return mixed
+     */
     public static function getParsedBody($request = null): mixed
     {
         // for PSR-7 compatible server requests
@@ -151,6 +255,11 @@ trait CommonRequestTrait
         return $_POST;
     }
 
+    /**
+     * Summary of getJsonBody
+     * @param mixed $request
+     * @return mixed
+     */
     public static function getJsonBody($request = null): mixed
     {
         // for PSR-7 compatible server requests

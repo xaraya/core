@@ -117,7 +117,7 @@ class TestEventListeners extends EventListenerProvider
             foreach ($eventinfo as $event => $info) {
                 $attached[$info['scope']] ??= [];
                 $attached[$info['scope']][$event] ??= [];
-                $attached[$info['scope']][$event][$modname]= 1;
+                $attached[$info['scope']][$event][$modname] = 1;
             }
         }
         $this->attached = $attached;

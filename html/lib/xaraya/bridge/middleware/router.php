@@ -18,9 +18,24 @@ use Xaraya\Bridge\Requests\CommonBridgeTrait;
 interface DefaultRouterInterface
 {
     public static function matchRequest(ServerRequestInterface $request): ServerRequestInterface;
+
+    /**
+     * Summary of parseUri
+     * @param ServerRequestInterface $request
+     * @return array<string, mixed>
+     */
     public static function parseUri(ServerRequestInterface $request): array;
-    // @checkme signature might be different for other routers - keep it generic here
+
+    /**
+     * Summary of buildUri - @checkme signature might be different for other routers - keep it generic here
+     * @param ?string $arg1
+     * @param ?string $arg2
+     * @param string|int|null $arg3
+     * @param array<string, mixed> $extra
+     * @return string
+     */
     public static function buildUri(?string $arg1 = null, ?string $arg2 = null, string|int|null $arg3 = null, array $extra = []): string;
+
     public static function stripBaseUri(ServerRequestInterface $request): ServerRequestInterface;
     public static function setBaseUri(string|ServerRequestInterface $request): void;
     public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface;

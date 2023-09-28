@@ -9,7 +9,7 @@
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/27.html
- * 
+ *
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
@@ -35,7 +35,7 @@ sys::import('xaraya.mapper.controllers.short');
 
 class RolesShortController extends ShortActionController
 {
-    function decode(Array $data=array())
+    public function decode(array $data = []): array
     {
         $token1 = $this->firstToken();
         switch ($token1) {
@@ -44,57 +44,68 @@ class RolesShortController extends ShortActionController
 
             case 'account':
                 $data['func'] = 'account';
-                
+
                 $token2 = $this->nextToken();
-                if ($token2 == 'profile')  $data['tab'] = 'profile';
-                elseif ($token2 == 'edit')  $data['tab'] = 'basic';
-                elseif ($token2)  $data['loadmodule'] = $token2;
-            break;
+                if ($token2 == 'profile') {
+                    $data['tab'] = 'profile';
+                } elseif ($token2 == 'edit') {
+                    $data['tab'] = 'basic';
+                } elseif ($token2) {
+                    $data['loadmodule'] = $token2;
+                }
+                break;
 
             case 'list':
                 $data['func'] = 'view';
 
                 $token2 = $this->nextToken();
-                if ($token2 == 'viewall' || !$token2)  $data['phase'] = 'viewall';
-                else $data['letter'] = $token2;
+                if ($token2 == 'viewall' || !$token2) {
+                    $data['phase'] = 'viewall';
+                } else {
+                    $data['letter'] = $token2;
+                }
 
                 $token3 = $this->nextToken();
-                if ($token3)  $data['letter'] = $token3;
-            break;
+                if ($token3) {
+                    $data['letter'] = $token3;
+                }
+                break;
 
             case 'password':
                 $data['func'] = 'lostpassword';
-            break;
+                break;
 
             case 'language':
                 $data['func'] = 'changelanguage';
-            break;
+                break;
 
             case 'settings':
                 $data['func'] = 'account';
                 $data['tab'] = 'basic';
-            break;
-            
+                break;
+
             case 'usermenu':
                 $data['func'] = 'usermenu';
-            break;
+                break;
 
             case 'validate':
                 $data['func'] = 'getvalidation';
                 break;
             default:
                 $data['func'] = 'account';
-            break;
+                break;
         }
         return $data;
     }
-    
-    public function encode(xarRequest $request)
-    {  
-        if ($request->getType() == 'admin') return parent::encode($request);
+
+    public function encode(xarRequest $request): string
+    {
+        if ($request->getType() == 'admin') {
+            return parent::encode($request);
+        }
 
         $params = $request->getFunctionArgs();
-        $path = array();
+        $path = [];
         switch($request->getFunction()) {
             case 'main':
                 // Note : if your main function calls some other function by default,
@@ -121,29 +132,29 @@ class RolesShortController extends ShortActionController
                 $path[] = 'language';
                 break;
 
-             case 'account':
+            case 'account':
                 $path[] = 'account';
-                if (!empty($params['tab'])){
+                if (!empty($params['tab'])) {
                     switch ($params['tab']) {
                         case 'basic': {
                             $path[] = 'edit';
                             unset($params['tab']);
-                            break; 
+                            break;
                         }
                         case 'profile': {
                             $path[] = 'profile';
                             unset($params['tab']);
-                            break; 
+                            break;
                         }
                     }
                 }
                 break;
 
-              case 'usermenu':
+            case 'usermenu':
                 $path[] = 'usermenu';
                 break;
 
-              case 'settings':
+            case 'settings':
                 $path[] = 'settings';
                 if (!empty($params['phase']) && ($params['phase'] == 'formbasic' || $params['phase'] == 'form')) {
                     // Note : this URL format is no longer in use
@@ -152,25 +163,25 @@ class RolesShortController extends ShortActionController
                 }
                 break;
 
-              case 'display':
+            case 'display':
                 // check for required parameters
                 if (isset($params['id']) && is_numeric($params['id'])) {
                     $path[] = $params['id'];
                     unset($params['id']);
                 }
                 break;
-              case 'getvalidation':
-                  $path[] = 'validate';
-                  break;
+            case 'getvalidation':
+                $path[] = 'validate';
+                break;
             default:
                 break;
         }
-        
+
         // Encode the processed params
         $request->setFunction($this->getFunction($path));
-        
+
         // Send the unprocessed params back
         $request->setFunctionArgs($params);
         return parent::encode($request);
-    }    
+    }
 }

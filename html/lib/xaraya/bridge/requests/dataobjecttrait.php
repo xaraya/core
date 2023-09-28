@@ -18,14 +18,50 @@ use DataObjectMaster;
  */
 interface DataObjectBridgeInterface extends CommonRequestInterface
 {
+    /**
+     * Summary of parseDataObjectPath
+     * @param string $path
+     * @param array<string, mixed> $query
+     * @param string $prefix
+     * @return array<string, mixed>
+     */
     public static function parseDataObjectPath(string $path = '/', array $query = [], string $prefix = ''): array;
+
+    /**
+     * Summary of buildDataObjectPath
+     * @param string $object
+     * @param ?string $method
+     * @param string|int|null $itemid
+     * @param array<string, mixed> $extra
+     * @param string $prefix
+     * @return string
+     */
     public static function buildDataObjectPath(string $object = 'sample', ?string $method = null, string|int|null $itemid = null, array $extra = [], string $prefix = '/object'): string;
+
+    /**
+     * Summary of runDataObjectGuiRequest
+     * @param array<string, mixed> $params
+     * @return string
+     */
     public static function runDataObjectGuiRequest($params): string;
+
+    /**
+     * Summary of runDataObjectApiRequest
+     * @param array<string, mixed> $params
+     * @return mixed
+     */
     public static function runDataObjectApiRequest($params): mixed;
 }
 
 trait DataObjectBridgeTrait
 {
+    /**
+     * Summary of parseDataObjectPath
+     * @param string $path
+     * @param array<string, mixed> $query
+     * @param string $prefix
+     * @return array<string, mixed>
+     */
     public static function parseDataObjectPath(string $path = '/', array $query = [], string $prefix = ''): array
     {
         $params = [];
@@ -52,6 +88,15 @@ trait DataObjectBridgeTrait
         return $params;
     }
 
+    /**
+     * Summary of buildDataObjectPath
+     * @param string $object
+     * @param ?string $method
+     * @param string|int|null $itemid
+     * @param array<string, mixed> $extra
+     * @param string $prefix
+     * @return string
+     */
     public static function buildDataObjectPath(string $object = 'sample', ?string $method = null, string|int|null $itemid = null, array $extra = [], string $prefix = '/object'): string
     {
         // see xarDDObject::getObjectURL() and xarServer::getObjectURL()
@@ -80,6 +125,12 @@ trait DataObjectBridgeTrait
         return $uri;
     }
 
+    /**
+     * Summary of runDataObjectGuiRequest
+     * @param array<string, mixed> $params
+     * @throws \Exception
+     * @return string
+     */
     public static function runDataObjectGuiRequest($params): string
     {
         if (empty($params['object'])) {
@@ -91,6 +142,12 @@ trait DataObjectBridgeTrait
         //...
     }
 
+    /**
+     * Summary of runDataObjectApiRequest
+     * @param array<string, mixed> $params
+     * @throws \Exception
+     * @return mixed
+     */
     public static function runDataObjectApiRequest($params): mixed
     {
         if (empty($params['object'])) {

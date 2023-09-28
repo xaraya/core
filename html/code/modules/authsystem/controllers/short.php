@@ -31,11 +31,11 @@ class AuthsystemShortController extends ShortActionController
 {
     /**
      * Function to decode data
-     * 
-     * @param string[]  $data Data array to be decoded.
-     * @return string[] Returns decoded data array.
+     *
+     * @param array<string, mixed> $data Data array to be decoded.
+     * @return array<string, mixed> Returns decoded data array.
      */
-    function decode(Array $data=array())
+    public function decode(array $data = []): array
     {
         $token = $this->firstToken();
         switch ($token) {
@@ -44,39 +44,41 @@ class AuthsystemShortController extends ShortActionController
 
             case 'login':
                 $data['func'] = 'showloginform';
-            break;
-            
+                break;
+
             case 'auth':
                 $data['func'] = 'login';
-            break;
+                break;
 
             case 'logout':
                 $data['func'] = 'logout';
-            break;
+                break;
 
             case 'password':
                 $data['func'] = 'password';
-            break;
+                break;
 
             default:
                 $data['func'] = 'showloginform';
-            break;
+                break;
         }
         return $data;
     }
-    
+
     /**
      * Method to encode xarRequest object
-     * 
+     *
      * @param xarRequest $request Request object to be encoded
      * @return string Returns encoded request string
      */
-    public function encode(xarRequest $request)
-    {  
-        if ($request->getType() == 'admin') return parent::encode($request);
+    public function encode(xarRequest $request): string
+    {
+        if ($request->getType() == 'admin') {
+            return parent::encode($request);
+        }
 
         $params = $request->getFunctionArgs();
-        $path = array();
+        $path = [];
         switch($request->getFunction()) {
             case 'main':
                 // Note : if your main function calls some other function by default,
@@ -93,12 +95,12 @@ class AuthsystemShortController extends ShortActionController
                 $path[] = $request->getFunction();
                 break;
         }
-        
+
         // Encode the processed params
         $request->setFunction($this->getFunction($path));
-        
+
         // Send the unprocessed params back
         $request->setFunctionArgs($params);
         return parent::encode($request);
-    }    
+    }
 }

@@ -15,20 +15,67 @@ use xarMod;
  */
 interface BlockBridgeInterface extends CommonRequestInterface
 {
+    /**
+     * Summary of parseBlockPath
+     * @param string $path
+     * @param array<string, mixed> $query
+     * @param string $prefix
+     * @return array<string, mixed>
+     */
     public static function parseBlockPath(string $path = '/', array $query = [], string $prefix = ''): array;
+
+    /**
+     * Summary of buildBlockPath
+     * @param string|int $type
+     * @param ?string $method
+     * @param string|int|null $instance
+     * @param array<string, mixed> $extra
+     * @param string $prefix
+     * @return string
+     */
     public static function buildBlockPath(string|int $type = 'menu', ?string $method = null, string|int|null $instance = null, array $extra = [], string $prefix = '/block'): string;
+
+    /**
+     * Summary of runBlockGuiRequest
+     * @param array<string, mixed> $vars
+     * @param ?array<string, mixed> $query
+     * @return string
+     */
     public static function runBlockGuiRequest($vars, $query = null): string;
+
+    /**
+     * Summary of runBlockApiRequest
+     * @param array<string, mixed> $vars
+     * @param ?array<string, mixed> $query
+     * @return mixed
+     */
     public static function runBlockApiRequest($vars, $query = null): mixed;
 }
 
 trait BlockBridgeTrait
 {
+    /**
+     * Summary of parseBlockPath
+     * @param string $path
+     * @param array<string, mixed> $query
+     * @param string $prefix
+     * @return array<string, mixed>
+     */
     public static function parseBlockPath(string $path = '/', array $query = [], string $prefix = ''): array
     {
         // @todo
         return [];
     }
 
+    /**
+     * Summary of buildBlockPath
+     * @param string|int $type
+     * @param ?string $method
+     * @param string|int|null $instance
+     * @param array<string, mixed> $extra
+     * @param string $prefix
+     * @return string
+     */
     public static function buildBlockPath(string|int $type = 'menu', ?string $method = null, string|int|null $instance = null, array $extra = [], string $prefix = '/block'): string
     {
         // @todo
@@ -36,6 +83,13 @@ trait BlockBridgeTrait
     }
 
     // @checkme limited to renderBlock() for now
+    /**
+     * Summary of runBlockGuiRequest
+     * @param array<string, mixed> $vars
+     * @param ?array<string, mixed> $query
+     * @throws \Exception
+     * @return string
+     */
     public static function runBlockGuiRequest($vars, $query = null): string
     {
         if (empty($vars['instance'])) {
@@ -45,6 +99,13 @@ trait BlockBridgeTrait
     }
 
     // @checkme limited to getinfo() for now
+    /**
+     * Summary of runBlockApiRequest
+     * @param array<string, mixed> $vars
+     * @param ?array<string, mixed> $query
+     * @throws \Exception
+     * @return mixed
+     */
     public static function runBlockApiRequest($vars, $query = null): mixed
     {
         if (empty($vars['instance'])) {

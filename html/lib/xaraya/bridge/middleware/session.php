@@ -26,9 +26,18 @@ class VirtualSession
     public string $ipAddress;
     public int $firstUsed;
     public int $lastUsed;
+    /** @var array<string, mixed> */
     public array $vars;
     public bool $isNew = true;
 
+    /**
+     * Summary of __construct
+     * @param string $sessionId
+     * @param int $userId
+     * @param string $ipAddress
+     * @param int $lastUsed
+     * @param array<string, mixed> $vars
+     */
     public function __construct(string $sessionId, int $userId = 0, string $ipAddress = '', int $lastUsed = 0, array $vars = [])
     {
         $this->sessionId = $sessionId;
@@ -43,7 +52,9 @@ class VirtualSession
 
     /**
      * Magic method to re-create session based on result of var_export($session, true)
-    **/
+     * @param array<string, mixed> $args
+     * @return VirtualSession
+     */
     public static function __set_state($args)
     {
         // not using new static() here - see https://phpstan.org/blog/solving-phpstan-error-unsafe-usage-of-new-static
@@ -58,7 +69,9 @@ class SessionMiddleware implements MiddlewareInterface
     private string $cookieName;
     private int $anonId;
     private int $length = 32;
+    /** @var array<string, mixed> */
     private array $config;
+    /** @var object */
     private $db;
     private string $table;
 
@@ -75,7 +88,7 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * Register callback functions for UserLogin and UserLogout events - to update userId in request
      */
-    public function registerCallbackEvents(ServerRequestInterface &$request)
+    public function registerCallbackEvents(ServerRequestInterface &$request): void
     {
         $login = function ($info) use (&$request) {
             echo "Event: " . $info['event'] . "\n";
@@ -227,12 +240,23 @@ class SessionMiddleware implements MiddlewareInterface
         return $response;
     }
 
-    // @checkme signature mismatch for process() with ReactPHP
+    /**
+     * Summary of __invoke - @checkme signature mismatch for process() with ReactPHP
+     * @param ServerRequestInterface $request
+     * @param callable $next
+     * @return ResponseInterface
+     */
     public function __invoke(ServerRequestInterface $request, callable $next): ResponseInterface
     {
         return $this->process($request, $next);
     }
 
+    /**
+     * Summary of lookup
+     * @param mixed $sessionId
+     * @param mixed $ipAddress
+     * @return VirtualSession
+     */
     private function lookup($sessionId, $ipAddress = '')
     {
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->table WHERE id = ?";
@@ -264,6 +288,11 @@ class SessionMiddleware implements MiddlewareInterface
         return $session;
     }
 
+    /**
+     * Summary of register
+     * @param mixed $session
+     * @return void
+     */
     private function register($session)
     {
         $query = "INSERT INTO $this->table (id, ip_addr, role_id, first_use, last_use, vars)
@@ -273,6 +302,11 @@ class SessionMiddleware implements MiddlewareInterface
         $stmt->executeUpdate($bindvars);
     }
 
+    /**
+     * Summary of update
+     * @param mixed $session
+     * @return void
+     */
     private function update($session)
     {
         $query = "UPDATE $this->table
@@ -283,6 +317,11 @@ class SessionMiddleware implements MiddlewareInterface
         $stmt->executeUpdate($bindvars);
     }
 
+    /**
+     * Summary of delete
+     * @param mixed $session
+     * @return void
+     */
     private function delete($session)
     {
         $query = "DELETE FROM $this->table WHERE id = ?";

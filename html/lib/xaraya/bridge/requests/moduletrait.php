@@ -13,14 +13,52 @@ use xarMod;
  */
 interface ModuleBridgeInterface extends CommonRequestInterface
 {
+    /**
+     * Summary of parseModulePath
+     * @param string $path
+     * @param array<string, mixed> $query
+     * @param string $prefix
+     * @return array<string, mixed>
+     */
     public static function parseModulePath(string $path = '/', array $query = [], string $prefix = ''): array;
+
+    /**
+     * Summary of buildModulePath
+     * @param string $module
+     * @param ?string $type
+     * @param string|int|null $func
+     * @param array<string, mixed> $extra
+     * @param string $prefix
+     * @return string
+     */
     public static function buildModulePath(string $module = 'base', ?string $type = null, string|int|null $func = null, array $extra = [], string $prefix = ''): string;
+
+    /**
+     * Summary of runModuleGuiRequest
+     * @param array<string, mixed> $vars
+     * @param array<string, mixed> $query
+     * @return string
+     */
     public static function runModuleGuiRequest($vars, $query): string;
+
+    /**
+     * Summary of runModuleApiRequest
+     * @param array<string, mixed> $vars
+     * @param array<string, mixed> $query
+     * @return mixed
+     */
     public static function runModuleApiRequest($vars, $query): mixed;
 }
 
 trait ModuleBridgeTrait
 {
+    /**
+     * Summary of parseModulePath
+     * @param string $path
+     * @param array<string, mixed> $query
+     * @param string $prefix
+     * @return array<string, mixed>
+     */
     public static function parseModulePath(string $path = '/', array $query = [], string $prefix = ''): array
     {
         $params = [];
@@ -47,6 +85,15 @@ trait ModuleBridgeTrait
         return $params;
     }
 
+    /**
+     * Summary of buildModulePath
+     * @param string $module
+     * @param ?string $type
+     * @param string|int|null $func
+     * @param array<string, mixed> $extra
+     * @param string $prefix
+     * @return string
+     */
     public static function buildModulePath(string $module = 'base', ?string $type = null, string|int|null $func = null, array $extra = [], string $prefix = ''): string
     {
         if ($module == 'object') {
@@ -81,11 +128,23 @@ trait ModuleBridgeTrait
         return $uri;
     }
 
+    /**
+     * Summary of runModuleGuiRequest
+     * @param array<string, mixed> $vars
+     * @param array<string, mixed> $query
+     * @return string
+     */
     public static function runModuleGuiRequest($vars, $query): string
     {
         return xarMod::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query);
     }
 
+    /**
+     * Summary of runModuleApiRequest
+     * @param array<string, mixed> $vars
+     * @param array<string, mixed> $query
+     * @return mixed
+     */
     public static function runModuleApiRequest($vars, $query): mixed
     {
         return xarMod::apiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'getitemtypes', $query);

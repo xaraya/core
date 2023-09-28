@@ -23,8 +23,8 @@ interface DefaultResponseInterface
     public function createResponse(string $body, string $mediaType = 'text/html; charset=utf-8'): ResponseInterface;
     public function createJsonResponse(mixed $result, string $mediaType = 'application/json; charset=utf-8', bool $numeric = true): ResponseInterface;
     public function createNotFoundResponse(string $path): ResponseInterface;
-    public function createUnauthorizedResponse($status = 401): ResponseInterface;
-    public function createForbiddenResponse($status = 403): ResponseInterface;
+    public function createUnauthorizedResponse(int $status = 401): ResponseInterface;
+    public function createForbiddenResponse(int $status = 403): ResponseInterface;
     public function createRedirectResponse(string $redirectURL, int $status = 302): ResponseInterface;
     public function createExceptionResponse(Throwable $e, mixed $result = null): ResponseInterface;
     public function createFileResponse(string $path, ?string $mediaType = null): ResponseInterface;
@@ -99,7 +99,7 @@ trait DefaultResponseTrait
         return $response;
     }
 
-    public function createUnauthorizedResponse($status = 401): ResponseInterface
+    public function createUnauthorizedResponse(int $status = 401): ResponseInterface
     {
         $response = $this->getResponseFactory()->createResponse();
         $response = $response->withStatus(401)->withHeader('WWW-Authenticate', 'Token realm="Xaraya Site Login", created=');
@@ -107,7 +107,7 @@ trait DefaultResponseTrait
         return $response;
     }
 
-    public function createForbiddenResponse($status = 403): ResponseInterface
+    public function createForbiddenResponse(int $status = 403): ResponseInterface
     {
         $response = $this->getResponseFactory()->createResponse();
         $response = $response->withStatus(403);

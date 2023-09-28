@@ -51,6 +51,8 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
 
     /**
      * Basic route parser for object requests e.g. in route matcher for router middleware
+     * @param ServerRequestInterface $request
+     * @return array<string, mixed>
      */
     public static function parseUri(ServerRequestInterface $request): array
     {
@@ -67,6 +69,11 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
 
     /**
      * Basic route builder for object requests e.g. in response output or templates - assuming short url format here
+     * @param ?string $object
+     * @param ?string $method
+     * @param string|int|null $itemid
+     * @param array<string, mixed> $extra
+     * @return string
      */
     public static function buildUri(?string $object = null, ?string $method = null, string|int|null $itemid = null, array $extra = []): string
     {

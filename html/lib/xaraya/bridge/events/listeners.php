@@ -138,7 +138,7 @@ class EventListenerProvider implements ListenerProviderInterface
     /**
      * See xarEvents::notify() on how $subject is created from $event and $args
      */
-    public function getEventSubject($event, $args=[])
+    public function getEventSubject($event, $args = [])
     {
         // get info for specified event
         $info = $this->getEventInfo($event);

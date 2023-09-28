@@ -21,9 +21,12 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     use StaticFileBridgeTrait;
     use DefaultResponseTrait;
 
+    /** @var array<string> */
     protected array $attributes = ['module', 'theme', 'folder', 'file'];
+    /** @var array<mixed> */
     protected array $options = [];
     public static string $baseUri = '';
+    /** @var array<string, string> */
     public static array $locations = [
         'theme' => '/themes',
         'module' => '/code/modules',
@@ -31,6 +34,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
 
     /**
      * Initialize the middleware with response factory (or container, ...)
+     * @param array<mixed> $options
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
     {
@@ -73,6 +77,12 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
         return $response;
     }
 
+    /**
+     * Summary of run
+     * @param mixed $attribs
+     * @param mixed $params
+     * @return ResponseInterface
+     */
     public function run($attribs, $params)
     {
         try {
@@ -116,6 +126,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
 
     /**
      * Basic route parser for static file requests e.g. in route matcher for router middleware
+     * @return array<string, mixed>
      */
     public static function parseUri(ServerRequestInterface $request, string $prefix = '/themes', string $type = 'theme'): array
     {
@@ -132,6 +143,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
 
     /**
      * Basic route builder for static file requests e.g. in response output or templates - assuming short url format here
+     * @param array<string, mixed> $extra
      */
     public static function buildUri(?string $source = null, ?string $folder = null, string|int|null $file = null, array $extra = [], string $prefix = ''): string
     {

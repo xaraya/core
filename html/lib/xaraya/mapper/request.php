@@ -27,10 +27,12 @@ class xarRequest extends xarObject
     public $modulealias   = '';
     public $type          = 'user';
     public $func          = 'main';
+    /** @var array<string, mixed> */
     public $funcargs      = array();
     public $object        = 'objects';
     public $method        = 'view';
     
+    /** @var array<mixed> */
     public $defaultRequestInfo = array();
     public $isObjectURL        = false;
 

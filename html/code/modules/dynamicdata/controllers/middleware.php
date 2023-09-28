@@ -27,6 +27,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
 {
     use DefaultResponseTrait;
 
+    /** @var array<string> */
     protected array $attributes = ['object', 'method', 'itemid'];
     protected ResponseFactoryInterface $responseFactory;
 
@@ -85,6 +86,11 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         return $response;
     }
 
+    /**
+     * Summary of run
+     * @param array<string, mixed> $params
+     * @return ResponseInterface
+     */
     public function run($params)
     {
         try {
@@ -98,8 +104,13 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
 
 class DataObjectApiMiddleware extends DataObjectMiddleware
 {
-    public $format = 'json';
+    public string $format = 'json';
 
+    /**
+     * Summary of run
+     * @param array<string, mixed> $params
+     * @return ResponseInterface
+     */
     public function run($params)
     {
         try {

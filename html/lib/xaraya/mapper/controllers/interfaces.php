@@ -15,9 +15,18 @@
 
 interface iController
 {
-    public function __construct(xarRequest $request=null);
-    public function decode(Array $data=array());
-    public function encode(xarRequest $request);
-    public function getActionString(xarRequest $request);  
-    public function getInitialPath(xarRequest $request);
+    public function __construct(xarRequest $request = null);
+
+    /**
+     * Summary of decode
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    public function decode(array $data = []): array;
+
+    public function encode(xarRequest $request): string;
+
+    public function getActionString(xarRequest $request): string;
+
+    public function getInitialPath(xarRequest $request): string;
 }

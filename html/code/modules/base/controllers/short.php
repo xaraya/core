@@ -27,7 +27,7 @@ sys::import('xaraya.mapper.controllers.short');
  */
 class BaseShortController extends ShortActionController
 {
-    function decode(Array $data=array())
+    public function decode(array $data = []): array
     {
         $token = $this->firstToken();
         switch ($token) {
@@ -37,23 +37,25 @@ class BaseShortController extends ShortActionController
             default:
                 $data['func'] = 'main';
                 $data['page'] = $token;
-            break;
+                break;
         }
         return $data;
     }
-    
-    public function encode(xarRequest $request)
-    {  
-        if ($request->getType() == 'admin') return parent::encode($request);
+
+    public function encode(xarRequest $request): string
+    {
+        if ($request->getType() == 'admin') {
+            return parent::encode($request);
+        }
 
         $params = $request->getFunctionArgs();
-        $path = array();
+        $path = [];
         switch($request->getFunction()) {
             case 'main':
-                if (!empty($params['page'])) {                    
+                if (!empty($params['page'])) {
                     $path[] = $params['page'];
                     unset($params['page']);
-                } else { 
+                } else {
                     $path[] = '';
                 }
                 break;
@@ -61,12 +63,12 @@ class BaseShortController extends ShortActionController
                 $path[] = '';
                 break;
         }
-        
+
         // Encode the processed params
         $request->setFunction($this->getFunction($path));
-        
+
         // Send the unprocessed params back
         $request->setFunctionArgs($params);
         return parent::encode($request);
-    }    
+    }
 }

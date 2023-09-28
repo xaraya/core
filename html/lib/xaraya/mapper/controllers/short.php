@@ -17,11 +17,16 @@ sys::import('xaraya.mapper.controllers.base');
 sys::import('xaraya.mapper.controllers.interfaces');
 
 class ShortActionController extends BaseActionController implements iController
-{    
-    public static $delimiter = '?';    // This character divides the URL into initial path and parameters
-    public $separator = '/';
-    
-    function decode(Array $data=array())
+{
+    public static string $delimiter = '?';    // This character divides the URL into initial path and parameters
+    public string $separator = '/';
+
+    /**
+     * Summary of decode
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    public function decode(array $data = []): array
     {
         $token = $this->firstToken();
         if (xarController::$request->getModule() == 'object') {
@@ -44,39 +49,50 @@ class ShortActionController extends BaseActionController implements iController
         return $data;
     }
 
-    public function encode(xarRequest $request)
-    {  
+    public function encode(xarRequest $request): string
+    {
         $path = $this->getInitialPath($request);
         $path .= self::$delimiter;
         foreach ($request->getFunctionArgs() as  $key => $value) {
             $path .= $key . '=' . $value . xarController::$separator;
         }
-        $path = substr($path,0,strlen($path)-1);
+        $path = substr($path, 0, strlen($path) - 1);
         return $this->separator . $path;
-    }        
+    }
 
-    public function getActionString(xarRequest $request)
-    { 
+    public function getActionString(xarRequest $request): string
+    {
         $initialpath = xarServer::getBaseURL() . $request->entryPoint;
-        $actionstring = substr($request->getURL(), strlen($initialpath)+1);
+        $actionstring = substr($request->getURL(), strlen($initialpath) + 1);
         $delimiterposition = strpos($actionstring, xarController::$delimiter);
-        if ($delimiterposition) $actionstring = substr($actionstring,0,$delimiterposition);
+        if ($delimiterposition) {
+            $actionstring = substr($actionstring, 0, $delimiterposition);
+        }
         $separatorposition = strpos($actionstring, $this->separator);
-        if (false === $separatorposition) return "";
-        $actionstring = substr($actionstring,$separatorposition+1);
+        if (false === $separatorposition) {
+            return "";
+        }
+        $actionstring = substr($actionstring, $separatorposition + 1);
         return $actionstring;
     }
 
-    public function getInitialPath(xarRequest $request)
-    {  
+    public function getInitialPath(xarRequest $request): string
+    {
         $path = $request->getModule();
-        if ('user' != $request->getType()) $path .= $this->separator . $request->getType();
+        if ('user' != $request->getType()) {
+            $path .= $this->separator . $request->getType();
+        }
         $path .= $this->separator . $request->getFunction();
         return $path;
-    }       
+    }
 
-    public function getFunction(Array $params)
-    {  
+    /**
+     * Summary of getFunction
+     * @param array<string> $params
+     * @return string
+     */
+    public function getFunction(array $params)
+    {
         return implode($this->separator, $params);
-    }       
+    }
 }

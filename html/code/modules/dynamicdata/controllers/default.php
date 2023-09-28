@@ -23,27 +23,38 @@ sys::import('xaraya.mapper.controllers.default');
  */
 class DynamicdataDefaultController extends DefaultActionController
 {
-    public function decode(array $data = [])
+    /**
+     * Summary of decode
+     * @param array<string, mixed> $data
+     * @return array<string, mixed>
+     */
+    public function decode(array $data = []): array
     {
         return parent::decode($data);
     }
 
-    public function encode(xarRequest $request)
+    public function encode(xarRequest $request): string
     {
         return parent::encode($request);
     }
 
-    public function getActionString(xarRequest $request)
+    public function getActionString(xarRequest $request): string
     {
         return parent::getActionString($request);
     }
 
-    public function getInitialPath(xarRequest $request)
+    public function getInitialPath(xarRequest $request): string
     {
         return parent::getInitialPath($request);
     }
 
-    public function chargeRequest(xarRequest $request, array $params = [])
+    /**
+     * Summary of chargeRequest
+     * @param xarRequest $request
+     * @param array<string, mixed> $params
+     * @return void
+     */
+    public function chargeRequest(xarRequest $request, array $params = []): void
     {
         // @todo Deal with object-specific parameters here someday so that the base controller in core doesn't have to
         //if (isset($params['object'])) {
@@ -57,7 +68,7 @@ class DynamicdataDefaultController extends DefaultActionController
         parent::chargeRequest($request, $params);
     }
 
-    public function run(xarRequest $request = null, xarResponse $response = null)
+    public function run(xarRequest $request = null, xarResponse $response = null): void
     {
         // Now get the output - @todo we'll never get here atm when xarDispatcher::findController() is looking for the 'object' module :-)
         //if ($request->getModule() == 'object') {
