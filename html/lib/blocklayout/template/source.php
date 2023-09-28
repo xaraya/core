@@ -22,5 +22,9 @@ sys::import('blocklayout.template.compiled');
 **/
 class SourceTemplate extends CompiledTemplate
 {
-    public function &compile() {}
+    /** @return string */
+    public function &compile()
+    {
+        return '';
+    }
 }

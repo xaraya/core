@@ -27,10 +27,20 @@
  */
 interface IxarBLCompiler
 {
-    static function &instance();        // Get an instance of the compiler
-    function configure();               // configure the compiler
-    function compileFile($fileName);    // compile a file
-    function compileString(&$data);     // compile a string
+    /** @return IxarBLCompiler */
+    public static function &instance();        // Get an instance of the compiler
+    /** @return array<string> */
+    public function configure();               // configure the compiler
+    /**
+     * @param string $fileName
+     * @return string
+     */
+    public function compileFile($fileName);    // compile a file
+    /**
+     * @param string $data
+     * @return string
+     */
+    public function compileString(&$data);     // compile a string
 }
 
 /**
@@ -43,19 +53,26 @@ interface IxarBLCompiler
  */
 class xarBLCompiler extends xarObject implements IxarBLCompiler
 {
+    /** @var ?xarBLCompiler */
     public static $instance  = null;
+    /** @var ?string */
     private $lastFile        = null;
+    /** @var ?BlockLayoutXSLTProcessor */
     private $processor       = null;
-    
+
+    /** @var mixed */
     protected $compresswhitespace = 1;
 
     /**
      * Private constructor, since this is a Singleton
      */
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
     /**
      * Implementation of the interface
+     * @return IxarBLCompiler
      */
     public static function &instance()
     {
@@ -65,11 +82,22 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         return self::$instance;
     }
 
+    /**
+     * Summary of compileString
+     * @param string $data
+     * @return string
+     */
     public function compileString(&$data)
     {
         return $this->compile($data);
     }
 
+    /**
+     * Summary of compileFile
+     * @param string $fileName
+     * @throws \Exception
+     * @return string
+     */
     public function compileFile($fileName)
     {
         xarLog::message(xarML("BL: Compiling the file '#(1)'", $fileName), xarLog::LEVEL_DEBUG);
@@ -93,18 +121,32 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         return $res;
     }
 
+    /**
+     * Summary of getTagPaths
+     * @param string $filepath
+     * @param string $prefix
+     * @return array<string>
+     */
     public function getTagPaths($filepath, $prefix)
     {
         $files = array();
         foreach (new DirectoryIterator($filepath) as $fileInfo) {
-            if($fileInfo->isDot()) continue;
+            if($fileInfo->isDot()) {
+                continue;
+            }
             $pathinfo = pathinfo($fileInfo->getPathName());
-            if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') continue;
+            if(isset($pathinfo['extension']) && $pathinfo['extension'] != 'xsl') {
+                continue;
+            }
             $files[] = $prefix . "/" . $fileInfo->getFileName();
         }
         return $files;
     }
 
+    /**
+     * Summary of configure
+     * @return array<string>
+     */
     public function configure()
     {
         // Compressing excess whitespace
@@ -115,11 +157,16 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         }
         return [];
     }
-    
-    protected function getProcessor($xslFile='')
+
+    /**
+     * Summary of getProcessor
+     * @param string $xslFile
+     * @return BlockLayoutXSLTProcessor
+     */
+    protected function getProcessor($xslFile = '')
     {
         xarLog::message(xarML("BL: Creating a new XSLT processor"), xarLog::LEVEL_DEBUG);
-        
+
         sys::import('blocklayout.xsltransformer');
         if (empty($xslFile)) {
             $xslProc = new BlockLayoutXSLTProcessor();
@@ -128,14 +175,22 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         }
         return $xslProc;
     }
-    
+
     /**
      * Private methods
      */
-    protected function boot($customDoc=null)
+
+    /**
+     * Summary of boot
+     * @param DOMDocument|null $customDoc
+     * @return string
+     */
+    protected function boot($customDoc = null)
     {
         $xslFile = sys::lib() . 'blocklayout/xslt/booter.xsl';
-        if (!isset($this->processor)) $this->processor = $this->getProcessor();
+        if (!isset($this->processor)) {
+            $this->processor = $this->getProcessor();
+        }
         $this->processor->setStyleSheet($xslFile);
 
         $xmlFile = sys::lib() . 'blocklayout/xslt/xar2php.xsl';
@@ -156,11 +211,11 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         $baseDir = sys::lib() . 'blocklayout/xslt/tags';
         $xslFiles = $this->getTagPaths($baseDir, 'tags');
         $this->processor->setParameter('', 'bltags', implode(',', $xslFiles));
-        
+
         // Pass the custom tags of the client using Blocklayout
         $clienttags = $this->configure();
         $this->processor->setParameter('', 'clienttags', implode(',', $clienttags));
-        
+
         // Pass any legacy tags if legacy support is turned on
         try {
             if (class_exists('xarConfigVars') && xarConfigVars::get(null, 'Site.Core.LoadLegacy')) {
@@ -168,18 +223,19 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
                 $baseDir = realpath($baseDir);
                 if (strpos($baseDir, '\\') != false) {
                     // On Windows, drive letters are preceeded by an extra / [file:///C:/...]
-                    $baseURI = 'file:///' . str_replace('\\','/',$baseDir);
+                    $baseURI = 'file:///' . str_replace('\\', '/', $baseDir);
                 } else {
                     $baseURI = 'file://' . $baseDir;
                 }
                 $xslFiles = $this->getTagPaths($baseDir, $baseURI);
                 $this->processor->setParameter('', 'legacytags', implode(',', $xslFiles));
             }
-        } catch (Exception $e) {}        
-       
+        } catch (Exception $e) {
+        }
+
         // Compress excess whitespace
-        $this->processor->setParameter('', 'compresswhitespace', $this->compresswhitespace);        
-        
+        $this->processor->setParameter('', 'compresswhitespace', $this->compresswhitespace);
+
         // Pass any custom markup. We expect this to be in the form of a stylesheet document
         // We do this by adding the nodes to the end of our stylesheet
         if (!empty($customDoc)) {
@@ -189,23 +245,28 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
             $children = $sheetnode->childNodes;
             // Run through them and append to the end of our stylesheet
             foreach($children as $node) {
-                $tempnode = $doc->importNode( $node, true );
+                $tempnode = $doc->importNode($node, true);
                 $doc->documentElement->appendChild($tempnode);
             }
         }
-        
+
         // Compile the compiler
         $outDoc = $this->processor->transformToXML($doc);
         return $outDoc;
     }
 
+    /**
+     * Summary of compile
+     * @param string $templateSource
+     * @return string
+     */
     protected function compile(&$templateSource)
     {
         xarLog::message(xarML("BL: Checking for an XSLT processor"), xarLog::LEVEL_DEBUG);
         if (!isset($this->processor)) {
             $this->processor = $this->getProcessor();
-            $xslDoc = new DOMDocument;
-        	xarLog::message(xarML("BL: Creating the compiler as a stylesheet"), xarLog::LEVEL_DEBUG);
+            $xslDoc = new DOMDocument();
+            xarLog::message(xarML("BL: Creating the compiler as a stylesheet"), xarLog::LEVEL_DEBUG);
             $xslDoc->loadXML($this->boot());
             $this->processor->importStyleSheet($xslDoc);
         }
@@ -214,7 +275,7 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
         $this->processor->xmlFile = $this->lastFile;
         xarLog::message(xarML("BL: Preparing the transform"), xarLog::LEVEL_DEBUG);
         $outDoc = $this->processor->transform($templateSource);
-        
+
         return $outDoc;
     }
 }
@@ -231,9 +292,9 @@ class xarBLCompiler extends xarObject implements IxarBLCompiler
  */
 class ExpressionTransformer extends xarObject
 {
-    const XAR_TOKEN_VAR_START = '$';
-    const XAR_TOKEN_CI_DELIM  = '#';
-    /*
+    public const XAR_TOKEN_VAR_START = '$';
+    public const XAR_TOKEN_CI_DELIM  = '#';
+    /**
      * Replace the array and object notation.
      * This is the BLExpression grammar:
      * BLExpression ::= Variable | Variable '.' ArrayKey | Variable ':' Property
@@ -241,8 +302,10 @@ class ExpressionTransformer extends xarObject
      * ArrayKey ::= Name | Name '.' ArrayKey | Name ':' Property
      * Property ::= Name | Name '.' ArrayKey | Name ':' Property
      * Name     ::= ([0-9a-zA-Z_])+
+     * @param string $blExpression
+     * @return string
      */
-    static function transformBLExpression($blExpression)
+    public static function transformBLExpression($blExpression)
     {
         $blExpression = self::normalize($blExpression);
 
@@ -256,15 +319,15 @@ class ExpressionTransformer extends xarObject
             return $blExpression;
         }
 
-        $identifiers = preg_split('/[.|:]/',$blExpression);
-        $operators = preg_split('/[^.|^:]/',$blExpression,-1,PREG_SPLIT_NO_EMPTY);
+        $identifiers = preg_split('/[.|:]/', $blExpression);
+        $operators = preg_split('/[^.|^:]/', $blExpression, -1, PREG_SPLIT_NO_EMPTY);
 
         $numIdentifiers = count($identifiers);
 
         $expression = $identifiers[0];
         for ($i = 1; $i < $numIdentifiers; $i++) {
             if($operators[$i - 1] == '.') {
-                if((substr($identifiers[$i],0,1) == self::XAR_TOKEN_VAR_START) || is_numeric($identifiers[$i])) {
+                if((substr($identifiers[$i], 0, 1) == self::XAR_TOKEN_VAR_START) || is_numeric($identifiers[$i])) {
                     $expression .= "[".$identifiers[$i]."]";
                 } else {
                     $expression .= "['".$identifiers[$i]."']";
@@ -279,14 +342,15 @@ class ExpressionTransformer extends xarObject
     /**
      * Transform a PHP expression from a template to a valid piece of PHP code
      *
+     * @param string $phpExpression
      * @return string|void Valid PHP expression
      * @todo if expressions were always between #...# this would be easier
      * @todo if the key / objectmember is a variable, make sure it fits the regex for a valid variable name
      * @todo the convenience operators may conflict in some situations with the MLS ( like 'le' for french)
      **/
-    static function transformPHPExpression($phpExpression)
+    public static function transformPHPExpression($phpExpression)
     {
-        $phpExpression =self::normalize($phpExpression);
+        $phpExpression = self::normalize($phpExpression);
         // This regular expression matches variables in their notation as
         // supported by php  and according to the dot/colon grammar in the
         // method above. These expressions are matched and passed on to the BL
@@ -310,7 +374,7 @@ class ExpressionTransformer extends xarObject
         //       of the resolving is now done by the previous method (i.e. a complete expression is passed into it)
 
         $regex = "/((\\\$[a-z_][a-z0-9_\[\]\$]*)([:|\.][$]{0,1}[0-9a-z_\]\[\$]+)*)/i";
-        if (preg_match_all($regex, $phpExpression,$matches)) {
+        if (preg_match_all($regex, $phpExpression, $matches)) {
             // Resolve BL expressions inside the php Expressions
 
             // To prevent overlap as much as we can we sort descending by length
@@ -319,7 +383,9 @@ class ExpressionTransformer extends xarObject
             for ($i = 0; $i < $numMatches; $i++) {
                 // CHECKME: & removed here for php 4.4
                 $resolvedName = self::transformBLExpression($matches[0][$i]);
-                if (!isset($resolvedName)) return; // throw back
+                if (!isset($resolvedName)) {
+                    return;
+                } // throw back
 
                 // CHECK: Does it matter if there is overlap in the matches?
                 $phpExpression = str_replace($matches[0][$i], $resolvedName, $phpExpression);
@@ -334,7 +400,13 @@ class ExpressionTransformer extends xarObject
         return $phpExpression;
     }
 
-    static function rlensort($a, $b)
+    /**
+     * Summary of rlensort
+     * @param string $a
+     * @param string $b
+     * @return int
+     */
+    public static function rlensort($a, $b)
     {
         if(strlen($a) == strlen($b)) {
             return 0;
@@ -342,13 +414,20 @@ class ExpressionTransformer extends xarObject
         return (strlen($a) < strlen($b)) ? 1 : -1;
     }
 
-    static function normalize($expr)
+    /**
+     * Summary of normalize
+     * @param string $expr
+     * @return string
+     */
+    public static function normalize($expr)
     {
         /* If the expression is enclosed in # s, ignore them */
-        if(empty($expr)) return $expr;
-        if( $expr[0] == self::XAR_TOKEN_CI_DELIM &&
-            $expr[strlen($expr)-1] == self::XAR_TOKEN_CI_DELIM) {
-            $expr = substr($expr,1,-1);
+        if(empty($expr)) {
+            return $expr;
+        }
+        if($expr[0] == self::XAR_TOKEN_CI_DELIM &&
+            $expr[strlen($expr) - 1] == self::XAR_TOKEN_CI_DELIM) {
+            $expr = substr($expr, 1, -1);
         }
         return $expr;
     }
