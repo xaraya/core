@@ -9,8 +9,8 @@ require_once 'creole/IdGenerator.php';
  * @version   $Revision: 1.6 $
  * @package   creole.drivers.mssql
  */
-class MSSQLIdGenerator implements IdGenerator {
-    
+class MSSQLIdGenerator implements IdGenerator
+{
     /** Connection object that instantiated this class */
     private $conn;
 
@@ -23,15 +23,15 @@ class MSSQLIdGenerator implements IdGenerator {
     {
         $this->conn = $conn;
     }
-    
+
     /**
      * @see IdGenerator::isBeforeInsert()
      */
     public function isBeforeInsert()
     {
         return false;
-    }    
-    
+    }
+
     /**
      * @see IdGenerator::isAfterInsert()
      */
@@ -39,7 +39,7 @@ class MSSQLIdGenerator implements IdGenerator {
     {
         return true;
     }
-        
+
     /**
      * @see IdGenerator::getIdMethod()
      */
@@ -47,7 +47,7 @@ class MSSQLIdGenerator implements IdGenerator {
     {
         return self::AUTOINCREMENT;
     }
-    
+
     /**
      * @see IdGenerator::getId()
      */
@@ -58,16 +58,16 @@ class MSSQLIdGenerator implements IdGenerator {
         $rs = $this->conn->executeQuery("select IDENT_CURRENT('$unused')", ResultSet::FETCHMODE_NUM);
         // END XARAYA modification
         $rs->next();
-        return $rs->getInt(1);        
+        return $rs->getInt(1);
     }
-    
+
     // XARAYA MODIFICATION
     public function getNextId($tableName)
     {
         // We dont know it, but we need it
-        return $this->getLastId($tableName) +1;
+        return $this->getLastId($tableName) + 1;
     }
-    
+
     public function getLastId($tableName)
     {
         return $this->getId($tableName);

@@ -43,42 +43,42 @@ include_once 'creole/Connection.php';
  * @version   $Revision: 1.14 $
  * @package   creole
  */
-class Creole {
-
+class Creole
+{
     /**
      * Constant that indicates a connection object should be used.
      */
-    const PERSISTENT = 1;
+    public const PERSISTENT = 1;
 
     /**
      * Flag to pass to the connection to indicate that no case conversions
      * should be performed by ResultSet on keys of fetched rows.
      * @deprecated use COMPAT_ASSOC_LOWER
      */
-    const NO_ASSOC_LOWER = 16;
+    public const NO_ASSOC_LOWER = 16;
 
     /**
      * Flag to pass to the connection to indicate that a to-lower case conversion
      * should be performed by ResultSet on keys of fetched rows.
      */
-    const COMPAT_ASSOC_LOWER = 32;
+    public const COMPAT_ASSOC_LOWER = 32;
 
     /**
      * Flag to pass to the connection to indicate that an rtrim() should be performed
      * on strings (using ResultSet->getString(), etc.).
      */
-    const COMPAT_RTRIM_STRING = 64;
+    public const COMPAT_RTRIM_STRING = 64;
 
     /**
      * Flag to indicate that all compatibility flags should be set.
      */
-    const COMPAT_ALL = 96;
+    public const COMPAT_ALL = 96;
 
     /**
      * MySQL connection flags to explicitly set multiple statement/result support
      */
-    const MYSQL_CLIENT_MULTI_STATEMENTS = 65536;
-    const MYSQL_CLIENT_MULTI_RESULTS = 131072;
+    public const MYSQL_CLIENT_MULTI_STATEMENTS = 65536;
+    public const MYSQL_CLIENT_MULTI_RESULTS = 131072;
 
     /**
      * Map of built-in drivers.
@@ -186,14 +186,18 @@ class Creole {
         }
 
         // gather any flags from the DSN
-        if ( isset ( $dsninfo['persistent'] ) && ! empty ( $dsninfo['persistent'] ) )
+        if (isset($dsninfo['persistent']) && ! empty($dsninfo['persistent'])) {
             $flags |= Creole::PERSISTENT;
-        if ( isset ( $dsninfo['compat_assoc_lower'] ) && ! empty ( $dsninfo['compat_assoc_lower'] ) )
+        }
+        if (isset($dsninfo['compat_assoc_lower']) && ! empty($dsninfo['compat_assoc_lower'])) {
             $flags |= Creole::COMPAT_ASSOC_LOWER;
-        if ( isset ( $dsninfo['compat_rtrim_string'] ) && ! empty ( $dsninfo['compat_rtrim_string'] ) )
+        }
+        if (isset($dsninfo['compat_rtrim_string']) && ! empty($dsninfo['compat_rtrim_string'])) {
             $flags |= Creole::COMPAT_RTRIM_STRING;
-        if ( isset ( $dsninfo['compat_all'] ) && ! empty ( $dsninfo['compat_all'] ) )
+        }
+        if (isset($dsninfo['compat_all']) && ! empty($dsninfo['compat_all'])) {
             $flags |= Creole::COMPAT_ALL;
+        }
 
         if ($flags & Creole::NO_ASSOC_LOWER) {
             trigger_error("The Creole::NO_ASSOC_LOWER flag has been deprecated, and is now the default behavior. Use Creole::COMPAT_ASSOC_LOWER to lowercase resulset keys.", E_USER_WARNING);
@@ -205,16 +209,15 @@ class Creole {
         $connectionMapKey = crc32(serialize($dsninfo + array('compat_flags' => ($flags & Creole::COMPAT_ALL))));
 
         // see if we already have a connection with these parameters cached
-        if(isset(self::$connectionMap[$connectionMapKey]))
-        {
+        if(isset(self::$connectionMap[$connectionMapKey])) {
             // persistent connections will be used if a non-persistent one was requested and is available
             // but a persistent connection will be created if a non-persistent one is present
 
-        // TODO: impliment auto close of non persistent and replacing the
-        // non persistent with the persistent object so as we dont have
-        // both links open for no reason
+            // TODO: impliment auto close of non persistent and replacing the
+            // non persistent with the persistent object so as we dont have
+            // both links open for no reason
 
-            if( isset(self::$connectionMap[$connectionMapKey][1]) ) { // is persistent
+            if(isset(self::$connectionMap[$connectionMapKey][1])) { // is persistent
                 // a persistent connection with these parameters is already there,
                 // so we return it, no matter what was specified as persistent flag
                 $con = self::$connectionMap[$connectionMapKey][1];
@@ -227,8 +230,9 @@ class Creole {
             // if we're here, a non-persistent connection was already there, but
             // the user wants a persistent one, so it will be created
 
-            if ($con->isConnected())
+            if ($con->isConnected()) {
                 return $con;
+            }
         }
 
         // support "catchall" drivers which will themselves handle the details of connecting
@@ -290,7 +294,7 @@ class Creole {
      *  phptype
      *
      * @param string $dsn Data Source Name to be parsed
-     * @return array An associative array
+     * @return array<mixed> An associative array
      */
     public static function parseDSN($dsn)
     {
@@ -313,7 +317,7 @@ class Creole {
 
         $info = array();
 
-        if (preg_match($preg_query,$dsn,$info)) { // only if it is matching
+        if (preg_match($preg_query, $dsn, $info)) { // only if it is matching
 
             $parsed['phptype'] = @$info[2]; // Group 2 should always exist.
 
@@ -323,7 +327,7 @@ class Creole {
 
                 if (strlen($info[10]) > 0) { // There is a username specified
                     $parsed['username'] = @$info[10];
-        }
+                }
 
                 if (strlen($info[12]) > 0) { // There is a password specified
                     $parsed['password'] = @$info[12];
@@ -334,33 +338,33 @@ class Creole {
 
                     if ($parsed["protocol"] === "unix") {
                         $parsed['socket'] = @$info[16];
-            } else {
+                    } else {
                         $parsed["hostspec"] = @$info[17];
                         if (strlen($info[19]) > 0) {
                             $parsed["port"] = @$info[19];
-            }
-        }
+                        }
+                    }
                 } elseif (strlen($info[20]) > 0) {
                     $parsed["hostspec"] = @$info[22];
 
                     if ((isset($info[24]) && (strlen($info[24]) > 0))) { // There is a port set (not always available)
                         $parsed["port"] = @$info[24];
-        }
+                    }
                 }
 
                 if ((isset($info[25])) && (strlen($info[25]) > 0)) { // There is a database
                     $parsed["database"] = @$info[25];
                 }
 
-                if ((isset($info[27])) && (strlen($info[27]) >0)) { // There is a query
+                if ((isset($info[27])) && (strlen($info[27]) > 0)) { // There is a query
                     $opts = explode('&', $info[27]);
-                foreach ($opts as $opt) {
-                    list($key, $value) = explode('=', $opt);
-                    if (!isset($parsed[$key])) { // don't allow params overwrite
-                        $parsed[$key] = urldecode($value);
+                    foreach ($opts as $opt) {
+                        list($key, $value) = explode('=', $opt);
+                        if (!isset($parsed[$key])) { // don't allow params overwrite
+                            $parsed[$key] = urldecode($value);
+                        }
                     }
                 }
-        }
 
             }
         }
@@ -377,15 +381,16 @@ class Creole {
      * @throws SQLException - if class does not exist and cannot load file
      *                      - if after loading file class still does not exist
      */
-    public static function import($class) {
+    public static function import($class)
+    {
         $pos = strrpos($class, '.');
         // get just classname ('path.to.ClassName' -> 'ClassName')
         if ($pos !== false) {
             $classname = substr($class, $pos + 1);
         } else {
-          $classname = $class;
+            $classname = $class;
         }
-        
+
         if (!class_exists($classname, false)) {
             $path = strtr($class, '.', DIRECTORY_SEPARATOR) . '.php';
             $ret = @include_once($path);
@@ -395,8 +400,8 @@ class Creole {
             if (!class_exists($classname)) {
                 throw new SQLException("Unable to find loaded class: $classname (Hint: make sure classname matches filename)");
             }
-            }
-        return $classname;
         }
+        return $classname;
+    }
 
 }

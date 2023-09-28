@@ -27,8 +27,8 @@
  * @version   $Revision: 1.9 $
  * @package   creole.metadata
  */
-class ForeignKeyInfo {
-
+class ForeignKeyInfo
+{
     private $name;
     private $references = array();
 
@@ -39,17 +39,17 @@ class ForeignKeyInfo {
     protected $vendorSpecificInfo = array();
 
 
-    const NONE       = "";            // No "ON [ DELETE | UPDATE]" behaviour specified.
-    const NOACTION   = "NO ACTION";
-    const CASCADE    = "CASCADE";
-    const RESTRICT   = "RESTRICT";
-    const SETDEFAULT = "SET DEFAULT";
-    const SETNULL    = "SET NULL";
+    public const NONE       = "";            // No "ON [ DELETE | UPDATE]" behaviour specified.
+    public const NOACTION   = "NO ACTION";
+    public const CASCADE    = "CASCADE";
+    public const RESTRICT   = "RESTRICT";
+    public const SETDEFAULT = "SET DEFAULT";
+    public const SETNULL    = "SET NULL";
 
     /**
      * @param string $name The name of the foreign key.
      */
-    function __construct($name, $vendorInfo = array())
+    public function __construct($name, $vendorInfo = array())
     {
         $this->name = $name;
         $this->vendorSpecificInfo = $vendorInfo;
@@ -76,7 +76,7 @@ class ForeignKeyInfo {
 
     /**
      * Gets the local-foreign column mapping.
-     * @return array array( [0] => array([0] => local ColumnInfo object, [1] => foreign ColumnInfo object, [2] => onDelete, [3] => onUpdate) )
+     * @return array<mixed> array( [0] => array([0] => local ColumnInfo object, [1] => foreign ColumnInfo object, [2] => onDelete, [3] => onUpdate) )
      */
     public function getReferences()
     {
@@ -85,7 +85,7 @@ class ForeignKeyInfo {
 
     /**
      * Get vendor specific optional information for this primary key.
-     * @return array vendorSpecificInfo[]
+     * @return array<mixed> vendorSpecificInfo[]
      */
     public function getVendorSpecificInfo()
     {

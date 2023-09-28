@@ -18,7 +18,7 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/ResultSet.php';
 require_once 'creole/common/ResultSetCommon.php';
 
@@ -28,50 +28,53 @@ require_once 'creole/common/ResultSetCommon.php';
  * Ldap supports OFFSET / LIMIT natively; this means that no adjustments or checking
  * are performed.  We will assume that if the lmitSQL() operation failed that an
  * exception was thrown, and that OFFSET/LIMIT will never be emulated for Ldap.
- * 
+ *
  * @author    Sébastien Cramatte <scramatte@zensoluciones.com>
  * @version   $Revision: 69 $
  * @package   creole.drivers.ldap
  */
-class LdapResultSet extends ResultSetCommon implements ResultSet {
-
-		private $firstentry = null;
+class LdapResultSet extends ResultSetCommon implements ResultSet
+{
+    private $firstentry = null;
 
     /**
      * @see ResultSet::seek()
-     */ 
+     */
     public function seek($rownum)
     {
-    		/* not implemented yet */
+        /* not implemented yet */
+        return false;
     }
-    
+
     /**
      * @see ResultSet::next()
-     */ 
+     */
     public function next()
     {
- 	    	if (!$this->entry) $this->entry = ldap_first_entry( $this->conn->getResource(), $this->result );
-    	  $this->entry = ldap_next_entry($this->conn->getResource(),$this->entry);
+        if (!$this->entry) {
+            $this->entry = ldap_first_entry($this->conn->getResource(), $this->result);
+        }
+        $this->entry = ldap_next_entry($this->conn->getResource(), $this->entry);
 
         if (!$this->entry) {
-            $errno = mysql_errno($this->conn->getResource());
+            $errno = ldap_errno($this->conn->getResource());
             if (!$errno) {
                 // We've advanced beyond end of recordset.
                 $this->afterLast();
                 return false;
             } else {
-                throw new SQLException("Error fetching result", mysql_error($this->conn->getResource()));
+                throw new SQLException("Error fetching result", ldap_error($this->conn->getResource()));
             }
         }
 
-        $this->cursorPos++;                
+        $this->cursorPos++;
         return $this->entry;
     }
 
     /**
      * @see ResultSet::getRecordCount()
      */
-    function getRecordCount()
+    public function getRecordCount()
     {
         $rows = @ldap_count_entries($this->result);
         if ($rows === null) {
@@ -82,55 +85,55 @@ class LdapResultSet extends ResultSetCommon implements ResultSet {
 
     /**
      * @see ResultSet::close()
-     */ 
-    function close()
-    {        
+     */
+    public function close()
+    {
         @ldap_free_result($this->result);
         $this->fields = array();
-    }    
+    }
 
     public function getRow()
     {
-    	
-			$conn = $this->conn->getResource();
-   		$dn = ldap_get_dn($conn,$this->entry);
-			$result = array();
-			
-			$attrs = ldap_get_attributes($conn, $this->entry);
-	
-			for ($i=0; $i < $attrs["count"]; $i++) {
-	   		$attr_name = $attrs[$i];
-	   		if ($attrs[$attr_name]["count"]==1) {
-	   			  $result[ $attr_name ] = $attrs[$attr_name][0];
-	   		} else {
-	   			 	$result[ $attr_name ] = $attrs[ $attr_name ];
-	   		}
-			}	
 
-			return $result;		
-		 	
+        $conn = $this->conn->getResource();
+        $dn = ldap_get_dn($conn, $this->entry);
+        $result = array();
+
+        $attrs = ldap_get_attributes($conn, $this->entry);
+
+        for ($i = 0; $i < $attrs["count"]; $i++) {
+            $attr_name = $attrs[$i];
+            if ($attrs[$attr_name]["count"] == 1) {
+                $result[ $attr_name ] = $attrs[$attr_name][0];
+            } else {
+                $result[ $attr_name ] = $attrs[ $attr_name ];
+            }
+        }
+
+        return $result;
+
     }
-    
-        
+
+
     /**
      * Get string version of column.
      * No rtrim() necessary for MySQL, as this happens natively.
      * @see ResultSet::getString()
      */
-    public function getString($column) 
+    public function getString($column)
     {
-    		/* not implemented yet */
+        /* not implemented yet */
     }
-    
+
     /**
      * Returns a unix epoch timestamp based on either a TIMESTAMP or DATETIME field.
      * @param mixed $column Column name (string) or index (int) starting with 1.
      * @return string
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
-    function getTimestamp($column, $format='Y-m-d H:i:s') 
+    public function getTimestamp($column, $format = 'Y-m-d H:i:s')
     {
-    		/* not implemented yet */
+        /* not implemented yet */
     }
 
 }

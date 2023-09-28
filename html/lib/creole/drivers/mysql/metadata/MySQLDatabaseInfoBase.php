@@ -28,33 +28,33 @@ require_once 'creole/metadata/DatabaseInfo.php';
  * @version   $Revision: 1.13 $
  * @package   creole.drivers.mysql.metadata
  */
-abstract class MySQLDatabaseInfoBase extends DatabaseInfo {
-    
+abstract class MySQLDatabaseInfoBase extends DatabaseInfo
+{
     protected $driverName;
-    
+
     protected $tableClassName;
-    
+
     /**
      * @throws SQLException
      * @return void
      */
     protected function initTables()
     {
-        include_once "creole/drivers/{$this->driverName}/metadata/{$this->tableClassName}.php";		
-	    
+        include_once "creole/drivers/{$this->driverName}/metadata/{$this->tableClassName}.php";
+
         $sql = "SHOW TABLES FROM `" . $this->dbname . "`";
-        
+
         $result = $this->sqlQuery($sql);
 
         if (!$result) {
             throw new SQLException("Could not list tables", mysql_error($this->conn->getResource()));
         }
 
-        while ($row = $this->fetchRow($result) ) {
+        while ($row = $this->fetchRow($result)) {
             $this->tables[strtoupper($row[0])] = new $this->tableClassName($this, $row[0]);
         }
-		
-		$this->tablesLoaded = true;	
+
+        $this->tablesLoaded = true;
     }
 
     /**
@@ -68,11 +68,11 @@ abstract class MySQLDatabaseInfoBase extends DatabaseInfo {
         // throw new SQLException("MySQL does not support sequences natively.");
     }
 
-    abstract function sqlQuery( $sql );
-    
-    abstract function fetchRow($result);
-    
-    abstract function fetchAssoc($result);
-    
-    abstract function selectDb($dbName);
+    abstract public function sqlQuery($sql);
+
+    abstract public function fetchRow($result);
+
+    abstract public function fetchAssoc($result);
+
+    abstract public function selectDb($dbName);
 }

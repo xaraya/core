@@ -34,8 +34,8 @@ include_once 'creole/drivers/pgsql/PgSQLResultSet.php';
  * @version   $Revision: 1.21 $
  * @package   creole.drivers.pgsql
  */
-class PgSQLConnection extends ConnectionCommon implements Connection {
-
+class PgSQLConnection extends ConnectionCommon implements Connection
+{
     /**
      * Affected Rows of last executed query.
      * Postgres needs this for getUpdateCount()
@@ -48,16 +48,16 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
     /**
      * Connect to a database and log in as the specified user.
      *
-     * @param array $dsn The datasource hash.
+     * @param array<mixed> $dsn The datasource hash.
      * @param $flags Any connection flags.
      * @access public
      * @throws SQLException
      * @return void
      */
-    function connect($dsninfo, $flags = 0)
+    public function connect($dsninfo, $flags = 0)
     {
         global $php_errormsg;
-                
+
         if (!extension_loaded('pgsql')) {
             throw new SQLException('pgsql extension not loaded');
         }
@@ -103,18 +103,18 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
         }
 
         if (!$conn) {
-			// hide the password from connstr
-			$cleanconnstr = preg_replace('/password=\'.*?\'($|\s)/', 'password=\'*********\'', $connstr);
+            // hide the password from connstr
+            $cleanconnstr = preg_replace('/password=\'.*?\'($|\s)/', 'password=\'*********\'', $connstr);
             throw new SQLException('Could not connect', $php_errormsg, $cleanconnstr);
         }
         @ini_restore('track_errors');
 
         $this->dblink = $conn;
-        
+
         // set the schema search order
-        if( !empty( $dsninfo['schema'] ) ) {
-            $this->setSchemaSearchPath( $dsninfo['schema'] );   
-    }
+        if(!empty($dsninfo['schema'])) {
+            $this->setSchemaSearchPath($dsninfo['schema']);
+        }
     }
 
     /**
@@ -122,10 +122,10 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      */
     public function applyLimit(&$sql, $offset, $limit)
     {
-        if ( $limit > 0 ) {
+        if ($limit > 0) {
             $sql .= " LIMIT ".$limit;
         }
-        if ( $offset > 0 ) {
+        if ($offset > 0) {
             $sql .= " OFFSET ".$offset;
         }
     }
@@ -133,10 +133,10 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::disconnect()
      */
-    function close()
+    public function close()
     {
         $ret = @pg_close($this->dblink);
-	$this->result_affected_rows = null;
+        $this->result_affected_rows = null;
         $this->dblink = null;
         return $ret;
     }
@@ -144,7 +144,7 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::simpleQuery()
      */
-    function executeQuery($sql, $fetchmode = null)
+    public function executeQuery($sql, $fetchmode = null)
     {
         $result = @pg_query($this->dblink, $sql);
         if (!$result) {
@@ -158,15 +158,15 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::simpleUpdate()
      */
-    function executeUpdate($sql)
+    public function executeUpdate($sql)
     {
         $result = @pg_query($this->dblink, $sql);
         if (!$result) {
             throw new SQLException('Could not execute update', pg_last_error($this->dblink), $sql);
         }
-	$this->result_affected_rows = (int) @pg_affected_rows($result);
+        $this->result_affected_rows = (int) @pg_affected_rows($result);
 
-	return $this->result_affected_rows;
+        return $this->result_affected_rows;
     }
 
     /**
@@ -214,12 +214,12 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
      * @see Statement::getUpdateCount()
      * @return int Number of rows affected by the last query.
      */
-    function getUpdateCount()
+    public function getUpdateCount()
     {
-	if ( $this->result_affected_rows === null ) {
-		throw new SQLException('getUpdateCount called before any sql queries were executed');
-	}
-	return $this->result_affected_rows;
+        if ($this->result_affected_rows === null) {
+            throw new SQLException('getUpdateCount called before any sql queries were executed');
+        }
+        return $this->result_affected_rows;
     }
 
 
@@ -252,7 +252,8 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::prepareCall()
      */
-    public function prepareCall($sql) {
+    public function prepareCall($sql)
+    {
         throw new SQLException('PostgreSQL does not support stored procedures.');
     }
 
@@ -266,60 +267,61 @@ class PgSQLConnection extends ConnectionCommon implements Connection {
 
     /**
      * Checks if the current connection supports savepoints
-     * 
+     *
      * @return bool Does the connection support savepoints
      * @todo This should check the version of the server to see if it supports savepoints
      */
     protected function supportsSavepoints()
     {
-    	return true;
-}
-    
+        return true;
+    }
+
     /**
      * Creates a new savepoint
      *
      * @param string $identifier Name of the savepoint to create
      * @see ConnectionCommon::setSavepoint()
      */
-    protected function setSavepoint( $identifier )
+    protected function setSavepoint($identifier)
     {
         $result = @pg_query($this->dblink, "savepoint ".$identifier);
         if (!$result) {
             throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
         }
     }
-    
+
     /**
      * Releases a savepoint
      *
      * @param string $identifier Name of the savepoint to release
      * @see ConnectionCommon::releaseSavepoint()
      */
-    protected function releaseSavepoint( $identifier )
+    protected function releaseSavepoint($identifier)
     {
         $result = @pg_query($this->dblink, "release savepoint ".$identifier);
         if (!$result) {
             throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
         }
     }
-    
+
     /**
      * Rollback changes to a savepoint
      *
      * @param string $identifier Name of the savepoint to rollback to
      * @see ConnectionCommon::rollbackToSavepoint()
      */
-    protected function rollbackToSavepoint( $identifier )
+    protected function rollbackToSavepoint($identifier)
     {
         $result = @pg_query($this->dblink, "rollback to savepoint ".$identifier);
         if (!$result) {
             throw new SQLException('Could not begin transaction', pg_last_error($this->dblink));
         }
     }
-    
-    public function setSchemaSearchPath( $searchPath ) {
+
+    public function setSchemaSearchPath($searchPath)
+    {
         $sql = "SET search_path TO $searchPath";
-        
-        return $this->executeUpdate( $sql );
+
+        return $this->executeUpdate($sql);
     }
 }

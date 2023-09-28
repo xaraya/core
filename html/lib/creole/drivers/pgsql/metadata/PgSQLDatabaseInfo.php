@@ -28,8 +28,8 @@ require_once 'creole/metadata/DatabaseInfo.php';
  * @version   $Revision: 1.11 $
  * @package   creole.drivers.pgsql.metadata
  */
-class PgSQLDatabaseInfo extends DatabaseInfo {
-
+class PgSQLDatabaseInfo extends DatabaseInfo
+{
     /**
      * @throws SQLException
      * @return void
@@ -37,22 +37,21 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
     protected function initTables()
     {
         include_once 'creole/drivers/pgsql/metadata/PgSQLTableInfo.php';
-        
+
         // Get Database Version
-	// TODO: www.php.net/pg_version
-        $result = pg_query ($this->conn->getResource(), "SELECT version() as ver");
-        
-        if (!$result)
-        {
-        	throw new SQLException ("Failed to select database version");
+        // TODO: www.php.net/pg_version
+        $result = pg_query($this->conn->getResource(), "SELECT version() as ver");
+
+        if (!$result) {
+            throw new SQLException("Failed to select database version");
         } // if (!$result)
-        $row = pg_fetch_assoc ($result, 0);
-        $arrVersion = sscanf ($row['ver'], '%*s %d.%d');
-        $version = sprintf ("%d.%d", $arrVersion[0], $arrVersion[1]);
+        $row = pg_fetch_assoc($result, 0);
+        $arrVersion = sscanf($row['ver'], '%*s %d.%d');
+        $version = sprintf("%d.%d", $arrVersion[0], $arrVersion[1]);
         // Clean up
         $arrVersion = null;
         $row = null;
-        pg_free_result ($result);
+        pg_free_result($result);
         $result = null;
 
         $result = pg_query($this->conn->getResource(), "SELECT c.oid, 
@@ -71,8 +70,8 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
         while ($row = pg_fetch_assoc($result)) {
             $this->tables[strtoupper($row['relname'])] = new PgSQLTableInfo($this, $row['relname'], $version, $row['oid']);
         }
-		
-		$this->tablesLoaded = true;
+
+        $this->tablesLoaded = true;
     }
 
     /**
@@ -83,9 +82,9 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
      */
     protected function initSequences()
     {
-     
-	 	$this->sequences = array();
-		   
+
+        $this->sequences = array();
+
         $result = pg_query($this->conn->getResource(), "SELECT c.oid, 
 														case when n.nspname='public' then c.relname else n.nspname||'.'||c.relname end as relname 
 														FROM pg_class c join pg_namespace n on (c.relnamespace=n.oid)
@@ -98,15 +97,15 @@ class PgSQLDatabaseInfo extends DatabaseInfo {
         if (!$result) {
             throw new SQLException("Could not list sequences", pg_last_error($this->dblink));
         }
-		
-		while ($row = pg_fetch_assoc($result)) {
-			// FIXME -- decide what info we need for sequences & then create a SequenceInfo object (if needed)
-			$obj = new stdClass;
-			$obj->name = $row['relname'];
-			$obj->oid = $row['oid'];
+
+        while ($row = pg_fetch_assoc($result)) {
+            // FIXME -- decide what info we need for sequences & then create a SequenceInfo object (if needed)
+            $obj = new stdClass();
+            $obj->name = $row['relname'];
+            $obj->oid = $row['oid'];
             $this->sequences[strtoupper($row['relname'])] = $obj;
         }
-		
+
     }
 
 }

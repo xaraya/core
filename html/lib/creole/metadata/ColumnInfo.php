@@ -27,12 +27,12 @@
  * @version   $Revision: 1.13 $
  * @package   creole.metadata
  */
-class ColumnInfo {
-
-     // FIXME
-     //    - Currently all member attributes are public.  This should be fixed
-     // when PHP's magic __sleep() and __wakeup() functions & serialization support
-     // handles protected/private members. (if ever)
+class ColumnInfo
+{
+    // FIXME
+    //    - Currently all member attributes are public.  This should be fixed
+    // when PHP's magic __sleep() and __wakeup() functions & serialization support
+    // handles protected/private members. (if ever)
 
     /** Column name */
     public $name;
@@ -83,19 +83,20 @@ class ColumnInfo {
      * @param mixed $default Default value.
      * @param boolean $is_auto_increment Whether col is of autoIncrement type.
      */
-    function __construct(TableInfo
+    public function __construct(
+        TableInfo
                          $table,
-                         $name,
-                         $type = null,
-                         $nativeType = null,
-                         $size = null,
-                         $precision=null,
-                         $scale = null,
-                         $is_nullable = null,
-                         $default = null,
-                         $is_auto_increment = null,
-                         $vendorInfo = array())
-    {
+        $name,
+        $type = null,
+        $nativeType = null,
+        $size = null,
+        $precision = null,
+        $scale = null,
+        $is_nullable = null,
+        $default = null,
+        $is_auto_increment = null,
+        $vendorInfo = array()
+    ) {
         $this->table = $table;
         $this->name = $name;
         $this->type = $type;
@@ -113,9 +114,9 @@ class ColumnInfo {
      * This "magic" method is invoked upon serialize().
      * Because the Info class hierarchy is recursive, we must handle
      * the serialization and unserialization of this object.
-     * @return array The class variables that should be serialized (all must be public!).
+     * @return array<mixed> The class variables that should be serialized (all must be public!).
      */
-    function __sleep()
+    public function __sleep()
     {
         return array('name', 'type', 'nativeType', 'size', 'precision', 'isNullable', 'defaultValue');
     }
@@ -205,7 +206,7 @@ class ColumnInfo {
 
     /**
      * Get vendor specific optional information for this column.
-     * @return array vendorSpecificInfo[]
+     * @return array<mixed> vendorSpecificInfo[]
      */
     public function getVendorSpecificInfo()
     {
@@ -228,10 +229,10 @@ class ColumnInfo {
     {
         return $this->table;
     }
-    
+
     // XARAYA modification
     // emulate some stuff
-    function __get($propname) 
+    public function __get($propname)
     {
         switch($propname) {
             case 'max_length':
@@ -240,8 +241,8 @@ class ColumnInfo {
                 throw new Exception("Unknown  property accessed for columninfo");
         }
     }
-    
-    function __call($method, $args) 
+
+    public function __call($method, $args)
     {
         switch($method) {
             default:

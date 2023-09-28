@@ -28,21 +28,21 @@ require_once 'creole/drivers/odbc/adapters/ODBCAdapter.php';
  * driver. The driver only supports forward-only cursor scrolling so this
  * adapter causes the ODBCCachedResultSet to be used.
  *
- * A couple other quirks exist: 
- * 
- * 1) Cannot get blobs to work correctly. If I try writing one to a 
+ * A couple other quirks exist:
+ *
+ * 1) Cannot get blobs to work correctly. If I try writing one to a
  *    LONGVARBINARY typed field, only the first few bytes are written.
  *    This will cause the ResultSetTest::testGetBlob() test case to fail
  *    when running tests for the driver.
  *
- * 2) For some reason the character count is off for the 
- *    ResultSetTest::testSetClob() test case _only_ when running from the 
+ * 2) For some reason the character count is off for the
+ *    ResultSetTest::testSetClob() test case _only_ when running from the
  *    command line. If I run the same test through a web server it works fine.
- *    Looks like it has something to do with line endings in Windows. The 
+ *    Looks like it has something to do with line endings in Windows. The
  *    difference in file sizes is 9803 vs 10090.
  *
- * 3) Setting a clob field to null writes a space to the field in the table. 
- *    This causes the PreparedStatementTest::testSetNull() test case to fail 
+ * 3) Setting a clob field to null writes a space to the field in the table.
+ *    This causes the PreparedStatementTest::testSetNull() test case to fail
  *    when running tests for the driver.
  *
  * @author    Dave Lawson <dlawson@masterytech.com>

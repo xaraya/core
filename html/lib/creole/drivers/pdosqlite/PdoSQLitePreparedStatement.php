@@ -18,23 +18,23 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/common/PdoPreparedStatementCommon.php';
 
 /**
  *  subclass for prepared statements.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.7 $
  * @package   creole.drivers.sqlite
  */
- 
+
 //TODO: use PDO prepared statements
-class PdoSQLitePreparedStatement extends PdoPreparedStatementCommon {
-    
-    public function executeQuery($p1 = null, $fetchmode = null, $rs_class = NULL)
-	{    
+class PdoSQLitePreparedStatement extends PdoPreparedStatementCommon
+{
+    public function executeQuery($p1 = null, $fetchmode = null, $rs_class = null)
+    {
         require_once 'creole/drivers/pdosqlite/PdoSQLiteResultSet.php';
-        return parent::executeQuery( $p1, $fetchmode, 'PdoSQLiteResultSet');
+        return parent::executeQuery($p1, $fetchmode, 'PdoSQLiteResultSet');
     }
 }

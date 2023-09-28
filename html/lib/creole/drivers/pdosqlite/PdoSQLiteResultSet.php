@@ -18,7 +18,7 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/ResultSet.php';
 require_once 'creole/common/PdoResultSetCommon.php';
 
@@ -28,19 +28,20 @@ require_once 'creole/common/PdoResultSetCommon.php';
  * SQLite supports OFFSET / LIMIT natively; this means that no adjustments or checking
  * are performed.  We will assume that if the lmitSQL() operation failed that an
  * exception was thrown, and that OFFSET/LIMIT will never be emulated for SQLite.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.9 $
  * @package   creole.drivers.sqlite
  */
-class PdoSQLiteResultSet extends PdoResultSetCommon implements ResultSet {
-        
+class PdoSQLiteResultSet extends PdoResultSetCommon implements ResultSet
+{
     /**
      * Gets optimized SQLiteResultSetIterator.
      * @return SQLiteResultSetIterator
      */
-    public function getIterator()
-    {   throw new SQLException('PdoSQLiteResultSet::getIterator() not yet implimented');
+    public function getIterator(): Traversable
+    {
+        throw new SQLException('PdoSQLiteResultSet::getIterator() not yet implimented');
         //require_once 'creole/drivers/pdosqlite/PdoSQLiteResultSetIterator.php';
         //return new PdoSQLiteResultSetIterator($this);
     }

@@ -19,7 +19,7 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/CreoleTypes.php';
 
 /**
@@ -30,8 +30,8 @@ require_once 'creole/CreoleTypes.php';
  * @version   $Revision: 1.8 $
  * @package   creole.drivers.oracle
  */
-class OCI8Types extends CreoleTypes {
-
+class OCI8Types extends CreoleTypes
+{
     /** Map Oracle native types to Creole (JDBC) types. */
     private static $typeMap = array(
                                 'char' => CreoleTypes::CHAR,
@@ -50,10 +50,10 @@ class OCI8Types extends CreoleTypes {
                                 'clob' => CreoleTypes::CLOB,
                                 'varray' => CreoleTypes::ARR,
                                 );
-    
+
     /** Reverse mapping, created on demand. */
     private static $reverseMap = null;
-    
+
     /**
      * This method returns the generic Creole (JDBC-like) type
      * when given the native db type.
@@ -63,18 +63,20 @@ class OCI8Types extends CreoleTypes {
     public static function getType($nativeType)
     {
         $t = str_replace(' ', '', strtolower($nativeType));
-        if ( substr($t, 0, 9) == 'timestamp' ) return CreoleTypes::TIMESTAMP;
+        if (substr($t, 0, 9) == 'timestamp') {
+            return CreoleTypes::TIMESTAMP;
+        }
         if (isset(self::$typeMap[$t])) {
             return self::$typeMap[$t];
         } else {
             return CreoleTypes::OTHER;
         }
     }
-            
+
     /**
      * This method will return a native type that corresponds to the specified
      * Creole (JDBC-like) type.
-     * If there is more than one matching native type, then the LAST defined 
+     * If there is more than one matching native type, then the LAST defined
      * native type will be returned.
      * @param int $creoleType
      * @return string Native type string.
@@ -86,5 +88,5 @@ class OCI8Types extends CreoleTypes {
         }
         return @self::$reverseMap[$creoleType];
     }
-                                
+
 }

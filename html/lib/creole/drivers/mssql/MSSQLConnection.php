@@ -27,10 +27,10 @@ include_once 'creole/drivers/mssql/MSSQLResultSet.php';
 
 /**
  * MS SQL Server implementation of Connection.
- * 
+ *
  * If you have trouble with BLOB / CLOB support
  * --------------------------------------------
- * 
+ *
  * You may need to change some PHP ini settings.  In particular, the first two settings
  * set the text size to maximum which should get around issues with truncated data.
  * The third rectifies an issue with losing the seconds part of a DATETIME column
@@ -41,49 +41,48 @@ include_once 'creole/drivers/mssql/MSSQLResultSet.php';
  * </code>
  * We do not set these by default (anymore) because they do not apply to cases where MSSQL
  * is being used w/ FreeTDS.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @author    Stig Bakken <ssb@fast.no> 
+ * @author    Stig Bakken <ssb@fast.no>
  * @author    Lukas Smith
  * @version   $Revision: 1.25 $
  * @package   creole.drivers.mssql
- */ 
-class MSSQLConnection extends ConnectionCommon implements Connection 
-{        
-    
+ */
+class MSSQLConnection extends ConnectionCommon implements Connection
+{
     /** Current database (used in mssql_select_db()). */
     private $database;
-    
+
     /**
      * @see Connection::connect()
      */
-    function connect($dsninfo, $flags = 0)
-    {                
+    public function connect($dsninfo, $flags = 0)
+    {
         if (!extension_loaded('mssql') && !extension_loaded('sybase') && !extension_loaded('sybase_ct')) {
             throw new SQLException('mssql extension not loaded');
         }
 
         $this->dsn = $dsninfo;
         $this->flags = $flags;
-                
+
         $persistent = ($flags & Creole::PERSISTENT === Creole::PERSISTENT);
 
         $user = $dsninfo['username'];
         $pw = $dsninfo['password'];
         $dbhost = $dsninfo['hostspec'] ? $dsninfo['hostspec'] : 'localhost';
-        
+
         if (PHP_OS == "WINNT" || PHP_OS == "WIN32") {
             $portDelimiter = ",";
         } else {
             $portDelimiter = ":";
         }
-       
+
         if(!empty($dsninfo['port'])) {
-                $dbhost .= $portDelimiter.$dsninfo['port'];
+            $dbhost .= $portDelimiter.$dsninfo['port'];
         } else {
-                $dbhost .= $portDelimiter.'1433';
+            $dbhost .= $portDelimiter.'1433';
         }
-        
+
         $connect_function = $persistent ? 'mssql_pconnect' : 'mssql_connect';
 
         if ($dbhost && $user && $pw) {
@@ -96,18 +95,18 @@ class MSSQLConnection extends ConnectionCommon implements Connection
         if (!$conn) {
             throw new SQLException('connect failed', mssql_get_last_message());
         }
-        
+
         if ($dsninfo['database']) {
             if (!@mssql_select_db($dsninfo['database'], $conn)) {
-                throw new SQLException('No database selected');               
+                throw new SQLException('No database selected');
             }
-            
+
             $this->database = $dsninfo['database'];
         }
-        
-        $this->dblink = $conn;        
-    }    
-    
+
+        $this->dblink = $conn;
+    }
+
     /**
      * @see Connection::getDatabaseInfo()
      */
@@ -116,25 +115,25 @@ class MSSQLConnection extends ConnectionCommon implements Connection
         require_once 'creole/drivers/mssql/metadata/MSSQLDatabaseInfo.php';
         return new MSSQLDatabaseInfo($this);
     }
-    
-     /**
-     * @see Connection::getIdGenerator()
-     */
+
+    /**
+    * @see Connection::getIdGenerator()
+    */
     public function getIdGenerator()
     {
         require_once 'creole/drivers/mssql/MSSQLIdGenerator.php';
         return new MSSQLIdGenerator($this);
     }
-    
+
     /**
      * @see Connection::prepareStatement()
      */
-    public function prepareStatement($sql) 
+    public function prepareStatement($sql)
     {
         require_once 'creole/drivers/mssql/MSSQLPreparedStatement.php';
         return new MSSQLPreparedStatement($this, $sql);
     }
-    
+
     /**
      * @see Connection::createStatement()
      */
@@ -143,7 +142,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection
         require_once 'creole/drivers/mssql/MSSQLStatement.php';
         return new MSSQLStatement($this);
     }
-    
+
     /**
      * Since MSSQL doesn't support this method natively, the SQL is modified to use
      * nested queries to attain the same result.
@@ -173,37 +172,37 @@ class MSSQLConnection extends ConnectionCommon implements Connection
         */
 
         // obtain the original select statement
-        preg_match('/\A(.*)select(.*)from/si',$sql,$select_segment);
-        if(count($select_segment>0)) {
+        preg_match('/\A(.*)select(.*)from/si', $sql, $select_segment);
+        if(count($select_segment > 0)) {
             $original_select = $select_segment[0];
         } else {
             // not a select query, nothing further to do
             return;
-    }
-        $modified_select = substr_replace($original_select, null, stristr($original_select,'SELECT') , 6 );
-    
+        }
+        $modified_select = substr_replace($original_select, null, stristr($original_select, 'SELECT'), 6);
+
         // remove the original select statement
-        $sql = str_replace($original_select , null, $sql);
+        $sql = str_replace($original_select, null, $sql);
 
         // obtain the original order by clause, or create one if there isn't one
-        preg_match('/order by(.*)\Z/si',$sql,$order_segment);
-        if(count($order_segment)>0) {
+        preg_match('/order by(.*)\Z/si', $sql, $order_segment);
+        if(count($order_segment) > 0) {
             $order_by = $order_segment[0];
         } else {
             // no order by clause, if there are columns we can attempt to sort by the columns in the select statement
-            $select_items = explode(',',trim(substr($modified_select,0,strlen($modified_select)-4)));
-            if(count($select_items)>0) {
+            $select_items = explode(',', trim(substr($modified_select, 0, strlen($modified_select) - 4)));
+            if(count($select_items) > 0) {
                 $item_number = 0;
                 $order_by = null;
-                while($order_by === null && $item_number<count($select_items)) {
-                    if(!strstr($select_items[$item_number],'*')) {
-                        if (strstr($select_items[$item_number],'(')) {
+                while($order_by === null && $item_number < count($select_items)) {
+                    if(!strstr($select_items[$item_number], '*')) {
+                        if (strstr($select_items[$item_number], '(')) {
                             // aggregate function used in field, if the field is named with AS, use it
                             //  if a name is not given, assign one for use as ORDER BY field
                             $aggregateFieldName = array();
                             //preg_match('/ as (.*)\Z/si',$select_items[$item_number],$aggregateFieldName);
                             if (count($aggregateFieldName) == 0) {
-                                $select_items[$item_number].=' AS _creole_order_field';
+                                $select_items[$item_number] .= ' AS _creole_order_field';
                                 $aggregateFieldName = array('_creole_order_field');
                             }
                             $order_by = 'ORDER BY ' . $aggregateFieldName[0] . ' ASC';
@@ -226,32 +225,32 @@ class MSSQLConnection extends ConnectionCommon implements Connection
                 // in this case, there is always at least one field
                 $order_by = 'ORDER BY ' . $fields[0] . ' ASC';
             }
-            $sql.= ' '.$order_by;
+            $sql .= ' '.$order_by;
         }
 
         // modify the sort order for paging
         $inverted_order = '';
-        $order_columns = explode(',',str_ireplace('order by ','',$order_by));
+        $order_columns = explode(',', str_ireplace('order by ', '', $order_by));
         $original_order_by = $order_by;
         $order_by = '';
         foreach($order_columns as $column) {
             // strip "table." from order by columns
-            $column = array_reverse(explode("\.",$column));
+            $column = array_reverse(explode("\.", $column));
             $column = $column[0];
 
             // commas if we have multiple sort columns
-            if(strlen($inverted_order)>0){
-                $order_by.= ', ';
-                $inverted_order.=', ';
+            if(strlen($inverted_order) > 0) {
+                $order_by .= ', ';
+                $inverted_order .= ', ';
             }
 
             // put together order for paging wrapper
-            if(stristr($column,' desc')) {
+            if(stristr($column, ' desc')) {
                 $order_by .= $column;
-                $inverted_order .= str_ireplace(' desc',' ASC',$column);
-            } elseif(stristr($column,' asc')) {
+                $inverted_order .= str_ireplace(' desc', ' ASC', $column);
+            } elseif(stristr($column, ' asc')) {
                 $order_by .= $column;
-                $inverted_order .= str_ireplace(' asc',' DESC',$column);
+                $inverted_order .= str_ireplace(' asc', ' DESC', $column);
             } else {
                 $order_by .= $column;
                 $inverted_order .= $column .' DESC';
@@ -262,45 +261,45 @@ class MSSQLConnection extends ConnectionCommon implements Connection
 
         // build the query
         $modified_sql = "";
-        if ( $limit > 0 ) {
+        if ($limit > 0) {
             $modified_sql = 'SELECT * FROM (';
-            $modified_sql.= 'SELECT TOP '.$limit.' * FROM (';
-            $modified_sql.= 'SELECT TOP '.($limit+$offset).' '.$modified_select.$sql;
-            $modified_sql.= ') OffsetSet '.$inverted_order.') LimitSet '.$order_by;
+            $modified_sql .= 'SELECT TOP '.$limit.' * FROM (';
+            $modified_sql .= 'SELECT TOP '.($limit + $offset).' '.$modified_select.$sql;
+            $modified_sql .= ') OffsetSet '.$inverted_order.') LimitSet '.$order_by;
         } else {
             // For the case when the limit is 0, the idea is to return the entire recordset minus the offset
-            $countSql = count($order_segment)>0 ? str_replace($order_segment[0] , null, $sql) : $sql;
+            $countSql = count($order_segment) > 0 ? str_replace($order_segment[0], null, $sql) : $sql;
             $countStmt = $this->prepareStatement("SELECT COUNT(*) FROM $countSql");
             $countRs = $countStmt->executeQuery(ResultSet::FETCHMODE_NUM);
             $countRs->next();
             $rowCount = $countRs->getInt(1);
             $modified_sql = 'SELECT * FROM (';
-            $modified_sql.= 'SELECT TOP '.($rowCount-$offset).' * FROM (';
-            $modified_sql.= 'SELECT TOP 100 PERCENT '.$modified_select.$sql;
-            $modified_sql.= ') OffsetSet '.$inverted_order.') LimitSet '.$order_by;
+            $modified_sql .= 'SELECT TOP '.($rowCount - $offset).' * FROM (';
+            $modified_sql .= 'SELECT TOP 100 PERCENT '.$modified_select.$sql;
+            $modified_sql .= ') OffsetSet '.$inverted_order.') LimitSet '.$order_by;
         }
         $sql = $modified_sql;
     }
-    
+
     /**
      * @see Connection::close()
      */
-    function close()
+    public function close()
     {
         $ret = @mssql_close($this->dblink);
         $this->dblink = null;
         return $ret;
     }
-    
+
     /**
      * @see Connection::executeQuery()
      */
-    function executeQuery($sql, $fetchmode = null)
-    {            
+    public function executeQuery($sql, $fetchmode = null)
+    {
         $this->lastQuery = $sql;
         if (!@mssql_select_db($this->database, $this->dblink)) {
             throw new SQLException('No database selected');
-        }       
+        }
         $result = @mssql_query($sql, $this->dblink);
         if (!$result) {
             throw new SQLException('Could not execute query', mssql_get_last_message());
@@ -311,9 +310,9 @@ class MSSQLConnection extends ConnectionCommon implements Connection
     /**
      * @see Connection::executeUpdate()
      */
-    function executeUpdate($sql)
-    {    
-        
+    public function executeUpdate($sql)
+    {
+
         $this->lastQuery = $sql;
         if (!mssql_select_db($this->database, $this->dblink)) {
             throw new SQLException('No database selected');
@@ -322,8 +321,8 @@ class MSSQLConnection extends ConnectionCommon implements Connection
         // We got to determine the table here and set identity insert to on for it
         // FIXME: this sucks
         $errMsgs = array();
-        $tmpSql = str_replace('(',' (', $sql);
-        $queryParts = preg_split("/[ ]+/", $tmpSql,4, PREG_SPLIT_NO_EMPTY);
+        $tmpSql = str_replace('(', ' (', $sql);
+        $queryParts = preg_split("/[ ]+/", $tmpSql, 4, PREG_SPLIT_NO_EMPTY);
         $stmtType = trim(strtolower($queryParts[0]));
         switch ($stmtType) {
             case 'update':
@@ -340,16 +339,16 @@ class MSSQLConnection extends ConnectionCommon implements Connection
             $res = @mssql_query("SET IDENTITY_INSERT $tablename ON", $this->dblink);
             if(!$res) {
                 // Dont except just yet, the table could have no identity column,
-                $tablename ='';
+                $tablename = '';
                 $errMsgs[] = mssql_get_last_message();
             }
         }
-        
+
         $result = @mssql_query($sql, $this->dblink);
         if (!$result) {
             throw new SQLException('Could not execute update', mssql_get_last_message(), $sql);
         }
-        
+
         if($tablename != '') {
             $res = mssql_query("SET IDENTITY_INSERT $tablename OFF", $this->dblink);
             if (!$res) {
@@ -372,7 +371,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection
             throw new SQLException('Could not begin transaction', mssql_get_last_message());
         }
     }
-    
+
     /**
      * Commit the current transaction.
      * @throws SQLException
@@ -396,7 +395,7 @@ class MSSQLConnection extends ConnectionCommon implements Connection
      */
     protected function rollbackTrans()
     {
-        if (!@mssql_select_db($this->database, $this->dblink)) {            
+        if (!@mssql_select_db($this->database, $this->dblink)) {
             throw new SQLException('no database selected');
         }
         $result = @mssql_query('ROLLBACK TRAN', $this->dblink);
@@ -412,8 +411,8 @@ class MSSQLConnection extends ConnectionCommon implements Connection
      * @return int Number of rows affected by the last query
      * @throws SQLException
      */
-    function getUpdateCount()
-    {       
+    public function getUpdateCount()
+    {
         $res = @mssql_query('select @@rowcount', $this->dblink);
         if (!$res) {
             throw new SQLException('Unable to get affected row count', mssql_get_last_message());
@@ -425,20 +424,20 @@ class MSSQLConnection extends ConnectionCommon implements Connection
             @mssql_free_result($res);
             $result = $ar[0];
         }
-        
+
         return $result;
-    }          
-    
-    
+    }
+
+
     /**
      * Creates a CallableStatement object for calling database stored procedures.
-     * 
+     *
      * @param string $sql
      * @return CallableStatement
      * @throws SQLException
      */
-    function prepareCall($sql) 
-    {             
+    public function prepareCall($sql)
+    {
         require_once 'creole/drivers/mssql/MSSQLCallableStatement.php';
         $stmt = mssql_init($sql);
         if (!$stmt) {

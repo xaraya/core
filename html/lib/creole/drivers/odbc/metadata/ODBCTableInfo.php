@@ -18,7 +18,7 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/metadata/TableInfo.php';
 
 /**
@@ -28,8 +28,8 @@ require_once 'creole/metadata/TableInfo.php';
  * @version   $Revision: 1.2 $
  * @package   creole.drivers.odbc.metadata
  */
-class ODBCTableInfo extends TableInfo {
-
+class ODBCTableInfo extends TableInfo
+{
     /**
      * @see TableInfo::initColumns()
      */
@@ -42,11 +42,11 @@ class ODBCTableInfo extends TableInfo {
 
         $result = @odbc_columns($this->conn->getResource(), $this->dbname, '', $this->name);
 
-        if (!$result)
+        if (!$result) {
             throw new SQLException('Could not get column names', $this->conn->nativeError());
+        }
 
-        while (odbc_fetch_row($result))
-        {
+        while (odbc_fetch_row($result)) {
             $name = odbc_result($result, 'COLUMN_NAME');
             $type = odbc_result($result, 'TYPE_NAME');
             $length = odbc_result($result, 'LENGTH');
@@ -70,16 +70,18 @@ class ODBCTableInfo extends TableInfo {
         include_once 'creole/metadata/PrimaryKeyInfo.php';
 
         // columns have to be loaded first
-        if (!$this->colsLoaded) $this->initColumns();
+        if (!$this->colsLoaded) {
+            $this->initColumns();
+        }
 
         $result = @odbc_primarykeys($this->conn->getResource(), $this->dbname, '', $this->name);
 
-        while (odbc_fetch_row($result))
-        {
+        while (odbc_fetch_row($result)) {
             $name = odbc_result($result, 'COLUMN_NAME');
 
-            if (!isset($this->primaryKey))
+            if (!isset($this->primaryKey)) {
                 $this->primaryKey = new PrimaryKeyInfo($name);
+            }
 
             $this->primaryKey->addColumn($this->columns[$name]);
         }
@@ -103,28 +105,26 @@ class ODBCTableInfo extends TableInfo {
     protected function initForeignKeys()
     {
         // columns have to be loaded first
-        if (!$this->colsLoaded) $this->initColumns();
+        if (!$this->colsLoaded) {
+            $this->initColumns();
+        }
 
         $result = @odbc_foreignkeys($this->conn->getResource(), '', '', '', $this->dbname, '', $this->name);
 
-        while (odbc_fetch_row($result))
-        {
+        while (odbc_fetch_row($result)) {
             $name = odbc_result($result, 'COLUMN_NAME');
             $ftbl = odbc_result($result, 'FKTABLE_NAME');
             $fcol = odbc_result($result, 'FKCOLUMN_NAME');
 
-            if (!isset($this->foreignKeys[$name]))
-            {
+            if (!isset($this->foreignKeys[$name])) {
                 $this->foreignKeys[$name] = new ForeignKeyInfo($name);
 
-                if (($foreignTable = $this->database->getTable($ftbl)) === null)
-                {
+                if (($foreignTable = $this->database->getTable($ftbl)) === null) {
                     $foreignTable = new TableInfo($ftbl);
                     $this->database->addTable($foreignTable);
                 }
 
-                if (($foreignCol = $foreignTable->getColumn($name)) === null)
-                {
+                if (($foreignCol = $foreignTable->getColumn($name)) === null) {
                     $foreignCol = new ColumnInfo($foreignTable, $name);
                     $foreignTable->addColumn($foreignCol);
                 }

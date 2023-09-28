@@ -27,14 +27,14 @@ require_once 'creole/drivers/odbc/ODBCTypes.php';
  *
  * In addition to limit/offset emulation, this class implements a resultset
  * cache. This can be useful as a workaround for some ODBC drivers which lack
- * support for reverse/absolute cursor scrolling, etc. 
+ * support for reverse/absolute cursor scrolling, etc.
  *
  * This class will cache rows _on-demand_. So if you only read the first couple
  * rows of a result, then only those rows will be cached. However, note that if
- * you call getRecordCount() or last(), the class must read and cache all 
- * available records. 
+ * you call getRecordCount() or last(), the class must read and cache all
+ * available records.
  *
- * The offset / limit variables are also taken into account when caching. Any 
+ * The offset / limit variables are also taken into account when caching. Any
  * rows preceding the offset value will be skipped. Caching will stop once the
  * limit value is reached.
  *
@@ -81,7 +81,7 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
     /**
      * @see ODBCResultSetCommon::close()
      */
-    function close()
+    public function close()
     {
         parent::close();
         $this->recs = null;
@@ -103,37 +103,35 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
         $curRecs = count($this->recs);
         $totRecs = ($curRecs ? $this->offset + $curRecs : 0);
 
-        while (1)
-        {
+        while (1) {
             // Is record already cached?
-            if ($this->lastPos != -1 || ($recPos > -1 && $recPos <= $curRecs))
+            if ($this->lastPos != -1 || ($recPos > -1 && $recPos <= $curRecs)) {
                 return;
+            }
 
             // Fetch row (no buffers copied yet).
             $rowNum = ++$totRecs;
             $result = @odbc_fetch_row($rid, $rowNum);
 
             // All records cached?
-            if ($result === false || ($this->limit > 0 && $curRecs+1 > $this->limit))
-            {
+            if ($result === false || ($this->limit > 0 && $curRecs + 1 > $this->limit)) {
                 $this->lastPos = $curRecs;
                 continue;
             }
 
             // Ignore offset records.
-            if ($totRecs <= $this->offset)
+            if ($totRecs <= $this->offset) {
                 continue;
+            }
 
             // Load row array.
             $row = array();
-            for ($i = 0, $n = @odbc_num_fields($rid); $i < $n; $i++)
-            {
-                $fldNum = $i+1;
+            for ($i = 0, $n = @odbc_num_fields($rid); $i < $n; $i++) {
+                $fldNum = $i + 1;
                 $row[$i] = odbc_result($rid, $fldNum);
-                
+
                 // Cache lobs if necessary
-                if ($this->cacheLobs)
-                {
+                if ($this->cacheLobs) {
                     ODBCTypes::loadTypeMap($this->conn);
 
                     $nativeType = @odbc_field_type($rid, $fldNum);
@@ -145,15 +143,14 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
                     $isClob = ($creoleType == CreoleTypes::CLOB ||
                                $creoleType == CreoleTypes::LONGVARCHAR);
 
-                    if (($isBlob || $isClob) && $row[$i] !== null)
-                    {
+                    if (($isBlob || $isClob) && $row[$i] !== null) {
                         $binmode = ($isBlob ? ODBC_BINMODE_RETURN : ODBC_BINMODE_CONVERT);
                         $curdata = $row[$i];
                         $row[$i] = $this->readLobData($fldNum, $binmode, $curdata);
                     }
                 }
             }
-                        
+
             // Add record to cache.
             $this->recs[++$curRecs] = $row;
         }
@@ -166,8 +163,9 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
     {
         $this->loadCache($rownum);
 
-        if ($rownum < 0 || $rownum > count($this->recs)+1)
+        if ($rownum < 0 || $rownum > count($this->recs) + 1) {
             return false;
+        }
 
         $this->cursorPos = $rownum;
 
@@ -177,17 +175,16 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
     /**
      * @see ResultSet::next()
      */
-    function next()
+    public function next()
     {
         $this->loadCache(++$this->cursorPos);
 
-        if ($this->isAfterLast())
-        {
+        if ($this->isAfterLast()) {
             $this->afterLast();
             return false;
         }
 
-        $this->fields =& $this->checkFetchMode($this->recs[$this->cursorPos]);
+        $this->fields = & $this->checkFetchMode($this->recs[$this->cursorPos]);
 
         return true;
     }
@@ -195,10 +192,11 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
     /**
      * @see ResultSet::getRecordCount()
      */
-    function getRecordCount()
+    public function getRecordCount()
     {
-        if ($this->lastPos == -1)
+        if ($this->lastPos == -1) {
             $this->loadCache(-1);
+        }
 
         return $this->lastPos;
     }
@@ -209,8 +207,9 @@ class ODBCCachedResultSet extends ODBCResultSetCommon implements ResultSet
     public function isAfterLast()
     {
         // All records cached yet?
-        if ($this->lastPos == -1)
+        if ($this->lastPos == -1) {
             return false;
+        }
 
         return ($this->cursorPos > $this->lastPos);
     }

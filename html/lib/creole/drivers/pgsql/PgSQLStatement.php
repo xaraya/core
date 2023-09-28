@@ -18,17 +18,17 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/Statement.php';
 require_once 'creole/common/StatementCommon.php';
 
 /**
  * PostgreSQL Statement implementation.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.1 $
  * @package   creole.drivers.pgsql
- */ 
-class PgSQLStatement extends StatementCommon implements Statement {
-    
+ */
+class PgSQLStatement extends StatementCommon implements Statement
+{
 }

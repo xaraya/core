@@ -27,8 +27,8 @@
  * @version   $Revision: 1.15 $
  * @package   creole.metadata
  */
-abstract class DatabaseInfo {
-
+abstract class DatabaseInfo
+{
     protected $tables = array();
 
     protected $sequences = array();
@@ -82,9 +82,9 @@ abstract class DatabaseInfo {
      * This method is invoked upon serialize().
      * Because the Info class hierarchy is recursive, we must handle
      * the serialization and unserialization of this object.
-     * @return array The class variables that should be serialized (all must be public!).
+     * @return array<mixed> The class variables that should be serialized (all must be public!).
      */
-    function __sleep()
+    public function __sleep()
     {
         return array('tables','sequences','conn');
     }
@@ -93,7 +93,7 @@ abstract class DatabaseInfo {
      * This method is invoked upon unserialize().
      * This method re-hydrates the object and restores the recursive hierarchy.
      */
-    function __wakeup()
+    public function __wakeup()
     {
         // Re-init vars from serialized connection
         $this->dbname = $this->conn->database;
@@ -104,8 +104,9 @@ abstract class DatabaseInfo {
             $tbl->database = $this;
             $tbl->dbname = $this->dbname;
             $tbl->dblink = $this->dblink;
-            if ($this instanceof OCI8DatabaseInfo && $tbl instanceof OCI8TableInfo)
+            if ($this instanceof OCI8DatabaseInfo && $tbl instanceof OCI8TableInfo) {
                 $tbl->schema = $this->schema;
+            }
         }
     }
 
@@ -126,31 +127,37 @@ abstract class DatabaseInfo {
      */
     public function getTable($name)
     {
-        if(!$this->tablesLoaded) $this->initTables();
+        if(!$this->tablesLoaded) {
+            $this->initTables();
+        }
         if (!isset($this->tables[strtoupper($name)])) {
             throw new SQLException("Database `".$this->dbname."` has no table `".$name."`");
         }
         return $this->tables[ strtoupper($name) ];
     }
 
-  /**
-   * Return whether database contains specified table.
-   * @param string $name The table name.
-   * @return boolean
-   */
-  public function hasTable($name)
-  {
-    if(!$this->tablesLoaded) $this->initTables();
-    return isset($this->tables[strtoupper($name)]);
-  }
+    /**
+     * Return whether database contains specified table.
+     * @param string $name The table name.
+     * @return boolean
+     */
+    public function hasTable($name)
+    {
+        if(!$this->tablesLoaded) {
+            $this->initTables();
+        }
+        return isset($this->tables[strtoupper($name)]);
+    }
 
     /**
      * Gets array of TableInfo objects.
-     * @return array TableInfo[]
+     * @return array<mixed> TableInfo[]
      */
     public function getTables()
     {
-        if(!$this->tablesLoaded) $this->initTables();
+        if(!$this->tablesLoaded) {
+            $this->initTables();
+        }
         return array_values($this->tables); //re-key [numerically]
     }
 
@@ -182,23 +189,27 @@ abstract class DatabaseInfo {
      */
     public function isSequence($key)
     {
-        if(!$this->seqsLoaded) $this->initSequences();
+        if(!$this->seqsLoaded) {
+            $this->initSequences();
+        }
         return isset($this->sequences[ strtoupper($key) ]);
     }
 
     /**
      * Gets array of ? objects.
-     * @return array ?[]
+     * @return array<mixed> ?[]
      */
     public function getSequences()
     {
-        if(!$this->seqsLoaded) $this->initSequences();
+        if(!$this->seqsLoaded) {
+            $this->initSequences();
+        }
         return array_values($this->sequences); //re-key [numerically]
     }
 
     /**
      * Get vendor specific optional information for this primary key.
-     * @return array vendorSpecificInfo[]
+     * @return array<mixed> vendorSpecificInfo[]
      */
     public function getVendorSpecificInfo()
     {

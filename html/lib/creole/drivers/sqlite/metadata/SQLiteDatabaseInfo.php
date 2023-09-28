@@ -18,47 +18,47 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/metadata/DatabaseInfo.php';
 
 /**
  * SQLite implementation of DatabaseInfo.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.3 $
  * @package   creole.drivers.sqlite.metadata
- */ 
-class SQLiteDatabaseInfo extends DatabaseInfo {
-    
+ */
+class SQLiteDatabaseInfo extends DatabaseInfo
+{
     /**
      * @throws SQLException
      * @return void
      */
     protected function initTables()
     {
-        include_once 'creole/drivers/sqlite/metadata/SQLiteTableInfo.php';        
-        
+        include_once 'creole/drivers/sqlite/metadata/SQLiteTableInfo.php';
+
         $sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
         $result = sqlite_query($this->dblink, $sql);
-            
+
         if (!$result) {
             throw new SQLException("Could not list tables", sqlite_last_error($this->dblink));
         }
-        
+
         while ($row = sqlite_fetch_array($result)) {
             $this->tables[strtoupper($row[0])] = new SQLiteTableInfo($this, $row[0]);
         }
     }
-    
+
     /**
      * SQLite does not support sequences.
      *
-     * @return void 
+     * @return void
      * @throws SQLException
      */
     protected function initSequences()
     {
         // throw new SQLException("MySQL does not support sequences natively.");
     }
-        
+
 }

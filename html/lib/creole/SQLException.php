@@ -26,14 +26,14 @@
  * @version   $Revision: 1.10 $
  * @package   creole
  */
-class SQLException extends Exception {
-    
+class SQLException extends Exception
+{
     /** Information that provides additional information for context of Exception (e.g. SQL statement or DSN). */
     protected $userInfo;
-    
+
     /** Native RDBMS error string */
     protected $nativeError;
-    
+
     /**
      * Constructs a SQLException.
      * @param string $msg Error message
@@ -50,54 +50,56 @@ class SQLException extends Exception {
             $this->setUserInfo($userinfo);
         }
     }
-    
+
     /**
      * Sets additional user / debug information for this error.
-     *  
+     *
      * @param mixed $info
      * @return void
-     */ 
+     */
     public function setUserInfo($info)
     {
         // Make sure we have an array
-        if (!is_array($info)) $info = explode(",",$info);
-        
+        if (!is_array($info)) {
+            $info = explode(",", $info);
+        }
+
         $this->userInfo = $info;
-        $this->message .= " [User Info: " . implode(",",$this->userInfo) . "]";
+        $this->message .= " [User Info: " . implode(",", $this->userInfo) . "]";
     }
-    
+
     /**
-     * Returns the additional / debug information for this error. 
-     * 
-     * @return array hash of user info properties.
+     * Returns the additional / debug information for this error.
+     *
+     * @return array<mixed> hash of user info properties.
      */
     public function getUserInfo()
     {
         return $this->userInfo;
     }
-    
+
     /**
      * Sets driver native error message.
-     *  
+     *
      * @param string $info
      * @return void
-     */ 
+     */
     public function setNativeError($msg)
     {
         $this->nativeError = $msg;
         $this->message .= " [Native Error: " .$this->nativeError . "]";
     }
-    
+
     /**
      * Gets driver native error message.
-     * 
+     *
      * @return string
      */
     public function getNativeError()
     {
         return $this->nativeError;
-    }        
-    
+    }
+
     /**
      * @deprecated This method only exists right now for easier compatibility w/ PHPUnit!
      */

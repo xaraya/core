@@ -33,8 +33,8 @@ include_once 'creole/drivers/mysql/MySQLResultSet.php';
  * @version   $Revision: 1.18 $
  * @package   creole.drivers.mysql
  */
-class MySQLConnection extends ConnectionCommon implements Connection {
-
+class MySQLConnection extends ConnectionCommon implements Connection
+{
     /** Current database (used in mysql_select_db()). */
     private $database;
 
@@ -47,7 +47,7 @@ class MySQLConnection extends ConnectionCommon implements Connection {
      * @throws SQLException
      * @return void
      */
-    function connect($dsninfo, $flags = 0)
+    public function connect($dsninfo, $flags = 0)
     {
         if (!extension_loaded('mysql')) {
             throw new SQLException('mysql extension not loaded');
@@ -57,10 +57,10 @@ class MySQLConnection extends ConnectionCommon implements Connection {
         $this->flags = $flags;
 
         $persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;
-		$multi_statement = ($flags & Creole::MYSQL_CLIENT_MULTI_STATEMENTS) === Creole::MYSQL_CLIENT_MULTI_STATEMENTS;
-		$multi_result = ($flags & Creole::MYSQL_CLIENT_MULTI_RESULTS) === Creole::MYSQL_CLIENT_MULTI_RESULTS;
-		$connect_flags = ($multi_statement ? Creole::MYSQL_CLIENT_MULTI_STATEMENTS : 0) |
-							($multi_result ? Creole::MYSQL_CLIENT_MULTI_RESULTS : 0);
+        $multi_statement = ($flags & Creole::MYSQL_CLIENT_MULTI_STATEMENTS) === Creole::MYSQL_CLIENT_MULTI_STATEMENTS;
+        $multi_result = ($flags & Creole::MYSQL_CLIENT_MULTI_RESULTS) === Creole::MYSQL_CLIENT_MULTI_RESULTS;
+        $connect_flags = ($multi_statement ? Creole::MYSQL_CLIENT_MULTI_STATEMENTS : 0) |
+                            ($multi_result ? Creole::MYSQL_CLIENT_MULTI_RESULTS : 0);
 
         if (isset($dsninfo['protocol']) && $dsninfo['protocol'] == 'unix') {
             $dbhost = ':' . $dsninfo['socket'];
@@ -73,7 +73,7 @@ class MySQLConnection extends ConnectionCommon implements Connection {
         $user = $dsninfo['username'];
         $pw = $dsninfo['password'];
 
-		$encoding = !empty($dsninfo['encoding']) ? $dsninfo['encoding'] : null;
+        $encoding = !empty($dsninfo['encoding']) ? $dsninfo['encoding'] : null;
 
         @ini_set('track_errors', true);
         try {
@@ -102,15 +102,15 @@ class MySQLConnection extends ConnectionCommon implements Connection {
 
         if ($dsninfo['database']) {
             if (!@mysql_select_db($dsninfo['database'], $conn)) {
-               switch(mysql_errno($conn)) {
-                        case 1049:
-                            $exc = new SQLException("no such database", mysql_error($conn));
+                switch(mysql_errno($conn)) {
+                    case 1049:
+                        $exc = new SQLException("no such database", mysql_error($conn));
                         break;
-                        case 1044:
-                            $exc = new SQLException("access violation", mysql_error($conn));
+                    case 1044:
+                        $exc = new SQLException("access violation", mysql_error($conn));
                         break;
-                        default:
-                           $exc = new SQLException("cannot select database", mysql_error($conn));
+                    default:
+                        $exc = new SQLException("cannot select database", mysql_error($conn));
                 }
 
                 throw $exc;
@@ -123,9 +123,9 @@ class MySQLConnection extends ConnectionCommon implements Connection {
         $this->dblink = $conn;
 
         if ($encoding) {
-			$this->executeUpdate("SET NAMES " . $encoding);
+            $this->executeUpdate("SET NAMES " . $encoding);
+        }
     }
-    }    
 
     /**
      * @see Connection::getDatabaseInfo()
@@ -157,7 +157,8 @@ class MySQLConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::prepareCall()
      */
-    public function prepareCall($sql) {
+    public function prepareCall($sql)
+    {
         throw new SQLException('MySQL does not support stored procedures.');
     }
 
@@ -173,7 +174,7 @@ class MySQLConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::disconnect()
      */
-    function close()
+    public function close()
     {
         $ret = mysql_close($this->dblink);
         $this->dblink = null;
@@ -185,9 +186,9 @@ class MySQLConnection extends ConnectionCommon implements Connection {
      */
     public function applyLimit(&$sql, $offset, $limit)
     {
-        if ( $limit > 0 ) {
+        if ($limit > 0) {
             $sql .= " LIMIT " . ($offset > 0 ? $offset . ", " : "") . $limit;
-        } else if ( $offset > 0 ) {
+        } elseif ($offset > 0) {
             $sql .= " LIMIT " . $offset . ", 18446744073709551615";
         }
     }
@@ -195,7 +196,7 @@ class MySQLConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::executeQuery()
      */
-    function executeQuery($sql, $fetchmode = null)
+    public function executeQuery($sql, $fetchmode = null)
     {
         $this->lastQuery = $sql;
         if ($this->database) {
@@ -213,13 +214,13 @@ class MySQLConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::executeUpdate()
      */
-    function executeUpdate($sql)
+    public function executeUpdate($sql)
     {
         $this->lastQuery = $sql;
 
         if ($this->database) {
             if (!@mysql_select_db($this->database, $this->dblink)) {
-                    throw new SQLException('No database selected', mysql_error($this->dblink));
+                throw new SQLException('No database selected', mysql_error($this->dblink));
             }
         }
 
@@ -253,18 +254,18 @@ class MySQLConnection extends ConnectionCommon implements Connection {
     {
         if ($this->database) {
             if (!@mysql_select_db($this->database, $this->dblink)) {
-                 throw new SQLException('No database selected', mysql_error($this->dblink));
+                throw new SQLException('No database selected', mysql_error($this->dblink));
             }
         }
-        
+
         $result = @mysql_query('COMMIT', $this->dblink);
         if (!$result) {
-            throw new SQLException('Could not commit transaction', mysql_error($this->dblink));                
+            throw new SQLException('Could not commit transaction', mysql_error($this->dblink));
         }
-        
+
         $result = @mysql_query('SET AUTOCOMMIT=1', $this->dblink);
         if (!$result) {
-            throw new SQLException('Could not set AUTOCOMMIT', mysql_error($this->dblink));                
+            throw new SQLException('Could not set AUTOCOMMIT', mysql_error($this->dblink));
         }
     }
 
@@ -280,16 +281,16 @@ class MySQLConnection extends ConnectionCommon implements Connection {
                 throw new SQLException('No database selected', mysql_error($this->dblink));
             }
         }
-        
+
         $result = @mysql_query('ROLLBACK', $this->dblink);
         if (!$result) {
             throw new SQLException('Could not rollback transaction', mysql_error($this->dblink));
         }
-        
+
         $result = @mysql_query('SET AUTOCOMMIT=1', $this->dblink);
         if (!$result) {
             throw new SQLException('Could not set AUTOCOMMIT', mysql_error($this->dblink));
-    }
+        }
     }
 
     /**
@@ -298,56 +299,56 @@ class MySQLConnection extends ConnectionCommon implements Connection {
      *
      * @return int Number of rows affected by the last query.
      */
-    function getUpdateCount()
+    public function getUpdateCount()
     {
         return (int) @mysql_affected_rows($this->dblink);
     }
 
     /**
      * Checks if the current connection supports savepoints
-     * 
+     *
      * @return bool Does the connection support savepoints
      * @todo This should check the version of the server to see if it supports savepoints
      */
     protected function supportsSavepoints()
     {
-    	return true;
-}    
+        return true;
+    }
     /**
      * Creates a new savepoint
      *
      * @param string $identifier Name of the savepoint to create
      * @see ConnectionCommon::setSavepoint()
      */
-    protected function setSavepoint( $identifier )
+    protected function setSavepoint($identifier)
     {
         $result = @mysql_query("savepoint ".$identifier, $this->dblink);
         if (!$result) {
             throw new SQLException('Could not begin transaction', mysql_error($this->dblink));
         }
     }
-    
+
     /**
      * Releases a savepoint
      *
      * @param string $identifier Name of the savepoint to release
      * @see ConnectionCommon::releaseSavepoint()
      */
-    protected function releaseSavepoint( $identifier )
+    protected function releaseSavepoint($identifier)
     {
         $result = @mysql_query("release savepoint ".$identifier, $this->dblink);
         if (!$result) {
             throw new SQLException('Could not begin transaction', mysql_error($this->dblink));
         }
     }
-    
+
     /**
      * Rollback changes to a savepoint
      *
      * @param string $identifier Name of the savepoint to rollback to
      * @see ConnectionCommon::rollbackToSavepoint()
      */
-    protected function rollbackToSavepoint( $identifier )
+    protected function rollbackToSavepoint($identifier)
     {
         $result = @mysql_query("rollback to savepoint ".$identifier, $this->dblink);
         if (!$result) {

@@ -28,7 +28,8 @@ require_once 'creole/IdGenerator.php';
  * @version   $Revision: 1.4 $
  * @package   creole.drivers.mysqli
  */
-class MySQLiIdGenerator implements IdGenerator {
+class MySQLiIdGenerator implements IdGenerator
+{
     /** Connection object that instantiated this class */
     private $conn;
 
@@ -80,12 +81,12 @@ class MySQLiIdGenerator implements IdGenerator {
         $resource = $this->conn->getResource();
         $insert_id = mysqli_insert_id($resource);
 
-        if ( $insert_id < 0 ) {
+        if ($insert_id < 0) {
             $insert_id = null;
 
             $result = mysqli_query($resource, 'SELECT LAST_INSERT_ID()');
 
-            if ( $result ) {
+            if ($result) {
                 $row = mysqli_fetch_row($result);
                 $insert_id = $row ? $row[0] : null;
             }
@@ -93,7 +94,7 @@ class MySQLiIdGenerator implements IdGenerator {
 
         return $insert_id;
     }
-    
+
     // XARAYA MODIFICATION
     public function getNextId($tableName)
     {

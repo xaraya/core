@@ -9,8 +9,8 @@ require_once 'creole/IdGenerator.php';
  * @version   $Revision: 1.5 $
  * @package   creole.drivers.oracle
  */
-class OCI8IdGenerator implements IdGenerator {
-    
+class OCI8IdGenerator implements IdGenerator
+{
     /** Connection object that instantiated this class */
     private $conn;
 
@@ -23,15 +23,15 @@ class OCI8IdGenerator implements IdGenerator {
     {
         $this->conn = $conn;
     }
-    
+
     /**
      * @see IdGenerator::isBeforeInsert()
      */
     public function isBeforeInsert()
     {
         return true;
-    }    
-    
+    }
+
     /**
      * @see IdGenerator::isAfterInsert()
      */
@@ -39,7 +39,7 @@ class OCI8IdGenerator implements IdGenerator {
     {
         return false;
     }
-        
+
     /**
      * @see IdGenerator::getIdMethod()
      */
@@ -47,7 +47,7 @@ class OCI8IdGenerator implements IdGenerator {
     {
         return self::SEQUENCE;
     }
-    
+
     /**
      * @see IdGenerator::getId()
      * @todo xaraya uses tablename, perhaps make the same change here as in postgres? (/me no have oracle to test)
@@ -61,19 +61,19 @@ class OCI8IdGenerator implements IdGenerator {
         $rs->next();
         return $rs->getInt(1);
     }
-    
+
     // XARAYA MODIFICATION
-    function getNextId($tableName)
+    public function getNextId($tableName)
     {
         return $this->getId($tableName);
     }
-    
-    function getLastId($tableName)
+
+    public function getLastId($tableName)
     {
         $rs = $this->conn->executeQuery('select ' . $tableName . '.curval from dual', ResultSet::FETCHMODE_NUM);
         $rs->next();
         return $rs->getInt(1);
     }
     // END XARAYA MODIFICATION
-    
+
 }

@@ -30,15 +30,15 @@ include_once 'creole/drivers/ldap/LdapResultSet.php';
  * @author    Sébastien Cramatte <scramatte@zensoluciones.com>
  * @package   creole.drivers.ldap
  */
-class LdapConnection extends ConnectionCommon implements Connection {
-
+class LdapConnection extends ConnectionCommon implements Connection
+{
     /** Current DN . */
     private $basedn;
     private $bind;
     private $query;
 
-    const PORT = 389;
-    const TLSPORT = 636;
+    public const PORT = 389;
+    public const TLSPORT = 636;
 
     /**
      * Connect to a database and log in as the specified user.
@@ -49,7 +49,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
      * @throws SQLException
      * @return void
      */
-    function connect($dsninfo, $flags = 0)
+    public function connect($dsninfo, $flags = 0)
     {
         if (!extension_loaded('ldap')) {
             throw new SQLException('ldap extension not loaded');
@@ -62,27 +62,31 @@ class LdapConnection extends ConnectionCommon implements Connection {
         $pw = $dsninfo['password'];
         $dbport = $dsninfo['port'];
 
-   			if ($dsninfo['phptype'] == 'ldaps') {
+        if ($dsninfo['phptype'] == 'ldaps') {
             $dbhost = 'ldaps://' . $dsninfo['hostspec'];
-            if (!isset($dbport)) $dbport = LdapConnection::TLSPORT;
+            if (!isset($dbport)) {
+                $dbport = LdapConnection::TLSPORT;
+            }
 
         } else {
             $dbhost = $dsninfo['hostspec'];
             $dbport = $dsninfo['port'];
-            if (!isset($dbport)) $dbport = LdapConnection::PORT;
+            if (!isset($dbport)) {
+                $dbport = LdapConnection::PORT;
+            }
         }
 
         @ini_set('track_errors', true);
         if ($dbhost) {
             $conn = @ldap_connect($dbhost, $dbport);
-            $bind = @ldap_bind($conn,$user, $pw);
+            $bind = @ldap_bind($conn, $user, $pw);
         } else {
             $conn = false;
         }
 
         @ini_restore('track_errors');
         if (empty($conn)) {
-            if (($err = @ldap_error()) != '') {
+            if (($err = @ldap_error($conn)) != '') {
                 throw new SQLException("connect failed", $err);
             } elseif (empty($php_errormsg)) {
                 throw new SQLException("connect failed");
@@ -91,11 +95,11 @@ class LdapConnection extends ConnectionCommon implements Connection {
             }
         }
 
-				if (!$dsninfo['database']) {
-						throw new SQLException("You must specify base DN");
-				}
+        if (!$dsninfo['database']) {
+            throw new SQLException("You must specify base DN");
+        }
 
-				$this->basedn = $dsninfo['database'];
+        $this->basedn = $dsninfo['database'];
 
         $this->dblink = $conn;
         $this->bind = $bind;
@@ -130,7 +134,8 @@ class LdapConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::prepareCall()
      */
-    public function prepareCall($sql) {
+    public function prepareCall($sql)
+    {
         throw new SQLException('Ldap does not support stored procedures.');
     }
 
@@ -146,7 +151,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::disconnect()
      */
-    function close()
+    public function close()
     {
         $ret = ldap_close($this->dblink);
         $this->dblink = null;
@@ -158,7 +163,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
      */
     public function applyLimit(&$sql, $offset, $limit)
     {
-    	/*
+        /*
         if ( $limit > 0 ) {
             $sql .= " LIMIT " . ($offset > 0 ? $offset . ", " : "") . $limit;
         } else if ( $offset > 0 ) {
@@ -167,44 +172,47 @@ class LdapConnection extends ConnectionCommon implements Connection {
       */
     }
 
-		private function createQuery($query) {
-			if (!is_array($query))  $query = explode('?',$query);
+    private function createQuery($query)
+    {
+        if (!is_array($query)) {
+            $query = explode('?', $query);
+        }
 
-		  /* return an array in the same order as specified in rfc 2255 */
-			return array (	'dn'=> $query[0]?$query[0]:$this->basedn,
-											'attributes' => $query[1]?explode(',',$query[1]):array('*'),
-											'scope' => $query[2]?$query[2]:'base',   /* base, one, sub */
-											'filter' => $query[3]?$query[3]:'(objectClass=*)',
-											'extensions' => $query[4]
-										);
-		}
+        /* return an array in the same order as specified in rfc 2255 */
+        return array(	'dn' => $query[0] ? $query[0] : $this->basedn,
+                                        'attributes' => $query[1] ? explode(',', $query[1]) : array('*'),
+                                        'scope' => $query[2] ? $query[2] : 'base',   /* base, one, sub */
+                                        'filter' => $query[3] ? $query[3] : '(objectClass=*)',
+                                        'extensions' => $query[4]
+                                    );
+    }
 
     /**
      * @see Connection::executeQuery()
      */
-    function executeQuery($query, $fetchmode = null)
+    public function executeQuery($query, $fetchmode = null)
     {
 
-    	$query = $this->createQuery($query);
-    	$this->lastQuery = $query;
+        $query = $this->createQuery($query);
+        $this->lastQuery = $query;
 
-    	$result = @ldap_search($this->dblink,$query['dn'],$query['filter'],$query['attributes']);
+        $result = @ldap_search($this->dblink, $query['dn'], $query['filter'], $query['attributes']);
 
-    	if (!$result) {
+        if (!$result) {
             throw new SQLException('Could not execute search', ldap_error($this->dblink));
-      }
+        }
 
 
-      return new LdapResultSet($this, $result, $fetchmode);
+        return new LdapResultSet($this, $result, $fetchmode);
 
     }
 
     /**
      * @see Connection::executeUpdate()
      */
-    function executeUpdate($sql)
+    public function executeUpdate($sql)
     {
-    	/*
+        /*
         $this->lastQuery = $sql;
 
         if ($this->database) {
@@ -219,6 +227,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
         }
         return (int) mysql_affected_rows($this->dblink);
       */
+        return 0;
     }
 
     /**
@@ -228,7 +237,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
      */
     protected function beginTrans()
     {
-				throw new SQLException('Ldap does not support stored procedures.');
+        throw new SQLException('Ldap does not support stored procedures.');
     }
 
     /**
@@ -248,7 +257,7 @@ class LdapConnection extends ConnectionCommon implements Connection {
      */
     protected function rollbackTrans()
     {
-				throw new SQLException('Ldap does not support stored procedures.');
+        throw new SQLException('Ldap does not support stored procedures.');
     }
 
     /**
@@ -257,9 +266,9 @@ class LdapConnection extends ConnectionCommon implements Connection {
      *
      * @return int Number of rows affected by the last query.
      */
-    function getUpdateCount()
+    public function getUpdateCount()
     {
-				throw new SQLException('Ldap does not support this feature.');
+        throw new SQLException('Ldap does not support this feature.');
     }
 
 }

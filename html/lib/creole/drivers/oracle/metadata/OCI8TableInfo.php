@@ -18,40 +18,40 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/metadata/TableInfo.php';
 
 /**
  * Oracle (OCI8) implementation of TableInfo.
- * 
+ *
  * @author    David Giffin <david@giffin.org>
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision$
  * @package   creole.drivers.oracle.metadata
  */
-class OCI8TableInfo extends TableInfo {
-    
-    private $schema;
-        
+class OCI8TableInfo extends TableInfo
+{
+    protected $schema;
+
     public function __construct(OCI8DatabaseInfo $database, $name)
     {
-        $this->schema = strtoupper( $database->getSchema() );
+        $this->schema = strtoupper($database->getSchema());
         parent::__construct($database, $name);
-		$this->name = strtoupper( $this->name );
+        $this->name = strtoupper($this->name);
     }
-    
+
     /** Loads the columns for this table. */
-    protected function initColumns() 
+    protected function initColumns()
     {
-        
+
         include_once 'creole/metadata/ColumnInfo.php';
         include_once 'creole/drivers/oracle/OCI8Types.php';
-        
 
-        // To get all of the attributes we need, we'll actually do 
+
+        // To get all of the attributes we need, we'll actually do
         // two separate queries.  The first gets names and default values
         // the second will fill in some more details.
-        
+
         $sql = "
 			SELECT column_name
 				, data_type
@@ -64,38 +64,40 @@ class OCI8TableInfo extends TableInfo {
             WHERE table_name = '{$this->name}'
                 AND OWNER = '{$this->schema}'";
 
-        $statement = @oci_parse($this->conn->getResource(),$sql);
-        $success = @oci_execute($statement,OCI_DEFAULT);
-		if (!$success) {
+        $statement = @oci_parse($this->conn->getResource(), $sql);
+        $success = @oci_execute($statement, OCI_DEFAULT);
+        if (!$success) {
             throw new SQLException("Could Not Get Columns");
         }
 
-        while ( $statement && $row = oci_fetch_array( $statement
-			, OCI_ASSOC + OCI_RETURN_NULLS ) ) {
+        while ($statement && $row = oci_fetch_array($statement, OCI_ASSOC + OCI_RETURN_NULLS)) {
             $row = array_change_key_case($row, CASE_LOWER);
-            $this->columns[$row['column_name']] = new ColumnInfo( $this
-				, $row['column_name']
-				, OCI8Types::getType($row['data_type'])
-				, $row['data_type']
-				, $row['data_length']
-				, $row['data_precision']
-				, $row['data_scale']
-				, $row['nullable']
-				, $row['data_default']
-			);
+            $this->columns[$row['column_name']] = new ColumnInfo(
+                $this,
+                $row['column_name'],
+                OCI8Types::getType($row['data_type']),
+                $row['data_type'],
+                $row['data_length'],
+                $row['data_precision'],
+                $row['data_scale'],
+                $row['nullable'],
+                $row['data_default']
+            );
         }
-                
+
         $this->colsLoaded = true;
     }
-    
+
     /** Loads the primary key information for this table. */
     protected function initPrimaryKey()
     {
         include_once 'creole/metadata/PrimaryKeyInfo.php';
-        
+
         // columns have to be loaded first
-        if (!$this->colsLoaded) $this->initColumns();
-        
+        if (!$this->colsLoaded) {
+            $this->initColumns();
+        }
+
 
         // Primary Keys Query
         $sql = "SELECT a.owner, a.table_name,
@@ -108,14 +110,14 @@ class OCI8TableInfo extends TableInfo {
             ";
 
 
-        $statement = @oci_parse($this->conn->getResource(),$sql);
-        $success = @oci_execute($statement,OCI_DEFAULT);
+        $statement = @oci_parse($this->conn->getResource(), $sql);
+        $success = @oci_execute($statement, OCI_DEFAULT);
         if (!$success) {
             throw new SQLException("Could Not Get Primary Keys");
         }
 
-        while ( $statement && $row = oci_fetch_assoc( $statement )) {
-            $row = array_change_key_case($row,CASE_LOWER);
+        while ($statement && $row = oci_fetch_assoc($statement)) {
+            $row = array_change_key_case($row, CASE_LOWER);
 
             $name = $row['column_name'];
 
@@ -125,17 +127,20 @@ class OCI8TableInfo extends TableInfo {
 
             $this->primaryKey->addColumn($this->columns[$name]);
         }
-        
+
         $this->pkLoaded = true;
     }
-    
+
     /** Loads the indexes for this table. */
-    protected function initIndexes() {
-    
-        include_once 'creole/metadata/IndexInfo.php';    
+    protected function initIndexes()
+    {
+
+        include_once 'creole/metadata/IndexInfo.php';
 
         // columns have to be loaded first
-        if (!$this->colsLoaded) $this->initColumns();        
+        if (!$this->colsLoaded) {
+            $this->initColumns();
+        }
 
         // Indexes
         $sql = "SELECT
@@ -156,8 +161,8 @@ class OCI8TableInfo extends TableInfo {
             ORDER BY allind.index_name,
                 indcol.column_position";
 
-        $statement = @oci_parse($this->conn->getResource(),$sql);
-        $success = @oci_execute($statement,OCI_DEFAULT);
+        $statement = @oci_parse($this->conn->getResource(), $sql);
+        $success = @oci_execute($statement, OCI_DEFAULT);
         if (!$success) {
             throw new SQLException("Could Not Get Primary Keys");
         }
@@ -166,8 +171,8 @@ class OCI8TableInfo extends TableInfo {
         // Loop through the returned results, grouping the same key_name together
         // adding each column for that key.
 
-        while ( $statement && $row = oci_fetch_assoc( $statement )) {
-            $row = array_change_key_case($row,CASE_LOWER);
+        while ($statement && $row = oci_fetch_assoc($statement)) {
+            $row = array_change_key_case($row, CASE_LOWER);
 
             $name = $row['index_name'];
             $index_col_name = $row['column_name'];
@@ -178,23 +183,26 @@ class OCI8TableInfo extends TableInfo {
 
             $this->indexes[$name]->addColumn($this->columns[ $index_col_name ]);
         }
-        
-                
+
+
         $this->indexesLoaded = true;
     }
-    
+
     /** Load foreign keys */
-    protected function initForeignKeys() {
-        
-        include_once 'creole/metadata/ForeignKeyInfo.php';    
+    protected function initForeignKeys()
+    {
+
+        include_once 'creole/metadata/ForeignKeyInfo.php';
 
         // columns have to be loaded first
-        if (!$this->colsLoaded) $this->initColumns();        
-        
+        if (!$this->colsLoaded) {
+            $this->initColumns();
+        }
+
         // Foreign keys
-		// TODO resolve cross schema references
-		// use all_cons... to do so, however, very slow queries then
-		// optimizations are very ugly
+        // TODO resolve cross schema references
+        // use all_cons... to do so, however, very slow queries then
+        // optimizations are very ugly
         $sql					= "
 			SELECT a.owner AS local_owner
 				, a.table_name AS local_table
@@ -221,56 +229,55 @@ class OCI8TableInfo extends TableInfo {
 				AND a.owner = '{$this->schema}'
 		";
 
-        $statement = @oci_parse($this->conn->getResource(),$sql);
-        $success = @oci_execute($statement,OCI_DEFAULT);
+        $statement = @oci_parse($this->conn->getResource(), $sql);
+        $success = @oci_execute($statement, OCI_DEFAULT);
         if (!$success) {
             throw new SQLException("Could Not Get Primary Keys");
         }
 
         // Loop through the returned results, grouping the same key_name
-		// together adding each column for that key.
+        // together adding each column for that key.
 
-        while ( $statement && $row = oci_fetch_assoc( $statement )) {
-            $row = array_change_key_case($row,CASE_LOWER);
+        while ($statement && $row = oci_fetch_assoc($statement)) {
+            $row = array_change_key_case($row, CASE_LOWER);
 
-            $name = $row['foreign_key_name'];            
+            $name = $row['foreign_key_name'];
 
             $foreignTable = $this->database->getTable($row['foreign_table']);
             $foreignColumn = $foreignTable->getColumn($row['foreign_column']);
 
-            $localTable   = $this->database->getTable($row['local_table']);    
+            $localTable   = $this->database->getTable($row['local_table']);
             $localColumn   = $localTable->getColumn($row['local_column']);
 
             if (!isset($this->foreignKeys[$name])) {
                 $this->foreignKeys[$name] = new ForeignKeyInfo($name);
             }
 
-			switch ( $row[ 'on_delete' ] )
-			{
-				case 'CASCADE':
-					$onDelete	= ForeignKeyInfo::CASCADE;
-					break;
+            switch ($row[ 'on_delete' ]) {
+                case 'CASCADE':
+                    $onDelete	= ForeignKeyInfo::CASCADE;
+                    break;
 
-				case 'SET NULL':
-					$onDelete	= ForeignKeyInfo::SETNULL;
-					break;
+                case 'SET NULL':
+                    $onDelete	= ForeignKeyInfo::SETNULL;
+                    break;
 
-				default:
-				case 'NO ACTION':
-					$onDelete	= ForeignKeyInfo::NONE;
-					break;
-			}
+                default:
+                case 'NO ACTION':
+                    $onDelete	= ForeignKeyInfo::NONE;
+                    break;
+            }
 
-			// addReference( local, foreign, onDelete, onUpdate )
-			// Oracle doesn't support 'on update'
+            // addReference( local, foreign, onDelete, onUpdate )
+            // Oracle doesn't support 'on update'
             $this->foreignKeys[ $name ]->addReference(
-				$localColumn
-				, $foreignColumn
-				, $onDelete
-			);
+                $localColumn,
+                $foreignColumn,
+                $onDelete
+            );
         }
-        
+
         $this->fksLoaded = true;
     }
-    
+
 }

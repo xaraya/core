@@ -28,8 +28,8 @@ require_once 'creole/metadata/DatabaseInfo.php';
  * @version   $Revision: 69 $
  * @package   creole.drivers.mysql.metadata
  */
-class LdapDatabaseInfo extends DatabaseInfo {
-
+class LdapDatabaseInfo extends DatabaseInfo
+{
     /**
      * Ldap does not support tables.
      *
@@ -38,7 +38,7 @@ class LdapDatabaseInfo extends DatabaseInfo {
      */
     protected function initTables()
     {
-    		throw new SQLException("Ldap does not support tables.");
+        throw new SQLException("Ldap does not support tables.");
     }
 
     /**

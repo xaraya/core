@@ -18,19 +18,19 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/Statement.php';
 require_once 'creole/common/StatementCommon.php';
 
 /**
  * MySQL Statement
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
- * @author    Stig Bakken <ssb@fast.no> 
+ * @author    Stig Bakken <ssb@fast.no>
  * @author    Lukas Smith
  * @version   $Revision: 1.1 $
  * @package   creole.drivers.mysql
- */ 
-class MySQLStatement extends StatementCommon implements Statement {   
-    
+ */
+class MySQLStatement extends StatementCommon implements Statement
+{
 }

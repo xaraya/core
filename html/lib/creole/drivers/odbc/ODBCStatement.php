@@ -36,24 +36,22 @@ class ODBCStatement extends StatementCommon implements Statement
      */
     public function executeQuery($sql, $fetchmode = null)
     {
-        if ($this->resultSet)
-        {
+        if ($this->resultSet) {
             $this->resultSet->close();
             $this->resultSet = null;
         }
 
         $this->updateCount = null;
 
-        if ($this->conn->getAdapter()->hasLimitOffset())
-        {
-            if ($this->limit > 0 || $this->offset > 0)
+        if ($this->conn->getAdapter()->hasLimitOffset()) {
+            if ($this->limit > 0 || $this->offset > 0) {
                 $this->conn->applyLimit($sql, $this->offset, $this->limit);
+            }
         }
 
         $this->resultSet = $this->conn->executeQuery($sql, $fetchmode);
 
-        if (!$this->conn->getAdapter()->hasLimitOffset())
-        {
+        if (!$this->conn->getAdapter()->hasLimitOffset()) {
             $this->resultSet->_setOffset($this->offset);
             $this->resultSet->_setLimit($this->limit);
         }

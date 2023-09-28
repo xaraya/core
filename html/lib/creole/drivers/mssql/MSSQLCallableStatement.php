@@ -25,8 +25,8 @@ include_once 'creole/CreoleTypes.php';
 
 /**
  * MS SQL Server class to handle stored procedure execution.
- * 
- * Developer note: 
+ *
+ * Developer note:
  *
  *    There is no CallableStatement superclass.  Unlike JDBC, Creole
  *    uses abstract parent classes rather than interfaces -- in order
@@ -39,11 +39,11 @@ include_once 'creole/CreoleTypes.php';
  * @version $Revision: 1.20 $
  * @package creole.drivers.mssql
  */
-class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableStatement {
-    
+class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableStatement
+{
     /** Output variables */
     private $boundOutVars = array();
-    
+
     /**
      * Match Creole types to SQL Server types
      * @var array
@@ -64,9 +64,9 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
         CreoleTypes::TIMESTAMP => SQLVARCHAR,
         CreoleTypes::VARBINARY => SQLVARCHAR,
         CreoleTypes::NUMERIC => SQLINT4,
-        CreoleTypes::DECIMAL => SQLFLT8                                        
+        CreoleTypes::DECIMAL => SQLFLT8
     );
-    
+
     /**
      * Statement created by mssql_init()
      * @var resource
@@ -79,10 +79,10 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
      * @var resource
      */
     private $result;
-    
+
     /**
      * Construct new MSSQLCallableStatement.
-     * 
+     *
      * @param Connection $conn
      * @param resource $stmt
      */
@@ -90,8 +90,8 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     {
         $this->conn = $conn;
         $this->stmt = $stmt;
-    }   
-    
+    }
+
     /**
      * @see CallableStatement::getResource()
      */
@@ -99,51 +99,56 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     {
         return $this->stmt;
     }
-        
+
     /**
      * @see CallableStatement::close()
      */
-    function close()
+    public function close()
     {
         @mssql_free_statement($this->stmt);
         $this->rsFetchCount = 0;
     }
-    
+
     /**
      * @see CallableStatement::executeQuery()
      */
-    function executeQuery($p1 = null, $fetchmode = null)
+    public function executeQuery($p1 = null, $fetchmode = null)
     {
         $params = null;
         if ($fetchmode !== null) {
             $params = $p1;
         } elseif ($p1 !== null) {
-            if (is_array($p1)) $params = $p1;
-            else $fetchmode = $p1;
-        }
-        
-        if ($params) {
-            for($i=0,$cnt=count($params); $i < $cnt; $i++) {
-                $this->set($i+1, $params[$i]);
+            if (is_array($p1)) {
+                $params = $p1;
+            } else {
+                $fetchmode = $p1;
             }
-        }                
-        
+        }
+
+        if ($params) {
+            for($i = 0,$cnt = count($params); $i < $cnt; $i++) {
+                $this->set($i + 1, $params[$i]);
+            }
+        }
+
         $this->result = mssql_execute($this->stmt);
         if (!$this->result) {
             throw new SQLException('unable to execute callable statement', mssql_get_last_message());
         }
-        
+
         return new MSSQLResultSet($this->conn, $this->result, $fetchmode, $this->offset, $this->limit);
     }
-    
+
     /**
      * @see CallableStatement::getMoreResults()
      */
-    function getMoreResults()
+    public function getMoreResults()
     {
-        $this->rsFetchCount++; // we track this because 
+        $this->rsFetchCount++; // we track this because
         $hasMore = mssql_next_result($this->result);
-        if ($this->resultSet) $this->resultSet->close();                    
+        if ($this->resultSet) {
+            $this->resultSet->close();
+        }
         if ($hasMore) {
             $clazz = $this->resultClass;
             $this->resultSet = new $clazz($this, $this->result);
@@ -156,17 +161,19 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     /**
      * @see CallableStatement::registerOutParameter()
      */
-    function registerOutParameter($paramIndex, $sqlType, $maxLength = null)
+    public function registerOutParameter($paramIndex, $sqlType, $maxLength = null)
     {
         mssql_bind($this->stmt, $paramIndex, $this->boundOutVars[$paramIndex], self::$typeMap[$sqlType], true, false, $maxLength);
     }
-    
+
     /**
      * @see CallableStatement::setArray()
      */
-    function setArray($paramIndex, $value, $out = false) 
+    public function setArray($paramIndex, $value, $out = false)
     {
-        if ($out) $this->boundOutVars[$paramIndex] = &$value; // reference means that changes to value, will be reflected
+        if ($out) {
+            $this->boundOutVars[$paramIndex] = &$value;
+        } // reference means that changes to value, will be reflected
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
@@ -178,9 +185,11 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     /**
      * @see CallableStatement::setBoolean()
      */
-    function setBoolean($paramIndex, $value, $out = false) 
+    public function setBoolean($paramIndex, $value, $out = false)
     {
-        if ($out) $this->boundOutVars[$paramIndex] = &$value; // reference means that changes to value, will be reflected        
+        if ($out) {
+            $this->boundOutVars[$paramIndex] = &$value;
+        } // reference means that changes to value, will be reflected
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
@@ -188,12 +197,12 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
             mssql_bind($this->stmt, $paramIndex, $value, SQLBIT, $out);
         }
     }
-    
+
 
     /**
      * @see CallableStatement::setBlob()
      */
-    function setBlob($paramIndex, $blob, $out = false) 
+    public function setBlob($paramIndex, $blob, $out = false)
     {
         if ($blob === null) {
             $this->setNull($paramIndex);
@@ -201,16 +210,18 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
             if (is_object($blob)) {
                 $blob = $blob->__toString();
             }
-            if ($out) $this->boundOutVars[$paramIndex] = &$blob; // reference means that changes to value, will be reflected        
+            if ($out) {
+                $this->boundOutVars[$paramIndex] = &$blob;
+            } // reference means that changes to value, will be reflected
             $data = unpack("H*hex", $blob);
             mssql_bind($this->stmt, $paramIndex, $data, SQLTEXT, $out);
         }
-    } 
-    
+    }
+
     /**
      * @see CallableStatement::setClob()
      */
-    function setClob($paramIndex, $clob, $out = false) 
+    public function setClob($paramIndex, $clob, $out = false)
     {
         if ($clob === null) {
             $this->setNull($paramIndex);
@@ -218,7 +229,9 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
             if (is_object($clob)) {
                 $clob = $clob->__toString();
             }
-            if ($out) $this->boundOutVars[$paramIndex] = &$clob; // reference means that changes to value, will be reflected
+            if ($out) {
+                $this->boundOutVars[$paramIndex] = &$clob;
+            } // reference means that changes to value, will be reflected
             mssql_bind($this->stmt, $paramIndex, $clob, SQLTEXT, $out);
         }
     }
@@ -226,23 +239,29 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
     /**
      * @see CallableStatement::setDate()
      */
-    function setDate($paramIndex, $value, $out = false) 
+    public function setDate($paramIndex, $value, $out = false)
     {
-        if ($out) $this->boundOutVars[$paramIndex] = &$value; // reference means that changes to value, will be reflected
+        if ($out) {
+            $this->boundOutVars[$paramIndex] = &$value;
+        } // reference means that changes to value, will be reflected
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
-            if (is_numeric($value)) $value = date("Y-m-d", $value);
+            if (is_numeric($value)) {
+                $value = date("Y-m-d", $value);
+            }
             mssql_bind($this->stmt, $paramIndex, $value, SQLVARCHAR, $out);
         }
-    } 
-        
+    }
+
     /**
      * @see CallableStatement::setFloat()
      */
-    function setFloat($paramIndex, $value, $out = false) 
+    public function setFloat($paramIndex, $value, $out = false)
     {
-        if ($out) $this->boundOutVars[$paramIndex] = &$value; // reference means that changes to value, will be reflected
+        if ($out) {
+            $this->boundOutVars[$paramIndex] = &$value;
+        } // reference means that changes to value, will be reflected
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
@@ -250,228 +269,260 @@ class MSSQLCallableStatement extends MSSQLPreparedStatement implements CallableS
             mssql_bind($this->stmt, $paramIndex, $value, SQLFLT8, $out);
         }
     }
-    
+
     /**
      * @see CallableStatement::setInt()
      */
-    function setInt($paramIndex, $value, $out = false) 
+    public function setInt($paramIndex, $value, $out = false)
     {
-        if ($out) $this->boundOutVars[$paramIndex] = &$value; // reference means that changes to value, will be reflected
+        if ($out) {
+            $this->boundOutVars[$paramIndex] = &$value;
+        } // reference means that changes to value, will be reflected
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
             $value = (int) $value;
             mssql_bind($this->stmt, $paramIndex, $value, SQLINT4, $out);
         }
-    }    
-    
+    }
+
     /**
      * @see CallableStatement::setNull()
      */
-    function setNull($paramIndex) 
+    public function setNull($paramIndex)
     {
         // hopefully type isn't essential here :)
         $value = null; // wants a var to pass by reference
-        mssql_bind($this->stmt, $paramIndex, $value, $type=null, $out=false, $is_null=true);
+        mssql_bind($this->stmt, $paramIndex, $value, $type = null, $out = false, $is_null = true);
     }
 
     /**
      * @see CallableStatement::setString()
      */
-    function setString($paramIndex, $value, $out = false) 
-    {    
-        if ($out) $this->boundOutVars[$paramIndex] = &$value; // reference means that changes to value, will be reflected
+    public function setString($paramIndex, $value, $out = false)
+    {
+        if ($out) {
+            $this->boundOutVars[$paramIndex] = &$value;
+        } // reference means that changes to value, will be reflected
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
-            $value = (string) $value;            
-            mssql_bind($this->stmt, $paramIndex, $value, SQLVARCHAR, $out);
-        }
-    } 
-    
-    /**
-     * @see CallableStatement::setTime()
-     */
-    function setTime($paramIndex, $value, $out = false) 
-    {    
-        if ($out) $this->boundOutVars[$paramIndex] = &$value; // reference means that changes to value, will be reflected
-        if ($value === null) {
-            $this->setNull($paramIndex);
-        } else {
-            if (is_numeric($value)) $value = date("H:i:s", $value);
+            $value = (string) $value;
             mssql_bind($this->stmt, $paramIndex, $value, SQLVARCHAR, $out);
         }
     }
-    
+
     /**
-     * @see CallableStatement::setTimestamp()
+     * @see CallableStatement::setTime()
      */
-    function setTimestamp($paramIndex, $value, $out = false) 
+    public function setTime($paramIndex, $value, $out = false)
     {
-        if ($out) $this->boundOutVars[$paramIndex] = &$value; // reference means that changes to value, will be reflected
+        if ($out) {
+            $this->boundOutVars[$paramIndex] = &$value;
+        } // reference means that changes to value, will be reflected
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
-            if (is_numeric($value)) $value = date('Y-m-d H:i:s', $value);
+            if (is_numeric($value)) {
+                $value = date("H:i:s", $value);
+            }
             mssql_bind($this->stmt, $paramIndex, $value, SQLVARCHAR, $out);
         }
-    }            
-        
+    }
+
+    /**
+     * @see CallableStatement::setTimestamp()
+     */
+    public function setTimestamp($paramIndex, $value, $out = false)
+    {
+        if ($out) {
+            $this->boundOutVars[$paramIndex] = &$value;
+        } // reference means that changes to value, will be reflected
+        if ($value === null) {
+            $this->setNull($paramIndex);
+        } else {
+            if (is_numeric($value)) {
+                $value = date('Y-m-d H:i:s', $value);
+            }
+            mssql_bind($this->stmt, $paramIndex, $value, SQLVARCHAR, $out);
+        }
+    }
+
     /**
      * @see CallableStatement::getArray()
      */
-    function getArray($paramIndex) 
+    public function getArray($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
         return (array) unserialize($this->boundOutVars[$paramIndex]);
-    } 
+    }
 
     /**
      * @see CallableStatement::getBoolean()
      */
-    function getBoolean($paramIndex) 
+    public function getBoolean($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
-        return (boolean) $this->boundOutVars[$paramIndex];
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
+        return (bool) $this->boundOutVars[$paramIndex];
     }
-            
+
     /**
      * @see CallableStatement::getBlob()
      */
-    function getBlob($paramIndex) 
+    public function getBlob($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
         require_once 'creole/util/Blob.php';
         $b = new Blob();
         $b->setContents($this->boundOutVars[$paramIndex]);
         return $b;
-    }     
+    }
 
     /**
      * @see CallableStatement::getClob()
      */
-    function getClob($paramIndex) 
+    public function getClob($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
         require_once 'creole/util/Clob.php';
         $c = new Clob();
         $c->setContents($this->boundOutVars[$paramIndex]);
         return $c;
-    } 
-    
+    }
+
     /**
      * @see CallableStatement::getDate()
      */
-    function getDate($paramIndex, $format = '%Y-%m-%d') 
+    public function getDate($paramIndex, $format = '%Y-%m-%d')
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
-        
-        $ts = strtotime($this->boundOutVars[$paramIndex]);        
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
+
+        $ts = strtotime($this->boundOutVars[$paramIndex]);
         if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
             throw new SQLException("Unable to convert value at column " . $paramIndex . " to timestamp: " . $this->boundOutVars[$paramIndex]);
-        }        
+        }
         if (strpos($format, '%') !== false) {
             return strftime($format, $ts);
         } else {
             return date($format, $ts);
         }
-        
+
         return $this->boundOutVars[$paramIndex];
-    } 
+    }
 
     /**
      * @param mixed $paramIndex Column name (string) or index (int).
      * @return float
      */
-    function getFloat($paramIndex) 
+    public function getFloat($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
         return (float) $this->boundOutVars[$paramIndex];
     }
 
     /**
      * @see CallableStatement::getInt()
      */
-    function getInt($paramIndex) 
+    public function getInt($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
         return (int) $this->boundOutVars[$paramIndex];
-    }            
+    }
 
     /**
      * @see CallableStatement::getString()
      */
-    function getString($paramIndex) 
+    public function getString($paramIndex)
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
         return (string) $this->boundOutVars[$paramIndex];
-    } 
+    }
 
     /**
      * @see CallableStatement::getTime()
      */
-    function getTime($paramIndex, $format='%X') 
+    public function getTime($paramIndex, $format = '%X')
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
-        
-        $ts = strtotime($this->boundOutVars[$paramIndex]);        
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
+
+        $ts = strtotime($this->boundOutVars[$paramIndex]);
         if ($ts === -1  || $ts === false) { // in PHP 5.1 return value changes to FALSE
             throw new SQLException("Unable to convert value at column " . $paramIndex . " to timestamp: " . $this->boundOutVars[$paramIndex]);
-        }        
+        }
         if (strpos($format, '%') !== false) {
             return strftime($format, $ts);
         } else {
             return date($format, $ts);
         }
-            
+
     }
 
     /**
      * @see CallableStatement::getTimestamp()
      */
-    function getTimestamp($paramIndex, $format = 'Y-m-d H:i:s') 
+    public function getTimestamp($paramIndex, $format = 'Y-m-d H:i:s')
     {
         if (!array_key_exists($paramIndex, $this->boundOutVars)) {
             throw new SQLException('Requesting variable not bound to output var: '.$paramIndex);
         }
-        if ($this->boundOutVars[$paramIndex] === null) { return null; }
-                
-        $ts = strtotime($this->boundOutVars[$paramIndex]);        
+        if ($this->boundOutVars[$paramIndex] === null) {
+            return null;
+        }
+
+        $ts = strtotime($this->boundOutVars[$paramIndex]);
         if ($ts === -1 || $ts === false) { // in PHP 5.1 return value changes to FALSE
             throw new SQLException("Unable to convert value at column " . $paramIndex . " to timestamp: " . $this->boundOutVars[$paramIndex]);
-        }        
+        }
         if (strpos($format, '%') !== false) {
             return strftime($format, $ts);
         } else {
             return date($format, $ts);
         }
-    }    
+    }
 
 }

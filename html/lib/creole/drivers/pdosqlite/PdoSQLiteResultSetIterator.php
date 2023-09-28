@@ -21,18 +21,18 @@
 
 /**
  * Optimized iterator for SQLite.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.6 $
  * @package   creole.drivers.sqlite
  */
-class PdoSQLiteResultSetIterator implements Iterator {
-
+class PdoSQLiteResultSetIterator implements Iterator
+{
     private $result;
     private $pos = 0;
     private $fetchmode;
     private $row_count;
-    
+
     /**
      * Construct the iterator.
      * @param SQLiteResultSet $rs
@@ -43,44 +43,44 @@ class PdoSQLiteResultSetIterator implements Iterator {
         $this->fetchmode = $rs->getFetchmode();
         $this->row_count = $rs->getRecordCount();
     }
-    
+
     /**
      * This method actually has no effect, since we do not rewind ResultSet for iteration.
      */
-    function rewind()
-    {        
+    public function rewind(): void
+    {
         sqlite_rewind($this->result);
     }
-    
-    function valid()
+
+    public function valid(): bool
     {
-        return ( $this->pos < $this->row_count );
+        return ($this->pos < $this->row_count);
     }
-    
+
     /**
      * Returns the cursor position.  Note that this will not necessarily
      * be 1 for the first row, since no rewind is performed at beginning
      * of iteration.
      * @return int
      */
-    function key()
+    public function key(): mixed
     {
         return $this->pos;
     }
-    
+
     /**
      * Returns the row (assoc array) at current cursor pos.
-     * @return array
+     * @return array<mixed>
      */
-    function current()
+    public function current(): mixed
     {
-       return sqlite_fetch_array($this->result, $this->fetchmode);
+        return sqlite_fetch_array($this->result, $this->fetchmode);
     }
-    
+
     /**
      * Advances internal cursor pos.
      */
-    function next()
+    public function next(): void
     {
         $this->pos++;
     }

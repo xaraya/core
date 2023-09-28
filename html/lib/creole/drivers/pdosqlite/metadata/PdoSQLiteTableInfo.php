@@ -18,62 +18,67 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/drivers/sqlite/metadata/SQLiteTableInfo.php';
 
 /**
  * PdoSQLite implementation of TableInfo.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @author    Randy Syring <randy@rcs-comp.com>
  * @version   $Revision: 1.8 $
  * @package   creole.drivers.sqlite.metadata
  */
-class PdoSQLiteTableInfo extends SQLiteTableInfo {
-    
+class PdoSQLiteTableInfo extends SQLiteTableInfo
+{
     protected $statement;
-    
+
     protected $i2statement;
-    
-    protected function prepTable() {
+
+    protected function prepTable()
+    {
         $sql = 'PRAGMA table_info('.$this->name.')';
-        
+
         try {
             $this->statement = $this->dblink->prepare($sql);
             $this->statement->execute();
-        } catch( PDOException $e ) {
+        } catch(PDOException $e) {
             throw new SQLException('Could not get table info', $e->getMessage(), $sql);
         }
     }
 
-    protected function getRow() {
+    protected function getRow()
+    {
         return $this->statement->fetch(PDO::FETCH_ASSOC);
     }
-    
-    protected function prepIndex1() {
+
+    protected function prepIndex1()
+    {
         $sql = "PRAGMA index_list('".$this->name."')";
-                
+
         try {
             $this->statement = $this->dblink->prepare($sql);
             $this->statement->execute();
-        } catch( PDOException $e ) {
+        } catch(PDOException $e) {
             throw new SQLException('Could not get index info', $e->getMessage(), $sql);
         }
     }
-    
-    protected function prepIndex2($name) {
+
+    protected function prepIndex2($name)
+    {
         $sql = "PRAGMA index_info('$name')";
-        
+
         try {
             $this->i2statement = $this->dblink->prepare($sql);
             $this->i2statement->execute();
-        } catch( PDOException $e ) {
+        } catch(PDOException $e) {
             throw new SQLException("Could not get index info for: $name", $e->getMessage(), $sql);
         }
     }
-    
-    protected function getI2Row() {
+
+    protected function getI2Row()
+    {
         return $this->i2statement->fetch(PDO::FETCH_ASSOC);
     }
-    
+
 }

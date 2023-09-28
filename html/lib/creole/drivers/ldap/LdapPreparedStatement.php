@@ -18,19 +18,19 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/PreparedStatement.php';
 require_once 'creole/common/PreparedStatementCommon.php';
 
 /**
  * MySQL subclass for prepared statements.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 69 $
  * @package   creole.drivers.mysql
  */
-class LdapPreparedStatement extends PreparedStatementCommon implements PreparedStatement {        
-    
+class LdapPreparedStatement extends PreparedStatementCommon implements PreparedStatement
+{
     /**
      * Quotes string using native mysql function (mysql_real_escape_string()).
      * @param string $str
@@ -38,7 +38,7 @@ class LdapPreparedStatement extends PreparedStatementCommon implements PreparedS
      */
     protected function escape($str)
     {
-        return mysql_real_escape_string($str, $this->conn->getResource());
-    }    
-    
+        return ldap_escape($str);
+    }
+
 }

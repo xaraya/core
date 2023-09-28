@@ -18,39 +18,41 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/metadata/DatabaseInfo.php';
 
 /**
  * Oracle (OCI8) implementation of DatabaseInfo.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.11 $
  * @package   creole.drivers.oracle.metadata
- */ 
-class OCI8DatabaseInfo extends DatabaseInfo {
-    
-    private $schema;
-           
-    public function __construct(Connection $conn) {
+ */
+class OCI8DatabaseInfo extends DatabaseInfo
+{
+    protected $schema;
+
+    public function __construct(Connection $conn)
+    {
         parent::__construct($conn);
-        
+
         $dsn = $conn->getDSN();
-        
+
         if (isset($dsn['schema'])) {
-        $this->schema = $dsn['schema'];
+            $this->schema = $dsn['schema'];
         } else {
-			// For Changing DB/Schema in Meta Data Interface
+            // For Changing DB/Schema in Meta Data Interface
             $this->schema = $dsn['username'];
         }
-            
-		$this->schema = strtoupper( $this->schema );
+
+        $this->schema = strtoupper($this->schema);
     }
-    
-    public function getSchema() {
+
+    public function getSchema()
+    {
         return $this->schema;
     }
-    
+
     /**
      * @throws SQLException
      * @return void
@@ -58,33 +60,32 @@ class OCI8DatabaseInfo extends DatabaseInfo {
     protected function initTables()
     {
         include_once 'creole/drivers/oracle/metadata/OCI8TableInfo.php';
-        
+
         $sql = "SELECT table_name
             FROM all_tables
             WHERE owner = '{$this->schema}'";
 
-        $statement = @oci_parse($this->conn->getResource(),$sql);
+        $statement = @oci_parse($this->conn->getResource(), $sql);
 
-        $success = @oci_execute($statement,OCI_DEFAULT);        
+        $success = @oci_execute($statement, OCI_DEFAULT);
         if (!$success) {
             throw new SQLException("Could not get tables", $this->conn->getResource()->nativeError($statement));
         }
-        while ( $statement && $row = oci_fetch_assoc( $statement ) )
-		{
-            $row = array_change_key_case($row,CASE_LOWER);
-            $this->tables[strtoupper($row['table_name'])] = new OCI8TableInfo($this,$row['table_name']);
+        while ($statement && $row = oci_fetch_assoc($statement)) {
+            $row = array_change_key_case($row, CASE_LOWER);
+            $this->tables[strtoupper($row['table_name'])] = new OCI8TableInfo($this, $row['table_name']);
         }
-    }            
-    
+    }
+
     /**
      * Oracle supports sequences.
      *
-     * @return void 
+     * @return void
      * @throws SQLException
      */
     protected function initSequences()
     {
         // throw new SQLException("MySQL does not support sequences natively.");
     }
-        
+
 }

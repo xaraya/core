@@ -33,7 +33,8 @@ require_once 'creole/common/ResultSetCommon.php';
  * @version   $Revision: 1.5 $
  * @package   creole.drivers.mysqli
  */
-class MySQLiResultSet extends ResultSetCommon implements ResultSet {
+class MySQLiResultSet extends ResultSetCommon implements ResultSet
+{
     /**
      * @see ResultSet::seek()
      */
@@ -41,8 +42,8 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet {
     {
         // MySQL rows start w/ 0, but this works, because we are
         // looking to move the position _before_ the next desired position
-         if (!@mysqli_data_seek($this->result, $rownum)) {
-                return false;
+        if (!@mysqli_data_seek($this->result, $rownum)) {
+            return false;
         }
 
         $this->cursorPos = $rownum;
@@ -103,7 +104,7 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet {
         if (isset($this->result) && is_resource($this->result)) {
             mysqli_free_result($this->result);
         } else {
-        // Remove it anyway
+            // Remove it anyway
             unset($this->result);
         }
         $this->fields = array();
@@ -135,7 +136,7 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet {
      * @return string
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
-    public function getTimestamp($column, $format='Y-m-d H:i:s')
+    public function getTimestamp($column, $format = 'Y-m-d H:i:s')
     {
         if (is_int($column)) {
             // because Java convention is to start at 1

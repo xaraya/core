@@ -30,8 +30,8 @@ require_once 'creole/drivers/odbc/adapters/ODBCAdapter.php';
  * @version   $Revision: 1.6 $
  * @package   creole.drivers.odbc
  */
-class ODBCConnection extends ConnectionCommon implements Connection {
-
+class ODBCConnection extends ConnectionCommon implements Connection
+{
     /**
      * Implements driver-specific behavior
      * @var ODBCAdapter
@@ -49,15 +49,17 @@ class ODBCConnection extends ConnectionCommon implements Connection {
      */
     public function connect($dsninfo, $flags = 0)
     {
-		if (!function_exists('odbc_connect'))
+        if (!function_exists('odbc_connect')) {
             throw new SQLException('odbc extension not loaded');
+        }
 
         $adapterclass = isset($dsninfo['adapter']) ? $dsninfo['adapter'] : null;
 
-        if (!$adapterclass)
+        if (!$adapterclass) {
             $adapterclass = 'ODBCAdapter';
-        else
+        } else {
             $adapterclass .= 'Adapter';
+        }
 
         Creole::import('creole.drivers.odbc.adapters.' . $adapterclass);
         $this->adapter = new $adapterclass();
@@ -65,22 +67,24 @@ class ODBCConnection extends ConnectionCommon implements Connection {
         $this->dsn = $dsninfo;
         $this->flags = $flags;
 
-        if ( !($this->flags & Creole::COMPAT_ASSOC_LOWER) && !$this->adapter->preservesColumnCase())
-        {
-            trigger_error('Connection created without Creole::COMPAT_ASSOC_LOWER, ' .
+        if (!($this->flags & Creole::COMPAT_ASSOC_LOWER) && !$this->adapter->preservesColumnCase()) {
+            trigger_error(
+                'Connection created without Creole::COMPAT_ASSOC_LOWER, ' .
                           'but driver does not support case preservation.',
-                          E_USER_WARNING);
+                E_USER_WARNING
+            );
             $this->flags != Creole::COMPAT_ASSOC_LOWER;
         }
 
         $persistent = ($flags & Creole::PERSISTENT) === Creole::PERSISTENT;
 
-        if ($dsninfo['database'])
+        if ($dsninfo['database']) {
             $odbcdsn = $dsninfo['database'];
-        elseif ($dsninfo['hostspec'])
+        } elseif ($dsninfo['hostspec']) {
             $odbcdsn = $dsninfo['hostspec'];
-        else
+        } else {
             $odbcdsn = 'localhost';
+        }
 
         $user = @$dsninfo['username'];
         $pw = @$dsninfo['password'];
@@ -89,8 +93,9 @@ class ODBCConnection extends ConnectionCommon implements Connection {
 
         $conn = @$connect_function($odbcdsn, $user, $pw, SQL_CUR_USE_IF_NEEDED);
 
-        if (!is_resource($conn))
+        if (!is_resource($conn)) {
             throw new SQLException('connect failed', $this->nativeError(), $odbcdsn);
+        }
 
         $this->dblink = $conn;
 
@@ -114,13 +119,12 @@ class ODBCConnection extends ConnectionCommon implements Connection {
         $this->adapter = null;
         $this->odbcresult = null;
 
-        if ($this->dblink !== null)
-        {
-            $ret = @odbc_close($this->dblink);
+        if ($this->dblink !== null) {
+            @odbc_close($this->dblink);
             $this->dblink = null;
         }
 
-        return $ret;
+        return null;
     }
 
     /**
@@ -137,10 +141,11 @@ class ODBCConnection extends ConnectionCommon implements Connection {
      */
     public function nativeError()
     {
-        if ($this->dblink && is_resource($this->dblink))
+        if ($this->dblink && is_resource($this->dblink)) {
             $errstr = '[' . @odbc_error($this->dblink) . '] ' . @odbc_errormsg($this->dblink);
-        else
+        } else {
             $errstr = '[' . @odbc_error() . '] ' . @odbc_errormsg();
+        }
 
         return $errstr;
     }
@@ -212,8 +217,9 @@ class ODBCConnection extends ConnectionCommon implements Connection {
      */
     public function applyLimit(&$sql, $offset, $limit)
     {
-        if ($this->adapter->hasLimitOffset())
+        if ($this->adapter->hasLimitOffset()) {
             $this->adapter->applyLimit($sql, $offset, $limit);
+        }
     }
 
     /**
@@ -221,13 +227,15 @@ class ODBCConnection extends ConnectionCommon implements Connection {
      */
     public function executeQuery($sql, $fetchmode = null)
     {
-        if ($this->odbcresult)
+        if ($this->odbcresult) {
             $this->odbcresult = null;
+        }
 
         $r = @odbc_exec($this->dblink, $sql);
 
-        if ($r === false)
+        if ($r === false) {
             throw new SQLException('Could not execute query', $this->nativeError(), $sql);
+        }
 
         $this->odbcresult = new ODBCResultResource($r);
 
@@ -239,13 +247,15 @@ class ODBCConnection extends ConnectionCommon implements Connection {
      */
     public function executeUpdate($sql)
     {
-        if ($this->odbcresult)
+        if ($this->odbcresult) {
             $this->odbcresult = null;
+        }
 
         $r = @odbc_exec($this->dblink, $sql);
 
-        if ($r === false)
+        if ($r === false) {
             throw new SQLException('Could not execute update', $this->nativeError(), $sql);
+        }
 
         $this->odbcresult = new ODBCResultResource($r);
 
@@ -266,7 +276,7 @@ class ODBCConnection extends ConnectionCommon implements Connection {
             }
         }
     }
-    
+
     /**
      * Commit the current transaction.
      * @throws SQLException
@@ -310,13 +320,15 @@ class ODBCConnection extends ConnectionCommon implements Connection {
      */
     public function getUpdateCount()
     {
-        if ($this->odbcresult === null)
+        if ($this->odbcresult === null) {
             return 0;
+        }
 
         $n = @odbc_num_rows($this->odbcresult->getHandle());
 
-        if ($n == -1)
+        if ($n == -1) {
             throw new SQLException('Could not retrieve update count', $this->nativeError());
+        }
 
         return (int) $n;
     }
@@ -344,14 +356,16 @@ class ODBCResultResource
 
     public function __construct($handle)
     {
-        if (is_resource($handle))
+        if (is_resource($handle)) {
             $this->handle = $handle;
+        }
     }
 
     public function __destruct()
     {
-        if ($this->handle !== null)
+        if ($this->handle !== null) {
             @odbc_free_result($this->handle);
+        }
     }
 
     public function getHandle()

@@ -18,7 +18,7 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/ResultSet.php';
 require_once 'creole/common/ResultSetCommon.php';
 
@@ -28,44 +28,44 @@ require_once 'creole/common/ResultSetCommon.php';
  * SQLite supports OFFSET / LIMIT natively; this means that no adjustments or checking
  * are performed.  We will assume that if the lmitSQL() operation failed that an
  * exception was thrown, and that OFFSET/LIMIT will never be emulated for SQLite.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.9 $
  * @package   creole.drivers.sqlite
  */
-class SQLiteResultSet extends ResultSetCommon implements ResultSet {
-    
+class SQLiteResultSet extends ResultSetCommon implements ResultSet
+{
     /**
      * Gets optimized SQLiteResultSetIterator.
      * @return SQLiteResultSetIterator
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         require_once 'creole/drivers/sqlite/SQLiteResultSetIterator.php';
         return new SQLiteResultSetIterator($this);
     }
-           
+
     /**
      * @see ResultSet::seek()
-     */ 
+     */
     public function seek($rownum)
     {
         // MySQL rows start w/ 0, but this works, because we are
         // looking to move the position _before_ the next desired position
-         if (!@sqlite_seek($this->result, $rownum)) {
-                return false;
+        if (!@sqlite_seek($this->result, $rownum)) {
+            return false;
         }
         $this->cursorPos = $rownum;
         return true;
     }
-    
+
     /**
      * @see ResultSet::next()
-     */ 
-    function next()
+     */
+    public function next()
     {
         $this->fields = sqlite_fetch_array($this->result, $this->fetchmode); // (ResultSet::FETCHMODE_NUM = SQLITE_NUM, etc.)
-           if (!$this->fields) {
+        if (!$this->fields) {
             $errno = sqlite_last_error($this->conn->getResource());
             if (!$errno) {
                 // We've advanced beyond end of recordset.
@@ -75,18 +75,18 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet {
                 throw new SQLException("Error fetching result", sqlite_error_string($errno));
             }
         }
-        
+
         // strip out the table part of the field names so we get
         // just the column part
         $keys = array_keys($this->fields);
-        foreach( $keys as $key ) {
-            if( ($pos = strpos($key, '.')) !== false ) {
-                $newkey = substr($key, $pos + 1 );
+        foreach($keys as $key) {
+            if(($pos = strpos($key, '.')) !== false) {
+                $newkey = substr($key, $pos + 1);
                 $this->fields[$newkey] = $this->fields[$key];
                 unset($this->fields[$key]);
             }
         }
-        
+
         // Advance cursor position
         $this->cursorPos++;
         return true;
@@ -102,23 +102,27 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet {
             throw new SQLException("Error fetching num rows", sqlite_error_string(sqlite_last_error($this->conn->getResource())));
         }
         return (int) $rows;
-    }    
+    }
 
     /**
      * Performs sqlite_udf_decode_binary on binary data.
      * @see ResultSet::getBlob()
      */
-    public function getBlob($column) 
+    public function getBlob($column)
     {
         $idx = (is_int($column) ? $column - 1 : $column);
-        if (!array_key_exists($idx, $this->fields)) { throw new SQLException("Invalid resultset column: " . $column); }
-        if ($this->fields[$idx] === null) { return null; }
+        if (!array_key_exists($idx, $this->fields)) {
+            throw new SQLException("Invalid resultset column: " . $column);
+        }
+        if ($this->fields[$idx] === null) {
+            return null;
+        }
         require_once 'creole/util/Blob.php';
         $b = new Blob();
         $b->setContents(sqlite_udf_decode_binary($this->fields[$idx]));
         return $b;
-    }    
-    
+    }
+
     /**
      * Simply empties array as there is no result free method for sqlite.
      * @see ResultSet::close()

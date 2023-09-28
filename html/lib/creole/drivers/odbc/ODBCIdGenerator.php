@@ -13,8 +13,8 @@ require_once 'creole/IdGenerator.php';
  * @version   $Revision: 1.2 $
  * @package   creole.drivers.odbc
  */
-class ODBCIdGenerator implements IdGenerator {
-
+class ODBCIdGenerator implements IdGenerator
+{
     /** Connection object that instantiated this class */
     private $conn;
 
@@ -57,28 +57,27 @@ class ODBCIdGenerator implements IdGenerator {
      */
     public function getId($seqname = null)
     {
-        if ($seqname === null)
+        if ($seqname === null) {
             throw new SQLException('You must specify the sequence name when calling getId() method.');
+        }
 
         $triedcreate = false;
 
-        while (1)
-        {
-            try
-            {
+        while (1) {
+            try {
                 $n = $this->conn->executeUpdate("UPDATE $seqname SET id = id + 1", ResultSet::FETCHMODE_NUM);
 
-                if ($n == 0)
+                if ($n == 0) {
                     throw new SQLException('Failed to update IdGenerator id', $this->conn->nativeError());
+                }
 
                 $rs = $this->conn->executeQuery("SELECT id FROM $seqname", ResultSet::FETCHMODE_NUM);
-            }
-            catch (SQLException $e)
-            {
+            } catch (SQLException $e) {
                 //$odbcerr = odbc_error($this->conn->getResource());
 
-                if ($triedcreate)// || ($odbcerr != 'S0000' && $odbcerr != 'S0002'))
+                if ($triedcreate) {// || ($odbcerr != 'S0000' && $odbcerr != 'S0002'))
                     throw $e;
+                }
 
                 $this->drop($seqname, true);
                 $this->create($seqname);
@@ -104,7 +103,7 @@ class ODBCIdGenerator implements IdGenerator {
         $rs->next();
         return $rs->getInt(1);
     }
-    
+
     public function getNextId($tableName)
     {
         // FIXME: the seq prefix is ad-hoc
@@ -112,7 +111,7 @@ class ODBCIdGenerator implements IdGenerator {
         return $this->getId($seqName);
     }
     // END XARAYA MODIFICATION
-    
+
     /**
      * Creates the sequence emulation table.
      */
@@ -130,7 +129,9 @@ class ODBCIdGenerator implements IdGenerator {
         try {
             $this->conn->executeUpdate("DROP TABLE $seqname");
         } catch (Exception $e) {
-            if (!$ignoreerrs) throw $e;
+            if (!$ignoreerrs) {
+                throw $e;
+            }
         }
     }
 

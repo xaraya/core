@@ -28,8 +28,8 @@ require_once 'creole/metadata/TableInfo.php';
  * @version   $Revision: 1.20 $
  * @package   creole.drivers.mysql.metadata
  */
-class MySQLTableInfoBase extends TableInfo {
-
+class MySQLTableInfoBase extends TableInfo
+{
     /** Loads the columns for this table. */
     protected function initColumns()
     {
@@ -58,13 +58,13 @@ class MySQLTableInfoBase extends TableInfo {
             $is_auto_increment = (strpos($row['Extra'], 'auto_increment') !== false);
             $size = null;
             $precision = null;
-			$scale = null;
-			
+            $scale = null;
+
             if (preg_match('/^(\w+)[\(]?([\d,]*)[\)]?( |$)/', $row['Type'], $matches)) {
                 //            colname[1]   size/precision[2]
                 $nativeType = $matches[1];
                 if ($matches[2]) {
-                    if ( ($cpos = strpos($matches[2], ',')) !== false) {
+                    if (($cpos = strpos($matches[2], ',')) !== false) {
                         $size = (int) substr($matches[2], 0, $cpos);
                         $precision = $size;
                         $scale = (int) substr($matches[2], $cpos + 1);
@@ -79,17 +79,19 @@ class MySQLTableInfoBase extends TableInfo {
             }
             //BLOBs can't have any default values in MySQL
             $default = preg_match('~blob|text~', $nativeType) ? null : $row['Default'];
-            $this->columns[$name] = new ColumnInfo($this,
-                                                   $name,
-                                                   MySQLTypes::getType($nativeType),
-                                                   $nativeType,
-                                                   $size,
-                                                   $precision,
-                                                   $scale,
-                                                   $is_nullable,
-                                                   $default,
-                                                   $is_auto_increment,
-                                                   $row);
+            $this->columns[$name] = new ColumnInfo(
+                $this,
+                $name,
+                MySQLTypes::getType($nativeType),
+                $nativeType,
+                $size,
+                $precision,
+                $scale,
+                $is_nullable,
+                $default,
+                $is_auto_increment,
+                $row
+            );
         }
 
         $this->colsLoaded = true;
@@ -101,7 +103,9 @@ class MySQLTableInfoBase extends TableInfo {
         include_once 'creole/metadata/PrimaryKeyInfo.php';
 
         // columns have to be loaded first
-        if (!$this->colsLoaded) $this->initColumns();
+        if (!$this->colsLoaded) {
+            $this->initColumns();
+        }
 
         if (!$this->database->selectDb($this->dbname)) {
             throw new SQLException('No database selected');
@@ -129,12 +133,15 @@ class MySQLTableInfoBase extends TableInfo {
     }
 
     /** Loads the indexes for this table. */
-    protected function initIndexes() {
+    protected function initIndexes()
+    {
 
         include_once 'creole/metadata/IndexInfo.php';
 
         // columns have to be loaded first
-        if (!$this->colsLoaded) $this->initColumns();
+        if (!$this->colsLoaded) {
+            $this->initColumns();
+        }
 
         if (!$this->database->selectDb($this->dbname)) {
             throw new SQLException('No database selected');
@@ -164,89 +171,92 @@ class MySQLTableInfoBase extends TableInfo {
         $this->indexesLoaded = true;
     }
 
-  /**
-   * Load foreign keys for supporting versions of MySQL.
-   * @author Tony Bibbs
-   */
-  protected function initForeignKeys() {
+    /**
+     * Load foreign keys for supporting versions of MySQL.
+     * @author Tony Bibbs
+     */
+    protected function initForeignKeys()
+    {
 
-    // First make sure we have supported version of MySQL:
-    $res = $this->database->sqlQuery("SELECT VERSION()");
-    $row = $this->database->fetchRow($res);
+        // First make sure we have supported version of MySQL:
+        $res = $this->database->sqlQuery("SELECT VERSION()");
+        $row = $this->database->fetchRow($res);
 
-    // Yes, it is OK to hardcode this...this was the first version of MySQL
-    // that supported foreign keys
-    if ($row[0] < '3.23.44') {
-       $this->fksLoaded = true;
-       return;
-    }
-
-    include_once 'creole/metadata/ForeignKeyInfo.php';
-
-    // columns have to be loaded first
-    if (!$this->colsLoaded) $this->initColumns();
-    if (!$this->database->selectDb($this->dbname)) {
-      throw new SQLException('No database selected');
-    }
-       // Get the CREATE TABLE syntax
-    $res = $this->database->sqlQuery("SHOW CREATE TABLE `" . $this->name . "`");
-    $row = $this->database->fetchRow($res);
-
-    // Get the information on all the foreign keys
-    $regEx = '/FOREIGN KEY \(`([^`]*)`\) REFERENCES `([^`]*)` \(`([^`]*)`\)(.*)/';
-    if (preg_match_all($regEx,$row[1],$matches)) {
-      $tmpArray = array_keys($matches[0]);
-      foreach ($tmpArray as $curKey) {
-        $name = $matches[1][$curKey];
-        $ftbl = $matches[2][$curKey];
-        $fcol = $matches[3][$curKey];
-        $fkey = $matches[4][$curKey];
-        if (!isset($this->foreignKeys[$name])) {
-          $this->foreignKeys[$name] = new ForeignKeyInfo($name);
-          if ($this->database->hasTable($ftbl)) {
-            $foreignTable = $this->database->getTable($ftbl);
-          } else {
-            $foreignTable = new $this->database->tableClassName($this->database, $ftbl);
-            $this->database->addTable($foreignTable);
-          }
-          if ($foreignTable->hasColumn($fcol)) {
-            $foreignCol = $foreignTable->getColumn($fcol);
-          } else {
-            $foreignCol = new ColumnInfo($foreignTable, $fcol);
-            $foreignTable->addColumn($foreignCol);
-          }
-
-          //typical for mysql is RESTRICT
-          $fkactions = array(
-            'ON DELETE'	=> ForeignKeyInfo::RESTRICT,
-            'ON UPDATE'	=> ForeignKeyInfo::RESTRICT,
-          );
-                              
-          if ($fkey) {
-            //split foreign key information -> search for ON DELETE and afterwords for ON UPDATE action
-            foreach (array_keys($fkactions) as $fkaction) {
-              $result = NULL;
-              preg_match('/' . $fkaction . ' (' . ForeignKeyInfo::CASCADE . '|' . ForeignKeyInfo::SETNULL . ')/', $fkey, $result);
-              if ($result && is_array($result) && isset($result[1])) {
-                $fkactions[$fkaction] = $result[1];
-              }
-            }
-          }
-
-          $this->foreignKeys[$name]->addReference($this->columns[$name], $foreignCol, $fkactions['ON DELETE'], $fkactions['ON UPDATE']);
+        // Yes, it is OK to hardcode this...this was the first version of MySQL
+        // that supported foreign keys
+        if ($row[0] < '3.23.44') {
+            $this->fksLoaded = true;
+            return;
         }
-      }
+
+        include_once 'creole/metadata/ForeignKeyInfo.php';
+
+        // columns have to be loaded first
+        if (!$this->colsLoaded) {
+            $this->initColumns();
+        }
+        if (!$this->database->selectDb($this->dbname)) {
+            throw new SQLException('No database selected');
+        }
+        // Get the CREATE TABLE syntax
+        $res = $this->database->sqlQuery("SHOW CREATE TABLE `" . $this->name . "`");
+        $row = $this->database->fetchRow($res);
+
+        // Get the information on all the foreign keys
+        $regEx = '/FOREIGN KEY \(`([^`]*)`\) REFERENCES `([^`]*)` \(`([^`]*)`\)(.*)/';
+        if (preg_match_all($regEx, $row[1], $matches)) {
+            $tmpArray = array_keys($matches[0]);
+            foreach ($tmpArray as $curKey) {
+                $name = $matches[1][$curKey];
+                $ftbl = $matches[2][$curKey];
+                $fcol = $matches[3][$curKey];
+                $fkey = $matches[4][$curKey];
+                if (!isset($this->foreignKeys[$name])) {
+                    $this->foreignKeys[$name] = new ForeignKeyInfo($name);
+                    if ($this->database->hasTable($ftbl)) {
+                        $foreignTable = $this->database->getTable($ftbl);
+                    } else {
+                        $foreignTable = new $this->database->tableClassName($this->database, $ftbl);
+                        $this->database->addTable($foreignTable);
+                    }
+                    if ($foreignTable->hasColumn($fcol)) {
+                        $foreignCol = $foreignTable->getColumn($fcol);
+                    } else {
+                        $foreignCol = new ColumnInfo($foreignTable, $fcol);
+                        $foreignTable->addColumn($foreignCol);
+                    }
+
+                    //typical for mysql is RESTRICT
+                    $fkactions = array(
+                      'ON DELETE'	=> ForeignKeyInfo::RESTRICT,
+                      'ON UPDATE'	=> ForeignKeyInfo::RESTRICT,
+                    );
+
+                    if ($fkey) {
+                        //split foreign key information -> search for ON DELETE and afterwords for ON UPDATE action
+                        foreach (array_keys($fkactions) as $fkaction) {
+                            $result = null;
+                            preg_match('/' . $fkaction . ' (' . ForeignKeyInfo::CASCADE . '|' . ForeignKeyInfo::SETNULL . ')/', $fkey, $result);
+                            if ($result && is_array($result) && isset($result[1])) {
+                                $fkactions[$fkaction] = $result[1];
+                            }
+                        }
+                    }
+
+                    $this->foreignKeys[$name]->addReference($this->columns[$name], $foreignCol, $fkactions['ON DELETE'], $fkactions['ON UPDATE']);
+                }
+            }
+        }
+        $this->fksLoaded = true;
+
     }
-    $this->fksLoaded = true;
-    
-  }
 
-  protected function initVendorSpecificInfo()
-  {
-      $res = $this->database->sqlQuery("SHOW TABLE STATUS LIKE '" . $this->name . "'");
-      $this->vendorSpecificInfo = $this->database->fetchAssoc($res);
+    protected function initVendorSpecificInfo()
+    {
+        $res = $this->database->sqlQuery("SHOW TABLE STATUS LIKE '" . $this->name . "'");
+        $this->vendorSpecificInfo = $this->database->fetchAssoc($res);
 
-      $this->vendorLoaded = true;
-  }
+        $this->vendorLoaded = true;
+    }
 
 }

@@ -31,8 +31,8 @@ require_once 'creole/common/ConnectionCommon.php';
  * @version   $Revision: 1.15 $
  * @package   creole.drivers.sqlite
  */
-class SQLiteConnection extends ConnectionCommon implements Connection {
-
+class SQLiteConnection extends ConnectionCommon implements Connection
+{
     /**
      * The case to use for SQLite results.
      * (0=nochange, 1=upper, 2=lower)
@@ -44,7 +44,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::connect()
      */
-    function connect($dsninfo, $flags = 0)
+    public function connect($dsninfo, $flags = 0)
     {
         if (!extension_loaded('sqlite')) {
             throw new SQLException('sqlite extension not loaded');
@@ -61,7 +61,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
         $persistent = ($flags & Creole::PERSISTENT === Creole::PERSISTENT);
 
         if (PHP_VERSION == '5.0.4' || PHP_VERSION == '5.0.5') {
-            $nochange = TRUE;
+            $nochange = true;
         } else {
             $nochange = !(($flags & Creole::COMPAT_ASSOC_LOWER) === Creole::COMPAT_ASSOC_LOWER);
         }
@@ -80,12 +80,12 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
 
         if ($file != ':memory:') {
             if (!file_exists($file)) {
-                if( !@touch($file) ) {
+                if(!@touch($file)) {
                     throw new SQLException("Unable to create SQLite database.  Check parent folder permissions.");
                 }
-                
+
                 chmod($file, $mode);
-                
+
                 if (!file_exists($file)) {
                     throw new SQLException("Unable to create SQLite database.");
                 }
@@ -99,7 +99,8 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
         }
 
         $connect_function = $persistent ? 'sqlite_popen' : 'sqlite_open';
-        if (!($conn = @$connect_function($file, $mode, $errmsg) )) {
+        $errmsg = '';
+        if (!($conn = @$connect_function($file, $mode, $errmsg))) {
             throw new SQLException("Unable to connect to SQLite database", $errmsg);
         }
 
@@ -115,9 +116,9 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
         return new SQLiteDatabaseInfo($this);
     }
 
-     /**
-     * @see Connection::getIdGenerator()
-     */
+    /**
+    * @see Connection::getIdGenerator()
+    */
     public function getIdGenerator()
     {
         require_once 'creole/drivers/sqlite/SQLiteIdGenerator.php';
@@ -136,7 +137,8 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::prepareCall()
      */
-    public function prepareCall($sql) {
+    public function prepareCall($sql)
+    {
         throw new SQLException('SQLite does not support stored procedures using CallableStatement.');
     }
 
@@ -152,11 +154,11 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::close()
      */
-    function close()
+    public function close()
     {
-        $ret = @sqlite_close($this->dblink);
+        @sqlite_close($this->dblink);
         $this->dblink = null;
-        return $ret;
+        return null;
     }
 
     /**
@@ -164,9 +166,9 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
      */
     public function applyLimit(&$sql, $offset, $limit)
     {
-        if ( $limit > 0 ) {
+        if ($limit > 0) {
             $sql .= " LIMIT " . $limit . ($offset > 0 ? " OFFSET " . $offset : "");
-        } elseif ( $offset > 0 ) {
+        } elseif ($offset > 0) {
             $sql .= " LIMIT -1 OFFSET " . $offset;
         }
     }
@@ -190,7 +192,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::executeUpdate()
      */
-    function executeUpdate($sql)
+    public function executeUpdate($sql)
     {
         $this->lastQuery = $sql;
         $result = @sqlite_query($this->dblink, $this->lastQuery);
@@ -249,7 +251,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection {
      *
      * @return int Number of rows affected by the last query.
      */
-    function getUpdateCount()
+    public function getUpdateCount()
     {
         return (int) @sqlite_changes($this->dblink);
     }

@@ -95,12 +95,11 @@ abstract class ODBCResultSetCommon extends ResultSetCommon
      * for the specified column name. Otherwise returns 0 (false).
      * @return int
      */
-    function getFieldNum($colname)
+    public function getFieldNum($colname)
     {
         $fieldnum = 0;
 
-        if ($this->fetchmode == ResultSet::FETCHMODE_ASSOC)
-        {
+        if ($this->fetchmode == ResultSet::FETCHMODE_ASSOC) {
             $keys = array_keys($this->fields);
             $fieldnum = array_search($colname, $keys);
         }
@@ -134,14 +133,14 @@ abstract class ODBCResultSetCommon extends ResultSetCommon
         odbc_binmode($this->result->getHandle(), $binmode);
         odbc_longreadlen($this->result->getHandle(), 4096);
 
-        while (1)
-        {
+        while (1) {
             $newdata = odbc_result($this->result->getHandle(), $fldNum);
 
-            if ($newdata === false)
+            if ($newdata === false) {
                 break;
-            else
+            } else {
                 $data .= $newdata;
+            }
         }
 
         // Restore the default binmode and longreadlen
@@ -154,34 +153,32 @@ abstract class ODBCResultSetCommon extends ResultSetCommon
 
         return $data;
     }
-    
+
     /**
      * Converts row fields to names if FETCHMODE_ASSOC is set.
      *
-     * @param array $row to convert.
+     * @param array<mixed> $row to convert.
      *
-     * @return array Converted row.
+     * @return array<mixed> Converted row.
      */
     protected function checkFetchMode(&$row)
     {
-        if ($this->fetchmode == ResultSet::FETCHMODE_ASSOC)
-        {
+        if ($this->fetchmode == ResultSet::FETCHMODE_ASSOC) {
             $newrow = array();
-            
-            for ($i = 0, $n = count($row); $i < $n; $i++)
-            {
-                $colname = @odbc_field_name($this->result->getHandle(), $i+1);
-                
+
+            for ($i = 0, $n = count($row); $i < $n; $i++) {
+                $colname = @odbc_field_name($this->result->getHandle(), $i + 1);
+
                 if ($this->lowerAssocCase) {
                     $colname = strtolower($colname);
                 }
-				
+
                 $newrow[$colname] = $row[$i];
             }
-            
-            $row =& $newrow;
+
+            $row = & $newrow;
         }
-        
+
         return $row;
     }
 

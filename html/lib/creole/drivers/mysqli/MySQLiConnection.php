@@ -31,13 +31,13 @@ include_once 'creole/drivers/mysqli/MySQLiResultSet.php';
  * @version   $Revision: 1.7 $
  * @package   creole.drivers.mysqli
  */
-class MySQLiConnection extends ConnectionCommon implements Connection {
-
+class MySQLiConnection extends ConnectionCommon implements Connection
+{
     /**
      * PHP 8 fix
      */
     private $lastQuery;
-    
+
     /**
      * Connect to a database and log in as the specified user.
      *
@@ -56,8 +56,8 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
         $this->dsn = $dsninfo;
         $this->flags = $flags;
 
-		$dbhost = null;
-		
+        $dbhost = null;
+
         if (isset($dsninfo['protocol']) && $dsninfo['protocol'] == 'unix') {
             $dbhost = ':' . $dsninfo['socket'];
         } else {
@@ -68,23 +68,23 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
             }
         }
 
-		$host = !empty($dsninfo['hostspec']) ? $dsninfo['hostspec'] : null;
+        $host = !empty($dsninfo['hostspec']) ? $dsninfo['hostspec'] : null;
         $user = !empty($dsninfo['username']) ? $dsninfo['username'] : null;
         $pw = !empty($dsninfo['password']) ? $dsninfo['password'] : null;
-		$port = !empty($dsninfo['port']) ? $dsninfo['port'] : null;
-		$socket = !empty($dsninfo['socket']) ? $dsninfo['socket'] : null;
-		$database = !empty($dsninfo['database']) ? $dsninfo['database'] : null;
+        $port = !empty($dsninfo['port']) ? $dsninfo['port'] : null;
+        $socket = !empty($dsninfo['socket']) ? $dsninfo['socket'] : null;
+        $database = !empty($dsninfo['database']) ? $dsninfo['database'] : null;
 
-		$encoding = !empty($dsninfo['encoding']) ? $dsninfo['encoding'] : null;
-		
+        $encoding = !empty($dsninfo['encoding']) ? $dsninfo['encoding'] : null;
+
         @ini_set('track_errors', true);
 
-		$conn = mysqli_connect($host, $user, $pw, $database, $port, $socket);
+        $conn = mysqli_connect($host, $user, $pw, $database, $port, $socket);
 
         @ini_restore('track_errors');
 
         if (!$conn) {
-            if (($err = @mysqli_error()) != '') {
+            if (($err = @mysqli_error($conn)) != '') {
                 throw new SQLException("connect failed", $err);
             } elseif (empty($php_errormsg)) {
                 throw new SQLException("connect failed");
@@ -96,9 +96,9 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
         $this->dblink = $conn;
 
         if ($encoding) {
-			$this->dblink->set_charset( $encoding );
-            }
+            $this->dblink->set_charset($encoding);
         }
+    }
 
     /**
      * @see Connection::getDatabaseInfo()
@@ -130,7 +130,8 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
     /**
      * @see Connection::prepareCall()
      */
-    public function prepareCall($sql) {
+    public function prepareCall($sql)
+    {
         throw new SQLException('MySQL does not support stored procedures.');
     }
 
@@ -158,9 +159,9 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
      */
     public function applyLimit(&$sql, $offset, $limit)
     {
-        if ( $limit > 0 ) {
+        if ($limit > 0) {
             $sql .= " LIMIT " . ($offset > 0 ? $offset . ", " : "") . $limit;
-        } else if ( $offset > 0 ) {
+        } elseif ($offset > 0) {
             $sql .= " LIMIT " . $offset . ", 18446744073709551615";
         }
     }
@@ -204,7 +205,7 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
      */
     protected function beginTrans()
     {
-        if (!mysqli_autocommit($this->dblink, FALSE)) {
+        if (!mysqli_autocommit($this->dblink, false)) {
             throw new SQLException('Could not begin transaction', mysqli_error($this->dblink));
         }
     }
@@ -220,9 +221,9 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
             throw new SQLException('Can not commit transaction', mysqli_error($this->dblink));
         }
 
-        if (!mysqli_autocommit($this->dblink, TRUE)) {
+        if (!mysqli_autocommit($this->dblink, true)) {
             throw new SQLException('Could not set AUTOCOMMIT', mysqli_error($this->dblink));
-    }
+        }
     }
 
     /**
@@ -236,9 +237,9 @@ class MySQLiConnection extends ConnectionCommon implements Connection {
             throw new SQLException('Could not rollback transaction', mysqli_error($this->dblink));
         }
 
-        if (!mysqli_autocommit($this->dblink, TRUE)) {
+        if (!mysqli_autocommit($this->dblink, true)) {
             throw new SQLException('Could not set AUTOCOMMIT', mysqli_error($this->dblink));
-    }
+        }
 
     }
 

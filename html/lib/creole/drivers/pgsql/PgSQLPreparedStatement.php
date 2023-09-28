@@ -18,19 +18,19 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/PreparedStatement.php';
 require_once 'creole/common/PreparedStatementCommon.php';
 
 /**
  * PgSQL subclass for prepared statements.
- * 
+ *
  * @author Hans Lellelid <hans@xmpl.org>
  * @version $Revision: 1.14 $
  * @package creole.drivers.pgsql
  */
-class PgSQLPreparedStatement extends PreparedStatementCommon implements PreparedStatement {
-    
+class PgSQLPreparedStatement extends PreparedStatementCommon implements PreparedStatement
+{
     /**
      * Quotes string using native pgsql function (pg_escape_string).
      * @param string $str
@@ -40,10 +40,10 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
     {
         return pg_escape_string($str);
     }
-    
+
     /**
      * Recursive function to turn multi-dim array into str representation.
-     * @param array $arr
+     * @param array<mixed> $arr
      * @return string Array in pgsql-friendly string notation: {val1, val2} or {{sub1,sub2}, {sub3, sub4}}
      */
     private function arrayToStr($arr)
@@ -57,30 +57,31 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
                     $parts[] = '"' . $this->escape($el) . '"';
                 } else {
                     $parts[] = $el;
-                }                
+                }
             }
-        }        
+        }
         return '{' . implode(',', $parts) . '}';
     }
-    
+
     /**
      * Sets an array.
      * Unless a driver-specific method is used, this means simply serializing
      * the passed parameter and storing it as a string.
      * @param int $paramIndex
-     * @param array $value
+     * @param array<mixed> $value
      * @return void
      * @see PreparedStatement::setArray()
      */
-    function setArray($paramIndex, $value) 
+    public function setArray($paramIndex, $value)
     {
-        if( $paramIndex > $this->positionsCount || $paramIndex < 1) {
+        if($paramIndex > $this->positionsCount || $paramIndex < 1) {
             throw new SQLException('Cannot bind to invalid param index: '.$paramIndex);
         }
-        if ($value === null)
+        if ($value === null) {
             $this->setNull($paramIndex);
-        else
-            $this->boundInVars[$paramIndex] = "'" . $this->arrayToStr($value) . "'";        
+        } else {
+            $this->boundInVars[$paramIndex] = "'" . $this->arrayToStr($value) . "'";
+        }
     }
 
     /**
@@ -89,15 +90,16 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
      * @param boolean $value
      * @return void
      */
-    function setBoolean($paramIndex, $value) 
+    public function setBoolean($paramIndex, $value)
     {
-        if( $paramIndex > $this->positionsCount || $paramIndex < 1) {
+        if($paramIndex > $this->positionsCount || $paramIndex < 1) {
             throw new SQLException('Cannot bind to invalid param index: '.$paramIndex);
-        }        
-        if ($value === null)
+        }
+        if ($value === null) {
             $this->setNull($paramIndex);
-        else
+        } else {
             $this->boundInVars[$paramIndex] = ($value ? "'t'" : "'f'");
+        }
     }
 
     /**
@@ -106,51 +108,54 @@ class PgSQLPreparedStatement extends PreparedStatementCommon implements Prepared
      * @param mixed $blob Blob object or string containing data.
      * @return void
      */
-    function setBlob($paramIndex, $blob) 
-    {    
+    public function setBlob($paramIndex, $blob)
+    {
         if ($blob === null) {
             $this->setNull($paramIndex);
         } else {
             // they took magic __toString() out of PHP5.0.0; this sucks
             if (is_object($blob)) {
                 $blob = $blob->__toString();
-            }            
-            $this->boundInVars[$paramIndex] = "'" . pg_escape_bytea( $blob ) . "'";
-        }    
-        
-    }
-	
-	/**
-     * @param int $paramIndex
-     * @param string $value
-     * @return void
-     */
-    function setTime($paramIndex, $value) 
-    {        
-        if ($value === null) {
-            $this->setNull($paramIndex);
-        } else {
-            if ( is_numeric ( $value ) ) {
-	    	$value = date ( "H:i:s O", $value );
-	    } elseif ( is_object ( $value ) ) {
-	    	$value = date ( "H:i:s O", $value->getTime ( ) );
-	    }
-            $this->boundInVars [ $paramIndex ] = "'" . $this->escape ( $value ) . "'";
+            }
+            $this->boundInVars[$paramIndex] = "'" . pg_escape_bytea($blob) . "'";
         }
+
     }
-    
+
     /**
      * @param int $paramIndex
      * @param string $value
      * @return void
      */
-    function setTimestamp($paramIndex, $value) 
-    {        
+    public function setTime($paramIndex, $value)
+    {
         if ($value === null) {
             $this->setNull($paramIndex);
         } else {
-       	    if (is_numeric($value)) $value = date('Y-m-d H:i:s O', $value);
-       	    elseif (is_object($value)) $value = date("Y-m-d H:i:s O", $value->getTime());
+            if (is_numeric($value)) {
+                $value = date("H:i:s O", $value);
+            } elseif (is_object($value)) {
+                $value = date("H:i:s O", $value->getTime());
+            }
+            $this->boundInVars [ $paramIndex ] = "'" . $this->escape($value) . "'";
+        }
+    }
+
+    /**
+     * @param int $paramIndex
+     * @param string $value
+     * @return void
+     */
+    public function setTimestamp($paramIndex, $value)
+    {
+        if ($value === null) {
+            $this->setNull($paramIndex);
+        } else {
+            if (is_numeric($value)) {
+                $value = date('Y-m-d H:i:s O', $value);
+            } elseif (is_object($value)) {
+                $value = date("Y-m-d H:i:s O", $value->getTime());
+            }
             $this->boundInVars[$paramIndex] = "'".$this->escape($value)."'";
         }
     }

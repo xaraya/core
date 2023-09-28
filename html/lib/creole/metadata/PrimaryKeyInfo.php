@@ -26,8 +26,8 @@
  * @version   $Revision: 1.6 $
  * @package   creole.metadata
  */
-class PrimaryKeyInfo {
-
+class PrimaryKeyInfo
+{
     /** name of the primary key */
     private $name;
 
@@ -40,7 +40,7 @@ class PrimaryKeyInfo {
     /**
      * @param string $name The name of the foreign key.
      */
-    function __construct($name, $vendorInfo = array())
+    public function __construct($name, $vendorInfo = array())
     {
         $this->name = $name;
         $this->vendorSpecificInfo = $vendorInfo;
@@ -65,7 +65,7 @@ class PrimaryKeyInfo {
     }
 
     /**
-     * @return array ColumnInfo[]
+     * @return array<mixed> ColumnInfo[]
      */
     public function getColumns()
     {
@@ -74,7 +74,7 @@ class PrimaryKeyInfo {
 
     /**
      * Get vendor specific optional information for this primary key.
-     * @return array vendorSpecificInfo[]
+     * @return array<mixed> vendorSpecificInfo[]
      */
     public function getVendorSpecificInfo()
     {

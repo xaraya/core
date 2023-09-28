@@ -28,8 +28,8 @@ require_once 'creole/util/Lob.php';
  * @version   $Revision: 1.6 $
  * @package   creole.util
  */
-class Clob extends Lob {
-
+class Clob extends Lob
+{
     /**
      * Read LOB data from file.
      * @param string $file Filename may also be specified here (if not specified using setInputFile()).
@@ -47,7 +47,9 @@ class Clob extends Lob {
         }
         $data = null;
         $file = fopen($this->inFile, "rt");
-        while (!feof($file)) $data .= fgets($file, 4096);
+        while (!feof($file)) {
+            $data .= fgets($file, 4096);
+        }
         fclose($file);
         if ($data === false) {
             throw new Exception('Unable to read from file: '.$this->inFile);
@@ -74,8 +76,9 @@ class Clob extends Lob {
             throw new Exception('No data to write to file');
         }
         $fp = fopen($this->outFile, "wt");
-        if (fputs($fp, $this->data) === false)
+        if (fputs($fp, $this->data) === false) {
             throw new Exception('Unable to write to file: '.$this->outFile);
+        }
         fclose($fp);
     }
 
@@ -85,7 +88,7 @@ class Clob extends Lob {
      * @return void
      * @throws Exception if no file or contents.
      */
-    function dump()
+    public function dump()
     {
         if (!$this->data) {
 

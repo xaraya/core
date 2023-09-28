@@ -9,8 +9,8 @@ require_once 'creole/IdGenerator.php';
  * @version   $Revision: 1.4 $
  * @package   creole.drivers.sqlite
  */
-class SQLiteIdGenerator implements IdGenerator {
-    
+class SQLiteIdGenerator implements IdGenerator
+{
     /** Connection object that instantiated this class */
     private $conn;
 
@@ -23,15 +23,15 @@ class SQLiteIdGenerator implements IdGenerator {
     {
         $this->conn = $conn;
     }
-    
+
     /**
      * @see IdGenerator::isBeforeInsert()
      */
     public function isBeforeInsert()
     {
         return false;
-    }    
-    
+    }
+
     /**
      * @see IdGenerator::isAfterInsert()
      */
@@ -39,7 +39,7 @@ class SQLiteIdGenerator implements IdGenerator {
     {
         return true;
     }
-       
+
     /**
      * @see IdGenerator::getIdMethod()
      */
@@ -47,7 +47,7 @@ class SQLiteIdGenerator implements IdGenerator {
     {
         return self::AUTOINCREMENT;
     }
-    
+
     /**
      * @see IdGenerator::getId()
      */
@@ -55,14 +55,14 @@ class SQLiteIdGenerator implements IdGenerator {
     {
         return sqlite_last_insert_rowid($this->conn->getResource());
     }
-    
+
     // XARAYA MODIFICATION
     public function getNextId($tableName)
     {
         // We dont know it, return null
         return null;
     }
-    
+
     public function getLastId($tableName)
     {
         // Same as getId

@@ -29,7 +29,8 @@ require_once 'creole/common/PreparedStatementCommon.php';
  * @version   $Revision: 1.3 $
  * @package   creole.drivers.mysqli
  */
-class MySQLiPreparedStatement extends PreparedStatementCommon implements PreparedStatement {
+class MySQLiPreparedStatement extends PreparedStatementCommon implements PreparedStatement
+{
     /**
      * Quotes string using native MySQL function.
      * @param string $str

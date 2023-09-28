@@ -18,17 +18,17 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/Statement.php';
 require_once 'creole/common/StatementCommon.php';
 
 /**
  * Oracle (OCI8) Statement implementation.
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.2 $
  * @package   creole.drivers.oracle
- */ 
-class OCI8Statement extends StatementCommon implements Statement {
-    
+ */
+class OCI8Statement extends StatementCommon implements Statement
+{
 }

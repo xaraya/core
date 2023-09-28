@@ -31,8 +31,8 @@ require_once 'creole/metadata/DatabaseInfo.php';
  * @version   $Revision: 1.2 $
  * @package   creole.drivers.odbc.metadata
  */
-class ODBCDatabaseInfo extends DatabaseInfo {
-
+class ODBCDatabaseInfo extends DatabaseInfo
+{
     /**
      * @see DatabaseInfo::initTables()
      */
@@ -42,11 +42,11 @@ class ODBCDatabaseInfo extends DatabaseInfo {
 
         $result = @odbc_tables($this->conn->getResource());
 
-        if (!$result)
+        if (!$result) {
             throw new SQLException('Could not list tables', $this->conn->nativeError());
+        }
 
-        while (odbc_fetch_row($result))
-        {
+        while (odbc_fetch_row($result)) {
             $tablename = strtoupper(odbc_result($result, 'TABLE_NAME'));
             $this->tables[$tablename] = new ODBCTableInfo($this, $tablename);
         }

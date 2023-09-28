@@ -26,8 +26,8 @@
  * @version   $Revision: 1.7 $
  * @package   creole.metadata
  */
-class IndexInfo {
-
+class IndexInfo
+{
     /** name of the index */
     private $name;
 
@@ -40,7 +40,7 @@ class IndexInfo {
     /** additional vendor specific information */
     private $vendorSpecificInfo = array();
 
-    function __construct($name, $isUnique = false, $vendorInfo = array())
+    public function __construct($name, $isUnique = false, $vendorInfo = array())
     {
         $this->name = $name;
         $this->isUnique = $isUnique;
@@ -59,7 +59,7 @@ class IndexInfo {
 
     /**
      * Get vendor specific optional information for this index.
-     * @return array vendorSpecificInfo[]
+     * @return array<mixed> vendorSpecificInfo[]
      */
     public function getVendorSpecificInfo()
     {

@@ -28,6 +28,6 @@ require_once 'creole/drivers/mysql/metadata/MySQLTableInfoBase.php';
  * @version   $Revision: 1.20 $
  * @package   creole.drivers.mysql.metadata
  */
-class MySQLTableInfo extends MySQLTableInfoBase {
-
-        }
+class MySQLTableInfo extends MySQLTableInfoBase
+{
+}

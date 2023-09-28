@@ -9,8 +9,8 @@ require_once 'creole/IdGenerator.php';
  * @version   $Revision: 1.4 $
  * @package   creole.drivers.sqlite
  */
-abstract class PdoIdGeneratorCommon implements IdGenerator {
-    
+abstract class PdoIdGeneratorCommon implements IdGenerator
+{
     /** Connection object that instantiated this class */
     private $conn;
 
@@ -23,15 +23,15 @@ abstract class PdoIdGeneratorCommon implements IdGenerator {
     {
         $this->conn = $conn;
     }
-    
+
     /**
      * @see IdGenerator::isBeforeInsert()
      */
     public function isBeforeInsert()
     {
         return false;
-    }    
-    
+    }
+
     /**
      * @see IdGenerator::isAfterInsert()
      */
@@ -39,7 +39,7 @@ abstract class PdoIdGeneratorCommon implements IdGenerator {
     {
         return true;
     }
-       
+
     /**
      * @see IdGenerator::getIdMethod()
      */
@@ -47,7 +47,7 @@ abstract class PdoIdGeneratorCommon implements IdGenerator {
     {
         return self::AUTOINCREMENT;
     }
-    
+
     /**
      * @see IdGenerator::getId()
      */
@@ -55,5 +55,5 @@ abstract class PdoIdGeneratorCommon implements IdGenerator {
     {
         return $this->conn->getResource()->lastInsertId();
     }
-    
+
 }

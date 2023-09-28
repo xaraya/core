@@ -21,7 +21,7 @@
 
 /**
  * Basic ResultSet Iterator.
- * 
+ *
  * This can be returned by your class's getIterator() method, but of course
  * you can also implement your own (e.g. to get better performance, by using direct
  * driver calls and avoiding other side-effects inherent in ResultSet scrolling
@@ -30,7 +30,7 @@
  * Important: ResultSet iteration does rewind the resultset if it is not at the
  * start.  Not all drivers support reverse scrolling, so this may result in an
  * exception in some cases (Oracle).
- * 
+ *
  * Developer note:
  * The implementation of this class is a little weird because it fetches the
  * array _early_ in order to answer valid() w/o needing to know total num
@@ -44,15 +44,15 @@
  * }
  * unset($it);
  * </code>
- * 
+ *
  * @author    Hans Lellelid <hans@xmpl.org>
  * @version   $Revision: 1.3 $
  * @package   creole
  */
-class ResultSetIterator implements Iterator {
+class ResultSetIterator implements Iterator
+{
+    private $rs;
 
-    private $rs;    
-    
     /**
      * Construct the iterator.
      * @param ResultSet $rs
@@ -61,52 +61,52 @@ class ResultSetIterator implements Iterator {
     {
         $this->rs = $rs;
     }
-    
+
     /**
      * If not at start of resultset, this method will call seek(0).
      * @see ResultSet::seek()
      */
-    function rewind()
+    public function rewind(): void
     {
         if (!$this->rs->isBeforeFirst()) {
             $this->rs->seek(0);
         }
     }
-    
+
     /**
      * This method checks to see whether there are more results
      * by advancing the cursor position.
      * @see ResultSet::next()
      */
-    function valid()
+    public function valid(): bool
     {
         return $this->rs->next();
     }
-    
+
     /**
      * Returns the cursor position.
      * @return int
      */
-    function key()
+    public function key(): mixed
     {
         return $this->rs->getCursorPos();
     }
-    
+
     /**
      * Returns the row (assoc array) at current cursor pos.
-     * @return array
+     * @return array<mixed>
      */
-    function current()
+    public function current(): mixed
     {
-       return $this->rs->getRow();
+        return $this->rs->getRow();
     }
-    
+
     /**
      * This method does not actually do anything since we have already advanced
      * the cursor pos in valid().
      * @see valid()
      */
-    function next()
+    public function next(): void
     {
     }
 

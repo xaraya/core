@@ -18,7 +18,7 @@
  * and is licensed under the LGPL. For more information please see
  * <http://creole.phpdb.org>.
  */
- 
+
 require_once 'creole/IdGenerator.php';
 
 /**
@@ -28,8 +28,8 @@ require_once 'creole/IdGenerator.php';
  * @version   $Revision: 1.5 $
  * @package   creole.drivers.pgsql
  */
-class PgSQLIdGenerator implements IdGenerator {
-    
+class PgSQLIdGenerator implements IdGenerator
+{
     /** Connection object that instantiated this class */
     private $conn;
 
@@ -42,15 +42,15 @@ class PgSQLIdGenerator implements IdGenerator {
     {
         $this->conn = $conn;
     }
-    
+
     /**
      * @see IdGenerator::isBeforeInsert()
      */
     public function isBeforeInsert()
     {
         return true;
-    }    
-    
+    }
+
     /**
      * @see IdGenerator::isAfterInsert()
      */
@@ -58,7 +58,7 @@ class PgSQLIdGenerator implements IdGenerator {
     {
         return false;
     }
-        
+
     /**
      * @see IdGenerator::getIdMethod()
      */
@@ -66,7 +66,7 @@ class PgSQLIdGenerator implements IdGenerator {
     {
         return self::SEQUENCE;
     }
-    
+
     /**
      * @see IdGenerator::getId()
      */
@@ -75,11 +75,11 @@ class PgSQLIdGenerator implements IdGenerator {
         if ($name === null) {
             throw new SQLException("You must specify the sequence name when calling getId() method.");
         }
-        $rs = $this->conn->executeQuery("SELECT nextval('" . pg_escape_string ( $name ) . "')", ResultSet::FETCHMODE_NUM);
+        $rs = $this->conn->executeQuery("SELECT nextval('" . pg_escape_string($name) . "')", ResultSet::FETCHMODE_NUM);
         $rs->next();
         return $rs->getInt(1);
     }
-    
+
     // XARAYA MODIFICATION
     // FIXME: Hmm, this is gettring rather specific, perhaps not do it in Creole but in our extension object?
     public function getLastId($tableName)
@@ -89,13 +89,13 @@ class PgSQLIdGenerator implements IdGenerator {
         $rs->next();
         return $rs->getInt(1);
     }
-    
+
     public function getNextId($tableName)
     {
         $seqName = $this->getSequenceName($tableName);
         return $this->getId($seqName);
     }
-    
+
     private function getSequenceName($tableName)
     {
         // TODO: this makes too much of an assumption that we have:
@@ -108,5 +108,5 @@ class PgSQLIdGenerator implements IdGenerator {
         return $tableName.'_seq';
     }
     // END XARAYA MODIFICATION
-    
+
 }

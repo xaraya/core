@@ -9,8 +9,8 @@ require_once 'creole/common/PdoIdGeneratorCommon.php';
  * @version   $Revision: 1.4 $
  * @package   creole.drivers.sqlite
  */
-class PdoSQLiteIdGenerator extends PdoIdGeneratorCommon {
-    
+class PdoSQLiteIdGenerator extends PdoIdGeneratorCommon
+{
     // XARAYA MODIFICATION
     public function getNextId($tableName)
     {

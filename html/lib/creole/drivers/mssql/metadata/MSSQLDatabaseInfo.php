@@ -27,9 +27,9 @@ require_once 'creole/metadata/DatabaseInfo.php';
  * @author    Hans Lellelid
  * @version   $Revision: 1.11 $
  * @package   creole.drivers.mssql.metadata
- */ 
-class MSSQLDatabaseInfo extends DatabaseInfo {
-    
+ */
+class MSSQLDatabaseInfo extends DatabaseInfo
+{
     /**
      * @throws SQLException
      * @return void
@@ -37,33 +37,33 @@ class MSSQLDatabaseInfo extends DatabaseInfo {
     protected function initTables()
     {
         include_once 'creole/drivers/mssql/metadata/MSSQLTableInfo.php';
-        
+
         $dsn = $this->conn->getDSN();
-        
-        
+
+
         if (!@mssql_select_db($this->dbname, $this->conn->getResource())) {
             throw new SQLException('No database selected');
         }
-             
+
         $result = mssql_query("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME <> 'dtproperties'", $this->conn->getResource());
-    
+
         if (!$result) {
-            throw new SQLException("Could not list tables", mssql_get_last_message());            
+            throw new SQLException("Could not list tables", mssql_get_last_message());
         }
-        
+
         while ($row = mssql_fetch_row($result)) {
-            $this->tables[strtoupper($row[0])] = new MSSQLTableInfo($this, $row[0]);            
+            $this->tables[strtoupper($row[0])] = new MSSQLTableInfo($this, $row[0]);
         }
-    }            
-    
+    }
+
     /**
-     * 
-     * @return void 
+     *
+     * @return void
      * @throws SQLException
      */
     protected function initSequences()
     {
         // there are no sequences -- afaik -- in MSSQL.
     }
-        
+
 }

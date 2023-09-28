@@ -49,9 +49,9 @@ class MySQLAdapter extends ODBCAdapter
      */
     public function applyLimit(&$sql, $offset, $limit)
     {
-        if ( $limit > 0 ) {
+        if ($limit > 0) {
             $sql .= " LIMIT " . ($offset > 0 ? $offset . ", " : "") . $limit;
-        } else if ( $offset > 0 ) {
+        } elseif ($offset > 0) {
             $sql .= " LIMIT " . $offset . ", 18446744073709551615";
         }
     }
@@ -69,7 +69,7 @@ class MySQLAdapter extends ODBCAdapter
      */
     public function createResultSet($conn, $odbcresult, $fetchmode)
     {
-//        return new ODBCCachedResultSet($conn, $odbcresult, $fetchmode, true);
+        //        return new ODBCCachedResultSet($conn, $odbcresult, $fetchmode, true);
         return new ODBCResultSet($conn, $odbcresult, $fetchmode);
     }
 

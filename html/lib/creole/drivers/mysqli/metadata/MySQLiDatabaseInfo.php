@@ -28,25 +28,29 @@ require_once 'creole/drivers/mysql/metadata/MySQLDatabaseInfoBase.php';
  * @version   $Revision: 1.3 $
  * @package   creole.drivers.mysqli.metadata
  */
-class MySQLiDatabaseInfo extends MySQLDatabaseInfoBase {
-        
+class MySQLiDatabaseInfo extends MySQLDatabaseInfoBase
+{
     protected $driverName = 'mysqli';
-    
+
     protected $tableClassName = 'MySQLiTableInfo';
-    
-    function sqlQuery( $sql ) {
-        return @mysqli_query( $this->conn->getResource(), $sql);   
-        }
-        
-    function fetchRow($result) {
+
+    public function sqlQuery($sql)
+    {
+        return @mysqli_query($this->conn->getResource(), $sql);
+    }
+
+    public function fetchRow($result)
+    {
         return mysqli_fetch_row($result);
-        }
-    
-    function fetchAssoc($result) {
+    }
+
+    public function fetchAssoc($result)
+    {
         return mysqli_fetch_assoc($result);
     }
 
-    function selectDb($dbName) {
+    public function selectDb($dbName)
+    {
         return @mysqli_select_db($this->conn->getResource(), $dbName);
     }
 }
