@@ -30,7 +30,8 @@ function xarThemeGetVar($themeName, $name, $prep = NULL)                        
  * 
  * @uses xarTheme::getIDFromName()
  * @deprecated
- * @param string themeName The name of the theme
+ * @param string $themeName The name of the theme
+ * @param string $id
  * @return int theme RegID for processing
  * @throws EmptyParameterException
  */
@@ -44,8 +45,8 @@ function xarThemeGetIDFromName($themeName,$id='regid')
  *
  * @uses xarTheme::getInfo()
  * @deprecated
- * @param int themeRegId theme id
- * @return array array of theme information
+ * @param int $regId theme id
+ * @return array<mixed> array of theme information
  */
 function xarThemeGetInfo($regId) { return xarTheme::getInfo($regId); }
 
@@ -54,7 +55,7 @@ function xarThemeGetInfo($regId) { return xarTheme::getInfo($regId); }
  *
  * @uses xarTheme::isAvailable()
  * @deprecated
- * @param string themeName registered name of theme
+ * @param string $themeName registered name of theme
  * @return boolean true if the theme is available, false if not
  */
 function xarThemeIsAvailable($themeName) { return xarTheme::isAvailable($themeName); }
@@ -66,8 +67,8 @@ function xarThemeIsAvailable($themeName) { return xarTheme::isAvailable($themeNa
  *
  * @uses xarTheme::getFileInfo()
  * @deprecated
- * @param string themeOSdir the theme's directory
- * @return xarMod::getFileInfo for processing
+ * @param string $themeOsDir the theme's directory
+ * @return array<mixed> xarMod::getFileInfo for processing
  * @todo move to own class so we can protect it
  */
 function xarTheme_getFileInfo($themeOsDir) { return xarTheme::getFileInfo($themeOsDir); }
@@ -77,8 +78,8 @@ function xarTheme_getFileInfo($themeOsDir) { return xarTheme::getFileInfo($theme
  *
  * @uses xarTheme::getBaseInfo()
  * @deprecated
- * @param string themeName the theme's name
- * @return array xarMod__getBaseInfo for processing
+ * @param string $themeName the theme's name
+ * @return array<mixed> xarMod__getBaseInfo for processing
  */
 function xarTheme_getBaseInfo($themeName) { return xarTheme::getBaseInfo($themeName); }
 
@@ -87,7 +88,8 @@ function xarTheme_getBaseInfo($themeName) { return xarTheme::getBaseInfo($themeN
  *
  * @uses xarTheme::getVarsByTheme()
  * @deprecated
- * @return array|bool an array of theme variables
+ * @param string $themeName the theme's name
+ * @return array<mixed>|bool an array of theme variables
  */
 function xarTheme_getVarsByTheme($themeName)
 {

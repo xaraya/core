@@ -93,7 +93,7 @@ class xarCache extends xarObject
     /**
      * Get a cache key for block output caching
      *
-     * @param array  $blockInfo block information
+     * @param array<string, mixed> $blockInfo block information
      * @return mixed cacheKey to be used with xarBlockCache::(is|get|set)Cached, or null if not applicable
      */
     public static function getBlockKey($blockInfo)
@@ -106,7 +106,10 @@ class xarCache extends xarObject
     /**
      * Get a cache key for module output caching
      *
-     * @param string url optional url to be checked if not the current url
+     * @param string $modName
+     * @param string $modType
+     * @param string $funcName
+     * @param array<string, mixed> $args optional parameters
      * @return mixed cacheKey to be used with xarModuleCache::(is|get|set)Cached, or null if not applicable
      */
     public static function getModuleKey($modName, $modType = 'user', $funcName = 'main', $args = [])
@@ -119,7 +122,9 @@ class xarCache extends xarObject
     /**
      * Get a cache key for object output caching
      *
-     * @param string url optional url to be checked if not the current url
+     * @param string $objectName
+     * @param string $methodName
+     * @param array<string, mixed> $args optional parameters
      * @return mixed cacheKey to be used with xarObjectCache::(is|get|set)Cached, or null if not applicable
      */
     public static function getObjectKey($objectName, $methodName = 'view', $args = [])
@@ -230,17 +235,18 @@ class xarCache extends xarObject
     /**
      * Get a storage class instance for some type of cached data
      *
-     *
-     * @param string  $storage the storage you want (filesystem, database, apcu or doctrine)
-     * @param string  $type the type of cached data (page, block, template, ...)
-     * @param string  $cachedir the path to the cache directory (for filesystem)
-     * @param string  $code the cache code (for URL factors et al.) if it's fixed
-     * @param integer $expire the expiration time for this data
-     * @param integer $sizelimit the maximum size for the cache storage
-     * @param string  $logfile the path to the logfile for HITs and MISSes
-     * @param integer $logsize the maximum size of the logfile
-     * @param string  $namespace optional namespace prefix for the cache keys
-     * @param object  $provider an instantiated Doctrine CacheProvider (for doctrine)
+     * @param array<string, mixed> $args
+     * with
+     *     string  $storage the storage you want (filesystem, database, apcu or doctrine)
+     *     string  $type the type of cached data (page, block, template, ...)
+     *     string  $cachedir the path to the cache directory (for filesystem)
+     *     string  $code the cache code (for URL factors et al.) if it's fixed
+     *     integer $expire the expiration time for this data
+     *     integer $sizelimit the maximum size for the cache storage
+     *     string  $logfile the path to the logfile for HITs and MISSes
+     *     integer $logsize the maximum size of the logfile
+     *     string  $namespace optional namespace prefix for the cache keys
+     *     object  $provider an instantiated Doctrine CacheProvider (for doctrine)
      * @return object the specified cache storage
      */
     public static function getStorage(array $args = [])
@@ -253,7 +259,7 @@ class xarCache extends xarObject
      * Get the parent group ids of the current user (with minimal overhead)
      *
      *
-     * @return array of parent gids
+     * @return array<mixed> of parent gids
      * @todo avoid DB lookup by passing groups via cookies ?
      * @todo Note : don't do this if admins get cached too :)
      */

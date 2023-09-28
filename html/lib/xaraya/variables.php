@@ -118,7 +118,7 @@ class xarVar extends xarObject
      * 
      * @global array xarVar_allowableHTML
      * @global bool xarVar_fixHTMLEntities
-     * @param array args
+     * @param array<mixed> $args
      * @return boolean
      * @todo <mrb> remove the two settings allowablehtml and fixhtmlentities
      * @todo revisit naming of config_vars table
@@ -163,10 +163,7 @@ class xarVar extends xarObject
      *     $results[variable name]['error'] holds the Error Message ('' in case of none)
      *  }
      *
-     *
-     * 
-     * @param array The arrays storing information equivalent to the xarVar::fetch interface
-     * @return array With the respective exceptions in case of failure
+     * @return array<mixed> With the respective exceptions in case of failure
     **/
     public static function batchFetch()
     {

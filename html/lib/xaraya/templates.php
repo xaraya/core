@@ -86,7 +86,7 @@ class xarTpl extends xarObject
  * Initializes the BlockLayout Template Engine
  *
  * @access public
- * @param  array   $args array of parameters<br/>
+ * @param array<string, mixed> $args array of parameters<br/>
  *         string  $args[defaultThemeDir] name of the theme to use<br/>
  *         boolean $args[generateXMLURLs] flag to indicate if XML URLs are to be used<br/>
  *         boolean $args[enableTemplatesCaching] flag to indicate if templates should be cached
@@ -142,7 +142,7 @@ class xarTpl extends xarObject
  * the themes module to prevent setting a nonexistent directory
  * 
  * @access public
- * @param  string themesDir
+ * @param  string $themesDir
  * @return boolean
 **/    
     public static function setBaseDir($themesDir)
@@ -205,7 +205,7 @@ class xarTpl extends xarObject
  * Set theme dir
  *
  * @access public
- * @param  string themeDir
+ * @param  string $themeDir
  * @throws DirectoryNotFoundException
  * @return boolean
  * @todo   see checkme's
@@ -271,7 +271,7 @@ class xarTpl extends xarObject
  * Get theme directory
  *
  * @access public
- * @param  string  name of theme, optional, default current theme dir
+ * @param  ?string  $theme name of theme, optional, default current theme dir
  * @return string  Theme directory
  */
     public static function getThemeDir($theme=null)
@@ -344,8 +344,8 @@ class xarTpl extends xarObject
  * Set page title
  *
  * @access public
- * @param  string $title
- * @param  string $module
+ * @param  ?string $title
+ * @param  ?string $module
  * @todo   this needs to be moved into the templating domain somehow
  * @return boolean
  */
@@ -411,8 +411,8 @@ class xarTpl extends xarObject
  * @param  string $modName      the module name
  * @param  string $modType      user|admin
  * @param  string $funcName     module function to template
- * @param  array  $tplData      arguments for the template
- * @param  string $templateName string the specific template to call
+ * @param array<mixed> $tplData arguments for the template
+ * @param  ?string $templateName string the specific template to call
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */
@@ -460,9 +460,9 @@ class xarTpl extends xarObject
  * 
  * @param  string $modName   the module name
  * @param  string $blockType the block type (xar_block_types.type)
- * @param  array  $tplData   arguments for the template
- * @param  string $tplName   the specific template to call
- * @param  string $tplBase   the base name of the template (defaults to $blockType)
+ * @param array<mixed> $tplData arguments for the template
+ * @param  ?string $tplName   the specific template to call
+ * @param  ?string $tplBase   the base name of the template (defaults to $blockType)
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */
@@ -486,6 +486,15 @@ class xarTpl extends xarObject
 
     }
 
+    /**
+     * Summary of exists
+     * @param string $scope
+     * @param string $package
+     * @param string $tplBase
+     * @param ?string $tplName
+     * @param mixed $tplPart
+     * @return bool
+     */
     public static function exists($scope, $package, $tplBase, $tplName=null, $tplPart='')
     {
         return (bool) self::getScopeFileName($scope, $package, $tplBase, $tplName, $tplPart);
@@ -503,9 +512,9 @@ class xarTpl extends xarObject
  * @param  string $scope        scope in which to look for templates [theme|module|block|property]
  * @param  string $package      name of the theme|module|block|property supplying the template
  * @param  string $tplBase      The base name for the template
- * @param  string $tplName      The name of the template to use, if any
+ * @param  ?string $tplName      The name of the template to use, if any
  * @param  string $tplPart      Optional sub path to look for templates in, default ''
- * @param  string $callerMod    Optional name of module calling this package (looks here first if supplied)
+ * @param  ?string $callerMod    Optional name of module calling this package (looks here first if supplied)
  * @return string the path [including sys::code()] to an existing template sourcefile, or empty
  *
  * @todo do we need to load the translations here or a bit later? (here:easy, later: better abstraction) 
@@ -617,7 +626,7 @@ class xarTpl extends xarObject
         }
 
         $sourceFileName = '';
-        if (!empty($paths)) {
+        if (count($paths) > 0) {
             foreach ($paths as $file) {
             
                 if (!file_exists($file)) continue;
@@ -646,8 +655,8 @@ class xarTpl extends xarObject
  * @param  string $objectName   the name of the object type, or some other name specified in BL tag or API call
  * @param  string $tplType      the template type to render
  *                              objects   : ( showdisplay(default)|showview|showform|showlist )
- * @param  array  $tplData      arguments for the template
- * @param  string $tplBase      the template type can be overridden too ( unused )
+ * @param array<mixed> $tplData arguments for the template
+ * @param  ?string $tplBase      the template type can be overridden too ( unused )
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */
@@ -685,8 +694,8 @@ class xarTpl extends xarObject
  * @param  string $propertyName  the name of the property type, or some other name specified in BL tag or API call
  * @param  string $tplType      the template type to render
  *                              properties: ( showoutput(default)|showinput|showhidden|validation|label )
- * @param  array  $tplData      arguments for the template
- * @param  string $tplBase      the template type can be overridden too ( unused )
+ * @param array<mixed> $tplData arguments for the template
+ * @param  ?string $tplBase      the template type can be overridden too ( unused )
  * @throws FileNotFoundException
  * @return string xarTpl::executeFromFile($sourceFileName, $tplData)
  */
@@ -768,8 +777,9 @@ class xarTpl extends xarObject
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * 
- * @param   string $modImage the module image url relative to xarimages/
- * @param   string $modName  the module to check for the image <optional>
+ * @param   string $fileName
+ * @param   ?string $scope
+ * @param   ?string $package
  * @return  string|void image url if it exists or module image url if not, or NULL if neither found
  *
  * @todo    provide examples, improve description, add functionality
@@ -875,7 +885,7 @@ class xarTpl extends xarObject
         // Return as an XML URL if required.
         // This will generally have little effect, but is here for
         // completeness to support alternative types of URL.
-        if (isset($filePath) && self::$generateXMLURLs) {
+        if (self::$generateXMLURLs) {
             $filePath = htmlspecialchars($filePath);
         }
         return $filePath;
@@ -892,8 +902,8 @@ class xarTpl extends xarObject
  *        this function to generate file URLs...
  *
  * @param   string $fileName the fileName relative to the theme/module/property/block folder/
- * @param   string $scope the scope to check for (theme/module/property/block)
- * @param   string $package the actual theme/module/property/block we're looking at
+ * @param   ?string $scope the scope to check for (theme/module/property/block)
+ * @param   ?string $package the actual theme/module/property/block we're looking at
  * @return  string|void file url if it exists or NULL if not
 */
 public static function getFile($fileName, $scope=NULL, $package=NULL)
@@ -967,7 +977,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
     // Return as an XML URL if required.
     // This will generally have little effect, but is here for
     // completeness to support alternative types of URL.
-    if (isset($filePath) && self::$generateXMLURLs) {
+    if (self::$generateXMLURLs) {
         $filePath = htmlspecialchars($filePath);
     }
     return $filePath;
@@ -978,7 +988,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  *
  * @access public
  * @param  string $templateCode pre-compiled template code (see xarTpl::compileString)
- * @param  array  $tplData      template variables
+ * @param array<mixed> $tplData template variables
  * @return string filled-in template
  * @todo   this is not MLS-aware (never was)
  * @todo   how 'special' should the 'memory' file be, namewise?
@@ -1005,7 +1015,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  *
  * @access public
  * @param  string $fileName location of the template file
- * @param  array  $tplData  template variables
+ * @param array<mixed> $tplData template variables
  * @return string filled-in template
  */
     public static function file($fileName, &$tplData)
@@ -1037,7 +1047,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  * @author Marco Canini <marco@xaraya.com>
  * 
  * @param  string $mainModuleOutput       the module output
- * @param  string $pageTemplate           the page template to use (without extension .xt)
+ * @param  ?string $pageTemplate           the page template to use (without extension .xt)
  * @return string
  *
  * @todo Needs a rewrite, i.e. finalisation of tplOrder scenario 
@@ -1064,8 +1074,8 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  * Render a block box
  *
  * @access public
- * @param  array  $blockInfo  Information on the block
- * @param  string $templateName string
+ * @param array<string, mixed> $blockInfo  Information on the block
+ * @param  ?string $templateName string
  * @return string xarTpl::executeFromFile($sourceFileName, $blockInfo)
  *
  * @todo the search logic for the templates can perhaps use the private function?
@@ -1097,9 +1107,9 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  * @param  string $tplType      scope in which to look for templates [theme|module|block|property]
  * @param  string $package      name of the theme|module|block|property supplying the template
  * @param  string $tplName      The name of the template to use
- * @param  array  $tplData      array of data for the template
+ * @param array<mixed> $tplData array of data for the template
  * @param  string $tplPart      Optional sub path to look for templates in relative to template path
- * @param  string $callerMod    Optional name of the module calling the template, if different from $package
+ * @param  ?string $callerMod    Optional name of the module calling the template, if different from $package
  * @throws FileNotFoundException
  * @return string self::executeFromFile($sourceFileName, $tplData);
 **/
@@ -1130,7 +1140,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  *
  * @access public
  * @param  string $templateName Basically handler function for <xar:template type="theme".../>
- * @param  array  $tplData      template variables
+ * @param array<mixed> $tplData template variables
  * @return string
  */
     public static function includeThemeTemplate($templateName, $tplData)
@@ -1150,7 +1160,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  * @access public
  * @param  string $modName      name of the module from which to include the template
  * @param  string $templateName Basically handler function for <xar:template type="module".../>
- * @param  array  $tplData      template variables
+ * @param array<mixed> $tplData template variables
  * @param  string $propertyName name of the property from which to include the template
  * @throws FileNotFoundException
  * @return string
@@ -1211,7 +1221,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  * FIXME: this cannot be private since it's used by the mail module
  * @access private
  * @param  string $sourceFileName       From which file do we want to execute? Assume it exists by now ;-)
- * @param  array  $tplData              Template variables
+ * @param array<mixed> $tplData Template variables
  * @param  string $tplType              'module' or 'page'
  * @return string generated output from the file
  * @todo  insert log warning when double entry in cachekeys occurs? (race condition)

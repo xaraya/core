@@ -72,7 +72,7 @@ class xarObjectCache extends xarObject
      *
      * @param string $objectName string registered name of object
      * @param string $methodName string specific method to run
-     * @param array  $args arguments to pass to the method
+     * @param array<string, mixed> $args arguments to pass to the method
      * @return mixed cacheKey to be used with (is|get|set)Cached, or null if not applicable
      */
     public static function getCacheKey($objectName, $methodName = 'view', $args = [])
@@ -133,7 +133,7 @@ class xarObjectCache extends xarObject
 
     /**
      * Get cache settings for the objects
-     * @return array
+     * @return array<mixed> 
      */
     public static function getCacheSettings()
     {
@@ -153,7 +153,7 @@ class xarObjectCache extends xarObject
      *
      * @param string $objectName string registered name of object
      * @param string $methodName string specific method to run
-     * @param array  $args arguments to pass to the method
+     * @param array<string, mixed> $args arguments to pass to the method
      * @return boolean  true if the module function is suitable for caching, false if not
      */
     public static function checkCachingRules($objectName, $methodName = 'view', $args = [])

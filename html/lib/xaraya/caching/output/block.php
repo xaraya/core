@@ -65,7 +65,7 @@ class xarBlockCache extends xarObject
     /**
      * Get a cache key if this block is suitable for output caching
      *
-     * @param  array  $blockInfo block information with module, type, id etc.
+     * @param array<string, mixed> $blockInfo block information with module, type, id etc.
      * @return mixed  cacheKey to be used with (is|get|set)Cached, or null if not applicable
      */
     public static function getCacheKey($blockInfo)
@@ -125,7 +125,7 @@ class xarBlockCache extends xarObject
 
     /**
      * Get cache settings for the blocks
-     * @return array
+     * @return array<mixed> 
      */
     /* As of soloblocks each block carries its own settings which we get from blockinfo
     public static function getCacheSettings()
@@ -167,7 +167,7 @@ class xarBlockCache extends xarObject
     /**
      * Check if this block is suitable for block caching
      *
-     * @param  array $blockInfo block information with module, type, id etc.
+     * @param array<string, mixed> $blockInfo block information with module, type, id etc.
      * @return boolean  true if the block is suitable for caching, false if not
      */
     public static function checkCachingRules($blockInfo = [])

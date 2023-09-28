@@ -276,8 +276,8 @@ class xarController extends xarObject
      * @param string $modType type of function
      * @param string $funcName module function
      * @param string $fragment document fragment target (e.g. somesite.com/index.php?foo=bar#target)
-     * @param array $args array of arguments to put on the URL
-     * @param array $entrypoint array of arguments for different entrypoint than index.php
+     * @param array<string, mixed> $args array of arguments to put on the URL
+     * @param array<mixed> $entrypoint array of arguments for different entrypoint than index.php
      * @return mixed absolute URL for call, or false on failure
      * @todo allow for an alternative entry point (e.g. stream.php) without affecting the other parameters
      */

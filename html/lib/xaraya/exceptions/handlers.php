@@ -44,7 +44,7 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
      * but we dont want to instantiate that directly, but rather one of our derived classes.
      * We define this handler here, because it needs to be defined before set_exception_handler
      *
-     * @param  Exception $exception The exception object
+     * @param  Exception $e The exception object
      * @throws Exception
      * @todo Get rid of the redundant parts
      * @return void
@@ -120,11 +120,11 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
     /**
      * PHP error handler bridge to Xaraya exceptions
      *
-     * @param  integer $errorType level of the error raised by PHP
+     * @param  integer $errorRaised level of the error raised by PHP
      * @param  string  $errorString errormessage issued
      * @param  string  $file file is which the error occurred
      * @param  integer $line linenumber on which the error occurred
-     * @param  array   $errorContext information on the context of the error
+     * @param array<mixed> $errorContext information on the context of the error
      * @author Marco Canini <marco@xaraya.com>
      * 
      * @throws PHPException

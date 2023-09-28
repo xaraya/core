@@ -38,7 +38,7 @@ class LocaleNotFoundException extends NotFoundExceptions
  * of this file
  *
  * @uses xarLocale::loadData()
- * @return array|bool|null locale data
+ * @return array<mixed>|bool|null locale data
  * @throws LocaleNotFoundException
  * @todo   figure out why we go through this function for xarMod::isAvailable
  */
@@ -71,10 +71,12 @@ function &xarMLSLoadLocaleData($locale = NULL)
         }
     }
 
+    // @todo get rid of invalid .php locale files
     $fileName = sys::varpath() . '/locales/$locale/locale.php';
     if (!$parsedLocale = xarMLS::parseLocaleString($locale)) return false;
     $siteCharset = $parsedLocale['charset'];
     $utf8locale = $parsedLocale['lang'].'_'.$parsedLocale['country'].'.utf-8';
+    // @todo get rid of invalid .php locale files
     $utf8FileName = sys::varpath() . '/locales/$utf8locale/locale.php';
     if (file_exists($fileName) && !(isset($loaded[$fileName]))) {
         // @todo do we need to wrap this in a try/catch construct?
@@ -509,9 +511,9 @@ function xarLocaleFormatUTCDate($format = null, $time = null, $addoffset = false
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
- * @param string format strftime() format to use (TODO: default locale-dependent or configurable ?)
- * @param mixed timestamp or date string (default now)
- * @param bool addoffset add user timezone offset (default true)
+ * @param string $format strftime() format to use (TODO: default locale-dependent or configurable ?)
+ * @param mixed $timestamp or date string (default now)
+ * @param bool $addoffset add user timezone offset (default true)
  * @return string date
  *
 **/
@@ -1083,7 +1085,7 @@ class xarMLS__LocaleDataLoader extends xarObject
         return array($path, (int) $content);
     }
     /**
-     * @return array
+     * @return array<mixed> 
      */
     function groupingSizeTagHandler($path, $attribs, $content)
     {
@@ -1100,7 +1102,7 @@ class xarMLS__LocaleDataLoader extends xarObject
         return array($path, $value);
     }
     /**
-     * @return array
+     * @return array<mixed> 
      */
     function monthTagHandler($path, $attribs, $content)
     {
@@ -1116,7 +1118,7 @@ class xarMLS__LocaleDataLoader extends xarObject
         return array($path, $value);
     }
     /**
-     * @return array
+     * @return array<mixed> 
      */
     function weekdayTagHandler($path, $attribs, $content)
     {
@@ -1145,7 +1147,7 @@ class xarLocale extends xarObject
      * Locale data is an associative array, its keys are described at the top
      * of this file
      *
-     * @return array locale data
+     * @return array<mixed> locale data
      * @throws LocaleNotFoundException
      * @todo   figure out why we go through this function for xarMod::isAvailable
      */

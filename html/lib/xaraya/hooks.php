@@ -58,7 +58,7 @@ class xarHooks extends xarEvents
     /**
      * Summary of getObservers
      * @param ixarHookSubject $subject
-     * @return array|void
+     * @return array<mixed>|void
      */
     public static function getObservers(ixarEventSubject $subject)
     {
@@ -504,7 +504,7 @@ class xarModHooks extends xarObject
      * @param $hookScope string the hook scope
      * @param $hookAction string the hook action
      * @param $callerItemType string optional item type for the calling module (default = none)
-     * @return array of hook information arrays, or null if database error
+     * @return array<mixed> of hook information arrays, or null if database error
      */
     public static function getList($callerModName, $hookScope, $hookAction, $callerItemType = '')
     {
@@ -536,7 +536,7 @@ class xarModHooks extends xarObject
      * @param $hookModName name of the hook module
      * @param $hookModType name of the hook type ('user' / 'admin' / ... for regular functions, or 'class' for hook call handlers)
      * @param $hookModFunc name of the hook function or handler class
-     * @return array|void true on success
+     * @return array<mixed>|void true on success
      * @throws BadParameterException
      */
     public static function register($hookScope, $hookAction, $hookArea, $hookModName, $hookModType, $hookModFunc)

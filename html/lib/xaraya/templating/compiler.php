@@ -34,7 +34,11 @@ sys::import('blocklayout.compiler');
 class XarayaCompiler extends xarBLCompiler
 {    
     private $legacy_compile = true;
-    
+
+    /**
+     * Summary of instance
+     * @return IxarBLCompiler
+     */
     public static function &instance()
     {
         if(self::$instance == null) {
@@ -43,6 +47,10 @@ class XarayaCompiler extends xarBLCompiler
         return self::$instance;
     }
 
+    /**
+     * Summary of configure
+     * @return array<string>
+     */
     public function configure()
     {
         parent::configure();
@@ -84,7 +92,13 @@ class XarayaCompiler extends xarBLCompiler
     /**
      * Private methods
      */
-    protected function boot($customDoc='')
+
+     /**
+     * Summary of boot
+     * @param DOMDocument|null $customDoc
+     * @return string
+     */
+    protected function boot($customDoc=null)
     {
         // TODO: generalize this functionality to any custom markup
         

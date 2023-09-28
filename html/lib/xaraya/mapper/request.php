@@ -106,6 +106,7 @@ class xarRequest extends xarObject
                 $this->setType($objectName);
                 $this->setFunction($this->method);
             } else {
+                $modName = null;
                 // Try and get the module the traditional Xaraya way
                 xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, xarVar::NOT_REQUIRED);
 
@@ -171,7 +172,7 @@ class xarRequest extends xarObject
      * TODO: evaluate and improve this, obviously :-)
      * + check security impact of people combining PATH_INFO with func/type param
      *
-     * @return array requested module, type and func
+     * @return array<mixed> requested module, type and func
      * @todo <marco> Do we need to do a preg_match on $params[1] here?
      * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
      * @todo <marco> Investigate this aliases thing before to integrate and promote it!
@@ -195,31 +196,33 @@ class xarRequest extends xarObject
                 $this->getType(),
                 $this->getFunction(),
             );
+            // Save the current info in case we call this function again
+            $currentRequestInfo = $info;
             return $info;
+        }
+        $params = xarController::parseQuery($url);
+        $regex = null;
+        if (!empty($params)) {
+            sys::import('xaraya.validations');
+            $regex = ValueValidations::get('regexp');
+        }
+        if (isset($params['module'])) {
+            $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
+            $modName = $isvalid ? $params['module'] : null;
         } else {
-            $params = xarController::parseQuery($url);
-            if (!empty($params)) {
-                sys::import('xaraya.validations');
-                $regex = ValueValidations::get('regexp');
-            }
-            if (isset($params['module'])) {
-                $isvalid =  $regex->validate($params['module'], array('/^[a-z][a-z_0-9]*$/'));
-                $modName = $isvalid ? $params['module'] : null;
-            } else {
-                $modName = null;
-            }
-            if (isset($params['type'])) {
-                $isvalid =  $regex->validate($params['type'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
-                $modType = $isvalid ? $params['type'] : 'user';
-            } else {
-                $modType = 'user';
-            }
-            if (isset($params['func'])) {
-                $isvalid =  $regex->validate($params['func'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
-                $funcName = $isvalid ? $params['func'] : 'main';
-            } else {
-                $funcName = 'main';
-            }
+            $modName = null;
+        }
+        if (isset($params['type'])) {
+            $isvalid =  $regex->validate($params['type'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
+            $modType = $isvalid ? $params['type'] : 'user';
+        } else {
+            $modType = 'user';
+        }
+        if (isset($params['func'])) {
+            $isvalid =  $regex->validate($params['func'], array('/^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$/'));
+            $funcName = $isvalid ? $params['func'] : 'main';
+        } else {
+            $funcName = 'main';
         }
 
         if (!empty($modName)) {
@@ -233,9 +236,9 @@ class xarRequest extends xarObject
                 xarVar::fetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, NULL, xarVar::NOT_REQUIRED);
                 // Specify 'dynamicdata' as module for xarTpl_* functions etc.
                 $requestInfo = array('object', $objectName, $methodName);
-                if (empty($url)) {
-                    $this->isObjectURL = true;
-                }
+                //if (empty($url)) {
+                //    $this->isObjectURL = true;
+                //}
             } else {
                 // If $modName is still empty we use the default module/type/func to be loaded in that such case
                 if (empty($this->defaultRequestInfo)) {
@@ -247,7 +250,7 @@ class xarRequest extends xarObject
             }
         }
         // Save the current info in case we call this function again
-        if (empty($url)) $currentRequestInfo = $requestInfo;
+        //if (empty($url)) $currentRequestInfo = $requestInfo;
         
         return $requestInfo;
     }

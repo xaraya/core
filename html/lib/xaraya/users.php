@@ -62,7 +62,7 @@ class xarUser extends xarObject
      * Initialise the User System
      *
      * 
-     * @param array $args[authenticationModules] array
+     * @param array<string, mixed> $args[authenticationModules] array
      * @return boolean true on success
      */
     static public function init(array $args = array())
@@ -132,6 +132,8 @@ class xarUser extends xarObject
         $userId = self::AUTH_FAILED;
         $args = array('uname' => $userName, 'pass' => $password);
     
+        $authModName = 'authsystem';
+        $modId = 42;
         foreach(self::$authenticationModules as $authModName)
         {
             // Bug #918 - If the module has been deactivated, then continue
@@ -299,7 +301,7 @@ class xarUser extends xarObject
      * Get the user navigation locale
      *
      * 
-     * @return string $locale users navigation locale name
+     * @return string|bool $locale users navigation locale name
      */
     static public function getNavigationLocale()
     {

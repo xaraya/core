@@ -245,7 +245,6 @@ class xarMod extends xarObject implements IxarMod
      * Get module system ID by name
      *
      * @param string $modName The name of the module
-     * @param string $type determines theme or module
      * @return string|void The module registry ID.
      */
     static function getId($modName)
@@ -313,7 +312,7 @@ class xarMod extends xarObject implements IxarMod
      *
      * @param int $modRegId module id
      * @param string $type determines theme or module
-     * @return array of module information
+     * @return array<mixed> of module information
      * @throws EmptyParameterException
      * @throws BadParameterException
      * @throws IDNotFoundException
@@ -561,9 +560,9 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Get info from xarversion.php for module specified by modOsDir
      *
-     * @param string $modOSdir the module's directory
+     * @param string $modOsDir the module's directory
      * @param string $type determines theme or module
-     * @return array|void an array of module file information
+     * @return array<mixed>|void an array of module file information
      * @throws EmptyParameterException
      * @throws BadParameterException
      * @todo <marco> #1 FIXME: admin or admin capable?
@@ -665,7 +664,7 @@ class xarMod extends xarObject implements IxarMod
      * Load database definition for a module
      *
      * @param string $modName name of module to load database definition for
-     * @param string|null $modOsDir directory that module is in
+     * @param string|null $modDir directory that module is in
      * @param string $type module or theme
      * @return mixed true on success
      * @throws EmptyParameterException
@@ -719,7 +718,7 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modName registered name of module
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
-     * @param array $args arguments to pass to the function
+     * @param array<string, mixed> $args arguments to pass to the function
      * @return mixed The output of the function, or raise an exception
      */
     static function guiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
@@ -771,7 +770,7 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modName registered name of module
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
-     * @param array $args arguments to pass to the function
+     * @param array<string, mixed> $args arguments to pass to the function
      * @return mixed The output of the function, or false on failure
      */
     static function apiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
@@ -994,8 +993,8 @@ class xarMod extends xarObject implements IxarMod
     /**
      * Check access for a specific action on module level (see also xarObject and xarBlock)
      * 
-     * @param string moduleName the module we want to check access for
-     * @param string ^$action the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
+     * @param string $moduleName the module we want to check access for
+     * @param string $action the action we want to take on this module (view/admin) // CHECKME: any others we really use on module level ?
      * @param mixed $roleid override the current user or null
      * @return boolean true if access
      * @throws BadParameterException

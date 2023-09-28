@@ -33,7 +33,7 @@ class xarPageCache extends xarObject
     /**
      * Initialise the page caching options
      *
-     * @param array $args cache configuration
+     * @param array<string, mixed> $args cache configuration
      * @return mixed true on success, exit if session-less page caching finds a hit
      */
     public static function init(array $args = [])
@@ -131,7 +131,7 @@ class xarPageCache extends xarObject
 
     /**
      * Get cache settings for the pages
-     * @return array
+     * @return array<mixed> 
      */
     public static function getCacheSettings()
     {

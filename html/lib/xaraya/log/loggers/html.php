@@ -32,7 +32,7 @@ class xarLogger_html extends xarLogger_simple
     /**
       * Set up the configuration of the specific Log Observer.
       *
-      * @param  array $conf  with
+      * @param array<string, mixed> $conf  with
       *               'filename'     => string      The filename of the logfile.
       *               'maxLevel'     => int         Maximum level at which to log.
       *               'mode'         => string      File mode of te log file (optional)

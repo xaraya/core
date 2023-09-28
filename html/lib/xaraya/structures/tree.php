@@ -66,6 +66,7 @@ class TreeNode extends xarObject implements ITreeNode
         uasort($data, array($this,"rcomparelevels"));
 
         $data1 = array();
+        $toplevel = null;
         foreach ($data as $key => $value) {
             if (isset($depth) && ($value['nodelevel'] > $depth)) continue;
             $children = array();

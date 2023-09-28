@@ -354,7 +354,7 @@ function xarBlock_renderGroup($groupname, $template=NULL) { return xarBlock::ren
  * @uses xarCache::init()
  * @deprecated
  */
-function xarCache_init($args = false) { return xarCache::init($args); }
+function xarCache_init($args = false) { xarCache::init($args); }
 
 /**
  * @package core\legacy

@@ -69,7 +69,7 @@ public static function newConn(array $args = null)
     /**
      * Get an array of database tables
      *
-     * @return array array of database tables
+     * @return array<mixed> array of database tables
      * @todo we should figure something out so we dont have to do the getTables stuff, it should be transparent
      */
     public static function &getTables() {  return self::$tables; }
@@ -159,7 +159,7 @@ public static function newConn(array $args = null)
     /**
      * Get the creole -> ddl type map
      *
-     * @return array
+     * @return array<mixed> 
      */
     public static function getTypeMap()
     {

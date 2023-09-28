@@ -36,7 +36,9 @@ class VariableTableDataStore extends SQLDataStore
     }
     /**
      * Get the item
-     * @param array $args['itemid'] item id
+     * @param array<string, mixed> $args
+     * with
+     *     $args['itemid'] item id
      */
     function getItem(array $args = array())
     {
@@ -86,7 +88,9 @@ class VariableTableDataStore extends SQLDataStore
     }
     /**
      * Create an item
-     * @param array $args with $itemid,
+     * @param array<string, mixed> $args
+     * with
+     *      $args['itemid']
      */
     function createItem(array $args = array())
     {
@@ -130,7 +134,9 @@ class VariableTableDataStore extends SQLDataStore
 
     /**
      * Update the item
-     * @param array $args['itemid'] in array $args
+     * @param array<string, mixed> $args
+     * with
+     *      $args['itemid']
      * @return int $itemid
      */
     function updateItem(array $args = array())
@@ -346,8 +352,8 @@ class VariableTableDataStore extends SQLDataStore
             $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars);
 
+            $items = array();
             if (count($this->object->sort) > 0) {
-                $items = array();
                 $dosort = 1;
             } else {
                 $dosort = 0;
@@ -590,11 +596,11 @@ class VariableTableDataStore extends SQLDataStore
             $result = $stmt->executeQuery();
 
             $isgrouped = 0;
+            $id = 0;
             if (count($this->object->groupby) > 0) {
                 $isgrouped = 1;
                 $items = array();
                 $combo = array();
-                $id = 0;
                 $process = array();
                 foreach ($propids as $propid) {
                     if (in_array($propid,$this->object->groupby)) {

@@ -70,7 +70,7 @@ class xarDB_PDO extends xarObject
     /**
      * Get an array of database tables
      *
-     * @return array array of database tables
+     * @return array<mixed> array of database tables
      * @todo we should figure something out so we dont have to do the getTables stuff, it should be transparent
      */
     public static function &getTables() {  return self::$tables; }
@@ -169,7 +169,7 @@ class xarDB_PDO extends xarObject
     /**
      * Get the PDO -> ddl type map
      *
-     * @return array
+     * @return array<int, string>
      */
     public static function getTypeMap()
     {
@@ -275,7 +275,7 @@ class xarPDO extends PDO
      * Executes a SQL query or update and resturn
      * 
      * @param string $string the query string
-     * @param array $binvars the parameters to be inserted into the query
+     * @param array<mixed> $bindvars the parameters to be inserted into the query
      * @param int $flag indicates the fetch mode for the results
      * 
      * @return object $resultset an object containing the results of the operation
@@ -524,7 +524,7 @@ class xarPDOStatement extends xarObject
     /**
      * Prepares and executes a SQL update (INSERT, UPDATE, or DELETE) and resturns the rows affected
      * 
-     * @param array $bindvars the parameters to be inserted into the query
+     * @param array<mixed> $bindvars the parameters to be inserted into the query
      * @param int $flag indicates the fetch mode for the results
      * 
      * @return int $affected_rows the rows inserted, changed, dropped
@@ -627,7 +627,7 @@ class PDODatabaseInfo extends xarObject
 
     /**
      * Gets array of TableInfo objects.
-     * @return array
+     * @return array<mixed>
      */
     public function getTables()
     {

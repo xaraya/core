@@ -55,7 +55,7 @@ class xarBlock extends xarObject implements ixarBlock
  *
  * @author Paul Rosania
  * 
- * @param  array args
+ * @param  array<string, mixed> $args
  * @return boolean
  */
     public static function init(array $args = array())
@@ -74,7 +74,7 @@ class xarBlock extends xarObject implements ixarBlock
  * @author Marco Canini <marco@xaraya.com>
  * @author Chris Powis 
  * 
- * @param  array data block information parameters
+ * @param array<string, mixed> $blockinfo block information parameters
  * @return string output the block to show
  * @todo   this function calls a module function, keep an eye on it.
  */
@@ -389,10 +389,11 @@ class xarBlock extends xarObject implements ixarBlock
  *
  * @author John Cox
  * 
- * @param  array $args
- * @param  string args[instance] id or name of block instance to render
- * @param  string args[module] module that owns the block
- * @param  string args[type] module that owns the block
+ * @param array<string, mixed> $args
+ * with
+ *     string args[instance] id or name of block instance to render
+ *     string args[module] module that owns the block
+ *     string args[type] module that owns the block
  * @return string
  * @todo   this function calls a module function, keep an eye on it.
  */
@@ -427,8 +428,8 @@ class xarBlock extends xarObject implements ixarBlock
  * @author Paul Rosania
  * @author Marco Canini <marco@xaraya.com>
  * 
- * @param string groupname the name of the block group
- * @param string template optional template to apply to all blocks in the group
+ * @param string $groupname the name of the block group
+ * @param string $template optional template to apply to all blocks in the group
  * @return string
  * @throws EmptyParameterException
  */
@@ -441,9 +442,9 @@ class xarBlock extends xarObject implements ixarBlock
     /**
      * Check access for a specific action on block level (see also xarMod and xarObject)
      *
-     * @param object block the block we want to check access for
-     * @param string action the action we want to take on this block (display/modify/delete)
-     * @param mixed roleid override the current user or null
+     * @param iBlock $block the block we want to check access for
+     * @param string $action the action we want to take on this block (display/modify/delete)
+     * @param mixed $roleid override the current user or null
      * @return boolean true if access
      */
     static function checkAccess(iBlock $block, $action, $roleid = null)

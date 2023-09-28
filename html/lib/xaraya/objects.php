@@ -47,7 +47,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      *
      * @param string $objectName registered name of object
      * @param string $methodName specific method to run
-     * @param array $args arguments to pass to the method
+     * @param array<string, mixed> $args arguments to pass to the method
      * @return mixed The output of the method, or raise an exception
      * @throws EmptyParameterException
      */
@@ -70,7 +70,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      *
      * @param string $objectName registered name of object
      * @param string $methodName specific method to run
-     * @param array $args arguments to pass to the method
+     * @param array<string, mixed> $args arguments to pass to the method
      * @param mixed $roleid override the current user or null
      * @return mixed The output of the method, or false on failure
      * @throws EmptyParameterException
@@ -157,7 +157,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      *
      * @param string $objectName registered name of object
      * @param string $methodName specific method to run
-     * @param array $args arguments to pass to the method
+     * @param array<string, mixed> $args arguments to pass to the method
      * @return mixed The output of the method, or false on failure
      * @throws EmptyParameterException
      */
@@ -182,7 +182,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
      * @param string $action the action we want to take on this object (= method or func)
      * @param mixed $itemid the specific item id or null
-     * @param array $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
     static function getActionURL($object, $action = '', $itemid = null, $extra = array())
@@ -229,7 +229,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
      * @param string $action the action we want to take on this object (= method or func)
      * @param mixed $itemid the specific item id or null
-     * @param array $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
     static function getModuleURL($object, $action = '', $itemid = null, $extra=array())
@@ -291,7 +291,7 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param DataObject|DataObjectList $object the object or object list we want to create an URL for
      * @param string $action the action we want to take on this object (= method or func)
      * @param mixed $itemid the specific item id or null
-     * @param array $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
     static function getObjectURL($object, $action = '', $itemid = null ,$extra=array())

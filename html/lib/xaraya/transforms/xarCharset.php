@@ -166,7 +166,7 @@ class xarCharset extends xarObject
      * Converts unicode number to UTF-8 multibyte character
      *
      * 
-     * @param  integer     Hexadecimal value of a unicode char.
+     * @param  int $number Hexadecimal value of a unicode char.
      * @return string      Encoded hexadecimal value as a regular char.
      **/
     function unicodeNumberToUtf8Char($number)
@@ -207,8 +207,8 @@ class xarCharset extends xarObject
     /**
      * Converts a UTF-8 multibyte character to a UNICODE number
      *
-     * @param   string   UTF-8 multibyte character string
-     * @param   boolean  If set, then a hex. number is returned.
+     * @param   string   $utf8char  UTF-8 multibyte character string
+     * @param   integer  $returnHex If set, then a hex. number is returned.
      * @return  integer  UNICODE integer
      **/
     function utf8CharToUnicodeNumber($utf8char,$returnHex=0)
@@ -235,7 +235,7 @@ class xarCharset extends xarObject
     /**
      * Converts chars to numeric entities.
      *
-     * @param    string    Input string
+     * @param    string    $inStr Input string
      * @return   string    Output string
      */
     function utf8ToEntities($inStr)
@@ -279,9 +279,9 @@ class xarCharset extends xarObject
      * The file with encoding tables have to be save in
      * "Format A" of unicode.org charset table format
      *
-     * @param string First encoding name and filename.
-     * @param string Second encoding name and filename. Optional for building a joined table.
-     * @return array Table necessary to convert one encoding to another.
+     * @param string $firstEncoding  First encoding name and filename.
+     * @param string $secondEncoding Second encoding name and filename. Optional for building a joined table.
+     * @return array<mixed> Table necessary to convert one encoding to another.
      **/
     function &initConvertTable ($firstEncoding, $secondEncoding = "")
     {
@@ -320,10 +320,10 @@ class xarCharset extends xarObject
     /**
      *  Converts string from one charset to another
      *
-     * @param string The input string you want to change.
-     * @param string Source charset.
-     * @param string Target charset.
-     * @param boolean Set to true or 1 if you want to use numeric entities insted of regular chars.
+     * @param string  $inString       The input string you want to change.
+     * @param string  $fromCharset    Source charset.
+     * @param string  $toCharset      Target charset.
+     * @param boolean $turnOnEntities Set to true or 1 if you want to use numeric entities insted of regular chars.
      * @return string Converted string
      **/
     function convertByTable ($inString, $fromCharset = '', $toCharset = '', $turnOnEntities = false)
@@ -416,10 +416,10 @@ class xarCharset extends xarObject
     /**
      *  Converts string from one charset to another
      *
-     * @param string The input string you want to change.
-     * @param string Source charset.
-     * @param string Target charset.
-     * @param boolean Set to true or 1 if you want to use numeric entities insted of regular chars.
+     * @param string  $inString       The input string you want to change.
+     * @param string  $fromCharset    Source charset.
+     * @param string  $toCharset      Target charset.
+     * @param boolean $turnOnEntities Set to true or 1 if you want to use numeric entities insted of regular chars.
      * @return string Converted string
      **/
     function convert ($inString, $fromCharset, $toCharset, $turnOnEntities = false)

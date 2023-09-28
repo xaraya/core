@@ -30,7 +30,7 @@ class xarVariableCache extends xarObject
     /**
      * Initialise the variable caching options
      *
-     * @param array $config caching configuration from config.caching.php
+     * @param array<string, mixed> $config caching configuration from config.caching.php
      * @return boolean true on success, false on failure
      */
     public static function init(array $config = [])
@@ -116,7 +116,7 @@ class xarVariableCache extends xarObject
 
     /**
      * Get cache settings for the variables
-     * @return array
+     * @return array<mixed> 
      */
     public static function getCacheSettings()
     {
@@ -210,7 +210,7 @@ class xarVariableCache extends xarObject
      * Set the value of a cached variable
      *
      * @param string $cacheKey the key identifying the particular variable you want to access
-     * @param string $value    the new value for that variable
+     * @param string|object $value    the new value for that variable
      * @param string $expire   optional expiration time for the varable (default is cacheTime)
      * @return void
     **/

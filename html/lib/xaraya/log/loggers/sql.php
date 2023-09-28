@@ -61,7 +61,7 @@ class xarLogger_sql extends xarLogger
     /**
     * Set up the configuration of the specific Log Observer.
     *
-    * @param  array $conf  with
+    * @param array<string, mixed> $conf  with
     *               'sqltable  '     => string      The name of the logger table.
     * 
     */
@@ -104,7 +104,7 @@ class xarLogger_sql extends xarLogger
      * instances that are observing this Log.
      *
      * @param string $message  The textual message to be logged.
-     * @param string $priority The priority of the message.  Valid
+     * @param string $level The priority of the message.  Valid
      *                  values are: PEAR_LOG_EMERG, PEAR_LOG_ALERT,
      *                  PEAR_LOG_CRIT, PEAR_LOG_ERR, PEAR_LOG_WARNING,
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.

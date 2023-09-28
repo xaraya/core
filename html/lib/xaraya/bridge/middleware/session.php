@@ -122,6 +122,7 @@ class SessionMiddleware implements MiddlewareInterface
             echo "Session: " . var_export($session, true) . "\n";
         } else {
             $request = $request->withAttribute('userId', 0);
+            $session = null;
         }
         $isLogin = false;
         if (strpos($request->getRequestTarget(), '/authsystem/login') !== false) {

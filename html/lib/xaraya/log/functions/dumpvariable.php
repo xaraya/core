@@ -11,7 +11,7 @@
 
 /**
  *  Helper function for variable logging
- *
+ * @param array<string, mixed> $array
  */
 function xarLog__dumpVariable (array $array)
 {
@@ -38,6 +38,7 @@ function xarLog__dumpVariable (array $array)
     
     $str = '';
     
+    $format ??= '';
     if (isset($name)) {
         if ($format == 'html') {
             $str = "<span style=\"color: $NAME_COLOR;\">".$blank.'Variable name: <b>'.
@@ -47,6 +48,8 @@ function xarLog__dumpVariable (array $array)
         }
     }
     
+    $name ??= '';
+    $var ??= '';
     $type = gettype($var);
     if (is_object($var)) {
         $args = array('name'=>$name, 'var'=>get_object_vars($var), 'classname'=>get_class($var), 'format'=>$format);

@@ -117,16 +117,16 @@ function xarVarGetCached($scope, $name)         { return xarCoreCache::getCached
  * @uses xarVar::setCached()
  * @deprecated
  */
-function xarVarSetCached($scope, $name, $value) { return xarCoreCache::setCached($scope, $name, $value);}
+function xarVarSetCached($scope, $name, $value) { xarCoreCache::setCached($scope, $name, $value);}
 /**
  * Legacy call
  * @uses xarVar::delCached()
  * @deprecated
  */
-function xarVarDelCached($scope, $name)         { return xarCoreCache::delCached($scope, $name);        }
+function xarVarDelCached($scope, $name)         { xarCoreCache::delCached($scope, $name);        }
 /**
  * Legacy call
  * @uses xarVar::flushCached()
  * @deprecated
  */
-function xarVarFlushCached($scope)              { return xarCoreCache::flushCached($scope);             }
+function xarVarFlushCached($scope)              { xarCoreCache::flushCached($scope);             }

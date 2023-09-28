@@ -56,7 +56,7 @@ class xarSec extends xarObject
      * xarSec::confirmAuthKey() to ensure that the operation has
      * indeed been manually requested by the user and that the key is valid
      *
-     * @param string modName the module this authorisation key is for (optional)
+     * @param ?string $modName the module this authorisation key is for (optional)
      * @return string an encrypted key for use in authorisation of operations
      * @todo bring back possibility of extra security by using date (See code)
      */
@@ -86,8 +86,9 @@ class xarSec extends xarObject
      * See description of xarSec::genAuthKey for information on
      * this function
      *
-     * @param string authIdVarName
-     * @return boolean true if the key is valid, false if it is not
+     * @param ?string $modName
+     * @param string $authIdVarName
+     * @return boolean $catch true if the key is valid, false if it is not
      * @throws ForbiddenOperationException
      * @todo bring back possibility of time authorized keys
      */

@@ -172,14 +172,15 @@ class xarSession extends xarObject implements IsessionHandler
                     $args['refererCheck'] = $host;
                 }
                 break;
-            case 'Medium':
-                // Session lasts set number of days
-                $lifetime = $args['duration'] * 86400;
-                break;
             case 'Low':
                 // Session lasts unlimited number of days (well, lots, anyway)
                 // (Currently set to 25 years)
                 $lifetime = 788940000;
+                break;
+            case 'Medium':
+            default:
+                // Session lasts set number of days
+                $lifetime = $args['duration'] * 86400;
                 break;
             }
             ini_set('session.cookie_lifetime', $lifetime);
@@ -639,7 +640,7 @@ class xarSession extends xarObject implements IsessionHandler
     /**
      * Clear all the sessions in the sessions table
      *
-     * @param array $spared a list of roles IDs whose sessions are left untouched
+     * @param array<mixed> $spared a list of roles IDs whose sessions are left untouched
      */
     public static function clear($spared=[])
     {

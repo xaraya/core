@@ -40,16 +40,18 @@ class xarCache_Storage extends xarObject
     /**
      * Factory class method for cache storage (only 'storage' is semi-required)
      *
-     * @param string  $storage the storage you want (filesystem, database, apcu or doctrine)
-     * @param string  $type the type of cached data (page, block, template, ...)
-     * @param string  $cachedir the path to the cache directory (for filesystem)
-     * @param string  $code the cache code (for URL factors et al.) if it's fixed
-     * @param integer $expire the expiration time for this data
-     * @param integer $sizelimit the maximum size for the cache storage
-     * @param string  $logfile the path to the logfile for HITs and MISSes
-     * @param integer $logsize the maximum size of the logfile
-     * @param string  $namespace optional namespace prefix for the cache keys
-     * @param object  $provider an instantiated Doctrine CacheProvider (for doctrine)
+     * @param array<string, mixed> $args
+     * with
+     *     string  $storage the storage you want (filesystem, database, apcu or doctrine)
+     *     string  $type the type of cached data (page, block, template, ...)
+     *     string  $cachedir the path to the cache directory (for filesystem)
+     *     string  $code the cache code (for URL factors et al.) if it's fixed
+     *     integer $expire the expiration time for this data
+     *     integer $sizelimit the maximum size for the cache storage
+     *     string  $logfile the path to the logfile for HITs and MISSes
+     *     integer $logsize the maximum size of the logfile
+     *     string  $namespace optional namespace prefix for the cache keys
+     *     object  $provider an instantiated Doctrine CacheProvider (for doctrine)
      * @return object the specified cache storage
      */
     public static function getCacheStorage(array $args = [])

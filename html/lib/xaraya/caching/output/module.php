@@ -78,7 +78,7 @@ class xarModuleCache extends xarObject
      * @param string $modName registered name of module
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
-     * @param array  $args arguments to pass to the function
+     * @param array<string, mixed> $args arguments to pass to the function
      * @return mixed cacheKey to be used with (is|get|set)Cached, or null if not applicable
      */
     public static function getCacheKey($modName, $modType = 'user', $funcName = 'main', $args = [])
@@ -152,7 +152,7 @@ class xarModuleCache extends xarObject
 
     /**
      * Get cache settings for the modules
-     * @return array
+     * @return array<mixed> 
      */
     public static function getCacheSettings()
     {
@@ -173,7 +173,7 @@ class xarModuleCache extends xarObject
      * @param string $modName registered name of module
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
-     * @param array  $args arguments to pass to the function
+     * @param array<string, mixed> $args arguments to pass to the function
      * @return boolean  true if the module function is suitable for caching, false if not
      */
     public static function checkCachingRules($modName, $modType = 'user', $funcName = 'main', $args = [])

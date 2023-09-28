@@ -22,7 +22,8 @@
  * @todo   this is no longer used and the makeGroup method doesn't exist (anymore)
  * @uses xarRoles::makeGroup()
  * @deprecated
- * @param   string name
+ * @param   string $name
+ * @param   string $uname
  * @return  bool
  */
 function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname); }
@@ -35,7 +36,13 @@ function xarMakeGroup($name,$uname='') { return xarRoles::makeGroup($name,$uname
  * @todo   this is no longer used and the makeUser method doesn't exist (anymore)
  * @uses xarRoles::makeUser()
  * @deprecated
- * @param  string name
+ * @param  string $name
+ * @param  string $uname
+ * @param  string $pass
+ * @param  string $dateReg
+ * @param  string $valCode
+ * @param  int $state
+ * @param  int $authModule
  * @return boolean
  */
 function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state=3,$authModule= 0)
@@ -50,8 +57,8 @@ function xarMakeUser($name,$uname,$email,$pass='',$dateReg='',$valCode='',$state
  *
  * @uses xarRoles::makeMemberByName()
  * @deprecated
- * @param  string child name
- * @param  string parent name
+ * @param  string $childName
+ * @param  string $parentName
  * @return boolean
  */
 function xarMakeRoleMemberByName($childName, $parentName)
@@ -66,8 +73,8 @@ function xarMakeRoleMemberByName($childName, $parentName)
  *
  * @uses xarRoles::makeMemberByUname()
  * @deprecated
- * @param  string child uname
- * @param  string parent uname
+ * @param  string $childName
+ * @param  string $parentName
  * @return boolean
  */
 function xarMakeRoleMemberByUname($childName, $parentName)
@@ -82,8 +89,8 @@ function xarMakeRoleMemberByUname($childName, $parentName)
  *
  * @uses xarRoles::makeMemberByID()
  * @deprecated
- * @param  string child ID
- * @param  string parent ID
+ * @param  string $childId
+ * @param  string $parentId
  * @return boolean
  */
 function xarMakeRoleMemberByID($childId, $parentId)
@@ -98,8 +105,8 @@ function xarMakeRoleMemberByID($childId, $parentId)
  *
  * @uses xarRoles::removeMemberByID()
  * @deprecated
- * @param  string child ID
- * @param  string parent ID
+ * @param  string $childId
+ * @param  string $parentId
  * @return boolean
  */
 function xarRemoveRoleMemberByID($childId, $parentId)
@@ -114,13 +121,13 @@ function xarRemoveRoleMemberByID($childId, $parentId)
  *
  * @uses xarPrivileges::register()
  * @deprecated
- * @param  string name
- * @param  integer realm
- * @param  string module
- * @param  string component
- * @param  string instance
+ * @param  string $name
+ * @param  integer $realm
+ * @param  string $module
+ * @param  string $component
+ * @param  string $instance
  * @param  mixed   $level string or integer - support both and convert as needed in register()
- * @param  string description
+ * @param  string $description
  * @return boolean
  */
 function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$description='')
@@ -135,8 +142,8 @@ function xarRegisterPrivilege($name,$realm,$module,$component,$instance,$level,$
  *
  * @uses xarPrivileges::makeMember()
  * @deprecated
- * @param  string childName
- * @param  string  parentName
+ * @param  string $childName
+ * @param  string $parentName
  * @return boolean
  */
 function xarMakePrivilegeMember($childName, $parentName)
@@ -151,8 +158,8 @@ function xarMakePrivilegeMember($childName, $parentName)
  *
  * @uses xarPrivileges::assign()
  * @deprecated
- * @param  string  privilege name
- * @param  string role name
+ * @param  string $privilege name
+ * @param  string $role name
  * @return boolean
  */
 function xarAssignPrivilege($privilege,$role)
@@ -167,7 +174,7 @@ function xarAssignPrivilege($privilege,$role)
  *
  * @uses xarPrivileges::removeModule()
  * @deprecated
- * @param   string module
+ * @param   string $module
  * @return  void
  */
 function xarRemovePrivileges($module)
@@ -182,14 +189,14 @@ function xarRemovePrivileges($module)
  *
  * @uses xarPrivileges::defineInstance()
  * @deprecated
- * @param  string module
- * @param  string type
- * @param  string query
- * @param  integer propagate
- * @param  string table2
- * @param  integer childId
- * @param  integer parentId
- * @param  string description
+ * @param  string $module
+ * @param  string $type
+ * @param  string $query
+ * @param  integer $propagate
+ * @param  string $table2
+ * @param  string $childId
+ * @param  string $parentId
+ * @param  string $description
  * @return boolean
  */
 function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId='',$parentId='',$description='')
@@ -204,7 +211,7 @@ function xarDefineInstance($module,$type,$query,$propagate=0,$table2='',$childId
  *
  * @uses xarPrivileges::removeInstances()
  * @deprecated
- * @param   string module
+ * @param   string $module
  * @return  bool
  */
 function xarRemoveInstances($module)
@@ -219,7 +226,7 @@ function xarRemoveInstances($module)
  *
  * @uses xarRoles::getgroups()
  * @deprecated
- * @return array of strings
+ * @return array<mixed> of strings
  */
 function xarGetGroups() { return xarRoles::getgroups(); }
 
@@ -230,7 +237,7 @@ function xarGetGroups() { return xarRoles::getgroups(); }
  *
  * @uses xarRoles::findRole()
  * @deprecated
- * @param   string name
+ * @param   string $name
  * @return  object role
  */
 function xarFindRole($name) { return xarRoles::findRole($name);  }
@@ -251,6 +258,8 @@ function xarCurrentRole()
 
 /**
  * @uses xarRoles::isParent()
+ * @param mixed $name1
+ * @param mixed $name2
  * @deprecated
  */
 function xarIsParent($name1, $name2)
@@ -260,6 +269,8 @@ function xarIsParent($name1, $name2)
 
 /**
  * @uses xarRoles::isAncestor()
+ * @param mixed $name1
+ * @param mixed $name2
  * @deprecated
  */
 function xarIsAncestor($name1, $name2)
@@ -274,7 +285,6 @@ function xarIsAncestor($name1, $name2)
  *
  * @uses xarTreeRenderer
  * @deprecated
- * @param   string name
  * @return  object|string role
  * @todo    what is this doing here?
  * @todo   ithis seems to be implemented via Javascript now in roles & privileges
@@ -295,9 +305,14 @@ function xarTree()
  *
  * @uses xarPrivileges::external()
  * @deprecated
- * @param   integer pid,level
- * @param   string pid,name,realm,module,component
- * @param   array instance
+ * @param   integer $pid
+ * @param   string $pid
+ * @param   string $name
+ * @param   array $realm
+ * @param   string $module
+ * @param   string $component
+ * @param   array $instance
+ * @param   integer $level
  * @return  boolean
  */
 function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$level)
@@ -312,7 +327,7 @@ function xarReturnPrivilege($pid,$name,$realm,$module,$component,$instance,$leve
  *
  * @uses xarSecurity::getLevel()
  * @deprecated
- * @param   integer levelname
+ * @param   integer $levelname
  * @return  int security level
  */
 function xarSecurityLevel($levelname)
@@ -325,7 +340,7 @@ function xarSecurityLevel($levelname)
  *
  * @uses xarSecurity::hasPrivilege()
  * @deprecated
- * @param   string name of privilege
+ * @param   string $name of privilege
  * @return  boolean
  */
 function xarPrivExists($name)
@@ -338,8 +353,9 @@ function xarPrivExists($name)
  *
  * @uses xarSecurity::hasMask()
  * @deprecated
- * @param   string name of mask
- * @param   string module of mask
+ * @param   string $name of mask
+ * @param   string $module of mask
+ * @param   string $component of mask
  * @return  bool
  */
 function xarMaskExists($name,$module="All",$component="All")
@@ -361,6 +377,8 @@ function xarMaskExists($name,$module="All",$component="All")
  * @param  string  $instance
  * @param  string  $module
  * @param  string  $role
+ * @param  integer $pnrealm
+ * @param  integer $pnlevel
  * @return boolean
  */
 function xarSecurityCheck($mask, $showException=1, $component='', $instance='', $module='', $role='',$pnrealm=0,$pnlevel=0)
@@ -399,7 +417,7 @@ function xarRegisterMask($name,$realm,$module,$component,$instance,$level,$descr
  *
  * @uses xarMasks::unregister()
  * @deprecated
- * @param  string name
+ * @param  string $name
  * @return boolean
  */
 function xarUnregisterMask($name)
@@ -414,7 +432,7 @@ function xarUnregisterMask($name)
  *
  * @uses xarMasks::removemasks()
  * @deprecated
- * @param   string module
+ * @param   string $module
  * @return  bool
  */
 function xarRemoveMasks($module)
@@ -427,7 +445,7 @@ function xarRemoveMasks($module)
  *
  * @uses xarSec::genAuthKey()
  * @deprecated
- * @param string modName the module this authorisation key is for (optional)
+ * @param string $modName the module this authorisation key is for (optional)
  * @return string an encrypted key for use in authorisation of operations
  * @todo bring back possibility of extra security by using date (See code)
  */
@@ -441,8 +459,9 @@ function xarSecGenAuthKey($modName = NULL)
  *
  * @uses xarSec::confirmAuthKey()
  * @deprecated
- * @param string authIdVarName
- * @return boolean true if the key is valid, false if it is not
+ * @param ?string $modName
+ * @param string $authIdVarName
+ * @return boolean $catch true if the key is valid, false if it is not
  * @throws ForbiddenOperationException
  * @todo bring back possibility of time authorized keys
  */

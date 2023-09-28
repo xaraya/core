@@ -589,6 +589,7 @@ class Query
 
    public function qand()
     {
+        $key = 'lost';
         $numargs = func_num_args();
         if ($numargs == 2) {
         } elseif ($numargs == 1) {
@@ -609,6 +610,7 @@ class Query
     }
     public function qor()
     {
+        $key = 'lost';
         $numargs = func_num_args();
         if ($numargs == 2) {
         } elseif ($numargs == 1) {
@@ -858,6 +860,7 @@ class Query
                 $condition['op'] = preg_match('/JOIN/i', $condition['op']) ? '=' : $condition['op'];
             }
         }
+        $field = '';
         switch ($this->type) {
             case "SELECT" :
                 $field = $condition['field1'];
@@ -1682,7 +1685,7 @@ class Query
     public function sessiongetvar($x)
     {
         $q = xarSession::getVar($x);
-        if (empty($q) || !isset($q)) return;
+        if (empty($q)) return;
         $this->open();
         return $this;
     }
@@ -2063,6 +2066,7 @@ class Query
 # --------------------------------------------------------
 # Finally get all the fields we'll be working with
 #
+        $fieldstodo = array();
         foreach ($this->fields as $field) $fieldstodo[$field['table'] . '.' . $field['name']] = $field;
 
 # --------------------------------------------------------
@@ -2258,6 +2262,7 @@ class Query
     
     private function findInternalTables($primarytable, $linkstodo) 
     {
+        $temp = [];
         foreach ($this->tables as $table) $temp[$table['alias']] = $table;
         $tables[$primarytable] = $temp[$primarytable];
         $links = $linkstodo;
@@ -2298,6 +2303,7 @@ class Query
             }
         }
         
+        $field1 = [];
         // Remove links with this table
         foreach ($this->tablelinks as $key => $link) {
             $field1 = $this->_deconstructfield($link['field1']);

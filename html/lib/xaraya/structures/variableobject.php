@@ -49,7 +49,7 @@ abstract class xarVariableObject extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param int|void $rolid
+ * @param int|null $role_id
  * @return object current instance
 **/
     final public static function getInstance($role_id=null)
@@ -179,7 +179,7 @@ abstract class xarVariableObject extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @return array names of properties to store when object is serialized
+ * @return array<mixed> names of properties to store when object is serialized
 **/
     public function __sleep()
 

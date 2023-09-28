@@ -358,6 +358,7 @@ class PHPBackendGenerator extends xarObject
             fputs($fp2, '<?php'."\n");
             fputs($fp2, 'global $xarML_PHPBackend_entries;'."\n");
             fputs($fp2, 'global $xarML_PHPBackend_keyEntries;'."\n");
+            $start = '';
             foreach ($vals as $node) {
                 if (!isset($node['tag'])) continue;
                 if (!isset($node['value'])) $node['value'] = '';
@@ -383,6 +384,8 @@ class PHPBackendGenerator extends xarObject
             xarLog::message("Could not create file: ".$this->fileName, xarLog::LEVEL_ERROR);
             global $xarML_PHPBackend_entries;
             global $xarML_PHPBackend_keyEntries;
+            $entryIndex = '';
+            $entryType = '';
             foreach ($vals as $node) {
                 if (!isset($node['tag'])) continue;
                 if (!isset($node['value'])) $node['value'] = '';

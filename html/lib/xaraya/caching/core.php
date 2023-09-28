@@ -26,7 +26,7 @@ class xarCoreCache extends xarObject
     /**
      * Initialise the caching options
      *
-     * @param array $config caching configuration from config.caching.php
+     * @param array<string, mixed> $config caching configuration from config.caching.php
      * @return boolean
      * @todo configure optional second-level cache here ?
     **/
@@ -166,7 +166,7 @@ class xarCoreCache extends xarObject
     /**
      * Get the list of cached scopes from the cache collection
      *
-     * @return array list of cache scopes
+     * @return array<mixed> list of cache scopes
     **/
     public static function getCachedScopes()
     {

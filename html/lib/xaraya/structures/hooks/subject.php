@@ -34,7 +34,7 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
      * constructor
      * This is common to all hook subjects
      * 
-     * @param array $args, array containing hook caller item params and values
+     * @param array<string, mixed> $args, array containing hook caller item params and values
      * @return void
      * @throws BadParameterException
     **/    

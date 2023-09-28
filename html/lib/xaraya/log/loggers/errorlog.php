@@ -58,7 +58,7 @@ class xarLogger_errorlog extends xarLogger
     /**
      * Sets up the configuration specific parameters for each driver
      *
-     * @param array     $conf               Configuration options for the specific driver.
+     * @param array<string, mixed> $conf               Configuration options for the specific driver.
      *
      * 
      * @return boolean
@@ -95,7 +95,7 @@ class xarLogger_errorlog extends xarLogger
      * instances that are observing this Log.
      *
      * @param string $message  The textual message to be logged.
-     * @param int $priority (optional) The priority of the message.  Valid
+     * @param int $level (optional) The priority of the message.  Valid
      *                  values are: PEAR_LOG_EMERG, PEAR_LOG_ALERT,
      *                  PEAR_LOG_CRIT, PEAR_LOG_ERR, PEAR_LOG_WARNING,
      *                  PEAR_LOG_NOTICE, PEAR_LOG_INFO, and PEAR_LOG_DEBUG.

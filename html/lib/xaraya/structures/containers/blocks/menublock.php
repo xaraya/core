@@ -96,7 +96,7 @@ abstract class MenuBlock extends BasicBlock implements iBlock
 /**
  * Get a module link for display
  *
- * @param array $link array of link information, required
+ * @param array<mixed> $link array of link information, required
  * @param bool $expand force loadmenuarray (default false)
  * @return mixed bool false if no modname, or link isn't visible, array of link info on success
 **/

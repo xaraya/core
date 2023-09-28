@@ -73,7 +73,7 @@ class xarLogger_mail extends xarLogger
     /**
      * Constructs a new Log_mail object.
      * 
-     * @param array  $conf      The configuration array.
+     * @param array<string, mixed> $conf      The configuration array.
      * Obligatory configurations:
      *   $conf['to']        : The e-mail that will be receiving the log files.
      *

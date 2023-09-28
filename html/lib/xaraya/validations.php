@@ -33,6 +33,7 @@ class ValueValidations extends xarObject implements IValidation
     static public function &get($type)
     {
         sys::import("xaraya.validations.$type");
+        $cls = 'ValueValidations';
         switch($type) {
             case 'array'    : $cls = 'ArrayValidation';     break;
             case 'bool'     : $cls = 'BoolValidation';      break;

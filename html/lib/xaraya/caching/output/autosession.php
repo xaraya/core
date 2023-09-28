@@ -69,11 +69,9 @@ class xarAutoSessionCache extends xarObject
                 filesize(xarOutputCache::$cacheDir.'/autocache.log') > 0) {
                 $logs = @file(xarOutputCache::$cacheDir.'/autocache.log');
                 $autocacheproposed = [];
-                if (!empty($cachingConfiguration['AutoCache.KeepStats'])) {
-                    $autocachestats = [];
-                    $autocachefirstseen = [];
-                    $autocachelastseen = [];
-                }
+                $autocachestats = [];
+                $autocachefirstseen = [];
+                $autocachelastseen = [];
                 foreach ($logs as $entry) {
                     if (empty($entry)) {
                         continue;
@@ -168,7 +166,7 @@ class xarAutoSessionCache extends xarObject
                     $fp = @fopen(xarOutputCache::$cacheDir.'/autocache.stats', 'w');
                     if ($fp) {
                         foreach ($autocachestats as $url => $stats) {
-                            if ($stats['HIT'] + $stats['MISS'] < 2) {
+                            if (intval($stats['HIT']) + intval($stats['MISS']) < 2) {
                                 continue;
                             }
                             @fwrite($fp, $url . ' ' . $stats['HIT'] . ' ' . $stats['MISS'] . ' ' . $autocachefirstseen[$url] . ' ' . $autocachelastseen[$url] . "\n");

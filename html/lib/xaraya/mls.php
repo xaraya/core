@@ -173,7 +173,7 @@ class xarMLS extends xarObject
      * Returns an array of locales available in the site
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return array of locales
+     * @return array<mixed> of locales
      */
     static public function listSiteLocales()
     {
@@ -292,7 +292,7 @@ class xarMLS extends xarObject
      * Info is an array composed by the 'lang', 'country', 'specializer' and 'charset' items.
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return array locale info
+     * @return array<mixed> locale info
      */
     static public function localeGetInfo($locale) { return self::parseLocaleString($locale); }
 
@@ -337,7 +337,7 @@ class xarMLS extends xarObject
      * lang, country, specializer, charset.
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return array locale list
+     * @return array<mixed> locale list
      */
     static public function localeGetList($filter=array())
     {
@@ -658,12 +658,15 @@ class xarMLS extends xarObject
      * The first alternative is the locale itself
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return array|void alternative locales
+     * @return array<mixed>|void alternative locales
      */
     static private function getLocaleAlternatives($locale)
     {
         if (!$parsedLocale = self::parseLocaleString($locale)) return; // throw back
         extract($parsedLocale); // $lang, $country, $charset
+        /** @var string $lang */
+        /** @var string $country */
+        /** @var string $charset */
     
         $alternatives = array($locale);
         if (!empty($country) && !empty($specializer)) $alternatives[] = $lang.'_'.$country.'.'.$charset;
@@ -677,7 +680,7 @@ class xarMLS extends xarObject
      * lang, country, specializer and charset keys
      *
      * @author Marco Canini <marco@xaraya.com>
-     * @return array parsed locale
+     * @return array<mixed> parsed locale
      */
     static public function parseLocaleString($locale)
     {
@@ -837,6 +840,7 @@ class xarMLSContext extends xarObject
     
     static public function getContextFromPath($path='')
     {
+        $domainType = 0;
         // @todo be able to handle standard files from other locations, e.g. from /vendor/ with composer
         if (strpos($path, sys::lib()) === 0) {
             $domainType = xarMLS::DNTYPE_CORE;

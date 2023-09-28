@@ -37,7 +37,7 @@ class xarLogger_javascript extends xarLogger
     /**
      * Sets up the configuration specific parameters for each driver
      *
-     * @param array     $conf               Configuration options for the specific driver.
+     * @param array<string, mixed> $conf               Configuration options for the specific driver.
      *
      * 
      * @return boolean

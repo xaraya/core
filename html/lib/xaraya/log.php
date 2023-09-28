@@ -185,7 +185,7 @@ class xarLog extends xarObject
 
     /**
      * Will return the loggers that are set as active
-     * @return array
+     * @return array<mixed>
      */
     static public function availables()
     {
@@ -198,8 +198,8 @@ class xarLog extends xarObject
     
     /**
      * Log a message
-     * @param string message. The message to log
-     * @param string level. The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
+     * @param string $message The message to log
+     * @param int $level The level for this message OPTIONAL Defaults to XARLOG_LEVEL_DEBUG
      *
      */
     static public function message($message, $level = self::LEVEL_DEBUG)

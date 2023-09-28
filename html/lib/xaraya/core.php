@@ -198,7 +198,7 @@ class xarCore extends xarCoreCache
     /**
      * Initializes the core engine
      * 
-     * @param integer whatToLoad What optional systems to load.
+     * @param integer $whatToLoad What optional systems to load.
      * @return boolean true
     **/
     public static function xarInit($whatToLoad = self::SYSTEM_ALL)
@@ -550,7 +550,7 @@ class xarCore extends xarCoreCache
     /**
      * Check for specified debugger flag.
      *
-     * @param integer flag the debugger flag to check for activity
+     * @param integer $flag the debugger flag to check for activity
      * @return boolean true if the flag is active, false otherwise
     **/
     public static function isDebugFlagSet($flag)

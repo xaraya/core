@@ -197,8 +197,6 @@ class xarLogger_simple extends xarLogger
     /**
      * Prepare the logfile for writing
      *
-     * @param string $file Path to the logger file
-     * 
      * @throws LoggerException
      * @return boolean true on success
      **/
@@ -305,9 +303,10 @@ class xarLogger_simple extends xarLogger
         }
     }
 
-    // Add a message, applying appropriate formatting, to the output buffer.
-    // @return boolean true on success or false on failure.
-    // 
+    /**
+     * Add a message, applying appropriate formatting, to the output buffer.
+     * @return boolean true on success or false on failure.
+     */ 
     public function notify($message, $level)
     {
         // Abort early if the level of priority is above the maximum logging level.
@@ -321,19 +320,21 @@ class xarLogger_simple extends xarLogger
         return true;
     }
 
-    // Format a message.
-    // @param string $message The message detail text
-    // @param integer $level The priority level of this record
-    // @return string The formatted log record
-    // 
+    /**
+     * Format a message.
+     * @param string $message The message detail text
+     * @param integer $level The priority level of this record
+     * @return string The formatted log record
+     */ 
     public function formatMessage($message, $level)
     {
         return $this->getTime() . ' [' . self::$levels[$level] . '] ' . $message . $this->EOL;
     }
 
-    // Get the name of the file to which we are writing.
-    // @return string The file name
-    // 
+    /**
+     * Get the name of the file to which we are writing.
+     * @return string The file name
+     */ 
     public function getFilename()
     {
         return basename($this->filename);

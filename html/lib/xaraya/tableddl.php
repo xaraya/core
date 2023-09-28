@@ -85,8 +85,9 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
  *
  * @uses xarTableDDL::createTable()
  * @param string $tableName the table to alter
- * @param array $fields
- * @param string databaseType the database type (optional)
+ * @param array<mixed> $fields
+ * @param string $databaseType the database type (optional)
+ * @param string $charset the character set (optional)
  * @return string generated sql
  * @throws EmptyParameterException, BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -145,15 +146,17 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
  *
  * @uses xarTableDDL::alterTable()
  * @param string $tableName the table to alter
- * @param array $args['command'] command to perform on table(add,modify,drop,rename)
- * @param array $args['field'] name of column to alter
- * @param array $args['type'] column type
- * @param array $args['size'] size of column if varying data
- * @param array $args['default'] default value of data
- * @param array $args['null'] null or not null (true/false)
- * @param array $args['unsigned'] allow unsigned data (true/false)
- * @param array $array $args['increment'] auto incrementing files
- * @param array $args['primary_key'] primary key
+ * @param array<string, mixed> $args
+ * with
+ *     $args['command'] command to perform on table(add,modify,drop,rename)
+ *     $args['field'] name of column to alter
+ *     $args['type'] column type
+ *     $args['size'] size of column if varying data
+ *     $args['default'] default value of data
+ *     $args['null'] null or not null (true/false)
+ *     $args['unsigned'] allow unsigned data (true/false)
+ *     $args['increment'] auto incrementing files
+ *     $args['primary_key'] primary key
  * @param string $databaseType the database type (optional)
  * @throws EmptyParameterException, BadParameterException
  * @return string generated sql
@@ -212,7 +215,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
  *
  * @uses xarTableDDL::dropTable()
  * @param string $tableName the physical table name
- * @param array $index an array containing the index name, type and fields array
+ * @param ?string $databaseType the database type
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  */
@@ -258,7 +261,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
  *
  * @uses xarTableDDL::createIndex()
  * @param string $tableName the physical table name
- * @param array $index an array containing the index name, type and fields array
+ * @param array<string, mixed> $index an array containing the index name, type and fields array
  * @param string $databaseType is an optional parameter to specify the database type
  * @return string|false the generated SQL statement, or false on failure
  * @throws EmptyParameterException, BadParameterException
@@ -325,7 +328,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
  *
  * @uses xarTableDDL::dropIndex()
  * @param string $tableName
- * @param array $index name a db index name
+ * @param array<string, mixed> $index name a db index name
  * @param string $databaseType
  * @return string|false generated sql to drop an index
  * @throws EmptyParameterException, BadParameterException

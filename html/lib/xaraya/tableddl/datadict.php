@@ -29,7 +29,7 @@
  *
  * 
  * @param string $tableName the physical table name
- * @param array $fields an array containing the fields to create
+ * @param array<string, mixed> $fields an array containing the fields to create
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  * @deprecated
@@ -67,10 +67,12 @@ function xarDB__datadictCreateTable($tableName, $fields)
  *
  * 
  * @param string $tableName the table to alter
- * @param array args['command'] command to perform on the table
- * @param string args['field'] name of column to modify
- * @param string args['after_field']
- * @param string args['new_name'] new name of table
+ * @param array<string, mixed> $args
+ * with
+ *     array args['command'] command to perform on the table
+ *     string args['field'] name of column to modify
+ *     string args['after_field']
+ *     string args['new_name'] new name of table
  * @return string|false datadict specific sql to alter a table
  * @throws BadParameterException
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
@@ -150,8 +152,8 @@ function xarDB__datadictAlterTable($tableName, $args)
  * DataDict specific column type generation - adapted from a d o d b-mysql.inc.php mapping
  *
  * 
- * @param string field_name
- * @param array parameters
+ * @param string $field_name
+ * @param array<string, mixed> $parameters
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  * @deprecated
  */
@@ -427,7 +429,7 @@ function xarDB__datadictDropTable($tableName)
  * Generate the SQL to create a table index
  *
  * @param string $tableName the physical table name
- * @param array $index an array containing the index name, type and fields array
+ * @param array<string, mixed> $index an array containing the index name, type and fields array
  * @return string|false the generated SQL statement, or false on failure
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  * @deprecated
@@ -450,7 +452,7 @@ function xarDB__datadictCreateIndex($tableName, $index)
  *
  * 
  * @param string $tableName
- * @param array $index name a db index name
+ * @param array<string, mixed> $index name a db index name
  * @return string|false generated sql to drop an index
  * @todo DID YOU READ THE NOTE AT THE TOP OF THIS FILE?
  * @deprecated

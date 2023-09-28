@@ -75,7 +75,7 @@ class xarURL extends xarObject
      * Format GET parameters formed by nested arrays, to support xarController::URL().
      * This function will recurse for each level to the arrays.
      *
-     * @param array $args the array to be expanded as a GET parameter
+     * @param array<string, mixed> $args the array to be expanded as a GET parameter
      * @param string $prefix the prefix for the GET parameter
      * @return string the expanded GET parameter(s)
      **/
@@ -95,7 +95,7 @@ class xarURL extends xarObject
     /**
      * Add further parameters to the path, ensuring each value is encoded correctly.
      *
-     * @param array $args the array to be encoded
+     * @param array<string, mixed> $args the array to be encoded
      * @param string $path the current path to append parameters to
      * @param string $pini the initial path seperator to use
      * @param string $psep the path seperator to use
@@ -340,7 +340,7 @@ class xarServer extends xarObject
     /**
      * Get current URL (and optionally add/replace some parameters)
      *
-     * @param array $args additional parameters to be added to/replaced in the URL (e.g. theme, ...)
+     * @param array<string, mixed> $args additional parameters to be added to/replaced in the URL (e.g. theme, ...)
      * @param bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
      * @param string $target add a 'target' component to the URL
      * @return string current URL

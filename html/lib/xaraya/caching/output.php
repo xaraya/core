@@ -30,7 +30,7 @@ class xarOutputCache extends xarObject
     /**
      * Initialise the caching options
      *
-     * @param array $config caching configuration from config.caching.php
+     * @param array<string, mixed> $config caching configuration from config.caching.php
      * @return boolean
      * @todo consider the use of a shutdownhandler for cache maintenance
      */

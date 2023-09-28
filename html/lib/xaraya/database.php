@@ -29,17 +29,18 @@ if ($middleware == 'Creole') {
      * connection using the required parameters then it sets
      * the table prefixes and xartables up and returns true
      *
-     * @param array $args
-     * @param string args[databaseType] database type to use
-     * @param string args[databaseHost] database hostname
-     * @param string args[databasePort] database port
-     * @param string args[databaseName] database name
-     * @param string args[userName] database username
-     * @param string args[password] database password
-     * @param bool args[persistent] flag to say we want persistent connections (optional)
-     * @param string args[systemTablePrefix] system table prefix
-     * @param string args[siteTablePrefix] site table prefix
-     * @param bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
+     * @param array<string, mixed> $args
+     * with
+     *     string args[databaseType] database type to use
+     *     string args[databaseHost] database hostname
+     *     string args[databasePort] database port
+     *     string args[databaseName] database name
+     *     string args[userName] database username
+     *     string args[password] database password
+     *     bool args[persistent] flag to say we want persistent connections (optional)
+     *     string args[systemTablePrefix] system table prefix
+     *     string args[siteTablePrefix] site table prefix
+     *     bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
      * @return boolean true
      * @todo <marco> move template tag table definition somewhere else?
     **/
@@ -89,17 +90,18 @@ if ($middleware == 'Creole') {
      * connection using the required parameters then it sets
      * the table prefixes and xartables up and returns true
      *
-     * @param array $args
-     * @param string args[databaseType] database type to use
-     * @param string args[databaseHost] database hostname
-     * @param string args[databasePort] database port
-     * @param string args[databaseName] database name
-     * @param string args[userName] database username
-     * @param string args[password] database password
-     * @param bool args[persistent] flag to say we want persistent connections (optional)
-     * @param string args[systemTablePrefix] system table prefix
-     * @param string args[siteTablePrefix] site table prefix
-     * @param bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
+     * @param array<string, mixed> $args
+     * with
+     *     string args[databaseType] database type to use
+     *     string args[databaseHost] database hostname
+     *     string args[databasePort] database port
+     *     string args[databaseName] database name
+     *     string args[userName] database username
+     *     string args[password] database password
+     *     bool args[persistent] flag to say we want persistent connections (optional)
+     *     string args[systemTablePrefix] system table prefix
+     *     string args[siteTablePrefix] site table prefix
+     *     bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
      * @return boolean true
      * @todo <marco> move template tag table definition somewhere else?
     **/

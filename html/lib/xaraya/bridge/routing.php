@@ -268,7 +268,7 @@ class FastRouteBridge implements CommonBridgeInterface
     /**
      * Summary of callHandler
      * @param mixed $handler
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $request
      * @return mixed
      */
@@ -286,7 +286,7 @@ class FastRouteBridge implements CommonBridgeInterface
     /**
      * Summary of callRestApiHandler
      * @param mixed $handler
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $request
      * @return mixed
      */
@@ -307,7 +307,7 @@ class FastRouteBridge implements CommonBridgeInterface
 
     /**
      * Summary of handleObjectRequest
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $request
      * @return string
      */
@@ -358,7 +358,7 @@ class FastRouteBridge implements CommonBridgeInterface
 
     /**
      * Summary of runObjectRequest
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return string
      */
     public static function runObjectRequest($params)
@@ -368,7 +368,7 @@ class FastRouteBridge implements CommonBridgeInterface
 
     /**
      * Summary of handleModuleRequest
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $request
      * @return string
      */
@@ -407,7 +407,7 @@ class FastRouteBridge implements CommonBridgeInterface
 
     /**
      * Summary of runModuleRequest
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $query
      * @return string
      */
@@ -418,7 +418,7 @@ class FastRouteBridge implements CommonBridgeInterface
 
     /**
      * Summary of handleBlockRequest
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $request
      * @return string
      */
@@ -437,7 +437,7 @@ class FastRouteBridge implements CommonBridgeInterface
 
     /**
      * Summary of runBlockRequest
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $query
      * @return string
      */
@@ -503,7 +503,7 @@ class FastRouteApiBridge extends FastRouteBridge
 
     /**
      * Summary of runObjectRequest
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return mixed
      */
     public static function runObjectRequest($params)
@@ -513,7 +513,7 @@ class FastRouteApiBridge extends FastRouteBridge
 
     /**
      * Summary of runModuleRequest
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $query
      * @return mixed
      */
@@ -524,7 +524,7 @@ class FastRouteApiBridge extends FastRouteBridge
 
     /**
      * Summary of runBlockRequest
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $query
      * @return mixed
      */
@@ -590,7 +590,7 @@ class FastRouteStaticBridge extends FastRouteBridge
 
     /**
      * Summary of handleThemeFileRequest
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $request
      * @return string
      */
@@ -608,7 +608,7 @@ class FastRouteStaticBridge extends FastRouteBridge
 
     /**
      * Summary of handleModuleFileRequest
-     * @param array $vars
+     * @param array<string, mixed> $vars
      * @param mixed $request
      * @return string
      */
@@ -632,7 +632,7 @@ class FastRouteBuildTest
 {
     /**
      * Summary of getObjectRoute
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return string
      */
     public static function getObjectRoute($params)
@@ -649,7 +649,7 @@ class FastRouteBuildTest
 
     /**
      * Summary of getModuleRoute
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return string
      */
     public static function getModuleRoute($params)
@@ -669,7 +669,7 @@ class FastRouteBuildTest
 
     /**
      * Summary of getBlockRoute
-     * @param array $params
+     * @param array<string, mixed> $params
      * @return string
      */
     public static function getBlockRoute($params)
@@ -686,8 +686,8 @@ class FastRouteBuildTest
 
     /**
      * Summary of matchRoutes
-     * @param array $routes
-     * @param array $vars
+     * @param array<mixed> $routes
+     * @param array<string, mixed> $vars
      * @return string
      */
     public static function matchRoutes($routes, $vars)

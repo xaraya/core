@@ -135,7 +135,7 @@ class xarEvents extends xarObject implements ixarEvents
     /**
      * public event notifier function
      *
-     * @param string event name of event subject, required
+     * @param string $event name of event subject, required
      * @param mixed $args argument(s) to pass to subject, optional, default empty array
      * @return mixed response from subject notify method
     **/
@@ -394,6 +394,7 @@ class xarEvents extends xarObject implements ixarEvents
         // validate input, some methods (register/notify) use this to validate input     
         $invalid = array();
         // Check we have a valid event
+        /** @var string $event */
         if (empty($event) || !is_string($event) || strlen($event) > 255)
             $invalid[] = 'event';
                     
@@ -401,25 +402,31 @@ class xarEvents extends xarObject implements ixarEvents
         if (!empty($module)) {
             $module_id = is_numeric($module) ? $module : xarMod::getRegID($module);
         }                    
+        /** @var int $module_id */
         if (!empty($module_id))
             $modinfo = xarMod::getInfo($module_id);
         // can't check mod available here, since it may not be if the module is init'ing
+        /** @var array<mixed> $modinfo */
         //if (empty($modinfo) || !xarMod::isAvailable($modinfo['name']))
         if (empty($modinfo)) 
             $invalid[] = 'module';       
 
         // Check we have a valid area (class, api, gui)
+        /** @var string $area */
         if (empty($area) || !is_string($area) || strlen($area) > 64)
             $invalid[] = 'area';
 
         // Check we have a valid type (eventobserver, eventsubject, admin, user, event, etc)
+        /** @var string $type */
         if (empty($type) || !is_string($type) || strlen($type) > 64)
             $invalid[] = 'type';        
 
         // Check we have a valid func
+        /** @var string $func */
         if (empty($func) || !is_string($func) || strlen($func) > 64)
             $invalid[] = 'func';
         
+        /** @var int $itemtype */
         if (empty($itemtype) || !is_numeric($itemtype)) {
             // not a valid subject or observer itemtype 
             $invalid[] = 'itemtype';
@@ -438,6 +445,7 @@ class xarEvents extends xarObject implements ixarEvents
             return $_files[$itemtype][$event][$module];
         $loaded = false;
         
+        $suffix = '';
         switch ($area) {
             case 'class':
             default:
@@ -608,7 +616,7 @@ class xarEvents extends xarObject implements ixarEvents
     /**
      * Load all subjects from db for current subject type
      * We only ever do this once per page request, results are cached
-     * @return array|void containing subjects, indexed by event name
+     * @return array<mixed>|void containing subjects, indexed by event name
      * used internally by the event system, must not be overloaded 
     **/
     final public static function getSubjects()
@@ -668,8 +676,8 @@ class xarEvents extends xarObject implements ixarEvents
     /**
      * Get all observers of an event subject from db
      *
-     * @param object $subject ixarEventSubject
-     * @return array|void containing subject observers
+     * @param ixarEventSubject $subject ixarEventSubject
+     * @return array<mixed>|void containing subject observers
     **/
     public static function getObservers(ixarEventSubject $subject)
     {

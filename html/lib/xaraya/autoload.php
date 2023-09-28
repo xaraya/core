@@ -31,7 +31,7 @@ class xarAutoload extends xarObject
     /**
      * Initialize the list of autoload functions
      *
-     * @param array $registerlist list of functions and classname::methods to be registered
+     * @param array<mixed> $registerlist list of functions and classname::methods to be registered
      * @param string $extensions comma-separated list of file extensions to be checked (instead of the default ones)
      * @return void
     **/

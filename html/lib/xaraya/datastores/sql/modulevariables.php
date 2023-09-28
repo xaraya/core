@@ -130,10 +130,12 @@ class ModuleVariablesDataStore extends RelationalDataStore
         $modvars = $this->getTable('module_vars');
         $moditemvars = $this->getTable('module_itemvars');
 
+        $modulefields = [];
         // split the fields to be gotten up by module
         foreach ($properties as $field) {
             if (empty($field->source)) continue;
             $this->setModvarName($field->source);
+            $modulefields[$this->modulename] ??= [];
             $modulefields[$this->modulename][] = $field->name;
         }
         foreach ($modulefields as $key => $values) {
@@ -189,10 +191,12 @@ class ModuleVariablesDataStore extends RelationalDataStore
 
         $properties = $this->object->getProperties();
 
+        $modulefields = [];
         // split the fields to be gotten up by module
         foreach ($properties as $field) {
             if (empty($field->source)) continue;
             $this->setModvarName($field->source);
+            $modulefields[$this->modulename] ??= [];
             $modulefields[$this->modulename][] = $field->name;
         }
         // include module variable as default

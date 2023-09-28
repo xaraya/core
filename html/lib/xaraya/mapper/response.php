@@ -39,7 +39,10 @@ class xarResponse extends xarObject
      *
      * 
      * @param string $msg the message
-     * @param ... string template overrides, cfr. xarTpl::module (optional)
+     * @param string $modName template overrides, cfr. xarTpl::module (optional)
+     * @param string $modType template overrides, cfr. xarTpl::module (optional)
+     * @param string $funcName template overrides, cfr. xarTpl::module (optional)
+     * @param string $templateName template overrides, cfr. xarTpl::module (optional)
      * @return string output display string
      */
     static public function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
@@ -67,7 +70,10 @@ class xarResponse extends xarObject
      *
      * 
      * @param string $msg the message
-     * @param ... string template overrides, cfr. xarTpl::module (optional)
+     * @param string $modName template overrides, cfr. xarTpl::module (optional)
+     * @param string $modType template overrides, cfr. xarTpl::module (optional)
+     * @param string $funcName template overrides, cfr. xarTpl::module (optional)
+     * @param string $templateName template overrides, cfr. xarTpl::module (optional)
      * @return string output display string
      */
     static public function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)

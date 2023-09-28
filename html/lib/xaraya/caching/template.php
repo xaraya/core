@@ -101,7 +101,7 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
     /**
      * Save the cache key for a sourcefile
      *
-     * @param  string $sourceFileName  For which file are we entering the key?
+     * @param  string $fileName  For which file are we entering the key?
      * @return boolean true on success, false on failure
      * @todo   exceptions?
      * @todo   typically writing of these keys occurs in bursts, can we leave file open until we're done?
