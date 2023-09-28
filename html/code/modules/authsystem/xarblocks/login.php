@@ -14,7 +14,6 @@
  * Initialise block info
  *
  * @author Jim McDonald
- * @return array
  */
 sys::import('xaraya.structures.containers.blocks.basicblock');
 

@@ -354,7 +354,7 @@ class Mail_mimeDecode extends PEAR
      *
      * @param  object $structure   The structure to go through
      * @param  string $mime_number Internal use only.
-     * @return array               Mime numbers
+     * @return array<mixed>               Mime numbers
      */
     function &getMimeNumbers(&$structure, $no_refs = false, $mime_number = '', $prepend = '')
     {
@@ -396,7 +396,7 @@ class Mail_mimeDecode extends PEAR
      * blank line) and return them.
      *
      * @param string Input to split apart
-     * @return array|bool Contains header and body section
+     * @return array<mixed>|bool Contains header and body section
      * @access private
      */
     function _splitBodyHeader($input)
@@ -413,7 +413,7 @@ class Mail_mimeDecode extends PEAR
      * as assoc array.
      *
      * @param string Headers to parse
-     * @return array Contains parsed headers
+     * @return array<mixed> Contains parsed headers
      * @access private
      */
     function _parseHeaders($input)
@@ -451,7 +451,7 @@ class Mail_mimeDecode extends PEAR
      * in the wrong place will probably break it.
      *
      * @param string Header value to parse
-     * @return array Contains parsed result
+     * @return array<mixed> Contains parsed result
      * @access private
      */
     function _parseHeaderValue($input)
@@ -500,7 +500,7 @@ class Mail_mimeDecode extends PEAR
      * on the given boundary
      *
      * @param string Input to parse
-     * @return array Contains array of resulting mime parts
+     * @return array<mixed> Contains array of resulting mime parts
      * @access private
      */
     function _boundarySplit($input, $boundary)
@@ -627,7 +627,7 @@ class Mail_mimeDecode extends PEAR
      * pass it.
      *
      * @param  string Input body to look for attahcments in
-     * @return array  Decoded bodies, filenames and permissions
+     * @return array<mixed>  Decoded bodies, filenames and permissions
      * @access public
      * @author Unknown
      */

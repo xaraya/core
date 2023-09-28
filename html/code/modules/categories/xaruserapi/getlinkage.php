@@ -15,8 +15,8 @@
 /**
  * Fetches category linkage from database
  * 
- * @param array $args Parameter data array
- * @return array Linkage data array
+ * @param array<string, mixed> $args Parameter data array
+ * @return array<mixed> Linkage data array
  */
 function categories_userapi_getlinkage($args)
 {

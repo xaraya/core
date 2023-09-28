@@ -38,13 +38,13 @@
  * 'class/category/name' as orderBy parameter
  *
  * @author Marco Canini <marco.canini@postnuke.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        array    $args['filter'] array of criteria used to filter the entire list of installed<br/>
  *                 themes.<br/>
  *        integer  $args['startNum'] the start offset in the list<br/>
  *        integer  $args['numItems'] the length of the list<br/>
  *        string   $args['orderBy'] the order type of the list
- * @return array of theme information arrays
+ * @return array<mixed> of theme information arrays
  */
 function themes_userapi_dropdownlist(Array $args=array())
 {

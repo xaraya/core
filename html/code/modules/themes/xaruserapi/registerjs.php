@@ -18,7 +18,7 @@
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param  array   $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *         string  $args[type] type of js to include, either src or code, optional, default src<br/>
  *         string  $args[code] code to include if $type is code<br/>
  *         mixed   $args[filename] array containing filename(s) or string comma delimited list

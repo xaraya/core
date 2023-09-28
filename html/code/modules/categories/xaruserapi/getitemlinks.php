@@ -17,7 +17,7 @@
  *
  * @param $args['itemtype'] item type (optional)
  * @param $args['itemids'] array of item ids to get
- * @return array Returns array containing the itemlink(s) for the item(s).
+ * @return array<mixed> Returns array containing the itemlink(s) for the item(s).
  */
 function categories_userapi_getitemlinks($args)
 {

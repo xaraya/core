@@ -12,7 +12,7 @@
 /**
  * Function to read a file
  * 
- * @param array $args Function parameters
+ * @param array<string, mixed> $args Function parameters
  * @param string $args['file'] File to be opened.
  * @return boolean|string Return either the file contents or false if no file was given.
  */

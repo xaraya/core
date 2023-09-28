@@ -17,7 +17,7 @@
  * 
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @return array|void Data array
+ * @return array<mixed>|void Data array
  * @throws BadParameterException Thrown if object was not found
  */
 function categories_adminapi_deletehook($args)

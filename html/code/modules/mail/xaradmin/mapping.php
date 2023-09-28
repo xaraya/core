@@ -14,7 +14,7 @@
  * This shows the mapping screen for mapping
  * messages onto a queue. The mapping is done
  * based on (simple) rules.
- * @return array data for the template display
+ * @return array<mixed> data for the template display
 */
 function mail_admin_mapping(Array $args=array())
 {

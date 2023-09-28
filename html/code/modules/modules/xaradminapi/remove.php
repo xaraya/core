@@ -12,7 +12,7 @@
  * Remove a module
  *
  * @author Xaraya Development Team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] the id of the module
  *        string   $args['name'] module's name
  * @return boolean|void true on success, false on failure

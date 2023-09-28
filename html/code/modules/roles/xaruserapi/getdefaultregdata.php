@@ -13,8 +13,8 @@
 /**
  * getdefaultregdata  - get the default registration module data
  *
- * @param array    $args array of optional parameters<br/>
- * @return array  defaultregmodname string, empty if no active registration module
+ * @param array<string, mixed> $args array of optional parameters<br/>
+ * @return array<mixed>  defaultregmodname string, empty if no active registration module
  *                defaultregmodactive boolean, regmodule is active or not
  *
  * @author Jo Dalle Nogare <jojodee@xaraya.com>

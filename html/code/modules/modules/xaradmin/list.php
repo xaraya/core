@@ -15,7 +15,7 @@
  * @author Xaraya Development Team
  * @param array several params from the associated form in template
  * @todo  finish cleanup, styles, filters and sort orders
- * @return array|bool data for the template display
+ * @return array<mixed>|bool data for the template display
  */
 function modules_admin_list()
 {

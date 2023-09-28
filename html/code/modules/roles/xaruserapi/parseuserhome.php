@@ -12,11 +12,11 @@
  */
 /**
  * @desct
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['url'] to check<br/>
  *        string   $args['truecurrenturl'] calling url<br/>
  *        string   $args['redirecturl'] page to return user
- * @return array|void true if external URL
+ * @return array<mixed>|void true if external URL
  */
 function roles_userapi_parseuserhome(Array $args=array())
 {

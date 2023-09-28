@@ -17,7 +17,7 @@
  *
  * @author  Andy Varganov <andyv@xaraya.com>
 
- * @return  array|void Data array for display template.
+ * @return array<mixed>|void Data array for display template.
 */
 function base_admin_confirmlogout()
 {

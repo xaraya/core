@@ -41,7 +41,7 @@ class ThemeProperty extends ObjectRefProperty
 	/**
 	 * Display a dropdown for input
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
     function showInput(Array $data=array())
@@ -53,7 +53,7 @@ class ThemeProperty extends ObjectRefProperty
 	/**
      * Retrieve the list of options on demand
      * 
-	 * @return array Returns list of options
+	 * @return array<mixed> Returns list of options
      */
     function getOptions()
     {

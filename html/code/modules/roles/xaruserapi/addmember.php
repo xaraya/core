@@ -13,7 +13,7 @@
 /**
  * addmember - add a role to a group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['gid'] group id<br/>
  *        integer  $args['id'] role id
  * @return boolean|void true on succes, false on failure

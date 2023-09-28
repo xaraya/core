@@ -19,7 +19,7 @@
  * within a region of the website - the 'region' being defined by one or
  * more branches.
  * @author Jason Judge judgej@xaraya.com
- * @param array $args
+ * @param array<string, mixed> $args
  * @param $args['cid'] id of category to test; or
  * @param $args['cids'] array of category ids to test; defaults to query parameter 'catid'
  * @param $args['branch'] id of the category branch; or

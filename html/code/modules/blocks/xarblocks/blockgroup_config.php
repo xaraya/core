@@ -23,8 +23,8 @@ class Blocks_BlockgroupBlockConfig extends Blocks_BlockgroupBlock implements iBl
 {   
     /**
      * Modify Function to the Blocks Admin
-     * @param array $data Array containing title,content
-     * @return array Data array
+     * @param array<string, mixed> $data Array containing title,content
+     * @return array<mixed> Data array
      */
     public function configmodify(Array $data=array())
     {

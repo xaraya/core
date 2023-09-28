@@ -17,7 +17,7 @@
  * 
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @return string|array|null Returns display data array on success null on failure. 
+ * @return string|array<mixed>|null Returns display data array on success null on failure. 
  * If security checks fail an empty string is returned
  * @throws BadParameterException Thrown if object ID was not passed to function
  */

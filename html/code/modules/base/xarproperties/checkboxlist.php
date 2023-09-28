@@ -63,7 +63,7 @@ class CheckboxListProperty extends SelectProperty
 /**
  * Display a checkbox for input
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
 	
@@ -83,7 +83,7 @@ class CheckboxListProperty extends SelectProperty
 /**
  * Display a checkbox for output
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for output on a web page
  */
     public function showOutput(Array $data = array())
@@ -97,7 +97,7 @@ class CheckboxListProperty extends SelectProperty
 /**
  * Used to show the hidden data
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for hidden input on a web page
  */	  
     public function showHidden(Array $data = array())
@@ -116,7 +116,7 @@ class CheckboxListProperty extends SelectProperty
  *  Check the value of input whether it is in an array or not.
  * If value of input is not an array it converts string into array first.
  * 
- * @return array    return always array value
+ * @return array<mixed>    return always array value
  */	 
     public function getValue()
     {

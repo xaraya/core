@@ -12,9 +12,9 @@
 /*
  * Map a mail item to a queue based on defined rules
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['object'] msg_structure parsed out result from the mailparser class
- * @return array the queue idents
+ * @return array<mixed> the queue idents
  */
 function mail_adminapi_maptoqueue(Array $args=array())
 {

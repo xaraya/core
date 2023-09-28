@@ -15,7 +15,7 @@
 /**
  * View admin categories
  * 
- * @return array|void Returns display data array on succes, null on failure
+ * @return array<mixed>|void Returns display data array on succes, null on failure
  */
 function categories_admin_view()
 {

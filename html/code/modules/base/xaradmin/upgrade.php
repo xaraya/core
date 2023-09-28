@@ -14,7 +14,7 @@
  *
  * @author John Cox
  *
- * @return array|void Data for the template display
+ * @return array<mixed>|void Data for the template display
  */
 function base_admin_upgrade()
 {

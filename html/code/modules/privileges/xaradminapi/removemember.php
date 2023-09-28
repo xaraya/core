@@ -18,7 +18,7 @@
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @access  public
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['childid']<br/>
  *        integer  $args['parentid']
  * @return  boolean

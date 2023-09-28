@@ -31,7 +31,7 @@ class Base_AdminmenuBlockDisplay extends Base_AdminmenuBlock implements iBlockMo
 
 /**
  * Display func.
- * @return array Returns display data array
+ * @return array<mixed> Returns display data array
  */
     public function display()
     {

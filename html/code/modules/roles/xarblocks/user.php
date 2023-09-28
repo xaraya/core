@@ -29,8 +29,8 @@ class Roles_UserBlock extends BasicBlock
 	/**
      * Display the user info via block
      * 
-     * @param array $data Data array
-     * @return array|void Display data array or null if nothing is to display.
+     * @param array<string, mixed> $data Data array
+     * @return array<mixed>|void Display data array or null if nothing is to display.
      */
     function display(Array $data=array())
     {

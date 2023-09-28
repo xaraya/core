@@ -13,7 +13,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
  * @todo change feed url once release module is moved
  */
 function modules_admin_release()

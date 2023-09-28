@@ -21,8 +21,8 @@
  * @author Chris Powis <crisp@xaraya.com>
  * 
  * @staticvar array $types
- * @param array $args Parameter data array
- * @return array List of available block types
+ * @param array<string, mixed> $args Parameter data array
+ * @return array<mixed> List of available block types
  */
 function blocks_typesapi_getfiles(Array $args=array())
 {

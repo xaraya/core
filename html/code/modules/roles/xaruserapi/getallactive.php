@@ -13,7 +13,7 @@
 /**
  * get all active users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        boolean  $args['include_anonymous'] whether or not to include anonymous user
  * @return mixed array of users, or false on failure
  */

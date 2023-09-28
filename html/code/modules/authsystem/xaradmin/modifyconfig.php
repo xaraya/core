@@ -15,7 +15,7 @@
  *
  * Standard GUI function to display and update the configuration settings of the module based on input data.
  * 
- * @return array|string|void Returns display template data on success else an output string will be returned.
+ * @return array<mixed>|string|void Returns display template data on success else an output string will be returned.
  */
 function authsystem_admin_modifyconfig()
 {

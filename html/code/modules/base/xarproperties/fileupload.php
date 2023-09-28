@@ -352,7 +352,7 @@ class FileUploadProperty extends DataProperty
 	/**
 	 * Display a file upload for input
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
     public function showInput(Array $data = array())
@@ -411,7 +411,7 @@ class FileUploadProperty extends DataProperty
 	/**
 	 * Display a file upload for output
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
     public function showOutput(Array $data = array())
@@ -454,7 +454,7 @@ class FileUploadProperty extends DataProperty
 	/**
 	 * Display a hidden file upload
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
     public function showHidden(Array $data = array())

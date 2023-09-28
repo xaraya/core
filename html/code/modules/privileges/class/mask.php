@@ -97,7 +97,7 @@ class xarMask extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   integer   adds  Number of additional instance parts to add to the array
-     * @return  array of strings
+     * @return array<mixed> of strings
     */
     function normalize($adds=0)
     {
@@ -157,7 +157,7 @@ class xarMask extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   xarMask object
-     * @return  array 2 normalized masks
+     * @return array<mixed> 2 normalized masks
     */
     function canonical($mask)
     {

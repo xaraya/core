@@ -98,7 +98,7 @@ class CategoryWorker extends xarObject
      * Fetch category info from database by its id
      * 
      * @param int $id ID of the category to fetch information for
-     * @return array|null Category data array, null if no category was found
+     * @return array<mixed>|null Category data array, null if no category was found
      * @throws Exception Thrown if no ID was passed to the method
      */
     public function getInfo($id=0)
@@ -131,7 +131,7 @@ class CategoryWorker extends xarObject
      * 
      * @param int $id ID of the parent category
      * @param boolean $myself
-     * @return array|null Data array containing children of the given category, null if no children were found
+     * @return array<mixed>|null Data array containing children of the given category, null if no children were found
      */
     public function getchildren($id=0,$myself=0)
     {
@@ -167,7 +167,7 @@ class CategoryWorker extends xarObject
      * @param int $id ID of the parent category
      * @param boolean $myself
      * @param string $order
-     * @return array|null Data array containing descendents of the given category, null if no children were found
+     * @return array<mixed>|null Data array containing descendents of the given category, null if no children were found
      */
     public function getdescendents($id=0, $myself=0, $order='id')
     {
@@ -198,7 +198,7 @@ class CategoryWorker extends xarObject
      * 
      * @param int $id ID of the category to be deleted (along with its children
      * @param boolean $myself
-     * @return array|bool|null Data array containing descendents of the given category, null if no children were found
+     * @return array<mixed>|bool|null Data array containing descendents of the given category, null if no children were found
      */
     public function delete($id=0)
     {
@@ -269,7 +269,7 @@ class CategoryWorker extends xarObject
     /**
      * Fetch top level categories from the tree in the database
      * 
-     * @return array|void Category data array
+     * @return array<mixed>|void Category data array
      */
     public function gettoplevel()
     {
@@ -293,8 +293,8 @@ class CategoryWorker extends xarObject
     /**
      * Fetch category bases from database
      * 
-     * @param array $args Parameter data array
-     * @return array|void Category bases data array
+     * @param array<string, mixed> $args Parameter data array
+     * @return array<mixed>|void Category bases data array
      */
     public function getcatbases($args)
     {
@@ -364,7 +364,7 @@ class CategoryWorker extends xarObject
     /**
      * Fetch count of category bases from database
      * 
-     * @param array $args Parameter data array
+     * @param array<string, mixed> $args Parameter data array
      * @return int Count of Category bases
      */
     public function getcatbasecount($args)

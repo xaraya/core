@@ -16,8 +16,8 @@
  * Utility function to retrieve the list of item types of this module (if any)
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array $args Parameter data array
- * @return array Returns array containing the item types and their description
+ * @param array<string, mixed> $args Parameter data array
+ * @return array<mixed> Returns array containing the item types and their description
  */
 function categories_userapi_getitemtypes($args)
 {

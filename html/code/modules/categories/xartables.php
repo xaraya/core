@@ -18,7 +18,7 @@
  *
  * @author  Jim McDonald, Fl�vio Botelho <nuncanada@xaraya.com>
  * @author  mikespub <postnuke@mikespub.net>
- * @return  array Table information
+ * @return array<mixed> Table information
  */
 function categories_xartables()
 {

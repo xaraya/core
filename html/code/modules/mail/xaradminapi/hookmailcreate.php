@@ -14,7 +14,7 @@
  * This is a hook function that is called to send mail on creation of an item
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['modid'] is the module that is sending mail.<br/>
  *        integer  $args['itemid'] is the item created.
  */

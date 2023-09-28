@@ -16,7 +16,7 @@
  * Returns the content of the file (possibly cached). Not intended for large files.
 
  * @author mikespub
- * @param array    $args Array of optional parameters<br/>
+ * @param array<string, mixed> $args Array of optional parameters<br/>
  *        string   $args['url'] The absolute URL for the file<br/>
  *        boolean  $args['cached'] Indicates whether this file can be cached or not<br/>
  *        string   $args['cachedir'] Directory (under var/) where the file should be cached<br/>

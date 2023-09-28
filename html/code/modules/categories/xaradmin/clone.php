@@ -17,7 +17,7 @@
 /**
  * Function to modify category
  * 
- * @return array|string|bool|void Returns display data array on success, null on failure
+ * @return array<mixed>|string|bool|void Returns display data array on success, null on failure
  */
 function categories_admin_clone()
 {

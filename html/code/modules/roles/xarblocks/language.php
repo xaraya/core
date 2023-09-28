@@ -30,7 +30,7 @@ class Roles_LanguageBlock extends BasicBlock
 
 	/**
 	 * Display the language block
-	 * @return array|void Display data array
+	 * @return array<mixed>|void Display data array
 	 */
     function display()
     {

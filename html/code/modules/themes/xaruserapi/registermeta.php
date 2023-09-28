@@ -18,7 +18,7 @@
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array  $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *         string $args[type] the type of meta tag, either name or http-equiv, required<br/>
  *         string $args[value] the value of the type, eg (author, rating, refresh, etc..), required<br/>
  *         string $args[content] the meta content, required<br/>

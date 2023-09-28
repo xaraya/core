@@ -15,7 +15,7 @@
  *
  * @author  John Cox
  * @access  public
- * @param   array $args id is the id of the user being sent
+ * @param array<string, mixed> $args id is the id of the user being sent
  * @return mixed data array for the template display or output display string if invalid data submitted
  * @throws  ForbiddenOperationException
  * @todo    handle empty subject and/or message?

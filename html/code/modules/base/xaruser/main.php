@@ -20,7 +20,7 @@
  * @author Paul Rosania
  * @author Marc Lutolf
  * 
- * @param array $args Optional parameters
+ * @param array<string, mixed> $args Optional parameters
  * @return mixed output display string
  */
  

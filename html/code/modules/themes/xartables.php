@@ -16,7 +16,7 @@
  * loaded. It adds the table names to a globally accessible array
  * 
  * @author Marty Vance
- * @return array the registered tables of this module
+ * @return array<mixed> the registered tables of this module
  */
 function themes_xartables()
 {

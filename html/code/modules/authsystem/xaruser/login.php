@@ -14,7 +14,7 @@
  * Log a user into the system
  * 
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param  array $args when called from elsewhere
+ * @param array<string, mixed> $args when called from elsewhere
  * @return mixed Returns true if the user was logged in successfully.<br/>
  *                     Else it returns an error code:<br/>
  *                     0: Deleted User<br/>

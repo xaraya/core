@@ -19,8 +19,8 @@
  * 
  * @author Chris Powis <crisp@xaraya.com>
  * 
- * @param array $args
- * @return array Returns block state array
+ * @param array<string, mixed> $args
+ * @return array<mixed> Returns block state array
  */
 function blocks_instancesapi_getstates(Array $args=array())
 {

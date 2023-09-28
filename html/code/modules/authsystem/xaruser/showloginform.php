@@ -17,8 +17,8 @@
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
  * @author  Jo Dalle Nogare <jojodeexaraya.com>
  * 
- * @param array $args Optional 'redirecturl' parameter
- * @return array|bool Returns data for display template.
+ * @param array<string, mixed> $args Optional 'redirecturl' parameter
+ * @return array<mixed>|bool Returns data for display template.
  */
 function authsystem_user_showloginform(Array $args = array())
 {

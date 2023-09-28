@@ -19,7 +19,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * 
- * @return array|string|void Data array
+ * @return array<mixed>|string|void Data array
  * @throws EmptyParameterException Thrown if no block id has been passed
  * @throws IDNotFoundException Thrown if no block with the given block id was found in the API
  */

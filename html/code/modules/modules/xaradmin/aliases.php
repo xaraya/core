@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/1.html
  */
 /**
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
  */
 
     function modules_admin_aliases(Array $args=array())

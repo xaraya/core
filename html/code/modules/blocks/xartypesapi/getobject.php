@@ -15,8 +15,8 @@
  * 
  * @author Chris Powis <crisp@xaraya.com>
  * 
- * @param array $args Parameter data array
- * @return array Data array
+ * @param array<string, mixed> $args Parameter data array
+ * @return array<mixed> Data array
  */
 function blocks_typesapi_getobject(Array $args=array())
 {

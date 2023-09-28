@@ -16,7 +16,7 @@
  *
  * @author  Andy Varganov <andyv@xaraya.com>
  * @access  public
- * @return  array|void data for the template display
+ * @return array<mixed>|void data for the template display
 */
 function modules_admin_confirmlogout()
 {

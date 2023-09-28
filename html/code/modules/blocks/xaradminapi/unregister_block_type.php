@@ -20,7 +20,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @access public
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  * @param string   $args['modName'] the module name<br/>
  * @param string   $args['blockType'] the block type
  * @return boolean true on success, false on failure

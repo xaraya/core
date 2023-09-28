@@ -21,9 +21,9 @@
  * SCCS - where Bitkeeper stores source files
  * PENDING - where Bitkeeper stores pending merges
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] - optional regid to retrieve
- * @return array|bool modules from the file system
+ * @return array<mixed>|bool modules from the file system
  */
 function modules_adminapi_getfilemodules(Array $args=array())
 {

@@ -13,7 +13,7 @@
 /**
  * Get the list of REST API calls supported by this module (if any)
  *
- * @return array of info
+ * @return array<mixed> of info
  */
 function authsystem_restapi_getlist($args = [])
 {

@@ -17,7 +17,7 @@
  * Usage : $num = xarMod::apiFunc('categories', 'user', 'countcats', $cat);
  *         $total = xarMod::apiFunc('categories', 'user', 'countcats', array());
  *
- * @param array $args
+ * @param array<string, mixed> $args
  * @param $args['cid'] The ID of the category you are counting for (optional)
  * @param $args['left_id'] The left value for that category (optional)
  * @param $args['right_id'] The right value for that category (optional)

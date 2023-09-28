@@ -124,7 +124,7 @@ class xarJS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @return array public object properties to store values for
+ * @return array<mixed> public object properties to store values for
 **/
     public function __sleep()
     {
@@ -370,7 +370,7 @@ class xarJS extends xarObject
  * @author Jason Judge
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param  array   $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *         string  $args[position] position to render the js, eg head or body, optional, default head<br/>
  *         string  $args[type] type of js to include, either src or code, optional, default src<br/>
  *         string  $args[scope] the scope in which to look for src files
@@ -749,7 +749,7 @@ class xarJS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array   $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string  $args[position] position to get JS for, optional<br/>
  *        string  $args[type] type to get JS for, optional
  *        string  $args[scope] scope of data source, optional
@@ -783,7 +783,7 @@ class xarJS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array   $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string  $args[position] position to render, optional<br/>
  *        string  $args[index] index to render, optional<br/>
  *        string  $args[type] type to render, optional
@@ -912,7 +912,7 @@ class xarJS extends xarObject
  * @param string $lib JS library name
  * @param string $vers JS library version
  * @param string $src JS library source
- * @return array library information
+ * @return array<mixed> library information
 **/
     private function getLibInfo($lib, $vers='', $src='')
     {
@@ -973,7 +973,7 @@ class xarJS extends xarObject
  * @param string $lib JS library name
  * @param string $vers JS library version
  * @param string $src JS library source
- * @return array library information
+ * @return array<mixed> library information
 **/
     private function getPluginInfo($lib, $plug, $vers='', $file='', $style='')
     {

@@ -14,7 +14,6 @@
  * Manage block config
  *
  * @author Jim McDonald
- * @return array
  */
 sys::import('modules.authsystem.xarblocks.login');
 
@@ -29,7 +28,7 @@ class Authsystem_LoginBlockConfig extends Authsystem_LoginBlock implements iBloc
     /**
      * Method to retrieve block content
      * 
-     * @return array Array of block content data
+     * @return array<mixed> Array of block content data
      */
     public function configmodify()
     {

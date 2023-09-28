@@ -30,7 +30,7 @@
  * @param $args['groupcids'] the number of categories you want items grouped by
  * @param $args['cidtree'] get items in cid or anywhere below it (= slower than cids, usually)
  *
- * @return array Returns an array in the following format array('table' => 'xar_categories_linkage',
+ * @return array<mixed> Returns an array in the following format array('table' => 'xar_categories_linkage',
  *               'field' => 'xar_categories_linkage.item_id',
  *               'where' => 'xar_categories_linkage.module_id = ...
  *                           AND xar_categories_linkage.id IN (...)',

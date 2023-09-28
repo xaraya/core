@@ -14,7 +14,7 @@
  * utility function pass individual menu items to the main menu
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @return array the menulinks for the main menu items.
+ * @return array<mixed> the menulinks for the main menu items.
  */
 function roles_adminapi_getgroupmenulinks()
 {

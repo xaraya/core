@@ -406,7 +406,7 @@ class CelkoPositionProperty extends DataProperty
 	/**
 	 * Display a dropdown for input
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
     public function showInput(Array $data = array())
@@ -478,7 +478,7 @@ class CelkoPositionProperty extends DataProperty
 	/**
 	 * Used to show the hidden data
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string   Returns true or false 
 	 */
     public function showHidden(Array $data = array())
@@ -556,7 +556,7 @@ class CelkoPositionProperty extends DataProperty
      * Fetch item from the database
      * 
      * @param int $id ID of the item
-     * @return array|void Array of fetched item
+     * @return array<mixed>|void Array of fetched item
      */
     public function getItem($id) 
     {
@@ -917,7 +917,7 @@ class CelkoPositionProperty extends DataProperty
 	/**
      * Update the current configuration rule in a specific way for this property type
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      */
     public function updateConfiguration(Array $data = array())
     {
@@ -939,7 +939,7 @@ class CelkoPositionPropertyInstall extends CelkoPositionProperty implements iDat
 	/**
      * Install method
      * 
-     * @param array $data Parameter data array
+     * @param array<string, mixed> $data Parameter data array
      * @return boolean Returns true.
      */
     public function install(Array $data=array())

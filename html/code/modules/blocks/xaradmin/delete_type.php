@@ -15,8 +15,8 @@
  * 
  * @author Chris Powis <crisp@xaraya.com>
  * 
- * @param array $args Set of optional parameters
- * @return array|string|void Returns data array
+ * @param array<string, mixed> $args Set of optional parameters
+ * @return array<mixed>|string|void Returns data array
  * @throws EmptyParameterException
  * @throws IDNotFoundException
  */

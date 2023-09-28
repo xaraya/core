@@ -16,7 +16,7 @@
  * 
  * @author Chris Powis <crisp@xaraya.com>
  *  
- * @param array $args Parameter data array
+ * @param array<string, mixed> $args Parameter data array
  * @return boolean|array Returns item on success or false on failure
  * @throws EmptyParameterException
  * @throws BadParameterException

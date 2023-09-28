@@ -21,9 +21,9 @@
  *               AND $where
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        array    $args['ids'] optional array of ids that we are selecting on
- * @return array|void array('table' => 'xar_roles',
+ * @return array<mixed>|void array('table' => 'xar_roles',
  *               'field' => 'xar_roles.id',
  *               'where' => 'xar_roles.id IN (...)',
  *               'name'  => 'xar_roles.name',

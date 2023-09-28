@@ -18,7 +18,7 @@
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @return array Data array
+ * @return array<mixed> Data array
  * @throws BadParameterException Thrown if object was not found.
  */
 function categories_adminapi_createhook($args)

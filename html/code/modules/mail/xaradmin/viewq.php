@@ -15,7 +15,7 @@
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
- * @return  array|string|void data for the template display
+ * @return array<mixed>|string|void data for the template display
 */
 function mail_admin_viewq(Array $args=array())
 {

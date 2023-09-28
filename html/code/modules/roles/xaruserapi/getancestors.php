@@ -13,9 +13,9 @@
 /**
  * getancestors - get ancestors of a role
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['id'] role id
- * @return array|void array containing name, id of the ancstors
+ * @return array<mixed>|void array containing name, id of the ancstors
  */
 function roles_userapi_getancestors(Array $args=array())
 {

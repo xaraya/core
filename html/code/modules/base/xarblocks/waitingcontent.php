@@ -20,7 +20,7 @@ class Base_WaitingContentBlock extends BasicBlock implements iBlock
     /**
      * Display method
      * 
-     * @return array Display data array
+     * @return array<mixed> Display data array
      */
     function display()
     {

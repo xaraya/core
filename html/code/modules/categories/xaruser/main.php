@@ -15,7 +15,7 @@
 /**
  * The main user function
  * 
- * @return array|void Returns display data array
+ * @return array<mixed>|void Returns display data array
  */
 function categories_user_main()
 {

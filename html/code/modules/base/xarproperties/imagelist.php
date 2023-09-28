@@ -48,7 +48,7 @@ class ImageListProperty extends FilePickerProperty
 /**
  * Display the output 
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for output on a web page
  */	
     public function showOutput(Array $data = array())

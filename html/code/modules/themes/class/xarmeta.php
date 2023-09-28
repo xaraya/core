@@ -57,7 +57,7 @@ class xarMeta extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array  $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *         string $args[type] the type of meta tag, either name or http-equiv, required<br/>
  *         string $args[value] the value of the type, eg (author, rating, refresh, etc..), required<br/>
  *         string $args[content] the meta content, required<br/>
@@ -121,7 +121,7 @@ class xarMeta extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array   $args array of optional parameters (todo)
+ * @param array<string, mixed> $args array of optional parameters (todo)
  * @return string|void templated output of meta tags to render
 **/
     public function render(Array $args=array())
@@ -137,7 +137,7 @@ class xarMeta extends xarObject
  * @author Chris Powis <crisp@xaraya.com>
  * @param  string $type one of http-equiv or name, required
  * @param  string $value the value of the http-equiv or name attribute, required
- * @param  array  $tag array of tag attributes, required
+ * @param array<mixed> $tag array of tag attributes, required
  * @param  bool   $append flag to optionally append content to an existing tag (if exists)
  * @return bool|void true on success
 **/
@@ -188,7 +188,7 @@ class xarMeta extends xarObject
  * Returns a list of meta tag types formatted for dropdown lists
  *
  * @author Chris Powis <crisp@xaraya.com>
- * @return array list of types
+ * @return array<mixed> list of types
 **/
     public static function getTypes()
     {
@@ -205,7 +205,7 @@ class xarMeta extends xarObject
  * Returns a list of text directions formatted for dropdown lists
  *
  * @author Chris Powis <crisp@xaraya.com>
- * @return array list of directions
+ * @return array<mixed> list of directions
 **/
     public static function getDirs()
     {
@@ -223,7 +223,7 @@ class xarMeta extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @param  bool $short optionally return the short description as name default true
- * @return array list of language codes
+ * @return array<mixed> list of language codes
 **/
     public static function getLanguages($short=true)
     {

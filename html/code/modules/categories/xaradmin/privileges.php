@@ -19,8 +19,8 @@
 /**
  * Manage definition of instances for privileges (unfinished)
  * 
- * @param array $args Parameter data array
- * @return array|bool|void Return display data array on success, null on failure.
+ * @param array<string, mixed> $args Parameter data array
+ * @return array<mixed>|bool|void Return display data array on success, null on failure.
  */
 function categories_admin_privileges($args)
 {

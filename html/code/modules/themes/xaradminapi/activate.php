@@ -16,7 +16,7 @@
  *
  * @author Marty Vance
  * @access public
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['regid'] theme's registered id
  *        string   $args['name'] theme's name
  * @return boolean true on success, false on failure

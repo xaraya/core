@@ -17,7 +17,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * 
  * @staticvar array $loaded Keeps track of clases that have been loaded
- * @param array $args Parameter data array
+ * @param array<string, mixed> $args Parameter data array
  * @return object|void Object to be returned
  * @throws BadParameterException
  * @throws FileNotFoundException

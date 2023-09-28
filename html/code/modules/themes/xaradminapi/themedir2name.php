@@ -15,7 +15,7 @@
  * Convert a theme directory to a theme name.
  *
  * @author Roger Keays <r.keays@ninthave.net>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['directory'] of the theme
  * @return  string the theme name in this directory, or false if theme is not
  *          found

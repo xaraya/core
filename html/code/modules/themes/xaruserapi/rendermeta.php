@@ -18,7 +18,7 @@
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array   $args array of optional parameters (todo)
+ * @param array<string, mixed> $args array of optional parameters (todo)
  * @return string templated output of meta tags to render
 **/    
 function themes_userapi_rendermeta($args)

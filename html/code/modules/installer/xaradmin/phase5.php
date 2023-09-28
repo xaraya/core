@@ -29,7 +29,7 @@
  * @param string dbPrefix
  * @param string dbType
  * @param bool createDb
- * @return array|string|void data for the template display
+ * @return array<mixed>|string|void data for the template display
  */
 function installer_admin_phase5()
 {

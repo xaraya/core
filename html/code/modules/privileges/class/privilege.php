@@ -262,7 +262,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  array
+     * @return array<mixed>
      * @todo    seems to me this belong in roles module instead?
     */
     function getRoles()
@@ -335,7 +335,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  array of privilege objects
+     * @return array<mixed> of privilege objects
     */
     function getParents()
     {
@@ -378,7 +378,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  array of privilege objects
+     * @return array<mixed> of privilege objects
     */
     function getAncestors()
     {
@@ -408,7 +408,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  array of privilege objects
+     * @return array<mixed> of privilege objects
     */
     function getChildren()
     {
@@ -468,7 +468,7 @@ class xarPrivilege extends xarMask
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  array of privilege objects
+     * @return array<mixed> of privilege objects
     */
     function getDescendants()
     {

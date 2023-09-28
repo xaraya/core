@@ -19,7 +19,7 @@
  * @param   string $uname users name
  * @param   string $valcode is the validation code sent to user on registration
  * @param   string phase is the point in the function to return
- * @return  array|string|bool|void if valcode matches valcode in user status table
+ * @return array<mixed>|string|bool|void if valcode matches valcode in user status table
  * @TODO jojodee - validation process, duplication of functions and call to registration module needs to be rethought
  *         Rethink to provide cleaner separation between roles, authentication and registration
  */

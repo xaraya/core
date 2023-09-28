@@ -15,7 +15,7 @@
  * It is used by public functions sendmail() and sendhtmlmail()
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['info'] is the email address we are sending (required)<br/>
  *        string   $args['name'] is the name of the email receipitent (optional)<br/>
  *        array    $args['recipients'] is an array of recipients (required) // NOTE: $info or $recipients is required, not both<br/>

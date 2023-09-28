@@ -14,7 +14,7 @@
  * 
  * 
  * @author Chris Powis <crisp@xaraya.com>
- * @return array|void Returns data display array
+ * @return array<mixed>|void Returns data display array
  */
 function blocks_admin_refresh_types(Array $args=array())
 {

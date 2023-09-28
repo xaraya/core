@@ -13,7 +13,7 @@
  * Update theme information
  *
  * @author Marty Vance
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] the id number of the theme to update<br/>
  *        string   $args['displayname'] the new display name of the theme<br/>
  *        string   $args['description'] the new description of the theme

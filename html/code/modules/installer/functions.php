@@ -24,7 +24,7 @@
  *
  * @access public
  * @param string $funcName specific function to run
- * @param array $args argument array
+ * @param array<string, mixed> $args argument array
  * @return string|void output display string
  * @throws FunctionNotFoundException
  */

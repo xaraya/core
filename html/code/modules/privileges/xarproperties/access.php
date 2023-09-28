@@ -100,7 +100,7 @@ class AccessProperty extends DataProperty
 	/**
 	 * Display a dropdown for input
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */	
     public function showInput(Array $data = array())
@@ -139,7 +139,7 @@ class AccessProperty extends DataProperty
 	/**
 	 * Display a dropdown for output
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
     public function showOutput(Array $data = array())
@@ -193,7 +193,7 @@ class AccessProperty extends DataProperty
 	/**
 	 * Get the dropdown options that are on defined levels
 	 * 
-	 * @return array    return the options with key as id and value as name
+	 * @return array<mixed>    return the options with key as id and value as name
 	 */	
     function getleveloptions()
     {
@@ -264,7 +264,7 @@ class AccessProperty extends DataProperty
 	/**
 	 * Check access from the access property
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @param  int exclusive 
 	 * @return bool   Returns access(For group or level) if exclusive, otherwise returns false 
 	 */
@@ -314,7 +314,7 @@ class AccessProperty extends DataProperty
 	/**
 	 * Check access (from the access tag
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @param  int exclusive 
 	 * @return bool   Returns access(For group or level) if exclusive, otherwise returns false 
 	 */
@@ -374,7 +374,7 @@ class AccessProperty extends DataProperty
 	/**
 	 * Check the realm of data
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return bool   Returns true
 	 */	
     public function checkRealm(Array $data=array())
@@ -386,7 +386,7 @@ class AccessProperty extends DataProperty
 	/**
 	 * Check the level of data of options
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return bool   Returns true or false 
 	 */	
     public function checkLevel(Array $data=array())
@@ -457,7 +457,7 @@ class AccessProperty extends DataProperty
 	/**
 	 * Used to show the hidden data
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 */	   	
     public function showHidden(Array $data = array())
     {
@@ -509,7 +509,7 @@ class AccessPropertyInstall extends AccessProperty implements iDataPropertyInsta
 	/**
 	 * Give access to install property
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return bool   Returns true or false 
 	 */	 
     public function install(Array $data=array())

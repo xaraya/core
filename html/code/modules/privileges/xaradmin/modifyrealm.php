@@ -15,7 +15,7 @@
 /**
  * modifyRealm - modify an existing realm
  * @param int id of the realm to be modified
- * @return array|string|void data for the template display
+ * @return array<mixed>|string|void data for the template display
  */
 function privileges_admin_modifyrealm()
 {

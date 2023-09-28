@@ -13,7 +13,7 @@
 /**
  * get all users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['order'] comma-separated list of order items; default 'name'<br/>
  *        string   $args['selection'] extra coonditions passed into the where-clause<br/>
  *        string   $args['group'] comma-separated list of group names or IDs, or<br/>

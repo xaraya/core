@@ -18,7 +18,7 @@
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array   $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string  $args[position] position to render, optional<br/>
  *        string  $args[index] index to render, optional<br/>
  *        string  $args[type] type to render, optional

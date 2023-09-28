@@ -15,7 +15,7 @@
 /**
  * Updates celko links
  * 
- * @param array $args Parameter data array
+ * @param array<string, mixed> $args Parameter data array
  * @return boolean|null Returns true on success, null on failure.
  * @throws BadParameterException Thrown is invalid parameters have been given.
  */

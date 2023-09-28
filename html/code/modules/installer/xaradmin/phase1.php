@@ -21,7 +21,7 @@
  * Phase 1: Welcome (Set Language and Locale) Page
  *
  * @access private
- * @return array data for the template display
+ * @return array<mixed> data for the template display
  */
 function installer_admin_phase1()
 {

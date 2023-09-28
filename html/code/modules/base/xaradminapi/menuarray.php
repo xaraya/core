@@ -14,7 +14,7 @@
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * 
- * @param array $args array of optional parameters
+ * @param array<string, mixed> $args array of optional parameters
  * @return string[] Menulinks for the module
  */
 function base_adminapi_menuarray(Array $args=array())

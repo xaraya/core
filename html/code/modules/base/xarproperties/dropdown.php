@@ -93,7 +93,7 @@ class SelectProperty extends DataProperty
 /**
  * Display a dropdown for input
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */	
     public function showInput(Array $data = array())
@@ -105,7 +105,7 @@ class SelectProperty extends DataProperty
 /**
  * Display a hidden dropdown
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for hidden input on a web page
  */	
     public function showHidden(Array $data = array())
@@ -117,7 +117,7 @@ class SelectProperty extends DataProperty
 /**
  * Display a dropdown for output
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for output on a web page
  */	
     public function showOutput(Array $data = array())
@@ -143,7 +143,7 @@ class SelectProperty extends DataProperty
 /**
  * (re)define the list of options
  * 
- * @param array $options array of options
+ * @param array<string, mixed> $options array of options
  * 
  * This array should have the form:
  * array (
@@ -264,7 +264,7 @@ class SelectProperty extends DataProperty
 /**
  * Gets the saved first line and returns it as a proper array
  * 
- * @return array Array containing first line
+ * @return array<mixed> Array containing first line
  */
     public function getFirstline()
     {
@@ -410,8 +410,8 @@ class SelectProperty extends DataProperty
 /**
  * Helper function to get the data for a dropdown display
  * 
- * @param  array data An array of input parameters
- * @return array data An array of output parameters to be sent to the template
+ * @param array<string, mixed> $data An array of input parameters
+ * @return array<mixed> data An array of output parameters to be sent to the template
  */	
     private function getTemplateData(Array $data = array())
     {
@@ -487,7 +487,7 @@ class DropdownPropertyInstall extends SelectProperty implements iDataPropertyIns
     /**
      * Install this property
      * 
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return bool     true
      */
     public function install(Array $data=array())

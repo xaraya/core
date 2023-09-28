@@ -14,7 +14,7 @@
  * loaded. It adds the table names to a globally accessible array
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @return array the registered tables of this module
+ * @return array<mixed> the registered tables of this module
  */
 function privileges_xartables()
 {

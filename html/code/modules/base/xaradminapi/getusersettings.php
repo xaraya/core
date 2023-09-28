@@ -11,7 +11,7 @@
 /**
  * Get user settings for admin API
  * 
- * @param array $args Optional function parameters
+ * @param array<string, mixed> $args Optional function parameters
  * @param string $args['module'] Required module parameter
  * @param integer $args['itemid'] Required item id parameter
  * @return object Data object

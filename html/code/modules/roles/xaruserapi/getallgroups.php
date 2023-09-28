@@ -13,8 +13,8 @@
 /**
  * viewallgroups - generate all groups listing.
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
- * @return array|void listing of available groups
+ * @param array<string, mixed> $args array of optional parameters<br/>
+ * @return array<mixed>|void listing of available groups
  * @todo this code is unreadable
  */
 

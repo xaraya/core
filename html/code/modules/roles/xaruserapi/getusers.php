@@ -13,9 +13,9 @@
 /**
  * getUsers - view users in group
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['id'] group id
- * @return array|void array containing uname, id of the users
+ * @return array<mixed>|void array containing uname, id of the users
  */
 function roles_userapi_getUsers(Array $args=array())
 {

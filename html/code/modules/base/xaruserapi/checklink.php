@@ -13,7 +13,7 @@
  *
  * @author mikespub
  * 
- * @param array   $args Array of optional parameters<br/>
+ * @param array<string, mixed> $args Array of optional parameters<br/>
  *        string  $args['url'] The absolute URL for the link<br/>
  *        string  $args['method'] The request method to use (default is HEAD, alternative is GET)<br/>
  *        boolean $args['skiplocal'] Indicates if we want to skip checking local URLs (default is true)<br/>

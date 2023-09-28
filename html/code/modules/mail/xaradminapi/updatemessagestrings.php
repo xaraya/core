@@ -12,7 +12,7 @@
 /**
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['module'] module directory in var/messaging<br/>
  *        string   $args['template'] name of the email type which has apair of -subject and -message files<br/>
  *        string   $args['subject'] new subject<br/>

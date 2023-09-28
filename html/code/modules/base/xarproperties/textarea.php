@@ -42,7 +42,7 @@ class TextAreaProperty extends DataProperty
     }
 /**
  
- * @return array   array of provided elements
+ * @return array<mixed>   array of provided elements
  */
     function aliases()
     {
@@ -67,7 +67,7 @@ class TextAreaProperty extends DataProperty
 /**
  * Display a textarea for input
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
     public function showInput(Array $data = array())

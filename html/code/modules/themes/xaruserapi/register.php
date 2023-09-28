@@ -44,7 +44,7 @@
  * @author andyv <andyv@xaraya.com>
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array  $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *         string $args[scope] scope of style, one of common!theme(default)|module|block|property<br/>
  *         string $args[method] style method, one of link(default)|import|embed<br/>
  *         string $args[alternatedir] alternative base folder to look in, falling back to...<br/>

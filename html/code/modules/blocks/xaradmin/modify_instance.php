@@ -16,7 +16,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * 
- * @return array|string|void data for the template display
+ * @return array<mixed>|string|void data for the template display
  */
 function blocks_admin_modify_instance()
 {

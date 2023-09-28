@@ -15,7 +15,7 @@
  * 
  * @author Chris Powis <crisp@xaraya.com>
  * 
- * @param array $args Parameter data array
+ * @param array<string, mixed> $args Parameter data array
  * @return int|void Returns the block id of the newly created item
  * @throws BadParameterException
  * @throws IDNotFoundException

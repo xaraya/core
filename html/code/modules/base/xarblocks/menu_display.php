@@ -34,8 +34,8 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
     /**
      * Display the menu block
      * 
-     * @param array $data Data array
-     * @return array|void Display data array or null if nothing is to display.
+     * @param array<string, mixed> $data Data array
+     * @return array<mixed>|void Display data array or null if nothing is to display.
      */
     function display(Array $data=array())
     {
@@ -163,7 +163,7 @@ class Base_MenuBlockDisplay extends Base_MenuBlock implements iBlock
     /**
      * Method to get help content
      * 
-     * @return array Display data array
+     * @return array<mixed> Display data array
      */
     public function help()
     {

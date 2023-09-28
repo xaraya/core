@@ -239,7 +239,7 @@ class ArrayProperty extends DataProperty
 	/**
 	 * Get the value of an array
 	 * 
-	 * @return array    return always array value
+	 * @return array<mixed>    return always array value
 	 */	
     public function getValue()
     {
@@ -284,7 +284,7 @@ class ArrayProperty extends DataProperty
 	/**
 	 * Display an array for input
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
     public function showInput(Array $data = array())
@@ -416,7 +416,7 @@ class ArrayProperty extends DataProperty
 	/**
 	 * Display an array for output
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
     public function showOutput(Array $data = array())
@@ -482,7 +482,7 @@ class ArrayProperty extends DataProperty
     /**
      * Update the current configuration rule in a specific way for this property type
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      */
     public function updateConfiguration(Array $data = array())
     {

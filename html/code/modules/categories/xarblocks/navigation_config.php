@@ -19,7 +19,7 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
     /**
      * Modify Function to the Blocks Admin
      * 
-     * @return array Returns data array
+     * @return array<mixed> Returns data array
      */
     public function configmodify()
     {
@@ -99,7 +99,7 @@ class Categories_NavigationBlockConfig extends Categories_NavigationBlock implem
     /**
      * Updates the Block config from the Blocks Admin
      * 
-     * @param array $data Parameter data array
+     * @param array<string, mixed> $data Parameter data array
      * @return boolean|null Returns true on success and null on failure 
      */
     public function configupdate(Array $vars=array())

@@ -19,7 +19,7 @@
  * 
  * @author Chris Powis <crisp@xaraya.com>
  * 
- * @param array $args Parameter data array
+ * @param array<string, mixed> $args Parameter data array
  * @return boolean|array Returns false on failure data array on success
  * @throws EmptyParameterException
  */

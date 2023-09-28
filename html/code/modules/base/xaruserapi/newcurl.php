@@ -13,7 +13,7 @@
 /**
  * Return a new xarCurl object.
  * 
- * @param array $args Optional set of arguments
+ * @param array<string, mixed> $args Optional set of arguments
  * @return \xarCurl xarCurl Object returned
  */
 function base_userapi_newcurl(Array $args=array())

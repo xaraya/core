@@ -42,13 +42,13 @@
  * 'class/category/name' as orderBy parameter
  *
  * @author Marco Canini <marco@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        array    $args['filter'] array of criteria used to filter the entire list of installed<br/>
  *                 modules.<br/>
  *        integer  $args['startNum'] integer the start offset in the list<br/>
  *        integer  $args['numItems'] integer the length of the list<br/>
  *        string   $args['orderBy'] string the order type of the list
- * @return array array of module information arrays
+ * @return array<mixed> array of module information arrays
  * @throws BadParameterException
  */
 function modules_adminapi_getlist(Array $args=array())

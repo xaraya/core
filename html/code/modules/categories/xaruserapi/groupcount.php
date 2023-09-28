@@ -14,7 +14,7 @@
 
 /**
  * Count number of items per category, or number of categories for each item
- * @param array $args
+ * @param array<string, mixed> $args
  * @param $args['groupby'] group entries by 'category' or by 'item'
  * @param $args['modid'] module ID
  * @param $args['itemid'] optional item ID that we are selecting on
@@ -23,7 +23,7 @@
  * @param $args['cids'] optional array of cids we're counting for (OR/AND)
  * @param $args['andcids'] true means AND-ing categories listed in cids
  * @param $args['groupcids'] the number of categories you want items grouped by
- * @return array|void Returns array of number of items per category, or caterogies per item
+ * @return array<mixed>|void Returns array of number of items per category, or caterogies per item
  */
 function categories_userapi_groupcount($args)
 {

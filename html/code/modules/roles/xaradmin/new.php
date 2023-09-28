@@ -13,7 +13,7 @@
  *
  * @author Marc Lutolf
  * @author Johnny Robeson
- * @return array|string|bool|void data for the template display
+ * @return array<mixed>|string|bool|void data for the template display
  */
 function roles_admin_new()
 {

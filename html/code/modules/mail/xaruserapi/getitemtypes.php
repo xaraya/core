@@ -13,7 +13,7 @@
 
 /**
  * Utility function to retrieve the list of itemtypes of this module (if any).
- * @return array the itemtypes of this module and their description *
+ * @return array<mixed> the itemtypes of this module and their description *
  */
 sys::import('modules.dynamicdata.class.objects.master');
 function mail_userapi_getitemtypes(Array $args=array())

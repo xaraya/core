@@ -16,7 +16,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * 
- * @return array|void Display template data array
+ * @return array<mixed>|void Display template data array
  */
 function blocks_admin_view_types()
 {

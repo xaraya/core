@@ -12,7 +12,7 @@
  *
  * This information can be used for support / debugging
  *
- * @return array|void of info from phpinfo()
+ * @return array<mixed>|void of info from phpinfo()
  */
 function base_admin_sysinfo()
 {

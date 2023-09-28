@@ -25,8 +25,8 @@ class Roles_OnlineBlockConfig extends Roles_OnlineBlock
 	/**
      * Modify the configuration of the online block
      * 
-     * @param array $data Data array
-     * @return array  array of values to be displayed in the block's configuration page
+     * @param array<string, mixed> $data Data array
+     * @return array<mixed>  array of values to be displayed in the block's configuration page
      */
     function configmodify(Array $data=array())
     {

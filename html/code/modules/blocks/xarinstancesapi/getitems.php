@@ -15,8 +15,8 @@
  * 
  * @author Chris Powis <crisp@xaraya.com>
  * 
- * @param array $args Parameter data array
- * @return array|void Array of items fetched.
+ * @param array<string, mixed> $args Parameter data array
+ * @return array<mixed>|void Array of items fetched.
  * @throws BadParameterException
  */
 function blocks_instancesapi_getitems(Array $args=array())

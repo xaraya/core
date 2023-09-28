@@ -12,7 +12,7 @@
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  * @param int $itemid whether
  * @return integer id representing the role's primary parent group
  */

@@ -19,7 +19,7 @@
  * @author jsb <jsb@xaraya.com>
  * 
  * @access public
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  * @param string   $args['starttime'] (seconds or hh:mm:ss)<br/>
  * @param string   $args['direction'] (from or to)
  * @return string $convertedtime (hh:mm:ss or seconds)

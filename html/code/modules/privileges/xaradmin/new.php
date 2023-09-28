@@ -13,7 +13,7 @@
 /**
  * new - create a new privilege
  * Takes no parameters
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
  */
 function privileges_admin_new()
 {

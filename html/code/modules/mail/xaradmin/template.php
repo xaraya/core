@@ -11,7 +11,7 @@
 /**
  * Modify the email templates for hooked notifications
  *
- * @return array|string|bool|void data for the template display
+ * @return array<mixed>|string|bool|void data for the template display
  */
 function mail_admin_template(Array $args=array())
 {

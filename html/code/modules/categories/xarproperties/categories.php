@@ -460,7 +460,7 @@ class CategoriesProperty extends DataProperty
 	 * Get the value of input
 	 * Unserialize the value
 	 * 
-	 * @return array    return the unserialized value
+	 * @return array<mixed>    return the unserialized value
 	 */	 
     public function getValue()
     {    
@@ -509,7 +509,7 @@ class CategoriesProperty extends DataProperty
      * 
      * @param int $category Category ID of the items
      * @param object $object Object the property belongs to
-     * @return array Array of fetched items
+     * @return array<mixed> Array of fetched items
      * @throws Exception Thrown if no object was given.
      */
     public function getItems($category=0, $object=null)
@@ -541,7 +541,7 @@ class CategoriesProperty extends DataProperty
 	/**
      * Update the current configuration rule in a specific way for this property type
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      */
     public function updateConfiguration(Array $data = array())
     {
@@ -627,7 +627,7 @@ class CategoriesProperty extends DataProperty
      * Get the category links for this property
      * 
      * @param int $itemid
-     * @return array category links
+     * @return array<mixed> category links
      *
      * The links are an associative array with
      * key: categoryID_basecategoryID
@@ -774,7 +774,7 @@ class CategoriesPropertyInstall extends CategoriesProperty implements iDataPrope
     /**
      * Install method
      * 
-     * @param array $data Parameter data array
+     * @param array<string, mixed> $data Parameter data array
      * @return boolean Returns true.
      */
     public function install(Array $data=array())

@@ -17,7 +17,7 @@
     /**
      * Create new category in admin
      * 
-     * @return array|null Returns display data array on success, null on failure
+     * @return array<mixed>|null Returns display data array on success, null on failure
      */
     function categories_admin_new()
     {

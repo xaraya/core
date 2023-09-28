@@ -22,7 +22,7 @@ class Base_FincludeBlockConfig extends Base_FincludeBlock implements iBlock
      * Modify function to the blocks admin
      * This method does not apply modifications
      * 
-     * @param array $data Data array for configutation modifications
+     * @param array<string, mixed> $data Data array for configutation modifications
      * @return string Returns content
      */
     public function configmodify(Array $data=array())
@@ -33,7 +33,7 @@ class Base_FincludeBlockConfig extends Base_FincludeBlock implements iBlock
     /**
      * Updates the Block config from the Blocks Admin
      * 
-     * @param array $data Config data array
+     * @param array<string, mixed> $data Config data array
      * @return boolean|void Returns true on success, false on failure.
      */
     public function configupdate(Array $data=array())

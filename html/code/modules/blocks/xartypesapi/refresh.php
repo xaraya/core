@@ -15,7 +15,7 @@
  * @author Chris Powis <crisp@xaraya.com>
  * 
  * @staticvar boolean $runonce
- * @param array $args Parameter data array
+ * @param array<string, mixed> $args Parameter data array
  * @return boolean|void True on success, false on failure
  */
 function blocks_typesapi_refresh(Array $args=array())

@@ -22,7 +22,7 @@
  *
  * @access private
  * @param string agree
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
  */
 function installer_admin_phase3()
 {

@@ -57,7 +57,7 @@ class xarRoles extends xarObject
      * On subsequent calls it just returns the array .
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array|void of arrays representing all the groups
+     * @return array<mixed>|void of arrays representing all the groups
      */
     public static function getgroups()
     {
@@ -86,7 +86,7 @@ class xarRoles extends xarObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param integer $id
-     * @return array|void representing the group
+     * @return array<mixed>|void representing the group
      */
     public static function getgroup($id)
     {
@@ -114,7 +114,7 @@ class xarRoles extends xarObject
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int $id
-     * @return array representing the subgroups of a group
+     * @return array<mixed> representing the subgroups of a group
      */
     public static function getsubgroups($id)
     {

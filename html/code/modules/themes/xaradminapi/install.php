@@ -14,7 +14,7 @@
  * Install a theme.
  *
  * @author Marty Vance
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['maindId'] ID of the module to look dependents for
  * @return boolean|void true on dependencies activated, false for not
  */

@@ -43,7 +43,7 @@ class Base_ContentBlockConfig extends Base_ContentBlock implements iBlock
 
     /**
      * Updates the Block config from the Blocks Admin
-     * @param array $data Data array for configuration update
+     * @param array<string, mixed> $data Data array for configuration update
      * @return boolean Returns true on success, false on failure
      */
     public function configupdate(Array $data=array())

@@ -36,7 +36,7 @@ function mail_admin_view(Array $args=array())
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/771.html
  *
- * @return array|string data for the template display
+ * @return array<mixed>|string data for the template display
  *
  * @author Marcel van der Boom <marcel@xaraya.com>
  */

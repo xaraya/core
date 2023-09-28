@@ -13,7 +13,7 @@
  * Set the state of a theme
  *
  * @author Marty Vance
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] the theme id<br/>
  *        string   $args['name'] themes's name
  *        integer  $args['state'] the state

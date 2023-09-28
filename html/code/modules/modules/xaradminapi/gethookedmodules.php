@@ -13,12 +13,12 @@
  * Get list of modules calling a particular hook module
  *
  * @author Xaraya Development Team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['hookModName'] hook module we're looking for<br/>
  *        string   $args['hookObject'] the object of the hook (item, module, ...) (optional)<br/>
  *        string   $args['hookAction'] the action on that object (transform, display, ...) (optional)<br/>
  *        string   $args['hookArea'] the area we're dealing with (GUI, API) (optional)
- * @return array modules calling this hook module
+ * @return array<mixed> modules calling this hook module
  * @throws EmptyParameterException
  */
 function modules_adminapi_gethookedmodules(Array $args=array())

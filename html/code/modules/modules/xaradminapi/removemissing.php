@@ -13,7 +13,7 @@
  * Remove a module when the files are missing
  *
  * @author Xaraya Development Team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] the id of the module
  * @return boolean|void true on success, false on failure
  */

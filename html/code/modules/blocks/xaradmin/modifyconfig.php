@@ -20,7 +20,7 @@
  *
  * Standard GUI function to display and update the configuration settings of the module based on input data.
  *
- * @return boolean|array|string|void data array for the template display or output display string if invalid data submitted
+ * @return boolean|array<mixed>|string|void data array for the template display or output display string if invalid data submitted
  */
 function blocks_admin_modifyconfig()
 {

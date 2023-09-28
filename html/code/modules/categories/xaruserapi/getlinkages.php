@@ -14,7 +14,7 @@
 
 /**
  * Get links
- * @param array $args
+ * @param array<string, mixed> $args
  * @param $args['cids'] array of ids of categories to get linkage for (OR/AND)
  * @param $args['iids'] array of ids of itens to get linkage for
  * @param $args['module'] module (if any)
@@ -24,7 +24,7 @@
  * @param $args['sort'] optional sort by itemid (default) or numlinks
  * @param $args['andcids'] true means AND-ing categories listed in cids
  * @param $args['groupcids'] the number of categories you want items grouped by
- * @return array|void Returns array of linkages with keys either item_id or category_id
+ * @return array<mixed>|void Returns array of linkages with keys either item_id or category_id
  */
 function categories_userapi_getlinkages($args)
 {

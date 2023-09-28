@@ -17,7 +17,7 @@
  *
  * @param $args['object'] the name of the object (required)
  * @param $args['property'] the name of the categories property of the object (optional)
- * @return array of category bases
+ * @return array<mixed> of category bases
  */
 
 function categories_userapi_getallcatbases($args)

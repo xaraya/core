@@ -13,7 +13,7 @@
  * Upgrade a theme
  *
  * @author Marty Vance
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] registered theme id
  * @return boolean|void true on success, false on failure
  * @throws EmptyParameterException

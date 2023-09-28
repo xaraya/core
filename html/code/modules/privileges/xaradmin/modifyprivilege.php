@@ -12,7 +12,7 @@
  */
 /**
  * modifyprivilege - modify privilege details
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
  */
 function privileges_admin_modifyprivilege()
 {

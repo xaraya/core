@@ -12,7 +12,7 @@
  */
 /**
  * viewPrivileges - view the current privileges
- * @return array|string|void data for the template display
+ * @return array<mixed>|string|void data for the template display
  */
 function privileges_admin_viewprivileges()
 {

@@ -15,7 +15,7 @@
  *
  * @author Xaraya Development Team
  * @access public
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['regid'] module's registered id
  *        string   $args['name'] module's name
  * @return boolean|void true on success, false on failure

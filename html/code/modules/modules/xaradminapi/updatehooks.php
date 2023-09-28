@@ -13,7 +13,7 @@
  * Update hooks for a particular hook module
  *
  * @author Xaraya Development Team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] the id number of the hook module
  * @return boolean|void true on success, false on failure
  */

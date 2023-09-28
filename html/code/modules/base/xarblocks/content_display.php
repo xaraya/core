@@ -23,7 +23,7 @@ class Base_ContentBlockDisplay extends Base_ContentBlock implements iBlock
 {
     /**
      * Display method
-     * @return array|void Returns display data array or null if not available.
+     * @return array<mixed>|void Returns display data array or null if not available.
      */
     function display()
     {

@@ -14,7 +14,7 @@
  * Get all themes in the database
  *
  * @author Marty Vance
- * @return array|void of themes in the database
+ * @return array<mixed>|void of themes in the database
  */
 function themes_adminapi_getdbthemes()
 {

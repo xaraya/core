@@ -32,7 +32,7 @@ class RadioButtonsProperty extends SelectProperty
 /**
  * Display a radio button for input
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
     public function showInput(Array $data = array())
@@ -43,7 +43,7 @@ class RadioButtonsProperty extends SelectProperty
 /**
  * Display a radio button for output on dropdown template
  * 
- * @param  array data An array of input parameters 
+ * @param array<string, mixed> $data An array of input parameters 
  * @return string     HTML markup to display the property for output on a web page
  */
     public function showOutput(Array $data = array())

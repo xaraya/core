@@ -21,7 +21,7 @@
  * @author Jim McDonald
  * @author Paul Rosania
  * @access public
- * @param array    $args array of optional parameters
+ * @param array<string, mixed> $args array of optional parameters
  * @param string   $args['modName'] the module name (deprecated)
  * @param string   $args['blockType'] the block type (deprecated)
  * @param string   $args['module'] the module name

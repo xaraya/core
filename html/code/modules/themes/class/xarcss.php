@@ -125,7 +125,7 @@ class xarCSS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @return array public object properties to store values for
+ * @return array<mixed> public object properties to store values for
 **/
     public function __sleep()
     {
@@ -358,7 +358,7 @@ class xarCSS extends xarObject
  * @author Andy Varganov <andyv@xaraya.com>
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array  $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *         string $args[scope] scope of style, one of common!theme(default)|module|block|property<br/>
  *         string $args[method] style method, one of link(default)|import|embed<br/>
  *         string $args[alternatedir] alternative base folder to look in, falling back to...<br/>
@@ -572,7 +572,7 @@ class xarCSS extends xarObject
  * @param string  $scope the scope of the file (common, theme, module, block, property)
  * @param string  $method the method to use (link, import, embed)
  * @param string  $url source, either code to embed or url of file to link or import
- * @param array   $data tag data to cache
+ * @param array<string, mixed> $data tag data to cache
  * @return boolean|void true on success
  * @todo make private once xarTpl functions are deprecated
 **/
@@ -621,7 +621,7 @@ class xarCSS extends xarObject
  *
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array   $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *         boolean $args[comments] show comments, optional, default false
  * @todo option to turn on/off style comments in UI, cfr template comments
  * @return string|void templated output of css to render

@@ -14,7 +14,7 @@
  * Update a user's state
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['id'] user ID<br/>
  *        string   $args['name'] user real name<br/>
  *        string   $args['uname'] user nick name<br/>

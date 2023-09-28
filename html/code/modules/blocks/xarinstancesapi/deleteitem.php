@@ -15,7 +15,7 @@
  * 
  * @author Chris Powis <crisp@xaraya.com>
  * 
- * @param array $args Parameter data array
+ * @param array<string, mixed> $args Parameter data array
  * @return boolean|void Returns true on success, false on failure
  * @throws EmptyParameterException
  * @throws IDNotFoundException

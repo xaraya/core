@@ -14,7 +14,7 @@
  * delete users based on status
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['state'] state that we are deleting.
  * @return boolean|string|void true on success, false on failure
  */

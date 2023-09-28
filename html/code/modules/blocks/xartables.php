@@ -16,7 +16,7 @@
  * This function is called internally by the core whenever the module is
  * loaded. It adds the table names to a globally accessible array
  * 
- * @return array Registered table names to a globally accessibl array
+ * @return array<mixed> Registered table names to a globally accessibl array
  */
 function blocks_xartables()
 {

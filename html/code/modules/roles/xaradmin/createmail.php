@@ -11,7 +11,7 @@
  * @link http://xaraya.info/index.php/release/27.html
  */
 /**
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
   */
 function roles_admin_createmail()
 {

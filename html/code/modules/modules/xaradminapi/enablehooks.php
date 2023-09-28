@@ -13,7 +13,7 @@
  * Note : hooks will be enabled for all item types if no specific item type is given
  *
  * @author Xaraya Development Team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['callerModName'] caller module<br/>
  *        string   $args['callerItemType'] optional item type for the caller module<br/>
  *        string   $args['hookModName'] hook module

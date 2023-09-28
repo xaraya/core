@@ -12,7 +12,7 @@
  */
 /**
  * viewroles - display the roles this privilege is assigned to
- * @return array|string|void data for the template display
+ * @return array<mixed>|string|void data for the template display
  */
 function privileges_admin_viewroles()
 {

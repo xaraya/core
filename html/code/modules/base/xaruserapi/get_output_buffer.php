@@ -16,7 +16,7 @@
  * @author Carl P. Corliss
  * @author the Base module development team
  * 
- * @return array containing the contents of the different output buffers
+ * @return array<mixed> containing the contents of the different output buffers
  */
 function base_userapi_get_output_buffer()
 {

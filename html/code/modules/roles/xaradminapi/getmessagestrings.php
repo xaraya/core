@@ -12,10 +12,10 @@
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['template'] name of the email type which has apair of -subject and -message files<br/>
  *        string   $args['module'] module directory in var/messaging
- * @return array of strings of file contents read
+ * @return array<mixed> of strings of file contents read
  */
 function roles_adminapi_getmessagestrings(Array $args=array())
 {

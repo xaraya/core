@@ -38,7 +38,7 @@ class xarMasks extends xarSecurity
      * @access  public
      * @param   string: module name
      * @param   string: component name
-     * @return  array of mask objects
+     * @return array<mixed> of mask objects
      * @throws  list of exception identifiers which can be thrown
      * @todo    list of things which must be done to comply to relevant RFC
     */
@@ -254,7 +254,7 @@ class xarMasks extends xarSecurity
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   role object
-     * @return  array containing the role's ancestors and privileges
+     * @return array<mixed> containing the role's ancestors and privileges
     */
     public static function getprivset($role)
     {

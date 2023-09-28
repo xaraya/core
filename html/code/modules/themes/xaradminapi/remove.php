@@ -14,7 +14,7 @@
  * Remove a theme
  *
  * @author Marty Vance
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] the id of the theme
  *        string   $args['name'] theme's name
  * @return boolean|void true on success, false on failure

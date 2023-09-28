@@ -17,8 +17,8 @@
  * 
  * @author Marcel van der Boom <mrb@hsdev.com>
  * 
- * @param array $args Parameter data array.
- * @return array|void Display data array 
+ * @param array<string, mixed> $args Parameter data array.
+ * @return array<mixed>|void Display data array 
  */
 function blocks_user_display(Array $args=array())
 {

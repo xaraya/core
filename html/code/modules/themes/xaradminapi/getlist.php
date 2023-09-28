@@ -47,7 +47,7 @@
  *        integer  $args['startNum'] the start offset in the list<br/>
  *        integer  $args['numItems'] the length of the list<br/>
  *        string   $args['orderBy'] the order type of the list
- * @return array of theme information arrays
+ * @return array<mixed> of theme information arrays
  * @throws BadParameterException
  */
 function themes_adminapi_getlist($filter = array(), $startNum = NULL, $numItems = NULL, $orderBy = 'name')

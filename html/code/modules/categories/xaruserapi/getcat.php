@@ -23,7 +23,7 @@
  *                                   eid and its children, grandchildren and
  *                                   every other sibbling will be returned
  * 
- * @param array $args
+ * @param array<string, mixed> $args
  * @param $args['cid'] =Integer= restrict output only to this category ID and its sibbling (default none)
  * @param $args['eid'] =Integer= do not output this category and its sibblings (default none)
  * @param $args['maximum_depth'] =Integer= return categories with the given depth or less
@@ -33,7 +33,7 @@
  * @param $args['getchildren'] =Boolean= get children of category (default false)
  * @param $args['getparents'] =Boolean= get parents of category (default false)
  * @param $args['return_itself'] =Boolean= return the cid itself (default false)
- * @return array|boolean|void Returns array of categories, or false on failure
+ * @return array<mixed>|boolean|void Returns array of categories, or false on failure
  */
 function categories_userapi_getcat($args)
 {

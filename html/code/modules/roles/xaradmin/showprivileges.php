@@ -14,7 +14,7 @@
  * showprivileges - display the privileges of this role
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @return array|string|void data for the template display
+ * @return array<mixed>|string|void data for the template display
  */
 function roles_admin_showprivileges()
 {

@@ -71,7 +71,7 @@ class CategoryNavigationProperty extends SelectProperty
 	/**
 	 * Display the property for input
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
     public function showInput(Array $data = array())
@@ -82,7 +82,7 @@ class CategoryNavigationProperty extends SelectProperty
 	/**
 	 * Display the property for output
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
     public function showOutput(Array $data = array())
@@ -1077,8 +1077,8 @@ class CategoryNavigationProperty extends SelectProperty
     /**
      * sort navigation trails by base category order, then by Celko tree
      * 
-     * @param array $a Parameter data array
-     * @param array $b Parameter data array
+     * @param array<string, mixed> $a Parameter data array
+     * @param array<string, mixed> $b Parameter data array
      * @return int Returns sort number
      */
     static function sortbyorder ($a,$b)

@@ -16,7 +16,7 @@
  * @author andyv <andyv@xaraya.com>
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
- * @param array   $args array of optional paramaters<br/>
+ * @param array<string, mixed> $args array of optional paramaters<br/>
  *         boolean $args[comments] show comments, optional, default false
  * @todo option to turn on/off style comments in UI, cfr template comments
  * @return string templated output of css to render

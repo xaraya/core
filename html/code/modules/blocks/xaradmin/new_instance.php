@@ -17,7 +17,7 @@
  * @author Paul Rosania
  * @author Chris Powis
  * 
- * @return array|string|void Data display array
+ * @return array<mixed>|string|void Data display array
 */
 function blocks_admin_new_instance()
 {

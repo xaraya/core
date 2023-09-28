@@ -14,7 +14,7 @@
  * Browse for files and directories (recursion supported).
  * Originally in Xarpages, and used to provide lists of APIs and templates.
  *
- * @param array   $args Array of optional parameters<br/>
+ * @param array<string, mixed> $args Array of optional parameters<br/>
  *
  * Identifying the base directory:<br/>
  *        string  $args['basedir'] the absolute or relative base directory<br/>

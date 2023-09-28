@@ -17,7 +17,7 @@
 /**
  * Function to modify category
  * 
- * @return array|string|void Returns display data array on success, null on failure
+ * @return array<mixed>|string|void Returns display data array on success, null on failure
  */
 function categories_admin_modify()
 {

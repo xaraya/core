@@ -11,7 +11,7 @@
 /**
  * Default web suervices call
  * 
- * @param array   $args Array of optional parameters<br/>
+ * @param array<string, mixed> $args Array of optional parameters<br/>
  * @return string Default message
  */
 function base_wsapi_default(Array $args=array())

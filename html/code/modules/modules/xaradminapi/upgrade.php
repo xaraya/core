@@ -12,7 +12,7 @@
  * Upgrade a module
  *
  * @author Xaraya Development Team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] registered module id
  * @return boolean|void true on success, false on failure
  * @throws EmptyParameterException

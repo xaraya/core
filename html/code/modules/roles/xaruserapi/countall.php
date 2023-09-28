@@ -13,7 +13,7 @@
 /**
  * count all users
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  * @return integer|void the number of users matching the selection criteria (cfr. getall)
  */
 function roles_userapi_countall(Array $args=array())

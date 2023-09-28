@@ -23,7 +23,7 @@
  * @param $args['modid'] module ID
  * @param $args['itemtype'] item type
  * @param $args['itemid'] item ID
- * @return array|boolean Returns category info on success, false on failure.
+ * @return array<mixed>|boolean Returns category info on success, false on failure.
  */
 function categories_userapi_getitemcats($args)
 {

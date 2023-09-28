@@ -33,8 +33,8 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     /**
      * Modify the configuration of the menu block
      * 
-     * @param array $data Data array
-     * @return array $data array of values to be displayed in the block's configuration page
+     * @param array<string, mixed> $data Data array
+     * @return array<mixed> $data array of values to be displayed in the block's configuration page
      */
     public function configmodify(Array $data=array())
     {
@@ -49,7 +49,7 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     /**
      * Update the configuration of the menu block
      * 
-     * @param array $data Data array
+     * @param array<string, mixed> $data Data array
      * @return boolean|void Returns true on success, false on failure
      */
     public function configupdate(Array $data=array())
@@ -401,8 +401,8 @@ class Base_MenuBlockConfig extends Base_MenuBlock implements iBlock
     /**
      * Custom update method to handle link ordering
      * 
-     * @param array $data Data array
-     * @return array|null Returns data array containing link ordering. If linkid, sublinkid or direction have not been found null is returned.
+     * @param array<string, mixed> $data Data array
+     * @return array<mixed>|null Returns data array containing link ordering. If linkid, sublinkid or direction have not been found null is returned.
      * @throws EmptyParameterException Thrown if linkid and direction are not given.
      */
     public function linkorderupdate(Array $data=array())

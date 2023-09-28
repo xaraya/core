@@ -15,7 +15,7 @@
  * Utility function pass individual menu items to the admin menu.
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
- * @return array the menulinks for the admin menu items of this module.
+ * @return array<mixed> the menulinks for the admin menu items of this module.
  */
 function mail_adminapi_getmenulinks()
 {

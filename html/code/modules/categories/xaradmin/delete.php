@@ -18,7 +18,7 @@
  *
  * This function also shows a count on the number of child categories of the current category
  * 
- * @return array|bool|string|void Returns display data array on success, null on failure
+ * @return array<mixed>|bool|string|void Returns display data array on success, null on failure
  * @throws BadParameterException Thrown if given category was not found in API
  */
 function categories_admin_delete()

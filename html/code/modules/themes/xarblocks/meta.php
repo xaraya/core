@@ -186,7 +186,7 @@ class Themes_MetaBlock extends BasicBlock
 	/**
 	 * Method to parse the linktags
 	 *
-	 * @return array Returns linktags array
+	 * @return array<mixed> Returns linktags array
 	 */
     public function parseLinkTags()
     {
@@ -273,7 +273,7 @@ class Themes_MetaBlock extends BasicBlock
 	/**
 	 * Method to display the default metatags
 	 * 
-     * @return array Returns array of metatags
+     * @return array<mixed> Returns array of metatags
 	 */
     public function default_metatags()
     {
@@ -333,7 +333,7 @@ class Themes_MetaBlock extends BasicBlock
 	/**
 	 * Method to display the default linktags
 	 * 
-     * @return array Returns array of linktags
+     * @return array<mixed> Returns array of linktags
 	 */
     public function default_linktags()
     {

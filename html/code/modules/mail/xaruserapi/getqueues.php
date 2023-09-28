@@ -10,7 +10,7 @@
  */
 
 /**
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  */
 function mail_userapi_getqueues(Array $args=array())
 {

@@ -14,7 +14,7 @@
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * This is a hook function that is called to send mail when an item changes
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['modid'] is the module that is sending mail.<br/>
  *        integer  $args['objectid'] is the item changed.
  */

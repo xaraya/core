@@ -423,7 +423,7 @@ class xarSecurity extends xarObject
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   array representing the initial node to start from
-     * @return  array nested array containing the role's ancestors and privileges
+     * @return array<mixed> nested array containing the role's ancestors and privileges
     */
     public static function irreducibleset($coreset,$module_id=null)
     {
@@ -471,8 +471,8 @@ class xarSecurity extends xarObject
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @param   array $mask normalform
-     * @param   array $privilegeset representing the irreducibles set of privileges
+     * @param array<mixed> $mask normalform
+     * @param array<mixed> $privilegeset representing the irreducibles set of privileges
      * @param   bool $pass false (initial test value)
      * @param   mixed $role
      * @return  bool false if check fails, privilege object if check succeeds

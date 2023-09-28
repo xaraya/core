@@ -14,8 +14,8 @@
  * Get blocks API info
  * 
  * @author Chris Powis <crisp@xaraya.com>
- * @param array $args Parameter data array
- * @return array Returns block info array
+ * @param array<string, mixed> $args Parameter data array
+ * @return array<mixed> Returns block info array
  * @throws EmptyParameterException
  * @throws BadParameterException
  * @throws DataNotFoundException

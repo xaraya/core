@@ -18,7 +18,7 @@
  * 
  * Updates an item in the API
  * 
- * @param array $args
+ * @param array<string, mixed> $args
  * @return integer|void Returns block id
  * @throws BadParameterException
  */

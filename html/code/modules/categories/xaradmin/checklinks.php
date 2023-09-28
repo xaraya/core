@@ -15,7 +15,7 @@
 /**
  * Check category links for orphans
  * 
- * @return array|bool|string|void Returns data array on success, false|null on failure
+ * @return array<mixed>|bool|string|void Returns data array on success, false|null on failure
  */
 function categories_admin_checklinks()
 {

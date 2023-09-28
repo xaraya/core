@@ -17,7 +17,7 @@
  *
  * @author the Example module development team
  * 
- * @return array Array containing menulinks for the main menu items.
+ * @return array<mixed> Array containing menulinks for the main menu items.
  */
 function categories_adminapi_getmenulinks()
 {

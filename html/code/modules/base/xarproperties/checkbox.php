@@ -81,7 +81,7 @@ class CheckboxProperty extends DataProperty
 /**
  * Display a checkbox for input
  * 
- * @param  array data An array of input parameters
+ * @param array<string, mixed> $data An array of input parameters
  * @return string     HTML markup to display the property for input on a web page
  */
     public function showInput(Array $data = array())

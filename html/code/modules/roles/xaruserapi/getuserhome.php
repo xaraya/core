@@ -12,7 +12,7 @@
  */
 /**
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['itemid']
  * @return string|void representing the user home
  */

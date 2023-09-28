@@ -12,7 +12,7 @@
 /**
  * Function to write to a file
  * 
- * @param array $args Function parameters
+ * @param array<string, mixed> $args Function parameters
  * @param string $args['file'] File name of the file to write to
  * @param string $args['data'] Data to be written to the file
  * @return boolean Returns true on success, false on failure

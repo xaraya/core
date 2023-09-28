@@ -34,7 +34,7 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
      * 
      * @param string $data['title']
      * @param string $data['content']
-     * @return array
+     * @return array<
      */
     public function configmodify(Array $data=array())
     {
@@ -55,7 +55,7 @@ class Base_AdminmenuBlockConfig extends Base_AdminmenuBlock implements iBlockMod
     /**
      * Updates the Block config from the Blocks Admin
      * 
-     * @param array $data Data array continaing title, content
+     * @param array<string, mixed> $data Data array continaing title, content
      * @return boolean|void Returns true on success, false on failure
      */
     public function configupdate(Array $data=array())

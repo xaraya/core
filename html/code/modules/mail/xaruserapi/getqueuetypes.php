@@ -10,7 +10,7 @@
  */
 
 /**
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  * Return a list of queue types in a structured format, also suitable for dd validation
    *
    */

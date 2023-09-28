@@ -182,7 +182,7 @@ class CategoryTreeNode extends TreeNode
 
     /**
      * Load values from array
-     * @param array $args Data array for CategoryTreeNode
+     * @param array<string, mixed> $args Data array for CategoryTreeNode
      */
     function load(Array $args)
     {
@@ -191,7 +191,7 @@ class CategoryTreeNode extends TreeNode
 
     /**
      * Set filter
-     * @param array $args Filter Data array
+     * @param array<string, mixed> $args Filter Data array
      */
     function setfilter($args=array())
     {
@@ -201,7 +201,7 @@ class CategoryTreeNode extends TreeNode
     /**
      * Return this object as an array
      * 
-     * @return array CategoryTreeNode information as array
+     * @return array<mixed> CategoryTreeNode information as array
      */
     function toArray()
     {

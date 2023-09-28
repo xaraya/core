@@ -18,7 +18,7 @@
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] Extra information
- * @return array Returns extrainfo array.
+ * @return array<mixed> Returns extrainfo array.
  * @throws BadParameterException Thrown if invalid parameters have been given.
  */
 function categories_adminapi_updatehook($args)

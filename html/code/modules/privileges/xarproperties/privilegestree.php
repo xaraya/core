@@ -45,7 +45,7 @@ class PrivilegesTreeProperty extends DataProperty
 	/**
 	 * Display a options for input to show wheather you want to display input for an instance or not.
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */	
     public function showInput(Array $data = array())

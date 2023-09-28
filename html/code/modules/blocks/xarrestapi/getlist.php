@@ -19,7 +19,7 @@
  * => ['itemtype' => 'string', 'itemids' => ['integer']]  // specify the array items type as 'integer' here
  * => ['itemtype' => ['type' => 'string'], 'itemids' => ['type' => 'array', 'items' => ['type' => 'integer']]]  // rest
  *
- * @return array of info
+ * @return array<mixed> of info
  */
 function blocks_restapi_getlist($args = [])
 {

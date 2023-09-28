@@ -40,7 +40,7 @@ class Role extends DataObject
      * Retrieves a single role (user or group) from the roles repository
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @param array $pargs
+     * @param array<mixed> $pargs
      * @return object role
      */
     public function __construct(DataObjectDescriptor $descriptor)
@@ -382,7 +382,7 @@ class Role extends DataObject
      * Gets all the privileges assigned directly to this role.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array of privilege objects
+     * @return array<mixed> of privilege objects
      * @todo seems to me this belongs in privileges.
      */
     public function getAssignedPrivileges()
@@ -438,7 +438,7 @@ class Role extends DataObject
      * Gets all the privileges inherited by this role.
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array of privilege objects
+     * @return array<mixed> of privilege objects
      */
     public function getInheritedPrivileges()
     {
@@ -521,7 +521,7 @@ class Role extends DataObject
      * @param integer numitems get a defined number of users
      * @param string order order the result (name, uname, itemtype, email, date_reg, state...)
      * @param string selection get users within this selection criteria
-     * @return array
+     * @return array<mixed> 
      */
     public function getUsers($state = xarRoles::ROLES_STATE_CURRENT, $startnum = 0, $numitems = 0, $order = 'name', $selection = NULL)
     {
@@ -639,7 +639,7 @@ class Role extends DataObject
      * getParents: returns the parent objects of a role
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array of role objects
+     * @return array<mixed> of role objects
      */
     public function getParents()
     {
@@ -683,7 +683,7 @@ class Role extends DataObject
      * getAncestors: returns all objects in the roles hierarchy above a role
      *
      * @author Marc Lutolf <marcinmilan@xaraya.com>
-     * @return array of role objects. The objects can be queried with the getLevel() method to show their relationship (1=prents, 2=grandparents etc.).
+     * @return array<mixed> of role objects. The objects can be queried with the getLevel() method to show their relationship (1=prents, 2=grandparents etc.).
      */
     public function getRoleAncestors()
     {
@@ -728,7 +728,7 @@ class Role extends DataObject
      * @author Marc Lutolf <marcinmilan@xaraya.com>
      * @param int state get users in this state
      * @param int $grpflag
-     * @return array list of users
+     * @return array<mixed> list of users
      * @todo evaluate performance of this (3 loops, of which 2 nested)
      */
     public function getDescendants($state = xarRoles::ROLES_STATE_CURRENT, $grpflag=0)

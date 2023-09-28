@@ -12,7 +12,7 @@
  * Activate a module if it has an active function, otherwise just set the state to active
  *
  * @access public
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] module's registered id
  *        string   $args['name'] module's name
  * @return boolean

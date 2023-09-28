@@ -15,8 +15,8 @@
  * 
  * @author Marc Lutolf <marcinmilan@xaraya.com>
  * 
- * @param array $args Arguments passed to Gui function. 
- * @return array Data for the display template
+ * @param array<string, mixed> $args Arguments passed to Gui function. 
+ * @return array<mixed> Data for the display template
  */
 function authsystem_user_password($args = array())
 {

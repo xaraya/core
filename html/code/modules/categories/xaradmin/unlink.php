@@ -19,7 +19,7 @@
 /**
  * Delete category links of module items.
  * 
- * @return boolean|array|string|void Returns true on success, null on failure.
+ * @return boolean|array<mixed>|string|void Returns true on success, null on failure.
  */
 function categories_admin_unlink()
 { 

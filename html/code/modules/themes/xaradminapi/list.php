@@ -13,7 +13,7 @@
  * Obtain list of themes
  *
  * @author Marty Vance
- * @return array|void the known themes
+ * @return array<mixed>|void the known themes
  */
 function themes_adminapi_list()
 {

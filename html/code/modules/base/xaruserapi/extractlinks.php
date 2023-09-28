@@ -15,12 +15,12 @@
  *
  * @author mikespub
  * 
- * @param array    $args Array of optional parameters<br/>
+ * @param array<string, mixed> $args Array of optional parameters<br/>
  *        string   $args['content'] String the HTML content that you want to extract links from<br/>
  *        string   $args['getlocal'] bool Indicates if we want to get local URLs (default is true)<br/>
  *        string   $args['getremote'] bool Indicates if we want to get remote URLs (default is false)<br/>
  *        string   $args['baseurl'] string Optional base URL for the content (default is this site)<br/>
- * @return array List of links found
+ * @return array<mixed> List of links found
  */
 function base_userapi_extractlinks(Array $args=array())
 {

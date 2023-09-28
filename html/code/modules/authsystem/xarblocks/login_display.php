@@ -14,7 +14,6 @@
  * Display block
  *
  * @author Jim McDonald
- * @return array
  */
 sys::import('modules.authsystem.xarblocks.login');
 
@@ -29,7 +28,7 @@ class Authsystem_LoginBlockDisplay extends Authsystem_LoginBlock implements iBlo
     /**
      * Method to display the login
      * 
-     * @return array|void Returns display data array.
+     * @return array<mixed>|void Returns display data array.
      */
     function display()
     {

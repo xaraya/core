@@ -100,7 +100,7 @@ class MultiSelectProperty extends SelectProperty
 	/**
 	 * Display a Dropdown for input
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for input on a web page
 	 */
     public function showInput(Array $data = array())
@@ -115,7 +115,7 @@ class MultiSelectProperty extends SelectProperty
 	/**
 	 * Display a dropdown for output
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string     HTML markup to display the property for output on a web page
 	 */	
     public function showOutput(Array $data = array())
@@ -130,7 +130,7 @@ class MultiSelectProperty extends SelectProperty
 	/**
 	 * Used to show the hidden data
 	 * 
-	 * @param  array data An array of input parameters
+	 * @param array<string, mixed> $data An array of input parameters
 	 * @return string|void   Returns true or false 
 	 */
     public function showHidden(Array $data = array())
@@ -169,7 +169,7 @@ class MultiSelectProperty extends SelectProperty
      * Unserializes a given value
      * 
      * @param string $value Serialized value
-     * @return array Return unserialized value of $value param
+     * @return array<mixed> Return unserialized value of $value param
      */
     public function getValue()
     {
@@ -180,7 +180,7 @@ class MultiSelectProperty extends SelectProperty
      * Unserializes a given value
      * 
      * @param string $value Serialized value
-     * @return array Return unserialized value of $value param
+     * @return array<mixed> Return unserialized value of $value param
      */
     public function getItemValue($itemid)
     {
@@ -191,7 +191,7 @@ class MultiSelectProperty extends SelectProperty
      * Unserializes a given value
      * 
      * @param string $value Serialized value
-     * @return array Return unserialized value of $value param
+     * @return array<mixed> Return unserialized value of $value param
      */
     public function getSerializedValue($value)
     {

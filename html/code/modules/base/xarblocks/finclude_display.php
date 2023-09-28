@@ -21,7 +21,7 @@ class Base_FincludeBlockDisplay extends Base_FincludeBlock implements iBlock
     /**
      * Disaply function
      * 
-     * @return array Retursn display data array
+     * @return array<mixed> Retursn display data array
      */
     function display()
     {

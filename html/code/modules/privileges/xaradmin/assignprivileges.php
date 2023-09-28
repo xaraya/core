@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/1098.html
  */
 /**
- * @return array|string|bool|void data for the template display
+ * @return array<mixed>|string|bool|void data for the template display
  */
 
     function privileges_admin_assignprivileges()

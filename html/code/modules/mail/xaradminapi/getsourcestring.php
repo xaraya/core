@@ -11,7 +11,7 @@
 
 /**
  * Psspl : Added API function to read the contents of template files (.xt) as plain text
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  */
 function mail_adminapi_getsourcestring(Array $args=array())
 {   

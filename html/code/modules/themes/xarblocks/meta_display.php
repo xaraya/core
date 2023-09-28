@@ -100,7 +100,7 @@ class Themes_MetaBlockDisplay extends Themes_MetaBlock
 	/**
      * Method to get help content
      * 
-     * @return array Display data array
+     * @return array<mixed> Display data array
      */ 
     public function help()
     {

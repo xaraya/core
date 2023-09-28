@@ -21,7 +21,7 @@
  * Phase 4: Database Settings Page
  *
  * @access private
- * @return array data for the template display
+ * @return array<mixed> data for the template display
  */
 function installer_admin_phase4()
 {

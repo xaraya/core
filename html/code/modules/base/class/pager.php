@@ -19,7 +19,7 @@ class xarTplPager extends xarObject
      * @param int $total Total number of items present
      * @param int $itemsPerPage Number of links to dispsplay (default 10)
      * @param int|array $blockOptions Number of pages to display at once (default 10) or array of optinal parameters
-     * @return array Data array containing pager info
+     * @return array<mixed> Data array containing pager info
      */
     public static function getInfo($currentItem, $total, $itemsPerPage = 10, $blockOptions = 10)
     {

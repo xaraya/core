@@ -16,7 +16,7 @@
  *
  * @author  John Cox <niceguyeddie@xaraya.com>
  * @access  public
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
 */
 function mail_admin_compose()
 {

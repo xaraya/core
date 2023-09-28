@@ -17,7 +17,7 @@
  * [list of] category. This function used to be 'getparents', the new name
  * being less ambiguous (see XLST AxisNames for examples).
  *
- * @param array $args
+ * @param array<string, mixed> $args
  * @param $args['cid'] id of category to get children for, or
  * @param $args['cids'] array of category ids to get children for
  * @param $args['self'] =Boolean= return the cid itself (default true)
@@ -25,7 +25,7 @@
  * @param $args['order'] 'root' or 'self' first; default 'root' (i.e. oldest ancestor first)
  * @param $args['descendants'] array to determine how descendants will be returned: 'tree', 'lists', 'list', ['none']
  * @staticvar array $cached
- * @return boolean|array|void Returns array of category info or false on failure
+ * @return boolean|array<mixed>|void Returns array of category info or false on failure
  */
 function categories_userapi_getancestors($args)
 {

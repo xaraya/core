@@ -16,12 +16,12 @@
  * Supported criteria are: UserCapable, AdminCapable, Class, Category, State.
  * @author original - Marco Canini <marco@xaraya.com>,
  * @author andyv - modified
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['filter'] array of criteria used to filter the entire list of installed themes.<br/>
  *        integer  $args['startNum'] the start offset in the list<br/>
  *        integer  $args['numItems'] the length of the list<br/>
  *        string   $args['orderBy'] the order type of the list
- * @return array array of theme information arrays
+ * @return array<mixed> array of theme information arrays
  * @throws BadParameterException
  */
 function themes_adminapi_getthemelist(Array $args=array())

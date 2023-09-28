@@ -18,7 +18,7 @@
  *
  * @param $args['objectid'] ID of the object
  * @param $args['extrainfo'] extra information
- * @return array Returns data array.
+ * @return array<mixed> Returns data array.
  */
 function categories_adminapi_updateconfighook($args)
 {

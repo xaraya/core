@@ -12,7 +12,7 @@
  * Update module information
  *
  * @author Xaraya Development Team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] the id number of the module to update<br/>
  *        string   $args['displayname'] the new display name of the module<br/>
  *        string   $args['admincapable'] the whether the module shows an admin menu<br/>

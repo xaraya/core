@@ -30,7 +30,7 @@ class Themes_SkinBlockConfig extends Themes_SkinBlock implements iBlock
 	/**
      * Modify the configuration of the skin block
      * 
-     * @return array $data array of values to be displayed in the block's configuration page
+     * @return array<mixed> $data array of values to be displayed in the block's configuration page
      */
     public function configmodify()
     {

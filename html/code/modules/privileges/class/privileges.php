@@ -261,7 +261,7 @@ class xarPrivileges extends xarMasks
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  array of privileges
+     * @return array<mixed> of privileges
      * @todo    use associative fetching and one getrow statement.
     */
     public static function getprivileges(Array $args=array())
@@ -314,7 +314,7 @@ class xarPrivileges extends xarMasks
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
      * @param   string $arg indicates what types of elements to get
-     * @return  array of privileges
+     * @return array<mixed> of privileges
      * @todo    use associative fetching and one getrow
      * @todo    cache with statics?
     */
@@ -378,7 +378,7 @@ class xarPrivileges extends xarMasks
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  array of realm ids and names
+     * @return array<mixed> of realm ids and names
      * @todo    this isn't really the right place for this function
     */
     public static function getrealms()
@@ -415,7 +415,7 @@ class xarPrivileges extends xarMasks
      *
      * @author  Marc Lutolf <marcinmilan@xaraya.com>
      * @access  public
-     * @return  array of module ids and names
+     * @return array<mixed> of module ids and names
      * @todo    this isn't really the right place for this function
      * @todo    ucfirst is a presentation issue.
      */
@@ -558,7 +558,7 @@ class xarPrivileges extends xarMasks
      * @author  Richard Cave<rcave@xaraya.com>
      * @access  public
      * @param   string
-     * @return  array of xarPrivilege objects
+     * @return array<mixed> of xarPrivilege objects
     */
     public static function findPrivilegesForModule($module)
     {

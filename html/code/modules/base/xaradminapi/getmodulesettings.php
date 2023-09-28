@@ -11,7 +11,7 @@
 /**
  * Get module settings for admin API
  * 
- * @param array $args Optional parameters.
+ * @param array<string, mixed> $args Optional parameters.
  * @param string $args['module'] Required module parameter
  * @return object Returns data object
  * @throws Exception Thrown if module parameter was not given

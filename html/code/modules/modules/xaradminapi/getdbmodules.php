@@ -12,9 +12,9 @@
 /**
  * Get all modules in the database
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['regid'] - optional regid to retrieve
- * @return array modules in the database
+ * @return array<mixed> modules in the database
  */
 function modules_adminapi_getdbmodules(Array $args=array())
 {

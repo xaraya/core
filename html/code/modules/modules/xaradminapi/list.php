@@ -12,8 +12,8 @@
  * Obtain list of modules (deprecated)
  *
  * @author Xaraya Development Team
- * @param array    $args array of optional parameters<br/>
- * @return array|void the known modules
+ * @param array<string, mixed> $args array of optional parameters<br/>
+ * @return array<mixed>|void the known modules
  */
 function modules_adminapi_list(Array $args=array())
 {

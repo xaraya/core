@@ -12,7 +12,7 @@
 /**
  * Psspl : Added API function to get the template file output for the mail message.
  * @access public
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['modName'] the module name<br/>
  *        string   $args['modType']      user|admin<br/>
  *        string   $args['funcName']     module function to template  <br/>

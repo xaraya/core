@@ -14,12 +14,12 @@
 
 /**
  * Get orphan links
- * @param array $args
+ * @param array<string, mixed> $args
  * @param $args['modid'] module ID
  * @param $args['itemtype'] item type (if any)
  * @param $args['numitems'] optional number of items to return
  * @param $args['startnum'] optional start at this number (1-based)
- * @return array|bool|void Returns an array of orphan links, or false on failure
+ * @return array<mixed>|bool|void Returns an array of orphan links, or false on failure
  */
 function categories_userapi_getorphanlinks($args)
 {

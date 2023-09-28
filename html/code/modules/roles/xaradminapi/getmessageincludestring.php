@@ -13,7 +13,7 @@
 /**
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['template'] name of the template without .xt extension<br/>
  *        string   $args['module'] module directory in var/messaging
  * @return string of file contents read

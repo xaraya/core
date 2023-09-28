@@ -15,7 +15,7 @@
 /**
  * Hooks shows the configuration of hooks for other modules 
  * 
- * @return array|void Returns display data array on success, null on security check failure
+ * @return array<mixed>|void Returns display data array on success, null on security check failure
  */
 function categories_admin_hooks()
 {

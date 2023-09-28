@@ -10,7 +10,7 @@
  */
 /**
  * Modify the  email for users
- * @return array|bool|void data for the template display
+ * @return array<mixed>|bool|void data for the template display
  */
 function roles_admin_modifyemail(Array $args=array())
 {

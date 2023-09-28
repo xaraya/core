@@ -17,7 +17,7 @@
  * Returns a pager based on url, startnum, itemsperpage and totalitems
  * Usage, eg <xar:pager startnum="1" itemsperpage="10" total="30"/>
  * 
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['total'] - required, total items of this type<br/>
  *        integer  $args['startnum'] optional, the current page startnum, if empty<br/>
  *                 the tag will try to fetch the startnum from the currenturl, and fall back to<br/>

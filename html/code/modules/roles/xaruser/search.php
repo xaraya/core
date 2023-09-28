@@ -13,7 +13,7 @@
  * Search
  *
  * @author Marc Lutolf <marcinmilan@xaraya.com>
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
  */
 function roles_user_search()
 {

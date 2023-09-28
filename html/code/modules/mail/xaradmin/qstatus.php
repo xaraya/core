@@ -12,7 +12,7 @@
 /*
  * Queue status management
  *
- * @return array data for the template display
+ * @return array<mixed> data for the template display
  */
 function mail_admin_qstatus(Array $args=array())
 {
