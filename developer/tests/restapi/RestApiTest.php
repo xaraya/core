@@ -52,12 +52,12 @@ class RestAPITest extends TestCase
     protected static $endpoint;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected static $operations;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     protected static $components;
 

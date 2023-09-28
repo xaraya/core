@@ -81,7 +81,7 @@ try {
  *
  * @author Chris Powis <crisp@crispcreations.co.uk>
  * @param string $path folder to get files in
- * @return array files found
+ * @return array<mixed> files found
 **/
 function getFiles($path)
 {

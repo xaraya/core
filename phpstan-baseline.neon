@@ -11,11 +11,6 @@ parameters:
 			path: html/code/modules/base/xarproperties/dropdown.php
 
 		-
-			message: "#^Function xar_legacy_validations_dropdown not found\\.$#"
-			count: 1
-			path: html/code/modules/base/xarproperties/dropdown.php
-
-		-
 			message: "#^Undefined variable\\: \\$items$#"
 			count: 2
 			path: html/code/modules/base/xarproperties/dropdown.php
@@ -24,11 +19,6 @@ parameters:
 			message: "#^Undefined variable\\: \\$temp$#"
 			count: 1
 			path: html/code/modules/base/xarproperties/filepicker.php
-
-		-
-			message: "#^Function xar_legacy_validations_dropdown not found\\.$#"
-			count: 1
-			path: html/code/modules/base/xarproperties/multiselect.php
 
 		-
 			message: "#^Undefined variable\\: \\$block_groups$#"
@@ -69,11 +59,6 @@ parameters:
 			message: "#^Call to an undefined method object\\:\\:setWhere\\(\\)\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/objects/master.php
-
-		-
-			message: "#^Undefined variable\\: \\$info$#"
-			count: 1
-			path: html/code/modules/dynamicdata/class/properties/base.php
 
 		-
 			message: "#^Undefined variable\\: \\$value$#"
@@ -161,11 +146,6 @@ parameters:
 			path: html/code/modules/themes/xaradmin/update.php
 
 		-
-			message: "#^Function xar_legacy_templates_fixLegacy not found\\.$#"
-			count: 1
-			path: html/lib/blocklayout/xsltransformer.php
-
-		-
 			message: "#^Instantiated class React\\\\Http\\\\HttpServer not found\\.$#"
 			count: 1
 			path: html/lib/xaraya/bridge/reactphp.php
@@ -246,24 +226,19 @@ parameters:
 			path: html/lib/xaraya/encryptor.php
 
 		-
+			message: "#^Call to an undefined static method xarRoles\\:\\:makeGroup\\(\\)\\.$#"
+			count: 1
+			path: html/lib/xaraya/legacy/security.php
+
+		-
+			message: "#^Call to an undefined static method xarRoles\\:\\:makeUser\\(\\)\\.$#"
+			count: 1
+			path: html/lib/xaraya/legacy/security.php
+
+		-
 			message: "#^Undefined variable\\: \\$systemConfiguration$#"
 			count: 2
 			path: html/lib/xaraya/log.php
-
-		-
-			message: "#^Undefined variable\\: \\$facility$#"
-			count: 1
-			path: html/lib/xaraya/log/loggers/syslog.php
-
-		-
-			message: "#^Undefined variable\\: \\$options$#"
-			count: 1
-			path: html/lib/xaraya/log/loggers/syslog.php
-
-		-
-			message: "#^Function xarDBNewDataDict not found\\.$#"
-			count: 1
-			path: html/lib/xaraya/tableddl/datadict.php
 
 		-
 			message: "#^Instantiated class soap_fault not found\\.$#"
