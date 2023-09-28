@@ -50,7 +50,7 @@ class ObjectRefProperty extends SelectProperty
     /**
      * Display a dropdown of items for input
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for input on a web page
      */
     public function showInput(array $data = [])
@@ -74,7 +74,7 @@ class ObjectRefProperty extends SelectProperty
     /**
      * Display a dropdown of items for output
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for output on a web page
      */
     public function showOutput(array $data = [])
@@ -195,7 +195,7 @@ class ObjectRefProperty extends SelectProperty
     /**
      * Show the current configuration rules for this property type
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return string containing the HTML (or other) text to output on a web page
      */
     public function showConfiguration(array $data = [])

@@ -20,7 +20,7 @@ function dynamicdata_admin_import(array $args = [])
         return;
     }
 
-    $data = [];
+    $data = ['prefix' => null];
     if(!xarVar::fetch('basedir', 'isset', $basedir, null, xarVar::DONT_SET)) {
         return;
     }
@@ -77,6 +77,7 @@ function dynamicdata_admin_import(array $args = [])
         }
         if (!empty($import)) {
             $found = '';
+            $file = '';
             foreach ($files as $file) {
                 if ($file == $import) {
                     $found = $file;

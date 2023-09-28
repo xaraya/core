@@ -14,14 +14,16 @@
 /**
  * This is a standard function that is called with the results of the
  * form supplied by xarMod::guiFunc('dynamicdata','admin','new') to create a new item
- * @param int    objectid
- * @param int    itemid
- * @param string preview
- * @param string return_url
- * @param string join
- * @param string table
- * @param string template
- * @param string tplmodule
+ * @param array<string, mixed> $args
+ * with
+ *     int    objectid
+ *     int    itemid
+ *     string preview
+ *     string return_url
+ *     string join
+ *     string table
+ *     string template
+ *     string tplmodule
  * @return mixed
  */
 function dynamicdata_admin_create(array $args = [])

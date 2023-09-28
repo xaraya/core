@@ -11,8 +11,9 @@
  * @link http://xaraya.info/index.php/release/182.html
  *
  * @author Marc Lutolf <mfl@netspan.ch>
+ * @param array<string, mixed> $args
+ * @return string|bool|void
  */
-
 function dynamicdata_user_property(array $args = [])
 {
     if (!xarVar::fetch('prop', 'str', $property, '', xarVar::NOT_REQUIRED)) {

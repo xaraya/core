@@ -13,8 +13,7 @@
 /**
  * Show an input form in a template
  *
- * @param array    $args array of optional parameters<br/>
- * @param array containing the item or fields to show
+ * @param array<string, mixed> $args array of optional parameters containing the item or fields to show
  * @return string|void output display string
  */
 function dynamicdata_adminapi_showfilterform(array $args = [])

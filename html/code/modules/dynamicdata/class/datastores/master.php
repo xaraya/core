@@ -35,6 +35,7 @@ class DDObject extends xarObject implements IDDObject
         $module ??= '';
         $type ??= '';
         $func ??= '';
+        $file ??= '';
         if (!empty($module)) {
             $file = sys::code() . 'modules/' . $module . '/xar' . $type . '/' . $func . '.xml';
         }
@@ -166,12 +167,16 @@ class DataStoreFactory extends xarObject
         return $datastore;
     }
 
-    public function getDataStores() {}
+    public function getDataStores()
+    {
+    }
 
     /**
      * Get possible data sources
      *
-     * @param $args['table'] optional extra table whose fields you want to add as potential data source
+     * @param array<string, mixed> $args
+     * with
+     *     $args['table'] optional extra table whose fields you want to add as potential data source
      */
     public static function &getDataSources($args = [])
     {

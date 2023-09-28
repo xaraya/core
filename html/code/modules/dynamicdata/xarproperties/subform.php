@@ -59,8 +59,8 @@ class SubFormProperty extends DataProperty
     /**
      * Get the value of a this property type from a web page<br/>
      *
-     * @param  string name The name of this property type
-     * @param  string value The value of this property type
+     * @param  string $name The name of this property type
+     * @param  string $value The value of this property type
      * @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
      */
     public function checkInput($name = '', $value = null)
@@ -465,7 +465,7 @@ class SubFormProperty extends DataProperty
     /**
      * Display this property type for input
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for input on a web page
      */
     public function showInput(array $data = [])
@@ -557,7 +557,7 @@ class SubFormProperty extends DataProperty
     /**
      * Display this property type for output
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $args An array of input parameters
      * @return string     HTML markup to display the property for output on a web page
      */
     public function showOutput(array $args = [])
@@ -600,7 +600,6 @@ class SubFormProperty extends DataProperty
      */
     public function &getObject($value)
     {
-        /** @var DataObject|DataObjectList $myobject */
         if (isset($this->objectref)) {
             $myobject = & $this->objectref;
             // Note: be careful that serialized values have the same type here (cfr. childlist)
@@ -612,6 +611,7 @@ class SubFormProperty extends DataProperty
         } else {
             $myobject = null;
         }
+        /** @var DataObject|DataObjectList|null $myobject */
         $this->oldvalue = $value;
         switch ($this->style) {
             case 'parentid':
@@ -779,11 +779,13 @@ class SubFormProperty extends DataProperty
     /**
      * Show the current configuration rule in a specific form for this property type
      *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['configuration'] configuration rule (default is the current configuration)
-     * @param $args['id'] id of the field
-     * @param $args['tabindex'] tab index of the field
-     * @param $args['repetitions'] number of repetitions of this subform to be displayed on forms
+     * @param array<string, mixed> $args
+     * with
+     *     $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     *     $args['configuration'] configuration rule (default is the current configuration)
+     *     $args['id'] id of the field
+     *     $args['tabindex'] tab index of the field
+     *     $args['repetitions'] number of repetitions of this subform to be displayed on forms
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showConfiguration(array $args = [])
@@ -836,9 +838,11 @@ class SubFormProperty extends DataProperty
     /**
      * Update the current configuration rule in a specific way for this property type
      *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['configuration'] configuration rule (default is the current configuration)
-     * @param $args['id'] id of the field
+     * @param array<string, mixed> $args
+     * with
+     *     $args['name'] name of the field (default is 'dd_NN' with NN the property id)
+     *     $args['configuration'] configuration rule (default is the current configuration)
+     *     $args['id'] id of the field
      * @return boolean true if the configuration rule could be processed, false otherwise
      */
     public function updateConfiguration(array $args = [])

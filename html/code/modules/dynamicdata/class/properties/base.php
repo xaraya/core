@@ -182,6 +182,7 @@ class DataProperty extends xarObject implements iDataProperty
             $modvarmodule = $nameparts[1];
             $source = 'module variable';
         } else {
+            $modvarmodule = '';
             $source = $this->source;
         }
         switch($source) {
@@ -266,7 +267,7 @@ class DataProperty extends xarObject implements iDataProperty
      * Fetch the input value of this property
      *
      * @param string $name name of the input field
-     * @return array an array containing a flag whether the value was found and the found value itself
+     * @return array<mixed> an array containing a flag whether the value was found and the found value itself
      */
     public function fetchValue($name = '')
     {
@@ -374,8 +375,8 @@ class DataProperty extends xarObject implements iDataProperty
      * Set the value of this property for a particular item (= for object lists)
      *
      * @param int $itemid
-     * @param mixed value
-     * @param integer fordisplay
+     * @param mixed $value
+     * @param integer $fordisplay
      */
     public function setItemValue($itemid, $value, $fordisplay = 0)
     {
@@ -423,13 +424,15 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Show an input field for setting/modifying the value of this property
      *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['value'] value of the field (default is the current value)
-     * @param $args['id'] id of the field
-     * @param $args['tabindex'] tab index of the field
-     * @param $args['module'] which module is responsible for the templating
-     * @param $args['template'] what's the partial name of the showinput template.
-     * @param $args[*] rest of arguments is passed on to the templating method.
+     * @param array<string, mixed> $data
+     * with
+     *     $data['name'] name of the field (default is 'dd_NN' with NN the property id)
+     *     $data['value'] value of the field (default is the current value)
+     *     $data['id'] id of the field
+     *     $data['tabindex'] tab index of the field
+     *     $data['module'] which module is responsible for the templating
+     *     $data['template'] what's the partial name of the showinput template.
+     *     $data[*] rest of arguments is passed on to the templating method.
      *
      * @return string containing the HTML (or other) text to output in the BL template
      */
@@ -528,7 +531,9 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Show some default output for this property
      *
-     * @param $args['value'] value of the property (default is the current value)
+     * @param array<string, mixed> $data
+     * with
+     *     $data['value'] value of the property (default is the current value)
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showOutput(array $data = [])
@@ -599,8 +604,10 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Show the label for this property
      *
-     * @param $data['label'] label of the property (default is the current label)
-     * @param $data['for'] label id to use for this property (id, name or nothing)
+     * @param array<string, mixed> $data
+     * with
+     *     $data['label'] label of the property (default is the current label)
+     *     $data['for'] label id to use for this property (id, name or nothing)
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showLabel(array $data = [])
@@ -657,8 +664,10 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Show the filter options for this property
      *
-     * @param $data['filters'] an array of filter options for the property
-     * @param $data['for'] label id to use for this property (id, name or nothing)
+     * @param array<string, mixed> $data
+     * with
+     *     $data['filters'] an array of filter options for the property
+     *     $data['for'] label id to use for this property (id, name or nothing)
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showFilter(array $data = [])
@@ -753,9 +762,11 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Show a hidden field for this property
      *
-     * @param $data['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $data['value'] value of the field (default is the current value)
-     * @param $data['id'] id of the field
+     * @param array<string, mixed> $data
+     * with
+     *     $data['name'] name of the field (default is 'dd_NN' with NN the property id)
+     *     $data['value'] value of the field (default is the current value)
+     *     $data['id'] id of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showHidden(array $data = [])
@@ -815,10 +826,12 @@ class DataProperty extends xarObject implements iDataProperty
      * See also preview="yes", which can be used on the object level to preview the whole object
      *
      * @access private
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['value'] value of the field (default is the current value)
-     * @param $args['id'] id of the field
-     * @param $args['tabindex'] tab index of the field
+     * @param array<string, mixed> $data
+     * with
+     *     $data['name'] name of the field (default is 'dd_NN' with NN the property id)
+     *     $data['value'] value of the field (default is the current value)
+     *     $data['id'] id of the field
+     *     $data['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
     final public function _showPreset(array $data = [])
@@ -842,7 +855,7 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Parse the configuration rule
      *
-     * @param string $configuration
+     * @param string|array<mixed> $configuration
      */
     public function parseConfiguration($configuration = '')
     {
@@ -904,10 +917,12 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Show the current configuration rule in a specific form for this property type
      *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['configuration'] configuration rule (default is the current configuration)
-     * @param $args['id'] id of the field
-     * @param $args['tabindex'] tab index of the field
+     * @param array<string, mixed> $data
+     * with
+     *     $data['name'] name of the field (default is 'dd_NN' with NN the property id)
+     *     $data['configuration'] configuration rule (default is the current configuration)
+     *     $data['id'] id of the field
+     *     $data['tabindex'] tab index of the field
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showConfiguration(array $data = [])
@@ -971,9 +986,11 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Update the current configuration rule in a specific way for this property
      *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['configuration'] configuration rule (default is the current configuration)
-     * @param $args['id'] id of the field
+     * @param array<string, mixed> $data
+     * with
+     *     $data['name'] name of the field (default is 'dd_NN' with NN the property id)
+     *     $data['configuration'] configuration rule (default is the current configuration)
+     *     $data['id'] id of the field
      * @return boolean true if the configuration rule could be processed, false otherwise
      */
     public function updateConfiguration(array $data = [])
@@ -1033,7 +1050,7 @@ class DataProperty extends xarObject implements iDataProperty
      *
      * @param $type:  type of option (display, initialization, validation)
      * @param $fullname: return the full name asa key, e.g. "display_size
-     * @return array of configuration options
+     * @return array<mixed> of configuration options
      */
     public function getConfigProperties($type = "", $fullname = 0)
     {

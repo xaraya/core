@@ -14,7 +14,7 @@
  * delete a dynamic object and its properties
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['objectid'] object id of the object to delete
  * @return integer object ID on success, null on failure
  */

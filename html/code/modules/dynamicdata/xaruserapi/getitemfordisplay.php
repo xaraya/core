@@ -15,8 +15,8 @@
 /**
  * return the properties for an item
  *
- * @param array    $args array of optional parameters<br/>
- * @return array containing a reference to the properties of the item
+ * @param array<string, mixed> $args array of optional parameters<br/>
+ * @return array<mixed> containing a reference to the properties of the item
  * @TODO: move this to some common place in Xaraya (base module ?)
  */
 function dynamicdata_userapi_getitemfordisplay(array $args = [])

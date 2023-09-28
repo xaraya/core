@@ -14,11 +14,12 @@
  * (try to) get the "static" properties, corresponding to fields in dedicated
  * tables for this module + item type
  *
- * @param array $args
- * @param $args['module'] module name of table you're looking for, or
- * @param $args['module_id'] module id of table you're looking for
- * @param $args['itemtype'] item type of table you're looking for
- * @param $args['table']  table name of table you're looking for (better)
+ * @param array<string, mixed> $args
+ * with
+ *     $args['module'] module name of table you're looking for, or
+ *     $args['module_id'] module id of table you're looking for
+ *     $args['itemtype'] item type of table you're looking for
+ *     $args['table']  table name of table you're looking for (better)
  * @return mixed value of the field, or false on failure
  * @throws BadParameterException
  * @todo split off the common parts which are also in getmeta

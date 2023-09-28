@@ -19,7 +19,8 @@
  * => ['itemtype' => 'string', 'itemids' => ['integer']]  // specify the array items type as 'integer' here
  * => ['itemtype' => ['type' => 'string'], 'itemids' => ['type' => 'array', 'items' => ['type' => 'integer']]]  // rest
  *
- * @return array of info
+ * @param array<string, mixed> $args
+ * @return array<mixed> of info
  */
 function dynamicdata_restapi_getlist($args = [])
 {

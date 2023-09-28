@@ -19,7 +19,7 @@ function dynamicdata_admin_delete_static()
         return;
     }
 
-    $data = [];
+    $data = ['table' => '', 'field' => '', 'confirm' => false];
     if (!xarVar::fetch('table', 'str:1', $data['table'], '', xarVar::NOT_REQUIRED)) {
         return;
     }

@@ -12,7 +12,7 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 /**
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  */
 function dynamicdata_adminapi_browse(array $args = [])
 {
@@ -33,6 +33,8 @@ function dynamicdata_adminapi_browse(array $args = [])
 
     // Get arguments from argument array
     extract($args);
+    /** @var string $basedir */
+    /** @var string $filetype */
 
     if (empty($filematch)) {
         $filematch = '';

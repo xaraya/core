@@ -78,17 +78,19 @@ class DataObjectUserInterface extends xarObject
     /**
      * Set up any initial parameters (all optional)
      *
-     * @param $args['framework'] the framework we're running in (= 'xaraya')
-     * @param $args['mapper'] the method mapper we want to override
-     * @param $args['alias'] the method aliases we want to redefine
-     * @param $args['handler'] a specific handler instance we want to use
+     * @param array<string, mixed> $args
+     * with
+     *     $args['framework'] the framework we're running in (= 'xaraya')
+     *     $args['mapper'] the method mapper we want to override
+     *     $args['alias'] the method aliases we want to redefine
+     *     $args['handler'] a specific handler instance we want to use
      *
      * And any other arguments we want to pass when creating the handler, e.g.
-     * @param $args['tplmodule'] module where the main templates for the GUI reside (defaults to the object module)
-     * @param $args['linktype'] main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
-     * @param $args['linkfunc'] main function handling all object method calls (= if we're not using object URLs)
-     * @param $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
-     * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
+     *     $args['tplmodule'] module where the main templates for the GUI reside (defaults to the object module)
+     *     $args['linktype'] main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
+     *     $args['linkfunc'] main function handling all object method calls (= if we're not using object URLs)
+     *     $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
+     *     $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
      */
     public function __construct(array $args = [])
     {
@@ -201,10 +203,12 @@ class DataObjectUserInterface extends xarObject
     /**
      * Determine which handler to run based on input parameters 'method' and 'itemid'
      *
-     * @param $args['method'] the ui method we are handling here
-     * @param $args['itemid'] item id of the object to call the method for, if the method needs it
-     * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
-     * @return string|null output of the handler->run() method
+     * @param array<string, mixed> $args
+     * with
+     *     $args['method'] the ui method we are handling here
+     *     $args['itemid'] item id of the object to call the method for, if the method needs it
+     *     $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
+     * @return string|void output of the handler->run() method
      */
     public function handle(array $args = [])
     {
@@ -223,6 +227,9 @@ class DataObjectUserInterface extends xarObject
                 $args['method'] = 'display';
             }
         }
+
+        // get the right function to call in this handler class (default is 'run')
+        $handlerfunc = 'run';
 
         // get the right handler based on the method mapper above
         if (empty($this->handler)) {
@@ -246,8 +253,6 @@ class DataObjectUserInterface extends xarObject
             // get the right function to call in this handler class (default is 'run')
             if (!empty($methodmap['classfunc'])) {
                 $handlerfunc = $methodmap['classfunc'];
-            } else {
-                $handlerfunc = 'run';
             }
 
             // import something extra for the class definition if specified

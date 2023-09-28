@@ -15,6 +15,7 @@
  * This is a standard function to provide an overview of all of the items
  * available from the module.
  *
+ * @param array<string, mixed> $args
  * @return string|void output display string
  */
 function dynamicdata_user_view(array $args = [])

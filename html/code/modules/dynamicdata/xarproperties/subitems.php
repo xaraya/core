@@ -45,8 +45,8 @@ class SubItemsProperty extends DataProperty
     public $tocreate          = [];                   // holds the ids of items to create
     public $todelete          = [];                   // holds the ids of items to delete
     public $defaultvalues     = [];                   // holds the default values of the object's properties. allows for overrides
-    public $fieldprefix;
-    public $localmodule;
+    public string $fieldprefix;
+    public string $localmodule;
     /*
     *   In this property the "value" ($itemsdata) corresponds to an array of the form
     *       array($subitemkey =>
@@ -81,8 +81,8 @@ class SubItemsProperty extends DataProperty
     /**
      * Get the value of subitems from a web page
      *
-     * @param  string name The name of the subitems
-     * @param  string value The value of the subitems
+     * @param  string $name The name of the subitems
+     * @param  string $value The value of the subitems
      * @return bool|void   This method returns the true or false value.
      */
     public function checkInput($name = '', $value = null)
@@ -145,24 +145,30 @@ class SubItemsProperty extends DataProperty
         return $isvalid;
     }
 
-    /*
+    /**
      * Note: "create" refers to the operation being performed by the parent item.
+     * @param int $itemid
+     * @return bool
      */
     public function createValue($itemid = 0)
     {
         return $this->valueFunction($itemid, 'create');
     }
 
-    /*
+    /**
      * Note: "update" refers to the operation being performed by the parent item.
+     * @param int $itemid
+     * @return bool
      */
     public function updateValue($itemid = 0)
     {
         return $this->valueFunction($itemid, 'update');
     }
 
-    /*
+    /**
      *  Delete the items from the subitem's itemdata property
+     * @param int $itemid
+     * @return int
      */
     public function deleteValue($itemid = 0)
     {
@@ -172,8 +178,10 @@ class SubItemsProperty extends DataProperty
         return $itemid;
     }
 
-    /*
+    /**
      * Move the items from the parent object to the subitem's itemsdata property
+     * @param int $itemid
+     * @return bool
      */
     public function mountValue($itemid = 0)
     {
@@ -184,7 +192,7 @@ class SubItemsProperty extends DataProperty
     /**
      * Display subitems for input
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for input on a web page
      */
     public function showInput(array $data = [])
@@ -305,7 +313,7 @@ class SubItemsProperty extends DataProperty
     /**
      * Display subitems for output
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for output on a web page
      */
     public function showOutput(array $data = [])
@@ -343,7 +351,7 @@ class SubItemsProperty extends DataProperty
     /**
      * Used to show the hidden subitems
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for output on a web page
      */
     public function showHidden(array $data = [])
@@ -411,8 +419,9 @@ class SubItemsProperty extends DataProperty
         return parent::showHidden($data);
     }
 
-    /*
+    /**
      * The public function just returns the contents of the itemsdata array corresponding to this property's key
+     * @return array<mixed>
      */
     public function getItemsData()
     {
@@ -423,8 +432,10 @@ class SubItemsProperty extends DataProperty
         return $this->itemsdata[$name];
     }
 
-    /*
+    /**
      * The public function adds the key to the args and saves as the contents of the itemsdata array corresponding to this property's key
+     * @param array<mixed> $args
+     * @return void
      */
     public function setItemsData($args = [])
     {
@@ -432,9 +443,11 @@ class SubItemsProperty extends DataProperty
         $this->itemsdata[$name] = $args;
     }
 
-    /*
+    /**
      * Rework the postings so that we can update where possible and not delete and recreate them all each time
      * This means addin the ID and transaction ID values of postings we will overwrite in the DB
+     * @param array<mixed> $args
+     * @return void
      */
     public function loadItemsData($args = [])
     {
@@ -457,6 +470,11 @@ class SubItemsProperty extends DataProperty
     }
 
     // FIXME: _getitemsdata and _setitemsdata should operate as opposites
+    /**
+     * Summary of _getItemsData
+     * @param int $withkeys
+     * @return array<mixed>
+     */
     private function _getItemsData($withkeys = 0)
     {
         $name = $this->propertyprefix . $this->id;
@@ -470,6 +488,12 @@ class SubItemsProperty extends DataProperty
         return $items[$name];
     }
 
+    /**
+     * Summary of _setItemsData
+     * @param array<mixed> $args
+     * @param int $withnokeys
+     * @return bool
+     */
     private function _setItemsData($args = [], $withnokeys = 0)
     {
         if ($withnokeys) {
@@ -481,6 +505,10 @@ class SubItemsProperty extends DataProperty
         return true;
     }
 
+    /**
+     * Summary of transposeItems
+     * @return array<mixed>
+     */
     private function transposeItems()
     {
         $name = $this->propertyprefix . $this->id;
@@ -498,8 +526,11 @@ class SubItemsProperty extends DataProperty
         return $items;
     }
 
-    // Method to get the names of the properties of this object and the parent object
-    // that are linked
+    /**
+     * Method to get the names of the properties of this object and the parent object
+     * that are linked
+     * @return array<mixed>
+     */
     private function getLinks()
     {
         // Get the link properties of both the parent and the subobject for use in creates and deletes
@@ -521,7 +552,11 @@ class SubItemsProperty extends DataProperty
         return [$sublink,$link];
     }
 
-    // Recursively set the prefix for subitemobject properties, including those that are subitems
+    /**
+     * Recursively set the prefix for subitemobject properties, including those that are subitems
+     * @param string $prefix
+     * @return bool
+     */
     private function setPrefix($prefix)
     {
         foreach (array_keys($this->subitemsobject->properties) as $name) {
@@ -533,12 +568,15 @@ class SubItemsProperty extends DataProperty
         return true;
     }
 
-    /*
+    /**
      * This function creates or updates subitems.
      * Note that an update of the parent update does not imply the subitems are all updated:
      * We might be creating new subitems even while updating the parent item.
      * However, when creating a new parent item, all the subitems are created, too.
-     *
+     * @param int $itemid
+     * @param string $functiontype
+     * @throws \Exception
+     * @return bool
      */
     private function valueFunction($itemid = 0, $functiontype = 'create')
     {

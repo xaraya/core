@@ -14,8 +14,10 @@
 /**
  * select dynamicdata for a new item - hook for ('item','new','GUI')
  *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
+ * @param array<string, mixed> $args
+ * with
+ *     $args['objectid'] ID of the object
+ *     $args['extrainfo'] extra information
  * @return string|void output display string
  */
 function dynamicdata_admin_newhook(array $args = [])
@@ -26,6 +28,7 @@ function dynamicdata_admin_newhook(array $args = [])
     }
 
     extract($args);
+    $extrainfo ??= [];
 
     // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
     $modname = $extrainfo['module'];
@@ -42,7 +45,7 @@ function dynamicdata_admin_newhook(array $args = [])
                                        'itemtype'  => $itemtype]);
     sys::import('modules.dynamicdata.class.objects.master');
     $object = DataObjectMaster::getObject(['name' => $descriptorargs['name']]);
-    if (!isset($object)) {
+    if (!isset($object) || empty($object->objectid)) {
         return;
     }
 

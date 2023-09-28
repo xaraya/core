@@ -35,8 +35,8 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
     /**
      * Get the value of a multiselect from a web page
      *
-     * @param  string name The name of the multiselect
-     * @param  string value The value of the multiselect
+     * @param  string $name The name of the multiselect
+     * @param  string $value The value of the multiselect
      * @return bool   This method passes the value gotten to the validateValue method and returns its output.
      */
     public function checkInput($name = '', $value = null)
@@ -99,7 +99,7 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
     /**
      * Display a multiselect for input
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for input on a web page
      */
     public function showInput(array $data = [])
@@ -121,7 +121,7 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
     /**
      * Display a multiselect for output
      *
-     * @param  array data An array of input parameters
+     * @param array<string, mixed> $data An array of input parameters
      * @return string     HTML markup to display the property for output on a web page
      */
     public function showOutput(array $data = [])
@@ -158,8 +158,8 @@ class ObjectMultiSelectProperty extends ObjectRefProperty
     /**
      * Unserializes a given value
      *
-     * @param string $value Serialized value
-     * @return array Return unserialized value of $value param
+     * @param string|array<mixed> $value Serialized value
+     * @return array<mixed> Return unserialized value of $value param
      */
     public function getSerializedValue($value)
     {

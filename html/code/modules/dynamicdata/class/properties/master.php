@@ -35,11 +35,13 @@ class DataPropertyMaster extends xarObject
     /**
      * Get the dynamic properties of an object
      *
-     * @param $args['objectid'] the object id of the object, or
-     * @param $args['moduleid'] the module id of the object +
-     * @param $args['itemtype'] the itemtype of the object
-     * @param $args['objectref'] a reference to the object to add those properties to (optional)
-     * @param $args['allprops'] skip disabled properties by default
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] the object id of the object, or
+     *     $args['moduleid'] the module id of the object +
+     *     $args['itemtype'] the itemtype of the object
+     *     $args['objectref'] a reference to the object to add those properties to (optional)
+     *     $args['allprops'] skip disabled properties by default
      */
     public static function getProperties(array $args = [])
     {
@@ -115,13 +117,15 @@ class DataPropertyMaster extends xarObject
     /**
      * Add a dynamic property to an object
      *
-     * @param $args['name'] the name for the dynamic property
-     * @param $args['type'] the type of dynamic property
-     * @param $args['label'] the label for the dynamic property
-     * @param $args['source'] the source for the dynamic property
-     * @param $args['datastore'] the datastore for the dynamic property
+     * @param array<string, mixed> $args
+     * with
+     *     $args['name'] the name for the dynamic property
+     *     $args['type'] the type of dynamic property
+     *     $args['label'] the label for the dynamic property
+     *     $args['source'] the source for the dynamic property
+     *     $args['datastore'] the datastore for the dynamic property
      * ...
-     * @param $objectref a reference to the object to add this property to
+     *     $objectref a reference to the object to add this property to
      * @todo  this look like it needs to be in object class
      * @todo  if not, we should define an interface for D_Obj and D_Obj_List so we can type hint on it
      */

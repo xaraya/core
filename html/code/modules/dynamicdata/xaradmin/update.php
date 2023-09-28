@@ -16,18 +16,21 @@
  * This is a standard function that is called with the results of the
  * form supplied by xarMod::guiFunc('dynamicdata','admin','modify') to update a current item
  *
- * @param int    objectid
- * @param int    module_id
- * @param int    itemtype
- * @param int    itemid
- * @param string return_url
- * @param bool   preview
- * @param string join
- * @param string table
+ * @param array<string, mixed> $args
+ * with
+ *     int    objectid
+ *     int    module_id
+ *     int    itemtype
+ *     int    itemid
+ *     string return_url
+ *     bool   preview
+ *     string join
+ *     string table
  */
 function dynamicdata_admin_update(array $args = [])
 {
     extract($args);
+    $data ??= [];
 
     if(!xarVar::fetch('objectid', 'isset', $objectid, null, xarVar::DONT_SET)) {
         return;
@@ -150,7 +153,7 @@ function dynamicdata_admin_update(array $args = [])
 
         case 'clone':
             // only admins can change access rules
-            $adminaccess = xarSecurity::check('', 0, 'All', $myobject->objectid . ":" . $myobject->name . ":" . "All", 0, '', 0, 800);
+            $adminaccess = xarSecurity::check('', 0, 'All', $myobject->objectid . ":" . $myobject->name . ":" . "All", '', '', 0, 800);
 
             if (!$adminaccess) {
                 return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'no_privileges']);

@@ -13,7 +13,7 @@
 /**
  * This is a standard function to modify the configuration parameters of the
  * module
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
  */
 function dynamicdata_admin_view_propertydefs()
 {

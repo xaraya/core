@@ -105,13 +105,15 @@ class DataObjectMaster extends xarObject
      * Default constructor to set the object variables, retrieve the dynamic properties
      * and get the corresponding data stores for those properties
      *
-     * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['moduleid'] module id of the object to retrieve +
-     * @param $args['itemtype'] item type of the object to retrieve, or
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] id of the object you're looking for, or
+     *     $args['moduleid'] module id of the object to retrieve +
+     *     $args['itemtype'] item type of the object to retrieve, or
      *
-     * @param $args['fieldlist'] optional list of properties to use, or
-     * @param $args['status'] optional status of the properties to use
-     * @param $args['allprops'] skip disabled properties by default
+     *     $args['fieldlist'] optional list of properties to use, or
+     *     $args['status'] optional status of the properties to use
+     *     $args['allprops'] skip disabled properties by default
      * @todo  This does too much, split it up
     **/
 
@@ -489,6 +491,7 @@ class DataObjectMaster extends xarObject
     **/
     public function &getProperties($args = [])
     {
+        $fields = [];
         if(!empty($args['fieldlist'])) {
             $fields = $this->getFieldList();
             $this->setFieldList($args['fieldlist']);
@@ -530,15 +533,17 @@ class DataObjectMaster extends xarObject
     /**
      * Add a property for this object
      *
-     * @param $args['name'] the name for the dynamic property (required)
-     * @param $args['type'] the type of dynamic property (required)
-     * @param $args['label'] the label for the dynamic property
-     * @param $args['source'] the source for the dynamic property
-     * @param $args['defaultvalue'] the default value for the dynamic property
-     * @param $args['status'] the input and display status for the dynamic property
-     * @param $args['seq'] the place in sequence this dynamic property appears in
-     * @param $args['configuration'] the configuration (serialized array) for the dynamic property
-     * @param $args['id'] the id for the dynamic property
+     * @param array<string, mixed> $args
+     * with
+     *     $args['name'] the name for the dynamic property (required)
+     *     $args['type'] the type of dynamic property (required)
+     *     $args['label'] the label for the dynamic property
+     *     $args['source'] the source for the dynamic property
+     *     $args['defaultvalue'] the default value for the dynamic property
+     *     $args['status'] the input and display status for the dynamic property
+     *     $args['seq'] the place in sequence this dynamic property appears in
+     *     $args['configuration'] the configuration (serialized array) for the dynamic property
+     *     $args['id'] the id for the dynamic property
      *
      * @todo why not keep the scope here and do this:
      *       $this->properties[$args['id']] = new Property($args); (with a reference probably)
@@ -594,7 +599,7 @@ class DataObjectMaster extends xarObject
     /**
      * Class method to retrieve information about all DataObjects
      *
-     * @return array of object definitions
+     * @return array<mixed> of object definitions
     **/
     public static function &getObjects(array $args = [])
     {
@@ -643,9 +648,11 @@ class DataObjectMaster extends xarObject
     /**
      * Class method to retrieve information about a Dynamic Object
      *
-     * @param $args['objectid'] id of the object you're looking for, OR
-     * @param $args['name'] name of the object you're looking for, OR
-     * @return array|void containing the name => value pairs for the object
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] id of the object you're looking for, OR
+     *     $args['name'] name of the object you're looking for, OR
+     * @return array<mixed>|null containing the name => value pairs for the object
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
      * @todo no ref return?
      * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
@@ -717,7 +724,7 @@ class DataObjectMaster extends xarObject
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if(!$result->first()) {
-            return;
+            return null;
         }
         $info = [];
         [
@@ -811,8 +818,10 @@ class DataObjectMaster extends xarObject
     /**
      * Class method to flush the variable cache in all scopes for a particular object definition
      *
-     * @param $args['objectid'] id of the object you're looking for, and/or
-     * @param $args['name'] name of the object you're looking for
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] id of the object you're looking for, and/or
+     *     $args['name'] name of the object you're looking for
      * @return void
     **/
     public static function flushVariableCache($args = [])
@@ -848,8 +857,10 @@ class DataObjectMaster extends xarObject
     /**
      * Class method to get the variable cache key in a certain scope for a particular object definition
      *
-     * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['name'] name of the object you're looking for
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] id of the object you're looking for, or
+     *     $args['name'] name of the object you're looking for
      * @return mixed cacheKey if it can be cached, or null if not
     **/
     public static function getVariableCacheKey($scope, $args = [])
@@ -864,6 +875,7 @@ class DataObjectMaster extends xarObject
         if (empty($args['objectid']) && empty($args['name'])) {
             throw new Exception(xarML('Cannot get object information without an objectid or a name'));
         }
+        $name = '';
         if (!empty($args['name'])) {
             $scope .= '.ByName';
             //$cacheKey = xarCache::getVariableKey($scope, $args['name']);
@@ -899,9 +911,11 @@ class DataObjectMaster extends xarObject
      * Class method to retrieve a particular object definition, with sub-classing
      * (= the same as creating a new Dynamic Object with itemid = null)
      *
-     * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['name'] name of the object you're looking for
-     * @param $args['class'] optional classname (e.g. <module>_DataObject)
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] id of the object you're looking for, or
+     *     $args['name'] name of the object you're looking for
+     *     $args['class'] optional classname (e.g. <module>_DataObject)
      * @return DataObject|void the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
@@ -913,6 +927,7 @@ class DataObjectMaster extends xarObject
         if (empty($info)) {
             return;
         }
+        $data = [];
         // The info method calls an entry for each of the object's properties. We only need one
         $current = current($info);
         foreach ($current as $key => $value) {
@@ -971,9 +986,11 @@ class DataObjectMaster extends xarObject
      * Class method to retrieve a particular object list definition, with sub-classing
      * (= the same as creating a new Dynamic Object List)
      *
-     * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['name'] name of the object you're looking for
-     * @param $args['class'] optional classname (e.g. <module>_DataObject[_List])
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] id of the object you're looking for, or
+     *     $args['name'] name of the object you're looking for
+     *     $args['class'] optional classname (e.g. <module>_DataObject[_List])
      * @return DataObjectList|void the requested object definition
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
@@ -984,6 +1001,7 @@ class DataObjectMaster extends xarObject
         // Complete the info if this is a known object
         $info = self::_getObjectInfo($args);
         if (empty($info)) {
+            $identifier = '';
             if (isset($args['name'])) {
                 $identifier = xarML("the name is '#(1)'", $args['name']);
             }
@@ -992,6 +1010,7 @@ class DataObjectMaster extends xarObject
             }
             throw new Exception(xarML('Unable to create an object where #(1)', $identifier));
         }
+        $data = [];
         // The info method calls an entry for each of the object's properties. We only need one
         $current = current($info);
         foreach ($current as $key => $value) {
@@ -1055,11 +1074,13 @@ class DataObjectMaster extends xarObject
      * Class method to retrieve a particular object interface definition, with sub-classing
      * (= the same as creating a new Dynamic Object User Interface)
      *
-     * @param $args['objectid'] id of the object you're looking for, or
-     * @param $args['name'] name of the object you're looking for, or
-     * @param $args['moduleid'] module id of the object to retrieve +
-     * @param $args['itemtype'] item type of the object to retrieve
-     * @param $args['class'] optional classname (e.g. <module>_DataObject[_Interface])
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] id of the object you're looking for, or
+     *     $args['name'] name of the object you're looking for, or
+     *     $args['moduleid'] module id of the object to retrieve +
+     *     $args['itemtype'] item type of the object to retrieve
+     *     $args['class'] optional classname (e.g. <module>_DataObject[_Interface])
      * @return object the requested object definition
      * @todo  get rid of the classname munging
      * @todo  automatic sub-classing per module (and itemtype) ?
@@ -1096,16 +1117,18 @@ class DataObjectMaster extends xarObject
     /**
      * Class method to create a new type of Dynamic Object
      *
-     * @param $args['objectid'] id of the object you want to create (optional)
-     * @param $args['name'] name of the object to create
-     * @param $args['label'] label of the object to create
-     * @param $args['moduleid'] module id of the object to create
-     * @param $args['itemtype'] item type of the object to create
-     * @param $args['urlparam'] URL parameter to use for the object items (itemid, exid, aid, ...)
-     * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
-     * @param $args['config'] some configuration for the object (free to define and use)
-     * @param $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
-     * @param $args['class'] optional classname (e.g. <module>_DataObject)
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] id of the object you want to create (optional)
+     *     $args['name'] name of the object to create
+     *     $args['label'] label of the object to create
+     *     $args['moduleid'] module id of the object to create
+     *     $args['itemtype'] item type of the object to create
+     *     $args['urlparam'] URL parameter to use for the object items (itemid, exid, aid, ...)
+     *     $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
+     *     $args['config'] some configuration for the object (free to define and use)
+     *     $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
+     *     $args['class'] optional classname (e.g. <module>_DataObject)
      * @return integer object id of the created item
     **/
     public static function createObject(array $args = [])
@@ -1237,18 +1260,22 @@ class DataObjectMaster extends xarObject
     /**
      * Get a module's itemtypes
      *
-     * @param array $args
-     * @param int     args[moduleid]
-     * @param string args[module]
-     * @param bool   args[native]
-     * @param bool   args[extensions]
+     * @param array<string, mixed> $args
+     * with
+     *     int    args[moduleid]
+     *     string args[module]
+     *     bool   args[native]
+     *     bool   args[extensions]
      * @todo don't use args
      * @todo pick moduleid or module
      * @todo move this into a utils class?
+     * @return array<mixed>
      */
     public static function getModuleItemTypes(array $args = [])
     {
         extract($args);
+        /** @var int $moduleid */
+        /** @var string $module */
         // Argument checks
         if (empty($moduleid) && empty($module)) {
             throw new BadParameterException('moduleid or module');
@@ -1310,7 +1337,7 @@ class DataObjectMaster extends xarObject
      * @access public
      * @param string $action the action we want to take on this object (= method or func)
      * @param mixed $itemid the specific item id or null
-     * @param array $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
+     * @param array<string, mixed> $extra extra arguments to pass to the URL - CHECKME: we should only need itemid here !?
      * @return string the generated URL
      */
     public function getActionURL($action = '', $itemid = null, $extra = [])
@@ -1449,6 +1476,7 @@ class DataObjectMaster extends xarObject
         $descriptor = $object->descriptor;
         // Set up the db tables
         if ($descriptor->exists('sources')) {
+            $sources = $descriptor->get('sources');
             try {
                 $sources = @unserialize($descriptor->get('sources'));
 
@@ -1842,8 +1870,8 @@ class DataObjectMaster extends xarObject
     /**
      * Divide the clause into an array of parts
      *
-     * @param string representing a SQL where clause
-     * @return array of operators and operands
+     * @param string $clause representing a SQL where clause
+     * @return array<mixed> of operators and operands
      */
     private function parseClause($clause)
     {
@@ -1925,8 +1953,8 @@ class DataObjectMaster extends xarObject
     /**
      * Turn an operand into a query condition and add it to the dataquery
      *
-     * @param string representing a SQL where clause
-     * @return array of operators and operands
+     * @param string $string representing a SQL where clause
+     * @return array<mixed> of operators and operands
      */
     private function parseRelation($string)
     {

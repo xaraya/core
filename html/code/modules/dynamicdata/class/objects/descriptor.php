@@ -57,7 +57,7 @@ class DataObjectDescriptor extends ObjectDescriptor
     /**
      * Get Object ID
      *
-     * @return array all parts necessary to describe a DataObject
+     * @return array<mixed> all parts necessary to describe a DataObject
      */
     public static function getObjectID(array $args = [])
     {

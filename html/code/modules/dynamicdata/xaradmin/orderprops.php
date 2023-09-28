@@ -15,9 +15,6 @@
 /**
  * Re-order the dynamic properties for a module + itemtype
  *
- * @param int objectid
- * @param int modid
- * @param int itemtype
  * @return boolean|void true on success and redirect to modifyprop
  */
 function dynamicdata_admin_orderprops()
@@ -89,6 +86,7 @@ function dynamicdata_admin_orderprops()
     );
     $orders = [];
     $currentpos = null;
+    $move_prop = '';
     foreach ($fields as $fname => $field) {
         if ($field['id'] == $itemid) {
             $move_prop = $fname;
@@ -97,6 +95,8 @@ function dynamicdata_admin_orderprops()
         $orders[] = $fname;
     }
     $i = 0;
+    $swappos = null;
+    $swapwith = '';
     foreach ($fields as $name => $field) {
         if ($field['seq'] == $currentpos && $direction == 'up' && isset($orders[$i - 1])) {
             $swapwith = $orders[$i - 1];

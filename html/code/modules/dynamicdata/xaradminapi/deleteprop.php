@@ -14,7 +14,7 @@
  * delete a property field
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['id'] property id of the item field to delete<br/>
 // TODO: do we want those for security check ? Yes, but the original values...<br/>
  *        integer  $args['module_id'] module id of the item field to delete<br/>

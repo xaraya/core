@@ -13,8 +13,10 @@
 /**
  * Get misc. information for dropdown lists
  *
- * @param $args['type'] the type of information you're looking for
- * @return array of info
+ * @param array<string, mixed> $args
+ * with
+ *     $args['type'] the type of information you're looking for
+ * @return array<mixed> of info
  */
 function dynamicdata_utilapi_getinfo($args = [])
 {

@@ -13,12 +13,13 @@
 /**
  * Import an object definition or an object item from XML
  *
- * @param array $args
- * @param $args['file'] location of the .xml file containing the object definition, or
- * @param $args['xml'] XML string containing the object definition
- * @param $args['keepitemid'] (try to) keep the item id of the different items (default false)
- * @param $args['entry'] optional array of external references.
- * @return array|void object id on success, null on failure
+ * @param array<string, mixed> $args
+ * with
+ *     $args['file'] location of the .xml file containing the object definition, or
+ *     $args['xml'] XML string containing the object definition
+ *     $args['keepitemid'] (try to) keep the item id of the different items (default false)
+ *     $args['entry'] optional array of external references.
+ * @return mixed|void object id on success, null on failure
  */
 function dynamicdata_utilapi_import(array $args = [])
 {
@@ -58,6 +59,7 @@ function dynamicdata_utilapi_import(array $args = [])
         $xml = preg_replace('/>[^<]+$/s', '>', $xml);
         $xmlobject = new SimpleXMLElement($xml);
     }
+    /** @var SimpleXMLElement $xmlobject */
 
     // No better way of doing this?
     $dom = dom_import_simplexml($xmlobject);
@@ -67,6 +69,7 @@ function dynamicdata_utilapi_import(array $args = [])
     $boolean = ValueValidations::get('bool');
     $integer = ValueValidations::get('int');
 
+    $objectid = 0;
     if ($roottag == 'object') {
 
         # --------------------------------------------------------
@@ -265,6 +268,8 @@ function dynamicdata_utilapi_import(array $args = [])
         // pass on a generic value so that the class(es) will know where we are
         $args['dd_import'] = true;
 
+        $object = null;
+        $objectproperties = [];
         foreach($xmlobject->children() as $child) {
 
             // pass on some generic values so that the class(es) will know where we are
@@ -275,6 +280,7 @@ function dynamicdata_utilapi_import(array $args = [])
             } else {
                 $args['dd_position'] = '';
             }
+            $index += 1;
 
             $thisname = $child->getName();
             $args['itemid'] = (!empty($keepitemid)) ? (string)$child->attributes()->itemid : 0;

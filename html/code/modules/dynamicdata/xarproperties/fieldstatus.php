@@ -39,7 +39,7 @@ class FieldStatusProperty extends SelectProperty
     /**
     * Display a Dropdown for input
     *
-    * @param  array data An array of input parameters
+    * @param array<string, mixed> $data An array of input parameters
     * @return string     HTML markup to display the property for input on a web page
     */
     public function showInput(array $data = [])
@@ -71,8 +71,8 @@ class FieldStatusProperty extends SelectProperty
     /**
     * Get the value of a dropdown from a web page<br/>
     *
-    * @param  string name The name of the dropdown
-    * @param  string value The value of the dropdown
+    * @param  string $name The name of the dropdown
+    * @param  string $value The value of the dropdown
     * @return bool|void   This method passes the value gotten to the validateValue method and returns its output.
     */
     public function checkInput($name = '', $value = null)
@@ -86,6 +86,8 @@ class FieldStatusProperty extends SelectProperty
         }
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;
+        $display_status = null;
+        $input_status = null;
         if (!isset($value)) {
             if(!xarVar::fetch($displayname, 'isset', $display_status, null, xarVar::DONT_SET)) {
                 return;

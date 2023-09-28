@@ -41,11 +41,13 @@ class StatsHandler extends DefaultHandler
     /**
      * Run the ui 'stats' method
      *
-     * @param $args['method'] the ui method we are handling is 'stats' here
-     * @param $args['catid'] optional category for the view
-     * @param $args['sort'] optional sort for the view
-     * @param $args['where'] optional where clause(s) for the view
-     * @param $args['startnum'] optional start number for the view
+     * @param array<string, mixed> $args
+     * with
+     *     $args['method'] the ui method we are handling is 'stats' here
+     *     $args['catid'] optional category for the view
+     *     $args['sort'] optional sort for the view
+     *     $args['where'] optional where clause(s) for the view
+     *     $args['startnum'] optional start number for the view
      * @return string|void output of xarTpl::object() using 'ui_stats'
      */
     public function run(array $args = [])

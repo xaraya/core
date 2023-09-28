@@ -25,7 +25,7 @@ function dynamicdata_admin_modifyconfig()
         return;
     }
 
-    $data = [];
+    $data = ['tab' => 'general'];
     if (!xarVar::fetch('phase', 'str:1:100', $phase, 'modify', xarVar::NOT_REQUIRED, xarVar::PREP_FOR_DISPLAY)) {
         return;
     }

@@ -14,11 +14,13 @@
 /**
  * search dynamicdata (called as hook from search module, or directly with pager)
  *
- * @param string q the query. The query is used in an SQL LIKE query
- * @param int startnum
- * @param array dd_check
- * @param int numitems The number of items to get
- * @return array|void output of the items found
+ * @param array<string, mixed> $args
+ * with
+ *     string $args['q'] the query. The query is used in an SQL LIKE query
+ *        int $args['startnum']
+ *      array $args['dd_check']
+ *        int $args['numitems'] The number of items to get
+ * @return array<mixed>|void output of the items found
  */
 function dynamicdata_user_search(array $args = [])
 {

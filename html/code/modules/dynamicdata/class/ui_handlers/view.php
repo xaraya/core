@@ -38,11 +38,13 @@ class ViewHandler extends DefaultHandler
     /**
      * Run the ui 'view' method
      *
-     * @param $args['method'] the ui method we are handling is 'view' here
-     * @param $args['catid'] optional category for the view
-     * @param $args['sort'] optional sort for the view
-     * @param $args['where'] optional where clause(s) for the view
-     * @param $args['startnum'] optional start number for the view
+     * @param array<string, mixed> $args
+     * with
+     *     $args['method'] the ui method we are handling is 'view' here
+     *     $args['catid'] optional category for the view
+     *     $args['sort'] optional sort for the view
+     *     $args['where'] optional where clause(s) for the view
+     *     $args['startnum'] optional start number for the view
      * @return string|void output of xarTpl::object() using 'ui_view'
      */
     public function run(array $args = [])

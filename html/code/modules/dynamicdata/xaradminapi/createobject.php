@@ -14,7 +14,7 @@
  * create a new dynamic object
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['name'] name of the object to create<br/>
  *        string   $args['label'] label of the object to create<br/>
  *        integer  $args['moduleid'] module id of the object to create<br/>

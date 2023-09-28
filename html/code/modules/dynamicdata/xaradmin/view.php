@@ -72,7 +72,7 @@ function dynamicdata_admin_view(array $args = [])
                                   ]
     );
 
-    if (!isset($object)) {
+    if (!isset($object) || empty($object->objectid)) {
         return;
     }
 
@@ -119,8 +119,8 @@ function dynamicdata_admin_view(array $args = [])
                 'dynamicdata',
                 'admin',
                 'query',
-                ['itemid' => $objectid,
-                                                 'join' => $data['join']]
+                ['itemid' => $data['objectid'],
+                 'join' => $data['join']]
             );
         } else {
             $data['querylink'] = xarController::URL(

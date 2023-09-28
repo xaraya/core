@@ -21,14 +21,14 @@
  * Note : for additional optional parameters, see the getitems() function
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['field'] field to use in the dropdown list (required here)<br/>
  *        boolean  $args['showoutput'] go through showOutput() for this field (default false)<br/>
  *        string   $args['module'] module name of the item fields to get, or<br/>
  *        integer  $args['module_id'] module id of the item fields to get +<br/>
  *        string   $args['itemtype'] item type of the item fields to get, or<br/>
  *        string   $args['table'] database table to turn into an object
- * @return array|void of (itemid => fieldvalue), or false on failure
+ * @return array<mixed>|void of (itemid => fieldvalue), or false on failure
  * @throws EmptyParameterException
  */
 function dynamicdata_userapi_dropdownlist(array $args = [])
@@ -44,7 +44,7 @@ function dynamicdata_userapi_dropdownlist(array $args = [])
     // get back the object
     $args['getobject'] = 1;
 
-    /** @var DataObjectList $object */
+    /** @var DataObjectList|null $object */
     $object = xarMod::apiFunc('dynamicdata', 'user', 'getitems', $args);
     if (!isset($object)) {
         return;
@@ -65,7 +65,9 @@ function dynamicdata_userapi_dropdownlist(array $args = [])
             continue;
         }
         if (!empty($args['showoutput'])) {
-            $value = $object->properties[$field]->showOutput(['value' => $item[$field]]);
+            /** @var DataProperty $property */
+            $property = $object->properties[$field];
+            $value = $property->showOutput(['value' => $item[$field]]);
             if (isset($value)) {
                 $list[$itemid] = $value;
             }

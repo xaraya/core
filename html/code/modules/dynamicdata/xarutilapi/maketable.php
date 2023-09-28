@@ -29,6 +29,7 @@
  * 6. (for extension objects) skip the extra itemid property in display / input templates
  * 7. in case of problems, report to http://bugs.xaraya.com/
  *
+ * @param array<string, mixed> $args
  * @return boolean|void true on succes
  */
 function dynamicdata_utilapi_maketable(array $args = [])

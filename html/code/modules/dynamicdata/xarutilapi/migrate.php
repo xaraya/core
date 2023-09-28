@@ -14,12 +14,13 @@
  * Migrate module items
  *
  * @author the DynamicData module development team
- * @param array $args
- * @param $args['from'] the module id, itemtype and itemid(s) for the original item
- * @param $args['to'] the module id, itemtype and itemid preserve flag for the new item
- * @param $args['fieldmap'] the field mapping
- * @param $args['hookmap'] the hook mapping
- * @param $args['debug'] don't actually update anything :-)
+ * @param array<string, mixed> $args
+ * with
+ *     $args['from'] the module id, itemtype and itemid(s) for the original item
+ *     $args['to'] the module id, itemtype and itemid preserve flag for the new item
+ *     $args['fieldmap'] the field mapping
+ *     $args['hookmap'] the hook mapping
+ *     $args['debug'] don't actually update anything :-)
  * @return mixed true or debug string on success, null on failure
  * @throws BadParameterException
  */
@@ -28,6 +29,7 @@ function dynamicdata_utilapi_migrate(array $args = [])
     extract($args);
 
     $invalid = [];
+    /** @var array<string, mixed> $from */
     if (empty($from)) {
         $invalid[] = 'from array';
     } else {
@@ -41,6 +43,7 @@ function dynamicdata_utilapi_migrate(array $args = [])
             $invalid[] = 'from itemid';
         }
     }
+    /** @var array<string, mixed> $to */
     if (empty($to)) {
         $invalid[] = 'to array';
     } else {
@@ -52,6 +55,8 @@ function dynamicdata_utilapi_migrate(array $args = [])
         }
         // itemid can be empty or not empty here
     }
+    /** @var array<string, mixed> $fieldmap */
+    /** @var array<string, mixed> $hookmap */
     if (empty($fieldmap)) {
         $invalid[] = 'fieldmap';
     }

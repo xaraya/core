@@ -14,12 +14,13 @@
  * Update hooks when migrating module items
  *
  * @author the DynamicData module development team
- * @param array $args
- * @param array $args['from'] the module id and itemtype for the original items
- * @param array $args['to'] the module id and itemtype for the new items
- * @param $args['hookmap'] the hook mapping
- * @param array $args['itemids'] the list of old => new itemids
- * @param $args['debug'] don't actually update anything :-)
+ * @param array<string, mixed> $args
+ * with
+ *     array $args['from'] the module id and itemtype for the original items
+ *     array $args['to'] the module id and itemtype for the new items
+ *     array $args['hookmap'] the hook mapping
+ *     array $args['itemids'] the list of old => new itemids
+ *     bool $args['debug'] don't actually update anything :-)
  * @return mixed true or debug string on success, null on failure
  * @throws BadParameterException
  */
@@ -28,6 +29,7 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
     extract($args);
 
     $invalid = [];
+    /** @var array<string, mixed> $from */
     if (empty($from)) {
         $invalid[] = 'from array';
     } else {
@@ -38,6 +40,7 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
             $invalid[] = 'from itemtype';
         }
     }
+    /** @var array<string, mixed> $to */
     if (empty($to)) {
         $invalid[] = 'to array';
     } else {
@@ -60,6 +63,8 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
         return;
     }
 
+    /** @var array<int, int> $itemids */
+    /** @var array<string, mixed> $hookmap */
     if (empty($itemids) || empty($hookmap)) {
         // nothing to do here
         if (!empty($debug)) {
@@ -78,13 +83,17 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
         if ($fromhook != $tohook) {
             continue;
         } // no moving of hooked content atm
+        $table = '';
+        $modfield = '';
+        $typefield = '';
+        $idfield = '';
         switch ($tohook) {
             case 'categories':
                 // load table definitions et al.
                 xarMod::apiLoad('categories', 'user');
                 $xartable = & xarDB::getTables();
                 if (empty($xartable['categories_linkage'])) {
-                    continue;
+                    break;
                 }
                 $table = $xartable['categories_linkage'];
                 $modfield = 'xar_modid';
@@ -101,7 +110,7 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
                 xarMod::apiLoad($tohook, 'user');
                 $xartable = & xarDB::getTables();
                 if (empty($xartable[$tohook])) {
-                    continue;
+                    break;
                 }
                 $table = $xartable[$tohook];
                 $modfield = 'xar_moduleid';
@@ -114,7 +123,7 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
                 xarMod::apiLoad('comments', 'user');
                 $xartable = & xarDB::getTables();
                 if (empty($xartable['comments'])) {
-                    continue;
+                    break;
                 }
                 $table = $xartable['comments'];
                 $modfield = 'xar_modid';
@@ -124,15 +133,14 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
 
             case 'dynamicdata':
                 // already done via field mapping
-                $table = '';
-                continue;
+                break;
 
             case 'polls':
                 // load table definitions et al.
                 xarMod::apiLoad('polls', 'user');
                 $xartable = & xarDB::getTables();
                 if (empty($xartable['polls'])) {
-                    continue;
+                    break;
                 }
                 $table = $xartable['polls'];
                 // Note: assuming fixed column names here (version 1.4.0)
@@ -144,15 +152,14 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
             case 'subitems':
                 // TODO: retrieve old/new subitems objects from subitems_ddobjects, then
                 //       copy DD from old to new object, and update id in subitems_ddids
-                $table = '';
-                continue;
+                break;
 
             case 'uploads':
                 // load table definitions et al.
                 xarMod::apiLoad('uploads', 'user');
                 $xartable = & xarDB::getTables();
                 if (empty($xartable['file_associations'])) {
-                    continue;
+                    break;
                 }
                 $table = $xartable['file_associations'];
                 $modfield = 'xar_modid';
@@ -163,11 +170,9 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
             case 'workflow':
                 // not possible to migrate this without knowing the processes,
                 // and especially what kind of information they store about items
-                $table = '';
-                continue;
+                break;
 
             default:
-                $table = '';
                 break;
         }
         if (empty($table)) {

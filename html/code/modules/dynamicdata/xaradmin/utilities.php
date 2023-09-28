@@ -20,6 +20,7 @@ function dynamicdata_admin_utilities(array $args = [])
     }
 
     extract($args);
+    $data ??= [];
     if(!xarVar::fetch('q', 'str', $data['option'], 'query', xarVar::NOT_REQUIRED)) {
         return;
     }

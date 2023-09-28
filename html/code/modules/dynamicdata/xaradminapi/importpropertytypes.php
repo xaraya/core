@@ -14,10 +14,10 @@
 /**
  * Check the properties directory for properties and import them into the Property Type table.
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        boolean  $args[flush] flush the property type table before import true/false (optional)<br/>
  *        array    $args[dirs]
- * @return array an array of the property types currently available
+ * @return array<mixed> an array of the property types currently available
  */
 function dynamicdata_adminapi_importpropertytypes(array $args = [])
 {

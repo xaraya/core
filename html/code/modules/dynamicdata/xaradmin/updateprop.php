@@ -13,13 +13,11 @@
 /**
  * Update the dynamic properties for a module + itemtype
  *
- * @param int objectid
- * @param int module_id
- * @param int itemtype
  * @return boolean|string|void true on success and redirect to modifyprop
  */
 function dynamicdata_admin_updateprop()
 {
+    /** @var int $objectid */
     if(!xarVar::fetch('objectid', 'isset', $objectid, 1, xarVar::DONT_SET)) {
         return;
     }

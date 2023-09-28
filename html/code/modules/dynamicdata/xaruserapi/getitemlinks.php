@@ -14,10 +14,10 @@
 /**
  * utility function to pass individual item links to whoever
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['itemtype'] item type (optional)<br/>
  *        array    $args['itemids'] array of item ids to get
- * @return array containing the itemlink(s) for the item(s).
+ * @return array<mixed> containing the itemlink(s) for the item(s).
  */
 function dynamicdata_userapi_getitemlinks(array $args = [])
 {

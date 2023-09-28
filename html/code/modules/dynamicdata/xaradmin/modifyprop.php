@@ -13,14 +13,15 @@
 /**
  * Modify the dynamic properties for a module + itemtype
  *
- * @param array $args
- * @param int itemid
- * @param int module_id
- * @param int itemtype
- * @param string table
- * @param mixed details
- * @param string layout (optional)
- * @return array|string|void data for the template display
+ * @param array<string, mixed> $args
+ * with
+ *     int itemid
+ *     int module_id
+ *     int itemtype
+ *     string table
+ *     mixed details
+ *     string layout (optional)
+ * @return array<mixed>|string|void data for the template display
  */
 function dynamicdata_admin_modifyprop(array $args = [])
 {
@@ -54,10 +55,10 @@ function dynamicdata_admin_modifyprop(array $args = [])
         ]
     );
     $objectinfo = DataObjectMaster::getObjectInfo($args);
-    $data['objectinfo'] = & $objectinfo;
+    $data['objectinfo'] = $objectinfo;
     $object = DataObjectMaster::getObject($args);
 
-    if (isset($objectinfo)) {
+    if (!empty($objectinfo)) {
         $objectid = $objectinfo['objectid'];
         $module_id = $objectinfo['moduleid'];
         $itemtype = $objectinfo['itemtype'];

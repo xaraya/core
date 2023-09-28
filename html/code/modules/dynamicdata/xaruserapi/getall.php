@@ -11,7 +11,9 @@
 /**
  * Get all items
  * @author mikespub <mikespub@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
+ * @deprecated 2.0.0 use getitem instead
+ * @return array<mixed>|DataObject|null of (name => value), or false on failure
 */
 
 function dynamicdata_userapi_getall(array $args = [])

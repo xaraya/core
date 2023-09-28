@@ -16,7 +16,7 @@
  * get the next itemtype of objects pertaining to a given module
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  * @return int of object definitions
  * @todo should we wrap this?
  */

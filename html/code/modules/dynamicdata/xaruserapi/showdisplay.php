@@ -14,7 +14,7 @@
 /**
  * Display an item in a template
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  * @param $args array containing the item or fields to show
  * @return string output display string
  */
@@ -25,6 +25,9 @@ function dynamicdata_userapi_showdisplay(array $args = [])
     $args['fallbackmodule'] = 'current';
     $descriptor = new DataObjectDescriptor($args);
     $args = $descriptor->getArgs();
+    if (empty($template)) {
+        $template = '';
+    }
 
     // we got everything via template parameters
     if (isset($fields) && is_array($fields) && count($fields) > 0) {

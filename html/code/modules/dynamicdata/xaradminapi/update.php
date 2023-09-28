@@ -14,7 +14,7 @@
  * update an item (the whole item or the dynamic data fields of it)
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['itemid'] item id of the original item<br/>
  *        integer  $args['module_id'] module id for the original item<br/>
  *        string   $args['itemtype'] item type of the original item<br/>
@@ -27,11 +27,14 @@ function dynamicdata_adminapi_update(array $args = [])
 {
     $args = DataObjectDescriptor::getObjectID($args);
     extract($args);
+    /** @var int $objectid */
 
     $invalid = [];
+    /** @var ?int $itemid */
     if (!isset($itemid) || !is_numeric($itemid) || empty($itemid)) { // we can't accept item id 0 here
         $invalid[] = 'item id';
     }
+    /** @var ?int $module_id */
     if (!isset($module_id) || !is_numeric($module_id)) {
         $invalid[] = 'module id';
     }

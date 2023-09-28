@@ -23,7 +23,8 @@ class DataObject extends DataObjectMaster implements iDataObject
     /**
      * Inherits from DataObjectMaster and sets the requested item id
      *
-     * @param $args['itemid'] item id of the object to get
+     * @param DataObjectDescriptor $descriptor
+     * with $args['itemid'] item id of the object to get
     **/
     public function __construct(DataObjectDescriptor $descriptor)
     {
@@ -32,8 +33,6 @@ class DataObject extends DataObjectMaster implements iDataObject
         unset($descriptor);
 
         // Get a reference to each property's value and find the primary's index
-        if (!empty($args['config'])) {
-        }
         if (!is_array($this->configuration)) {
             $this->configuration = [];
         }
@@ -609,7 +608,9 @@ class DataObject extends DataObjectMaster implements iDataObject
     /**
      * Get the next available item type (for objects that are assigned to the dynamicdata module)
      *
-     * @param $args['moduleid'] module id for the object
+     * @param array<string, mixed> $args
+     * with
+     *     $args['moduleid'] module id for the object
      * @return int|void value of the next item type
      *
      * @todo this needs to change into something more safe.
@@ -643,8 +644,8 @@ class DataObject extends DataObjectMaster implements iDataObject
      * Initialize whatever this object needs from the environment
      * This operation is in general performed only once
      *
-     * @param array $args
-     * @return integer value of the next item type
+     * @param array<string, mixed> $args
+     * @return bool true if initialized
      *
      */
     public function initialize(array $args = [])

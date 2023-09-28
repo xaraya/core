@@ -22,7 +22,7 @@ function dynamicdata_admin_new_static()
         return;
     }
 
-    $data = [];
+    $data = ['table' => '', 'confirm' => false];
     if (!xarVar::fetch('table', 'str:1', $data['table'], '', xarVar::NOT_REQUIRED)) {
         return;
     }

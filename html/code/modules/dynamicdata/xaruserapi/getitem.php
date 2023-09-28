@@ -16,7 +16,7 @@
  * (identified by module + item type + item id or table + item id)
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['module'] module name of the item fields to get or<br/>
  *        integer  $args['module_id'] module id of the item fields to get +<br/>
  *        integer  $args['itemtype'] item type of the item fields to get, or<br/>
@@ -27,7 +27,7 @@
  *        string   $args['join'] join a module table to the dynamic object (if it extends the table)<br/>
  *        boolean  $args['getobject'] flag indicating if you want to get the whole object back<br/>
  *        boolean  $args['preview'] flag indicating if you're previewing an item
- * @return array|DataObject|void of (name => value), or false on failure
+ * @return array<mixed>|DataObject|null of (name => value), or false on failure
  * @throws BadParameterException
  */
 function &dynamicdata_userapi_getitem(array $args = [])
@@ -53,12 +53,14 @@ function &dynamicdata_userapi_getitem(array $args = [])
     }
 
     $invalid = [];
+    /** @var ?int $module_id */
     if (!isset($module_id) || !is_numeric($module_id) || empty($modinfo['name'])) {
         $invalid[] = 'module id';
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
         $invalid[] = 'item type';
     }
+    /** @var ?int $itemid */
     if (!isset($itemid) || !is_numeric($itemid)) {
         $invalid[] = 'item id';
     }
@@ -94,7 +96,7 @@ function &dynamicdata_userapi_getitem(array $args = [])
     $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
                                        'itemtype'  => $itemtype]);
     if (empty($args['objectid'])) {
-        return;
+        return $nullreturn;
     }
     $object = DataObjectMaster::getObject(['objectid'  => $args['objectid'],
                                        'itemid'    => $itemid,

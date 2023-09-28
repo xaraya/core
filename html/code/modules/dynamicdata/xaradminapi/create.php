@@ -14,7 +14,7 @@
  * create a new item (the whole item or some dynamic data fields for it)
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['module_id'] module id for the original item<br/>
  *        string   $args['itemtype'] item type of the original item<br/>
  *        integer  $args['itemid'] item id of the original item<br/>
@@ -27,8 +27,10 @@ function dynamicdata_adminapi_create(array $args = [])
 {
     $args = DataObjectDescriptor::getObjectID($args);
     extract($args);
+    /** @var int $objectid */
 
     $invalid = [];
+    /** @var ?int $itemid */
     if (!isset($itemid) || !is_numeric($itemid)) {
         $invalid[] = 'item id';
     }

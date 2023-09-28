@@ -14,8 +14,8 @@
  * get the list of defined dynamic objects
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
- * @return array of object definitions
+ * @param array<string, mixed> $args array of optional parameters<br/>
+ * @return array<mixed> of object definitions
  */
 function dynamicdata_userapi_getobjects($args = [])
 {

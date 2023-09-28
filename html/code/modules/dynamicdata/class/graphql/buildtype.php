@@ -567,6 +567,7 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     {
         xarGraphQL::$paths[] = "use keyval field resolver for type $typename field $fieldname";
         $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname, $fieldalias) {
+            $result = null;
             if (is_array($values)) {
                 $result = $values[$fieldname] ?? ($values[$fieldalias] ?? null);
             }

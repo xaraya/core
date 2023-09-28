@@ -13,8 +13,10 @@
  */
 /**
  * delete item
- * @param 'itemid' the id of the item to be deleted
- * @param 'confirm' confirm that this item can be deleted
+ * @param array<string, mixed> $args
+ * with
+ *     'itemid' the id of the item to be deleted
+ *     'confirm' confirm that this item can be deleted
  */
 function dynamicdata_admin_delete(array $args = [])
 {

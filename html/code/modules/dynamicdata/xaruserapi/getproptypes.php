@@ -14,8 +14,8 @@
  * Get the list of defined property types
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
- * @return array of property types
+ * @param array<string, mixed> $args array of optional parameters<br/>
+ * @return array<mixed> of property types
  */
 function dynamicdata_userapi_getproptypes(array $args = [])
 {

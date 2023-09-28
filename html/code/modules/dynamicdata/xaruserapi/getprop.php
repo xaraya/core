@@ -14,7 +14,7 @@
  * Get field properties for a specific module + item type
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['objectid'] object id of the properties to get<br/>
  *        string   $args['module'] module name of the item fields, or<br/>
  *        integer  $args['module_id'] module id of the item field to get<br/>
@@ -101,6 +101,9 @@ function dynamicdata_userapi_getprop(array $args = [])
         } else {
             return $propertybag["$module_id:$itemtype"];
         }
+    }
+    if (empty($objectid)) {
+        $objectid = null;
     }
 
     $fields = DataPropertyMaster::getProperties(['objectid' => $objectid,

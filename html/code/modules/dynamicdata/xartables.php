@@ -15,7 +15,7 @@
  * loaded. It adds the table names to a globally accessible array
  *
  * @author mikespub <mikespub@xaraya.com>
- * @return array the registered tables of this module
+ * @return array<mixed> the registered tables of this module
  */
 function dynamicdata_xartables()
 {

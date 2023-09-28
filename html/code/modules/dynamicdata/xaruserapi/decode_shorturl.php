@@ -14,8 +14,8 @@
 /**
  * extract function and arguments from short URLs for this module, and pass
  * them back to xarGetRequestInfo()
- * @param array    $params array of optional parameters<br/>
- * @return array|void containing func the function to be called and args the query
+ * @param array<mixed> $params array of optional parameters<br/>
+ * @return array<mixed>|void containing func the function to be called and args the query
  *         string arguments, or empty if it failed
  */
 function dynamicdata_userapi_decode_shorturl($params)

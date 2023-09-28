@@ -19,7 +19,7 @@ function dynamicdata_admin_rename_static_table()
         return;
     }
 
-    $data = [];
+    $data = ['table' => '', 'newtable' => '', 'confirm' => false];
     if (!xarVar::fetch('table', 'str:1', $data['table'], '', xarVar::NOT_REQUIRED)) {
         return;
     }

@@ -13,15 +13,16 @@
 /**
  * delete fields for an item - hook for ('item','delete','API')
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['objectid'] ID of the object<br/>
  *        string   $args['extrainfo'] extra information
- * @return array true on success, false on failure
+ * @return array<mixed> true on success, false on failure
  * @throws BadParameterException
  */
 function dynamicdata_adminapi_deletehook(array $args = [])
 {
     extract($args);
+    $extrainfo ??= [];
 
     // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
     $modname = $extrainfo['module'];

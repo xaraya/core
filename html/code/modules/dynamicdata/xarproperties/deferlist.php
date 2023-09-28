@@ -100,8 +100,8 @@ class DeferredListProperty extends DeferredItemProperty
      * Set the value of this property for a particular item (= for object lists)
      *
      * @param int $itemid
-     * @param mixed value
-     * @param integer fordisplay
+     * @param mixed $value
+     * @param integer $fordisplay
      */
     public function setItemValue($itemid, $value, $fordisplay = 0)
     {
@@ -146,13 +146,15 @@ class DeferredListProperty extends DeferredItemProperty
     /**
      * Show an input field for setting/modifying the value of this property
      *
-     * @param $args['name'] name of the field (default is 'dd_NN' with NN the property id)
-     * @param $args['value'] value of the field (default is the current value)
-     * @param $args['id'] id of the field
-     * @param $args['tabindex'] tab index of the field
-     * @param $args['module'] which module is responsible for the templating
-     * @param $args['template'] what's the partial name of the showinput template.
-     * @param $args[*] rest of arguments is passed on to the templating method.
+     * @param array<string, mixed> $data
+     * with
+     *     $data['name'] name of the field (default is 'dd_NN' with NN the property id)
+     *     $data['value'] value of the field (default is the current value)
+     *     $data['id'] id of the field
+     *     $data['tabindex'] tab index of the field
+     *     $data['module'] which module is responsible for the templating
+     *     $data['template'] what's the partial name of the showinput template.
+     *     $data[*] rest of arguments is passed on to the templating method.
      *
      * @return string containing the HTML (or other) text to output in the BL template
      */
@@ -169,7 +171,9 @@ class DeferredListProperty extends DeferredItemProperty
     /**
      * Show some default output for this property
      *
-     * @param mixed $data['value'] value of the property (default is the current value)
+     * @param array<string, mixed> $data
+     * with
+     *     mixed $data['value'] value of the property (default is the current value)
      * @return string containing the HTML (or other) text to output in the BL template
      */
     public function showOutput(array $data = [])

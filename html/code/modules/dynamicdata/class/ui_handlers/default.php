@@ -54,11 +54,13 @@ class DefaultHandler extends xarObject
     /**
      * Default constructor for all handlers - get common input arguments for objects
      *
-     * @param $args['tplmodule'] module where the main templates for the GUI reside (defaults to the object module)
-     * @param $args['linktype'] main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
-     * @param $args['linkfunc'] main function handling all object method calls (= if we're not using object URLs)
-     * @param $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
-     * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
+     * @param array<string, mixed> $args
+     * with
+     *     $args['tplmodule'] module where the main templates for the GUI reside (defaults to the object module)
+     *     $args['linktype'] main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
+     *     $args['linkfunc'] main function handling all object method calls (= if we're not using object URLs)
+     *     $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
+     *     $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
      */
     public function __construct(array $args = [])
     {
@@ -161,9 +163,11 @@ class DefaultHandler extends xarObject
     /**
      * Run some other unknown ui method, or call some object/objectlist method directly
      *
-     * @param $args['method'] the ui method we are handling here
-     * @param $args['itemid'] item id of the object to call the method for, if the method needs it
-     * @param $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList()
+     * @param array<string, mixed> $args
+     * with
+     *     $args['method'] the ui method we are handling here
+     *     $args['itemid'] item id of the object to call the method for, if the method needs it
+     *     $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList()
      * @return string|void output of xarTpl::object() using 'ui_default'
      */
     public function run(array $args = [])

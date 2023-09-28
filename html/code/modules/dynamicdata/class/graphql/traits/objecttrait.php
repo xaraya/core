@@ -82,7 +82,9 @@ trait xarGraphQLObjectTrait
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
      */
-    public static function _xar_object_field_resolver($typename, $object = null): ?callable {}
+    public static function _xar_object_field_resolver($typename, $object = null): ?callable
+    {
+    }
 
     /**
      * Make a generic Object Type with pagination for a dynamic object type by name = "Sample_Page" for samples etc.

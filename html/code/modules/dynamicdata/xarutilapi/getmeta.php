@@ -13,10 +13,11 @@
 /**
  * (try to) get the "meta" properties of tables via db abstraction layer
  *
- * @param array $args
- * @param $args['table']  optional table you're looking for
- * @param $args['db']  optional database you're looking in (mysql only)
- * @return array|void of field definitions, or null on failure
+ * @param array<string, mixed> $args
+ * with
+ *     $args['table']  optional table you're looking for
+ *     $args['db']  optional database you're looking in (mysql only)
+ * @return array<string, mixed>|void of field definitions, or null on failure
  * @todo split off the common parts which are also in getstatic.php
  */
 function dynamicdata_utilapi_getmeta(array $args = [])
@@ -214,11 +215,11 @@ function dynamicdata_utilapi_getmeta(array $args = [])
                                    ];
             if (isset($field->primary_key)) {
                 $newelement = ['primary' => $field->primary_key];
-                array_merge($columns[$name], $newelement);
+                $columns[$name] = array_merge($columns[$name], $newelement);
             }
             if (isset($field->auto_increment)) {
                 $newelement = ['autoincrement' => $field->auto_increment];
-                array_merge($columns[$name], $newelement);
+                $columns[$name] = array_merge($columns[$name], $newelement);
 
             }
             $id++;

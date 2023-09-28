@@ -42,12 +42,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Inherits from DataObjectMaster and sets the requested item ids, sort, where, ...
      *
-     * @param $args['itemids'] array of item ids to return
-     * @param $args['sort'] sort field(s)
-     * @param $args['where'] WHERE clause to be used as part of the selection
-     * @param $args['numitems'] number of items to retrieve
-     * @param $args['startnum'] start number
-     * @param $args['count'] count items first before you get them (on demand only)
+     * @param DataObjectDescriptor $descriptor
+     * with
+     *     $args['itemids'] array of item ids to return
+     *     $args['sort'] sort field(s)
+     *     $args['where'] WHERE clause to be used as part of the selection
+     *     $args['numitems'] number of items to retrieve
+     *     $args['startnum'] start number
+     *     $args['count'] count items first before you get them (on demand only)
      */
     public function __construct(DataObjectDescriptor $descriptor)
     {
@@ -141,7 +143,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     {
         xarLog::message("DataObjectList::checkInput: Checking items of object " . $this->name, xarLog::LEVEL_INFO);
 
-        $data = [];  // = $args; // @checkme is that what we want here?
+        $data = ['id' => []];  // = $args; // @checkme is that what we want here?
         // First get the itemids
         if (!xarVar::fetch($this->primary, 'array', $data['id'], [], xarVar::NOT_REQUIRED)) {
             return;
@@ -222,7 +224,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Set arguments for the DataObjectList class
      *
-     * @param array
+     * @param array<string, mixed> $args
      */
     public function setArguments(array $args = [])
     {
@@ -464,7 +466,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Set Group By
      *
-     * @param mixed groupby
+     * @param mixed $groupby
      * @todo make param not mixed
      */
     public function setGroupBy($groupby)
@@ -481,7 +483,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Set categories for an object (work in progress - do not use)
      *
-     * @param array $cids array of category ids
+     * @param array<int>|int $cids array of category ids
      * @param bool $join_by_and get items assigned to all the cids (AND = true) or any of the cids (OR = false)
      */
     public function setCategories($cids, $join_by_and = false)
@@ -529,7 +531,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Get Items
      *
-     * @return array
+     * @return array<mixed>
      */
     public function &getItems(array $args = [])
     {
@@ -551,6 +553,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
 
         // Replace the fieldlist with the fields passed
+        $fields = [];
         if(!empty($args['fieldlist'])) {
             $fields = $this->getFieldList();
             $this->setFieldList($args['fieldlist']);
@@ -807,7 +810,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
       * Get List to fill showView template options
       *
-      * @return array
+      * @return array<mixed>
       *
       * @todo make this smarter
       */
@@ -916,7 +919,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Get the labels and values to include in some output view for these items
      *
-     * @return array
+     * @return array<mixed>
      */
     public function &getViewValues(array $args = [])
     {
@@ -954,7 +957,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
     /**
      * Get field summary based on requested operation per field (sum, min, max, avg, ...)
      *
-     * @return array
+     * @return array<mixed>
      */
     public function getFieldSummary(array $fieldsummary = [])
     {

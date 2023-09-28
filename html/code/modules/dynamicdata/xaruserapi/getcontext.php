@@ -12,13 +12,15 @@
  * get an array of context data for a module using dynamicdata
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $module  name of the module dynamicdata is working for
- * @return array of data
+ * @return array<mixed> of data
  */
 function dynamicdata_userapi_getcontext($args = ['module' => 'dynamicdata'])
 {
     extract($args);
+    /** @var ?string $module */
+    $module ??= 'dynamicdata';
     $context = xarSession::getVar('ddcontext.' . $module);
     $context['tplmodule'] = $module;
     return $context;

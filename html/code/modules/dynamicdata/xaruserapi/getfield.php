@@ -15,7 +15,7 @@
  * @TODO: update this with all the new stuff
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['module'] module name of the item field to get, or<br/>
  *        integer  $args['module_id'] module id of the item field to get<br/>
  *        integer  $args['itemtype'] item type of the item field to get<br/>
@@ -36,15 +36,18 @@ function dynamicdata_userapi_getfield(array $args = [])
     }
 
     $invalid = [];
+    /** @var ?int $module_id */
     if (!isset($module_id) || !is_numeric($module_id)) {
         $invalid[] = 'module id';
     }
     if (!isset($itemtype) || !is_numeric($itemtype)) {
         $invalid[] = 'item type';
     }
+    /** @var ?int $itemid */
     if (!isset($itemid) || !is_numeric($itemid)) {
         $invalid[] = 'item id';
     }
+    /** @var ?string $name */
     if (!isset($name) || !is_string($name)) {
         $invalid[] = 'field name';
     }
@@ -62,7 +65,7 @@ function dynamicdata_userapi_getfield(array $args = [])
     $object = DataObjectMaster::getObject(['objectid'  => $args['objectid'],
                                        'itemid'    => $itemid,
                                        'fieldlist' => [$name]]);
-    if (!isset($object)) {
+    if (!isset($object) || empty($object->objectid)) {
         return;
     }
     $object->getItem();

@@ -13,7 +13,7 @@
  */
 /**
  * Show configuration of some property
- * @return array|string|void data for the template display
+ * @return array<mixed>|string|bool|void data for the template display
  */
 function dynamicdata_admin_showpropval(array $args = [])
 {
@@ -180,7 +180,7 @@ function dynamicdata_admin_showpropval(array $args = [])
 
 /**
  * Show sample configuration for some property type
- * @return array|void
+ * @return array<mixed>|void
  */
 function dynamicdata_config_propval($proptype)
 {

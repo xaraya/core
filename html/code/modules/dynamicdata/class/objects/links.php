@@ -44,6 +44,7 @@ class DataObjectLinks extends xarObject
      */
     public static function initLinks()
     {
+        $linklist = null;
         try {
             $linklist = DataObjectMaster::getObjectList(['name' => 'dynamic_object_links']);
         } catch (Exception $e) {
@@ -558,7 +559,7 @@ class DataObjectLinks extends xarObject
     /**
      * Get mapping of objects to datastores by looking at the property sources
      *
-     * @return array of [objectid][datastore] = number of properties
+     * @return array<mixed> of [objectid][datastore] = number of properties
      */
     public static function getMapping()
     {

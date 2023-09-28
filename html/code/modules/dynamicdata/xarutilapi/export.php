@@ -15,12 +15,14 @@
  * Export an object definition or an object item to XML
  *
  * @author mikespub <mikespub@xaraya.com>
- * @param array $args
- * @param object $args['objectref'] reference to the object to export, or
- * @param int $args['objectid'] object id of the object to export
- * @param mixed $args['itemid'] item id or 'all' of the item(s) you want to import (optional)
- * @param int $args['module_id'] module id of the object to export (deprecated)
- * @param int $args['itemtype'] item type of the object to export (deprecated)
+ * @param array<string, mixed> $args
+ * with
+ *     object $args['objectref'] reference to the object to export, or
+ *        int $args['objectid'] object id of the object to export
+ *      mixed $args['itemid'] item id or 'all' of the item(s) you want to import (optional)
+ *        int $args['module_id'] module id of the object to export (deprecated)
+ *        int $args['itemtype'] item type of the object to export (deprecated)
+ * @return string|void
  */
 function dynamicdata_utilapi_export(array $args = [])
 {

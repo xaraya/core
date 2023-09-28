@@ -14,11 +14,12 @@
  * import property fields from a static table
  *
  * @author the DynamicData module development team
- * @param array $args
- * @param int $args['module_id'] module id of the table to import
- * @param int $args['itemtype'] item type of the table to import
- * @param string $args['table'] name of the table you want to import
- * @param int $args['objectid'] object id to assign these properties to
+ * @param array<string, mixed> $args
+ * with
+ *        int $args['module_id'] module id of the table to import
+ *        int $args['itemtype'] item type of the table to import
+ *     string $args['table'] name of the table you want to import
+ *        int $args['objectid'] object id to assign these properties to
  * @return boolean|void true on success, false on failure
  * @throws BadParameterException
  */
@@ -66,7 +67,7 @@ function dynamicdata_utilapi_importproperties(array $args = [])
                                             'name' => $name,
                                             'label' => ucfirst($name)]
             );
-            if (!isset($objectid)) {
+            if (empty($objectid)) {
                 return;
             }
         } else {

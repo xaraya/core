@@ -383,7 +383,7 @@ class DataObjectLoader
                 $value = str_replace("'", "\\'", $value);
                 $clause = $mapop[$op] . " '" . $value . "'";
             }
-            if (!empty($clause)) {
+            if ($clause != '') {
                 $objectlist->addWhere($field, $clause, $join);
                 // @checkme setWhere() in objects/master.php expects 'field in val1,val2' not 'field in (val1, val2)'
                 if ($op === 'in') {
@@ -707,4 +707,6 @@ class LinkObjectItemLoader extends DataObjectItemLoader
     }
 }
 
-class LinkObjectListLoader extends DataObjectListLoader {}
+class LinkObjectListLoader extends DataObjectListLoader
+{
+}

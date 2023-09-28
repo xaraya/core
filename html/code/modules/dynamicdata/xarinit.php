@@ -216,7 +216,7 @@ function dynamicdata_init()
  * upgrade the dynamicdata module from an old version
  * This function can be called multiple times
  *
- * @param string oldversion
+ * @param string $oldversion
  * @return boolean true on success, false on failure
  */
 function dynamicdata_upgrade($oldversion)

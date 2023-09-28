@@ -38,14 +38,16 @@ class SearchHandler extends DefaultHandler
     /**
      * Run the ui 'search' and 'query' methods
      *
-     * @param $args['method'] the ui method we are handling is 'search' or 'query' here
-     * @param $args['catid'] optional category for the search
-     * @param $args['sort'] optional sort for the search
-     * @param $args['where'] optional where clause(s) for the search
-     * @param $args['startnum'] optional start number for the search
-     * @param $args['q'] optional query string for the search
-     * @param $args['field'] optional field selection for the search
-     * @param $args['match'] optional match type for the search
+     * @param array<string, mixed> $args
+     * with
+     *     $args['method'] the ui method we are handling is 'search' or 'query' here
+     *     $args['catid'] optional category for the search
+     *     $args['sort'] optional sort for the search
+     *     $args['where'] optional where clause(s) for the search
+     *     $args['startnum'] optional start number for the search
+     *     $args['q'] optional query string for the search
+     *     $args['field'] optional field selection for the search
+     *     $args['match'] optional match type for the search
      * @return string|void output of xarTpl::object() using 'ui_search'
      */
     public function run(array $args = [])
@@ -197,7 +199,7 @@ class SearchHandler extends DefaultHandler
                 // CHECKME: use OR by default here !
                 $join = 'or';
             }
-            if (!empty($wherestring) && is_object($result->datastore) && get_class($result->datastore) !== 'VariableTableDataStore') {
+            if ($wherestring != '' && is_object($result->datastore) && get_class($result->datastore) !== 'VariableTableDataStore') {
                 $conditions = $result->setWhere($wherestring);
                 $result->dataquery->addconditions($conditions);
             }
@@ -347,7 +349,7 @@ class SearchHandler extends DefaultHandler
                 // CHECKME: use AND by default here !
                 $join = 'and';
             }
-            if (!empty($wherestring) && is_object($result->datastore) && get_class($result->datastore) !== 'VariableTableDataStore') {
+            if ($wherestring != '' && is_object($result->datastore) && get_class($result->datastore) !== 'VariableTableDataStore') {
                 $conditions = $result->setWhere($wherestring);
                 $result->dataquery->addconditions($conditions);
             }
@@ -499,9 +501,9 @@ class SearchHandler extends DefaultHandler
     /**
      * Check the range for two values and return the WHERE clause(s)
      *
-     * @param string $value1 first value
-     * @param string $value2 second value
-     * @return array where clause(s)
+     * @param ?string $value1 first value
+     * @param ?string $value2 second value
+     * @return array<mixed> where clause(s)
      */
     public function checkrange($value1, $value2)
     {

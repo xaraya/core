@@ -14,8 +14,10 @@
 /**
  * modify configuration for a module - hook for ('module','modifyconfig','GUI')
  *
- * @param int $args['objectid'] ID of the object
- * @param array $args['extrainfo'] extra information
+ * @param array<string, mixed> $args
+ * with
+ *     int $args['objectid'] ID of the object
+ *     array $args['extrainfo'] extra information
  * @return string|void output display string
  * @throws EmptyParameterException
  * @throws BadParameterException

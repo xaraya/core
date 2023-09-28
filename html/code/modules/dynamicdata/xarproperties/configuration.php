@@ -40,12 +40,13 @@ class ConfigurationProperty extends TextAreaProperty
     /**
     * Get the value of a textarea from a web page
     *
-    * @param  string name The name of the textarea
-    * @param  string value The value of the textarea
+    * @param  string $name The name of the textarea
+    * @param  string $value The value of the textarea
     * @return bool|void   This method returns true if $data configuration updated otherwise returns false
     */
     public function checkInput($name = '', $value = null)
     {
+        $data = [];
         // set property type from object reference (= dynamic configuration) if possible
         if (!empty($this->objectref) && !empty($this->objectref->properties['property_id'])) {
             $this->proptype = $this->objectref->properties['property_id']->value;
@@ -62,6 +63,7 @@ class ConfigurationProperty extends TextAreaProperty
             return;
         }
 
+        $data['configuration'] = null;
         if (!xarVar::fetch($data['name'], 'isset', $data['configuration'], null, xarVar::NOT_REQUIRED)) {
             return;
         }
@@ -77,7 +79,7 @@ class ConfigurationProperty extends TextAreaProperty
     /**
     * Display a textarea for input
     *
-    * @param  array data An array of input parameters
+    * @param array<string, mixed> $data An array of input parameters
     * @return string     HTML markup to display the property for input on a web page
     */
     public function showInput(array $data = [])
@@ -106,7 +108,7 @@ class ConfigurationProperty extends TextAreaProperty
     /**
     * Display a textarea for output
     *
-    * @param  array data An array of input parameters
+    * @param array<string, mixed> $data An array of input parameters
     * @return string     HTML markup to display the property for output on a web page
     */
     public function showOutput(array $data = [])

@@ -260,7 +260,7 @@ class DataStoreLinks extends xarObject
     /**
      * Get mapping of datastores to objects by looking at the property sources
      *
-     * @return array of [datastore][objectid] = number of properties
+     * @return array<mixed> of [datastore][objectid] = number of properties
      */
     public static function getMapping()
     {
@@ -300,7 +300,7 @@ class DataStoreLinks extends xarObject
     /**
      * Get mapping of datasource fields to properties
      *
-     * @return array of [datasource] = property info
+     * @return array<mixed> of [datasource] = property info
      */
     public static function getSourceFieldMapping()
     {
@@ -334,7 +334,7 @@ class DataStoreLinks extends xarObject
     /**
      * Get the foreign keys for all tables in the database
      *
-     * @return array of foreign keys
+     * @return array<mixed> of foreign keys
      */
     public static function getForeignKeys()
     {

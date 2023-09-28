@@ -14,7 +14,7 @@
  * update a property field
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['id'] property id of the item field to update<br/>
  *        string   $args['name'] name of the field to update (optional)<br/>
  *        string   $args['label'] label of the field to update<br/>
@@ -32,12 +32,15 @@ function dynamicdata_adminapi_updateprop(array $args = [])
 
     // Required arguments
     $invalid = [];
+    /** @var ?int $id */
     if (!isset($id) || !is_numeric($id)) {
         $invalid[] = 'property id';
     }
+    /** @var ?string $label */
     if (!isset($label) || !is_string($label)) {
         $invalid[] = 'label';
     }
+    /** @var ?int $type */
     if (!isset($type) || !is_numeric($type)) {
         $invalid[] = 'type';
     }

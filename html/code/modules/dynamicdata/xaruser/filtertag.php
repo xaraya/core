@@ -15,6 +15,10 @@
 
 sys::import('modules.dynamicdata.class.properties.master');
 
+/**
+ * @param array<string, mixed> $args
+ * @return array<mixed>|bool|void
+ */
 function dynamicdata_user_filtertag(array $args = [])
 {
     if (!xarVar::fetch('filter_submitted', 'int:0', $filter_submitted, 0, xarVar::NOT_REQUIRED)) {
@@ -174,6 +178,11 @@ function dynamicdata_user_filtertag(array $args = [])
     return $data;
 }
 
+/**
+ * Summary of transform_operator
+ * @param string $op
+ * @return string
+ */
 function transform_operator($op)
 {
     $oparray = [

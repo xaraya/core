@@ -16,7 +16,7 @@
  * This is a standard function to provide detailed informtion on a single item
  * available from the module.
  *
- * @param $args an array of arguments (if called by other modules)
+ * @param array<string, mixed> $args an array of arguments (if called by other modules)
  * @return string|void output display string
  */
 function dynamicdata_user_display(array $args = [])

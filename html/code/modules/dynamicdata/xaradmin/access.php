@@ -16,8 +16,8 @@
  * This is a standard function that is called whenever an administrator
  * wishes to modify the access to an object
  *
- * @param int itemid the id of the object to be modified
- * @return string|void output display string
+ * @param array<string, mixed> $args itemid the id of the object to be modified
+ * @return string|true|void output display string
  */
 function dynamicdata_admin_access(array $args = [])
 {

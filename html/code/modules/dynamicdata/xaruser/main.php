@@ -18,7 +18,8 @@
  * initiated without defining arguments.
  * The function displays a list of DD's available modules.
  *
- * @return array|bool empty array of data for the template display
+ * @param array<string, mixed> $args
+ * @return array<mixed>|bool empty array of data for the template display
  */
 function dynamicdata_user_main(array $args = [])
 {

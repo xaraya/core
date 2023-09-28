@@ -37,12 +37,14 @@ class DeleteHandler extends DefaultHandler
     /**
      * Run the ui 'delete' method
      *
-     * @param $args['method'] the ui method we are handling is 'delete' here
-     * @param $args['itemid'] item id of the object to delete (required here)
-     * @param $args['cancel'] true if the user cancels
-     * @param $args['confirm'] true if the user confirms
-     * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string|void output of xarTpl::object() using 'ui_delete'
+     * @param array<string, mixed> $args
+     * with
+     *     $args['method'] the ui method we are handling is 'delete' here
+     *     $args['itemid'] item id of the object to delete (required here)
+     *     $args['cancel'] true if the user cancels
+     *     $args['confirm'] true if the user confirms
+     *     $args['return_url'] the url to return to when finished (defaults to the object view / module)
+     * @return string|bool|void output of xarTpl::object() using 'ui_delete'
      */
     public function run(array $args = [])
     {

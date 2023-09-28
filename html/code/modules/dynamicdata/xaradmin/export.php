@@ -124,7 +124,7 @@ function dynamicdata_admin_export(array $args = [])
         $ext = '-dat';
 
     } else {
-        $data['label'] = xarML('Unknown Request for #(1)', $label);
+        $data['label'] = xarML('Unknown Request for #(1)', $myobject->label);
         $xml = '';
     }
 

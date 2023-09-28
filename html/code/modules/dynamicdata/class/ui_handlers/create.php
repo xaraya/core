@@ -37,12 +37,14 @@ class CreateHandler extends DefaultHandler
     /**
      * Run the ui 'create' method
      *
-     * @param $args['method'] the ui method we are handling is 'create' here
-     * @param $args['preview'] true if you want dd to call checkInput() = standard dd preview using GET/POST params, or
-     * @param $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
-     * @param $args['confirm'] true if the user confirms
-     * @param $args['return_url'] the url to return to when finished (defaults to the object view / module)
-     * @return string|void output of xarTpl::object() using 'ui_create'
+     * @param array<string, mixed> $args
+     * with
+     *     $args['method'] the ui method we are handling is 'create' here
+     *     $args['preview'] true if you want dd to call checkInput() = standard dd preview using GET/POST params, or
+     *     $args['values'] array of predefined field values to use = ui-specific preview using arguments in your call
+     *     $args['confirm'] true if the user confirms
+     *     $args['return_url'] the url to return to when finished (defaults to the object view / module)
+     * @return string|bool|void output of xarTpl::object() using 'ui_create'
      */
     public function run(array $args = [])
     {

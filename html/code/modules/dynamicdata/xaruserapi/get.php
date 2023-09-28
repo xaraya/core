@@ -12,7 +12,9 @@
  * Dynamic Data Version Information
  *
  * @author mikespub <mikespub@xaraya.com>
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
+ * @deprecated 2.0.0 use getfield instead
+ * @return mixed value of the field, or false on failure
 */
 function dynamicdata_userapi_get(array $args = [])
 {

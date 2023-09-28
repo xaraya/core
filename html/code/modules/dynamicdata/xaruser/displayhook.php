@@ -12,13 +12,16 @@
  */
 /**
  *
- * @param $args['objectid'] ID of the object
- * @param $args['extrainfo'] extra information
+ * @param array<string, mixed> $args
+ * with
+ *     $args['objectid'] ID of the object
+ *     $args['extrainfo'] extra information
  * @return string|void output display string
  */
 function dynamicdata_user_displayhook(array $args = [])
 {
     extract($args);
+    $extrainfo ??= [];
 
     // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
     $modname = $extrainfo['module'];
@@ -30,7 +33,7 @@ function dynamicdata_user_displayhook(array $args = [])
                                        'itemtype'  => $itemtype]);
     $object = DataObjectMaster::getObject(['name' => $descriptorargs['name'],
                                        'itemid'   => $itemid]);
-    if (!isset($object)) {
+    if (!isset($object) || empty($object->objectid)) {
         return;
     }
     if (!$object->checkAccess('display')) {

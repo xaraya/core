@@ -16,11 +16,13 @@
  * This is a standard function that is called whenever an administrator
  * wishes to modify a current module item
  *
- * @param int objectid the id of the item to be modified
- * @param int module_id the id of the module where the item comes from
- * @param int itemtype the id of the itemtype of the item
- * @param string join
- * @param string table
+ * @param array<string, mixed> $args
+ * with
+ *     int objectid the id of the item to be modified
+ *     int module_id the id of the module where the item comes from
+ *     int itemtype the id of the itemtype of the item
+ *     string join
+ *     string table
  * @return string|void output display string
  */
 function dynamicdata_admin_modify(array $args = [])
@@ -157,7 +159,7 @@ function dynamicdata_admin_modify(array $args = [])
 
         case 'clone':
             // user needs admin access to change the access rules
-            $data['adminaccess'] = xarSecurity::check('', 0, 'All', $object->objectid . ":" . $name . ":" . "$itemid", 0, '', 0, 800);
+            $data['adminaccess'] = xarSecurity::check('', 0, 'All', $object->objectid . ":" . $name . ":" . "$itemid", '', '', 0, 800);
             $data['name'] = $object->properties['name']->value;
             if ($object->objectid == 1) {
                 $data['label'] = $object->properties['label']->value;

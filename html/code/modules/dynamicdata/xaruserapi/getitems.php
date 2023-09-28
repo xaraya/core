@@ -16,7 +16,7 @@
  * (identified by module + item type or table, and item ids or other search criteria)
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['module'] module name of the item fields to get, or<br/>
  *        integer  $args['module_id'] module id of the item fields to get +<br/>
  *        integer  $args['itemtype'] item type of the item fields to get, or<br/>
@@ -32,7 +32,7 @@
  *        integer  $args['startnum'] start number<br/>
  *        string   $args['where'] WHERE clause to be used as part of the selection<br/>
  *        boolean  $args['getobject'] flag indicating if you want to get the whole object back
- * @return array|DataObjectList|void of (itemid => array of (name => value)), or false on failure
+ * @return array<mixed>|DataObjectList|null of (itemid => array of (name => value)), or false on failure
  * @throws BadParameterException
  */
 function &dynamicdata_userapi_getitems(array $args = [])

@@ -14,10 +14,10 @@
  * update fields for an item - hook for ('item','update','API')
  * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['objectid'] ID of the object<br/>
  *        string   $args['extrainfo'] extra information
- * @return array true on success, false on failure
+ * @return array<mixed> true on success, false on failure
  * @throws BadParameterException
  */
 function dynamicdata_adminapi_updatehook(array $args = [])
@@ -25,6 +25,7 @@ function dynamicdata_adminapi_updatehook(array $args = [])
     $verbose = false;
 
     extract($args);
+    $extrainfo ??= [];
 
     if (!isset($dd_function) || $dd_function != 'createhook') {
         $dd_function = 'updatehook';
@@ -60,7 +61,7 @@ function dynamicdata_adminapi_updatehook(array $args = [])
                                          'itemid'   => $itemid]);
 
     // If no object returned, bail and pass the extrainfo to the next hook
-    if (!isset($myobject)) {
+    if (!isset($myobject) || empty($myobject->objectid)) {
         return $extrainfo;
     }
 

@@ -14,10 +14,10 @@
  * update configuration for a module - hook for ('module','updateconfig','API')
  * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        integer  $args['objectid'] ID of the object<br/>
  *        string   $args['extrainfo'] extra information
- * @return array true on success, false on failure
+ * @return array<mixed> true on success, false on failure
  * @throws BadParameterException
  */
 function dynamicdata_adminapi_updateconfighook(array $args = [])

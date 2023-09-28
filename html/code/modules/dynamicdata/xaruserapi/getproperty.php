@@ -14,7 +14,7 @@
  * get a dynamic property
  *
  * @author the DynamicData module development team
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args['type'] type of property (required)<br/>
  *        string   $args['name'] name for the property (optional)<br/>
  *        string   $args['label'] label for the property (optional)<br/>

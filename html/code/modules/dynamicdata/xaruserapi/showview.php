@@ -13,7 +13,7 @@
 // TODO: move this to some common place in Xaraya (base module ?)
  * list some items in a template
  *
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  * @return string|void output display string
  */
 
@@ -28,6 +28,9 @@ function dynamicdata_userapi_showview(array $args = [])
     // do we want to count?
     if (empty($count)) {
         $args['count'] = false;
+    }
+    if (empty($template)) {
+        $template = '';
     }
 
     // we got everything via template parameters
@@ -91,6 +94,8 @@ function dynamicdata_userapi_showview(array $args = [])
             // and array of fields
         } elseif (is_array($fieldlist)) {
             $myfieldlist = $fieldlist;
+        } else {
+            $myfieldlist = null;
         }
         $status = null;
     } else {
@@ -114,7 +119,7 @@ function dynamicdata_userapi_showview(array $args = [])
                                            'catid' => $catid,
                                            'groupby' => $groupby,
                                            'status' => $status]);
-    if (!isset($object)) {
+    if (!isset($object) || empty($object->label)) {
         return;
     }
     if (!$object->checkAccess('view')) {
@@ -160,9 +165,6 @@ function dynamicdata_userapi_showview(array $args = [])
     }
     if (empty($tplmodule)) {
         $tplmodule = 'dynamicdata';
-    }
-    if (empty($template)) {
-        $template = '';
     }
     return $object->showView(['layout'    => $layout,
                                    'tplmodule' => $tplmodule,

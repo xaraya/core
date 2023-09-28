@@ -53,16 +53,18 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
     /**
      * Make an object descriptor to create a new (virtual) type of Dynamic Object
      *
-     * @param $args['name'] name of the object to create (required)
-     * @param $args['objectid'] id of the object you want to create (optional)
-     * @param $args['label'] label of the object to create
-     * @param $args['moduleid'] module id of the object to create
-     * @param $args['itemtype'] item type of the object to create
-     * @param $args['urlparam'] URL parameter to use for the object items (itemid, exid, aid, ...)
-     * @param $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
-     * @param $args['config'] some configuration for the object (free to define and use)
-     * @param $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
-     * @param $args['class'] optional classname (e.g. <module>_DataObject)
+     * @param array<string, mixed> $args
+     * with
+     *     $args['name'] name of the object to create (required)
+     *     $args['objectid'] id of the object you want to create (optional)
+     *     $args['label'] label of the object to create
+     *     $args['moduleid'] module id of the object to create
+     *     $args['itemtype'] item type of the object to create
+     *     $args['urlparam'] URL parameter to use for the object items (itemid, exid, aid, ...)
+     *     $args['maxid'] for purely dynamic objects, the current max. itemid (for import only)
+     *     $args['config'] some configuration for the object (free to define and use)
+     *     $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
+     *     $args['class'] optional classname (e.g. <module>_DataObject)
      * @return object virtual object descriptor for use in $object = new DataObject($descriptor); or $objectlist = new DataObjectList($descriptor);
     **/
     public function __construct(array $args = [])
@@ -77,15 +79,17 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
     /**
      * Add a property to the descriptor before building this object
      *
-     * @param $args['name'] the name for the dynamic property (required)
-     * @param $args['type'] the type of dynamic property (required)
-     * @param $args['label'] the label for the dynamic property
-     * @param $args['source'] the source for the dynamic property
-     * @param $args['defaultvalue'] the default value for the dynamic property
-     * @param $args['status'] the input and display status for the dynamic property
-     * @param $args['seq'] the place in sequence this dynamic property appears in
-     * @param $args['configuration'] the configuration (serialized array) for the dynamic property
-     * @param $args['id'] the id for the dynamic property
+     * @param array<string, mixed> $args
+     * with
+     *     $args['name'] the name for the dynamic property (required)
+     *     $args['type'] the type of dynamic property (required)
+     *     $args['label'] the label for the dynamic property
+     *     $args['source'] the source for the dynamic property
+     *     $args['defaultvalue'] the default value for the dynamic property
+     *     $args['status'] the input and display status for the dynamic property
+     *     $args['seq'] the place in sequence this dynamic property appears in
+     *     $args['configuration'] the configuration (serialized array) for the dynamic property
+     *     $args['id'] the id for the dynamic property
     **/
     public function addProperty(array $args = [])
     {

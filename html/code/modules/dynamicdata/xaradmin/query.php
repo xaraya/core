@@ -12,7 +12,7 @@
  */
 /**
  * query items
- * @return array|void data for the template display
+ * @return array<mixed>|void data for the template display
  */
 function dynamicdata_admin_query(array $args = [])
 {
@@ -351,7 +351,7 @@ function dynamicdata_admin_query(array $args = [])
                     $newlist = [];
                     foreach ($list as $part) {
                         // try to get around problem of leading 0's
-                        if (is_numeric($part) && strlen($part) == strlen((float)$part)) {
+                        if (is_numeric($part) && strlen($part) == strlen(strval((float)$part))) {
                             $newlist[] = $part;
                         } else {
                             $part = preg_replace('/^\'/', '', $part);
@@ -364,7 +364,7 @@ function dynamicdata_admin_query(array $args = [])
                     break;
                 default:
                     // try to get around problem of leading 0's
-                    if (is_numeric($value[$name]) && strlen($value[$name]) == strlen((float)$value[$name])) {
+                    if (is_numeric($value[$name]) && strlen($value[$name]) == strlen(strval((float)$value[$name]))) {
                         $whereclause .=  " $what " . $value[$name];
                     } else {
                         $whereclause .=  " $what " . $dbconn->qstr($value[$name]);

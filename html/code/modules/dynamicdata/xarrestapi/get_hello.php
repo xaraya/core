@@ -13,7 +13,8 @@
 /**
  * Sample REST API call supported by this module (if any)
  *
- * @return array of info
+ * @param array<string, mixed> $args
+ * @return string of info
  */
 function dynamicdata_restapi_get_hello($args = [])
 {

@@ -13,7 +13,7 @@
  */
 /**
  * return the path for a short URL to xarController::URL for this module
- * @param array    $args array of optional parameters<br/>
+ * @param array<string, mixed> $args array of optional parameters<br/>
  *        string   $args the function and arguments passed to xarController::URL
  * @return string|void path to be added to index.php for a short URL, or empty if failed
  */
