@@ -31,6 +31,11 @@ class SimpleObjectInterface extends DefaultHandler
         }
     }
 
+    /**
+     * Summary of handle
+     * @param array<string, mixed> $args
+     * @return mixed
+     */
     public function handle(array $args = [])
     {
         if (!xarVar::fetch('method', 'str', $args['method'], 'showDisplay', xarVar::NOT_REQUIRED)) {

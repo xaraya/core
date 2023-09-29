@@ -32,7 +32,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
  */
 class CreateHandler extends DefaultHandler
 {
-    public $method = 'create';
+    public string $method = 'create';
 
     /**
      * Run the ui 'create' method

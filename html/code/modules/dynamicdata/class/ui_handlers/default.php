@@ -23,6 +23,8 @@ use xarResponse;
 use xarTpl;
 use xarDDObject;
 use DataObjectMaster;
+use DataObjectList;
+use DataObject;
 use sys;
 
 sys::import('xaraya.objects');
@@ -33,22 +35,24 @@ sys::import('xaraya.objects');
  */
 class DefaultHandler extends xarObject
 {
-    public $method = 'overridden in child classes';
+    public string $method = 'overridden in child classes';
 
     // module where the main templates for the GUI reside (defaults to the object module)
-    public $tplmodule = null;
+    public ?string $tplmodule = null;
     // main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
-    public $linktype = 'object';
+    public string $linktype = 'object';
     // main function handling all object method calls (= if we're not using object URLs)
-    public $linkfunc = 'main';
+    public string $linkfunc = 'main';
     // default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
-    public $nextmethod = 'view';
+    public string $nextmethod = 'view';
     // title shown in the main templates
-    public $tpltitle = null;
+    public ?string $tpltitle = null;
 
     // current arguments for the handler
+    /** @var ?array<string, mixed> */
     public $args = [];
 
+    /** @var DataObjectList|DataObject|null */
     public $object = null;
 
     /**
@@ -240,7 +244,7 @@ class DefaultHandler extends xarObject
     /**
      * Get the return URL (based on argument or handler settings)
      *
-     * @param $url any $args['return_url'] given by the method
+     * @param string $return_url any $args['return_url'] given by the method
      * @return string the return url
      */
     public function getReturnURL($return_url = '')

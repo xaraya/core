@@ -32,7 +32,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
  */
 class DeleteHandler extends DefaultHandler
 {
-    public $method = 'delete';
+    public string $method = 'delete';
 
     /**
      * Run the ui 'delete' method

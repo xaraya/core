@@ -32,7 +32,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
  */
 class DisplayHandler extends DefaultHandler
 {
-    public $method = 'display';
+    public string $method = 'display';
 
     /**
      * Run the ui 'display' method

@@ -32,7 +32,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
  */
 class UpdateHandler extends DefaultHandler
 {
-    public $method = 'update';
+    public string $method = 'update';
 
     /**
      * Run the ui 'update' method

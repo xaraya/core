@@ -12,6 +12,10 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+use Xaraya\DataObject\Handlers\DefaultHandler;
+use DataObjectList;
+use DataObject;
+
 /**
  * Dynamic Object User Interface (work in progress)
  *
@@ -58,21 +62,25 @@
 class DataObjectUserInterface extends xarObject
 {
     // application framework we're working with
-    public $framework = 'xaraya';
+    public string $framework = 'xaraya';
 
     // method mapper
-    public $mapper = [];
+    /** @var array<string, mixed> */
+    public array $mapper = [];
 
     // method aliases
-    public $alias = [];
+    /** @var array<string, string> */
+    public array $alias = [];
 
     // class namespace
-    public $namespace = 'Xaraya\DataObject\Handlers';
+    public string $namespace = 'Xaraya\DataObject\Handlers';
 
     // current arguments for the handler
-    public $args = [];
+    /** @var array<string, mixed> */
+    public array $args = [];
 
     // current handler
+    /** @var DefaultHandler|object|null */
     private $handler = null;
 
     /**
@@ -277,6 +285,7 @@ class DataObjectUserInterface extends xarObject
 
     /**
      * Return the current handler, e.g. in case you want to access something or run another time
+     * @return DefaultHandler|object|null
      */
     public function &getHandler()
     {
@@ -285,11 +294,13 @@ class DataObjectUserInterface extends xarObject
 
     /**
      * Return the current object in the handler, e.g. in case you want to access it afterwards
+     * @return DataObjectList|DataObject|null
      */
     public function &getObject()
     {
         if (isset($this->handler)) {
             return $this->handler->object;
         }
+        return null;
     }
 }

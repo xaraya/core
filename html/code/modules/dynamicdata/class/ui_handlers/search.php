@@ -33,7 +33,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
  */
 class SearchHandler extends DefaultHandler
 {
-    public $method = 'search'; // or 'query'
+    public string $method = 'search'; // or 'query'
 
     /**
      * Run the ui 'search' and 'query' methods
@@ -104,6 +104,10 @@ class SearchHandler extends DefaultHandler
         return $output;
     }
 
+    /**
+     * Summary of search
+     * @return string
+     */
     public function search()
     {
         // set search criteria
@@ -239,6 +243,10 @@ class SearchHandler extends DefaultHandler
         );
     }
 
+    /**
+     * Summary of query
+     * @return string
+     */
     public function query()
     {
         // set query criteria

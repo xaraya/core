@@ -36,7 +36,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
  */
 class StatsHandler extends DefaultHandler
 {
-    public $method = 'stats';
+    public string $method = 'stats';
 
     /**
      * Run the ui 'stats' method
@@ -110,6 +110,10 @@ class StatsHandler extends DefaultHandler
         return $output;
     }
 
+    /**
+     * Summary of stats
+     * @return bool|string
+     */
     public function stats()
     {
         // set stats criteria
@@ -294,7 +298,7 @@ class StatsHandler extends DefaultHandler
 
         // check if we need to save this report
         if (!xarVar::fetch('save', 'isset', $save, null, xarVar::DONT_SET)) {
-            return;
+            return false;
         }
 
         // nothing to show here
@@ -336,6 +340,10 @@ class StatsHandler extends DefaultHandler
         return $output;
     }
 
+    /**
+     * Summary of report
+     * @return string
+     */
     public function report()
     {
         // set report criteria
@@ -406,6 +414,9 @@ class StatsHandler extends DefaultHandler
 
     /**
      * We use a custom operation here that gets translated to a database-specific one by the datastore
+     * @param string $field
+     * @param string $format
+     * @return string
      */
     public function getTimestampField($field, $format) // CHECKME for all database types
     {
@@ -422,6 +433,9 @@ class StatsHandler extends DefaultHandler
 
     /**
      * We use a custom operation here that gets translated to a database-specific one by the datastore
+     * @param string $field
+     * @param string $format
+     * @return string
      */
     public function getDateField($field, $format) // CHECKME for all database types
     {
@@ -436,6 +450,10 @@ class StatsHandler extends DefaultHandler
         return $newfield;
     }
 
+    /**
+     * Summary of getReportList
+     * @return array<mixed>
+     */
     public function getReportList()
     {
         $serialreports = xarModVars::get('dynamicdata', 'reportlist.'.$this->object->name);
@@ -447,6 +465,11 @@ class StatsHandler extends DefaultHandler
         return $reportlist;
     }
 
+    /**
+     * Summary of getReport
+     * @param string $report
+     * @return array<mixed>
+     */
     public function getReport($report)
     {
         $key = 'report.'.$this->object->name.'.'.$report;
@@ -462,6 +485,13 @@ class StatsHandler extends DefaultHandler
         return $info;
     }
 
+    /**
+     * Summary of saveReport
+     * @param string $report
+     * @param array<mixed> $stats
+     * @param array<mixed> $info
+     * @return void
+     */
     public function saveReport($report, $stats, $info)
     {
         $reportlist = $this->getReportList();
@@ -484,6 +514,11 @@ class StatsHandler extends DefaultHandler
         xarModVars::set('dynamicdata', $key, serialize($info));
     }
 
+    /**
+     * Summary of deleteReport
+     * @param string $report
+     * @return void
+     */
     public function deleteReport($report)
     {
         $key = 'report.'.$this->object->name.'.'.$report;

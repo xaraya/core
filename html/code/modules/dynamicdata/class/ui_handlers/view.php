@@ -33,7 +33,7 @@ sys::import('modules.dynamicdata.class.ui_handlers.default');
  */
 class ViewHandler extends DefaultHandler
 {
-    public $method = 'view';
+    public string $method = 'view';
 
     /**
      * Run the ui 'view' method
