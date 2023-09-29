@@ -59,10 +59,14 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
     use xarTimerTrait;  // activate with self::$enableTimer = true
     use xarCacheTrait;  // activate with self::$enableCache = true
 
-    public static $endpoint = 'gql.php';
+    public static string $endpoint = 'gql.php';
+    /** @var array<string, mixed> */
     public static $config = [];
+    /** @var string|null */
     public static $schemaFile = null;
+    /** @var array<string, mixed> */
     public static $type_cache = [];
+    /** @var array<string, string> */
     public static $type_mapper = [
         'query'    => 'querytype',
         'sample'   => 'sampletype',
@@ -80,6 +84,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         //'ddnode'   => 'ddnodetype',
         'module_api' => 'moduleapitype',
     ];
+    /** @var array<string, string> */
     public static $base_types = [
         'id'      => 'id',
         'string'  => 'string',
@@ -87,26 +92,37 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         'boolean' => 'boolean',
         'number'  => 'float',
     ];
+    /** @var array<string> */
     public static $extra_types = [];
-    public static $trace_path = false;
+    public static bool $trace_path = false;
+    /** @var array<string> */
     public static $paths = [];
+    /** @var mixed */
     public static $query_plan = null;
+    /** @var array<string, mixed> */
     public static $type_fields = [];
-    public static $cache_plan = false;
-    public static $cache_data = false;
-    public static $cache_operation = false;
+    public static bool $cache_plan = false;
+    public static bool $cache_data = false;
+    public static bool $cache_operation = false;
+    /** @var array<string, string> */
     public static $object_type = [];
-    public static $queryComplexity = 0;
-    public static $queryDepth = 0;
-    public static $tokenExpires = 12 * 60 * 60;  // 12 hours
-    public static $storageType = 'apcu';  // database or apcu
-    public static $tokenStorage;
+    public static int $queryComplexity = 0;
+    public static int $queryDepth = 0;
+    public static int $tokenExpires = 12 * 60 * 60;  // 12 hours
+    public static string $storageType = 'apcu';  // database or apcu
+    public static ixarCache_Storage $tokenStorage;
+    /** @var array<string, mixed> */
     public static $objectSecurity = [];
+    /** @var array<string, mixed> */
     public static $objectFieldSpecs = [];
+    /** @var array<string, mixed> */
     public static $object_ref = [];
 
     /**
      * Get GraphQL Schema with Query type and typeLoader
+     * @param ?array<string> $extraTypes
+     * @param bool $validate
+     * @return Schema
      */
     public static function get_schema($extraTypes = null, $validate = false)
     {
@@ -134,6 +150,10 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return $schema;
     }
 
+    /**
+     * Summary of map_objects
+     * @return void
+     */
     public static function map_objects()
     {
         if (!empty(self::$object_type)) {
@@ -157,6 +177,8 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
 
     /**
      * Get GraphQL Type by name
+     * @param string $name
+     * @return mixed|void
      */
     public static function get_type($name)
     {
@@ -180,6 +202,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         };
     }
 
+    /**
+     * Summary of has_type
+     * @param string $name
+     * @return bool
+     */
     public static function has_type($name)
     {
         $name = strtolower($name);
@@ -193,14 +220,25 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return false;
     }
 
-    // @checkme for dynamically created types like the module api input types per function
+    /**
+     * @checkme for dynamically created types like the module api input types per function
+     * Summary of set_type
+     * @param string $name
+     * @param mixed $type
+     * @return void
+     */
     public static function set_type($name, $type)
     {
         $name = strtolower($name);
         self::$type_cache[$name] = $type;
     }
 
-    // 'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)), doesn't accept lazy loading
+    /**
+     * Summary of get_type_list
+     * 'type' => Type::listOf(xarGraphQL::get_type(static::$_xar_type)), doesn't accept lazy loading
+     * @param string $name
+     * @return Closure
+     */
     public static function get_type_list($name)
     {
         $name = strtolower($name);
@@ -211,7 +249,12 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         };
     }
 
-    // 'type' => Type::listOf(xarGraphQL::get_input_type(static::$_xar_type)), doesn't accept lazy loading
+    /**
+     * Summary of get_input_type_list
+     * 'type' => Type::listOf(xarGraphQL::get_input_type(static::$_xar_type)), doesn't accept lazy loading
+     * @param string $name
+     * @return Closure
+     */
     public static function get_input_type_list($name)
     {
         $name = strtolower($name);
@@ -223,6 +266,12 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         };
     }
 
+    /**
+     * Summary of load_lazy_type
+     * @param string $name
+     * @throws \Exception
+     * @return mixed
+     */
     public static function load_lazy_type($name)
     {
         if (isset(self::$type_cache[$name])) {
@@ -264,6 +313,9 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
 
     /**
      * Get GraphQL Type by name with pagination
+     * @param string $name
+     * @throws \Exception
+     * @return mixed
      */
     public static function get_page_type($name)
     {
@@ -296,6 +348,9 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
 
     /**
      * Get GraphQL Input Type by name
+     * @param string $name
+     * @throws \Exception
+     * @return mixed
      */
     public static function get_input_type($name)
     {
@@ -328,6 +383,8 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
 
     /**
      * Get class where the GraphQL Type is defined
+     * @param string $type
+     * @return string
      */
     public static function get_type_class($type)
     {
@@ -367,6 +424,10 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
 
     /**
      * Build GraphQL Schema based on schema.graphql file and type config decorator
+     * @param string $schemaFile
+     * @param ?array<string> $extraTypes
+     * @param bool $validate
+     * @return Schema
      */
     public static function build_schema($schemaFile, $extraTypes = null, $validate = false)
     {
@@ -388,6 +449,10 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
 
     /**
      * Type config decorator for Query and Object types when using BuildSchema
+     * @param array<string, mixed> $typeConfig
+     * @param mixed $typeDefinitionNode
+     * @param mixed $allNodesMap
+     * @return mixed
      */
     public static function type_config_decorator($typeConfig, $typeDefinitionNode, $allNodesMap)
     {
@@ -435,6 +500,13 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
 
     /**
      * Utility function to execute a GraphQL query and get the data
+     * @param string $queryString
+     * @param mixed $variableValues
+     * @param ?string $operationName
+     * @param ?array<string> $extraTypes
+     * @param ?string $schemaFile
+     * @param mixed $context
+     * @return mixed
      */
     public static function get_data($queryString = '{schema}', $variableValues = [], $operationName = null, $extraTypes = [], $schemaFile = null, $context = null)
     {
@@ -557,6 +629,8 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
 
     /**
      * Utility function to send the data to the browser or app
+     * @param mixed $data
+     * @return void
      */
     public static function output($data)
     {
@@ -580,6 +654,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
 
     /**
      * Send CORS options to the browser in preflight checks
+     * @return void
      */
     public static function send_cors_options()
     {
@@ -592,6 +667,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         // header('Access-Control-Allow-Credentials: true');
     }
 
+    /**
+     * Summary of dump_query_plan
+     * @param mixed $plan
+     * @return mixed
+     */
     public static function dump_query_plan($plan)
     {
         if (!is_array($plan)) {
@@ -608,6 +688,15 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return $info;
     }
 
+    /**
+     * Summary of has_cached_data
+     * @param mixed $queryType
+     * @param mixed $rootValue
+     * @param mixed $args
+     * @param mixed $context
+     * @param ResolveInfo $info
+     * @return bool
+     */
     public static function has_cached_data($queryType, $rootValue, $args, $context, ResolveInfo $info)
     {
         if (!empty(self::$query_plan)) {
@@ -672,7 +761,12 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return false;
     }
 
-    // different processing for GraphQL API - see gql.php
+    /**
+     * Summary of handleRequest - different processing for GraphQL API - see gql.php
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return mixed
+     */
     public static function handleRequest($vars = [], &$request = null)
     {
         // dispatcher doesn't provide query params by default
@@ -709,6 +803,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return $result;
     }
 
+    /**
+     * Summary of checkUser
+     * @param array<string, mixed> $context
+     * @return int
+     */
     public static function checkUser($context)
     {
         $userId = self::checkToken($context);
@@ -718,6 +817,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return self::checkCookie($context['cookie']);
     }
 
+    /**
+     * Summary of checkToken
+     * @param array<string, mixed> $context
+     * @return mixed|void
+     */
     public static function checkToken($context)
     {
         $context['request'] ??= null;
@@ -737,6 +841,13 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         }
     }
 
+    /**
+     * Summary of checkCookie
+     * @param array<string, mixed> $cookieVars
+     * @uses xarSession::init()
+     * @uses xarUser::isLoggedIn()
+     * @return mixed|void
+     */
     public static function checkCookie($cookieVars)
     {
         if (empty($cookieVars) || empty($cookieVars['XARAYASID'])) {
@@ -756,6 +867,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return xarSession::getVar('role_id');
     }
 
+    /**
+     * Summary of createToken
+     * @param array<string, mixed> $userInfo
+     * @return string|void
+     */
     public static function createToken($userInfo)
     {
         if (function_exists('random_bytes')) {
@@ -771,6 +887,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return $token;
     }
 
+    /**
+     * Summary of deleteToken
+     * @param array<string, mixed> $context
+     * @return void
+     */
     public static function deleteToken($context)
     {
         $context['request'] ??= null;
@@ -781,6 +902,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         self::getTokenStorage()->delCached($token);
     }
 
+    /**
+     * Summary of getTokenStorage
+     * @uses xarCache::getStorage()
+     * @return ixarCache_Storage
+     */
     public static function getTokenStorage()
     {
         if (!isset(self::$tokenStorage)) {
@@ -796,11 +922,21 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return self::$tokenStorage;
     }
 
+    /**
+     * Summary of hasSecurity
+     * @param string $object
+     * @param ?string $method
+     * @return bool
+     */
     public static function hasSecurity($object, $method = null)
     {
         return !empty(self::$objectSecurity[$object]) ? true : false;
     }
 
+    /**
+     * Summary of loadConfig
+     * @return void
+     */
     public static function loadConfig()
     {
         if (!empty(self::$config)) {
@@ -867,6 +1003,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         }
     }
 
+    /**
+     * Summary of loadObjects
+     * @param array<string, mixed> $config
+     * @return void
+     */
     public static function loadObjects($config = [])
     {
         if (!empty(self::$config['objects'])) {
@@ -890,6 +1031,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         self::setTimer('objects');
     }
 
+    /**
+     * Summary of loadModules
+     * @param array<string, mixed> $config
+     * @return void
+     */
     public static function loadModules($config = [])
     {
         if (!empty(self::$config['modules'])) {
@@ -908,6 +1054,11 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         self::setTimer('modules');
     }
 
+    /**
+     * Summary of find_extra_types
+     * @param ?array<string> $objectNames
+     * @return array<string>
+     */
     public static function find_extra_types($objectNames = null)
     {
         // @checkme set list of modules here before filtering out for $extraTypes - note: dependency on REST API
@@ -928,6 +1079,21 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTr
         return $extraTypes;
     }
 
+    /**
+     * Summary of dump_schema
+     * @param ?array<string> $extraTypes
+     * @param string $storage
+     * @param int $expires
+     * @param int $complexity
+     * @param int $depth
+     * @param bool $timer
+     * @param bool $trace
+     * @param bool $cache
+     * @param bool $plan
+     * @param bool $data
+     * @param bool $operation
+     * @return void
+     */
     public static function dump_schema($extraTypes = null, $storage = 'database', $expires = 12 * 60 * 60, $complexity = 0, $depth = 0, $timer = false, $trace = false, $cache = false, $plan = false, $data = false, $operation = false)
     {
         $infoData = [];

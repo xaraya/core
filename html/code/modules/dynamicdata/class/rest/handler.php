@@ -25,16 +25,26 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     use xarTimerTrait;  // activate with self::$enableTimer = true
     use xarCacheTrait;  // activate with self::$enableCache = true
 
-    public static $endpoint = 'rst.php/v1';
+    public static string $endpoint = 'rst.php/v1';
+    /** @var array<string, mixed> */
     public static $objects = [];
+    /** @var array<string, mixed> */
     public static $schemas = [];
+    /** @var array<string, mixed> */
     public static $config = [];
+    /** @var array<string, mixed> */
     public static $modules = [];
-    public static $tokenExpires = 12 * 60 * 60;  // 12 hours
-    public static $storageType = 'apcu';  // database or apcu
-    public static $tokenStorage;
-    public static $mediaType;
+    public static int $tokenExpires = 12 * 60 * 60;  // 12 hours
+    public static string $storageType = 'apcu';  // database or apcu
+    public static ixarCache_Storage $tokenStorage;
+    public static string $mediaType;
 
+    /**
+     * Summary of getOpenAPI
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return mixed
+     */
     public static function getOpenAPI($vars = [], &$request = null)
     {
         $openapi = sys::varpath() . '/cache/api/openapi.json';
@@ -48,6 +58,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $doc;
     }
 
+    /**
+     * Summary of getBaseURL
+     * @param string $base
+     * @param ?string $path
+     * @param array<string, mixed> $args
+     * @return string
+     */
     public static function getBaseURL($base = '', $path = null, $args = [])
     {
         if (empty($path)) {
@@ -56,6 +73,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return xarServer::getBaseURL() . self::$endpoint . $base . '/' . $path;
     }
 
+    /**
+     * Summary of getObjectURL
+     * @param ?string $object
+     * @param mixed $itemid
+     * @return string
+     */
     public static function getObjectURL($object = null, $itemid = null)
     {
         if (empty($object)) {
@@ -67,6 +90,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return self::getBaseURL('/objects', $object . '/' . $itemid);
     }
 
+    /**
+     * Summary of getObjects
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     */
     public static function getObjects($args)
     {
         self::loadObjects();
@@ -83,6 +111,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $result;
     }
 
+    /**
+     * Summary of getObjectList
+     * @param array<string, mixed> $args
+     * @throws \ForbiddenOperationException
+     * @return array<string, mixed>
+     */
     public static function getObjectList($args)
     {
         $object = $args['path']['object'];
@@ -152,6 +186,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $result;
     }
 
+    /**
+     * Summary of getObjectItem
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @throws \ForbiddenOperationException
+     * @return array<string, mixed>
+     */
     public static function getObjectItem($args)
     {
         $object = $args['path']['object'];
@@ -176,6 +217,9 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $fieldlist = self::getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
         $objectitem = DataObjectMaster::getObject($params);
+        if (empty($objectitem)) {
+            throw new Exception('Unknown item ' . $object);
+        }
         if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
@@ -206,6 +250,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $item;
     }
 
+    /**
+     * Summary of createObjectItem
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @throws \ForbiddenOperationException
+     * @return array<mixed>|int|mixed
+     */
     public static function createObjectItem($args)
     {
         $object = $args['path']['object'];
@@ -225,7 +276,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         $params = ['name' => $object];
         $objectitem = DataObjectMaster::getObject($params);
-        if (!$objectitem->checkAccess('create', 0, $userId)) {
+        if (empty($objectitem) || !$objectitem->checkAccess('create', 0, $userId)) {
             throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->createItem($args['input']);
@@ -236,6 +287,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $itemid;
     }
 
+    /**
+     * Summary of updateObjectItem
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @throws \ForbiddenOperationException
+     * @return array<string, mixed>|int|mixed
+     */
     public static function updateObjectItem($args)
     {
         $object = $args['path']['object'];
@@ -259,7 +317,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
-        if (!$objectitem->checkAccess('update', $itemid, $userId)) {
+        if (empty($objectitem) || !$objectitem->checkAccess('update', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->updateItem($args['input']);
@@ -270,6 +328,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $itemid;
     }
 
+    /**
+     * Summary of deleteObjectItem
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @throws \ForbiddenOperationException
+     * @return array<string, mixed>|int|mixed
+     */
     public static function deleteObjectItem($args)
     {
         $object = $args['path']['object'];
@@ -285,7 +350,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $userId = self::checkUser($args);
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectMaster::getObject($params);
-        if (!$objectitem->checkAccess('delete', $itemid, $userId)) {
+        if (empty($objectitem) || !$objectitem->checkAccess('delete', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
         $itemid = $objectitem->deleteItem();
@@ -296,6 +361,10 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $itemid;
     }
 
+    /**
+     * Summary of loadConfig
+     * @return void
+     */
     public static function loadConfig()
     {
         if (!empty(self::$config)) {
@@ -335,6 +404,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
     }
 
+    /**
+     * Summary of loadObjects
+     * @param array<string, mixed> $config
+     * @return void
+     */
     public static function loadObjects($config = [])
     {
         if (!empty(self::$objects)) {
@@ -352,7 +426,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             self::$objects = [];
             foreach (self::$config['objects'] as $name => $item) {
                 $item = array_intersect_key($item, $allowed);
-                self::$objects[$name] = $item;
+                self::$objects[(string) $name] = $item;
             }
         } else {
             $object = 'objects';
@@ -371,6 +445,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         self::setTimer('objects');
     }
 
+    /**
+     * Summary of loadModules
+     * @param array<string, mixed> $config
+     * @return void
+     */
     public static function loadModules($config = [])
     {
         if (!empty(self::$modules)) {
@@ -399,6 +478,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         self::setTimer('modules');
     }
 
+    /**
+     * Summary of hasObject
+     * @param string $object
+     * @return bool
+     */
     public static function hasObject($object)
     {
         self::loadObjects();
@@ -408,6 +492,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return true;
     }
 
+    /**
+     * Summary of hasOperation
+     * @param string $object
+     * @param string $method
+     * @return bool
+     */
     public static function hasOperation($object, $method)
     {
         if (!self::hasObject($object)) {
@@ -419,11 +509,21 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return true;
     }
 
+    /**
+     * Summary of getOperation
+     * @param string $object
+     * @param string $method
+     * @return array<string, mixed>
+     */
     public static function getOperation($object, $method)
     {
         return self::$config['objects'][$object]['x-operations'][$method];
     }
 
+    /**
+     * Summary of loadSchemas
+     * @return mixed
+     */
     public static function loadSchemas()
     {
         if (empty(self::$schemas)) {
@@ -435,24 +535,48 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
     }
 
+    /**
+     * Summary of hasSecurity
+     * @param string $object
+     * @param string $method
+     * @return bool
+     */
     public static function hasSecurity($object, $method)
     {
         $operation = self::getOperation($object, $method);
         return !empty($operation['security']) ? true : false;
     }
 
+    /**
+     * Summary of hasCaching
+     * @param string $object
+     * @param string $method
+     * @return bool
+     */
     public static function hasCaching($object, $method)
     {
         $operation = self::getOperation($object, $method);
         return !empty($operation['caching']) ? true : false;
     }
 
+    /**
+     * Summary of getProperties
+     * @param string $object
+     * @param string $method
+     * @return array<string>
+     */
     public static function getProperties($object, $method)
     {
         $operation = self::getOperation($object, $method);
         return $operation['properties'];
     }
 
+    /**
+     * Summary of getViewProperties
+     * @param string $object
+     * @param ?array<string, mixed> $args
+     * @return array<string>
+     */
     public static function getViewProperties($object, $args = null)
     {
         // schema (object) -> properties -> items (array) -> items (object) -> properties
@@ -461,6 +585,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return self::expandProperties($object, $properties, $args);
     }
 
+    /**
+     * Summary of getDisplayProperties
+     * @param string $object
+     * @param ?array<string, mixed> $args
+     * @return array<string>
+     */
     public static function getDisplayProperties($object, $args = null)
     {
         // schema (object) -> properties
@@ -469,6 +599,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return self::expandProperties($object, $properties, $args);
     }
 
+    /**
+     * Summary of getCreateProperties
+     * @param string $object
+     * @return array<string>
+     */
     public static function getCreateProperties($object)
     {
         // schema (object) -> properties
@@ -476,6 +611,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return self::getProperties($object, 'create');
     }
 
+    /**
+     * Summary of getUpdateProperties
+     * @param string $object
+     * @return array<string>
+     */
     public static function getUpdateProperties($object)
     {
         // schema (object) -> properties
@@ -483,6 +623,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return self::getProperties($object, 'update');
     }
 
+    /**
+     * Summary of expandProperties
+     * @param string $object
+     * @param array<string> $fieldlist
+     * @param ?array<string, mixed> $args
+     * @return array<string>
+     */
     public static function expandProperties($object, $fieldlist, $args = null)
     {
         if (empty($args) || empty($args['expand'])) {
@@ -506,6 +653,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
 
     /**
      * Return the current user or exit with 401 status code
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
      */
     public static function whoami($args)
     {
@@ -518,6 +667,9 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
 
     /**
      * Verify that the cookie corresponds to an authorized user (with minimal core load) or exit with 401 status code
+     * @param array<string, mixed> $context
+     * @throws \UnauthorizedOperationException
+     * @return int
      */
     private static function checkUser($context)
     {
@@ -545,6 +697,10 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
 
     /**
      * Verify that the cookie corresponds to an authorized user (with minimal core load) using xarSession
+     * @param array<string, mixed> $cookieVars
+     * @uses xarSession::init()
+     * @uses xarUser::isLoggedIn()
+     * @return mixed|void
      */
     private static function checkCookie($cookieVars)
     {
@@ -564,6 +720,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
 
     /**
      * Verify that the token corresponds to an authorized user (with minimal core load) using xarCache_Storage
+     * @param array<string, mixed> $context
+     * @return mixed|void
      */
     private static function checkToken($context)
     {
@@ -575,6 +733,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return self::getTokenStorage()->getCached($token);
     }
 
+    /**
+     * Summary of postToken
+     * @param array<string, mixed> $args
+     * @throws \UnauthorizedOperationException
+     * @return array<string, mixed>
+     */
     public static function postToken($args)
     {
         // this contains any POSTed args from rst.php
@@ -625,6 +789,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
     }
 
+    /**
+     * Summary of deleteToken
+     * @param array<string, mixed> $args
+     * @return bool
+     */
     public static function deleteToken($args)
     {
         $args['request'] ??= null;
@@ -638,6 +807,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return true;
     }
 
+    /**
+     * Summary of getTokenStorage
+     * @uses xarCache::getStorage()
+     * @return ixarCache_Storage
+     */
     public static function getTokenStorage()
     {
         if (!isset(self::$tokenStorage)) {
@@ -653,6 +827,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return self::$tokenStorage;
     }
 
+    /**
+     * Summary of getModuleURL
+     * @param ?string $module
+     * @param ?string $api
+     * @param array<string, mixed> $args
+     * @return string
+     */
     public static function getModuleURL($module = null, $api = null, $args = [])
     {
         if (empty($module)) {
@@ -664,6 +845,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return self::getBaseURL('/modules', $module . '/' . $api);
     }
 
+    /**
+     * Summary of getModules
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     */
     public static function getModules($args)
     {
         self::loadModules();
@@ -676,6 +862,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $result;
     }
 
+    /**
+     * Summary of getModuleApis
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     */
     public static function getModuleApis($args)
     {
         $module = $args['path']['module'];
@@ -696,6 +887,15 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $result;
     }
 
+    /**
+     * Summary of getModuleCall
+     * @param array<string, mixed> $args
+     * @uses xarMod::init()
+     * @uses xarUser::init()
+     * @uses xarMod::apiFunc()
+     * @throws \ForbiddenOperationException
+     * @return mixed
+     */
     public static function getModuleCall($args)
     {
         $module = $args['path']['module'];
@@ -750,6 +950,15 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params);
     }
 
+    /**
+     * Summary of postModuleCall
+     * @param array<string, mixed> $args
+     * @uses xarMod::init()
+     * @uses xarUser::init()
+     * @uses xarMod::apiFunc()
+     * @throws \ForbiddenOperationException
+     * @return mixed
+     */
     public static function postModuleCall($args)
     {
         $module = $args['path']['module'];
@@ -798,6 +1007,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params);
     }
 
+    /**
+     * Summary of putModuleCall
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @return mixed
+     */
     public static function putModuleCall($args)
     {
         $module = $args['path']['module'];
@@ -811,6 +1026,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         throw new Exception('Unsupported method PUT for module api');
     }
 
+    /**
+     * Summary of deleteModuleCall
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @return mixed
+     */
     public static function deleteModuleCall($args)
     {
         $module = $args['path']['module'];
@@ -824,6 +1045,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         throw new Exception('Unsupported method DELETE for module api');
     }
 
+    /**
+     * Summary of hasModule
+     * @param string $module
+     * @return bool
+     */
     public static function hasModule($module)
     {
         self::loadModules();
@@ -833,18 +1059,32 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return true;
     }
 
+    /**
+     * Summary of getModuleApiList
+     * @param string $module
+     * @return array<string, mixed>
+     */
     public static function getModuleApiList($module)
     {
         if (!self::hasModule($module)) {
-            return;
+            return [];
         }
         return self::$modules[$module]['apilist'];
     }
 
+    /**
+     * Summary of getModuleApiFunc
+     * @param string $module
+     * @param string $path
+     * @param string $method
+     * @param ?string $more
+     * @throws \Exception
+     * @return array<string, mixed>|null
+     */
     public static function getModuleApiFunc($module, $path, $method = 'get', $more = null)
     {
         if (!self::hasModule($module)) {
-            return;
+            return null;
         }
         $apilist = self::getModuleApiList($module);
         if (!empty($more)) {
@@ -905,6 +1145,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 return $item;
             }
         }
+        return null;
     }
 
     /**
@@ -947,7 +1188,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         });
     }
 
-    // different processing for REST API - see rst.php
+    /**
+     * Summary of callHandler - different processing for REST API - see rst.php
+     * @param mixed $handler
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return mixed
+     */
     public static function callHandler($handler, $vars, &$request = null)
     {
         if (empty($vars)) {
@@ -977,6 +1224,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         return $result;
     }
 
+    /**
+     * Summary of getQueryId
+     * @param string $method
+     * @param array<string, mixed> $vars
+     * @return string
+     */
     public static function getQueryId($method, $vars)
     {
         $queryId = $method;
@@ -1003,6 +1256,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
 
     /**
      * Handle request and get result
+     * @param mixed $handler
+     * @param array<string, mixed> $params
+     * @param mixed $request
+     * @uses xarCache::init()
+     * @uses xarDatabase::init()
+     * @throws \UnauthorizedOperationException
+     * @throws \ForbiddenOperationException
+     * @return mixed
      */
     public static function getResult($handler, $params, &$request = null)
     {
@@ -1080,6 +1341,9 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
 
     /**
      * Send Content-Type and JSON result to the browser
+     * @param mixed $result
+     * @param mixed $status
+     * @return void
      */
     public static function output($result, $status = 200)
     {
@@ -1117,6 +1381,9 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
 
     /**
      * Send CORS options to the browser in preflight checks
+     * @param mixed $vars
+     * @param mixed $request
+     * @return void
      */
     public static function sendCORSOptions($vars = [], &$request = null)
     {

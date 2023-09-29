@@ -47,20 +47,22 @@
  */
 interface xarTimerTraitInterface
 {
-    public static function setTimer($label): void;
+    public static function setTimer(string $label): void;
+    /** @return list<array<string, float>> */
     public static function getTimers(): array;
-    public static function wrapTimer($label, $callback, ...$args): mixed;
+    public static function wrapTimer(string $label, callable $callback, ...$args): mixed;
 }
 
 trait xarTimerTrait
 {
-    public static $enableTimer = false;  // activate with self::$enableTimer = true
-    protected static $_timerKeep = [];
-    protected static $_timerPrev = 0.0;
-    protected static $_timerMult = 1000.0;  // in milliseconds
-    protected static $_timerPrec = 3;
+    public static bool $enableTimer = false;  // activate with self::$enableTimer = true
+    /** @var list<array<string, float>> */
+    protected static array $_timerKeep = [];
+    protected static float $_timerPrev = 0.0;
+    protected static float $_timerMult = 1000.0;  // in milliseconds
+    protected static int $_timerPrec = 3;
 
-    public static function setTimer($label): void
+    public static function setTimer(string $label): void
     {
         if (static::$enableTimer) {
             $now = microtime(true);
@@ -73,6 +75,10 @@ trait xarTimerTrait
         }
     }
 
+    /**
+     * Summary of getTimers
+     * @return list<array<string, float>>
+     */
     public static function getTimers(): array
     {
         static::$_timerPrev = !empty($_SERVER['REQUEST_TIME_FLOAT']) ? (float) $_SERVER['REQUEST_TIME_FLOAT'] : 0.0;
@@ -83,7 +89,7 @@ trait xarTimerTrait
     /**
      * Utility method to set timer on callback function
      */
-    public static function wrapTimer($label, $callback, ...$args): mixed
+    public static function wrapTimer(string $label, callable $callback, ...$args): mixed
     {
         static::setTimer("start $label");
         $result = call_user_func($callback, ...$args);

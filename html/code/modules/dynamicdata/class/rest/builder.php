@@ -15,25 +15,42 @@ sys::import('modules.dynamicdata.class.objects.master');
 **/
 class DataObjectRESTBuilder extends xarObject
 {
-    protected static $openapi;
+    protected static string $openapi;
+    /** @var array<string, mixed> */
     protected static $config;
-    protected static $endpoint = 'rst.php/v1';
+    protected static string $endpoint = 'rst.php/v1';
+    /** @var array<string, mixed> */
     protected static $objects = [];
+    /** @var array<string> */
     protected static $internal = ['objects', 'properties', 'configurations'];
+    /** @var array<int, string> */
     protected static $proptype_names = [];
+    /** @var array<string, mixed> */
     protected static $paths = [];
+    /** @var array<string, mixed> */
     protected static $schemas = [];
+    /** @var array<string, mixed> */
     protected static $responses = [];
+    /** @var array<string, mixed> */
     protected static $parameters = [];
+    /** @var array<string, mixed> */
     protected static $requestBodies = [];
+    /** @var array<string, mixed> */
     protected static $securitySchemes = [];
+    /** @var list<array<string, mixed>> */
     protected static $tags = [];
+    /** @var array<string, mixed> */
     protected static $modules = [];
-    protected static $storage = 'database';  // database or apcu
-    protected static $expires = 12 * 60 * 60;  // 12 hours
-    protected static $timer = false;  // use xarTimerTrait
-    protected static $cache = false;  // use xarCacheTrait
+    protected static string $storage = 'database';  // database or apcu
+    protected static int $expires = 12 * 60 * 60;  // 12 hours
+    protected static bool $timer = false;  // use xarTimerTrait
+    protected static bool $cache = false;  // use xarCacheTrait
 
+    /**
+     * Summary of init
+     * @param array<string, mixed> $args
+     * @return void
+     */
     public static function init(array $args = [])
     {
         if (isset(self::$openapi)) {
@@ -61,6 +78,10 @@ class DataObjectRESTBuilder extends xarObject
         }
     }
 
+    /**
+     * Summary of parse_openapi
+     * @return mixed
+     */
     public static function parse_openapi()
     {
         if (!file_exists(self::$openapi)) {
@@ -71,6 +92,15 @@ class DataObjectRESTBuilder extends xarObject
         return $doc;
     }
 
+    /**
+     * Summary of create_openapi
+     * @param array<string> $selectedList
+     * @param string $storage
+     * @param int $expires
+     * @param bool $timer
+     * @param bool $cache
+     * @return void
+     */
     public static function create_openapi($selectedList = [], $storage = 'database', $expires = 12 * 60 * 60, $timer = false, $cache = false)
     {
         self::$storage = $storage;
@@ -85,6 +115,10 @@ class DataObjectRESTBuilder extends xarObject
         self::dump_openapi();
     }
 
+    /**
+     * Summary of dump_openapi
+     * @return void
+     */
     public static function dump_openapi()
     {
         $doc = [];
@@ -130,6 +164,10 @@ class DataObjectRESTBuilder extends xarObject
         file_put_contents($configFile, json_encode($configData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 
+    /**
+     * Summary of init_openapi
+     * @return void
+     */
     public static function init_openapi()
     {
         self::$paths = [];
@@ -144,6 +182,10 @@ class DataObjectRESTBuilder extends xarObject
         self::add_securitySchemes();
     }
 
+    /**
+     * Summary of add_parameters
+     * @return void
+     */
     public static function add_parameters()
     {
         self::$parameters['itemid'] = [
@@ -223,6 +265,10 @@ class DataObjectRESTBuilder extends xarObject
         ];
     }
 
+    /**
+     * Summary of add_responses
+     * @return void
+     */
     public static function add_responses()
     {
         self::$responses['itemid'] = [
@@ -250,6 +296,10 @@ class DataObjectRESTBuilder extends xarObject
         ];
     }
 
+    /**
+     * Summary of add_securitySchemes
+     * @return void
+     */
     public static function add_securitySchemes()
     {
         self::$securitySchemes['cookieAuth'] = [
@@ -274,6 +324,13 @@ class DataObjectRESTBuilder extends xarObject
         ];
     }
 
+    /**
+     * Summary of add_operation_security
+     * @param string $path
+     * @param string $method
+     * @param bool $add_auth
+     * @return void
+     */
     public static function add_operation_security($path, $method = 'get', $add_auth = true)
     {
         self::$paths[$path][$method]['responses']['401'] = [
@@ -292,6 +349,15 @@ class DataObjectRESTBuilder extends xarObject
         ];
     }
 
+    /**
+     * Summary of add_operation_requestBody
+     * @param string $path
+     * @param string $method
+     * @param string $schema
+     * @param array<string, mixed> $properties
+     * @param string $mediaType
+     * @return void
+     */
     public static function add_operation_requestBody($path, $method, $schema, $properties, $mediaType = 'application/json')
     {
         self::$paths[$path][$method]['requestBody'] = [
@@ -314,6 +380,16 @@ class DataObjectRESTBuilder extends xarObject
         ];
     }
 
+    /**
+     * Summary of add_operation_response
+     * @param string $path
+     * @param string $method
+     * @param string $schema
+     * @param array<string, mixed> $properties
+     * @param string $code
+     * @param string $mediaType
+     * @return void
+     */
     public static function add_operation_response($path, $method, $schema, $properties = [], $code = '200', $mediaType = 'application/json')
     {
         self::$paths[$path][$method]['responses'] = [
@@ -355,6 +431,11 @@ class DataObjectRESTBuilder extends xarObject
         }
     }
 
+    /**
+     * Summary of get_page_properties
+     * @param array<string, mixed> $itemproperties
+     * @return array<string, mixed>
+     */
     public static function get_page_properties($itemproperties)
     {
         $pageproperties = [
@@ -390,6 +471,11 @@ class DataObjectRESTBuilder extends xarObject
         return $pageproperties;
     }
 
+    /**
+     * Summary of get_list_properties
+     * @param array<string, mixed> $itemproperties
+     * @return array<string, mixed>
+     */
     public static function get_list_properties($itemproperties)
     {
         $listproperties = [
@@ -407,6 +493,11 @@ class DataObjectRESTBuilder extends xarObject
         return $listproperties;
     }
 
+    /**
+     * Summary of get_potential_objects
+     * @param array<string> $selectedList
+     * @return array<mixed>
+     */
     public static function get_potential_objects($selectedList = [])
     {
         $objectname = 'objects';
@@ -423,6 +514,11 @@ class DataObjectRESTBuilder extends xarObject
         return $items;
     }
 
+    /**
+     * Summary of add_objects
+     * @param array<string> $selectedList
+     * @return array<string, mixed>
+     */
     public static function add_objects($selectedList = [])
     {
         self::get_proptype_names();
@@ -456,6 +552,7 @@ class DataObjectRESTBuilder extends xarObject
             } elseif ($item['datastore'] !== 'dynamicdata' && !in_array($item['name'], self::$internal)) {
                 continue;
             }
+            $item['name'] = (string) $item['name'];
             self::$objects[$item['name']] = $item;
             self::$objects[$item['name']]['x-operations'] = [];
             self::$objects[$item['name']]['properties'] = self::get_object_properties($item['name']);
@@ -463,18 +560,26 @@ class DataObjectRESTBuilder extends xarObject
         return self::$objects;
     }
 
+    /**
+     * Summary of get_proptype_names
+     * @return array<int, string>
+     */
     public static function get_proptype_names()
     {
         if (empty(self::$proptype_names)) {
             self::$proptype_names = [];
             $proptypes = DataPropertyMaster::getPropertyTypes();
             foreach ($proptypes as $typeid => $proptype) {
-                self::$proptype_names[$typeid] = $proptype['name'];
+                self::$proptype_names[(int) $typeid] = (string) $proptype['name'];
             }
         }
         return self::$proptype_names;
     }
 
+    /**
+     * Summary of get_objects
+     * @return array<string, mixed>
+     */
     public static function get_objects()
     {
         if (empty(self::$objects)) {
@@ -487,6 +592,12 @@ class DataObjectRESTBuilder extends xarObject
         return self::$objects;
     }
 
+    /**
+     * Summary of get_object_properties
+     * @param string $objectname
+     * @throws \Exception
+     * @return list<array<string, mixed>>
+     */
     public static function get_object_properties($objectname)
     {
         $properties = [];
@@ -559,6 +670,13 @@ class DataObjectRESTBuilder extends xarObject
         return $properties;
     }
 
+    /**
+     * Summary of add_object_view
+     * @param string $objectname
+     * @param array<string, mixed> $properties
+     * @param string $path
+     * @return void
+     */
     public static function add_object_view($objectname, $properties, $path = '')
     {
         if (empty($path)) {
@@ -603,6 +721,12 @@ class DataObjectRESTBuilder extends xarObject
         }
     }
 
+    /**
+     * Summary of add_object_display
+     * @param string $objectname
+     * @param array<string, mixed> $properties
+     * @return void
+     */
     public static function add_object_display($objectname, $properties)
     {
         $path = '/objects/' . $objectname . '/{id}';
@@ -639,6 +763,12 @@ class DataObjectRESTBuilder extends xarObject
         ];
     }
 
+    /**
+     * Summary of add_object_create
+     * @param string $objectname
+     * @param array<string, mixed> $properties
+     * @return void
+     */
     public static function add_object_create($objectname, $properties)
     {
         $path = '/objects/' . $objectname;
@@ -661,6 +791,12 @@ class DataObjectRESTBuilder extends xarObject
         ];
     }
 
+    /**
+     * Summary of add_object_update
+     * @param string $objectname
+     * @param array<string, mixed> $properties
+     * @return void
+     */
     public static function add_object_update($objectname, $properties)
     {
         $path = '/objects/' . $objectname . '/{id}';
@@ -685,6 +821,12 @@ class DataObjectRESTBuilder extends xarObject
         ];
     }
 
+    /**
+     * Summary of add_object_delete
+     * @param string $objectname
+     * @param array<string, mixed> $properties
+     * @return void
+     */
     public static function add_object_delete($objectname, $properties)
     {
         $path = '/objects/' . $objectname . '/{id}';
@@ -708,6 +850,10 @@ class DataObjectRESTBuilder extends xarObject
         ];
     }
 
+    /**
+     * Summary of add_whoami
+     * @return void
+     */
     public static function add_whoami()
     {
         $path = '/whoami';
@@ -734,6 +880,11 @@ class DataObjectRESTBuilder extends xarObject
         self::add_operation_security($path, $method);
     }
 
+    /**
+     * Summary of add_modules
+     * @param array<string> $selectedList
+     * @return void
+     */
     public static function add_modules($selectedList = [])
     {
         $path = '/modules';
@@ -769,6 +920,12 @@ class DataObjectRESTBuilder extends xarObject
         }
     }
 
+    /**
+     * Summary of add_module_apilist
+     * @param string $module
+     * @param array<string, mixed> $apilist
+     * @return void
+     */
     public static function add_module_apilist($module, $apilist)
     {
         $path = '/modules/' . $module;
@@ -867,6 +1024,14 @@ class DataObjectRESTBuilder extends xarObject
         self::$tags[] = ['name' => $module . '_module', 'description' => $module . ' module operations'];
     }
 
+    /**
+     * Summary of add_module_api
+     * @param string $module
+     * @param string $api
+     * @param array<string, mixed> $item
+     * @throws \Exception
+     * @return void
+     */
     public static function add_module_api($module, $api, $item)
     {
         $path = '/modules/' . $module . '/' . $item['path'];
@@ -956,6 +1121,11 @@ class DataObjectRESTBuilder extends xarObject
         self::$schemas[$schema] = $item['response'];
     }
 
+    /**
+     * Summary of parse_api_parameters
+     * @param mixed $api_parameters
+     * @return list<array<string, mixed>>
+     */
     public static function parse_api_parameters($api_parameters)
     {
         $parameters = [];
@@ -1030,6 +1200,11 @@ class DataObjectRESTBuilder extends xarObject
         return $parameters;
     }
 
+    /**
+     * Summary of parse_api_requestBody
+     * @param array<mixed> $requestBody
+     * @return array<string, mixed>
+     */
     public static function parse_api_requestBody($requestBody)
     {
         $properties = [];
@@ -1061,6 +1236,11 @@ class DataObjectRESTBuilder extends xarObject
         return $properties;
     }
 
+    /**
+     * Summary of get_potential_modules
+     * @param array<string> $selectedList
+     * @return array<string, mixed>
+     */
     public static function get_potential_modules($selectedList = [])
     {
         $moduleList = ['dynamicdata'];
@@ -1112,6 +1292,11 @@ class DataObjectRESTBuilder extends xarObject
         return $items;
     }
 
+    /**
+     * Summary of find_default_api_functions
+     * @param string $module
+     * @return array<string, mixed>
+     */
     public static function find_default_api_functions($module)
     {
         $apiList = [];
@@ -1150,6 +1335,10 @@ class DataObjectRESTBuilder extends xarObject
         return $apiList;
     }
 
+    /**
+     * Summary of add_token
+     * @return void
+     */
     public static function add_token()
     {
         $path = '/token';
@@ -1210,6 +1399,12 @@ class DataObjectRESTBuilder extends xarObject
         self::add_operation_security($path, $method);
     }
 
+    /**
+     * Summary of match_proptype
+     * @param DataProperty $property
+     * @throws \Exception
+     * @return array<string, mixed>
+     */
     public static function match_proptype($property)
     {
         // @todo improve matching types

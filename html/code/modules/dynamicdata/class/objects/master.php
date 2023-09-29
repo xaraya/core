@@ -916,16 +916,16 @@ class DataObjectMaster extends xarObject
      *     $args['objectid'] id of the object you're looking for, or
      *     $args['name'] name of the object you're looking for
      *     $args['class'] optional classname (e.g. <module>_DataObject)
-     * @return DataObject|void the requested object definition
+     * @return DataObject|null the requested object definition
      * @todo  automatic sub-classing per module (and itemtype) ?
     **/
     public static function getObject(array $args = [])
     {
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
         $info = self::_getObjectInfo($args);
-        // If we have no such object, just return false for now
+        // If we have no such object, just return null for now
         if (empty($info)) {
-            return;
+            return null;
         }
         $data = [];
         // The info method calls an entry for each of the object's properties. We only need one
@@ -991,7 +991,7 @@ class DataObjectMaster extends xarObject
      *     $args['objectid'] id of the object you're looking for, or
      *     $args['name'] name of the object you're looking for
      *     $args['class'] optional classname (e.g. <module>_DataObject[_List])
-     * @return DataObjectList|void the requested object definition
+     * @return DataObjectList|null the requested object definition
      * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
