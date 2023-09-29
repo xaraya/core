@@ -15,6 +15,7 @@
 
 class xarCache_Dummy_Storage extends xarCache_Storage implements ixarCache_Storage
 {
+    /** @var array<string, mixed> */
     public static $varcache = [];
 
     public function __construct(array $args = [])

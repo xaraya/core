@@ -43,6 +43,8 @@ class xarSessionLessCache extends xarObject
     /**
      * Check session-less page caching
      *
+     * @param ?array<mixed> $sessionLessList
+     * @param int $autoCachePeriod
      * @return void exit if session-less page caching finds a hit
      */
     public static function isCached($sessionLessList = null, $autoCachePeriod = 0)
@@ -98,6 +100,11 @@ class xarSessionLessCache extends xarObject
         return;
     }
 
+    /**
+     * Summary of getCached
+     * @param string $cache_file
+     * @return void
+     */
     public static function getCached($cache_file)
     {
         // send the content of the cache file to the browser
@@ -106,6 +113,10 @@ class xarSessionLessCache extends xarObject
         //xarCache_CleanCached('Page');
     }
 
+    /**
+     * Summary of setCached
+     * @return void
+     */
     public static function setCached()
     {
         // tell xarPageCache::setCached() that we want to save another copy here

@@ -18,7 +18,9 @@ class xarAutoSessionCache extends xarObject
 {
     /**
      * Log the HIT / MISS status of URLs requested by first-time visitors
-     *
+     * @param string $status
+     * @param int $autoCachePeriod
+     * @return void
      */
     public static function logStatus($status = 'MISS', $autoCachePeriod = 0)
     {
@@ -51,7 +53,7 @@ class xarAutoSessionCache extends xarObject
 
     /**
      * Re-calculate Page.SessionLess based on autocache.log and save in config.caching.php
-     *
+     * @return void
      */
     public static function refreshSessionLessList()
     {
@@ -64,6 +66,7 @@ class xarAutoSessionCache extends xarObject
             is_writable($cachingConfigFile)) {
             $cachingConfiguration = [];
             include $cachingConfigFile;
+            /** @var array<string, mixed> $cachingConfiguration */
             if (!empty($cachingConfiguration['AutoCache.MaxPages']) &&
                 file_exists(xarOutputCache::$cacheDir.'/autocache.log') &&
                 filesize(xarOutputCache::$cacheDir.'/autocache.log') > 0) {

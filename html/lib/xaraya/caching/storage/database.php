@@ -14,11 +14,12 @@
 
 class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public $table = '';
-    public $lastkey = null;
-    public $lastid = null;
-    public $value = null;
-    private $dbconn = null;
+    public string $table = '';
+    public ?string $lastkey = null;
+    public ?int $lastid = null;
+    public mixed $value = null;
+    private ?object $dbconn = null;
+    /** @var array<string, mixed> */
     private $lastinfo = null;
 
     public function __construct(array $args = [])
@@ -27,6 +28,10 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
         $this->storage = 'database';
     }
 
+    /**
+     * Summary of getTable
+     * @return string
+     */
     public function getTable()
     {
         if (!empty($this->table)) {
@@ -37,6 +42,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
             return $this->table;
         } else {
             // can't use this storage until the core is loaded !
+            return '';
         }
     }
 
@@ -289,7 +295,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
     {
         $table = $this->getTable();
         if (empty($table)) {
-            return;
+            return [];
         }
 
         $query = "SELECT SUM(size), COUNT(id), MAX(time)
@@ -348,7 +354,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
     {
         $table = $this->getTable();
         if (empty($table)) {
-            return false;
+            return [];
         }
 
         $query = "SELECT id, time, cache_key, code, size, cache_check
@@ -375,7 +381,7 @@ class xarCache_Database_Storage extends xarCache_Storage implements ixarCache_St
     {
         $table = $this->getTable();
         if (empty($table)) {
-            return false;
+            return [];
         }
 
         $query = "SELECT cache_key, COUNT(*) as count

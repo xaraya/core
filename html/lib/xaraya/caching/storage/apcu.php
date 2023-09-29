@@ -16,8 +16,8 @@
 sys::import('xaraya.caching.storage');
 class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public $lastkey = null;
-    public $value = null;
+    public ?string $lastkey = null;
+    public mixed $value = null;
 
     public function __construct(array $args = [])
     {
@@ -103,7 +103,7 @@ class xarCache_APCu_Storage extends xarCache_Storage implements ixarCache_Storag
         $cache_key = $this->getCacheKey($key);
         // filter out the keys that don't start with the right type/namespace prefix
         if (!empty($this->prefix) && strpos($cache_key, $this->prefix) !== 0) {
-            return $cache_key;
+            return [];
         }
         // CHECKME: this assumes the code is always hashed
         if (preg_match('/^(.*)-(\w*)$/', $cache_key, $matches)) {

@@ -19,13 +19,15 @@
  */
 class xarVariableCache extends xarObject
 {
-    public static $cacheTime      = 7200;
-    public static $cacheSizeLimit = 2097152;
+    public static int $cacheTime      = 7200;
+    public static int $cacheSizeLimit = 2097152;
+    /** @var ?array<string, mixed> */
     public static $cacheScopes    = null;
-    public static $cacheStorage   = null;
+    public static ?ixarCache_Storage $cacheStorage   = null;
 
+    /** @var ?array<mixed> */
     public static $cacheSettings  = null;
-    public static $cacheDir       = null;
+    public static ?string $cacheDir       = null;
 
     /**
      * Initialise the variable caching options
@@ -116,7 +118,7 @@ class xarVariableCache extends xarObject
 
     /**
      * Get cache settings for the variables
-     * @return array<mixed> 
+     * @return array<mixed>
      */
     public static function getCacheSettings()
     {
@@ -211,7 +213,7 @@ class xarVariableCache extends xarObject
      *
      * @param string $cacheKey the key identifying the particular variable you want to access
      * @param string|object $value    the new value for that variable
-     * @param string $expire   optional expiration time for the varable (default is cacheTime)
+     * @param ?int $expire   optional expiration time for the varable (default is cacheTime)
      * @return void
     **/
     public static function setCached($cacheKey, $value, $expire = null)

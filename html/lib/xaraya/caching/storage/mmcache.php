@@ -93,10 +93,10 @@ class xarCache_MMCache_Storage extends xarCache_Storage implements ixarCache_Sto
         $output = ob_get_contents();
         ob_end_clean();
         if (preg_match('/Memory Allocated<.+?>([0-9,]+) Bytes/', $output, $matches)) {
-            $this->size = strtr($matches[1], [',' => '']);
+            $this->size = intval(strtr($matches[1], [',' => '']));
         }
         if (preg_match('/Cached Keys<.+?>(\d+)/', $output, $matches)) {
-            $this->items = $matches[1];
+            $this->items = intval($matches[1]);
         }
         // TODO: extract other values
 

@@ -16,16 +16,16 @@
 
 class xarOutputCache extends xarObject
 {
-    public static $cacheDir             = 'var/cache/output';
-    public static $cacheTheme           = '';
-    public static $cacheSizeLimit       = 2097152;
-    public static $cacheCookie          = 'XARAYASID';
-    public static $cacheLocale          = 'en_US.utf-8';
+    public static string $cacheDir             = 'var/cache/output';
+    public static string $cacheTheme           = '';
+    public static int $cacheSizeLimit       = 2097152;
+    public static string $cacheCookie          = 'XARAYASID';
+    public static string $cacheLocale          = 'en_US.utf-8';
 
-    public static $pageCacheIsEnabled   = false;
-    public static $blockCacheIsEnabled  = false;
-    public static $moduleCacheIsEnabled = false;
-    public static $objectCacheIsEnabled = false;
+    public static bool $pageCacheIsEnabled   = false;
+    public static bool $blockCacheIsEnabled  = false;
+    public static bool $moduleCacheIsEnabled = false;
+    public static bool $objectCacheIsEnabled = false;
 
     /**
      * Initialise the caching options

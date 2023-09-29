@@ -16,19 +16,20 @@
 
 class xarPageCache extends xarObject
 {
-    public static $cacheTime         = 1800;
-    public static $cacheDisplay      = 0;
-    public static $cacheShowTime     = 1;
-    public static $cacheExpireHeader = 0;
-    public static $cacheGroups       = '';
-    public static $cacheHookedOnly   = 0;
-    public static $cacheSizeLimit    = 2097152;
-    public static $cacheStorage      = null;
+    public static int $cacheTime         = 1800;
+    public static int $cacheDisplay      = 0;
+    public static int $cacheShowTime     = 1;
+    public static int $cacheExpireHeader = 0;
+    public static string $cacheGroups       = '';
+    public static int $cacheHookedOnly   = 0;
+    public static int $cacheSizeLimit    = 2097152;
+    public static ?ixarCache_Storage $cacheStorage = null;
 
-    public static $cacheSettings     = null;
-    public static $cacheKey          = null;
-    public static $cacheCode         = null;
-    public static $cacheNoSession    = 0;
+    /** @var ?array<mixed> */
+    public static $cacheSettings      = null;
+    public static ?string $cacheKey   = null;
+    public static ?string $cacheCode  = null;
+    public static int $cacheNoSession = 0;
 
     /**
      * Initialise the page caching options
@@ -131,7 +132,7 @@ class xarPageCache extends xarObject
 
     /**
      * Get cache settings for the pages
-     * @return array<mixed> 
+     * @return array<mixed>
      */
     public static function getCacheSettings()
     {
@@ -192,7 +193,7 @@ class xarPageCache extends xarObject
     /**
      * Send HTTP headers for page caching (or return 304 Not Modified)
      *
-     *
+     * @param int $modtime
      * @return void
      */
     public static function sendHeaders($modtime = 0)
@@ -392,6 +393,7 @@ class xarPageCache extends xarObject
 
     /**
      * Flush page cache entries
+     * @param string $cacheKey
      * @return void
      */
     public static function flushCached($cacheKey)
@@ -415,6 +417,7 @@ class xarPageCache extends xarObject
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  *
+ * @param string $cacheGroups
  * @return boolean
  * @todo Note : don't do this if admins get cached too :)
 **/

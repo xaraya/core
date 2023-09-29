@@ -16,22 +16,24 @@
 
 class xarBlockCache extends xarObject
 {
-    public static $cacheTime      = 7200;
-    public static $cacheSizeLimit = 2097152;
-    public static $cacheStorage   = null;
+    public static int $cacheTime      = 7200;
+    public static int $cacheSizeLimit = 2097152;
+    public static ?ixarCache_Storage $cacheStorage   = null;
 
+    /** @var ?array<mixed> */
     public static $cacheSettings  = null;
-    public static $cacheKey       = null;
-    public static $cacheCode      = null;
+    public static ?string $cacheKey       = null;
+    public static ?string $cacheCode      = null;
 
-    public static $noCache        = null;
-    public static $pageShared     = null;
-    public static $userShared     = null;
-    public static $expireTime     = null;
+    public static ?int $noCache        = null;
+    public static ?int $pageShared     = null;
+    public static ?int $userShared     = null;
+    public static ?int $expireTime     = null;
 
     /**
      * Initialise the block caching options
      *
+     * @param array<string, mixed> $args
      * @return boolean true on success, false on failure
      */
     public static function init(array $args = [])
@@ -125,7 +127,7 @@ class xarBlockCache extends xarObject
 
     /**
      * Get cache settings for the blocks
-     * @return array<mixed> 
+     * @return array<mixed>
      */
     /* As of soloblocks each block carries its own settings which we get from blockinfo
     public static function getCacheSettings()
@@ -336,6 +338,7 @@ class xarBlockCache extends xarObject
 
     /**
      * Flush block cache entries
+     * @param string $cacheKey
      * @return void
      */
     public static function flushCached($cacheKey)

@@ -24,6 +24,10 @@ class xarCache_Doctrine_Storage extends xarCache_Storage implements ixarCache_St
         $this->storage = 'doctrine';
     }
 
+    /**
+     * Summary of getProvider
+     * @return object|null
+     */
     public function getProvider()
     {
         return $this->provider;
@@ -124,7 +128,7 @@ class xarCache_Doctrine_Storage extends xarCache_Storage implements ixarCache_St
     public function getCacheInfo()
     {
         if (empty($this->provider)) {
-            return;
+            return [];
         }
 
         // this is the size of the whole cache for the current server

@@ -16,26 +16,32 @@
 
 class xarObjectCache extends xarObject
 {
-    public static $cacheTime      = 7200;
-    public static $cacheSizeLimit = 2097152;
+    public static int $cacheTime      = 7200;
+    public static int $cacheSizeLimit = 2097152;
+    /** @var ?array<mixed> */
     public static $cacheMethods   = null;
-    public static $cacheStorage   = null;
+    public static ?ixarCache_Storage $cacheStorage   = null;
 
+    /** @var ?array<mixed> */
     public static $cacheSettings  = null;
-    public static $cacheKey       = null;
-    public static $cacheCode      = null;
+    public static ?string $cacheKey       = null;
+    public static ?string $cacheCode      = null;
 
-    public static $noCache        = null;
-    public static $userShared     = null;
-    public static $expireTime     = null;
+    public static ?int $noCache        = null;
+    public static ?int $userShared     = null;
+    public static ?int $expireTime     = null;
 
+    /** @var ?array<mixed> */
     public static $pageTitle      = [];
+    /** @var array<mixed> */
     public static $styleList      = [];
+    /** @var array<mixed> */
     public static $scriptList     = [];
 
     /**
      * Initialise the object caching options
      *
+     * @param array<string, mixed> $args
      * @return boolean true on success, false on failure
      */
     public static function init(array $args = [])
@@ -133,7 +139,7 @@ class xarObjectCache extends xarObject
 
     /**
      * Get cache settings for the objects
-     * @return array<mixed> 
+     * @return array<mixed>
      */
     public static function getCacheSettings()
     {
@@ -316,6 +322,7 @@ class xarObjectCache extends xarObject
 
     /**
      * Flush object cache entries
+     * @param string $cacheKey
      * @return void
      */
     public static function flushCached($cacheKey)
@@ -329,6 +336,8 @@ class xarObjectCache extends xarObject
 
     /**
      * Keep track of some page title for caching - see xarTpl::setPageTitle()
+     * @param ?string $title
+     * @param ?string $module
      * @return void
      */
     public static function setPageTitle($title = null, $module = null)
@@ -341,9 +350,10 @@ class xarObjectCache extends xarObject
 
     /**
      * Keep track of some stylesheet for caching - see xarMod::apiFunc('themes','user','register')
+     * @param array<string, mixed> $args
      * @return void
      */
-    public static function addStyle(array $args=[])
+    public static function addStyle(array $args = [])
     {
         if (empty(self::$cacheKey)) {
             return;
@@ -353,6 +363,7 @@ class xarObjectCache extends xarObject
 
     /**
      * Keep track of some javascript for caching - see xarMod::apiFunc('themes','user','registerjs')
+     * @param array<string, mixed> $args
      * @return void
      */
     public static function addJavaScript(array $args = [])

@@ -22,12 +22,49 @@ sys::import('xaraya.exceptions');
 **/
 interface IxarTemplateCache
 {
+    /**
+     * Summary of init
+     * @param string $dir
+     * @param bool $active
+     * @return void
+     */
     public static function init($dir, $active);
+    /**
+     * Summary of getKey
+     * @param string $fileName
+     * @return string
+     */
     public static function getKey($fileName);
+    /**
+     * Summary of saveKey
+     * @param string $fileName
+     * @return bool
+     */
     public static function saveKey($fileName);
+    /**
+     * Summary of saveEntry
+     * @param string $fileName
+     * @param string $data
+     * @return bool
+     */
     public static function saveEntry($fileName, $data);
+    /**
+     * Summary of isDirty
+     * @param string $fileName
+     * @return bool
+     */
     public static function isDirty($fileName);
+    /**
+     * Summary of cacheFile
+     * @param string $fileName
+     * @return string
+     */
     public static function cacheFile($fileName);   // wrong for sure
+    /**
+     * Summary of sourceFile
+     * @param string $key
+     * @return string|null
+     */
     public static function sourceFile($key);       // arguably wrong
 }
 
@@ -52,15 +89,17 @@ interface IxarTemplateCache
 class xarTemplateCache extends xarObject implements IxarTemplateCache
 {
     // Inactive means that we reuse one file in the cache all the time.
-    private static $inactiveKeySeed    = 'youreallyreallyneedtocachetemplates';
-    private static $dir         = '';    // location
-    private static $active      = true;  // template cache is active by default.
+    private static string $inactiveKeySeed    = 'youreallyreallyneedtocachetemplates';
+    private static string $dir         = '';    // location
+    private static bool $active      = true;  // template cache is active by default.
 
     /**
      * Initialize template cache
      *
      * @param string $dir    location of the cache
      * @param bool   $active is the cache active?
+     * @throws \GeneralException
+     * @return void
     **/
     public static function init($dir, $active)
     {
@@ -93,7 +132,7 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
     {
         // Simple MD5 hash over the filename determines the key for the cache
         if (!self::isActive()) {
-            $fileName=self::$inactiveKeySeed;
+            $fileName = self::$inactiveKeySeed;
         }
         return md5($fileName);
     }
@@ -125,6 +164,10 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
     }
 
     /* Private methods */
+    /**
+     * Summary of isActive
+     * @return bool
+     */
     private static function isActive()
     {
         return self::$active;
@@ -182,11 +225,21 @@ class xarTemplateCache extends xarObject implements IxarTemplateCache
         return true; // either cache not active of entry needs recompilation
     }
 
+    /**
+     * Summary of cacheFile
+     * @param string $fileName
+     * @return string
+     */
     public static function cacheFile($fileName)
     {
         return self::$dir . '/' . self::getKey($fileName) . '.php';
     }
 
+    /**
+     * Summary of sourceFile
+     * @param string $key
+     * @return string|null
+     */
     public static function sourceFile($key)
     {
         $sourceFile = null;

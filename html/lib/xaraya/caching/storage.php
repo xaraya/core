@@ -16,26 +16,26 @@ sys::import('xaraya.caching.interfaces');
 
 class xarCache_Storage extends xarObject
 {
-    public $storage    = '';        // filesystem, database, apcu or doctrine cache
-    public $cachedir   = 'var/cache/output';
-    public $type       = '';        // page, block, object, module, template, core, ...
-    public $code       = '';        // URL factors et al.
-    public $compressed = false;
-    public $sizelimit  = 10000000;
-    public $expire     = 0;
-    public $logfile    = null;
-    public $logsize    = 2000000;   // for each logfile
-    public $namespace  = '';        // optional namespace prefix for the cache keys (= sitename, version, ...)
-    public $provider   = null;      // instantiated Doctrine CacheProvider (for doctrine)
+    public string $storage    = '';        // filesystem, database, apcu or doctrine cache
+    public string $cachedir   = 'var/cache/output';
+    public string $type       = '';        // page, block, object, module, template, core, ...
+    public string $code       = '';        // URL factors et al.
+    public bool $compressed = false;
+    public int $sizelimit  = 10000000;
+    public int $expire     = 0;
+    public ?string $logfile    = null;
+    public int $logsize    = 2000000;   // for each logfile
+    public string $namespace  = '';        // optional namespace prefix for the cache keys (= sitename, version, ...)
+    public ?object $provider   = null;      // instantiated Doctrine CacheProvider (for doctrine)
 
-    public $prefix     = '';        // the default prefix for the cache keys will be 'type/namespace' (except in filesystem)
+    public string $prefix     = '';        // the default prefix for the cache keys will be 'type/namespace' (except in filesystem)
 
-    public $size       = 0;
-    public $items      = 0;
-    public $hits       = 0;
-    public $misses     = 0;
-    public $modtime    = 0;         // last modification time
-    public $reached    = null;      // result of sizeLimitReached()
+    public int $size       = 0;
+    public int $items      = 0;
+    public int $hits       = 0;
+    public int $misses     = 0;
+    public int $modtime    = 0;         // last modification time
+    public ?bool $reached    = null;      // result of sizeLimitReached()
 
     /**
      * Factory class method for cache storage (only 'storage' is semi-required)
@@ -52,7 +52,7 @@ class xarCache_Storage extends xarObject
      *     integer $logsize the maximum size of the logfile
      *     string  $namespace optional namespace prefix for the cache keys
      *     object  $provider an instantiated Doctrine CacheProvider (for doctrine)
-     * @return object the specified cache storage
+     * @return ixarCache_Storage the specified cache storage
      */
     public static function getCacheStorage(array $args = [])
     {
@@ -146,6 +146,7 @@ class xarCache_Storage extends xarObject
     /**
      * Constructor
      *
+     * @param array<string, mixed> $args
      * @todo using an args array here is taking the easy way out, lets define a proper interface
      */
     public function __construct(array $args = [])
@@ -187,6 +188,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Set the current namespace prefix
+     * @param string $namespace
+     * @return void
      */
     public function setNamespace($namespace = '')
     {
@@ -197,6 +200,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Set the current Doctrine CacheProvider (for doctrine)
+     * @param mixed $provider
+     * @return void
      */
     public function setProvider($provider = '')
     {
@@ -205,6 +210,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Set the current code suffix
+     * @param string $code
+     * @return void
      */
     public function setCode($code = '')
     {
@@ -213,6 +220,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Get the actual cache key used for storage (= including namespace and code)
+     * @param string $key
+     * @return string
      */
     public function getCacheKey($key = '')
     {
@@ -229,6 +238,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Set the current expiration time (not used by all storage)
+     * @param int $expire
+     * @return void
      */
     public function setExpire($expire = 0)
     {
@@ -237,6 +248,7 @@ class xarCache_Storage extends xarObject
 
     /**
      * Get the last modification time (not supported by all storage)
+     * @return int
      */
     public function getLastModTime()
     {
@@ -245,6 +257,10 @@ class xarCache_Storage extends xarObject
 
     /**
      * Check if the data is cached
+     * @param string $key
+     * @param int $expire
+     * @param int $log
+     * @return bool
      */
     public function isCached($key = '', $expire = 0, $log = 1)
     {
@@ -254,6 +270,10 @@ class xarCache_Storage extends xarObject
 
     /**
      * Get the cached data
+     * @param string $key
+     * @param int $output
+     * @param int $expire
+     * @return mixed
      */
     public function getCached($key = '', $output = 0, $expire = 0)
     {
@@ -263,6 +283,10 @@ class xarCache_Storage extends xarObject
 
     /**
      * Set the cached data
+     * @param string $key
+     * @param mixed $value
+     * @param int $expire
+     * @return void
      */
     public function setCached($key = '', $value = '', $expire = 0)
     {
@@ -271,6 +295,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Delete the cached data
+     * @param string $key
+     * @return void
      */
     public function delCached($key = '')
     {
@@ -279,13 +305,15 @@ class xarCache_Storage extends xarObject
 
     /**
      * Get detailed information about the cache key (not supported by all storage)
+     * @param string $key
+     * @return array<string, mixed>
      */
     public function keyInfo($key = '')
     {
         $cache_key = $this->getCacheKey($key);
         // filter out the keys that don't start with the right type/namespace prefix
         if (!empty($this->prefix) && strpos($cache_key, $this->prefix) !== 0) {
-            return $cache_key;
+            return [];
         }
         // CHECKME: this assumes the code is always hashed
         if (preg_match('/^(.*)-(\w*)$/', $cache_key, $matches)) {
@@ -308,6 +336,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Flush all cache keys that start with this key (= for all code suffixes)
+     * @param string $key
+     * @return void
      */
     public function flushCached($key = '')
     {
@@ -335,6 +365,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Clean up the cache based on expiration time
+     * @param int $expire
+     * @return void
      */
     public function cleanCached($expire = 0)
     {
@@ -371,6 +403,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Do garbage collection based on expiration time (not supported by all storage)
+     * @param int $expire
+     * @return void
      */
     public function doGarbageCollection($expire = 0)
     {
@@ -379,6 +413,7 @@ class xarCache_Storage extends xarObject
 
     /**
      * Get information about the cache (not supported by all storage)
+     * @return array<string, mixed>
      */
     public function getCacheInfo()
     {
@@ -391,6 +426,8 @@ class xarCache_Storage extends xarObject
 
     /**
      * Get the current cache size (not supported by all storage)
+     * @param bool $countitems
+     * @return int
      */
     public function getCacheSize($countitems = false)
     {
@@ -400,6 +437,7 @@ class xarCache_Storage extends xarObject
 
     /**
      * Get the number of items in cache (not supported by all storage)
+     * @return int
      */
     public function getCacheItems()
     {
@@ -408,6 +446,7 @@ class xarCache_Storage extends xarObject
 
     /**
      * Check if we reached the size limit for this cache (not supported by all storage)
+     * @return bool
      */
     public function sizeLimitReached()
     {
@@ -440,6 +479,9 @@ class xarCache_Storage extends xarObject
 
     /**
      * Log the HIT / MISS status for cache keys
+     * @param string $status
+     * @param string $key
+     * @return void
      */
     public function logStatus($status = 'MISS', $key = '')
     {
@@ -468,6 +510,9 @@ class xarCache_Storage extends xarObject
 
     /**
      * Save the cached data to file
+     * @param string $key
+     * @param string $filename
+     * @return void
      */
     public function saveFile($key = '', $filename = '')
     {
@@ -497,6 +542,10 @@ class xarCache_Storage extends xarObject
         }
     }
 
+    /**
+     * Summary of getCachedList
+     * @return array<mixed>
+     */
     public function getCachedList()
     {
         $list = [];
@@ -516,6 +565,10 @@ class xarCache_Storage extends xarObject
         return $list;
     }
 
+    /**
+     * Summary of getCachedKeys
+     * @return array<string, int>
+     */
     public function getCachedKeys()
     {
         $list = $this->getCachedList();

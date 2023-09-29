@@ -14,10 +14,10 @@
 
 class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public $dir = '';                   // Directory where the cached files are stored
-    public $ext = 'php';                // Extension for the cached files
-    public $blksize = 0;
-    public $bsknown = false;
+    public string $dir = '';                   // Directory where the cached files are stored
+    public string $ext = 'php';                // Extension for the cached files
+    public int $blksize = 0;
+    public bool $bsknown = false;
 
     public function __construct(array $args = [])
     {
@@ -225,6 +225,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
 
     /**
      * private function for use in flushCached()
+     * @param string $key
+     * @param string|bool $dir
+     * @return void
      */
     private function _flushDirCached($key = '', $dir = false)
     {
@@ -254,6 +257,9 @@ class xarCache_FileSystem_Storage extends xarCache_Storage implements ixarCache_
 
     /**
      * private function for use in getCacheSize()
+     * @param string|bool $dir
+     * @param bool $countitems
+     * @return float|int
      */
     private function _getCacheDirSize($dir = false, $countitems = false)
     {

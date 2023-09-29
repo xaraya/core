@@ -87,7 +87,7 @@ class xarCache_XCache_Storage extends xarCache_Storage implements ixarCache_Stor
                 // we've seen enough
                 break;
             }
-        // XCache doesn't support caching resources, so we forget about it
+            // XCache doesn't support caching resources, so we forget about it
         } elseif (is_resource($value)) {
             return;
         }

@@ -15,13 +15,15 @@
  */
 class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_Storage
 {
-    public $host       = 'localhost';
-    public $port       = 11211; // default values, cfr. http://php.net/manual/en/function.memcache-addserver.php
-    public $persistent = true;
-    public $weight     = 1;
-    public $timeout    = 1;
-    public $retry      = 15;
+    /** @var string|array<mixed> */
+    public $host    = 'localhost';
+    public int $port       = 11211; // default values, cfr. http://php.net/manual/en/function.memcache-addserver.php
+    public bool $persistent = true;
+    public int $weight     = 1;
+    public int $timeout    = 1;
+    public int $retry      = 15;
 
+    /** @var Memcache */
     public $memcache   = null;
 
     public function __construct(array $args = [])
@@ -86,25 +88,25 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
         $this->storage = 'memcached';
     }
 
-/*
-    public function setNamespace($namespace = '')
-    {
-        // customize with site prefix, versioned namespaces etc. see bug 6315
-        parent::setNamespace($namespace);
-    }
+    /*
+        public function setNamespace($namespace = '')
+        {
+            // customize with site prefix, versioned namespaces etc. see bug 6315
+            parent::setNamespace($namespace);
+        }
 
-    public function getCacheKey($key = '')
-    {
-        // customize with site prefix, versioned namespaces etc. see bug 6315
-        return parent::getCacheKey($key);
-    }
+        public function getCacheKey($key = '')
+        {
+            // customize with site prefix, versioned namespaces etc. see bug 6315
+            return parent::getCacheKey($key);
+        }
 
-    public function flushCached($key = '')
-    {
-        // customize with site prefix, versioned namespaces etc. see bug 6315
-        return parent::flushCached($key);
-    }
-*/
+        public function flushCached($key = '')
+        {
+            // customize with site prefix, versioned namespaces etc. see bug 6315
+            return parent::flushCached($key);
+        }
+    */
 
     public function isCached($key = '', $expire = 0, $log = 1)
     {
@@ -194,7 +196,7 @@ class xarCache_MemCached_Storage extends xarCache_Storage implements ixarCache_S
     public function getCacheInfo()
     {
         if (empty($this->memcache)) {
-            return;
+            return [];
         }
 
         // this is the size of the whole cache for the current server
