@@ -8,7 +8,8 @@
         "nyholm/psr7": "dev-master",
         "nyholm/psr7-server": "^1.0.2",
         "phpdocumentor/reflection": "5.x-dev",
-        "webonyx/graphql-php": "dev-master"
+        "webonyx/graphql-php": "dev-master",
+        "xaraya/modules": "^2.4@dev"
     },
     "suggest": {
         "phpstan/phpstan": "PHP Static Analysis Tool - discover bugs in your code without running it",
