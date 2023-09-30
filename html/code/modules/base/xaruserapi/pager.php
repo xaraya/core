@@ -52,7 +52,7 @@ function base_userapi_pager(Array $args=array())
 
     if (!isset($itemsperpage) || !is_numeric($itemsperpage)) {
         if (empty($module))
-            list($module) = xarController::$request->getInfo();
+            $module = xarController::getRequest()->getModule();
         if (!empty($module))
             // @TODO: setting per itemtype?
             // if (!empty($itemtype)) $itemsperpage = xarModUserVars::get($module, 'items_per_page'.$itemtype);

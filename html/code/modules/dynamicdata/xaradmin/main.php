@@ -29,9 +29,7 @@ function dynamicdata_admin_main()
         return;
     }
 
-    $refererinfo = xarController::getRequest()->getInfo(xarServer::getVar('HTTP_REFERER'));
-    $info = xarController::getRequest()->getInfo();
-    $samemodule = $info[0] == $refererinfo[0];
+    $samemodule = xarController::isRefererSameModule();
 
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
         return xarTpl::module('dynamicdata', 'admin', 'overview');

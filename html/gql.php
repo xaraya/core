@@ -22,7 +22,7 @@ use GraphQL\GraphQL;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     xarGraphQL::send_cors_options();
-    exit(0);
+    return;
 }
 
 // initialize bootstrap

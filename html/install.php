@@ -116,6 +116,7 @@ define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
  */
 function xarInstallLoader()
 {
+    global $systemConfiguration;
     $xmlextension = extension_loaded('xml');
     $xslextension = extension_loaded('xsl');
     $mbsextension = extension_loaded('mbstring');

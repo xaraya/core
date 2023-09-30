@@ -63,7 +63,7 @@ class xarSec extends xarObject
     public static function genAuthKey($modName = NULL)
     {
         if (empty($modName)) {
-            list($modName) = xarController::getRequest()->getInfo();
+            $modName = xarController::getRequest()->getModule();
         }
 
         // Date gives extra security but leave it out for now
@@ -97,7 +97,7 @@ class xarSec extends xarObject
         // We don't need this check for AJAX calls
         if (xarController::getRequest()->isAjax()) return true;
 
-        if(!isset($modName)) list($modName) = xarController::getRequest()->getInfo();
+        if(!isset($modName)) $modName = xarController::getRequest()->getModule();
         $authid = xarController::getVar($authIdVarName);
 
         // Regenerate static part of key

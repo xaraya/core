@@ -13,7 +13,7 @@
                 <xar:set name="thisname">$object->properties['name']->getValue()</xar:set>
             </xar:if>
             <h2>Manage #$object:label# '#$thisname#':</h2>
-            <xar:set name="request">xarController::$request->getInfo()</xar:set>
+            <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
             <xar:set name="activetab">#$request.2#</xar:set>
             <xar:set name="xmldata">'showusers'</xar:set>
             <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>

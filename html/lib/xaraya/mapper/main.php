@@ -198,6 +198,17 @@ class xarController extends xarObject
     }
 
     /**
+     * Check if the referral comes from the same module for admin overview
+     * @return bool
+     */
+    static function isRefererSameModule()
+    {
+        $refererinfo = self::getRequest()->getInfo(xarServer::getVar('HTTP_REFERER'));
+        $module = self::getRequest()->getModule();
+        return $module == $refererinfo[0];
+    }
+
+    /**
      * Carry out a redirect
      * 
      * @param string $url the URL to redirect to

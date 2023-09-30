@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /**
  * Bootstrap file
  *
@@ -63,7 +64,7 @@ class xarObject extends stdClass
     final public function toString()
     {
         // Reuse __toString magic by internal conversion.
-        return sprintf('%s',$this);
+        return sprintf('%s', $this);
     }
 
     /**
@@ -172,8 +173,9 @@ final class Class_ extends Reflectable
     public function getProperties()
     {
         $ret = array();
-        foreach($this->reflect->getProperties() as $p)
+        foreach($this->reflect->getProperties() as $p) {
             $ret[] = new Property($this, $p->getName());
+        }
         return $ret;
     }
 
@@ -186,7 +188,7 @@ final class Class_ extends Reflectable
     **/
     final public function getProperty_($name)
     {
-        return new Property($this,$name);
+        return new Property($this, $name);
     }
 }
 
@@ -211,7 +213,7 @@ final class Property extends Reflectable
     **/
     public function __construct(Class_ $clazz, $name)
     {
-        $this->reflect = new ReflectionProperty($clazz->getName(),$name);
+        $this->reflect = new ReflectionProperty($clazz->getName(), $name);
     }
 
     public function isPublic()
@@ -238,9 +240,9 @@ final class Property extends Reflectable
 **/
 final class sys extends xarObject
 {
-    const CONFIG = 'config.system.php';     // Default system configuration file
-    const LAYOUT = 'layout.system.php';     // Default layout configuration file
-    const LOG    = 'config.log.php';        // Default log configuration file
+    public const CONFIG = 'config.system.php';     // Default system configuration file
+    public const LAYOUT = 'layout.system.php';     // Default layout configuration file
+    public const LOG    = 'config.log.php';        // Default log configuration file
 
     private static $has  = array();         // Keep a list of what we already have
     private static $var  = null;            // Save the var location
@@ -248,27 +250,57 @@ final class sys extends xarObject
     private static $lib  = null;            // Save our lib location
     private static $code = null;            // Save our code location
     private static $web  = null;            // Save our web root location
+    private static $autoload = false;
 
     private function __construct()
-    {} // no objects can be made out of this.
+    {
+    } // no objects can be made out of this.
 
     /**
      * Load the layout file so we know where to find the Xaraya directories (composer autoload)
      */
     public static function init()
     {
-        if (!empty($GLOBALS['systemConfiguration'])) return;
+        if (!empty($GLOBALS['systemConfiguration'])) {
+            return;
+        }
         $systemConfiguration = array();
         include 'var/layout.system.php';
-        if (!isset($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = '../';
-        if (!isset($systemConfiguration['libDir'])) $systemConfiguration['libDir'] = 'lib/';
-        if (!isset($systemConfiguration['webDir'])) $systemConfiguration['webDir'] = 'html/';
-        if (!isset($systemConfiguration['codeDir'])) $systemConfiguration['codeDir'] = 'code/';
-        if (empty($systemConfiguration['rootDir'])) $systemConfiguration['rootDir'] = __DIR__ . '/';
+        if (!isset($systemConfiguration['rootDir'])) {
+            $systemConfiguration['rootDir'] = '../';
+        }
+        if (!isset($systemConfiguration['libDir'])) {
+            $systemConfiguration['libDir'] = 'lib/';
+        }
+        if (!isset($systemConfiguration['webDir'])) {
+            $systemConfiguration['webDir'] = 'html/';
+        }
+        if (!isset($systemConfiguration['codeDir'])) {
+            $systemConfiguration['codeDir'] = 'code/';
+        }
+        if (empty($systemConfiguration['rootDir'])) {
+            $systemConfiguration['rootDir'] = __DIR__ . '/';
+        }
         $GLOBALS['systemConfiguration'] = $systemConfiguration;
         if (!empty($systemConfiguration['rootDir'])) {
             set_include_path($systemConfiguration['rootDir'] . PATH_SEPARATOR . get_include_path());
         }
+    }
+
+    public static function autoload()
+    {
+        if (self::$autoload) {
+            return;
+        }
+        // test compatibility with composer autoload by disabling sys::import
+        if (empty(self::$root)) {
+            require_once dirname(__DIR__).'/vendor/autoload.php';
+        } elseif (self::$root == self::$web && is_dir(self::$root . '../vendor')) {
+            require_once self::$root . '../vendor/autoload.php';
+        } else {
+            require_once self::$root . 'vendor/autoload.php';
+        }
+        self::$autoload = true;
     }
 
     /**
@@ -304,11 +336,10 @@ final class sys extends xarObject
      * @param  string $dp 'dot path' a dot separated string describing which component to include
      * @param  bool $root whether to prepend the relative root directory
     **/
-    private static function once($dp, $offset='')
+    private static function once($dp, $offset = '')
     {
         // If we already have it, get out of here asap
-        if(!isset(self::$has[$dp]))
-        {
+        if(!isset(self::$has[$dp])) {
             // set this *before* the include below
             self::$has[$dp] = true;
             // tiny bit faster would be to use include, but this is quite a bit safer
@@ -330,14 +361,16 @@ final class sys extends xarObject
      * @see    sys::once()
      * @todo   do we want to support sys::import('blocklayout.*') ?
     **/
-    public static function import($dp, $offset='')
+    public static function import($dp, $offset = '')
     {
         // test compatibility with composer autoload by disabling sys::import
-        //return true;
-        $dp = str_replace('.','/',$dp);
-        if((0===strpos($dp,'modules/')) || (0===strpos($dp,'properties/')) || (0===strpos($dp,'blocks/'))) {
+        //if (self::$autoload) {
+        //    return true;
+        //}
+        $dp = str_replace('.', '/', $dp);
+        if((0 === strpos($dp, 'modules/')) || (0 === strpos($dp, 'properties/')) || (0 === strpos($dp, 'blocks/'))) {
             return self::once(self::code() . $dp, $offset);
-        } elseif(0===strpos($dp,'composer/')) {
+        } elseif(0 === strpos($dp, 'composer/')) {
             return self::once($dp, $offset);
         }
         return self::once(self::lib() . $dp, $offset);
@@ -349,11 +382,12 @@ final class sys extends xarObject
      *
      * @return string
     **/
-    public static function root($offset='')
+    public static function root($offset = '')
     {
         // We are in bootstrap.php and we want <root>
-        if(!isset(self::$root))
+        if(!isset(self::$root)) {
             self::$root = $offset . $GLOBALS['systemConfiguration']['rootDir'];
+        }
         return self::$root;
     }
 
@@ -363,11 +397,12 @@ final class sys extends xarObject
      *
      * @return string
     **/
-    public static function lib($offset='')
+    public static function lib($offset = '')
     {
         // We are in bootstrap.php and we want <lib>
-        if(!isset(self::$lib))
+        if(!isset(self::$lib)) {
             self::$lib = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['libDir'];
+        }
         return self::$lib;
     }
 
@@ -377,11 +412,12 @@ final class sys extends xarObject
      *
      * @return string
     **/
-    public static function web($offset='')
+    public static function web($offset = '')
     {
         // We are in bootstrap.php and we want <web>
-        if(!isset(self::$web))
+        if(!isset(self::$web)) {
             self::$web = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['webDir'];
+        }
         return self::$web;
     }
     /**
@@ -390,11 +426,12 @@ final class sys extends xarObject
      *
      * @return string
     **/
-    public static function code($offset='')
+    public static function code($offset = '')
     {
         // We are in bootstrap.php and we want <code>
-        if(!isset(self::$code))
+        if(!isset(self::$code)) {
             self::$code = $offset . $GLOBALS['systemConfiguration']['rootDir'] . $GLOBALS['systemConfiguration']['codeDir'];
+        }
         return self::$code;
     }
 
@@ -411,9 +448,11 @@ final class sys extends xarObject
      * @return string the var directory path name
      * @todo the .key.php construct seems odd
     **/
-    public static function varpath($offset='')
+    public static function varpath($offset = '')
     {
-        if (isset(self::$var)) return self::$var;
+        if (isset(self::$var)) {
+            return self::$var;
+        }
         if (isset($GLOBALS['systemConfiguration']['varDir'])) {
             self::$var = $offset . $GLOBALS['systemConfiguration']['varDir'];
         } else {
@@ -447,8 +486,9 @@ class DataContainer extends xarObject
     public function get($name)
     {
         $p = $this->getProperty_($name);
-        if($p->isPublic())
+        if($p->isPublic()) {
             return $p->$name;
+        }
     }
 
     /**
@@ -458,7 +498,8 @@ class DataContainer extends xarObject
     public function set($name, $value)
     {
         $p = $this->getProperty_($name);
-        if($p->isPublic())
+        if($p->isPublic()) {
             $this->$name = $value;
+        }
     }
 }

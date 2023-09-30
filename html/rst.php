@@ -23,7 +23,7 @@ require dirname(__DIR__).'/vendor/autoload.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     DataObjectRESTHandler::sendCORSOptions();
-    exit(0);
+    return;
 }
 
 // initialize bootstrap

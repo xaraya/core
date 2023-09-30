@@ -111,7 +111,7 @@ function installer_admin_phase3()
     $data['maxexectimepass']            = $maxexectime<=30;
     $data['memory_limit']               = $memLimit;
     $data['memory_warning']             = $memLimit == xarML('Undetermined');
-    $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024 || $data['memory_warning'];
+    $data['metMinMemRequirement']       = $memVal >= 8 * 1024 * 1024 || $memLimit == '-1' || $data['memory_warning'];
 
     $data['language']    = $install_language;
     $data['phase']       = 3;

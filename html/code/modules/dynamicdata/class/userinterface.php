@@ -13,8 +13,6 @@
  */
 
 use Xaraya\DataObject\Handlers\DefaultHandler;
-use DataObjectList;
-use DataObject;
 
 /**
  * Dynamic Object User Interface (work in progress)

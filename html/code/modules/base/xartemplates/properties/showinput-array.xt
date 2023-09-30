@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <xar:set name="info">xarController::$request->getInfo()</xar:set>
+    <xar:set name="info">xarController::getRequest()->getInfo()</xar:set>
     <div class="xar-clearboth">
         <xar:if condition="$info[2] eq 'showpropval' AND ($display_page_type eq 'configuration')">
             <!-- We are configuring an array property -->

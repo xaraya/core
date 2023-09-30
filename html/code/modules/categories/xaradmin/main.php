@@ -22,9 +22,7 @@ function categories_admin_main()
     // Security check
     if(!xarSecurity::check('EditCategories')) return;
 
-    $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
-    $info = xarController::$request->getInfo();
-    $samemodule = $info[0] == $refererinfo[0];
+    $samemodule = xarController::isRefererSameModule();
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return array();

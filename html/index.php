@@ -15,6 +15,7 @@
 
 function xarLoader()
 {
+    global $systemConfiguration;
     $GLOBALS["Xaraya_PageTime"] = microtime(true); 
 
 /**

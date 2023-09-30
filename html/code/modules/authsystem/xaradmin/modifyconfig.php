@@ -47,7 +47,7 @@ function authsystem_admin_modifyconfig()
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
                 // If this is an AJAX call, send back a message (and end)
-                xarController::$request->msgAjax($data['module_settings']->getInvalids());
+                xarController::getRequest()->msgAjax($data['module_settings']->getInvalids());
                 // No AJAX, just send the data to the template for display
                 return xarTpl::module('authsystem','admin','modifyconfig', $data);        
             } else {
@@ -60,7 +60,7 @@ function authsystem_admin_modifyconfig()
             xarModVars::set('authsystem', 'lockouttries', $data['lockouttries']);
             
             // If this is an AJAX call, end here
-            xarController::$request->exitAjax();
+            xarController::getRequest()->exitAjax();
             xarController::redirect(xarServer::getCurrentURL());
             return true;
     }

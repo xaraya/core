@@ -170,16 +170,7 @@ function dynamicdata_admin_test_apis(array $args = [])
         return;
     }
     if (!empty($create_gql)) {
-        $root = sys::root();
-        // flat install supporting symlinks
-        if (empty($root)) {
-            $vendor = realpath(dirname(realpath($_SERVER['SCRIPT_FILENAME'])) . '/../vendor');
-        } elseif ($root == sys::web() && is_dir($root . '../vendor')) {
-            $vendor = realpath($root . '../vendor');
-        } else {
-            $vendor = realpath($root . 'vendor');
-        }
-        require_once $vendor .'/autoload.php';
+        sys::autoload();
         sys::import('modules.dynamicdata.class.graphql');
         $extraTypes = xarGraphQL::find_extra_types($graphqllist);
         xarGraphQL::dump_schema($extraTypes, $storageType, $tokenExpires, $queryComplexity, $queryDepth, $enableTimer, $tracePath, $enableCache, $cachePlan, $cacheData, $cacheOperation);

@@ -29,11 +29,11 @@ class ShortActionController extends BaseActionController implements iController
     public function decode(array $data = []): array
     {
         $token = $this->firstToken();
-        if (xarController::$request->getModule() == 'object') {
+        if (xarController::getRequest()->getModule() == 'object') {
             $data['type'] = $token;
             if ($token == 'admin') {
                 // No admin equivalent for objectURL for now
-                xarController::$request->setModule('dynamicdata');
+                xarController::getRequest()->setModule('dynamicdata');
                 $token = false;
             }
             $token = $this->nextToken();

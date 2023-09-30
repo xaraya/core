@@ -29,10 +29,7 @@ function base_admin_main()
     // Security
     if(!xarSecurity::check('EditBase')) return;
 
-    $request = new xarRequest();
-    $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
-    $module = xarController::$request->getModule();
-    $samemodule = $module == $refererinfo[0];
+    $samemodule = xarController::isRefererSameModule();
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('base','admin','overview');

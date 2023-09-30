@@ -24,9 +24,7 @@ function roles_admin_main()
     // Security
     if (!xarSecurity::check('EditRoles')) return;
     
-    $refererinfo = xarController::$request->getInfo(xarServer::getVar('HTTP_REFERER'));
-    $info = xarController::$request->getInfo();
-    $samemodule = $info[0] == $refererinfo[0];
+    $samemodule = xarController::isRefererSameModule();
     
     if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule){
         return xarTpl::module('roles','admin','overview');

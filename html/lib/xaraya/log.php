@@ -72,6 +72,7 @@ class xarLog extends xarObject
             if (!include (self::configFile())) {
                 throw new LoggerException('xarLog_init: Log configuration file is invalid!');
             }
+            /** @var array<string, mixed> $systemConfiguration */
             
             $vararray = ['Filename', 'MaxFileSize', 'Level', 'Mode', 'Recipient', 'Sender', 'Subject', 'Timeformat','SQLTable', 'Facility', 'Options', 'SQLTable'];
 

@@ -41,7 +41,7 @@ function base_javascriptapi__findfile(Array $args=array())
 
     // Use the current module if none supplied.
     if (empty($module) && empty($modid)) {
-        list($module) = xarController::$request->getInfo();
+        $module = xarController::getRequest()->getModule();
     }
 
     // Get the module ID from the module name.

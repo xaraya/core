@@ -243,7 +243,7 @@ function xarRequestIsLocalReferer()                       { return xarController
  */
 function xarResponseRedirect($redirectURL)                { return xarController::redirect($redirectURL); }
 //function xarRequest::getVar($name, $allowOnlyMethod)      { return xarController::getVar($name, $allowOnlyMethod);}
-//function xarRequest::getInfo()                            { return xarController::$request->getInfo(); }
+//function xarRequest::getInfo()                            { return xarController::getRequest()->getInfo(); }
 //function xarRequest::isLocalReferer()                     { return xarController::isLocalReferer(); }
 
 /**

@@ -105,7 +105,8 @@ function roles_userapi_parseuserhome(Array $args=array())
                 $url_parts = parse_url($url);
                 if (isset($url_parts['host'])) { //if not we don't have to worry
                     if (($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
-                        ($url_parts['host'] != $_SERVER["HTTP_HOST"])) {
+                        ($url_parts['host'] != $_SERVER["HTTP_HOST"]) &&
+                        ($url_parts['host'] != 'localhost')) {
                         $externalurl=true;
                     }
                     if (!$allowexternalurl && $externalurl) {

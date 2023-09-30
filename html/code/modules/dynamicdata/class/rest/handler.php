@@ -49,6 +49,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     {
         $openapi = sys::varpath() . '/cache/api/openapi.json';
         if (!file_exists($openapi)) {
+            xarDatabase::init();
             sys::import('modules.dynamicdata.class.rest.builder');
             DataObjectRESTBuilder::init();
             return ['TODO' => 'generate var/cache/api/openapi.json with builder'];

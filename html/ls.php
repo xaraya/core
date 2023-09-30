@@ -14,6 +14,7 @@
 
 function xarLSLoader($argc, $argv)
 {
+    global $systemConfiguration;
 /**
  * Load the layout file so we know where to find the Xaraya directories
  */

@@ -21,7 +21,7 @@
         <h2>
             <a href="#xarController::URL('roles','admin','createmail')#">Messaging System:</a> Send Mail To Users/Groups
         </h2>
-        <xar:set name="request">xarController::$request->getInfo()</xar:set>
+        <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
         <xar:set name="tab">#$request.2#</xar:set>
         <xar:set name="xmldata">'mail'</xar:set>
         <xar:template type="module" module="base" file="admin-menu-skel"/>

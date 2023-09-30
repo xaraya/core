@@ -188,7 +188,7 @@ class xarRequest extends xarObject
         } elseif (is_array($loopHole)) {
             // FIXME: Security checks in functions used by decode_shorturl cause infinite loops,
             //        because they request the current module too at the moment - unnecessary ?
-            xarLog::message('Avoiding loop in xarController::$request->getInfo()', xarLog::LEVEL_INFO);
+            xarLog::message('Avoiding loop in xarController::getRequest()->getInfo()', xarLog::LEVEL_INFO);
             return $loopHole;
         }
         // Get variables

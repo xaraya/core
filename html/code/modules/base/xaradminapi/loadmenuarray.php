@@ -41,7 +41,7 @@
 function base_adminapi_loadmenuarray(Array $args=array())
 {
     if (!isset($args['modname']) || !isset($args['modtype']) || !isset($args['funcname'])) {
-        $urlinfo = xarController::$request->getInfo();
+        $urlinfo = xarController::getRequest()->getInfo();
         if (empty($args['modname'])) $args['modname'] = $urlinfo[0];
         if (empty($args['modtype'])) $args['modtype'] = $urlinfo[1];
         // handle modules using util as an admin type

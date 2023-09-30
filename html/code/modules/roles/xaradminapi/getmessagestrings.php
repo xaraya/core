@@ -23,7 +23,7 @@ function roles_adminapi_getmessagestrings(Array $args=array())
     if (!isset($template)) throw new EmptyParameterException('template');
 
     if(!isset($module)){
-        list($module) = xarController::$request->getInfo();
+        $module = xarController::getRequest()->getModule();
     }
 
 	if (!isset($tpl_path)) {
