@@ -18,6 +18,10 @@ class xarGraphQLInflector
      * Sanitize name, type, object, list and item based on given name, e.g.:
      * name=Object, type=object, object=objects, list=objects, item=object
      * name=Property, type=property, object=properties, list=properties, item=property
+     * @param mixed $name
+     * @param mixed $type
+     * @param mixed $object
+     * @return array<string>
      */
     public static function sanitize($name, $type = null, $object = null)
     {
@@ -48,6 +52,8 @@ class xarGraphQLInflector
     /**
      * Basic normalize for most common case(s):
      * samples_page -> samples / sample_input -> sample
+     * @param string $value
+     * @return string
      */
     public static function normalize($value)
     {
@@ -64,6 +70,8 @@ class xarGraphQLInflector
     /**
      * Basic pluralize for most common case(s): typename -> objectname or listname
      * object -> objects / property -> properties
+     * @param string $type
+     * @return string
      */
     public static function pluralize($type)
     {
@@ -83,6 +91,8 @@ class xarGraphQLInflector
     /**
      * Basic singularize for most common case(s): objectname or listname -> typename
      * objects -> object / properties -> property
+     * @param string $name
+     * @return string
      */
     public static function singularize($name)
     {

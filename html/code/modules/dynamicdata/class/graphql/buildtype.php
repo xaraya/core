@@ -28,7 +28,9 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     //use xarGraphQLDeferredTrait;
     //use xarGraphQLInputTrait;
 
+    /** @var array<string, int> */
     public static $property_id = [];
+    /** @var array<int, string> */
     public static $known_proptype_ids = [];
 
     /**
@@ -36,6 +38,10 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      *
      * Use inline style to define Object Type here instead of inheritance
      * https://webonyx.github.io/graphql-php/type-system/object-types/
+     * @param mixed $name
+     * @param mixed $type
+     * @param mixed $object
+     * @return ObjectType
      */
     public static function make_type($name, $type = null, $object = null)
     {
@@ -59,6 +65,10 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
 
     /**
      * Make a generic Object Type with pagination
+     * @param mixed $name
+     * @param mixed $type
+     * @param mixed $object
+     * @return ObjectType
      */
     public static function make_page_type($name, $type = null, $object = null)
     {
@@ -91,6 +101,10 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
 
     /**
      * Make a generic Input Object Type for create/update mutations
+     * @param mixed $name
+     * @param mixed $type
+     * @param mixed $object
+     * @return InputObjectType
      */
     public static function make_input_type($name, $type = null, $object = null)
     {
@@ -120,6 +134,9 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
      * @checkme when the query contains some fragments from other types, those are loaded too even if they're unused
      * Using resolve in each object field instead of the overall resolveField means we can't cache this information here
      * before the query plan is even checked
+     * @param mixed $object
+     * @throws \Exception
+     * @return array<string, mixed>
      */
     public static function get_object_fields($object)
     {
@@ -171,6 +188,10 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return $fields;
     }
 
+    /**
+     * Summary of get_field_basetypes
+     * @return array<string, mixed>
+     */
     public static function get_field_basetypes()
     {
         return [
@@ -186,6 +207,9 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
 
     /**
      * Get the input type fields for this dynamicdata object type
+     * @param mixed $object
+     * @throws \Exception
+     * @return array<string, mixed>
      */
     public static function get_input_fields($object)
     {
@@ -234,6 +258,11 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return $fields;
     }
 
+    /**
+     * Summary of get_property_id
+     * @param string $name
+     * @return int
+     */
     public static function get_property_id($name)
     {
         if (empty(self::$property_id[$name])) {
@@ -248,6 +277,13 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return self::$property_id[$name];
     }
 
+    /**
+     * Summary of find_object_fieldspecs
+     * @param mixed $object
+     * @param mixed $refresh
+     * @throws \Exception
+     * @return mixed
+     */
     public static function find_object_fieldspecs($object, $refresh = false)
     {
         xarGraphQL::loadObjects();
@@ -316,6 +352,11 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return $fieldspecs;
     }
 
+    /**
+     * Summary of find_property_typename
+     * @param mixed $property
+     * @return mixed
+     */
     public static function find_property_typename($property)
     {
         if (empty($property->objectname)) {
@@ -332,6 +373,13 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return $typename;
     }
 
+    /**
+     * Summary of get_deferred_field
+     * @param mixed $fieldname
+     * @param mixed $typename
+     * @param mixed $islist
+     * @return array<string, mixed>
+     */
     public static function get_deferred_field($fieldname, $typename, $islist = false)
     {
         // xarGraphQL::setTimer('get deferred field ' . $fieldname);
@@ -344,6 +392,14 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         ];
     }
 
+    /**
+     * Summary of get_deferred_item
+     * @param mixed $fieldname
+     * @param mixed $typename
+     * @param mixed $defername
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
     public static function get_deferred_item($fieldname, $typename, $defername, $object)
     {
         // xarGraphQL::setTimer('get deferred item ' . $fieldname);
@@ -362,6 +418,14 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         ];
     }
 
+    /**
+     * Summary of get_deferred_list
+     * @param mixed $fieldname
+     * @param mixed $typename
+     * @param mixed $defername
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
     public static function get_deferred_list($fieldname, $typename, $defername, $object)
     {
         // xarGraphQL::setTimer('get deferred list ' . $fieldname);
@@ -395,6 +459,14 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         ];
     }
 
+    /**
+     * Summary of get_deferred_many
+     * @param mixed $fieldname
+     * @param mixed $typename
+     * @param mixed $defername
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
     public static function get_deferred_many($fieldname, $typename, $defername, $object)
     {
         // xarGraphQL::setTimer('get deferred many ' . $fieldname);
@@ -430,6 +502,13 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         ];
     }
 
+    /**
+     * Summary of deferred_field_resolver
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @param mixed $object
+     * @return mixed
+     */
     public static function deferred_field_resolver($typename, $fieldname, $object = null)
     {
         // we only need the type class here, not the type instance
@@ -444,6 +523,9 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
 
     /**
      * Get the field resolver for the object type fields
+     * @param mixed $type
+     * @param mixed $object
+     * @return Closure
      */
     public static function object_field_resolver($type, $object = null)
     {
@@ -483,6 +565,8 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
 
     /**
      * Get a default field resolver for all type fields - @checkme don't use type classes by default for BuildSchema?
+     * @param mixed $useTypeClasses
+     * @return Closure
      */
     public static function default_field_resolver($useTypeClasses = true)
     {
@@ -506,6 +590,12 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return $resolver;
     }
 
+    /**
+     * Summary of keys_field_resolver
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @return Closure
+     */
     public static function keys_field_resolver($typename, $fieldname)
     {
         xarGraphQL::$paths[] = "use keys field resolver for type $typename field $fieldname";
@@ -533,6 +623,12 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return $resolver;
     }
 
+    /**
+     * Summary of serial_field_resolver
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @return Closure
+     */
     public static function serial_field_resolver($typename, $fieldname)
     {
         xarGraphQL::$paths[] = "use serial field resolver for type $typename field $fieldname";
@@ -549,6 +645,13 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return $resolver;
     }
 
+    /**
+     * Summary of alias_field_resolver
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @param mixed $fieldalias
+     * @return Closure
+     */
     public static function alias_field_resolver($typename, $fieldname, $fieldalias)
     {
         xarGraphQL::$paths[] = "use alias field resolver for type $typename field $fieldname = $fieldalias";
@@ -563,6 +666,13 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return $resolver;
     }
 
+    /**
+     * Summary of keyval_field_resolver
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @param mixed $fieldalias
+     * @return Closure
+     */
     public static function keyval_field_resolver($typename, $fieldname, $fieldalias)
     {
         xarGraphQL::$paths[] = "use keyval field resolver for type $typename field $fieldname";
@@ -597,6 +707,12 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         return $resolver;
     }
 
+    /**
+     * Summary of basetype_field_resolver
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @return Closure
+     */
     public static function basetype_field_resolver($typename, $fieldname)
     {
         xarGraphQL::$paths[] = "use basetype field resolver for type $typename field $fieldname";
@@ -621,6 +737,11 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
 
     /**
      * Find the appropriate field resolver for a particular type and field
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @param mixed $useTypeClasses
+     * @throws \Exception
+     * @return mixed
      */
     public static function find_field_resolver($typename = '*', $fieldname = '*', $useTypeClasses = true)
     {
@@ -792,6 +913,10 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     /**
      * Get the root query fields for this object for the GraphQL Query type (list, item)
      * @todo Move to queries trait
+     * @param mixed $name
+     * @param mixed $type
+     * @param mixed $object
+     * @return array<mixed>
      */
     public static function get_query_fields($name, $type = null, $object = null)
     {
@@ -813,71 +938,12 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     }
 
     /**
-     * Get paginated list query field for this object type - see also relay connection for cursor-based
-     * @deprecated Moved to queries trait
-     */
-    public static function get_page_query($page, $type, $object)
-    {
-        return self::_xar_get_page_query($page, $type, $object);
-    }
-
-    /**
-     * Get the paginated list query resolver for the object type
-     * @deprecated Moved to queries trait
-     */
-    public static function page_query_resolver($type, $object = null)
-    {
-        return self::_xar_page_query_resolver($type, $object);
-    }
-
-    /**
-     * Get list query field for this object type
-     * @deprecated Moved to queries trait
-     */
-    public static function get_list_query($list, $type, $object)
-    {
-        return self::_xar_get_list_query($list, $type, $object);
-    }
-
-    /**
-     * Get the list query resolver for the object type
-     * @deprecated Moved to queries trait
-     */
-    public static function list_query_resolver($type, $object = null)
-    {
-        return self::_xar_list_query_resolver($type, $object);
-    }
-
-    /**
-     * Get item query field for this object type
-     * @deprecated Moved to queries trait
-     */
-    public static function get_item_query($item, $type, $object)
-    {
-        return self::_xar_get_item_query($item, $type, $object);
-    }
-
-    /**
-     * Get the item query resolver for the object type
-     * @deprecated Moved to queries trait
-     */
-    public static function item_query_resolver($type, $object = null)
-    {
-        return self::_xar_item_query_resolver($type, $object);
-    }
-
-    /**
-     * Add to the query resolver for the object type (page, list, item) - when using BuildSchema
-     * @deprecated Moved to queries trait
-     */
-    public static function object_query_resolver($name = 'Query')
-    {
-        return self::_xar_query_field_resolver($name);
-    }
-
-    /**
      * Get the root mutation fields for this object for the GraphQL Mutation type (create..., update..., delete...)
      * @todo Move to mutations trait
+     * @param mixed $name
+     * @param mixed $type
+     * @param mixed $object
+     * @return array<mixed>
      */
     public static function get_mutation_fields($name, $type = null, $object = null)
     {
@@ -893,70 +959,9 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     }
 
     /**
-     * Get create mutation field for this object type
-     * @deprecated Moved to mutations trait
-     */
-    public static function get_create_mutation($name, $type, $object)
-    {
-        return self::_xar_get_create_mutation($name, $type, $object);
-    }
-
-    /**
-     * Get the create mutation resolver for the object type
-     * @deprecated Moved to mutations trait
-     */
-    public static function create_mutation_resolver($type, $object = null)
-    {
-        return self::_xar_create_mutation_resolver($type, $object);
-    }
-
-    /**
-     * Get update mutation field for this object type
-     * @deprecated Moved to mutations trait
-     */
-    public static function get_update_mutation($name, $type, $object)
-    {
-        return self::_xar_get_update_mutation($name, $type, $object);
-    }
-
-    /**
-     * Get the update mutation resolver for the object type
-     * @deprecated Moved to mutations trait
-     */
-    public static function update_mutation_resolver($type, $object = null)
-    {
-        return self::_xar_update_mutation_resolver($type, $object);
-    }
-
-    /**
-     * Get delete mutation field for this object type
-     * @deprecated Moved to mutations trait
-     */
-    public static function get_delete_mutation($name, $type, $object)
-    {
-        return self::_xar_get_delete_mutation($name, $type, $object);
-    }
-
-    /**
-     * Get the delete mutation resolver for the object type
-     * @deprecated Moved to mutations trait
-     */
-    public static function delete_mutation_resolver($type, $object = null)
-    {
-        return self::_xar_delete_mutation_resolver($type, $object);
-    }
-
-    /**
-     * Add to the mutation resolver for the object type (create, update, delete) - when using BuildSchema
-     * @deprecated Moved to mutations trait
-     */
-    public static function object_mutation_resolver($name = 'Mutation')
-    {
-        return self::_xar_mutation_field_resolver($name);
-    }
-
-    /**
      * Add to the type resolver for the object type - when using BuildSchema
+     * @param mixed $name
+     * @return mixed
      */
     public static function object_type_resolver($name)
     {
@@ -966,6 +971,8 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
 
     /**
      * Get the type definition for the object type - used by the default field resolver now
+     * @param mixed $name
+     * @return mixed
      */
     public static function object_type_definition($name)
     {

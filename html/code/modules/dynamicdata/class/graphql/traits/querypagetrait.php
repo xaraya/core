@@ -17,7 +17,22 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 interface xarGraphQLQueryPageInterface
 {
+    /**
+     * Get paginated list query field for this object type - see also relay connection for cursor-based
+     * @param mixed $pagename
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
     public static function _xar_get_page_query($pagename, $typename, $object): array;
+    /**
+     * Get the paginated list query resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @return callable
+     */
     public static function _xar_page_query_resolver($typename, $object = null): callable;
 }
 
@@ -28,6 +43,10 @@ trait xarGraphQLQueryPageTrait
 {
     /**
      * Get paginated list query field for this object type - see also relay connection for cursor-based
+     * @param mixed $pagename
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_page_query($pagename, $typename, $object): array
     {
@@ -55,6 +74,10 @@ trait xarGraphQLQueryPageTrait
      * Get the paginated list query resolver for the object type
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @throws \Exception
+     * @return callable
      */
     public static function _xar_page_query_resolver($typename, $object = null): callable
     {

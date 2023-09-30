@@ -13,8 +13,12 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
+/**
+ * Summary of xarGraphQLMutationType
+ */
 class xarGraphQLMutationType extends ObjectType
 {
+    /** @var array<string> */
     public static $mutation_types = ['tokentype', 'sampletype', 'moduleapitype'];
 
     public function __construct()
@@ -25,6 +29,9 @@ class xarGraphQLMutationType extends ObjectType
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename = 'Mutation', $object = null)
     {
@@ -38,6 +45,7 @@ class xarGraphQLMutationType extends ObjectType
 
     /**
      * Get all root mutation fields for the GraphQL Mutation type from the mutation_types above
+     * @return array<mixed>
      */
     public static function _xar_get_mutation_fields(): array
     {
@@ -63,6 +71,8 @@ class xarGraphQLMutationType extends ObjectType
 
     /**
      * Add the mutation fields defined in the GraphQL Object Type class (createSample, updateSample, ...)
+     * @param mixed $type
+     * @return array<mixed>
      */
     public static function _xar_add_mutation_fields($type)
     {
@@ -72,6 +82,9 @@ class xarGraphQLMutationType extends ObjectType
 
     /**
      * Add a root mutation field as defined in the GraphQL Object Type class (createSample, updateSample, ...)
+     * @param mixed $name
+     * @param mixed $type
+     * @return array<string, mixed>
      */
     public static function _xar_add_mutation_field($name, $type)
     {

@@ -58,7 +58,9 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         ],
     ];
      */
+    /** @var array<mixed> */
     public static $_xar_queries = [];
+    /** @var array<mixed> */
     public static $_xar_mutations = [];
 
     public function __construct()
@@ -70,6 +72,9 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename, $object = null)
     {
@@ -79,6 +84,11 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         ];
     }
 
+    /**
+     * Summary of _xar_load_config
+     * @throws \Exception
+     * @return void
+     */
     public static function _xar_load_config()
     {
         xarGraphQL::loadModules();
@@ -136,6 +146,11 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         }
     }
 
+    /**
+     * Summary of _xar_parse_api_parameters
+     * @param mixed $parameters
+     * @return array<string, mixed>
+     */
     public static function _xar_parse_api_parameters($parameters)
     {
         $properties = [];
@@ -168,6 +183,10 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         return $properties;
     }
 
+    /**
+     * Summary of _xar_get_query_fields
+     * @return array<mixed>
+     */
     public static function _xar_get_query_fields(): array
     {
         static::_xar_load_config();
@@ -178,6 +197,13 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         return $fields;
     }
 
+    /**
+     * Summary of _xar_get_query_field
+     * @param mixed $name
+     * @param mixed $func
+     * @throws \Exception
+     * @return array<string, mixed>
+     */
     public static function _xar_get_query_field($name, $func = []): array
     {
         if (empty($func)) {
@@ -207,6 +233,11 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         ];
     }
 
+    /**
+     * Summary of _xar_get_param_fielddef
+     * @param mixed $param
+     * @return array<string, mixed>
+     */
     public static function _xar_get_param_fielddef($param)
     {
         if (empty($param)) {
@@ -254,6 +285,9 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
      * Get the call query resolver for the module api function
      *
      * This method *may* be overridden for a specific module api function, but it doesn't have to be
+     * @param mixed $func
+     * @throws \Exception
+     * @return Closure
      */
     public static function _xar_call_query_resolver($func)
     {
@@ -285,6 +319,10 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         return $resolver;
     }
 
+    /**
+     * Summary of _xar_get_mutation_fields
+     * @return array<mixed>
+     */
     public static function _xar_get_mutation_fields(): array
     {
         static::_xar_load_config();
@@ -295,6 +333,13 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         return $fields;
     }
 
+    /**
+     * Summary of _xar_get_mutation_field
+     * @param mixed $name
+     * @param mixed $func
+     * @throws \Exception
+     * @return array<string, mixed>
+     */
     public static function _xar_get_mutation_field($name, $func = []): array
     {
         if (empty($func)) {
@@ -322,6 +367,11 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
     }
 
     // @checkme for dynamically created types like the module api input types per function
+    /**
+     * Summary of _xar_create_input_type
+     * @param mixed $name
+     * @return InputObjectType|mixed
+     */
     public static function _xar_create_input_type($name)
     {
         $typename = ucwords($name . '_input', '_');
@@ -366,6 +416,12 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         return static::_xar_parse_input_args($name, $func);
     }
 
+    /**
+     * Summary of _xar_parse_input_args
+     * @param mixed $name
+     * @param mixed $func
+     * @return array<string, mixed>
+     */
     public static function _xar_parse_input_args($name, $func)
     {
         if (empty($func['args'])) {
@@ -389,6 +445,10 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         return $fields;
     }
 
+    /**
+     * Summary of _xar_get_paging_args
+     * @return array<string, mixed>
+     */
     public static function _xar_get_paging_args()
     {
         $fields = [
@@ -418,6 +478,9 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
      * Get the call mutation resolver for the module api function
      *
      * This method *may* be overridden for a specific module api function, but it doesn't have to be
+     * @param mixed $func
+     * @throws \Exception
+     * @return Closure
      */
     public static function _xar_call_mutation_resolver($func)
     {
@@ -455,6 +518,16 @@ class xarGraphQLModuleApiType extends ObjectType implements xarGraphQLInputInter
         return $resolver;
     }
 
+    /**
+     * Summary of _xar_call_module_function
+     * @param mixed $module
+     * @param mixed $type
+     * @param mixed $func
+     * @param mixed $args
+     * @param mixed $userId
+     * @param mixed $fields
+     * @return mixed
+     */
     public static function _xar_call_module_function($module, $type, $func, $args, $userId, $fields)
     {
         //$role = xarRoles::getRole($userId);

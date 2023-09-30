@@ -27,6 +27,9 @@ class xarGraphQLNodeType extends InterfaceType
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename, $object = null)
     {
@@ -53,6 +56,10 @@ class xarGraphQLNodeType extends InterfaceType
         ];
     }
 
+    /**
+     * Summary of _xar_get_query_fields
+     * @return array<string, mixed>
+     */
     public static function _xar_get_query_fields()
     {
         return [
@@ -74,11 +81,17 @@ class xarGraphQLNodeType extends InterfaceType
         ];
     }
 
+    /**
+     * Summary of _xar_get_query_field
+     * @param mixed $name
+     * @return array<string, mixed>
+     */
     public static function _xar_get_query_field($name)
     {
         $fields = static::_xar_get_query_fields();
         if (!empty($fields[$name])) {
             return $fields[$name];
         }
+        throw new Exception("Unknown query '$name'");
     }
 }

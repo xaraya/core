@@ -18,6 +18,7 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreateInterface, xarGraphQLMutationDeleteInterface
 {
+    /** @var array<mixed> */
     public static $_xar_mutations = ['getToken', 'deleteToken'];
 
     public function __construct()
@@ -28,6 +29,9 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename, $object = null)
     {
@@ -42,6 +46,10 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
         ];
     }
 
+    /**
+     * Summary of _xar_get_mutation_fields
+     * @return array<mixed>
+     */
     public static function _xar_get_mutation_fields()
     {
         $fields = [];
@@ -51,7 +59,13 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
         return $fields;
     }
 
-    // @checkme getting an access token is typically done as a mutation, not a query
+    /**
+     * @checkme getting an access token is typically done as a mutation, not a query
+     * @param mixed $name
+     * @param mixed $kind
+     * @throws \Exception
+     * @return array<string, mixed>
+     */
     public static function _xar_get_mutation_field($name, $kind = 'token')
     {
         switch ($name) {

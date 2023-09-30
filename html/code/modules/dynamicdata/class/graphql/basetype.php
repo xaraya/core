@@ -23,15 +23,18 @@ class xarGraphQLBaseType extends ObjectType implements xarGraphQLQueriesInterfac
     use xarGraphQLDeferredTrait;
     use xarGraphQLInputTrait;
 
-    public static $_xar_name   = '';
-    public static $_xar_type   = '';
-    public static $_xar_object = '';
-    public static $_xar_security = true;
+    public static string $_xar_name   = '';
+    public static string $_xar_type   = '';
+    public static string $_xar_object = '';
+    public static bool $_xar_security = true;
+    /** @var array<mixed> */
     public static $_xar_queries = [];
+    /** @var array<mixed> */
     public static $_xar_mutations = [];
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param ?array<string, mixed> $config
      */
     public function __construct($config = null)
     {
@@ -45,6 +48,9 @@ class xarGraphQLBaseType extends ObjectType implements xarGraphQLQueriesInterfac
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename, $object = null): array
     {
@@ -61,6 +67,8 @@ class xarGraphQLBaseType extends ObjectType implements xarGraphQLQueriesInterfac
 
     /**
      * This method *should* be overridden for each specific object type
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_object_fields($object): array
     {
@@ -75,6 +83,9 @@ class xarGraphQLBaseType extends ObjectType implements xarGraphQLQueriesInterfac
      * Get the object field resolver for the object type
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return ?callable
      */
     public static function _xar_object_field_resolver($typename, $object = null): ?callable
     {
@@ -83,6 +94,9 @@ class xarGraphQLBaseType extends ObjectType implements xarGraphQLQueriesInterfac
 
     /**
      * This method *should* be overridden for each specific object type
+     * @param mixed $object
+     * @param mixed $newType
+     * @return array<string, mixed>
      */
     public static function _xar_get_input_fields($object, &$newType): array
     {

@@ -26,6 +26,9 @@ class xarGraphQLMultiValType extends UnionType
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename, $object = null)
     {

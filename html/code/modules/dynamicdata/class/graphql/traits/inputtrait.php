@@ -17,8 +17,26 @@ use GraphQL\Type\Definition\InputObjectType;
  */
 interface xarGraphQLInputInterface
 {
+    /**
+     * Make a generic Input Object Type for create/update mutations
+     * @param mixed $typename
+     * @param mixed $object
+     * @return InputObjectType
+     */
     public static function _xar_get_input_type($typename, $object = null): InputObjectType;
+    /**
+     * This method *should* be overridden for each specific object type
+     * @param mixed $object
+     * @param mixed $newType
+     * @return array<string, mixed>
+     */
     public static function _xar_get_input_fields($object, &$newType): array;
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @return ?callable
+     */
     public static function _xar_input_value_parser($typename, $object): ?callable;
 }
 
@@ -29,6 +47,9 @@ trait xarGraphQLInputTrait
 {
     /**
      * Make a generic Input Object Type for create/update mutations
+     * @param mixed $typename
+     * @param mixed $object
+     * @return InputObjectType
      */
     public static function _xar_get_input_type($typename, $object = null): InputObjectType
     {
@@ -49,6 +70,9 @@ trait xarGraphQLInputTrait
 
     /**
      * This method *should* be overridden for each specific object type
+     * @param mixed $object
+     * @param mixed $newType
+     * @return array<string, mixed>
      */
     public static function _xar_get_input_fields($object, &$newType): array
     {
@@ -62,6 +86,9 @@ trait xarGraphQLInputTrait
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @return ?callable
      */
     public static function _xar_input_value_parser($typename, $object): ?callable
     {

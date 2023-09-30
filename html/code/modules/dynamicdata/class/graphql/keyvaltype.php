@@ -20,7 +20,7 @@ class xarGraphQLKeyValType extends ObjectType implements xarGraphQLInputInterfac
 {
     use xarGraphQLInputTrait;
 
-    public static $_xar_name   = 'KeyVal';
+    public static string $_xar_name   = 'KeyVal';
 
     public function __construct()
     {
@@ -30,6 +30,9 @@ class xarGraphQLKeyValType extends ObjectType implements xarGraphQLInputInterfac
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename, $object = null)
     {

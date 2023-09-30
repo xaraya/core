@@ -13,8 +13,12 @@ use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
 
+/**
+ * Summary of xarGraphQLQueryType
+ */
 class xarGraphQLQueryType extends ObjectType
 {
+    /** @var array<string> */
     public static $query_types = ['dummytype', 'sampletype', 'objecttype', 'propertytype', 'moduleapitype'];  // 'nodetype'
 
     public function __construct()
@@ -25,6 +29,9 @@ class xarGraphQLQueryType extends ObjectType
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename = 'Query', $object = null)
     {
@@ -38,6 +45,7 @@ class xarGraphQLQueryType extends ObjectType
 
     /**
      * Get all root query fields for the GraphQL Query type from the query_types above
+     * @return array<mixed>
      */
     public static function _xar_get_query_fields(): array
     {
@@ -62,6 +70,8 @@ class xarGraphQLQueryType extends ObjectType
 
     /**
      * Add the query fields defined in the GraphQL Object Type class (page, list, item, other...)
+     * @param mixed $type
+     * @return mixed
      */
     public static function _xar_add_query_fields($type)
     {
@@ -71,6 +81,9 @@ class xarGraphQLQueryType extends ObjectType
 
     /**
      * Add a root query field as defined in the GraphQL Object Type class (page, list, item, other...)
+     * @param mixed $name
+     * @param mixed $type
+     * @return mixed
      */
     public static function _xar_add_query_field($name, $type)
     {

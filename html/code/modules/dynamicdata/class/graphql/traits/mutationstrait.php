@@ -17,8 +17,25 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 interface xarGraphQLMutationsInterface extends xarGraphQLMutationCreateInterface, xarGraphQLMutationUpdateInterface, xarGraphQLMutationDeleteInterface
 {
+    /**
+     * Get the mutation fields listed in the $_xar_mutations property of the actual class
+     * @return array<mixed>
+     */
     public static function _xar_get_mutation_fields(): array;
+    /**
+     * This method will be inherited by all specific object types, so it's important to use "static"
+     * @param mixed $name
+     * @param mixed $kind
+     * @throws \Exception
+     * @return array<string, mixed>
+     */
     public static function _xar_get_mutation_field($name, $kind = ''): array;
+    /**
+     * Add to the mutation resolver for the object type (create, update, delete) - when using BuildSchema
+     * @param mixed $typename
+     * @throws \Exception
+     * @return callable
+     */
     public static function _xar_mutation_field_resolver($typename = 'mutation'): callable;
 }
 
@@ -31,12 +48,14 @@ trait xarGraphQLMutationsTrait
     use xarGraphQLMutationUpdateTrait;
     use xarGraphQLMutationDeleteTrait;
 
-    public static $_xar_type   = '';  // specify in the class using this trait
-    public static $_xar_object = '';  // specify in the class using this trait
+    public static string $_xar_type   = '';  // specify in the class using this trait
+    public static string $_xar_object = '';  // specify in the class using this trait
+    /** @var array<mixed> */
     public static $_xar_mutations = [];  // specify in the class using this trait
 
     /**
      * Get the mutation fields listed in the $_xar_mutations property of the actual class
+     * @return array<mixed>
      */
     public static function _xar_get_mutation_fields(): array
     {
@@ -52,6 +71,10 @@ trait xarGraphQLMutationsTrait
     /**
      * This method will be inherited by all specific object types, so it's important to use "static"
      * instead of "self" here - see https://www.php.net/manual/en/language.oop5.late-static-bindings.php
+     * @param mixed $name
+     * @param mixed $kind
+     * @throws \Exception
+     * @return array<string, mixed>
      */
     public static function _xar_get_mutation_field($name, $kind = ''): array
     {
@@ -72,6 +95,9 @@ trait xarGraphQLMutationsTrait
 
     /**
      * Add to the mutation resolver for the object type (create, update, delete) - when using BuildSchema
+     * @param mixed $typename
+     * @throws \Exception
+     * @return callable
      */
     public static function _xar_mutation_field_resolver($typename = 'mutation'): callable
     {

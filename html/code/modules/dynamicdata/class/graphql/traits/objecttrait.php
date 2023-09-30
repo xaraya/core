@@ -17,10 +17,44 @@ use GraphQL\Type\Definition\ObjectType;
  */
 interface xarGraphQLObjectInterface
 {
+    /**
+     * Make a generic Object Type for a dynamicdata object type by name = "Sample" for samples etc.
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @return ObjectType
+     */
     public static function _xar_get_object_type($typename, $object = null): ObjectType;
+    /**
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
     public static function _xar_get_type_config($typename, $object = null): array;
+    /**
+     * This method *should* be overridden for each specific object type
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
     public static function _xar_get_object_fields($object): array;
+    /**
+     * Get the object field resolver for the object type
+     *
+     * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @return ?callable
+     */
     public static function _xar_object_field_resolver($typename, $object = null): ?callable;
+    /**
+     * Make a generic Object Type with pagination for a dynamic object type by name = "Sample_Page" for samples etc.
+     * @param mixed $name
+     * @param mixed $type
+     * @param mixed $object
+     * @return ObjectType
+     */
     public static function _xar_get_page_type($name, $type = null, $object = null): ObjectType;
 }
 
@@ -36,6 +70,9 @@ trait xarGraphQLObjectTrait
      *
      * Use inline style to define Object Type here instead of inheritance
      * https://webonyx.github.io/graphql-php/type-system/object-types/
+     * @param mixed $typename
+     * @param mixed $object
+     * @return ObjectType
      */
     public static function _xar_get_object_type($typename, $object = null): ObjectType
     {
@@ -50,6 +87,9 @@ trait xarGraphQLObjectTrait
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename, $object = null): array
     {
@@ -67,6 +107,8 @@ trait xarGraphQLObjectTrait
 
     /**
      * This method *should* be overridden for each specific object type
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_object_fields($object): array
     {
@@ -81,13 +123,21 @@ trait xarGraphQLObjectTrait
      * Get the object field resolver for the object type
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @return ?callable
      */
     public static function _xar_object_field_resolver($typename, $object = null): ?callable
     {
+        return null;
     }
 
     /**
      * Make a generic Object Type with pagination for a dynamic object type by name = "Sample_Page" for samples etc.
+     * @param mixed $name
+     * @param mixed $type
+     * @param mixed $object
+     * @return ObjectType
      */
     public static function _xar_get_page_type($name, $type = null, $object = null): ObjectType
     {

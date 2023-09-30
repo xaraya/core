@@ -18,15 +18,17 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 class xarGraphQLSampleType extends xarGraphQLBaseType
 {
-    public static $_xar_name   = 'Sample';
-    public static $_xar_type   = 'sample';
-    public static $_xar_object = 'sample';
-    public static $_xar_security = false;
+    public static string $_xar_name   = 'Sample';
+    public static string $_xar_type   = 'sample';
+    public static string $_xar_object = 'sample';
+    public static bool $_xar_security = false;
+    /** @var array<mixed> */
     public static $_xar_queries = [
         'page' => 'samples_page',
         'list' => 'samples',
         'item' => 'sample',
     ];
+    /** @var array<mixed> */
     public static $_xar_mutations = [
         'create' => 'createSample',
         'update' => 'updateSample',
@@ -64,6 +66,8 @@ class xarGraphQLSampleType extends xarGraphQLBaseType
 
     /**
      * This method *should* be overridden for each specific object type
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_object_fields($object): array
     {

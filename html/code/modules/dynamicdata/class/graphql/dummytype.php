@@ -18,6 +18,7 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 class xarGraphQLDummyType extends ObjectType
 {
+    /** @var array<mixed> */
     public static $_xar_queries = ['hello', 'echo', 'schema', 'whoami'];
 
     public function __construct()
@@ -28,6 +29,9 @@ class xarGraphQLDummyType extends ObjectType
 
     /**
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param string $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_type_config($typename, $object = null): array
     {
@@ -37,6 +41,10 @@ class xarGraphQLDummyType extends ObjectType
         ];
     }
 
+    /**
+     * Summary of _xar_get_query_fields
+     * @return array<string, mixed>
+     */
     public static function _xar_get_query_fields(): array
     {
         return [
@@ -120,6 +128,13 @@ class xarGraphQLDummyType extends ObjectType
         ];
     }
 
+    /**
+     * Summary of _xar_get_query_field
+     * @param mixed $name
+     * @param mixed $kind
+     * @throws \Exception
+     * @return array<string, mixed>
+     */
     public static function _xar_get_query_field($name, $kind = 'dummy'): array
     {
         $fields = static::_xar_get_query_fields();

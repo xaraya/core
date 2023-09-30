@@ -17,7 +17,20 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 interface xarGraphQLQueryItemInterface
 {
+    /**
+     * Get item query field for this object type
+     * @param mixed $itemname
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
     public static function _xar_get_item_query($itemname, $typename, $object): array;
+    /**
+     * Get the item query resolver for the object type
+     * @param mixed $typename
+     * @param mixed $object
+     * @return callable
+     */
     public static function _xar_item_query_resolver($typename, $object = null): callable;
 }
 
@@ -28,6 +41,10 @@ trait xarGraphQLQueryItemTrait
 {
     /**
      * Get item query field for this object type
+     * @param mixed $itemname
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_item_query($itemname, $typename, $object): array
     {
@@ -49,6 +66,10 @@ trait xarGraphQLQueryItemTrait
      * Get the item query resolver for the object type
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @throws \Exception
+     * @return callable
      */
     public static function _xar_item_query_resolver($typename, $object = null): callable
     {

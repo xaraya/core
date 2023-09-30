@@ -62,6 +62,11 @@ class xarGraphQLMixedType extends ScalarType
         return $this->parseValueNode($valueNode);
     }
 
+    /**
+     * Summary of parseValueNode
+     * @param mixed $valueNode
+     * @return mixed
+     */
     public function parseValueNode($valueNode)
     {
         if ($valueNode->kind === "ObjectValue") {

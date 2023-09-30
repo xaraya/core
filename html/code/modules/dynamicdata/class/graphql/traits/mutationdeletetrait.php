@@ -17,7 +17,21 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 interface xarGraphQLMutationDeleteInterface
 {
+    /**
+     * Get delete mutation field for this object type
+     * @param mixed $name
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
     public static function _xar_get_delete_mutation($name, $typename, $object): array;
+    /**
+     * Get the delete mutation resolver for the object type
+     * @param mixed $typename
+     * @param mixed $object
+     * @throws \Exception
+     * @return callable
+     */
     public static function _xar_delete_mutation_resolver($typename, $object = null): callable;
 }
 
@@ -29,6 +43,10 @@ trait xarGraphQLMutationDeleteTrait
 {
     /**
      * Get delete mutation field for this object type
+     * @param mixed $name
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_delete_mutation($name, $typename, $object): array
     {
@@ -50,6 +68,10 @@ trait xarGraphQLMutationDeleteTrait
      * Get the delete mutation resolver for the object type
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @throws \Exception
+     * @return callable
      */
     public static function _xar_delete_mutation_resolver($typename, $object = null): callable
     {

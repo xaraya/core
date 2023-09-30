@@ -17,7 +17,21 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 interface xarGraphQLMutationCreateInterface
 {
+    /**
+     * Get create mutation field for this object type
+     * @param mixed $name
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
+     */
     public static function _xar_get_create_mutation($name, $typename, $object): array;
+    /**
+     * Get the create mutation resolver for the object type
+     * @param mixed $typename
+     * @param mixed $object
+     * @throws \Exception
+     * @return callable
+     */
     public static function _xar_create_mutation_resolver($typename, $object = null): callable;
 }
 
@@ -28,6 +42,10 @@ trait xarGraphQLMutationCreateTrait
 {
     /**
      * Get create mutation field for this object type
+     * @param mixed $name
+     * @param mixed $typename
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_create_mutation($name, $typename, $object): array
     {
@@ -49,6 +67,10 @@ trait xarGraphQLMutationCreateTrait
      * Get the create mutation resolver for the object type
      *
      * This method *may* be overridden for a specific object type, but it doesn't have to be
+     * @param mixed $typename
+     * @param mixed $object
+     * @throws \Exception
+     * @return callable
      */
     public static function _xar_create_mutation_resolver($typename, $object = null): callable
     {

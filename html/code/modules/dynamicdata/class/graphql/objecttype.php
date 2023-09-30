@@ -18,17 +18,21 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 class xarGraphQLObjectType extends xarGraphQLBaseType
 {
-    public static $_xar_name   = 'Object';
-    public static $_xar_type   = 'object';
-    public static $_xar_object = 'objects';
+    public static string $_xar_name   = 'Object';
+    public static string $_xar_type   = 'object';
+    public static string $_xar_object = 'objects';
+    /** @var array<mixed> */
     public static $_xar_queries = [
         'list' => 'objects',
         'item' => 'object',
     ];
+    /** @var array<mixed> */
     public static $_xar_mutations = [];
 
     /**
      * This method *should* be overridden for each specific object type
+     * @param mixed $object
+     * @return array<string, mixed>
      */
     public static function _xar_get_object_fields($object): array
     {

@@ -29,6 +29,11 @@ class xarGraphQLSerialType extends ScalarType
         return $this->tryUnserialized($value);
     }
 
+    /**
+     * Summary of tryUnserialized
+     * @param mixed $value
+     * @return mixed
+     */
     public function tryUnserialized($value)
     {
         if (empty($value) || !is_string($value)) {
@@ -58,6 +63,11 @@ class xarGraphQLSerialType extends ScalarType
         return $this->parseValueNode($valueNode);
     }
 
+    /**
+     * Summary of parseValueNode
+     * @param mixed $valueNode
+     * @return mixed
+     */
     public function parseValueNode($valueNode)
     {
         if ($valueNode instanceof ObjectValueNode) {

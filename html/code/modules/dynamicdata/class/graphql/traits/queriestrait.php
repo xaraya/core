@@ -17,8 +17,23 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 interface xarGraphQLQueriesInterface extends xarGraphQLQueryPageInterface, xarGraphQLQueryListInterface, xarGraphQLQueryItemInterface
 {
+    /**
+     * Get the query fields listed in the $_xar_queries property of the actual class
+     * @return array<mixed>
+     */
     public static function _xar_get_query_fields(): array;
+    /**
+     * This method will be inherited by all specific object types, so it's important to use "static"
+     * @param mixed $name
+     * @param mixed $kind
+     * @return array<string, mixed>
+     */
     public static function _xar_get_query_field($name, $kind = ''): array;
+    /**
+     * Add to the query resolver for the object type (page, list, item) - when using BuildSchema
+     * @param mixed $typename
+     * @return callable
+     */
     public static function _xar_query_field_resolver($typename = 'query'): callable;
 }
 
@@ -31,12 +46,14 @@ trait xarGraphQLQueriesTrait
     use xarGraphQLQueryListTrait;
     use xarGraphQLQueryItemTrait;
 
-    public static $_xar_type   = '';  // specify in the class using this trait
-    public static $_xar_object = '';  // specify in the class using this trait
+    public static string $_xar_type   = '';  // specify in the class using this trait
+    public static string $_xar_object = '';  // specify in the class using this trait
+    /** @var array<mixed> */
     public static $_xar_queries = [];  // specify in the class using this trait
 
     /**
      * Get the query fields listed in the $_xar_queries property of the actual class
+     * @return array<mixed>
      */
     public static function _xar_get_query_fields(): array
     {
@@ -52,6 +69,10 @@ trait xarGraphQLQueriesTrait
     /**
      * This method will be inherited by all specific object types, so it's important to use "static"
      * instead of "self" here - see https://www.php.net/manual/en/language.oop5.late-static-bindings.php
+     * @param mixed $name
+     * @param mixed $kind
+     * @throws \Exception
+     * @return array<string, mixed>
      */
     public static function _xar_get_query_field($name, $kind = ''): array
     {
@@ -80,6 +101,8 @@ trait xarGraphQLQueriesTrait
 
     /**
      * Add to the query resolver for the object type (page, list, item) - when using BuildSchema
+     * @param mixed $typename
+     * @return callable
      */
     public static function _xar_query_field_resolver($typename = 'query'): callable
     {

@@ -16,11 +16,50 @@ use GraphQL\Type\Definition\ResolveInfo;
  */
 interface xarGraphQLDeferredInterface
 {
+    /**
+     * Summary of _xar_get_deferred_field
+     * @param mixed $fieldname
+     * @param mixed $typename
+     * @param mixed $islist
+     * @return array<string, mixed>
+     */
     public static function _xar_get_deferred_field($fieldname, $typename, $islist = false): array;
+    /**
+     * Get the field resolver for a deferred field - looking up the user names for example
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @param mixed $object
+     * @return callable
+     */
     public static function _xar_deferred_field_resolver($typename, $fieldname, $object = null): callable;
+    /**
+     * Get the property resolver for a deferred field - looking up the user names for example
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @param mixed $object
+     * @return callable
+     */
     public static function _xar_deferred_property_resolver($typename, $fieldname, $object): callable;
+    /**
+     * Add item id to the deferred list of items to be looked up later
+     * @param mixed $typename
+     * @param mixed $id
+     * @param mixed $fieldlist
+     * @return void
+     */
     public static function _xar_add_deferred($typename, $id, $fieldlist = null): void;
+    /**
+     * Load values for a deferred field - looking up the user names for example
+     * @param mixed $typename
+     * @return ?callable
+     */
     public static function _xar_load_deferred($typename): ?callable;
+    /**
+     * Get item from the deferred list of items once they're all loaded
+     * @param mixed $typename
+     * @param mixed $id
+     * @return mixed
+     */
     public static function _xar_get_deferred($typename, $id): mixed;
 }
 
@@ -29,8 +68,16 @@ interface xarGraphQLDeferredInterface
  */
 trait xarGraphQLDeferredTrait
 {
+    /** @var array<string, mixed> */
     protected static $_xar_deferred = [];
 
+    /**
+     * Summary of _xar_get_deferred_field
+     * @param mixed $fieldname
+     * @param mixed $typename
+     * @param mixed $islist
+     * @return array<string, mixed>
+     */
     public static function _xar_get_deferred_field($fieldname, $typename, $islist = false): array
     {
         // xarGraphQL::setTimer('get deferred field ' . $fieldname);
@@ -46,6 +93,11 @@ trait xarGraphQLDeferredTrait
      * Get the property resolver for a deferred field - looking up the user names for example
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @param mixed $object
+     * @throws \Exception
+     * @return callable
      */
     public static function _xar_deferred_property_resolver($typename, $fieldname, $object): callable
     {
@@ -122,6 +174,10 @@ trait xarGraphQLDeferredTrait
      * Get the field resolver for a deferred field - looking up the user names for example
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @param mixed $object
+     * @return callable
      */
     public static function _xar_deferred_field_resolver($typename, $fieldname, $object = null): callable
     {
@@ -181,6 +237,10 @@ trait xarGraphQLDeferredTrait
 
     /**
      * Add item id to the deferred list of items to be looked up later
+     * @param mixed $typename
+     * @param mixed $id
+     * @param mixed $fieldlist
+     * @return void
      */
     public static function _xar_add_deferred($typename, $id, $fieldlist = null): void
     {
@@ -193,6 +253,8 @@ trait xarGraphQLDeferredTrait
      * This method *should* be overridden for each specific object type - unless we rely on the DataObjectLoader
      *
      * See Solving N+1 Problem - https://webonyx.github.io/graphql-php/data-fetching/
+     * @param mixed $typename
+     * @return ?callable
      */
     public static function _xar_load_deferred($typename): ?callable
     {
@@ -213,6 +275,9 @@ trait xarGraphQLDeferredTrait
 
     /**
      * Get item from the deferred list of items once they're all loaded
+     * @param mixed $typename
+     * @param mixed $id
+     * @return mixed
      */
     public static function _xar_get_deferred($typename, $id): mixed
     {
