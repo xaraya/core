@@ -70,6 +70,9 @@ class xarInstallComposer extends xarObject
         $modulesDir = dirname(__DIR__);
         foreach (static::listModules() as $package) {
             [$prefix, $module] = explode('/', $package);
+            if ($module == 'cachemanager') {
+                $module = 'xarcachemanager';
+            }
             if (is_link($modulesDir . '/' . $module)) {
                 echo "Module $module is already linked\n";
                 continue;
