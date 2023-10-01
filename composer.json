@@ -47,12 +47,12 @@
         "post-package-install": "xarInstallComposer::postPackageInstall",
         "post-package-update": "xarInstallComposer::postPackageUpdate",
         "post-package-uninstall": "xarInstallComposer::postPackageUninstall",
-        "install-module-todo": "xarInstallComposer::eventHandler",
-        "list-modules": "xarInstallComposer::showModules"
+        "xar-install-modules": "xarInstallComposer::createModuleSymLinks",
+        "xar-list-modules": "xarInstallComposer::showModules"
     },
     "scripts-descriptions": {
-        "install-module-todo": "Install Xaraya module via composer (TODO)",
-        "list-modules": "List Xaraya modules installed via composer"
+        "xar-install-modules": "Create symlinks to Xaraya modules via composer",
+        "xar-list-modules": "List Xaraya modules installed via composer"
     },
     "extra": {
         "installer-paths": {

@@ -16,6 +16,9 @@ use Composer\Installer\PackageEvent;
 
 const MATCHES = '/xaraya/';
 
+/**
+ * See https://getcomposer.org/doc/articles/scripts.md#defining-scripts
+ */
 class xarInstallComposer extends xarObject
 {
     public static function eventHandler(Event $event)
@@ -59,6 +62,25 @@ class xarInstallComposer extends xarObject
         }
         // @todo remove symlink from vendor/xaraya/<name> to html/code/modules/<name>
         echo "Uninstalled: " . $package->getName() . " " . $package->getType() . "\n";
+    }
+
+    public static function createModuleSymLinks(Event $event)
+    {
+        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
+        $modulesDir = dirname(__DIR__);
+        foreach (static::listModules() as $package) {
+            [$prefix, $module] = explode('/', $package);
+            if (is_link($modulesDir . '/' . $module)) {
+                echo "Module $module is already linked\n";
+                continue;
+            }
+            if (is_dir($modulesDir . '/' . $module)) {
+                echo "Module $module is already copied\n";
+                continue;
+            }
+            echo "Creating symbolic link for module $module\n";
+            symlink($vendorDir . '/' . $package, $modulesDir . '/' . $module);
+        }
     }
 
     public static function showModules()

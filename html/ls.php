@@ -67,6 +67,7 @@ function xarLSLoader($argc, $argv)
 /**
  * Set to the minimalist exception handler
  */
+    sys::import('xaraya.log');
     sys::import('xaraya.exceptions');
     xarDebug::setExceptionHandler(array('ExceptionHandlers','bone'));
 
@@ -143,4 +144,4 @@ try {
 /**
  * Process the local request and shut down
  */
-exit(xarLocalServicesMain($argc, $argv));
+return xarLocalServicesMain($argc, $argv);

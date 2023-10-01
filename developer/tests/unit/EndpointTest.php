@@ -99,12 +99,15 @@ final class EndpointTest extends TestCase
 
     public function testLs(): void
     {
-        $this->markTestSkipped('For local services...');
+        global $argc, $argv;
+        $argv = ['ls.php', 'mail'];
+        $argc = count($argv);
+
         ob_start();
         include sys::web() . 'ls.php';
         $output = ob_get_clean();
 
-        $expected = 'local services';
+        $expected = 'Usage: mail -u <user> -p <pass> [mailcontent]';
         $this->assertStringContainsString($expected, $output);
     }
 
