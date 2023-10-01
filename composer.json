@@ -26,6 +26,9 @@
         "sort-packages": true,
         "preferred-install": {
             "xaraya/properties": "source"
+        },
+        "allow-plugins": {
+            "xaraya/*": true
         }
     },
     "minimum-stability": "dev",
@@ -44,15 +47,17 @@
         ]
     },
     "scripts": {
-        "post-package-install": "xarInstallComposer::postPackageInstall",
-        "post-package-update": "xarInstallComposer::postPackageUpdate",
-        "post-package-uninstall": "xarInstallComposer::postPackageUninstall",
         "xar-install-modules": "xarInstallComposer::createModuleSymLinks",
-        "xar-list-modules": "xarInstallComposer::showModules"
+        "xar-list-modules": "xarInstallComposer::showModules",
+        "xar-start-server": [
+            "Composer\\Config::disableProcessTimeout",
+            "php -S 0.0.0.0:8080 -t html"
+        ]
     },
     "scripts-descriptions": {
         "xar-install-modules": "Create symlinks to Xaraya modules via composer",
-        "xar-list-modules": "List Xaraya modules installed via composer"
+        "xar-list-modules": "List Xaraya modules installed via composer",
+        "xar-start-server": "Start local PHP server to browse Xaraya site"
     },
     "extra": {
         "installer-paths": {
@@ -60,20 +65,6 @@
             "html/themes/{name}/": ["type:xaraya-theme"],
             "html/code/blocks/{name}/": ["type:xaraya-block"],
             "html/code/properties/{name}/": ["type:xaraya-property"]
-        },
-        "xaraya": {
-            "layout": {
-                "root": "",
-                "web": "",
-                "lib": "lib/",
-                "code": "code/"
-            },
-            "install": {
-                "module": "code/modules",
-                "theme": "web/themes",
-                "block": "code/blocks",
-                "property": "code/properties"
-            }
         }
     }
 }
