@@ -13,12 +13,30 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
-class ItemCreate extends DataObjectHookObserver
+use HookObserver;
+use ixarEventSubject;
+use ixarHookSubject;
+use sys;
+
+sys::import('xaraya.structures.hooks.observer');
+
+/**
+ * DataObject Hook Observer for Item* and Module* ixarHookSubject events
+ * Notified if DD module is hooked to a particular module, itemtype and/or scope
+ */
+class DataObjectHookObserver extends HookObserver
 {
+    public $module = 'dynamicdata';
+
     /**
-     * create fields for an item - hook for ('item','create','API')
-     * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
-     *
+     * @param ixarHookSubject $subject
+     */
+    public function notify(ixarEventSubject $subject)
+    {
+        return static::run($subject->getArgs());
+    }
+
+    /**
      * @param array<string, mixed> $args array of optional parameters<br/>
      *        ingeger  $args['objectid'] ID of the object<br/>
      *        string   $args['extrainfo'] extra information
@@ -26,8 +44,6 @@ class ItemCreate extends DataObjectHookObserver
      */
     public static function run(array $args = [])
     {
-        // we rely on the updatehook to do the real work here
-        $args['dd_function'] = 'createhook';
-        return ItemUpdate::run($args);
+        return $args['extrainfo'] ?? [];
     }
 }

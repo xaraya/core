@@ -20,73 +20,68 @@ use xarVar;
 use DataObjectDescriptor;
 use DataObjectMaster;
 use sys;
-use HookObserver;
 
-sys::import('xaraya.structures.hooks.observer');
-
-class ItemNew extends HookObserver
+class ItemNew extends DataObjectHookObserver
 {
-    public $module = 'dynamicdata';
+    /**
+     * select dynamicdata for a new item - hook for ('item','new','GUI')
+     *
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] ID of the object
+     *     $args['extrainfo'] extra information
+     * @return string|void output display string
+     */
+    public static function run(array $args = [])
+    {
+        // Security
+        if (!xarSecurity::check('AddDynamicData')) {
+            return;
+        }
 
-/**
- * select dynamicdata for a new item - hook for ('item','new','GUI')
- *
- * @param array<string, mixed> $args
- * with
- *     $args['objectid'] ID of the object
- *     $args['extrainfo'] extra information
- * @return string|void output display string
- */
-public static function run(array $args = [])
-{
-    // Security
-    if (!xarSecurity::check('AddDynamicData')) {
-        return;
+        extract($args);
+        $extrainfo ??= [];
+
+        // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
+        $modname = $extrainfo['module'];
+        $itemtype = $extrainfo['itemtype'];
+        $itemid = $extrainfo['itemid'];
+        $module_id = $extrainfo['module_id'];
+
+        // don't allow hooking to yourself in DD
+        if ($modname == 'dynamicdata') {
+            return '';
+        }
+
+        $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
+                                           'itemtype'  => $itemtype]);
+        sys::import('modules.dynamicdata.class.objects.master');
+        $object = DataObjectMaster::getObject(['name' => $descriptorargs['name']]);
+        if (!isset($object) || empty($object->objectid)) {
+            return;
+        }
+
+        // if we are in preview mode, we need to check for any preview values
+        if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
+            return;
+        }
+        if (!empty($preview)) {
+            $object->checkInput();
+        }
+
+        if (!empty($object->template)) {
+            $template = $object->template;
+        } else {
+            $template = $object->name;
+        }
+
+        $properties = $object->getProperties();
+        return xarTpl::module(
+            'dynamicdata',
+            'admin',
+            'newhook',
+            ['properties' => $properties],
+            $template
+        );
     }
-
-    extract($args);
-    $extrainfo ??= [];
-
-    // everything is already validated in HookSubject, except possible empty objectid/itemid for create/display
-    $modname = $extrainfo['module'];
-    $itemtype = $extrainfo['itemtype'];
-    $itemid = $extrainfo['itemid'];
-    $module_id = $extrainfo['module_id'];
-
-    // don't allow hooking to yourself in DD
-    if ($modname == 'dynamicdata') {
-        return '';
-    }
-
-    $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype]);
-    sys::import('modules.dynamicdata.class.objects.master');
-    $object = DataObjectMaster::getObject(['name' => $descriptorargs['name']]);
-    if (!isset($object) || empty($object->objectid)) {
-        return;
-    }
-
-    // if we are in preview mode, we need to check for any preview values
-    if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
-        return;
-    }
-    if (!empty($preview)) {
-        $object->checkInput();
-    }
-
-    if (!empty($object->template)) {
-        $template = $object->template;
-    } else {
-        $template = $object->name;
-    }
-
-    $properties = $object->getProperties();
-    return xarTpl::module(
-        'dynamicdata',
-        'admin',
-        'newhook',
-        ['properties' => $properties],
-        $template
-    );
-}
 }
