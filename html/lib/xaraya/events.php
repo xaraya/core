@@ -76,9 +76,9 @@ interface ixarEvents
     public static function getSubjectType();
     public static function getObserverType();
     public static function getObservers(ixarEventSubject $subject);
-    public static function registerSubject($event,$scope,$module,$area,$type,$func);
-    public static function register($event,$module,$area,$type,$func,$itemtype,$scope);
-    public static function registerObserver($event,$module,$area,$type,$func);
+    public static function registerSubject($event,$scope,$module,$area,$type,$func,$classname);
+    public static function register($event,$module,$area,$type,$func,$itemtype,$scope,$classname);
+    public static function registerObserver($event,$module,$area,$type,$func,$classname);
     public static function unregisterSubject($event,$module);
     public static function unregisterObserver($event,$module);
     public static function notify($event, $args);
@@ -240,24 +240,26 @@ class xarEvents extends xarObject implements ixarEvents
     /**
      * public event registration functions
      *
-    **/    
-    public static function registerSubject($event,$scope,$module,$area='class',$type='eventsubjects',$func='notify')
+    **/
+    public static function registerSubject($event, $scope, $module, $area = 'class', $type = 'eventsubjects', $func = 'notify', $classname = '')
     {
         $subjecttype = static::getSubjectType();
         $info = self::register($event, $module, $area, $type, $func, $subjecttype, $scope);
         if (empty($info)) return;
         self::$subjects[$subjecttype][$event] = $info;
         return $info['id'];
-    }    
-    
-    public static function registerObserver($event,$module,$area='class',$type='eventobservers',$func='notify')
-    {     
-        $observertype = static::getObserverType();  
-        $info = self::register($event, $module, $area, $type, $func, $observertype);
+    }
+
+    public static function registerObserver($event, $module, $area = 'class', $type = 'eventobservers', $func = 'notify', $classname = '')
+    {
+        $observertype = static::getObserverType();
+        // always empty for observers - used for selective hook observers to a particular subject scope (module/itemtype/item/...)
+        $scope = '';
+        $info = self::register($event, $module, $area, $type, $func, $observertype, $scope, $classname);
         if (empty($info)) return;
         self::$observers[$observertype][$event][$module] = $info;
         return $info['id'];
-    }    
+    }
 
     /**
      * allow others to define callback functions without registering observers e.g. for event bridge (= not saved in database)
@@ -278,7 +280,9 @@ class xarEvents extends xarObject implements ixarEvents
      * @param string $area, name of area where file can be found (class|gui|api)
      * @param string $type, type of function (eventobserver|eventsubject for class) (user|admin|etc for ap|gui)
      * @param string $func, name of method for class, or name of function for api|gui
-     * @param int $itemtype id of event itemtype
+     * @param int $itemtype id of event itemtype (event subject/object, hook subject/object)
+     * @param string $scope scope of subject events for selective hooks - also part of event name (event|server|session|module|itemtype|item|user|...)
+     * @param string $classname fully qualified class name - when using namespaces or custom instead of default class name
      *
      * @throws BadParameterException, DBException, DuplicateEventException
      * @returns bool, true on success
@@ -296,7 +300,7 @@ class xarEvents extends xarObject implements ixarEvents
      * xarMod::apiFunc('roles', 'user', 'otherevent');
     **/
     
-    final public static function register($event,$module,$area='class',$type='eventobservers',$func='notify', $itemtype=0, $scope="")
+    final public static function register($event, $module, $area = 'class', $type = 'eventobservers', $func = 'notify', $itemtype = 0, $scope = '', $classname = '')
     {
 
         // @checkme support namespaces in modules (and core someday) - we may pass along $info['classname'] here someday too
@@ -307,10 +311,10 @@ class xarEvents extends xarObject implements ixarEvents
             'type'     => $type,
             'func'     => $func,
             'itemtype' => $itemtype,
-            'classname' => '',
+            'classname' => $classname,
             'scope'    => $scope,
-        );        
-                      
+        );
+
         // file load takes care of validation, any invalid input throws an exception 
         if (!self::fileLoad($info)) return;
 

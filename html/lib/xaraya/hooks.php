@@ -38,19 +38,22 @@ class xarHooks extends xarEvents
     {
         return xarHooks::HOOK_OBSERVER_TYPE;
     }
+
     /**
      * public event registration functions
      *
-    **/    
-    public static function registerSubject($event,$scope,$module,$area='class',$type='hooksubjects',$func='notify')
+    **/
+    public static function registerSubject($event, $scope, $module, $area = 'class', $type = 'hooksubjects', $func = 'notify', $classname = '')
     {
-        return xarHooks::register($event, $module, $area, $type, $func, xarHooks::HOOK_SUBJECT_TYPE, $scope);
-    }    
-    
-    public static function registerObserver($event,$module,$area='class',$type='hookobservers',$func='notify')
-    {       
-        return xarHooks::register($event, $module, $area, $type, $func, xarHooks::HOOK_OBSERVER_TYPE);
-    } 
+        return xarHooks::register($event, $module, $area, $type, $func, xarHooks::HOOK_SUBJECT_TYPE, $scope, $classname);
+    }
+
+    public static function registerObserver($event, $module, $area = 'class', $type = 'hookobservers', $func = 'notify', $classname = '')
+    {
+        // always empty for observers - used for selective hook observers to a particular subject scope (module/itemtype/item/...)
+        $scope = '';
+        return xarHooks::register($event, $module, $area, $type, $func, xarHooks::HOOK_OBSERVER_TYPE, $scope, $classname);
+    }
 
     // this function is called when an event is raised (hook called)
     // it returns all modules hooked to the caller module (+ itemtype) that raised the event
