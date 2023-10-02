@@ -76,9 +76,9 @@ interface ixarEvents
     public static function getSubjectType();
     public static function getObserverType();
     public static function getObservers(ixarEventSubject $subject);
-    public static function registerSubject($event,$scope,$module,$area,$type,$func,$classname);
+    public static function registerSubject($event,$scope,$module,$classnameOrArea,$type,$func);
     public static function register($event,$module,$area,$type,$func,$itemtype,$scope,$classname);
-    public static function registerObserver($event,$module,$area,$type,$func,$classname);
+    public static function registerObserver($event,$module,$classnameOrArea,$type,$func);
     public static function unregisterSubject($event,$module);
     public static function unregisterObserver($event,$module);
     public static function notify($event, $args);

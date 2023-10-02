@@ -11,7 +11,21 @@
 
 sys::import('xaraya.structures.events.observer');
 
-class HookObserver extends EventObserver implements ixarEventObserver
+/**
+ * Hook Observer Interface
+ *
+ * All Hook Observers must implement this
+**/
+interface ixarHookObserver extends ixarEventObserver
+{
+    /**
+     * Phpstan complaint about not contravariant
+     * @param ixarHookSubject $subject
+     */
+    public function notify(ixarEventSubject $subject);
+}
+
+class HookObserver extends EventObserver implements ixarHookObserver
 {
     public $module = "modules";
     
