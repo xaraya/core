@@ -21,6 +21,8 @@ use DataObjectDescriptor;
 use DataObjectMaster;
 use sys;
 
+sys::import('modules.dynamicdata.class.hookobservers.generic');
+
 class ItemNew extends DataObjectHookObserver
 {
     /**

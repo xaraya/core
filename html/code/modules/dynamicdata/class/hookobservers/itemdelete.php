@@ -15,6 +15,9 @@ namespace Xaraya\DataObject\HookObservers;
 
 use xarMod;
 use BadParameterException;
+use sys;
+
+sys::import('modules.dynamicdata.class.hookobservers.generic');
 
 class ItemDelete extends DataObjectHookObserver
 {

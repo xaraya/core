@@ -38,4 +38,5 @@ $modversion = [
     'user'               => true,
     'class'              => 'Core Complete',
     'category'           => 'Content',
+    'namespace'          => 'Xaraya\DataObject',
 ];

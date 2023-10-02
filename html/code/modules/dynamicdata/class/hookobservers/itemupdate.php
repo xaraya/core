@@ -17,6 +17,9 @@ use xarVar;
 use DataObjectDescriptor;
 use DataObjectMaster;
 use BadParameterException;
+use sys;
+
+sys::import('modules.dynamicdata.class.hookobservers.generic');
 
 class ItemUpdate extends DataObjectHookObserver
 {

@@ -1,6 +1,5 @@
 <?php
 /**
- * Modify Dynamic data for an Item
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -14,19 +13,16 @@
 
 namespace Xaraya\DataObject\HookObservers;
 
-use xarSecurity;
 use xarTpl;
-use xarVar;
 use DataObjectDescriptor;
 use DataObjectMaster;
 use sys;
 
 sys::import('modules.dynamicdata.class.hookobservers.generic');
 
-class ItemModify extends DataObjectHookObserver
+class ItemDisplay extends DataObjectHookObserver
 {
     /**
-     * modify dynamicdata for an item - hook for ('item','modify','GUI')
      *
      * @param array<string, mixed> $args
      * with
@@ -36,11 +32,6 @@ class ItemModify extends DataObjectHookObserver
      */
     public static function run(array $args = [])
     {
-        // Security
-        if (!xarSecurity::check('EditDynamicData')) {
-            return;
-        }
-
         extract($args);
         $extrainfo ??= [];
 
@@ -50,40 +41,29 @@ class ItemModify extends DataObjectHookObserver
         $itemid = $extrainfo['itemid'];
         $module_id = $extrainfo['module_id'];
 
-        // don't allow hooking to yourself in DD
-        if ($modname == 'dynamicdata') {
-            return '';
-        }
-
         $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
-                                           'itemtype'  => $itemtype]);
-        sys::import('modules.dynamicdata.class.objects.master');
-        $object = DataObjectMaster::getObject(['name' => $descriptorargs['name']]);
+                                        'itemtype'  => $itemtype]);
+        $object = DataObjectMaster::getObject(['name' => $descriptorargs['name'],
+                                        'itemid'   => $itemid]);
         if (!isset($object) || empty($object->objectid)) {
             return;
         }
-        $object->getItem(['itemid' => $itemid]);
+        if (!$object->checkAccess('display')) {
+            return xarML('Display #(1) is forbidden', $object->label);
+        }
 
-        // if we are in preview mode, we need to check for any preview values
-        if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
-            return;
-        }
-        if (!empty($preview)) {
-            $object->checkInput();
-        }
+        $object->getItem();
 
         if (!empty($object->template)) {
             $template = $object->template;
         } else {
             $template = $object->name;
         }
-
-        $properties = $object->getProperties();
         return xarTpl::module(
             'dynamicdata',
-            'admin',
-            'modifyhook',
-            ['properties' => $properties],
+            'user',
+            'displayhook',
+            ['properties' => & $object->properties],
             $template
         );
     }

@@ -224,29 +224,54 @@ function dynamicdata_upgrade($oldversion)
     // Upgrade dependent on old version number
     switch ($oldversion) {
         case '2.0.0':
+            // fall through to next upgrade
+            // no break
+        case '2.4.1':
+            // @todo remove xaModHooks::unregister() calls at next upgrade
             // when a new module item is being specified
-            xarModHooks::register('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
+            xarModHooks::unregister('item', 'new', 'GUI', 'dynamicdata', 'admin', 'newhook');
             // when a module item is created (uses 'dd_*')
-            xarModHooks::register('item', 'create', 'API', 'dynamicdata', 'admin', 'createhook');
+            xarModHooks::unregister('item', 'create', 'API', 'dynamicdata', 'admin', 'createhook');
             // when a module item is being modified (uses 'dd_*')
-            xarModHooks::register('item', 'modify', 'GUI', 'dynamicdata', 'admin', 'modifyhook');
+            xarModHooks::unregister('item', 'modify', 'GUI', 'dynamicdata', 'admin', 'modifyhook');
             // when a module item is updated (uses 'dd_*')
-            xarModHooks::register('item', 'update', 'API', 'dynamicdata', 'admin', 'updatehook');
+            xarModHooks::unregister('item', 'update', 'API', 'dynamicdata', 'admin', 'updatehook');
             // when a module item is deleted
-            xarModHooks::register('item', 'delete', 'API', 'dynamicdata', 'admin', 'deletehook');
+            xarModHooks::unregister('item', 'delete', 'API', 'dynamicdata', 'admin', 'deletehook');
             // when a module configuration is being modified (uses 'dd_*')
-            xarModHooks::register('module', 'modifyconfig', 'GUI', 'dynamicdata', 'admin', 'modifyconfighook');
+            xarModHooks::unregister('module', 'modifyconfig', 'GUI', 'dynamicdata', 'admin', 'modifyconfighook');
             // when a module configuration is updated (uses 'dd_*')
-            xarModHooks::register('module', 'updateconfig', 'API', 'dynamicdata', 'admin', 'updateconfighook');
+            xarModHooks::unregister('module', 'updateconfig', 'API', 'dynamicdata', 'admin', 'updateconfighook');
             // when a whole module is removed, e.g. via the modules admin screen
             // (set object ID to the module name !)
-            xarModHooks::register('module', 'remove', 'API', 'dynamicdata', 'admin', 'removehook');
+            xarModHooks::unregister('module', 'remove', 'API', 'dynamicdata', 'admin', 'removehook');
             //  Ideally, people should be able to use the dynamic fields in their
             //  module templates as if they were 'normal' fields -> this means
             //  adapting the get() function in the user API of the module, and/or
             //  using some common data retrieval function (DD) in the future...
             /*  display hook is now disabled by default - use the BL tags or APIs instead
-                xarModHooks::register('item', 'display', 'GUI', 'dynamicdata', 'user', 'displayhook');
+                xarModHooks::unregister('item', 'display', 'GUI', 'dynamicdata', 'user', 'displayhook');
+            */
+            $namespace = 'Xaraya\DataObject\HookObservers';
+            // when a new module item is being specified
+            xarHooks::registerObserver('ItemNew', 'dynamicdata', $namespace . '\ItemNew');
+            // when a module item is created (uses 'dd_*')
+            xarHooks::registerObserver('ItemCreate', 'dynamicdata', $namespace . '\ItemCreate');
+            // when a module item is being modified (uses 'dd_*')
+            xarHooks::registerObserver('ItemModify', 'dynamicdata', $namespace . '\ItemModify');
+            // when a module item is updated (uses 'dd_*')
+            xarHooks::registerObserver('ItemUpdate', 'dynamicdata', $namespace . '\ItemUpdate');
+            // when a module item is deleted
+            xarHooks::registerObserver('ItemDelete', 'dynamicdata', $namespace . '\ItemDelete');
+            // when a module configuration is being modified (uses 'dd_*')
+            xarHooks::registerObserver('ModuleModifyconfig', 'dynamicdata', $namespace . '\ModuleModifyconfig');
+            // when a module configuration is updated (uses 'dd_*')
+            xarHooks::registerObserver('ModuleUpdateconfig', 'dynamicdata', $namespace . '\ModuleUpdateconfig');
+            // when a whole module is removed, e.g. via the modules admin screen
+            // (set object ID to the module name !)
+            xarHooks::registerObserver('ModuleRemove', 'dynamicdata', $namespace . '\ModuleRemove');
+            /*  display hook is now disabled by default - use the BL tags or APIs instead
+                xarHooks::registerObserver('ItemDisplay', 'dynamicdata', $namespace . '\ItemDisplay');
             */
             // fall through to next upgrade
             // no break

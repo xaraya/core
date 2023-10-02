@@ -14,6 +14,9 @@
 namespace Xaraya\DataObject\HookObservers;
 
 use BadParameterException;
+use sys;
+
+sys::import('modules.dynamicdata.class.hookobservers.generic');
 
 class ModuleUpdateconfig extends DataObjectHookObserver
 {
