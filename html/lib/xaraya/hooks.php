@@ -43,13 +43,29 @@ class xarHooks extends xarEvents
      * public event registration functions
      *
     **/
-    public static function registerSubject($event, $scope, $module, $area = 'class', $type = 'hooksubjects', $func = 'notify', $classname = '')
+    public static function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'hooksubjects', $func = 'notify')
     {
+        // move classname earlier in params list when they're all classes
+        if (in_array(strtolower($classnameOrArea), self::SUPPORTED_AREAS)) {
+            $classname = '';
+            $area = $classnameOrArea;
+        } else {
+            $classname = $classnameOrArea;
+            $area = 'class';
+        }
         return xarHooks::register($event, $module, $area, $type, $func, xarHooks::HOOK_SUBJECT_TYPE, $scope, $classname);
     }
 
-    public static function registerObserver($event, $module, $area = 'class', $type = 'hookobservers', $func = 'notify', $classname = '')
+    public static function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'hookobservers', $func = 'notify')
     {
+        // move classname earlier in params list when they're all classes
+        if (in_array(strtolower($classnameOrArea), self::SUPPORTED_AREAS)) {
+            $classname = '';
+            $area = $classnameOrArea;
+        } else {
+            $classname = $classnameOrArea;
+            $area = 'class';
+        }
         // always empty for observers - used for selective hook observers to a particular subject scope (module/itemtype/item/...)
         $scope = '';
         return xarHooks::register($event, $module, $area, $type, $func, xarHooks::HOOK_OBSERVER_TYPE, $scope, $classname);

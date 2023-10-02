@@ -102,7 +102,8 @@ class xarEvents extends xarObject implements ixarEvents
     // Event system itemtypes 
     const SUBJECT_TYPE       = 1;   // System event subjects, handles OBSERVER_TYPE events
     const OBSERVER_TYPE      = 2;   // System event observers
-    
+    const SUPPORTED_AREAS    = ['class', 'api', 'gui'];
+
     // Cached event subjects and observers
     // @TODO: evaluate caching
     protected static $subjects;
@@ -241,17 +242,33 @@ class xarEvents extends xarObject implements ixarEvents
      * public event registration functions
      *
     **/
-    public static function registerSubject($event, $scope, $module, $area = 'class', $type = 'eventsubjects', $func = 'notify', $classname = '')
+    public static function registerSubject($event, $scope, $module, $classnameOrArea = 'class', $type = 'eventsubjects', $func = 'notify')
     {
+        // move classname earlier in params list when they're all classes
+        if (in_array(strtolower($classnameOrArea), self::SUPPORTED_AREAS)) {
+            $classname = '';
+            $area = $classnameOrArea;
+        } else {
+            $classname = $classnameOrArea;
+            $area = 'class';
+        }
         $subjecttype = static::getSubjectType();
-        $info = self::register($event, $module, $area, $type, $func, $subjecttype, $scope);
+        $info = self::register($event, $module, $area, $type, $func, $subjecttype, $scope, $classname);
         if (empty($info)) return;
         self::$subjects[$subjecttype][$event] = $info;
         return $info['id'];
     }
 
-    public static function registerObserver($event, $module, $area = 'class', $type = 'eventobservers', $func = 'notify', $classname = '')
+    public static function registerObserver($event, $module, $classnameOrArea = 'class', $type = 'eventobservers', $func = 'notify')
     {
+        // move classname earlier in params list when they're all classes
+        if (in_array(strtolower($classnameOrArea), self::SUPPORTED_AREAS)) {
+            $classname = '';
+            $area = $classnameOrArea;
+        } else {
+            $classname = $classnameOrArea;
+            $area = 'class';
+        }
         $observertype = static::getObserverType();
         // always empty for observers - used for selective hook observers to a particular subject scope (module/itemtype/item/...)
         $scope = '';
