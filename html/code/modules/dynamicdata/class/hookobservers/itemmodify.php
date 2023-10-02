@@ -1,6 +1,6 @@
 <?php
 /**
- * Select dynamicdata for a new item
+ * Modify Dynamic data for an Item
  * @package modules\dynamicdata
  * @subpackage dynamicdata
  * @category Xaraya Web Applications Framework
@@ -11,8 +11,25 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+namespace Xaraya\DataObject\HookObservers;
+
+use xarSecurity;
+use xarTpl;
+use xarVar;
+use DataObjectDescriptor;
+use DataObjectMaster;
+use sys;
+use HookObserver;
+
+sys::import('xaraya.structures.hooks.observer');
+
+class ItemModify extends HookObserver
+{
+    public $module = 'dynamicdata';
+
 /**
- * select dynamicdata for a new item - hook for ('item','new','GUI')
+ * modify dynamicdata for an item - hook for ('item','modify','GUI')
  *
  * @param array<string, mixed> $args
  * with
@@ -20,10 +37,10 @@
  *     $args['extrainfo'] extra information
  * @return string|void output display string
  */
-function dynamicdata_admin_newhook(array $args = [])
+public static function run(array $args = [])
 {
     // Security
-    if (!xarSecurity::check('AddDynamicData')) {
+    if (!xarSecurity::check('EditDynamicData')) {
         return;
     }
 
@@ -48,6 +65,7 @@ function dynamicdata_admin_newhook(array $args = [])
     if (!isset($object) || empty($object->objectid)) {
         return;
     }
+    $object->getItem(['itemid' => $itemid]);
 
     // if we are in preview mode, we need to check for any preview values
     if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {
@@ -67,8 +85,9 @@ function dynamicdata_admin_newhook(array $args = [])
     return xarTpl::module(
         'dynamicdata',
         'admin',
-        'newhook',
+        'modifyhook',
         ['properties' => $properties],
         $template
     );
+}
 }

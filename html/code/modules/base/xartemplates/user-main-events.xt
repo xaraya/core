@@ -217,7 +217,7 @@ xarEvents::registerSubject('MyOtherAPIEvent','MyOtherItems','mymodule', 'api', '
     E.g. with xarHooks::registerObserver('ItemCreate', 'mymodule')
     some class with a fully qualified class name "Xaraya\Modules\MyModule\HookObservers\ItemCreateObserver"
     should still be defined
-    in file code/modules/mymodule/hookobservers/itemcreate.php
+    in file code/modules/mymodule/class/hookobservers/itemcreate.php
 </pre></code>
 
 <p>All observer classes must implement ixarEventObserver interface (see xaraya.structures.events.observer)</p>

@@ -10,6 +10,19 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+namespace Xaraya\DataObject\HookObservers;
+
+use xarMod;
+use sys;
+use HookObserver;
+
+sys::import('xaraya.structures.hooks.observer');
+
+class ItemCreate extends HookObserver
+{
+    public $module = 'dynamicdata';
+
 /**
  * create fields for an item - hook for ('item','create','API')
  * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
@@ -19,9 +32,10 @@
  *        string   $args['extrainfo'] extra information
  * @return array<mixed> true on success, false on failure
  */
-function dynamicdata_adminapi_createhook(array $args = [])
+public static function run(array $args = [])
 {
     // we rely on the updatehook to do the real work here
     $args['dd_function'] = 'createhook';
     return xarMod::apiFunc('dynamicdata', 'admin', 'updatehook', $args);
+}
 }

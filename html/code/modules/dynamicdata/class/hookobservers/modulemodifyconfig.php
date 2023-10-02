@@ -11,6 +11,27 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+namespace Xaraya\DataObject\HookObservers;
+
+use xarController;
+use xarMod;
+use xarSecurity;
+use xarTpl;
+use DataObjectDescriptor;
+use DataObjectMaster;
+use DataPropertyMaster;
+use BadParameterException;
+use EmptyParameterException;
+use sys;
+use HookObserver;
+
+sys::import('xaraya.structures.hooks.observer');
+
+class ModuleModifyconfig extends HookObserver
+{
+    public $module = 'dynamicdata';
+
 /**
  * modify configuration for a module - hook for ('module','modifyconfig','GUI')
  *
@@ -22,7 +43,7 @@
  * @throws EmptyParameterException
  * @throws BadParameterException
  */
-function dynamicdata_admin_modifyconfighook(array $args = [])
+public static function run(array $args = [])
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -116,4 +137,5 @@ function dynamicdata_admin_modifyconfighook(array $args = [])
         $template = null;
     }
     return xarTpl::module('dynamicdata', 'admin', 'modifyconfighook', $data, $template);
+}
 }

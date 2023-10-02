@@ -10,6 +10,22 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+namespace Xaraya\DataObject\HookObservers;
+
+use xarVar;
+use DataObjectDescriptor;
+use DataObjectMaster;
+use BadParameterException;
+use sys;
+use HookObserver;
+
+sys::import('xaraya.structures.hooks.observer');
+
+class ItemUpdate extends HookObserver
+{
+    public $module = 'dynamicdata';
+
 /**
  * update fields for an item - hook for ('item','update','API')
  * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
@@ -20,7 +36,7 @@
  * @return array<mixed> true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_updatehook(array $args = [])
+public static function run(array $args = [])
 {
     $verbose = false;
 
@@ -111,4 +127,5 @@ function dynamicdata_adminapi_updatehook(array $args = [])
     }
     // Return the extra info
     return $extrainfo;
+}
 }

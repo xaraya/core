@@ -10,6 +10,19 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+namespace Xaraya\DataObject\HookObservers;
+
+use BadParameterException;
+use sys;
+use HookObserver;
+
+sys::import('xaraya.structures.hooks.observer');
+
+class ModuleUpdateconfig extends HookObserver
+{
+    public $module = 'dynamicdata';
+
 /**
  * update configuration for a module - hook for ('module','updateconfig','API')
  * Needs $extrainfo['dd_*'] from arguments, or 'dd_*' from input
@@ -20,7 +33,7 @@
  * @return array<mixed> true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_updateconfighook(array $args = [])
+public static function run(array $args = [])
 {
     if (!isset($args['extrainfo'])) {
         $args['extrainfo'] = [];
@@ -31,4 +44,5 @@ function dynamicdata_adminapi_updateconfighook(array $args = [])
     /*
      * currently NOT used (we're going through the 'normal' updateconfig for now)
      */
+}
 }

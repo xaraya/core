@@ -11,6 +11,23 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+namespace Xaraya\DataObject\HookObservers;
+
+use xarDB;
+use xarMod;
+use xarSecurity;
+use BadParameterException;
+use SQLException;
+use sys;
+use HookObserver;
+
+sys::import('xaraya.structures.hooks.observer');
+
+class ModuleRemove extends HookObserver
+{
+    public $module = 'dynamicdata';
+
 /**
  * delete all dynamicdata fields for a module - hook for ('module','remove','API')
  *
@@ -20,7 +37,7 @@
  * @return array<mixed> true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_removehook(array $args = [])
+public static function run(array $args = [])
 {
     extract($args);
 
@@ -107,4 +124,5 @@ function dynamicdata_adminapi_removehook(array $args = [])
 
     // Return the extra info
     return $extrainfo;
+}
 }
