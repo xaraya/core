@@ -8,7 +8,11 @@
  *     "post-package-uninstall": "xarInstallComposer::postPackageUninstall",
  *     "xar-install-modules": "xarInstallComposer::createModuleSymLinks",
  *     "xar-list-modules": "xarInstallComposer::showModules",
- *     "xar-start-server": "php -S 0.0.0.0:8080 -t html"
+ *     "xar-start-server": [
+ *         "Composer\\Config::disableProcessTimeout",
+ *         "php -S 0.0.0.0:8080 -t html"
+ *     ],
+ *     "xar-uninstall-modules": "xarInstallComposer::removeModuleSymLinks"
  * },
  *
  * @package modules\installer\installer
@@ -117,6 +121,33 @@ class xarInstallComposer extends xarObject
             }
             echo "Creating symbolic link for module $module\n";
             symlink($vendorDir . '/' . $package, $modulesDir . '/' . $module);
+        }
+    }
+
+    /**
+     * Summary of removeModuleSymLinks
+     * @param Composer\Script\Event $event
+     * @return void
+     */
+    public static function removeModuleSymLinks(Event $event)
+    {
+        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
+        $modulesDir = dirname(__DIR__);
+        foreach (static::listModules() as $package) {
+            [$prefix, $module] = explode('/', $package);
+            if ($module == 'cachemanager') {
+                $module = 'xarcachemanager';
+            }
+            if (!is_link($modulesDir . '/' . $module)) {
+                echo "Module $module is already unlinked\n";
+                continue;
+            }
+            if (readlink($modulesDir . '/' . $module) !== $vendorDir . '/' . $package) {
+                echo "Module $module is already linked to $vendorDir/$package\n";
+                continue;
+            }
+            echo "Removing symbolic link for module $module\n";
+            unlink($modulesDir . '/' . $module);
         }
     }
 

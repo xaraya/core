@@ -52,12 +52,14 @@
         "xar-start-server": [
             "Composer\\Config::disableProcessTimeout",
             "php -S 0.0.0.0:8080 -t html"
-        ]
+        ],
+        "xar-uninstall-modules": "xarInstallComposer::removeModuleSymLinks"
     },
     "scripts-descriptions": {
         "xar-install-modules": "Create symlinks to Xaraya modules via composer",
         "xar-list-modules": "List Xaraya modules installed via composer",
-        "xar-start-server": "Start local PHP server to browse Xaraya site"
+        "xar-start-server": "Start local PHP server to browse Xaraya site",
+        "xar-uninstall-modules": "Remove symlinks to Xaraya modules via composer"
     },
     "extra": {
         "installer-paths": {
