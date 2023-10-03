@@ -11,6 +11,10 @@
  * @author mikespub <mikespub@xaraya.com>
  * @todo move the xml generate code into a template based system.
  */
+
+sys::import('modules.dynamicdata.class.export.generic');
+use Xaraya\DataObject\Export\DataObjectExporter;
+
 /**
  * Export an object definition to XML
  *
@@ -18,6 +22,7 @@
  * @param array<string, mixed> $args
  * with
  *     int $args['objectid'] object id of the object to export
+ *  string $args['format'] the export format to use (optional)
  * @return string|void
  */
 function dynamicdata_utilapi_export_objectdef(array $args = [])
@@ -27,93 +32,9 @@ function dynamicdata_utilapi_export_objectdef(array $args = [])
     if (empty($objectid)) {
         return;
     }
-
-    $myobject = DataObjectMaster::getObject(['name' => 'objects']);
-
-    $myobject->getItem(['itemid' => $objectid]);
-
-    if (!isset($myobject) || empty($myobject->label) || empty($myobject->properties['objectid']->value)) {
-        return;
+    if (empty($format)) {
+        $format = 'xml';
     }
 
-    // get the list of properties for a Dynamic Object
-    $object_properties = DataPropertyMaster::getProperties(['objectid' => 1]);
-
-    // get the list of properties for a Dynamic Property
-    $property_properties = DataPropertyMaster::getProperties(['objectid' => 2]);
-
-    $proptypes = DataPropertyMaster::getPropertyTypes();
-
-    $prefix = xarDB::getPrefix();
-    $prefix .= '_';
-
-    $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-    $xml .= '<object name="'.$myobject->properties['name']->value.'">'."\n";
-    foreach (array_keys($object_properties) as $name) {
-        if ($name != 'name' && isset($myobject->properties[$name]->value)) {
-            if (is_array($myobject->properties[$name]->value)) {
-                $xml .= "  <$name>\n";
-                foreach ($myobject->$name as $field => $value) {
-                    $xml .= "    <$field>" . xarVar::prepForDisplay($value) . "</$field>\n";
-                }
-                $xml .= "  </$name>\n";
-            } elseif (in_array($name, ['access', 'config', 'sources', 'relations', 'objects', 'category'])) {
-                // don't replace anything in the serialized value
-                $value = $myobject->properties[$name]->value;
-                $xml .= "  <$name>" . $value . "</$name>\n";
-            } else {
-                $value = $myobject->properties[$name]->value;
-                $xml .= "  <$name>" . xarVar::prepForDisplay($value) . "</$name>\n";
-            }
-        }
-    }
-    $xml .= "  <properties>\n";
-    $properties = DataPropertyMaster::getProperties(['objectid' => $myobject->properties['objectid']->value]);
-    foreach (array_keys($properties) as $name) {
-        $xml .= '    <property name="'.$name.'">' . "\n";
-        foreach (array_keys($property_properties) as $key) {
-            if ($key != 'name' && isset($properties[$name][$key])) {
-                if ($key == 'type') {
-                    // replace numeric property type with text version
-                    $xml .= "      <$key>".xarVar::prepForDisplay($proptypes[$properties[$name][$key]]['name'])."</$key>\n";
-                } elseif ($key == 'source') {
-                    // replace local table prefix with default xar_* one
-                    $val = $properties[$name][$key];
-                    $val = preg_replace("/^$prefix/", 'xar_', $val);
-                    $xml .= "      <$key>".xarVar::prepForDisplay($val)."</$key>\n";
-                } elseif ($key == 'configuration') {
-                    // don't replace anything in the serialized value
-                    $val = $properties[$name][$key];
-                    $xml .= "      <$key>" . $val . "</$key>\n";
-                } else {
-                    $xml .= "      <$key>".xarVar::prepForDisplay($properties[$name][$key])."</$key>\n";
-                }
-            }
-        }
-        $xml .= "    </property>\n";
-    }
-    $xml .= "  </properties>\n";
-
-    /* We don't use this
-        // get object links for this object
-        $name = $myobject->properties['name']->value;
-        sys::import('modules.dynamicdata.class.objects.links');
-        $links = DataObjectLinks::getLinks($name,'all');
-        if (!empty($links) && !empty($links[$name])) {
-            $xml .= "  <links>\n";
-            foreach ($links[$name] as $link) {
-                $xml .= '    <link id="link_'.$link['id'].'">' . "\n";
-                $xml .= '      <source>'.$link['source'].'</source>' . "\n";
-                $xml .= '      <from_prop>'.$link['from_prop'].'</from_prop>' . "\n";
-                $xml .= '      <link_type>'.$link['link_type'].'</link_type>' . "\n";
-                $xml .= '      <target>'.$link['target'].'</target>' . "\n";
-                $xml .= '      <to_prop>'.$link['to_prop'].'</to_prop>' . "\n";
-                $xml .= '      <direction>'.$link['direction'].'</direction>' . "\n";
-                $xml .= '    </link>' . "\n";
-            }
-            $xml .= "  </links>\n";
-        }
-    */
-    $xml .= "</object>\n";
-    return $xml;
+    return DataObjectExporter::export($objectid, null, $format);
 }

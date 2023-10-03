@@ -46,6 +46,9 @@ function dynamicdata_admin_export(array $args = [])
     if(!xarVar::fetch('convert', 'isset', $convert, null, xarVar::DONT_SET)) {
         return;
     }
+    if(!xarVar::fetch('format', 'isset', $format, null, xarVar::DONT_SET)) {
+        return;
+    }
 
     $data = [];
     $data['menutitle'] = xarML('Dynamic Data Utilities');
@@ -81,7 +84,8 @@ function dynamicdata_admin_export(array $args = [])
             'dynamicdata',
             'util',
             'export',
-            ['objectref' => &$myobject]
+            ['objectref' => &$myobject,
+            'format' => $format]
         );
         $ext = '-def';
 
@@ -107,7 +111,8 @@ function dynamicdata_admin_export(array $args = [])
             'util',
             'export_item',
             ['objectid' => $myobject->objectid,
-                                     'itemid'   => $itemid]
+            'itemid' => $itemid,
+            'format' => $format]
         );
         $ext = '-dat.' . $itemid;
 
@@ -119,7 +124,8 @@ function dynamicdata_admin_export(array $args = [])
             'dynamicdata',
             'util',
             'export_items',
-            ['objectid' => $myobject->objectid]
+            ['objectid' => $myobject->objectid,
+            'format' => $format]
         );
         $ext = '-dat';
 
@@ -133,22 +139,22 @@ function dynamicdata_admin_export(array $args = [])
         'admin',
         'export',
         ['objectid' => $myobject->objectid,
-                                        'itemid'   => 'all']
+        'itemid'   => 'all']
     );
     $data['filelink'] = xarController::URL(
         'dynamicdata',
         'admin',
         'export',
         ['objectid' => $myobject->objectid,
-                                        'itemid'   => 'all',
-                                        'tofile'   => 1]
+        'itemid'   => 'all',
+        'tofile'   => 1]
     );
     $data['savelink'] = xarController::URL(
         'dynamicdata',
         'admin',
         'export',
         ['objectid' => $myobject->objectid,
-                                        'tofile'   => 1]
+        'tofile'   => 1]
     );
 
     if (!empty($tofile) && !empty($ext)) {

@@ -21,8 +21,6 @@ sys::import('modules.dynamicdata.class.hookobservers.generic');
 
 class ItemDelete extends DataObjectHookObserver
 {
-    public $module = 'dynamicdata';
-
     /**
      * delete fields for an item - hook for ('item','delete','API')
      *

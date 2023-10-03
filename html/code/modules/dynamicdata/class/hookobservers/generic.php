@@ -26,6 +26,7 @@ sys::import('xaraya.structures.hooks.observer');
  */
 class DataObjectHookObserver extends HookObserver
 {
+    /** @var string */
     public $module = 'dynamicdata';
 
     /**
@@ -40,7 +41,7 @@ class DataObjectHookObserver extends HookObserver
      * @param array<string, mixed> $args array of optional parameters<br/>
      *        ingeger  $args['objectid'] ID of the object<br/>
      *        string   $args['extrainfo'] extra information
-     * @return array<mixed> true on success, false on failure
+     * @return array<mixed>|string|void API returns extrainfo array, GUI returns string or void
      */
     public static function run(array $args = [])
     {

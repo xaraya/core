@@ -10,6 +10,10 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+sys::import('modules.dynamicdata.class.export.generic');
+use Xaraya\DataObject\Export\DataObjectExporter;
+
 /**
  * Export all object items for an object id to XML
  *
@@ -17,6 +21,7 @@
  * @param array<string, mixed> $args
  * with
  *     int $args['objectid'] object id of the object items to export
+ *  string $args['format'] the export format to use (optional)
  * @return string|void
  */
 function dynamicdata_utilapi_export_items(array $args = [])
@@ -26,55 +31,9 @@ function dynamicdata_utilapi_export_items(array $args = [])
     if (empty($objectid)) {
         return;
     }
-
-    $mylist = DataObjectMaster::getObjectList(['objectid' => $objectid,
-                                               'prelist'  => false, ]);     // don't run preList method
-
-    // Export all properties that are not disabled
-    foreach ($mylist->properties as $name => $property) {
-        $status = $property->getDisplayStatus();
-        if ($status == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {
-            // Remove this property if it is disabled
-            unset($mylist->properties[$name]);
-        } else {
-            // Anything else: set to active
-            $mylist->properties[$name]->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
-        }
-    }
-    $mylist->getItems(['getvirtuals' => 1]);
-
-    $fieldlist = array_keys($mylist->properties);
-    $deferred = [];
-    foreach ($fieldlist as $key) {
-        if (!empty($mylist->properties[$key]) && $mylist->properties[$key] instanceof DeferredItemProperty) {
-            array_push($deferred, $key);
-            // @checkme set the targetLoader to null to avoid retrieving the propname values
-            if ($mylist->properties[$key] instanceof DeferredManyProperty) {
-                $mylist->properties[$key]->getDeferredLoader()->targetLoader = null;
-            }
-            // @checkme we need to set the item values for relational objects here
-            // foreach ($mylist->items as $itemid => $item) {
-            //     $mylist->properties[$key]->setItemValue($itemid, $item[$key] ?? null);
-            // }
-        }
+    if (empty($format)) {
+        $format = 'xml';
     }
 
-    $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-    $xml .= "<items>\n";
-    foreach ($mylist->items as $itemid => $item) {
-        $xml .= '  <'.$mylist->name.' itemid="'.$itemid.'">'."\n";
-        foreach ($mylist->properties as $name => $property) {
-            if (isset($item[$name]) || in_array($name, $deferred)) {
-                $xml .= "    <$name>";
-                $xml .= $property->exportValue($itemid, $item);
-            } else {
-                $xml .= "    <$name>";
-            }
-            $xml .= "</$name>\n";
-        }
-        $xml .= '  </'.$mylist->name.">\n";
-    }
-    $xml .= "</items>\n";
-
-    return $xml;
+    return DataObjectExporter::export($objectid, 'all', $format);
 }

@@ -22,6 +22,7 @@
  *      mixed $args['itemid'] item id or 'all' of the item(s) you want to import (optional)
  *        int $args['module_id'] module id of the object to export (deprecated)
  *        int $args['itemtype'] item type of the object to export (deprecated)
+ *     string $args['format'] the export format to use (optional)
  * @return string|void
  */
 function dynamicdata_utilapi_export(array $args = [])
@@ -29,6 +30,7 @@ function dynamicdata_utilapi_export(array $args = [])
     if (isset($args['objectref'])) {
         $objectid = $args['objectref']->objectid;
         $itemid = null;
+        $format = $args['format'] ?? 'xml';
     } else {
         extract($args);
 
@@ -49,6 +51,9 @@ function dynamicdata_utilapi_export(array $args = [])
         $objectid = $itemid;
         $itemid = null;
     }
+    if (empty($format)) {
+        $format = 'xml';
+    }
 
     if (empty($objectid)) {
         return;
@@ -56,11 +61,11 @@ function dynamicdata_utilapi_export(array $args = [])
 
     if (!empty($itemid)) {
         if (is_numeric($itemid)) {
-            return xarMod::apiFunc('dynamicdata', 'util', 'export_item', ['objectid' => $objectid, 'itemid' => $itemid]);
+            return xarMod::apiFunc('dynamicdata', 'util', 'export_item', ['objectid' => $objectid, 'itemid' => $itemid, 'format' => $format]);
         } else {
-            return xarMod::apiFunc('dynamicdata', 'util', 'export_items', ['objectid' => $objectid]);
+            return xarMod::apiFunc('dynamicdata', 'util', 'export_items', ['objectid' => $objectid, 'format' => $format]);
         }
     }
 
-    return xarMod::apiFunc('dynamicdata', 'util', 'export_objectdef', ['objectid' => $objectid]);
+    return xarMod::apiFunc('dynamicdata', 'util', 'export_objectdef', ['objectid' => $objectid, 'format' => $format]);
 }

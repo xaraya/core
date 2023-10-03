@@ -10,6 +10,10 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+sys::import('modules.dynamicdata.class.export.generic');
+use Xaraya\DataObject\Export\DataObjectExporter;
+
 /**
  * Export a single object item for an object id and item id to XML
  *
@@ -18,6 +22,7 @@
  * with
  *     int $args['objectid'] object id of the object item to export
  *     int $args['itemid'] item id of the object item to export
+ *  string $args['format'] the export format to use (optional)
  * @return string|void
  */
 function dynamicdata_utilapi_export_item(array $args = [])
@@ -27,33 +32,9 @@ function dynamicdata_utilapi_export_item(array $args = [])
     if (empty($objectid) || empty($itemid)) {
         return;
     }
-
-    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
-                                             'itemid'   => $itemid,
-                                             'allprops' => true, ]);
-
-    if (!isset($myobject) || empty($myobject->label)) {
-        return;
+    if (empty($format)) {
+        $format = 'xml';
     }
 
-    $myobject->getItem();
-    $item = $myobject->getFieldValues();
-
-    $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-    $xml .= '<'.$myobject->name.' itemid="'.$itemid.'">'."\n";
-    foreach ($myobject->properties as $name => $property) {
-        if ($property instanceof DeferredItemProperty) {
-            $property->setDataToDefer($itemid, $item[$name]);
-            // @checkme set the targetLoader to null to avoid retrieving the propname values
-            if ($property instanceof DeferredManyProperty) {
-                $property->getDeferredLoader()->targetLoader = null;
-            }
-            $xml .= "  <$name>" . $property->exportValue($itemid, $item) . "</$name>\n";
-        } else {
-            $xml .= "  <$name>" . $property->exportValue($itemid, $item) . "</$name>\n";
-        }
-    }
-    $xml .= '</'.$myobject->name.">\n";
-
-    return $xml;
+    return DataObjectExporter::export($objectid, $itemid, $format);
 }
