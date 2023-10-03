@@ -131,7 +131,7 @@ $finder = Finder::create()
               ->ignoreVCS(true)
               ->in($ROOT_DIR.'/html/lib/xaraya/')
               ->exclude('legacy');
-
+$todo = [];
 foreach ($finder as $file) {
     $absoluteFilePath = $file->getRealPath();
     $stubFilePath = str_replace(
@@ -148,6 +148,7 @@ foreach ($finder as $file) {
             mkdir(dirname($stubFilePath), 0777, true);
         }
         file_put_contents($stubFilePath, $contents);
+        $todo[] = $stubFilePath;
     } catch (Error $error) {
         echo "Parse error: {$error->getMessage()}\n";
     }
@@ -158,4 +159,15 @@ echo $stubFilePath . "\n";
 $code = file_get_contents($ROOT_DIR.'/html/bootstrap.php');
 $ast = $parser->parse($code);
 $contents = $prettyPrinter->prettyPrintFile($ast);
+file_put_contents($stubFilePath, $contents);
+$todo[] = $stubFilePath;
+
+$stubFilePath = __DIR__.'/stubs.neon';
+$contents = '
+parameters:
+    stubFiles:
+';
+foreach ($todo as $file) {
+    $contents .= '        - ' . str_replace(__DIR__ . '/stubs/', 'stubs/', $file) . "\n";
+}
 file_put_contents($stubFilePath, $contents);
