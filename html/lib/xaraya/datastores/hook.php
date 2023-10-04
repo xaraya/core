@@ -30,11 +30,17 @@ class HookDataStore extends BasicDataStore
         if (!empty($proptypes[$curtype]['name'])) {
             return $proptypes[$curtype]['name'];
         }
+        return null;
     }
 
-    function setPrimary(DataProperty &$property)
+    /**
+     * Set the primary key for this data store (only 1 allowed for now)
+     * @param DataProperty $property
+     * @return void
+     */
+    public function setPrimary(DataProperty &$property)
     {
-        // not applicable !?
+        // see OrderedDataStore
     }
 
     function getItem(array $args = array())

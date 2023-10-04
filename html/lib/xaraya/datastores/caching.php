@@ -20,9 +20,16 @@ sys::import('xaraya.datastores.basic');
 
 class CachingDataStore extends BasicDataStore
 {
+    /** @var mixed */
     protected $cacheStorage;
+    /** @var string */
     protected $storageType = 'apcu';
 
+    /**
+     * Summary of __construct
+     * @param ?string $name
+     * @param ?string $storage
+     */
     public function __construct($name = null, $storage = null)
     {
         parent::__construct($name);
@@ -75,7 +82,6 @@ class CachingDataStore extends BasicDataStore
                 $this->object->properties[$field]->setItemValue($itemid, $item[$field]);
             }
         }
-        return $itemids;
     }
 
     public function countItems(array $args = [])
@@ -136,6 +142,10 @@ class CachingDataStore extends BasicDataStore
         return $itemid;
     }
 
+    /**
+     * Summary of getCacheStorage
+     * @return ixarCache_Storage
+     */
     public function getCacheStorage()
     {
         if (!empty($this->cacheStorage)) {
@@ -143,7 +153,7 @@ class CachingDataStore extends BasicDataStore
         }
         // Note: we use dummy or apcu by default here - see VirtualObjectDescriptor
         $this->cacheStorage = xarCache::getStorage([
-            'storage'   => $this->storageType ?? 'apcu',
+            'storage'   => $this->storageType ?: 'apcu',
             'type'      => 'datastore',
             //'provider'  => $provider,
             // we (won't) store cache files under this

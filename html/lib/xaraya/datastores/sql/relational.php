@@ -19,10 +19,17 @@ sys::import('xaraya.datastores.sql');
  */
 class RelationalDataStore extends SQLDataStore
 {
-    private $encryptor;
+    /** @var array<int> */
     private static $_subitems_types = array(30069, 30120);
+    /** @var string */
     private static $_deferred_property = 'DeferredItemProperty';
+    /** @var mixed */
+    private $encryptor;
     
+    /**
+     * Summary of __construct
+     * @param mixed $name
+     */
     function __construct($name=null)
     {
         parent::__construct($name);
@@ -34,6 +41,10 @@ class RelationalDataStore extends SQLDataStore
         }
     }
 
+    /**
+     * Summary of __toString
+     * @return string
+     */
     function __toString()
     {
         return "relational";
@@ -51,8 +62,15 @@ class RelationalDataStore extends SQLDataStore
             $field = $matches[2];
             return $field;
         }
+        return null;
     }
 
+    /**
+     * Summary of itemExists
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @return bool
+     */
     function itemExists(Array $args = array())
     {
         // Get the itemid from the params or from the object definition
@@ -72,6 +90,12 @@ class RelationalDataStore extends SQLDataStore
         
     }
     
+    /**
+     * Summary of getItem
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @return mixed
+     */
     function getItem(Array $args = array())
     {
         // Get the itemid from the params or from the object definition
@@ -127,6 +151,7 @@ class RelationalDataStore extends SQLDataStore
     /**
      * Create an item in the flat table
      *
+     * @param array<string, mixed> $args
      * @return bool true on success, false on failure
      * @throws BadParameterException
      **/
@@ -217,6 +242,12 @@ class RelationalDataStore extends SQLDataStore
         return $itemid;
     }
     
+    /**
+     * Summary of updateItem
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @return mixed
+     */
     function updateItem(Array $args = array())
     {
         // Get the itemid from the params or from the object definition
@@ -289,6 +320,12 @@ class RelationalDataStore extends SQLDataStore
         return $itemid;
     }
 
+    /**
+     * Summary of deleteItem
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @return mixed
+     */
     function deleteItem(Array $args = array())
     {
         // Get the itemid from the params or from the object definition
@@ -313,6 +350,11 @@ class RelationalDataStore extends SQLDataStore
         return $itemid;
     }
 
+    /**
+     * Summary of removeForeignTables
+     * @param mixed $q
+     * @return mixed
+     */
     private function removeForeignTables($q=null)
     {
         // Foreign tables are any tables not among the object's datasources, like subitems
@@ -350,6 +392,12 @@ class RelationalDataStore extends SQLDataStore
         return $q;
     }
     
+    /**
+     * Summary of getItems
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @return void
+     */
     function getItems(Array $args = array())
     {
         if (!empty($args['numitems'])) {
@@ -480,9 +528,11 @@ class RelationalDataStore extends SQLDataStore
 
     /**
      * Assign a query result value to its property in the proper object 
-     *
-     **/
-
+     * @param mixed $value
+     * @param mixed $field
+     * @throws \Exception
+     * @return void
+     */
     private function setValue($value, $field)
     {
     // Is this a subitems property?
@@ -519,6 +569,7 @@ class RelationalDataStore extends SQLDataStore
             }
         }
     }
+
     /**
      * Summary of setItemValue
      * @param mixed $itemid
@@ -585,8 +636,10 @@ class RelationalDataStore extends SQLDataStore
     
     /**
      * Add the properties of a subitems object to the getItems query
-     *
-     **/
+     * @param Query $query
+     * @param mixed $objectname
+     * @return void
+     */
     private function addqueryfields(Query $query, $objectname)
     {
         $object = DataObjectMaster::getObject(array('name' => $objectname));
@@ -604,6 +657,12 @@ class RelationalDataStore extends SQLDataStore
         }
     }
 
+    /**
+     * Summary of countItems
+     * @param array<string, mixed> $args
+     * @throws \Exception
+     * @return int|null
+     */
     function countItems(Array $args = array())
     {
         if (!empty($args['itemids'])) {
@@ -630,11 +689,16 @@ class RelationalDataStore extends SQLDataStore
         // Run the query
         if (!$q->run()) throw new Exception(xarML('Query failed'));
         $result = $q->row();
-        if (empty($result)) return;
+        if (empty($result)) return null;
 
         return (int)current($result);
     }
 
+    /**
+     * Summary of getNext
+     * @param array<string, mixed> $args
+     * @return mixed
+     */
     function getNext(Array $args = array())
     {
         static $temp = array();
@@ -740,5 +804,4 @@ class RelationalDataStore extends SQLDataStore
         }
         return $itemid;
     }
-
 }

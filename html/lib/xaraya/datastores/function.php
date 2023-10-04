@@ -18,18 +18,29 @@
 **/
 sys::import('xaraya.datastores.basic');
 
+/**
+ * @deprecated 2.0.0 no longer in use
+ */
 class Dynamic_Function_DataStore extends BasicDataStore
 {
+    /** @var mixed */
     public $itemtype;
 
     /**
      * Get the field name used to identify this property (the property validation holds the function name here - for now...)
+     * @param DataProperty $property
+     * @return mixed
      */
     function getFieldName(DataProperty &$property)
     {
         return $property->validation;
     }
 
+    /**
+     * Summary of setPrimary
+     * @param DataProperty $property
+     * @return void
+     */
     function setPrimary(DataProperty &$property)
     {
         // not applicable !?
@@ -38,6 +49,11 @@ class Dynamic_Function_DataStore extends BasicDataStore
     // TODO: support different functions for the different methods,
     //       and/or pass an 'action' argument to the function, and/or...
 
+    /**
+     * Summary of getItem
+     * @param array<string, mixed> $args
+     * @return mixed
+     */
     function getItem(array $args = array())
     {
         $modid    = $args['moduleid'];
@@ -91,12 +107,16 @@ class Dynamic_Function_DataStore extends BasicDataStore
         return $itemid;
     }
 
-    /* fetch a list of the values for all items in the datastore */
+    /**
+     * Fetch a list of the values for all items in the datastore
+     * @param array<string, mixed> $args
+     * @return void
+     */
     function getItems(array $args = array())
     {
         /* don't bother if there are no item ids set */
         if (empty($this->_itemids)) {
-            return array();
+            return;
         }
 
         /* default values - you shouldn't rely on these! */
@@ -127,5 +147,5 @@ class Dynamic_Function_DataStore extends BasicDataStore
                         $this->fields[$function]->value);
             }
         }
-    } /* getItems */
+    }
 }

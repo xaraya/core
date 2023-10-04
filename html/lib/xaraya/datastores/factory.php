@@ -12,23 +12,41 @@
 sys::import('xaraya.datastores.interface');
 
 /**
- * Base class for DD objects
+ * Base class for DD objects datastore
+ * @todo move xml schema elsewhere
  */
 class DDObject extends xarObject implements IDDObject
 {
+    /** @var string */
     public $name;
+    /** @var SimpleXMLElement */
     public $schemaobject;
 
+    /**
+     * Summary of __construct
+     * @param ?string $name
+     */
     public function __construct($name = null)
     {
         $this->name = $name ?? self::toString();
     }
 
+    /**
+     * Summary of loadSchema
+     * @param array<string, mixed> $args
+     * @return void
+     */
     public function loadSchema(array $args = [])
     {
         $this->schemaobject = $this->readSchema($args);
     }
 
+    /**
+     * Summary of readSchema
+     * @param array<string, mixed> $args
+     * @throws \BadParameterException
+     * @return SimpleXMLElement|bool
+     */
     public function readSchema(array $args = [])
     {
         extract($args);
@@ -47,6 +65,11 @@ class DDObject extends xarObject implements IDDObject
     }
 
     //Stolen off http://it2.php.net/manual/en/ref.simplexml.php
+    /**
+     * Summary of toArray
+     * @param SimpleXMLElement|null $schemaobject
+     * @return array<mixed>|bool
+     */
     public function toArray(SimpleXMLElement $schemaobject = null)
     {
         $schemaobject ??= $this->schemaobject;
@@ -83,11 +106,16 @@ class DDObject extends xarObject implements IDDObject
         }
     }
 
+    /**
+     * Summary of toXML
+     * @param SimpleXMLElement|null $schemaobject
+     * @return bool|string
+     */
     public function toXML(SimpleXMLElement $schemaobject = null)
     {
         $schemaobject ??= $this->schemaobject;
         if (empty($schemaobject)) {
-            return [];
+            return '';
         }
         return $schemaobject->asXML();
     }
@@ -96,13 +124,16 @@ class DDObject extends xarObject implements IDDObject
 /**
  * Factory Class to create Dynamic Data Stores
  *
- * @todo this factory should go into core once we use datastores in more broad ways.
  * @todo the classnames could use a bit of a clean up (shorter, lowercasing)
  */
 class DataStoreFactory extends xarObject
 {
     /**
      * Class method to get a new dynamic data store (of the right type)
+     * @param string $name
+     * @param string $type
+     * @param ?string $storage
+     * @return IBasicDataStore
      */
     public static function &getDataStore($name = '_dynamic_data_', $type = 'data', $storage = null)
     {
@@ -167,6 +198,10 @@ class DataStoreFactory extends xarObject
         return $datastore;
     }
 
+    /**
+     * Summary of getDataStores
+     * @return void
+     */
     public function getDataStores()
     {
     }
@@ -177,9 +212,11 @@ class DataStoreFactory extends xarObject
      * @param array<string, mixed> $args
      * with
      *     $args['table'] optional extra table whose fields you want to add as potential data source
+     * @return list<array<string, string>>
      */
     public static function &getDataSources($args = [])
     {
+        $sources = [];
         $sources[] = ['id' => '', 'name' => xarML('None')];
 
         $dbconn = xarDB::getConn();

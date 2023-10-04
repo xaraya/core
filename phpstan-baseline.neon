@@ -81,6 +81,11 @@ parameters:
 			path: html/code/modules/dynamicdata/xarproperties/itemtype.php
 
 		-
+			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:createModuleSymLinks\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
+			count: 1
+			path: html/code/modules/installer/composer.php
+
+		-
 			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:eventHandler\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
 			count: 1
 			path: html/code/modules/installer/composer.php
@@ -97,6 +102,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:postPackageUpdate\\(\\) has invalid type Composer\\\\Installer\\\\PackageEvent\\.$#"
+			count: 1
+			path: html/code/modules/installer/composer.php
+
+		-
+			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:removeModuleSymLinks\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
 			count: 1
 			path: html/code/modules/installer/composer.php
 

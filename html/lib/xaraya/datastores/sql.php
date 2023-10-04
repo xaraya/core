@@ -11,22 +11,31 @@
  * @link http://www.xaraya.info
 **/
 
+sys::import('xaraya.datastores.basic');
+
 /**
  * Base class for SQL Data Stores
  *
 **/
-sys::import('xaraya.datastores.basic');
-
 class SQLDataStore extends OrderedDataStore implements ISQLDataStore
 {
+    /** @var mixed */
     protected $db     = null;
     //protected $tables = null;
 
+    /** @var array<mixed> */
     public $where  = array();
+    /** @var array<mixed> */
     public $groupby= array();
+    /** @var array<mixed> */
     public $join   = array();
+    /** @var ?array<mixed> */
     public $extra;
 
+    /**
+     * Summary of __construct
+     * @param mixed $name
+     */
     function __construct($name=null)
     {
         parent::__construct($name);
@@ -37,6 +46,12 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
 
     /**
      * Add a where clause for this data store (for getItems)
+     * @param DataProperty $property
+     * @param mixed $clause
+     * @param mixed $join
+     * @param mixed $pre
+     * @param mixed $post
+     * @return void
      */
     function addWhere(DataProperty &$property, $clause, $join, $pre = '', $post = '')
     {
@@ -52,7 +67,18 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     }
 
     /**
+     * Remove all where criteria for this data store (for getItems)
+     * @return void
+     */
+    public function cleanWhere()
+    {
+        $this->where = [];
+    }
+
+    /**
      * Add a group by field for this data store (for getItems)
+     * @param DataProperty $property
+     * @return void
      */
     function addGroupBy(DataProperty &$property)
     {
@@ -64,7 +90,24 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     }
 
     /**
+     * Remove all group by fields for this data store (for getItems)
+     * @return void
+     */
+    public function cleanGroupBy()
+    {
+        $this->groupby = [];
+    }
+
+    /**
      * Join another database table to this data store (unfinished)
+     * @param mixed $table
+     * @param mixed $key
+     * @param mixed $fields
+     * @param mixed $where
+     * @param mixed $andor
+     * @param mixed $more
+     * @param mixed $sort
+     * @return void
      */
     function addJoin($table, $key, $fields, $where = '', $andor = 'and', $more = '', $sort = array())
     {
@@ -105,6 +148,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
 
     /**
      * Remove all join criteria for this data store (for getItems)
+     * @return void
      */
     function cleanJoin()
     {
@@ -113,6 +157,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
 
     /**
      * Database functions for lazy connection
+     * @return void
      */
     function connect()
     {
@@ -122,6 +167,11 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
         }
     }
 
+    /**
+     * Summary of getTable
+     * @param mixed $name
+     * @return mixed
+     */
     function getTable($name)
     {
         $tables = xarDB::getTables();
@@ -130,23 +180,41 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
         }
     }
 
+    /**
+     * Summary of getType
+     * @return mixed
+     */
     function getType()
     {
         return xarDB::getType();
     }
 
+    /**
+     * Summary of prepareStatement
+     * @param mixed $sql
+     * @return mixed
+     */
     function prepareStatement($sql)
     {
         $this->connect();
         return $this->db->prepareStatement($sql);
     }
 
+    /**
+     * Summary of getLastId
+     * @param mixed $table
+     * @return mixed
+     */
     function getLastId($table)
     {
         $this->connect();
         return $this->db->getLastId($table);
     }
 
+    /**
+     * Summary of getDatabaseInfo
+     * @return mixed
+     */
     function getDatabaseInfo()
     {
         $this->connect();

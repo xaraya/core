@@ -19,7 +19,9 @@ sys::import('xaraya.datastores.sql.relational');
 
 class ModuleVariablesDataStore extends RelationalDataStore
 {
+    /** @var string */
     public $modulename;
+    /** @var string */
     public $variablename;
 
     function __construct($name=null)
@@ -33,6 +35,12 @@ class ModuleVariablesDataStore extends RelationalDataStore
         return "module_variables";
     }
 
+    /**
+     * Summary of setModvarName
+     * @param ?string $name
+     * @throws \Exception
+     * @return void
+     */
     private function setModvarName($name="")
     {
         if (empty($name)) throw new Exception('Bad modvar name');
@@ -217,7 +225,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
 
             $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($values);
-            if (!$result->first()) return;
+            if (!$result->first()) return null;
 
             $numitems += $result->getInt(1);
             $result->close();

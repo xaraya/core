@@ -23,17 +23,19 @@ sys::import('xaraya.datastores.sql');
 **/
 class VariableTableDataStore extends SQLDataStore
 {
-    protected $table = 'dynamic_data';
+    /** @var string */
     private static $_deferred_property = 'DeferredItemProperty';
-    public $extra;
+    /** @var string */
+    protected $table = 'dynamic_data';
 
     /**
      * Get the field name used to identify this property (we use the property id here)
      */
     function getFieldName(DataProperty &$property)
     {
-        return (int)$property->id;
+        return (string) $property->id;
     }
+
     /**
      * Get the item
      * @param array<string, mixed> $args
@@ -261,7 +263,7 @@ class VariableTableDataStore extends SQLDataStore
     function getItems(array $args = array())
     {
         // Bail if no properties have yet been defined
-        if(count($this->object->properties) == 0) return array();
+        if(count($this->object->properties) == 0) return;
         
         // FIXME: this is a hack
         if (!empty($this->object->where) && !is_array($this->object->where)) {
@@ -911,7 +913,7 @@ class VariableTableDataStore extends SQLDataStore
     function countItems(array $args = array())
     {
         // Bail if no properties have yet been defined
-        if(count($this->object->properties) == 0) return array();
+        if(count($this->object->properties) == 0) return 0;
         
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
@@ -961,7 +963,7 @@ class VariableTableDataStore extends SQLDataStore
             $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($bindvars);
 
-            if ($result->first()) return;
+            if ($result->first()) return null;
             $this->object->numitems = $result->getInt(1);
             $result->close();
 
@@ -990,7 +992,7 @@ class VariableTableDataStore extends SQLDataStore
 
             $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery();
-            if (!$result->first()) return;
+            if (!$result->first()) return null;
 
             $this->object->numitems = $result->getInt(1);
             $result->close();
@@ -1012,7 +1014,7 @@ class VariableTableDataStore extends SQLDataStore
 
             $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($propids);
-            if (!$result->first()) return;
+            if (!$result->first()) return null;
 
             $this->object->numitems = $result->getInt(1);
             $result->close();
@@ -1024,7 +1026,7 @@ class VariableTableDataStore extends SQLDataStore
     /**
      * get next item id (for objects stored only in dynamic data table)
      *
-     * @param $args['objectid'] dynamic object id for the item
+     * @param mixed $objectid dynamic object id for the item
      * @return int|void value of the next id
      * @throws BadParameterException
      */
