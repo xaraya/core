@@ -16,7 +16,7 @@
  *
  *
 **/
-sys::import('modules.dynamicdata.class.datastores.base');
+sys::import('xaraya.datastores.basic');
 
 class Dynamic_Function_DataStore extends BasicDataStore
 {

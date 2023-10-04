@@ -1,7 +1,7 @@
 <?php
 /**
- * @package modules\dynamicdata
- * @subpackage dynamicdata
+ * @package core\datastores
+ * @subpackage datastores
  * @category Xaraya Web Applications Framework
  * @version 2.4.0
  * @copyright see the html/credits.html file in this release
@@ -104,7 +104,7 @@ class DataStoreFactory extends xarObject
     /**
      * Class method to get a new dynamic data store (of the right type)
      */
-    public static function &getDataStore($name = '_dynamic_data_', $type = 'data')
+    public static function &getDataStore($name = '_dynamic_data_', $type = 'data', $storage = null)
     {
         switch ($type) {
             case 'relational':
@@ -157,7 +157,7 @@ class DataStoreFactory extends xarObject
                 break;
             case 'cache':
                 sys::import('xaraya.datastores.caching');
-                $datastore = new CachingDataStore($name);
+                $datastore = new CachingDataStore($name, $storage);
                 break;
             default:
                 sys::import('xaraya.datastores.sql.variabletable');

@@ -46,7 +46,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         'template' => '',
         // Data Store is supported by cacheStorage (dummy = 1 request only or apcu = somewhat persistent by default)
         'datastore' => 'cache',
-        'cachestorage' => 'dummy', // or 'apcu' etc.
+        'cachestorage' => 'apcu', // or 'dummy' etc.
         'propertyargs' => [],
     ];
 

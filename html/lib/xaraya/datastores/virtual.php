@@ -26,7 +26,7 @@
  * Dummy data store class
  *
  */
-sys::import('modules.dynamicdata.class.datastores.base');
+sys::import('xaraya.datastores.basic');
 
 class DummyDataStore extends BasicDataStore
 {

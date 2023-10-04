@@ -15,7 +15,7 @@
  * Class to handle hook datastore
  *
 **/
-sys::import('modules.dynamicdata.class.datastores.base');
+sys::import('xaraya.datastores.basic');
 
 class HookDataStore extends BasicDataStore
 {

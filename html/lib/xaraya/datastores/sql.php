@@ -15,7 +15,7 @@
  * Base class for SQL Data Stores
  *
 **/
-sys::import('modules.dynamicdata.class.datastores.base');
+sys::import('xaraya.datastores.basic');
 
 class SQLDataStore extends OrderedDataStore implements ISQLDataStore
 {

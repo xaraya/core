@@ -16,11 +16,18 @@
 /**
  * Class for cache datastore
  */
-sys::import('modules.dynamicdata.class.datastores.base');
+sys::import('xaraya.datastores.basic');
 
 class CachingDataStore extends BasicDataStore
 {
     protected $cacheStorage;
+    protected $storageType = 'apcu';
+
+    public function __construct($name = null, $storage = null)
+    {
+        parent::__construct($name);
+        $this->storageType = $storage ?? 'apcu';
+    }
 
     public function getItem(array $args = [])
     {
@@ -136,7 +143,7 @@ class CachingDataStore extends BasicDataStore
         }
         // Note: we use dummy or apcu by default here - see VirtualObjectDescriptor
         $this->cacheStorage = xarCache::getStorage([
-            'storage'   => $this->object->cachestorage ?? 'dummy',
+            'storage'   => $this->storageType ?? 'apcu',
             'type'      => 'datastore',
             //'provider'  => $provider,
             // we (won't) store cache files under this

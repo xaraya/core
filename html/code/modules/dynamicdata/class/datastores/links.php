@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-sys::import('modules.dynamicdata.class.datastores.master');
+sys::import('xaraya.datastores.factory');
 
 /**
  * DataStoreLinks class

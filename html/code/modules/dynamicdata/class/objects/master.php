@@ -457,9 +457,12 @@ class DataObjectMaster extends xarObject
                     throw new Exception(xarML('Did not find a first property for module variable datastore'));
                 }
                 break;
-            case 'cache': $this->addDataStore($this->name, 'cache');
+            case 'cache':
+                $storage = $this->descriptor->get('cachestorage') ?? 'apcu';
+                $this->addDataStore($this->name, 'cache', $storage);
                 break;
-            case 'dynamicdata': $this->addDataStore('_dynamic_data_', 'data');
+            case 'dynamicdata':
+                $this->addDataStore('_dynamic_data_', 'data');
                 break;
         }
     }
@@ -470,11 +473,11 @@ class DataObjectMaster extends xarObject
      * @param $name the name for the data store
      * @param $type the type of data store
     **/
-    public function addDataStore($name = '_dynamic_data_', $type = 'data')
+    public function addDataStore($name = '_dynamic_data_', $type = 'data', $storage = null)
     {
         // get the data store
-        sys::import('modules.dynamicdata.class.datastores.master');
-        $this->datastore = DataStoreFactory::getDataStore($name, $type);
+        sys::import('xaraya.datastores.factory');
+        $this->datastore = DataStoreFactory::getDataStore($name, $type, $storage);
 
         // Pass along a reference to this object
         $this->datastore->object = $this;
