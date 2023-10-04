@@ -30,25 +30,26 @@ sys::import('xaraya.datastores.basic');
 
 class DummyDataStore extends BasicDataStore
 {
-    function getItem(Array $args = array())
+    public function getItem(array $args = [])
     {
-        if (empty($args['itemid']))
+        if (empty($args['itemid'])) {
             throw new BadParameterException(xarML('Cannot get itemid 0'));
+        }
         // Get the itemid from the params or from the object definition
-        $itemid = isset($args['itemid']) ? $args['itemid'] : $this->object->itemid;
+        $itemid = $args['itemid'] ?? $this->object->itemid;
         foreach (array_keys($this->fields) as $field) {
             $this->fields[$field]->setValue($itemid);
         }
     }
 
-    function getItems(Array $args = array())
+    public function getItems(array $args = [])
     {
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
         } elseif (isset($this->_itemids)) {
             $itemids = $this->_itemids;
         } else {
-            $itemids = array();
+            $itemids = [];
         }
         foreach ($itemids as $itemid) {
             foreach (array_keys($this->fields) as $field) {
@@ -57,38 +58,39 @@ class DummyDataStore extends BasicDataStore
         }
     }
 
-    function createItem(Array $args = array())
+    public function createItem(array $args = [])
     {
         // Get the itemid from the params or from the object definition
-        $itemid = isset($args['itemid']) ? $args['itemid'] : $this->object->itemid;
+        $itemid = $args['itemid'] ?? $this->object->itemid;
         foreach (array_keys($this->fields) as $field) {
-            if (method_exists($this->fields[$field],'createvalue')) {
+            if (method_exists($this->fields[$field], 'createvalue')) {
                 $this->fields[$field]->createValue($itemid);
             }
         }
         return $itemid;
     }
 
-    function updateItem(Array $args = array())
+    public function updateItem(array $args = [])
     {
-        if (empty($args['itemid']))
+        if (empty($args['itemid'])) {
             throw new BadParameterException(xarML('Cannot update itemid 0'));
+        }
         // Get the itemid from the params or from the object definition
-        $itemid = isset($args['itemid']) ? $args['itemid'] : $this->object->itemid;
+        $itemid = $args['itemid'] ?? $this->object->itemid;
         foreach (array_keys($this->fields) as $field) {
-            if (method_exists($this->fields[$field],'updatevalue')) {
+            if (method_exists($this->fields[$field], 'updatevalue')) {
                 $this->fields[$field]->updateValue($itemid);
             }
         }
         return $itemid;
     }
 
-    function deleteItem(Array $args = array())
+    public function deleteItem(array $args = [])
     {
         // Get the itemid from the params or from the object definition
-        $itemid = isset($args['itemid']) ? $args['itemid'] : $this->object->itemid;
+        $itemid = $args['itemid'] ?? $this->object->itemid;
         foreach (array_keys($this->fields) as $field) {
-            if (method_exists($this->fields[$field],'deletevalue')) {
+            if (method_exists($this->fields[$field], 'deletevalue')) {
                 $this->fields[$field]->deleteValue($itemid);
             }
         }

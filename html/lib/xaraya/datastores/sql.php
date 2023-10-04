@@ -24,11 +24,11 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     //protected $tables = null;
 
     /** @var array<mixed> */
-    public $where  = array();
+    public $where  = [];
     /** @var array<mixed> */
-    public $groupby= array();
+    public $groupby = [];
     /** @var array<mixed> */
-    public $join   = array();
+    public $join   = [];
     /** @var ?array<mixed> */
     public $extra;
 
@@ -36,7 +36,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * Summary of __construct
      * @param mixed $name
      */
-    function __construct($name=null)
+    public function __construct($name = null)
     {
         parent::__construct($name);
         // lazy connection
@@ -53,17 +53,18 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param mixed $post
      * @return void
      */
-    function addWhere(DataProperty &$property, $clause, $join, $pre = '', $post = '')
+    public function addWhere(DataProperty &$property, $clause, $join, $pre = '', $post = '')
     {
         $name = $this->getFieldName($property);
-        if(!isset($name))
+        if(!isset($name)) {
             return;
+        }
 
-        $this->where[] = array('field'  => $name,
+        $this->where[] = ['field'  => $name,
                                'clause' => $clause,
                                'join'   => $join,
                                'pre'    => $pre,
-                               'post'   => $post);
+                               'post'   => $post];
     }
 
     /**
@@ -80,11 +81,12 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param DataProperty $property
      * @return void
      */
-    function addGroupBy(DataProperty &$property)
+    public function addGroupBy(DataProperty &$property)
     {
         $name = $this->getFieldName($property);
-        if(!isset($name))
+        if(!isset($name)) {
             return;
+        }
 
         $this->groupby[] = $name;
     }
@@ -109,14 +111,14 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param mixed $sort
      * @return void
      */
-    function addJoin($table, $key, $fields, $where = '', $andor = 'and', $more = '', $sort = array())
+    public function addJoin($table, $key, $fields, $where = '', $andor = 'and', $more = '', $sort = [])
     {
-        if(!isset($this->extra))
-            $this->extra = array();
+        if(!isset($this->extra)) {
+            $this->extra = [];
+        }
 
-        $fieldlist = array();
-        foreach(array_keys($fields) as $field)
-        {
+        $fieldlist = [];
+        foreach(array_keys($fields) as $field) {
             $source = $fields[$field]->source;
             // save the source for the query fieldlist
             $fieldlist[] = $source;
@@ -125,41 +127,39 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
         }
 
         $whereclause = '';
-        if(is_array($where) && count($where) > 0)
-        {
-            foreach($where as $part)
-            {
+        if(is_array($where) && count($where) > 0) {
+            foreach($where as $part) {
                 // TODO: support pre- and post-parts here too ? (cfr. bug 3090)
                 $whereclause .= $part['join'] . ' ' . $part['property']->source . ' ' . $part['clause'] . ' ';
             }
-        }
-        elseif(is_string($where))
+        } elseif(is_string($where)) {
             $whereclause = $where;
+        }
 
-        $this->join[] = array(
+        $this->join[] = [
             'table'  => $table,
             'key'    => $key,
             'fields' => $fieldlist,
             'where'  => $whereclause,
             'andor'  => $andor,
-            'more'   => $more
-        );
+            'more'   => $more,
+        ];
     }
 
     /**
      * Remove all join criteria for this data store (for getItems)
      * @return void
      */
-    function cleanJoin()
+    public function cleanJoin()
     {
-        $this->join = array();
+        $this->join = [];
     }
 
     /**
      * Database functions for lazy connection
      * @return void
      */
-    function connect()
+    public function connect()
     {
         // Note: the only reason we keep this variable is for getLastId()
         if (empty($this->db)) {
@@ -172,7 +172,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param mixed $name
      * @return mixed
      */
-    function getTable($name)
+    public function getTable($name)
     {
         $tables = xarDB::getTables();
         if (!empty($tables[$name])) {
@@ -184,7 +184,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * Summary of getType
      * @return mixed
      */
-    function getType()
+    public function getType()
     {
         return xarDB::getType();
     }
@@ -194,7 +194,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param mixed $sql
      * @return mixed
      */
-    function prepareStatement($sql)
+    public function prepareStatement($sql)
     {
         $this->connect();
         return $this->db->prepareStatement($sql);
@@ -205,7 +205,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param mixed $table
      * @return mixed
      */
-    function getLastId($table)
+    public function getLastId($table)
     {
         $this->connect();
         return $this->db->getLastId($table);
@@ -215,7 +215,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * Summary of getDatabaseInfo
      * @return mixed
      */
-    function getDatabaseInfo()
+    public function getDatabaseInfo()
     {
         $this->connect();
         return $this->db->getDatabaseInfo();

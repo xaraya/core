@@ -29,11 +29,14 @@ class Dynamic_Function_DataStore extends BasicDataStore
     /**
      * Get the field name used to identify this property (the property validation holds the function name here - for now...)
      * @param DataProperty $property
-     * @return mixed
+     * @return string|null
      */
-    function getFieldName(DataProperty &$property)
+    public function getFieldName(DataProperty &$property)
     {
-        return $property->validation;
+        if (property_exists($property, 'validation')) {
+            return $property->validation;
+        }
+        return null;
     }
 
     /**
@@ -41,7 +44,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
      * @param DataProperty $property
      * @return void
      */
-    function setPrimary(DataProperty &$property)
+    public function setPrimary(DataProperty &$property)
     {
         // not applicable !?
     }
@@ -54,7 +57,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
      * @param array<string, mixed> $args
      * @return mixed
      */
-    function getItem(array $args = array())
+    public function getItem(array $args = [])
     {
         $modid    = $args['moduleid'];
         $itemtype = $args['itemtype'];
@@ -64,40 +67,48 @@ class Dynamic_Function_DataStore extends BasicDataStore
         foreach (array_keys($this->fields) as $function) {
             // split into module, type and function
             // TODO: improve this ?
-            list($fmod,$ftype,$ffunc) = explode('_',$function);
+            [$fmod, $ftype, $ffunc] = explode('_', $function);
             // see if the module is available
             if (!xarMod::isAvailable($fmod)) {
                 continue;
             }
             // see if we're dealing with an API function or a GUI one
-            if (preg_match('/api$/',$ftype)) {
-                $ftype = preg_replace('/api$/','',$ftype);
+            if (preg_match('/api$/', $ftype)) {
+                $ftype = preg_replace('/api$/', '', $ftype);
                 // try to invoke the function with some common parameters
-            // TODO: standardize this, or allow the admin to specify the arguments
-                $value = xarMod::apiFunc($fmod,$ftype,$ffunc,
-                                       array('modname' => $modname,
+                // TODO: standardize this, or allow the admin to specify the arguments
+                $value = xarMod::apiFunc(
+                    $fmod,
+                    $ftype,
+                    $ffunc,
+                    ['modname' => $modname,
                                              'modid' => $modid,
                                              'itemtype' => $itemtype,
                                              'itemid' => $itemid,
-                                             'objectid' => $itemid));
+                                             'objectid' => $itemid]
+                );
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->value = $value;
                 }
             } else {
-            // TODO: don't we want auto-loading for xarMod::guiFunc too ???
+                // TODO: don't we want auto-loading for xarMod::guiFunc too ???
                 // try to load the module GUI
-                if (!xarMod::load($fmod,$ftype)) {
+                if (!xarMod::load($fmod, $ftype)) {
                     continue;
                 }
                 // try to invoke the function with some common parameters
-            // TODO: standardize this, or allow the admin to specify the arguments
-                $value = xarMod::guiFunc($fmod,$ftype,$ffunc,
-                                    array('modname' => $modname,
+                // TODO: standardize this, or allow the admin to specify the arguments
+                $value = xarMod::guiFunc(
+                    $fmod,
+                    $ftype,
+                    $ffunc,
+                    ['modname' => $modname,
                                           'modid' => $modid,
                                           'itemtype' => $itemtype,
                                           'itemid' => $itemid,
-                                          'objectid' => $itemid));
+                                          'objectid' => $itemid]
+                );
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$function]->value = $value;
@@ -112,7 +123,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
      * @param array<string, mixed> $args
      * @return void
      */
-    function getItems(array $args = array())
+    public function getItems(array $args = [])
     {
         /* don't bother if there are no item ids set */
         if (empty($this->_itemids)) {
@@ -133,7 +144,7 @@ class Dynamic_Function_DataStore extends BasicDataStore
         if (!isset($args['objectid'])) {
             $args['objectid'] = '';
         }
-        $items = array();
+        $items = [];
 
         /* fetch the items */
         //xarLog::message(var_export($this, true));
@@ -143,8 +154,10 @@ class Dynamic_Function_DataStore extends BasicDataStore
 
             /* save the result */
             foreach (array_keys($this->fields) as $function) {
-                $this->fields[$function]->setItemValue($itemid,
-                        $this->fields[$function]->value);
+                $this->fields[$function]->setItemValue(
+                    $itemid,
+                    $this->fields[$function]->value
+                );
             }
         }
     }

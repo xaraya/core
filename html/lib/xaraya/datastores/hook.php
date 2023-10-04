@@ -22,7 +22,7 @@ class HookDataStore extends BasicDataStore
     /**
      * Get the field name used to identify this property (we use the hook name here)
      */
-    function getFieldName(DataProperty &$property)
+    public function getFieldName(DataProperty &$property)
     {
         // check if this is a known module, based on the name of the property type
         $proptypes = DataPropertyMaster::getPropertyTypes();
@@ -43,7 +43,7 @@ class HookDataStore extends BasicDataStore
         // see OrderedDataStore
     }
 
-    function getItem(array $args = array())
+    public function getItem(array $args = [])
     {
         $modid = $args['moduleid'];
         $itemtype = $args['itemtype'];
@@ -52,13 +52,17 @@ class HookDataStore extends BasicDataStore
 
         foreach (array_keys($this->fields) as $hook) {
             if (xarMod::isAvailable($hook)) {
-            // TODO: find some more consistent way to do this !
-                $value = xarMod::apiFunc($hook,'user','get',
-                                       array('modname' => $modname,
+                // TODO: find some more consistent way to do this !
+                $value = xarMod::apiFunc(
+                    $hook,
+                    'user',
+                    'get',
+                    ['modname' => $modname,
                                              'modid' => $modid,
                                              'itemtype' => $itemtype,
                                              'itemid' => $itemid,
-                                             'objectid' => $itemid));
+                                             'objectid' => $itemid]
+                );
                 // see if we got something interesting in return
                 if (isset($value)) {
                     $this->fields[$hook]->value = $value;

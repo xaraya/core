@@ -202,9 +202,7 @@ class DataStoreFactory extends xarObject
      * Summary of getDataStores
      * @return void
      */
-    public function getDataStores()
-    {
-    }
+    public function getDataStores() {}
 
     /**
      * Get possible data sources

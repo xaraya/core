@@ -24,13 +24,13 @@ class ModuleVariablesDataStore extends RelationalDataStore
     /** @var string */
     public $variablename;
 
-    function __construct($name=null)
+    public function __construct($name = null)
     {
         parent::__construct($name);
         $this->setModvarName($name);
     }
 
-    function __toString()
+    public function __toString()
     {
         return "module_variables";
     }
@@ -41,70 +41,80 @@ class ModuleVariablesDataStore extends RelationalDataStore
      * @throws \Exception
      * @return void
      */
-    private function setModvarName($name="")
+    private function setModvarName($name = "")
     {
-        if (empty($name)) throw new Exception('Bad modvar name');
+        if (empty($name)) {
+            throw new Exception('Bad modvar name');
+        }
         $this->modulename = $name;
     }
 
-    function getFieldName(DataProperty &$property)
+    public function getFieldName(DataProperty &$property)
     {
         return $property->name;
     }
 
-    function getItem(Array $args = array())
+    public function getItem(array $args = [])
     {
         $this->setModvarName($this->name);
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
         $fieldlist = $this->object->getFieldList();
-        if (count($fieldlist) < 1) return;
+        if (count($fieldlist) < 1) {
+            return;
+        }
         foreach ($fieldlist as $field) {
-            $value = xarModItemVars::get($this->modulename,$field,$itemid);
+            $value = xarModItemVars::get($this->modulename, $field, $itemid);
             // set the value for this property
             $this->object->properties[$field]->value = $value;
         }
         return $itemid;
     }
 
-    function createItem(Array $args = array())
+    public function createItem(array $args = [])
     {
         return $this->updateItem($args);
     }
 
-    function updateItem(Array $args = array())
+    public function updateItem(array $args = [])
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
         $fieldlist = $this->object->getFieldList();
-        if (count($fieldlist) < 1) return 0;
+        if (count($fieldlist) < 1) {
+            return 0;
+        }
 
         foreach ($fieldlist as $field) {
             // get the value from the corresponding property
             $value = $this->object->properties[$field]->value;
             // skip fields where values aren't set
-            if (!isset($value)) continue;
+            if (!isset($value)) {
+                continue;
+            }
             if (empty($itemid)) {
-                xarModVars::set($this->modulename,$field,$value);
+                xarModVars::set($this->modulename, $field, $value);
             } else {
-                xarModItemVars::set($this->modulename,$field,$value,$itemid);
+                xarModItemVars::set($this->modulename, $field, $value, $itemid);
             }
         }
         return $itemid;
     }
 
-    function deleteItem(Array $args = array())
+    public function deleteItem(array $args = [])
     {
         $itemid = !empty($args['itemid']) ? $args['itemid'] : 0;
         $fieldlist = $this->object->getFieldList();
-        if (count($fieldlist) < 1) return 0;
+        if (count($fieldlist) < 1) {
+            return 0;
+        }
 
         foreach ($fieldlist as $field) {
-            xarModItemVars::delete($this->modulename,$field,$itemid);
+            xarModItemVars::delete($this->modulename, $field, $itemid);
         }
 
         return $itemid;
     }
 
-    function getItems(Array $args = array())
+    public function getItems(array $args = [])
     {
         // FIXME: only the last clause has been done!!
 
@@ -123,7 +133,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
         } elseif (isset($this->_itemids)) {
             $itemids = $this->_itemids;
         } else {
-            $itemids = array();
+            $itemids = [];
         }
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
@@ -141,15 +151,19 @@ class ModuleVariablesDataStore extends RelationalDataStore
         $modulefields = [];
         // split the fields to be gotten up by module
         foreach ($properties as $field) {
-            if (empty($field->source)) continue;
+            if (empty($field->source)) {
+                continue;
+            }
             $this->setModvarName($field->source);
             $modulefields[$this->modulename] ??= [];
             $modulefields[$this->modulename][] = $field->name;
         }
         foreach ($modulefields as $key => $values) {
-            if (count($values)<1) continue;
-            $modid = xarMod::getID(substr(trim($key),17));
-            $bindmarkers = '?' . str_repeat(',?',count($values)-1);
+            if (count($values) < 1) {
+                continue;
+            }
+            $modid = xarMod::getID(substr(trim($key), 17));
+            $bindmarkers = '?' . str_repeat(',?', count($values) - 1);
             // include module variable as default
             $query = "SELECT DISTINCT m.name,
                              m.value,
@@ -160,9 +174,9 @@ class ModuleVariablesDataStore extends RelationalDataStore
             $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($values);
 
-            $itemidlist = array();
+            $itemidlist = [];
             while ($result->next()) {
-                list($field,$default,$itemid,$value) = $result->getRow();
+                [$field, $default, $itemid, $value] = $result->getRow();
                 if (empty($itemid)) {
                     $itemid = 0;
                     $value = $default;
@@ -171,7 +185,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
                 $itemidlist[$itemid] = 1;
                 if (isset($value)) {
                     // add the item to the value list for this property
-                    $properties[$field]->setItemValue($itemid,$value);
+                    $properties[$field]->setItemValue($itemid, $value);
                 }
             }
             // add the itemids to the list
@@ -180,14 +194,14 @@ class ModuleVariablesDataStore extends RelationalDataStore
         }
     }
 
-    function countItems(Array $args = array())
+    public function countItems(array $args = [])
     {
         if (!empty($args['itemids'])) {
             $itemids = $args['itemids'];
         } elseif (isset($this->_itemids)) {
             $itemids = $this->_itemids;
         } else {
-            $itemids = array();
+            $itemids = [];
         }
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
@@ -202,7 +216,9 @@ class ModuleVariablesDataStore extends RelationalDataStore
         $modulefields = [];
         // split the fields to be gotten up by module
         foreach ($properties as $field) {
-            if (empty($field->source)) continue;
+            if (empty($field->source)) {
+                continue;
+            }
             $this->setModvarName($field->source);
             $modulefields[$this->modulename] ??= [];
             $modulefields[$this->modulename][] = $field->name;
@@ -210,10 +226,12 @@ class ModuleVariablesDataStore extends RelationalDataStore
         // include module variable as default
         $numitems = 1;
         foreach ($modulefields as $key => $values) {
-            if (count($values)<1) continue;
-            $modid = xarMod::getID(substr(trim($key),17));
-            $bindmarkers = '?' . str_repeat(',?',count($values)-1);
-            if($this->getType() == 'sqlite' ) {
+            if (count($values) < 1) {
+                continue;
+            }
+            $modid = xarMod::getID(substr(trim($key), 17));
+            $bindmarkers = '?' . str_repeat(',?', count($values) - 1);
+            if($this->getType() == 'sqlite') {
                 $query = "SELECT COUNT(*)
                           FROM (SELECT DISTINCT mi.item_id FROM $modvars m INNER JOIN $moditemvars mi ON m.id = mi.module_var_id
                           WHERE m.name IN ($bindmarkers)) AND m.module_id = $modid";
@@ -225,7 +243,9 @@ class ModuleVariablesDataStore extends RelationalDataStore
 
             $stmt = $this->prepareStatement($query);
             $result = $stmt->executeQuery($values);
-            if (!$result->first()) return null;
+            if (!$result->first()) {
+                return null;
+            }
 
             $numitems += $result->getInt(1);
             $result->close();
