@@ -134,6 +134,10 @@ class DataPropertyMaster extends xarObject
         if(!isset($objectref) || empty($args['name']) || empty($args['type'])) {
             return;
         }
+        // If this is a disabled property, then ignore
+        if (!self::isPropertyEnabled($args)) {
+            return;
+        }
 
         xarLog::message(xarMLS::translate("DataPropertyMaster::addProperty: Adding a new property #(1)", $args['name']), xarLog::LEVEL_DEBUG);
 
@@ -169,6 +173,21 @@ class DataPropertyMaster extends xarObject
             $objectref->upload = true;
         }
 
+        return true;
+    }
+
+    /**
+     * Check if a property args is enabled or disabled
+     *
+     * @param array<string, mixed> $args
+     * @return bool
+     */
+    public static function isPropertyEnabled(array $args = [])
+    {
+        // If this is a disabled property, then ignore
+        if (isset($args['status']) && ($args['status'] & self::DD_DISPLAYMASK) == self::DD_DISPLAYSTATE_DISABLED) {
+            return false;
+        }
         return true;
     }
 

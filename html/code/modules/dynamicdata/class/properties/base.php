@@ -260,7 +260,11 @@ class DataProperty extends xarObject implements iDataProperty
 
     public function clearValue()
     {
-        $this->value = null;
+        try {
+            $this->setValue($this->defaultvalue);
+        } catch (Exception $e) {
+            $this->value = null;
+        }
     }
 
     /**
