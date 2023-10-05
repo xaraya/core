@@ -37,6 +37,8 @@ xarMod::init();
 // for showOutput
 //xarTpl::init();
 
+const TEST_COUNT = 5000;
+
 function mini_profile($profile, $callable, $itemid = null)
 {
     echo "Profile: $profile\n";
@@ -53,7 +55,7 @@ function mini_profile($profile, $callable, $itemid = null)
 function test_normal_baseline($itemid = null)
 {
     $coll = new ArrayObject();
-    for ($i = 0; $i < 10000; $i++) {
+    for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = DataObjectMaster::getObject(['name' => 'sample']);
         if (!empty($itemid)) {
@@ -72,7 +74,7 @@ function test_normal_unserialize($itemid = null)
     $sample = DataObjectMaster::getObject(['name' => 'sample']);
     $serialized = serialize($sample);
     $coll = new ArrayObject();
-    for ($i = 0; $i < 10000; $i++) {
+    for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = unserialize($serialized);
         if (!empty($itemid)) {
@@ -95,7 +97,7 @@ function test_normal_clone($itemid = null)
 function test_generated_baseline($itemid = null)
 {
     $coll = new ArrayObject();
-    for ($i = 0; $i < 10000; $i++) {
+    for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = new Sample($itemid, $args);
         $coll[] = $sample;
@@ -111,9 +113,12 @@ function test_generated_unserialize($itemid = null)
     $sample = new Sample($itemid, $args);
     $serialized = serialize($sample);
     $coll = new ArrayObject();
-    for ($i = 0; $i < 10000; $i++) {
+    for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = unserialize($serialized);
+        if (!empty($itemid)) {
+            $sample->getObject()->getItem(['itemid' => $itemid]);
+        }
         foreach ($args as $key => $val) {
             $sample->set($key, $val);
         }
@@ -129,9 +134,12 @@ function test_generated_clone($itemid = null)
     $args = ['name' => "Mike", 'age' => 20];
     $base = new Sample($itemid, $args);
     $coll = new ArrayObject();
-    for ($i = 0; $i < 10000; $i++) {
+    for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = clone $base;
+        if (!empty($itemid)) {
+            $sample->getObject()->getItem(['itemid' => $itemid]);
+        }
         foreach ($args as $key => $val) {
             $sample->set($key, $val);
         }
@@ -142,15 +150,15 @@ function test_generated_clone($itemid = null)
     return count($coll);
 }
 
-mini_profile("Normal baseline", function ($itemid) { return test_normal_baseline($itemid); });
-mini_profile("Normal unserialize", function ($itemid) { return test_normal_unserialize($itemid); });
-mini_profile("Normal clone", function ($itemid) { return test_normal_clone($itemid); });
-mini_profile("Generated baseline", function ($itemid) { return test_generated_baseline($itemid); });
-mini_profile("Generated unserialize", function ($itemid) { return test_generated_unserialize($itemid); });
-mini_profile("Generated clone", function ($itemid) { return test_generated_clone($itemid); });
-
-//$itemid = null;
+$itemid = null;
 //$itemid = 1;
+mini_profile("Normal baseline", function ($itemid) { return test_normal_baseline($itemid); }, $itemid);
+mini_profile("Normal unserialize", function ($itemid) { return test_normal_unserialize($itemid); }, $itemid);
+mini_profile("Normal clone", function ($itemid) { return test_normal_clone($itemid); }, $itemid);
+mini_profile("Generated baseline", function ($itemid) { return test_generated_baseline($itemid); }, $itemid);
+mini_profile("Generated unserialize", function ($itemid) { return test_generated_unserialize($itemid); }, $itemid);
+mini_profile("Generated clone", function ($itemid) { return test_generated_clone($itemid); }, $itemid);
+
 //$args = [];
 //$args = ['name' => 'Mike', 'age' => 20];
 //$sample = new Sample($itemid, $args);
