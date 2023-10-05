@@ -23,6 +23,7 @@ use Xaraya\DataObject\Export\DataObjectExporter;
  *     int $args['objectid'] object id of the object item to export
  *     int $args['itemid'] item id of the object item to export
  *  string $args['format'] the export format to use (optional)
+ *    bool $args['tofile'] save to file (optional)
  * @return string|void
  */
 function dynamicdata_utilapi_export_item(array $args = [])
@@ -35,6 +36,11 @@ function dynamicdata_utilapi_export_item(array $args = [])
     if (empty($format)) {
         $format = 'xml';
     }
+    if (!empty($tofile)) {
+        $tofile = true;
+    } else {
+        $tofile = false;
+    }
 
-    return DataObjectExporter::export($objectid, $itemid, $format);
+    return DataObjectExporter::export($objectid, $itemid, $format, $tofile);
 }

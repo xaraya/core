@@ -37,7 +37,7 @@ class DataObjectExporter
     public array $proptypes = [];
     public string $prefix = 'xar_';
 
-    public function __construct(public int $objectid)
+    public function __construct(public int $objectid, public bool $tofile = false)
     {
     }
 
@@ -103,11 +103,28 @@ class DataObjectExporter
     /**
      * Summary of format
      * @param mixed $output
+     * @param string $filename
      * @return mixed
      */
-    public function format($output)
+    public function format($output, $filename = 'export.xml')
     {
+        $this->saveOutput($output, $filename);
         return $output;
+    }
+
+    /**
+     * Summary of saveOutput
+     * @param mixed $output
+     * @param string $filename
+     * @return void
+     */
+    public function saveOutput($output, $filename)
+    {
+        if (!$this->tofile) {
+            return;
+        }
+        $filepath = sys::varpath() . '/uploads/' . $filename;
+        file_put_contents($filepath, $output);
     }
 
     /**
@@ -201,15 +218,16 @@ class DataObjectExporter
      * Summary of export
      * @param mixed $objectid
      * @param mixed $itemid
-     * @param mixed $format
+     * @param string $format
+     * @param bool $tofile
      * @return bool|string
      */
-    public static function export($objectid, $itemid = null, $format = 'xml')
+    public static function export($objectid, $itemid = null, $format = 'xml', $tofile = false)
     {
         $exporter = match ($format) {
-            'php' => new PhpExporter($objectid),
-            'json' => new JsonExporter($objectid),
-            default => new XmlExporter($objectid),
+            'php' => new PhpExporter($objectid, $tofile),
+            'json' => new JsonExporter($objectid, $tofile),
+            default => new XmlExporter($objectid, $tofile),
         };
         if (!isset($itemid)) {
             $type = 'objectdef';

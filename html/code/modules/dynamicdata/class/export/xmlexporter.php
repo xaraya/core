@@ -30,7 +30,8 @@ class XmlExporter extends DataObjectExporter
         $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
         $xml = $this->addObjectDef($xml, $objectdef);
 
-        return $this->format($xml);
+        $filename = $objectdef->properties['name']->value . '-def.xml';
+        return $this->format($xml, $filename);
     }
 
     public function addObjectDef($xml, $objectdef)
@@ -152,7 +153,8 @@ class XmlExporter extends DataObjectExporter
         }
         $xml .= "</items>\n";
 
-        return $this->format($xml);
+        $filename = $objectlist->name . '-dat.xml';
+        return $this->format($xml, $filename);
     }
 
     public function exportItem(int $itemid)
@@ -176,6 +178,7 @@ class XmlExporter extends DataObjectExporter
         }
         $xml .= '</'.$objectitem->name.">\n";
 
-        return $this->format($xml);
+        $filename = $objectitem->name . '-dat.' . $itemid . '.xml';
+        return $this->format($xml, $filename);
     }
 }

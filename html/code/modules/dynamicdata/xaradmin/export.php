@@ -85,7 +85,8 @@ function dynamicdata_admin_export(array $args = [])
             'util',
             'export',
             ['objectref' => &$myobject,
-            'format' => $format]
+            'format' => $format,
+            'tofile' => $tofile]
         );
         $ext = '-def';
 

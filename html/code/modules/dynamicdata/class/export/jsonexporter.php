@@ -24,9 +24,11 @@ use Exception;
  */
 class JsonExporter extends DataObjectExporter
 {
-    public function format($info)
+    public function format($info, $filename = 'export.json')
     {
-        return json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
+        $output = json_encode($info, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK | JSON_THROW_ON_ERROR);
+        $this->saveOutput($output, $filename);
+        return $output;
     }
 
     public function exportObjectDef()
@@ -36,7 +38,8 @@ class JsonExporter extends DataObjectExporter
         $info = [];
         $info = $this->addObjectDef($info, $objectdef);
 
-        return $this->format($info);
+        $filename = $objectdef->properties['name']->value . '-def.json';
+        return $this->format($info, $filename);
     }
 
     public function addObjectDef($info, $objectdef)
@@ -136,7 +139,8 @@ class JsonExporter extends DataObjectExporter
             $info[] = $iteminfo;
         }
 
-        return $this->format($info);
+        $filename = $objectlist->name . '-dat.json';
+        return $this->format($info, $filename);
     }
 
     public function exportItem(int $itemid)
@@ -158,6 +162,7 @@ class JsonExporter extends DataObjectExporter
             }
         }
 
-        return $this->format($info);
+        $filename = $objectitem->name . '-dat.' . $itemid . '.json';
+        return $this->format($info, $filename);
     }
 }
