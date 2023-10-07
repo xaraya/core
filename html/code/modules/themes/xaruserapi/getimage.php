@@ -23,12 +23,12 @@
  *         $args[scope] scope to look in [(theme)|module|property], required<br/>
  *         $args[module] name of module, optional when in module scope, defaults to current module<br/>
  *         $args[property] name of property, required when in property scope
- * @return string|void url to image
+ * @return string url to image
 **/  
 function themes_userapi_getimage($args)
 {   
     extract($args);
-    if (empty($file)) return;
+    if (empty($file)) return '';
     if (empty($scope)) $scope = 'module';
 
     if ($scope == 'theme') {
@@ -37,7 +37,7 @@ function themes_userapi_getimage($args)
     } elseif ($scope == 'module') {
         $package = empty($module) ? xarMod::getName() : $module;
     } elseif ($scope == 'property') {
-        if (empty($property)) return;
+        if (empty($property)) return '';
         $package = $property;
     }
     return xarTpl::getImage($file, $scope, $package);        

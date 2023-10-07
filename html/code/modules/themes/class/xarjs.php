@@ -787,12 +787,12 @@ class xarJS extends xarObject
  *        string  $args[position] position to render, optional<br/>
  *        string  $args[index] index to render, optional<br/>
  *        string  $args[type] type to render, optional
- * @return string|void templated output of js to render
+ * @return string templated output of js to render
 **/
     public function render($args)
     {
         $javascript = $this->getQueued($args);
-        if (empty($javascript)) return;
+        if (empty($javascript)) return '';
         $args['javascript'] = $javascript;
         $args['comments'] = !empty($args['comments']);
         return xarTpl::module('themes', 'javascript', 'render', $args);

@@ -122,11 +122,11 @@ class xarMeta extends xarObject
  * @author Chris Powis <crisp@xaraya.com>
  * @access public
  * @param array<string, mixed> $args array of optional parameters (todo)
- * @return string|void templated output of meta tags to render
+ * @return string templated output of meta tags to render
 **/
     public function render(Array $args=array())
     {
-        if (empty(self::$meta)) return;
+        if (empty(self::$meta)) return '';
         $args['meta'] = self::$meta;
         return xarTpl::module('themes', 'meta', 'render', $args);
     }

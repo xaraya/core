@@ -624,11 +624,11 @@ class xarCSS extends xarObject
  * @param array<string, mixed> $args array of optional parameters<br/>
  *         boolean $args[comments] show comments, optional, default false
  * @todo option to turn on/off style comments in UI, cfr template comments
- * @return string|void templated output of css to render
+ * @return string templated output of css to render
 **/
     public function render($args)
     {
-        if (empty(self::$css)) return;
+        if (empty(self::$css)) return '';
         extract($args);
         if ($this->combined) {
             $this->combine();
