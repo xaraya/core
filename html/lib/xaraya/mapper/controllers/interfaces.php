@@ -17,6 +17,8 @@ interface iController
 {
     public function __construct(xarRequest $request = null);
 
+    public function run(xarRequest $request = null, xarResponse $response = null): void;
+
     /**
      * Summary of decode
      * @param array<string, mixed> $data

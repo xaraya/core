@@ -17,8 +17,6 @@ sys::import('xaraya.mapper.controllers.interfaces');
 
 class BaseActionController extends xarObject
 {
-    /** @var mixed $controller */
-    private $controller;
     private xarRequest $request;
     private string $actionstring;
     public string $separator      = '/';
@@ -62,11 +60,6 @@ class BaseActionController extends xarObject
         return $data;
     }
 
-    /** @return mixed */
-    public function getController()
-    {
-        return $this->controller;
-    }
     /** @return xarRequest */
     public function getRequest()
     {

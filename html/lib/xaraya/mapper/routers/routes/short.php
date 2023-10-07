@@ -31,15 +31,17 @@ sys::import('xaraya.mapper.routers.routes.base');
 
 class ShortRoute extends xarRoute
 {
-    protected $validModule  = false;
+    protected bool $validModule  = false;
 
-    public function __construct(Array $defaults=array(), xarDispatcher $dispatcher=null)
+    public function __construct(array $defaults = array(), ?xarDispatcher $dispatcher = null)
     {
-        if (isset($dispatcher)) $this->dispatcher = $dispatcher;
+        if (isset($dispatcher)) {
+            $this->dispatcher = $dispatcher;
+        }
         parent::__construct($defaults, $dispatcher);
     }
 
-    public function match(xarRequest $request, $partial=false)
+    public function match(xarRequest $request, bool $partial = false)
     {
         // Set the keys for module/type/func as per the current request, and the default values in xarController
         $this->setRequestKeys();
@@ -49,9 +51,11 @@ class ShortRoute extends xarRoute
 
         $params = array();
         $parts = array();
-        
+
         // Get everything between the entry point and the beginning of the query part of the URL
-        if ($pos = strpos($path, '?')) $path = substr($path, 0, $pos);
+        if ($pos = strpos($path, '?')) {
+            $path = substr($path, 0, $pos);
+        }
         if (strpos($path, $request->entryPoint) === 0) {
             // This is a relative URL
             $path = substr($path, strlen($request->entryPoint));
@@ -59,8 +63,10 @@ class ShortRoute extends xarRoute
             // This is a full URL
             $path = substr($path, strlen(xarServer::getBaseURL() . $request->entryPoint));
         }
-        if (empty($path)) return false;
-        
+        if (empty($path)) {
+            return false;
+        }
+
         if (!$partial) {
             $path = trim($path, $this->delimiter);
         } else {
@@ -76,12 +82,12 @@ class ShortRoute extends xarRoute
         }
 
         // if the next part is admin, set type
-        // <chris/> this is a temp fix, to be addressed in mapper2 
+        // <chris/> this is a temp fix, to be addressed in mapper2
         if (count($path) && !empty($path[0]) && $path[0] == 'admin') {
             $request->setType(array_shift($path));
             $parts[$this->typeKey] = $request->getType();
         }
-        
+
         // Get the function part
         if (count($path) && !empty($path[0])) {
             $request->setFunction(array_shift($path));
@@ -93,16 +99,18 @@ class ShortRoute extends xarRoute
             for ($i = 0; $i < $numSegs; $i = $i + 2) {
                 $key = urldecode($path[$i]);
                 $val = isset($path[$i + 1]) ? urldecode($path[$i + 1]) : null;
-                $params[$key] = (isset($params[$key]) ? (array_merge((array) $params[$key], array($val))): $val);
+                $params[$key] = (isset($params[$key]) ? (array_merge((array) $params[$key], array($val))) : $val);
             }
         }
-        
+
         // @fixme does anyone know what this was supposed to do?
-        if ($partial) $this->setMatchedPath($matchedPath);
-        
+        if ($partial) {
+            $this->setMatchedPath($matchedPath);
+        }
+
         // Add all the parts together
         $this->parts = $parts + $params;
-        
+
         // Add in any missing parts as defaults
         return $this->parts + $this->defaults;
     }

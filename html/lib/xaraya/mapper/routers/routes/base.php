@@ -17,24 +17,32 @@ sys::import('xaraya.mapper.routers.routes.interfaces');
 
 class xarRoute extends xarObject implements iRoute
 {
-    protected $delimiter = "/";
+    protected string $delimiter = "/";
+    /** @var xarRequest */
     protected $request;
+    /** @var xarDispatcher */
     protected $dispatcher;
+    /** @var ?string */
     protected $route = null;
+    /** @var array<string, mixed> */
     protected $parts = array();
+    /** @var array<string, mixed> */
     protected $defaults = array();
-    protected $keysSet     = false;
+    protected bool $keysSet     = false;
+    /** @var ?string */
     protected $matchedPath = null;
-    
-    protected $moduleKey = 'module';
-    protected $typeKey   = 'type';
-    protected $funcKey   = 'func';
 
-    public function __construct(Array $defaults=array(), xarDispatcher $dispatcher=null)
+    protected string $moduleKey = 'module';
+    protected string $typeKey   = 'type';
+    protected string $funcKey   = 'func';
+
+    public function __construct(array $defaults = array(), ?xarDispatcher $dispatcher = null)
     {
         $this->defaults += $defaults;
         //if (isset($request)) $this->request = $request;
-        if (isset($dispatcher)) $this->dispatcher = $dispatcher;
+        if (isset($dispatcher)) {
+            $this->dispatcher = $dispatcher;
+        }
     }
 
     /**
@@ -44,10 +52,17 @@ class xarRoute extends xarObject implements iRoute
      */
     protected function setRequestKeys()
     {
+        // @todo these are actually never updated
         if (null !== $this->request) {
-            if ($this->request->moduleKey) $this->moduleKey   = $this->request->moduleKey;
-            if ($this->request->typeKey) $this->typeKey       = $this->request->typeKey;
-            if ($this->request->funcKey) $this->funcKey       = $this->request->funcKey;
+            if ($this->request->moduleKey) {
+                $this->moduleKey   = $this->request->moduleKey;
+            }
+            if ($this->request->typeKey) {
+                $this->typeKey       = $this->request->typeKey;
+            }
+            if ($this->request->funcKey) {
+                $this->funcKey       = $this->request->funcKey;
+            }
         }
 
         $this->defaults += array(
@@ -59,13 +74,13 @@ class xarRoute extends xarObject implements iRoute
         $this->keysSet = true;
     }
 
-    public function match(xarRequest $request, $partial=false)
+    public function match(xarRequest $request, bool $partial = false)
     {
         $path = $request->getURL();
         if ($partial) {
-            if (substr($path, 0, strlen($this->route)) === $this->route) {
+            if (isset($this->route) && substr($path, 0, strlen($this->route)) === $this->route) {
                 // @fixme does anyone know what this was supposed to do?
-                $this->setMatchedPath($this->_route);
+                $this->setMatchedPath($this->route);
                 return $this->defaults;
             }
         } else {
@@ -73,15 +88,24 @@ class xarRoute extends xarObject implements iRoute
                 return $this->defaults;
             }
         }
-        
+
         return false;
     }
 
+    /**
+     * Summary of setMatchedPath - @todo not used anywhere
+     * @param string $matchedPath
+     * @return void
+     */
     public function setMatchedPath($matchedPath)
     {
         $this->matchedPath = $matchedPath;
     }
 
+    /**
+     * Summary of getParts
+     * @return array<string, mixed>
+     */
     public function getParts()
     {
         return $this->parts;

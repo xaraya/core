@@ -15,16 +15,20 @@
 
 class xarResponse extends xarObject
 {
-    public $output;
-    
+    public string $output;
+
     /**
      * initialize
      *
+     * @param array<string, mixed> $args
+     * @return void
      */
-    static function init(Array $args=array()) { }
+    public static function init(array $args = array())
+    {
+    }
 
-// CHECKME: Should we support this kind of high-level user response in module GUI functions ?
-//          And should some of the existing exceptions (to be defined) call those methods too ?
+    // CHECKME: Should we support this kind of high-level user response in module GUI functions ?
+    //          And should some of the existing exceptions (to be defined) call those methods too ?
 
     /**
      * Return a 404 Not Found header, and fill in the template message-notfound.xt from the base module
@@ -37,7 +41,6 @@ class xarResponse extends xarObject
      *    }
      *    ...
      *
-     * 
      * @param string $msg the message
      * @param string $modName template overrides, cfr. xarTpl::module (optional)
      * @param string $modType template overrides, cfr. xarTpl::module (optional)
@@ -45,7 +48,7 @@ class xarResponse extends xarObject
      * @param string $templateName template overrides, cfr. xarTpl::module (optional)
      * @return string output display string
      */
-    static public function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = NULL)
+    public static function NotFound($msg = '', $modName = 'base', $modType = 'message', $funcName = 'notfound', $templateName = null)
     {
         xarCache::noCache();
         if (!headers_sent()) {
@@ -68,7 +71,6 @@ class xarResponse extends xarObject
      *    }
      *    ...
      *
-     * 
      * @param string $msg the message
      * @param string $modName template overrides, cfr. xarTpl::module (optional)
      * @param string $modType template overrides, cfr. xarTpl::module (optional)
@@ -76,7 +78,7 @@ class xarResponse extends xarObject
      * @param string $templateName template overrides, cfr. xarTpl::module (optional)
      * @return string output display string
      */
-    static public function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = NULL)
+    public static function Forbidden($msg = '', $modName = 'base', $modType = 'message', $funcName = 'forbidden', $templateName = null)
     {
         xarCache::noCache();
         if (!headers_sent()) {
@@ -93,11 +95,15 @@ class xarResponse extends xarObject
      *
      * @access public
      * @param string $url the URL to redirect to
+     * @return bool|never
      */
-    static public function Redirect($url = '')
+    public static function Redirect($url = '')
     {
         return xarController::redirect($url);
     }
 
-    function getOutput() { return $this->output; }
+    public function getOutput(): string
+    {
+        return $this->output;
+    }
 }

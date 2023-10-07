@@ -15,44 +15,53 @@
 
 class xarRequest extends xarObject
 {
-    protected $url          = '';
-    protected $actionstring = '';
-    protected $dispatched   = false;
-    protected $modulekey    = 'module';
-    protected $typekey      = 'type';
-    protected $funckey      = 'func';
-    protected $route        = 'default';
+    protected string $url          = '';
+    protected string $actionstring = '';
+    protected bool $dispatched   = false;
+    protected string $moduleKey    = 'module';
+    protected string $typeKey      = 'type';
+    protected string $funcKey      = 'func';
+    protected string $route        = 'default';
 
-    public $module        = 'base';
-    public $modulealias   = '';
-    public $type          = 'user';
-    public $func          = 'main';
+    /** @var ?string */
+    public $module        = null;
+    public string $modulealias   = '';
+    /** @var ?string */
+    public $type          = null;
+    /** @var ?string */
+    public $func          = null;
     /** @var array<string, mixed> */
     public $funcargs      = array();
-    public $object        = 'objects';
-    public $method        = 'view';
-    
+    public string $object        = 'objects';
+    public string $method        = 'view';
+
     /** @var array<mixed> */
     public $defaultRequestInfo = array();
-    public $isObjectURL        = false;
+    public bool $isObjectURL     = false;
 
-    public $entryPoint;
-    public $separator    = '&';
-    
+    public string $entryPoint;
+    public string $separator    = '&';
+
+    /** @var ?bool */
     private $isAjax   = null;
-    
-    function __construct($url=null)
+
+    public function __construct($url = null)
     {
         // Make this load lazily
-        $this->setModule(xarModVars::get('modules', 'defaultmodule'));
-        $this->setType(xarModVars::get('modules', 'defaultmoduletype'));
-        $this->setFunction(xarModVars::get('modules', 'defaultmodulefunction'));
+        //$this->setModule(xarModVars::get('modules', 'defaultmodule'));
+        //$this->setType(xarModVars::get('modules', 'defaultmoduletype'));
+        //$this->setFunction(xarModVars::get('modules', 'defaultmodulefunction'));
 
         $this->entryPoint = xarController::$entryPoint;
         $this->setURL($url);
     }
 
-    function setURL($url=null)
+    /**
+     * Summary of setURL
+     * @param string|array<string, mixed>|null $url
+     * @return void
+     */
+    public function setURL($url = null)
     {
         if (null != $url) {
             // A URL was passed
@@ -61,7 +70,9 @@ class xarRequest extends xarObject
                 if (!empty($url['module'])) {
                     // Resolve if this is an alias for some other module
                     $this->setModule(xarModAlias::resolve($url['module']));
-                    if ($this->getModule() != $url['module']) $this->setModuleAlias($url['module']);
+                    if ($this->getModule() != $url['module']) {
+                        $this->setModuleAlias($url['module']);
+                    }
                     unset($url['module']);
                 }
                 if (!empty($url['type'])) {
@@ -72,23 +83,29 @@ class xarRequest extends xarObject
                     $this->setFunction($url['func']);
                     unset($url['func']);
                 }
-                
+
                 // Rename the array so we can use the code at the end
                 $params = $url;
-                
+
                 // CHECKME: how should this URL be stored?
-                
+
             } else {
                 // This is a string representing a URL
-                $url = preg_replace('/&amp;/','&',$url);
+                $url = preg_replace('/&amp;/', '&', $url);
                 $params = xarController::parseQuery($url);
-                if (!empty($params['module'])) $this->setModule($params['module']);
-                if (!empty($params['type'])) $this->setType($params['type']);
-                if (!empty($params['func'])) $this->setFunction($params['func']);
-                
+                if (!empty($params['module'])) {
+                    $this->setModule($params['module']);
+                }
+                if (!empty($params['type'])) {
+                    $this->setType($params['type']);
+                }
+                if (!empty($params['func'])) {
+                    $this->setFunction($params['func']);
+                }
+
                 // Store the URL
                 $this->url = $url;
-                
+
             }
         } else {
             // CHECKME: are these next lines needed?
@@ -99,9 +116,9 @@ class xarRequest extends xarObject
 
             // We now have a URL. Set it.
             $this->url = $url;
-        
-            // See if this is an object call; easiest to start like this 
-            xarVar::fetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $objectName, NULL, xarVar::NOT_REQUIRED);
+
+            // See if this is an object call; easiest to start like this
+            xarVar::fetch('object', 'regexp:/^[a-z][a-z_0-9]*$/', $objectName, null, xarVar::NOT_REQUIRED);
             // Found a module object name
             if (null != $objectName) {
                 $this->setModule('object');
@@ -110,30 +127,38 @@ class xarRequest extends xarObject
             } else {
                 $modName = null;
                 // Try and get the module the traditional Xaraya way
-                xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, NULL, xarVar::NOT_REQUIRED);
+                xarVar::fetch('module', 'regexp:/^[a-z][a-z_0-9]*$/', $modName, null, xarVar::NOT_REQUIRED);
 
                 // Else assume a form of short urls. The module name or the object keyword will be the first item
                 if (null == $modName) {
-                    $path = substr($url,strlen(xarServer::getBaseURL() . $this->entryPoint . xarController::$delimiter));
+                    $path = substr($url, strlen(xarServer::getBaseURL() . $this->entryPoint . xarController::$delimiter));
                     $tokens = explode('/', $path);
                     $modName = array_shift($tokens);
-                    
+
                     // This is an object call
                     if ($modName == 'object') {
                         $this->setModule('object');
                         $this->setType(array_shift($tokens));
                         $this->setFunction($this->method);
-                    
-                    // This is a module name
+
+                        // This is a module name
                     } else {
                         // Resolve if this is an alias for some other module
-                        if (!empty($modName)) $this->setModule(xarModAlias::resolve($modName));
-                        if ($this->getModule() != $modName) $this->setModuleAlias($modName);
+                        if (!empty($modName)) {
+                            $this->setModule(xarModAlias::resolve($modName));
+                            if ($this->getModule() != $modName) {
+                                $this->setModuleAlias($modName);
+                            }
+                        }
                     }
                 } else {
                     // Resolve if this is an alias for some other module
-                    if (!empty($modName)) $this->setModule(xarModAlias::resolve($modName));
-                    if ($this->getModule() != $modName) $this->setModuleAlias($modName);
+                    if (!empty($modName)) {
+                        $this->setModule(xarModAlias::resolve($modName));
+                        if ($this->getModule() != $modName) {
+                            $this->setModuleAlias($modName);
+                        }
+                    }
                 }
 
             }
@@ -147,14 +172,15 @@ class xarRequest extends xarObject
         unset($params['method']);
         $this->setFunctionArgs($params);
         // At this point the request has assembled the module or object it belongs to and any query parameters.
-        // What is still to be defined by routing are the type (for modules) and function/function arguments or method (for objects).            
+        // What is still to be defined by routing are the type (for modules) and function/function arguments or method (for objects).
     }
-    
-    function getRawURL()
+
+    /** @return string */
+    public function getRawURL()
     {
         return $this->url;
     }
-    
+
     /**
      * Gets request info for current page or a given url.
      *
@@ -174,15 +200,16 @@ class xarRequest extends xarObject
      * TODO: evaluate and improve this, obviously :-)
      * + check security impact of people combining PATH_INFO with func/type param
      *
+     * @param string $url
      * @return array<mixed> requested module, type and func
      * @todo <marco> Do we need to do a preg_match on $params[1] here?
      * @todo <mikespub> you mean for upper-case Admin, or to support other funcs than user and admin someday ?
      * @todo <marco> Investigate this aliases thing before to integrate and promote it!
      */
-    public function getInfo($url='')
+    public function getInfo($url = '')
     {
-        static $currentRequestInfo = NULL;
-        static $loopHole = NULL;
+        static $currentRequestInfo = null;
+        static $loopHole = null;
         if (is_array($currentRequestInfo) && empty($url)) {
             return $currentRequestInfo;
         } elseif (is_array($loopHole)) {
@@ -232,10 +259,10 @@ class xarRequest extends xarObject
             $requestInfo = array($modName, $modType, $funcName);
         } else {
             // Check if we have an object to work with for object URLs
-            xarVar::fetch('object', 'regexp:/^[a-zA-Z0-9_-]+$/', $objectName, NULL, xarVar::NOT_REQUIRED);
+            xarVar::fetch('object', 'regexp:/^[a-zA-Z0-9_-]+$/', $objectName, null, xarVar::NOT_REQUIRED);
             if (!empty($objectName)) {
                 // Check if we have a method to work with for object URLs
-                xarVar::fetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, NULL, xarVar::NOT_REQUIRED);
+                xarVar::fetch('method', 'regexp:/^[a-zA-Z0-9_-]+$/', $methodName, null, xarVar::NOT_REQUIRED);
                 // Specify 'dynamicdata' as module for xarTpl_* functions etc.
                 $requestInfo = array('object', $objectName, $methodName);
                 //if (empty($url)) {
@@ -253,58 +280,206 @@ class xarRequest extends xarObject
         }
         // Save the current info in case we call this function again
         //if (empty($url)) $currentRequestInfo = $requestInfo;
-        
+
         return $requestInfo;
     }
-    
+
     /**
      * Check to see if this request is an object URL
      *
-     * 
      * @return boolean true if object URL, false if not
      */
-    function isObjectURL() { return $this->isObjectURL; }
+    public function isObjectURL()
+    {
+        return $this->isObjectURL;
+    }
 
-    function getProtocol()       { return xarServer::getProtocol(); }
-    function getHost()           { return xarServer::getHost(); }
-    function getModuleKey()      { return $this->modulekey; }
-    function getTypeKey()        { return $this->typekey; }
-    function getFunctionKey()    { return $this->funckey; }
-    function getModule()         { return $this->module; }
-    function getModuleAlias()    { return $this->modulealias; }
-    function getType()           { return $this->type; }
-    function getFunction()       { return $this->func; }
-    function getObject()         { return $this->object; }
-    function getMethod()         { return $this->method; }
-    function getActionString()   { return $this->actionstring; }
-    function getFunctionArgs()   { return $this->funcargs; }
-    function getURL()            { return $this->url; }
-    function getRoute()          { return $this->route; }
+    /** @return string */
+    public function getProtocol()
+    {
+        return xarServer::getProtocol();
+    }
+    /** @return string */
+    public function getHost()
+    {
+        return xarServer::getHost();
+    }
+    /** @return string */
+    public function getModuleKey()
+    {
+        return $this->moduleKey;
+    }
+    /** @return string */
+    public function getTypeKey()
+    {
+        return $this->typeKey;
+    }
+    /** @return string */
+    public function getFunctionKey()
+    {
+        return $this->funcKey;
+    }
+    /** @return string */
+    public function getModule()
+    {
+        $this->module ??= xarModVars::get('modules', 'defaultmodule');
+        return $this->module;
+    }
+    /** @return string */
+    public function getModuleAlias()
+    {
+        return $this->modulealias;
+    }
+    /** @return string */
+    public function getType()
+    {
+        $this->type ??= xarModVars::get('modules', 'defaultmoduletype');
+        return $this->type;
+    }
+    /** @return string */
+    public function getFunction()
+    {
+        $this->func ??= xarModVars::get('modules', 'defaultmodulefunction');
+        return $this->func;
+    }
+    /** @return string */
+    public function getObject()
+    {
+        return $this->object;
+    }
+    /** @return string */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+    /** @return string */
+    public function getActionString()
+    {
+        return $this->actionstring;
+    }
+    /** @return array<string, mixed> */
+    public function getFunctionArgs()
+    {
+        return $this->funcargs;
+    }
+    /** @return string */
+    public function getURL()
+    {
+        return $this->url;
+    }
+    /** @return string */
+    public function getRoute()
+    {
+        return $this->route;
+    }
 
-    function setModule($p)               { $this->module = $p; }
-    function setModuleAlias($p)          { $this->modulealias = $p; }
-    function setType($p)                 { $this->type = $p; }
-    function setFunction($p)             { $this->func = $p; }
-    function setObject($p)               { $this->object = $p; }
-    function setMethod($p)               { $this->method = $p; }
-    function setRoute($r)                { $this->route = $r; }
-    function setActionString($p)         { $this->actionstring = $p; }
-    function setFunctionArgs($p=array()) { $this->funcargs = $p; }
+    /**
+     * Summary of setModule
+     * @param string $p
+     * @return void
+     */
+    public function setModule($p)
+    {
+        $this->module = $p;
+    }
+    /**
+     * Summary of setModuleAlias
+     * @param string $p
+     * @return void
+     */
+    public function setModuleAlias($p)
+    {
+        $this->modulealias = $p;
+    }
+    /**
+     * Summary of setType
+     * @param string $p
+     * @return void
+     */
+    public function setType($p)
+    {
+        $this->type = $p;
+    }
+    /**
+     * Summary of setFunction
+     * @param string $p
+     * @return void
+     */
+    public function setFunction($p)
+    {
+        $this->func = $p;
+    }
+    /**
+     * Summary of setObject
+     * @param string $p
+     * @return void
+     */
+    public function setObject($p)
+    {
+        $this->object = $p;
+    }
+    /**
+     * Summary of setMethod
+     * @param string $p
+     * @return void
+     */
+    public function setMethod($p)
+    {
+        $this->method = $p;
+    }
+    /**
+     * Summary of setRoute
+     * @param string $r
+     * @return void
+     */
+    public function setRoute($r)
+    {
+        $this->route = $r;
+    }
+    /**
+     * Summary of setActionString
+     * @param string $p
+     * @return void
+     */
+    public function setActionString($p)
+    {
+        $this->actionstring = $p;
+    }
+    /**
+     * Summary of setFunctionArgs
+     * @param array<string, mixed> $p
+     * @return void
+     */
+    public function setFunctionArgs($p = array())
+    {
+        $this->funcargs = $p;
+    }
 
+    /**
+     * Summary of isDispatched
+     * @return bool
+     */
     public function isDispatched()
     {
         return $this->dispatched;
     }
 
-    public function setDispatched($flag=true)
+    /**
+     * Summary of setDispatched
+     * @param bool $flag
+     * @return bool
+     */
+    public function setDispatched($flag = true)
     {
         $this->dispatched = $flag ? true : false;
         return true;
     }
 
-/*
- * Checks whether the current request is an AJAX request
- */
+    /**
+     * Checks whether the current request is an AJAX request
+     *
+     * @return bool
+     */
     public function isAJAX()
     {
         if (!isset($this->isAjax)) {
@@ -318,26 +493,33 @@ class xarRequest extends xarObject
         return $this->isAjax;
     }
 
-/*
- * Halts execution at the end of an AJAX request
- */
+    /**
+     * Halts execution at the end of an AJAX request
+     *
+     * @return void|never
+     */
     public function exitAjax()
     {
-        if ($this->isAjax()) exit;
+        if ($this->isAjax()) {
+            exit;
+        }
     }
 
-/*
- * Outputs a message from the AJAX request
- * The message can be in the form of a simple string or an array
- * In the latter case we use a template to format the message before outputing
- */
+    /**
+     * Outputs a message from the AJAX request
+     * The message can be in the form of a simple string or an array
+     * In the latter case we use a template to format the message before outputing
+     *
+     * @param mixed $msg
+     * @return void|never
+     */
     public function msgAjax($msg)
     {
         if ($this->isAjax()) {
             if (is_array($msg)) {
-                 $data = array('message' => $msg);
-                 $output = xarTpl::includeTemplate('theme','','user-message',$data);
-                 echo $output;
+                $data = array('message' => $msg);
+                $output = xarTpl::includeTemplate('theme', '', 'user-message', $data);
+                echo $output;
             } else {
                 echo $msg;
             }

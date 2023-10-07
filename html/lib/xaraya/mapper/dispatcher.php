@@ -15,11 +15,14 @@
 
 class xarDispatcher extends xarObject
 {
+    /** @var iController */
     protected $controller;
+    /** @var xarRequest */
     protected $request;
+    /** @var xarResponse */
     protected $response;
 
-    public function findController(xarRequest $request)
+    public function findController(xarRequest $request): iController
     {
         if (file_exists(sys::code() . 'modules/' . $request->getModule() . '/controllers/' . $request->getRoute() . '.php')) {
             sys::import('modules.' . $request->getModule() . '.controllers.' . $request->getRoute());
@@ -33,21 +36,30 @@ class xarDispatcher extends xarObject
         return $controller;
     }
 
-    public function dispatch(xarRequest $request, xarResponse $response)
+    public function dispatch(xarRequest $request, xarResponse $response): string
     {
         $this->response = $response;
         $this->controller = $this->findController($request);
         $this->controller->run($request, $response);
-        return $response->output;
+        return $response->getOutput();
     }
 
-    public function isValidModule($module)
+    public function isValidModule(string $module): bool
     {
-        if (empty($module) || !is_string($module)) return false;
+        if (empty($module)) {
+            return false;
+        }
         $available = xarMod::isAvailable($module);
         return $available;
     }
 
-    function getController()  { return $this->controller; }
-    function getRequest()     { return $this->request; }
+    public function getController(): iController
+    {
+        return $this->controller;
+    }
+
+    public function getRequest(): xarRequest
+    {
+        return $this->request;
+    }
 }

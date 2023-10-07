@@ -15,16 +15,21 @@
 
 class xarRouter extends xarObject
 {
+    /** @var array<string, xarRoute> */
     protected $routes       = array();
-    protected $currentRoute = 'default';
-    protected $globalParams = array();
-    
-    public function addRoute($name, xarRoute $route) 
+    protected string $currentRoute = 'default';
+    //protected $globalParams = array();
+
+    public function addRoute(string $name, xarRoute $route): bool
     {
-        $this->routes[$name] = $route;        
+        $this->routes[$name] = $route;
         return true;
     }
 
+    /**
+     * Summary of addDefaultRoutes
+     * @return static
+     */
     public function addDefaultRoutes()
     {
         if (empty($this->routes['default'])) {
@@ -41,10 +46,15 @@ class xarRouter extends xarObject
             /* Add more routes here
             */
         }
-        
+
         return $this;
     }
 
+    /**
+     * Summary of route
+     * @param xarRequest $request
+     * @return bool
+     */
     public function route(xarRequest $request)
     {
         $this->addDefaultRoutes();
@@ -52,7 +62,9 @@ class xarRouter extends xarObject
             if ($route->match($request)) {
                 $publicproperties = array_keys($request->getPublicProperties());
                 foreach ($route->getParts() as $key => $value) {
-                    if (in_array($key,$publicproperties)) $request->$key = $value;
+                    if (in_array($key, $publicproperties)) {
+                        $request->$key = $value;
+                    }
                 }
                 $publicproperties = $request->getPublicProperties();
                 $request->setRoute($name);
@@ -64,12 +76,13 @@ class xarRouter extends xarObject
         return false;
     }
 
+    /**
     public function assemble($userParams=array(), $name=null, $reset=false, $encode=true)
     {
         if ($name == null) {
             $name = isset($this->currentRoute) ? $this->currentRoute : 'default';
         }
-        
+
         $params = array_merge($this->globalParams, $userParams);
 
         // @fixme what was this supposed to do? There is no assemble method in xarRoute()
@@ -82,20 +95,37 @@ class xarRouter extends xarObject
 
         return $url;
     }
+     */
 
-    public function getRoute($name=null)
+    /**
+     * Summary of route
+     * @checkme $request->setRoute is expecting a string name, not a xarRoute
+     * @param ?string $name
+     * @return string
+     */
+    public function getRoute($name = null)
     {
-        if (null == $name) return $this->currentRoute;
-        return $this->routes[$name];
+        if (null == $name) {
+            return $this->currentRoute;
+        }
+        //return $this->routes[$name];
+        return $name;
     }
 
+    /**
     protected function setRequestParams(xarRequest $request, $params)
     {
         foreach ($params as $key => $value) {
-            if ($key === 'module') $request->module = $value;
-            if ($key === 'type')   $request->type   = $value;
-            if ($key === 'func')   $request->func   = $value;
+            if ($key === 'module') {
+                $request->setModule($value);
+            }
+            if ($key === 'type') {
+                $request->setType($value);
+            }
+            if ($key === 'func') {
+                $request->setFunction($value);
+            }
         }
     }
-
+     */
 }

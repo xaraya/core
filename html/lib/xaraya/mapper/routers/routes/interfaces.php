@@ -15,6 +15,9 @@
 
 interface iRoute
 {
-    public function __construct(Array $defaults=array(), xarDispatcher $dispatcher=null);
-    public function match(xarRequest $request, $partial=false);
+    /** @param array<string, mixed> $defaults */
+    public function __construct(array $defaults = array(), ?xarDispatcher $dispatcher = null);
+
+    /** @return array<string, mixed>|bool */
+    public function match(xarRequest $request, bool $partial = false);
 }
