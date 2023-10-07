@@ -126,13 +126,13 @@ function modules_admin_install()
     // set the target location (anchor) to go to within the page
     $target = $minfo['name'];
 
-    if (xarCache::$outputCacheIsEnabled) {
-        if (xarOutputCache::$pageCacheIsEnabled) {
+    if (xarCache::isOutputCacheEnabled()) {
+        if (xarOutputCache::isPageCacheEnabled()) {
             xarPageCache::flushCached('modules');
             // a status update might mean a new menulink and new base homepage
             xarPageCache::flushCached('base');
         }
-        if (xarOutputCache::$blockCacheIsEnabled) {
+        if (xarOutputCache::isBlockCacheEnabled()) {
             // a status update might mean a new menulink and new base homepage
             xarBlockCache::flushCached('base');
         }

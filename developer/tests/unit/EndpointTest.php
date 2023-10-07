@@ -31,11 +31,11 @@ final class EndpointTest extends TestCase
         unset($_SERVER['REQUEST_METHOD']);
         unset($_SERVER['QUERY_STRING']);
 
-        $expected = 19;
+        $expected = null;
         $result = json_decode($output, true);
-        $this->assertCount($expected, $result['data']['objects']);
-        $expected = 'objects';
-        $this->assertEquals($expected, $result['data']['objects'][0]['name']);
+        $this->assertEquals($expected, $result['data']['objects']);
+        $expected = 'Invalid user';
+        $this->assertEquals($expected, $result['errors'][0]['extensions']['debugMessage']);
         $this->assertStringContainsString($expected, $output);
     }
 

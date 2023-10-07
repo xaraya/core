@@ -69,7 +69,7 @@ class xarPageCache extends xarObject
             'type'      => 'page',
             'provider'  => $provider,
             // we store output cache files under this
-            'cachedir'  => xarOutputCache::$cacheDir,
+            'cachedir'  => xarOutputCache::getCacheDir(),
             'expire'    => self::$cacheTime,
             'sizelimit' => self::$cacheSizeLimit,
             'logfile'   => $logfile,
@@ -283,7 +283,7 @@ class xarPageCache extends xarObject
             if (!empty(self::$cacheNoSession)) {
                 $cacheKey2 = 'static';
                 $cacheCode2 = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-                $cache_file2 = xarOutputCache::$cacheDir."/page/$cacheKey2-$cacheCode2.php";
+                $cache_file2 = xarOutputCache::getCacheDir()."/page/$cacheKey2-$cacheCode2.php";
                 // Note that if we get here, the first-time visitor will receive a session cookie,
                 // so he will no longer benefit from this himself ;-)
                 self::$cacheStorage->saveFile($cacheKey, $cache_file2);
@@ -380,7 +380,7 @@ class xarPageCache extends xarObject
             if (!empty(self::$cacheNoSession)) {
                 $cacheKey2 = 'static';
                 $cacheCode2 = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-                $cache_file2 = xarOutputCache::$cacheDir."/page/$cacheKey2-$cacheCode2.php";
+                $cache_file2 = xarOutputCache::getCacheDir()."/page/$cacheKey2-$cacheCode2.php";
                 // Note that if we get here, the first-time visitor will receive a session cookie,
                 // so he will no longer benefit from this himself ;-)
                 self::$cacheStorage->saveFile($cacheKey, $cache_file2);

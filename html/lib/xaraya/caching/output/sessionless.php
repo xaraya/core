@@ -62,7 +62,7 @@ class xarSessionLessCache extends xarObject
         if (in_array('http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'], $sessionLessList)) {
             $cacheKey = 'static';
             $cacheCode = md5($_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']);
-            $cache_file = xarOutputCache::$cacheDir . "/page/$cacheKey-" . $cacheCode . ".php";
+            $cache_file = xarOutputCache::getCacheDir() . "/page/$cacheKey-" . $cacheCode . ".php";
             // Note: we stick to filesystem for session-less caching
             if (file_exists($cache_file) &&
                 filesize($cache_file) > 0 &&
@@ -79,7 +79,7 @@ class xarSessionLessCache extends xarObject
                 self::getCached($cache_file);
 
                 // CHECKME: if we do this after xarPageCache::sendHeaders(), we'll never get the 304's logged for autocache
-                if (file_exists(xarOutputCache::$cacheDir.'/autocache.start')) {
+                if (file_exists(xarOutputCache::getCacheDir().'/autocache.start')) {
                     sys::import('xaraya.caching.output.autosession');
                     xarAutoSessionCache::logStatus('HIT', $autoCachePeriod);
                 }
@@ -93,7 +93,7 @@ class xarSessionLessCache extends xarObject
             }
         }
         // we haven't found a cache hit for this URL
-        if (file_exists(xarOutputCache::$cacheDir.'/autocache.start')) {
+        if (file_exists(xarOutputCache::getCacheDir().'/autocache.start')) {
             sys::import('xaraya.caching.output.autosession');
             xarAutoSessionCache::logStatus('MISS', $autoCachePeriod);
         }

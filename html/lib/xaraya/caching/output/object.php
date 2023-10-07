@@ -61,7 +61,7 @@ class xarObjectCache extends xarObject
             'type'      => 'object',
             'provider'  => $provider,
             // we store output cache files under this
-            'cachedir'  => xarOutputCache::$cacheDir,
+            'cachedir'  => xarOutputCache::getCacheDir(),
             'expire'    => self::$cacheTime,
             'sizelimit' => self::$cacheSizeLimit,
             'logfile'   => $logfile,

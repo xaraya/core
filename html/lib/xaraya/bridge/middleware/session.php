@@ -78,7 +78,7 @@ class SessionMiddleware implements MiddlewareInterface
     public function __construct()
     {
         $this->cookieName = xarSession::COOKIE;
-        $this->anonId = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
+        $this->anonId = (int) xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
         $this->config = xarSession::getConfig();
         $this->db = xarDB::getConn();
         $tables = xarDB::getTables();

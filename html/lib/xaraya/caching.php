@@ -20,6 +20,7 @@ class xarCache extends xarObject
     public static bool $coreCacheIsEnabled      = true;
     public static bool $templateCacheIsEnabled  = true; // currently unused, cfr. xaraya/templates.php
     public static bool $variableCacheIsEnabled  = false;
+    //public static bool $queryCacheIsEnabled     = false;
     public static string $cacheDir                = '';
 
     /**
@@ -86,7 +87,7 @@ class xarCache extends xarObject
      */
     public static function getPageKey($url = null)
     {
-        if (xarCache::$outputCacheIsEnabled && xarOutputCache::$pageCacheIsEnabled) {
+        if (self::isOutputCacheEnabled() && xarOutputCache::isPageCacheEnabled()) {
             return xarPageCache::getCacheKey($url);
         }
         return null;
@@ -100,7 +101,7 @@ class xarCache extends xarObject
      */
     public static function getBlockKey($blockInfo)
     {
-        if (xarCache::$outputCacheIsEnabled && xarOutputCache::$blockCacheIsEnabled) {
+        if (self::isOutputCacheEnabled() && xarOutputCache::isBlockCacheEnabled()) {
             return xarBlockCache::getCacheKey($blockInfo);
         }
     }
@@ -116,7 +117,7 @@ class xarCache extends xarObject
      */
     public static function getModuleKey($modName, $modType = 'user', $funcName = 'main', $args = [])
     {
-        if (xarCache::$outputCacheIsEnabled && xarOutputCache::$moduleCacheIsEnabled) {
+        if (self::isOutputCacheEnabled() && xarOutputCache::isModuleCacheEnabled()) {
             return xarModuleCache::getCacheKey($modName, $modType, $funcName, $args);
         }
         return null;
@@ -132,7 +133,7 @@ class xarCache extends xarObject
      */
     public static function getObjectKey($objectName, $methodName = 'view', $args = [])
     {
-        if (xarCache::$outputCacheIsEnabled && xarOutputCache::$objectCacheIsEnabled) {
+        if (self::isOutputCacheEnabled() && xarOutputCache::isObjectCacheEnabled()) {
             return xarObjectCache::getCacheKey($objectName, $methodName, $args);
         }
         return null;
@@ -147,7 +148,7 @@ class xarCache extends xarObject
      */
     public static function getVariableKey($scope, $name)
     {
-        if (xarCache::$variableCacheIsEnabled) {
+        if (self::isVariableCacheEnabled()) {
             return xarVariableCache::getCacheKey($scope, $name);
         }
         return null;
@@ -159,23 +160,23 @@ class xarCache extends xarObject
      */
     public static function noCache()
     {
-        if (!xarCache::$outputCacheIsEnabled) {
+        if (!self::isOutputCacheEnabled()) {
             return;
         }
-        if (xarOutputCache::$pageCacheIsEnabled) {
+        if (xarOutputCache::isPageCacheEnabled()) {
             // set the current cacheKey to null
             xarPageCache::$cacheKey = null;
             xarCoreCache::setCached('Page.Caching', 'nocache', true);
         }
-        if (xarOutputCache::$blockCacheIsEnabled) {
+        if (xarOutputCache::isBlockCacheEnabled()) {
             // set the current cacheKey to null
             xarBlockCache::$cacheKey = null;
         }
-        if (xarOutputCache::$moduleCacheIsEnabled) {
+        if (xarOutputCache::isModuleCacheEnabled()) {
             // set the current cacheKey to null
             xarModuleCache::$cacheKey = null;
         }
-        if (xarOutputCache::$objectCacheIsEnabled) {
+        if (xarOutputCache::isObjectCacheEnabled()) {
             // set the current cacheKey to null
             xarObjectCache::$cacheKey = null;
         }
@@ -189,15 +190,15 @@ class xarCache extends xarObject
      */
     public static function setPageTitle($title = null, $module = null)
     {
-        if (!xarCache::$outputCacheIsEnabled) {
+        if (!self::isOutputCacheEnabled()) {
             return;
         }
         // TODO: refactor common code ?
-        if (xarOutputCache::$moduleCacheIsEnabled) {
+        if (xarOutputCache::isModuleCacheEnabled()) {
             // set page title for module output
             xarModuleCache::setPageTitle($title, $module);
         }
-        if (xarOutputCache::$objectCacheIsEnabled) {
+        if (xarOutputCache::isObjectCacheEnabled()) {
             // set page title for object output
             xarObjectCache::setPageTitle($title, $module);
         }
@@ -210,15 +211,15 @@ class xarCache extends xarObject
      */
     public static function addStyle(array $args = [])
     {
-        if (!xarCache::$outputCacheIsEnabled) {
+        if (!self::isOutputCacheEnabled()) {
             return;
         }
         // TODO: refactor common code ?
-        if (xarOutputCache::$moduleCacheIsEnabled) {
+        if (xarOutputCache::isModuleCacheEnabled()) {
             // add stylesheet for module output
             xarModuleCache::addStyle($args);
         }
-        if (xarOutputCache::$objectCacheIsEnabled) {
+        if (xarOutputCache::isObjectCacheEnabled()) {
             // add stylesheet for object output
             xarObjectCache::addStyle($args);
         }
@@ -231,15 +232,15 @@ class xarCache extends xarObject
      */
     public static function addJavaScript(array $args = [])
     {
-        if (!xarCache::$outputCacheIsEnabled) {
+        if (!self::isOutputCacheEnabled()) {
             return;
         }
         // TODO: refactor common code ?
-        if (xarOutputCache::$moduleCacheIsEnabled) {
+        if (xarOutputCache::isModuleCacheEnabled()) {
             // add javascript for module output
             xarModuleCache::addJavaScript($args);
         }
-        if (xarOutputCache::$objectCacheIsEnabled) {
+        if (xarOutputCache::isObjectCacheEnabled()) {
             // add javascript for object output
             xarObjectCache::addJavaScript($args);
         }
@@ -307,16 +308,52 @@ class xarCache extends xarObject
     public static function getOutputCacheDir()
     {
         // make sure xarOutputCache is initialized
-        if (!xarCache::$outputCacheIsEnabled) {
+        if (!self::isOutputCacheEnabled()) {
             // get the caching configuration
-            $config = xarCache::getConfig();
+            $config = self::getConfig();
             // initialize the output cache
             sys::import('xaraya.caching.output');
-            //xarCache::$outputCacheIsEnabled = xarOutputCache::init($config);
+            //self::$outputCacheIsEnabled = xarOutputCache::init($config);
             xarOutputCache::init($config);
             // make sure we don't cache here
-            xarCache::noCache();
+            self::noCache();
         }
-        return xarOutputCache::$cacheDir;
+        return xarOutputCache::getCacheDir();
+    }
+
+    /**
+     * Summary of isOutputCacheEnabled
+     * @return bool
+     */
+    public static function isOutputCacheEnabled()
+    {
+        return self::$outputCacheIsEnabled;
+    }
+
+    /**
+     * Summary of isCoreCacheEnabled
+     * @return bool
+     */
+    public static function isCoreCacheEnabled()
+    {
+        return self::$coreCacheIsEnabled;
+    }
+
+    /**
+     * Summary of isTemplateCacheEnabled
+     * @return bool
+     */
+    public static function isTemplateCacheEnabled()
+    {
+        return self::$templateCacheIsEnabled;
+    }
+
+    /**
+     * Summary of isVariableCacheEnabled
+     * @return bool
+     */
+    public static function isVariableCacheEnabled()
+    {
+        return self::$variableCacheIsEnabled;
     }
 }

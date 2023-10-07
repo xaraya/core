@@ -54,7 +54,8 @@ class xarSession extends xarObject implements IsessionHandler
 {
     const  PREFIX='XARSV';     // Reserved by us for our session vars
     const  COOKIE='XARAYASID'; // Our cookiename
-    public static $anonId;     // Replacement for _XAR_ID_UNREGISTERED
+    /** @var ?int */
+    public static $anonId = null;     // Replacement for _XAR_ID_UNREGISTERED
     private static $securityLevel;
     private static $duration;
     private static $inactivityTimeout;
@@ -470,7 +471,7 @@ class xarSession extends xarObject implements IsessionHandler
         //self::$cookieDomain = $args['cookieDomain'];
         //self::$refererCheck = $args['refererCheck'));
 
-	self::$anonId = xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
+	self::$anonId = (int) xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
         if (!defined('_XAR_ID_UNREGISTERED')) {
             define('_XAR_ID_UNREGISTERED', self::$anonId);
         }
@@ -625,6 +626,15 @@ class xarSession extends xarObject implements IsessionHandler
             self::$lastSaved = (int) $lastused;
         }
         return self::$lastSaved;
+    }
+
+    /**
+     * Get the anonymous userId
+     * @return ?int
+     */
+    public static function getAnonId()
+    {
+        return self::$anonId;
     }
 
     /**

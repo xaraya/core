@@ -73,4 +73,49 @@ class xarOutputCache extends xarObject
 
         return true;
     }
+
+    /**
+     * Get output cache dir
+     * @return string
+     */
+    public static function getCacheDir()
+    {
+        return self::$cacheDir;
+    }
+
+    /**
+     * Summary of isPageCacheEnabled
+     * @return bool
+     */
+    public static function isPageCacheEnabled()
+    {
+        return self::$pageCacheIsEnabled;
+    }
+
+    /**
+     * Summary of isBlockCacheEnabled
+     * @return bool
+     */
+    public static function isBlockCacheEnabled()
+    {
+        return self::$blockCacheIsEnabled;
+    }
+
+    /**
+     * Summary of isModuleCacheEnabled
+     * @return bool
+     */
+    public static function isModuleCacheEnabled()
+    {
+        return self::$moduleCacheIsEnabled;
+    }
+
+    /**
+     * Summary of isObjectCacheEnabled
+     * @return bool
+     */
+    public static function isObjectCacheEnabled()
+    {
+        return self::$objectCacheIsEnabled;
+    }
 }

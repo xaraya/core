@@ -284,7 +284,7 @@ class xarCore extends xarCoreCache
             xarCache::$variableCacheIsEnabled = false;
         }
 
-        if (xarCache::$variableCacheIsEnabled) {
+        if (xarCache::isVariableCacheEnabled()) {
             sys::import('xaraya.caching.variable');
         }
 
@@ -380,7 +380,7 @@ class xarCore extends xarCoreCache
          *
          * @todo <mfl> eventually remove the caching condition
          */
-        if (xarCache::$variableCacheIsEnabled) {
+        if (xarCache::isVariableCacheEnabled()) {
             sys::import('xaraya.autoload');
             xarAutoload::initialize();
         }
