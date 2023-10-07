@@ -86,13 +86,13 @@ class CategoriesProperty extends DataProperty
         $this->fieldname = $name;
 
         // Pull in local module and itemtype from the form and store for reuse
-        if (!xarVar::fetch($name . '["itemtype"]', 'int', $itemtype, 0, xarVar::NOT_REQUIRED)) return;
-        if (!xarVar::fetch($name . '["module_id"]', 'int', $module_id, 182, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch($name . '[itemtype]', 'int', $itemtype, 0, xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch($name . '[module_id]', 'int', $module_id, 182, xarVar::NOT_REQUIRED)) return;
         $this->module_id = $module_id;
         $this->itemtype = $itemtype;
        
         // Get the base categories from the form
-        if (!xarVar::fetch($name . '["base_category"]', 'array', $basecats, array(), xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch($name . '[base_category]', 'array', $basecats, array(), xarVar::NOT_REQUIRED)) return;
         $this->basecategories = $basecats;
         // Get the categories from the form
         // Select type of each tree can be different
@@ -101,10 +101,10 @@ class CategoriesProperty extends DataProperty
             $select_type = 3;
             if ($select_type == 1) $select_type = 'dropdown';
             else $select_type = 'multiselect';
-            if (!xarVar::fetch($name . '["categories"]', 'array', $categories, array(), xarVar::NOT_REQUIRED)) return;
+            if (!xarVar::fetch($name . '[categories]', 'array', $categories, array(), xarVar::NOT_REQUIRED)) return;
         }
         */
-        if (!xarVar::fetch($name . '["categories"]', 'array', $categories, array(), xarVar::NOT_REQUIRED)) return;
+        if (!xarVar::fetch($name . '[categories]', 'array', $categories, array(), xarVar::NOT_REQUIRED)) return;
         return $this->validateValue($categories);
     }
 
