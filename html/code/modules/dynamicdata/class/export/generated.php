@@ -5,11 +5,14 @@ namespace Xaraya\DataObject\Generated;
 use DataContainer;
 use DataObjectDescriptor;
 use DataObject;
+use Exception;
 use VirtualObjectDescriptor;
+use xarCoreCache;
 use sys;
 
 /**
- * Generated DataObject Class exported from DD DataObject configuration (experimental)
+ * Generated DataObject Class exported from DD DataObject configuration
+ * with properties mapped to their DataObject properties (experimental)
  *
  * use Xaraya\DataObject\Generated\Sample;
  * use Xaraya\DataObject\Generated\Format;
@@ -20,7 +23,7 @@ use sys;
  * $sample = new Sample(1);
  * // dummy sample object with name and age
  * $sample = new Sample(null, ['name' => 'Mike', 'age' => 20]);
- * // actual sample object with itemid = 1 and differen age
+ * // actual sample object with itemid = 1 and different age
  * $sample = new Sample(1, ['age' => 33]);
  *
  * $coll = new ArrayObject();
@@ -30,6 +33,8 @@ use sys;
  */
 class GeneratedClass extends DataContainer
 {
+    /** @var string */
+    protected static $_objectName = 'OVERRIDE';
     /** @var ?DataObject */
     protected static $_object;
     /** @var ?DataObjectDescriptor */
@@ -44,26 +49,17 @@ class GeneratedClass extends DataContainer
     protected $_values = [];
 
     /**
-     * Summary of __construct
-     * @param ?int $itemid
-     * @param array<string, mixed> $args
+     * Constructor for GeneratedClass
+     * @param ?int $itemid (optional) itemid to retrieve DataObject item from database
+     * @param array<string, mixed> $values (optional) values to set for DataObject properties
      */
-    public function __construct($itemid = null, $args = [])
+    public function __construct($itemid = null, $values = [])
     {
-        $this->_itemid = null;
-        $this->_values = [];
-        if (!empty($itemid)) {
-            $this->_itemid = static::getObject()->getItem(['itemid' => $itemid]);
-        } else {
-            $this->_itemid = static::getObject()->clearFieldValues();
+        $this->initialize($itemid);
+        if (!empty($values)) {
+            $this->refresh($values);
         }
-        if (!empty($args)) {
-            static::getObject()->setFieldValues($args);
-        }
-        $this->_values = static::getObject()->getFieldValues();
-        foreach (static::getPropertyNames() as $name) {
-            $this->$name = static::getObject()->properties[$name];
-        }
+        $this->store();
     }
 
     /**
@@ -105,6 +101,79 @@ class GeneratedClass extends DataContainer
     }
 
     /**
+     * Initialize DataObject and instance
+     * @param mixed $itemid
+     * @return void
+     */
+    public function initialize($itemid = null)
+    {
+        $this->_itemid = null;
+        $this->_values = [];
+        if (!empty($itemid)) {
+            $this->_itemid = $this->retrieve($itemid);
+        } else {
+            $this->clear();
+        }
+        $this->connect();
+    }
+
+    /**
+     * Refresh DataObject values from instance or values
+     * @param ?array<string, mixed> $values
+     * @return void
+     */
+    public function refresh($values = null)
+    {
+        if (isset($values)) {
+            static::getObject()->setFieldValues($values);
+        } else {
+            static::getObject()->setFieldValues($this->_values);
+        }
+    }
+
+    /**
+     * Store DataObject values in instance
+     * @return void
+     */
+    public function store()
+    {
+        $this->_values = static::getObject()->getFieldValues();
+    }
+
+    /**
+     * Retrieve DataObject item from database
+     * @param mixed $itemid
+     * @return mixed
+     */
+    public function retrieve($itemid)
+    {
+        if (empty($itemid) || $itemid == $this->_itemid) {
+            return $itemid;
+        }
+        return static::getObject()->getItem(['itemid' => $itemid]);
+    }
+
+    /**
+     * Clear DataObject values
+     * @return void
+     */
+    public function clear()
+    {
+        static::getObject()->clearFieldValues();
+    }
+
+    /**
+     * Connect DataObject properties to instance
+     * @return void
+     */
+    public function connect()
+    {
+        foreach (static::getPropertyNames() as $name) {
+            $this->$name = static::getObject()->properties[$name];
+        }
+    }
+
+    /**
      * Only serialize the current itemid and values
      * @return array<string>
      */
@@ -119,10 +188,8 @@ class GeneratedClass extends DataContainer
      */
     public function __wakeup()
     {
-        //static::getObject()->setFieldValues($this->_values);
-        foreach (static::getPropertyNames() as $name) {
-            $this->$name = static::getObject()->properties[$name];
-        }
+        //$this->refresh();
+        $this->connect();
     }
 
     /**
@@ -161,6 +228,13 @@ class GeneratedClass extends DataContainer
      */
     public static function getDescriptorArgs()
     {
+        if (empty(static::$_descriptorArgs)) {
+            $filepath = sys::varpath() . '/cache/variables/' . static::$_objectName . '.descriptor.php';
+            if (!is_file($filepath)) {
+                throw new Exception('No descriptor cached yet - you need to export this object to php first');
+            }
+            static::$_descriptorArgs = require $filepath;
+        }
         $args = static::$_descriptorArgs;
         $args['propertyargs'] = static::getPropertyArgs();
         return $args;
@@ -172,6 +246,13 @@ class GeneratedClass extends DataContainer
      */
     public static function getPropertyArgs()
     {
+        if (empty(static::$_propertyArgs)) {
+            $filepath = sys::varpath() . '/cache/variables/' . static::$_objectName . '.properties.php';
+            if (!is_file($filepath)) {
+                throw new Exception('No properties cached yet - you need to export this object to php first');
+            }
+            static::$_propertyArgs = require $filepath;
+        }
         return static::$_propertyArgs;
     }
 
@@ -186,5 +267,27 @@ class GeneratedClass extends DataContainer
             $names[] = $propertyArg['name'];
         }
         return $names;
+    }
+
+    /**
+     * Load core cache with property types and configurations
+     * @return void
+     */
+    public static function loadCoreCache()
+    {
+        static $loaded = false;
+        if ($loaded) {
+            return;
+        }
+        $filepath = sys::varpath() . '/cache/variables/DynamicData.PropertyTypes.php';
+        if (!is_file($filepath)) {
+            throw new Exception('No property types cached yet - you need to export at least 1 object to php');
+        }
+        $proptypes = include $filepath;
+        xarCoreCache::setCached('DynamicData', 'PropertyTypes', $proptypes);
+        $filepath = sys::varpath() . '/cache/variables/DynamicData.Configurations.php';
+        $configprops = include $filepath;
+        xarCoreCache::setCached('DynamicData', 'Configurations', $configprops);
+        $loaded = true;
     }
 }

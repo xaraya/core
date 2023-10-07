@@ -17,6 +17,7 @@ use DataObject;
 use DataObjectList;
 use DataObjectMaster;
 use DataPropertyMaster;
+use BadParameterException;
 use xarCoreCache;
 use sys;
 
@@ -49,7 +50,8 @@ class PhpExporter extends JsonExporter
 
     /**
      * Summary of getObjectDef
-     * @return DataObject|void
+     * @throws BadParameterException
+     * @return DataObject
      */
     public function getObjectDef()
     {
@@ -60,7 +62,7 @@ class PhpExporter extends JsonExporter
         ]);
 
         if (!isset($myobject) || empty($myobject->label)) {
-            return;
+            throw new BadParameterException('Invalid object id ' . $this->objectid);
         }
 
         return $myobject;
@@ -68,6 +70,27 @@ class PhpExporter extends JsonExporter
 
     public function addObjectDef($info, $objectdef)
     {
+        $args = $objectdef->descriptor->getArgs();
+        $propertyargs = $args['propertyargs'];
+        unset($args['propertyargs']);
+        $filepath = sys::varpath() . '/cache/variables/' . $objectdef->name . '.descriptor.php';
+        $output = "<?php\n\$object = " . var_export($args, true) . ";\nreturn \$object;\n";
+        file_put_contents($filepath, $output);
+        $filepath = sys::varpath() . '/cache/variables/' . $objectdef->name . '.properties.php';
+        $output = "<?php\n\$properties = [];\n";
+        foreach ($propertyargs as $propertyarg) {
+            if (!DataPropertyMaster::isPropertyEnabled($propertyarg)) {
+                continue;
+            }
+            $propertyarg = array_filter($propertyarg, function ($key) {
+                return !str_starts_with($key, 'object_');
+            }, ARRAY_FILTER_USE_KEY);
+            unset($propertyarg['_objectid']);
+            $output .= "\$properties[] = " . var_export($propertyarg, true) . ";\n";
+        }
+        $output .= "return \$properties;\n";
+        file_put_contents($filepath, $output);
+
         $info .= '<?php
 
 namespace Xaraya\DataObject\Generated;
@@ -82,35 +105,36 @@ namespace Xaraya\DataObject\Generated;
             $info .= "use " . $classname . ";\n";
             $seen[$classname] = true;
         }
+        $classname = ucwords($objectdef->name, '_');
+        $objectclass = $objectdef->descriptor->get('class') ?? 'DataObject';
+        $exploded = explode('\\', $objectclass);
+        $objectclass = array_pop($exploded);
         $info .= '
-class ' . ucwords($objectdef->name, '_') . ' extends GeneratedClass {
+/**
+ * Generated ' . $classname . ' class exported from DD DataObject configuration
+ * with properties mapped to their ' . $objectclass . ' properties (experimental)
+ *
+ * Configuration saved in ' . $objectdef->name . '.descriptor.php and ' . $objectdef->name . '.properties.php
+ */
+class ' . $classname . ' extends GeneratedClass {
+    /** @var string */
+    protected static $_objectName = \'' . $objectdef->name . '\';
 ';
         foreach ($objectdef->properties as $name => $property) {
             $info .= "    /** @var " . get_class($property) . " */\n";
             $info .= "    public \$" . $name . ";\n";
         }
 
-        $args = $objectdef->descriptor->getArgs();
-        $propertyargs = $args['propertyargs'];
-        unset($args['propertyargs']);
         $info .= '
-    /** @var array<string, mixed> */
-    protected static $_descriptorArgs = ' . str_replace("\n", "\n    ", var_export($args, true)) . ';
-    /** @var list<array<string, mixed>> */
-    protected static $_propertyArgs = array (
-';
-        foreach ($propertyargs as $propertyarg) {
-            if (!DataPropertyMaster::isPropertyEnabled($propertyarg)) {
-                continue;
-            }
-            $propertyarg = array_filter($propertyarg, function ($key) {
-                return !str_starts_with($key, 'object_');
-            }, ARRAY_FILTER_USE_KEY);
-            unset($propertyarg['_objectid']);
-            $info .= "        " . str_replace("\n", "\n        ", var_export($propertyarg, true)) . ",\n";
-        }
-        $info .= '
-    );
+    /**
+     * Constructor for ' . $classname . '
+     * @param ?int $itemid (optional) itemid to retrieve ' . $objectclass . ' item from database
+     * @param array<string, mixed> $values (optional) values to set for ' . $objectclass . ' properties
+     */
+    public function __construct($itemid = null, $values = [])
+    {
+        parent::__construct($itemid, $values);
+    }
 
     /**
      * Get the value of this property (= for a particular object item)
@@ -143,10 +167,10 @@ class ' . ucwords($objectdef->name, '_') . ' extends GeneratedClass {
     }
 
     /**
-     * Summary of saveCoreCache
+     * Summary of saveCoreCache - used in GeneratedClass::loadCoreCache()
      * @return void
      */
-    public function saveCoreCache()
+    public static function saveCoreCache()
     {
         $filepath = sys::varpath() . '/cache/variables/DynamicData.PropertyTypes.php';
         $proptypes = xarCoreCache::getCached('DynamicData', 'PropertyTypes');
@@ -167,11 +191,11 @@ return $configprops;
     }
 
     /**
-     * Summary of unlinkObjectRef
+     * Summary of unlinkObjectRef - currently not used, see tests/virtual
      * @param DataObject|DataObjectList $object
      * @return void
      */
-    public function unlinkObjectRef(& $object)
+    public static function unlinkObjectRef(& $object)
     {
         $object->datastore->object = '$this';
         //$object->datastore->db = null;
@@ -182,11 +206,11 @@ return $configprops;
     }
 
     /**
-     * Summary of relinkObjectRef
+     * Summary of relinkObjectRef - currently not used, see tests/virtual
      * @param DataObject|DataObjectList $object
      * @return void
      */
-    public function relinkObjectRef(& $object)
+    public static function relinkObjectRef(& $object)
     {
         //$object->descriptor->objectref = &$object;
         //$object->descriptor->set('objectref', &$object);

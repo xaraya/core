@@ -10,9 +10,16 @@ use Xaraya\DataObject\Generated\Sample;
 sys::init();
 // initialize caching
 xarCache::init();
-// initialize database
-//xarDatabase::init();
+
+// load core cache with property types and configurations
+Sample::loadCoreCache();
+
+// initialize database for itemid - if not already loaded
+xarDatabase::init();
+// @checkme for object URLs - if not already loaded
 //xarMod::init();
+// for showOutput
+//xarTpl::init();
 // see CommonBridgeTrait::prepareController()
 xarController::$buildUri = function ($module, $type, $func, $extra) {
     $module ??= 'object';
@@ -25,18 +32,6 @@ xarController::$buildUri = function ($module, $type, $func, $extra) {
     return "/{$module}/{$type}/{$func}{$query}";
 };
 
-$basedir = sys::varpath() . '/cache/variables';
-$proptypes = include $basedir.'/DynamicData.PropertyTypes.php';
-xarCoreCache::setCached('DynamicData', 'PropertyTypes', $proptypes);
-$configprops = include $basedir.'/DynamicData.Configurations.php';
-xarCoreCache::setCached('DynamicData', 'Configurations', $configprops);
-
-// with itemid
-xarDatabase::init();
-xarMod::init();
-// for showOutput
-//xarTpl::init();
-
 const TEST_COUNT = 5000;
 
 function mini_profile($profile, $callable, $itemid = null)
@@ -47,9 +42,10 @@ function mini_profile($profile, $callable, $itemid = null)
 
     $count = call_user_func($callable, $itemid);
 
-    $elapsed = microtime(true) - $start;
-    $memory = memory_get_usage(true) - $used;
-    echo "Elapsed: $elapsed - Memory: $memory - Count: $count\n\n";
+    $stop = microtime(true);
+    $elapsed = sprintf('%.3f', $stop - $start);
+    $memory = sprintf('%.1f', (memory_get_usage(true) - $used) / 1024 / 1024);
+    echo "Elapsed: $elapsed sec - Memory: $memory MB - Count: $count\n\n";
 }
 
 function test_normal_baseline($itemid = null)
@@ -117,7 +113,7 @@ function test_generated_unserialize($itemid = null)
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = unserialize($serialized);
         if (!empty($itemid)) {
-            $sample->getObject()->getItem(['itemid' => $itemid]);
+            $sample->retrieve($itemid);
         }
         foreach ($args as $key => $val) {
             $sample->set($key, $val);
@@ -138,7 +134,7 @@ function test_generated_clone($itemid = null)
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = clone $base;
         if (!empty($itemid)) {
-            $sample->getObject()->getItem(['itemid' => $itemid]);
+            $sample->retrieve($itemid);
         }
         foreach ($args as $key => $val) {
             $sample->set($key, $val);

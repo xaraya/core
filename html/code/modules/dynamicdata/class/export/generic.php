@@ -19,6 +19,7 @@ use DataObjectMaster;
 use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
+use BadParameterException;
 use xarDB;
 use sys;
 
@@ -57,8 +58,8 @@ class DataObjectExporter
 
     /**
      * Summary of addObjectDef
-     * @param mixed $output
-     * @param mixed $objectdef
+     * @param string|array<string, mixed> $output
+     * @param DataObject $objectdef
      * @return mixed
      */
     public function addObjectDef($output, $objectdef)
@@ -129,7 +130,8 @@ class DataObjectExporter
 
     /**
      * Summary of getObjectDef
-     * @return DataObject|void
+     * @throws BadParameterException
+     * @return DataObject
      */
     public function getObjectDef()
     {
@@ -138,7 +140,7 @@ class DataObjectExporter
         $myobject->getItem(['itemid' => $this->objectid]);
 
         if (!isset($myobject) || empty($myobject->label) || empty($myobject->properties['objectid']->value)) {
-            return;
+            throw new BadParameterException('Invalid object id ' . $this->objectid);
         }
 
         $this->proptypes = DataPropertyMaster::getPropertyTypes();
@@ -151,7 +153,8 @@ class DataObjectExporter
 
     /**
      * Summary of getObjectList
-     * @return DataObjectList|null
+     * @throws BadParameterException
+     * @return DataObjectList
      */
     public function getObjectList()
     {
@@ -159,6 +162,10 @@ class DataObjectExporter
             'objectid' => $this->objectid,
             'prelist'  => false,
         ]);     // don't run preList method
+
+        if (!isset($mylist) || empty($mylist->label)) {
+            throw new BadParameterException('Invalid object id ' . $this->objectid);
+        }
 
         // Export all properties that are not disabled
         foreach ($mylist->properties as $name => $property) {
@@ -195,7 +202,8 @@ class DataObjectExporter
     /**
      * Summary of getObjectItem
      * @param int $itemid
-     * @return DataObject|void
+     * @throws BadParameterException
+     * @return DataObject
      */
     public function getObjectItem(int $itemid)
     {
@@ -206,7 +214,7 @@ class DataObjectExporter
         ]);
 
         if (!isset($myobject) || empty($myobject->label)) {
-            return;
+            throw new BadParameterException('Invalid object id ' . $this->objectid);
         }
 
         $myobject->getItem();
