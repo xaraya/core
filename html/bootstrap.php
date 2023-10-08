@@ -479,26 +479,18 @@ final class sys extends xarObject
 **/
 class DataContainer extends xarObject
 {
-    /**
-     *  @todo protected members cannot be gotten?
-     *  @todo <mrb> i dont think this is a feasible direction
-    **/
     public function get($name)
     {
-        $p = $this->getProperty_($name);
-        if($p->isPublic()) {
-            return $p->$name;
+        //$p = $this->getProperty_($name);
+        if (property_exists($this, $name)) {
+            return $this->$name;
         }
     }
 
-    /**
-     *  @todo protected members cannot be set?
-     *  @todo <mrb> i dont think this is a feasible direction
-    **/
     public function set($name, $value)
     {
-        $p = $this->getProperty_($name);
-        if($p->isPublic()) {
+        //$p = $this->getProperty_($name);
+        if (property_exists($this, $name)) {
             $this->$name = $value;
         }
     }

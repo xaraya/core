@@ -341,6 +341,11 @@ class xarMod extends xarObject implements IxarMod
         $dbconn = xarDB::getConn();
         $tables = xarDB::getTables();
 
+        if (!isset($tables['modules'])) {
+            self::loadDbInfo('modules', 'modules');
+            $tables = xarDB::getTables();
+        }
+
         switch($type) {
         case 'module':
         default:
@@ -499,6 +504,10 @@ class xarMod extends xarObject implements IxarMod
         $tables = xarDB::getTables();
 
         // theme+s or module+s
+        if (!isset($tables[$type.'s'])) {
+            self::loadDbInfo($type.'s', $type.'s');
+            $tables = xarDB::getTables();
+        }
         $table = $tables[$type.'s'];
 
         if ($type == 'theme') {
@@ -1060,6 +1069,9 @@ class xarModAlias extends xarObject implements IxarModAlias
      */
     static function resolve($alias)
     {
+        if ($alias == 'object') {
+            return $alias;
+        }
         $aliasesMap = xarConfigVars::get(null,'System.ModuleAliases');
         return (!empty($aliasesMap[$alias])) ? $aliasesMap[$alias] : $alias;
     }

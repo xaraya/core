@@ -112,7 +112,7 @@
         <xar:elseif condition="$export eq 'view'"/>
             <!-- example of using virtual object descriptor to show database table -->
             <xar:set name="dummy">sys::import('modules.dynamicdata.class.objects.virtual')</xar:set>
-            <xar:set name="descriptor">new VirtualObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
+            <xar:set name="descriptor">new TableObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
             <xar:set name="object">new DataObjectList($descriptor)</xar:set>
             <xar:set name="dummy">$object->getItems()</xar:set>
             <h3>
@@ -128,7 +128,7 @@
         <xar:elseif condition="$export eq 'display'"/>
             <!-- example of using virtual object descriptor to show database table -->
             <xar:set name="dummy">sys::import('modules.dynamicdata.class.objects.virtual')</xar:set>
-            <xar:set name="descriptor">new VirtualObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
+            <xar:set name="descriptor">new TableObjectDescriptor(['table' => $table, 'fields' => $tables[$table]])</xar:set>
             <xar:set name="object">new DataObject($descriptor)</xar:set>
             <xar:set name="dummy">xarVar::fetch('itemid', 'notempty', $itemid, 1, xarVar::NOT_REQUIRED)</xar:set>
             <xar:set name="dummy">$object->getItem(['itemid' => $itemid])</xar:set>

@@ -29,14 +29,15 @@ sys::import('modules.dynamicdata.class.objects.descriptor');
  * $objectlist = new DataObjectlist($descriptor);
  * $items = $objectlist->getItems(['itemids' => [5]]);
  *
- * Or you can also use an existing database table as relational data store for the virtual objects
+ * You can also use an existing database table as relational data store for the virtual objects
  *
- * $descriptor = new VirtualObjectDescriptor(['table' => 'xar_other_table']);
+ * $descriptor = new TableObjectDescriptor(['table' => 'xar_other_table']);
  * $objectlist = new DataObjectList($descriptor);
  * $items = $objectlist->getItems();
  */
 class VirtualObjectDescriptor extends DataObjectDescriptor
 {
+    /** @var array<string, mixed> */
     protected $args = [
         'objectid' => 0,
         'name' => 'virtual',
@@ -71,9 +72,6 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
     {
         //$args = self::getObjectID($args);
         ObjectDescriptor::__construct($args);
-        if (!empty($args['table'])) {
-            $this->addTable($args['table'], $args['fields'] ?? []);
-        }
     }
 
     /**
@@ -90,24 +88,69 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
      *     $args['seq'] the place in sequence this dynamic property appears in
      *     $args['configuration'] the configuration (serialized array) for the dynamic property
      *     $args['id'] the id for the dynamic property
+     * @return void
     **/
     public function addProperty(array $args = [])
     {
         if (empty($args['name']) || empty($args['type'])) {
             throw new Exception('You need to specify at least a name and type for each property');
         }
+        $this->args['propertyargs'] ??= [];
         $this->args['propertyargs'][] = $args;
+    }
+
+    /**
+     * Magic method to re-create object descriptor based on result of var_export($object->descriptor, true)
+     * @param array<string, mixed> $args
+    **/
+    public static function __set_state($args)
+    {
+        $var = get_called_class();
+        $c = new $var($args['args']);
+        return $c;
+    }
+}
+
+/**
+ * Generate the variables necessary to instantiate a *virtual* DataObject class (= not defined in database)
+ *
+ * You can also use an existing database table as relational data store for the virtual objects
+ *
+ * $descriptor = new TableObjectDescriptor(['table' => 'xar_other_table']);
+ * $objectlist = new DataObjectList($descriptor);
+ * $items = $objectlist->getItems();
+ */
+class TableObjectDescriptor extends VirtualObjectDescriptor
+{
+    /**
+     * Make an object descriptor to create a new (virtual) type of Dynamic Object for a database table
+     *
+     * @param array<string, mixed> $args
+     * with
+     *     ... arguments above, and
+     *     $args['table'] name of the database table (required)
+     *     $args['fields'] list of field specs coming from getmeta() or elsewhere (optional)
+     */
+    public function __construct(array $args = [])
+    {
+        //$args = self::getObjectID($args);
+        parent::__construct($args);
+        if (!empty($args['table'])) {
+            $this->addTable($args['table'], $args['fields'] ?? []);
+        }
     }
 
     /**
      * Use an existing database table as relational data store for this virtual object
      *
-     * @param $table name of the database table (required)
-     * @param $fields list of field specs coming from getmeta() or elsewhere (optional)
+     * @param string $table name of the database table (required)
+     * @param array<string, array<string, mixed>> $fields list of field specs coming from getmeta() or elsewhere (optional)
+     * @return void
     **/
     public function addTable(string $table, array $fields = [])
     {
         if (empty($fields)) {
+            /** @var array<string, array<string, array<string, mixed>>> $meta */
             $meta = xarMod::apiFunc('dynamicdata', 'util', 'getmeta', ['table' => $table]);
             if (empty($meta[$table])) {
                 throw new Exception("Unknown table $table");
@@ -117,18 +160,8 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         $this->args['name'] = $table;
         $this->args['datastore'] = 'relational';
         $this->args['sources'] = serialize([$table => $table]);
-        foreach ($fields as $field) {
+        foreach ($fields as $name => $field) {
             $this->addProperty($field);
         }
-    }
-
-    /**
-     * Magic method to re-create object descriptor based on result of var_export($object->descriptor, true)
-    **/
-    public static function __set_state($args)
-    {
-        $var = get_called_class();
-        $c = new $var($args['args']);
-        return $c;
     }
 }

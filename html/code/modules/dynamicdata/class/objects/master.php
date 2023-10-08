@@ -921,6 +921,11 @@ class DataObjectMaster extends xarObject
     public static function getObject(array $args = [])
     {
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
+        if (!empty($args['table']) && empty($args['objectid']) && empty($args['name'])) {
+            sys::import('modules.dynamicdata.class.objects.virtual');
+            $descriptor = new TableObjectDescriptor($args);
+            return new DataObject($descriptor);
+        }
         $info = self::_getObjectInfo($args);
         // If we have no such object, just return null for now
         if (empty($info)) {
@@ -998,6 +1003,11 @@ class DataObjectMaster extends xarObject
     {
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
         // Complete the info if this is a known object
+        if (!empty($args['table']) && empty($args['objectid']) && empty($args['name'])) {
+            sys::import('modules.dynamicdata.class.objects.virtual');
+            $descriptor = new TableObjectDescriptor($args);
+            return new DataObjectList($descriptor);
+        }
         $info = self::_getObjectInfo($args);
         if (empty($info)) {
             $identifier = '';
