@@ -12,10 +12,11 @@ use DeferredListProperty;
 /**
  * Generated Sample class exported from DD DataObject configuration
  * with properties mapped to their DataObject properties (experimental)
- * 
+ *
  * Configuration saved in sample.descriptor.php and sample.properties.php
  */
-class Sample extends GeneratedClass {
+class Sample extends GeneratedClass
+{
     /** @var string */
     protected static $_objectName = 'sample';
     /** @var ItemIDProperty */
@@ -50,9 +51,7 @@ class Sample extends GeneratedClass {
      */
     public function get($name)
     {
-        // don't use the property getValue() here
-        //return $this->$name->getValue();
-        return $this->_values[$name] ?? null;
+        return parent::get($name);
     }
 
     /**
@@ -63,8 +62,15 @@ class Sample extends GeneratedClass {
      */
     public function set($name, $value = null)
     {
-        // use the property setValue() and getValue() here
-        $this->$name->setValue($value);
-        $this->_values[$name] = $this->$name->getValue();
+        parent::set($name, $value);
+    }
+
+    /**
+     * Save DataObject item
+     * @return int|null
+     */
+    public function save()
+    {
+        return parent::save();
     }
 }

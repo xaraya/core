@@ -16,21 +16,10 @@ Sample::loadCoreCache();
 
 // initialize database for itemid - if not already loaded
 xarDatabase::init();
-// @checkme for object URLs - if not already loaded
+// for hook calls - if not already loaded
 //xarMod::init();
 // for showOutput
 //xarTpl::init();
-// see CommonBridgeTrait::prepareController()
-xarController::$buildUri = function ($module, $type, $func, $extra) {
-    $module ??= 'object';
-    $type ??= 'sample';
-    $func ??= 'view';
-    $query = '';
-    if (!empty($query)) {
-        $query = '?' . http_build_query($extra);
-    }
-    return "/{$module}/{$type}/{$func}{$query}";
-};
 
 const TEST_COUNT = 5000;
 
@@ -146,18 +135,80 @@ function test_generated_clone($itemid = null)
     return count($coll);
 }
 
+function run_profile($itemid = null)
+{
+    mini_profile("Normal baseline", function ($itemid) { return test_normal_baseline($itemid); }, $itemid);
+    mini_profile("Normal unserialize", function ($itemid) { return test_normal_unserialize($itemid); }, $itemid);
+    mini_profile("Normal clone", function ($itemid) { return test_normal_clone($itemid); }, $itemid);
+    mini_profile("Generated baseline", function ($itemid) { return test_generated_baseline($itemid); }, $itemid);
+    mini_profile("Generated unserialize", function ($itemid) { return test_generated_unserialize($itemid); }, $itemid);
+    mini_profile("Generated clone", function ($itemid) { return test_generated_clone($itemid); }, $itemid);
+}
+
 $itemid = null;
 //$itemid = 1;
-mini_profile("Normal baseline", function ($itemid) { return test_normal_baseline($itemid); }, $itemid);
-mini_profile("Normal unserialize", function ($itemid) { return test_normal_unserialize($itemid); }, $itemid);
-mini_profile("Normal clone", function ($itemid) { return test_normal_clone($itemid); }, $itemid);
-mini_profile("Generated baseline", function ($itemid) { return test_generated_baseline($itemid); }, $itemid);
-mini_profile("Generated unserialize", function ($itemid) { return test_generated_unserialize($itemid); }, $itemid);
-mini_profile("Generated clone", function ($itemid) { return test_generated_clone($itemid); }, $itemid);
+//run_profile($itemid);
 
-//$args = [];
-//$args = ['name' => 'Mike', 'age' => 20];
-//$sample = new Sample($itemid, $args);
-//var_dump($sample->get('children'));
-//var_dump($sample->children->getDeferredData());
-//var_dump($sample->children->showOutput());
+function test_crud()
+{
+    $itemid = null;
+    //$args = [];
+    $args = ['name' => 'Mike', 'age' => 20];
+    $sample = new Sample($itemid, $args);
+    $itemid = $sample->save();
+    echo "Create $itemid\n";
+
+    $sample = new Sample($itemid);
+    $values = $sample->toArray();
+    echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
+    $sample->set('age', $sample->get('age') + 1);
+    $itemid = $sample->save();
+    echo "Update $itemid\n";
+
+    $sample = new Sample($itemid);
+    $values = $sample->toArray();
+    echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
+    $sample->delete();
+    echo "Delete $itemid\n";
+    $sample = new Sample($itemid);
+    $values = $sample->toArray();
+    echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
+}
+
+//test_crud();
+
+function test_list()
+{
+    $result = Sample::list();
+    foreach ($result as $itemid => $item) {
+        echo "Item $itemid\n";
+        var_dump($item->toArray());
+    }
+    $sample = $result[2];
+    // we need to refresh here to get the right values in the data object
+    $sample->refresh();
+    var_dump($sample->partner->getValue());
+    $data = $sample->partner->getDeferredData();
+    var_dump($data['value']);
+    $data = $sample->children->getDeferredData();
+    var_dump($data['value']);
+}
+
+test_list();
+
+function test_properties()
+{
+    $itemid = null;
+    $args = ['id' => 4, 'name' => 'Mike', 'age' => 20, 'children' => [5]];
+    $sample = new Sample($itemid, $args);
+    var_dump($sample->id->getValue());
+    var_dump($sample->name->getValue());
+    var_dump($sample->get('children'));
+    $data = $sample->children->getDeferredData();
+    var_dump($data['value']);
+    var_dump($sample->children->getDeferredLoader());
+    xarTpl::init();
+    var_dump($sample->name->showOutput());
+}
+
+//test_properties();

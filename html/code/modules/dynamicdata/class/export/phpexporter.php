@@ -74,10 +74,10 @@ class PhpExporter extends JsonExporter
         $propertyargs = $args['propertyargs'];
         unset($args['propertyargs']);
         $filepath = sys::varpath() . '/cache/variables/' . $objectdef->name . '.descriptor.php';
-        $output = "<?php\n\$object = " . var_export($args, true) . ";\nreturn \$object;\n";
+        $output = "<?php\n\n\$object = " . var_export($args, true) . ";\nreturn \$object;\n";
         file_put_contents($filepath, $output);
         $filepath = sys::varpath() . '/cache/variables/' . $objectdef->name . '.properties.php';
-        $output = "<?php\n\$properties = [];\n";
+        $output = "<?php\n\n\$properties = [];\n";
         foreach ($propertyargs as $propertyarg) {
             if (!DataPropertyMaster::isPropertyEnabled($propertyarg)) {
                 continue;
@@ -116,7 +116,8 @@ namespace Xaraya\DataObject\Generated;
  *
  * Configuration saved in ' . $objectdef->name . '.descriptor.php and ' . $objectdef->name . '.properties.php
  */
-class ' . $classname . ' extends GeneratedClass {
+class ' . $classname . ' extends GeneratedClass
+{
     /** @var string */
     protected static $_objectName = \'' . $objectdef->name . '\';
 ';
@@ -143,9 +144,7 @@ class ' . $classname . ' extends GeneratedClass {
      */
     public function get($name)
     {
-        // don\'t use the property getValue() here
-        //return $this->$name->getValue();
-        return $this->_values[$name] ?? null;
+        return parent::get($name);
     }
 
     /**
@@ -156,9 +155,16 @@ class ' . $classname . ' extends GeneratedClass {
      */
     public function set($name, $value = null)
     {
-        // use the property setValue() and getValue() here
-        $this->$name->setValue($value);
-        $this->_values[$name] = $this->$name->getValue();
+        parent::set($name, $value);
+    }
+
+    /**
+     * Save DataObject item
+     * @return int|null
+     */
+    public function save()
+    {
+        return parent::save();
     }
 }
 ';

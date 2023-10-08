@@ -1,5 +1,6 @@
 <?php
-$object = array (
+
+$object = array(
   'objectid' => 4,
   'allprops' => true,
   'id' => '4',

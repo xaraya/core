@@ -5,10 +5,49 @@ namespace Xaraya\DataObject\Generated;
 use DataContainer;
 use DataObjectDescriptor;
 use DataObject;
+use DataObjectList;
 use Exception;
 use VirtualObjectDescriptor;
 use xarCoreCache;
+use ArrayObject;
 use sys;
+
+interface iGeneratedClass
+{
+    /**
+     * Constructor for GeneratedClass
+     * @param ?int $itemid (optional) itemid to retrieve DataObject item from database
+     * @param array<string, mixed> $values (optional) values to set for DataObject properties
+     */
+    public function __construct($itemid = null, $values = []);
+
+    /**
+     * Get the value of this property (= for a particular object item)
+     * @param string $name
+     * @return mixed
+     */
+    public function get($name);
+
+    /**
+     * Set the value of this property (= for a particular object item)
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public function set($name, $value = null);
+
+    /**
+     * Return this object as an array
+     * @return array<string, mixed>
+     */
+    public function toArray();
+
+    /**
+     * Get a list of instances of this class
+     * @return \ArrayObject<(int|string), mixed>
+     */
+    public static function list(int $startnum = 0, int $numitems = -1);
+}
 
 /**
  * Generated DataObject Class exported from DD DataObject configuration
@@ -31,7 +70,7 @@ use sys;
  *     $coll[] = new Sample(null, ['name' => "Item $i", 'age' => $i]);
  * }
  */
-class GeneratedClass extends DataContainer
+class GeneratedClass extends DataContainer implements iGeneratedClass
 {
     /** @var string */
     protected static $_objectName = 'OVERRIDE';
@@ -163,6 +202,34 @@ class GeneratedClass extends DataContainer
     }
 
     /**
+     * Save DataObject item
+     * @return int|null
+     */
+    public function save()
+    {
+        if (empty($this->_itemid)) {
+            $this->_itemid = static::getObject()->createItem();
+        } else {
+            $this->_itemid = static::getObject()->updateItem();
+        }
+        $this->store();
+        return $this->_itemid;
+    }
+
+    /**
+     * Delete DataObject item and re-initialize
+     * @return void
+     */
+    public function delete()
+    {
+        if (!empty($this->_itemid)) {
+            static::getObject()->deleteItem();
+        }
+        $this->initialize();
+        $this->store();
+    }
+
+    /**
      * Connect DataObject properties to instance
      * @return void
      */
@@ -193,17 +260,64 @@ class GeneratedClass extends DataContainer
     }
 
     /**
+     * Get a list of instances of this class
+     * @param int $startnum
+     * @param int $numitems
+     * @return \ArrayObject<(int|string), mixed>
+     */
+    public static function list(int $startnum = 0, int $numitems = -1)
+    {
+        $clazz = static::getObjectClass();
+        if (class_exists($clazz . 'List')) {
+            $clazz .= 'List';
+        } elseif (!method_exists($clazz, 'getItems')) {
+            throw new Exception('Invalid class ' . $clazz . ' List');
+        }
+        /** @var DataObjectList $objectlist */
+        $objectlist = new $clazz(static::getDescriptor());
+        if ($numitems > 0) {
+            $items = $objectlist->getItems(['startnum' => $startnum, 'numitems' => $numitems]);
+        } else {
+            $items = $objectlist->getItems();
+        }
+
+        $classname = static::class;
+        $base = new $classname();
+
+        $result = new ArrayObject();
+        foreach ($items as $itemid => $values) {
+            $item = clone $base;
+            $item->_itemid = $itemid;
+            $item->_values = $values;
+            /** @phpstan-ignore-next-line */
+            $result[$itemid] = $item;
+        }
+        return $result;
+    }
+
+    /**
+     * Get the class for the data object
+     * @return string
+     */
+    public static function getObjectClass()
+    {
+        $args = static::getDescriptorArgs();
+        $clazz = $args['class'] ?? 'DataObject';
+        $filepath = $args['filepath'] ?? 'auto';
+        if(!empty($filepath) && ($filepath != 'auto')) {
+            include_once(sys::code() . $filepath);
+        }
+        return $clazz;
+    }
+
+    /**
      * Get the data object
      * @return DataObject
      */
     public static function getObject()
     {
         if (!isset(static::$_object)) {
-            $clazz = static::$_descriptorArgs['class'] ?? 'DataObject';
-            $filepath = static::$_descriptorArgs['filepath'] ?? 'auto';
-            if(!empty($filepath) && ($filepath != 'auto')) {
-                include_once(sys::code() . $filepath);
-            }
+            $clazz = static::getObjectClass();
             static::$_object = new $clazz(static::getDescriptor());
         }
         return static::$_object;
