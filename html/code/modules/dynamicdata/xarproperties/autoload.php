@@ -15,6 +15,7 @@
 
 /**
  * Autoload function for this module's properties
+ * @deprecated 2.4.1 use composer autoload instead
  */
 function dynamicdata_properties_autoload($class)
 {

@@ -15,6 +15,7 @@
 
 /**
  * Autoload function for standalone properties
+ * @deprecated 2.4.1 use composer autoload instead
  */
 function xaraya_properties_autoload($class)
 {
