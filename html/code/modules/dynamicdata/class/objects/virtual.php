@@ -66,12 +66,16 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
      *     $args['config'] some configuration for the object (free to define and use)
      *     $args['isalias'] flag to indicate whether the object name is used as alias for short URLs
      *     $args['class'] optional classname (e.g. <module>_DataObject)
+     * @param bool $offline do we want to work offline = without database connection (need to export cache first)
      * @return object virtual object descriptor for use in $object = new DataObject($descriptor); or $objectlist = new DataObjectList($descriptor);
     **/
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], bool $offline = false)
     {
         //$args = self::getObjectID($args);
         ObjectDescriptor::__construct($args);
+        if ($offline) {
+            static::loadCoreCache();
+        }
     }
 
     /**
@@ -96,6 +100,9 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
             throw new Exception('You need to specify at least a name and type for each property');
         }
         $this->args['propertyargs'] ??= [];
+        if (!isset($args['id'])) {
+            $args['id'] = count($this->args['propertyargs']) + 1;
+        }
         $this->args['propertyargs'][] = $args;
     }
 
@@ -108,6 +115,28 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         $var = get_called_class();
         $c = new $var($args['args']);
         return $c;
+    }
+
+    /**
+     * Load core cache with property types and configurations
+     * @return void
+     */
+    public static function loadCoreCache()
+    {
+        static $loaded = false;
+        if ($loaded) {
+            return;
+        }
+        $filepath = sys::varpath() . '/cache/variables/DynamicData.PropertyTypes.php';
+        if (!is_file($filepath)) {
+            throw new Exception('No property types cached yet - you need to export at least 1 object to php');
+        }
+        $proptypes = include $filepath;
+        xarCoreCache::setCached('DynamicData', 'PropertyTypes', $proptypes);
+        $filepath = sys::varpath() . '/cache/variables/DynamicData.Configurations.php';
+        $configprops = include $filepath;
+        xarCoreCache::setCached('DynamicData', 'Configurations', $configprops);
+        $loaded = true;
     }
 }
 
@@ -134,7 +163,8 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
     public function __construct(array $args = [])
     {
         //$args = self::getObjectID($args);
-        parent::__construct($args);
+        $offline = false;
+        parent::__construct($args, $offline);
         if (!empty($args['table'])) {
             $this->addTable($args['table'], $args['fields'] ?? []);
         }
@@ -159,6 +189,7 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
         }
         $this->args['name'] = $table;
         $this->args['datastore'] = 'relational';
+        unset($this->args['cachestorage']);
         $this->args['sources'] = serialize([$table => $table]);
         foreach ($fields as $name => $field) {
             $this->addProperty($field);

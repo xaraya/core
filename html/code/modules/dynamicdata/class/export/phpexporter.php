@@ -173,7 +173,7 @@ class ' . $classname . ' extends GeneratedClass
     }
 
     /**
-     * Summary of saveCoreCache - used in GeneratedClass::loadCoreCache()
+     * Summary of saveCoreCache - used in VirtualObjecDescriptor::loadCoreCache()
      * @return void
      */
     public static function saveCoreCache()

@@ -11,9 +11,6 @@ sys::init();
 // initialize caching
 xarCache::init();
 
-// load core cache with property types and configurations
-Sample::loadCoreCache();
-
 // initialize database for itemid - if not already loaded
 xarDatabase::init();
 // for hook calls - if not already loaded
@@ -145,10 +142,6 @@ function run_profile($itemid = null)
     mini_profile("Generated clone", function ($itemid) { return test_generated_clone($itemid); }, $itemid);
 }
 
-$itemid = null;
-//$itemid = 1;
-//run_profile($itemid);
-
 function test_crud()
 {
     $itemid = null;
@@ -175,8 +168,6 @@ function test_crud()
     echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
 }
 
-//test_crud();
-
 function test_list()
 {
     $result = Sample::list();
@@ -194,8 +185,6 @@ function test_list()
     var_dump($data['value']);
 }
 
-test_list();
-
 function test_properties()
 {
     $itemid = null;
@@ -211,4 +200,10 @@ function test_properties()
     var_dump($sample->name->showOutput());
 }
 
-//test_properties();
+$itemid = null;
+//$itemid = 1;
+//run_profile($itemid);
+
+//test_crud();
+//test_list();
+test_properties();

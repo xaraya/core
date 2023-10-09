@@ -1386,10 +1386,14 @@ class DataObjectMaster extends xarObject
             return;
         }
 
-        // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
-        $modname = xarMod::getName($this->moduleid);
-        if($modname == 'articles' || $modname == 'roles') {
-            return;
+        if ($this->moduleid === 182) {
+            $modname = 'dynamicdata';
+        } else {
+            // Added: check if module is articles or roles to prevent recursive hook calls if using an external table for those modules
+            $modname = xarMod::getName($this->moduleid);
+            if($modname == 'articles' || $modname == 'roles') {
+                return;
+            }
         }
 
         // CHECKME: prevent recursive hook calls in general

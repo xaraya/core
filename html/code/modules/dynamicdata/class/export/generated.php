@@ -331,7 +331,8 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
     {
         if (!isset(static::$_descriptor)) {
             // support *virtual* DataObject classes (= not defined in database) too
-            static::$_descriptor = new VirtualObjectDescriptor(static::getDescriptorArgs());
+            $offline = true;
+            static::$_descriptor = new VirtualObjectDescriptor(static::getDescriptorArgs(), $offline);
         }
         return static::$_descriptor;
     }
@@ -381,27 +382,5 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
             $names[] = $propertyArg['name'];
         }
         return $names;
-    }
-
-    /**
-     * Load core cache with property types and configurations
-     * @return void
-     */
-    public static function loadCoreCache()
-    {
-        static $loaded = false;
-        if ($loaded) {
-            return;
-        }
-        $filepath = sys::varpath() . '/cache/variables/DynamicData.PropertyTypes.php';
-        if (!is_file($filepath)) {
-            throw new Exception('No property types cached yet - you need to export at least 1 object to php');
-        }
-        $proptypes = include $filepath;
-        xarCoreCache::setCached('DynamicData', 'PropertyTypes', $proptypes);
-        $filepath = sys::varpath() . '/cache/variables/DynamicData.Configurations.php';
-        $configprops = include $filepath;
-        xarCoreCache::setCached('DynamicData', 'Configurations', $configprops);
-        $loaded = true;
     }
 }

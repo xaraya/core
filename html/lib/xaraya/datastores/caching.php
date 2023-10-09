@@ -89,6 +89,17 @@ class CachingDataStore extends BasicDataStore
         return count($this->_itemids ?? []);
     }
 
+    /**
+     * Non-relational datastore - we list all the cached keys = item ids here
+     * @return array<(int|string)>
+     */
+    public function listItemIds()
+    {
+        $keys = array_keys($this->getCacheStorage()->getCachedKeys());
+        sort($keys, SORT_NUMERIC);
+        return $keys;
+    }
+
     public function createItem(array $args = [])
     {
         // Get the itemid from the params or from the object definition
@@ -105,7 +116,7 @@ class CachingDataStore extends BasicDataStore
             $item[$field] = $this->object->properties[$field]->getValue();
         }
         $value = serialize($item);
-        echo "Creating item $itemid: $value";
+        //echo "Creating item $itemid: $value\n";
         $this->getCacheStorage()->setCached($itemid, $value);
         return $itemid;
     }
@@ -117,8 +128,8 @@ class CachingDataStore extends BasicDataStore
         if (empty($itemid)) {
             throw new Exception(xarML('Cannot update itemid 0'));
         }
-        $item = $this->getItem($itemid);
-        $item = array_merge($item, $args);
+        // $args should be empty as properties have already been updated in object
+        $item = array_merge(['itemid' => $itemid], $args);
         if (!empty($this->object->primary) && $this->object->primary !== 'itemid') {
             $item[$this->object->primary] = $itemid;
         }
@@ -127,6 +138,7 @@ class CachingDataStore extends BasicDataStore
             $item[$field] = $this->object->properties[$field]->getValue();
         }
         $value = serialize($item);
+        //echo "Updating item $itemid: $value\n";
         $this->getCacheStorage()->setCached($itemid, $value);
         return $itemid;
     }
@@ -138,6 +150,7 @@ class CachingDataStore extends BasicDataStore
         if (empty($itemid)) {
             throw new Exception(xarML('Cannot delete itemid 0'));
         }
+        //echo "Deleting item $itemid\n";
         $this->getCacheStorage()->delCached($itemid);
         return $itemid;
     }
@@ -164,6 +177,8 @@ class CachingDataStore extends BasicDataStore
         ]);
         // we use the object name as namespace here
         $this->cacheStorage->setNamespace($this->object->name . '-');
+        // @checkme we use a dummy cache code here, to be able to list the item ids later
+        $this->cacheStorage->setCode('any');
         return $this->cacheStorage;
     }
 }
