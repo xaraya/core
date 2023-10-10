@@ -89,15 +89,18 @@ class xarHooks extends xarEvents
         $subject_module = $args['module'];
         $subject_itemtype = empty($args['itemtype']) ? 0 : $args['itemtype'];
         
-        if (!empty($subject_itemtype)) {
-            if (isset(self::$hookobservers[$subject_module][$subject_itemtype][$event]))
-                return self::$hookobservers[$subject_module][$subject_itemtype][$event];
+        $cacheScope = 'Hooks.Observers';
+        $cacheName = $subject_module . '.' . $subject_itemtype;
+        $observers = array();
+        if (xarCoreCache::isCached($cacheScope, $cacheName)) {
+            $observers = xarCoreCache::getCached($cacheScope, $cacheName);
+            if (isset($observers[$event])) {
+                return $observers[$event];
+            }
         }
-        if (isset(self::$hookobservers[$subject_module][0][$event]))
-            return self::$hookobservers[$subject_module][0][$event];        
-        // init cache        
-        self::$hookobservers[$subject_module][$subject_itemtype][$event] = array();
-             
+        // init cache
+        $observers[$event] = array();
+
         // Get database info
         $dbconn   = xarDB::getConn();
         $xartable = xarDB::getTables();
@@ -113,9 +116,9 @@ class xarHooks extends xarEvents
         // only get observers for the hooks observer itemtype
         $where[] =  "eo.itemtype = ?";
         $bindvars[] = xarHooks::HOOK_OBSERVER_TYPE;        
-        // only get observers of this event        
-        $where[] = "eo.event = ?";
-        $bindvars[] = $event;
+        // only get observers of this event - we take all events at once now
+        //$where[] = "eo.event = ?";
+        //$bindvars[] = $event;
         // only from modules hooked to this subject
         $where[] = "h.subject = ?";
         $bindvars[] = $subject_id;
@@ -155,10 +158,10 @@ class xarHooks extends xarEvents
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if (!$result) return;
-        self::$hookobservers[$subject_module][$subject_itemtype][$event] = array();
         while($result->next()) {
             list($id, $evt, $module_id, $area, $type, $func, $itemtype, $classname, $module) = $result->fields;
-            self::$hookobservers[$subject_module][$subject_itemtype][$event][$module] = array(
+            $observers[$evt] ??= array();
+            $observers[$evt][$module] = array(
                 'id' => $id,
                 'event' => $evt,
                 'module_id' => $module_id,
@@ -171,7 +174,8 @@ class xarHooks extends xarEvents
             );
         };
         $result->close();
-        return self::$hookobservers[$subject_module][$subject_itemtype][$event];           
+        xarCoreCache::setCached($cacheScope, $cacheName, $observers);
+        return $observers[$event];
     }
     
     

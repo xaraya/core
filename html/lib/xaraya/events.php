@@ -104,10 +104,6 @@ class xarEvents extends xarObject implements ixarEvents
     const OBSERVER_TYPE      = 2;   // System event observers
     const SUPPORTED_AREAS    = ['class', 'api', 'gui'];
 
-    // Cached event subjects and observers
-    // @TODO: evaluate caching
-    protected static $subjects;
-    protected static $observers;
     // keep track of classname as detected in fileLoad() for register()
     protected static $classnames = [];
     // for non-core modules we're only interested in hookobservers for now - this may extend to eventobservers later...
@@ -255,7 +251,6 @@ class xarEvents extends xarObject implements ixarEvents
         $subjecttype = static::getSubjectType();
         $info = self::register($event, $module, $area, $type, $func, $subjecttype, $scope, $classname);
         if (empty($info)) return;
-        self::$subjects[$subjecttype][$event] = $info;
         return $info['id'];
     }
 
@@ -274,7 +269,6 @@ class xarEvents extends xarObject implements ixarEvents
         $scope = '';
         $info = self::register($event, $module, $area, $type, $func, $observertype, $scope, $classname);
         if (empty($info)) return;
-        self::$observers[$observertype][$event][$module] = $info;
         return $info['id'];
     }
 
@@ -552,8 +546,6 @@ class xarEvents extends xarObject implements ixarEvents
     {
         $subjecttype = static::getSubjectType();
         if (!self::unregister($event, $module, $subjecttype)) return;
-        if (isset(self::$subjects[$subjecttype][$event]))
-            unset(self::$subjects[$subjecttype][$event]);
         return true;
     }
     
@@ -561,8 +553,6 @@ class xarEvents extends xarObject implements ixarEvents
     {
         $observertype = static::getObserverType();
         if (!self::unregister($event, $module, $observertype)) return;
-        if (isset(self::$observers[$observertype][$event][$module]))
-            unset(self::$observers[$observertype][$event][$module]);
         return true;
     }
 
@@ -627,11 +617,10 @@ class xarEvents extends xarObject implements ixarEvents
     final public static function getSubject($event)
     {
         // init the cache, if it isn't already init'ed
-        static::getSubjects();
-        $subjecttype = static::getSubjectType();
-        if (!isset(self::$subjects[$subjecttype][$event]))
-            self::$subjects[$subjecttype][$event] = array();
-        return self::$subjects[$subjecttype][$event];
+        $subjects = static::getSubjects();
+        if (!isset($subjects[$event]))
+            $subjects[$event] = array();
+        return $subjects[$event];
     }
 
     /**
@@ -643,11 +632,16 @@ class xarEvents extends xarObject implements ixarEvents
     final public static function getSubjects()
     {
         $subjecttype = static::getSubjectType();
-        if (isset(self::$subjects[$subjecttype]))
-            return self::$subjects[$subjecttype];
+        // Cached event subjects and observers
+        $cacheScope = 'Events.Subjects';
+        $cacheName = $subjecttype;
+        if (xarCoreCache::isCached($cacheScope, $cacheName)) {
+            $subjects = xarCoreCache::getCached($cacheScope, $cacheName);
+            return $subjects;
+        }
         
         // initialize the cache (we only ever run this query once per subject type)
-        self::$subjects[$subjecttype] = array();
+        $subjects = array();
 
         // Get database info
         $dbconn   = xarDB::getConn();
@@ -676,7 +670,7 @@ class xarEvents extends xarObject implements ixarEvents
         while($result->next()) {
             list($id, $event, $module_id, $area, $type, $func, $itemtype, $classname, $scope, $module) = $result->fields;
             // cache results            
-            self::$subjects[$subjecttype][$event] = array(
+            $subjects[$event] = array(
                 'id' => $id,
                 'event' => $event,
                 'module_id' => $module_id,
@@ -690,8 +684,9 @@ class xarEvents extends xarObject implements ixarEvents
             );
         };
         $result->close();
-        // return cached results   
-        return self::$subjects[$subjecttype];
+        // return cached results
+        xarCoreCache::setCached($cacheScope, $cacheName, $subjects);
+        return $subjects;
     }
 
     /**
@@ -708,9 +703,16 @@ class xarEvents extends xarObject implements ixarEvents
         if (empty($info) || $info['itemtype'] != $subjecttype) 
             return array();
         $observertype = static::getObserverType();
-        
-        if (isset(self::$observers[$observertype][$event]))
-            return self::$observers[$observertype][$event];
+        // Cached event subjects and observers
+        $cacheScope = 'Events.Observers';
+        $cacheName = $observertype;
+        $observers = array();
+        if (xarCoreCache::isCached($cacheScope, $cacheName)) {
+            $observers = xarCoreCache::getCached($cacheScope, $cacheName);
+            if (isset($observers[$event])) {
+                return $observers[$event];
+            }
+        }
         
         // Get database info
         $dbconn   = xarDB::getConn();
@@ -744,9 +746,9 @@ class xarEvents extends xarObject implements ixarEvents
         // only get observers for the current observer itemtype
         $where[] = "o.itemtype = ?";
         $bindvars[] = $observertype;
-        // only observers of this event subject
-        $where[] = "s.event = ?";
-        $bindvars[] = $event;
+        // only observers of this event subject - we take all events at once now
+        //$where[] = "s.event = ?";
+        //$bindvars[] = $event;
 
         $query .= " WHERE " . join(" AND ", $where);
         // order by module, event
@@ -754,11 +756,10 @@ class xarEvents extends xarObject implements ixarEvents
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery($bindvars);
         if (!$result) return;
-        $obs = array();
         while($result->next()) {
             list($id, $evt, $module_id, $module, $area, $type, $func, $itemtype, $classname) = $result->fields;
-            // @todo: cache these effectively
-            self::$observers[$itemtype][$evt][$module] = array(
+            $observers[$evt] ??= array();
+            $observers[$evt][$module] = array(
                 'id' => $id,
                 'event' => $evt,
                 'module_id' => $module_id,
@@ -770,10 +771,11 @@ class xarEvents extends xarObject implements ixarEvents
                 'classname' => $classname,
             );
         };
-        if (!isset(self::$observers[$observertype][$event])) 
-            self::$observers[$observertype][$event] = array();
+        if (!isset($observers[$event]))
+            $observers[$event] = array();
 
-        return self::$observers[$observertype][$event];  
+        xarCoreCache::setCached($cacheScope, $cacheName, $observers);
+        return $observers[$event];
     }
 
     public static function getObserverModules()
