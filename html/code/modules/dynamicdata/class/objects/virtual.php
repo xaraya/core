@@ -127,15 +127,12 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         if ($loaded) {
             return;
         }
-        $filepath = sys::varpath() . '/cache/variables/DynamicData.PropertyTypes.php';
-        if (!is_file($filepath)) {
+        if (!xarCoreCache::loadCached('DynamicData', 'PropertyTypes')) {
             throw new Exception('No property types cached yet - you need to export at least 1 object to php');
         }
-        $proptypes = include $filepath;
-        xarCoreCache::setCached('DynamicData', 'PropertyTypes', $proptypes);
-        $filepath = sys::varpath() . '/cache/variables/DynamicData.Configurations.php';
-        $configprops = include $filepath;
-        xarCoreCache::setCached('DynamicData', 'Configurations', $configprops);
+        if (!xarCoreCache::loadCached('DynamicData', 'Configurations')) {
+            throw new Exception('No configurations cached yet - you need to export at least 1 object to php');
+        }
         $loaded = true;
     }
 }

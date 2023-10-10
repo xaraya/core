@@ -134,11 +134,84 @@ class xarCoreCache extends xarObject
     }
 
     /**
+     * Load a particular scope and name from .php file (opcache) - not serialized, so plain values/arrays only
+     *
+     * @param string $scope the scope identifying which part of the cache you want to access
+     * @param ?string $name  the name of the variable in that particular scope
+     * @return boolean
+    **/
+    public static function loadCached($scope, $name = null)
+    {
+        if (isset($name)) {
+            $filepath = sys::varpath() . '/cache/core/' . $scope . '.' . $name . '.php';
+            if (!is_file($filepath)) {
+                return false;
+            }
+            // replace value for name in cache scope
+            $value = include $filepath;
+            self::setCached($scope, $name, $value);
+            return true;
+        }
+        $filepath = sys::varpath() . '/cache/core/' . $scope . '.php';
+        if (!is_file($filepath)) {
+            return false;
+        }
+        if (!isset(self::$cacheCollection[$scope])) {
+            // initialize cache if necessary
+            self::$cacheCollection[$scope] = [];
+        }
+        // replace values for names in cache scope - keep the others as is
+        $values = include $filepath;
+        if (!is_array($values)) {
+            return false;
+        }
+        foreach ($values as $name => $value) {
+            self::setCached($scope, $name, $value);
+        }
+        return true;
+    }
+
+    /**
+     * Save a particular scope and name to .php file (opcache) - not serialized, so plain values/arrays only
+     *
+     * @param string $scope the scope identifying which part of the cache you want to access
+     * @param ?string $name  the name of the variable in that particular scope
+     * @return boolean
+    **/
+    public static function saveCached($scope, $name = null)
+    {
+        if (!isset(self::$cacheCollection[$scope])) {
+            return false;
+        }
+        if (isset($name)) {
+            if (!self::isCached($scope, $name)) {
+                return false;
+            }
+            $filepath = sys::varpath() . '/cache/core/' . $scope . '.' . $name . '.php';
+            $value = self::$cacheCollection[$scope][$name];
+            $info = '<?php
+$value = ' . var_export($value, true) . ';
+return $value;
+';
+            file_put_contents($filepath, $info);
+            return true;
+        }
+        $filepath = sys::varpath() . '/cache/core/' . $scope . '.php';
+        $values = self::$cacheCollection[$scope];
+        $info = '<?php
+$values = ' . var_export($values, true) . ';
+return $values;
+';
+        file_put_contents($filepath, $info);
+        return true;
+    }
+
+    /**
      * Set second-level cache storage if you want to keep values for longer than the current HTTP request
      *
-     * @param object $cacheStorage  the cache storage instance you want to use (typically in-memory like apc, memcached, xcache, ...)
+     * @param ixarCache_Storage $cacheStorage  the cache storage instance you want to use (typically in-memory like apc, memcached, xcache, ...)
      * @param int    $cacheExpire   how long do you want to keep values in second-level cache storage (if the storage supports it)
-     * @param int   $isBulkStorage do we load/save all variables in bulk by scope or not ?
+     * @param int   $isBulkStorage do we load/save all variables in bulk by scope or not ? - deprecated
      * @return void
     **/
     public static function setCacheStorage($cacheStorage, $cacheExpire = 0, $isBulkStorage = 0)
@@ -156,12 +229,14 @@ class xarCoreCache extends xarObject
         // FIXME: some in-memory cache storage requires explicit garbage collection !?
 
         self::$isBulkStorage = $isBulkStorage;
+        /** @deprecated 2.4.1 no longer relevant
         if ($isBulkStorage) {
             // load from second-level cache storage here
             self::loadBulkStorage();
             // save to second-level cache storage at shutdown
-            register_shutdown_function(['xarCoreCache','saveBulkStorage']);
+            //register_shutdown_function(['xarCoreCache','saveBulkStorage']);
         }
+         */
     }
 
     /**
@@ -178,6 +253,7 @@ class xarCoreCache extends xarObject
      * CHECKME: work with bulk load per scope instead of individual gets per scope:name ?
      *          But what about concurrent updates in bulk then (+ unserialize & autoload too early) ?<br/>
      *          Get the list of scopes and load each scope from second-level cache. There doesn't seem to be a big difference in performance using bulk or not, at least with xcache
+     * @deprecated 2.4.1 no longer relevant
      * @return void
     */
     public static function loadBulkStorage()
@@ -209,6 +285,7 @@ class xarCoreCache extends xarObject
      * CHECKME: work with bulk save per scope instead of individual gets per scope:name ?<br/>
      *          But what about concurrent updates in bulk then (+ unserialize & autosave too early) ?<br/>
      *          It gets the list of scopes and save each scope to second-level cache
+     * @deprecated 2.4.1 no longer relevant
      * @return void
      */
     public static function saveBulkStorage()

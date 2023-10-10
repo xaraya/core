@@ -178,22 +178,8 @@ class ' . $classname . ' extends GeneratedClass
      */
     public static function saveCoreCache()
     {
-        $filepath = sys::varpath() . '/cache/variables/DynamicData.PropertyTypes.php';
-        $proptypes = xarCoreCache::getCached('DynamicData', 'PropertyTypes');
-        $info = '<?php
-$proptypes = ' . var_export($proptypes, true) . ';
-//xarCoreCache::setCached("DynamicData", "PropertyTypes", $proptypes);
-return $proptypes;
-';
-        file_put_contents($filepath, $info);
-        $filepath = sys::varpath() . '/cache/variables/DynamicData.Configurations.php';
-        $configprops = xarCoreCache::getCached('DynamicData', 'Configurations');
-        $info = '<?php
-$configprops = ' . var_export($configprops, true) . ';
-//xarCoreCache::setCached("DynamicData", "Configurations", $configprops);
-return $configprops;
-';
-        file_put_contents($filepath, $info);
+        xarCoreCache::saveCached('DynamicData', 'PropertyTypes');
+        xarCoreCache::saveCached('DynamicData', 'Configurations');
     }
 
     /**
