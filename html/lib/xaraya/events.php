@@ -146,7 +146,7 @@ class xarEvents extends xarObject implements ixarEvents
             if (empty($info)) return;
             // file load takes care of validation for us 
             if (!self::fileLoad($info)) return; 
-            $module = xarMod::getName($info['module_id']);
+            $module = $info['module'];
             switch (strtolower($info['area'])) {
                 // support namespaces in modules (and core someday) - we may use $info['classname'] here
                 case 'class':
@@ -161,7 +161,7 @@ class xarEvents extends xarObject implements ixarEvents
                             // Attempt to load observer
                             try {
                                 if (!self::fileLoad($obs)) continue;
-                                $obsmod = xarMod::getName($obs['module_id']);
+                                $obsmod = $obs['module'];
                                 $obs['module'] = $obsmod;
                                 switch (strtolower($obs['area'])) {
                                     // support namespaces in modules (and core someday) - we may use $obs['classname'] here
@@ -314,10 +314,12 @@ class xarEvents extends xarObject implements ixarEvents
     final public static function register($event, $module, $area = 'class', $type = 'eventobservers', $func = 'notify', $itemtype = 0, $scope = '', $classname = '')
     {
 
-        // @checkme support namespaces in modules (and core someday) - we may pass along $info['classname'] here someday too
+        $module_id = xarMod::getRegID($module);
+        // support namespaces in modules (and core someday) - we may pass along $info['classname'] here too
         $info = array(
             'event'    => $event,
             'module'   => $module,
+            'module_id' => $module_id,
             'area'     => $area,
             'type'     => $type,
             'func'     => $func,
@@ -358,8 +360,6 @@ class xarEvents extends xarObject implements ixarEvents
              // unregister the event so it can be re-registered ( = updated :) )
              if (!static::unregisterObserver($event, $module)) return;
         }
-        
-        $module_id = xarMod::getRegID($module);        
         
          // create entry in db
         $dbconn = xarDB::getConn();
@@ -414,17 +414,23 @@ class xarEvents extends xarObject implements ixarEvents
             $invalid[] = 'event';
                     
         // Check we have a valid module
-        if (!empty($module)) {
-            $module_id = is_numeric($module) ? $module : xarMod::getRegID($module);
-        }                    
-        /** @var int $module_id */
-        if (!empty($module_id))
-            $modinfo = xarMod::getInfo($module_id);
-        // can't check mod available here, since it may not be if the module is init'ing
-        /** @var array<mixed> $modinfo */
-        //if (empty($modinfo) || !xarMod::isAvailable($modinfo['name']))
-        if (empty($modinfo)) 
-            $invalid[] = 'module';       
+        /** @var string $module */
+        if (empty($module) || is_numeric($module) || empty($module_id) || !is_numeric($module_id)) {
+            if (!empty($module)) {
+                $module_id = is_numeric($module) ? $module : xarMod::getRegID($module);
+            }
+            /** @var int $module_id */
+            if (!empty($module_id))
+                $modinfo = xarMod::getInfo($module_id);
+            // can't check mod available here, since it may not be if the module is init'ing
+            /** @var array<mixed> $modinfo */
+            //if (empty($modinfo) || !xarMod::isAvailable($modinfo['name']))
+            if (!empty($modinfo)) {
+                $module = $modinfo['name'];
+            } else {
+                $invalid[] = 'module';
+            }
+        }
 
         // Check we have a valid area (class, api, gui)
         /** @var string $area */
@@ -454,7 +460,6 @@ class xarEvents extends xarObject implements ixarEvents
         }
         
         $area = strtolower($area);
-        $module = $modinfo['name'];
         static $_files = array();
         if (isset($_files[$itemtype][$event][$module]))
             return $_files[$itemtype][$event][$module];
@@ -575,10 +580,12 @@ class xarEvents extends xarObject implements ixarEvents
         $tables = xarDB::getTables();
         $q = new Query('DELETE', $tables['eventsystem']);
         $q->eq('itemtype', $itemtype);
+        // @deprecated 2.4.1 this hasn't been around in a long while
         if (strtoupper($event) != 'ALL') {
             $q->eq('event', $event);
         }
         
+        // @deprecated 2.4.1 this hasn't been around in a long while
         if (strtoupper($module) != 'ALL') {
             if (is_numeric($module)) {
                 $module_id = $module;

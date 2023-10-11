@@ -196,7 +196,7 @@ xarEvents::registerSubject('MyOtherAPIEvent','MyOtherItems','mymodule', 'api', '
 
     @event, string, name of the event, required, must be unique
     @module, string, the name of the module the file can be found in, required
-    @area, string, the area in which the file can be found, either api, gui or class, default class
+    @area, string, the area in which the file can be found, either api, gui, class or classname, default class
     @type, string, if area is api or gui the type of api function (user, admin, etc) or 
                    if area is class the name of a subfolder in /module/class/, default eventsubjects
     @func, string, if area is api or gui, the name of the function to call, defaults to strtolower(event)
@@ -214,7 +214,9 @@ xarEvents::registerSubject('MyOtherAPIEvent','MyOtherItems','mymodule', 'api', '
 <p>Note: starting with version 2.4.1, modules may also use their own naming convention for observer classes with namespaces, as long as they follow the same file structure</p>
 
 <code><pre>
-    E.g. with xarHooks::registerObserver('ItemCreate', 'mymodule')
+    E.g. with
+        $namespace = 'Xaraya\Modules\MyModule\HookObservers';
+        xarHooks::registerObserver('ItemCreate', 'mymodule', $namespace . '\ItemCreateObserver');
     some class with a fully qualified class name "Xaraya\Modules\MyModule\HookObservers\ItemCreateObserver"
     should still be defined
     in file code/modules/mymodule/class/hookobservers/itemcreate.php

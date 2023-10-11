@@ -184,7 +184,7 @@ class Query
         }
 
         if ($this->debugflag) $loopstart = microtime(true);
-        if (!$result) return;
+        if (!$result) return false;
         $this->result =& $result;
 
         if (!isset($result->fields) || ($result->fields === false))
