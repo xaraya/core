@@ -139,7 +139,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         return true;
     }
 
-    public function checkInput(array $args = [])
+    public function checkInput(array $args = [], $suppress = 0)
     {
         xarLog::message("DataObjectList::checkInput: Checking items of object " . $this->name, xarLog::LEVEL_INFO);
 

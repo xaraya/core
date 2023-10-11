@@ -31,7 +31,9 @@
  * $hookbridge = new HookObserverBridge($dispatcher, ['ItemUpdate']);
  *
  * // have an event subscriber show interest in a few events and/or hooks - see testers.php
- * $subscriber = new TestObserverBridgeSubscriber(['Event'], ['ItemUpdate']);
+ * $eventList = array_keys($eventbridge->getObservedEvents());
+ * $hookList = array_keys($hookbridge->getObservedEvents());
+ * $subscriber = new TestObserverBridgeSubscriber($eventList, $hookList);
  * // and add it to the event dispatcher to see something happen
  * $dispatcher->addSubscriber($subscriber);
  *

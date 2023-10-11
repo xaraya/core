@@ -465,8 +465,8 @@ class DataObject extends DataObjectMaster implements iDataObject
         // Set the value of the primary index property
         $this->properties[$this->primary]->value = $this->itemid;
 
-        // call create hooks for this item - let's try this again (but start with stand-alone DD objects for now)
-        if (!empty($this->primary) && is_object($this->datastore) && get_class($this->datastore) == 'VariableTableDataStore') {
+        // call create hooks for this item - for stand-alone DD objects and virtual DD objects for now
+        if (!empty($this->primary) && is_object($this->datastore) && in_array(get_class($this->datastore), ['VariableTableDataStore', 'CachingDataStore'])) {
             $this->callHooks('create');
         }
 
@@ -525,8 +525,8 @@ class DataObject extends DataObjectMaster implements iDataObject
             DataObjectMaster::flushVariableCache(['objectid' => $this->itemid]);
         }
 
-        // call update hooks for this item - let's try this again (but start with stand-alone DD objects for now)
-        if (!empty($this->primary) && is_object($this->datastore) && get_class($this->datastore) == 'VariableTableDataStore') {
+        // call update hooks for this item - for stand-alone DD objects and virtual DD objects for now
+        if (!empty($this->primary) && is_object($this->datastore) && in_array(get_class($this->datastore), ['VariableTableDataStore', 'CachingDataStore'])) {
             $this->callHooks('update');
         }
 
@@ -596,8 +596,10 @@ class DataObject extends DataObjectMaster implements iDataObject
             DataObjectMaster::flushVariableCache(['objectid' => $this->itemid]);
         }
 
-        // call delete hooks for this item
-        $this->callHooks('delete');
+        // call delete hooks for this item - for stand-alone DD objects and virtual DD objects for now
+        if (!empty($this->primary) && is_object($this->datastore) && in_array(get_class($this->datastore), ['VariableTableDataStore', 'CachingDataStore'])) {
+            $this->callHooks('delete');
+        }
 
         return $this->itemid;
     }

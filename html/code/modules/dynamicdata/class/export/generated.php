@@ -8,7 +8,6 @@ use DataObject;
 use DataObjectList;
 use Exception;
 use VirtualObjectDescriptor;
-use xarCoreCache;
 use ArrayObject;
 use sys;
 
@@ -54,7 +53,6 @@ interface iGeneratedClass
  * with properties mapped to their DataObject properties (experimental)
  *
  * use Xaraya\DataObject\Generated\Sample;
- * use Xaraya\DataObject\Generated\Format;
  *
  * // dummy sample object
  * $sample = new Sample();
@@ -94,11 +92,10 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
      */
     public function __construct($itemid = null, $values = [])
     {
-        $this->initialize($itemid);
+        $this->load($itemid);
         if (!empty($values)) {
             $this->refresh($values);
         }
-        $this->store();
     }
 
     /**
@@ -140,11 +137,11 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
     }
 
     /**
-     * Initialize DataObject and instance
+     * Load DataObject item and instance
      * @param mixed $itemid
      * @return void
      */
-    public function initialize($itemid = null)
+    public function load($itemid = null)
     {
         $this->_itemid = null;
         $this->_values = [];
@@ -168,6 +165,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
         } else {
             static::getObject()->setFieldValues($this->_values);
         }
+        $this->store();
     }
 
     /**
@@ -189,7 +187,9 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
         if (empty($itemid) || $itemid == $this->_itemid) {
             return $itemid;
         }
-        return static::getObject()->getItem(['itemid' => $itemid]);
+        $this->_itemid = static::getObject()->getItem(['itemid' => $itemid]);
+        $this->store();
+        return $this->_itemid;
     }
 
     /**
@@ -199,6 +199,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
     public function clear()
     {
         static::getObject()->clearFieldValues();
+        $this->store();
     }
 
     /**
@@ -225,8 +226,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
         if (!empty($this->_itemid)) {
             static::getObject()->deleteItem();
         }
-        $this->initialize();
-        $this->store();
+        $this->load();
     }
 
     /**

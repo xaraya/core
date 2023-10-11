@@ -44,7 +44,7 @@ class CachingDataStore extends BasicDataStore
             throw new Exception(xarML('Cannot get itemid 0'));
         }
         $value = $this->getCacheStorage()->getCached($itemid);
-        echo "Getting item $itemid: $value";
+        //echo "Getting item $itemid: $value";
         $item = unserialize($value);
         if (!empty($this->object->primary) && $this->object->primary !== 'itemid') {
             $item[$this->object->primary] = $itemid;

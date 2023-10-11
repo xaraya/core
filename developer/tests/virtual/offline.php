@@ -1,7 +1,7 @@
 <?php
 /**
  * Entrypoint for experimenting with virtual objects
- * 
+ *
  * Needs the following setting in /etc/php[8.x]/cli/php.ini to enable acp(u) for cli:
  * apc.enable_cli=1
  */
@@ -66,6 +66,16 @@ function test_delete_item()
 
     // @checkme avoid last stand protection in deleteItem()
     $something->objectid = time();
+    // @checkme avoid exceptions in xarEvents::notify
+    /**
+    $something->itemtype = 3;
+    xarCoreCache::loadCached('Events.Subjects', '3');
+    xarCoreCache::loadCached('Hooks.Observers', 'dynamicdata.3');
+    xarCoreCache::loadCached('Events.Subjects', '1');
+    xarCoreCache::loadCached('Events.Observers', '2');
+    xarCoreCache::loadCached('Mod.BaseInfos');
+    xarCoreCache::loadCached('Mod.Infos');
+     */
     $itemid = $something->deleteItem(['itemid' => 2]);
     echo "Item $itemid\n";
 }
