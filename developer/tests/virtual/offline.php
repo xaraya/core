@@ -12,10 +12,36 @@ sys::init();
 // initialize caching
 xarCache::init();
 
-// initialize database for itemid - if not already loaded
-//xarDatabase::init();
-// for hook calls - if not already loaded
-//xarMod::init();
+function init_online()
+{
+    // initialize database for itemid - if not already loaded
+    xarDatabase::init();
+    // for hook calls - if not already loaded
+    xarMod::init();
+    xarEvents::init();
+}
+
+function init_offline_cache()
+{
+    xarCoreCache::loadCached('Events.Subjects', '3');
+    xarCoreCache::loadCached('Hooks.Observers', 'dynamicdata.0');
+    xarCoreCache::loadCached('Events.Subjects', '1');
+    xarCoreCache::loadCached('Events.Observers', '2');
+    xarCoreCache::loadCached('Mod.BaseInfos');
+    /**
+    xarCoreCache::loadCached('Mod.Infos');
+     */
+}
+
+function save_offline_cache()
+{
+    xarCoreCache::saveCached('Events.Subjects', '3');
+    xarCoreCache::saveCached('Hooks.Observers', 'dynamicdata.0');
+    xarCoreCache::saveCached('Events.Subjects', '1');
+    xarCoreCache::saveCached('Events.Observers', '2');
+    xarCoreCache::saveCached('Mod.BaseInfos');
+    xarCoreCache::saveCached('Mod.Infos');
+}
 
 function get_descriptor()
 {
@@ -66,22 +92,15 @@ function test_delete_item()
 
     // @checkme avoid last stand protection in deleteItem()
     $something->objectid = time();
-    // @checkme avoid exceptions in xarEvents::notify
-    /**
-    $something->itemtype = 3;
-    xarCoreCache::loadCached('Events.Subjects', '3');
-    xarCoreCache::loadCached('Hooks.Observers', 'dynamicdata.3');
-    xarCoreCache::loadCached('Events.Subjects', '1');
-    xarCoreCache::loadCached('Events.Observers', '2');
-    xarCoreCache::loadCached('Mod.BaseInfos');
-    xarCoreCache::loadCached('Mod.Infos');
-     */
     $itemid = $something->deleteItem(['itemid' => 2]);
     echo "Item $itemid\n";
 }
 
+//init_online();
+init_offline_cache();
 test_create_items();
 test_update_item();
 test_get_items();
 test_delete_item();
 test_get_items();
+//save_offline_cache();
