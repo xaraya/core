@@ -180,9 +180,6 @@ class xarCoreCache extends xarObject
     **/
     public static function saveCached($scope, $name = null)
     {
-        if (!isset(self::$cacheCollection[$scope])) {
-            return false;
-        }
         if (isset($name)) {
             if (!self::isCached($scope, $name)) {
                 return false;
@@ -195,6 +192,9 @@ return $value;
 ';
             file_put_contents($filepath, $info);
             return true;
+        }
+        if (!isset(self::$cacheCollection[$scope])) {
+            return false;
         }
         $filepath = sys::varpath() . '/cache/core/' . $scope . '.php';
         $values = self::$cacheCollection[$scope];

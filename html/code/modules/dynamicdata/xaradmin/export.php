@@ -46,7 +46,7 @@ function dynamicdata_admin_export(array $args = [])
     if(!xarVar::fetch('convert', 'isset', $convert, null, xarVar::DONT_SET)) {
         return;
     }
-    if(!xarVar::fetch('format', 'isset', $format, null, xarVar::DONT_SET)) {
+    if(!xarVar::fetch('format', 'isset', $format, 'xml', xarVar::DONT_SET)) {
         return;
     }
 
@@ -88,7 +88,9 @@ function dynamicdata_admin_export(array $args = [])
             'format' => $format,
             'tofile' => $tofile]
         );
-        $ext = '-def';
+        if ($format != 'php') {
+            $ext = '-def';
+        }
 
         /**
         if (!empty($myobject->datastores) && count($myobject->datastores) == 1 && !empty($myobject->datastores['_dynamic_data_'])) {
@@ -157,10 +159,18 @@ function dynamicdata_admin_export(array $args = [])
         ['objectid' => $myobject->objectid,
         'tofile'   => 1]
     );
+    $data['generatelink'] = xarController::URL(
+        'dynamicdata',
+        'admin',
+        'export',
+        ['objectid' => $myobject->objectid,
+        'format' => 'php',
+        'tofile'   => 1]
+    );
 
     if (!empty($tofile) && !empty($ext)) {
         $varDir = sys::varpath();
-        $outfile = $varDir . '/uploads/' . xarVar::prepForOS($myobject->name) . $ext . '.' . xarLocale::formatDate('%Y%m%d%H%M%S', time()) . '.xml';
+        $outfile = $varDir . '/uploads/' . xarVar::prepForOS($myobject->name) . $ext . '.' . xarLocale::formatDate('%Y%m%d%H%M%S', time()) . '.' . $format;
         $fp = @fopen($outfile, 'w');
         if (!$fp) {
             $data['xml'] = xarML('Unable to open file #(1)', $outfile);
@@ -177,6 +187,7 @@ function dynamicdata_admin_export(array $args = [])
 
     $data['objectid'] = $objectid;
     $data['xml'] = xarVar::prepForDisplay($xml);
+    $data['format'] = $format;
 
     xarTpl::setPageTemplateName('admin');
 

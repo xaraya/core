@@ -15,8 +15,21 @@
                     </div>
                     <div class="xar-col">
                         <xar:data-input type="object" name="objectid" value="$objectid" display_prop="name" store_prop="objectid" onchange="submit()"/>
-                        <xar:var name="label">Refresh</xar:var>&#160;
-                        <xar:button type="submit" label="$label"/>
+                        <xar:var name="button">Refresh</xar:var>&#160;
+                        <xar:button type="submit" label="$button"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="xml" class="xar-form-label">Format :</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:set name="formats">array(
+                            array('id' => 'xml', 'name' => 'XML'),
+                            array('id' => 'json', 'name' => 'JSON'),
+                            array('id' => 'php', 'name' => 'PHP'),
+                        )</xar:set>
+                        <xar:data-input type="dropdown" name="format" id="format" options="$formats" value="$format"/>
                     </div>
                 </div>
             </fieldset>
@@ -52,6 +65,11 @@
         <xar:if condition="!empty($filelink)">
             <p class="xar-align-center">
                 <a href="#$filelink#">Export the data for all items to a -dat.xml file</a>
+            </p>
+        </xar:if>
+        <xar:if condition="!empty($generatelink)">
+            <p class="xar-align-center">
+                <a href="#$generatelink#">Generate DataObject class in a .php file (experimental)</a>
             </p>
         </xar:if>
     </div>
