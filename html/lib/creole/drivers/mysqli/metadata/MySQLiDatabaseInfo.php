@@ -51,6 +51,9 @@ class MySQLiDatabaseInfo extends MySQLDatabaseInfoBase
 
     public function selectDb($dbName)
     {
+        $this->tables = array();
+        $this->tablesLoaded = false;
+        $this->dbname = $dbName;
         return @mysqli_select_db($this->conn->getResource(), $dbName);
     }
 }
