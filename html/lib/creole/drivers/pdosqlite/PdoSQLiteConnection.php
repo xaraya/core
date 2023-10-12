@@ -36,7 +36,7 @@ class PdoSQLiteConnection extends PdoConnectionCommon implements Connection
     /**
      * @see Connection::connect()
      */
-    public function connect($dsninfo, $flags = 0)
+    public function connect($dsninfo, $flags = 0, $pdo_dsn = '')
     {
         if (!extension_loaded('pdo_sqlite')) {
             throw new SQLException('pdo_sqlite extension not loaded');
@@ -154,7 +154,7 @@ class PdoSQLiteConnection extends PdoConnectionCommon implements Connection
     /**
      * @see Connection::executeQuery()
      */
-    public function executeQuery($sql, $fetchmode = null)
+    public function executeQuery($sql, $fetchmode = null, $rs_class = '')
     {
 
         require_once 'creole/drivers/pdosqlite/PdoSQLiteResultSet.php';
