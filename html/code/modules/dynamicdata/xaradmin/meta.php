@@ -31,6 +31,9 @@ function dynamicdata_admin_meta(array $args = [])
     if (!xarVar::fetch('showdb', 'notempty', $showdb, 0, xarVar::NOT_REQUIRED)) {
         return;
     }
+    if (!xarVar::fetch('dbtype', 'notempty', $dbtype, xarDB::getType(), xarVar::NOT_REQUIRED)) {
+        return;
+    }
     if (!xarVar::fetch('db', 'notempty', $db, xarDB::getName(), xarVar::NOT_REQUIRED)) {
         return;
     }
@@ -38,7 +41,6 @@ function dynamicdata_admin_meta(array $args = [])
     $data = [];
 
     $dbconn = xarDB::getConn();
-    $dbtype = xarDB::getType();
     $dbname = xarDB::getName();
 
     if ($db != $dbname) {
@@ -51,18 +53,25 @@ function dynamicdata_admin_meta(array $args = [])
 
     $data['databases'] = [];
 
+    $data['dbtype'] = '';
+    $data['dbConnIndex'] = 0;
     if (!empty($showdb) || $data['db'] != $dbname) {
         // Note: not supported for other database types
-        if ($dbtype == 'mysql') {
+        if ($dbtype == 'mysqli') {
             try {
                 // Note: this only works if we use the same database connection
-                $db_list = mysql_list_dbs($dbconn->getResource());
-                while ($row = mysql_fetch_object($db_list)) {
+                $db_list = mysqli_query($dbconn->getResource(), "SHOW DATABASES");
+                while ($row = mysqli_fetch_object($db_list)) {
                     $database = $row->Database;
                     $data['databases'][$database] = $database;
                 }
             } catch (Exception $e) {
             }
+        } elseif ($dbtype == 'sqlite3' && !empty($data['db'])) {
+            $data['dbtype'] = $dbtype;
+            $connArgs = ['databaseType' => $dbtype, 'databaseName' => $data['db']];
+            $conn = xarDB::newConn($connArgs);
+            $data['dbConnIndex'] = xarDB::$count - 1;
         }
 
         if (empty($data['databases'])) {
@@ -73,7 +82,7 @@ function dynamicdata_admin_meta(array $args = [])
         'dynamicdata',
         'util',
         'getmeta',
-        ['db' => $db, 'table' => $table]
+        ['db' => $db, 'table' => $table, 'dbConnIndex' => $data['dbConnIndex']]
     );
 
     if ($export == 'ddl') {

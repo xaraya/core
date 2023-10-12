@@ -17,6 +17,7 @@
  * with
  *     $args['table']  optional table you're looking for
  *     $args['db']  optional database you're looking in (mysql only)
+ *     $args['dbConnIndex'] connection index of the database if different from Xaraya DB (optional)
  * @return array<string, mixed>|void of field definitions, or null on failure
  * @todo split off the common parts which are also in getstatic.php
  */
@@ -31,8 +32,11 @@ function dynamicdata_utilapi_getmeta(array $args = [])
     } elseif (isset($propertybag[$table])) {
         return [$table => $propertybag[$table]];
     }
+    if (empty($dbConnIndex)) {
+        $dbConnIndex = 0;
+    }
 
-    $dbconn = xarDB::getConn();
+    $dbconn = xarDB::getConn($dbConnIndex);
     // dbInfo holds the meta information about the database
     $dbInfo = $dbconn->getDatabaseInfo();
 
@@ -42,13 +46,21 @@ function dynamicdata_utilapi_getmeta(array $args = [])
         $db = $dbname;
     }
 
+    // Get the default property types
+    sys::import('modules.dynamicdata.class.properties.master');
+    $proptypes = DataPropertyMaster::getPropertyTypes();
+    $proptypeid = [];
+    foreach ($proptypes as $proptype) {
+        $proptypeid[$proptype['name']] = $proptype['id'];
+    }
+
     // Note: not supported for other database types
-    if ($dbtype == 'mysql' && $db == $dbname && !empty($table) && strpos($table, '.') !== false) {
+    if ($dbtype == 'mysqli' && $db == $dbname && !empty($table) && strpos($table, '.') !== false) {
         [$db, $table] = explode('.', $table);
     }
 
     // Note: this only works if we use the same database connection
-    if (!empty($db) && $db != $dbname) {
+    if (!empty($db) && $db != $dbname && empty($dbConnIndex)) {
         $dbInfo->selectDb($db);
         $prefix = $db . '.';
     } else {
@@ -63,14 +75,6 @@ function dynamicdata_utilapi_getmeta(array $args = [])
     }
     if (!isset($tables)) {
         return;
-    }
-
-    // Get the default property types
-    sys::import('modules.dynamicdata.class.properties.master');
-    $proptypes = DataPropertyMaster::getPropertyTypes();
-    $proptypeid = [];
-    foreach ($proptypes as $proptype) {
-        $proptypeid[$proptype['name']] = $proptype['id'];
     }
 
     // Based on this, loop over the table info object and fill the metadata
@@ -113,7 +117,7 @@ function dynamicdata_utilapi_getmeta(array $args = [])
 
             // (try to) assign some default property type for now
             // = obviously limited to basic data types in this case
-            $dtype = $datatype;
+            $dtype = strtolower($datatype);
             // skip special definitions (unsigned etc.)
             $dtype = preg_replace('/\(.*$/', '', $dtype);
             switch ($dtype) {
@@ -139,6 +143,8 @@ function dynamicdata_utilapi_getmeta(array $args = [])
                     $proptype = $proptypeid['integerbox']; // Number Box
                     if (!empty($size) && $size > 6) {
                         $validation = '';
+                    } elseif (empty($size)) {
+                        $validation = '';
                     }
                     break;
                 case 'bigint':
@@ -147,11 +153,13 @@ function dynamicdata_utilapi_getmeta(array $args = [])
                 case 'float':
                 case 'decimal':
                 case 'double':
+                case 'real':
                     $proptype = $proptypeid['floatbox']; // Number Box (float)
                     $validation = '';
                     break;
                     // in case we have some leftover bit(1) columns instead of tinyint(1) for boolean in MySQL
                 case 'bit':
+                case 'bool':
                 case 'boolean':
                     $proptype = $proptypeid['checkbox']; // Checkbox
                     $validation = '';
@@ -229,7 +237,7 @@ function dynamicdata_utilapi_getmeta(array $args = [])
     }
 
     // Note: this only works if we use the same database connection
-    if (!empty($db) && $db != $dbname) {
+    if (!empty($db) && $db != $dbname && empty($dbConnIndex)) {
         $dbInfo->selectDb($dbname);
     }
 

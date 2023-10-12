@@ -145,6 +145,15 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
  * $descriptor = new TableObjectDescriptor(['table' => 'xar_other_table']);
  * $objectlist = new DataObjectList($descriptor);
  * $items = $objectlist->getItems();
+ *
+ * Or connect to a different database first and use their tables as relational data store
+ * $args = ['databaseType' => 'sqlite3', 'databaseName' => $filepath];
+ * $conn = xarDB::newConn($args);
+ * $dbConnIndex = xarDB::$count - 1;
+ *
+ * $descriptor = new TableObjectDescriptor(['table' => 'non_xar_table', 'dbConnIndex' => $dbConnIndex]);
+ * $objectlist = new DataObjectList($descriptor);
+ * ...
  */
 class TableObjectDescriptor extends VirtualObjectDescriptor
 {
@@ -156,6 +165,7 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
      *     ... arguments above, and
      *     $args['table'] name of the database table (required)
      *     $args['fields'] list of field specs coming from getmeta() or elsewhere (optional)
+     *     $args['dbConnIndex'] connection index of the database if different from Xaraya DB (optional)
      */
     public function __construct(array $args = [])
     {
@@ -163,7 +173,7 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
         $offline = false;
         parent::__construct($args, $offline);
         if (!empty($args['table'])) {
-            $this->addTable($args['table'], $args['fields'] ?? []);
+            $this->addTable($args['table'], $args['fields'] ?? [], $args['dbConnIndex'] ?? 0);
         }
     }
 
@@ -172,13 +182,15 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
      *
      * @param string $table name of the database table (required)
      * @param array<string, array<string, mixed>> $fields list of field specs coming from getmeta() or elsewhere (optional)
+     * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      * @return void
     **/
-    public function addTable(string $table, array $fields = [])
+    public function addTable(string $table, array $fields = [], int $dbConnIndex = 0)
     {
         if (empty($fields)) {
+            //$fields = xarMod::apiFunc('dynamicdata', 'util', 'getstatic', ['module' => 'dynamicdata', 'module_id' => 182, 'table' => $table, 'dbConnIndex' => $dbConnIndex]);
             /** @var array<string, array<string, array<string, mixed>>> $meta */
-            $meta = xarMod::apiFunc('dynamicdata', 'util', 'getmeta', ['table' => $table]);
+            $meta = xarMod::apiFunc('dynamicdata', 'util', 'getmeta', ['table' => $table, 'dbConnIndex' => $dbConnIndex]);
             if (empty($meta[$table])) {
                 throw new Exception("Unknown table $table");
             }

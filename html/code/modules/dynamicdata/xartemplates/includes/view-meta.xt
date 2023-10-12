@@ -3,6 +3,13 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!-- TODO: multi-column output -->
     <xar:set name="dummy">xarVar::fetch('table', 'notempty', $table, '', xarVar::NOT_REQUIRED)</xar:set>
+    <xar:set name="dummy">xarVar::fetch('dbtype', 'notempty', $dbtype, '', xarVar::NOT_REQUIRED)</xar:set>
+    <xar:set name="dummy">xarVar::fetch('db', 'notempty', $db, '', xarVar::NOT_REQUIRED)</xar:set>
+    <xar:if condition="empty($dbtype)">
+        <xar:set name="itemlink">xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'display'])</xar:set>
+    <xar:else />
+        <xar:set name="itemlink">xarController::URL('dynamicdata','admin','meta', ['dbtype' => $dbtype, 'db' => $db, 'table' => $table, 'export' => 'display'])</xar:set>
+    </xar:if>
     <table class="xar-table">
         <tr>
             <xar:foreach in="$properties" key="$name">
@@ -37,7 +44,7 @@
                 <xar:if condition="empty($linkfield)">
                     <td class="xar-align-center">
                         <xar:if condition="!empty($object->primary)">
-                            <a href="#xarController::URL('dynamicdata','admin','meta', ['table' => $table, 'export' => 'display', 'itemid' => $itemid])#" title="Display"><xar:img scope="theme" file="icons/display.png" class="xar-icon" alt="display"/></a>
+                            <a href="#$itemlink#&amp;itemid=#$itemid#" title="Display"><xar:img scope="theme" file="icons/display.png" class="xar-icon" alt="display"/></a>
                         </xar:if>
                     </td>
                 </xar:if>

@@ -20,9 +20,11 @@
  *     $args['module_id'] module id of table you're looking for
  *     $args['itemtype'] item type of table you're looking for
  *     $args['table']  table name of table you're looking for (better)
+ *     $args['dbConnIndex'] connection index of the database if different from Xaraya DB (optional)
  * @return mixed value of the field, or false on failure
  * @throws BadParameterException
  * @todo split off the common parts which are also in getmeta
+ * @todo mapping of sqlite types to creole types is not correct - use getmeta() for sqlite instead
  */
 function dynamicdata_utilapi_getstatic(array $args = [])
 {
@@ -59,8 +61,11 @@ function dynamicdata_utilapi_getstatic(array $args = [])
     if (isset($propertybag["$module_id:$itemtype:$table"])) {
         return $propertybag["$module_id:$itemtype:$table"];
     }
+    if (empty($dbConnIndex)) {
+        $dbConnIndex = 0;
+    }
 
-    $dbconn = xarDB::getConn();
+    $dbconn = xarDB::getConn($dbConnIndex);
     $xartable = & xarDB::getTables();
 
     $dbInfo = $dbconn->getDatabaseInfo();
@@ -157,8 +162,10 @@ function dynamicdata_utilapi_getstatic(array $args = [])
                 case 'decimal':
                 case 'double':
                 case 'float':
+                case 'real':
                     $proptype = $proptypeid['floatbox']; // Number Box (float)
                     break;
+                case 'bool':
                 case 'boolean':
                     $proptype = $proptypeid['checkbox']; // Checkbox
                     break;
