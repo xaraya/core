@@ -20,6 +20,8 @@ sys::import('xaraya.datastores.sql');
 /**
  * Data store is a variable SQL table
  *
+ * Note: in theory we could also use a different database than Xaraya with dbConnIndex,
+ * but there are dependencies with getTable() etc. here that are for Xaraya DB only
 **/
 class VariableTableDataStore extends SQLDataStore
 {
@@ -188,15 +190,15 @@ class VariableTableDataStore extends SQLDataStore
             } elseif (isset($args[$field->name])) {
                 // We have an override through the methods parameters
                 // Encrypt if required
-                if (!empty($field->initialization_encrypt)) {
-                    throw new Exception(xarML('Cannot encrypt data for variable table store'));
-                }
+                //if (!empty($field->initialization_encrypt)) {
+                //    throw new Exception(xarML('Cannot encrypt data for variable table store'));
+                //}
             } else {
                 // No override, just take the value the property already has
                 // Encrypt if required
-                if (!empty($field->initialization_encrypt)) {
-                    throw new Exception(xarML('Cannot encrypt data for variable table store'));
-                }
+                //if (!empty($field->initialization_encrypt)) {
+                //    throw new Exception(xarML('Cannot encrypt data for variable table store'));
+                //}
             }
             $goodproperties[$fieldname] = & $this->object->properties[$fieldname];
         }

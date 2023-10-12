@@ -18,6 +18,7 @@ class Query
     public $version             = "3.6";
     public $id;                                 // A unique identifier for this query
     public $type                = 'SELECT';     // Normalized array of tables used in the statement
+    public $dbConnIndex         = 0;            // Connection index of the database if different from Xaraya DB
     public $tables              = array();      // Normalized array of tables used in the statement
     public $tablelinks          = array();      // Normalized array of table links used in the statement
     public $fields              = array();      // Normalized array of fields used in the statement
@@ -75,7 +76,7 @@ class Query
 //---------------------------------------------------------
 // Constructor
 //---------------------------------------------------------
-    public function __construct($type='SELECT',$tables='',$fields='')
+    public function __construct($type='SELECT',$tables='',$fields='',$dbConnIndex=0)
     {
         // Set the debugflag
         if (xarCore::isLoaded(xarCore::SYSTEM_USER) && xarConfigVars::get(null,'Site.BL.ShowQueries',false) && in_array(xarUser::getVar('id'),xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
@@ -91,6 +92,7 @@ class Query
             throw new BadParameterException(null,$msg);
         }
 
+        $this->setDbConnIndex($dbConnIndex);
         $this->addtables($tables);
         $this->addfields($fields);
         
@@ -106,11 +108,16 @@ class Query
         $this->operatorarray['ge'] = '>=';
     }
 
+    public function setDbConnIndex($dbConnIndex = 0)
+    {
+        $this->dbConnIndex = $dbConnIndex;
+    }
+
     public function run($statement='',$display=1)
     {
         if ($this->debugflag) $querystart = microtime(true);
 
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
         if ($this->debugflag && (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO')) {
             $this->dbconn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
@@ -195,6 +202,22 @@ class Query
         if ($display == 1) {
             if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
                 $this->output = $result->getall();
+            } elseif (!empty($this->dbConnIndex) && get_class($result) === 'PdoSQLiteResultSet') {
+                // PDO ResultSet doesn't handle EOF very well in Creole
+                while ($result->fields !== false) {
+                    $i=0; $line=array();
+                    foreach ($this->fields as $key => $value ) {
+                        if(!empty($value['alias']))
+                            $line[$value['alias']] = $result->fields[$i];
+                        elseif(!empty($value['name']))
+                            $line[$value['name']] = $result->fields[$i];
+                        else
+                            $line[] = $result->fields[$i];
+                        $i++;
+                    }
+                    $this->output[] = $line;
+                    $result->next();
+                }
             } else {
                 if (!$this->israwstatement) {
                     if ($this->fields == array() && $numfields > 0) {
@@ -247,7 +270,7 @@ class Query
 
     public function open()
     {
-        $this->openconnection(xarDB::getConn());
+        $this->openconnection(xarDB::getConn($this->dbConnIndex));
     }
 
     public function uselimits()
@@ -774,7 +797,7 @@ class Query
 */
     private function _getbinding($key)
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
         $binding = $this->bindings[$key];
         if (!is_numeric($binding['field2']) && !preg_match('/JOIN/i', $binding['op'])) {
             $sqlfield = $this->dbconn->qstr($binding['field2']);
@@ -788,7 +811,7 @@ class Query
 
     private function _getcondition($key)
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
         $condition = $this->conditions[$key];
 
         if (!isset($condition['field2']) || $condition['field2'] === 'NULL') {
@@ -1199,7 +1222,7 @@ class Query
 
     private function assembledfields($type)
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
         $f = "";
         $this->bindstring = "";
         switch ($this->type) {
@@ -1482,7 +1505,7 @@ class Query
     }
     public function bindstatement()
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
         $pieces = explode('?',$this->statement);
         $bound = $pieces[0];
         $limit = count($pieces);
@@ -1557,7 +1580,7 @@ class Query
     }
     public function getconnection()
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
         return $this->dbconn;
     }
     public function getorder($x='')
@@ -1580,7 +1603,7 @@ class Query
         if (isset($this->output) && $this->rowstodo == 0) return count($this->output);
         if ($this->optimize == true) $this->optimize();
         if ($this->type == 'SELECT' && $this->rowstodo != 0 && $this->limits == 1) {
-            if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+            if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
             if ($this->israwstatement) {
                 $temp1 = $this->rowstodo;
                 $temp2 = $this->startat;
@@ -1659,7 +1682,7 @@ class Query
     }
     public function lastid($table="", $id="")
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
         $parts = explode('.',$id);
         $field = isset($parts[1]) ? $parts[1] : $parts[0];
         $table = isset($parts[1]) ? $parts[0] : $table;
@@ -1669,12 +1692,12 @@ class Query
     }
     public function nextid($table="", $id="")
     {
-        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn();
+        if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
         return $this->dbconn->PO_Insert_ID($table,$id);
     }
     public function openconnection($x = '')
     {
-        if (empty($x)) $this->dbconn = xarDB::getConn();
+        if (empty($x)) $this->dbconn = xarDB::getConn($this->dbConnIndex);
         else $this->dbconn = $x;
     }
     public function qecho($statement='')

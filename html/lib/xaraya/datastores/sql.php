@@ -22,6 +22,8 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     /** @var mixed */
     protected $db     = null;
     //protected $tables = null;
+    /** @var int */
+    public $dbConnIndex = 0;
 
     /** @var array<mixed> */
     public $where  = [];
@@ -35,12 +37,14 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     /**
      * Summary of __construct
      * @param mixed $name
+     * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      */
-    public function __construct($name = null)
+    public function __construct($name = null, $dbConnIndex = 0)
     {
         parent::__construct($name);
+        $this->dbConnIndex = $dbConnIndex;
         // lazy connection
-        //$this->db     = xarDB::getConn();
+        //$this->db     = xarDB::getConn($dbConnIndex);
         //$this->tables = xarDB::getTables(); // Is this scopy enough? i.e. would all tables be there already?
     }
 
@@ -163,12 +167,12 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     {
         // Note: the only reason we keep this variable is for getLastId()
         if (empty($this->db)) {
-            $this->db = xarDB::getConn();
+            $this->db = xarDB::getConn($this->dbConnIndex);
         }
     }
 
     /**
-     * Summary of getTable
+     * Summary of getTable - only for default database (dbConnIndex = 0)
      * @param mixed $name
      * @return mixed
      */
@@ -181,7 +185,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     }
 
     /**
-     * Summary of getType
+     * Summary of getType - only for default database (dbConnIndex = 0)
      * @return mixed
      */
     public function getType()

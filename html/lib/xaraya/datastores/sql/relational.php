@@ -23,22 +23,26 @@ class RelationalDataStore extends SQLDataStore
     private static $_subitems_types = [30069, 30120];
     /** @var string */
     private static $_deferred_property = 'DeferredItemProperty';
-    /** @var mixed */
-    private $encryptor;
+    ///** @var mixed */
+    //private $encryptor;
 
     /**
      * Summary of __construct
      * @param mixed $name
+     * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      */
-    public function __construct($name = null)
+    public function __construct($name = null, $dbConnIndex = 0)
     {
-        parent::__construct($name);
+        parent::__construct($name, $dbConnIndex);
 
+        /**
+         * @deprecated in PHP 7.1.0 and removed in PHP 7.2.0 - see https://www.php.net/manual/en/intro.mcrypt.php
         if (extension_loaded('mcrypt')) {
             // Load the encryption class in case we have encrypted fields
             sys::import('xaraya.encryptor');
             $this->encryptor = xarEncryptor::instance();
         }
+         */
     }
 
     /**
@@ -149,9 +153,9 @@ class RelationalDataStore extends SQLDataStore
         foreach ($result as $row) {
             foreach ($fieldlist as $fieldname) {
                 // Decrypt if required
-                if (!empty($this->object->properties[$fieldname]->initialization_encrypt)) {
-                    $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
-                }
+                //if (!empty($this->object->properties[$fieldname]->initialization_encrypt)) {
+                //    $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
+                //}
 
                 // Subitem properties get special treatment
                 if (in_array($this->object->properties[$fieldname]->type, self::$_subitems_types)) {
@@ -225,11 +229,11 @@ class RelationalDataStore extends SQLDataStore
             } else {
                 // No override, just take the value the property already has
                 // Encrypt if required
-                if (!empty($field->initialization_encrypt)) {
-                    $fieldvalue = $this->encryptor->encrypt($field->value);
-                } else {
-                    $fieldvalue = $field->value;
-                }
+                //if (!empty($field->initialization_encrypt)) {
+                //    $fieldvalue = $this->encryptor->encrypt($field->value);
+                //} else {
+                $fieldvalue = $field->value;
+                //}
                 $q->addfield($field->source, $fieldvalue);
             }
         }
@@ -312,18 +316,18 @@ class RelationalDataStore extends SQLDataStore
             } elseif (isset($args[$field->name])) {
                 // We have an override through the methods parameters
                 // Encrypt if required
-                if (!empty($field->initialization_encrypt)) {
-                    $args[$field->name] = $this->encryptor->encrypt($args[$field->name]);
-                }
+                //if (!empty($field->initialization_encrypt)) {
+                //    $args[$field->name] = $this->encryptor->encrypt($args[$field->name]);
+                //}
                 $q->addfield($field->source, $args[$field->name]);
             } else {
                 // No override, just take the value the property already has
                 // Encrypt if required
-                if (!empty($field->initialization_encrypt)) {
-                    $fieldvalue = $this->encryptor->encrypt($field->value);
-                } else {
-                    $fieldvalue = $field->value;
-                }
+                //if (!empty($field->initialization_encrypt)) {
+                //    $fieldvalue = $this->encryptor->encrypt($field->value);
+                //} else {
+                $fieldvalue = $field->value;
+                //}
                 $q->addfield($field->source, $fieldvalue);
             }
         }
@@ -570,9 +574,9 @@ class RelationalDataStore extends SQLDataStore
             // Set the values of the valid properties
             foreach ($this->object->fieldlist as $fieldname) {
                 // Decrypt if required
-                if (!empty($this->object->properties[$fieldname]->initialization_encrypt)) {
-                    $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
-                }
+                //if (!empty($this->object->properties[$fieldname]->initialization_encrypt)) {
+                //    $row[$fieldname] = $this->encryptor->decrypt($row[$fieldname]);
+                //}
 
                 $this->setItemValue($itemid, $row, $fieldname, $this->object, $fordisplay, $args['row_output']);
             }

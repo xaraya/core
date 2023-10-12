@@ -131,16 +131,17 @@ class DataStoreFactory extends xarObject
     /**
      * Class method to get a new dynamic data store (of the right type)
      * @param string $name
-     * @param string $type
-     * @param ?string $storage
+     * @param string $type type of datastore (relational, data, hook, modulevars, cache, ...)
+     * @param ?string $storage storageType for the cacheStorage in CachingDatastore
+     * @param ?int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      * @return IBasicDataStore
      */
-    public static function &getDataStore($name = '_dynamic_data_', $type = 'data', $storage = null)
+    public static function &getDataStore($name = '_dynamic_data_', $type = 'data', $storage = null, $dbConnIndex = 0)
     {
         switch ($type) {
             case 'relational':
                 sys::import('xaraya.datastores.sql.relational');
-                $datastore = new RelationalDataStore();
+                $datastore = new RelationalDataStore(null, $dbConnIndex);
                 break;
                 // case 'table':
                 //     sys::import('xaraya.datastores.sql.flattable');
@@ -207,22 +208,21 @@ class DataStoreFactory extends xarObject
     /**
      * Get possible data sources
      *
-     * @param array<string, mixed> $args
-     * with
-     *     $args['table'] optional extra table whose fields you want to add as potential data source
+     * @param array<mixed> $args object datasources
+     * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      * @return list<array<string, string>>
      */
-    public static function &getDataSources($args = [])
+    public static function &getDataSources($args = [], $dbConnIndex = 0)
     {
         $sources = [];
         $sources[] = ['id' => '', 'name' => xarML('None')];
 
-        $dbconn = xarDB::getConn();
+        $dbconn = xarDB::getConn($dbConnIndex);
         $dbInfo = $dbconn->getDatabaseInfo();
 
         // TODO: re-evaluate this once we're further along
-        $modules = xarMod::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_ACTIVE]]);
         /*
+        $modules = xarMod::apiFunc('modules', 'admin', 'getlist', ['filter' => ['State' => xarMod::STATE_ACTIVE]]);
         foreach ($modules as $module) {
             $sources[] = array('id'=> $module['regid'], 'name' => 'module variable: ' . $module['name']);
         }

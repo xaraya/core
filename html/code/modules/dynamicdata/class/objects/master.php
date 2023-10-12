@@ -50,6 +50,7 @@ class DataObjectMaster extends xarObject
     public $config      = 'a:0:{}';       // the configuration parameters for this DD object
     public $configuration;                // the configuration parameters for this DD object
     public $datastore   = '';             // the datastore for the DD object
+    public $dbConnIndex = 0;              // the connection index of the database if different from Xaraya DB
     public $datasources = [];        // the db source tables of this object
     public $dataquery;                    // the initialization query of this obect
     public $sources     = 'a:0:{}';		  // the source tables of this object (relational datastore)
@@ -182,6 +183,9 @@ class DataObjectMaster extends xarObject
             $this->datastore = $descriptor->get('datastore');
             if ($this->datastore == 'relational') {
                 // We start from scratch
+                if (!empty($this->dbConnIndex)) {
+                    $this->dataquery->setDbConnIndex($this->dbConnIndex);
+                }
                 $this->dataquery->cleartables();
                 $this->assembleQuery($this);
             }
@@ -473,7 +477,7 @@ class DataObjectMaster extends xarObject
     {
         // get the data store
         sys::import('xaraya.datastores.factory');
-        $this->datastore = DataStoreFactory::getDataStore($name, $type, $storage);
+        $this->datastore = DataStoreFactory::getDataStore($name, $type, $storage, $this->dbConnIndex);
 
         // Pass along a reference to this object
         $this->datastore->object = $this;
