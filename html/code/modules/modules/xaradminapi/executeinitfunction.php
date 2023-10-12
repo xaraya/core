@@ -62,6 +62,9 @@ function modules_adminapi_executeinitfunction(Array $args=array())
     }
 
     $func = $modInfo['name'] . '_'.$args['function'];
+    if (!empty($modInfo['namespace']) && !function_exists($func)) {
+        $func = $modInfo['namespace'] . '\\' . $func;
+    }
     if (function_exists($func)) {
         if ($args['function'] == 'upgrade') {
             // pass the old version as argument to the upgrade function
