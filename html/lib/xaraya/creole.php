@@ -39,6 +39,15 @@ class xarDB_Creole extends Creole
  */
 public static function newConn(array $args = null)
 {
+    // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
+    if ($args['databaseType'] == 'sqlite3') {
+        $args['databaseName'] ??= ':memory:';
+        $args['databaseHost'] ??= '';
+        $args['databasePort'] ??= '';
+        $args['userName'] ??= '';
+        $args['password'] ??= '';
+        $args['databaseCharset'] ??= '';
+    }
     // Get database parameters
     $dsn = array('phptype'   => $args['databaseType'],
                  'hostspec'  => $args['databaseHost'],
