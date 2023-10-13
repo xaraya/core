@@ -144,6 +144,15 @@ class xarDB_PDO extends xarObject
       return $conn;
     }
 
+    public static function hasConn($index = 0)
+    {
+        // getConn() above automatically creates another connection to the first DSN on demand
+        if (isset(self::$connection[$index])) {
+            return true;
+        }
+        return false;
+    }
+
     public static function getConnection($dsn, $flags=array())
     {
     $dsn['phptype'] = 'mysql';

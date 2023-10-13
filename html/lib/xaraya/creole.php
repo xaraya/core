@@ -147,6 +147,15 @@ public static function newConn(array $args = null)
       return $conn;
     }
 
+    public static function hasConn($index = 0)
+    {
+        // getConn() above automatically creates another connection to the first DSN on demand
+        if (isset(self::$connection[$index])) {
+            return true;
+        }
+        return false;
+    }
+
     // Overridden
     public static function getConnection($dsn, $flags = 0)
     {

@@ -51,6 +51,7 @@ class DataObjectMaster extends xarObject
     public $configuration;                // the configuration parameters for this DD object
     public $datastore   = '';             // the datastore for the DD object
     public $dbConnIndex = 0;              // the connection index of the database if different from Xaraya DB
+    public $dbConnArgs  = null;           // the connection arguments for the database if different from Xaraya DB
     public $datasources = [];        // the db source tables of this object
     public $dataquery;                    // the initialization query of this obect
     public $sources     = 'a:0:{}';		  // the source tables of this object (relational datastore)
@@ -184,6 +185,7 @@ class DataObjectMaster extends xarObject
             if ($this->datastore == 'relational') {
                 // We start from scratch
                 if (!empty($this->dbConnIndex)) {
+                    $this->checkDbConnection();
                     $this->dataquery->setDbConnIndex($this->dbConnIndex);
                 }
                 $this->dataquery->cleartables();
@@ -437,6 +439,33 @@ class DataObjectMaster extends xarObject
             }
         }
         return true;
+    }
+
+    /**
+     * Check the DB connection index or use dbConnArgs to connect
+     * Use json-encoded ["className","methodName"] format to invoke static method (if class is loaded)
+     * Example:
+     *   $config = ['dbConnIndex' => 1, 'dbConnArgs' => json_encode([MyClass::class, 'myMethod'])];
+     *   $descriptor->set('config', serialize($config));
+     * @return void
+     */
+    public function checkDbConnection()
+    {
+        if (empty($this->dbConnIndex) || xarDB::hasConn($this->dbConnIndex)) {
+            return;
+        }
+        if (!empty($this->dbConnArgs)) {
+            if (is_string($this->dbConnArgs)) {
+                $this->dbConnArgs = json_decode($this->dbConnArgs, true);
+            }
+            if (is_callable($this->dbConnArgs)) {
+                $args = call_user_func($this->dbConnArgs);
+            } else {
+                $args = $this->dbConnArgs;
+            }
+            xarDB::newConn($args);
+            $this->dbConnIndex = xarDB::$count - 1;
+        }
     }
 
     /**
