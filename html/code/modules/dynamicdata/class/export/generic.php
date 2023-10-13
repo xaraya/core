@@ -40,6 +40,10 @@ class DataObjectExporter
 
     public function __construct(public int $objectid, public bool $tofile = false)
     {
+        $this->proptypes = DataPropertyMaster::getPropertyTypes();
+
+        $this->prefix = xarDB::getPrefix();
+        $this->prefix .= '_';
     }
 
     /**
@@ -142,11 +146,6 @@ class DataObjectExporter
         if (!isset($myobject) || empty($myobject->label) || empty($myobject->properties['objectid']->value)) {
             throw new BadParameterException('Invalid object id ' . $this->objectid);
         }
-
-        $this->proptypes = DataPropertyMaster::getPropertyTypes();
-
-        $this->prefix = xarDB::getPrefix();
-        $this->prefix .= '_';
 
         return $myobject;
     }

@@ -41,6 +41,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
     protected $args = [
         'objectid' => 0,
         'name' => 'virtual',
+        'label' => 'Virtual Object',
         'moduleid' => 182,
         'itemtype' => 0,
         'module_id' => 182,
@@ -71,6 +72,8 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
     **/
     public function __construct(array $args = [], bool $offline = false)
     {
+        $args['moduleid'] ??= 182;
+        $args['module_id'] = $args['moduleid'];
         //$args = self::getObjectID($args);
         ObjectDescriptor::__construct($args);
         if ($offline) {
@@ -169,6 +172,8 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
      */
     public function __construct(array $args = [])
     {
+        $args['name'] ??= $args['table'] ?? 'unknown';
+        $args['label'] ??= 'Table ' . $args['name'];
         //$args = self::getObjectID($args);
         $offline = false;
         parent::__construct($args, $offline);
@@ -196,11 +201,15 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
             }
             $fields = $meta[$table];
         }
-        $this->args['name'] = $table;
         $this->args['datastore'] = 'relational';
         unset($this->args['cachestorage']);
         $this->args['sources'] = serialize([$table => $table]);
         foreach ($fields as $name => $field) {
+            // cosmetic fix for name and title fields
+            if (in_array($field['name'], ['name', 'title']) && $field['type'] == '4') {
+                $field['type'] = '2';
+                $field['status'] = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
+            }
             $this->addProperty($field);
         }
     }
