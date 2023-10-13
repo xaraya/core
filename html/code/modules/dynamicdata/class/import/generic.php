@@ -10,6 +10,31 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+namespace Xaraya\DataObject\Import;
+
+use DataObject;
+use DataObjectLinks;
+use DataObjectMaster;
+use DataPropertyMaster;
+use SimpleXMLElement;
+use ValueValidations;
+use BadParameterException;
+use DuplicateException;
+use EmptyParameterException;
+use Exception;
+use xarConfigVars;
+use xarDB;
+use xarLog;
+use xarMod;
+use xarVar;
+use sys;
+
+/**
+ * DataObject Importer
+ */
+class DataObjectImporter
+{
 /**
  * Import an object definition or an object item from XML
  *
@@ -21,7 +46,7 @@
  *     $args['entry'] optional array of external references.
  * @return mixed|void object id on success, null on failure
  */
-function dynamicdata_utilapi_import(array $args = [])
+public static function import(array $args = [])
 {
     extract($args);
 
@@ -373,4 +398,5 @@ function dynamicdata_utilapi_import(array $args = [])
         }
         */
     return $objectid;
+}
 }
