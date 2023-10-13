@@ -459,7 +459,8 @@ class DataObjectMaster extends xarObject
                 $this->dbConnArgs = json_decode($this->dbConnArgs, true);
             }
             if (is_callable($this->dbConnArgs)) {
-                $args = call_user_func($this->dbConnArgs);
+                // we pass the current object as argument here, just in case...
+                $args = call_user_func($this->dbConnArgs, $this);
             } else {
                 $args = $this->dbConnArgs;
             }
