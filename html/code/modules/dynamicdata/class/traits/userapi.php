@@ -13,6 +13,10 @@
 
 namespace Xaraya\DataObject\Traits;
 
+use sys;
+
+sys::import('modules.dynamicdata.class.traits.itemlinks');
+
 /**
  * For documentation purposes only - available via UserApiTrait
  */

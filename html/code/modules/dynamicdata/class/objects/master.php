@@ -458,11 +458,16 @@ class DataObjectMaster extends xarObject
             if (is_string($this->dbConnArgs)) {
                 $this->dbConnArgs = json_decode($this->dbConnArgs, true);
             }
+            // Note: this assumes the class is (auto-)loaded
             if (is_callable($this->dbConnArgs)) {
                 // we pass the current object as argument here, just in case...
                 $args = call_user_func($this->dbConnArgs, $this);
-            } else {
+            } elseif (array_key_exists('databaseType', $this->dbConnArgs)) {
                 $args = $this->dbConnArgs;
+            } else {
+                // allow database connection failure later on when it's actually needed
+                xarLog::message("DataObjectMaster::checkDbConnection: Invalid dbConnArgs - unable to create new db connection", xarLog::LEVEL_WARNING);
+                return;
             }
             xarDB::newConn($args);
             $this->dbConnIndex = xarDB::$count - 1;
