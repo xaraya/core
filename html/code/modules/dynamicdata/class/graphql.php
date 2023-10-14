@@ -31,8 +31,8 @@
 //sys::import('modules.dynamicdata.class.graphql.accesstype');
 //sys::import('modules.dynamicdata.class.graphql.keyvaltype');
 //sys::import('modules.dynamicdata.class.graphql.inflector');
-//sys::import('xaraya.caching.cachetrait');
-//sys::import('modules.dynamicdata.class.timertrait');
+//sys::import('xaraya.traits.cachetrait');
+//sys::import('xaraya.traits.timertrait');
 sys::import('xaraya.bridge.requests.requesttrait');
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;

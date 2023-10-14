@@ -10,8 +10,8 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 sys::import('modules.dynamicdata.class.objects.master');
-sys::import('modules.dynamicdata.class.timertrait');
-sys::import('xaraya.caching.cachetrait');
+sys::import('xaraya.traits.timertrait');
+sys::import('xaraya.traits.cachetrait');
 sys::import('xaraya.bridge.requests.requesttrait');
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
