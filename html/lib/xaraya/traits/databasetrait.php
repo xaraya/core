@@ -126,6 +126,20 @@ trait DatabaseTrait
     }
 
     /**
+     * Summary of addDatabase
+     * @param string $name
+     * @param array<mixed> $database
+     * @return void
+     */
+    public static function addDatabase($name, $database)
+    {
+        static::$_databases ??= [];
+        $database['name'] ??= $name;
+        $database['description'] ??= ucwords(str_replace('_', ' ', $name));
+        static::$_databases[$name] = $database;
+    }
+
+    /**
      * Summary of connectDatabase
      * @param string $name
      * @return int|null
