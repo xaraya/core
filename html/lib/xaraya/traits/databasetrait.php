@@ -59,6 +59,14 @@ interface DatabaseInterface
     public static function getDatabases();
 
     /**
+     * Summary of addDatabase
+     * @param string $name
+     * @param array<mixed> $database
+     * @return void
+     */
+    public static function addDatabase($name, $database);
+
+    /**
      * Summary of connectDatabase
      * @param string $name
      * @return int|null

@@ -16,7 +16,7 @@ xarCache::init();
 // *don't* initialize database for Xaraya first here (dbConnIndex = 0)
 //xarDatabase::init();
 
-function get_descriptor($table)
+function get_descriptor($table, $offline)
 {
     $filepath = dirname(__DIR__, 3).'/html/code/modules/library/xardata/lb_' . $table . '-def.php';
     if (!is_file($filepath)) {
@@ -29,19 +29,27 @@ function get_descriptor($table)
             $args[$name] = serialize($args[$name]);
         }
     }
-    $offline = true;
     $descriptor = new VirtualObjectDescriptor($args, $offline);
     return $descriptor;
 }
 
+$offline = true;
+//$offline = false;
+
+if (!$offline) {
+    xarDatabase::init();
+}
+
 $table = 'books';
-$descriptor = get_descriptor($table);
+$descriptor = get_descriptor($table, $offline);
 
 // set current database before we get to dbConnArgs - this uses xarSession (not initialized) = $_SESSION
 UserApi::setCurrentDatabase('test');
-// add database before we get to dbConnArgs - this avoids using xarModVars (not initialized)
-$filepath = dirname(__DIR__, 3).'/html/code/modules/library/xardata/metadata.db';
-UserApi::addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath]);
+if ($offline or true) {
+    // add database before we get to dbConnArgs - this avoids using xarModVars (not initialized)
+    $filepath = dirname(__DIR__, 3).'/html/code/modules/library/xardata/metadata.db';
+    UserApi::addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath]);
+}
 
 $booklist = new LibraryObjectList($descriptor);
 
