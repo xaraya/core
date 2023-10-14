@@ -41,10 +41,10 @@
  *     }
  * }
  *
- * @package core\caching
- * @subpackage caching
+ * @package core\traits
+ * @subpackage traits
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
