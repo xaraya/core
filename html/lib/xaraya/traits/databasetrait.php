@@ -95,11 +95,11 @@ interface DatabaseInterface
     public static function setCurrentDatabase($name = '');
 
     /**
-     * Summary of getTables
+     * Summary of getDatabaseTables
      * @param string $name
      * @return array<mixed>
      */
-    public static function getTables($name);
+    public static function getDatabaseTables($name);
 }
 
 /**
@@ -107,11 +107,11 @@ interface DatabaseInterface
  */
 trait DatabaseTrait
 {
-    protected static string $moduleName = 'OVERRIDE';
+    //protected static string $moduleName = 'OVERRIDE';
     /** @var array<string, mixed> */
-    protected static array $databases = [];
+    protected static array $_databases = [];
     /** @var array<string, mixed> */
-    protected static array $connections = [];
+    protected static array $_connections = [];
 
     /**
      * Summary of getDatabases
@@ -119,10 +119,10 @@ trait DatabaseTrait
      */
     public static function getDatabases()
     {
-        if (empty(static::$databases)) {
-            static::$databases = unserialize(xarModVars::get(static::$moduleName, 'databases'));
+        if (empty(static::$_databases)) {
+            static::$_databases = unserialize(xarModVars::get(static::$moduleName, 'databases'));
         }
-        return static::$databases;
+        return static::$_databases;
     }
 
     /**
@@ -132,8 +132,8 @@ trait DatabaseTrait
      */
     public static function connectDatabase($name)
     {
-        if (!empty(static::$connections[$name])) {
-            return static::$connections[$name];
+        if (!empty(static::$_connections[$name])) {
+            return static::$_connections[$name];
         }
         try {
             $args = static::getDatabaseDSN($name);
@@ -144,7 +144,7 @@ trait DatabaseTrait
         $conn = xarDB::newConn($args);
         // save the connection index
         $dbConnIndex = xarDB::$count - 1;
-        static::$connections[$name] = $dbConnIndex;
+        static::$_connections[$name] = $dbConnIndex;
         // return the connection index
         return $dbConnIndex;
     }
@@ -211,11 +211,11 @@ trait DatabaseTrait
     }
 
     /**
-     * Summary of getTables
+     * Summary of getDatabaseTables
      * @param string $name
      * @return array<mixed>
      */
-    public static function getTables($name)
+    public static function getDatabaseTables($name)
     {
         $result = [];
         $dbConnIndex = static::connectDatabase($name);

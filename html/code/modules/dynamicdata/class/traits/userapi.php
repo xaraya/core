@@ -16,7 +16,14 @@ namespace Xaraya\DataObject\Traits;
 /**
  * For documentation purposes only - available via UserApiTrait
  */
-interface UserApiInterface extends ItemLinksInterface {}
+interface UserApiInterface extends ItemLinksInterface
+{
+    /**
+     * Utility function to retrieve the DD objects of this module (if any).
+     * @return array<string, mixed>
+     */
+    public static function getModuleObjects(): array;
+}
 
 /**
  * Trait to handle generic user api functions
@@ -25,4 +32,13 @@ interface UserApiInterface extends ItemLinksInterface {}
 trait UserApiTrait
 {
     use ItemLinksTrait;
+
+    /**
+     * Utility function to retrieve the DD objects of this module (if any).
+     * @return array<string, mixed>
+     */
+    public static function getModuleObjects(): array
+    {
+        return static::getItemLinkObjects();
+    }
 }

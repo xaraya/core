@@ -31,7 +31,7 @@ interface ItemLinksInterface
      * Utility function to retrieve the DD objects of this module (if any).
      * @return array<string, mixed>
      */
-    public static function getModuleObjects(): array;
+    public static function getItemLinkObjects(): array;
 
     /**
      * Utility function to retrieve the list of itemtypes of this module (if any).
@@ -56,30 +56,30 @@ interface ItemLinksInterface
  */
 trait ItemLinksTrait
 {
-    protected static int $moduleId = 123456;
-    protected static string $moduleName = 'OVERRIDE';
+    //protected static int $moduleId = 123456;
+    //protected static string $moduleName = 'OVERRIDE';
     /** @var array<string, mixed> */
-    protected static array $moduleObjects = [];
+    protected static array $_itemlinkObjects = [];
 
     /**
      * Utility function to retrieve the DD objects of this module (if any).
      * @return array<string, array<string, mixed>>
      */
-    public static function getModuleObjects(): array
+    public static function getItemLinkObjects(): array
     {
-        if (!empty(static::$moduleObjects)) {
-            return static::$moduleObjects;
+        if (!empty(static::$_itemlinkObjects)) {
+            return static::$_itemlinkObjects;
         }
         $objects = DataObjectMaster::getObjects();
-        static::$moduleObjects = [];
+        static::$_itemlinkObjects = [];
         foreach ($objects as $objectid => $objectinfo) {
             /** @var array<string, mixed> $objectinfo */
             if (intval($objectinfo['moduleid']) !== static::$moduleId) {
                 continue;
             }
-            static::$moduleObjects[$objectinfo['name']] = $objectinfo;
+            static::$_itemlinkObjects[$objectinfo['name']] = $objectinfo;
         }
-        return static::$moduleObjects;
+        return static::$_itemlinkObjects;
     }
 
     /**
@@ -89,7 +89,7 @@ trait ItemLinksTrait
      */
     public static function getItemTypes(array $args = []): array
     {
-        $objects = static::getModuleObjects();
+        $objects = static::getItemLinkObjects();
         $itemtypes = [];
         foreach ($objects as $name => $objectinfo) {
             $itemtypes[$objectinfo['itemtype']] = [
