@@ -17,6 +17,7 @@ use DataObject;
 use DataObjectLinks;
 use DataObjectMaster;
 use DataPropertyMaster;
+use VirtualObjectDescriptor;
 use SimpleXMLElement;
 use ValueValidations;
 use BadParameterException;
@@ -30,12 +31,21 @@ use xarMod;
 use xarVar;
 use sys;
 
+sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.virtual');
+sys::import('modules.dynamicdata.class.import.xmlimporter');
+sys::import('modules.dynamicdata.class.import.jsonimporter');
+sys::import('modules.dynamicdata.class.import.phpimporter');
+
 /**
  * DataObject Importer
  * @todo split object and items import + support other formats besides xml
  */
 class DataObjectImporter
 {
+    protected static ?DataObject $dataobject = null;
+    protected static ?DataObject $dataproperty = null;
+
     /**
      * Import an object definition or an object item from XML
      *
@@ -398,6 +408,35 @@ class DataObjectImporter
                 unset($objectcache);
             }
             */
+        return $objectid;
+    }
+
+    /**
+     * Summary of createObject
+     * @param VirtualObjectDescriptor $descriptor
+     * @return int|mixed
+     */
+    public static function createObject($descriptor)
+    {
+        static::$dataobject ??= DataObjectMaster::getObject(['name' => 'objects']);
+        static::$dataproperty ??= DataObjectMaster::getObject(['name' => 'properties']);
+        $info = $descriptor->getArgs();
+        $propertyargs = $info['propertyargs'];
+        unset($info['propertyargs']);
+        $objectid = static::$dataobject->createItem($info);
+        $sequence = 1;
+        foreach ($propertyargs as $propertyarg) {
+            $propertyarg = array_filter($propertyarg, function ($key) {
+                return !str_starts_with($key, 'object_');
+            }, ARRAY_FILTER_USE_KEY);
+            $propertyarg['itemid'] = 0;
+            $propertyarg['objectid'] = $objectid;
+            unset($propertyarg['_objectid']);
+            $propertyarg['seq'] ??= $sequence;
+            $propertyarg['configuration'] ??= '';
+            $propid = static::$dataproperty->createItem($propertyarg);
+            $sequence += 1;
+        }
         return $objectid;
     }
 }

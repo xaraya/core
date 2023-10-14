@@ -17,9 +17,13 @@ use DataObject;
 use DataObjectList;
 use DataObjectMaster;
 use DataPropertyMaster;
+use VirtualObjectDescriptor;
 use BadParameterException;
+use Throwable;
 use xarCoreCache;
 use sys;
+
+sys::import('modules.dynamicdata.class.objects.virtual');
 
 /**
  * DataObject PHP Class Exporter (TODO - experimental)
@@ -170,6 +174,43 @@ class ' . $classname . ' extends GeneratedClass
 ';
 
         return $info;
+    }
+
+    /**
+     * Summary of exportDefinition
+     * @param VirtualObjectDescriptor $descriptor
+     * @param string $filepath
+     * @return string
+     */
+    public static function exportDefinition($descriptor, $filepath)
+    {
+        $info = $descriptor->getArgs();
+        $propertyargs = $info['propertyargs'];
+        unset($info['propertyargs']);
+        $arrayargs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
+        foreach ($arrayargs as $name) {
+            if (!empty($info[$name]) && is_string($info[$name])) {
+                try {
+                    $value = unserialize($info[$name]);
+                    if ($value !== false) {
+                        $info[$name] = $value;
+                    }
+                } catch (Throwable $e) {
+                }
+            }
+        }
+        $output = "<?php\n\n\$object = " . var_export($info, true) . ";\n";
+        $output .= "\$properties = array();\n";
+        foreach ($propertyargs as $propertyarg) {
+            $propertyarg = array_filter($propertyarg, function ($key) {
+                return !str_starts_with($key, 'object_');
+            }, ARRAY_FILTER_USE_KEY);
+            unset($propertyarg['_objectid']);
+            $output .= "\$properties[] = " . var_export($propertyarg, true) . ";\n";
+        }
+        $output .= "\$object['propertyargs'] = \$properties;\nreturn \$object;\n";
+        file_put_contents($filepath, $output);
+        return $filepath;
     }
 
     /**
