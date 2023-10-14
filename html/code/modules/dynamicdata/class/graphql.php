@@ -34,6 +34,10 @@
 //sys::import('xaraya.traits.cachetrait');
 //sys::import('xaraya.traits.timertrait');
 sys::import('xaraya.bridge.requests.requesttrait');
+use Xaraya\Core\Traits\CacheInterface;
+use Xaraya\Core\Traits\CacheTrait;
+use Xaraya\Core\Traits\TimerInterface;
+use Xaraya\Core\Traits\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
 
@@ -53,11 +57,11 @@ use GraphQL\Validator\DocumentValidator;
 /**
  * See xardocs/graphql.txt for class structure
  */
-class xarGraphQL extends xarObject implements CommonRequestInterface, xarCacheTraitInterface, xarTimerTraitInterface
+class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
 {
     use CommonRequestTrait;
-    use xarTimerTrait;  // activate with self::$enableTimer = true
-    use xarCacheTrait;  // activate with self::$enableCache = true
+    use TimerTrait;  // activate with self::$enableTimer = true
+    use CacheTrait;  // activate with self::$enableCache = true
 
     public static string $endpoint = 'gql.php';
     /** @var array<string, mixed> */

@@ -74,7 +74,7 @@ trait ItemLinksTrait
         static::$moduleObjects = [];
         foreach ($objects as $objectid => $objectinfo) {
             /** @var array<string, mixed> $objectinfo */
-            if (intval($objectinfo['moduleid']) !== static::$moduleid) {
+            if (intval($objectinfo['moduleid']) !== static::$moduleId) {
                 continue;
             }
             static::$moduleObjects[$objectinfo['name']] = $objectinfo;
@@ -121,7 +121,7 @@ trait ItemLinksTrait
         }
 
         // for items managed by library itself only
-        $args = DataObjectDescriptor::getObjectID(['moduleid'  => static::$moduleid,
+        $args = DataObjectDescriptor::getObjectID(['moduleid'  => static::$moduleId,
                                         'itemtype'  => $itemtype]);
         if (empty($args['objectid'])) {
             return $itemlinks;

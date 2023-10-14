@@ -4,9 +4,12 @@
  *
  * Usage:
  *
- * class myFancyClass
+ * use Xaraya\Core\Traits\TimerInterface;
+ * use Xaraya\Core\Traits\TimerTrait;
+ *
+ * class myFancyClass implements TimerInterface
  * {
- *     use xarTimerTrait;
+ *     use TimerTrait;  // activate with self::$enableTimer = true
  *
  *     public function __construct()
  *     {
@@ -42,18 +45,21 @@
  * @author mikespub <mikespub@xaraya.com>
 **/
 
+namespace Xaraya\Core\Traits;
+
 /**
- * For documentation purposes only - available via xarTimerTrait
+ * For documentation purposes only - available via TimerTrait
  */
-interface xarTimerTraitInterface
+interface TimerInterface
 {
     public static function setTimer(string $label): void;
     /** @return list<array<string, float>> */
     public static function getTimers(): array;
+    /** @param array<mixed> $args */
     public static function wrapTimer(string $label, callable $callback, ...$args): mixed;
 }
 
-trait xarTimerTrait
+trait TimerTrait
 {
     public static bool $enableTimer = false;  // activate with self::$enableTimer = true
     /** @var list<array<string, float>> */

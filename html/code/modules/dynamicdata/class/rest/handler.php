@@ -13,17 +13,21 @@ sys::import('modules.dynamicdata.class.objects.master');
 sys::import('xaraya.traits.timertrait');
 sys::import('xaraya.traits.cachetrait');
 sys::import('xaraya.bridge.requests.requesttrait');
+use Xaraya\Core\Traits\CacheInterface;
+use Xaraya\Core\Traits\CacheTrait;
+use Xaraya\Core\Traits\TimerInterface;
+use Xaraya\Core\Traits\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
 
 /**
  * Class to handle DataObject REST API calls
  */
-class DataObjectRESTHandler extends xarObject implements CommonRequestInterface, xarCacheTraitInterface, xarTimerTraitInterface
+class DataObjectRESTHandler extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
 {
     use CommonRequestTrait;
-    use xarTimerTrait;  // activate with self::$enableTimer = true
-    use xarCacheTrait;  // activate with self::$enableCache = true
+    use TimerTrait;  // activate with self::$enableTimer = true
+    use CacheTrait;  // activate with self::$enableCache = true
 
     public static string $endpoint = 'rst.php/v1';
     /** @var array<string, mixed> */

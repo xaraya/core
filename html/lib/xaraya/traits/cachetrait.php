@@ -4,9 +4,12 @@
  *
  * Usage:
  *
- * class myFancyClass
+ * use Xaraya\Core\Traits\CacheInterface;
+ * use Xaraya\Core\Traits\CacheTrait;
+ *
+ * class myFancyClass implements CacheInterface
  * {
- *     use xarCacheTrait;
+ *     use CacheTrait;  // activate with self::$enableCache = true
  *
  *     public function __construct()
  *     {
@@ -48,10 +51,16 @@
  *
  * @author mikespub <mikespub@xaraya.com>
 **/
+
+namespace Xaraya\Core\Traits;
+
+use xarCache;
+use xarVariableCache;
+
 /**
- * For documentation purposes only - available via xarCacheTrait
+ * For documentation purposes only - available via CacheTrait
  */
-interface xarCacheTraitInterface
+interface CacheInterface
 {
     /**
      * Summary of setCacheScope
@@ -131,7 +140,7 @@ interface xarCacheTraitInterface
 /**
  * Summary of xarCacheTrait
  */
-trait xarCacheTrait
+trait CacheTrait
 {
     public static bool $enableCache = false;  // activate with self::$enableCache = true
     public static string $_cacheScope = 'CacheTrait';
