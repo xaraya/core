@@ -118,17 +118,17 @@ function installer_adminapi_initialise(Array $args=array())
 
     // Run the function, check for existence
 
-    $initFunc = $osDirectory.'_'.$initfunc;
-    if (function_exists($initFunc)) {
-        $res = $initFunc();
+    $modInitFunc = $osDirectory.'_'.$initfunc;
+    if (function_exists($modInitFunc)) {
+        $res = $modInitFunc();
 
         if ($res == false) {
             // exception
-            throw new Exception('Core initialization failed!');
+            throw new Exception('Core initialization failed for ' . $modInitFunc);
         }
     } else {
         // modulename_init() not found?!
-        throw new FunctionNotFoundException($initFunc);
+        throw new FunctionNotFoundException($modInitFunc);
     }
 
     return true;
