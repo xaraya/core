@@ -14,10 +14,9 @@
 namespace Xaraya\DataObject\Export;
 
 use DataObject;
+use DataObjectDescriptor;
 use DataObjectList;
 use DataObjectMaster;
-use DataPropertyMaster;
-use VirtualObjectDescriptor;
 use BadParameterException;
 use Throwable;
 use xarCoreCache;
@@ -74,26 +73,8 @@ class PhpExporter extends JsonExporter
 
     public function addObjectDef($info, $objectdef)
     {
-        $args = $objectdef->descriptor->getArgs();
-        $propertyargs = $args['propertyargs'];
-        unset($args['propertyargs']);
-        $filepath = sys::varpath() . '/cache/variables/' . $objectdef->name . '.descriptor.php';
-        $output = "<?php\n\n\$object = " . var_export($args, true) . ";\nreturn \$object;\n";
-        file_put_contents($filepath, $output);
-        $filepath = sys::varpath() . '/cache/variables/' . $objectdef->name . '.properties.php';
-        $output = "<?php\n\n\$properties = [];\n";
-        foreach ($propertyargs as $propertyarg) {
-            if (!DataPropertyMaster::isPropertyEnabled($propertyarg)) {
-                continue;
-            }
-            $propertyarg = array_filter($propertyarg, function ($key) {
-                return !str_starts_with($key, 'object_');
-            }, ARRAY_FILTER_USE_KEY);
-            unset($propertyarg['_objectid']);
-            $output .= "\$properties[] = " . var_export($propertyarg, true) . ";\n";
-        }
-        $output .= "return \$properties;\n";
-        file_put_contents($filepath, $output);
+        $filepath = sys::varpath() . '/cache/variables/' . $objectdef->name . '-def.php';
+        static::exportDefinition($objectdef->descriptor, $filepath);
 
         $info .= '<?php
 
@@ -118,7 +99,7 @@ namespace Xaraya\DataObject\Generated;
  * Generated ' . $classname . ' class exported from DD DataObject configuration
  * with properties mapped to their ' . $objectclass . ' properties (experimental)
  *
- * Configuration saved in ' . $objectdef->name . '.descriptor.php and ' . $objectdef->name . '.properties.php
+ * Configuration saved in ' . $objectdef->name . '-def.php
  */
 class ' . $classname . ' extends GeneratedClass
 {
@@ -178,7 +159,7 @@ class ' . $classname . ' extends GeneratedClass
 
     /**
      * Summary of exportDefinition
-     * @param VirtualObjectDescriptor $descriptor
+     * @param DataObjectDescriptor $descriptor
      * @param string $filepath
      * @return string
      */
@@ -190,13 +171,7 @@ class ' . $classname . ' extends GeneratedClass
         $arrayargs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
         foreach ($arrayargs as $name) {
             if (!empty($info[$name]) && is_string($info[$name])) {
-                try {
-                    $value = unserialize($info[$name]);
-                    if ($value !== false) {
-                        $info[$name] = $value;
-                    }
-                } catch (Throwable $e) {
-                }
+                $info[$name] = static::tryUnserialize($info[$name]);
             }
         }
         $output = "<?php\n\n\$object = " . var_export($info, true) . ";\n";
@@ -206,11 +181,26 @@ class ' . $classname . ' extends GeneratedClass
                 return !str_starts_with($key, 'object_');
             }, ARRAY_FILTER_USE_KEY);
             unset($propertyarg['_objectid']);
+            if (!empty($propertyarg['configuration']) && is_string($propertyarg['configuration'])) {
+                $propertyarg['configuration'] = static::tryUnserialize($propertyarg['configuration']);
+            }
             $output .= "\$properties[] = " . var_export($propertyarg, true) . ";\n";
         }
         $output .= "\$object['propertyargs'] = \$properties;\nreturn \$object;\n";
         file_put_contents($filepath, $output);
         return $filepath;
+    }
+
+    public static function tryUnserialize($serialized)
+    {
+        try {
+            $value = unserialize($serialized);
+            if ($value !== false) {
+                $serialized = $value;
+            }
+        } catch (Throwable $e) {
+        }
+        return $serialized;
     }
 
     /**

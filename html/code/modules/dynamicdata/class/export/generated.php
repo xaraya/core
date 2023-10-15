@@ -344,15 +344,26 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
     public static function getDescriptorArgs()
     {
         if (empty(static::$_descriptorArgs)) {
-            $filepath = sys::varpath() . '/cache/variables/' . static::$_objectName . '.descriptor.php';
+            $filepath = sys::varpath() . '/cache/variables/' . static::$_objectName . '-def.php';
             if (!is_file($filepath)) {
                 throw new Exception('No descriptor cached yet - you need to export this object to php first');
             }
-            static::$_descriptorArgs = require $filepath;
+            $args = require $filepath;
+            $arrayArgs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
+            foreach ($arrayArgs as $name) {
+                if (isset($args[$name]) && is_array($args[$name])) {
+                    $args[$name] = serialize($args[$name]);
+                }
+            }
+            $args['propertyargs'] ??= [];
+            foreach ($args['propertyargs'] as $idx => $propertyArg) {
+                if (isset($propertyArg['configuration']) && is_array($propertyArg['configuration'])) {
+                    $args['propertyargs'][$idx]['configuration'] = serialize($propertyArg['configuration']);
+                }
+            }
+            static::$_descriptorArgs = $args;
         }
-        $args = static::$_descriptorArgs;
-        $args['propertyargs'] = static::getPropertyArgs();
-        return $args;
+        return static::$_descriptorArgs;
     }
 
     /**
@@ -361,14 +372,8 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
      */
     public static function getPropertyArgs()
     {
-        if (empty(static::$_propertyArgs)) {
-            $filepath = sys::varpath() . '/cache/variables/' . static::$_objectName . '.properties.php';
-            if (!is_file($filepath)) {
-                throw new Exception('No properties cached yet - you need to export this object to php first');
-            }
-            static::$_propertyArgs = require $filepath;
-        }
-        return static::$_propertyArgs;
+        $args = static::getDescriptorArgs();
+        return $args['propertyargs'] ?? [];
     }
 
     /**

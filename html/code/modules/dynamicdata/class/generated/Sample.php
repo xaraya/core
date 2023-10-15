@@ -13,7 +13,7 @@ use DeferredListProperty;
  * Generated Sample class exported from DD DataObject configuration
  * with properties mapped to their DataObject properties (experimental)
  *
- * Configuration saved in sample.descriptor.php and sample.properties.php
+ * Configuration saved in sample-def.php
  */
 class Sample extends GeneratedClass
 {

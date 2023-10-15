@@ -32,10 +32,16 @@ class PhpImporter extends DataObjectImporter
     public static function importDefinition($filepath, $offline = false)
     {
         $args = include $filepath;
-        $arrayargs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
-        foreach ($arrayargs as $name) {
-            if (!empty($args[$name]) && is_array($args[$name])) {
+        $arrayArgs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
+        foreach ($arrayArgs as $name) {
+            if (isset($args[$name]) && is_array($args[$name])) {
                 $args[$name] = serialize($args[$name]);
+            }
+        }
+        $args['propertyargs'] ??= [];
+        foreach ($args['propertyargs'] as $idx => $propertyArg) {
+            if (isset($propertyArg['configuration']) && is_array($propertyArg['configuration'])) {
+                $args['propertyargs'][$idx]['configuration'] = serialize($propertyArg['configuration']);
             }
         }
         $descriptor = new VirtualObjectDescriptor($args, $offline);
