@@ -100,6 +100,18 @@ class JsonImporter extends DataObjectImporter
      */
     public static function getObjectDescriptor($args, $offline = false)
     {
+        $args = static::prepareDescriptorArgs($args);
+        $descriptor = new VirtualObjectDescriptor($args, $offline);
+        return $descriptor;
+    }
+
+    /**
+     * Summary of prepareDescriptorArgs
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     */
+    public static function prepareDescriptorArgs($args)
+    {
         $arrayArgs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
         foreach ($arrayArgs as $name) {
             if (isset($args[$name]) && is_array($args[$name])) {
@@ -112,7 +124,6 @@ class JsonImporter extends DataObjectImporter
                 $args['propertyargs'][$idx]['configuration'] = serialize($propertyArg['configuration']);
             }
         }
-        $descriptor = new VirtualObjectDescriptor($args, $offline);
-        return $descriptor;
+        return $args;
     }
 }

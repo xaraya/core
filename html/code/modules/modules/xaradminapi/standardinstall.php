@@ -35,18 +35,41 @@ function modules_adminapi_standardinstall(Array $args=array())
             $dat_file = sys::code() . 'modules/' . $module . '/xardata/'.$name.'-dat.xml';
 
             $data = array('file' => $def_file, 'keepitemid' => false);
+            // @deprecated 2.4.0 no additional object arguments supported since Jamaica
             if (is_array($dd_object)) {
                 // pass the args we received though to the import routine
                 // (and from there to the class(es) that will use them
                 $data = array_merge($data,$dd_object);
             }
 
+            // check for $name-def.xml file if available
+            if (file_exists($def_file)) {
+                $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+                if (!$objectid) return;
+                else $dd_objects[$name] = $objectid;
+            
+                // Let data import be allowed to be empty
+                if (file_exists($dat_file)) {
+                    $data['file'] = $dat_file;
+                    // And allow it to fail for now
+                    $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
+                }
+                continue;
+            }
+
+            // check for $name-def.php file if available
+            if (!file_exists(str_replace('.xml', '.php', $def_file))) {
+                throw new BadParameterException($def_file, 'Invalid importfile "#(1)"');
+            }
+            $def_file = str_replace('.xml', '.php', $def_file);
+            $data = ['file' => $def_file, 'format' => 'php'];
             $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
             if (!$objectid) return;
             else $dd_objects[$name] = $objectid;
-        
+
+            $dat_file = str_replace('.xml', '.php', $dat_file);
             // Let data import be allowed to be empty
-            if(file_exists($dat_file)) {
+            if (file_exists($dat_file)) {
                 $data['file'] = $dat_file;
                 // And allow it to fail for now
                 $objectid = xarMod::apiFunc('dynamicdata','util','import', $data);
