@@ -124,6 +124,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
             $sql = xarDB__oracleCreateTable($tableName, $fields, $charset);
             break;
         case 'sqlite':
+        case 'sqlite3':
         case 'pdosqlite':
             sys::import('xaraya.tableddl.sqlite');
             $sql = xarDB__sqliteCreateTable($tableName, $fields, $charset);
@@ -196,6 +197,7 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
             $sql = xarDB__oracleAlterTable($tableName, $args);
             break;
         case 'sqlite':
+        case 'sqlite3':
         case 'pdosqlite':
             sys::import('xaraya.tableddl.sqlite');
             $sql = xarDB__sqliteAlterTable($tableName, $args);
@@ -242,6 +244,7 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
+        case 'sqlite3':
         case 'pdosqlite':
             $sql = 'DROP TABLE '.$tableName;
             break;
@@ -304,6 +307,7 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
+        case 'sqlite3':
         case 'pdosqlite':
             if ($index['unique'] == true) {
                 $sql = 'CREATE UNIQUE INDEX '.$index['name'].' ON '.$tableName;
@@ -360,6 +364,7 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         case 'oci8':
         case 'oci8po':
         case 'sqlite':
+        case 'sqlite3':
         case 'pdosqlite':
             $sql = 'DROP INDEX '.$index['name'];
             break;
@@ -418,6 +423,7 @@ class xarXMLInstaller extends xarObject
         
         if (!isset($xmlFile))
             throw new BadParameterException(xarML('No file to transform!'));
+        // @todo we would need an sqlite version of the .xsl here to get transform working for sqlite here...
         if (!isset($xslFile))
             $xslFile = sys::lib() . '/xaraya/tableddl/xml2ddl-'. $dbName . '.xsl';
         if (!file_exists($xslFile)) {

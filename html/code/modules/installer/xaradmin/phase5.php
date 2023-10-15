@@ -61,6 +61,7 @@ function installer_admin_phase5()
     $version_ok = false;
     
     // Cater to SQLite before trying to connect
+    $dbPathName = $dbName;
     if (in_array($dbType, array('sqlite', 'sqlite3'))) {
         switch ($dbType) {
             case 'sqlite':
@@ -72,10 +73,13 @@ function installer_admin_phase5()
         }
         if ($version_ok) {
             // Create the database in the directory we want, otherwise it will be created below
-            @mkdir(sys::varpath() . '/sqlite', 0755);
+            if (!is_dir(sys::varpath() . '/sqlite')) {
+                mkdir(sys::varpath() . '/sqlite', 0755);
+            }
             try {
                 $dbpath = sys::varpath() . '/sqlite/';
-                $db = new SQLite3($dbpath . $dbName); 
+                $db = new SQLite3($dbpath . $dbName);
+                $dbPathName = $dbpath . $dbName;
             } catch(Exception $e){
                  echo $e->getMessage(); 
                  exit;
@@ -88,7 +92,7 @@ function installer_admin_phase5()
 
     // Save config data
     $config_args = array('dbHost'    => $dbHost,
-                         'dbName'    => $dbName,
+                         'dbName'    => $dbPathName,
                          'dbUname'   => $dbUname,
                          'dbPass'    => $dbPass,
                          'dbPrefix'  => $dbPrefix,
@@ -103,7 +107,7 @@ function installer_admin_phase5()
                         'databaseHost'       => $dbHost,
                         'databasePort'       => $dbPort,
                         'databaseType'       => $dbType,
-                        'databaseName'       => $dbName,
+                        'databaseName'       => $dbPathName,
                         'databaseCharset'    => $dbCharset,
                         'prefix'             => $dbPrefix,
                         'doConnect'          => false);
@@ -258,6 +262,7 @@ function installer_admin_phase5()
     // 1. Load base and modules module
     $modules = array('base','modules');
     foreach ($modules as $module) {
+        // @todo it's over for sqlite here because we're missing a specific .xsl transform in tableddl
         if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;
     }
 
