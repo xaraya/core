@@ -14,21 +14,19 @@
 namespace Xaraya\DataObject\Import;
 
 use DataObject;
+use DataObjectDescriptor;
 use DataObjectMaster;
 use DataPropertyMaster;
-use VirtualObjectDescriptor;
 use xarDB;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.master');
-sys::import('modules.dynamicdata.class.objects.virtual');
 sys::import('modules.dynamicdata.class.import.xmlimporter');
 sys::import('modules.dynamicdata.class.import.jsonimporter');
 sys::import('modules.dynamicdata.class.import.phpimporter');
 
 /**
  * DataObject Importer
- * @todo split object and items import + support other formats besides xml
  */
 class DataObjectImporter
 {
@@ -54,8 +52,7 @@ class DataObjectImporter
     {
         $this->proptypes = DataPropertyMaster::getPropertyTypes();
 
-        $this->prefix = $prefix ?? xarDB::getPrefix();
-        $this->prefix .= '_';
+        $this->prefix = $prefix ?? (xarDB::getPrefix() . '_');
         $this->overwrite = $overwrite;
         $this->keepitemid = $keepitemid;
     }
@@ -63,8 +60,8 @@ class DataObjectImporter
     /**
      * Import an object definition or an object item from XML, PHP or JSON
      *
-     * @param ?string $file location of the .xml file containing the object definition, or
-     * @param ?string $content XML/PHP/JSON string containing the object definition
+     * @param ?string $file location of the .xml/.php/.json file containing the object definition, or
+     * @param ?string $content XML/-/JSON string containing the object definition
      * @param string $format import format to use (default xml)
      * @param ?string $prefix table prefix for local database installation (default xarDB prefix)
      * @param bool $overwrite overwrite existing object definition (default false)
@@ -83,7 +80,12 @@ class DataObjectImporter
         // @todo allow non-prefixed table names someday
         $prefix .= '_';
 
-        $importer = new XmlImporter($prefix, $overwrite, $keepitemid);
+        $importer = match ($format) {
+            'php' => new PhpImporter($prefix, $overwrite, $keepitemid),
+            'json' => new JsonImporter($prefix, $overwrite, $keepitemid),
+            default => new XmlImporter($prefix, $overwrite, $keepitemid),
+        };
+
         return $importer->importContent($file, $content);
     }
 
@@ -123,7 +125,7 @@ class DataObjectImporter
 
     /**
      * Summary of createObject
-     * @param VirtualObjectDescriptor $descriptor
+     * @param DataObjectDescriptor $descriptor
      * @return int|mixed
      */
     public static function createObject($descriptor)

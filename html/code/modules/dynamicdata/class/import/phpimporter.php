@@ -14,6 +14,7 @@
 namespace Xaraya\DataObject\Import;
 
 use VirtualObjectDescriptor;
+use BadParameterException;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.virtual');
@@ -21,8 +22,63 @@ sys::import('modules.dynamicdata.class.objects.virtual');
 /**
  * DataObject PHP Importer
  */
-class PhpImporter extends DataObjectImporter
+class PhpImporter extends JsonImporter
 {
+    /**
+     * Summary of importContent
+     * @param ?string $filepath
+     * @param ?string $content not applicable for php importer
+     * @throws \BadParameterException
+     * @return mixed
+     */
+    public function importContent($filepath = null, $content = null)
+    {
+        if (empty($filepath) || !file_exists($filepath)) {
+            throw new BadParameterException($filepath, 'Invalid import filepath "#(1)"');
+        }
+        if (!str_ends_with($filepath, '.php')) {
+            throw new BadParameterException($filepath, 'Invalid import filetype "#(1)"');
+        }
+
+        $objectid = 0;
+        if (str_contains($filepath, '-def.')) {
+            $objectid = $this->importObjectDef($filepath);
+
+        } elseif (str_contains($filepath, '-dat.')) {
+            $objectid = $this->importItems($filepath);
+
+        } else {
+            throw new BadParameterException($filepath, 'Invalid import filename "#(1)"');
+
+        }
+
+        return $objectid;
+    }
+
+    /**
+     * Summary of importObjectDef
+     * @param string $filepath
+     * @return int|mixed
+     */
+    public function importObjectDef($filepath)
+    {
+        $descriptor = static::importDefinition($filepath);
+        $objectid = static::createObject($descriptor);
+        return $objectid;
+    }
+
+    /**
+     * Summary of importItems
+     * @param string $filepath
+     * @return mixed
+     */
+    public function importItems($filepath)
+    {
+        $items = include $filepath;
+        // @todo import object items someday? See export :-)
+        return count($items);
+    }
+
     /**
      * Summary of importDefinition
      * @param string $filepath
@@ -32,19 +88,6 @@ class PhpImporter extends DataObjectImporter
     public static function importDefinition($filepath, $offline = false)
     {
         $args = include $filepath;
-        $arrayArgs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
-        foreach ($arrayArgs as $name) {
-            if (isset($args[$name]) && is_array($args[$name])) {
-                $args[$name] = serialize($args[$name]);
-            }
-        }
-        $args['propertyargs'] ??= [];
-        foreach ($args['propertyargs'] as $idx => $propertyArg) {
-            if (isset($propertyArg['configuration']) && is_array($propertyArg['configuration'])) {
-                $args['propertyargs'][$idx]['configuration'] = serialize($propertyArg['configuration']);
-            }
-        }
-        $descriptor = new VirtualObjectDescriptor($args, $offline);
-        return $descriptor;
+        return static::getObjectDescriptor($args, $offline);
     }
 }
