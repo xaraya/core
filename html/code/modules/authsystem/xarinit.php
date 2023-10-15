@@ -44,8 +44,9 @@ function authsystem_init()
     $result = $dbconn->Execute($query,$bindvars);
     if (!$result) return;
 
-    // Installation complete; check for upgrades
-    return authsystem_upgrade('2.0.0');
+    // Installation complete; don't upgrade twice on same version
+    //return authsystem_upgrade('2.0.0');
+    return true;
 }
 
 /**
