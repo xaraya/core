@@ -40,6 +40,15 @@ class xarDB_PDO extends xarObject
  */
     public static function newConn(array $args = null)
     {
+        // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
+        if ($args['databaseType'] == 'sqlite3') {
+            $args['databaseName'] ??= ':memory:';
+            $args['databaseHost'] ??= '';
+            $args['databasePort'] ??= '';
+            $args['userName'] ??= '';
+            $args['password'] ??= '';
+            $args['databaseCharset'] ??= 'utf8';
+        }
         // Get database parameters
         $dsn = array('phptype'   => $args['databaseType'],
                      'hostspec'  => $args['databaseHost'],
@@ -60,7 +69,7 @@ class xarDB_PDO extends xarObject
         $flags[] = PDO::CASE_LOWER;
 
         try {
-            $conn = xarDB::getConnection($dsn,$flags); // cached on dsn hash, so no worries
+            $conn = self::getConnection($dsn,$flags); // cached on dsn hash, so no worries
         } catch (Exception $e) {
             throw $e;
         }
@@ -155,12 +164,18 @@ class xarDB_PDO extends xarObject
 
     public static function getConnection($dsn, $flags=array())
     {
-    $dsn['phptype'] = 'mysql';
-        // CHECKME: What about ports?
-        $dsnstring  = $dsn['phptype'] . ':host=' . $dsn['hostspec'] . ';';
-        if (!empty($dsn['port'])) $dsnstring .= 'port=' . $dsn['port'] . ";";
-        $dsnstring .= 'dbname=' . $dsn['database'] . ";";
-        $dsnstring .= 'charset=' . $dsn['encoding'] . ";";
+        $dsn['phptype'] ??= 'mysql';
+        if ($dsn['phptype'] == 'sqlite3') {
+            $dsn['phptype'] = 'sqlite';
+            $dsnstring  = $dsn['phptype'] . ':' . $dsn['database'];
+        } else {
+            $dsn['phptype'] = 'mysql';
+            // CHECKME: What about ports?
+            $dsnstring  = $dsn['phptype'] . ':host=' . $dsn['hostspec'] . ';';
+            if (!empty($dsn['port'])) $dsnstring .= 'port=' . $dsn['port'] . ";";
+            $dsnstring .= 'dbname=' . $dsn['database'] . ";";
+            $dsnstring .= 'charset=' . $dsn['encoding'] . ";";
+        }
 
         try {
             $conn = new xarPDO($dsnstring, $dsn['username'], $dsn['password'], $flags);
@@ -201,6 +216,7 @@ class xarPDO extends PDO
     public $row_count     = 0; 
     public $last_id       = null; 
     public $dblink        = null;
+    public $driverName    = "mysql";
 
     public function __construct($dsn, $username, $password, $options)
     {
@@ -209,6 +225,7 @@ class xarPDO extends PDO
         } catch (Exception $e) {
             throw $e;
         }
+        $this->driverName = $this->getAttribute(PDO::ATTR_DRIVER_NAME);
         // Force PDO to prepare statements
         // CHECKME: setting this to false gives an error with some INSERT statements
         // (missing modules in modules_adminapi_regenerate)
@@ -661,13 +678,16 @@ class PDODatabaseInfo extends xarObject
      */
     private function initTables()
     {
-        //$sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
         // get the list of all tables
-        $sql = "SHOW TABLES";
+        if ($this->pdo->driverName == 'sqlite') {
+            $sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
+        } else {
+            $sql = "SHOW TABLES";
+        }
         try {
             $pdostatement = $this->pdo->query($sql);
         } catch (PDOException $e) {
-            throw new PDOException('Could not list tables', $e->getMessage(), $sql);
+            throw new PDOException('Could not list tables ' . $e->getMessage() . ': ' . $sql);
         }
         while ($row = $pdostatement->fetch()) {
             $thistable = $this->initTable($row[0]);
