@@ -77,6 +77,13 @@ interface DatabaseInterface
     public static function addDatabase($name, $database, $save = false);
 
     /**
+     * Summary of saveDatabases
+     * @param ?array<string, mixed> $databases
+     * @return void
+     */
+    public static function saveDatabases($databases = null);
+
+    /**
      * Summary of connectDatabase
      * @param string $name
      * @return int|null
@@ -182,8 +189,19 @@ trait DatabaseTrait
             static::$_databases[$name] = $database;
         }
         if ($save) {
-            xarModVars::set(static::$moduleName, 'databases', serialize(static::$_databases));
+            static::saveDatabases();
         }
+    }
+
+    /**
+     * Summary of saveDatabases
+     * @param ?array<string, mixed> $databases
+     * @return void
+     */
+    public static function saveDatabases($databases = null)
+    {
+        $databases ??= static::$_databases;
+        xarModVars::set(static::$moduleName, 'databases', serialize($databases));
     }
 
     /**
@@ -239,6 +257,9 @@ trait DatabaseTrait
         $databases = static::getDatabases();
         if (!isset($databases[$name])) {
             throw new BadParameterException($name, 'Invalid database name #(1)');
+        }
+        if (!empty($databases[$name]['disabled'])) {
+            throw new BadParameterException($name, 'Disabled database name #(1)');
         }
         return $databases[$name];
     }
