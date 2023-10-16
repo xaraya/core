@@ -70,10 +70,11 @@ interface DatabaseInterface
     /**
      * Summary of addDatabase
      * @param string $name
-     * @param array<mixed> $database
+     * @param ?array<mixed> $database db connection args, or null to delete
+     * @param bool $save save changes to module vars (default false)
      * @return void
      */
-    public static function addDatabase($name, $database);
+    public static function addDatabase($name, $database, $save = false);
 
     /**
      * Summary of connectDatabase
@@ -171,6 +172,7 @@ trait DatabaseTrait
      */
     public static function addDatabase($name, $database, $save = false)
     {
+        // allow starting with un-initialized $_databases = before calling getDatabases()
         static::$_databases ??= [];
         if (empty($database)) {
             unset(static::$_databases[$name]);
