@@ -1,6 +1,7 @@
 <?php
 /**
  * Creole wrapper class
+ * @todo stop extending Creole for xarDB_Creole class
  *
  * The idea here is to put all deviations/additions/correction from creole
  * into this class. All generic improvement should be  pushed upstream obviously
@@ -17,6 +18,7 @@
  */
 sys::import('creole.Creole');
 
+// @todo why do we extend Creole here again? None of it except a few const and getConnection() are used...
 class xarDB_Creole extends Creole
 {
     public static $count = 0;
@@ -59,13 +61,13 @@ public static function newConn(array $args = null)
     // Set flags
     $flags = 0;
     $persistent = !empty($args['persistent']) ? true : false;
-    if($persistent) $flags |= self::PERSISTENT;
+    if($persistent) $flags |= Creole::PERSISTENT;
     // if code uses assoc fetching and makes a mess of column names, correct
     // this by forcing returns to be lowercase
     // <mrb> : this is not for nothing a COMPAT flag. the problem still lies
     //         in creating the database schema case sensitive in the first
     //         place. Unfortunately, that is just not portable.
-    $flags |= self::COMPAT_ASSOC_LOWER;
+    $flags |= Creole::COMPAT_ASSOC_LOWER;
 
     try {
         $conn = self::getConnection($dsn,$flags); // cached on dsn hash, so no worries
@@ -160,7 +162,7 @@ public static function newConn(array $args = null)
     public static function getConnection($dsn, $flags = 0)
     {
         try {
-            $conn = parent::getConnection($dsn, $flags);
+            $conn = Creole::getConnection($dsn, $flags);
         } catch (Exception $e) {
             throw $e;
         }

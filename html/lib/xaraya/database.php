@@ -1,6 +1,7 @@
 <?php
 /**
  * Creole Database Abstraction Layer API Helpers
+ * @todo review how xarDB is defined here + fix ResultSet mess + stop extending Creole for xarDB_Creole class
  *
  * @package core
  * @subpackage database
@@ -15,12 +16,14 @@
 
 $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
 
+// @todo get rid of this conditional class extension - use a common proxy or decorator instead?
 if ($middleware == 'Creole') {
 
     // Import our db abstraction layer
     // Theoretically any adodb like layer could come in here.
     sys::import('xaraya.creole');
     class xarDB extends xarDB_Creole {}
+    // ResultSet is an interface with Creole constants here
 
     /**
      * Initializes the database connection.
@@ -50,7 +53,8 @@ if ($middleware == 'Creole') {
 
         // Register postgres driver, since Creole uses a slightly different alias
         // We do this here so we can remove customisation from creole lib.
-        xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
+        // @deprecated 2.4.0 postgres hasn't been supported for a long time now
+        //Creole::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
 
         if(!isset($args['doConnect']) or $args['doConnect']) {
             try {
@@ -82,6 +86,7 @@ if ($middleware == 'Creole') {
     sys::import('xaraya.pdo');
     class xarDB     extends xarDB_PDO {}
     class ResultSet extends PDOResultSet {}
+    // ResultSet is a class with different PDO constants here
 
     /**
      * Initializes the database connection.

@@ -920,6 +920,7 @@ class PDOResultSet extends xarObject
         // We may not have a PDOSTatment
         if ($pdostatement==null) return;
 
+        // @todo why don't we re-map the flags here, instead of re-defining ResultSet constants for everyone?
         $this->fetchflag = empty($flag) ? self::FETCHMODE_NUM : $flag;
         $this->pdostatement = $pdostatement;
         $this->array = $this->pdostatement->fetchAll($this->fetchflag);
@@ -1000,6 +1001,7 @@ class PDOResultSet extends xarObject
 
     public function setFetchMode($flag)
     {
+        // @todo why don't we re-map the flags here, instead of re-defining ResultSet constants for everyone?
         if ($this->fetchflag == $flag) return true;
         $this->fetchflag = $flag;
         $this->pdostatement->closeCursor();
