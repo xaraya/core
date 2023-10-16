@@ -1,9 +1,9 @@
 <?php
 /**
- * Trait to trace time
+ * Trait to trace time and record steps taken
  *
  * Usage:
- *
+ * ```
  * use Xaraya\Core\Traits\TimerInterface;
  * use Xaraya\Core\Traits\TimerTrait;
  *
@@ -33,7 +33,7 @@
  *         return $result;
  *     }
  * }
- *
+ * ```
  * @package core\traits
  * @subpackage traits
  * @category Xaraya Web Applications Framework
@@ -59,6 +59,9 @@ interface TimerInterface
     public static function wrapTimer(string $label, callable $callback, ...$args): mixed;
 }
 
+/**
+ * Trait to trace time and record steps taken
+ */
 trait TimerTrait
 {
     public static bool $enableTimer = false;  // activate with self::$enableTimer = true
@@ -94,6 +97,10 @@ trait TimerTrait
 
     /**
      * Utility method to set timer on callback function
+     * @param string $label
+     * @param callable $callback
+     * @param array<mixed> $args
+     * @return mixed
      */
     public static function wrapTimer(string $label, callable $callback, ...$args): mixed
     {

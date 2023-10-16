@@ -57,7 +57,7 @@ interface ItemLinksInterface
 trait ItemLinksTrait
 {
     //protected static int $moduleId = 123456;
-    //protected static string $moduleName = 'OVERRIDE';
+    //protected static int $itemtype = 0;
     /** @var array<string, mixed> */
     protected static array $_itemlinkObjects = [];
 
@@ -76,6 +76,11 @@ trait ItemLinksTrait
             /** @var array<string, mixed> $objectinfo */
             if (intval($objectinfo['moduleid']) !== static::$moduleId) {
                 continue;
+            }
+            if (property_exists(static::class, 'itemtype')) {
+                if (intval($objectinfo['itemtype']) > static::$itemtype) {
+                    static::$itemtype = intval($objectinfo['itemtype']);
+                }
             }
             static::$_itemlinkObjects[$objectinfo['name']] = $objectinfo;
         }

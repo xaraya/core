@@ -48,7 +48,7 @@ UserApi::setCurrentDatabase('test');
 if ($offline or true) {
     // add database before we get to dbConnArgs - this avoids using xarModVars (not initialized)
     $filepath = dirname(__DIR__, 3).'/html/code/modules/library/xardata/metadata.db';
-    UserApi::addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath]);
+    UserApi::addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath], false);
 }
 
 $booklist = new LibraryObjectList($descriptor);

@@ -30,8 +30,23 @@ interface UserApiInterface extends ItemLinksInterface
 }
 
 /**
- * Trait to handle generic user api functions
- * for modules with their own DD objects
+ * Trait to handle generic user api functions for modules with their own DD objects
+ *
+ * Example:
+ * ```
+ * use Xaraya\DataObject\Traits\UserApiInterface;
+ * use Xaraya\DataObject\Traits\UserApiTrait;
+ * use sys;
+ *
+ * sys::import('modules.dynamicdata.class.traits.userapi');
+ *
+ * class MyClassApi implements UserApiInterface
+ * {
+ *     use UserApiTrait;
+ *     protected static int $moduleId = 18252;
+ *     protected static int $itemtype = 0;
+ * }
+ * ```
  */
 trait UserApiTrait
 {

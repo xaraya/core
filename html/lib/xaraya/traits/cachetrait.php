@@ -3,7 +3,7 @@
  * Trait to cache variables in other classes
  *
  * Usage:
- *
+ * ```
  * use Xaraya\Core\Traits\CacheInterface;
  * use Xaraya\Core\Traits\CacheTrait;
  *
@@ -40,6 +40,7 @@
  *         return $item;
  *     }
  * }
+ * ```
  *
  * @package core\traits
  * @subpackage traits

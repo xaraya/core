@@ -1,9 +1,11 @@
 <?php
 /**
- * Trait to handle module- or object-specific database connections
- * See xaraya/library for an example connecting to sqlite3 databases
+ * Trait to handle module- or object-specific database connections.
+ * See https://github.com/xaraya-modules/library module for an example connecting to sqlite3 databases
  *
  * In modules, you can specify the database(s) by setting module vars:
+ * ```
+ * $moduleName = 'library';
  * $databases = [
  *     'test' => [
  *         'name' => 'test',
@@ -13,15 +15,22 @@
  *         // ...other DB params for mysql/mariadb
  *     ],
  * ];
- * xarModVars::set($module, 'databases', serialize($databases));
- * xarModVars::set($module, 'dbName', 'test');
+ * xarModVars::set($moduleName, 'databases', serialize($databases));
+ * xarModVars::set($moduleName, 'dbName', 'test');
+ * ```
  *
  * In objects, you can specify the DB connection args by setting config: (work in progress)
+ * ```
+ * use Xaraya\Modules\Library\UserApi;
+ *
  * $config = ['dbConnIndex' => 1, 'dbConnArgs' => json_encode([UserApi::class, 'getDbConnArgs'])];
  * $descriptor->set('config', serialize($config));
+ * ```
  *
  * If you support more than 1 database (besides the Xaraya DB), you can set the current DB for the user with:
- * static::setCurrentDatabase($name)
+ * ```
+ * UserApi::setCurrentDatabase($name)
+ * ```
  *
  * @package core\traits
  * @subpackage traits
@@ -112,6 +121,23 @@ interface DatabaseInterface
 
 /**
  * Trait to handle module- or object-specific database connections
+ *
+ * Usage:
+ * ```
+ * namespace Xaraya\Modules\Library;
+ *
+ * use Xaraya\Core\Traits\DatabaseInterface;
+ * use Xaraya\Core\Traits\DatabaseTrait;
+ * use sys;
+ *
+ * sys::import('xaraya.traits.databasetrait');
+ *
+ * class UserApi implements DatabaseInterface
+ * {
+ *     use DatabaseTrait;
+ *     protected static string $moduleName = 'library';
+ * }
+ * ```
  */
 trait DatabaseTrait
 {
@@ -129,6 +155,9 @@ trait DatabaseTrait
     {
         if (empty(static::$_databases)) {
             static::$_databases = unserialize(xarModVars::get(static::$moduleName, 'databases'));
+            if (empty(static::$_databases)) {
+                static::$_databases = [];
+            }
         }
         return static::$_databases;
     }
@@ -136,15 +165,23 @@ trait DatabaseTrait
     /**
      * Summary of addDatabase
      * @param string $name
-     * @param array<mixed> $database
+     * @param ?array<mixed> $database db connection args, or null to delete
+     * @param bool $save save changes to module vars (default false)
      * @return void
      */
-    public static function addDatabase($name, $database)
+    public static function addDatabase($name, $database, $save = false)
     {
         static::$_databases ??= [];
-        $database['name'] ??= $name;
-        $database['description'] ??= ucwords(str_replace('_', ' ', $name));
-        static::$_databases[$name] = $database;
+        if (empty($database)) {
+            unset(static::$_databases[$name]);
+        } else {
+            $database['name'] ??= $name;
+            $database['description'] ??= ucwords(str_replace('_', ' ', $name));
+            static::$_databases[$name] = $database;
+        }
+        if ($save) {
+            xarModVars::set(static::$moduleName, 'databases', serialize(static::$_databases));
+        }
     }
 
     /**
