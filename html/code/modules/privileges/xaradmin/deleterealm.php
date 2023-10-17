@@ -29,7 +29,7 @@ function privileges_admin_deleterealm()
     $query = "SELECT id, name FROM $tbl WHERE id = ?";
     $bindvars[] = $id;
     $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+    $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
     if(!$result) return;
     while($result->next())
     {
@@ -56,7 +56,7 @@ function privileges_admin_deleterealm()
     $query = "DELETE FROM $tbl WHERE id = ?";
     $stmt = $dbconn->prepareStatement($query);
     $bindvars[] = $result_id;
-    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+    $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
 
 // Hmm... what do we do about hooks?
 //xarModHooks::call('item', 'delete', $id, '');

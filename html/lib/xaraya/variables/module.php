@@ -75,7 +75,7 @@ class xarModVars extends xarVars implements IxarModVars
         $bindvars = array((int)$modBaseInfo['systemid'],$name);
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery($bindvars,xarDB::FETCHMODE_NUM);
 
         if($result->next())
         {
@@ -111,7 +111,7 @@ class xarModVars extends xarVars implements IxarModVars
 
         $query = "SELECT name, value FROM $module_varstable WHERE module_id = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($modBaseInfo['systemid']),ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery(array($modBaseInfo['systemid']),xarDB::FETCHMODE_ASSOC);
 
         while ($result->next()) {
             xarCoreCache::setCached('Mod.Variables.' . $scope, $result->getString('name'), $result->get('value'));
@@ -235,7 +235,7 @@ class xarModVars extends xarVars implements IxarModVars
         // Select the id's which need to be removed
         $sql="SELECT $module_varstable.id FROM $module_varstable WHERE $module_varstable.module_id = ?";
         $stmt = $dbconn->prepareStatement($sql);
-        $result = $stmt->executeQuery(array($modBaseInfo['systemid']), ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array($modBaseInfo['systemid']), xarDB::FETCHMODE_NUM);
 
         // Seems that at least mysql and pgsql support the scalar IN operator
         $idlist = array();
@@ -303,7 +303,7 @@ class xarModVars extends xarVars implements IxarModVars
 
         $query = "SELECT id FROM $module_varstable WHERE module_id = ? AND name = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array((int)$modBaseInfo['systemid'],$name),xarDB::FETCHMODE_NUM);
         // If there is no such thing, the callee is responsible, return null
         if(!$result->next()) return;
 

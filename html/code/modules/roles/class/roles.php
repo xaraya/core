@@ -71,7 +71,7 @@ class xarRoles extends xarObject
             $bindvars[] = self::ROLES_STATE_ACTIVE;
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
             if(!$result) return;            
             while($result->next()) $allgroups[] = $result->fields;
         }
@@ -99,7 +99,7 @@ class xarRoles extends xarObject
         $bindvars[] = self::ROLES_STATE_ACTIVE;
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         if(!$result) return;            
         while($result->next()) $group[] = $result->fields;
         if (!empty($group)) return $group;
@@ -337,7 +337,7 @@ class xarRoles extends xarObject
             $query .= " AND state = " . $state;
         }
         $stmt = self::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_ASSOC);
         if(!$result) return;            
         if($result->next()) $row = $result->fields;
         if (empty($row)) return;

@@ -22,7 +22,18 @@ if ($middleware == 'Creole') {
     // Import our db abstraction layer
     // Theoretically any adodb like layer could come in here.
     sys::import('xaraya.creole');
-    class xarDB extends xarDB_Creole {}
+    class xarDB extends xarDB_Creole
+    {
+        /**
+         * Index result set by field name.
+         */
+        public const FETCHMODE_ASSOC = 1;
+
+        /**
+         * Index result set numerically.
+         */
+        public const FETCHMODE_NUM = 2;
+    }
     // ResultSet is an interface with Creole constants here
 
     /**
@@ -84,7 +95,11 @@ if ($middleware == 'Creole') {
     // Import our db abstraction layer
     // Theoretically any adodb like layer could come in here.
     sys::import('xaraya.pdo');
-    class xarDB     extends xarDB_PDO {}
+    class xarDB     extends xarDB_PDO
+    {
+        public const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
+        public const FETCHMODE_NUM   = PDO::FETCH_NUM;
+    }
     // ResultSet is a class with different PDO constants here!?
     //class ResultSet extends PDOResultSet {}
     // see if we ever use this for anything other than the 2 constants

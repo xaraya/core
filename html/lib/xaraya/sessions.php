@@ -325,7 +325,7 @@ class xarSession extends xarObject implements IsessionHandler
     {
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->tbl WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
-        $result = $stmt->executeQuery(array($sessionId),ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array($sessionId),xarDB::FETCHMODE_NUM);
 
         if ($result->first()) {
             // Already have this session

@@ -405,7 +405,7 @@ class xarSecurity extends xarObject
             $query .= " AND itemtype = ? ";
             $bindvars[] = self::PRIVILEGES_MASKTYPE;
             $stmt = self::$dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
             if(!$result->next()) return; // Mask isn't there.
             $pargs = $result->getRow();
             if(is_null($pargs['realm']))  $pargs['realm']  = 'All';

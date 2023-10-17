@@ -371,7 +371,7 @@ class xarMod extends xarObject implements IxarMod
             break;
         }
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($modRegId),ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array($modRegId),xarDB::FETCHMODE_NUM);
 
         if (!$result->next()) {
             $result->close();
@@ -523,7 +523,7 @@ class xarMod extends xarObject implements IxarMod
         }
         $bindvars = array($modName, $modName);
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_NUM);
 
         if (!$result->next()) {
             $result->close();

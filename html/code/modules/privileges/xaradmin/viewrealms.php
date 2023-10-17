@@ -33,7 +33,7 @@ function privileges_admin_viewrealms()
 
     $query .= " ORDER BY name ";
     $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+    $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
     if (!$result) return;
     while($result->next())
     {

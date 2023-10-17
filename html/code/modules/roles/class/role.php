@@ -90,7 +90,7 @@ class Role extends DataObject
         }
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         if ($result->getRow() > 0) {
             $result = $result->row();
             throw new DuplicateException(array('role',($this->itemtype == xarRoles::ROLES_GROUPTYPE) ? $result['name'] :$result['uname'] ));
@@ -167,7 +167,7 @@ class Role extends DataObject
 
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         
         // If the relation already exists we are done
         while($result->next()) $row = $result->fields;
@@ -178,7 +178,7 @@ class Role extends DataObject
         $bindvars = array();
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
 
         // for children that are users
         // add 1 to the users field of the parent group. This is for display purposes.
@@ -190,7 +190,7 @@ class Role extends DataObject
             $query .= " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
             if (!$result) return;
             while($result->next()) $row = $result->fields;
 
@@ -200,7 +200,7 @@ class Role extends DataObject
             $query = "UPDATE  " . $this->rolestable . " SET users = " . $value . " WHERE id = ?";
             $bindvars[] =  $this->getID();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
 
         }
 
@@ -245,7 +245,7 @@ class Role extends DataObject
             $bindvars[] =  $this->getID();
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
             if (!$result) return;
             while($result->next()) $row = $result->fields;
 
@@ -257,7 +257,7 @@ class Role extends DataObject
             $bindvars[] =  $this->getID();
 
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         }
         $item['module']   = 'roles';
         $item['itemtype'] = $this->getType();
@@ -369,7 +369,7 @@ class Role extends DataObject
         $bindvars[] = $this->getID();
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         $item['module'] = 'roles';
         $item['itemid'] = $this->getID();
         $item['itemtype'] = $this->getType();
@@ -611,10 +611,10 @@ class Role extends DataObject
         if (isset($selection)) {
             $query = $selection;
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         } else {
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         }
         if($result) return;
         while ($result->next()) $row = $result->fields;
@@ -842,7 +842,7 @@ class Role extends DataObject
             $bindvars[] = $parent->getID();
 
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
             if (!$result) return;
             // get the current count.
             while ($result->next())
@@ -854,7 +854,7 @@ class Role extends DataObject
             $value = $row['users'] + $adjust;
             $bindvars[] = $value;
             $stmt = $dbconn->prepareStatement($query1);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
             if (!$result) return;
         }
         return true;

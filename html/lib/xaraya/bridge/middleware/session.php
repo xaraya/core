@@ -261,7 +261,7 @@ class SessionMiddleware implements MiddlewareInterface
     {
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->table WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
-        $result = $stmt->executeQuery([$sessionId], ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery([$sessionId], xarDB::FETCHMODE_NUM);
 
         if ($result->first()) {
             // Already have this session

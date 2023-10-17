@@ -130,7 +130,7 @@ class xarMasks extends xarSecurity
         $realmid = null;
         if($realm != 'All') {
             $stmt = self::$dbconn->prepareStatement('SELECT id FROM '.self::$realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($realm),ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery(array($realm),xarDB::FETCHMODE_ASSOC);
             if($result->next()) $realmid = $result->getInt('id');
         }
 

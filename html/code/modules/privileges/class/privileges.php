@@ -145,7 +145,7 @@ class xarPrivileges extends xarMasks
         $realmid = null;
         if($realm != 'All') {
             $stmt = parent::$dbconn->prepareStatement('SELECT id FROM '.parent::$realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($realm),ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery(array($realm),xarDB::FETCHMODE_ASSOC);
             if($result->next()) $realmid = $result->getInt('id');
         }
         if($module == 'All') {
@@ -233,7 +233,7 @@ class xarPrivileges extends xarMasks
                   " ORDER BY p.name";
         $stmt = parent::$dbconn->prepareStatement($query);
         // The fetchmode *needed* to be here, dunno why. Exception otherwise
-        $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_NUM);
         $allprivileges = array();
         while($result->next()) {
             list($id, $name, $role_id, $role_type, $role_name, $module, $component, $instance, $level,
@@ -285,7 +285,7 @@ class xarPrivileges extends xarMasks
                   " ORDER BY p.name";
         $stmt = parent::$dbconn->prepareStatement($query);
         // The fetchmode *needed* to be here, dunno why. Exception otherwise
-        $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_NUM);
         $allprivileges = array();
         while($result->next()) {
             list($id, $name, $realm, $module, $component, $instance, $level,
@@ -486,7 +486,7 @@ class xarPrivileges extends xarMasks
 
         $stmt = parent::$dbconn->prepareStatement($query);
         //Execute the query, bail if an exception was thrown
-        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE,$id),ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE,$id),xarDB::FETCHMODE_NUM);
 
         if ($result->next()) {
             list($id,$name,$realm,$module_id,$module,$component,$instance,$level,$description) = $result->fields;

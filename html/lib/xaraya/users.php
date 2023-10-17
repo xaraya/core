@@ -404,7 +404,7 @@ class xarUser extends xarObject
                 // We want the result as an associative array
                 // First get the field names
                 $fields = array();
-                $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
+                $result->setFetchMode(xarDB::FETCHMODE_ASSOC);
                 $result->next(); $result->previous();
                 $numfields = count($result->fields);
                 for ($i=0;$i< $numfields;$i++) {
@@ -412,7 +412,7 @@ class xarUser extends xarObject
                     $namefield  = key($tmp);
                     $fields[$namefield]['name'] = strtolower($namefield);
                 }
-                $result->setFetchMode(ResultSet::FETCHMODE_NUM);
+                $result->setFetchMode(xarDB::FETCHMODE_NUM);
                 $result->next(); $result->previous();
                 
                 // Now get the values
@@ -611,7 +611,7 @@ class xarUser extends xarObject
                   WHERE mods.id = roles.auth_module_id AND
                         roles.id = ?";
         $stmt =& $dbconn->prepareStatement($query);
-        $result =& $stmt->executeQuery(array($userId),ResultSet::FETCHMODE_NUM);
+        $result =& $stmt->executeQuery(array($userId),xarDB::FETCHMODE_NUM);
     
         if (!$result->next()) {
             // That user has never logon, strange, don't you think?

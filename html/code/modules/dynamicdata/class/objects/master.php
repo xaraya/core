@@ -1365,7 +1365,7 @@ class DataObjectMaster extends xarObject
 
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
 
             // put in itemtype as key for easier manipulation
             while ($result->next()) {

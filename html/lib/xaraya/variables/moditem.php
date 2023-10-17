@@ -65,7 +65,7 @@ class xarModItemVars extends xarVars implements IxarModItemVars
         $bindvars = array((int)$modvarid, (int)$itemid);
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars,ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery($bindvars,xarDB::FETCHMODE_NUM);
 
         if(!$result->next()) {
             // No value, return the modvar default

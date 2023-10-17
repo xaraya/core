@@ -122,7 +122,7 @@ function roles_userapi_get(Array $args=array())
         $query .= $queryWhere;
     }
     $stmt = $dbconn->prepareStatement($query);
-    $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+    $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
     // Check for no rows found, and if so return
     $result->next();
     $user = $result->getRow();

@@ -125,7 +125,7 @@ class xarConfigVars extends xarVars implements IxarVars
         $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
 
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array($name),ResultSet::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array($name),xarDB::FETCHMODE_NUM);
 
         if($result->next()) {
             // Found it, retrieve and cache it
@@ -184,7 +184,7 @@ class xarConfigVars extends xarVars implements IxarVars
         
         $query = "SELECT name, value FROM $varstable WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(), ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_ASSOC);
 
         while ($result->next())
         {

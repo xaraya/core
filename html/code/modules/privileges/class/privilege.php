@@ -60,7 +60,7 @@ class xarPrivilege extends xarMask
         $realmid = null;
         if($this->realm != 'All') {
             $stmt = $dbconn->prepareStatement('SELECT id FROM '. $this->realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($this->realm),ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery(array($this->realm),xarDB::FETCHMODE_ASSOC);
             if($result->next()) $realmid = $result->getInt('id');
         }
         $query = "INSERT INTO $this->privilegestable
@@ -131,7 +131,7 @@ class xarPrivilege extends xarMask
         
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         if (!$result) return false;
         // Refresh the privileges cached for the current sessions
         sys::import('modules.privileges.class.security');
@@ -154,7 +154,7 @@ class xarPrivilege extends xarMask
         $realmid = null;
         if($this->realm != 'All') {
             $stmt = $dbconn->prepareStatement('SELECT id FROM '. $this->realmstable .' WHERE name=?');
-            $result = $stmt->executeQuery(array($this->realm),ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery(array($this->realm),xarDB::FETCHMODE_ASSOC);
             if($result->next()) $realmid = $result->getInt('id');
         }
 
@@ -572,7 +572,7 @@ class xarPrivilege extends xarMask
         $bindvars[] =  $this->getID();
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query); 
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         return ($result != array());
     }
 }

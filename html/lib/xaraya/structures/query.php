@@ -221,14 +221,14 @@ class Query
             } else {
                 if (!$this->israwstatement) {
                     if ($this->fields == array() && $numfields > 0) {
-                        $result->setFetchMode(ResultSet::FETCHMODE_ASSOC);
+                        $result->setFetchMode(xarDB::FETCHMODE_ASSOC);
                         $result->next(); $result->previous();
                         for ($i=0;$i< $numfields;$i++) {
                             $tmp = array_slice($result->fields,$i,1);
                             $namefield  = key($tmp);
                             $this->fields[$namefield]['name'] = strtolower($namefield ?? '');
                         }
-                        $result->setFetchMode(ResultSet::FETCHMODE_NUM);
+                        $result->setFetchMode(xarDB::FETCHMODE_NUM);
                         $result->next(); $result->previous();
                     }
                     while (!$result->EOF) {

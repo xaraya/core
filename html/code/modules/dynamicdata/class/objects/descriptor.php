@@ -88,7 +88,7 @@ class DataObjectDescriptor extends ObjectDescriptor
 
         $dbconn = xarDB::getConn();
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
         if (!$result->first()) {
             $row = [];
         } else {

@@ -113,7 +113,7 @@ class GroupListProperty extends SelectProperty
                 $bindvars[] = $this->previous_groupid;
                 $dbconn = xarDB::getConn();
                 $stmt = $dbconn->prepareStatement($query);
-                $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+                $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
                 if(!$result) return;
             } else {
                 $bindvars = array();
@@ -123,7 +123,7 @@ class GroupListProperty extends SelectProperty
                 $bindvars[] = $this->previous_groupid;
                 $dbconn = xarDB::getConn();
                 $stmt = $dbconn->prepareStatement($query);
-                $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+                $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
                 if(!$result) return;
             }
         } else {
@@ -134,7 +134,7 @@ class GroupListProperty extends SelectProperty
             $bindvars[] = $this->current_groupid;
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
             if(!$result) return;
         }        
         return true;
@@ -180,7 +180,7 @@ class GroupListProperty extends SelectProperty
             $bindvars[] = $itemid;
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
             if(!$result) return;echo $query;
             foreach ($result->next() as $row) {var_dump($row);echo "X";
                 $candidate = xarRoles::get($row['parent_id']);

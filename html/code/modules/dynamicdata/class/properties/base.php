@@ -1077,7 +1077,7 @@ class DataProperty extends xarObject implements iDataProperty
 
             $dbconn = xarDB::getConn();
             $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, ResultSet::FETCHMODE_ASSOC);
+            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
 
             $allconfigproperties = [];
             while ($result->next()) {
