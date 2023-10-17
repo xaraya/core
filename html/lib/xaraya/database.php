@@ -102,7 +102,8 @@ if ($middleware == 'Creole') {
     }
     // ResultSet is a class with different PDO constants here!?
     //class ResultSet extends PDOResultSet {}
-    // see if we ever use this for anything other than the 2 constants
+    // @todo see if we ever use this for anything other than the 2 constants
+    // @todo and get rid of it to finally fix composer autoload conflict
     interface ResultSet
     {
         const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
