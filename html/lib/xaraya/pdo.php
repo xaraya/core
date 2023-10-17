@@ -156,7 +156,7 @@ class xarDB_PDO extends xarObject
     public static function hasConn($index = 0)
     {
         // getConn() above automatically creates another connection to the first DSN on demand
-        if (isset(self::$connection[$index])) {
+        if (isset(self::$connections[$index])) {
             return true;
         }
         return false;
