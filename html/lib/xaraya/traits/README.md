@@ -108,7 +108,7 @@ xarModVars::set($module, 'databases', serialize($databases));
 xarModVars::set($module, 'dbName', 'test');
 ```
 
-In objects, you can specify the DB connection args by setting config: (work in progress)
+In DD objects, you can specify the DB connection args by setting config: see [Dynamic Data Objects README](../../../code/modules/dynamicdata/README.md#database-connections) for details
 ```
 use Xaraya\Modules\Library\UserApi;
 
