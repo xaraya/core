@@ -137,8 +137,12 @@ class UserApi implements DatabaseInterface
 What's left to do in your module is: see https://github.com/xaraya-modules/library
 1. define the database(s) at module init (or afterwards)
 2. have a UserApi class using the Database Trait as shown above
-3. define your DD objects with the right config
+3. define your DD objects with the right config (*)
 4. do something with these DD objects in your user interface :-)
+
+(*) if you're not using composer autoload, your DD objects will need to use a custom class that extends DataObject and provides the import of the right UserApi class, like https://github.com/xaraya-modules/library/blob/main/class/object.php
+
+The good news is that when you do that, you can also add some custom action methods, and/or override a standard DD method as you prefer - like adding an "Action!" link as view option :-)
 
 ## Import PHP Definitions
 
