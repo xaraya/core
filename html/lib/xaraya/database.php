@@ -85,8 +85,14 @@ if ($middleware == 'Creole') {
     // Theoretically any adodb like layer could come in here.
     sys::import('xaraya.pdo');
     class xarDB     extends xarDB_PDO {}
-    class ResultSet extends PDOResultSet {}
-    // ResultSet is a class with different PDO constants here
+    // ResultSet is a class with different PDO constants here!?
+    //class ResultSet extends PDOResultSet {}
+    // see if we ever use this for anything other than the 2 constants
+    interface ResultSet
+    {
+        const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
+        const FETCHMODE_NUM   = PDO::FETCH_NUM;
+    }
 
     /**
      * Initializes the database connection.
