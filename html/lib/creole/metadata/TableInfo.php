@@ -139,7 +139,7 @@ abstract class TableInfo
     /**
      * Get parimary key in this table.
      * @throws Exception - if foreign keys are unsupported by DB.
-     * @return array<mixed> ForeignKeyInfo[]
+     * @return PrimaryKeyInfo|mixed
      */
     public function getPrimaryKey()
     {

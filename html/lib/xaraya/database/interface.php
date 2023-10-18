@@ -72,7 +72,7 @@ interface StatementInterface
 {
     public function setLimit($v);
     public function setOffset($v);
-    public function executeQuery();
+    public function executeQuery($p1 = null, $fetchmode = null);
     public function executeUpdate($params = null);
 }
 

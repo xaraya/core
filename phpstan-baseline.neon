@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Call to an undefined method DataContainer\\:\\:getProperty_\\(\\)\\.$#"
-			count: 2
-			path: html/bootstrap.php
-
-		-
 			message: "#^Call to function unset\\(\\) contains undefined variable \\$items\\.$#"
 			count: 1
 			path: html/code/modules/base/xarproperties/dropdown.php
@@ -56,6 +51,11 @@ parameters:
 			path: html/code/modules/dynamicdata/class/objects/master.php
 
 		-
+			message: "#^Call to an undefined method object\\:\\:checkDbConnection\\(\\)\\.$#"
+			count: 1
+			path: html/code/modules/dynamicdata/class/objects/master.php
+
+		-
 			message: "#^Call to an undefined method object\\:\\:setWhere\\(\\)\\.$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/objects/master.php
@@ -64,16 +64,6 @@ parameters:
 			message: "#^Undefined variable\\: \\$value$#"
 			count: 1
 			path: html/code/modules/dynamicdata/class/properties/base.php
-
-		-
-			message: "#^Function mysql_fetch_object not found\\.$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaradmin/meta.php
-
-		-
-			message: "#^Function mysql_list_dbs not found\\.$#"
-			count: 1
-			path: html/code/modules/dynamicdata/xaradmin/meta.php
 
 		-
 			message: "#^Undefined variable\\: \\$items$#"
