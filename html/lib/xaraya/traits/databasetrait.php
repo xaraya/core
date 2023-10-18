@@ -275,6 +275,9 @@ trait DatabaseTrait
         } else {
             $name = xarSession::getVar(static::$moduleName . ':dbName');
         }
+        if (!isset($name)) {
+            $name = xarModVars::get(static::$moduleName, 'dbName');
+        }
         return $name;
     }
 

@@ -1419,6 +1419,9 @@ class DataObjectRESTBuilder extends xarObject
                 //case 'integer':
                 $datatype = ['type' => 'integer'];
                 break;
+            case 'floatbox':
+                $datatype = ['type' => 'number', 'format' => 'float'];
+                break;
             case 'textbox':
             case 'textarea':
             case 'textarea_medium':
