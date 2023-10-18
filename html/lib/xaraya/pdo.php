@@ -636,7 +636,7 @@ class xarPDOStatement extends xarObject
 class PDODatabaseInfo extends xarObject
 {
     private $pdo;
-    private $tables;
+    private $tables = [];
 
     /** have tables been loaded */
     protected $tablesLoaded = false;
