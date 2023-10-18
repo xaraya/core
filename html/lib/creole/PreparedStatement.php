@@ -19,6 +19,8 @@
  * <http://creole.phpdb.org>.
  */
 
+use Xaraya\Database\StatementInterface;
+
 /**
  * Interface for a pre-compiled SQL statement.
  *
@@ -47,7 +49,7 @@
  * @version   $Revision: 1.21 $
  * @package   creole
  */
-interface PreparedStatement
+interface PreparedStatement extends StatementInterface
 {
     /**
      * Gets the db Connection that created this statement.

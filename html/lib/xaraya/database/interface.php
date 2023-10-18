@@ -76,7 +76,7 @@ interface StatementInterface
     public function executeUpdate($params = null);
 }
 
-// align with Creole ResultSet + ResultSetIterator - without the Xaraya modifications in ResultSetCommon
+// align with Creole ResultSet - without the Xaraya modifications in ResultSetCommon
 interface ResultSetInterface
 {
     //public function getResource();
@@ -109,9 +109,10 @@ interface ResultSetInterface
     public function getString($column);
     //public function getTime($column, $format = '%X');
     //public function getTimestamp($column, $format = 'Y-m-d H:i:s');
-    public function rewind();
-    public function valid();
-    public function key();
-    public function current();    
+    // Extra ResultSetIterator methods are *not* supported in MySQLiResultSet
+    //public function rewind();
+    //public function valid();
+    //public function key();
+    //public function current();
     //public function getIterator();
 }

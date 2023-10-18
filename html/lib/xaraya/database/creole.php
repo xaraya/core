@@ -16,12 +16,12 @@
  *
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
-sys::import('creole.Creole');
 sys::import('xaraya.database.interface');
+sys::import('creole.Creole');
 use Xaraya\Database\DatabaseInterface;
 
-// @todo why do we extend Creole here again? None of it except a few const and getConnection() are used...
-class xarDB_Creole extends Creole implements DatabaseInterface
+// why did we extend Creole here again? None of it except a few const and getConnection() were used...
+class xarDB_Creole extends xarObject implements DatabaseInterface
 {
     public static $count = 0;
 

@@ -19,6 +19,7 @@
  * <http://creole.phpdb.org>.
  */
 
+use Xaraya\Database\ConnectionInterface;
 include_once 'creole/ResultSet.php'; // we need this for the fetchmode ResultSet flags (constants) that are passed to executeQuery()
 
 /**
@@ -32,7 +33,7 @@ include_once 'creole/ResultSet.php'; // we need this for the fetchmode ResultSet
  * @version   $Revision: 1.29 $
  * @package   creole
  */
-interface Connection
+interface Connection extends ConnectionInterface
 {
     // Constants that define transaction isolation levels.
     // [We don't have any code using these yet, so there's no need

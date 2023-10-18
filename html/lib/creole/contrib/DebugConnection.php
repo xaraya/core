@@ -265,4 +265,8 @@ class DebugConnection implements Connection
         }
     }
 
+    public function Execute($sql, $bindvars = array(), $fetchmode = null)
+    {
+        throw new SQLException("Execute() is not supported in DebugConnection");
+    }
 }

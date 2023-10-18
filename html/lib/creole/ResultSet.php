@@ -19,6 +19,8 @@
  * <http://creole.phpdb.org>.
  */
 
+use Xaraya\Database\ResultSetInterface;
+
 /**
  * This is the interface for classes the wrap db results.
  *
@@ -50,7 +52,7 @@
  * @version   $Revision: 1.28 $
  * @package   creole
  */
-interface ResultSet extends IteratorAggregate
+interface ResultSet extends IteratorAggregate, ResultSetInterface
 {
     /**
      * Index result set by field name.
