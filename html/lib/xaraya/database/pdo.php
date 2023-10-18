@@ -18,7 +18,13 @@
  *
  * @author Marc Lutolf <marc@luetolf-carroll.com>
  */
-class xarDB_PDO extends xarObject
+sys::import('xaraya.database.interface');
+use Xaraya\Database\DatabaseInterface;
+use Xaraya\Database\ConnectionInterface;
+use Xaraya\Database\StatementInterface;
+use Xaraya\Database\ResultSetInterface;
+
+class xarDB_PDO extends xarObject implements DatabaseInterface
 {
     public static $count = 0;
 
@@ -110,8 +116,9 @@ class xarDB_PDO extends xarObject
                 self::$firstDSN = $dsn;
                 return;
             }
-            $conn = self::$connections[0];
-            self::$firstDSN = $conn->getDSN();
+            // connection is not set yet, but we always have $dsn here
+            //$conn = self::$connections[0];
+            //self::$firstDSN = $conn->getDSN();
         }
     }
 
@@ -122,8 +129,9 @@ class xarDB_PDO extends xarObject
                 self::$firstFlags = $flags;
                 return;
             }
-            $conn = self::$connections[0];
-            self::$firstFlags = $conn->getFlags();
+            // connection is not set yet, but we always have $flags here
+            //$conn = self::$connections[0];
+            //self::$firstFlags = $conn->getFlags();
         }
     }
 
@@ -207,7 +215,7 @@ class xarDB_PDO extends xarObject
     }
 }
 
-class xarPDO extends PDO
+class xarPDO extends PDO implements ConnectionInterface
 {
     private $databaseInfo;
 
@@ -352,7 +360,7 @@ class xarPDO extends PDO
      * 
      * @return object $resultset an object containing the results of the operation
      */
-    public function ExecuteQuery($string='', $flag=0)
+    public function executeQuery($string='', $flag=0)
     {
         xarLog::message("xarPDO::executeQuery: Executing $string", xarLog::LEVEL_DEBUG);
         try {
@@ -459,7 +467,7 @@ class xarPDO extends PDO
     }
 }
 
-class xarPDOStatement extends xarObject
+class xarPDOStatement extends xarObject implements StatementInterface
 {
     private $pdo;
     private $pdostmt;
@@ -590,7 +598,7 @@ class xarPDOStatement extends xarObject
         try {
             $rows_affected = (int) $this->pdostmt->rowCount();
         } catch( PDOException $e ) {
-            throw new PDOException('Could not get update count', $e->getMessage(), $this->pdo->queryString);
+            throw new PDOException('Could not get update count ' . $e->getMessage() . $this->pdo->queryString);
         }
         return $rows_affected;
     }
@@ -899,7 +907,7 @@ class PDOColumn extends xarObject
  * PDO does not have result sets, so we have to roll our own here
  *
  */
-class PDOResultSet extends xarObject
+class PDOResultSet extends xarObject implements ResultSetInterface
 {
     const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
     const FETCHMODE_NUM   = PDO::FETCH_NUM;
@@ -925,8 +933,8 @@ class PDOResultSet extends xarObject
         $this->pdostatement = $pdostatement;
         $this->array = $this->pdostatement->fetchAll($this->fetchflag);
         $this->EOF = count($this->array) === 0;
-        // This is an odd Creole legacy. Remove instances of calling $result->fields without next() first
-        // Actually this dates back from the ADODB time, see https://www.xaraya.hu/rfcs/rfc0035.html#rfc.section.9.3
+        // Q: This is an odd Creole legacy. Remove instances of calling $result->fields without next() first
+        // A: Actually this dates back from the ADODB time, see https://www.xaraya.hu/rfcs/rfc0035.html#rfc.section.9.3
         if (!empty($this->array)) $this->fields = reset($this->array);
     }
     

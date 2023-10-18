@@ -66,7 +66,7 @@ abstract class ResultSetCommon
 
     /**
      * Resource identifier used for native result set handling.
-     * @var resource
+     * @var resource|object
      */
     protected $result;
 

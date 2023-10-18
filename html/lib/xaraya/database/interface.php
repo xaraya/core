@@ -1,0 +1,117 @@
+<?php
+/**
+ * @package core/database
+ * @subpackage database
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.1
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
+ */
+
+namespace Xaraya\Database;
+
+// align with xarDB_Creole and xarDB_PDO
+interface DatabaseInterface
+{
+    /** @return string */
+    public static function getPrefix();
+    public static function setPrefix($prefix);
+    /** @return \Connection|\xarPDO */
+    public static function newConn(array $args = null);
+    public static function &getTables();
+    public static function importTables(Array $tables = array());
+    public static function getHost();
+    public static function getType();
+    public static function getName();
+    //public static function configure($dsn, $flags = -1, $prefix = 'xar');
+    //private static function setFirstDSN($dsn = null);
+    //private static function setFirstFlags($flags = null);
+    /** @return \Connection|\xarPDO */
+    public static function &getConn($index = 0);
+    public static function hasConn($index = 0);
+    public static function getConnection($dsn, $flags = 0);
+    public static function getTypeMap();
+}
+
+// align with Creole Connection - without the Xaraya modifications in ConnectionCommon except Execute()
+interface ConnectionInterface
+{
+    // from Xaraya modifications in ConnectionCommon
+    /** @return \ResultSet|\PDOResultSet */
+    public function Execute($sql, $bindvars = array(), $fetchmode = null);
+    //public function SelectLimit($sql, $limit = 0, $offset = 0, $bindvars = array(), $fetchmode = null);
+    //public function connect($dsn, $flags = false);
+    /** @return resource|object */
+    public function getResource();
+    //public function getFlags();
+    //public function getDSN();
+    /** @return \DatabaseInfo|\PDODatabaseInfo */
+    public function getDatabaseInfo();
+    //public function getIdGenerator();
+    /** @return \PreparedStatement|\xarPDOStatement */
+    public function prepareStatement($sql);
+    //public function createStatement();
+    //public function applyLimit(&$sql, $offset, $limit);
+    /** @return \ResultSet|\PDOResultSet */
+    public function executeQuery($sql, $fetchmode = null);
+    public function executeUpdate($sql);
+    //public function prepareCall($sql);
+    //public function close();
+    //public function isConnected();
+    //public function getAutoCommit();
+    //public function setAutoCommit($bit);
+    public function begin();
+    public function commit();
+    public function rollback();
+    //public function getUpdateCount();
+}
+
+// align with Creole Statement + PreparedStatement - most not used or implemented
+interface StatementInterface
+{
+    public function setLimit($v);
+    public function setOffset($v);
+    public function executeQuery();
+    public function executeUpdate($params = null);
+}
+
+// align with Creole ResultSet + ResultSetIterator - without the Xaraya modifications in ResultSetCommon
+interface ResultSetInterface
+{
+    //public function getResource();
+    public function setFetchmode($mode);
+    //public function getFetchmode();
+    //public function isLowerAssocCase();
+    public function next();
+    public function previous();
+    //public function relative($offset);
+    //public function absolute($pos);
+    //public function seek($rownum);
+    public function first();
+    //public function last();
+    //public function beforeFirst();
+    //public function afterLast();
+    public function isAfterLast();
+    //public function isBeforeFirst();
+    //public function getCursorPos();
+    public function getRow();
+    public function getRecordCount();
+    public function close();
+    public function get($column);
+    public function getArray($column);
+    public function getBoolean($column);
+    //public function getBlob($column);
+    //public function getClob($column);
+    //public function getDate($column, $format = '%x');
+    public function getFloat($column);
+    public function getInt($column);
+    public function getString($column);
+    //public function getTime($column, $format = '%X');
+    //public function getTimestamp($column, $format = 'Y-m-d H:i:s');
+    public function rewind();
+    public function valid();
+    public function key();
+    public function current();    
+    //public function getIterator();
+}

@@ -17,9 +17,11 @@
  * @author Marcel van der Boom <marcel@hsdev.com>
  */
 sys::import('creole.Creole');
+sys::import('xaraya.database.interface');
+use Xaraya\Database\DatabaseInterface;
 
 // @todo why do we extend Creole here again? None of it except a few const and getConnection() are used...
-class xarDB_Creole extends Creole
+class xarDB_Creole extends Creole implements DatabaseInterface
 {
     public static $count = 0;
 
@@ -38,6 +40,7 @@ class xarDB_Creole extends Creole
  *
  * Create a new connection based on the supplied parameters
  *
+ * @return Connection
  */
 public static function newConn(array $args = null)
 {
@@ -131,7 +134,7 @@ public static function newConn(array $args = null)
     /**
      * Get a database connection
      *
-     * @return object database connection object
+     * @return Connection database connection object
      */
     public static function &getConn($index = 0) 
     { 
