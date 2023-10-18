@@ -303,17 +303,17 @@ class xarAutoload extends xarObject
         if (xarSystemVars::get(sys::CONFIG, 'DB.Middleware') == 'PDO') {
             $database_class_array = array(
 
-                'xardb'              => 'xaraya.pdo',
-                'xarpdo'             => 'xaraya.pdo',
-                'xarpdostatement'    => 'xaraya.pdo',
-                'databaseinfo'       => 'xaraya.pdo',
-                'pdotable'           => 'xaraya.pdo',
-                'pdocolumn'          => 'xaraya.pdo',
-                'resultset'          => 'xaraya.pdo',
+                'xardb'              => 'xaraya.database',
+                'xarpdo'             => 'xaraya.database.pdo',
+                'xarpdostatement'    => 'xaraya.database.pdo',
+                'databaseinfo'       => 'xaraya.database.pdo',
+                'pdotable'           => 'xaraya.database.pdo',
+                'pdocolumn'          => 'xaraya.database.pdo',
+                'resultset'          => 'xaraya.database.pdo',
             );
         } else {
             $database_class_array = array(
-                'xardb'              => 'xaraya.creole',
+                'xardb'              => 'xaraya.database',
             );
         }
 

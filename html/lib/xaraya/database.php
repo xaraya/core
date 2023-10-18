@@ -21,7 +21,7 @@ if ($middleware == 'Creole') {
 
     // Import our db abstraction layer
     // Theoretically any adodb like layer could come in here.
-    sys::import('xaraya.creole');
+    sys::import('xaraya.database.creole');
     class xarDB extends xarDB_Creole
     {
         /**
@@ -94,7 +94,7 @@ if ($middleware == 'Creole') {
 
     // Import our db abstraction layer
     // Theoretically any adodb like layer could come in here.
-    sys::import('xaraya.pdo');
+    sys::import('xaraya.database.pdo');
     class xarDB     extends xarDB_PDO
     {
         public const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;

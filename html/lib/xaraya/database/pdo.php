@@ -925,7 +925,8 @@ class PDOResultSet extends xarObject
         $this->pdostatement = $pdostatement;
         $this->array = $this->pdostatement->fetchAll($this->fetchflag);
         $this->EOF = count($this->array) === 0;
-        // @todo: This is an odd Creole legacy. Remove instances of calling $resilt->fields without next() first
+        // This is an odd Creole legacy. Remove instances of calling $result->fields without next() first
+        // Actually this dates back from the ADODB time, see https://www.xaraya.hu/rfcs/rfc0035.html#rfc.section.9.3
         if (!empty($this->array)) $this->fields = reset($this->array);
     }
     
