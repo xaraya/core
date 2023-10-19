@@ -1,0 +1,25 @@
+{
+    "1": {
+        "id": 1,
+        "name": "Johnny",
+        "age": 32,
+        "location": "https://owncloud.mikespub.net/images/cuernos1.jpg",
+        "partner": 2,
+        "children": [
+            3
+        ],
+        "parents": []
+    },
+    "3": {
+        "id": 3,
+        "name": "Baby",
+        "age": 1,
+        "location": "https://owncloud.mikespub.net/images/sydney1.jpg",
+        "partner": "",
+        "children": [],
+        "parents": [
+            1,
+            2
+        ]
+    }
+}
