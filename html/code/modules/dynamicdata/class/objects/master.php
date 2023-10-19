@@ -49,6 +49,7 @@ class DataObjectMaster extends xarObject
     public $access_rules;                 // the exploded access parameters for this DD object
     public $config      = 'a:0:{}';       // the configuration parameters for this DD object
     public $configuration;                // the configuration parameters for this DD object
+    /** @var string|IBasicDataStore */
     public $datastore   = '';             // the datastore for the DD object
     public $dbConnIndex = 0;              // the connection index of the database if different from Xaraya DB
     public $dbConnArgs  = null;           // the connection arguments for the database if different from Xaraya DB
@@ -514,7 +515,7 @@ class DataObjectMaster extends xarObject
     {
         // get the data store
         sys::import('xaraya.datastores.factory');
-        $this->datastore = DataStoreFactory::getDataStore($name, $type, $storage, $this->dbConnIndex);
+        $this->datastore = DataStoreFactory::getDataStore($name, $type, $storage, $this->dbConnIndex, $this->dbConnArgs);
 
         // Pass along a reference to this object
         $this->datastore->object = $this;

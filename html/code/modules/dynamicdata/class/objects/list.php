@@ -279,7 +279,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         }
         */
         // Make sure we don't have an empty datastore
-        if (is_object($this->datastore)) {
+        if (is_object($this->datastore) && $this->datastore instanceof SQLDataStore) {
             // Note: they can be empty here, which means overriding any previous criteria
             // make sure we don't have some left-over sort criteria
             $this->datastore->cleanSort();

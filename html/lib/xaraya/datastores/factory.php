@@ -134,9 +134,10 @@ class DataStoreFactory extends xarObject
      * @param string $type type of datastore (relational, data, hook, modulevars, cache, ...)
      * @param ?string $storage storageType for the cacheStorage in CachingDatastore
      * @param ?int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
+     * @param ?array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB (optional)
      * @return IBasicDataStore
      */
-    public static function &getDataStore($name = '_dynamic_data_', $type = 'data', $storage = null, $dbConnIndex = 0)
+    public static function &getDataStore($name = '_dynamic_data_', $type = 'data', $storage = null, $dbConnIndex = 0, $dbConnArgs = [])
     {
         switch ($type) {
             case 'relational':
@@ -190,6 +191,10 @@ class DataStoreFactory extends xarObject
             case 'cache':
                 sys::import('xaraya.datastores.caching');
                 $datastore = new CachingDataStore($name, $storage);
+                break;
+            case 'external':
+                sys::import('xaraya.datastores.sql.external');
+                $datastore = new ExternalDataStore($name, $dbConnArgs);
                 break;
             default:
                 sys::import('xaraya.datastores.sql.variabletable');

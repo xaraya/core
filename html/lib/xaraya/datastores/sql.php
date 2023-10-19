@@ -163,7 +163,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * Database functions for lazy connection
      * @return void
      */
-    public function connect()
+    protected function connect()
     {
         // Note: the only reason we keep this variable is for getLastId()
         if (empty($this->db)) {
