@@ -81,7 +81,7 @@ function blocks_instancesapi_createitem(Array $args=array())
     $result = $stmt->executeQuery($bindvars);
     if (!$result) return;      
 
-    $block_id = $dbconn->PO_Insert_ID($blocks_table, 'id');
+    $block_id = $dbconn->getLastId($blocks_table);
     if (empty($block_id)) return;
        
     return $block_id;

@@ -462,6 +462,7 @@ class RelationalDataStore extends SQLDataStore
         } else {
             $itemids = [];
         }
+        // @deprecated not actually used in datastores
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
             $this->cache = $args['cache'];
@@ -743,6 +744,7 @@ class RelationalDataStore extends SQLDataStore
         } else {
             $itemids = [];
         }
+        // @deprecated not actually used in datastores
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
             $this->cache = $args['cache'];
@@ -773,6 +775,7 @@ class RelationalDataStore extends SQLDataStore
      * Summary of getNext
      * @param array<string, mixed> $args
      * @return mixed
+     * @deprecated 2.2.0 relies on old datastore fields instead of object properties
      */
     public function getNext(array $args = [])
     {

@@ -476,6 +476,7 @@ class DataObjectMaster extends xarObject
 
     /**
      * Get the data stores where the dynamic properties of this object are kept
+     * @param bool $reset deprecated reset is now handled in dataquery instead of datastore
     **/
     public function getDataStore($reset = false)
     {
@@ -505,8 +506,9 @@ class DataObjectMaster extends xarObject
     /**
      * Add a data store for this object
      *
-     * @param $name the name for the data store
-     * @param $type the type of data store
+     * @param string $name the name for the data store
+     * @param string $type the type of data store (relational, data, hook, modulevars, cache, ...)
+     * @param ?string $storage storageType for the cacheStorage in CachingDatastore (for cache only)
     **/
     public function addDataStore($name = '_dynamic_data_', $type = 'data', $storage = null)
     {

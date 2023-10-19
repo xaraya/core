@@ -228,33 +228,33 @@ interface ISQLDataStore
      * @param mixed $name
      * @return mixed
      */
-    public function getTable($name);
+    //protected function getTable($name);
 
     /**
      * Summary of getType
      * @return mixed
      */
-    public function getType();
+    //protected function getType();
 
     /**
      * Summary of prepareStatement
      * @param mixed $sql
      * @return mixed
      */
-    public function prepareStatement($sql);
+    //protected function prepareStatement($sql);
 
     /**
      * Summary of getLastId
      * @param mixed $table
      * @return mixed
      */
-    public function getLastId($table);
+    //protected function getLastId($table);
 
     /**
      * Summary of getDatabaseInfo
      * @return mixed
      */
-    public function getDatabaseInfo();
+    //protected function getDatabaseInfo();
 }
 
 /*

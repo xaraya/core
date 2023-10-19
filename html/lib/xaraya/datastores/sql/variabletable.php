@@ -320,6 +320,7 @@ class VariableTableDataStore extends SQLDataStore
         } else {
             $itemids = [];
         }
+        // @deprecated not actually used in datastores
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
             $this->cache = $args['cache'];
@@ -584,6 +585,7 @@ class VariableTableDataStore extends SQLDataStore
      * More difficult case where we need to create a pivot table, basically
      * @todo make sure this is portable !
      * @param mixed $properties
+     * @param mixed $startnum
      * @return void
      */
     public function getItemsLimit($properties, $startnum)
@@ -691,11 +693,11 @@ class VariableTableDataStore extends SQLDataStore
 
         $isgrouped = 0;
         $id = 0;
+        $process = [];
         if (count($this->object->groupby) > 0) {
             $isgrouped = 1;
             $items = [];
             $combo = [];
-            $process = [];
             foreach ($propids as $propid) {
                 if (in_array($propid, $this->object->groupby)) {
                     // Note: we'll process the *TIME_BY_* operations for the groupid
@@ -1035,6 +1037,7 @@ class VariableTableDataStore extends SQLDataStore
         } else {
             $itemids = [];
         }
+        // @deprecated not actually used in datastores
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
             $this->cache = $args['cache'];
@@ -1059,7 +1062,7 @@ class VariableTableDataStore extends SQLDataStore
      * Easy case where we already know the items we want
      * @todo fix countItems with itemids
      * @param mixed $itemids
-     * @return void
+     * @return mixed
      */
     public function countItemsById($itemids)
     {

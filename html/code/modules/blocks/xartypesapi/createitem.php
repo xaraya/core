@@ -96,7 +96,7 @@ function blocks_typesapi_createitem(Array $args=array())
 
     $result = $dbconn->Execute($query,$bindvars);
     if (!$result) return;
-    $id = $dbconn->PO_Insert_ID($types_table, 'id');
+    $id = $dbconn->getLastId($types_table);
     if (empty($id)) return;
     return $id;
 }

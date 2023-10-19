@@ -135,6 +135,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
         } else {
             $itemids = [];
         }
+        // @deprecated not actually used in datastores
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
             $this->cache = $args['cache'];
@@ -203,6 +204,7 @@ class ModuleVariablesDataStore extends RelationalDataStore
         } else {
             $itemids = [];
         }
+        // @deprecated not actually used in datastores
         // check if it's set here - could be 0 (= empty) too
         if (isset($args['cache'])) {
             $this->cache = $args['cache'];

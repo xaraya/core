@@ -176,7 +176,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param mixed $name
      * @return mixed
      */
-    public function getTable($name)
+    protected function getTable($name)
     {
         $tables = xarDB::getTables();
         if (!empty($tables[$name])) {
@@ -188,7 +188,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * Summary of getType - only for default database (dbConnIndex = 0)
      * @return mixed
      */
-    public function getType()
+    protected function getType()
     {
         return xarDB::getType();
     }
@@ -198,7 +198,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param mixed $sql
      * @return mixed
      */
-    public function prepareStatement($sql)
+    protected function prepareStatement($sql)
     {
         $this->connect();
         return $this->db->prepareStatement($sql);
@@ -209,7 +209,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * @param mixed $table
      * @return mixed
      */
-    public function getLastId($table)
+    protected function getLastId($table)
     {
         $this->connect();
         return $this->db->getLastId($table);
@@ -219,7 +219,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
      * Summary of getDatabaseInfo
      * @return mixed
      */
-    public function getDatabaseInfo()
+    protected function getDatabaseInfo()
     {
         $this->connect();
         return $this->db->getDatabaseInfo();

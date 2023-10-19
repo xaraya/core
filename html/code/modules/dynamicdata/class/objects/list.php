@@ -288,6 +288,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // make sure we don't have some left-over group by fields
             $this->datastore->cleanGroupBy();
         }
+        // @deprecated not actually used in datastores
         if(isset($args['cache'])) {
             // pass the cache value to the datastores
             $this->datastore->cache = $args['cache'];
@@ -1050,6 +1051,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
      * Get items one at a time, instead of storing everything in $this->items
      *
      * @return integer
+     * @deprecated 2.2.0 relies on old datastore fields instead of object properties
      */
     public function getNext(array $args = [])
     {

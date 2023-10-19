@@ -51,5 +51,6 @@ interface iDataObjectList
     public function getViewOptions($itemid = null);
     public function &getViewValues(array $data = []);
     public function getSortURL($currenturl = null);
+    /** @deprecated 2.2.0 relies on old datastore fields instead of object properties */
     public function getNext(array $data = []);
 }

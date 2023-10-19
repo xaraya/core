@@ -26,7 +26,7 @@ class BasicDataStore extends DDObject implements IBasicDataStore
     public $object;             // reference to DataObject or DataObjectList TODO: investigate public scope
 
     /** @var mixed */
-    public $cache = 0;
+    public $cache = 0;          // @deprecated not actually used in datastores
 
     /** @var mixed */
     public $type;

@@ -1690,6 +1690,7 @@ class Query
         list($id) = $result->fields;
         return (int)$id;
     }
+    /** @deprecated 2.2.0 no longer supported - try lastid() after insert if needed */
     public function nextid($table="", $id="")
     {
         if (!isset($this->dbconn)) $this->dbconn = xarDB::getConn($this->dbConnIndex);

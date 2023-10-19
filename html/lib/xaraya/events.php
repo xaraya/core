@@ -394,7 +394,7 @@ class xarEvents extends xarObject implements ixarEvents
         $result = $dbconn->Execute($query,$bindvars);
         if (!$result) return;
         
-        $id = $dbconn->PO_Insert_ID($emstable, 'id');
+        $id = $dbconn->getLastId($emstable);
         if (empty($id)) return;
         $info['id'] = $id;
         $info['module_id'] = $module_id;
