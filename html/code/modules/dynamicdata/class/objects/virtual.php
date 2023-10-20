@@ -10,6 +10,8 @@
  */
 
 sys::import('modules.dynamicdata.class.objects.descriptor');
+sys::import('modules.dynamicdata.class.utilapi');
+use Xaraya\DataObject\UtilApi;
 
 /**
  * Generate the variables necessary to instantiate a *virtual* DataObject class (= not defined in database)
@@ -157,6 +159,11 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
  * $descriptor = new TableObjectDescriptor(['table' => 'non_xar_table', 'dbConnIndex' => $dbConnIndex]);
  * $objectlist = new DataObjectList($descriptor);
  * ...
+ *
+ * Or pass along the connection parameters directly to the descriptor
+ * $descriptor = new TableObjectDescriptor(['table' => 'non_xar_table', 'dbConnArgs' => $dbConnArgs]);
+ * $objectlist = new DataObjectList($descriptor);
+ * ...
  */
 class TableObjectDescriptor extends VirtualObjectDescriptor
 {
@@ -169,6 +176,7 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
      *     $args['table'] name of the database table (required)
      *     $args['fields'] list of field specs coming from getmeta() or elsewhere (optional)
      *     $args['dbConnIndex'] connection index of the database if different from Xaraya DB (optional)
+     *     $args['dbConnArgs'] connection params of the database if different from Xaraya DB (optional)
      */
     public function __construct(array $args = [])
     {
@@ -178,7 +186,10 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
         $offline = false;
         parent::__construct($args, $offline);
         if (!empty($args['table'])) {
-            $this->addTable($args['table'], $args['fields'] ?? [], $args['dbConnIndex'] ?? 0);
+            $args['fields'] ??= [];
+            $args['dbConnIndex'] ??= 0;
+            $args['dbConnArgs'] ??= [];
+            $this->addTable($args['table'], $args['fields'], $args['dbConnIndex'], $args['dbConnArgs']);
         }
     }
 
@@ -188,14 +199,15 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
      * @param string $table name of the database table (required)
      * @param array<string, array<string, mixed>> $fields list of field specs coming from getmeta() or elsewhere (optional)
      * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
+     * @param array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB (optional)
      * @return void
     **/
-    public function addTable(string $table, array $fields = [], int $dbConnIndex = 0)
+    public function addTable(string $table, array $fields = [], int $dbConnIndex = 0, array $dbConnArgs = [])
     {
         if (empty($fields)) {
             //$fields = xarMod::apiFunc('dynamicdata', 'util', 'getstatic', ['module' => 'dynamicdata', 'module_id' => 182, 'table' => $table, 'dbConnIndex' => $dbConnIndex]);
             /** @var array<string, array<string, array<string, mixed>>> $meta */
-            $meta = xarMod::apiFunc('dynamicdata', 'util', 'getmeta', ['table' => $table, 'dbConnIndex' => $dbConnIndex]);
+            $meta = UtilApi::getMeta($table, null, $dbConnIndex, $dbConnArgs);
             if (empty($meta[$table])) {
                 throw new Exception("Unknown table $table");
             }

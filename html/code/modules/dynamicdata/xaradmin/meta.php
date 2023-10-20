@@ -55,6 +55,7 @@ function dynamicdata_admin_meta(array $args = [])
 
     $data['dbtype'] = '';
     $data['dbConnIndex'] = 0;
+    $data['dbConnArgs'] = [];
     if (!empty($showdb) || $data['db'] != $dbname) {
         // Note: not supported for other database types
         if ($dbtype == 'mysqli') {
