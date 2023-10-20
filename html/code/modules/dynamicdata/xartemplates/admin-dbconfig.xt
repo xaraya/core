@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:style scope="module" file="dd"/>
+    <xar:template file="admin-mod-head"/>
+    <div class="xar-mod-body">
+        <h2>Utilities - Database Configurations</h2>
+        <xar:template type="module" file="utility-menu"/>
+        <xar:if condition="empty($db)">
+        <h3>Database Configurations</h3>
+        <ul>
+            <li>Xaraya: (0) <a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['db' => 'default'])#">default</a></li>
+            <xar:foreach in="$dbconfigs" key="$module" value="$info">
+                <li>
+                    #$module#:
+                    <ol>
+                        <li>
+                            Databases:
+                            <ul>
+                                <xar:foreach in="$info['databases']" key="$name" value="$config">
+                                    <li>
+                                        <a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['db' => $module . '.' . $name])#">#$name#</a>:
+                                        #$config['description']#
+                                    </li>
+                                </xar:foreach>
+                                <li><a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['db' => $module . '.*'])#">Add new database</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            Objects:
+                            <ul>
+                                <xar:foreach in="$info['objects']" key="$name" value="$config">
+                                    <li>
+                                        #$name#:
+                                        (#$config['dbConnIndex']#) #$config['dbConnArgs']#
+                                    </li>
+                                </xar:foreach>
+                            </ul>
+                        </li>
+                    </ol>
+                </li>
+            </xar:foreach>
+        </ul>
+        <xar:else/>
+        <h3>Database Configuration</h3>
+        <form method="post">
+        <fieldset>
+            <legend>Database: #$db#</legend>
+            <xar:if condition="$db eq 'default'">
+                <div class="xar-row">
+                    <div class="xar-col">
+                    <p>Nothing to see here - the database configuration for Xaraya is defined in the config.system file</p>
+                    </div>
+                </div>
+            <xar:else/>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="module" title="" style="">Module</label>
+                    </div>
+                    <div class="xar-col">
+                        #$module#
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="name" title="" style="">Name</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="name" name="config[name]" value="#$database['name']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        (lowercase, no space)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="description" title="" style="">Description</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="description" name="config[description]" value="#$database['description']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textxlong"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="dbtype" title="" style="">Database Type</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="dbtype" name="config[dbtype]" value="#$database['databaseType']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        (supported by Xaraya or external)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="dbname" title="" style="">Database Name</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="dbname" name="config[dbname]" value="#$database['databaseName']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textxlong"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="dbhost" title="" style="">Database Host</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="dbhost" name="config[dbhost]" value="#$database['databaseHost']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        (if needed)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="dbport" title="" style="">Database Port</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="dbport" name="config[dbport]" value="#$database['databasePort']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        (if needed)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="dbuser" title="" style="">User Name</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="dbuser" name="config[dbuser]" value="#$database['userName']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        (if needed)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="dbpass" title="" style="">Password</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="password" id="dbpass" name="config[dbpass]" value="" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        (if needed)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="dbcharset" title="" style="">Character Set</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="dbcharset" name="config[dbcharset]" value="#$database['databaseCharset']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        (if needed)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="prefix" title="" style="">Table Prefix</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="prefix" name="config[prefix]" value="#$database['prefix']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        (if applicable)
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="external" title="" style="">External Connection</label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:if condition="!empty($database['external'])">
+                            <input type="checkbox" id="external" name="config[external]" value="1" checked="checked"/>
+                        <xar:else />
+                            <input type="checkbox" id="external" name="config[external]" value="1"/>
+                        </xar:if>
+                        (if not supported by Xaraya)
+                    </div>
+                </div>
+            </xar:if>
+        </fieldset>
+        <div class="xar-align-center">
+            <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
+            <input type="hidden" name="db" value="#$db#"/>
+            <xar:var name="label">Save Configuration</xar:var>
+            <xar:button type="submit" label="$label"/>
+        </div>
+        </form>
+    </xar:if>
+    </div>
+</xar:template>

@@ -36,6 +36,12 @@
             <target>meta</target>
             <label>Table Browser</label>
         </menuitem>
+        <menuitem>
+            <mask>AdminDynamicData</mask>
+            <value>meta</value>
+            <target>dbconfig</target>
+            <label>DB Connections</label>
+        </menuitem>
 <!--
         <menuitem>
             <mask>AdminDynamicData</mask>

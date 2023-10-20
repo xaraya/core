@@ -33,6 +33,20 @@ class UtilApi implements DatabaseInterface
     protected static array $propTypeIds = [];
 
     /**
+     * Summary of setModuleName
+     * @param string $moduleName
+     * @return void
+     */
+    public static function setModuleName($moduleName)
+    {
+        // reset list of databases in DatabaseTrait
+        if ($moduleName !== static::$moduleName) {
+            static::$_databases = [];
+        }
+        static::$moduleName = $moduleName;
+    }
+
+    /**
      * (try to) get the "meta" properties of tables via db abstraction layer
      *
      * @param string $table name of the database table (required)
