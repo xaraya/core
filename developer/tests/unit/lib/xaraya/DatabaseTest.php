@@ -1,6 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use Xaraya\Database\ExternalDatabase;
 
 /**
  * We need to run each test in a separate process here to switch databases
@@ -35,7 +36,7 @@ final class DatabaseTest extends TestCase
         file_put_contents($fileName, $content);
     }
 
-    public function testCreoleDatabase(): void
+    public function testCreoleMiddleware(): void
     {
         $expected = 'Creole';
         self::useMiddleware($expected);
@@ -91,7 +92,7 @@ final class DatabaseTest extends TestCase
         $this->assertCount($expected, $tables);
     }
 
-    public function testPDODatabase(): void
+    public function testPDOMiddleware(): void
     {
         $expected = 'PDO';
         self::useMiddleware($expected);
@@ -145,5 +146,45 @@ final class DatabaseTest extends TestCase
         $tables = $dbInfo->getTables();
         $expected = 0;
         $this->assertCount($expected, $tables);
+    }
+
+    public function testExternalPDODriver(): void
+    {
+        $dbConnArgs = [
+            'databaseType' => 'sqlite',
+            'databaseName' => sys::varpath() . '/sqlite/metadata.db',
+        ];
+        $dbConnArgs['external'] = 'pdo';
+        $conn = ExternalDatabase::newConn($dbConnArgs);
+        $this->assertTrue($conn instanceof \PDO);
+
+        // use native methods on connection and succeed
+        $expected = 'sqlite';
+        $driver = $conn->getAttribute(PDO::ATTR_DRIVER_NAME);
+        $this->assertEquals($expected, $driver);
+
+        // try static method on external database and fail
+        $this->expectException(BadMethodCallException::class);
+        $type = ExternalDatabase::getType();
+    }
+
+    public function testExternalDBALDriver(): void
+    {
+        $dbConnArgs = [
+            'databaseType' => 'sqlite3',
+            'databaseName' => sys::varpath() . '/sqlite/metadata.db',
+        ];
+        $dbConnArgs['external'] = 'dbal';
+        $conn = ExternalDatabase::newConn($dbConnArgs);
+        $this->assertTrue($conn instanceof \Doctrine\DBAL\Connection);
+
+        // use native methods on connection and succeed
+        $expected = 'Doctrine\DBAL\Driver\SQLite3\Driver';
+        $driver = $conn->getDriver();
+        $this->assertEquals($expected, get_class($driver));
+
+        // try static method on external database and fail
+        $this->expectException(BadMethodCallException::class);
+        $type = ExternalDatabase::getType();
     }
 }

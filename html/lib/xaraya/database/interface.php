@@ -11,26 +11,80 @@
 
 namespace Xaraya\Database;
 
-// align with xarDB_Creole and xarDB_PDO
+/**
+ * Aligned with xarDB_Creole and xarDB_PDO
+ */
 interface DatabaseInterface
 {
-    /** @return string */
+    /**
+     * Summary of getPrefix
+     * @return string
+     */
     public static function getPrefix();
+    /**
+     * Summary of setPrefix
+     * @param string $prefix
+     * @return void
+     */
     public static function setPrefix($prefix);
-    /** @return \Connection|\xarPDO|object */
+    /**
+     * Summary of newConn
+     * @param ?array<string, mixed> $args
+     * @return \Connection|\xarPDO|object
+     */
     public static function newConn(array $args = null);
+    /**
+     * Summary of getTables
+     * @return array<string, string>
+     */
     public static function &getTables();
-    public static function importTables(Array $tables = array());
+    /**
+     * Summary of importTables
+     * @param array<string, string> $tables
+     * @return void
+     */
+    public static function importTables(array $tables = array());
+    /**
+     * Summary of getHost
+     * @return string
+     */
     public static function getHost();
+    /**
+     * Summary of getType
+     * @return string
+     */
     public static function getType();
+    /**
+     * Summary of getName
+     * @return string
+     */
     public static function getName();
     //public static function configure($dsn, $flags = -1, $prefix = 'xar');
     //private static function setFirstDSN($dsn = null);
     //private static function setFirstFlags($flags = null);
-    /** @return \Connection|\xarPDO|object */
+    /**
+     * Summary of getConn
+     * @param mixed $index
+     * @return \Connection|\xarPDO|object
+     */
     public static function &getConn($index = 0);
+    /**
+     * Summary of hasConn
+     * @param mixed $index
+     * @return bool
+     */
     public static function hasConn($index = 0);
+    /**
+     * Summary of getConnection
+     * @param mixed $dsn
+     * @param mixed $flags
+     * @return \Connection|\xarPDO|object
+     */
     public static function getConnection($dsn, $flags = 0);
+    /**
+     * Summary of getTypeMap
+     * @return array<mixed>
+     */
     public static function getTypeMap();
 }
 
