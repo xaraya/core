@@ -191,6 +191,9 @@ class DataObjectMaster extends xarObject
                 }
                 $this->dataquery->cleartables();
                 $this->assembleQuery($this);
+            } elseif ($this->datastore == 'external') {
+                // process $this->dbConnArgs here too
+                $this->parseDbConnArgs();
             }
         } else {
             $this->datastore = 'dynamicdata';
@@ -455,24 +458,39 @@ class DataObjectMaster extends xarObject
         if (empty($this->dbConnIndex) || xarDB::hasConn($this->dbConnIndex)) {
             return;
         }
-        if (!empty($this->dbConnArgs)) {
-            if (is_string($this->dbConnArgs)) {
-                $this->dbConnArgs = json_decode($this->dbConnArgs, true);
-            }
-            // Note: this assumes the class is (auto-)loaded
-            if (is_callable($this->dbConnArgs)) {
-                // we pass the current object as argument here, just in case...
-                $args = call_user_func($this->dbConnArgs, $this);
-            } elseif (array_key_exists('databaseType', $this->dbConnArgs)) {
-                $args = $this->dbConnArgs;
-            } else {
-                // allow database connection failure later on when it's actually needed
-                xarLog::message("DataObjectMaster::checkDbConnection: Invalid dbConnArgs - unable to create new db connection", xarLog::LEVEL_WARNING);
-                return;
-            }
-            xarDB::newConn($args);
-            $this->dbConnIndex = xarDB::$count - 1;
+        $args = $this->parseDbConnArgs();
+        if (empty($args)) {
+            return;
         }
+        xarDB::newConn($args);
+        $this->dbConnIndex = xarDB::$count - 1;
+    }
+
+    /**
+     * Summary of parseDbConnArgs
+     * @return mixed
+     */
+    public function parseDbConnArgs()
+    {
+        if (empty($this->dbConnArgs)) {
+            return null;
+        }
+        if (is_string($this->dbConnArgs)) {
+            $this->dbConnArgs = json_decode($this->dbConnArgs, true);
+        }
+        // Note: this assumes the class is (auto-)loaded
+        if (is_callable($this->dbConnArgs)) {
+            // we pass the current object as argument here, just in case...
+            $args = call_user_func($this->dbConnArgs, $this);
+            $this->dbConnArgs = $args;
+        } elseif (array_key_exists('databaseType', $this->dbConnArgs)) {
+            $args = $this->dbConnArgs;
+        } else {
+            // allow database connection failure later on when it's actually needed
+            xarLog::message("DataObjectMaster::checkDbConnection: Invalid dbConnArgs - unable to create new db connection", xarLog::LEVEL_WARNING);
+            return null;
+        }
+        return $args;
     }
 
     /**
@@ -494,9 +512,20 @@ class DataObjectMaster extends xarObject
                     throw new Exception(xarML('Did not find a first property for module variable datastore'));
                 }
                 break;
+            /**
+            case 'hook':
+                $this->addDataStore($this->name, 'hook');
+                break;
+             */
+            case 'none':
+                $this->addDataStore($this->name, 'none');
+                break;
             case 'cache':
                 $storage = $this->descriptor->get('cachestorage') ?? 'apcu';
                 $this->addDataStore($this->name, 'cache', $storage);
+                break;
+            case 'external':
+                $this->addDataStore($this->name, 'external');
                 break;
             case 'dynamicdata':
                 $this->addDataStore('_dynamic_data_', 'data');

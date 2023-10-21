@@ -17,7 +17,7 @@ interface DatabaseInterface
     /** @return string */
     public static function getPrefix();
     public static function setPrefix($prefix);
-    /** @return \Connection|\xarPDO */
+    /** @return \Connection|\xarPDO|object */
     public static function newConn(array $args = null);
     public static function &getTables();
     public static function importTables(Array $tables = array());
@@ -27,7 +27,7 @@ interface DatabaseInterface
     //public static function configure($dsn, $flags = -1, $prefix = 'xar');
     //private static function setFirstDSN($dsn = null);
     //private static function setFirstFlags($flags = null);
-    /** @return \Connection|\xarPDO */
+    /** @return \Connection|\xarPDO|object */
     public static function &getConn($index = 0);
     public static function hasConn($index = 0);
     public static function getConnection($dsn, $flags = 0);
@@ -38,7 +38,7 @@ interface DatabaseInterface
 interface ConnectionInterface
 {
     // from Xaraya modifications in ConnectionCommon
-    /** @return \ResultSet|\PDOResultSet */
+    /** @return \ResultSet|\PDOResultSet|object */
     public function Execute($sql, $bindvars = array(), $fetchmode = null);
     //public function SelectLimit($sql, $limit = 0, $offset = 0, $bindvars = array(), $fetchmode = null);
     //public function connect($dsn, $flags = false);
@@ -46,14 +46,14 @@ interface ConnectionInterface
     public function getResource();
     //public function getFlags();
     //public function getDSN();
-    /** @return \DatabaseInfo|\PDODatabaseInfo */
+    /** @return \DatabaseInfo|\PDODatabaseInfo|object */
     public function getDatabaseInfo();
     //public function getIdGenerator();
-    /** @return \PreparedStatement|\xarPDOStatement */
+    /** @return \PreparedStatement|\xarPDOStatement|object */
     public function prepareStatement($sql);
     //public function createStatement();
     //public function applyLimit(&$sql, $offset, $limit);
-    /** @return \ResultSet|\PDOResultSet */
+    /** @return \ResultSet|\PDOResultSet|object */
     public function executeQuery($sql, $fetchmode = null);
     public function executeUpdate($sql);
     //public function prepareCall($sql);
