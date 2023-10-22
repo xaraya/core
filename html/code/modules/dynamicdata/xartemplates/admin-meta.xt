@@ -156,7 +156,7 @@
                     <xar:img scope="theme" file="icons/export-xml.png" class="xar-icon" alt="export"/>
                 </a>
             </h3>
-            <xar:data-display object="$object" table="$table"/>
+            <xar:data-display object="$object" table="$table" layout="meta"/>
         <xar:else />
             <h3>
                 Table: #$table#&#160;

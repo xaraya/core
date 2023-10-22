@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <xar:foreach in="$properties" key="$name" value="$property">
+        <div class="xar-row">
+            <div class="xar-col">
+                <xar:data-label property="$properties[$name]" for="id"/>
+            </div>
+            <div class="xar-col">
+                <xar:if condition="get_class($property) eq 'TextAreaProperty' and is_string($property->value) and str_starts_with($property->value, 'a:')">
+                    <xar:set name="value">json_encode(unserialize($property->value), JSON_PRETTY_PRINT)</xar:set>
+                    (serialized)<pre>#$value#</pre>
+                <xar:else/>
+                    <xar:data-output property="$properties[$name]"/>
+                </xar:if>
+            </div>
+        </div>
+    </xar:foreach>
+</xar:template>
