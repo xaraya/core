@@ -28,7 +28,7 @@
             "$timestamp = null",
             "?string $locale = null"
         ],
-        "line": 778
+        "line": 786
     },
     "debug": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/exceptions.php",
@@ -89,7 +89,7 @@
             "$privilege",
             "$role"
         ],
-        "line": 158,
+        "line": 165,
         "uses": "xarPrivileges::assign()",
         "class": "xarPrivileges",
         "check": "assign",
@@ -150,7 +150,7 @@
         "args": [
             "$obj"
         ],
-        "line": 32,
+        "line": 33,
         "class": "xarBoot",
         "check": "getPublicObjectProperties"
     },
@@ -230,7 +230,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
         "name": "xarCurrentRole",
         "args": [],
-        "line": 247,
+        "line": 254,
         "uses": "xarRoles::current()",
         "class": "xarRoles",
         "check": "current",
@@ -243,7 +243,7 @@
             "$tableName",
             "$args"
         ],
-        "line": 77,
+        "line": 81,
         "class": "xarDB",
         "check": "_datadictAlterTable"
     },
@@ -254,7 +254,7 @@
             "$field_name",
             "$parameters"
         ],
-        "line": 155,
+        "line": 160,
         "class": "xarDB",
         "check": "_datadictColumnDefinition"
     },
@@ -264,7 +264,7 @@
         "args": [
             "$databaseName"
         ],
-        "line": 388,
+        "line": 393,
         "class": "xarDB",
         "check": "_datadictCreateDatabase"
     },
@@ -275,7 +275,7 @@
             "$tableName",
             "$index"
         ],
-        "line": 430,
+        "line": 437,
         "class": "xarDB",
         "check": "_datadictCreateIndex"
     },
@@ -286,7 +286,7 @@
             "$tableName",
             "$fields"
         ],
-        "line": 36,
+        "line": 37,
         "class": "xarDB",
         "check": "_datadictCreateTable"
     },
@@ -297,7 +297,7 @@
             "$tableName",
             "$index"
         ],
-        "line": 453,
+        "line": 460,
         "class": "xarDB",
         "check": "_datadictDropIndex"
     },
@@ -307,7 +307,7 @@
         "args": [
             "$tableName"
         ],
-        "line": 409,
+        "line": 415,
         "class": "xarDB",
         "check": "_datadictDropTable"
     },
@@ -315,7 +315,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/tableddl/datadict.php",
         "name": "xarDB__datadictInit",
         "args": [],
-        "line": 469,
+        "line": 477,
         "class": "xarDB",
         "check": "_datadictInit"
     },
@@ -326,7 +326,7 @@
             "$tableName",
             "$args"
         ],
-        "line": 100,
+        "line": 102,
         "class": "xarDB",
         "check": "_mysqlAlterTable"
     },
@@ -337,7 +337,7 @@
             "$field_name",
             "$parameters"
         ],
-        "line": 213,
+        "line": 215,
         "class": "xarDB",
         "check": "_mysqlColumnDefinition"
     },
@@ -346,7 +346,8 @@
         "name": "xarDB__mysqlCreateTable",
         "args": [
             "$tableName",
-            "$fields"
+            "$fields",
+            "$charset = null"
         ],
         "line": 36,
         "class": "xarDB",
@@ -359,7 +360,7 @@
             "$tableName",
             "$args"
         ],
-        "line": 95,
+        "line": 97,
         "class": "xarDB",
         "check": "_oracleAlterTable"
     },
@@ -370,7 +371,7 @@
             "$field_name",
             "$parameters"
         ],
-        "line": 197,
+        "line": 199,
         "class": "xarDB",
         "check": "_oracleColumnDefinition"
     },
@@ -379,7 +380,8 @@
         "name": "xarDB__oracleCreateTable",
         "args": [
             "$tableName",
-            "$fields"
+            "$fields",
+            "$charset = null"
         ],
         "line": 36,
         "class": "xarDB",
@@ -392,7 +394,7 @@
             "$field_name",
             "$parameters"
         ],
-        "line": 180,
+        "line": 182,
         "class": "xarDB",
         "check": "_postgresColumnDefinition"
     },
@@ -403,7 +405,7 @@
             "$tableName",
             "$args"
         ],
-        "line": 97,
+        "line": 99,
         "class": "xarDB",
         "check": "_postgresqlAlterTable"
     },
@@ -412,7 +414,8 @@
         "name": "xarDB__postgresqlCreateTable",
         "args": [
             "$tableName",
-            "$fields"
+            "$fields",
+            "$charset = null"
         ],
         "line": 36,
         "class": "xarDB",
@@ -425,7 +428,7 @@
             "$tableName",
             "$args"
         ],
-        "line": 86,
+        "line": 88,
         "class": "xarDB",
         "check": "_sqliteAlterTable"
     },
@@ -436,7 +439,7 @@
             "$field_name",
             "$parameters"
         ],
-        "line": 132,
+        "line": 134,
         "class": "xarDB",
         "check": "_sqliteColumnDefinition"
     },
@@ -445,7 +448,8 @@
         "name": "xarDB__sqliteCreateTable",
         "args": [
             "$tableName",
-            "$fields"
+            "$fields",
+            "$charset = null"
         ],
         "line": 35,
         "class": "xarDB",
@@ -457,7 +461,7 @@
         "args": [
             "array &$args"
         ],
-        "line": 106,
+        "line": 135,
         "class": "xarDB",
         "check": "init"
     },
@@ -469,7 +473,7 @@
             "$args",
             "$databaseType = NULL"
         ],
-        "line": 168,
+        "line": 166,
         "uses": "xarTableDDL::alterTable()",
         "class": "xarTableDDL",
         "check": "alterTable",
@@ -497,7 +501,7 @@
             "$index",
             "$databaseType = NULL"
         ],
-        "line": 277,
+        "line": 273,
         "uses": "xarTableDDL::createIndex()",
         "class": "xarTableDDL",
         "check": "createIndex",
@@ -512,7 +516,7 @@
             "$databaseType = \"\"",
             "$charset = \"\""
         ],
-        "line": 101,
+        "line": 95,
         "uses": "xarTableDDL::createTable()",
         "class": "xarTableDDL",
         "check": "createTable",
@@ -526,7 +530,7 @@
             "$index",
             "$databaseType = NULL"
         ],
-        "line": 346,
+        "line": 341,
         "uses": "xarTableDDL::dropIndex()",
         "class": "xarTableDDL",
         "check": "dropIndex",
@@ -539,7 +543,7 @@
             "$tableName",
             "$databaseType = NULL"
         ],
-        "line": 227,
+        "line": 224,
         "uses": "xarTableDDL::dropTable()",
         "class": "xarTableDDL",
         "check": "dropTable",
@@ -653,7 +657,7 @@
             "$parentId = ''",
             "$description = ''"
         ],
-        "line": 195,
+        "line": 202,
         "uses": "xarPrivileges::defineInstance()",
         "class": "xarPrivileges",
         "check": "defineInstance",
@@ -665,7 +669,7 @@
         "args": [
             "$name"
         ],
-        "line": 236,
+        "line": 243,
         "uses": "xarRoles::findRole()",
         "class": "xarRoles",
         "check": "findRole",
@@ -675,7 +679,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
         "name": "xarGetGroups",
         "args": [],
-        "line": 224,
+        "line": 231,
         "uses": "xarRoles::getgroups()",
         "class": "xarRoles",
         "check": "getgroups",
@@ -688,7 +692,7 @@
             "$name1",
             "$name2"
         ],
-        "line": 265,
+        "line": 276,
         "uses": "xarRoles::isAncestor()",
         "class": "xarRoles",
         "check": "isAncestor",
@@ -701,7 +705,7 @@
             "$name1",
             "$name2"
         ],
-        "line": 256,
+        "line": 265,
         "uses": "xarRoles::isParent()",
         "class": "xarRoles",
         "check": "isParent",
@@ -714,7 +718,7 @@
             "$currency",
             "$localeData = NULL"
         ],
-        "line": 201,
+        "line": 203,
         "class": "xarLocale",
         "check": "FormatCurrency",
         "method": "formatCurrency",
@@ -731,7 +735,7 @@
             "$timestamp = null",
             "$addoffset = true"
         ],
-        "line": 512,
+        "line": 520,
         "class": "xarLocale",
         "check": "FormatDate",
         "method": "formatDate",
@@ -749,7 +753,7 @@
             "$localeData = NULL",
             "$isCurrency = false"
         ],
-        "line": 224,
+        "line": 225,
         "class": "xarLocale",
         "check": "FormatNumber",
         "method": "formatNumber",
@@ -767,7 +771,7 @@
             "$time = null",
             "$addoffset = false"
         ],
-        "line": 486,
+        "line": 494,
         "class": "xarLocale",
         "check": "FormatUTCDate",
         "method": "formatUTCDate",
@@ -785,7 +789,7 @@
             "$timestamp = null",
             "$addoffset = true"
         ],
-        "line": 348,
+        "line": 349,
         "class": "xarLocale",
         "check": "GetFormattedDate",
         "method": "getFormattedDate",
@@ -803,7 +807,7 @@
             "$timestamp = null",
             "$addoffset = true"
         ],
-        "line": 415,
+        "line": 417,
         "class": "xarLocale",
         "check": "GetFormattedTime",
         "method": "getFormattedTime",
@@ -821,7 +825,7 @@
             "$timestamp = null",
             "$addoffset = false"
         ],
-        "line": 321,
+        "line": 322,
         "class": "xarLocale",
         "check": "GetFormattedUTCDate",
         "method": "getFormattedUTCDate",
@@ -839,7 +843,7 @@
             "$timestamp = null",
             "$addoffset = false"
         ],
-        "line": 388,
+        "line": 390,
         "class": "xarLocale",
         "check": "GetFormattedUTCTime",
         "method": "getFormattedUTCTime",
@@ -892,7 +896,7 @@
             "$currency",
             "$localeData = NULL"
         ],
-        "line": 146,
+        "line": 148,
         "class": "xarLocale",
         "check": "ParseCurrency",
         "method": "parseCurrency",
@@ -909,7 +913,7 @@
             "$localeData = NULL",
             "$isCurrency = false"
         ],
-        "line": 173,
+        "line": 175,
         "class": "xarLocale",
         "check": "ParseNumber",
         "method": "parseNumber",
@@ -933,7 +937,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/log.php",
         "name": "xarLog__shutdown_handler",
         "args": [],
-        "line": 258,
+        "line": 259,
         "class": "xarLog",
         "check": "_shutdown_handler"
     },
@@ -1021,7 +1025,7 @@
             "$name",
             "$uname = ''"
         ],
-        "line": 28,
+        "line": 29,
         "uses": "xarRoles::makeGroup()",
         "class": "xarRoles",
         "check": "makeGroup",
@@ -1034,7 +1038,7 @@
             "$childName",
             "$parentName"
         ],
-        "line": 142,
+        "line": 149,
         "uses": "xarPrivileges::makeMember()",
         "class": "xarPrivileges",
         "check": "makeMember",
@@ -1057,7 +1061,7 @@
             "$childId",
             "$parentId"
         ],
-        "line": 89,
+        "line": 96,
         "uses": "xarRoles::makeMemberByID()",
         "class": "xarRoles",
         "check": "makeMemberByID",
@@ -1070,7 +1074,7 @@
             "$childName",
             "$parentName"
         ],
-        "line": 57,
+        "line": 64,
         "uses": "xarRoles::makeMemberByName()",
         "class": "xarRoles",
         "check": "makeMemberByName",
@@ -1083,7 +1087,7 @@
             "$childName",
             "$parentName"
         ],
-        "line": 73,
+        "line": 80,
         "uses": "xarRoles::makeMemberByUname()",
         "class": "xarRoles",
         "check": "makeMemberByUname",
@@ -1112,7 +1116,7 @@
             "$state = 3",
             "$authModule = 0"
         ],
-        "line": 41,
+        "line": 48,
         "uses": "xarRoles::makeUser()",
         "class": "xarRoles",
         "check": "makeUser",
@@ -1126,7 +1130,7 @@
             "$module = \"All\"",
             "$component = \"All\""
         ],
-        "line": 345,
+        "line": 361,
         "uses": "xarSecurity::hasMask()",
         "class": "xarSecurity",
         "check": "hasMask",
@@ -1239,7 +1243,7 @@
             "$format = null",
             "$timestamp = null"
         ],
-        "line": 575,
+        "line": 583,
         "class": "xarMLS",
         "check": "strftime"
     },
@@ -1847,7 +1851,7 @@
         "args": [
             "$cacheGroups"
         ],
-        "line": 427,
+        "line": 424,
         "class": "xarPage",
         "check": "checkUserCaching"
     },
@@ -1857,7 +1861,7 @@
         "args": [
             "$name"
         ],
-        "line": 331,
+        "line": 346,
         "uses": "xarSecurity::hasPrivilege()",
         "class": "xarSecurity",
         "check": "hasPrivilege",
@@ -1875,7 +1879,7 @@
             "$level",
             "$description = ''"
         ],
-        "line": 392,
+        "line": 410,
         "uses": "xarMasks::register()",
         "class": "xarMasks",
         "check": "register",
@@ -1893,7 +1897,7 @@
             "$level",
             "$description = ''"
         ],
-        "line": 126,
+        "line": 133,
         "uses": "xarPrivileges::register()",
         "class": "xarPrivileges",
         "check": "register",
@@ -1905,7 +1909,7 @@
         "args": [
             "$module"
         ],
-        "line": 210,
+        "line": 217,
         "uses": "xarPrivileges::removeInstances()",
         "class": "xarPrivileges",
         "check": "removeInstances",
@@ -1917,7 +1921,7 @@
         "args": [
             "$module"
         ],
-        "line": 420,
+        "line": 438,
         "uses": "xarMasks::removemasks()",
         "class": "xarMasks",
         "check": "removemasks",
@@ -1929,7 +1933,7 @@
         "args": [
             "$module"
         ],
-        "line": 173,
+        "line": 180,
         "uses": "xarPrivileges::removeModule()",
         "class": "xarPrivileges",
         "check": "removeModule",
@@ -1942,7 +1946,7 @@
             "$childId",
             "$parentId"
         ],
-        "line": 105,
+        "line": 112,
         "uses": "xarRoles::removeMemberByID()",
         "class": "xarRoles",
         "check": "removeMemberByID",
@@ -2008,7 +2012,7 @@
             "$instance",
             "$level"
         ],
-        "line": 303,
+        "line": 318,
         "uses": "xarPrivileges::external()",
         "class": "xarPrivileges",
         "check": "external",
@@ -2022,7 +2026,7 @@
             "$authIdVarName = 'authid'",
             "$catch = false"
         ],
-        "line": 449,
+        "line": 468,
         "uses": "xarSec::confirmAuthKey()",
         "class": "xarSec",
         "check": "confirmAuthKey",
@@ -2034,7 +2038,7 @@
         "args": [
             "$modName = NULL"
         ],
-        "line": 434,
+        "line": 452,
         "uses": "xarSec::genAuthKey()",
         "class": "xarSec",
         "check": "genAuthKey",
@@ -2053,7 +2057,7 @@
             "$pnrealm = 0",
             "$pnlevel = 0"
         ],
-        "line": 366,
+        "line": 384,
         "uses": "xarSecurity::check()",
         "class": "xarSecurity",
         "check": "check",
@@ -2065,7 +2069,7 @@
         "args": [
             "$levelname"
         ],
-        "line": 318,
+        "line": 333,
         "uses": "xarSecurity::getLevel()",
         "class": "xarSecurity",
         "check": "getLevel",
@@ -2225,7 +2229,7 @@
         "args": [
             "$themeName"
         ],
-        "line": 83,
+        "line": 84,
         "uses": "xarTheme::getBaseInfo()",
         "class": "xarTheme",
         "check": "getBaseInfo",
@@ -2237,7 +2241,7 @@
         "args": [
             "$themeOsDir"
         ],
-        "line": 73,
+        "line": 74,
         "uses": "xarTheme::getFileInfo()",
         "class": "xarTheme",
         "check": "getFileInfo",
@@ -2249,7 +2253,7 @@
         "args": [
             "$themeName"
         ],
-        "line": 92,
+        "line": 94,
         "uses": "xarTheme::getVarsByTheme()",
         "class": "xarTheme",
         "check": "getVarsByTheme",
@@ -2262,7 +2266,7 @@
             "$themeName",
             "$id = 'regid'"
         ],
-        "line": 37,
+        "line": 38,
         "uses": "xarTheme::getIDFromName()",
         "class": "xarTheme",
         "check": "getIDFromName",
@@ -2274,7 +2278,7 @@
         "args": [
             "$regId"
         ],
-        "line": 50,
+        "line": 51,
         "uses": "xarTheme::getInfo()",
         "class": "xarTheme",
         "check": "getInfo",
@@ -2300,7 +2304,7 @@
         "args": [
             "$themeName"
         ],
-        "line": 60,
+        "line": 61,
         "uses": "xarTheme::isAvailable()",
         "class": "xarTheme",
         "check": "isAvailable",
@@ -2697,7 +2701,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/legacy/security.php",
         "name": "xarTree",
         "args": [],
-        "line": 282,
+        "line": 292,
         "uses": "xarTreeRenderer"
     },
     "xarufindrole": {
@@ -2706,7 +2710,7 @@
         "args": [
             "$name"
         ],
-        "line": 241,
+        "line": 248,
         "uses": "xarRoles::ufindRole()",
         "class": "xarRoles",
         "check": "ufindRole",
@@ -2718,7 +2722,7 @@
         "args": [
             "$name"
         ],
-        "line": 405,
+        "line": 423,
         "uses": "xarMasks::unregister()",
         "class": "xarMasks",
         "check": "unregister",
@@ -2938,7 +2942,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepEmailDisplay",
         "args": [],
-        "line": 605,
+        "line": 604,
         "class": "xarVar",
         "check": "PrepEmailDisplay",
         "method": "prepEmailDisplay",
@@ -2950,7 +2954,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepForDisplay",
         "args": [],
-        "line": 472,
+        "line": 469,
         "class": "xarVar",
         "check": "PrepForDisplay",
         "method": "prepForDisplay",
@@ -2962,7 +2966,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepForOS",
         "args": [],
-        "line": 655,
+        "line": 654,
         "class": "xarVar",
         "check": "PrepForOS",
         "method": "prepForOS",
@@ -2974,7 +2978,7 @@
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/variables.php",
         "name": "xarVarPrepHTMLDisplay",
         "args": [],
-        "line": 512,
+        "line": 511,
         "class": "xarVar",
         "check": "PrepHTMLDisplay",
         "method": "prepHTMLDisplay",
@@ -2988,7 +2992,7 @@
         "args": [
             "$matches"
         ],
-        "line": 584,
+        "line": 583,
         "class": "xarVar",
         "check": "PrepHTMLDisplay__callback"
     },

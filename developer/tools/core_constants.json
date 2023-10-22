@@ -1,8 +1,8 @@
 {
     "_xar_id_unregistered": {
-        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/sessions.php",
+        "file": "/home/mikespub/xaraya-core/html/lib/xaraya/users.php",
         "name": "_XAR_ID_UNREGISTERED",
-        "value": "self::$anonId"
+        "value": "xarSession::getAnonId()"
     },
     "convert_tables_dir": {
         "file": "/home/mikespub/xaraya-core/html/lib/xaraya/transforms/xarCharset.php",
