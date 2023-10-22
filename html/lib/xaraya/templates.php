@@ -1431,7 +1431,3 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
     }
 
 }
-
-
-// Legacy calls - import by default for now...
-//sys::import('xaraya.legacy.templates');

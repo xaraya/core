@@ -682,6 +682,3 @@ class xarSession extends xarObject implements IsessionHandler
         return true;
     }
 }
-
-// Legacy calls - import by default for now...
-//sys::import('xaraya.legacy.sessions');

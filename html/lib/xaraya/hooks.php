@@ -587,6 +587,3 @@ class xarModHooks extends xarObject
         return xarHooks::unregisterObserver($event, $hookModName);
     }
 }
-
-// Legacy calls - import by default for now...
-//sys::import('xaraya.legacy.hooks');

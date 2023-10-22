@@ -1096,6 +1096,3 @@ class xarModAlias extends xarObject implements IxarModAlias
         return xarMod::apiFunc('modules', 'admin', 'delete_module_alias', $args);
     }
 }
-
-// Legacy calls - import by default for now...
-//sys::import('xaraya.legacy.modules');

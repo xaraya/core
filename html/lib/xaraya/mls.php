@@ -954,6 +954,3 @@ if (!function_exists('xarML')) {
         return call_user_func_array(array('xarMLS', 'translate'), func_get_args());
     }
 }
-
-// Legacy calls - import by default for now...
-//sys::import('xaraya.legacy.mls');

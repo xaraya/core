@@ -123,7 +123,7 @@ function dynamicdata_utilapi_maketable(array $args = [])
                 break;
 
             case 'textbox':
-                if (!empty($properties[$name]['validation']) && preg_match('/^\d*:(\d+)$/', $properties[$name]['validation'], $matches)) {
+                if (!empty($properties[$name]['configuration']) && preg_match('/^\d*:(\d+)$/', $properties[$name]['configuration'], $matches)) {
                     $maxlength = $matches[1];
                 } else {
                     $maxlength = 254;

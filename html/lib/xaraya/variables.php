@@ -675,6 +675,3 @@ function xarVarPrepForOS()
         return $args;
     }
 }
-
-// Legacy calls - import by default for now...
-//sys::import('xaraya.legacy.variables');

@@ -184,7 +184,7 @@ class UtilApi implements DatabaseInterface
                 $datatype = 'itemid';
             }
 
-            [$proptype, $validation, $status] = static::mapPropertyType($datatype, $size);
+            [$proptype, $configuration, $status] = static::mapPropertyType($datatype, $size);
 
             // JDJ: added 'primary' and 'autoincrement' fields.
             // If this causes a problem, it could be made optional.
@@ -200,8 +200,7 @@ class UtilApi implements DatabaseInterface
                 'source' => $curtable . '.' . $name,
                 'status' => $status,
                 'seq' => $id,
-                'validation' => $validation,
-                'configuration' => $validation,
+                'configuration' => $configuration,
                 //'primary' => isset($field->primary_key)?$field->primary_key : '',
                 //'autoincrement' => isset($field->auto_increment))? $field->auto_increment : ''
             ];
@@ -232,8 +231,8 @@ class UtilApi implements DatabaseInterface
         $proptypeid = static::getPropTypeIds();
 
         // assign some default validation for now
-        $validation = $datatype;
-        $validation .= (empty($size) || $size < 0) ? '' : ' (' . $size . ')';
+        $configuration = $datatype;
+        $configuration .= (empty($size) || $size < 0) ? '' : ' (' . $size . ')';
 
         // (try to) assign some default property type for now
         // = obviously limited to basic data types in this case
@@ -243,19 +242,19 @@ class UtilApi implements DatabaseInterface
         switch ($dtype) {
             case 'itemid':
                 $proptype = $proptypeid['itemid']; // Item ID
-                $validation = '';
+                $configuration = '';
                 break;
             case 'char':
             case 'varchar':
                 $proptype = $proptypeid['textbox']; // Text Box
                 if (!empty($size) && $size > 0) {
-                    $validation = "0:" . strval($size);
+                    $configuration = "0:" . strval($size);
                 }
                 break;
             case 'tinyint':
                 if ($size == 1) {
                     $proptype = $proptypeid['checkbox']; // Checkbox
-                    $validation = '';
+                    $configuration = '';
                 } else {
                     $proptype = $proptypeid['integerbox']; // Number Box
                 }
@@ -266,9 +265,9 @@ class UtilApi implements DatabaseInterface
             case 'mediumint':
                 $proptype = $proptypeid['integerbox']; // Number Box
                 if (!empty($size) && $size > 6) {
-                    $validation = '';
+                    $configuration = '';
                 } elseif (empty($size)) {
-                    $validation = '';
+                    $configuration = '';
                 }
                 break;
             case 'bigint':
@@ -279,14 +278,14 @@ class UtilApi implements DatabaseInterface
             case 'double':
             case 'real':
                 $proptype = $proptypeid['floatbox']; // Number Box (float)
-                $validation = '';
+                $configuration = '';
                 break;
                 // in case we have some leftover bit(1) columns instead of tinyint(1) for boolean in MySQL
             case 'bit':
             case 'bool':
             case 'boolean':
                 $proptype = $proptypeid['checkbox']; // Checkbox
-                $validation = '';
+                $configuration = '';
                 break;
             case 'date':
             case 'datetime':
@@ -297,12 +296,12 @@ class UtilApi implements DatabaseInterface
             case 'mediumtext':
                 $proptype = $proptypeid['textarea_medium']; // Medium Text Area
                 $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
-                $validation = '';
+                $configuration = '';
                 break;
             case 'longtext':
                 $proptype = $proptypeid['textarea_large']; // Large Text Area
                 $status = DataPropertyMaster::DD_DISPLAYSTATE_DISPLAYONLY;
-                $validation = '';
+                $configuration = '';
                 break;
             case 'blob':       // caution, could be binary too !
                 $proptype = $proptypeid['textarea_medium']; // Medium Text Area
@@ -310,14 +309,14 @@ class UtilApi implements DatabaseInterface
                 break;
             case 'enum':
                 $proptype = $proptypeid['dropdown']; // Dropdown
-                $validation = strtr($validation, ['enum(' => '', ')' => '', "'" => '', ',' => ';']);
+                $configuration = strtr($configuration, ['enum(' => '', ')' => '', "'" => '', ',' => ';']);
                 break;
             default:
                 $proptype = $proptypeid['static']; // Static Text
                 break;
         }
 
-        return [$proptype, $validation, $status];
+        return [$proptype, $configuration, $status];
     }
 
     /**

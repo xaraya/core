@@ -291,6 +291,3 @@ function xarLog__shutdown_handler()
     }
  */
 }
-
-// Legacy calls - import by default for now...
-//sys::import('xaraya.legacy.log');

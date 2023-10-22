@@ -90,7 +90,3 @@ class xarTheme extends xarObject
         return xarModVars::preload('themes');
     }
 }
-
-
-// Legacy calls - import by default for now...
-//sys::import('xaraya.legacy.themes');

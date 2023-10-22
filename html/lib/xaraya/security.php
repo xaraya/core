@@ -132,6 +132,3 @@ class xarSec extends xarObject
         else return false;
     }
 }
-
-// Legacy calls - import by default for now...
-//sys::import('xaraya.legacy.security');
