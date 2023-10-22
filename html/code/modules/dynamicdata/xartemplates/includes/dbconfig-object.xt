@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <form method="post">
+        <fieldset>
+            <legend>Object: #$obj#</legend>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="module" title="" style="">Module</label>
+                </div>
+                <div class="xar-col">
+                    #$module#
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="name" title="" style="">Name (empty to delete configuration)</label>
+                </div>
+                <div class="xar-col">
+                    <input type="text" id="name" name="config[name]" value="#$config['name']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                    (lowercase, no space)
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="class" title="" style="">Class</label>
+                </div>
+                <div class="xar-col">
+                    #$config['class']#
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="filepath" title="" style="">Location</label>
+                </div>
+                <div class="xar-col">
+                    #$config['filepath']#
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <label class="xar-form-label" for="datastore" title="" style="">Datastore</label>
+                </div>
+                <div class="xar-col">
+                    <xar:set name="options">['relational', 'external']</xar:set>
+                    <select id="datastore" name="config[datastore]">
+                        <xar:foreach in="$options" value="$option">
+                            <xar:if condition="!empty($config['datastore']) and $option eq $config['datastore']">
+                                <option value="#$option#" selected="selected">#$option#</option>
+                            <xar:else/>
+                                <option value="#$option#">#$option#</option>
+                            </xar:if>
+                        </xar:foreach>
+                    </select>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="dbConnIndex" title="" style="">DB Connection Index (dbConnIndex)</label>
+                    </div>
+                    <div class="xar-col">
+                        <input type="text" id="dbConnIndex" name="config[dbConnIndex]" value="#$config['dbConnIndex']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                    </div>
+                </div>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label class="xar-form-label" for="dbConnArgs" title="" style="">DB Connection Arguments (dbConnArgs)</label>
+                    </div>
+                    <div class="xar-col">
+                        Callable:<br/>
+                        Class <input type="text" id="dbConnArgs" name="config[callable][class]" value="#$config['callable']['class']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textxlong"/>&#160;
+                        Method <input type="text" id="dbConnArgs_2" name="config[callable][method]" value="#$config['callable']['method']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        (empty class to reset)
+                        <br/>or<br/>
+                        Parameters:<br/>
+                        <xar:foreach in="$config['dbConnArgs']" key="$key" value="$value">
+                            <input id="dbConnArgs_key_#$key#" name="config[dbConnArgs][key][#$key#]" value="#$key#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                            <input id="dbConnArgs_val_#$key#" name="config[dbConnArgs][val][#$key#]" value="#$value#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                            (empty to delete)
+                            <br/>
+                        </xar:foreach>
+                        <input id="dbConnArgs_key_new" name="config[dbConnArgs][key][new]" value="" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                        <input id="dbConnArgs_val_new" name="config[dbConnArgs][val][new]" value="" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="xar-align-center">
+            <input type="hidden" name="authid" value="#xarSec::genAuthKey('dynamicdata')#"/>
+            <input type="hidden" name="obj" value="#$obj#"/>
+            <xar:var name="label">Cancel</xar:var>
+            <xar:button type="cancel" label="$label"/>&#160;
+            <xar:var name="label">Save Configuration</xar:var>
+            <xar:button type="submit" label="$label"/>
+        </div>
+    </form>
+</xar:template>

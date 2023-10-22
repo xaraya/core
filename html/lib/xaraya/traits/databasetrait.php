@@ -62,10 +62,18 @@ sys::import('modules.dynamicdata.class.objects.master');
 interface DatabaseInterface
 {
     /**
+     * Summary of setModuleName
+     * @param string $moduleName
+     * @return void
+     */
+    public static function setModuleName($moduleName);
+
+    /**
      * Summary of getDatabases
+     * @param ?string $moduleName
      * @return array<string, mixed>
      */
-    public static function getDatabases();
+    public static function getDatabases($moduleName = null);
 
     /**
      * Summary of addDatabase
@@ -79,9 +87,10 @@ interface DatabaseInterface
     /**
      * Summary of saveDatabases
      * @param ?array<string, mixed> $databases
+     * @param ?string $moduleName
      * @return void
      */
-    public static function saveDatabases($databases = null);
+    public static function saveDatabases($databases = null, $moduleName = null);
 
     /**
      * Summary of connectDatabase
@@ -156,11 +165,29 @@ trait DatabaseTrait
     protected static array $_connections = [];
 
     /**
+     * Summary of setModuleName
+     * @param string $moduleName
+     * @return void
+     */
+    public static function setModuleName($moduleName)
+    {
+        // reset list of databases in DatabaseTrait
+        if ($moduleName !== static::$moduleName) {
+            static::$_databases = [];
+        }
+        static::$moduleName = $moduleName;
+    }
+
+    /**
      * Summary of getDatabases
+     * @param ?string $moduleName
      * @return array<string, mixed>
      */
-    public static function getDatabases()
+    public static function getDatabases($moduleName = null)
     {
+        if (!empty($moduleName)) {
+            static::setModuleName($moduleName);
+        }
         if (empty(static::$_databases)) {
             static::$_databases = unserialize(xarModVars::get(static::$moduleName, 'databases'));
             if (empty(static::$_databases)) {
@@ -196,12 +223,14 @@ trait DatabaseTrait
     /**
      * Summary of saveDatabases
      * @param ?array<string, mixed> $databases
+     * @param ?string $moduleName
      * @return void
      */
-    public static function saveDatabases($databases = null)
+    public static function saveDatabases($databases = null, $moduleName = null)
     {
         $databases ??= static::$_databases;
-        xarModVars::set(static::$moduleName, 'databases', serialize($databases));
+        $moduleName ??= static::$moduleName;
+        xarModVars::set($moduleName, 'databases', serialize($databases));
     }
 
     /**
@@ -222,7 +251,7 @@ trait DatabaseTrait
         // open a new database connection
         $conn = xarDB::newConn($args);
         // save the connection index
-        $dbConnIndex = xarDB::$count - 1;
+        $dbConnIndex = xarDB::getConnIndex();
         static::$_connections[$name] = $dbConnIndex;
         // return the connection index
         return $dbConnIndex;

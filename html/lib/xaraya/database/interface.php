@@ -75,6 +75,11 @@ interface DatabaseInterface
      */
     public static function hasConn($index = 0);
     /**
+     * Summary of getConnIndex
+     * @return mixed
+     */
+    public static function getConnIndex();
+    /**
      * Summary of getConnection
      * @param mixed $dsn
      * @param mixed $flags

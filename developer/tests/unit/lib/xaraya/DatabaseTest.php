@@ -63,12 +63,12 @@ final class DatabaseTest extends TestCase
         $this->assertEquals($expected, $table->getName());
 
         // check getConn vs. hasConn due to auto-connect
-        $expected = 1;
-        $this->assertEquals($expected, xarDB::$count);
+        $expected = 0;
+        $this->assertEquals($expected, xarDB::getConnIndex());
         $this->assertFalse(xarDB::hasConn(1));
         $conn = xarDB::getConn(1);
-        $expected = 2;
-        $this->assertEquals($expected, xarDB::$count);
+        $expected = 1;
+        $this->assertEquals($expected, xarDB::getConnIndex());
         $this->assertTrue($conn instanceof \Connection);
         $this->assertTrue(xarDB::hasConn(1));
 
@@ -78,7 +78,7 @@ final class DatabaseTest extends TestCase
             'databaseName' => sys::varpath() . '/sqlite/metadata.db',
         ];
         $conn = xarDB::newConn($dbConnArgs);
-        $dbConnIndex = xarDB::$count - 1;
+        $dbConnIndex = xarDB::getConnIndex();
         $expected = 2;
         $this->assertEquals($expected, $dbConnIndex);
         $this->assertTrue($conn instanceof \Connection);
@@ -119,12 +119,12 @@ final class DatabaseTest extends TestCase
         $this->assertEquals($expected, $table->getName());
 
         // check getConn vs. hasConn due to auto-connect
-        $expected = 1;
-        $this->assertEquals($expected, xarDB::$count);
+        $expected = 0;
+        $this->assertEquals($expected, xarDB::getConnIndex());
         $this->assertFalse(xarDB::hasConn(1));
         $conn = xarDB::getConn(1);
-        $expected = 2;
-        $this->assertEquals($expected, xarDB::$count);
+        $expected = 1;
+        $this->assertEquals($expected, xarDB::getConnIndex());
         $this->assertTrue($conn instanceof \xarPDO);
         $this->assertTrue(xarDB::hasConn(1));
 
@@ -134,7 +134,7 @@ final class DatabaseTest extends TestCase
             'databaseName' => sys::varpath() . '/sqlite/metadata.db',
         ];
         $conn = xarDB::newConn($dbConnArgs);
-        $dbConnIndex = xarDB::$count - 1;
+        $dbConnIndex = xarDB::getConnIndex();
         $expected = 2;
         $this->assertEquals($expected, $dbConnIndex);
         $this->assertTrue($conn instanceof \xarPDO);

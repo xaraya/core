@@ -463,7 +463,7 @@ class DataObjectMaster extends xarObject
             return;
         }
         xarDB::newConn($args);
-        $this->dbConnIndex = xarDB::$count - 1;
+        $this->dbConnIndex = xarDB::getConnIndex();
     }
 
     /**

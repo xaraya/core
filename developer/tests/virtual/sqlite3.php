@@ -21,7 +21,7 @@ function get_dbconn_index($filepath)
         'databaseName' => $filepath,
     ];
     $conn = xarDB::newConn($args);
-    $dbConnIndex = xarDB::$count - 1;
+    $dbConnIndex = xarDB::getConnIndex();
 
     $dbinfo = $conn->getDatabaseInfo();
     echo "Connection $dbConnIndex: " . $dbinfo->getName() . "\n";

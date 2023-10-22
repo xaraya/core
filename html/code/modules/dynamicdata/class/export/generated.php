@@ -261,11 +261,11 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
 
     /**
      * Get a list of instances of this class
-     * @param int $startnum
-     * @param int $numitems
+     * @param int $startnum start number (default 1)
+     * @param int $numitems number of items to retrieve (default 0 = all)
      * @return \ArrayObject<(int|string), mixed>
      */
-    public static function list(int $startnum = 0, int $numitems = -1)
+    public static function list(int $startnum = 1, int $numitems = 0)
     {
         $clazz = static::getObjectClass();
         if (class_exists($clazz . 'List')) {

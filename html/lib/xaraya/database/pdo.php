@@ -194,6 +194,12 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
         return false;
     }
 
+    public static function getConnIndex()
+    {
+        // index of the latest connection
+        return self::$count - 1;
+    }
+
     public static function getConnection($dsn, $flags = array())
     {
         $dsn['phptype'] ??= 'mysql';

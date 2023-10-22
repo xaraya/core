@@ -61,7 +61,7 @@ $args = [
 // create new database connection
 $conn = xarDB::newConn($args);
 // get the latest connection index
-$dbConnIndex = xarDB::$count - 1;
+$dbConnIndex = xarDB::getConnIndex();
 
 // get an existing DD object or create a virtual one, and pass along the dbConnIndex
 $descriptor = new TableObjectDescriptor(['table' => 'books', 'dbConnIndex' => $dbConnIndex]);

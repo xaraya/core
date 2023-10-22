@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <ul>
+        <li>Xaraya: (0) <a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['db' => 'default'])#">default</a></li>
+        <xar:foreach in="$dbconfigs" key="$module" value="$info">
+            <li>
+                #$module#:
+                <ol>
+                    <li>
+                        Databases:
+                        <ul>
+                            <xar:foreach in="$info['databases']" key="$name" value="$config">
+                                <li>
+                                    <a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['db' => $module . '.' . $name])#">#$name#</a>:
+                                    #$config['description']#
+                                    <xar:if condition="!empty($config['external'])">
+                                        (#strtoupper($config['external'])#)
+                                    </xar:if>
+                                </li>
+                            </xar:foreach>
+                            <li><a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['db' => $module . '.*'])#">Add new database</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        Objects:
+                        <ul>
+                            <xar:foreach in="$info['objects']" key="$name" value="$config">
+                                <li>
+                                    <a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['obj' => $module . '.' . $name])#">#$name#</a>:
+                                    #$config['datastore']# (#$config['dbConnIndex']#) #$config['dbConnArgs']#
+                                </li>
+                            </xar:foreach>
+                            <li><a href="#xarController::URL('dynamicdata', 'admin', 'dbconfig', ['obj' => $module . '.*'])#">Configure other objects</a></li>
+                        </ul>
+                    </li>
+                </ol>
+            </li>
+        </xar:foreach>
+    </ul>
+</xar:template>

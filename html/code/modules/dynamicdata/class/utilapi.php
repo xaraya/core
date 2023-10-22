@@ -15,7 +15,9 @@ namespace Xaraya\DataObject;
 
 use Xaraya\Core\Traits\DatabaseInterface;
 use Xaraya\Core\Traits\DatabaseTrait;
+use DataObjectMaster;
 use DataPropertyMaster;
+use BadParameterException;
 use xarDB;
 use sys;
 
@@ -32,18 +34,30 @@ class UtilApi implements DatabaseInterface
     /** @var array<string, int> */
     protected static array $propTypeIds = [];
 
-    /**
-     * Summary of setModuleName
-     * @param string $moduleName
-     * @return void
-     */
-    public static function setModuleName($moduleName)
+    public static function getObjectConfig($objectname, $item = null)
     {
-        // reset list of databases in DatabaseTrait
-        if ($moduleName !== static::$moduleName) {
-            static::$_databases = [];
+        $item ??= DataObjectMaster::getObjectInfo(['name' => $objectname]);
+        if (empty($item) || $item['name'] !== $objectname) {
+            throw new BadParameterException($objectname, 'Invalid object name #(1)');
         }
-        static::$moduleName = $moduleName;
+        $configuration = [
+            'name' => $objectname,
+        ];
+        if (!empty($item['config'])) {
+            $configuration = unserialize($item['config']);
+        }
+        if (!empty($configuration['dbConnArgs']) && is_string($configuration['dbConnArgs'])) {
+            $configuration['dbConnArgs'] = json_decode($configuration['dbConnArgs'], true);
+            if (is_callable($configuration['dbConnArgs'])) {
+                $configuration['callable'] = [
+                    'class' => $configuration['dbConnArgs'][0],
+                    'method' => $configuration['dbConnArgs'][1],
+                ];
+                $configuration['dbConnArgs'] = [];
+            }
+        }
+        $configuration = array_merge($configuration, $item);
+        return $configuration;
     }
 
     /**
@@ -72,7 +86,7 @@ class UtilApi implements DatabaseInterface
             // open a new database connection
             $dbconn = xarDB::newConn($dbConnArgs);
             // save the connection index
-            $dbConnIndex = xarDB::$count - 1;
+            $dbConnIndex = xarDB::getConnIndex();
         }
         // dbInfo holds the meta information about the database
         $dbInfo = $dbconn->getDatabaseInfo();

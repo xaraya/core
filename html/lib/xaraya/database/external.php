@@ -28,9 +28,9 @@ namespace Xaraya\Database;
 class ExternalDatabase implements DatabaseInterface
 {
     public const ERROR_MSG = 'Not available as static method for ExternalDatabase - use the native methods of the database connection or $datastore->getDatabaseInfo() to get this';
-    public static int $count = 0;
+    public static string $latest = '';
     public static string $prefix = "";
-    /** @var list<\Connection|\xarPDO|object> */
+    /** @var array<string, \Connection|\xarPDO|object> */
     public static array $connections = [];
     // if we want to extend this class per DB extension someday + override $connectionClass
     public static string $connectionClass = "ExternalConnection";
@@ -102,6 +102,12 @@ class ExternalDatabase implements DatabaseInterface
         return false;
     }
 
+    public static function getConnIndex()
+    {
+        // index of the latest connection
+        return self::$latest;
+    }
+
     /**
      * Summary of getConnection
      * @param mixed $dsn
@@ -125,8 +131,10 @@ class ExternalDatabase implements DatabaseInterface
                 $conn = new static::$connectionClass($dsn, $flags);
                 break;
         }
-        static::$connections[] = & $conn;
-        static::$count += 1;
+        // avoid false positives when checking is_numeric($dbConnIndex)
+        $index = 'ext_' . md5(serialize($dsn));
+        static::$connections[$index] = & $conn;
+        static::$latest = $index;
         return $conn;
     }
 

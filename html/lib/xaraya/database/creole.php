@@ -185,6 +185,12 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
         return false;
     }
 
+    public static function getConnIndex()
+    {
+        // index of the latest connection
+        return self::$count - 1;
+    }
+
     // Overridden
     public static function getConnection($dsn, $flags = 0)
     {

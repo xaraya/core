@@ -72,7 +72,7 @@ function dynamicdata_admin_meta(array $args = [])
             $data['dbtype'] = $dbtype;
             $connArgs = ['databaseType' => $dbtype, 'databaseName' => $data['db']];
             $conn = xarDB::newConn($connArgs);
-            $data['dbConnIndex'] = xarDB::$count - 1;
+            $data['dbConnIndex'] = xarDB::getConnIndex();
         }
 
         if (empty($data['databases'])) {
