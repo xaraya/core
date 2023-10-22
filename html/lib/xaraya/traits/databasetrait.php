@@ -236,7 +236,7 @@ trait DatabaseTrait
     /**
      * Summary of connectDatabase
      * @param string $name
-     * @return int|null
+     * @return int|string|null
      */
     public static function connectDatabase($name)
     {

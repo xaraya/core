@@ -133,7 +133,7 @@ class DataStoreFactory extends xarObject
      * @param string $name
      * @param string $type type of datastore (relational, data, hook, modulevars, cache, ...)
      * @param ?string $storage storageType for the cacheStorage in CachingDatastore
-     * @param ?int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
+     * @param int|string|null $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      * @param ?array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB (optional)
      * @return IBasicDataStore
      */
@@ -223,7 +223,7 @@ class DataStoreFactory extends xarObject
      * Get possible data sources
      *
      * @param array<mixed> $args object datasources
-     * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
+     * @param int|string $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      * @return list<array<string, string>>
      */
     public static function &getDataSources($args = [], $dbConnIndex = 0)

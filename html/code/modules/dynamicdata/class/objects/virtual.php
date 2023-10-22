@@ -198,11 +198,11 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
      *
      * @param string $table name of the database table (required)
      * @param array<string, array<string, mixed>> $fields list of field specs coming from getmeta() or elsewhere (optional)
-     * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
+     * @param int|string $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      * @param array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB (optional)
      * @return void
     **/
-    public function addTable(string $table, array $fields = [], int $dbConnIndex = 0, array $dbConnArgs = [])
+    public function addTable(string $table, array $fields = [], int|string $dbConnIndex = 0, array $dbConnArgs = [])
     {
         if (empty($fields)) {
             //$fields = xarMod::apiFunc('dynamicdata', 'util', 'getstatic', ['module' => 'dynamicdata', 'module_id' => 182, 'table' => $table, 'dbConnIndex' => $dbConnIndex]);

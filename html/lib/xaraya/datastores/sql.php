@@ -22,7 +22,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     /** @var mixed */
     protected $db     = null;
     //protected $tables = null;
-    /** @var int */
+    /** @var int|string */
     public $dbConnIndex = 0;
 
     /** @var array<mixed> */
@@ -37,7 +37,7 @@ class SQLDataStore extends OrderedDataStore implements ISQLDataStore
     /**
      * Summary of __construct
      * @param mixed $name
-     * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
+     * @param int|string $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      */
     public function __construct($name = null, $dbConnIndex = 0)
     {

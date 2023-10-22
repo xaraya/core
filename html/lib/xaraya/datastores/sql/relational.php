@@ -29,7 +29,7 @@ class RelationalDataStore extends SQLDataStore
     /**
      * Summary of __construct
      * @param mixed $name
-     * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
+     * @param int|string $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      */
     public function __construct($name = null, $dbConnIndex = 0)
     {

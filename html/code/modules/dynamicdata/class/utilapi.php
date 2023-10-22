@@ -65,7 +65,7 @@ class UtilApi implements DatabaseInterface
      *
      * @param string $table name of the database table (required)
      * @param ?string $db optional database you're looking in (mysql only)
-     * @param int $dbConnIndex connection index of the database if different from Xaraya DB (optional)
+     * @param int|string $dbConnIndex connection index of the database if different from Xaraya DB (optional)
      * @param array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB (optional)
      * @return array<string, array<string, mixed>>|void of field definitions, or null on failure
      */
