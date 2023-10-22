@@ -196,6 +196,10 @@ class XarayaCodeAnalyzer
             $this->log('Class Conflict: ' . $name, true);
         }
         $this->classes[$lname] = ['file' => $fpath, 'name' => $name, 'methods' => [], 'const' => []];
+        $fqsen = (string) $class->getFqsen();
+        if ($fqsen !== '\\' . $name) {
+            $this->classes[$lname]['namespace'] = substr($fqsen, 0, strlen($fqsen) - strlen('\\' . $name));
+        }
         $this->classes[$lname]['parent'] = (string) $class->getParent();
         $this->classes[$lname]['line'] = $class->getLocation()->getLineNumber();
         foreach ($class->getMethods() as $method) {
@@ -572,7 +576,11 @@ class XarayaCoreAnalyzer extends XarayaCodeAnalyzer
         $this->classroot = new xarNode('root');
         foreach (array_keys($this->classes) as $lname) {
             if (!array_key_exists('node', $this->classes[$lname])) {
-                $this->classes[$lname]['node'] = new xarNode($this->classes[$lname]['name']);
+                if (!empty($this->classes[$lname]['namespace'])) {
+                    $this->classes[$lname]['node'] = new xarNode($this->classes[$lname]['namespace'] . '\\' . $this->classes[$lname]['name']);
+                } else {
+                    $this->classes[$lname]['node'] = new xarNode($this->classes[$lname]['name']);
+                }
             }
             $class = $this->classes[$lname];
             // base class
