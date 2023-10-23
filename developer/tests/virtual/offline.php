@@ -43,7 +43,7 @@ function save_offline_cache()
     xarCoreCache::saveCached('Mod.Infos');
 }
 
-function get_descriptor()
+function get_cache_descriptor()
 {
     $offline = true;
     $descriptor = new VirtualObjectDescriptor(['name' => 'something'], $offline);
@@ -53,11 +53,36 @@ function get_descriptor()
     return $descriptor;
 }
 
+function get_mongodb_descriptor()
+{
+    $offline = true;
+    $descriptor = new VirtualObjectDescriptor(['name' => 'something', 'config' => ''], $offline);
+    $descriptor->addProperty(['name' => 'id', 'type' => 'itemid', 'source' => 'stuff.id']);
+    $descriptor->addProperty(['name' => 'key', 'type' => 'textbox', 'source' => 'stuff.key']);
+    $descriptor->addProperty(['name' => 'val', 'type' => 'textbox', 'source' => 'stuff.val']);
+    $config = [
+        //'dbConnIndex' => 1,
+        'dbConnArgs' => [
+            'external' => 'mongodb',
+        ],
+    ];
+    $config['dbConnArgs'] = json_encode($config['dbConnArgs']);
+    $descriptor->set('config', serialize($config));
+    $descriptor->set('datastore', 'external');
+    return $descriptor;
+}
+
+function get_descriptor()
+{
+    //return get_cache_descriptor();
+    return get_mongodb_descriptor();
+}
+
 function test_create_items()
 {
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
-
+    echo get_class($something->datastore) . "\n";
     $itemid = $something->createItem(['id' => 1, 'key' => 'yes', 'val' => 'OK']);
     echo "Item $itemid\n";
     $itemid = $something->createItem(['id' => 2, 'key' => 'no', 'val' => 'Not OK']);
@@ -80,8 +105,12 @@ function test_get_items()
     $descriptor = get_descriptor();
     $something = new DataObjectList($descriptor);
 
-    $itemids = $something->datastore->listItemIds();
-    $items = $something->getItems(['itemids' => $itemids]);
+    if ($something->datastore instanceof CachingDataStore) {
+        $itemids = $something->datastore->listItemIds();
+        $items = $something->getItems(['itemids' => $itemids]);
+    } else {
+        $items = $something->getItems();
+    }
     var_dump($items);
 }
 

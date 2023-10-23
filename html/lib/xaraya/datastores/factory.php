@@ -198,6 +198,10 @@ class DataStoreFactory extends xarObject
                         sys::import('xaraya.datastores.external.dbal');
                         $datastore = new DbalDataStore($name, $dbConnArgs);
                         break;
+                    case 'mongodb':
+                        sys::import('xaraya.datastores.external.mongodb');
+                        $datastore = new MongoDBDataStore($name, $dbConnArgs);
+                        break;
                     case 'pdo':
                     default:
                         sys::import('xaraya.datastores.external.pdo');

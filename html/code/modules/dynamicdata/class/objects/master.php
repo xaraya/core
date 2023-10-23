@@ -483,7 +483,7 @@ class DataObjectMaster extends xarObject
             // we pass the current object as argument here, just in case...
             $args = call_user_func($this->dbConnArgs, $this);
             $this->dbConnArgs = $args;
-        } elseif (array_key_exists('databaseType', $this->dbConnArgs)) {
+        } elseif (array_key_exists('databaseType', $this->dbConnArgs) || array_key_exists('external', $this->dbConnArgs)) {
             $args = $this->dbConnArgs;
         } else {
             // allow database connection failure later on when it's actually needed

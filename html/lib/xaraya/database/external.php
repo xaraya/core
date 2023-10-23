@@ -126,6 +126,9 @@ class ExternalDatabase implements DatabaseInterface
             case 'dbal':
                 $conn = static::getDbalConnection($dsn, $flags);
                 break;
+            case 'mongodb':
+                $conn = static::getMongoDBConnection($dsn, $flags);
+                break;
             default:
                 // map $dsn and $flags to whatever the connection class expects
                 $conn = new static::$connectionClass($dsn, $flags);
@@ -230,6 +233,22 @@ class ExternalDatabase implements DatabaseInterface
             $params['charset'] = $dsn['databaseCharset'];
         }
         return $params;
+    }
+
+    public static function getMongoDBConnection($dsn, $flags)
+    {
+        // @todo add mapping for non-localhost configs
+        $params = static::mapMongoDBDSN($dsn, $flags);
+        $client = new \MongoDB\Client();
+        // use default MongoDB database if not specified
+        $params['databaseName'] ??= 'test';
+        return $client->selectDatabase($params['databaseName']);
+    }
+
+    public static function mapMongoDBDSN($dsn, $flags = [])
+    {
+        // see https://www.mongodb.com/docs/manual/reference/connection-string/
+        return $dsn;
     }
 
     public static function getTypeMap()

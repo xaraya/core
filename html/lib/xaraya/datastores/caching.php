@@ -68,6 +68,7 @@ class CachingDataStore extends BasicDataStore
         } else {
             $itemids = [];
         }
+        // we can only get items based on itemid here - see listItemIds()
         $fieldlist = $this->object->getFieldList();
         foreach ($itemids as $itemid) {
             $value = $this->getCacheStorage()->getCached($itemid);
