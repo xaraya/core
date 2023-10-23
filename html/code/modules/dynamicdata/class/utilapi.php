@@ -254,7 +254,7 @@ class UtilApi implements DatabaseInterface
             case 'tinyint':
                 if ($size == 1) {
                     $proptype = $proptypeid['checkbox']; // Checkbox
-                    $configuration = '';
+                    //$configuration = '';
                 } else {
                     $proptype = $proptypeid['integerbox']; // Number Box
                 }

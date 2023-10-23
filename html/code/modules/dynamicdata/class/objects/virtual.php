@@ -177,13 +177,13 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
      *     $args['fields'] list of field specs coming from getmeta() or elsewhere (optional)
      *     $args['dbConnIndex'] connection index of the database if different from Xaraya DB (optional)
      *     $args['dbConnArgs'] connection params of the database if different from Xaraya DB (optional)
+     * @param bool $offline do we want to work offline = without database connection (need to export cache first)
      */
-    public function __construct(array $args = [])
+    public function __construct(array $args = [], bool $offline = false)
     {
         $args['name'] ??= $args['table'] ?? 'unknown';
         $args['label'] ??= 'Table ' . $args['name'];
         //$args = self::getObjectID($args);
-        $offline = false;
         parent::__construct($args, $offline);
         if (!empty($args['table'])) {
             $args['fields'] ??= [];
@@ -213,7 +213,11 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
             }
             $fields = $meta[$table];
         }
-        $this->args['datastore'] = 'relational';
+        if (!empty($dbConnArgs) && !empty($dbConnArgs['external'])) {
+            $this->args['datastore'] = 'external';
+        } else {
+            $this->args['datastore'] = 'relational';
+        }
         unset($this->args['cachestorage']);
         $this->args['sources'] = serialize([$table => $table]);
         foreach ($fields as $name => $field) {
