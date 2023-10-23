@@ -1510,7 +1510,9 @@ class Query
         $bound = $pieces[0];
         $limit = count($pieces);
         for ($i=1;$i<$limit;$i++){
-            if (!is_numeric($this->bindvars[$i-1])) {
+            if (!isset($this->bindvars[$i-1])) {
+                $sqlfield = 'NULL';
+            } elseif (!is_numeric($this->bindvars[$i-1])) {
                 $sqlfield = $this->dbconn->qstr($this->bindvars[$i-1]);
             }
             else {
