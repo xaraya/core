@@ -76,4 +76,38 @@ class DbalDriver
         }
         return $params;
     }
+
+    /**
+     * Summary of listTableNames
+     * @param mixed $dbconn
+     * @return array<string>
+     */
+    public static function listTableNames($dbconn)
+    {
+        /** @var \Doctrine\DBAL\Connection $dbconn */
+        $sm = $dbconn->createSchemaManager();
+        $tables = $sm->listTableNames();
+        return $tables;
+    }
+
+    /**
+     * Summary of listTableColumns
+     * @param mixed $dbconn
+     * @param string $tablename
+     * @return array<string, mixed>
+     */
+    public static function listTableColumns($dbconn, $tablename)
+    {
+        /** @var \Doctrine\DBAL\Connection $dbconn */
+        $sm = $dbconn->createSchemaManager();
+        $columns = $sm->listTableColumns($tablename);
+        $result = [];
+        foreach ($columns as $column) {
+            $name = $column->getName();
+            $type = $column->getType();
+            $typeName = \Doctrine\DBAL\Types\Type::lookupName($type);
+            $result[$name] = $typeName;
+        }
+        return $result;
+    }
 }

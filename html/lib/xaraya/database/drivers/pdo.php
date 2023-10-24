@@ -101,4 +101,51 @@ class PdoDriver
                 return $dbType;
         }
     }
+
+    /**
+     * Summary of listTableNames
+     * @param mixed $dbconn
+     * @return array<string>
+     */
+    public static function listTableNames($dbconn)
+    {
+        /** @var \PDO $dbconn */
+        $dbInfo = new \PDODatabaseInfo($dbconn);
+        $tables = $dbInfo->getTables();
+        $result = [];
+        foreach ($tables as $tblInfo) {
+            $result[] = $tblInfo->getName();
+        }
+        return $result;
+    }
+
+    /**
+     * Summary of listTableColumns
+     * @param mixed $dbconn
+     * @param string $tablename
+     * @return array<string, mixed>
+     */
+    public static function listTableColumns($dbconn, $tablename)
+    {
+        /** @var \PDO $dbconn */
+        $dbInfo = new \PDODatabaseInfo($dbconn);
+        $tblInfo = $dbInfo->getTable($tablename);
+        // Get the columns and the primary keys
+        $columns = $tblInfo->getColumns();
+        /** @var \PDOColumn $keyInfo */
+        $keyInfo = $tblInfo->getPrimaryKey();
+        $result = [];
+        foreach ($columns as $column) {
+            /** @var \PDOColumn $column */
+            $name = (string) $column->getName();
+            $datatype = $column->getNativeType();
+            if (is_object($keyInfo) && $name == $keyInfo->getName()) {
+                $datatype = 'itemid';
+            } elseif ($name == 'id' && $datatype == 'integer') {
+                $datatype = 'itemid';
+            }
+            $result[$name] = $datatype;
+        }
+        return $result;
+    }
 }

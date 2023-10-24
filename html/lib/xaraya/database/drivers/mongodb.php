@@ -49,4 +49,37 @@ class MongoDBDriver
         // see https://www.mongodb.com/docs/manual/reference/connection-string/
         return $dsn;
     }
+
+    /**
+     * Summary of listTableNames
+     * @param mixed $dbconn
+     * @return array<string>
+     */
+    public static function listTableNames($dbconn)
+    {
+        /** @var \MongoDB\Database $dbconn */
+        $collections = $dbconn->listCollectionNames();
+        $result = [];
+        foreach ($collections as $name) {
+            $result[] = $name;
+        }
+        return $result;
+    }
+
+    /**
+     * Summary of listTableColumns
+     * @param mixed $dbconn
+     * @param string $tablename
+     * @return array<string, mixed>
+     */
+    public static function listTableColumns($dbconn, $tablename)
+    {
+        /** @var \MongoDB\Database $dbconn */
+        // @todo use document schema?
+        // $collection = $dbconn->selectCollection($table);
+        $result = [
+            '_id' => 'documentid',
+        ];
+        return $result;
+    }
 }

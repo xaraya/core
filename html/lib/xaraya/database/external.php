@@ -146,6 +146,45 @@ class ExternalDatabase implements DatabaseInterface
         // this will need to come from the native connection
         throw new \BadMethodCallException(static::ERROR_MSG);
     }
+
+    /**
+     * Summary of listTableNames
+     * @param mixed $index
+     * @return array<mixed>
+     */
+    public static function listTableNames($index)
+    {
+        $conn = static::getConn($index);
+        switch (get_class($conn)) {
+            case 'Doctrine\DBAL\Connection':
+                return DbalDriver::listTableNames($conn);
+            case 'MongoDB\Database':
+                return MongoDBDriver::listTableNames($conn);
+            case 'PDO':
+            default:
+                return PdoDriver::listTableNames($conn);
+        }
+    }
+
+    /**
+     * Summary of listTableColumns
+     * @param mixed $index
+     * @param string $tablename
+     * @return array<string, mixed>
+     */
+    public static function listTableColumns($index, $tablename)
+    {
+        $conn = static::getConn($index);
+        switch (get_class($conn)) {
+            case 'Doctrine\DBAL\Connection':
+                return DbalDriver::listTableColumns($conn, $tablename);
+            case 'MongoDB\Database':
+                return MongoDBDriver::listTableColumns($conn, $tablename);
+            case 'PDO':
+            default:
+                return PdoDriver::listTableColumns($conn, $tablename);
+        }
+    }
 }
 
 /**
