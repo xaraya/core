@@ -107,7 +107,7 @@
                     <label class="xar-form-label" for="external" title="" style="">External Connection</label>
                 </div>
                 <div class="xar-col">
-                    <xar:set name="options">['' => '', 'dbal' => 'DBAL', 'pdo' => 'PDO', 'todo' => 'Others...']</xar:set>
+                    <xar:set name="options">['' => '', 'dbal' => 'DBAL', 'pdo' => 'PDO', 'mongodb' => 'MongoDB', 'todo' => 'Others...']</xar:set>
                     <select id="external" name="config[external]">
                         <xar:foreach in="$options" key="$key" value="$value">
                             <xar:if condition="!empty($config['external']) and $key eq $config['external']">
@@ -126,7 +126,8 @@
                 </div>
                 <div class="xar-col">
                     {databaseType}:host={databaseHost};port={databasePort};dbname={databaseName};charset={databaseCharset}
-                    with {userName} and {password}
+                    with {userName} and {password}<br/>
+                    or {databaseType}:{databaseName} = path for sqlite3 database
                 </div>
             </div>
             <div class="xar-row">
@@ -135,6 +136,14 @@
                 </div>
                 <div class="xar-col">
                     driver={databaseType} - the rest is mapped to their equivalent
+                </div>
+            </div>
+            <div class="xar-row">
+                <div class="xar-col">
+                    MongoDB Parameters
+                </div>
+                <div class="xar-col">
+                    only {databaseName} is used for now - MongoDB is expected at default localhost:27017
                 </div>
             </div>
             <div class="xar-row">

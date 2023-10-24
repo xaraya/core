@@ -37,4 +37,5 @@
             </li>
         </xar:foreach>
     </ul>
+    <p>Note: For more details on how to use DB Connections, see the <a href="https://github.com/xaraya/core/blob/com.xaraya.core.bermuda/html/code/modules/dynamicdata/README.md">DD README</a> on GitHub or <a href="code/modules/dynamicdata/README.md">here</a></p>
 </xar:template>

@@ -83,18 +83,28 @@ function test_create_items()
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
     echo get_class($something->datastore) . "\n";
-    $itemid = $something->createItem(['id' => 1, 'key' => 'yes', 'val' => 'OK']);
-    echo "Item $itemid\n";
-    $itemid = $something->createItem(['id' => 2, 'key' => 'no', 'val' => 'Not OK']);
-    echo "Item $itemid\n";
+    if ($something->datastore instanceof MongoDBDatastore) {
+        $something->datastore->deleteAll('stuff');
+        // working with or without pre-defined id
+        $itemid = $something->createItem(['id' => null, 'key' => 'yes', 'val' => 'OK']);
+        echo "Item $itemid\n";
+        $itemid = $something->createItem(['id' => null, 'key' => 'no', 'val' => 'Not OK']);
+        echo "Item $itemid\n";
+    } else {
+        $itemid = $something->createItem(['id' => 1, 'key' => 'yes', 'val' => 'OK']);
+        echo "Item $itemid\n";
+        $itemid = $something->createItem(['id' => 2, 'key' => 'no', 'val' => 'Not OK']);
+        echo "Item $itemid\n";
+    }
+    return $itemid;
 }
 
-function test_update_item()
+function test_update_item($lastid = 2)
 {
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
 
-    $itemid = $something->getItem(['itemid' => 2]);
+    $itemid = $something->getItem(['itemid' => $lastid]);
     var_dump($something->getFieldValues());
     $itemid = $something->updateItem(['val' => 'Maybe OK']);
     var_dump($something->getFieldValues());
@@ -114,22 +124,22 @@ function test_get_items()
     var_dump($items);
 }
 
-function test_delete_item()
+function test_delete_item($lastid = 2)
 {
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
 
     // @checkme avoid last stand protection in deleteItem()
     $something->objectid = time();
-    $itemid = $something->deleteItem(['itemid' => 2]);
+    $itemid = $something->deleteItem(['itemid' => $lastid]);
     echo "Item $itemid\n";
 }
 
 //init_online();
 init_offline_cache();
-test_create_items();
-test_update_item();
+$lastid = test_create_items();
+test_update_item($lastid);
 test_get_items();
-test_delete_item();
+test_delete_item($lastid);
 test_get_items();
 //save_offline_cache();

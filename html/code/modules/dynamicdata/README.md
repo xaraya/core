@@ -14,7 +14,7 @@ This allows you to create a virtual table object on the fly for any table in the
 
 In the past, this was available in limited fashion within the DD admin interface itself, but it was "bolted on" and stopped working quite a while ago.
 
-See Dynamic Data > Utilities > Table Browser > View any table
+See **Dynamic Data > Utilities > Table Browser** > View any table
 
 Example:
 ```
@@ -40,9 +40,10 @@ By default, DD objects will use datastores with relational tables or xar_dynamic
 Now you can define another database connection in your module or script, and configure the DD object to use that connection instead.
 See https://github.com/xaraya-modules/library module for an example connecting to sqlite3 databases.
 
-There are 2 main use cases:
+There are 3 main use cases:
 - predefined database connections
 - database connections on demand
+- external database connections
 
 ### Predefined database connection
 
@@ -108,7 +109,10 @@ Practical note: to save `dbConnArgs` as part of the DD object config and show it
 ```
 use Xaraya\Modules\Library\UserApi;
 
-$config = ['dbConnIndex' => 1, 'dbConnArgs' => json_encode([UserApi::class, 'getDbConnArgs'])];
+$config = [
+    'dbConnIndex' => 1,
+    'dbConnArgs' => json_encode([UserApi::class, 'getDbConnArgs'])
+];
 $args = [
     // ...
     'config' => serialize($config),
@@ -153,6 +157,26 @@ $object = [
 ```
 
 The good news is that when you do that, you can also add some custom action methods, and/or override a standard DD method as you prefer - like adding an "Action!" link as view option to borrow a book or whatever :-)
+
+### External database connections
+
+In some cases you may want to bypass Xaraya's database connections altogether, and use external DB drivers like those of Doctrine DBAL or MongoDB. For example when the data you want to use is stored in a database that's not supported by Creole/PDO, or perhaps because you need some specific features available only from that external DB driver. This functionality is provided by the new `ExternalDatabase` class, which replaces `xarDB_Creole` or `xarDB_PDO` to open database connections via the external DB driver.
+
+To use this for DD objects you can set an `external` value in the `dbConnArgs` parameter above:
+```
+// specify database parameters
+$dbConnArgs = [
+    //'external' => 'dbal',
+    'external' => 'mongodb',
+    // ...other parameters for dbal or mongodb
+];
+```
+
+This will tell DD to use an `ExternalDatastore` instead of the regular relational or variabletable datastore. It supports all the standard getItem, getItems(*), createItem, updateItem, deleteItem operations for datastores that DD objects use internally, but does this via an `ExternalDatabase` connection specified by the `dbConnArgs` parameter.
+
+(*) for getItems() not all features are supported yet
+
+See **Dynamic Data > Utilities > DB Connections** > select or add a database to configure
 
 ## Import PHP Definitions
 

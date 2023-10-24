@@ -112,7 +112,10 @@ In DD objects, you can specify the DB connection args by setting config: see [Dy
 ```
 use Xaraya\Modules\Library\UserApi;
 
-$config = ['dbConnIndex' => 1, 'dbConnArgs' => json_encode([UserApi::class, 'getDbConnArgs'])];
+$config = [
+    'dbConnIndex' => 1,
+    'dbConnArgs' => json_encode([UserApi::class, 'getDbConnArgs'])
+];
 $descriptor->set('config', serialize($config));
 ```
 

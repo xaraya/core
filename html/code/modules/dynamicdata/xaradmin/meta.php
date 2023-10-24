@@ -10,6 +10,9 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+sys::import('modules.dynamicdata.class.utilapi');
+use Xaraya\DataObject\UtilApi;
+
 /**
  * Return meta data (test only)
  */
@@ -57,8 +60,17 @@ function dynamicdata_admin_meta(array $args = [])
     $data['dbConnIndex'] = 0;
     $data['dbConnArgs'] = [];
     if (!empty($showdb) || $data['db'] != $dbname) {
-        // Note: not supported for other database types
-        if ($dbtype == 'mysqli') {
+        if (strpos($data['db'], '.') !== false) {
+            // see dbconfig
+            [$module, $dbname] = explode('.', $db . '.');
+            $databases = UtilApi::getDatabases($module);
+            if (!empty($databases[$dbname])) {
+                $data['dbConnIndex'] = UtilApi::connectDatabase($dbname);
+                $connArgs = $databases[$dbname];
+                $data['dbtype'] = $connArgs['databaseType'] ?? $connArgs['external'];
+            }
+        } elseif ($dbtype == 'mysqli') {
+            // Note: not supported for other database types
             try {
                 // Note: this only works if we use the same database connection
                 $db_list = mysqli_query($dbconn->getResource(), "SHOW DATABASES");

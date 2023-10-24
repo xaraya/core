@@ -742,7 +742,7 @@ class PDODatabaseInfo extends xarObject
     private function initTables()
     {
         // get the list of all tables
-        if ($this->pdo->driverName == 'sqlite') {
+        if ($this->pdo->getAttribute(PDO::ATTR_DRIVER_NAME) == 'sqlite') {
             $sql = "SELECT name FROM sqlite_master WHERE type='table' UNION ALL SELECT name FROM sqlite_temp_master WHERE type='table' ORDER BY name;";
         } else {
             $sql = "SHOW TABLES";

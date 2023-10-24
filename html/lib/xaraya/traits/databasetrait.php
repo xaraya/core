@@ -248,10 +248,18 @@ trait DatabaseTrait
         } catch (BadParameterException $e) {
             return null;
         }
-        // open a new database connection
-        $conn = xarDB::newConn($args);
-        // save the connection index
-        $dbConnIndex = xarDB::getConnIndex();
+        if (!empty($args['external'])) {
+            sys::import('xaraya.database.external');
+            // open a new database connection
+            $conn = \Xaraya\Database\ExternalDatabase::newConn($args);
+            // save the connection index
+            $dbConnIndex = \Xaraya\Database\ExternalDatabase::getConnIndex();
+        } else {
+            // open a new database connection
+            $conn = xarDB::newConn($args);
+            // save the connection index
+            $dbConnIndex = xarDB::getConnIndex();
+        }
         static::$_connections[$name] = $dbConnIndex;
         // return the connection index
         return $dbConnIndex;
@@ -340,8 +348,8 @@ trait DatabaseTrait
         $conn = xarDB::getConn($dbConnIndex);
         $dbInfo = $conn->getDatabaseInfo();
         $tables = $dbInfo->getTables();
-        foreach ($tables as $table) {
-            $result[] = $table->getName();
+        foreach ($tables as $tblInfo) {
+            $result[] = $tblInfo->getName();
         }
         return $result;
     }

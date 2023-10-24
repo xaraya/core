@@ -59,7 +59,7 @@ class ExternalDatabase implements DatabaseInterface
         throw new \BadMethodCallException(static::ERROR_MSG);
     }
 
-    public static function importTables(array $tables = array())
+    public static function importTables(array $tables = [])
     {
         // not relevant here
         throw new \BadMethodCallException(static::ERROR_MSG);
@@ -121,13 +121,13 @@ class ExternalDatabase implements DatabaseInterface
 
         switch ($dsn['external']) {
             case 'pdo':
-                $conn = static::getPdoConnection($dsn, $flags);
+                $conn = PdoDriver::getConnection($dsn, $flags);
                 break;
             case 'dbal':
-                $conn = static::getDbalConnection($dsn, $flags);
+                $conn = DbalDriver::getConnection($dsn, $flags);
                 break;
             case 'mongodb':
-                $conn = static::getMongoDBConnection($dsn, $flags);
+                $conn = MongoDBDriver::getConnection($dsn, $flags);
                 break;
             default:
                 // map $dsn and $flags to whatever the connection class expects
@@ -139,116 +139,6 @@ class ExternalDatabase implements DatabaseInterface
         static::$connections[$index] = & $conn;
         static::$latest = $index;
         return $conn;
-    }
-
-    public static function getPdoConnection($dsn, $flags = [])
-    {
-        [$dsn, $username, $password, $options] = static::mapPdoDSN($dsn, $flags);
-        return new \PDO($dsn, $username, $password, $options);
-    }
-
-    public static function mapPdoDSN($dsn, $flags = [])
-    {
-        $username = $dsn['userName'] ?? null;
-        $password = $dsn['password'] ?? null;
-        $options = $flags;
-        // check if $dsn already contain PDO-compatible parameters
-        if (!empty($dsn['dsnstring'])) {
-            // @todo check username for other variants if needed
-            $dsnstring = $dsn['dsnstring'];
-            return [$dsnstring, $username, $password, $options];
-        }
-        // map Xaraya connection arguments to PDO-compatible parameters
-        $parts = [];
-        if (!empty($dsn['databaseHost'])) {
-            if (str_starts_with($dsn['databaseHost'], '/') && str_contains($dsn['databaseType'], 'mysql')) {
-                $parts[] = 'unix_socket=' . $dsn['databaseHost'];
-            } else {
-                $parts[] = 'host=' . $dsn['databaseHost'];
-            }
-        }
-        if (!empty($dsn['databasePort'])) {
-            $parts[] = 'port=' . $dsn['databasePort'];
-        }
-        if (!empty($dsn['databaseName'])) {
-            if (empty($dsn['databaseHost']) && str_contains($dsn['databaseType'], 'sqlite')) {
-                // DSN string is sqlite:/home/xaraya-core/html/var/sqlite/xaraya.db
-                $parts[] = $dsn['databaseName'];
-            } else {
-                $parts[] = 'dbname=' . $dsn['databaseName'];
-            }
-        }
-        //if (!empty($dsn['userName'])) {
-        //    $parts[] = 'user=' . $dsn['userName'];
-        //}
-        //if (!empty($dsn['password'])) {
-        //    $parts[] = 'password=' . $dsn['password'];
-        //}
-        if (!empty($dsn['databaseCharset'])) {
-            $parts[] = 'charset=' . $dsn['databaseCharset'];
-        }
-        // we want to get an exception if databaseType is not defined
-        $dsnstring = $dsn['databaseType'] . ':' . implode(';', $parts);
-        return [$dsnstring, $username, $password, $options];
-    }
-
-    public static function getDbalConnection($dsn, $flags)
-    {
-        $params = static::mapDbalDSN($dsn, $flags);
-        return \Doctrine\DBAL\DriverManager::getConnection($params);
-    }
-
-    public static function mapDbalDSN($dsn, $flags = [])
-    {
-        // check if $dsn already contain DBAL-compatible parameters
-        if (!empty($dsn['driver']) && (!empty($dsn['dbname']) || !empty($dsn['path']))) {
-            return $dsn;
-        }
-        // map Xaraya connection arguments to DBAL-compatible parameters
-        $params = [];
-        // we want to get an exception if databaseType is not defined
-        $params['driver'] = $dsn['databaseType'];
-        if (empty($dsn['databaseHost']) && str_contains($params['driver'], 'sqlite')) {
-            $params['path'] = $dsn['databaseName'];
-        } else {
-            $params['dbname'] = $dsn['databaseName'];
-        }
-        if (!empty($dsn['databaseHost'])) {
-            if (str_starts_with($dsn['databaseHost'], '/') && str_contains($params['driver'], 'mysql')) {
-                $params['unix_socket'] = $dsn['databaseHost'];
-            } else {
-                $params['host'] = $dsn['databaseHost'];
-            }
-        }
-        if (!empty($dsn['databasePort'])) {
-            $params['port'] = $dsn['databasePort'];
-        }
-        if (!empty($dsn['userName'])) {
-            $params['user'] = $dsn['userName'];
-        }
-        if (!empty($dsn['password'])) {
-            $params['password'] = $dsn['password'];
-        }
-        if (!empty($dsn['databaseCharset'])) {
-            $params['charset'] = $dsn['databaseCharset'];
-        }
-        return $params;
-    }
-
-    public static function getMongoDBConnection($dsn, $flags)
-    {
-        // @todo add mapping for non-localhost configs
-        $params = static::mapMongoDBDSN($dsn, $flags);
-        $client = new \MongoDB\Client();
-        // use default MongoDB database if not specified
-        $params['databaseName'] ??= 'test';
-        return $client->selectDatabase($params['databaseName']);
-    }
-
-    public static function mapMongoDBDSN($dsn, $flags = [])
-    {
-        // see https://www.mongodb.com/docs/manual/reference/connection-string/
-        return $dsn;
     }
 
     public static function getTypeMap()
@@ -266,9 +156,15 @@ class ExternalDatabase implements DatabaseInterface
  */
 abstract class ExternalConnection implements ConnectionInterface
 {
+    /** @var array<string, mixed> */
     public array $dsn = [];
     public mixed $flags = [];
 
+    /**
+     * Summary of __construct
+     * @param array<string, mixed> $dsn
+     * @param mixed $flags
+     */
     public function __construct(array $dsn = null, mixed $flags = [])
     {
         $this->dsn = $dsn;
@@ -277,7 +173,7 @@ abstract class ExternalConnection implements ConnectionInterface
 
     // from Xaraya modifications in ConnectionCommon
     /** @return \ResultSet|\PDOResultSet|object */
-    abstract public function Execute($sql, $bindvars = array(), $fetchmode = null);
+    abstract public function Execute($sql, $bindvars = [], $fetchmode = null);
     /** @return resource|object */
     abstract public function getResource();
     /** @return \DatabaseInfo|\PDODatabaseInfo|object */
