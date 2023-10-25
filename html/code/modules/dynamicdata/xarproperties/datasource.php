@@ -15,6 +15,9 @@ sys::import('modules.base.xarproperties.dropdown');
  * @author mikespub <mikespub@xaraya.com>
  */
 
+sys::import('xaraya.datastores.factory');
+use Xaraya\DataObject\DataStores\DataStoreFactory;
+
 /**
  * This property displays a dropdown of data sources
  * If a relational datastore is defined, it shows the database fields available as sources

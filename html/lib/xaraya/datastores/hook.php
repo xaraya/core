@@ -11,12 +11,19 @@
  * @link http://www.xaraya.info
 **/
 
+namespace Xaraya\DataObject\DataStores;
+
+use xarMod;
+use DataProperty;
+use DataPropertyMaster;
+use sys;
+
+sys::import('xaraya.datastores.basic');
+
 /**
  * Class to handle hook datastore
  *
 **/
-sys::import('xaraya.datastores.basic');
-
 class HookDataStore extends BasicDataStore
 {
     /**

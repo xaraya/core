@@ -11,12 +11,21 @@
  * @link http://www.xaraya.info
  */
 
+namespace Xaraya\DataObject\DataStores;
+
+use xarMod;
+use xarModItemVars;
+use xarModVars;
+use DataProperty;
+use Exception;
+use sys;
+
+sys::import('xaraya.datastores.sql.relational');
+
 /**
  * Class to handle module variables datastores
  *
  */
-sys::import('xaraya.datastores.sql.relational');
-
 class ModuleVariablesDataStore extends RelationalDataStore
 {
     /** @var string */

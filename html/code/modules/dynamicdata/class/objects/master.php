@@ -18,6 +18,8 @@
  */
 
 sys::import('modules.dynamicdata.class.objects.descriptor');
+sys::import('xaraya.datastores.factory');
+use Xaraya\DataObject\DataStores\DataStoreFactory;
 
 class DataObjectMaster extends xarObject
 {
@@ -547,7 +549,6 @@ class DataObjectMaster extends xarObject
     public function addDataStore($name = '_dynamic_data_', $type = 'data', $storage = null)
     {
         // get the data store
-        sys::import('xaraya.datastores.factory');
         $this->datastore = DataStoreFactory::getDataStore($name, $type, $storage, $this->dbConnIndex, $this->dbConnArgs);
 
         // Pass along a reference to this object

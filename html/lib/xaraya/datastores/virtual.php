@@ -11,7 +11,16 @@
  * @link http://www.xaraya.info
 **/
 
+namespace Xaraya\DataObject\DataStores;
+
+use BadParameterException;
+use sys;
+
+sys::import('xaraya.datastores.basic');
+
 /**
+ * Dummy data store class
+ *
  * This datastore can be used for all sorts non-standard dataproperties.
  * whose storage is particular to them and cannot be
  * easily handled by a common datastore.
@@ -21,13 +30,7 @@
  *
  * Going this route also allows us to run such operations in the correct sequence, rather than, as currently
  * is the case with subforms, stick them into the checkInput method.
-
-/**
- * Dummy data store class
- *
  */
-sys::import('xaraya.datastores.basic');
-
 class DummyDataStore extends BasicDataStore
 {
     public function getItem(array $args = [])

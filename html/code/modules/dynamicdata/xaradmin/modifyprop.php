@@ -10,6 +10,10 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+
+sys::import('xaraya.datastores.factory');
+use Xaraya\DataObject\DataStores\DataStoreFactory;
+
 /**
  * Modify the dynamic properties for a module + itemtype
  *

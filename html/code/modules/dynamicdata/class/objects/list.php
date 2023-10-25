@@ -16,6 +16,8 @@
 
 sys::import('modules.dynamicdata.class.objects.master');
 sys::import('modules.dynamicdata.class.objects.interfaces');
+sys::import('xaraya.datastores.sql');
+use Xaraya\DataObject\DataStores\SQLDataStore;
 
 class DataObjectList extends DataObjectMaster implements iDataObjectList
 {

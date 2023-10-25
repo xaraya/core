@@ -9,6 +9,15 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+namespace Xaraya\DataObject\DataStores;
+
+use xarDB;
+use xarObject;
+use SimpleXMLElement;
+use BadParameterException;
+use Exception;
+use sys;
+
 sys::import('xaraya.datastores.interface');
 
 /**
@@ -208,7 +217,9 @@ class DataStoreFactory extends xarObject
      * Summary of getDataStores
      * @return void
      */
-    public function getDataStores() {}
+    public function getDataStores()
+    {
+    }
 
     /**
      * Get possible data sources

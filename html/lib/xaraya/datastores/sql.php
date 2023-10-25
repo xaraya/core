@@ -11,6 +11,12 @@
  * @link http://www.xaraya.info
 **/
 
+namespace Xaraya\DataObject\DataStores;
+
+use xarDB;
+use DataProperty;
+use sys;
+
 sys::import('xaraya.datastores.basic');
 
 /**

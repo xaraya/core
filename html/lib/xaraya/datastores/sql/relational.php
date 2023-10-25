@@ -11,6 +11,18 @@
  * @link http://www.xaraya.info
 **/
 
+namespace Xaraya\DataObject\DataStores;
+
+use DataObject;
+use DataObjectList;
+use DataObjectMaster;
+use DataProperty;
+use DataPropertyMaster;
+use Query;
+use BadParameterException;
+use Exception;
+use sys;
+
 sys::import('xaraya.datastores.sql');
 
 /**

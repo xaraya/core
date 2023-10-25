@@ -13,11 +13,18 @@
  * @link http://www.xaraya.info
 **/
 
+namespace Xaraya\DataObject\DataStores;
+
+use ixarCache_Storage;
+use xarCache;
+use Exception;
+use sys;
+
+sys::import('xaraya.datastores.basic');
+
 /**
  * Class for cache datastore
  */
-sys::import('xaraya.datastores.basic');
-
 class CachingDataStore extends BasicDataStore
 {
     /** @var mixed */

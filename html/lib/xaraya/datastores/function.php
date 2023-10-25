@@ -11,14 +11,18 @@
  * @link http://www.xaraya.info
 **/
 
-/**
- * Handly function data store
- *
- *
-**/
+namespace Xaraya\DataObject\DataStores;
+
+use xarController;
+use xarMod;
+use DataProperty;
+use sys;
+
 sys::import('xaraya.datastores.basic');
 
 /**
+ * Handly function data store
+ *
  * @deprecated 2.0.0 no longer in use
  */
 class Dynamic_Function_DataStore extends BasicDataStore

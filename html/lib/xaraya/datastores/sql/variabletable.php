@@ -11,10 +11,14 @@
  * @link http://www.xaraya.info
 **/
 
-/*
- * Parent class is SQL datastore
- *
- */
+namespace Xaraya\DataObject\DataStores;
+
+use DataProperty;
+use DataPropertyMaster;
+use BadParameterException;
+use Exception;
+use sys;
+
 sys::import('xaraya.datastores.sql');
 
 /**
