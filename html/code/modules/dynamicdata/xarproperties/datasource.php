@@ -49,7 +49,9 @@ class DataSourceProperty extends SelectProperty
         if (count($this->options) > 0) {
             return $this->options;
         }
-        $sources = is_object($this->objectref) ? $this->objectref->datasources : [];
-        return DataStoreFactory::getDataSources($sources);
+        if (is_object($this->objectref)) {
+            return DataStoreFactory::getDataSources($this->objectref);
+        }
+        return DataStoreFactory::getDataSources();
     }
 }

@@ -20,6 +20,7 @@
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('xaraya.datastores.factory');
 use Xaraya\DataObject\DataStores\DataStoreFactory;
+use Xaraya\DataObject\DataStores\IBasicDataStore;
 
 class DataObjectMaster extends xarObject
 {

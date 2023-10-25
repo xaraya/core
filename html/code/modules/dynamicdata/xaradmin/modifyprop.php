@@ -127,7 +127,7 @@ function dynamicdata_admin_modifyprop(array $args = [])
     }
 
     try {
-        $data['sources'] = DataStoreFactory::getDataSources($object->datasources, $object->dbConnIndex);
+        $data['sources'] = DataStoreFactory::getDataSources($object);
     } catch (Exception $e) {
         return xarResponse::NotFound($e->getMessage());
     }

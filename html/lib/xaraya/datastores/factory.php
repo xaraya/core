@@ -11,8 +11,10 @@
 
 namespace Xaraya\DataObject\DataStores;
 
+use Xaraya\Database\ExternalDatabase;
 use xarDB;
 use xarObject;
+use DataObject;
 use SimpleXMLElement;
 use BadParameterException;
 use Exception;
@@ -224,16 +226,37 @@ class DataStoreFactory extends xarObject
     /**
      * Get possible data sources
      *
-     * @param array<mixed> $args object datasources
-     * @param int|string $dbConnIndex connection index of the database if different from Xaraya DB (optional)
+     * @param DataObject|null $object
      * @return list<array<string, string>>
      */
-    public static function &getDataSources($args = [], $dbConnIndex = 0)
+    public static function &getDataSources($object = null)
     {
         $sources = [];
         $sources[] = ['id' => '', 'name' => xarML('None')];
 
-        $dbconn = xarDB::getConn($dbConnIndex);
+        if (empty($object)) {
+            $sources[] = ['id' => 'dynamicdata', 'name' => xarML('DynamicData')];
+            return $sources;
+        }
+
+        if (empty($object->datasources) && !empty($object->sources)) {
+            try {
+                $object->datasources = unserialize($object->sources);
+            } catch (Exception $e) {
+            }
+        }
+        if (empty($object->datasources)) {
+            $sources[] = ['id' => 'dynamicdata', 'name' => xarML('DynamicData')];
+            return $sources;
+        }
+
+        $object->dbConnIndex = ExternalDatabase::checkDbConnection($object->dbConnIndex, $object->dbConnArgs);
+        // use external database connection
+        if (!is_numeric($object->dbConnIndex) && str_starts_with($object->dbConnIndex, 'ext_')) {
+            return static::getExternalDataSources($object->datasources, $object->dbConnIndex);
+        }
+
+        $dbconn = xarDB::getConn($object->dbConnIndex);
         $dbInfo = $dbconn->getDatabaseInfo();
 
         // TODO: re-evaluate this once we're further along
@@ -244,28 +267,51 @@ class DataStoreFactory extends xarObject
         }
         */
         // try to get the meta table definition
-        if (!empty($args)) {
-            foreach ($args as $key => $value) {
-                if (is_array($value)) {
-                    $tablename = current($value);
-                    $tableobject = $dbInfo->getTable($tablename);
-                } else {
-                    $tablename = $value;
-                    $tableobject = $dbInfo->getTable($tablename);
-                }
-                // Bail if we don't have an object
-                if (!is_object($tableobject)) {
-                    $message = xarML("'#(1)' is not a valid table name. Go back and change it.", $tablename);
-                    throw new Exception($message);
-                }
-
-                $fields = $tableobject->getColumns();
-                foreach ($fields as $field) {
-                    $sources[] = ['id' => $key . "." . $field->getName(), 'name' => $key . "." . $field->getName()];
-                }
+        foreach ($object->datasources as $key => $value) {
+            if (is_array($value)) {
+                $tablename = current($value);
+                $tableobject = $dbInfo->getTable($tablename);
+            } else {
+                $tablename = $value;
+                $tableobject = $dbInfo->getTable($tablename);
             }
-        } else {
-            $sources[] = ['id' => 'dynamicdata', 'name' => xarML('DynamicData')];
+            // Bail if we don't have an object
+            if (!is_object($tableobject)) {
+                $message = xarML("'#(1)' is not a valid table name. Go back and change it.", $tablename);
+                throw new Exception($message);
+            }
+
+            $fields = $tableobject->getColumns();
+            foreach ($fields as $field) {
+                $sources[] = ['id' => $key . "." . $field->getName(), 'name' => $key . "." . $field->getName()];
+            }
+        }
+        return $sources;
+    }
+
+    /**
+     * Get possible data sources from external database
+     *
+     * @param array<mixed> $datasources object datasources
+     * @param string $dbConnIndex connection index of the database if different from Xaraya DB (required)
+     * @return list<array<string, string>>
+     */
+    public static function &getExternalDataSources($datasources = [], $dbConnIndex = '')
+    {
+        $sources = [];
+        $sources[] = ['id' => '', 'name' => xarML('None')];
+
+        // try to get the meta table definition
+        foreach ($datasources as $key => $value) {
+            if (is_array($value)) {
+                $tablename = current($value);
+            } else {
+                $tablename = $value;
+            }
+            $columns = ExternalDatabase::listTableColumns($dbConnIndex, $tablename);
+            foreach ($columns as $name => $datatype) {
+                $sources[] = ['id' => $key . "." . $name, 'name' => $key . "." . $name];
+            }
         }
         return $sources;
     }

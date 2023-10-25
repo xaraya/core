@@ -83,7 +83,7 @@ class UtilApi implements DatabaseInterface
 
         $dbConnIndex = ExternalDatabase::checkDbConnection($dbConnIndex, $dbConnArgs);
         // use external database connection
-        if (!is_numeric($dbConnIndex) && str_starts_with($dbConnIndex,'ext_')) {
+        if (!is_numeric($dbConnIndex) && str_starts_with($dbConnIndex, 'ext_')) {
             return static::getExternalMeta($table, $dbConnIndex);
         }
         $dbconn = xarDB::getConn($dbConnIndex);

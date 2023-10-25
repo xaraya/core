@@ -138,7 +138,7 @@
                 <td colspan="6" class="#$displayclass#">
                     <xar:set name="name">'dd_source[' . $field['id'] . ']'</xar:set>
                     <xar:set name="id">'dd_source_' . $field['id']</xar:set>
-                    <xar:if condition="!isset($objectinfo) OR ($objectinfo['datastore'] eq 'relational')">
+                    <xar:if condition="!isset($objectinfo) OR ($objectinfo['datastore'] eq 'relational') OR ($objectinfo['datastore'] eq 'external')">
                         Source:&#160;
                         <xar:data-input property="$dropdown" class="dd-norm" name="$name" id="$id" value="$field['source']" options="$sources" />
                         &#160;&#160;
