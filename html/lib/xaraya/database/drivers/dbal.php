@@ -11,7 +11,7 @@
  * @link http://www.xaraya.info
  */
 
-namespace Xaraya\Database;
+namespace Xaraya\Database\Drivers;
 
 /**
  * Provide an external database connection via Doctrine DBAL

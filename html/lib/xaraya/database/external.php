@@ -165,11 +165,11 @@ class ExternalDatabase implements DatabaseInterface
         $driverName = static::getDriverName($index);
         switch ($driverName) {
             case 'dbal':
-                return DbalDriver::class;
+                return Drivers\DbalDriver::class;
             case 'mongodb':
-                return MongoDBDriver::class;
+                return Drivers\MongoDBDriver::class;
             case 'pdo':
-                return PdoDriver::class;
+                return Drivers\PdoDriver::class;
             case 'xaraya':
                 // probably not very useful here, but who knows
                 return xarDB::class;
@@ -222,13 +222,13 @@ class ExternalDatabase implements DatabaseInterface
 
         switch ($dsn['external']) {
             case 'pdo':
-                $conn = PdoDriver::getConnection($dsn, $flags);
+                $conn = Drivers\PdoDriver::getConnection($dsn, $flags);
                 break;
             case 'dbal':
-                $conn = DbalDriver::getConnection($dsn, $flags);
+                $conn = Drivers\DbalDriver::getConnection($dsn, $flags);
                 break;
             case 'mongodb':
-                $conn = MongoDBDriver::getConnection($dsn, $flags);
+                $conn = Drivers\MongoDBDriver::getConnection($dsn, $flags);
                 break;
             default:
                 // map $dsn and $flags to whatever the connection class expects
