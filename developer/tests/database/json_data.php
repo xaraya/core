@@ -1,17 +1,20 @@
 <?php
 /**
- * Entrypoint for experimenting with JSON data type in Doctrine DBAL
+ * Entrypoint for experimenting with JSON data type in Doctrine DBAL or MongoDB
  *
  * The idea was to see if we could replace xar_dynamic_data with xar_dynamic_json
  * at some point in the future, i.e. switch to a JSON document-style way of working
  * instead of keeping each property value of (objectid + itemid) in separate rows
  *
- * Currently on hold - support for JSON data type in Doctrine DBAL isn't as transparent as I'd hoped yet
+ * Support for JSON data type in Doctrine DBAL isn't as transparent as I'd hoped yet,
+ * but using an external MongoDB seems like an interesting option - to be continued
  */
 require dirname(__DIR__, 3).'/vendor/autoload.php';
 
 // initialize bootstrap
 sys::init();
+
+require __DIR__ . '/config.php';
 
 function create_json_table($conn, $name = 'xar_dynamic_json')
 {
@@ -54,8 +57,16 @@ function add_json_index($conn, $name = 'xar_dynamic_json')
     //}
 }
 
-function fill_json_table($conn, $refresh = false)
+/**
+ * Summary of fill_json_table
+ * @param Doctrine\DBAL\Connection $conn
+ * @param MongoDB\Client $client
+ * @param mixed $refresh
+ * @return void
+ */
+function fill_json_table($conn, $client, $refresh = false)
 {
+    $client->dropDatabase("Xaraya");
     $sql = "SELECT * FROM xar_dynamic_objects WHERE datastore = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bindValue(1, 'dynamicdata');
@@ -73,8 +84,10 @@ function fill_json_table($conn, $refresh = false)
         $properties = $resultSet2->fetchAllAssociative();
         print_r($properties);
         $prop_names = array();
+        $prop_types = array();
         foreach ($properties as $property) {
             $prop_names[$property["id"]] = $property["name"];
+            $prop_types[$property["id"]] = $property["type"];
         }
         $prop_ids = array_keys($prop_names);
         //$stmt3->bindValue(1, $prop_ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
@@ -82,15 +95,41 @@ function fill_json_table($conn, $refresh = false)
         //The parameter list support only works with Doctrine\DBAL\Connection::executeQuery() and Doctrine\DBAL\Connection::executeStatement(), NOT with the binding methods of a prepared statement.
         $resultSet3 = $conn->executeQuery($sql3, array($prop_ids), array(\Doctrine\DBAL\ArrayParameterType::INTEGER));
         $data = $resultSet3->fetchAllAssociative();
-        print_r($data);
+        //print_r($data);
         $items = array();
         foreach ($data as $field) {
             if (!array_key_exists($field["item_id"], $items)) {
                 $items[$field["item_id"]] = array();
+                $items[$field["item_id"]]["_id"] = (int) $field["item_id"];
             }
-            $items[$field["item_id"]][$prop_names[$field["property_id"]]] = $field["value"];
+            if (in_array($prop_types[$field["property_id"]], [21, 15, 18281])) {
+                // itemid, integerbox, deferitem
+                $items[$field["item_id"]][$prop_names[$field["property_id"]]] = (int) $field["value"];
+            } elseif (in_array($prop_types[$field["property_id"]], [7, 24, 507, 20]) && is_numeric($field["value"])) {
+                // user, object, objectref, itemtype (if numeric)
+                $items[$field["item_id"]][$prop_names[$field["property_id"]]] = (int) $field["value"];
+            } elseif (in_array($prop_types[$field["property_id"]], [8]) && is_numeric($field["value"])) {
+                // calendar (if numeric) - pass timestamp in milliseconds
+                $items[$field["item_id"]][$prop_names[$field["property_id"]]] = new MongoDB\BSON\UTCDateTime(((float) $field["value"]) * 1000);
+            } elseif (in_array($prop_types[$field["property_id"]], [14])) {
+                // checkbox
+                $items[$field["item_id"]][$prop_names[$field["property_id"]]] = (bool) $field["value"];
+            } elseif (in_array($prop_types[$field["property_id"]], [17])) {
+                // floatbox
+                $items[$field["item_id"]][$prop_names[$field["property_id"]]] = (float) $field["value"];
+            } elseif (in_array($prop_types[$field["property_id"]], [18282, 18283])) {
+                // deferlist, defermany (if not empty)
+                $value = json_decode($field["value"], true, 512, JSON_THROW_ON_ERROR);
+                $items[$field["item_id"]][$prop_names[$field["property_id"]]] = array_filter($value);
+            } else {
+                $items[$field["item_id"]][$prop_names[$field["property_id"]]] = $field["value"];
+            }
         }
-        print_r($items);
+        echo var_export($items, true) . "\n";
+        $collection = $client->selectCollection("Xaraya", $object["name"]);
+        $result = $collection->insertMany(array_values($items));
+        printf("Inserted %d document(s)\n", $result->getInsertedCount());
+        continue;
         if ($refresh) {
             foreach ($items as $itemid => $item) {
                 $conn->update("xar_dynamic_json", array("data" => json_encode($item)), array("object_id" => $object["id"], "item_id" => $itemid));
@@ -121,4 +160,6 @@ function test_json_table($conn)
     //$conn->update("xar_dynamic_json", array("data" => json_encode(array("id" => 11, "name" => "strong", "age" => 0, "location" => "lost"))), array("object_id" => 4, "item_id" => 11));
 }
 
-//currently on hold
+$xarConn = get_xaraya_conn();
+$mongodb = new MongoDB\Client();
+fill_json_table($xarConn, $mongodb);

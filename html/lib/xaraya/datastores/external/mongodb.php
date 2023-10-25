@@ -51,6 +51,9 @@ class MongoDBDataStore extends ExternalDataStore
         if (is_string($itemid) && strlen($itemid) == static::ID_SIZE) {
             return new \MongoDB\BSON\ObjectId($itemid);
         }
+        if (is_numeric($itemid)) {
+            return (int) $itemid;
+        }
         return $itemid;
     }
 
@@ -63,6 +66,9 @@ class MongoDBDataStore extends ExternalDataStore
     {
         if (is_object($objectid)) {
             return (string) $objectid;
+        }
+        if (is_numeric($objectid)) {
+            return (int) $objectid;
         }
         return $objectid;
     }

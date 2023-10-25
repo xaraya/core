@@ -298,8 +298,11 @@ class UtilApi implements DatabaseInterface
                 $configuration = '';
                 break;
             case 'objectid':
-                $proptype = $proptypeid['itemid']; // Item ID
+                $proptype = $proptypeid['itemid']; // Item ID from MongoDB
                 $configuration = 'objectid';
+                break;
+            case 'object':
+                $proptype = $proptypeid['mongodb_bson']; // (try to) convert BSON object/array to array?
                 break;
             case 'char':
             case 'varchar':
