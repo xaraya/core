@@ -229,6 +229,14 @@ class ArrayProperty extends DataProperty
                         $temp[$column[0]][] = $item;
                     }
                 }
+                if ($this->source == 'dynamic_objects.config') {
+                    // collapse into actual key=value associative array
+                    foreach (array_keys($temp) as $key) {
+                        if (is_array($temp[$key]) && count($temp[$key]) == 1) {
+                            $temp[$key] = $temp[$key][0];
+                        }
+                    }
+                }
             }
             $value = $temp;
         }
