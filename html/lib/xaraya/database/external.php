@@ -13,6 +13,8 @@
 
 namespace Xaraya\Database;
 
+use xarDB;
+
 /**
  * Provide an external database connection to something via PDO/DBAL/... DB driver
  *
@@ -65,37 +67,136 @@ class ExternalDatabase implements DatabaseInterface
         throw new \BadMethodCallException(static::ERROR_MSG);
     }
 
-    public static function getHost()
+    /**
+     * Summary of getHost
+     * @param mixed $index
+     * @throws \BadMethodCallException
+     * @return string
+     */
+    public static function getHost($index = '')
     {
         // this will need to come from the native connection
-        throw new \BadMethodCallException(static::ERROR_MSG);
+        if (empty($index)) {
+            throw new \BadMethodCallException(static::ERROR_MSG);
+        }
+        if (is_numeric($index)) {
+            return xarDB::getHost();
+        }
+        // @todo get database host from db connection
+        return 'TODO';
     }
 
-    public static function getType()
+    /**
+     * Summary of getType
+     * @param mixed $index
+     * @throws \BadMethodCallException
+     * @return string
+     */
+    public static function getType($index = '')
     {
         // this will need to come from the native connection
-        throw new \BadMethodCallException(static::ERROR_MSG);
+        if (empty($index)) {
+            throw new \BadMethodCallException(static::ERROR_MSG);
+        }
+        if (is_numeric($index)) {
+            return xarDB::getType();
+        }
+        // return some information about db driver type from connection
+        $conn = static::getConn($index);
+        $driverClass = static::getDriverClass($index);
+        return $driverClass::getDriverType($conn);
     }
 
-    public static function getName()
+    /**
+     * Summary of getName
+     * @param mixed $index
+     * @throws \BadMethodCallException
+     * @return string
+     */
+    public static function getName($index = '')
     {
         // this will need to come from the native connection
-        throw new \BadMethodCallException(static::ERROR_MSG);
+        if (empty($index)) {
+            throw new \BadMethodCallException(static::ERROR_MSG);
+        }
+        if (is_numeric($index)) {
+            return xarDB::getName();
+        }
+        // @todo get database name from db connection
+        return 'TODO';
+    }
+
+    /**
+     * Summary of getDriverName
+     * @param mixed $index
+     * @throws \BadMethodCallException
+     * @return string
+     */
+    public static function getDriverName($index = '')
+    {
+        // this will need to come from the native connection
+        if (empty($index)) {
+            throw new \BadMethodCallException(static::ERROR_MSG);
+        }
+        if (is_numeric($index)) {
+            return 'xaraya';
+        }
+        $conn = static::getConn($index);
+        switch (get_class($conn)) {
+            case 'Doctrine\DBAL\Connection':
+                return 'dbal';
+            case 'MongoDB\Database':
+                return 'mongodb';
+            case 'PDO':
+                return 'pdo';
+            default:
+                throw new \Exception('Unknown database driver ' . get_class($conn));
+        }
+    }
+
+    /**
+     * Summary of getDriverClass
+     * @param mixed $index
+     * @throws \BadMethodCallException
+     * @return string
+     */
+    public static function getDriverClass($index = '')
+    {
+        $driverName = static::getDriverName($index);
+        switch ($driverName) {
+            case 'dbal':
+                return DbalDriver::class;
+            case 'mongodb':
+                return MongoDBDriver::class;
+            case 'pdo':
+                return PdoDriver::class;
+            case 'xaraya':
+                // probably not very useful here, but who knows
+                return xarDB::class;
+            default:
+                throw new \Exception('Unknown database driver ' . $driverName);
+        }
     }
 
     //public static function configure($dsn, $flags = -1, $prefix = 'xar');
     //private static function setFirstDSN($dsn = null);
     //private static function setFirstFlags($flags = null);
-    public static function &getConn($index = 0)
+    public static function &getConn($index = '')
     {
+        if (is_numeric($index)) {
+            return xarDB::getConn($index);
+        }
         if (isset(static::$connections[$index])) {
             return static::$connections[$index];
         }
-        throw new \Exception("Invalid index $index");
+        throw new \Exception('Invalid db connection index ' . $index);
     }
 
-    public static function hasConn($index = 0)
+    public static function hasConn($index = '')
     {
+        if (is_numeric($index)) {
+            return xarDB::hasConn($index);
+        }
         if (isset(static::$connections[$index])) {
             return true;
         }
@@ -148,6 +249,33 @@ class ExternalDatabase implements DatabaseInterface
     }
 
     /**
+     * Summary of checkDbConnection
+     * @param mixed $dbConnIndex
+     * @param array<string, mixed> $dbConnArgs
+     * @return mixed
+     */
+    public static function checkDbConnection($dbConnIndex = 0, $dbConnArgs = [])
+    {
+        // see if we already have a valid connection (external or not)
+        if (!empty($dbConnIndex) && static::hasConn($dbConnIndex)) {
+            return $dbConnIndex;
+        }
+        // we need to make a new connection
+        if (!empty($dbConnArgs['external'])) {
+            // open a new database connection
+            $conn = static::newConn($dbConnArgs);
+            // save the connection index
+            $dbConnIndex = static::getConnIndex();
+        } elseif (!empty($dbConnArgs['databaseType'])) {
+            // open a new database connection
+            $conn = xarDB::newConn($dbConnArgs);
+            // save the connection index
+            $dbConnIndex = xarDB::getConnIndex();
+        }
+        return $dbConnIndex;
+    }
+
+    /**
      * Summary of listTableNames
      * @param mixed $index
      * @return array<mixed>
@@ -155,15 +283,8 @@ class ExternalDatabase implements DatabaseInterface
     public static function listTableNames($index)
     {
         $conn = static::getConn($index);
-        switch (get_class($conn)) {
-            case 'Doctrine\DBAL\Connection':
-                return DbalDriver::listTableNames($conn);
-            case 'MongoDB\Database':
-                return MongoDBDriver::listTableNames($conn);
-            case 'PDO':
-            default:
-                return PdoDriver::listTableNames($conn);
-        }
+        $driverClass = static::getDriverClass($index);
+        return $driverClass::listTableNames($conn);
     }
 
     /**
@@ -175,15 +296,8 @@ class ExternalDatabase implements DatabaseInterface
     public static function listTableColumns($index, $tablename)
     {
         $conn = static::getConn($index);
-        switch (get_class($conn)) {
-            case 'Doctrine\DBAL\Connection':
-                return DbalDriver::listTableColumns($conn, $tablename);
-            case 'MongoDB\Database':
-                return MongoDBDriver::listTableColumns($conn, $tablename);
-            case 'PDO':
-            default:
-                return PdoDriver::listTableColumns($conn, $tablename);
-        }
+        $driverClass = static::getDriverClass($index);
+        return $driverClass::listTableColumns($conn, $tablename);
     }
 }
 

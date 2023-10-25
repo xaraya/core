@@ -45,6 +45,7 @@
 
 namespace Xaraya\Core\Traits;
 
+use Xaraya\Database\ExternalDatabase;
 use Connection;
 use xarDB;
 use xarModVars;
@@ -55,6 +56,7 @@ use BadParameterException;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.master');
+sys::import('xaraya.database.external');
 
 /**
  * For documentation purposes only - available via DatabaseTrait
@@ -248,18 +250,7 @@ trait DatabaseTrait
         } catch (BadParameterException $e) {
             return null;
         }
-        if (!empty($args['external'])) {
-            sys::import('xaraya.database.external');
-            // open a new database connection
-            $conn = \Xaraya\Database\ExternalDatabase::newConn($args);
-            // save the connection index
-            $dbConnIndex = \Xaraya\Database\ExternalDatabase::getConnIndex();
-        } else {
-            // open a new database connection
-            $conn = xarDB::newConn($args);
-            // save the connection index
-            $dbConnIndex = xarDB::getConnIndex();
-        }
+        $dbConnIndex = ExternalDatabase::checkDbConnection(null, $args);
         static::$_connections[$name] = $dbConnIndex;
         // return the connection index
         return $dbConnIndex;
@@ -343,6 +334,9 @@ trait DatabaseTrait
         $dbConnIndex = static::connectDatabase($name);
         if (!isset($dbConnIndex)) {
             return $result;
+        }
+        if (!is_numeric($dbConnIndex)) {
+            return ExternalDatabase::listTableNames($dbConnIndex);
         }
         /** @var Connection $conn */
         $conn = xarDB::getConn($dbConnIndex);

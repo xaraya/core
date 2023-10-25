@@ -15,6 +15,7 @@ namespace Xaraya\DataObject;
 
 use Xaraya\Core\Traits\DatabaseInterface;
 use Xaraya\Core\Traits\DatabaseTrait;
+use Xaraya\Database\ExternalDatabase;
 use DataObjectMaster;
 use DataPropertyMaster;
 use BadParameterException;
@@ -80,14 +81,12 @@ class UtilApi implements DatabaseInterface
             return [$table => $propertybag[$table]];
         }
 
-        if (empty($dbConnArgs)) {
-            $dbconn = xarDB::getConn($dbConnIndex);
-        } else {
-            // open a new database connection
-            $dbconn = xarDB::newConn($dbConnArgs);
-            // save the connection index
-            $dbConnIndex = xarDB::getConnIndex();
+        $dbConnIndex = ExternalDatabase::checkDbConnection($dbConnIndex, $dbConnArgs);
+        // use external database connection
+        if (!is_numeric($dbConnIndex) && str_starts_with($dbConnIndex,'ext_')) {
+            return static::getExternalMeta($table, $dbConnIndex);
         }
+        $dbconn = xarDB::getConn($dbConnIndex);
         // dbInfo holds the meta information about the database
         $dbInfo = $dbconn->getDatabaseInfo();
 
@@ -218,12 +217,66 @@ class UtilApi implements DatabaseInterface
     }
 
     /**
+     * (try to) get the "meta" properties of tables via external db connection
+     *
+     * @param string $table name of the database table (required)
+     * @param string $dbConnIndex connection index of the database if different from Xaraya DB (required)
+     * @return array<string, array<string, mixed>>|void of field definitions, or null on failure
+     */
+    public static function getExternalMeta($table, $dbConnIndex = '')
+    {
+        if (empty($dbConnIndex) || is_numeric($dbConnIndex)) {
+            // we're in the wrong part of town
+            return [];
+        }
+
+        $metadata = [];
+        if (empty($table)) {
+            $tables = ExternalDatabase::listTableNames($dbConnIndex);
+            foreach ($tables as $name) {
+                $metadata[$name] = [];
+            }
+            return $metadata;
+        }
+
+        $metadata[$table] = [];
+        $columns = ExternalDatabase::listTableColumns($dbConnIndex, $table);
+        $id = 1;
+        $primary = '';
+        foreach ($columns as $name => $datatype) {
+            $label = ucwords(str_replace('_', ' ', $name));
+            if ($datatype == 'itemid') {
+                $primary = $name;
+            }
+            [$proptype, $configuration, $status] = static::mapPropertyType($datatype);
+            $metadata[$table][$name] = [
+                'name' => $name,
+                'label' => $label,
+                'type' => $proptype,
+                'id' => $id,
+                'defaultvalue' => null,
+                'source' => $table . '.' . $name,
+                'status' => $status,
+                'seq' => $id,
+                'configuration' => $configuration,
+            ];
+            $id++;
+        }
+        // if we have no primary but there is an 'id' field of type numeric, make it primary
+        if (empty($primary) && isset($metadata[$table]['id']) && $metadata[$table]['id']['type'] == 15) {
+            $primary = 'id';
+            $metadata[$table]['id']['type'] = 21;
+        }
+        return $metadata;
+    }
+
+    /**
      * Summary of mapPropertyType
      * @param string $datatype
      * @param string|int $size
      * @return array{0: int, 1: string, 2: int}
      */
-    public static function mapPropertyType($datatype, $size)
+    public static function mapPropertyType($datatype, $size = 0)
     {
         $proptype = '';
         $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
@@ -244,8 +297,13 @@ class UtilApi implements DatabaseInterface
                 $proptype = $proptypeid['itemid']; // Item ID
                 $configuration = '';
                 break;
+            case 'objectid':
+                $proptype = $proptypeid['itemid']; // Item ID
+                $configuration = 'objectid';
+                break;
             case 'char':
             case 'varchar':
+            case 'string':
                 $proptype = $proptypeid['textbox']; // Text Box
                 if (!empty($size) && $size > 0) {
                     $configuration = "0:" . strval($size);

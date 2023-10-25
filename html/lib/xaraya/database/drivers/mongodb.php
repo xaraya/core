@@ -51,6 +51,17 @@ class MongoDBDriver
     }
 
     /**
+     * Summary of getDriverType
+     * @param mixed $dbconn
+     * @return string
+     */
+    public static function getDriverType($dbconn)
+    {
+        /** @var \MongoDB\Database $dbconn */
+        return 'MongoDB';
+    }
+
+    /**
      * Summary of listTableNames
      * @param mixed $dbconn
      * @return array<string>
@@ -76,10 +87,19 @@ class MongoDBDriver
     {
         /** @var \MongoDB\Database $dbconn */
         // @todo use document schema?
-        // $collection = $dbconn->selectCollection($table);
-        $result = [
-            '_id' => 'documentid',
-        ];
+        $collection = $dbconn->selectCollection($tablename);
+        $document = $collection->findOne();
+        $result = [];
+        if (!empty($document)) {
+            $item = $document->getArrayCopy();
+            foreach ($item as $key => $value) {
+                $result[$key] = gettype($value);
+            }
+        } else {
+            $result['document'] = 'json';
+        }
+        // use custom datatype for _id here
+        $result['_id'] = 'objectid';
         return $result;
     }
 }

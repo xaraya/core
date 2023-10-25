@@ -10,7 +10,8 @@
             <h3>Database Configurations</h3>
             <xar:template type="module" file="dbconfig-dblist"/>
         <xar:elseif condition="!empty($db)"/>
-            <h3>Database Configuration</h3>
+            <xar:set name="link">xarController::URL('dynamicdata', 'admin', 'meta', ['db' => $db])</xar:set>
+            <h3>Database Configuration <a href="#$link#" title="Table Browser"><xar:img scope="theme" file="icons/system-search.png" class="xar-icon" alt="search"/></a></h3>
             <xar:if condition="$db eq 'default'">
                 <div class="xar-row">
                     <div class="xar-col">

@@ -103,6 +103,17 @@ class PdoDriver
     }
 
     /**
+     * Summary of getDriverType
+     * @param mixed $dbconn
+     * @return string
+     */
+    public static function getDriverType($dbconn)
+    {
+        /** @var \PDO $dbconn */
+        return $dbconn->getAttribute(\PDO::ATTR_DRIVER_NAME);
+    }
+
+    /**
      * Summary of listTableNames
      * @param mixed $dbconn
      * @return array<string>

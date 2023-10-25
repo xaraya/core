@@ -78,6 +78,17 @@ class DbalDriver
     }
 
     /**
+     * Summary of getDriverType
+     * @param mixed $dbconn
+     * @return string
+     */
+    public static function getDriverType($dbconn)
+    {
+        /** @var \Doctrine\DBAL\Connection $dbconn */
+        return 'DBAL TODO';
+    }
+
+    /**
      * Summary of listTableNames
      * @param mixed $dbconn
      * @return array<string>
@@ -106,6 +117,9 @@ class DbalDriver
             $name = $column->getName();
             $type = $column->getType();
             $typeName = \Doctrine\DBAL\Types\Type::lookupName($type);
+            if ($name == 'id' && $typeName == 'integer') {
+                $typeName = 'itemid';
+            }
             $result[$name] = $typeName;
         }
         return $result;

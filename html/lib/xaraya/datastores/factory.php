@@ -193,21 +193,8 @@ class DataStoreFactory extends xarObject
                 $datastore = new CachingDataStore($name, $storage);
                 break;
             case 'external':
-                switch ($dbConnArgs['external'] ?? '') {
-                    case 'dbal':
-                        sys::import('xaraya.datastores.external.dbal');
-                        $datastore = new DbalDataStore($name, $dbConnArgs);
-                        break;
-                    case 'mongodb':
-                        sys::import('xaraya.datastores.external.mongodb');
-                        $datastore = new MongoDBDataStore($name, $dbConnArgs);
-                        break;
-                    case 'pdo':
-                    default:
-                        sys::import('xaraya.datastores.external.pdo');
-                        $datastore = new PdoDataStore($name, $dbConnArgs);
-                        break;
-                }
+                sys::import('xaraya.datastores.external');
+                $datastore = ExternalDataStore::getDataStore($name, $dbConnIndex, $dbConnArgs);
                 break;
             default:
                 sys::import('xaraya.datastores.sql.variabletable');

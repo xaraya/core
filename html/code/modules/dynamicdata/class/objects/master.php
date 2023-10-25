@@ -472,6 +472,10 @@ class DataObjectMaster extends xarObject
      */
     public function parseDbConnArgs()
     {
+        // if we already have an external db connection, e.g. from admin meta GUI function
+        if (!empty($this->dbConnIndex) && !is_numeric($this->dbConnIndex)) {
+            return $this->dbConnArgs;
+        }
         if (empty($this->dbConnArgs)) {
             return null;
         }

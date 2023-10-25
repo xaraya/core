@@ -215,6 +215,8 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
         }
         if (!empty($dbConnArgs) && !empty($dbConnArgs['external'])) {
             $this->args['datastore'] = 'external';
+        } elseif (!empty($dbConnIndex) && !is_numeric($dbConnIndex)) {
+            $this->args['datastore'] = 'external';
         } else {
             $this->args['datastore'] = 'relational';
         }

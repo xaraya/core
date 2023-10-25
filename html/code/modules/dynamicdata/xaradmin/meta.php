@@ -68,6 +68,7 @@ function dynamicdata_admin_meta(array $args = [])
                 $data['dbConnIndex'] = UtilApi::connectDatabase($dbname);
                 $connArgs = $databases[$dbname];
                 $data['dbtype'] = $connArgs['databaseType'] ?? $connArgs['external'];
+                $data['dbConnArgs'] = $connArgs;
             }
         } elseif ($dbtype == 'mysqli') {
             // Note: not supported for other database types
