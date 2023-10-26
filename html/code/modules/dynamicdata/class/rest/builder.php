@@ -641,6 +641,8 @@ class DataObjectRESTBuilder extends xarObject
             if ($propinfo["type"] == 'itemid' && str_contains($property->source, '._id')) {
                 $propinfo["type"] = 'documentid';
                 $propinfo["basetype"] = 'string';
+            }
+            if ($propinfo["type"] == 'documentid') {
                 $idparam = 'documentid';
             }
             // @todo improve matching types
@@ -678,10 +680,10 @@ class DataObjectRESTBuilder extends xarObject
         self::add_object_view($objectname, $prop_view);
         self::add_object_display($objectname, $prop_display, $idparam);
         if ($objectname == 'sample') {
-            self::add_object_create($objectname, $prop_create);
-            self::add_object_update($objectname, $prop_create);
-            self::add_object_delete($objectname, $prop_create);
-            //self::add_object_patch($objectname, $prop_create);
+            self::add_object_create($objectname, $prop_create, $idparam);
+            self::add_object_update($objectname, $prop_create, $idparam);
+            self::add_object_delete($objectname, $prop_create, $idparam);
+            //self::add_object_patch($objectname, $prop_create, $idparam);
         }
         self::$tags[] = ['name' => $objectname, 'description' => $objectname . ' operations'];
         return $properties;
@@ -776,7 +778,7 @@ class DataObjectRESTBuilder extends xarObject
             'properties' => array_keys($properties),
             'security' => $do_security,
             'caching' => $do_cache,
-            'parameters' => ['object', 'itemid', 'expand'],
+            'parameters' => ['object', $idparam, 'expand'],
             'timeout' => 7200,
         ];
     }
@@ -785,9 +787,10 @@ class DataObjectRESTBuilder extends xarObject
      * Summary of add_object_create
      * @param string $objectname
      * @param array<string, mixed> $properties
+     * @param string $idparam
      * @return void
      */
-    public static function add_object_create($objectname, $properties)
+    public static function add_object_create($objectname, $properties, $idparam = 'itemid')
     {
         $path = '/objects/' . $objectname;
         $method = 'post';
@@ -800,7 +803,7 @@ class DataObjectRESTBuilder extends xarObject
             'description' => $description,
         ];
         // @checkme this returns the itemid
-        self::add_operation_response($path, $method, 'itemid');
+        self::add_operation_response($path, $method, $idparam);
         self::add_operation_requestBody($path, $method, $schema, $properties);
         self::add_operation_security($path, $method);
         self::$objects[$objectname]['x-operations']['create'] = [
@@ -813,9 +816,10 @@ class DataObjectRESTBuilder extends xarObject
      * Summary of add_object_update
      * @param string $objectname
      * @param array<string, mixed> $properties
+     * @param string $idparam
      * @return void
      */
-    public static function add_object_update($objectname, $properties)
+    public static function add_object_update($objectname, $properties, $idparam = 'itemid')
     {
         $path = '/objects/' . $objectname . '/{id}';
         $method = 'put';
@@ -824,13 +828,13 @@ class DataObjectRESTBuilder extends xarObject
         $description = ucfirst(str_replace('-', ' ', $schema));
         self::$paths[$path][$method] = [
             'parameters' => [
-                ['$ref' => '#/components/parameters/itemid'],
+                ['$ref' => '#/components/parameters/' . $idparam],
             ],
             'tags' => [$objectname],
             'operationId' => $operationId,
             'description' => $description,
         ];
-        self::add_operation_response($path, $method, 'itemid');
+        self::add_operation_response($path, $method, $idparam);
         self::add_operation_requestBody($path, $method, $schema, $properties);
         self::add_operation_security($path, $method);
         self::$objects[$objectname]['x-operations']['update'] = [
@@ -843,9 +847,10 @@ class DataObjectRESTBuilder extends xarObject
      * Summary of add_object_delete
      * @param string $objectname
      * @param array<string, mixed> $properties
+     * @param string $idparam
      * @return void
      */
-    public static function add_object_delete($objectname, $properties)
+    public static function add_object_delete($objectname, $properties, $idparam = 'itemid')
     {
         $path = '/objects/' . $objectname . '/{id}';
         $method = 'delete';
@@ -854,13 +859,13 @@ class DataObjectRESTBuilder extends xarObject
         $description = ucfirst(str_replace('-', ' ', $schema));
         self::$paths[$path][$method] = [
             'parameters' => [
-                ['$ref' => '#/components/parameters/itemid'],
+                ['$ref' => '#/components/parameters/' . $idparam],
             ],
             'tags' => [$objectname],
             'operationId' => $operationId,
             'description' => $description,
         ];
-        self::add_operation_response($path, $method, 'itemid');
+        self::add_operation_response($path, $method, $idparam);
         self::add_operation_security($path, $method);
         self::$objects[$objectname]['x-operations']['delete'] = [
             'properties' => array_keys($properties),
