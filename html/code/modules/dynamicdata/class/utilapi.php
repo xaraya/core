@@ -49,7 +49,7 @@ class UtilApi implements DatabaseInterface
         }
         if (!empty($configuration['dbConnArgs']) && is_string($configuration['dbConnArgs'])) {
             $configuration['dbConnArgs'] = json_decode($configuration['dbConnArgs'], true);
-            if (is_callable($configuration['dbConnArgs'])) {
+            if (is_callable($configuration['dbConnArgs'], true)) {
                 $configuration['callable'] = [
                     'class' => $configuration['dbConnArgs'][0],
                     'method' => $configuration['dbConnArgs'][1],

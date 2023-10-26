@@ -13,7 +13,7 @@
             </div>
             <div class="xar-row">
                 <div class="xar-col">
-                    <label class="xar-form-label" for="name" title="" style="">Name (empty to delete configuration)</label>
+                    <label class="xar-form-label" for="name" title="" style="">Name (empty to delete db configuration)</label>
                 </div>
                 <div class="xar-col">
                     <input type="text" id="name" name="config[name]" value="#$config['name']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>

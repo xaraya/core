@@ -28,7 +28,7 @@ class MongoDBDriver
     public static function getConnection($dsn, $flags)
     {
         if (!class_exists('\\MongoDB\\Client')) {
-            throw new \Exception("Please install MongoDB PHP Library:\n$ composer require mongodb/mongodb\n");
+            throw new \Exception("Please use sys::autoload() in Xaraya, and install MongoDB PHP Library:\n$ composer require mongodb/mongodb\n");
         }
         // @todo add mapping for non-localhost configs
         $params = static::mapDSN($dsn, $flags);

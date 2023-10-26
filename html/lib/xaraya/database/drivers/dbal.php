@@ -28,7 +28,7 @@ class DbalDriver
     public static function getConnection($dsn, $flags)
     {
         if (!class_exists('\\Doctrine\\DBAL\\DriverManager')) {
-            throw new \Exception("Please install Doctrine DBAL:\n$ composer require doctrine/dbal\n");
+            throw new \Exception("Please use sys::autoload() in Xaraya, and install Doctrine DBAL:\n$ composer require doctrine/dbal\n");
         }
         $params = static::mapDSN($dsn, $flags);
         return \Doctrine\DBAL\DriverManager::getConnection($params);

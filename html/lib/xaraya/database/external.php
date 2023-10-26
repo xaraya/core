@@ -14,6 +14,7 @@
 namespace Xaraya\Database;
 
 use xarDB;
+use sys;
 
 /**
  * Provide an external database connection to something via PDO/DBAL/... DB driver
@@ -165,10 +166,15 @@ class ExternalDatabase implements DatabaseInterface
         $driverName = static::getDriverName($index);
         switch ($driverName) {
             case 'dbal':
+                // we really need sys::autoload() here
+                sys::import('xaraya.database.drivers.dbal');
                 return Drivers\DbalDriver::class;
             case 'mongodb':
+                // we really need sys::autoload() here
+                sys::import('xaraya.database.drivers.mongodb');
                 return Drivers\MongoDBDriver::class;
             case 'pdo':
+                sys::import('xaraya.database.drivers.pdo');
                 return Drivers\PdoDriver::class;
             case 'xaraya':
                 // probably not very useful here, but who knows
@@ -222,12 +228,17 @@ class ExternalDatabase implements DatabaseInterface
 
         switch ($dsn['external']) {
             case 'pdo':
+                sys::import('xaraya.database.drivers.pdo');
                 $conn = Drivers\PdoDriver::getConnection($dsn, $flags);
                 break;
             case 'dbal':
+                // we really need sys::autoload() here
+                sys::import('xaraya.database.drivers.dbal');
                 $conn = Drivers\DbalDriver::getConnection($dsn, $flags);
                 break;
             case 'mongodb':
+                // we really need sys::autoload() here
+                sys::import('xaraya.database.drivers.mongodb');
                 $conn = Drivers\MongoDBDriver::getConnection($dsn, $flags);
                 break;
             default:

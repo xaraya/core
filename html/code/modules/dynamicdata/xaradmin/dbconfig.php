@@ -125,6 +125,7 @@ function dynamicdata_admin_dbconfig(array $args = [])
             'class' => '',
             'method' => 'getDbConnArgs',
         ];
+        $data['config']['objectid'] ??= 0;
         return $data;
     }
 

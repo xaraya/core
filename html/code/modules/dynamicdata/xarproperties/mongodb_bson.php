@@ -10,13 +10,18 @@
  * @link http://xaraya.info/index.php/release/68.html
  */
 
+namespace Xaraya\DataObject\Properties\MongoDB;
+
+use DataProperty;
+use ObjectDescriptor;
+use sys;
 /* Include parent class */
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
  * The MongoDB BSON property tries to deal with various MongoDB BSON data formats
  */
-class MongoDB_BSONProperty extends DataProperty
+class BSONProperty extends DataProperty
 {
     public $id         = 18290;
     public $name       = 'mongodb_bson';
@@ -27,7 +32,9 @@ class MongoDB_BSONProperty extends DataProperty
     public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-
+        if (!class_exists('\\MongoDB\\Client')) {
+            $this->desc .= ' (autoload)';
+        }
         // Set for runtime
         $this->tplmodule = 'dynamicdata';
         $this->template = 'mongodb_bson';
