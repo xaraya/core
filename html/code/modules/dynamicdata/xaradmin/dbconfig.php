@@ -153,6 +153,7 @@ function dynamicdata_admin_dbconfig(array $args = [])
         if (empty($configuration['dbConnIndex']) && empty($configuration['dbConnArgs'])) {
             continue;
         }
+        $configuration['dbConnIndex'] ??= 1;
         $data['dbconfigs'][$item['module_id']] ??= ['objects' => [], 'databases' => []];
         if (!empty($configuration['dbConnArgs']) && is_string($configuration['dbConnArgs'])) {
             $configuration['dbConnArgs'] = json_decode($configuration['dbConnArgs'], true);

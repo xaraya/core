@@ -93,13 +93,23 @@ class MongoDBDriver
         if (!empty($document)) {
             $item = $document->getArrayCopy();
             foreach ($item as $key => $value) {
-                $result[$key] = gettype($value);
+                if (is_object($value)) {
+                    $result[$key] = 'mongodb_bson (' . get_class($value) . ')';
+                } else {
+                    $result[$key] = gettype($value);
+                }
+            }
+            // use custom datatype for _id here
+            if (is_object($item['_id']) || (is_string($item['_id']) && strlen($item['_id']))) {
+                $result['_id'] = 'documentid';
+            } else {
+                $result['_id'] = 'itemid';
             }
         } else {
+            // use custom datatype for _id here
+            $result['_id'] = 'documentid';
             $result['document'] = 'json';
         }
-        // use custom datatype for _id here
-        $result['_id'] = 'objectid';
         return $result;
     }
 }

@@ -175,7 +175,7 @@ function dynamicdata_admin_updateprop()
             )) {
                 return;
             }
-            if ($dd_type[$id] == 21) { // item id
+            if (DataPropertyMaster::isPrimaryType($dd_type[$id])) { // item id
                 $isprimary = 1;
             }
 
@@ -221,7 +221,7 @@ function dynamicdata_admin_updateprop()
             return;
         }
 
-        if ($dd_type[0] == 21) { // item id
+        if (DataPropertyMaster::isPrimaryType($dd_type[0])) { // item id
             $isprimary = 1;
         }
         $property = DataPropertyMaster::getProperty(['type' => $dd_type[0]]);

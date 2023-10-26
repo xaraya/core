@@ -149,6 +149,9 @@ class MongoDBDataStore extends ExternalDataStore
 
         //$result = $collection->updateOne([$wherefield => $itemid], ['$set' => $values]);
         $objectid = $this->getObjectId($itemid);
+        if (array_key_exists('_id', $values)) {
+            unset($values['_id']);
+        }
         $result = $collection->updateOne(['_id' => $objectid], ['$set' => $values]);
         if (empty($result->getMatchedCount())) {
             return null;

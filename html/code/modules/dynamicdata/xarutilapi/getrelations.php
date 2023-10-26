@@ -85,7 +85,7 @@ function dynamicdata_utilapi_getrelations(array $args = [])
         // first look for the (possible) item id field in the current module
         $itemid = '???';
         foreach ($static as $field) {
-            if ($field['type'] == 21) { // Item ID
+            if (DataPropertyMaster::isPrimaryType($field['type'])) { // Item ID
                 $itemid = $field['source'];
                 break;
             }

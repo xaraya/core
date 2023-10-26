@@ -159,7 +159,7 @@ class DataObjectMaster extends xarObject
 
         // Make sure we have a primary key
         foreach ($this->properties as $property) {
-            if ($property->type == 21) {
+            if (DataPropertyMaster::isPrimaryType($property->type)) {
                 $this->primary = $property->name;
             }
         }
@@ -1506,7 +1506,7 @@ class DataObjectMaster extends xarObject
 
                 // *never* transform an ID
                 // TODO: there is probably lots more to skip here.
-                if ($this->properties[$name]->type != 21) {
+                if (!(DataPropertyMaster::isPrimaryType($this->properties[$name]->type))) {
                     $this->hookvalues['transform'][] = $name;
                 }
                 $this->hookvalues[$name] = $this->properties[$name]->value;

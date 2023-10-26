@@ -201,7 +201,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     public static function getObjectItem($args)
     {
         $object = $args['path']['object'];
-        $itemid = intval($args['path']['itemid']);
+        // @todo how to validate other documentid types like Base64 or free-form?
+        // for mongodb objectid etc. (string)
+        if (is_string($args['path']['itemid']) && strlen($args['path']['itemid']) == 24) {
+            $itemid = $args['path']['itemid'];
+        } else {
+            $itemid = intval($args['path']['itemid']);
+        }
         $method = 'display';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -230,7 +236,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         $itemid = $objectitem->getItem();
         if ($itemid != $params['itemid']) {
-            throw new Exception('Unknown item ' . $object);
+            throw new Exception('Unknown itemid for ' . $object);
         }
         // @checkme this throws exception for userlist property when xarUser::init() is not called first
         //$result = $objectitem->getFieldValues();

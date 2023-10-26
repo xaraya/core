@@ -263,6 +263,16 @@ class DataObjectRESTBuilder extends xarObject
             'explode' => false,
             'description' => 'Properties to expand in items (comma separated)',
         ];
+        // for mongodb objectid etc. (string)
+        self::$parameters['documentid'] = [
+            'name' => 'id',
+            'in' => 'path',
+            'schema' => [
+                'type' => 'string',
+            ],
+            'description' => 'documentid value',
+            'required' => true,
+        ];
     }
 
     /**
@@ -606,6 +616,7 @@ class DataObjectRESTBuilder extends xarObject
         $prop_display = [];
         $prop_view = [];
         $prop_create = [];
+        $idparam = 'itemid';
         // @todo add fields based on object descriptor?
         $fieldlist = ['id', 'name', 'label', 'type', 'status', 'seq', 'basetype'];
         foreach ($objectref->getProperties() as $key => $property) {
@@ -626,6 +637,12 @@ class DataObjectRESTBuilder extends xarObject
                 }
             }
             $propinfo["type"] = self::$proptype_names[$property->type];
+            // for mongodb objectid etc. (string)
+            if ($propinfo["type"] == 'itemid' && str_contains($property->source, '._id')) {
+                $propinfo["type"] = 'documentid';
+                $propinfo["basetype"] = 'string';
+                $idparam = 'documentid';
+            }
             // @todo improve matching types
             $datatype = self::match_proptype($property);
             switch ($property->getDisplayStatus()) {
@@ -659,7 +676,7 @@ class DataObjectRESTBuilder extends xarObject
             $properties[] = $propinfo;
         }
         self::add_object_view($objectname, $prop_view);
-        self::add_object_display($objectname, $prop_display);
+        self::add_object_display($objectname, $prop_display, $idparam);
         if ($objectname == 'sample') {
             self::add_object_create($objectname, $prop_create);
             self::add_object_update($objectname, $prop_create);
@@ -725,9 +742,10 @@ class DataObjectRESTBuilder extends xarObject
      * Summary of add_object_display
      * @param string $objectname
      * @param array<string, mixed> $properties
+     * @param string $idparam
      * @return void
      */
-    public static function add_object_display($objectname, $properties)
+    public static function add_object_display($objectname, $properties, $idparam = 'itemid')
     {
         $path = '/objects/' . $objectname . '/{id}';
         $method = 'get';
@@ -737,7 +755,7 @@ class DataObjectRESTBuilder extends xarObject
         self::$paths[$path] = [
             $method => [
                 'parameters' => [
-                    ['$ref' => '#/components/parameters/itemid'],
+                    ['$ref' => '#/components/parameters/' . $idparam],
                     ['$ref' => '#/components/parameters/expand'],
                 ],
                 'tags' => [$objectname],
@@ -1409,6 +1427,10 @@ class DataObjectRESTBuilder extends xarObject
     {
         // @todo improve matching types
         $typename = self::$proptype_names[$property->type];
+        // for mongodb objectid etc. (string)
+        if ($typename == 'itemid' && str_contains($property->source, '._id')) {
+            $typename = 'documentid';
+        }
         //$typename = $property->basetype;
         switch ($typename) {
             case 'integerbox':
@@ -1422,6 +1444,8 @@ class DataObjectRESTBuilder extends xarObject
             case 'floatbox':
                 $datatype = ['type' => 'number', 'format' => 'float'];
                 break;
+            case 'documentid':
+            case 'static':
             case 'textbox':
             case 'textarea':
             case 'textarea_medium':
@@ -1437,6 +1461,10 @@ class DataObjectRESTBuilder extends xarObject
             case 'dropdown':
             case 'crontab':
                 //case 'string':
+                $datatype = ['type' => 'string'];
+                break;
+            case 'mongodb_bson':
+                // @todo customize later
                 $datatype = ['type' => 'string'];
                 break;
             case 'deferitem':

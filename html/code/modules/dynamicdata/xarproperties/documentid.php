@@ -1,6 +1,12 @@
 <?php
 /**
- * The MongoDB BSON property tries to deal with various MongoDB BSON data formats
+ * The Document ID property holds a unique string identifier for an item or document
+ *
+ * This provides an alternative for ItemIDProperty when the id's are generated outside
+ * Xaraya and are in string format, e.g. hexadecimal, Base64 or free-format
+ *
+ * Note: this only affects the format type. Please continue using 'itemid' as the variable
+ * and/or URL parameter to pass along the item id's anywhere else in Xaraya as usual
  *
  * @package modules\dynamicdata
  * @category Xaraya Web Applications Framework
@@ -10,7 +16,7 @@
  * @link http://xaraya.info/index.php/release/68.html
  */
 
-namespace Xaraya\DataObject\Properties\MongoDB;
+namespace Xaraya\DataObject\Properties;
 
 use DataProperty;
 use ObjectDescriptor;
@@ -20,25 +26,22 @@ use sys;
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
- * The MongoDB BSON property tries to deal with various MongoDB BSON data formats
+ * The Document ID property holds a unique string identifier for an item or document
  */
-class BSONProperty extends DataProperty
+class DocumentIDProperty extends DataProperty
 {
-    public $id         = 18290;
-    public $name       = 'mongodb_bson';
-    public $desc       = 'MongoDB BSON';
+    public $id         = 18221;
+    public $name       = 'documentid';
+    public $desc       = 'Document ID';
     public $reqmodules = ['dynamicdata'];
-    public $options    = [];
+    public $basetype   = 'string';
 
     public function __construct(ObjectDescriptor $descriptor)
     {
         parent::__construct($descriptor);
-        if (!class_exists('\\MongoDB\\Client')) {
-            $this->desc .= ' (autoload)';
-        }
         // Set for runtime
         $this->tplmodule = 'dynamicdata';
-        $this->template = 'mongodb_bson';
+        $this->template = 'documentid';
         $this->filepath = 'modules/dynamicdata/xarproperties';
     }
 
@@ -61,7 +64,7 @@ class BSONProperty extends DataProperty
     public function setValue($value = null)
     {
         if (is_object($value)) {
-            $value = var_export($value, true);
+            $value = (string) $value;
         }
         //$this->value = $value;
         parent::setValue($value);
@@ -89,7 +92,7 @@ class BSONProperty extends DataProperty
     public function setItemValue($itemid, $value, $fordisplay = 0)
     {
         if (is_object($value)) {
-            $value = var_export($value, true);
+            $value = (string) $value;
         }
         //$this->value = $value;
         //$this->_items[$itemid][$this->name] = $this->value;

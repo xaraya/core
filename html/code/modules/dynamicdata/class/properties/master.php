@@ -336,4 +336,23 @@ class DataPropertyMaster extends xarObject
         }
         return false;
     }
+
+    /**
+     * Summary of isPrimaryType
+     * @param mixed $type
+     * @return bool
+     */
+    public static function isPrimaryType($type)
+    {
+        if (is_numeric($type)) {
+            if (in_array((int) $type, [21, 18221])) {
+                return true;
+            }
+            return false;
+        }
+        if (in_array((string) $type, ['itemid', 'documentid'])) {
+            return true;
+        }
+        return false;
+    }
 }

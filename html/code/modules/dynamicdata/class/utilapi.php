@@ -245,7 +245,7 @@ class UtilApi implements DatabaseInterface
         $primary = '';
         foreach ($columns as $name => $datatype) {
             $label = ucwords(str_replace('_', ' ', $name));
-            if ($datatype == 'itemid') {
+            if ($datatype == 'itemid' || $datatype == 'documentid') {
                 $primary = $name;
             }
             [$proptype, $configuration, $status] = static::mapPropertyType($datatype);
@@ -291,16 +291,18 @@ class UtilApi implements DatabaseInterface
         // = obviously limited to basic data types in this case
         $dtype = strtolower($datatype);
         // skip special definitions (unsigned etc.)
-        $dtype = preg_replace('/\(.*$/', '', $dtype);
+        $dtype = preg_replace('/\s*\(.*$/', '', $dtype);
         switch ($dtype) {
             case 'itemid':
                 $proptype = $proptypeid['itemid']; // Item ID
                 $configuration = '';
                 break;
-            case 'objectid':
+            case 'documentid':
+                // @todo evaluate impact of using 'documentid' here
                 $proptype = $proptypeid['itemid']; // Item ID from MongoDB
-                $configuration = 'objectid';
+                $configuration = 'documentid';
                 break;
+            case 'mongodb_bson':
             case 'object':
                 $proptype = $proptypeid['mongodb_bson']; // (try to) convert BSON object/array to array?
                 break;

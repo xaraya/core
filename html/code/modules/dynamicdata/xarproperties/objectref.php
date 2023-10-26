@@ -175,7 +175,7 @@ class ObjectRefProperty extends SelectProperty
         }
 
         // Check if the store_prop is the itemid
-        if ($object->properties[$this->initialization_store_prop]->type == 21) { // itemid
+        if (DataPropertyMaster::isPrimaryType($object->properties[$this->initialization_store_prop]->type)) { // itemid
             $this->store_prop_is_itemid = true;
         } else {
             $this->store_prop_is_itemid = false;

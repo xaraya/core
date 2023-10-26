@@ -25,6 +25,7 @@ class ItemIDProperty extends NumberBoxProperty
     public $name       = 'itemid';
     public $desc       = 'Item ID';
     public $reqmodules = ['dynamicdata'];
+    public $basetype   = 'integer';
 
     public function __construct(ObjectDescriptor $descriptor)
     {

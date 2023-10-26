@@ -16,6 +16,7 @@ namespace Xaraya\DataObject\DataStores;
 use DataObject;
 use DataObjectList;
 use DataProperty;
+use DataPropertyMaster;
 use sys;
 
 sys::import('xaraya.datastores.factory');
@@ -167,7 +168,7 @@ class OrderedDataStore extends BasicDataStore implements IOrderedDataStore
     public function addField(DataProperty &$property)
     {
         parent::addField($property);
-        if(!isset($this->primary) && $property->type == 21) {
+        if(!isset($this->primary) && DataPropertyMaster::isPrimaryType($property->type)) {
             // Item ID
             $this->setPrimary($property);
         }

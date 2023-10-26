@@ -351,7 +351,7 @@ class DataObject extends DataObjectMaster implements iDataObject
                 continue;
             }
 
-            if ($this->properties[$name]->type == 21 || !isset($this->hookvalues[$name])) {
+            if (DataPropertyMaster::isPrimaryType($this->properties[$name]->type) || !isset($this->hookvalues[$name])) {
                 $args['properties'][$name] = & $this->properties[$name];
             } else {
                 $args['properties'][$name] = & $this->properties[$name];

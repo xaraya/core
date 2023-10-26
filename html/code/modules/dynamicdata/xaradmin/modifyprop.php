@@ -139,7 +139,7 @@ function dynamicdata_admin_modifyprop(array $args = [])
             // Note : we could use addcslashes here, but that could lead to a whole bunch of other issues...
             $data['fields'][$field]['defaultvalue'] = preg_replace("/\r?\n/", '[LF]', $data['fields'][$field]['defaultvalue']);
         }
-        if ($data['fields'][$field]['type'] == 21) { // item id
+        if (DataPropertyMaster::isPrimaryType($data['fields'][$field]['type'])) { // item id
             $isprimary = 1;
             //    break;
         }
