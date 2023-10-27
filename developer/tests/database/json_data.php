@@ -11,11 +11,19 @@
  */
 require dirname(__DIR__, 3).'/vendor/autoload.php';
 
+use Xaraya\Database\ExternalDatabase;
+
 // initialize bootstrap
 sys::init();
 
-require __DIR__ . '/config.php';
+require __DIR__ . '/dbal_config.php';
 
+/**
+ * Create JSON table in MySQL database
+ * @param mixed $conn
+ * @param mixed $name
+ * @return void
+ */
 function create_json_table($conn, $name = 'xar_dynamic_json')
 {
     $sm = $conn->createSchemaManager();
@@ -40,6 +48,12 @@ function create_json_table($conn, $name = 'xar_dynamic_json')
     }
 }
 
+/**
+ * Add index to JSON table in MySQL database
+ * @param mixed $conn
+ * @param mixed $name
+ * @return void
+ */
 function add_json_index($conn, $name = 'xar_dynamic_json')
 {
     $sm = $conn->createSchemaManager();
@@ -58,13 +72,36 @@ function add_json_index($conn, $name = 'xar_dynamic_json')
 }
 
 /**
- * Summary of fill_json_table
- * @param Doctrine\DBAL\Connection $conn
- * @param MongoDB\Client $client
- * @param mixed $refresh
+ * Test queries on JSON table in MySQL - not very convincing
+ * @param mixed $conn
  * @return void
  */
-function fill_json_table($conn, $client, $refresh = false)
+function test_json_table($conn)
+{
+    // very different syntax depending on the database type :-(
+    // select * from xar_dynamic_json where object_id=4 order by json_value(data, '$.name');
+    // select * from xar_dynamic_json where object_id=4 and json_value(data, '$.name')="Baby";
+    // select * from xar_dynamic_json where object_id=4 and json_extract(data, '$.name')="Baby";
+    // select * from xar_dynamic_json where object_id=4 and json_contains(data, "Baby", '$.name')=1; // doesn't work
+    // select object_id, json_keys(data), count(*) from xar_dynamic_json group by object_id;
+    $stats = $conn->fetchAllAssociative("select object_id, json_keys(data), count(*) from xar_dynamic_json group by object_id");
+    print_r($stats);
+    $test = $conn->fetchAllAssociative("select * from xar_dynamic_json where object_id=4 order by json_value(data, '$.name')");
+
+    print_r($test);
+    // https://mariadb.com/resources/blog/json-with-mariadb-10-2/
+    //$conn->update("xar_dynamic_json", array("data" => "JSON_REPLACE(data, '$.name', 'strong')"), array("object_id" => 4, "item_id" => 11));
+    //$conn->update("xar_dynamic_json", array("data" => json_encode(array("id" => 11, "name" => "strong", "age" => 0, "location" => "lost"))), array("object_id" => 4, "item_id" => 11));
+}
+
+/**
+ * Copy Xaraya DD object items as collection documents in MongoDB
+ * @param Doctrine\DBAL\Connection $conn
+ * @param MongoDB\Client $client
+ * @param bool $refresh
+ * @return void
+ */
+function copy_dynamicdata_objects($conn, $client, $refresh = false)
 {
     $client->dropDatabase("Xaraya");
     $sql = "SELECT * FROM xar_dynamic_objects WHERE datastore = ?";
@@ -142,24 +179,60 @@ function fill_json_table($conn, $client, $refresh = false)
     }
 }
 
-function test_json_table($conn)
+/**
+ * Copy external database tables as collections in MongoDB
+ * @param string $dbName
+ * @param string $dbConnIndex
+ * @param MongoDB\Client $client
+ * @return void
+ */
+function copy_external_database($dbName = "Calibre", $dbConnIndex, $client)
 {
-    // very different syntax depending on the database type :-(
-    // select * from xar_dynamic_json where object_id=4 order by json_value(data, '$.name');
-    // select * from xar_dynamic_json where object_id=4 and json_value(data, '$.name')="Baby";
-    // select * from xar_dynamic_json where object_id=4 and json_extract(data, '$.name')="Baby";
-    // select * from xar_dynamic_json where object_id=4 and json_contains(data, "Baby", '$.name')=1; // doesn't work
-    // select object_id, json_keys(data), count(*) from xar_dynamic_json group by object_id;
-    $stats = $conn->fetchAllAssociative("select object_id, json_keys(data), count(*) from xar_dynamic_json group by object_id");
-    print_r($stats);
-    $test = $conn->fetchAllAssociative("select * from xar_dynamic_json where object_id=4 order by json_value(data, '$.name')");
-
-    print_r($test);
-    // https://mariadb.com/resources/blog/json-with-mariadb-10-2/
-    //$conn->update("xar_dynamic_json", array("data" => "JSON_REPLACE(data, '$.name', 'strong')"), array("object_id" => 4, "item_id" => 11));
-    //$conn->update("xar_dynamic_json", array("data" => json_encode(array("id" => 11, "name" => "strong", "age" => 0, "location" => "lost"))), array("object_id" => 4, "item_id" => 11));
+    $client->dropDatabase($dbName);
+    $tables = ExternalDatabase::listTableNames($dbConnIndex);
+    $conn = ExternalDatabase::getConn($dbConnIndex);
+    //print_r($tables);
+    foreach ($tables as $table) {
+        $columns = ExternalDatabase::listTableColumns($dbConnIndex, $table);
+        echo "Table $table:\n";
+        //print_r($columns);
+        $primary = '';
+        foreach ($columns as $name => $type) {
+            if ($type == 'itemid') {
+                $primary = $name;
+                break;
+            }
+        }
+        // not very elegant way of doing this, but we don't really care
+        $sql = 'SELECT * FROM ' . $table;
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+        $items = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        printf("Selected %d items(s)\n", count($items));
+        if (empty($items)) {
+            continue;
+        }
+        if (!empty($primary)) {
+            foreach (array_keys($items) as $key) {
+                $items[$key]['_id'] = $items[$key][$primary];
+            }
+        }
+        $collection = $client->selectCollection($dbName, $table);
+        $result = $collection->insertMany(array_values($items));
+        printf("Inserted %d document(s)\n", $result->getInsertedCount());
+    }
 }
 
-$xarConn = get_xaraya_conn();
+//$xarConn = get_xaraya_conn();
+//$mongodb = new MongoDB\Client();
+//copy_dynamicdata_objects($xarConn, $mongodb);
+
+$dbName = 'Calibre';
+$dbConnArgs = [
+    'external' => 'pdo',
+    'databaseType' => 'sqlite3',
+    'databaseName' => dirname(__DIR__, 3).'/html/code/modules/library/xardata/metadata.db',
+];
+$dbConnIndex = ExternalDatabase::checkDbConnection(null, $dbConnArgs);
 $mongodb = new MongoDB\Client();
-fill_json_table($xarConn, $mongodb);
+copy_external_database($dbName, $dbConnIndex, $mongodb);
