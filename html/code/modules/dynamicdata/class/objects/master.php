@@ -736,8 +736,6 @@ class DataObjectMaster extends xarObject
      *     $args['name'] name of the object you're looking for, OR
      * @return array<mixed>|null containing the name => value pairs for the object
      * @todo when we had a constructor which was more passive, this could be non-static. (cheap construction is a good rule of thumb)
-     * @todo no ref return?
-     * @todo when we can turn this into an object method, we dont have to do db inclusion all the time.
     **/
     public static function getObjectInfo(array $args = [])
     {
@@ -999,7 +997,6 @@ class DataObjectMaster extends xarObject
      *     $args['name'] name of the object you're looking for
      *     $args['class'] optional classname (e.g. <module>_DataObject)
      * @return DataObject|null the requested object definition
-     * @todo  automatic sub-classing per module (and itemtype) ?
     **/
     public static function getObject(array $args = [])
     {
@@ -1079,7 +1076,6 @@ class DataObjectMaster extends xarObject
      *     $args['name'] name of the object you're looking for
      *     $args['class'] optional classname (e.g. <module>_DataObject[_List])
      * @return DataObjectList|null the requested object definition
-     * @todo   automatic sub-classing per module (and itemtype) ?
      * @todo   get rid of the classname munging, use typing
     **/
     public static function getObjectList(array $args = [])
@@ -1175,7 +1171,6 @@ class DataObjectMaster extends xarObject
      *     $args['class'] optional classname (e.g. <module>_DataObject[_Interface])
      * @return object the requested object definition
      * @todo  get rid of the classname munging
-     * @todo  automatic sub-classing per module (and itemtype) ?
     **/
     public static function &getObjectInterface(array $args = [])
     {
@@ -1352,75 +1347,28 @@ class DataObjectMaster extends xarObject
     /**
      * Get a module's itemtypes
      *
+     * @uses Xaraya\DataObject\UserApi::getModuleItemTypes()
      * @param array<string, mixed> $args
      * with
      *     int    args[moduleid]
-     *     string args[module]
      *     bool   args[native]
      *     bool   args[extensions]
-     * @todo don't use args
-     * @todo pick moduleid or module
-     * @todo move this into a utils class?
+     * @deprecated 2.4.1 use Xaraya\DataObject\UserApi::getModuleItemTypes() instead
      * @return array<mixed>
      */
     public static function getModuleItemTypes(array $args = [])
     {
+        sys::import('modules.dynamicdata.class.userapi');
         extract($args);
         /** @var int $moduleid */
-        /** @var string $module */
         // Argument checks
-        if (empty($moduleid) && empty($module)) {
-            throw new BadParameterException('moduleid or module');
+        if (empty($moduleid)) {
+            throw new BadParameterException('moduleid');
         }
-        if (empty($module)) {
-            $module = xarMod::getName($moduleid);
-        }
-
         $native ??= true;
         $extensions ??= true;
 
-        $types = [];
-        if ($native) {
-            // Try to get the itemtypes
-            try {
-                // @todo create an adaptor class for procedural getitemtypes in modules
-                $types = xarMod::apiFunc($module, 'user', 'getitemtypes', []);
-            } catch (FunctionNotFoundException $e) {
-                // No worries
-            }
-        }
-        if ($extensions) {
-            // Get all the objects at once
-            xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-            $xartable = & xarDB::getTables();
-
-            $dynamicobjects = $xartable['dynamic_objects'];
-
-            $bindvars = [];
-            $query = "SELECT id AS objectid,
-                             name AS objectname,
-                             label AS objectlabel,
-                             module_id AS moduleid,
-                             itemtype AS itemtype
-                      FROM $dynamicobjects ";
-
-            $query .= " WHERE module_id = ? ";
-            $bindvars[] = (int) $moduleid;
-
-            $dbconn = xarDB::getConn();
-            $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
-
-            // put in itemtype as key for easier manipulation
-            while ($result->next()) {
-                $row = $result->fields;
-                $types [$row['itemtype']] = [
-                                            'label' => $row['objectlabel'],
-                                            'title' => xarML('View #(1)', $row['objectlabel']),
-                                            'url' => xarController::URL('dynamicdata', 'user', 'view', ['itemtype' => $row['itemtype']])];
-            }
-        }
-        return $types;
+        return Xaraya\DataObject\UserApi::getModuleItemTypes($moduleid, $native, $extensions);
     }
 
     /**

@@ -7,8 +7,6 @@ sys::import('modules.dynamicdata.class.objects.loader');
 /**
  * The Deferred Many property delays loading related objects based on the itemids until they need to be shown.
  *
- * @todo make this query work for relational datastores: select where caller_id in $values
- *
  * Note: this is for many-to-many relationships stored in a separate object, not for one-to-many objectlinks or subitems
  * The relationships are defined based on the itemid of the source & target objects, stored via a separate link object.
  * The property itself holds no significant value in the database - it may be used to store a cached version someday...

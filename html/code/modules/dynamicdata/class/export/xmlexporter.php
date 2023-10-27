@@ -20,6 +20,7 @@ use xarVar;
 
 /**
  * DataObject XML Exporter
+ * @todo move the xml generate code into a template based system.
  */
 class XmlExporter extends DataObjectExporter
 {

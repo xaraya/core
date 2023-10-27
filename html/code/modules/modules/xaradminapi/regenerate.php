@@ -260,8 +260,8 @@ function modules_adminapi_regenerate()
         }
     }
 
-    // Finds and updates event handlers
-    if (!xarMod::apiFunc('modules', 'admin', 'geteventhandlers')) {return;}
+    // Finds and updates event handlers - replaced with xarEvent code and event observers
+    //if (!xarMod::apiFunc('modules', 'admin', 'geteventhandlers')) {return;}
 
     return true;
 }

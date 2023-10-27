@@ -43,7 +43,7 @@ function categories_userapi_getitemtypes($args)
         foreach ($itemtypes as $key => $value) $types[$key] = $value;
         foreach ($extensionitemtypes as $key => $value) $types[$key] = $value;
 
-        /* TODO: activate this code when we move to php5
+        /* TODO: activate this code when we move to php5 - that would be about now, no? ;-)
         $keys = array_merge(array_keys($itemtypes),array_keys($extensionitemtypes));
         $values = array_merge(array_values($itemtypes),array_values($extensionitemtypes));
         return array_combine($keys,$values);

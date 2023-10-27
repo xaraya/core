@@ -434,12 +434,12 @@ abstract class ConnectionCommon
         return $tmp;
     }
 
-    /*
+    /**
      * Some modules in xaraya use this to test whether a db execute operation has succeeded
      * value 0: succeeded
      * otherwise: error
      * Since we throw exceptions if we have an error, this just return 0
-     * @todo remove when we can, only seen in modules
+     * @deprecated 2.4.0 remove when we can, only seen in modules
      */
     public function ErrorNo()
     {

@@ -17,7 +17,7 @@ sys::import('modules.dynamicdata.class.properties.base');
  */
 
 /**
- * @todo This has been superceded by the subitems property
+ * @deprecated 2.4.0 This has been superceded by the subitems property
  */
 class SubFormProperty extends DataProperty
 {

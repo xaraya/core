@@ -12,13 +12,15 @@
  *
  * @author random <mfl@netspan.ch>
 */
+sys::import('modules.dynamicdata.class.userapi');
 /**
  * get the next itemtype of objects pertaining to a given module
  *
+ * @uses Xaraya\DataObject\UserApi::getModuleItemTypes()
  * @author the DynamicData module development team
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return int of object definitions
- * @todo should we wrap this?
+ * @todo combine this with DataObject::getNextItemType()?
  */
 function dynamicdata_adminapi_getnextitemtype($args = [])
 {
@@ -26,7 +28,7 @@ function dynamicdata_adminapi_getnextitemtype($args = [])
     if (empty($module_id)) {
         $module_id = 182;
     }
-    $types = DataObjectMaster::getModuleItemTypes(['moduleid' => $module_id]);
+    $types = Xaraya\DataObject\UserApi::getModuleItemTypes($module_id);
     $ids = array_keys($types);
     sort($ids);
     $lastid = array_pop($ids);

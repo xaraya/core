@@ -493,7 +493,7 @@ abstract class ExternalDataStore extends SQLDataStore
         // @todo select based on whatever criteria were passed here
         $where = $this->doParseWhere($this->object->where);
 
-        // @todo count items
+        // count items
         return $this->doCountItems($itemids, $tablename, $where);
     }
 
@@ -567,7 +567,7 @@ abstract class ExternalDataStore extends SQLDataStore
      */
     protected function connect()
     {
-        // @todo connect database
+        // connect database
         if (empty($this->db)) {
             $this->doConnect();
         }
@@ -602,7 +602,7 @@ abstract class ExternalDataStore extends SQLDataStore
      */
     protected function prepareStatement($sql)
     {
-        // @todo prepare sql statement and return *something*
+        // prepare sql statement and return *something*
         return $this->doPrepareStatement($sql);
     }
 
@@ -620,7 +620,7 @@ abstract class ExternalDataStore extends SQLDataStore
      */
     protected function getLastId($table)
     {
-        // @todo get last id
+        // get last id
         return $this->doGetLastId($table);
     }
 
@@ -637,7 +637,7 @@ abstract class ExternalDataStore extends SQLDataStore
      */
     public function getDatabaseInfo()
     {
-        // @todo get database info
+        // get database info
         return $this->doGetDatabaseInfo();
     }
 
@@ -683,7 +683,7 @@ abstract class ExternalDataStore extends SQLDataStore
      */
     public static function getDataStore($name = 'external', $dbConnIndex = '', $dbConnArgs = [])
     {
-        // @todo re-use external db connection
+        // re-use external db connection
         if (!empty($dbConnIndex) && !is_numeric($dbConnIndex)) {
             $driver = ExternalDatabase::getDriverName($dbConnIndex);
         } else {

@@ -12,14 +12,25 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
+sys::import('modules.dynamicdata.class.userapi');
 /**
  * utility function to retrieve the list of item types of a module (if any)
  *
- * @todo remove this before it can propagate
+ * @uses Xaraya\DataObject\UserApi::getModuleItemTypes()
+ * @todo remove this before it can propagate - too late, sorry
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return array<mixed> containing the item types and their description
  */
 function dynamicdata_userapi_getmoduleitemtypes(array $args = [])
 {
-    return DataObjectMaster::getModuleItemTypes($args);
+    extract($args);
+    /** @var int $moduleid */
+    // Argument checks
+    if (empty($moduleid)) {
+        throw new BadParameterException('moduleid');
+    }
+    $native ??= true;
+    $extensions ??= true;
+
+    return Xaraya\DataObject\UserApi::getModuleItemTypes($moduleid, $native, $extensions);
 }

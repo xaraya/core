@@ -1258,7 +1258,7 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
             }
 
             // Execute either the compiled template, or the code determined
-            // @todo get rid of the cachedFileName usage
+            // @todo get rid of the cachedFileName usage - why?
             $cachedFileName = xarTemplateCache::cacheFile($sourceFileName);
 
             xarCoreCache::setCached('Templates.ExecuteFromFile', $sourceFileName, $cachedFileName);

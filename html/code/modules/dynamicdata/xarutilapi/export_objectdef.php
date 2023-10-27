@@ -9,7 +9,6 @@
  * @link http://xaraya.info/index.php/release/182.html
  *
  * @author mikespub <mikespub@xaraya.com>
- * @todo move the xml generate code into a template based system.
  */
 
 sys::import('modules.dynamicdata.class.export.generic');

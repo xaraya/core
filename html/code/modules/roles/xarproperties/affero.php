@@ -13,7 +13,7 @@ sys::import('modules.base.xarproperties.textbox');
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/27.html
  * @author mikespub <mikespub@xaraya.com>
- * @todo: Remove?
+ * @deprecated 2.4.0 gone
  */
 class AfferoProperty extends TextBoxProperty
 {

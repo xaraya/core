@@ -28,7 +28,6 @@ class xarURL extends xarObject
      * @param string $data the data to be encoded (see todo)
      * @param string $type the type of string to be encoded ('getname', 'getvalue', 'path', 'url', 'domain')
      * @return string the encoded URL parts
-     * @todo this could be made public
      * @todo support arrays and encode the complete array (keys and values)
     **/
     public static function encode($data, $type = 'getname')

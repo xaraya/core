@@ -11,7 +11,6 @@
  * @link http://www.xaraya.info
  *
  * @author Michel Dalle <mikespub@xaraya.com>
- * @todo Investigate possible use ;-)
  */
 
 /**

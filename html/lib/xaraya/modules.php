@@ -260,8 +260,7 @@ class xarMod extends xarObject implements IxarMod
      * @param int $modRegId the module's registered id
      * @param string $type determines theme or module
      * @return mixed the module's current state
-     * @todo implement the xarMod__setState reciproke
-     * @todo We dont need this, used nowhere
+     * @deprecated 2.4.0 We dont need this, used nowhere
      */
     static function getState($modRegId, $type = 'module')
     {

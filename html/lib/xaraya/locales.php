@@ -40,7 +40,6 @@ class LocaleNotFoundException extends NotFoundExceptions
  * @uses xarLocale::loadData()
  * @return array<mixed>|bool|null locale data
  * @throws LocaleNotFoundException
- * @todo   figure out why we go through this function for xarMod::isAvailable
  */
 function &xarMLSLoadLocaleData($locale = NULL)
 {

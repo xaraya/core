@@ -26,7 +26,6 @@ abstract class ApiHookSubject extends HookSubject
     protected $subject = 'ApiHook';  // change this to the name of your hook subject
     /**
      * Notify hooked observers
-     * @todo: it shouldn't be necessary to overload this method, make it final?
      *
      * @return array<mixed> of cumulative extrainfo from observers
     **/

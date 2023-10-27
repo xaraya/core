@@ -14,7 +14,7 @@
  * It defines a simple interface used by the Multi Language System to fetch both
  * string and key based translations. Each MLS backend must implement this interface.
  *
- * @todo    interface once php5 is there
+ * @todo    interface once php5 is there - yep, it's here :-)
  */
 interface ITranslationsBackend {
     // Get the string based translation associated to the string param.

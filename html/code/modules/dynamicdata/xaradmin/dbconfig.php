@@ -69,7 +69,6 @@ function dynamicdata_admin_dbconfig(array $args = [])
             ));
             return true;
         }
-        // @todo save config if needed
         $data['db'] = $db;
         $data['module'] = $module;
         $data['dbname'] = $dbname;

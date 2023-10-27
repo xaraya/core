@@ -13,10 +13,11 @@
  *
  * @author Xaraya Development Team
  * @return boolean null on exceptions, true on sucess to update
+ * @deprecated 2.4.0 replaced with xarEvent code and event observers
  */
 function modules_adminapi_geteventhandlers()
 {
-    static $check = false;
+    static $check = true;  // switch to always true
 
     //Now with dependency checking, this function may be called multiple times
     //Let's check if it already return ok and stop the processing here

@@ -56,7 +56,6 @@ if ($middleware == 'Creole') {
      *     string args[siteTablePrefix] site table prefix
      *     bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
      * @return boolean true
-     * @todo <marco> move template tag table definition somewhere else?
     **/
     function xarDB_init(array &$args)
     {
@@ -130,7 +129,6 @@ if ($middleware == 'Creole') {
      *     string args[siteTablePrefix] site table prefix
      *     bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
      * @return boolean true
-     * @todo <marco> move template tag table definition somewhere else?
     **/
     function xarDB_init(array &$args)
     {

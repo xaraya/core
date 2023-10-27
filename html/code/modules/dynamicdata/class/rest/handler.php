@@ -201,13 +201,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     public static function getObjectItem($args)
     {
         $object = $args['path']['object'];
-        // @todo how to validate other documentid types like Base64 or free-form?
-        // for mongodb objectid etc. (string)
-        if (is_string($args['path']['itemid']) && strlen($args['path']['itemid']) == 24) {
-            $itemid = $args['path']['itemid'];
-        } else {
-            $itemid = intval($args['path']['itemid']);
-        }
+        $itemid = self::checkItemId($object, $args['path']['itemid']);
         $method = 'display';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'getObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -262,6 +256,23 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     }
 
     /**
+     * Summary of checkItemId
+     * @param string $object
+     * @param mixed $itemid
+     * @return mixed
+     */
+    private static function checkItemId($object, $itemid)
+    {
+        // @todo use $object to validate expected format for itemid
+        // @todo how to validate other documentid types like Base64 or free-form?
+        // for mongodb objectid etc. (string)
+        if (is_string($itemid) && strlen($itemid) == 24) {
+            return $itemid;
+        }
+        return intval($itemid);
+    }
+
+    /**
      * Summary of createObjectItem
      * @param array<string, mixed> $args
      * @throws \Exception
@@ -308,7 +319,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     public static function updateObjectItem($args)
     {
         $object = $args['path']['object'];
-        $itemid = intval($args['path']['itemid']);
+        $itemid = self::checkItemId($object, $args['path']['itemid']);
         $method = 'update';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'updateObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
@@ -349,7 +360,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     public static function deleteObjectItem($args)
     {
         $object = $args['path']['object'];
-        $itemid = intval($args['path']['itemid']);
+        $itemid = self::checkItemId($object, $args['path']['itemid']);
         $method = 'delete';
         if (!self::hasOperation($object, $method)) {
             return ['method' => 'deleteObjectItem', 'args' => $args, 'error' => 'Unknown operation'];

@@ -298,9 +298,8 @@ class UtilApi implements DatabaseInterface
                 $configuration = '';
                 break;
             case 'documentid':
-                // @todo evaluate impact of using 'documentid' here
-                $proptype = $proptypeid['itemid']; // Item ID from MongoDB
-                $configuration = 'documentid';
+                $proptype = $proptypeid['documentid']; // Item ID from MongoDB
+                $configuration = '';
                 break;
             case 'mongodb_bson':
             case 'object':

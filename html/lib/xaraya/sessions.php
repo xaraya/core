@@ -461,8 +461,6 @@ class xarSession extends xarObject implements IsessionHandler
         if (empty($args)) {
             $args = self::getConfig();
         }
-        /* @todo: get rid of the global */
-        //$GLOBALS['xarSession_systemArgs'] = $args;
         self::$securityLevel = $args['securityLevel'];
         self::$duration = $args['duration'];
         self::$inactivityTimeout = $args['inactivityTimeout'];

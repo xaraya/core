@@ -27,7 +27,6 @@ abstract class GuiHookSubject extends HookSubject
     protected $hookoutput = array(); // property to store array of hooked module responses 
     /**
      * Notify hooked observers
-     * @todo: it shouldn't be necessary to overload this method, make it final?
      *
      * @return array<mixed> of cumulative responses from observers
     **/    

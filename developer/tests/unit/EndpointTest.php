@@ -84,7 +84,7 @@ final class EndpointTest extends TestCase
     public function testInstall(): void
     {
         $olddir = getcwd();
-        // @todo install fails otherwise because phase1 installer checks for 'install.php'
+        // install fails otherwise because phase1 installer checks for 'install.php'
         chdir(sys::web());
 
         ob_start();

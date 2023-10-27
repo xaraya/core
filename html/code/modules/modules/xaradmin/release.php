@@ -14,62 +14,46 @@
  * @author Xaraya Development Team
  * @access public
  * @return array<mixed>|void data for the template display
- * @todo change feed url once release module is moved
  */
 function modules_admin_release()
 {
     // Security
-    if(!xarSecurity::check('EditModules')) return;
-    
-    // allow fopen
-    if (!xarCore::funcIsDisabled('ini_set')) ini_set('allow_url_fopen', 1);
-    if (!ini_get('allow_url_fopen')) {
-        throw new ConfigurationException('allow_url_fopen','PHP is not currently configured to allow URL retrieval
-                             of remote files.  Please turn on #(1) to use the base module getfile userapi.');
+    if(!xarSecurity::check('EditModules')) {
+        return;
     }
-    // Require the feedParser class
-    sys::import('modules.base.class.feedParser');
+
+    // allow fopen
+    if (!xarCore::funcIsDisabled('ini_set')) {
+        ini_set('allow_url_fopen', 1);
+    }
+    if (!ini_get('allow_url_fopen')) {
+        throw new ConfigurationException('allow_url_fopen', 'PHP is not currently configured to allow URL retrieval
+        of remote files.  Please turn on #(1) to use the base module getfile userapi.');
+    }
     // Check and see if a feed has been supplied to us.
-    // Need to change the url once release module is moved to 
-    $feedfile = "http://www.xaraya.com/index.php/articles/rnid/?theme=rss";
+    $feedfile = "https://packagist.org/search.json?type=xaraya-module&per_page=100";
     // Get the feed file (from cache or from the remote site)
-    $feeddata = xarMod::apiFunc('base', 'user', 'getfile',
-                              array('url' => $feedfile,
-                                    'cached' => true,
-                                    'cachedir' => 'cache/rss',
-                                    'refresh' => 604800,
-                                    'extension' => '.xml'));
-    if (!$feeddata) return;
-    // Create a need feedParser object
-    $p = new feedParser();
-    // Tell feedParser to parse the data
-    $info = $p->parseFeed($feeddata);
-    if (empty($info['warning'])){
-        foreach ($info as $content){
-             foreach ($content as $newline){
-                    if(is_array($newline)) {
-                        if (isset($newline['description'])){
-                            $description = $newline['description'];
-                        } else {
-                            $description = '';
-                        }
-                        if (isset($newline['title'])){
-                            $title = $newline['title'];
-                        } else {
-                            $title = '';
-                        }
-                        if (isset($newline['link'])){
-                            $link = $newline['link'];
-                        } else {
-                            $link = '';
-                        }
-                    $feedcontent[] = array('title' => $title, 'link' => $link, 'description' => $description);
-                }
-            }
+    $feeddata = xarMod::apiFunc(
+        'base',
+        'user',
+        'getfile',
+        array('url' => $feedfile,
+            'cached' => true,
+            'cachedir' => 'cache/rss',
+            'refresh' => 604800,
+            'extension' => '.json')
+    );
+    if (!$feeddata) {
+        return;
+    }
+    $info = json_decode($feeddata, true, 512, JSON_THROW_ON_ERROR);
+    if (!empty($info['results'])) {
+        foreach ($info['results'] as $package) {
+            $feedcontent[] = array('title' => $package['name'], 'link' => $package['url'], 'description' => $package['description']);
         }
-        $data['chantitle']  =   $info['channel']['title'];
-        $data['chanlink']   =   $info['channel']['link'];
-        $data['chandesc']   =   $info['channel']['description'];
+        $data['chantitle']  =   'Xaraya Modules on Packagist';
+        $data['chanlink']   =   'https://packagist.org/?type=xaraya-module';
+        $data['chandesc']   =   $data['chantitle'];
     } else {
         $msg = xarML('There is a problem with a feed.');
         throw new Exception($msg);
