@@ -1,6 +1,6 @@
 <?php
 /**
- * Configuration for other test scripts
+ * Doctrine DBAL Configuration for other test scripts
  */
 require dirname(__DIR__, 3).'/vendor/autoload.php';
 
@@ -72,18 +72,19 @@ function get_xaraya_conn($config = null)
     return $conn;
 }
 
-function get_sqlite_params()
+function get_sqlite_params($filepath = null)
 {
+    $filepath ??= dirname(__DIR__, 3).'/html/code/modules/library/xardata/metadata.db';
     return [
         'driver' => 'sqlite3',  // 'pdo_sqlite',
         //'path' => sys::varpath() . '/sqlite/xaraya.sqlite',
-        //'path' => dirname(__DIR__, 3).'/html/code/modules/library/xardata/metadata.db',
+        'path' => $filepath,
     ];
 }
 
-function get_sqlite_conn($clear = false)
+function get_sqlite_conn($filepath = null, $clear = false)
 {
-    $options = get_sqlite_params();
+    $options = get_sqlite_params($filepath);
     if ($clear && file_exists($options['path'])) {
         unlink($options['path']);
     }

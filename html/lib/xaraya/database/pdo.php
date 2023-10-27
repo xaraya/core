@@ -930,12 +930,17 @@ class PDOColumn extends xarObject
     {
         return $this->columndata['precision'];
     }
+    public function getData()
+    {
+        return $this->columndata;
+    }
     public function isAutoIncrement()
     {
         return $this->isAutoIncrement === true;
     }
     public function getColumns()
     {
+        // @todo only used in combination with getPrimaryKey() and never set
         return $this->columns;
     }
     public function getDefaultValue()

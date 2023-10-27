@@ -154,6 +154,13 @@ class PdoDriver
             /** @var \PDOColumn $column */
             $name = (string) $column->getName();
             $datatype = $column->getNativeType();
+            // old sqlite syntax: TEXT NON NULL -> native_type = null, pdo_type = 0, sqlite:decl_type = TEXT NON
+            if (empty($datatype) || $datatype == 'null') {
+                $data = $column->getData();
+                if (empty($data['pdo_type']) && !empty($data['sqlite:decl_type'])) {
+                    $datatype = str_replace(' non', '', strtolower($data['sqlite:decl_type']));
+                }
+            }
             if (is_object($keyInfo) && $name == $keyInfo->getName()) {
                 $datatype = 'itemid';
             } elseif ($name == 'id' && $datatype == 'integer') {
