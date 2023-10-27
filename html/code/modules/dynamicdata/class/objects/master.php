@@ -186,6 +186,10 @@ class DataObjectMaster extends xarObject
         $this->dataquery = new Query();
         if ($descriptor->exists('datastore')) {
             $this->datastore = $descriptor->get('datastore');
+            if ($this->datastore == 'relational' || $this->datastore == 'external') {
+                // process $this->dbConnArgs first - this could change datastore to external
+                $this->parseDbConnArgs();
+            }
             if ($this->datastore == 'relational') {
                 // We start from scratch
                 if (!empty($this->dbConnIndex)) {
@@ -194,9 +198,6 @@ class DataObjectMaster extends xarObject
                 }
                 $this->dataquery->cleartables();
                 $this->assembleQuery($this);
-            } elseif ($this->datastore == 'external') {
-                // process $this->dbConnArgs here too
-                $this->parseDbConnArgs();
             }
         } else {
             $this->datastore = 'dynamicdata';
@@ -449,34 +450,35 @@ class DataObjectMaster extends xarObject
     }
 
     /**
-     * Check the DB connection index or use dbConnArgs to connect
-     * Use json-encoded ["className","methodName"] format to invoke static method (if class is loaded)
-     * Example:
-     *   $config = ['dbConnIndex' => 1, 'dbConnArgs' => json_encode([MyClass::class, 'myMethod'])];
-     *   $descriptor->set('config', serialize($config));
+     * Check the DB connection index or use dbConnArgs to connect - for relational datastore
      * @return void
      */
     public function checkDbConnection()
     {
+        // we already have a valid db connection index (internal)
         if (empty($this->dbConnIndex) || xarDB::hasConn($this->dbConnIndex)) {
             return;
         }
-        $args = $this->parseDbConnArgs();
-        if (empty($args)) {
+        // we have no db connection arguments to use
+        if (empty($this->dbConnArgs)) {
             return;
         }
-        xarDB::newConn($args);
+        // create a new db connection and get its index
+        xarDB::newConn($this->dbConnArgs);
         $this->dbConnIndex = xarDB::getConnIndex();
     }
 
     /**
-     * Summary of parseDbConnArgs
+     * Parse DB connection arguments - for relational & external datastores
+     * Note: this may set the datastore to 'external' if necessary, so call it before checkDbConnection()
+     * Use json-encoded ["className","methodName"] format to invoke static method (if class is loaded)
      * @return mixed
      */
     public function parseDbConnArgs()
     {
         // if we already have an external db connection, e.g. from admin meta GUI function
         if (!empty($this->dbConnIndex) && !is_numeric($this->dbConnIndex)) {
+            $this->datastore = 'external';
             return $this->dbConnArgs;
         }
         if (empty($this->dbConnArgs)) {
@@ -496,6 +498,10 @@ class DataObjectMaster extends xarObject
             // allow database connection failure later on when it's actually needed
             xarLog::message("DataObjectMaster::checkDbConnection: Invalid dbConnArgs - unable to create new db connection", xarLog::LEVEL_WARNING);
             return null;
+        }
+        // if we have an external db connection argument, the datastore is external
+        if (!empty($this->dbConnArgs['external'])) {
+            $this->datastore = 'external';
         }
         return $args;
     }
