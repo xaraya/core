@@ -133,12 +133,11 @@ class DbalDataStore extends ExternalDataStore
     protected function doGetItems($itemids, $tablename, $queryfields, $where = null, $sort = null, $startnum = 1, $numitems = 0)
     {
         $this->connect();
+        /**
         $qb = $this->db->createQueryBuilder()
             ->add('select', $queryfields)  // can't use ->select() here with array of fields
             ->from($tablename);
         // @todo support where etc.
-        $params = [];
-        /**
         if (!empty($where)) {
             $qb->where(
                 $qb->expr()->and(
@@ -147,9 +146,22 @@ class DbalDataStore extends ExternalDataStore
                 )
             );
         }
-         */
         $sql = $qb->getSQL();
         //echo $sql;
+         */
+        $sql = "SELECT " . implode(", ", $queryfields) . " FROM $tablename";
+        $params = [];
+        if (!empty($where)) {
+            $sql .= " WHERE $where";
+        }
+        if (!empty($sort)) {
+            $sql .= " ORDER BY $sort";
+        }
+        if ($numitems > 0) {
+            $sql .= " LIMIT ?, ?";
+            $params[] = (int) $startnum - 1;
+            $params[] = (int) $numitems;
+        }
 
         // Note: we could use iterateAssociative() here as optimization
         $result = $this->db->fetchAllAssociative($sql, $params);
@@ -166,13 +178,11 @@ class DbalDataStore extends ExternalDataStore
     protected function doCountItems($itemids, $tablename, $where = null)
     {
         $this->connect();
-
+        /**
         $qb = $this->db->createQueryBuilder()
             ->select('COUNT(*)')
             ->from($tablename);
         // @todo support where etc.
-        $params = [];
-        /**
         if (!empty($where)) {
             $qb->where(
                 $qb->expr()->and(
@@ -181,9 +191,14 @@ class DbalDataStore extends ExternalDataStore
                 )
             );
         }
-         */
         $sql = $qb->getSQL();
         //echo $sql;
+         */
+        $sql = "SELECT COUNT(*) FROM $tablename";
+        $params = [];
+        if (!empty($where)) {
+            $sql .= " WHERE $where";
+        }
 
         $result = $this->db->fetchOne($sql, $params);
         return (int) $result;

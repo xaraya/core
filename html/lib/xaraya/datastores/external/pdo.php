@@ -155,8 +155,24 @@ class PdoDataStore extends ExternalDataStore
     {
         $this->connect();
         $sql = "SELECT " . implode(", ", $queryfields) . " FROM $tablename";
-        // WHERE $wherefield = ?";
+        //$params = [];
+        if (!empty($where)) {
+            $sql .= " WHERE $where";
+        }
+        if (!empty($sort)) {
+            $sql .= " ORDER BY $sort";
+        }
+        if ($numitems > 0) {
+            $sql .= " LIMIT :offset, :limit";
+            //$sql .= " LIMIT ?, ?";
+            //$params[] = (int) $startnum - 1;
+            //$params[] = (int) $numitems;
+        }
         $stmt = $this->prepareStatement($sql);
+        if ($numitems > 0) {
+            $stmt->bindValue('offset', (int) $startnum - 1, \PDO::PARAM_INT);
+            $stmt->bindValue('limit', (int) $numitems, \PDO::PARAM_INT);
+        }
         // Note: all values are treated as PDO::PARAM_STR here
         //$params = [ $itemid ];
         //$result = $stmt->execute($params);
@@ -178,7 +194,9 @@ class PdoDataStore extends ExternalDataStore
     {
         $this->connect();
         $sql = "SELECT COUNT(*) FROM $tablename";
-        // WHERE $wherefield = ?";
+        if (!empty($where)) {
+            $sql .= " WHERE $where";
+        }
         $stmt = $this->prepareStatement($sql);
         // Note: all values are treated as PDO::PARAM_STR here
         //$params = [ $itemid ];

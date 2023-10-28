@@ -196,9 +196,31 @@ class MongoDBDataStore extends ExternalDataStore
         $this->connect();
         $collection = $this->db->selectCollection($tablename);
 
+        $options = [];
+        if ($numitems > 0) {
+            $options['limit'] = (int) $numitems;
+        }
+        if ($startnum > 1) {
+            $options['skip'] = (int) $startnum - 1;
+        }
+        if (!empty($sort)) {
+            $options['sort'] = $sort;
+        }
+        // @todo add queryfields
+        //if (!empty($queryfields)) {
+        //    $options['projection'] = $queryfields;
+        //}
         $result = [];
         //$cursor = $collection->find(array_combine($where, $params));
-        $cursor = $collection->find();
+        if (!empty($itemids)) {
+            // map to objectid or int
+            $itemids = array_map([$this, 'getObjectId'], $itemids);
+            $cursor = $collection->find(['_id' => ['$in' => $itemids]], $options);
+        } elseif (!empty($where)) {
+            $cursor = $collection->find($where, $options);
+        } else {
+            $cursor = $collection->find([], $options);
+        }
         foreach ($cursor as $document) {
             /** @var \MongoDB\Model\BSONDocument $document */
             $document['_id'] = $this->getItemId($document['_id']);
@@ -206,6 +228,198 @@ class MongoDBDataStore extends ExternalDataStore
             $result[] = $document->getArrayCopy();
         }
         return $result;
+    }
+
+    /**
+     * Summary of doParseWhere
+     * @param mixed $where
+     * @return mixed
+     */
+    protected function doParseWhere($where)
+    {
+        if (empty($where)) {
+            return null;
+        }
+        $filter = [];
+        $orquery = false;
+        // this only supports AND-ing clauses for different fields - see OR-ing below
+        foreach ($where as $whereitem) {
+            if (empty($whereitem)) {
+                continue;
+            }
+            // $query .= $whereitem['join'] . ' ' . $whereitem['pre'] . 'dd_' . $whereitem['field'] . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+            $fieldname = $whereitem['name'];
+            if (empty($this->object->properties[$fieldname])) {
+                throw new \Exception('Invalid where fieldname ' . $fieldname);
+            }
+            $property = $this->object->properties[$fieldname];
+            if (empty($property->source)) {
+                throw new \Exception('Invalid where property ' . $fieldname);
+            }
+            [$tablename, $field] = explode('.', $property->source);
+            $clause = $this->doParseWhereClause($whereitem['clause'], $property->basetype);
+            // db.bios.find( { birth: { $gt: new Date('1940-01-01'), $lt: new Date('1960-01-01') } } )
+            if (!array_key_exists($field, $filter)) {
+                $filter[$field] = $clause;
+            } elseif (is_array($filter[$field]) && is_array($clause)) {
+                $filter[$field] = array_merge($filter[$field], $clause);
+            } elseif (is_array($filter[$field])) {
+                $filter[$field] = array_merge($filter[$field], ['$eq' => $clause]);
+            } elseif (is_array($clause)) {
+                $filter[$field] = array_merge(['$eq' => $filter[$field]], $clause);
+            } else {
+                // now that's just weird
+                throw new \Exception('Unable to merge $eq clauses for ' . $field);
+            }
+            if ($whereitem['join'] === 'or') {
+                $orquery = true;
+            }
+        }
+        // assume it's all or nothing - see search.php
+        if ($orquery) {
+            $final = ['$or' => []];
+            foreach ($filter as $field => $clause) {
+                $final['$or'][] = [$field => $clause];
+            }
+            $filter = $final;
+        }
+        return $filter;
+    }
+
+    /**
+     * Summary of doParseWhereClause
+     * @param mixed $clause
+     * @param mixed $basetype see DataProperty::showFilter()
+     * @return mixed
+     */
+    public function doParseWhereClause($clause, $basetype)
+    {
+        // see https://www.mongodb.com/docs/manual/reference/method/db.collection.find/
+        $clause = trim($clause);
+        [$op, $value] = explode(' ', $clause, 2);
+        $op = strtolower($op);
+        // parse clause: IN (2,3,4) - see loader.php
+        if ($op === 'in') {
+            $values = explode(',', trim($value, '()'));
+            // @todo improve type checking
+            if (is_string($values[0])) {
+                if (strlen($values[0]) == static::ID_SIZE) {
+                    // objectid format - do not convert here
+                } elseif (is_numeric($values[0])) {
+                    // for floatbox
+                    if ($basetype == 'float') {
+                        $values = array_map('floatval', $values);
+                    //} elseif ($basetype == 'checkbox') {
+                    //    $values = array_map('boolval', $values);
+                    } else {
+                        $values = array_map('intval', $values);
+                    }
+                } else {
+                    // @todo trim single quotes around values?
+                }
+            }
+            // db.bios.find( { contribs: { $in: [ "ALGOL", "Lisp" ]} } )
+            return ['$in' => $values];
+        }
+        // parse clause: = 2 - see loader.php
+        if ($op === '=') {
+            // @todo improve type checking
+            if (is_string($value)) {
+                if (strlen($value) == static::ID_SIZE) {
+                    // objectid format - do not convert here
+                } elseif (is_numeric($value)) {
+                    // for floatbox
+                    if ($basetype == 'decimal') {
+                        $value = floatval($value);
+                    //} elseif ($basetype == 'checkbox') {
+                    //    $value = boolval($value);
+                    } else {
+                        $value = intval($value);
+                    }
+                } else {
+                    // @todo trim single quotes around value?
+                }
+            }
+            // db.bios.find( { "name.last": "Hopper" } )
+            return $value;
+        }
+        // see https://www.mongodb.com/docs/manual/reference/operator/query/#query-selectors
+        $mapop = ['!=' => '$ne', '>' => '$gt', '<' => '$lt', '>=' => '$lte', '<=' => '$gte'];
+        if (!empty($mapop[$op])) {
+            // @todo improve type checking
+            if (is_string($value)) {
+                if (strlen($value) == static::ID_SIZE) {
+                    // objectid format - do not convert here
+                } elseif (is_numeric($value)) {
+                    // for floatbox
+                    if ($basetype == 'decimal') {
+                        $value = floatval($value);
+                    //} elseif ($basetype == 'checkbox') {
+                    //    $value = boolval($value);
+                    } else {
+                        $value = intval($value);
+                    }
+                } else {
+                    // @todo trim single quotes around value?
+                }
+            }
+            // db.collection.find( { qty: { $gt: 4 } } )
+            return [$mapop[$op] => $value];
+        }
+        // like see https://sparkbyexamples.com/mongodb/mongodb-query-like/
+        // db.bios.find( { "name.last": { $regex: /^N/ } } )
+        // 'city' => ['$regex' => '^garden', '$options' => 'i'],
+        // parse clause: LIKE '%Holmes%' - see search.php
+        if ($op === 'like') {
+            if (str_starts_with($value, "'%")) {
+                $value = str_replace("'%", "", $value);
+            } else {
+                $value = '^' . substr($value, 1);
+            }
+            if (str_ends_with($value, "%'")) {
+                $value = str_replace("%'", "", $value);
+            } else {
+                $value = substr($value, 0, strlen($value) - 1) . '$';
+            }
+            return ['$regex' => $value];
+        }
+        // @todo parse other clauses
+        throw new \Exception('Unsupported operation for ' . $clause);
+        //return [];
+    }
+
+    /**
+     * Summary of doParseSort
+     * @param mixed $sort
+     * @return mixed
+     */
+    protected function doParseSort($sort)
+    {
+        if (empty($sort)) {
+            return null;
+        }
+        $sortfields = [];
+        foreach ($sort as $sortitem) {
+            if (empty($sortitem)) {
+                continue;
+            }
+            // $query .= $join . 'dd_' . $sortitem['field'] . ' ' . $sortitem['sortorder'];
+            $fieldname = $sortitem['name'];
+            if (empty($this->object->properties[$fieldname])) {
+                throw new \Exception('Invalid sort fieldname ' . $fieldname);
+            }
+            $property = $this->object->properties[$fieldname];
+            if (empty($property->source)) {
+                throw new \Exception('Invalid sort property ' . $fieldname);
+            }
+            [$tablename, $field] = explode('.', $property->source);
+            if (strtoupper($sortitem['sortorder']) == 'DESC') {
+                $sortfields[$field] = -1;
+            } else {
+                $sortfields[$field] = 1;
+            }
+        }
+        return $sortfields;
     }
 
     /**
@@ -220,11 +434,16 @@ class MongoDBDataStore extends ExternalDataStore
         $this->connect();
         $collection = $this->db->selectCollection($tablename);
 
-        if (empty($where)) {
+        $options = [];
+        if (empty($itemids) && empty($where)) {
             $result = $collection->estimatedDocumentCount();
-        } else {
+        } elseif (!empty($itemids)) {
+            // map to objectid or int
+            $itemids = array_map([$this, 'getObjectId'], $itemids);
+            $result = $collection->countDocuments(['_id' => ['$in' => $itemids]]);
+        } elseif (!empty($where)) {
             //$result = $collection->countDocuments(array_combine($where, $params));
-            $result = $collection->countDocuments();
+            $result = $collection->countDocuments($where);
         }
         return (int) $result;
     }

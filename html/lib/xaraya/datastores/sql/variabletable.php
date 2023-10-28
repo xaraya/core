@@ -901,7 +901,7 @@ class VariableTableDataStore extends SQLDataStore
 
         while ($result->next()) {
             [$propid, $itemid, $value] = $result->getRow();
-            echo "$propid - $itemid - $value\n";
+            //echo "$propid - $itemid - $value\n";
             if (isset($value)) {
                 $curval = $properties[$propid]->getItemValue($curid);
                 switch ($properties[$propid]->operation) {

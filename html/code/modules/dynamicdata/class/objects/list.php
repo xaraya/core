@@ -399,6 +399,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $sortitem = [
             'field' => $this->properties[$name]->id,
             'sortorder' => $sortorder,
+            // add name for external datastores
+            'name' => $name,
         ];
         $this->ddsort[] = $sortitem;
     }

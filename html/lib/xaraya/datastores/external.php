@@ -384,8 +384,11 @@ abstract class ExternalDataStore extends SQLDataStore
             $queryfields[] = $property->source . ' as ' . $fieldname;
         }
         // @todo select based on whatever criteria were passed here
-        $where = $this->doParseWhere($this->object->where);
-        $sort = $this->doParseSort($this->object->sort);
+        $where = null;
+        if (empty($itemids)) {
+            $where = $this->doParseWhere($this->object->ddwhere);
+        }
+        $sort = $this->doParseSort($this->object->ddsort);
 
         // Get items
         $result = $this->doGetItems($itemids, $tablename, $queryfields, $where, $sort, $startnum, $numitems);
@@ -443,7 +446,25 @@ abstract class ExternalDataStore extends SQLDataStore
      */
     protected function doParseWhere($where)
     {
-        return null;
+        if (empty($where)) {
+            return null;
+        }
+        $wherestring = '';
+        foreach ($where as $whereitem) {
+            if (empty($whereitem)) {
+                continue;
+            }
+            $fieldname = $whereitem['name'];
+            if (empty($this->object->properties[$fieldname])) {
+                throw new \Exception('Invalid where fieldname ' . $fieldname);
+            }
+            $property = $this->object->properties[$fieldname];
+            if (empty($property->source)) {
+                throw new \Exception('Invalid where property ' . $fieldname);
+            }
+            $wherestring .= $whereitem['join'] . ' ' . $whereitem['pre'] . $property->source . ' ' . $whereitem['clause'] . $whereitem['post'] . ' ';
+        }
+        return $wherestring;
     }
 
     /**
@@ -453,7 +474,27 @@ abstract class ExternalDataStore extends SQLDataStore
      */
     protected function doParseSort($sort)
     {
-        return null;
+        if (empty($sort)) {
+            return null;
+        }
+        $sortstring = '';
+        $join = '';
+        foreach ($sort as $sortitem) {
+            if (empty($sortitem)) {
+                continue;
+            }
+            $fieldname = $sortitem['name'];
+            if (empty($this->object->properties[$fieldname])) {
+                throw new \Exception('Invalid sort fieldname ' . $fieldname);
+            }
+            $property = $this->object->properties[$fieldname];
+            if (empty($property->source)) {
+                throw new \Exception('Invalid sort property ' . $fieldname);
+            }
+            $sortstring .= $join . $property->source . ' ' . $sortitem['sortorder'];
+            $join = ', ';
+        }
+        return $sortstring;
     }
 
     /**
@@ -491,7 +532,10 @@ abstract class ExternalDataStore extends SQLDataStore
         }
 
         // @todo select based on whatever criteria were passed here
-        $where = $this->doParseWhere($this->object->where);
+        $where = null;
+        if (empty($itemids)) {
+            $where = $this->doParseWhere($this->object->ddwhere);
+        }
 
         // count items
         return $this->doCountItems($itemids, $tablename, $where);
