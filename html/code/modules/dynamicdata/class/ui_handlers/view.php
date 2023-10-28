@@ -105,7 +105,7 @@ class ViewHandler extends DefaultHandler
             $this->args['where'] = array_intersect_key($this->args['where'], $allowed);
             // Need the database connection for quoting strings.
             $dbconn = xarDB::getConn();
-            if (get_class($this->object->datastore) !== 'VariableTableDataStore') {
+            if ($this->object->datastore->getClassName() === 'RelationalDataStore') {
                 $wherelist = [];
                 foreach ($this->args['where'] as $key => $value) {
                     if (is_numeric($value)) {

@@ -203,7 +203,7 @@ class SearchHandler extends DefaultHandler
                 // CHECKME: use OR by default here !
                 $join = 'or';
             }
-            if ($wherestring != '' && is_object($result->datastore) && get_class($result->datastore) !== 'VariableTableDataStore') {
+            if ($wherestring != '' && is_object($result->datastore) && $result->datastore->getClassName() === 'RelationalDataStore') {
                 $conditions = $result->setWhere($wherestring);
                 $result->dataquery->addconditions($conditions);
             }
@@ -357,7 +357,7 @@ class SearchHandler extends DefaultHandler
                 // CHECKME: use AND by default here !
                 $join = 'and';
             }
-            if ($wherestring != '' && is_object($result->datastore) && get_class($result->datastore) !== 'VariableTableDataStore') {
+            if ($wherestring != '' && is_object($result->datastore) && $result->datastore->getClassName() === 'RelationalDataStore') {
                 $conditions = $result->setWhere($wherestring);
                 $result->dataquery->addconditions($conditions);
             }

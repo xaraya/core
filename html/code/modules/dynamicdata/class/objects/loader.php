@@ -393,7 +393,7 @@ class DataObjectLoader
                 $join = 'AND';
             }
         }
-        if (!empty($wherestring) && is_object($objectlist->datastore) && get_class($objectlist->datastore) !== 'VariableTableDataStore') {
+        if (!empty($wherestring) && is_object($objectlist->datastore) && $objectlist->datastore->getClassName() === 'RelationalDataStore') {
             // @todo support string values in setWhere() 'field in val1,val2'
             $conditions = $objectlist->setWhere($wherestring);
             $objectlist->dataquery->addconditions($conditions);
@@ -556,7 +556,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
         //$result = $this->objectlist->getItems($params);
         $this->objectlist->addWhere($this->caller_id, 'IN (' . implode(',', $itemids) . ')');
-        if (is_object($this->objectlist->datastore) && get_class($this->objectlist->datastore) !== 'VariableTableDataStore') {
+        if (is_object($this->objectlist->datastore) && $this->objectlist->datastore->getClassName() === 'RelationalDataStore') {
             $wherestring = $this->caller_id . ' IN ' . implode(',', $itemids);
             // @todo support string values in setWhere() 'field in val1,val2'
             $conditions = $this->objectlist->setWhere($wherestring);
@@ -677,7 +677,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         $params = ['name' => $this->linkname];
         $objectlist = DataObjectMaster::getObjectList($params);
         $objectlist->addWhere($this->caller_id, '= ' . $itemid);
-        if (is_object($objectlist->datastore) && get_class($objectlist->datastore) !== 'VariableTableDataStore') {
+        if (is_object($objectlist->datastore) && $objectlist->datastore->getClassName() === 'RelationalDataStore') {
             $wherestring = $this->caller_id . ' = ' . $itemid;
             $conditions = $objectlist->setWhere($wherestring);
             $objectlist->dataquery->addconditions($conditions);

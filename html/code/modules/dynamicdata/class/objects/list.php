@@ -345,7 +345,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             // Add the field's order clause
             $this->dataquery->addorder($this->properties[$criteria]->source, $sortorder);
             // @todo fix setSort() and/or dataquery to support other datastores than relational ones
-            if (is_object($this->datastore) && get_class($this->datastore) == 'VariableTableDataStore') {
+            if (is_object($this->datastore) && $this->datastore->getClassName() !== 'RelationalDataStore') {
                 $this->addSort($criteria, $sortorder);
             }
         }
@@ -371,6 +371,8 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             'field' => $this->properties[$name]->id,
             'clause' => $clause,
             'post' => $post,
+            // add name for external datastores
+            'name' => $name,
         ];
         $this->ddwhere[] = $whereitem;
     }

@@ -85,6 +85,18 @@ class xarObject extends stdClass
     }
 
     /**
+     * Get the class name without namespace
+     * If you want the full class name, use the normal $this::class or get_class($this)
+     * @return string
+     */
+    final public function getClassName()
+    {
+        $className = get_class($this);
+        if (($pos = strrpos($className, '\\')) !== false) return substr($className, $pos + 1);
+        return $className;
+    }
+
+    /**
      * Determine equality of two objects
      *
      * We do this because it allows to make the comparison overridable and
@@ -112,7 +124,7 @@ class xarObject extends stdClass
     /**
      * Get an array of property values
      *
-     * @todo why not deliver a Property[] instead?
+     * @todo why not deliver a Property[] instead? - no thank you
      * @todo the public part is something that probably belongs in the caller, not here
      * @todo it doesnt get properties ;-)
     **/
@@ -184,7 +196,6 @@ final class Class_ extends Reflectable
      *
      * @param  string   $name Name of the property
      * @return Property Property object
-     * @todo get rid of the underscore once DataPropertyMaster:getProperty is remodelled
     **/
     final public function getProperty_($name)
     {

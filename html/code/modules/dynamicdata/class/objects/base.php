@@ -466,7 +466,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $this->properties[$this->primary]->value = $this->itemid;
 
         // call create hooks for this item - for stand-alone DD objects and virtual DD objects for now
-        if (!empty($this->primary) && is_object($this->datastore) && in_array(get_class($this->datastore), ['VariableTableDataStore', 'CachingDataStore'])) {
+        if (!empty($this->primary) && is_object($this->datastore) && in_array($this->datastore->getClassName(), ['VariableTableDataStore', 'CachingDataStore'])) {
             $this->callHooks('create');
         }
 
@@ -526,7 +526,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
 
         // call update hooks for this item - for stand-alone DD objects and virtual DD objects for now
-        if (!empty($this->primary) && is_object($this->datastore) && in_array(get_class($this->datastore), ['VariableTableDataStore', 'CachingDataStore'])) {
+        if (!empty($this->primary) && is_object($this->datastore) && in_array($this->datastore->getClassName(), ['VariableTableDataStore', 'CachingDataStore'])) {
             $this->callHooks('update');
         }
 
@@ -597,7 +597,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         }
 
         // call delete hooks for this item - for stand-alone DD objects and virtual DD objects for now
-        if (!empty($this->primary) && is_object($this->datastore) && in_array(get_class($this->datastore), ['VariableTableDataStore', 'CachingDataStore'])) {
+        if (!empty($this->primary) && is_object($this->datastore) && in_array($this->datastore->getClassName(), ['VariableTableDataStore', 'CachingDataStore'])) {
             $this->callHooks('delete');
         }
 
