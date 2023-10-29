@@ -19,6 +19,15 @@
  * @link http://xaraya.info/index.php/release/68.html
  */
 
+namespace Xaraya\DataObject\Properties;
+
+use DataProperty;
+use ObjectDescriptor;
+use SimpleXMLElement;
+use Exception;
+use JsonException;
+use sys;
+
 /* Include parent class */
 sys::import('modules.dynamicdata.class.properties.base');
 
@@ -29,18 +38,27 @@ class CallableProperty extends DataProperty
 {
     public $id         = 18270;
     public $name       = 'callable';
-    public $desc       = 'Callable';
+    public $desc       = 'Callable (test)';
     public $reqmodules = ['dynamicdata'];
+    /** @var array<mixed> */
     public $options    = [];
     // override default configuration types here
+    /** @var list<string> */
     public $configurationtypes = ['callable'];
-    public $callable_getter    = null;
-    public $callable_setter    = null;
-    public $callable_options   = null;
-    public $callable_input     = null;
-    public $callable_output    = null;
-    public $callable_debug     = false;
-    public $callable_trace     = false;
+    /** @var callable */
+    protected $callable_getter;
+    /** @var callable */
+    protected $callable_setter;
+    /** @var callable */
+    protected $callable_options;
+    /** @var callable */
+    protected $callable_input;
+    /** @var callable */
+    protected $callable_output;
+    /** @var bool|string */
+    protected $callable_debug     = false;
+    /** @var bool|string */
+    protected $callable_trace     = false;
 
     public function __construct(ObjectDescriptor $descriptor)
     {
@@ -68,9 +86,9 @@ class CallableProperty extends DataProperty
         if (is_string($this->{$callable}) && str_starts_with($this->{$callable}, '[')) {
             // add quotes around $this and $this->objectref if needed
             if (str_starts_with($this->{$callable}, '[$this->objectref')) {
-                $this->{$callable} = str_replace('$this->objectref','"$this->objectref"', $this->{$callable});
+                $this->{$callable} = str_replace('$this->objectref', '"$this->objectref"', $this->{$callable});
             } elseif (str_starts_with($this->{$callable}, '[$this')) {
-                $this->{$callable} = str_replace('$this','"$this"', $this->{$callable});
+                $this->{$callable} = str_replace('$this', '"$this"', $this->{$callable});
             }
             try {
                 $decoded = json_decode($this->{$callable}, true, 2, JSON_THROW_ON_ERROR);
@@ -157,7 +175,6 @@ class CallableProperty extends DataProperty
         if ($this->checkCallable('getter')) {
             // Note: $this is inherited by default, but we use $itemid and $value here
             $value = function () use ($itemid, $value) {
-                //return 'Callable for ' . $itemid . ' value ' . var_export($value, true);
                 return call_user_func($this->callable_getter, $itemid, $value, $this->callable_debug);
             };
         }
@@ -186,6 +203,7 @@ class CallableProperty extends DataProperty
      * Set the value of this property (= for a particular object item)
      *
      * @param mixed $value the new value for the property
+     * @return void
      */
     public function setValue($value = null)
     {
@@ -222,6 +240,7 @@ class CallableProperty extends DataProperty
      * @param int $itemid
      * @param mixed $value
      * @param integer $fordisplay
+     * @return void
      */
     public function setItemValue($itemid, $value, $fordisplay = 0)
     {
@@ -311,6 +330,11 @@ class CallableProperty extends DataProperty
         return parent::showHidden($data);
     }
 
+    /**
+     * Summary of importValue
+     * @param \SimpleXMLElement $element
+     * @return mixed
+     */
     public function importValue(SimpleXMLElement $element)
     {
         // return $this->castType((string)$element->{$this->name});
@@ -319,6 +343,9 @@ class CallableProperty extends DataProperty
 
     /**
      * Export the value of itemprop1 here, but don't return the propname values from Called1
+     * @param mixed $itemid
+     * @param mixed $item
+     * @return mixed
      */
     public function exportValue($itemid, $item)
     {
@@ -327,6 +354,11 @@ class CallableProperty extends DataProperty
         return parent::exportValue($itemid, $item);
     }
 
+    /**
+     * Summary of createValue
+     * @param mixed $itemid
+     * @return void
+     */
     public function createValue($itemid = 0)
     {
         // $itemid is still unknown at this point, since this is called before datastore->createItem()
@@ -338,6 +370,11 @@ class CallableProperty extends DataProperty
         }
     }
 
+    /**
+     * Summary of updateValue
+     * @param mixed $itemid
+     * @return void
+     */
     public function updateValue($itemid = 0)
     {
         if (empty($itemid) || empty($this->value)) {
@@ -348,6 +385,11 @@ class CallableProperty extends DataProperty
         }
     }
 
+    /**
+     * Summary of deleteValue
+     * @param mixed $itemid
+     * @return void
+     */
     public function deleteValue($itemid = 0)
     {
         if (empty($itemid) || empty($this->value)) {
@@ -360,6 +402,8 @@ class CallableProperty extends DataProperty
 
     /**
      * Retrieve the list of options on demand - only used for showInput() here, not validateValue() or elsewhere
+     * @param array<mixed> $data
+     * @return array<mixed>
      */
     public function getOptions($data = [])
     {
@@ -380,6 +424,7 @@ class CallableProperty extends DataProperty
      * Parse the configuration rule - replace $this string with $this value here?
      *
      * @param string|array<mixed> $configuration
+     * @return array<string, mixed>
      */
     public function parseConfiguration($configuration = '')
     {
@@ -417,8 +462,8 @@ class CallableProperty extends DataProperty
     /**
      * Return the configuration options for this property - don't bother looking up in database
      *
-     * @param $type:  type of option (display, initialization, validation) - callable here
-     * @param $fullname: return the full name asa key, e.g. "display_size - always 1
+     * @param string $type:  type of option (display, initialization, validation) - callable here
+     * @param int|bool $fullname: return the full name asa key, e.g. "display_size - always 1
      * @return array<mixed> of configuration options
      */
     public function getConfigProperties($type = "", $fullname = 0)
@@ -459,6 +504,10 @@ class CallableProperty extends DataProperty
         return $configproperties;
     }
 
+    /**
+     * Summary of log_trace
+     * @return void
+     */
     public function log_trace()
     {
         if (empty($this->callable_trace)) {
