@@ -82,30 +82,7 @@ class CallableProperty extends DataProperty
         if (empty($this->{$callable})) {
             return false;
         }
-        // [$this,'methodName']
-        if (is_string($this->{$callable}) && str_starts_with($this->{$callable}, '[')) {
-            // add quotes around $this and $this->objectref if needed
-            if (str_starts_with($this->{$callable}, '[$this->objectref')) {
-                $this->{$callable} = str_replace('$this->objectref', '"$this->objectref"', $this->{$callable});
-            } elseif (str_starts_with($this->{$callable}, '[$this')) {
-                $this->{$callable} = str_replace('$this', '"$this"', $this->{$callable});
-            }
-            try {
-                $decoded = json_decode($this->{$callable}, true, 2, JSON_THROW_ON_ERROR);
-            } catch (JsonException $e) {
-                echo $e->getMessage();
-                return false;
-            }
-            $this->{$callable} = $decoded;
-        }
-        if (is_array($this->{$callable}) && is_string($this->{$callable}[0])) {
-            $class = $this->{$callable}[0];
-            if ($class == '$this->objectref') {
-                $this->{$callable}[0] = $this->objectref;
-            } elseif ($class == '$this') {
-                $this->{$callable}[0] = $this;
-            }
-        }
+        $this->{$callable} = $this->decodeCallableValue($this->{$callable});
         if (is_callable($this->{$callable})) {
             return true;
         }
@@ -162,7 +139,7 @@ class CallableProperty extends DataProperty
     }
 
     /**
-     * Call 'setter' function and set value to 'setter' function
+     * Call 'setter' function and set value to callable 'getter' function for later
      * @param mixed $itemid
      * @param mixed $value
      * @return mixed
@@ -482,7 +459,7 @@ class CallableProperty extends DataProperty
             ];
             // not sure it's ever called without the fullname :-)
             $key = $fullname ? $name : $prop;
-            $configproperties[$key]['value'] = $this->{$name};
+            $configproperties[$key]['value'] = $this->encodeCallableValue($this->{$name});
             $configproperties[$key]['shortname'] = $prop;
             $configproperties[$key]['fullname'] = $name;
         }
@@ -502,6 +479,57 @@ class CallableProperty extends DataProperty
             ];
         }
         return $configproperties;
+    }
+
+    /**
+     * Summary of encodeCallableValue
+     * @param mixed $value
+     * @return mixed
+     */
+    public function encodeCallableValue($value)
+    {
+        if (!empty($value) && is_array($value)) {
+            $class = $value[0];
+            if (is_object($class)) {
+                $value = ['$this', $value[1]];
+            }
+            $value = json_encode($value, JSON_HEX_QUOT);
+        }
+        return $value;
+    }
+
+    /**
+     * Summary of decodeCallableValue
+     * @param mixed $value
+     * @return mixed
+     */
+    public function decodeCallableValue($value)
+    {
+        // [$this,"method"] or [$this->objectref,"method"] or callable_function or ["className","staticMethod"]
+        if (is_string($value) && str_starts_with($value, '[')) {
+            // add quotes around $this and $this->objectref if needed
+            if (str_starts_with($value, '[$this->objectref')) {
+                $value = str_replace('$this->objectref', '"$this->objectref"', $value);
+            } elseif (str_starts_with($value, '[$this')) {
+                $value = str_replace('$this', '"$this"', $value);
+            }
+            try {
+                $decoded = json_decode($value, true, 2, JSON_THROW_ON_ERROR);
+            } catch (JsonException $e) {
+                echo $e->getMessage();
+                return false;
+            }
+            $value = $decoded;
+        }
+        if (is_array($value) && is_string($value[0])) {
+            $class = $value[0];
+            if ($class == '$this->objectref') {
+                $value[0] = $this->objectref;
+            } elseif ($class == '$this') {
+                $value[0] = $this;
+            }
+        }
+        return $value;
     }
 
     /**
@@ -559,8 +587,8 @@ function dynamicdata_callable_getter($itemid, $value, $debug = false)
 
 /**
  * Example of callable 'options' function
- * @param mixed $itemid optional - not used atm
- * @param mixed $value optional - not used atm
+ * @param mixed $itemid optional
+ * @param mixed $value optional
  * @param bool $debug
  * @return array<mixed>
  */
