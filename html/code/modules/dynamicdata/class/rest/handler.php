@@ -163,6 +163,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             'filter' => $loader->filter,
         ];
         $deferred = [];
+        $callable = [];
         foreach ($fieldlist as $key) {
             if (!empty($objectlist->properties[$key]) && method_exists($objectlist->properties[$key], 'getDeferredData')) {
                 array_push($deferred, $key);
@@ -170,6 +171,9 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 // foreach ($items as $itemid => $item) {
                 //     $objectlist->properties[$key]->setItemValue($itemid, $item[$key] ?? null);
                 // }
+            }
+            if (!empty($objectlist->properties[$key]) && method_exists($objectlist->properties[$key], 'checkCallable')) {
+                array_push($callable, $key);
             }
         }
         $allowed = array_flip($fieldlist);
@@ -182,6 +186,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                     $item[$key] = array_values($data['value']);
                 } else {
                     $item[$key] = $data['value'];
+                }
+            }
+            foreach ($callable as $key) {
+                if (!empty($item[$key]) && is_callable($item[$key])) {
+                    $item[$key] = call_user_func($item[$key]);
                 }
             }
             $item['_links'] = ['self' => ['href' => self::getObjectURL($object, $itemid)]];
@@ -247,6 +256,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                     $item[$key] = array_values($data['value']);
                 } else {
                     $item[$key] = $data['value'];
+                }
+            }
+            if (!empty($objectitem->properties[$key]) && method_exists($objectitem->properties[$key], 'checkCallable')) {
+                // see showOutput() in CallableProperty - we need to go through setValue() first, but we bypassed it above
+                if (!empty($item[$key]) && !is_callable($item[$key])) {
+                    $objectitem->properties[$key]->setValue($item[$key]);
+                    $item[$key] = $objectitem->properties[$key]->getValue();
                 }
             }
         }
