@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="isset($value)">
+        <xar:if condition="is_array($value)">
+        <xar:if condition="!empty($object) and empty($singlevalue)">
+            <xar:set name="values">array($source => $value)</xar:set>
+            <xar:data-view object="$object" items="$values" fieldlist="$fieldlist" linktype="object" newlink=""/>
+        <xar:else/>
+        <div class="xar-form-container">
+            <xar:if condition="!empty($link) and !empty($source)">
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label title="" style=""><a href="#$link#">#$source#</a>:</label>&#160;
+                    </div>
+                </div>
+            </xar:if>
+            <xar:foreach in="$value" key="$key" value="$val">
+                <div class="xar-row">
+                    <div class="xar-col">
+                    <label title="" style="">#$key#:</label>&#160;
+                    <xar:var name="val"/>
+                    </div>
+                </div>
+            </xar:foreach>
+        </div>
+        </xar:if>
+        <xar:elseif condition="!empty($link)"/>
+            <a href="#$link#">#$value#</a>
+        <xar:else/>
+            <xar:var name="value"/>
+        </xar:if>
+    </xar:if>
+</xar:template>

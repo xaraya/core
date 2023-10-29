@@ -1,9 +1,4 @@
 <?php
-
-/* Include parent class */
-sys::import('modules.dynamicdata.xarproperties.deferitem');
-sys::import('modules.dynamicdata.class.objects.loader');
-
 /**
  * The Deferred Many property delays loading related objects based on the itemids until they need to be shown.
  *
@@ -29,17 +24,21 @@ sys::import('modules.dynamicdata.class.objects.loader');
  *
  * @package modules\dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
 
+/* Include parent class */
+sys::import('modules.dynamicdata.xarproperties.deferitem');
+sys::import('modules.dynamicdata.class.objects.loader');
+
 /**
- * This property displays deferred related objects for an item (experimental - do not use in production)
+ * This property displays deferred related objects for an item
  *
  * Configuration:
- * the defaultvalue can be set to automatically load related object link properties based on the itemids,
+ * the defaultvalue can be set to automatically load related object link properties based on the itemids
  */
 class DeferredManyProperty extends DeferredItemProperty
 {
@@ -157,7 +156,6 @@ class DeferredManyProperty extends DeferredItemProperty
         // 2. in showForm() set for input preview and update - set cache values
         if (!empty($value) && is_array($value)) {
             $value = array_filter($value);
-            $this->log_trace();
             if (!empty($this->_itemid) && !empty($this->linkname)) {
                 $this->getDeferredLoader()->set($this->_itemid, $value);
             }

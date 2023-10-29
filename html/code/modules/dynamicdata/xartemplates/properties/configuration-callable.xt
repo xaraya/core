@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
+    <xar:if condition="!empty($callable)">
+        <fieldset>
+            <legend>Callable options</legend>
+            <xar:foreach in="$callable" key="$key" value="$init">
+                <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
+                <xar:set name="fieldid">$id . '_' . $key</xar:set>
+                <xar:if condition="isset($init['configuration'])">
+                    <xar:set name="configuration">$init['configuration']</xar:set>
+                <xar:else />
+                    <xar:set name="configuration">''</xar:set>
+                </xar:if>
+                <div class="xar-row">
+                    <div class="xar-col">
+                        <label for="#$fieldid#" title="#$init['description']#">
+                            #$init['label']#
+                        </label>
+                    </div>
+                    <div class="xar-col">
+                        <xar:data-input type="$init['property_id']" name="$fieldname" id="$fieldid" configuration="$configuration" value="$init['value']"/>
+                    </div>
+                </div>
+            </xar:foreach>
+            <div class="xar-row">
+                <div class="xar-col">
+                    Supported formats
+                </div>
+                <div class="xar-col">
+                    [$this,"method"]<br/>
+                    [$this->objectref,"method"]<br/>
+                    callable_function<br/>
+                    ["className","staticMethod"]<br/>
+                    ...<br/>
+                </div>
+            </div>
+        </fieldset>
+    </xar:if>
+
+    <xar:template file="dataproperty_additions" module="base"/>
+</xar:template>

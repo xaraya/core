@@ -1,9 +1,4 @@
 <?php
-
-/* Include parent class */
-sys::import('modules.dynamicdata.class.properties.base');
-sys::import('modules.dynamicdata.class.objects.loader');
-
 /**
  * The Deferred Item property delays loading extra information using the database values until they need to be shown.
  * It was inspired by how GraphQL-PHP tackles the N+1 problem, but without proxy, callable or promises (sync or async).
@@ -25,17 +20,21 @@ sys::import('modules.dynamicdata.class.objects.loader');
  *
  * @package modules\dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
 
+/* Include parent class */
+sys::import('modules.dynamicdata.class.properties.base');
+sys::import('modules.dynamicdata.class.objects.loader');
+
 /**
- * This property displays a deferred item for a value (experimental - do not use in production)
+ * This property displays a deferred item for a value
  *
  * Configuration:
- * the defaultvalue can be set to automatically load an object property if the value contains its itemid,
+ * the defaultvalue can be set to automatically load an object property if the value contains its itemid
  */
 class DeferredItemProperty extends DataProperty
 {
@@ -119,7 +118,6 @@ class DeferredItemProperty extends DataProperty
      */
     public function getValue()
     {
-        $this->log_trace();
         //return $this->value;
         return parent::getValue();
     }
@@ -131,7 +129,6 @@ class DeferredItemProperty extends DataProperty
      */
     public function setValue($value = null)
     {
-        $this->log_trace();
         //$this->value = $value;
         parent::setValue($value);
     }
@@ -144,7 +141,6 @@ class DeferredItemProperty extends DataProperty
      */
     public function getItemValue($itemid)
     {
-        $this->log_trace();
         //return $this->_items[$itemid][$this->name];
         return parent::getItemValue($itemid);
     }
@@ -159,7 +155,6 @@ class DeferredItemProperty extends DataProperty
     public function setItemValue($itemid, $value, $fordisplay = 0)
     {
         $value = $this->setDataToDefer($itemid, $value);
-        $this->log_trace();
         //$this->value = $value;
         //$this->_items[$itemid][$this->name] = $this->value;
         parent::setItemValue($itemid, $value, $fordisplay);
@@ -214,7 +209,6 @@ class DeferredItemProperty extends DataProperty
         }
         // @checkme we *don't* really want to retrieve the data based on the value here - extended in defermany
         //$data = $this->getDeferredData($data);
-        $this->log_trace();
         //if(!isset($data['value']))       $data['value']    = $this->value;
         return parent::showInput($data);
     }
@@ -233,7 +227,6 @@ class DeferredItemProperty extends DataProperty
             $this->singlevalue = true;
         }
         $data = $this->getDeferredData($data);
-        $this->log_trace();
         //if (empty($data['_itemid'])) $data['_itemid'] = 0;
         //if(!isset($data['value']))     $data['value']    = $this->value;
         return parent::showOutput($data);
@@ -345,23 +338,6 @@ class DeferredItemProperty extends DataProperty
     {
         if (!isset(static::$deferred[$name])) {
             static::$deferred[$name] = null;
-        }
-    }
-
-    public function log_trace()
-    {
-        return;
-        try {
-            $trace = debug_backtrace(2, 3);
-            array_shift($trace);
-            $caller = array_shift($trace);
-            print_r("<pre>Caller: " . $this->name . ' (' . $this->_itemid . ")\n");
-            print_r($caller);
-            //print_r("\nTrace:\n");
-            //print_r($trace);
-            print_r("</pre>");
-        } catch (Exception $e) {
-            print_r($e->getMessage());
         }
     }
 }

@@ -1,9 +1,4 @@
 <?php
-
-/* Include parent class */
-sys::import('modules.dynamicdata.xarproperties.deferitem');
-sys::import('modules.dynamicdata.class.objects.loader');
-
 /**
  * The Deferred List property delays loading extra information using the database values until they need to be shown.
  *
@@ -23,18 +18,22 @@ sys::import('modules.dynamicdata.class.objects.loader');
  *
  * @package modules\dynamicdata
  * @category Xaraya Web Applications Framework
- * @version 2.4.0
+ * @version 2.4.1
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/68.html
  */
 
+/* Include parent class */
+sys::import('modules.dynamicdata.xarproperties.deferitem');
+sys::import('modules.dynamicdata.class.objects.loader');
+
 /**
- * This property displays a deferred item list for a value array (experimental - do not use in production)
+ * This property displays a deferred item list for a value array
  * In general, $this->value should be encoded, and $data['value'] and *ItemValue should be in decoded format
  *
  * Configuration:
- * the defaultvalue can be set to automatically load object properties if the value includes their itemids,
+ * the defaultvalue can be set to automatically load object properties if the value includes their itemids
  */
 class DeferredListProperty extends DeferredItemProperty
 {
