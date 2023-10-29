@@ -20,48 +20,84 @@ sys::import('modules.dynamicdata.class.properties.interfaces');
 class DataProperty extends xarObject implements iDataProperty
 {
     // Attributes for registration
+    /** @var int */
     public $id             = 0;
+    /** @var string */
     public $name           = 'propertyName';
+    /** @var string */
     public $desc           = 'propertyDescription';
+    /** @var string */
     public $label          = 'Property Label';
+    /** @var int */
     public $type           = 1;
+    /** @var mixed */
     public $defaultvalue   = '';
+    /** @var string */
     public $source         = 'dynamic_data';
+    /** @var int|bool */
     public $translatable   = 0;          // as it says
+    /** @var int */
     public $status         = 33;
+    /** @var int */
     public $seq            = 0;
+    /** @var mixed */
     public $format         = '0'; //<-- eh?
+    /** @var string */
     public $filepath       = 'auto';
+    /** @var string */
     public $class          = '';         // this property's class
+    /** @var list<string> */
     public $reqmodules     = [];
 
     // Attributes for runtime
+    /** @var ObjectDescriptor */
     public $descriptor;                  // the description object of this property
+    /** @var string */
     public $template = '';
+    /** @var string */
     public $layout = '';
+    /** @var string */
     public $tplmodule = 'dynamicdata';
+    /** @var mixed */
     public $configuration = 'a:0:{}';
+    /** @var string deprecated */
     public $dependancies = '';           // semi-colon seperated list of files that must be present for this property to be available (optional)
+    /** @var mixed */
     public $args         = [];      //args that hold alias info
+    /** @var int|bool */
     public $anonymous = 0;               // if true the name, rather than the dd_xx designation is used in displaying the property
 
+    /** @var string deprecated */
     public $datastore = '';              // name of the data store where this property comes from
 
+    /** @var mixed */
     public $value          = null;       // value of this property for a particular DataObject
+    /** @var mixed */
     public $previous_value = null;       // previous value of this property (if supported)
+    /** @var mixed */
     public $filter         = 'nofilter'; // value of the filter of this property (if it is part of a filter layout)
+    /** @var string */
     public $invalid        = '';         // result of the checkInput/validateValue methods
+    /** @var string */
     public $basetype       = 'string';   // the primitive data type of this property
 
+    /** @var int */
     public $include_reference = 0; // tells the object this property belongs to whether to add a reference of itself to me
+    /** @var mixed */
     public $objectref = null;      // object this property belongs to
+    /** @var mixed */
     public $_objectid = null;      // objectid this property belongs to
+    /** @var mixed */
     public $_fieldprefix = '';     // the object's fieldprefix
+    /** @var string */
     public $propertyprefix = 'dd_';// the object's fieldprefix
 
+    /** @var mixed */
     public $_itemid;               // reference to $itemid in DataObject, where the current itemid is kept
+    /** @var array<mixed> */
     public $_items;                // reference to $items in DataObjectList, where the different item values are kept
 
+    /** @var list<string> */
     public $configurationtypes = ['display','validation','initialization'];
     //    public $display_template                = "";
     public $display_layout                  = "default";      // we display the default layout of a template
@@ -77,7 +113,9 @@ class DataProperty extends xarObject implements iDataProperty
     public $validation_equals_invalid;
     public $validation_notequals_invalid;
     public $validation_allowempty_invalid;
+    /** @var mixed */
     public $operation;
+    /** @var string */
     public $fieldname;
 
     /**
@@ -137,6 +175,7 @@ class DataProperty extends xarObject implements iDataProperty
 
     /**
      * Return the label of this property as per its descriptor
+     * @return string
      */
     public function getLabel()
     {
@@ -146,6 +185,8 @@ class DataProperty extends xarObject implements iDataProperty
 
     /**
      * Return the datasource of this property as per its descriptor
+     * @param string $format
+     * @return string
      */
     public function getSource($format = 'full')
     {
@@ -161,6 +202,8 @@ class DataProperty extends xarObject implements iDataProperty
 
     /**
      * Set the datasource of this property to a given value, or to its original value
+     * @param mixed $source
+     * @return bool
      */
     public function setSource($source = '')
     {
@@ -173,6 +216,8 @@ class DataProperty extends xarObject implements iDataProperty
 
     /**
      * Find the datastore name and type corresponding to the data source of a property
+     * @return array<string>
+     * @deprecated 2.4.0 outdated source format
      */
     public function getDataStore()
     {
@@ -252,12 +297,17 @@ class DataProperty extends xarObject implements iDataProperty
      * Set the value of this property (= for a particular object item)
      *
      * @param mixed $value the new value for the property
+     * @return void
      */
     public function setValue($value = null)
     {
         $this->value = $value;
     }
 
+    /**
+     * Summary of clearValue
+     * @return void
+     */
     public function clearValue()
     {
         try {
@@ -290,6 +340,8 @@ class DataProperty extends xarObject implements iDataProperty
      *
      * @param string $name name of the input field (default is 'dd_NN' with NN the property id)
      * @param mixed  $value value of the input field (default is retrieved via xarVar::fetch())
+     * @return bool|null|void
+     * @todo some of the overrides return null or void instead of bool
      */
     public function checkInput($name = '', $value = null)
     {
@@ -322,6 +374,7 @@ class DataProperty extends xarObject implements iDataProperty
      * Validate the value of this property
      *
      * @param mixed $value value of the property (default is the current value)
+     * @return bool Returns true if the value passes all validation checks; otherwise returns false.
      */
     public function validateValue($value = null)
     {
@@ -381,6 +434,7 @@ class DataProperty extends xarObject implements iDataProperty
      * @param int $itemid
      * @param mixed $value
      * @param integer $fordisplay
+     * @return void
      */
     public function setItemValue($itemid, $value, $fordisplay = 0)
     {
@@ -402,24 +456,36 @@ class DataProperty extends xarObject implements iDataProperty
     }
 
     /**
-     * Get and set the value of this property's display status
+     * Get the value of this property's display status
+     * @return int
      */
     public function getDisplayStatus()
     {
         return ($this->status & DataPropertyMaster::DD_DISPLAYMASK);
     }
+    /**
+     * Set the value of this property's display status
+     * @param int $status
+     * @return void
+     */
     public function setDisplayStatus($status)
     {
         $this->status = $status & DataPropertyMaster::DD_DISPLAYMASK;
     }
 
     /**
-     * Get and set the value of this property's input status
+     * Get the value of this property's input status
+     * @return int
      */
     public function getInputStatus()
     {
         return $this->status - $this->getDisplayStatus();
     }
+    /**
+     * Set the value of this property's input status
+     * @param int $status
+     * @return void
+     */
     public function setInputStatus($status)
     {
         $this->status = $status + $this->getDisplayStatus();
@@ -860,13 +926,14 @@ class DataProperty extends xarObject implements iDataProperty
      * Parse the configuration rule
      *
      * @param string|array<mixed> $configuration
+     * @return array<string, mixed>
      */
     public function parseConfiguration($configuration = '')
     {
         if (is_array($configuration)) {
             $fields = $configuration;
         } elseif (empty($configuration)) {
-            return true;
+            return [];
 
             // fall back to the old N:M validation for text boxes et al. (cfr. utilapi_getstatic/getmeta)
         } elseif (preg_match('/^(\d+):(\d+)$/', $configuration, $matches)) {
@@ -880,8 +947,7 @@ class DataProperty extends xarObject implements iDataProperty
                 $fields = unserialize($configuration);
             } catch (Exception $e) {
                 // if the configuration is malformed just return an empty configuration
-                $fields = [];
-                return true;
+                return [];
             }
         }
         if (!empty($fields) && is_array($fields)) {
@@ -1036,14 +1102,34 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Deprecated methods
      */
+
+    /**
+     * Summary of parseValidation
+     * @param mixed $configuration
+     * @return mixed
+     * @deprecated 2.4.0 use parseConfiguration() instead
+     */
     public function parseValidation($configuration = '')
     {
         return $this->parseConfiguration($configuration);
     }
+    /**
+     * Summary of showValidation
+     * @param array<string, mixed> $data
+     * @return string
+     * @deprecated 2.4.0 use showConfiguration() instead
+     */
     public function showValidation(array $data = [])
     {
         return $this->showConfiguration($data);
     }
+
+    /**
+     * Summary of updateValidation
+     * @param array<string, mixed> $data
+     * @return bool
+     * @deprecated 2.4.0 use updateConfiguration() instead
+     */
     public function updateValidation(array $data = [])
     {
         return $this->updateConfiguration($data);
@@ -1052,8 +1138,8 @@ class DataProperty extends xarObject implements iDataProperty
     /**
      * Return the configuration options for this property
      *
-     * @param $type:  type of option (display, initialization, validation)
-     * @param $fullname: return the full name asa key, e.g. "display_size
+     * @param string $type:  type of option (display, initialization, validation)
+     * @param int|bool $fullname: return the full name asa key, e.g. "display_size
      * @return array<mixed> of configuration options
      */
     public function getConfigProperties($type = "", $fullname = 0)
@@ -1139,6 +1225,11 @@ class DataProperty extends xarObject implements iDataProperty
         return $template;
     }
 
+    /**
+     * Summary of getCanonicalName
+     * @param mixed $data
+     * @return string
+     */
     protected function getCanonicalName($data = null)
     {
         if(!isset($data['name'])) {
@@ -1152,6 +1243,11 @@ class DataProperty extends xarObject implements iDataProperty
         return $data['name'];
     }
 
+    /**
+     * Summary of getCanonicalID
+     * @param mixed $data
+     * @return mixed
+     */
     protected function getCanonicalID($data = null)
     {
         if(!isset($data['id'])) {
@@ -1161,6 +1257,11 @@ class DataProperty extends xarObject implements iDataProperty
         return $data['id'];
     }
 
+    /**
+     * Summary of getPrefix
+     * @param mixed $data
+     * @return string
+     */
     private function getPrefix($data = null)
     {
         // Add the object's field prefix if there is one
@@ -1176,30 +1277,60 @@ class DataProperty extends xarObject implements iDataProperty
         return $prefix;
     }
 
+    /**
+     * Summary of addToObject
+     * @param mixed $data
+     * @return bool
+     */
     public function addToObject($data = [])
     {
         return true;
     }
+    /**
+     * Summary of removeFromObject
+     * @param mixed $data
+     * @return bool
+     */
     public function removeFromObject($data = [])
     {
         return true;
     }
 
+    /**
+     * Summary of aliases
+     * @return array<mixed>
+     */
     public function aliases()
     {
         return [];
     }
 
+    /**
+     * Summary of castType
+     * @param mixed $value
+     * @return mixed
+     */
     public function castType($value = null)
     {
         return (string)$value;
     }
 
+    /**
+     * Summary of importValue
+     * @param SimpleXMLElement $element
+     * @return mixed
+     */
     public function importValue(SimpleXMLElement $element)
     {
         return $this->castType((string)$element->{$this->name});
     }
 
+    /**
+     * Summary of exportValue
+     * @param mixed $itemid
+     * @param mixed $item
+     * @return mixed
+     */
     public function exportValue($itemid, $item)
     {
         if (isset($item[$this->name]) && is_array($item[$this->name])) {
@@ -1208,22 +1339,27 @@ class DataProperty extends xarObject implements iDataProperty
         return xarVar::prepForDisplay($item[$this->name] ?? null);
     }
 
+    /** @return bool */
     public function preCreate()
     {
         return true;
     }
+    /** @return bool */
     public function preUpdate()
     {
         return true;
     }
+    /** @return bool */
     public function preDelete()
     {
         return true;
     }
+    /** @return bool */
     public function preGet()
     {
         return true;
     }
+    /** @return bool */
     public function preList()
     {
         return true;
