@@ -25,13 +25,16 @@
             </xar:foreach>
             <div class="xar-row">
                 <div class="xar-col">
-                    Supported formats
+                    Supported formats<br/>
+                    Note: arrays are json-encoded, use double quotes
                 </div>
                 <div class="xar-col">
-                    [$this,"method"]<br/>
-                    [$this->objectref,"method"]<br/>
-                    callable_function<br/>
-                    ["className","staticMethod"]<br/>
+                    [$this,"method"] = call method in the current property<br/>
+                    [$this->objectref,"method"] = call method of the object referred in the property<br/>
+                    callable_function = call function in current namespace [\Xaraya\DataObject\Properties]<br/>
+                    \Namespaced\callable_function = call function including full namespace<br/>
+                    ["ClassName","staticMethod"] = call static class method in current namespace [\Xaraya\DataObject\Properties]<br/>
+                    ["\\\\Namespaced\\\\ClassName","staticMethod"] = call static class method with double backslash for namespace<br/>
                     ...<br/>
                 </div>
             </div>

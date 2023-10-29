@@ -85,12 +85,22 @@ class CallableProperty extends DataProperty
         $this->{$callable} = $this->decodeCallableValue($this->{$callable});
         if (is_callable($this->{$callable})) {
             return true;
+        } elseif (is_string($this->{$callable}) && is_callable(__NAMESPACE__ . '\\' . $this->{$callable})) {
+            $this->{$callable} = __NAMESPACE__ . '\\' . $this->{$callable};
+            return true;
+        } elseif (is_array($this->{$callable}) && is_string($this->{$callable}[0]) && is_callable([__NAMESPACE__ . '\\' . $this->{$callable}[0], $this->{$callable}[1]])) {
+            $this->{$callable} = [__NAMESPACE__ . '\\' . $this->{$callable}[0], $this->{$callable}[1]];
+            return true;
+        }
+        if ($this->callable_debug) {
+            echo 'Warning: Callable "' . $type . '" is not callable: ' . var_export($this->{$callable}, true);
         }
         return false;
     }
 
     /**
      * Example of callable 'setter' method
+     * Configuration: [$this,"setter"]
      * @param mixed $itemid
      * @param mixed $value
      * @param bool $debug
@@ -105,6 +115,7 @@ class CallableProperty extends DataProperty
 
     /**
      * Example of callable 'getter' method
+     * Configuration: [$this,"getter"]
      * @param mixed $itemid
      * @param mixed $value
      * @param bool $debug
@@ -120,6 +131,7 @@ class CallableProperty extends DataProperty
 
     /**
      * Example of callable 'options' method
+     * Configuration: [$this,"options"]
      * @param mixed $itemid optional
      * @param mixed $value optional
      * @param bool $debug
@@ -554,10 +566,22 @@ class CallableProperty extends DataProperty
             print_r($e->getMessage());
         }
     }
+
+    /**
+     * Example of callable static class method (not for real use)
+     * Configuration: ["CallableProperty","hello"] or ["\\Xaraya\\DataObject\\Properties\\CallableProperty","hello"]
+     * @param array<mixed> $args
+     * @return void
+     */
+    public static function hello(...$args)
+    {
+        echo 'Hello: ' . var_export($args, true);
+    }
 }
 
 /**
  * Example of callable 'setter' function
+ * Configuration: dynamicdata_callable_setter or \Xaraya\DataObject\Properties\dynamicdata_callable_setter
  * @param mixed $itemid
  * @param mixed $value
  * @param bool $debug
@@ -572,6 +596,7 @@ function dynamicdata_callable_setter($itemid, $value, $debug = false)
 
 /**
  * Example of callable 'getter' function
+ * Configuration: dynamicdata_callable_getter or \Xaraya\DataObject\Properties\dynamicdata_callable_getter
  * @param mixed $itemid
  * @param mixed $value
  * @param bool $debug
@@ -587,6 +612,7 @@ function dynamicdata_callable_getter($itemid, $value, $debug = false)
 
 /**
  * Example of callable 'options' function
+ * Configuration: dynamicdata_callable_options or \Xaraya\DataObject\Properties\dynamicdata_callable_options
  * @param mixed $itemid optional
  * @param mixed $value optional
  * @param bool $debug

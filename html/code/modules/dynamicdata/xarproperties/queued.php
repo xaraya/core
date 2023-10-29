@@ -23,6 +23,7 @@ sys::import('modules.dynamicdata.xarproperties.callable');
 
 /**
  * This property displays the queued result of a callable function as value (experimental - do not use in production)
+ * The 'setter', 'getter' and 'batch' callables will be preset for basic batch operation if not defined in your property configuration
  */
 class QueuedProperty extends CallableProperty
 {
@@ -66,23 +67,25 @@ class QueuedProperty extends CallableProperty
     }
 
     /**
-     * Example of callable 'batch' method = set everything from queued in cached :-)
+     * Example of callable 'batch' method = set everything from queue in cache :-)
+     * Configuration: [$this,"batch"]
+     * @param array<int, mixed> $queue current queue by reference
+     * @param array<mixed> $cache current cache by reference
      * @param bool $debug
      * @return int
      */
-    public function batch($debug = false)
+    public function batch(&$queue, &$cache, $debug = false)
     {
         if ($debug) {
-            echo 'Batch method for ' . $this->countQueueValues() . ' items';
+            echo 'Batch method for ' . count($queue) . ' items';
         }
-        // basic 'batch' operation = set everything from queued in cached :-)
-        $queue = $this->getQueueName();
-        foreach (static::$_queued[$queue] as $value) {
+        // basic 'batch' operation = set everything from queue in cache :-)
+        foreach ($queue as $value) {
             // set cached for value = value here
-            static::$_cached[$queue][$value] ??= $value;
+            $cache[$value] ??= $value;
         }
-        static::$_queued[$queue] = [];
-        return $this->countCacheValues();
+        $queue = [];
+        return count($cache);
     }
 
     /**
@@ -176,11 +179,16 @@ class QueuedProperty extends CallableProperty
             return $value;
         }
         // batch handling of values in $_queued[$queue]
+        $queue = $this->getQueueName();
         if ($this->checkCallable('batch') && $this->countQueueValues() > 0) {
-            $count = call_user_func($this->callable_batch, $this->callable_debug);
+            // we want to pass by reference, so use call_user_func_array() approach here
+            //$count = call_user_func($this->callable_batch, static::$_queued[$queue], static::$_cached[$queue], $this->callable_debug);
+            $count = call_user_func_array($this->callable_batch, [&static::$_queued[$queue], &static::$_cached[$queue], $this->callable_debug]);
+            if ($this->callable_debug) {
+                echo 'Batch call result (' . $count . ') = ' . count(static::$_queued[$queue]) . ' queued, ' . count(static::$_cached[$queue]) . ' cached';
+            }
         }
         if (!$this->hasCacheValue($itemid, $value)) {
-            $queue = $this->getQueueName();
             throw new Exception('Unexpected value ' . var_export($value, true) . ' in callable queue ' . $queue);
         }
         return $this->getCacheValue($itemid, $value);
@@ -281,4 +289,26 @@ class QueuedProperty extends CallableProperty
         }
         return $configproperties;
     }
+}
+
+/**
+ * Example of callable 'batch' function = set everything from queue in cache :-)
+ * Configuration: dynamicdata_callable_batch or \Xaraya\DataObject\Properties\dynamicdata_callable_batch
+ * @param array<int, mixed> $queue current queue by reference
+ * @param array<mixed> $cache current cache by reference
+ * @param bool $debug
+ * @return int
+ */
+function dynamicdata_callable_batch(&$queue, &$cache, $debug = false)
+{
+    if ($debug) {
+        echo 'Batch method for ' . count($queue) . ' items';
+    }
+    // basic 'batch' operation = set everything from queue in cache :-)
+    foreach ($queue as $value) {
+        // set cached for value = value here
+        $cache[$value] ??= $value;
+    }
+    $queue = [];
+    return count($cache);
 }
