@@ -87,15 +87,49 @@ class MongoDBDataStore extends ExternalDataStore
         $collection = $this->db->selectCollection($tablename);
 
         // @todo use projection with $queryfields
+        $projection = $this->doGetProjection();
+
         //$result = $collection->findOne([$wherefield => $itemid]);
         $objectid = $this->getObjectId($itemid);
-        $result = $collection->findOne(['_id' => $objectid]);
+        if (!empty($projection)) {
+            $result = $collection->findOne(['_id' => $objectid], ['projection' => $projection]);
+        } else {
+            $result = $collection->findOne(['_id' => $objectid]);
+        }
         if (empty($result)) {
             return null;
         }
         /** @var \MongoDB\Model\BSONDocument $result */
         $result['_id'] = $this->getItemId($result['_id']);
         return $result->getArrayCopy();
+    }
+
+    /**
+     * Summary of doGetProjection
+     * @return array<string, mixed>
+     */
+    public function doGetProjection()
+    {
+        $projection = [];
+        // @todo evaluate if we always want to use projection, or only when we have field subsets
+        if (empty($this->object->fieldsubset)) {
+            return $projection;
+        }
+        foreach ($this->object->getFieldList() as $fieldname) {
+            $property = $this->object->properties[$fieldname];
+            [$tablename, $field] = explode('.', $property->source);
+            if (array_key_exists($fieldname, $this->object->fieldsubset)) {
+                foreach ($this->object->fieldsubset[$fieldname] as $key => $subset) {
+                    $projection[$field . '.' . $subset] = 1;
+                }
+                if (property_exists($property, 'projection')) {
+                    $property->projection = $this->object->fieldsubset[$fieldname];
+                }
+            } else {
+                $projection[$field] = 1;
+            }
+        }
+        return $projection;
     }
 
     /**
@@ -206,10 +240,15 @@ class MongoDBDataStore extends ExternalDataStore
         if (!empty($sort)) {
             $options['sort'] = $sort;
         }
-        // @todo add queryfields
+        // @todo use projection with $queryfields
         //if (!empty($queryfields)) {
         //    $options['projection'] = $queryfields;
         //}
+        $projection = $this->doGetProjection();
+        if (!empty($projection)) {
+            $options['projection'] = $projection;
+        }
+
         $result = [];
         //$cursor = $collection->find(array_combine($where, $params));
         if (!empty($itemids)) {

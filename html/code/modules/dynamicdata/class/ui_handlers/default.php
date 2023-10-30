@@ -242,6 +242,34 @@ class DefaultHandler extends xarObject
     }
 
     /**
+     * Check if we want a subset of fields here (projection)
+     * @return void
+     */
+    public function checkFieldList()
+    {
+        // index.php?object=mongodb_properties&method=display&itemid=4&fieldlist=name,configuration.display_layout,configuration.initialization_refobject
+        $fieldsubset = [];
+        if (!empty($this->args['fieldlist'])) {
+            if (!is_array($this->args['fieldlist'])) {
+                $this->args['fieldlist'] = array_filter(explode(',', $this->args['fieldlist']));
+            }
+            $cleanfields = [];
+            foreach($this->args['fieldlist'] as $field) {
+                if (str_contains($field,'.')) {
+                    [$field, $subset] = explode('.', $field, 2);
+                    $fieldsubset[$field] ??= [];
+                    $fieldsubset[$field][] = $subset;
+                }
+                if (!in_array($field, $cleanfields)) {
+                    $cleanfields[] = $field;
+                }
+            }
+            $this->args['fieldsubset'] = $fieldsubset;
+            $this->args['fieldlist'] = $cleanfields;
+        }
+    }
+
+    /**
      * Get the return URL (based on argument or handler settings)
      *
      * @param string $return_url any $args['return_url'] given by the method

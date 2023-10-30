@@ -67,6 +67,7 @@ class DataObjectMaster extends xarObject
     /** @var array<string,DataProperty> $properties */
     public $properties  = [];      // list of properties for the DD object
     public $fieldlist   = [];      // array of properties to be displayed
+    public $fieldsubset = [];      // subset of fields within the properties to be displayed (dot notation for mongodb etc.)
     public $fieldorder  = [];      // displayorder for the properties
     public $fieldprefix = '';           // prefix to use in field names etc.
     // CHECKME: should be overridden by DataObjectList and DataObject to exclude DISPLAYONLY resp. VIEWONLY !?
@@ -394,6 +395,7 @@ class DataObjectMaster extends xarObject
             if (!is_array($fieldlist)) {
                 $fieldlist = explode(',', $fieldlist);
             }
+            // Note: we already filter out field subsets in ui_handler view and display (and elsewhere?)
             foreach($fieldlist as $field) {
                 // Ignore those disabled AND those that don't exist
                 if(isset($this->properties[$field]) && ($this->properties[$field]->getDisplayStatus() != DataPropertyMaster::DD_DISPLAYSTATE_DISABLED)) {
