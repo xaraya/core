@@ -32,7 +32,8 @@ use sys;
 sys::import('modules.dynamicdata.class.properties.base');
 
 /**
- * This property displays the result of a callable function as value (experimental - do not use in production)
+ * This property displays the result of a callable function as value
+ * It is extended by QueuedProperty for practical batch operations
  */
 class CallableProperty extends DataProperty
 {
@@ -86,9 +87,11 @@ class CallableProperty extends DataProperty
         if (is_callable($this->{$callable})) {
             return true;
         } elseif (is_string($this->{$callable}) && is_callable(__NAMESPACE__ . '\\' . $this->{$callable})) {
+            // call function in current namespace
             $this->{$callable} = __NAMESPACE__ . '\\' . $this->{$callable};
             return true;
         } elseif (is_array($this->{$callable}) && is_string($this->{$callable}[0]) && is_callable([__NAMESPACE__ . '\\' . $this->{$callable}[0], $this->{$callable}[1]])) {
+            // call static class method in current namespace
             $this->{$callable} = [__NAMESPACE__ . '\\' . $this->{$callable}[0], $this->{$callable}[1]];
             return true;
         }
@@ -151,6 +154,21 @@ class CallableProperty extends DataProperty
     }
 
     /**
+     * Example of callable 'output' method
+     * Configuration: [$this,"output"]
+     * @param array<string, mixed> $data
+     * @param bool $debug
+     * @return array<string, mixed>
+     */
+    public function output($data, $debug = false)
+    {
+        if ($debug) {
+            echo 'Output method for data';
+        }
+        return $data;
+    }
+
+    /**
      * Call 'setter' function and set value to callable 'getter' function for later
      * @param mixed $itemid
      * @param mixed $value
@@ -180,7 +198,6 @@ class CallableProperty extends DataProperty
         // 1. in showDisplay() get value from property - see showOutput()
         // 2. in showForm() set for input preview and update with setValue() - call 'getter' here
         //$this->log_trace();
-        //echo 'Getting value ' . var_export($this->value, true);
         if (!empty($this->value) && is_callable($this->value)) {
             $this->value = call_user_func($this->value);
         }
@@ -201,7 +218,6 @@ class CallableProperty extends DataProperty
         // 3. in showDisplay() get value from property - see showOutput()
         //$this->log_trace();
         if (!empty($this->_itemid) && !empty($value)) {
-            //echo 'Setting value ' . var_export($value, true);
             $itemid = $this->_itemid;
             $value = $this->callFunctions($itemid, $value);
         }
@@ -234,7 +250,9 @@ class CallableProperty extends DataProperty
     public function setItemValue($itemid, $value, $fordisplay = 0)
     {
         // 1. in getItems() set to value from datastore - call 'setter' and set value to 'getter'
-        $value = $this->callFunctions($itemid, $value);
+        if (!empty($itemid) && !empty($value)) {
+            $value = $this->callFunctions($itemid, $value);
+        }
         //$this->log_trace();
         //$this->value = $value;
         //$this->_items[$itemid][$this->name] = $this->value;
@@ -298,6 +316,9 @@ class CallableProperty extends DataProperty
             $data['value'] = $value;
         }
         //$this->log_trace();
+        if (!empty($data['value']) && $this->checkCallable('output')) {
+            $data = call_user_func($this->callable_output, $data, $this->callable_debug);
+        }
         return parent::showOutput($data);
     }
 

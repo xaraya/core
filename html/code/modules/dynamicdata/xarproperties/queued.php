@@ -22,8 +22,34 @@ use sys;
 sys::import('modules.dynamicdata.xarproperties.callable');
 
 /**
- * This property displays the queued result of a callable function as value (experimental - do not use in production)
- * The 'setter', 'getter' and 'batch' callables will be preset for basic batch operation if not defined in your property configuration
+ * This property displays the queued result of a callable function as value
+ * The 'setter', 'getter' and 'batch' callables will be preset for basic *batch operation* if not defined in your property configuration
+ *
+ * In principle you only need to override or configure the 'batch' method for practical use:
+ * ```
+ *    /**
+ *     * Example of callable 'batch' method = set everything from queue in cache :-)
+ *     * Configuration: [$this,"batch"]
+ *     * @param array<int, mixed> $values list of values to be resolved (current queue by reference)
+ *     * @param array<mixed> $result assoc array of result by value (current cache by reference)
+ *     * @param bool $debug show some debug messages or not
+ *     * @return int
+ *     * /
+ *    public function batch(&$values, &$result, $debug = false)
+ *    {
+ *        if ($debug) {
+ *            echo 'Batch method for ' . count($values) . ' values';
+ *        }
+ *        // basic 'batch' operation = set everything from queue in cache :-)
+ *        foreach ($values as $value) {
+ *            // set result for value = value here
+ *            $result[$value] ??= $value;
+ *        }
+ *        // clear queue
+ *        $values = [];
+ *        return count($result);
+ *    }
+ * ```
  */
 class QueuedProperty extends CallableProperty
 {
@@ -69,23 +95,24 @@ class QueuedProperty extends CallableProperty
     /**
      * Example of callable 'batch' method = set everything from queue in cache :-)
      * Configuration: [$this,"batch"]
-     * @param array<int, mixed> $queue current queue by reference
-     * @param array<mixed> $cache current cache by reference
-     * @param bool $debug
+     * @param array<int, mixed> $values list of values to be resolved (current queue by reference)
+     * @param array<mixed> $result assoc array of result by value (current cache by reference)
+     * @param bool $debug show some debug messages or not
      * @return int
      */
-    public function batch(&$queue, &$cache, $debug = false)
+    public function batch(&$values, &$result, $debug = false)
     {
         if ($debug) {
-            echo 'Batch method for ' . count($queue) . ' items';
+            echo 'Batch method for ' . count($values) . ' values';
         }
         // basic 'batch' operation = set everything from queue in cache :-)
-        foreach ($queue as $value) {
-            // set cached for value = value here
-            $cache[$value] ??= $value;
+        foreach ($values as $value) {
+            // set result for value = value here
+            $result[$value] ??= $value;
         }
-        $queue = [];
-        return count($cache);
+        // clear queue
+        $values = [];
+        return count($result);
     }
 
     /**
@@ -294,21 +321,22 @@ class QueuedProperty extends CallableProperty
 /**
  * Example of callable 'batch' function = set everything from queue in cache :-)
  * Configuration: dynamicdata_callable_batch or \Xaraya\DataObject\Properties\dynamicdata_callable_batch
- * @param array<int, mixed> $queue current queue by reference
- * @param array<mixed> $cache current cache by reference
- * @param bool $debug
+ * @param array<int, mixed> $values list of values to be resolved (current queue by reference)
+ * @param array<mixed> $result assoc array of result by value (current cache by reference)
+ * @param bool $debug show some debug messages or not
  * @return int
  */
-function dynamicdata_callable_batch(&$queue, &$cache, $debug = false)
+function dynamicdata_callable_batch(&$values, &$result, $debug = false)
 {
     if ($debug) {
-        echo 'Batch method for ' . count($queue) . ' items';
+        echo 'Batch method for ' . count($values) . ' values';
     }
     // basic 'batch' operation = set everything from queue in cache :-)
-    foreach ($queue as $value) {
-        // set cached for value = value here
-        $cache[$value] ??= $value;
+    foreach ($values as $value) {
+        // set result for value = value here
+        $result[$value] ??= $value;
     }
-    $queue = [];
-    return count($cache);
+    // clear queue
+    $values = [];
+    return count($result);
 }
