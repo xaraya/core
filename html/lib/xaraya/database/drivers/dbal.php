@@ -112,12 +112,22 @@ class DbalDriver
         /** @var \Doctrine\DBAL\Connection $dbconn */
         $sm = $dbconn->createSchemaManager();
         $columns = $sm->listTableColumns($tablename);
+        $indexes = $sm->listTableIndexes($tablename);
+        $primary = '';
+        foreach ($indexes as $index) {
+            if ($index->isPrimary() && count($index->getColumns()) == 1) {
+                $primary = $index->getColumns()[0];
+                break;
+            }
+        }
         $result = [];
         foreach ($columns as $column) {
             $name = $column->getName();
             $type = $column->getType();
             $typeName = \Doctrine\DBAL\Types\Type::lookupName($type);
-            if ($name == 'id' && $typeName == 'integer') {
+            if (!empty($primary) && $primary == $name) {
+                $typeName = 'itemid';
+            } elseif (empty($primary) && $name == 'id' && $typeName == 'integer') {
                 $typeName = 'itemid';
             }
             $result[$name] = $typeName;
