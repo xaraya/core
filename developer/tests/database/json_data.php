@@ -74,10 +74,23 @@ function add_json_index($conn, $name = 'xar_dynamic_json')
 /**
  * Test queries on JSON table in MySQL - not very convincing
  * @param mixed $conn
+ * @param array<mixed> $items
+ * @param bool $refresh
  * @return void
  */
-function test_json_table($conn)
+function test_json_table($conn, $items = [], $refresh = false)
 {
+    /**
+    if ($refresh) {
+        foreach ($items as $itemid => $item) {
+            $conn->update("xar_dynamic_json", array("data" => json_encode($item)), array("object_id" => $object["id"], "item_id" => $itemid));
+        }
+    } else {
+        foreach ($items as $itemid => $item) {
+            $conn->insert("xar_dynamic_json", array("object_id" => $object["id"], "item_id" => $itemid, "data" => json_encode($item)));
+        }
+    }
+     */
     // very different syntax depending on the database type :-(
     // select * from xar_dynamic_json where object_id=4 order by json_value(data, '$.name');
     // select * from xar_dynamic_json where object_id=4 and json_value(data, '$.name')="Baby";
@@ -96,15 +109,21 @@ function test_json_table($conn)
 
 /**
  * Copy Xaraya DD object items as collection documents in MongoDB
- * @param Doctrine\DBAL\Connection $conn
+ * @param string $dbName Xaraya database name
+ * @param string $dbConnIndex
  * @param MongoDB\Client $client
- * @param bool $refresh
+ * @param bool $drop default false
  * @return void
  */
-function copy_dynamicdata_objects($conn, $client, $refresh = false)
+function copy_dynamicdata_objects($dbName, $dbConnIndex, $client, $drop = false)
 {
-    $client->dropDatabase("Xaraya");
+    if ($drop) {
+        $client->dropDatabase($dbName);
+    }
+    /** @var Doctrine\DBAL\Connection $conn */
+    $conn = ExternalDatabase::getConn($dbConnIndex);
     $sql = "SELECT * FROM xar_dynamic_objects WHERE datastore = ?";
+    /** @var Doctrine\DBAL\Statement $stmt */
     $stmt = $conn->prepare($sql);
     $stmt->bindValue(1, 'dynamicdata');
     $resultSet = $stmt->executeQuery();
@@ -119,7 +138,7 @@ function copy_dynamicdata_objects($conn, $client, $refresh = false)
         $stmt2->bindValue(1, $object["id"]);
         $resultSet2 = $stmt2->executeQuery();
         $properties = $resultSet2->fetchAllAssociative();
-        print_r($properties);
+        //print_r($properties);
         $prop_names = array();
         $prop_types = array();
         foreach ($properties as $property) {
@@ -162,34 +181,29 @@ function copy_dynamicdata_objects($conn, $client, $refresh = false)
                 $items[$field["item_id"]][$prop_names[$field["property_id"]]] = $field["value"];
             }
         }
-        echo var_export($items, true) . "\n";
-        $collection = $client->selectCollection("Xaraya", $object["name"]);
+        //echo var_export($items, true) . "\n";
+        $collName = "dd_" . $object["name"];
+        $collection = $client->selectCollection($dbName, $collName);
         $result = $collection->insertMany(array_values($items));
         printf("Inserted %d document(s)\n", $result->getInsertedCount());
-        continue;
-        if ($refresh) {
-            foreach ($items as $itemid => $item) {
-                $conn->update("xar_dynamic_json", array("data" => json_encode($item)), array("object_id" => $object["id"], "item_id" => $itemid));
-            }
-        } else {
-            foreach ($items as $itemid => $item) {
-                $conn->insert("xar_dynamic_json", array("object_id" => $object["id"], "item_id" => $itemid, "data" => json_encode($item)));
-            }
-        }
     }
 }
 
 /**
  * Copy external database tables as collections in MongoDB
- * @param string $dbName
+ * @param string $dbName Calibre database name
  * @param string $dbConnIndex
  * @param MongoDB\Client $client
+ * @param bool $drop default true
  * @return void
  */
-function copy_external_database($dbName = "Calibre", $dbConnIndex, $client)
+function copy_external_database($dbName, $dbConnIndex, $client, $drop = true)
 {
-    $client->dropDatabase($dbName);
+    if ($drop) {
+        $client->dropDatabase($dbName);
+    }
     $tables = ExternalDatabase::listTableNames($dbConnIndex);
+    /** @var PDO $conn */
     $conn = ExternalDatabase::getConn($dbConnIndex);
     //print_r($tables);
     foreach ($tables as $table) {
@@ -223,10 +237,86 @@ function copy_external_database($dbName = "Calibre", $dbConnIndex, $client)
     }
 }
 
-//$xarConn = get_xaraya_conn();
-//$mongodb = new MongoDB\Client();
-//copy_dynamicdata_objects($xarConn, $mongodb);
+/**
+ * Copy Xaraya database tables as collections in MongoDB
+ * @param string $dbName Xaraya database name
+ * @param string $dbConnIndex
+ * @param MongoDB\Client $client
+ * @param bool $drop default true
+ * @return void
+ */
+function copy_xaraya_database($dbName, $dbConnIndex, $client, $drop = true)
+{
+    if ($drop) {
+        $client->dropDatabase($dbName);
+    }
+    $tables = ExternalDatabase::listTableNames($dbConnIndex);
+    /** @var Doctrine\DBAL\Connection $conn */
+    $conn = ExternalDatabase::getConn($dbConnIndex);
+    //print_r($tables);
+    $todo = [];
+    foreach ($tables as $table) {
+        $columns = ExternalDatabase::listTableColumns($dbConnIndex, $table);
+        //print_r($columns);
+        $primary = '';
+        foreach ($columns as $name => $type) {
+            if ($type == 'itemid') {
+                $primary = $name;
+                break;
+            }
+        }
+        //echo "Table $table - Primary $primary\n";
+        $todo[$table] = $primary;
+    }
+    foreach ($todo as $table => $primary) {
+        // not very elegant way of doing this, but we don't really care
+        $sql = "SELECT * from $table";
+        $items = $conn->fetchAllAssociative($sql);
+        echo "Table $table:\n";
+        printf("Selected %d items(s)\n", count($items));
+        if (empty($items)) {
+            continue;
+        }
+        // unserialize text values here?
+        foreach (array_keys($items) as $key) {
+            foreach (array_keys($items[$key]) as $field) {
+                if (is_string($items[$key][$field]) && str_starts_with($items[$key][$field], 'a:')) {
+                    // clean-up of some messed-up default content
+                    if (str_contains($items[$key][$field], '&amp;quot;')) {
+                        $items[$key][$field] = str_replace('&amp;quot;', '"', $items[$key][$field]);
+                    }
+                    try {
+                        $value = unserialize($items[$key][$field]);
+                        if (is_array($value)) {
+                            // clean-up of some messed-up default content
+                            if (count($value) > 0 && array_keys($value)[0] === 0) {
+                                $value[0] = array_filter($value[0]);
+                            }
+                            $value = array_filter($value);
+                        }
+                        $items[$key][$field] = $value;
+                    } catch (Throwable $e) {
+                    }
+                }
+            }
+        }
+        if (!empty($primary)) {
+            foreach (array_keys($items) as $key) {
+                $items[$key]['_id'] = $items[$key][$primary];
+            }
+        }
+        $collection = $client->selectCollection($dbName, $table);
+        try {
+            $result = $collection->insertMany(array_values($items));
+            printf("Inserted %d document(s)\n", $result->getInsertedCount());
+        } catch (Throwable $e) {
+            echo json_encode($items, JSON_PRETTY_PRINT) . "\n";
+            echo $e->getMessage();
+        }
+    }
+}
 
+/**
 $dbName = 'Calibre';
 $dbConnArgs = [
     'external' => 'pdo',
@@ -236,3 +326,14 @@ $dbConnArgs = [
 $dbConnIndex = ExternalDatabase::checkDbConnection(null, $dbConnArgs);
 $mongodb = new MongoDB\Client();
 copy_external_database($dbName, $dbConnIndex, $mongodb);
+ */
+
+// use dbal driver here to get correct primary keys + return value types
+$dbName = 'Xaraya';
+$dbConnArgs = get_xaraya_params();
+$dbConnArgs['external'] = 'dbal';
+$dbConnIndex = ExternalDatabase::checkDbConnection(null, $dbConnArgs);
+$mongodb = new MongoDB\Client();
+copy_xaraya_database($dbName, $dbConnIndex, $mongodb);
+
+copy_dynamicdata_objects($dbName, $dbConnIndex, $mongodb);
