@@ -14,6 +14,7 @@ namespace Xaraya\DataObject\Properties\MongoDB;
 
 use DataProperty;
 use ObjectDescriptor;
+use JsonSerializable;
 use sys;
 
 /* Include parent class */
@@ -61,7 +62,12 @@ class BSONProperty extends DataProperty
     public function setValue($value = null)
     {
         if (is_object($value)) {
-            $value = var_export($value, true);
+            if ($value instanceof JsonSerializable) {
+                // leave the value as is here and deal with it in template
+                //$value = json_encode($value, JSON_PRETTY_PRINT);
+            } else {
+                $value = var_export($value, true);
+            }
         }
         //$this->value = $value;
         parent::setValue($value);
@@ -89,10 +95,26 @@ class BSONProperty extends DataProperty
     public function setItemValue($itemid, $value, $fordisplay = 0)
     {
         if (is_object($value)) {
-            $value = var_export($value, true);
+            if ($value instanceof JsonSerializable) {
+                // leave the value as is here and deal with it in template
+                //$value = json_encode($value, JSON_PRETTY_PRINT);
+            } else {
+                $value = var_export($value, true);
+            }
         }
         //$this->value = $value;
         //$this->_items[$itemid][$this->name] = $this->value;
         parent::setItemValue($itemid, $value, $fordisplay);
+    }
+
+    /**
+     * Summary of castType
+     * @param mixed $value
+     * @return mixed
+     */
+    public function castType($value = null)
+    {
+        // leave the value as is here and deal with it in template
+        return $value;
     }
 }

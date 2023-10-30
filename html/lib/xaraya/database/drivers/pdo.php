@@ -130,6 +130,7 @@ class PdoDriver
         foreach ($tables as $tblInfo) {
             $result[] = $tblInfo->getName();
         }
+        sort($result);
         return $result;
     }
 

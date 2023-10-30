@@ -5,7 +5,6 @@
         <xar:set name="value">json_encode($value, JSON_PRETTY_PRINT)</xar:set>
         (bson)<pre>#$value#</pre>
     <xar:else/>
-        #$value# 
+        <xar:var name="value"/>
     </xar:if>
-    <input type="hidden" name="#$name#" id="#$id#" value="#$value#"/>
 </xar:template>

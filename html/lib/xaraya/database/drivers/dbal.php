@@ -98,6 +98,7 @@ class DbalDriver
         /** @var \Doctrine\DBAL\Connection $dbconn */
         $sm = $dbconn->createSchemaManager();
         $tables = $sm->listTableNames();
+        sort($tables);
         return $tables;
     }
 

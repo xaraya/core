@@ -74,6 +74,7 @@ class MongoDBDriver
         foreach ($collections as $name) {
             $result[] = $name;
         }
+        sort($result);
         return $result;
     }
 
