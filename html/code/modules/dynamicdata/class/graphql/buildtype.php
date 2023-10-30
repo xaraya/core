@@ -178,6 +178,11 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
                 //$fields[$fieldname] = xarGraphQL::get_type_list("mixed");
                 continue;
             }
+            if ($fieldtype == 'bsonprop') {
+                //$fields[$fieldname] = xarGraphQL::get_type_list("mixed");
+                $fields[$fieldname] = xarGraphQL::get_type($typename);
+                continue;
+            }
             if ($fieldtype == 'basetype') {
                 $fields[$fieldname] = $basetypes[$typename];
                 continue;
@@ -247,6 +252,11 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
                 //$fields[$fieldname] = Type::listOf(xarGraphQL::get_type($typename));
                 $fields[$fieldname] = xarGraphQL::get_input_type_list($typename);
                 //$fields[$fieldname] = xarGraphQL::get_type_list("mixed");
+                continue;
+            }
+            if ($fieldtype == 'bsonprop') {
+                //$fields[$fieldname] = xarGraphQL::get_input_type_list("mixed");
+                $fields[$fieldname] = xarGraphQL::get_input_type($typename);
                 continue;
             }
             if ($fieldtype == 'basetype') {
@@ -340,6 +350,11 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             if ($property->type == self::get_property_id('configuration')) {
                 $typename = "keyval";
                 $fieldspecs[$property->name] = ['typelist', $typename];
+                continue;
+            }
+            if ($property->type == self::get_property_id('mongodb_bson')) {
+                $typename = "mixed";
+                $fieldspecs[$property->name] = ['bsonprop', $typename];
                 continue;
             }
             if (!array_key_exists($property->name, $fieldspecs)) {
@@ -646,6 +661,28 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
     }
 
     /**
+     * Summary of bson_field_resolver
+     * @param mixed $typename
+     * @param mixed $fieldname
+     * @return Closure
+     */
+    public static function bson_field_resolver($typename, $fieldname)
+    {
+        xarGraphQL::$paths[] = "use bson field resolver for type $typename field $fieldname";
+        $resolver = function ($values, $args, $context, ResolveInfo $info) use ($fieldname) {
+            // handle case where values is object - see MongoDB\Model\BSONDocument and MongoDB\Model\BSONArray
+            if (is_object($values[$fieldname]) && !empty($values[$fieldname])) {
+                $result = $values[$fieldname]->jsonSerialize();
+                if ($result !== false) {
+                    return $result;
+                }
+            }
+            return $values[$fieldname];
+        };
+        return $resolver;
+    }
+
+    /**
      * Summary of alias_field_resolver
      * @param mixed $typename
      * @param mixed $fieldname
@@ -881,6 +918,8 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
             $field_resolver = self::serial_field_resolver($typename, $fieldname);
         } elseif ($fieldtype == 'basetype' && $fieldspec == 'Serial') {
             $field_resolver = self::serial_field_resolver($typename, $fieldname);
+        } elseif ($fieldtype == 'bsonprop') {
+            $field_resolver = self::bson_field_resolver($typename, $fieldname);
         } elseif ($fieldtype == 'basetype') {
             // @checkme use standard default field resolver here?
             $field_resolver = self::basetype_field_resolver($typename, $fieldname);
