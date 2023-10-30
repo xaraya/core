@@ -6,9 +6,13 @@
                 <xar:data-label property="$properties[$name]" for="id"/>
             </div>
             <div class="xar-col">
-                <xar:if condition="get_class($property) eq 'TextAreaProperty' and is_string($property->value) and str_starts_with($property->value, 'a:')">
-                    <xar:set name="value">json_encode(unserialize($property->value), JSON_PRETTY_PRINT)</xar:set>
-                    (serialized)<pre>#$value#</pre>
+                <xar:if condition="get_class($property) eq 'TextAreaProperty' and is_string($property->value)">
+                    <xar:if condition="str_starts_with($property->value, 'a:')">
+                        <xar:set name="value">json_encode(unserialize($property->value), JSON_PRETTY_PRINT)</xar:set>
+                        (serialized)<pre>#$value#</pre>
+                    <xar:else/>
+                        <xar:data-output property="$properties[$name]" layout="preformat"/>
+                    </xar:if>
                 <xar:else/>
                     <xar:data-output property="$properties[$name]"/>
                 </xar:if>

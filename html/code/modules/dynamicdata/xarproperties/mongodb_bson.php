@@ -69,8 +69,36 @@ class BSONProperty extends DataProperty
                 $value = var_export($value, true);
             }
         }
+        // from preview and update
+        if (is_array($value)) {
+            $value = $this->decodeArrayValue($value);
+        }
         //$this->value = $value;
         parent::setValue($value);
+    }
+
+    /**
+     * Summary of decodeArrayValue
+     * @param mixed $value
+     * @return mixed
+     */
+    public function decodeArrayValue($value)
+    {
+        if (empty($value) || !is_array($value)) {
+            return $value;
+        }
+        // see showinput-mongodb_bson: sub-values are json-encoded in input form
+        foreach (array_keys($value) as $key) {
+            if (!empty($value[$key]) && is_array($value[$key]) && count($value[$key]) == 1) {
+                $value[$key] = json_decode($value[$key][0], true);
+            }
+        }
+        if (array_keys($value)[0] !== 0) {
+            $value = new \MongoDB\Model\BSONDocument($value);
+        } else {
+            $value = new \MongoDB\Model\BSONArray($value);
+        }
+        return $value;
     }
 
     /**

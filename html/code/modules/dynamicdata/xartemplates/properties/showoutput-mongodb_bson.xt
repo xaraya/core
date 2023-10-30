@@ -4,6 +4,9 @@
     <xar:if condition="!empty($value) and is_object($value)">
         <xar:set name="value">json_encode($value, JSON_PRETTY_PRINT)</xar:set>
         (bson)<pre>#$value#</pre>
+    <xar:elseif condition="!empty($value) and is_array($value)"/>
+        <xar:set name="value">json_encode($value, JSON_PRETTY_PRINT)</xar:set>
+        (array)<pre>#$value#</pre>
     <xar:else/>
         <xar:var name="value"/>
     </xar:if>
