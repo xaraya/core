@@ -161,6 +161,7 @@ class PdoDriver
                     $datatype = str_replace(' non', '', strtolower($data['sqlite:decl_type']));
                 }
             }
+            // @todo xarPDO middleware only returns primary_key column, not columns for multiple keys
             if (is_object($keyInfo) && $name == $keyInfo->getName()) {
                 $datatype = 'itemid';
             } elseif ($name == 'id' && $datatype == 'integer') {

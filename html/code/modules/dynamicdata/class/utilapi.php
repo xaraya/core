@@ -175,9 +175,8 @@ class UtilApi implements DatabaseInterface
             }
 
             // try to figure out if it's the item id
-            // FIXME: this only deals with primary keys which consist of 1 column
-            // The mod_uservars table as such will be wrongly identified
-            if(is_object($keyInfo) && $name == $keyInfo->getName()) {
+            // @todo xarPDO middleware only returns primary_key column, not columns for multiple keys
+            if(is_object($keyInfo) && $name == $keyInfo->getName() && count($keyInfo->getColumns()) < 2) {
                 // CHECKME: how are multiple tuples handled here?
                 // not allowed to modify primary key !
                 $datatype = 'itemid';

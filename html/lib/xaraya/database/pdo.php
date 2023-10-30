@@ -817,6 +817,7 @@ class PDOTable extends xarObject
 
     public function getPrimaryKey()
     {
+        // @todo xarPDO middleware only returns primary_key column, not columns for multiple keys
         $columns = $this->getColumns();
         $key_column = '';
         foreach ($columns as $name => $column) {
