@@ -10,7 +10,7 @@
   <access></access>
   <isalias>true</isalias>
   <datastore>relational</datastore>
-  <config>a:1:{s:0:"";a:1:{i:0;s:0:"";}}</config>
+  <config></config>
   <sources>a:1:{s:8:"linkages";a:2:{i:0;s:22:"xar_categories_linkage";i:1;s:8:"internal";}}</sources>
   <relations></relations>
   <objects></objects>

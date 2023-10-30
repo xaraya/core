@@ -51,7 +51,7 @@
       <source>privileges.module_id</source>
       <status>33</status>
       <seq>4</seq>
-      <configuration>a:2:{s:10:&quot;validation&quot;;s:8:&quot;systemid&quot;;s:8:&quot;override&quot;;s:1:&quot;1&quot;;}</configuration>
+      <configuration>a:2:{s:10:"validation";s:8:"systemid";s:8:"override";s:1:"1";}</configuration>
     </property>
     <property name="component">
       <id>53</id>
