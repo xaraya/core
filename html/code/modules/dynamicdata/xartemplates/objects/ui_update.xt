@@ -51,6 +51,10 @@
                 </xar:if>
                 <input type="hidden" name="method" id="method" value="update"/>
                 <input type="hidden" name="itemid" id="itemid" value="#$object:itemid#"/>
+                <xar:if condition="count($object->fieldlist) lt count($object->properties)">
+                    <xar:set name="fieldlist">implode(',',array_values($object->fieldlist))</xar:set>
+                    <input type="hidden" name="fieldlist" id="fieldlist" value="#$fieldlist#"/>
+                </xar:if>
                 <input type="hidden" name="authid" id="authid" value="#$authid#"/>
                 <xar:if condition="!empty($object:join)">
                     <input type="hidden" name="join" id="join" value="#$object:join#"/>

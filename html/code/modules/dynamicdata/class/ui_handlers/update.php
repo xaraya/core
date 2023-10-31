@@ -66,6 +66,9 @@ class UpdateHandler extends DefaultHandler
             $this->args = array_merge($this->args, $args);
         }
 
+        // check if we want a subset of fields here (projection)
+        $this->checkFieldList();
+
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {

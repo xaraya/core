@@ -26,6 +26,9 @@
                         <xar:if condition="is_object($val) or is_array($val)">
                             <xar:set name="val">json_encode($val)</xar:set>
                             <textarea name="#$namekey#[]" id="#$idkey#">#$val#</textarea>
+                        <xar:elseif condition="is_string($val)"/>
+                            <xar:set name="val">htmlspecialchars($val)</xar:set>
+                            <input type="text" name="#$namekey#" id="#$idkey#" value="#$val#"/>
                         <xar:else/>
                             <input type="text" name="#$namekey#" id="#$idkey#" value="#$val#"/>
                         </xar:if>
@@ -45,6 +48,10 @@
         <xar:set name="encoded">json_encode($value)</xar:set>
         (array)<br/>
         <textarea name="#$name#[]" id="#$id#">#$encoded#</textarea>
+    <xar:elseif condition="!empty($value) and is_string($value)"/>
+        <xar:set name="value">htmlspecialchars($value)</xar:set>
+        (bson)<br/>
+        <input type="text" name="#$name#" id="#$id#" value="#$value#"/>
     <xar:else/>
         (bson)<br/>
         <input type="text" name="#$name#" id="#$id#" value="#$value#"/>
