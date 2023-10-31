@@ -31,7 +31,7 @@ class BSONProperty extends DataProperty
     public $reqmodules = ['dynamicdata'];
     // if we use object->fieldsubset for getItem(s), this is set by mongodb datastore
     /** @var array<mixed> */
-    public $projection = [];
+    public $subset = [];
 
     public function __construct(ObjectDescriptor $descriptor)
     {
@@ -139,8 +139,8 @@ class BSONProperty extends DataProperty
 
     public function showOutput(array $data = [])
     {
-        if (!empty($this->projection)) {
-            $data['projection'] = $this->projection;
+        if (!empty($this->subset)) {
+            $data['subset'] = $this->subset;
         }
         return parent::showOutput($data);
     }

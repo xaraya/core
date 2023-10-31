@@ -122,8 +122,8 @@ class MongoDBDataStore extends ExternalDataStore
                 foreach ($this->object->fieldsubset[$fieldname] as $key => $subset) {
                     $projection[$field . '.' . $subset] = 1;
                 }
-                if (property_exists($property, 'projection')) {
-                    $property->projection = $this->object->fieldsubset[$fieldname];
+                if (property_exists($property, 'subset')) {
+                    $property->subset = $this->object->fieldsubset[$fieldname];
                 }
             } else {
                 $projection[$field] = 1;
