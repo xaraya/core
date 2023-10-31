@@ -68,6 +68,10 @@ class UpdateHandler extends DefaultHandler
 
         // check if we want a subset of fields here (projection)
         $this->checkFieldList();
+        // @todo support updating field subsets for mongodb etc. someday
+        if (!empty($this->args['fieldsubset'])) {
+            $this->args['fieldsubset'] = [];
+        }
 
         if (!isset($this->object)) {
             $this->object = DataObjectMaster::getObject($this->args);
