@@ -20,7 +20,7 @@
  * different potentially interesting subject modules (+ itemtypes), i.e. those which are attached to a listener
  * (hook observer) for that event.
  *
- * require dirname(__DIR__).'/vendor/autoload.php';
+ * require_once dirname(__DIR__).'/vendor/autoload.php';
  * sys::init();
  * xarCache::init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);

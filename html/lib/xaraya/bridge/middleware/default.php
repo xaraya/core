@@ -4,7 +4,7 @@
  *
  * See dynamicdata/controllers/middleware.php and modules/controllers/middleware.php
  *
- * require dirname(__DIR__).'/vendor/autoload.php';
+ * require_once dirname(__DIR__).'/vendor/autoload.php';
  * sys::init();
  * xarCache::init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);

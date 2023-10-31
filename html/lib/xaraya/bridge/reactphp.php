@@ -11,7 +11,7 @@
  * Caution: this does not support sessions or authentication, and is not meant for production (at all)
  */
 
-require dirname(dirname(__DIR__)).'/vendor/autoload.php';
+require_once dirname(dirname(__DIR__)).'/vendor/autoload.php';
 sys::init();
 xarCache::init();
 xarCore::xarInit(xarCore::SYSTEM_USER);

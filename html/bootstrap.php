@@ -25,7 +25,7 @@
  * @author Marcel van der Boom <mrb@hsdev.com>
 **/
 // test compatibility with composer autoload by disabling sys::import
-//require dirname(__DIR__).'/vendor/autoload.php';
+//require_once dirname(__DIR__).'/vendor/autoload.php';
 
 /**
  * Get the public properties of an object (this must be done outside the class)

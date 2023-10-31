@@ -3,7 +3,7 @@
  * Generate stubs of Xaraya core files for phpstan etc.
  */
 $ROOT_DIR = dirname(dirname(__DIR__));
-require $ROOT_DIR.'/vendor/autoload.php';
+require_once $ROOT_DIR.'/vendor/autoload.php';
 sys::init();
 
 /**

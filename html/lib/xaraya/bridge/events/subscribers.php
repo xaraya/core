@@ -13,7 +13,7 @@
  * The EventDispatcher does not return any results, but the response to an event is available via the subscriber.
  * Optionally, specific callback functions can also be defined to react to certain events (see also listeners).
  *
- * require dirname(__DIR__).'/vendor/autoload.php';
+ * require_once dirname(__DIR__).'/vendor/autoload.php';
  * sys::init();
  * xarCache::init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);

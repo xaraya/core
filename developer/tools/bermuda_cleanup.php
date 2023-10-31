@@ -14,7 +14,7 @@
  * to avoid Reflection error finding the file for that function, when updating core files
  *
  */
-require dirname(dirname(__DIR__)).'/vendor/autoload.php';
+require_once dirname(dirname(__DIR__)).'/vendor/autoload.php';
 //use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
 
 

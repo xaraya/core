@@ -12,7 +12,7 @@
  * to the event/hook observer bridges and your event subscribers to select which events they want to listen to.
  * An example of a test event subscriber is available in lib/xaraya/bridge/events/testers.php
  *
- * require dirname(__DIR__).'/vendor/autoload.php';
+ * require_once dirname(__DIR__).'/vendor/autoload.php';
  * sys::init();
  * xarCache::init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);

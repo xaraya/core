@@ -9,17 +9,17 @@
  * $ head html/db.php
  * <?php
  * ...
- * require dirname(__DIR__).'/vendor/autoload.php';
+ * require_once dirname(__DIR__).'/vendor/autoload.php';
  * ...
  *
  * https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/index.html
  */
-require dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3).'/vendor/autoload.php';
 
 // initialize bootstrap
 sys::init();
 
-require __DIR__ . '/dbal_config.php';
+require_once __DIR__ . '/dbal_config.php';
 
 function check_schema($conn)
 {

@@ -2,7 +2,7 @@
 /**
  * Experiment with routing bridges for use with other dispatchers
  *
- * require dirname(__DIR__).'/vendor/autoload.php';
+ * require_once dirname(__DIR__).'/vendor/autoload.php';
  * sys::init();
  * xarCache::init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);

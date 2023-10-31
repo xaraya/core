@@ -9,14 +9,14 @@
  * Support for JSON data type in Doctrine DBAL isn't as transparent as I'd hoped yet,
  * but using an external MongoDB seems like an interesting option - to be continued
  */
-require dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3).'/vendor/autoload.php';
 
 use Xaraya\Database\ExternalDatabase;
 
 // initialize bootstrap
 sys::init();
 
-require __DIR__ . '/dbal_config.php';
+require_once __DIR__ . '/dbal_config.php';
 
 /**
  * Create JSON table in MySQL database

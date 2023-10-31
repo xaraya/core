@@ -2,7 +2,7 @@
 /**
  * Entrypoint for experimenting with library objects (without Xaraya DB)
  */
-require dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3).'/vendor/autoload.php';
 
 use Xaraya\Modules\Library\LibraryObject;
 use Xaraya\Modules\Library\LibraryObjectList;

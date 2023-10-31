@@ -9,12 +9,12 @@
  * $ head html/rst.php
  * <?php
  * ...
- * require dirname(__DIR__).'/vendor/autoload.php';
+ * require_once dirname(__DIR__).'/vendor/autoload.php';
  * ...
  *
  * https://github.com/nikic/FastRoute
  */
-require dirname(__DIR__).'/vendor/autoload.php';
+require_once dirname(__DIR__).'/vendor/autoload.php';
 
 // use the FastRoute library here
 //use FastRoute\Dispatcher;

@@ -9,16 +9,16 @@
  * $ head html/gql.php
  * <?php
  * ...
- * require dirname(__DIR__).'/vendor/autoload.php';
+ * require_once dirname(__DIR__).'/vendor/autoload.php';
  * ...
  *
  * https://webonyx.github.io/graphql-php/getting-started/
  * https://github.com/webonyx/graphql-php/tree/master/examples/01-blog
  */
-require dirname(__DIR__).'/vendor/autoload.php';
+require_once dirname(__DIR__).'/vendor/autoload.php';
 
 // use the GraphQL PHP library here
-use GraphQL\GraphQL;
+//use GraphQL\GraphQL;
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     xarGraphQL::send_cors_options();

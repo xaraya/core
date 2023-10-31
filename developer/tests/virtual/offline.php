@@ -5,7 +5,7 @@
  * Needs the following setting in /etc/php[8.x]/cli/php.ini to enable acp(u) for cli:
  * apc.enable_cli=1
  */
-require dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3).'/vendor/autoload.php';
 
 // initialize bootstrap
 sys::init();

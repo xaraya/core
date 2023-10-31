@@ -4,7 +4,7 @@
  *
  * Note: see also lib/xaraya/bridge/reactphp.php for an example with ReactPHP (not fully functional with links)
  *
- * require dirname(__DIR__).'/vendor/autoload.php';
+ * require_once dirname(__DIR__).'/vendor/autoload.php';
  * sys::init();
  * xarCache::init();
  * xarCore::xarInit(xarCore::SYSTEM_USER);
