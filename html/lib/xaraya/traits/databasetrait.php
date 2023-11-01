@@ -274,15 +274,16 @@ trait DatabaseTrait
     /**
      * Summary of getDatabaseDSN
      * @param string $name
+     * @param ?string $moduleName
      * @throws BadParameterException
      * @return array<string, mixed>
      */
-    public static function getDatabaseDSN($name)
+    public static function getDatabaseDSN($name, $moduleName = null)
     {
         if ($name == 'memory') {
             return ['databaseType' => 'sqlite3', 'databaseName' => ':memory:'];
         }
-        $databases = static::getDatabases();
+        $databases = static::getDatabases($moduleName);
         if (!isset($databases[$name])) {
             throw new BadParameterException($name, 'Invalid database name #(1)');
         }

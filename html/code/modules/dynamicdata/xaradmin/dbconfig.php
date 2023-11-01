@@ -125,6 +125,8 @@ function dynamicdata_admin_dbconfig(array $args = [])
             'method' => 'getDbConnArgs',
         ];
         $data['config']['objectid'] ??= 0;
+        $data['databases'] = UtilApi::getDatabases($module);
+        $data['config']['dbconfig'] ??= '';
         return $data;
     }
 
@@ -158,6 +160,9 @@ function dynamicdata_admin_dbconfig(array $args = [])
             $configuration['dbConnArgs'] = json_decode($configuration['dbConnArgs'], true);
             if (is_callable($configuration['dbConnArgs'])) {
                 $configuration['dbConnArgs'] = 'via callback method';
+            } elseif (!empty($configuration['dbConnArgs']['databaseConfig'])) {
+                $configuration['dbConnIndex'] = $configuration['dbConnArgs']['databaseConfig'];
+                $configuration['dbConnArgs'] = '= database config';
             } else {
                 $configuration['dbConnArgs'] = 'with parameters';
             }

@@ -2,6 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:style scope="module" file="dd"/>
+    <xar:javascript scope="theme" filename="checkall.js" position="head"/>
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <h2>Utilities - Table Browser</h2>
@@ -33,13 +34,25 @@
             </xar:if>
             <xar:if condition="empty($tables)">
             <xar:elseif condition="empty($table)"/>
+            <form method="post" id="import_tables" action="#xarController::URL('dynamicdata','admin','meta')#">
                 <table class="xar-table">
                     <tr>
-                        <th>Name</th>
-                        <th>Actions</th>
+                        <xar:if condition="!empty($dbtype)">
+                            <th>Create DD Object</th>
+                        </xar:if>
+                        <th>Properties</th>
+                        <th>View Items</th>
+                        <th>Query Table</th>
+                        <th>Object Definition</th>
+                        <th>DDL</th>
                     </tr>
                     <xar:foreach in="$tables" key="$curtable" value="$fields">
                         <tr>
+                            <xar:if condition="!empty($dbtype)">
+                                <td class="xar-align-center">
+                                    <input type="checkbox" name="create[#$curtable#]" id="create_#$curtable#"/>
+                                </td>
+                            </xar:if>
                             <td>
                                 <xar:if condition="empty($dbtype)">
                                     <xar:set name="curlink">xarController::URL('dynamicdata','admin','meta',array('table'=>$curtable))</xar:set>
@@ -51,11 +64,17 @@
                             </td>
                             <td class="xar-align-center">
                                 <a href="#$curlink#&amp;export=view">
-                            View</a>| 
+                            View</a>
+                            </td>
+                            <td class="xar-align-center">
                                 <a href="#xarController::URL('dynamicdata','admin','query',array('table'=>$curtable))#">
-                            Query</a>| 
+                            Query</a>
+                            </td>
+                            <td class="xar-align-center">
                                 <a href="#$curlink#&amp;export=object">
-                            Export Object</a>| 
+                            Export Object</a>
+                            </td>
+                            <td class="xar-align-center">
                                 <a href="#$curlink#&amp;export=ddl">
                             Export DDL</a>
                             <!--
@@ -65,8 +84,31 @@
                            </td>
                         </tr>
                     </xar:foreach>
+                    <xar:if condition="!empty($dbtype)">
+                        <tr>
+                            <td class="xar-align-center">
+                    			<a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['import_tables'],true);return false;">
+			                        Check All
+			                    </a>|
+			                    <a href="javascript:void(0);" onclick="xar_base_checkall(document.forms['import_tables'],false);return false;">
+			                        Uncheck All
+			                    </a>
+                            </td>
+                            <td>
+                                <input type="hidden" name="db" value="#$db#"/>
+                                <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
+                                <xar:var name="label">Create DD Object (todo)</xar:var>
+                                <xar:button type="submit" label="$label"/>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </xar:if>
                 </table>
-                <xar:else />
+            </form>
+            <xar:else />
                 <h3>
                     Table: #$table#&#160;
                     <a href="#$tablelink#&amp;export=view" title="View #$table#">

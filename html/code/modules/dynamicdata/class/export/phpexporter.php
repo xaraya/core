@@ -107,7 +107,7 @@ class ' . $classname . ' extends GeneratedClass
     protected static $_objectName = \'' . $objectdef->name . '\';
 ';
         foreach ($objectdef->properties as $name => $property) {
-            $info .= "    /** @var " . get_class($property) . " */\n";
+            $info .= "    /** @var " . $property->getClassName() . " */\n";
             $info .= "    public \$" . $name . ";\n";
         }
 
@@ -211,6 +211,7 @@ class ' . $classname . ' extends GeneratedClass
     {
         xarCoreCache::saveCached('DynamicData', 'PropertyTypes');
         xarCoreCache::saveCached('DynamicData', 'Configurations');
+        //xarCoreCache::saveCached('Mod.Variables.dynamicdata');  // 'databases'
     }
 
     /**

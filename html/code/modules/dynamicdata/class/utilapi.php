@@ -55,6 +55,9 @@ class UtilApi implements DatabaseInterface
                     'method' => $configuration['dbConnArgs'][1],
                 ];
                 $configuration['dbConnArgs'] = [];
+            } elseif (!empty($configuration['dbConnArgs']['databaseConfig'])) {
+                $configuration['dbconfig'] = $configuration['dbConnArgs']['databaseConfig'];
+                $configuration['dbConnArgs'] = [];
             }
         }
         $configuration = array_merge($configuration, $item);

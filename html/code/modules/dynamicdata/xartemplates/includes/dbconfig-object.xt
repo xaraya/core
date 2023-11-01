@@ -65,11 +65,23 @@
                         <label class="xar-form-label" for="dbConnArgs" title="" style="">DB Connection Arguments (dbConnArgs)</label>
                     </div>
                     <div class="xar-col">
+                        Defined Database:<br/>
+                        Name <select id="dbConnArgs" name="config[dbconfig]">
+                            <option value=""></option>
+                            <xar:foreach in="$databases" key="$dbname" value="$dbinfo">
+                                <xar:if condition="!empty($config['dbconfig']) and $dbname eq $config['dbconfig']">
+                                    <option value="#$module#.#$dbname#" selected="selected">#$dbname#</option>
+                                <xar:else/>
+                                    <option value="#$module#.#$dbname#">#$dbname#</option>
+                                </xar:if>
+                            </xar:foreach>
+                        </select>
+                        <br/>or
                         Callable:<br/>
-                        Class <input type="text" id="dbConnArgs" name="config[callable][class]" value="#$config['callable']['class']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textxlong"/>&#160;
+                        Class <input type="text" id="dbConnArgs_1" name="config[callable][class]" value="#$config['callable']['class']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textxlong"/>&#160;
                         Method <input type="text" id="dbConnArgs_2" name="config[callable][method]" value="#$config['callable']['method']#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
                         (empty class to reset)
-                        <br/>or<br/>
+                        <br/>or
                         Parameters:<br/>
                         <xar:foreach in="$config['dbConnArgs']" key="$key" value="$value">
                             <input id="dbConnArgs_key_#$key#" name="config[dbConnArgs][key][#$key#]" value="#$key#" size="25" maxlength="254" tabindex="0" style="" class="xar-form-textmedium"/>
@@ -88,7 +100,7 @@
             <input type="hidden" name="obj" value="#$obj#"/>
             <xar:var name="label">Cancel</xar:var>
             <xar:button type="cancel" label="$label"/>&#160;
-            <xar:var name="label">Save Configuration</xar:var>
+            <xar:var name="label">Save Configuration (todo)</xar:var>
             <xar:button type="submit" label="$label"/>
         </div>
     </form>

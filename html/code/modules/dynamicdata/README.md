@@ -93,9 +93,12 @@ $dbConnArgs = [
 
 In practice, we don't want to store all this configuration for each DD object, especially if it contains sensitive information like username and password for MySQL databases. And we'd also prefer to have 1 place where all database connections are defined (per module), rather than to have to maintain this for every DD object individually.
 
-So the best approach for now is to specify a `callable` function as `dbConnArgs`, something like:
+So the best approach for now is to specify an existing database configuration (see [External database connections](#external-database-connections)), or use a `callable` function as `dbConnArgs`, something like:
 ```
-// specify callable to get database parameters
+// specify existing database configuration
+$dbConnArgs = ['databaseConfig' => 'dynamicdata.testdb'];
+
+// or specify callable to get database parameters
 $dbConnArgs = [ UserApi::class, 'getDbConnArgs' ];
 
 // this will call $dbConnArgs = UserApi::getDbConnArgs($object) for each DD object on demand

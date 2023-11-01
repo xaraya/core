@@ -40,6 +40,9 @@ function dynamicdata_admin_meta(array $args = [])
     if (!xarVar::fetch('db', 'notempty', $db, xarDB::getName(), xarVar::NOT_REQUIRED)) {
         return;
     }
+    if (!xarVar::fetch('create', 'notempty', $create, '', xarVar::NOT_REQUIRED)) {
+        return;
+    }
 
     $data = [];
 
@@ -98,6 +101,29 @@ function dynamicdata_admin_meta(array $args = [])
         'getmeta',
         ['db' => $db, 'table' => $table, 'dbConnIndex' => $data['dbConnIndex']]
     );
+
+    if (!empty($create) && !empty($data['dbConnIndex'])) {
+        $objects = DataObjectMaster::getObjects();
+        $objectnames = [];
+        foreach ($objects as $objectinfo) {
+            $objectnames[] = $objectinfo['name'];
+        }
+        foreach ($create as $table => $check) {
+            if (!array_key_exists($table, $data['tables'])) {
+                continue;
+            }
+            //$config = ['dbConnIndex' => $data['dbConnIndex'], 'dbConnArgs' => json_encode([UtilApi::class, 'getDbConnArgs'])];
+            $config = ['dbConnArgs' => json_encode(['databaseConfig' => $db])];
+            $descriptor = new TableObjectDescriptor([
+                'name' => $table,
+                'label' => ucwords(str_replace('_', ' ', $table)),
+                'table' => $table,
+                'dbConnIndex' => $data['dbConnIndex'],
+                'config' => serialize($config),
+            ]);
+            var_dump($descriptor);
+        }
+    }
 
     if ($export == 'ddl') {
         $dbInfo = $dbconn->getDatabaseInfo();

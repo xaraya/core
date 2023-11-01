@@ -494,6 +494,18 @@ class DataObjectMaster extends xarObject
             // we pass the current object as argument here, just in case...
             $args = call_user_func($this->dbConnArgs, $this);
             $this->dbConnArgs = $args;
+        } elseif (!empty($this->dbConnArgs['databaseConfig'])) {
+            sys::import('modules.dynamicdata.class.utilapi');
+            // get existing database config
+            try {
+                [$module, $dbname] = explode('.', $this->dbConnArgs['databaseConfig']);
+                $args = Xaraya\DataObject\UtilApi::getDatabaseDSN($dbname, $module);
+                $this->dbConnArgs = $args;
+            } catch (Exception $e) {
+                // allow database connection failure later on when it's actually needed
+                xarLog::message("DataObjectMaster::parseDbConnArgs: Invalid dbConnArgs - unable to create new db connection", xarLog::LEVEL_WARNING);
+                return null;
+            }
         } elseif (array_key_exists('databaseType', $this->dbConnArgs) || array_key_exists('external', $this->dbConnArgs)) {
             $args = $this->dbConnArgs;
         } else {

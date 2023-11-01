@@ -138,6 +138,10 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         if (!xarCoreCache::loadCached('DynamicData', 'Configurations')) {
             throw new Exception('No configurations cached yet - you need to export at least 1 object to php');
         }
+        // @todo adapt xarModVars::preload to allow preloading from cache?
+        //if (!xarCoreCache::loadCached('Mod.Variables.dynamicdata')) {  // 'databases'
+        //    throw new Exception('No module variables cached yet - you need to export at least 1 object to php');
+        //}
         $loaded = true;
     }
 }
