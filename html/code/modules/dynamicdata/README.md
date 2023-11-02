@@ -181,6 +181,12 @@ This will tell DD to use an `ExternalDatastore` instead of the regular relationa
 
 See **Dynamic Data > Utilities > DB Connections** > select or add a database to configure
 
+### Create DD objects for database tables
+
+Once you have defined a database configuration, you can also create DD objects for all/selected tables in that database.
+
+![Create DD Objects](xartemplates/images/dbconfig-create.png)
+
 ## Import PHP Definitions
 
 Xaraya has been using XML definition files for DD objects for years. Why suddenly support another way of defining DD objects using PHP files?
