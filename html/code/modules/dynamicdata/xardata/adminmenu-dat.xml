@@ -28,7 +28,7 @@
                 <includeitem>view_propertydefs</includeitem>
             </includes>
             <target>view_propertydefs</target>
-            <title>Configure the default data proerty types</title>
+            <title>Configure the default data property types</title>
             <label>Manage Property Types</label>
         </menuitem>
         <menuitem>
@@ -41,6 +41,8 @@
 				<includeitem>view_static</includeitem>
 				<includeitem>meta</includeitem>
 				<includeitem>relations</includeitem>
+				<includeitem>dbconfig</includeitem>
+				<includeitem>test_apis</includeitem>
             </includes>
             <target>utilities</target>
             <title>Import/export and other utilities</title>

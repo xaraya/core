@@ -102,27 +102,10 @@ function dynamicdata_admin_meta(array $args = [])
         ['db' => $db, 'table' => $table, 'dbConnIndex' => $data['dbConnIndex']]
     );
 
+    $data['result'] = '';
     if (!empty($create) && !empty($data['dbConnIndex'])) {
-        $objects = DataObjectMaster::getObjects();
-        $objectnames = [];
-        foreach ($objects as $objectinfo) {
-            $objectnames[] = $objectinfo['name'];
-        }
-        foreach ($create as $table => $check) {
-            if (!array_key_exists($table, $data['tables'])) {
-                continue;
-            }
-            //$config = ['dbConnIndex' => $data['dbConnIndex'], 'dbConnArgs' => json_encode([UtilApi::class, 'getDbConnArgs'])];
-            $config = ['dbConnArgs' => json_encode(['databaseConfig' => $db])];
-            $descriptor = new TableObjectDescriptor([
-                'name' => $table,
-                'label' => ucwords(str_replace('_', ' ', $table)),
-                'table' => $table,
-                'dbConnIndex' => $data['dbConnIndex'],
-                'config' => serialize($config),
-            ]);
-            var_dump($descriptor);
-        }
+        $data['result'] = UtilApi::importTables($create, $db, $data['dbConnIndex']);
+        $table = '';
     }
 
     if ($export == 'ddl') {

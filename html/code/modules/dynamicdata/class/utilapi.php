@@ -16,13 +16,18 @@ namespace Xaraya\DataObject;
 use Xaraya\Core\Traits\DatabaseInterface;
 use Xaraya\Core\Traits\DatabaseTrait;
 use Xaraya\Database\ExternalDatabase;
+use Xaraya\DataObject\Import\PhpImporter;
 use DataObjectMaster;
 use DataPropertyMaster;
+use TableObjectDescriptor;
 use BadParameterException;
+use Exception;
 use xarDB;
 use sys;
 
 sys::import('xaraya.traits.databasetrait');
+sys::import('modules.dynamicdata.class.objects.virtual');
+sys::import('modules.dynamicdata.class.import.generic');
 
 /**
  * Class to handle the dynamicdata util API
@@ -400,5 +405,77 @@ class UtilApi implements DatabaseInterface
             static::$propTypeIds[(string) $proptype['name']] = (int) $proptype['id'];
         }
         return static::$propTypeIds;
+    }
+
+    /**
+     * Summary of importTables
+     * @param array<string, mixed> $checklist assoc array of tablename => on checkboxes
+     * @param string $dbConfigName pre-defined database configuration (module.dbname)
+     * @param mixed $dbConnIndex corresponding db connection index (relational or external)
+     * @return string
+     */
+    public static function importTables($checklist, $dbConfigName, $dbConnIndex = 0)
+    {
+        $result = '';
+        if (empty($checklist)) {
+            $result .= "No tables to import\n";
+            return $result;
+        }
+        // create db connection based on database configuration if needed
+        if (empty($dbConnIndex)) {
+            [$module, $dbname] = explode('.', $dbConfigName . '.');
+            $databases = static::getDatabases($module);
+            if (empty($databases[$dbname])) {
+                $result .= "Invalid database configuration $dbConfigName to import tables\n";
+                return $result;
+            }
+            $dbConnIndex = static::connectDatabase($dbname);
+            if (empty($dbConnIndex)) {
+                $result .= "Invalid db connection for database configuration $dbConfigName to import tables\n";
+                return $result;
+            }
+        }
+        // check existing tables and objects
+        $tables = static::getMeta('', null, $dbConnIndex);
+        $objects = DataObjectMaster::getObjects();
+        $objectnames = [];
+        foreach ($objects as $objectinfo) {
+            $objectnames[] = $objectinfo['name'];
+        }
+        foreach ($checklist as $table => $check) {
+            if (empty($check)) {
+                $result .= "Skipping table $table\n";
+                continue;
+            }
+            if (!array_key_exists($table, $tables)) {
+                $result .= "Unknown table $table\n";
+                continue;
+            }
+            // avoid conflicting object names
+            $name = $table;
+            $i = 1;
+            while (in_array($name, $objectnames)) {
+                $name = $table . '_' . $i;
+                $i++;
+            }
+            //$config = ['dbConnIndex' => $dbConnIndex, 'dbConnArgs' => json_encode([UtilApi::class, 'getDbConnArgs'])];
+            $config = ['dbConnArgs' => json_encode(['databaseConfig' => $dbConfigName])];
+            $descriptor = new TableObjectDescriptor([
+                'name' => $name,
+                'label' => ucwords(str_replace('_', ' ', $name)),
+                'table' => $table,
+                'dbConnIndex' => $dbConnIndex,
+                'config' => serialize($config),
+            ]);
+            //var_dump($descriptor);
+            try {
+                $objectid = PhpImporter::createObject($descriptor);
+                $result .= "Created DD object ($objectid) '$name' for table $table\n";
+            } catch (Exception $e) {
+                $result .= "Error creating DD object '$name' for table $table:\n";
+                $result .= $e->getMessage() . "\n";
+            }
+        }
+        return $result;
     }
 }

@@ -34,6 +34,12 @@
             </xar:if>
             <xar:if condition="empty($tables)">
             <xar:elseif condition="empty($table)"/>
+            <xar:if condition="!empty($result)">
+                <fieldset>
+                    <legend>Result</legend>
+                    <pre>#$result#</pre>
+                </fieldset>
+            </xar:if>
             <form method="post" id="import_tables" action="#xarController::URL('dynamicdata','admin','meta')#">
                 <table class="xar-table">
                     <tr>
@@ -97,7 +103,7 @@
                             <td>
                                 <input type="hidden" name="db" value="#$db#"/>
                                 <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
-                                <xar:var name="label">Create DD Object (todo)</xar:var>
+                                <xar:var name="label">Create DD Objects</xar:var>
                                 <xar:button type="submit" label="$label"/>
                             </td>
                             <td></td>
