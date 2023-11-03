@@ -7,6 +7,8 @@
  */
 require_once dirname(__DIR__, 3).'/vendor/autoload.php';
 
+use Xaraya\DataObject\DataStores\MongoDBDataStore;
+
 // initialize bootstrap
 sys::init();
 // initialize caching
@@ -31,6 +33,18 @@ function init_offline_cache()
     /**
     xarCoreCache::loadCached('Mod.Infos');
      */
+}
+
+function hooks_callback($info)
+{
+    echo "Hook Event: " . var_export($info, true) . "\n";
+}
+
+function hooks_register()
+{
+    xarHooks::registerCallback('ItemCreate', 'hooks_callback');
+    xarHooks::registerCallback('ItemUpdate', 'hooks_callback');
+    xarHooks::registerCallback('ItemDelete', 'hooks_callback');
 }
 
 function save_offline_cache()
@@ -83,7 +97,7 @@ function test_create_items()
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
     echo get_class($something->datastore) . "\n";
-    if ($something->datastore instanceof MongoDBDatastore) {
+    if ($something->datastore instanceof MongoDBDataStore) {
         $something->datastore->deleteAll('stuff');
         // working with or without pre-defined id
         $itemid = $something->createItem(['id' => null, 'key' => 'yes', 'val' => 'OK']);
@@ -137,6 +151,7 @@ function test_delete_item($lastid = 2)
 
 //init_online();
 init_offline_cache();
+hooks_register();
 $lastid = test_create_items();
 test_update_item($lastid);
 test_get_items();
