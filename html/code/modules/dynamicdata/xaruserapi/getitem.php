@@ -98,7 +98,7 @@ function &dynamicdata_userapi_getitem(array $args = [])
     if (empty($args['objectid'])) {
         return $nullreturn;
     }
-    $object = DataObjectMaster::getObject(['objectid'  => $args['objectid'],
+    $object = DataObjectFactory::getObject(['objectid'  => $args['objectid'],
                                        'itemid'    => $itemid,
                                        'fieldlist' => $fieldlist,
                                        'join'      => $join,

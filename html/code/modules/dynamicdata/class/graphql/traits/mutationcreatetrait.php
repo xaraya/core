@@ -93,7 +93,7 @@ trait xarGraphQLMutationCreateTrait
                 throw new Exception('Invalid user');
             }
             $params = ['name' => $object];
-            $objectitem = DataObjectMaster::getObject($params);
+            $objectitem = DataObjectFactory::getObject($params);
             if (!$objectitem->checkAccess('create', 0, $userId)) {
                 throw new Exception('Invalid user access');
             }

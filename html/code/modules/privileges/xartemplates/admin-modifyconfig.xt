@@ -231,7 +231,7 @@
                         This option is provided for Web Developer convenience. In general most Site Administrators should not need to access the Masks list provided below. Editing of the masks without an understanding of how they function can result in access problems to content on your site.
                     </p>
                     <xar:set name="where">'priv_type eq 3'</xar:set>
-                    <xar:set name="object">DataObjectMaster::getObjectList(array('name' => 'privileges_privileges', 'where' => $where))</xar:set>
+                    <xar:set name="object">DataObjectFactory::getObjectList(array('name' => 'privileges_privileges', 'where' => $where))</xar:set>
                     <xar:data-view object="$object"/>
                 </fieldset>
                 <input type="hidden" name="tab" id="tab" value="#$tab#"/>

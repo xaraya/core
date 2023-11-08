@@ -22,7 +22,7 @@ use xarMod;
 use xarResponse;
 use xarDB;
 use xarTpl;
-use DataObjectMaster;
+use DataObjectFactory;
 use sys;
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -85,7 +85,7 @@ class ViewHandler extends DefaultHandler
         $this->checkFieldList();
 
         if (!isset($this->object)) {
-            $this->object = DataObjectMaster::getObjectList($this->args);
+            $this->object = DataObjectFactory::getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }

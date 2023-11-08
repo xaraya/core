@@ -35,8 +35,8 @@ function themes_admin_themesinfo()
     $info = xarTheme::getInfo($themeid);
 
     // get the theme object corresponding to this theme
-    sys::import('modules.dynamicdata.class.objects.master');
-    $theme = DataObjectMaster::getObject(array('name'   => 'themes'));
+    sys::import('modules.dynamicdata.class.objects.factory');
+    $theme = DataObjectFactory::getObject(array('name'   => 'themes'));
     $id = $theme->getItem(array('itemid' => $info['systemid']));
     if (empty($theme)) return;
 

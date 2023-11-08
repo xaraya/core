@@ -41,7 +41,7 @@ class DataStoreLinks extends xarObject
      */
     public static function initLinks()
     {
-        $linklist = DataObjectMaster::getObjectList(['name' => 'dynamic_table_links']);
+        $linklist = DataObjectFactory::getObjectList(['name' => 'dynamic_table_links']);
         if (empty($linklist) || empty($linklist->objectid)) {
             $def_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_table_links-def.xml';
             $dat_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_table_links-dat.xml';
@@ -73,7 +73,7 @@ class DataStoreLinks extends xarObject
                     DataStoreLinks::addLink($info['source'], $info['from'], $info['target'], $info['to'], 'parents', 'fk');
                 }
             }
-            $linklist = DataObjectMaster::getObjectList(['name' => 'dynamic_table_links']);
+            $linklist = DataObjectFactory::getObjectList(['name' => 'dynamic_table_links']);
         }
         return $linklist;
     }
@@ -144,7 +144,7 @@ class DataStoreLinks extends xarObject
      */
     public static function addLink($from_table, $from_field, $to_table, $to_field, $link_type, $direction, $extra = '', $add_reverse = true)
     {
-        $linkobject = DataObjectMaster::getObject(['name' => 'dynamic_table_links']);
+        $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_table_links']);
         if (empty($linkobject) || empty($linkobject->objectid)) {
             return;
         }
@@ -205,7 +205,7 @@ class DataStoreLinks extends xarObject
      */
     public static function removeLink($link_id, $remove_reverse = true)
     {
-        $linkobject = DataObjectMaster::getObject(['name' => 'dynamic_table_links']);
+        $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_table_links']);
         if (empty($linkobject) || empty($linkobject->objectid)) {
             return;
         }

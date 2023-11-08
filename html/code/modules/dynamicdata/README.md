@@ -19,7 +19,7 @@ See **Dynamic Data > Utilities > Table Browser** > View any table
 Example:
 ```
 // use the standard DataObjectMaster methods with 'table' => ... args
-$objectlist = DataObjectMaster::getObjectList(['table' => 'xar_eventsystem']);
+$objectlist = DataObjectFactory::getObjectList(['table' => 'xar_eventsystem']);
 $items = $objectlist->getItems();
 
 // or create a virtual table object for some table in the Xaraya DB
@@ -29,7 +29,7 @@ $objectlist = new DataObjectList($descriptor);
 $items = $objectlist->getItems();
 ```
 
-This is now available anywhere that relies on `DataObjectMaster::getObject()` or `DataObjectMaster::getObjectList()`, whenever the `table` parameter is passed along without `objectid` or `name`.
+This is now available anywhere that relies on `DataObjectFactory::getObject()` or `DataObjectFactory::getObjectList()`, whenever the `table` parameter is passed along without `objectid` or `name`.
 
 *Note: existing API functions or BL tags may pre-process some of these already, e.g. by adding DB prefix in xar:data-view and dynamicdata_userapi_showview(), so this may not work everywhere in Xaraya as is. They were not adapted yet, as that might have side-effects for other modules or sites relying on them today.*
 

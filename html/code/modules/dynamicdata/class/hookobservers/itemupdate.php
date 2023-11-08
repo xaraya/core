@@ -15,7 +15,7 @@ namespace Xaraya\DataObject\HookObservers;
 
 use xarVar;
 use DataObjectDescriptor;
-use DataObjectMaster;
+use DataObjectFactory;
 use BadParameterException;
 use sys;
 
@@ -70,7 +70,7 @@ class ItemUpdate extends DataObjectHookObserver
 
         $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
                                            'itemtype'  => $itemtype]);
-        $myobject = DataObjectMaster::getObject(['name' => $descriptorargs['name'],
+        $myobject = DataObjectFactory::getObject(['name' => $descriptorargs['name'],
                                              'itemid'   => $itemid]);
 
         // If no object returned, bail and pass the extrainfo to the next hook

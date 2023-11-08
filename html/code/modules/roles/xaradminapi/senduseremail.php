@@ -78,8 +78,8 @@ function roles_adminapi_senduseremail(Array $args=array())
             // retrieve the dynamic properties (if any) for use in the e-mail too
 
             // get the DataObject defined for this module and item id
-            sys::import('modules.dynamicdata.class.objects.master');
-            $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
+            sys::import('modules.dynamicdata.class.objects.factory');
+            $object = DataObjectFactory::getObject(array('name' => 'roles_users'));
             if (isset($object) && !empty($object->objectid)) {
                 // retrieve the item itself
                 $itemid = $object->getItem(array('itemid' => $userid));

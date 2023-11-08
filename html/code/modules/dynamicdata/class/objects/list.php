@@ -198,7 +198,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $db_items = $this->getItems();
 
         // Replace the DB data with the data to be updated
-        $single_object = DataObjectMaster::getObject(['name' => $this->name]);
+        $single_object = DataObjectFactory::getObject(['name' => $this->name]);
         foreach ($db_items as $key => $db_item) {
             // Check if the data changed
             $unchanged = true;

@@ -33,7 +33,7 @@ function dynamicdata_userapi_getprop(array $args = [])
     if (empty($args['objectid']) && empty($args['name'])) {
         $args = DataObjectDescriptor::getObjectID($args);
     }
-    $args = DataObjectMaster::getObjectInfo($args);
+    $args = DataObjectFactory::getObjectInfo($args);
     if (empty($args)) {
         return [];
     }

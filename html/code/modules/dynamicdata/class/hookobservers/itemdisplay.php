@@ -15,7 +15,7 @@ namespace Xaraya\DataObject\HookObservers;
 
 use xarTpl;
 use DataObjectDescriptor;
-use DataObjectMaster;
+use DataObjectFactory;
 use sys;
 
 sys::import('modules.dynamicdata.class.hookobservers.generic');
@@ -43,7 +43,7 @@ class ItemDisplay extends DataObjectHookObserver
 
         $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
                                         'itemtype'  => $itemtype]);
-        $object = DataObjectMaster::getObject(['name' => $descriptorargs['name'],
+        $object = DataObjectFactory::getObject(['name' => $descriptorargs['name'],
                                         'itemid'   => $itemid]);
         if (!isset($object) || empty($object->objectid)) {
             return;

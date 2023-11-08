@@ -82,7 +82,7 @@ function roles_create_roles()
                     'valcode' => 'createdbysystem',
                     'authmodule' => (int)xarMod::getID('roles'),
     );
-    $group = DataObjectMaster::getObject(array('name' => 'roles_groups'));
+    $group = DataObjectFactory::getObject(array('name' => 'roles_groups'));
     $rolefields['role_type'] = xarRoles::ROLES_GROUPTYPE;
     xarModVars::set('roles', 'defaultgroup', 0);
     // The top level group Everybody
@@ -116,7 +116,7 @@ function roles_create_roles()
     $rolefields['parentid'] = $topid;
     $usergroup = $group->createItem($rolefields);
     xarModVars::set('roles', 'defaultgroup', $usergroup);
-    $user = DataObjectMaster::getObject(array('name' => 'roles_users'));
+    $user = DataObjectFactory::getObject(array('name' => 'roles_users'));
     $rolefields['role_type'] = xarRoles::ROLES_USERTYPE;
     // The Anonymous user
     $rolefields['name'] = 'Anonymous';

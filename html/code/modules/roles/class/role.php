@@ -568,7 +568,7 @@ class Role extends DataObject
         while ($result->next()) {
             list($id) = $result->fields;
 
-            $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
+            $role = DataObjectFactory::getObject(array('name' => 'roles_users'));
             $role->getItem(array('itemid' => $id));
             $users[] = $role;
         }
@@ -670,7 +670,7 @@ class Role extends DataObject
         while ($result->next()) {
             list($id) = $result->fields;
 
-            $role = DataObjectMaster::getObject(array('name' => 'roles_groups'));
+            $role = DataObjectFactory::getObject(array('name' => 'roles_groups'));
             $role->getItem(array('itemid' => $id));
             $parents[] = $role;
         }

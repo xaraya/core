@@ -69,11 +69,11 @@ class SubItemsProperty extends DataProperty
         $this->filepath   = 'modules/dynamicdata/xarproperties';
 
         $this->fieldprefix    = $this->_fieldprefix . $this->propertyprefix . $this->id;
-        sys::import('modules.dynamicdata.class.objects.master');
+        sys::import('modules.dynamicdata.class.objects.factory');
         // FIXME: properties should not be instantiated when being registered
         // In this case refreshing the property cache causes a failure which we have to catch
         try {
-            $this->subitemsobject = DataObjectMaster::getObject(['name' => $this->initialization_refobject]);
+            $this->subitemsobject = DataObjectFactory::getObject(['name' => $this->initialization_refobject]);
         } catch (Exception $e) {
         }
     }
@@ -326,7 +326,7 @@ class SubItemsProperty extends DataProperty
         if (is_array($this->defaultvalue)) {
             $data['items'] = $data['items'] + $this->defaultvalue;
         }
-        $data['object'] = DataObjectMaster::getObjectList(['name' => $this->subitemsobject->name]);
+        $data['object'] = DataObjectFactory::getObjectList(['name' => $this->subitemsobject->name]);
         $data['object']->items = & $data['items'];
 
         // Fallback to the module that is using this property

@@ -236,3 +236,8 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
         }
     }
 }
+
+class VirtualObjectFactory extends DataObjectFactory
+{
+
+}

@@ -607,7 +607,7 @@ class CategoriesProperty extends DataProperty
        
         // Align the display status of this property with that of the name property in he categories object
         // In other words, we can make this field be displayed or not depending on the display status we give it in the DD UI
-        $categories_object = DataObjectMaster::getObject(array('name' => 'categories'));
+        $categories_object = DataObjectFactory::getObject(array('name' => 'categories'));
         $display_status = $categories_object->properties['name']->getDisplayStatus();
         $this->setDisplayStatus($display_status);
         $this->objectref->setFieldList();

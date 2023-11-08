@@ -12,14 +12,14 @@
  * @link http://xaraya.info/index.php/release/70.html
  */
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 function themes_admin_view_configs()
 {
     // Security
     if(!xarSecurity::check('EditThemes')) return;
 
-    $data['object'] = DataObjectMaster::getObjectList(array('name' => 'themes_configurations'));
+    $data['object'] = DataObjectFactory::getObjectList(array('name' => 'themes_configurations'));
 
     if (!isset($data['object'])) {return;}
     if (!$data['object']->checkAccess('view'))

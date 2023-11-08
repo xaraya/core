@@ -522,7 +522,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // CHECKME: flush the variable cache if necessary
         if ($this->objectid == 1) {
-            DataObjectMaster::flushVariableCache(['objectid' => $this->itemid]);
+            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid]);
         }
 
         // call update hooks for this item - for stand-alone DD objects and virtual DD objects for now
@@ -593,7 +593,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         // CHECKME: flush the variable cache if necessary
         if ($this->objectid == 1) {
-            DataObjectMaster::flushVariableCache(['objectid' => $this->itemid]);
+            DataObjectFactory::flushVariableCache(['objectid' => $this->itemid]);
         }
 
         // call delete hooks for this item - for stand-alone DD objects and virtual DD objects for now

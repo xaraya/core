@@ -304,8 +304,8 @@ class CategoryWorker extends xarObject
         extract($args);
         if (isset($object)) {
             // We are getting the base categories of an object
-            sys::import('modules.dynamicdata.class.objects.master');
-            $object = DataObjectMaster::getObject(array('name' => $object));
+            sys::import('modules.dynamicdata.class.objects.factory');
+            $object = DataObjectFactory::getObject(array('name' => $object));
 
             if (!isset($property) && isset($object->properties['categories'])) {
                 $property = $object->properties['categories'];

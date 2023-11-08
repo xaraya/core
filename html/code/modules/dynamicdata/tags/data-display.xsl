@@ -36,10 +36,10 @@
             </xsl:when>
             <xsl:otherwise>
               <!-- This a string. we assume it's an object name -->
-              <xsl:text>sys::import('modules.dynamicdata.class.objects.master');</xsl:text>
+              <xsl:text>sys::import('modules.dynamicdata.class.objects.factory');</xsl:text>
               <xsl:text>$__</xsl:text>
               <xsl:value-of select="@object"/>
-              <xsl:text>=DataObjectMaster::getObject(array('name'=>'</xsl:text>
+              <xsl:text>=DataObjectFactory::getObject(array('name'=>'</xsl:text>
               <xsl:value-of select="@object"/>
               <xsl:text>'));</xsl:text>
               <xsl:text>echo </xsl:text>

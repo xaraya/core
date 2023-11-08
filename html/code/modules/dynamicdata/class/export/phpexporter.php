@@ -16,7 +16,7 @@ namespace Xaraya\DataObject\Export;
 use DataObject;
 use DataObjectDescriptor;
 use DataObjectList;
-use DataObjectMaster;
+use DataObjectFactory;
 use BadParameterException;
 use Throwable;
 use xarCoreCache;
@@ -59,7 +59,7 @@ class PhpExporter extends JsonExporter
     public function getObjectDef()
     {
         // we grab the actual object here
-        $myobject = DataObjectMaster::getObject([
+        $myobject = DataObjectFactory::getObject([
             'objectid' => $this->objectid,
             'allprops' => true,
         ]);

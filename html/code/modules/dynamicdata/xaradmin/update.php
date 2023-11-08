@@ -67,7 +67,7 @@ function dynamicdata_admin_update(array $args = [])
         return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
     }
 
-    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid]);
@@ -171,7 +171,7 @@ function dynamicdata_admin_update(array $args = [])
 
             // Check if this object already exists
             try {
-                $testobject = DataObjectMaster::getObject(['name' => $newname]);
+                $testobject = DataObjectFactory::getObject(['name' => $newname]);
             } catch (Exception $e) {
                 return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $newname]);
             }
@@ -182,7 +182,7 @@ function dynamicdata_admin_update(array $args = [])
             $myobject->properties['itemtype']->setValue($itemtype);
             $newitemid = $myobject->createItem(['itemid' => 0]);
 
-            $oldobject = DataObjectMaster::getObject(['objectid' => $itemid]);
+            $oldobject = DataObjectFactory::getObject(['objectid' => $itemid]);
             foreach ($oldobject->properties as $property) {
                 $fields['name'] = $property->name;
                 $fields['label'] = $property->label;

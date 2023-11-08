@@ -122,7 +122,7 @@ class ObjectRefProperty extends SelectProperty
         // The object we need to query is in $this->initialization_refobject, we display the value of
         // the property in $this->display_prop and the id comes from $this->store_prop
 
-        sys::import('modules.dynamicdata.class.objects.master');
+        sys::import('modules.dynamicdata.class.objects.factory');
         if ($this->initialization_refobject == 'objects') {
             // In this case need to go directly (rather than get a DD object) to avoid recursion
             if ($this->initialization_display_prop == 'id') {
@@ -152,9 +152,9 @@ class ObjectRefProperty extends SelectProperty
                                  'config'   => $config,
                                  'isalias'   => $isalias];
             }
-            $object = DataObjectMaster::getObject(['name' => 'objects']);
+            $object = DataObjectFactory::getObject(['name' => 'objects']);
         } else {
-            $object = DataObjectMaster::getObjectList(['name' => $this->initialization_refobject]);
+            $object = DataObjectFactory::getObjectList(['name' => $this->initialization_refobject]);
 
             $items =  $object->getItems(
                 [
@@ -162,7 +162,7 @@ class ObjectRefProperty extends SelectProperty
                                         'fieldlist' => [$this->initialization_display_prop,$this->initialization_store_prop],
                                         'fordisplay' => 1]
             );
-            $object = DataObjectMaster::getObject(['name' => $this->initialization_refobject]);
+            $object = DataObjectFactory::getObject(['name' => $this->initialization_refobject]);
         }
 
         // Make sure the display and store fields are valid properties of this object
@@ -234,7 +234,7 @@ class ObjectRefProperty extends SelectProperty
             $object = $this->objectref;
         } else {
             // Property table is different from the object table
-            $object = DataObjectMaster::getObject(['name' => $this->initialization_refobject]);
+            $object = DataObjectFactory::getObject(['name' => $this->initialization_refobject]);
         }
 
         // We only support relational storage

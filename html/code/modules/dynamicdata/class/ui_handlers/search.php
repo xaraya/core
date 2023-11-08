@@ -21,7 +21,7 @@ use xarMLS;
 use xarMod;
 use xarResponse;
 use xarTpl;
-use DataObjectMaster;
+use DataObjectFactory;
 use DataPropertyMaster;
 use sys;
 
@@ -137,7 +137,7 @@ class SearchHandler extends DefaultHandler
         }
 
         if (!isset($this->object)) {
-            $this->object = DataObjectMaster::getObject($this->args);
+            $this->object = DataObjectFactory::getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
@@ -184,7 +184,7 @@ class SearchHandler extends DefaultHandler
             $result = null;
         } else {
             // get result list
-            $result = DataObjectMaster::getObjectList($this->args);
+            $result = DataObjectFactory::getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
@@ -274,7 +274,7 @@ class SearchHandler extends DefaultHandler
         }
 
         if (!isset($this->object)) {
-            $this->object = DataObjectMaster::getObject($this->args);
+            $this->object = DataObjectFactory::getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
@@ -334,7 +334,7 @@ class SearchHandler extends DefaultHandler
             $result = null;
         } else {
             // get result list
-            $result = DataObjectMaster::getObjectList($this->args);
+            $result = DataObjectFactory::getObjectList($this->args);
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }

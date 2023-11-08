@@ -23,12 +23,12 @@ function base_adminapi_getusersettings(Array $args=array())
         throw new Exception(xarML('The getusersettings function requires a module parameter'));
     if (!isset($args['itemid'])) // itemid = 0, module vars :)
         throw new Exception(xarML('The getusersettings function requires an itemid parameter'));
-    sys::import('modules.dynamicdata.class.objects.master');
+    sys::import('modules.dynamicdata.class.objects.factory');
     // look for module specific user settings object
-    $object = DataObjectMaster::getObject(array('name' => $args['module'] . '_user_settings'));
+    $object = DataObjectFactory::getObject(array('name' => $args['module'] . '_user_settings'));
     // fall back to base module user settings?
     if (!isset($object)) {
-        $object = DataObjectMaster::getObject(array('name' => 'user_settings'));
+        $object = DataObjectFactory::getObject(array('name' => 'user_settings'));
     }
     // shouldn't be necessary here, props should have the correct modvar datastore
     // but since props are easily added set it anyway, just to be sure...

@@ -62,7 +62,7 @@ function dynamicdata_userapi_getfield(array $args = [])
     if (empty($args['objectid'])) {
         return;
     }
-    $object = DataObjectMaster::getObject(['objectid'  => $args['objectid'],
+    $object = DataObjectFactory::getObject(['objectid'  => $args['objectid'],
                                        'itemid'    => $itemid,
                                        'fieldlist' => [$name]]);
     if (!isset($object) || empty($object->objectid)) {

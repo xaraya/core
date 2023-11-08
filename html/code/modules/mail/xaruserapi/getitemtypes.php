@@ -15,7 +15,7 @@
  * Utility function to retrieve the list of itemtypes of this module (if any).
  * @return array<mixed> the itemtypes of this module and their description *
  */
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 function mail_userapi_getitemtypes(Array $args=array())
 {
     $itemtypes = array();
@@ -34,7 +34,7 @@ function mail_userapi_getitemtypes(Array $args=array())
         return $itemtypes;
         //throw new Exception('Mail queue definition does not exist');
     }
-    $qdefObjectInfo = DataObjectMaster::getObjectInfo(array('name' => $qdefName));
+    $qdefObjectInfo = DataObjectFactory::getObjectInfo(array('name' => $qdefName));
     if(!$qdefObjectInfo)
         return $itemtypes;
 

@@ -47,7 +47,7 @@ function dynamicdata_admin_access(array $args = [])
 
     $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
 
-    $object = DataObjectMaster::getObject([
+    $object = DataObjectFactory::getObject([
                                          'name' => $name,
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule]);
@@ -61,7 +61,7 @@ function dynamicdata_admin_access(array $args = [])
     xarTpl::setPageTitle(xarML('Manage Access Rules for #(1)', $data['label']));
 
     // check security of the parent object ... or DD Admin as fail-safe here
-    $tmpobject = DataObjectMaster::getObject(['objectid' => $object->itemid]);
+    $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid]);
 
     // Security
     if (!$tmpobject->checkAccess('config') && !xarSecurity::check('AdminDynamicData', 0)) {

@@ -56,7 +56,7 @@ function dynamicdata_admin_delete(array $args = [])
         return;
     }
 
-    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'name'       => $name,
                                          'join'       => $join,
                                          'table'      => $table,
@@ -112,7 +112,7 @@ function dynamicdata_admin_delete(array $args = [])
         // handle special cases
         if ($myobject->objectid == 1) {
             // check security of the parent object
-            $tmpobject = DataObjectMaster::getObject(['objectid' => $myobject->itemid]);
+            $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->itemid]);
             if (!$tmpobject->checkAccess('config')) {
                 return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
             }
@@ -128,7 +128,7 @@ function dynamicdata_admin_delete(array $args = [])
 
         } elseif ($myobject->objectid == 2) {
             // check security of the parent object
-            $tmpobject = DataObjectMaster::getObject(['objectid' => $myobject->properties['objectid']->value]);
+            $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->properties['objectid']->value]);
             if (!$tmpobject->checkAccess('config')) {
                 return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
             }
@@ -139,7 +139,7 @@ function dynamicdata_admin_delete(array $args = [])
         $data = array_merge($data, xarMod::apiFunc('dynamicdata', 'admin', 'menu'));
         $data['object'] = $myobject;
         if ($data['objectid'] == 1) {
-            $mylist = DataObjectMaster::getObjectList(['objectid' => $data['itemid']]);
+            $mylist = DataObjectFactory::getObjectList(['objectid' => $data['itemid']]);
             if (count($mylist->properties) > 0) {
                 $data['related'] = xarML('Warning : there are #(1) properties and #(2) items associated with this object !', count($mylist->properties), $mylist->countItems());
             }
@@ -165,7 +165,7 @@ function dynamicdata_admin_delete(array $args = [])
     // special case for a dynamic object : delete its properties too // TODO: and items
     // TODO: extend to any parent-child relation ?
     if ($data['objectid'] == 1) {
-        $mylist = DataObjectMaster::getObjectList(['objectid' => $data['itemid']]);
+        $mylist = DataObjectFactory::getObjectList(['objectid' => $data['itemid']]);
         foreach (array_keys($mylist->properties) as $name) {
             $propid = $mylist->properties[$name]->id;
             $propid = DataPropertyMaster::deleteProperty(['itemid' => $propid]);

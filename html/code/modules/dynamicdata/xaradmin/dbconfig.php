@@ -144,7 +144,7 @@ function dynamicdata_admin_dbconfig(array $args = [])
         $data['dbconfigs'][$item['name']]['databases'] = $databases;
     }
     // find any objects with config containing dbConnIndex and/or dbConnArgs
-    $objectlist = DataObjectMaster::getObjectList(['name' => 'objects', 'fieldlist' => ['name', 'label', 'module_id', 'datastore', 'config']]);
+    $objectlist = DataObjectFactory::getObjectList(['name' => 'objects', 'fieldlist' => ['name', 'label', 'module_id', 'datastore', 'config']]);
     $all_objects = $objectlist->getItems();
     foreach ($all_objects as $item) {
         if (empty($item['config'])) {

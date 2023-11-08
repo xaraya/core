@@ -137,7 +137,7 @@ function dynamicdata_admin_privileges(array $args = [])
     }
 
     // Get objects
-    $objects = DataObjectMaster::getObjects();
+    $objects = DataObjectFactory::getObjects();
 
     // TODO: use object list instead of (or in addition to) module + itemtype
 

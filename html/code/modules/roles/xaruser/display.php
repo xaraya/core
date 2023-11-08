@@ -52,8 +52,8 @@ function roles_user_display(Array $args=array())
         $data['name'] = $name;
         //get the data for a user
         if ($data['itemtype'] == xarRoles::ROLES_USERTYPE) {
-            sys::import('modules.dynamicdata.class.objects.master');
-            $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
+            sys::import('modules.dynamicdata.class.objects.factory');
+            $object = DataObjectFactory::getObject(array('name' => 'roles_users'));
             $object->tplmodule = $args['tplmodule'];   // roles/xartemplates/objects/
             $object->template = $args['template'];  // showdisplay-account.xt
             $object->layout = $args['layout'];

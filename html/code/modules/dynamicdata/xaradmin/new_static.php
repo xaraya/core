@@ -13,7 +13,7 @@
 /**
  * @return mixed data array for the template display or output display string if invalid data submitted
  */
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 function dynamicdata_admin_new_static()
 {
@@ -30,7 +30,7 @@ function dynamicdata_admin_new_static()
         return;
     }
 
-    $data['object'] = DataObjectMaster::getObject(['name' => 'dynamicdata_tablefields']);
+    $data['object'] = DataObjectFactory::getObject(['name' => 'dynamicdata_tablefields']);
     $data['authid'] = xarSec::genAuthKey();
 
     if ($data['confirm']) {

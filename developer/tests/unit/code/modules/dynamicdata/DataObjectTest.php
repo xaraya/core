@@ -18,7 +18,7 @@ final class DataObjectTest extends TestCase
     public function testGetObjectList(): void
     {
         $params = ['name' => 'objects', 'fieldlist' => null];
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $objectlist = DataObjectFactory::getObjectList($params);
         $expected = 'Dynamic Objects';
         $this->assertEquals($expected, $objectlist->label);
 
@@ -32,7 +32,7 @@ final class DataObjectTest extends TestCase
     public function testGetObject(): void
     {
         $params = ['name' => 'objects', 'itemid' => 2, 'fieldlist' => null];
-        $object = DataObjectMaster::getObject($params);
+        $object = DataObjectFactory::getObject($params);
         $expected = 'Dynamic Objects';
         $this->assertEquals($expected, $object->label);
 
@@ -46,7 +46,7 @@ final class DataObjectTest extends TestCase
     public function testGetSampleList(): void
     {
         $params = ['name' => 'sample', 'fieldlist' => null];
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $objectlist = DataObjectFactory::getObjectList($params);
         $expected = 'Sample Object';
         $this->assertEquals($expected, $objectlist->label);
 
@@ -60,7 +60,7 @@ final class DataObjectTest extends TestCase
     public function testGetSample(): void
     {
         $params = ['name' => 'sample', 'itemid' => 2, 'fieldlist' => null];
-        $object = DataObjectMaster::getObject($params);
+        $object = DataObjectFactory::getObject($params);
         $expected = 'Sample Object';
         $this->assertEquals($expected, $object->label);
 
@@ -94,7 +94,7 @@ final class DataObjectTest extends TestCase
     public function testShowView(): void
     {
         $params = ['name' => 'sample', 'fieldlist' => null];
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $objectlist = DataObjectFactory::getObjectList($params);
         $expected = 'Sample Object';
         $this->assertEquals($expected, $objectlist->label);
 
@@ -111,7 +111,7 @@ final class DataObjectTest extends TestCase
     public function testObjectInterface(): void
     {
         $params = ['object' => 'sample'];
-        $interface = DataObjectMaster::getObjectInterface($params);
+        $interface = DataObjectFactory::getObjectInterface($params);
         $expected = 'sample';
         $this->assertEquals($expected, $interface->args['object']);
 

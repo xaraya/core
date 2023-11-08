@@ -21,7 +21,7 @@ use xarController;
 use xarResponse;
 use xarSec;
 use xarTpl;
-use DataObjectMaster;
+use DataObjectFactory;
 use sys;
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
@@ -74,7 +74,7 @@ class UpdateHandler extends DefaultHandler
         }
 
         if (!isset($this->object)) {
-            $this->object = DataObjectMaster::getObject($this->args);
+            $this->object = DataObjectFactory::getObject($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }

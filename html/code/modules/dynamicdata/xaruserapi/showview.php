@@ -108,7 +108,7 @@ function dynamicdata_userapi_showview(array $args = [])
         $catid = '';
     }
 
-    $object = DataObjectMaster::getObjectList(['objectid'  => $args ['objectid'],
+    $object = DataObjectFactory::getObjectList(['objectid'  => $args ['objectid'],
                                            'itemids' => $itemids,
                                            'sort' => $sort,
                                            'numitems' => $numitems,

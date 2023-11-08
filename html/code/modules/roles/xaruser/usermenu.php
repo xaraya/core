@@ -46,9 +46,9 @@ function roles_user_usermenu(Array $args=array())
 
         case 'updatebasic':
 
-            sys::import('modules.dynamicdata.class.objects.master');
+            sys::import('modules.dynamicdata.class.objects.factory');
 
-            $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
+            $object = DataObjectFactory::getObject(array('name' => 'roles_users'));
             $object->getItem(array('itemid' => $id));
 
             $oldpass = $object->properties['password']->value;

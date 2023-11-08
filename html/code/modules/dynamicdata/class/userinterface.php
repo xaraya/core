@@ -96,7 +96,7 @@ class DataObjectUserInterface extends xarObject
      *     $args['linktype'] main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
      *     $args['linkfunc'] main function handling all object method calls (= if we're not using object URLs)
      *     $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
-     *     $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
+     *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList() later on
      */
     public function __construct(array $args = [])
     {
@@ -213,7 +213,7 @@ class DataObjectUserInterface extends xarObject
      * with
      *     $args['method'] the ui method we are handling here
      *     $args['itemid'] item id of the object to call the method for, if the method needs it
-     *     $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
+     *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList() later on
      * @return string|void output of the handler->run() method
      */
     public function handle(array $args = [])

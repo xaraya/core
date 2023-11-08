@@ -9,7 +9,7 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 /**
  * Class to build DataObject REST API
 **/
@@ -513,7 +513,7 @@ class DataObjectRESTBuilder extends xarObject
         $objectname = 'objects';
         $fieldlist = ['objectid', 'name', 'label', 'module_id', 'itemtype', 'datastore'];
         $params = ['name' => $objectname, 'fieldlist' => $fieldlist];
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $objectlist = DataObjectFactory::getObjectList($params);
         $items = $objectlist->getItems();
         foreach (array_keys($items) as $itemid) {
             $item = $items[$itemid];
@@ -612,7 +612,7 @@ class DataObjectRESTBuilder extends xarObject
     {
         $properties = [];
         $params = ['name' => $objectname];
-        $objectref = DataObjectMaster::getObject($params);
+        $objectref = DataObjectFactory::getObject($params);
         $prop_display = [];
         $prop_view = [];
         $prop_create = [];

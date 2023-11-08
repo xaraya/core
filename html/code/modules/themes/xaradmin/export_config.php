@@ -13,7 +13,7 @@
  * @todo move the xml generate code to a template based system.
  */
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
     
 function themes_admin_export_config()
 {
@@ -21,7 +21,7 @@ function themes_admin_export_config()
     if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObjectList(array('name' => 'themes_configurations'));
+    $data['object'] = DataObjectFactory::getObjectList(array('name' => 'themes_configurations'));
 
     // Security
     if (empty($data['object']))

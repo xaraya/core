@@ -17,7 +17,7 @@ use Xaraya\Core\Traits\DatabaseInterface;
 use Xaraya\Core\Traits\DatabaseTrait;
 use Xaraya\Database\ExternalDatabase;
 use Xaraya\DataObject\Import\PhpImporter;
-use DataObjectMaster;
+use DataObjectFactory;
 use DataPropertyMaster;
 use TableObjectDescriptor;
 use BadParameterException;
@@ -42,7 +42,7 @@ class UtilApi implements DatabaseInterface
 
     public static function getObjectConfig($objectname, $item = null)
     {
-        $item ??= DataObjectMaster::getObjectInfo(['name' => $objectname]);
+        $item ??= DataObjectFactory::getObjectInfo(['name' => $objectname]);
         if (empty($item) || $item['name'] !== $objectname) {
             throw new BadParameterException($objectname, 'Invalid object name #(1)');
         }
@@ -437,7 +437,7 @@ class UtilApi implements DatabaseInterface
         }
         // check existing tables and objects
         $tables = static::getMeta('', null, $dbConnIndex);
-        $objects = DataObjectMaster::getObjects();
+        $objects = DataObjectFactory::getObjects();
         $objectnames = [];
         foreach ($objects as $objectinfo) {
             $objectnames[] = $objectinfo['name'];

@@ -72,7 +72,7 @@ function dynamicdata_admin_modify(array $args = [])
     if (empty($objectid) && empty($name)) {
         $objectid = 1;
     }
-    $object = DataObjectMaster::getObject(['objectid' => $objectid,
+    $object = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
@@ -109,7 +109,7 @@ function dynamicdata_admin_modify(array $args = [])
             // handle special cases
             if ($object->objectid == 1) {
                 // check security of the parent object
-                $tmpobject = DataObjectMaster::getObject(['objectid' => $object->itemid]);
+                $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid]);
                 if (empty($tmpobject)) {
                     return xarResponse::NotFound();
                 }
@@ -128,7 +128,7 @@ function dynamicdata_admin_modify(array $args = [])
 
             } elseif ($object->objectid == 2) {
                 // check security of the parent object
-                $tmpobject = DataObjectMaster::getObject(['objectid' => $object->properties['objectid']->value]);
+                $tmpobject = DataObjectFactory::getObject(['objectid' => $object->properties['objectid']->value]);
                 if (!$tmpobject->checkAccess('config')) {
                     return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
                 }

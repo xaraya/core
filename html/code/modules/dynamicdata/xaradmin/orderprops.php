@@ -59,7 +59,7 @@ function dynamicdata_admin_orderprops()
         //return xarTpl::module('privileges','user','errors',array('layout' => 'bad_author'));
     }
 
-    $objectinfo = DataObjectMaster::getObjectInfo(
+    $objectinfo = DataObjectFactory::getObjectInfo(
         [
                                     'objectid' => $objectid,
                                     ]

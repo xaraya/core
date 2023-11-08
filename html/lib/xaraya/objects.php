@@ -81,19 +81,19 @@ class xarDDObject extends xarObject implements IxarDDObject
         // Pass the object name to the object class
         $args['name'] = $objectName;
 
-        sys::import('modules.dynamicdata.class.objects.master');
+        sys::import('modules.dynamicdata.class.objects.factory');
 
         switch (strtolower($methodName))
         {
             case 'countitems':
-                $objectlist = DataObjectMaster::getObjectList($args);
+                $objectlist = DataObjectFactory::getObjectList($args);
                 if (!$objectlist->checkAccess('view', null, $roleid)) {
                     return;
                 }
                 return $objectlist->countItems($args);
 
             case 'getitems':
-                $objectlist = DataObjectMaster::getObjectList($args);
+                $objectlist = DataObjectFactory::getObjectList($args);
                 if (!$objectlist->checkAccess('view', null, $roleid)) {
                     return;
                 }
@@ -101,7 +101,7 @@ class xarDDObject extends xarObject implements IxarDDObject
 
             case 'showview':
             case 'getviewvalues':
-                $objectlist = DataObjectMaster::getObjectList($args);
+                $objectlist = DataObjectFactory::getObjectList($args);
                 if (!$objectlist->checkAccess('view', null, $roleid)) {
                     return;
                 }
@@ -111,7 +111,7 @@ class xarDDObject extends xarObject implements IxarDDObject
 
             // CHECKME: what do we want to return here ?
             case 'getitem':
-                $object = DataObjectMaster::getObject($args);
+                $object = DataObjectFactory::getObject($args);
                 if (!$object->checkAccess('display', $args['itemid'], $roleid)) {
                     return;
                 }
@@ -125,7 +125,7 @@ class xarDDObject extends xarObject implements IxarDDObject
             case 'getdisplayvalues':
             case 'showform':
             case 'showdisplay':
-                $object = DataObjectMaster::getObject($args);
+                $object = DataObjectFactory::getObject($args);
                 if (!$object->checkAccess('display', $args['itemid'], $roleid)) {
                     return;
                 }
@@ -139,7 +139,7 @@ class xarDDObject extends xarObject implements IxarDDObject
             case 'updateitem':
             case 'deleteitem':
             default:
-                $object = DataObjectMaster::getObject($args);
+                $object = DataObjectFactory::getObject($args);
                 if (!$object->checkAccess('delete', $args['itemid'], $roleid)) {
                     return;
                 }

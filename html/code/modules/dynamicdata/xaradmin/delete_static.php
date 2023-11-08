@@ -10,7 +10,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/182.html
  */
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 function dynamicdata_admin_delete_static()
 {
@@ -30,7 +30,7 @@ function dynamicdata_admin_delete_static()
         return;
     }
 
-    $data['object'] = DataObjectMaster::getObject(['name' => 'dynamicdata_tablefields']);
+    $data['object'] = DataObjectFactory::getObject(['name' => 'dynamicdata_tablefields']);
 
     $data['tplmodule'] = 'dynamicdata';
     $data['authid'] = xarSec::genAuthKey('dynamicdata');

@@ -33,8 +33,8 @@
           <xsl:text>;</xsl:text>
         </xsl:when>
         <xsl:when test="@objectname">
-         <xsl:text>sys::import('modules.dynamicdata.class.objects.master');</xsl:text>
-          <xsl:text>$__object=DataObjectMaster::getObjectList(array('name'=>'</xsl:text>
+         <xsl:text>sys::import('modules.dynamicdata.class.objects.factory');</xsl:text>
+          <xsl:text>$__object=DataObjectFactory::getObjectList(array('name'=>'</xsl:text>
           <xsl:value-of select="@objectname"/>
           <xsl:text>'));</xsl:text>
         </xsl:when>

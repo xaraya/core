@@ -21,7 +21,7 @@
         <xsl:text>));</xsl:text>
         <xsl:text>$object-&gt;getItem(</xsl:text>
         <xsl:call-template name="atts2args">
-          <xsl:with-param name="nodeset" selec="@*[name() != 'properties']"/>
+          <xsl:with-param name="nodeset" select="@*[name() != 'properties']"/>
         </xsl:call-template>
         <xsl:text>);</xsl:text>
         <!-- the name attribute holds a variable name, not good, but it is like that -->
@@ -50,10 +50,10 @@
           </xsl:when>
           <xsl:otherwise>
             <!-- This a string. we assume it's an object name -->
-            <xsl:text>sys::import('modules.dynamicdata.class.objects.master');</xsl:text>
+            <xsl:text>sys::import('modules.dynamicdata.class.objects.factory');</xsl:text>
             <xsl:text>$__</xsl:text>
             <xsl:value-of select="@objectname"/>
-            <xsl:text> = DataObjectMaster::getObject(array('name' => '</xsl:text>
+            <xsl:text> = DataObjectFactory::getObject(array('name' => '</xsl:text>
             <xsl:value-of select="@objectname"/>
             <xsl:text>'));</xsl:text>
             <xsl:text>$__</xsl:text>

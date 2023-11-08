@@ -154,7 +154,7 @@ function roles_admin_showusers()
                            '2' => xarML('Tabbed')
                            );
 
-    $object = DataObjectMaster::getObjectList(array('name' => 'roles_users'));
+    $object = DataObjectFactory::getObjectList(array('name' => 'roles_users'));
 
     // Load Template
     $data['id']        = $id;

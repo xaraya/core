@@ -11,7 +11,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
  */
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 function themes_admin_new_config()
 {
@@ -20,7 +20,7 @@ function themes_admin_new_config()
     $data = [];
     if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,     xarVar::NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
+    $data['object'] = DataObjectFactory::getObject(array('name' => 'themes_configurations'));
     if ($data['confirm']) {
     
         // we only retrieve 'preview' from the input here - the rest is handled by checkInput()

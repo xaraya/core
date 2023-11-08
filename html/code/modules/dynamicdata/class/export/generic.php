@@ -15,7 +15,7 @@ namespace Xaraya\DataObject\Export;
 
 use DataObject;
 use DataObjectList;
-use DataObjectMaster;
+use DataObjectFactory;
 use DataPropertyMaster;
 use DeferredItemProperty;
 use DeferredManyProperty;
@@ -139,7 +139,7 @@ class DataObjectExporter
      */
     public function getObjectDef()
     {
-        $myobject = DataObjectMaster::getObject(['name' => 'objects']);
+        $myobject = DataObjectFactory::getObject(['name' => 'objects']);
 
         $myobject->getItem(['itemid' => $this->objectid]);
 
@@ -157,7 +157,7 @@ class DataObjectExporter
      */
     public function getObjectList()
     {
-        $mylist = DataObjectMaster::getObjectList([
+        $mylist = DataObjectFactory::getObjectList([
             'objectid' => $this->objectid,
             'prelist'  => false,
         ]);     // don't run preList method
@@ -206,7 +206,7 @@ class DataObjectExporter
      */
     public function getObjectItem(int $itemid)
     {
-        $myobject = DataObjectMaster::getObject([
+        $myobject = DataObjectFactory::getObject([
             'objectid' => $this->objectid,
             'itemid'   => $itemid,
             'allprops' => true,

@@ -11,7 +11,7 @@ use sys;
 
 sys::import('modules.dynamicdata.class.userinterface');
 use DataObjectUserInterface;
-use DataObjectMaster;
+use DataObjectFactory;
 
 /**
  * For documentation purposes only - available via DataObjectBridgeTrait
@@ -156,13 +156,13 @@ trait DataObjectBridgeTrait
         // @checkme overriding $params['name'] here
         $params['name'] = $params['object'];
         unset($params['object']);
-        $info = DataObjectMaster::getObjectInfo($params);
+        $info = DataObjectFactory::getObjectInfo($params);
         if (empty($info) || empty($info['objectid'])) {
             $params = array_merge($params, $info ?? []);
             return $params;
         }
         if (!empty($params['itemid'])) {
-            $objectitem = DataObjectMaster::getObject($params);
+            $objectitem = DataObjectFactory::getObject($params);
             if (!empty($params['method']) && method_exists($objectitem, $params['method'])) {
                 return "Running method $params[method]() on object '$params[name]' is not advised here - please use REST API or GraphQL API instead";
             }
@@ -170,7 +170,7 @@ trait DataObjectBridgeTrait
             $item = $objectitem->getFieldValues();
             return $item;
         }
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $objectlist = DataObjectFactory::getObjectList($params);
         if (!empty($params['method']) && method_exists($objectlist, $params['method'])) {
             return "Running method $params[method]() on object '$params[name]' is not advised here - please use REST API or GraphQL API instead";
         }

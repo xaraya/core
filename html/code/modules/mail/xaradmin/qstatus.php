@@ -34,7 +34,7 @@ function mail_admin_qstatus(Array $args=array())
     foreach($queues as $index => $qInfo) {
         // Get some info on the Q
         $qName = 'q_'.$qInfo['name'];
-        $qStore = DataObjectMaster::getObjectInfo(array('name'=>$qName));
+        $qStore = DataObjectFactory::getObjectInfo(array('name'=>$qName));
         if(!isset($qStore)) {
             // Not there, we know enough
             $queues[$index]['status'] = 'problematic';

@@ -22,7 +22,7 @@ use xarModVars;
 use xarResponse;
 use xarTpl;
 use xarDDObject;
-use DataObjectMaster;
+use DataObjectFactory;
 use DataObjectList;
 use DataObject;
 use sys;
@@ -64,7 +64,7 @@ class DefaultHandler extends xarObject
      *     $args['linktype'] main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
      *     $args['linkfunc'] main function handling all object method calls (= if we're not using object URLs)
      *     $args['nextmethod'] default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
-     *     $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList() later on
+     *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList() later on
      */
     public function __construct(array $args = [])
     {
@@ -142,11 +142,11 @@ class DefaultHandler extends xarObject
             $args['object'] = $args['name'];
         }
 
-        sys::import('modules.dynamicdata.class.objects.master');
+        sys::import('modules.dynamicdata.class.objects.factory');
 
         // retrieve the object information for this object
         if (!empty($args['object'])) {
-            $info = DataObjectMaster::getObjectInfo(
+            $info = DataObjectFactory::getObjectInfo(
                 ['name' => $args['object']]
             );
             if (!empty($info)) {
@@ -171,7 +171,7 @@ class DefaultHandler extends xarObject
      * with
      *     $args['method'] the ui method we are handling here
      *     $args['itemid'] item id of the object to call the method for, if the method needs it
-     *     $args any other arguments we want to pass to DataObjectMaster::getObject() or ::getObjectList()
+     *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList()
      * @return string|void output of xarTpl::object() using 'ui_default'
      */
     public function run(array $args = [])
@@ -186,9 +186,9 @@ class DefaultHandler extends xarObject
 
         if (!isset($this->object)) {
             if (!empty($this->args['itemid'])) {
-                $this->object = DataObjectMaster::getObject($this->args);
+                $this->object = DataObjectFactory::getObject($this->args);
             } else {
-                $this->object = DataObjectMaster::getObjectList($this->args);
+                $this->object = DataObjectFactory::getObjectList($this->args);
             }
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));

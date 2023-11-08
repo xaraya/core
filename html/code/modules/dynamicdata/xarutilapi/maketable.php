@@ -59,7 +59,7 @@ function dynamicdata_utilapi_maketable(array $args = [])
             $itemid = null;
         }
 
-        $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+        $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                              'moduleid' => $module_id,
                                              'itemtype' => $itemtype,
                                              'itemid'   => $itemid,
@@ -174,7 +174,7 @@ function dynamicdata_utilapi_maketable(array $args = [])
     $dbconn->Execute($query);
 
     sys::import('xaraya.structures.query');
-    $objectlist = DataObjectMaster::getObjectList(['name' => $myobject->name]);
+    $objectlist = DataObjectFactory::getObjectList(['name' => $myobject->name]);
     $items = $objectlist->getItems();
     $q = new Query('INSERT', $table);
     foreach ($items as $row) {

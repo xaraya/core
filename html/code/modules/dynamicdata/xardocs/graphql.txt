@@ -35,7 +35,7 @@ gql.php
  |   |
  |   |- buildtype::make_type
  |   | |
- |   | |- get_object_fields - DataObjectMaster::getObject geProperties()
+ |   | |- get_object_fields - DataObjectFactory::getObject geProperties()
  |   | | |
  |   | | #- get_deferred_field
  |   | |
@@ -51,15 +51,15 @@ gql.php
  |   |   |   |
  |   |   |   |- _xar_get_page_query
  |   |   |   | |
- |   |   |   | #- _xar_page_query_resolver - DataObjectMaster::getObjectList
+ |   |   |   | #- _xar_page_query_resolver - DataObjectFactory::getObjectList
  |   |   |   |
  |   |   |   |- _xar_get_list_query
  |   |   |   | |
- |   |   |   | #- _xar_list_query_resolver - DataObjectMaster::getObjectList
+ |   |   |   | #- _xar_list_query_resolver - DataObjectFactory::getObjectList
  |   |   |   |
  |   |   |   #- _xar_get_item_query
  |   |   |     |
- |   |   |     #- _xar_item_query_resolver - DataObjectMaster::getObject
+ |   |   |     #- _xar_item_query_resolver - DataObjectFactory::getObject
  |   |   |
  |   |   #- buildtype::get_query_fields
  |   |     |
@@ -75,11 +75,11 @@ gql.php
  |   |     |
  |   |     |- get_list_query
  |   |     | |
- |   |     | #- list_query_resolver - DataObjectMaster::getObjectList getItems()
+ |   |     | #- list_query_resolver - DataObjectFactory::getObjectList getItems()
  |   |     |
  |   |     #- get_item_query
  |   |       |
- |   |       #- item_query_resolver - DataObjectMaster::getObject getItem()
+ |   |       #- item_query_resolver - DataObjectFactory::getObject getItem()
  |   |
  |   #- mutationtype::__construct
  |     |
@@ -99,17 +99,17 @@ gql.php
  |       |   | | |
  |       |   | | #- buildtype::make_input_type
  |       |   | |   |
- |       |   | |   #- get_object_fields - DataObjectMaster::getObject geProperties()
+ |       |   | |   #- get_object_fields - DataObjectFactory::getObject geProperties()
  |       |   | |
- |       |   | #- _xar_create_mutation_resolver - DataObjectMaster::getObject createItem()
+ |       |   | #- _xar_create_mutation_resolver - DataObjectFactory::getObject createItem()
  |       |   |
  |       |   |- _xar_get_update_mutation
  |       |   | |
- |       |   | #- _xar_update_mutation_resolver - DataObjectMaster::getObject updateItem()
+ |       |   | #- _xar_update_mutation_resolver - DataObjectFactory::getObject updateItem()
  |       |   |
  |       |   |- _xar_get_delete_mutation
  |       |     |
- |       |     #- _xar_delete_mutation_resolver - DataObjectMaster::getObject deleteItem()
+ |       |     #- _xar_delete_mutation_resolver - DataObjectFactory::getObject deleteItem()
  |       |
  |       #- buildtype::get_mutation_fields @todo
  |         |
@@ -121,9 +121,9 @@ gql.php
       |
       |- buildtype::object_query_resolver
       | |
-      | |- list_query_resolver - DataObjectMaster::getObjectList getItems()
+      | |- list_query_resolver - DataObjectFactory::getObjectList getItems()
       | |
-      | #- item_query_resolver - DataObjectMaster::getObject getItem()
+      | #- item_query_resolver - DataObjectFactory::getObject getItem()
       |
       #- buildtype::object_field_resolver
 

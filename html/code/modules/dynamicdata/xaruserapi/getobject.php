@@ -26,7 +26,7 @@ function dynamicdata_userapi_getobject(array $args = [])
         sys::import('modules.dynamicdata.class.objects.descriptor');
         $args = DataObjectDescriptor::getObjectID($args);
     }
-    sys::import('modules.dynamicdata.class.objects.master');
-    $object = DataObjectMaster::getObject($args);
+    sys::import('modules.dynamicdata.class.objects.factory');
+    $object = DataObjectFactory::getObject($args);
     return $object;
 }

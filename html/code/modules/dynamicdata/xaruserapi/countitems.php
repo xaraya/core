@@ -23,7 +23,7 @@ function dynamicdata_userapi_countitems(array $args = [])
     if (empty($args['objectid']) && empty($args['name'])) {
         $args = DataObjectDescriptor::getObjectID($args);
     }
-    $mylist = DataObjectMaster::getObjectList($args);
+    $mylist = DataObjectFactory::getObjectList($args);
     if (!isset($mylist)) {
         return;
     }

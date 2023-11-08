@@ -38,7 +38,7 @@ function dynamicdata_userapi_getitemlinks(array $args = [])
         return $itemlinks;
     }
     $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-    $object = DataObjectMaster::getObjectList(['objectid'  => $args['objectid'],
+    $object = DataObjectFactory::getObjectList(['objectid'  => $args['objectid'],
                                            'itemids' => $itemids,
                                            'status' => $status]);
     if (!isset($object) || (empty($object->objectid) && empty($object->table))) {

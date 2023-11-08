@@ -124,7 +124,7 @@ function &dynamicdata_userapi_getitems(array $args = [])
     if (empty($args['objectid'])) {
         return $emptyarray;
     }
-    $object = DataObjectMaster::getObjectList(['objectid'  => $args['objectid'],
+    $object = DataObjectFactory::getObjectList(['objectid'  => $args['objectid'],
                                            'itemids' => $itemids,
                                            'sort' => $sort,
                                            'numitems' => $numitems,

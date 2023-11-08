@@ -9,7 +9,7 @@
  *
  * @author mikespub <mikespub@xaraya.com>
  */
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.traits.timertrait');
 sys::import('xaraya.traits.cachetrait');
 sys::import('xaraya.bridge.requests.requesttrait');
@@ -230,7 +230,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $args = $args['query'] ?? [];
         $fieldlist = self::getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
-        $objectitem = DataObjectMaster::getObject($params);
+        $objectitem = DataObjectFactory::getObject($params);
         if (empty($objectitem)) {
             throw new Exception('Unknown item ' . $object);
         }
@@ -313,7 +313,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             unset($args['input']['id']);
         }
         $params = ['name' => $object];
-        $objectitem = DataObjectMaster::getObject($params);
+        $objectitem = DataObjectFactory::getObject($params);
         if (empty($objectitem) || !$objectitem->checkAccess('create', 0, $userId)) {
             throw new ForbiddenOperationException();
         }
@@ -354,7 +354,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             throw new Exception('Unknown id ' . $object);
         }
         $params = ['name' => $object, 'itemid' => $itemid];
-        $objectitem = DataObjectMaster::getObject($params);
+        $objectitem = DataObjectFactory::getObject($params);
         if (empty($objectitem) || !$objectitem->checkAccess('update', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
@@ -387,7 +387,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
         $userId = self::checkUser($args);
         $params = ['name' => $object, 'itemid' => $itemid];
-        $objectitem = DataObjectMaster::getObject($params);
+        $objectitem = DataObjectFactory::getObject($params);
         if (empty($objectitem) || !$objectitem->checkAccess('delete', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
@@ -469,7 +469,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         } else {
             $object = 'objects';
             $params = ['name' => $object, 'fieldlist' => $fieldlist];
-            $objectlist = DataObjectMaster::getObjectList($params);
+            $objectlist = DataObjectFactory::getObjectList($params);
             self::$objects = $objectlist->getItems();
             self::$config['objects'] = [];
             foreach (self::$objects as $itemid => $item) {

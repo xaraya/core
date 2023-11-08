@@ -84,7 +84,7 @@ function dynamicdata_user_search(array $args = [])
     if (empty($data['ishooked']) && !empty($data['gotobject'])) {
         // get the selected object
         $objects = [];
-        $object = DataObjectMaster::getObjectInfo(
+        $object = DataObjectFactory::getObjectInfo(
             ['moduleid' => $module_id,
                                       'itemtype' => $itemtype]
         );
@@ -94,7 +94,7 @@ function dynamicdata_user_search(array $args = [])
         }
     } else {
         // get items from the objects table
-        $objects = DataObjectMaster::getObjects();
+        $objects = DataObjectFactory::getObjects();
     }
 
     if (empty($data['ishooked'])) {

@@ -29,7 +29,7 @@
  *
  **/
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 class DataObjectLoader
 {
@@ -189,10 +189,10 @@ class DataObjectLoader
         xarLog::message("DataObjectLoader::getValues: get " . count($itemids) . " items from " . $this->objectname, xarLog::LEVEL_INFO);
         $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
         //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
-        $this->objectlist = DataObjectMaster::getObjectList($params);
+        $this->objectlist = DataObjectFactory::getObjectList($params);
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         $this->objectlist->setFieldList($this->fieldlist);
-        // see what DataObjectMaster found with setupFieldList()
+        // see what DataObjectList found with setupFieldList()
         if (empty($this->fieldlist)) {
             $this->fieldlist = $this->objectlist->getFieldList();
         }
@@ -229,14 +229,14 @@ class DataObjectLoader
             $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
             //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         }
-        $this->objectlist = DataObjectMaster::getObjectList($params);
+        $this->objectlist = DataObjectFactory::getObjectList($params);
         if (!empty($this->access) && !$this->objectlist->checkAccess($this->access)) {
             //http_response_code(403);
             throw new Exception('No access to object ' . $this->objectname);
         }
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         $this->objectlist->setFieldList($this->fieldlist);
-        // see what DataObjectMaster found with setupFieldList()
+        // see what DataObjectList found with setupFieldList()
         if (empty($this->fieldlist)) {
             $this->fieldlist = $this->objectlist->getFieldList();
         }
@@ -550,7 +550,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         $fieldlist = [$this->caller_id, $this->called_id];
         $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
-        $this->objectlist = DataObjectMaster::getObjectList($params);
+        $this->objectlist = DataObjectFactory::getObjectList($params);
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         // @todo make this query work for relational datastores: select where caller_id in $values
         //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
@@ -583,7 +583,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
             //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         }
-        $this->objectlist = DataObjectMaster::getObjectList($params);
+        $this->objectlist = DataObjectFactory::getObjectList($params);
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         return $this->objectlist;
     }
@@ -675,7 +675,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             throw new Exception('No saving links to complete child object ' . $this->linkname);
         }
         $params = ['name' => $this->linkname];
-        $objectlist = DataObjectMaster::getObjectList($params);
+        $objectlist = DataObjectFactory::getObjectList($params);
         $objectlist->addWhere($this->caller_id, '= ' . $itemid);
         if (is_object($objectlist->datastore) && $objectlist->datastore->getClassName() === 'RelationalDataStore') {
             $wherestring = $this->caller_id . ' = ' . $itemid;
@@ -697,7 +697,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         // xarLog::message("LinkObjectItemLoader::save: old links " . implode(', ', $oldlinks), xarLog::LEVEL_INFO);
         // xarLog::message("LinkObjectItemLoader::save: new values " . implode(', ', $newvalues), xarLog::LEVEL_INFO);
         // xarLog::message("LinkObjectItemLoader::save: del values " . implode(', ', $delvalues), xarLog::LEVEL_INFO);
-        $objectref = DataObjectMaster::getObject($params);
+        $objectref = DataObjectFactory::getObject($params);
         foreach ($delvalues as $called_id) {
             $objectref->deleteItem(['itemid' => $oldlinks[$called_id]]);
         }

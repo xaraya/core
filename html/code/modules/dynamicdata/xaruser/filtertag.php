@@ -46,7 +46,7 @@ function dynamicdata_user_filtertag(array $args = [])
         }
 
         // Get an instance of the dataobject so that we can get at the dataproperties' checkInput() method
-        $object = DataObjectMaster::getObject(['name' => $objectname]);
+        $object = DataObjectFactory::getObject(['name' => $objectname]);
 
         sys::import('xaraya.structures.query');
         $q = new Query();
@@ -105,7 +105,7 @@ function dynamicdata_user_filtertag(array $args = [])
         // Make sure we have a dataobject
         if (!isset($args['object'])) {
             if (isset($args['objectname'])) {
-                $args['object'] = DataObjectMaster::getObject(['name' => $args['objectname']]);
+                $args['object'] = DataObjectFactory::getObject(['name' => $args['objectname']]);
             } else {
                 throw new Exception('Missing $object for filter tag');
             }

@@ -267,7 +267,7 @@ class DataPropertyMaster extends xarObject
     }
     public static function createProperty(array $args = [])
     {
-        $object = DataObjectMaster::getObject(
+        $object = DataObjectFactory::getObject(
             [
                                             'name' => 'properties',
                                             'itemid'   => $args['itemid'],
@@ -290,7 +290,7 @@ class DataPropertyMaster extends xarObject
         }
 
         // TODO: delete all the (dynamic ?) data for this property as well
-        $object = DataObjectMaster::getObject(
+        $object = DataObjectFactory::getObject(
             [
                 'name'   => 'properties', // the Dynamic Properties = 2
                 'itemid' => $args['itemid'],

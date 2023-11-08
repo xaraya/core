@@ -302,10 +302,10 @@ class xarGraphQLBuildType implements xarGraphQLQueriesInterface, xarGraphQLMutat
         }
         xarGraphQL::setTimer('find object fieldspecs ' . $object);
         //$args = array('name' => $object, 'numitems' => 1);
-        //$objectlist = DataObjectMaster::getObjectList($args);
+        //$objectlist = DataObjectFactory::getObjectList($args);
         //print_r($objectlist->getItems());
         $params = ['name' => $object];
-        $objectref = DataObjectMaster::getObject($params);
+        $objectref = DataObjectFactory::getObject($params);
         if (!is_object($objectref)) {
             throw new Exception('Invalid object ' . $object);
         }

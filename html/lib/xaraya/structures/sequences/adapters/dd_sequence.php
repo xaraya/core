@@ -127,15 +127,15 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     /* Refresh the sequence data */
     private function getSequence()
     {
-        sys::import('modules.dynamicdata.class.objects.master');
-        $this->seqObject = DataObjectMaster::getObjectList($this->seqInfo);
+        sys::import('modules.dynamicdata.class.objects.factory');
+        $this->seqObject = DataObjectFactory::getObjectList($this->seqInfo);
         $objectData = $this->seqObject->getItems(array(
                                 'sort'      => 'nextid',
                                 'fieldlist' => array('id','nextid')
                             ));
         // Make sure we have them in the right order (logically), i.e. sort on nextid
         $this->items = array_reverse($objectData);
-        $this->seqObject = DataObjectMaster::getObject($this->seqInfo);
+        $this->seqObject = DataObjectFactory::getObject($this->seqInfo);
     }
 
     /* Update an item to have a new successor in the sequence */

@@ -29,7 +29,7 @@ class Dynamicdata_FormBlockDisplay extends Dynamicdata_FormBlock implements iBlo
         $data = $this->getContent();
 
         if (!empty($data['objectid'])) {
-            $object = DataObjectMaster::getObject($data);
+            $object = DataObjectFactory::getObject($data);
             if (!empty($object) && $object->checkAccess('create')) {
                 $data['object'] = $object;
                 return $data;

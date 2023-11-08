@@ -9,7 +9,7 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 /**
  * DataObjectLinks class
@@ -46,7 +46,7 @@ class DataObjectLinks extends xarObject
     {
         $linklist = null;
         try {
-            $linklist = DataObjectMaster::getObjectList(['name' => 'dynamic_object_links']);
+            $linklist = DataObjectFactory::getObjectList(['name' => 'dynamic_object_links']);
         } catch (Exception $e) {
             if (empty($linklist) || empty($linklist->objectid)) {
                 $def_file = sys::code() . 'modules/dynamicdata/xardata/dynamic_object_links-def.xml';
@@ -73,7 +73,7 @@ class DataObjectLinks extends xarObject
                         return;
                     }
                 }
-                $linklist = DataObjectMaster::getObjectList(['name' => 'dynamic_object_links']);
+                $linklist = DataObjectFactory::getObjectList(['name' => 'dynamic_object_links']);
             }
         }
         return $linklist;
@@ -184,7 +184,7 @@ class DataObjectLinks extends xarObject
 
         // create the link
         if (empty($link_id)) {
-            $linkobject = DataObjectMaster::getObject(['name' => 'dynamic_object_links']);
+            $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_object_links']);
             if (empty($linkobject) || empty($linkobject->objectid)) {
                 return;
             }
@@ -242,7 +242,7 @@ class DataObjectLinks extends xarObject
 
         // create the reverse link
         if (empty($linkobject)) {
-            $linkobject = DataObjectMaster::getObject(['name' => 'dynamic_object_links']);
+            $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_object_links']);
             if (empty($linkobject) || empty($linkobject->objectid)) {
                 return;
             }
@@ -257,7 +257,7 @@ class DataObjectLinks extends xarObject
      */
     public static function removeLink($link_id, $remove_reverse = true)
     {
-        $linkobject = DataObjectMaster::getObject(['name' => 'dynamic_object_links']);
+        $linkobject = DataObjectFactory::getObject(['name' => 'dynamic_object_links']);
         if (empty($linkobject) || empty($linkobject->objectid)) {
             return;
         }
@@ -309,7 +309,7 @@ class DataObjectLinks extends xarObject
         if (empty($object)) {
             return;
         } elseif (is_numeric($object)) {
-            $info = DataObjectMaster::getObjectInfo(['objectid' => $object]);
+            $info = DataObjectFactory::getObjectInfo(['objectid' => $object]);
             return $info['name'];
         } elseif (is_string($object)) {
             return $object;
@@ -350,7 +350,7 @@ class DataObjectLinks extends xarObject
             }
 
             // get an objectlist for the target
-            $linkedlist = DataObjectMaster::getObjectList(['name' => $link['target']]);
+            $linkedlist = DataObjectFactory::getObjectList(['name' => $link['target']]);
 
             // skip links to unknown objects or properties
             if (empty($linkedlist->objectid) || empty($linkedlist->properties[$link['to_prop']])) {
@@ -393,7 +393,7 @@ class DataObjectLinks extends xarObject
                                             $itemid = $linkedlist->itemids[0];
                                             $item = $linkedlist->items[$itemid];
                                             // get a single object for the target
-                                            $linkedlist = DataObjectMaster::getObject(array('name' => $link['target']));
+                                            $linkedlist = DataObjectFactory::getObject(array('name' => $link['target']));
                                             $linkedlist->itemid = $itemid;
                                             $linkedlist->setFieldValues($item);
                                         }
@@ -450,7 +450,7 @@ class DataObjectLinks extends xarObject
             }
 
             // get an objectlist for the target
-            $linkedlist = DataObjectMaster::getObjectList(['name' => $link['target']]);
+            $linkedlist = DataObjectFactory::getObjectList(['name' => $link['target']]);
             // skip links to unknown objects or properties
             if (empty($linkedlist->objectid) || empty($linkedlist->properties[$link['to_prop']])) {
                 continue;

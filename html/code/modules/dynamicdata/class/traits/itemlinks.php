@@ -14,13 +14,13 @@
 namespace Xaraya\DataObject\Traits;
 
 use DataObjectDescriptor;
-use DataObjectMaster;
+use DataObjectFactory;
 use DataPropertyMaster;
 use xarServer;
 use xarVar;
 use sys;
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 /**
  * For documentation purposes only - available via ItemLinksTrait
@@ -70,7 +70,7 @@ trait ItemLinksTrait
         if (!empty(static::$_itemlinkObjects)) {
             return static::$_itemlinkObjects;
         }
-        $objects = DataObjectMaster::getObjects();
+        $objects = DataObjectFactory::getObjects();
         static::$_itemlinkObjects = [];
         foreach ($objects as $objectid => $objectinfo) {
             /** @var array<string, mixed> $objectinfo */
@@ -132,7 +132,7 @@ trait ItemLinksTrait
             return $itemlinks;
         }
         $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
-        $object = DataObjectMaster::getObjectList(['objectid'  => $args['objectid'],
+        $object = DataObjectFactory::getObjectList(['objectid'  => $args['objectid'],
                                             'itemids' => $itemids,
                                             'status' => $status]);
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {

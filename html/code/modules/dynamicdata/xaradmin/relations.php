@@ -526,7 +526,7 @@ function dynamicdata_sync_relations()
         // sync object links with objectref properties
 
         // find all properties of type ObjectRef
-        $properties = DataObjectMaster::getObjectList(array('name'  => 'properties',
+        $properties = DataObjectFactory::getObjectList(array('name'  => 'properties',
                                                             'where' => 'type eq 507', // ObjectRefProperty
                                                             'fieldlist' => array('id','name','objectid')));
         $properties->getItems();
@@ -536,7 +536,7 @@ function dynamicdata_sync_relations()
         }
 
         foreach (array_keys($objectstocheck) as $objectid) {
-            $object = DataObjectMaster::getObject(array('objectid' => $objectid));
+            $object = DataObjectFactory::getObject(array('objectid' => $objectid));
             $links = DataObjectLinks::getLinks($object,'all');
             $source = $object->name;
             if (empty($links[$source])) {

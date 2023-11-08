@@ -40,8 +40,8 @@ function categories_admin_update()
     //Reverses the order of cids with the 'last children' option:
     //Look at bug #997
 
-    sys::import('modules.dynamicdata.class.objects.master');
-    $data['object'] = DataObjectMaster::getObject(array('name' => xarModVars::get('categories','categoriesobject')));
+    sys::import('modules.dynamicdata.class.objects.factory');
+    $data['object'] = DataObjectFactory::getObject(array('name' => xarModVars::get('categories','categoriesobject')));
     $isvalid = $data['object']->checkInput();
 
     if (!$isvalid) {

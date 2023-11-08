@@ -58,9 +58,9 @@ function dynamicdata_admin_modifyprop(array $args = [])
             'itemtype' => $itemtype,
         ]
     );
-    $objectinfo = DataObjectMaster::getObjectInfo($args);
+    $objectinfo = DataObjectFactory::getObjectInfo($args);
     $data['objectinfo'] = $objectinfo;
-    $object = DataObjectMaster::getObject($args);
+    $object = DataObjectFactory::getObject($args);
 
     if (!empty($objectinfo)) {
         $objectid = $objectinfo['objectid'];
@@ -68,7 +68,7 @@ function dynamicdata_admin_modifyprop(array $args = [])
         $itemtype = $objectinfo['itemtype'];
         $label =  $objectinfo['label'];
         // check security of the parent object
-        $tmpobject = DataObjectMaster::getObject($objectinfo);
+        $tmpobject = DataObjectFactory::getObject($objectinfo);
         if (!$tmpobject->checkAccess('config')) {
             return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
         }

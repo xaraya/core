@@ -29,6 +29,7 @@ sys::import('modules.dynamicdata.class.datastores');
     Over time this will probably change. For now i just made sure that everyone
     can still reach the same stuff as before.
 */
+sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('modules.dynamicdata.class.objects.master');
 sys::import('modules.dynamicdata.class.objects.list');
 sys::import('modules.dynamicdata.class.objects.base');

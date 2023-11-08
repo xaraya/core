@@ -47,7 +47,7 @@ function dynamicdata_adminapi_delete(array $args = [])
         $itemtype = 0;
     }
 
-    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'itemid'   => $itemid]);
     if (empty($myobject)) {
         return;

@@ -62,7 +62,7 @@ function dynamicdata_admin_create(array $args = [])
         return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
     }
 
-    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid]);

@@ -25,7 +25,7 @@ function dynamicdata_userapi_getitemfields(array $args = [])
     if (empty($args['objectid']) && empty($args['name'])) {
         $args = DataObjectDescriptor::getObjectID($args);
     }
-    $object = DataObjectMaster::getObject($args);
+    $object = DataObjectFactory::getObject($args);
     if (!is_object($object)) {
         return [];
     }

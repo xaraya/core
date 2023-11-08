@@ -39,7 +39,7 @@ function test_normal_baseline($itemid = null)
     $coll = new ArrayObject();
     for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
-        $sample = DataObjectMaster::getObject(['name' => 'sample']);
+        $sample = DataObjectFactory::getObject(['name' => 'sample']);
         if (!empty($itemid)) {
             $sample->getItem(['itemid' => $itemid]);
         }
@@ -53,7 +53,7 @@ function test_normal_baseline($itemid = null)
 
 function test_normal_unserialize($itemid = null)
 {
-    $sample = DataObjectMaster::getObject(['name' => 'sample']);
+    $sample = DataObjectFactory::getObject(['name' => 'sample']);
     $serialized = serialize($sample);
     $coll = new ArrayObject();
     for ($i = 0; $i < TEST_COUNT; $i++) {

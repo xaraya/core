@@ -19,11 +19,11 @@ function modules_adminapi_standardinstall(Array $args=array())
 
     if (isset($objects)) {
         // FIXME: Data loss risk!!
-        sys::import('modules.dynamicdata.class.objects.master');
-        $existing_objects  = DataObjectMaster::getObjects();
+        sys::import('modules.dynamicdata.class.objects.factory');
+        $existing_objects  = DataObjectFactory::getObjects();
         foreach($existing_objects as $objectid => $objectinfo) {
             if(in_array($objectinfo['name'], $objects)) {
-                if(!DataObjectMaster::deleteObject(array('objectid' => $objectid))) return;
+                if(!DataObjectFactory::deleteObject(array('objectid' => $objectid))) return;
             }
         }
         $dd_objects = array();

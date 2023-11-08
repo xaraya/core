@@ -61,8 +61,8 @@ function installer_admin_upgrade()
     if ($data['phase'] != 1) {
         // Get the password of the designated site administrator
         $adminid = xarModVars::get('roles','admin');
-        sys::import('modules.dynamicdata.class.objects.master');
-        $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
+        sys::import('modules.dynamicdata.class.objects.factory');
+        $role = DataObjectFactory::getObject(array('name' => 'roles_users'));
         $role->getItem(array('itemid' => $adminid));
         $adminpass = $role->properties['password']->value;
         $role->properties['password']->value = '';

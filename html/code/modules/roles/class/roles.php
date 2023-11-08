@@ -211,13 +211,13 @@ class xarRoles extends xarObject
         // create the parent object
         list($id, $name, $itemtype, $parentid, $uname, $email, $pass,
             $date_reg, $val_code, $state, $auth_module) = $result->fields;
-        sys::import('modules.dynamicdata.class.objects.master');
+        sys::import('modules.dynamicdata.class.objects.factory');
         switch ($itemtype) {
             case 1: $name = "roles_users"; break;
             case 2: $name = "roles_groups"; break;
         }
         /** @var Role $parent */
-        $parent = DataObjectMaster::getObject(array('name' => $name));
+        $parent = DataObjectFactory::getObject(array('name' => $name));
         $parent->getItem(array('itemid' => $id));
 
         // retrieve the child's data from the repository
@@ -234,7 +234,7 @@ class xarRoles extends xarObject
             case 2: $name = "roles_groups"; break;
         }
         /** @var Role $child */
-        $child = DataObjectMaster::getObject(array('name' => $name));
+        $child = DataObjectFactory::getObject(array('name' => $name));
         $child->getItem(array('itemid' => $id));
 
        // done
@@ -350,8 +350,8 @@ class xarRoles extends xarObject
         if(xarVar::isCached($cacheKey,$row['id'])) {
             return xarVar::getCached($cacheKey,$row['id']);
         }
-        sys::import('modules.dynamicdata.class.objects.master');
-        $role = DataObjectMaster::getObject(array('name' => $name));
+        sys::import('modules.dynamicdata.class.objects.factory');
+        $role = DataObjectFactory::getObject(array('name' => $name));
         $role->getItem(array('itemid' => $row['id']));
         xarVar::setCached($cacheKey,$row['id'],$role);
         return $role;

@@ -11,7 +11,7 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://xaraya.info/index.php/release/70.html
  */
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 function themes_admin_delete_config()
 {
@@ -19,7 +19,7 @@ function themes_admin_delete_config()
     if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('confirm',    'int',   $data['confirm'], 0,       xarVar::NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
+    $data['object'] = DataObjectFactory::getObject(array('name' => 'themes_configurations'));
     $data['object']->getItem(array('itemid' => $data['itemid']));
     
     // Security

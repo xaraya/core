@@ -12,7 +12,7 @@
  * @link http://xaraya.info/index.php/release/70.html
  */
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 function themes_admin_view_csslibs()
 {
@@ -22,7 +22,7 @@ function themes_admin_view_csslibs()
      $data = [];
      if (!xarVar::fetch('tab',   'str:1:100', $data['tab'], 'remote', xarVar::NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_csslibraries'));
+    $data['object'] = DataObjectFactory::getObject(array('name' => 'themes_csslibraries'));
 
     if (!isset($data['object'])) {return;}
     if (!$data['object']->checkAccess('view'))

@@ -52,7 +52,7 @@ function dynamicdata_userapi_encode_shorturl(array $args = [])
     }
 
     if (count($objectcache) == 0) {
-        $objects = DataObjectMaster::getObjects();
+        $objects = DataObjectFactory::getObjects();
         foreach ($objects as $object) {
             $objectcache[$object['moduleid'].':'.$object['itemtype']] = $object['name'];
         }

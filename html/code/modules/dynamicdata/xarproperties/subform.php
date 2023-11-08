@@ -134,7 +134,7 @@ class SubFormProperty extends DataProperty
 
         if ($this->style == 'serialized') {
 
-            $object = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+            $object = DataObjectFactory::getObject(['objectid'  => $this->objectid,
                                                                 'fieldlist' => $this->fieldlist]);
             $i = 0;
             $values = [];
@@ -285,7 +285,7 @@ class SubFormProperty extends DataProperty
                 array_push($this->fieldlist, $this->link);
             }
             // check user input for the object item
-            $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+            $myobject = DataObjectFactory::getObject(['objectid'  => $this->objectid,
                                                                 'fieldlist' => $this->fieldlist]);
             $keylist = array_keys($myobject->properties);
             // report all invalid values here, even the ones we don't see because of the fieldlist
@@ -383,7 +383,7 @@ class SubFormProperty extends DataProperty
                 array_push($this->fieldlist, $this->link);
             }
             // check user input for the object item
-            $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+            $myobject = DataObjectFactory::getObject(['objectid'  => $this->objectid,
                                                                 'fieldlist' => $this->fieldlist]);
             $keylist = array_keys($myobject->properties);
             // report all invalid values here, even the ones we don't see because of the fieldlist
@@ -512,12 +512,12 @@ class SubFormProperty extends DataProperty
 
         if (!empty($this->objectid)) {
             $data['object'] = & $this->getObject($value);
-            $data['emptyobject'] = $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+            $data['emptyobject'] = $myobject = DataObjectFactory::getObject(['objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist]);
 
             // get the list of available items if requested
             if ($this->style == 'itemid' && !empty($this->title)) {
-                $mylist = DataObjectMaster::getObjectList(['objectid'  => $this->objectid,
+                $mylist = DataObjectFactory::getObjectList(['objectid'  => $this->objectid,
                                                                       'fieldlist' => [$this->title],
                                                                       'where'     => $this->where]);
                 $data['dropdown'] = $mylist->getItems();
@@ -543,7 +543,7 @@ class SubFormProperty extends DataProperty
                     $data['count'] = $data['object']->primary;
                 }
                 // get the number of items per link field value
-                $mylist = DataObjectMaster::getObjectList(['objectid'  => $this->objectid,
+                $mylist = DataObjectFactory::getObjectList(['objectid'  => $this->objectid,
                                                                       'fieldlist' => [$this->link],
                                                                       'groupby'   => [$this->link]]);
                 $data['dropdown'] = $mylist->getItems();
@@ -621,7 +621,7 @@ class SubFormProperty extends DataProperty
                     } else {
                         $status = null;
                     }
-                    $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                    $myobject = DataObjectFactory::getObject(['objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist,
                                                                             'status'    => $status]);
                 } else {
@@ -656,7 +656,7 @@ class SubFormProperty extends DataProperty
                     } else {
                         $status = null;
                     }
-                    $myobject = DataObjectMaster::getObjectList(['objectid'  => $this->objectid,
+                    $myobject = DataObjectFactory::getObjectList(['objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist,
                                                                             'status'    => $status]);
                 } else {
@@ -692,7 +692,7 @@ class SubFormProperty extends DataProperty
 
             case 'itemid':
                 if (!isset($myobject)) {
-                    $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                    $myobject = DataObjectFactory::getObject(['objectid'  => $this->objectid,
                                                                         'fieldlist' => $this->fieldlist]);
                 }
                 if (!empty($value)) {
@@ -718,7 +718,7 @@ class SubFormProperty extends DataProperty
                 $objects = [];
                 if (empty($value)) {
                     if (!isset($myobject)) {
-                        $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                        $myobject = DataObjectFactory::getObject(['objectid'  => $this->objectid,
                                                                             'fieldlist' => $this->fieldlist]);
                     } else {
                         // initialise the properties again
@@ -733,7 +733,7 @@ class SubFormProperty extends DataProperty
                 } else {
                     // Preserve the index in case it has meaning
                     foreach ($value as $idx => $vals) {
-                        $myobject = DataObjectMaster::getObject(['objectid'  => $this->objectid,
+                        $myobject = DataObjectFactory::getObject(['objectid'  => $this->objectid,
                                                                         'fieldlist' => $this->fieldlist]);
                         foreach ($vals as $key => $val) {
                             if (isset($myobject->properties[$key])) {
@@ -765,7 +765,7 @@ class SubFormProperty extends DataProperty
                 if (isset($fields[$item])) {
                     // FIXME: needs to be a better way to convert between objectname and objectid
                     if ($item == 'objectname') {
-                        $info = DataObjectMaster::getObjectInfo(['name' => $fields[$item]]);
+                        $info = DataObjectFactory::getObjectInfo(['name' => $fields[$item]]);
                         $this->objectid = $info['objectid'];
                     }
                     $this->$item = $fields[$item];
@@ -774,6 +774,7 @@ class SubFormProperty extends DataProperty
                 }
             }
         }
+        return [];
     }
 
     /**
@@ -807,9 +808,9 @@ class SubFormProperty extends DataProperty
         }
         if (!empty($this->objectname)) {
             if (is_numeric($this->objectname)) {
-                $object = DataObjectMaster::getObject(['objectid' => $this->objectname]);
+                $object = DataObjectFactory::getObject(['objectid' => $this->objectname]);
             } else {
-                $object = DataObjectMaster::getObject(['name' => $this->objectname]);
+                $object = DataObjectFactory::getObject(['name' => $this->objectname]);
             }
         }
         if (!empty($object)) {
@@ -860,7 +861,7 @@ class SubFormProperty extends DataProperty
                     if (isset($configuration[$item])) {
                         // FIXME: needs to be a better way to convert between objectname and objectid
                         if ($item == 'objectname') {
-                            $info = DataObjectMaster::getObjectInfo(['objectid' => $configuration[$item]]);
+                            $info = DataObjectFactory::getObjectInfo(['objectid' => $configuration[$item]]);
                             $configuration[$item] = $info['name'];
                         }
                         $data[$item] = $configuration[$item];

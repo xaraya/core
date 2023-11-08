@@ -239,7 +239,7 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
                 }
             }
             $params = ['name' => $object, 'itemid' => $args['id']];
-            $objectref = DataObjectMaster::getObject($params);
+            $objectref = DataObjectFactory::getObject($params);
             if (xarGraphQL::hasSecurity($object) && !$objectref->checkAccess('display', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
             }

@@ -112,7 +112,7 @@ trait xarGraphQLDeferredTrait
             // }
             // @checkme are we sure we'll always have this available?
             if (empty(xarGraphQL::$object_ref[$object])) {
-                xarGraphQL::$object_ref[$object] = DataObjectMaster::getObjectList(['name' => $object]);
+                xarGraphQL::$object_ref[$object] = DataObjectFactory::getObjectList(['name' => $object]);
             }
             $property = (xarGraphQL::$object_ref[$object])->properties[$fieldname];
             if (get_class($property) === 'DeferredManyProperty') {
@@ -265,7 +265,7 @@ trait xarGraphQLDeferredTrait
         // get the DD items for a deferred list of item ids here
         //$resolver = function ($itemids) use ($object, $fieldlist) {
         //    $params = ['name' => $object, 'fieldlist' => $fieldlist];
-        //    $objectlist = DataObjectMaster::getObjectList($params);
+        //    $objectlist = DataObjectFactory::getObjectList($params);
         //    $params = ['itemids' => $itemids];
         //    return $objectlist->getItems($params);
         //};

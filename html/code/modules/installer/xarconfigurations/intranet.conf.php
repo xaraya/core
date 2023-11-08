@@ -157,13 +157,13 @@ function installer_intranet_oversightrole()
                     'valcode' => 'createdbysystem',
                     'authmodule' => xarMod::getID('roles'),
     );
-    $group = DataObjectMaster::getObject(array('name' => 'roles_groups'));
+    $group = DataObjectFactory::getObject(array('name' => 'roles_groups'));
     $rolefields['role_type'] = xarRoles::ROLES_GROUPTYPE;
     $rolefields['name'] = 'Oversight';
     $rolefields['uname'] = 'oversight';
     $group->createItem($rolefields);
 
-    $user = DataObjectMaster::getObject(array('name' => 'roles_users'));
+    $user = DataObjectFactory::getObject(array('name' => 'roles_users'));
     $rolefields['role_type'] = xarRoles::ROLES_USERTYPE;
     $rolefields['name'] = 'Overseer';
     $rolefields['uname'] = 'overseer';

@@ -19,7 +19,7 @@ use xarMod;
 use xarSecurity;
 use xarTpl;
 use DataObjectDescriptor;
-use DataObjectMaster;
+use DataObjectFactory;
 use DataPropertyMaster;
 use BadParameterException;
 use EmptyParameterException;
@@ -83,7 +83,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
             return;
         }
 
-        sys::import('modules.dynamicdata.class.objects.master');
+        sys::import('modules.dynamicdata.class.objects.factory');
         $args = DataObjectDescriptor::getObjectID(['module'  => $module_id,
                                            'itemtype'  => $itemtype]);
 
@@ -122,7 +122,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
         $data['fields'] = $fields;
         $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(['type' => 'fieldtype']);
 
-        $object = DataObjectMaster::getObject(['name' => $args['name']]);
+        $object = DataObjectFactory::getObject(['name' => $args['name']]);
 
         if (!empty($object)) {
             if (!empty($object->template)) {

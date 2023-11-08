@@ -283,15 +283,15 @@ class xarPrivilege extends xarMask
         sys::import('modules.roles.class.roles');
         $roles = array();
 
-        sys::import('modules.dynamicdata.class.objects.master');
+        sys::import('modules.dynamicdata.class.objects.factory');
         while($result->next()) {
             list($id,$name,$itemtype,$uname,$email,$pass,$auth_modid) = $result->fields;
             switch ($itemtype) {
                 case 1:
-                $role = DataObjectMaster::getObject(array('name' => 'roles_users'));
+                $role = DataObjectFactory::getObject(array('name' => 'roles_users'));
                 break;
                 case 2:
-                $role = DataObjectMaster::getObject(array('name' => 'roles_groups'));
+                $role = DataObjectFactory::getObject(array('name' => 'roles_groups'));
                 break;
             }
             $role->getItem(array('itemid' => $id));

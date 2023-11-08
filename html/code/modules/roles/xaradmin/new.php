@@ -29,7 +29,7 @@ function roles_admin_new()
     if ($data['itemtype'] == xarRoles::ROLES_USERTYPE) $name = 'roles_users';
     elseif ($data['itemtype'] == xarRoles::ROLES_GROUPTYPE) $name = 'roles_groups';
 
-    $data['object'] = DataObjectMaster::getObject(array('name'   => $name));
+    $data['object'] = DataObjectFactory::getObject(array('name'   => $name));
 
     // call item new hooks
     $item = $data;

@@ -12,7 +12,7 @@
  * @link http://xaraya.info/index.php/release/70.html
  */
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 function themes_admin_display_config(Array $args=array())
 {
@@ -20,7 +20,7 @@ function themes_admin_display_config(Array $args=array())
     if (!xarVar::fetch('itemid' ,    'int',    $data['itemid'] , 0 ,          xarVar::NOT_REQUIRED)) return;
     if (!xarVar::fetch('confirm',    'bool',   $data['confirm'], false,       xarVar::NOT_REQUIRED)) return;
 
-    $data['object'] = DataObjectMaster::getObject(array('name' => 'themes_configurations'));
+    $data['object'] = DataObjectFactory::getObject(array('name' => 'themes_configurations'));
 
     if (!isset($data['object'])) return;
     if (!$data['object']->checkAccess('display'))

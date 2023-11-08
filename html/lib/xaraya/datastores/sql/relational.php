@@ -15,7 +15,7 @@ namespace Xaraya\DataObject\DataStores;
 
 use DataObject;
 use DataObjectList;
-use DataObjectMaster;
+use DataObjectFactory;
 use DataProperty;
 use DataPropertyMaster;
 use Query;
@@ -722,7 +722,7 @@ class RelationalDataStore extends SQLDataStore
      */
     private function addqueryfields(Query $query, $objectname)
     {
-        $object = DataObjectMaster::getObject(['name' => $objectname]);
+        $object = DataObjectFactory::getObject(['name' => $objectname]);
         foreach ($object->properties as $property) {
             // Ignore fields that are disabled
             if ($property->getDisplayStatus() == DataPropertyMaster::DD_DISPLAYSTATE_DISABLED) {

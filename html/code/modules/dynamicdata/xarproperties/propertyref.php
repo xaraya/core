@@ -95,7 +95,7 @@ class PropertyRefProperty extends SelectProperty
         if (is_numeric($objectname)) {
             $objectid = $objectname;
         } else {
-            $info = DataObjectMaster::getObjectInfo(['name' => $objectname]);
+            $info = DataObjectFactory::getObjectInfo(['name' => $objectname]);
             if (empty($info) || empty($info['objectid'])) {
                 // try table name
                 $fields = xarMod::apiFunc(
@@ -114,7 +114,7 @@ class PropertyRefProperty extends SelectProperty
             $objectid = $info['objectid'];
         }
 
-        $object = DataObjectMaster::getObjectList(['name' => 'properties']);
+        $object = DataObjectFactory::getObjectList(['name' => 'properties']);
         $items = $object->getItems(['where'     => "objectid eq $objectid", // filter on the selected object
                                          'fieldlist' => ['name','label']]);
         foreach ($items as $item) {

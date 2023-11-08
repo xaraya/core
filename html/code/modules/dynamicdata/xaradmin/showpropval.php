@@ -49,7 +49,7 @@ function dynamicdata_admin_showpropval(array $args = [])
     }
 
     // get the object corresponding to this dynamic property
-    $myobject = DataObjectMaster::getObject(['name'   => 'properties',
+    $myobject = DataObjectFactory::getObject(['name'   => 'properties',
                                                     'itemid' => $itemid]);
     if (empty($myobject)) {
         return;
@@ -66,7 +66,7 @@ function dynamicdata_admin_showpropval(array $args = [])
 
     // check security of the parent object
     $parentobjectid = $myobject->properties['objectid']->value;
-    $parentobject = DataObjectMaster::getObject(['objectid' => $parentobjectid]);
+    $parentobject = DataObjectFactory::getObject(['objectid' => $parentobjectid]);
     if (empty($parentobject)) {
         return;
     }

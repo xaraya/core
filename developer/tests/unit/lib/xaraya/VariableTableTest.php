@@ -30,7 +30,7 @@ final class VariableTableTest extends TestCase
 
     public function testGetItemsById(): void
     {
-        $objectlist = DataObjectMaster::getObjectList(['name' => 'sample']);
+        $objectlist = DataObjectFactory::getObjectList(['name' => 'sample']);
         $items = $objectlist->getItems(['itemids' => [1, 3]]);
         //$this->saveFixtureData('getitemsbyid.json', $items);
         $expected = $this->getFixtureData('getitemsbyid.json');
@@ -40,7 +40,7 @@ final class VariableTableTest extends TestCase
     /**
     public function testGetItemsJoin(): void
     {
-        $objectlist = DataObjectMaster::getObjectList(['name' => 'sample']);
+        $objectlist = DataObjectFactory::getObjectList(['name' => 'sample']);
         // @todo $objectlist->datastore->join = [];
         $items = $objectlist->getItems();
         //$this->saveFixtureData('getitemsjoin.json', $items);
@@ -51,7 +51,7 @@ final class VariableTableTest extends TestCase
 
     public function testGetItemsLimit(): void
     {
-        $objectlist = DataObjectMaster::getObjectList(['name' => 'sample']);
+        $objectlist = DataObjectFactory::getObjectList(['name' => 'sample']);
         $objectlist->numitems = 2;
         $items = $objectlist->getItems();
         //$this->saveFixtureData('getitemslimit.json', $items);
@@ -63,7 +63,7 @@ final class VariableTableTest extends TestCase
     /**
     public function testGetItemsProcess(): void
     {
-        $objectlist = DataObjectMaster::getObjectList(['name' => 'sample']);
+        $objectlist = DataObjectFactory::getObjectList(['name' => 'sample']);
         $objectlist->properties['id']->operation = 'COUNT';
         $objectlist->properties['age']->operation = 'AVG';
         $items = $objectlist->getItems();
@@ -75,7 +75,7 @@ final class VariableTableTest extends TestCase
 
     public function testGetItemsAll(): void
     {
-        $objectlist = DataObjectMaster::getObjectList(['name' => 'sample']);
+        $objectlist = DataObjectFactory::getObjectList(['name' => 'sample']);
         $items = $objectlist->getItems();
         //$this->saveFixtureData('getitemsall.json', $items);
         $expected = $this->getFixtureData('getitemsall.json');
@@ -85,7 +85,7 @@ final class VariableTableTest extends TestCase
     /**
     public function testCountItemsById(): void
     {
-        $objectlist = DataObjectMaster::getObjectList(['name' => 'sample']);
+        $objectlist = DataObjectFactory::getObjectList(['name' => 'sample']);
         $expected = 2;
         // @todo fix countItems with itemids
         //$this->assertEquals($expected, $objectlist->countItems(['itemids' => [1, 3]]));
@@ -95,7 +95,7 @@ final class VariableTableTest extends TestCase
     /**
     public function testCountItemsLimit(): void
     {
-        $objectlist = DataObjectMaster::getObjectList(['name' => 'sample']);
+        $objectlist = DataObjectFactory::getObjectList(['name' => 'sample']);
         // @todo fix countItems with limits
         //$this->assertEquals($expected, $objectlist->countItems(['where' => [...]]));
     }
@@ -103,7 +103,7 @@ final class VariableTableTest extends TestCase
 
     public function testCountItemsAll(): void
     {
-        $objectlist = DataObjectMaster::getObjectList(['name' => 'sample']);
+        $objectlist = DataObjectFactory::getObjectList(['name' => 'sample']);
         $expected = 3;
         $this->assertEquals($expected, $objectlist->countItems());
     }

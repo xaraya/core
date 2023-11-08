@@ -15,12 +15,12 @@ namespace Xaraya\DataObject\Import;
 
 use DataObject;
 use DataObjectDescriptor;
-use DataObjectMaster;
+use DataObjectFactory;
 use DataPropertyMaster;
 use xarDB;
 use sys;
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('modules.dynamicdata.class.import.xmlimporter');
 sys::import('modules.dynamicdata.class.import.jsonimporter');
 sys::import('modules.dynamicdata.class.import.phpimporter');
@@ -130,8 +130,8 @@ class DataObjectImporter
      */
     public static function createObject($descriptor)
     {
-        static::$dataobject ??= DataObjectMaster::getObject(['name' => 'objects']);
-        static::$dataproperty ??= DataObjectMaster::getObject(['name' => 'properties']);
+        static::$dataobject ??= DataObjectFactory::getObject(['name' => 'objects']);
+        static::$dataproperty ??= DataObjectFactory::getObject(['name' => 'properties']);
         $info = $descriptor->getArgs();
         $propertyargs = $info['propertyargs'];
         unset($info['propertyargs']);

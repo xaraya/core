@@ -35,8 +35,8 @@ function categories_admin_clone()
     if(!xarSecurity::check('AddCategories',1,'All',"All:$cid")) return;
 
     // Setting up necessary data.
-    sys::import('modules.dynamicdata.class.objects.master');
-    $data['object'] = DataObjectMaster::getObject(array('name' => xarModVars::get('categories','categoriesobject')));
+    sys::import('modules.dynamicdata.class.objects.factory');
+    $data['object'] = DataObjectFactory::getObject(array('name' => xarModVars::get('categories','categoriesobject')));
     $data['object']->getItem(array('itemid' => $data['itemid']));
 
     if ($confirm) {

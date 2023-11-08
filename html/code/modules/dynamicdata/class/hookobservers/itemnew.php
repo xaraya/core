@@ -18,7 +18,7 @@ use xarSecurity;
 use xarTpl;
 use xarVar;
 use DataObjectDescriptor;
-use DataObjectMaster;
+use DataObjectFactory;
 use sys;
 
 sys::import('modules.dynamicdata.class.hookobservers.generic');
@@ -57,8 +57,8 @@ class ItemNew extends DataObjectHookObserver
 
         $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
                                            'itemtype'  => $itemtype]);
-        sys::import('modules.dynamicdata.class.objects.master');
-        $object = DataObjectMaster::getObject(['name' => $descriptorargs['name']]);
+        sys::import('modules.dynamicdata.class.objects.factory');
+        $object = DataObjectFactory::getObject(['name' => $descriptorargs['name']]);
         if (!isset($object) || empty($object->objectid)) {
             return;
         }

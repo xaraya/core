@@ -70,7 +70,7 @@ function dynamicdata_admin_updateprop()
         return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
     }
 
-    $objectinfo = DataObjectMaster::getObjectInfo(
+    $objectinfo = DataObjectFactory::getObjectInfo(
         [
                                     'objectid' => $objectid,
                                     'moduleid' => $module_id,
@@ -88,8 +88,7 @@ function dynamicdata_admin_updateprop()
             if (!empty($itemtype)) {
                 $name .= '_' . $itemtype;
             }
-            sys::import('modules.dynamicdata.class.objects.master');
-            $objectid = DataObjectMaster::createObject(
+            $objectid = DataObjectFactory::createObject(
                 ['moduleid' => $module_id,
                                             'itemtype' => $itemtype,
                                             'name' => $name,
@@ -229,7 +228,7 @@ function dynamicdata_admin_updateprop()
     }
 
     // CHECKME: flush the variable cache if necessary
-    DataObjectMaster::flushVariableCache(['objectid' => $objectid]);
+    DataObjectFactory::flushVariableCache(['objectid' => $objectid]);
 
     if ($isprimary) {
         $modinfo = xarMod::getInfo($module_id);

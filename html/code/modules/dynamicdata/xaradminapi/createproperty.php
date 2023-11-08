@@ -73,8 +73,8 @@ function dynamicdata_adminapi_createproperty(array $args = [])
         }
     }
 
-    sys::import('modules.dynamicdata.class.objects.master');
-    $propertyobject = DataObjectMaster::getObject(['name' => 'properties']);
+    sys::import('modules.dynamicdata.class.objects.factory');
+    $propertyobject = DataObjectFactory::getObject(['name' => 'properties']);
     $propid = $propertyobject->createItem($values);
     return $propid;
 }

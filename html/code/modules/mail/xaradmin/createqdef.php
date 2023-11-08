@@ -56,7 +56,7 @@ function mail_admin_createqdef(Array $args=array())
         if($newItemtype==0) $newItemtype++; // prevent the 0 value
 
         $params = array('objectid' => $qdefObjectId, 'itemtype' => $newItemtype);
-        $itemid = DataObjectMaster::updateObject($params);
+        $itemid = DataObjectFactory::updateObject($params);
 
     } else {
         // All went well, we can set the modvar now

@@ -51,7 +51,7 @@ function roles_admin_modifyemail(Array $args=array())
             $data['message'] = $strings['message'];
             $data['authid'] = xarSec::genAuthKey();
 
-            $object = DataObjectMaster::getObject(array('name' => 'roles_users'));
+            $object = DataObjectFactory::getObject(array('name' => 'roles_users'));
                 if (isset($object) && !empty($object->objectid)) {
                     // get the Dynamic Properties of this object
                     $data['properties'] = &$object->getProperties();

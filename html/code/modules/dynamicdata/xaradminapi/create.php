@@ -53,7 +53,7 @@ function dynamicdata_adminapi_create(array $args = [])
     }
 
     // TODO: test this
-    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'itemid'   => $itemid]);
     if (empty($myobject)) {
         return;

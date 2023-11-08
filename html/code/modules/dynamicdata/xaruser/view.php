@@ -86,7 +86,7 @@ function dynamicdata_user_view(array $args = [])
     }
 
     // Note: we need to pass all relevant arguments ourselves here
-    $object = DataObjectMaster::getObjectList(
+    $object = DataObjectFactory::getObjectList(
         ['objectid'  => $itemid,
                                   'name'      => $name,
                                   'startnum'  => $startnum,

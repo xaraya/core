@@ -15,7 +15,7 @@ namespace Xaraya\DataObject\Import;
 
 use DataObject;
 use DataObjectLinks;
-use DataObjectMaster;
+use DataObjectFactory;
 use SimpleXMLElement;
 use ValueValidations;
 use BadParameterException;
@@ -28,7 +28,7 @@ use xarLog;
 use xarMod;
 use sys;
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.validations');
 
 /**
@@ -131,7 +131,7 @@ class XmlImporter extends DataObjectImporter
         xarLog::message('DD: importing ' . $args['name'], xarLog::LEVEL_INFO);
 
         // check if the object exists
-        $info = DataObjectMaster::getObjectInfo(['name' => $args['name']]);
+        $info = DataObjectFactory::getObjectInfo(['name' => $args['name']]);
         $dupexists = !empty($info);
         if ($dupexists && !$this->overwrite) {
             //$msg = 'Duplicate definition for #(1) #(2)';
@@ -139,7 +139,7 @@ class XmlImporter extends DataObjectImporter
             throw new DuplicateException(null, $args['name']);
         }
 
-        $object = DataObjectMaster::getObject(['name' => 'objects']);
+        $object = DataObjectFactory::getObject(['name' => 'objects']);
         $objectproperties = array_keys($object->properties);
         foreach($objectproperties as $property) {
             if (isset($xmlobject->{$property}[0])) {
@@ -176,7 +176,7 @@ class XmlImporter extends DataObjectImporter
         );
 
         // Create the DataProperty object we will use to create items of
-        $dataproperty = DataObjectMaster::getObject(['name' => 'properties']);
+        $dataproperty = DataObjectFactory::getObject(['name' => 'properties']);
         if (empty($dataproperty)) {
             return null;
         }
@@ -189,7 +189,7 @@ class XmlImporter extends DataObjectImporter
             $objectid = $object->updateItem(['itemid' => $args['itemid']]);
             $objectid = $object->updateItem();
             // remove the properties, as they will be replaced
-            $duplicateobject = DataObjectMaster::getObject(['name' => $info['name']]);
+            $duplicateobject = DataObjectFactory::getObject(['name' => $info['name']]);
             $oldproperties = $duplicateobject->properties;
             foreach ($oldproperties as $propertyitem) {
                 $dataproperty->deleteItem(['itemid' => $propertyitem->id]);
@@ -354,7 +354,7 @@ class XmlImporter extends DataObjectImporter
                 /*
                 // Check that this is a real object
                 if (empty($objectnamelist[$currentobject])) {
-                    $objectinfo = DataObjectMaster::getObjectInfo(array('name' => $currentobject));
+                    $objectinfo = DataObjectFactory::getObjectInfo(array('name' => $currentobject));
                     if (isset($objectinfo) && !empty($objectinfo['objectid'])) {
                         $objectname2objectid[$currentobject] = $$currentobject;
                     } else {
@@ -366,7 +366,7 @@ class XmlImporter extends DataObjectImporter
                 */
                 // Create the item
                 if (!isset($this->objectcache[$currentobject])) {
-                    $this->objectcache[$currentobject] = DataObjectMaster::getObject(['name' => $currentobject]);
+                    $this->objectcache[$currentobject] = DataObjectFactory::getObject(['name' => $currentobject]);
                 }
                 /** @var DataObject $object */
                 $object = $this->objectcache[$currentobject];
@@ -421,7 +421,7 @@ class XmlImporter extends DataObjectImporter
         if (count($this->objectcache) > 0 && count($this->objectmaxid) > 0) {
             foreach (array_keys($this->objectcache) as $objectname) {
                 if (!empty($this->objectmaxid[$objectname]) && $object->maxid < $this->objectmaxid[$objectname]) {
-                    $itemid = DataObjectMaster::updateObject(array('name' => $objectname,
+                    $itemid = DataObjectFactory::updateObject(array('name' => $objectname,
                                                                     'maxid'    => $this->objectmaxid[$objectname]));
                     if (empty($itemid)) return;
                 }

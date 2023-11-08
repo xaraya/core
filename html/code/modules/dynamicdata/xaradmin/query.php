@@ -186,7 +186,7 @@ function dynamicdata_admin_query(array $args = [])
 
     $data['itemid'] = $itemid;
     $data['olditemid'] = $itemid;
-    $data['objects'] = DataObjectMaster::getObjects();
+    $data['objects'] = DataObjectFactory::getObjects();
 
     $dbconn = xarDB::getConn();
     $data['table'] = $table;
@@ -198,7 +198,7 @@ function dynamicdata_admin_query(array $args = [])
     $data['jointables'] = '';
 
     if (!empty($itemid)) {
-        $data['object'] = DataObjectMaster::getObjectList(['objectid' => $itemid,
+        $data['object'] = DataObjectFactory::getObjectList(['objectid' => $itemid,
                                                         'join' => $join]);
         if (isset($data['object']) && !empty($data['object']->objectid)) {
             $data['itemid'] = $data['object']->objectid;
@@ -229,7 +229,7 @@ function dynamicdata_admin_query(array $args = [])
             return;
         }
     } elseif (!empty($table)) {
-        $data['object'] = DataObjectMaster::getObjectList(['table' => $table]);
+        $data['object'] = DataObjectFactory::getObjectList(['table' => $table]);
         if (!isset($data['object'])) {
             return;
         }

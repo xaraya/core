@@ -121,7 +121,7 @@ class xarGraphQLUserType extends xarGraphQLBaseType
             //$params = array('name' => $object);
             $params = ['name' => $object, 'fieldlist' => $fieldlist];
             //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $itemids);
-            $objectlist = DataObjectMaster::getObjectList($params);
+            $objectlist = DataObjectFactory::getObjectList($params);
             $params = ['itemids' => $itemids];
             return $objectlist->getItems($params);
         };

@@ -24,7 +24,7 @@ use xarController;
 use xarServer;
 use xarResponse;
 use xarTpl;
-use DataObjectMaster;
+use DataObjectFactory;
 use DataPropertyMaster;
 use sys;
 
@@ -155,7 +155,7 @@ class StatsHandler extends DefaultHandler
         $stats['report'] = xarVar::prepForDisplay($stats['report']);
 
         if (!isset($this->object)) {
-            $this->object = DataObjectMaster::getObjectList($this->args);
+            $this->object = DataObjectFactory::getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
@@ -365,7 +365,7 @@ class StatsHandler extends DefaultHandler
         $report['report'] = xarVar::prepForDisplay($report['report']);
 
         if (!isset($this->object)) {
-            $this->object = DataObjectMaster::getObjectList($this->args);
+            $this->object = DataObjectFactory::getObjectList($this->args);
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }

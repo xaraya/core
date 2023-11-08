@@ -53,7 +53,7 @@ function dynamicdata_userapi_showdisplay(array $args = [])
         $args['fieldlist'] = null;
     }
 
-    $object = DataObjectMaster::getObject($args);
+    $object = DataObjectFactory::getObject($args);
     if (!$object->checkAccess('display')) {
         return xarML('Display #(1) is forbidden', $object->label);
     }

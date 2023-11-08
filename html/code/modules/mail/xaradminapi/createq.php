@@ -33,7 +33,7 @@ function mail_adminapi_createq(Array $args=array())
     if($newItemtype==0) $newItemtype++; // prevent the 0 value
     // Create a new itemtype by creating a new object in dd
     $params = array('objectid' => $qdataObjectId, 'itemtype' => $newItemtype);
-    $itemid = DataObjectMaster::updateObject($params);
+    $itemid = DataObjectFactory::updateObject($params);
     
     return true;
 }

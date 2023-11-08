@@ -42,7 +42,7 @@ function dynamicdata_user_display(array $args = [])
         return;
     }
 
-    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'name' => $name,
                                          'itemid'   => $itemid,
                                          'tplmodule' => $tplmodule]);

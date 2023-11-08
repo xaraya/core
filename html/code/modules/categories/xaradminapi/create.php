@@ -25,8 +25,8 @@ function categories_adminapi_create($args)
     // This makes the relative position of this category the last child of the parent
     if (empty($args['relative_position'])) $args['relative_position'] = 3;
     
-    sys::import('modules.dynamicdata.class.objects.master');
-    $category = DataObjectMaster::getObject(array('name' => 'categories'));
+    sys::import('modules.dynamicdata.class.objects.factory');
+    $category = DataObjectFactory::getObject(array('name' => 'categories'));
     $id = $category->createItem($args);
     return $id;
 }

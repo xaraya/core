@@ -7,6 +7,7 @@ require_once dirname(__DIR__, 3).'/vendor/autoload.php';
 use Xaraya\Modules\Library\LibraryObject;
 use Xaraya\Modules\Library\LibraryObjectList;
 use Xaraya\Modules\Library\UserApi;
+use Xaraya\DataObject\Import\PhpImporter;
 
 // initialize bootstrap
 sys::init();
@@ -19,18 +20,7 @@ xarCache::init();
 function get_descriptor($table, $offline)
 {
     $filepath = dirname(__DIR__, 3).'/html/code/modules/library/xardata/lb_' . $table . '-def.php';
-    if (!is_file($filepath)) {
-        die('Unable to find ' . $filepath);
-    }
-    $args = include $filepath;
-    $arrayargs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
-    foreach ($arrayargs as $name) {
-        if (!empty($args[$name]) && is_array($args[$name])) {
-            $args[$name] = serialize($args[$name]);
-        }
-    }
-    $args['datastore'] = 'external';
-    $descriptor = new VirtualObjectDescriptor($args, $offline);
+    $descriptor = PhpImporter::importDefinition($filepath, $offline);
     return $descriptor;
 }
 

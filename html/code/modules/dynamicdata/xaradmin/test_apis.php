@@ -195,7 +195,7 @@ function dynamicdata_admin_test_apis(array $args = [])
     foreach ($data['objects'] as $item) {
         array_push($known_objects, $item['name']);
     }
-    $objectlist = DataObjectMaster::getObjectList(['name' => 'objects', 'fieldlist' => ['name', 'label']]);
+    $objectlist = DataObjectFactory::getObjectList(['name' => 'objects', 'fieldlist' => ['name', 'label']]);
     $all_objects = $objectlist->getItems();
     $data['otherlist'] = [];
     foreach ($all_objects as $item) {

@@ -50,7 +50,7 @@ function dynamicdata_utilapi_importproperties(array $args = [])
 
     // search for an object, or create one
     if (empty($objectid)) {
-        $object = DataObjectMaster::getObjectInfo(
+        $object = DataObjectFactory::getObjectInfo(
             ['module_id' => $module_id,
                                       'itemtype' => $itemtype]
         );
@@ -60,8 +60,8 @@ function dynamicdata_utilapi_importproperties(array $args = [])
             if (!empty($itemtype)) {
                 $name .= '_' . $itemtype;
             }
-            sys::import('modules.dynamicdata.class.objects.master');
-            $objectid = DataObjectMaster::createObject(
+            sys::import('modules.dynamicdata.class.objects.factory');
+            $objectid = DataObjectFactory::createObject(
                 ['moduleid' => $module_id,
                                             'itemtype' => $itemtype,
                                             'name' => $name,

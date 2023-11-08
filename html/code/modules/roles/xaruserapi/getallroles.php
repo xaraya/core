@@ -130,7 +130,7 @@ function roles_userapi_getallroles(Array $args=array())
         case 2: $name = "roles_users"; break;
         case 3: $name = "roles_groups"; break;
     }
-    $object = DataObjectMaster::getObjectList(array('name' => $name));
+    $object = DataObjectFactory::getObjectList(array('name' => $name));
     $items['dditems'] = $object->getItems(array('itemids' => $itemids,'getobject' => true));
 /*    for ($i = 0, $max = count($items); $i < $max; $i++) {
         if (!isset($properties[$items[$i]['id']])) continue;

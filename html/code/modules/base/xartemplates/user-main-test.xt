@@ -13,15 +13,15 @@
         <h4>First create the roles object</h4>
 <pre>
 &lt;xar:set name="dummy">1;
-    sys::import('modules.dynamicdata.class.objects.master');
-    $roles = DataObjectMaster::getObjectList(array('name'=>'roles_users'));
+    sys::import('modules.dynamicdata.class.objects.factory');
+    $roles = DataObjectFactory::getObjectList(array('name'=>'roles_users'));
 &lt;/xar:set>
 </pre>
 
         <!-- Here we create the object -->
         <xar:set name="dummy">1;
-            sys::import('modules.dynamicdata.class.objects.master');
-            $roles = DataObjectMaster::getObjectList(array('name'=>'roles_users'));
+            sys::import('modules.dynamicdata.class.objects.factory');
+            $roles = DataObjectFactory::getObjectList(array('name'=>'roles_users'));
             $roles->dataquery->eq('uname','admin');
         </xar:set>
 
@@ -54,8 +54,8 @@
 </pre>
         <!-- Here we create the object -->
         <xar:set name="dummy">1;
-            sys::import('modules.dynamicdata.class.objects.master');
-            $roles = DataObjectMaster::getObjectList(array('name'=>'roles_users'));
+            sys::import('modules.dynamicdata.class.objects.factory');
+            $roles = DataObjectFactory::getObjectList(array('name'=>'roles_users'));
         </xar:set>
         
         <!-- Here we create the object -->

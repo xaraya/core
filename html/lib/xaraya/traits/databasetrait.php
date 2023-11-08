@@ -55,7 +55,7 @@ use xarUser;
 use BadParameterException;
 use sys;
 
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.database.external');
 
 /**

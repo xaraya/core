@@ -27,9 +27,9 @@
 
         if(!xarSecurity::check('AddCategories')) return;
 
-        sys::import('modules.dynamicdata.class.objects.master');
+        sys::import('modules.dynamicdata.class.objects.factory');
         for ($i=1;$i<=$data['repeat'];$i++) {
-            $data['objects'][$i] = DataObjectMaster::getObject(array('name' => xarModVars::get('categories','categoriesobject'), 'fieldprefix' => $i));
+            $data['objects'][$i] = DataObjectFactory::getObject(array('name' => xarModVars::get('categories','categoriesobject'), 'fieldprefix' => $i));
         }
 
         // Setting up necessary data.

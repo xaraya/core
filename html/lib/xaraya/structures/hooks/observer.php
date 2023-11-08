@@ -62,7 +62,7 @@ class HookObserver extends EventObserver implements ixarHookObserver
         // If we have an object, we need to get its ID
         if (isset($extrainfo['object']) && is_string($extrainfo['object'])) {
             sys::import('modules.dynamicdata.class.properties.master');
-            $object = DataObjectMaster::getObjectList(array('name' => 'objects'));
+            $object = DataObjectFactory::getObjectList(array('name' => 'objects'));
             $q = $object->dataquery;
             $q->eq('name', $extrainfo['object']);
             $items = $object->getItems();

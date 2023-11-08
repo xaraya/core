@@ -13,7 +13,7 @@
 /**
  * Export an object definition or an object item to XML
  */
-sys::import('modules.dynamicdata.class.objects.master');
+sys::import('modules.dynamicdata.class.objects.factory');
 
 function dynamicdata_admin_export(array $args = [])
 {
@@ -52,7 +52,7 @@ function dynamicdata_admin_export(array $args = [])
     $data = [];
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
-    $myobject = DataObjectMaster::getObject(['objectid' => $objectid,
+    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'name'     => $name,
                                          'itemid'   => $itemid,
                                          'allprops' => true]);
