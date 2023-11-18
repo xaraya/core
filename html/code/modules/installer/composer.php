@@ -143,7 +143,7 @@ class xarInstallComposer extends xarObject
                 continue;
             }
             if (readlink($modulesDir . '/' . $module) !== $vendorDir . '/' . $package) {
-                echo "Module $module is already linked to $vendorDir/$package\n";
+                echo "Module $module is not linked to $vendorDir/$package\n";
                 continue;
             }
             echo "Removing symbolic link for module $module\n";
@@ -186,5 +186,85 @@ class xarInstallComposer extends xarObject
     public static function listPackages($matches = self::MATCHES)
     {
         return static::listModules(null, $matches);
+    }
+
+    /**
+     * Summary of createPropertySymLinks
+     * @param Composer\Script\Event $event
+     * @return void
+     */
+    public static function createPropertySymLinks(Event $event)
+    {
+        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
+        $packageDir = $vendorDir . '/xaraya/properties';
+        $propertiesDir = dirname(__DIR__, 2) . '/properties';
+        foreach (static::listProperties($packageDir) as $property) {
+            if (is_link($propertiesDir . '/' . $property)) {
+                echo "Property $property is already linked\n";
+                continue;
+            }
+            if (is_dir($propertiesDir . '/' . $property)) {
+                echo "Property $property is already copied\n";
+                continue;
+            }
+            echo "Creating symbolic link for property $property\n";
+            symlink($packageDir . '/' . $property, $propertiesDir . '/' . $property);
+        }
+    }
+
+    /**
+     * Summary of removePropertySymLinks
+     * @param Composer\Script\Event $event
+     * @return void
+     */
+    public static function removePropertySymLinks(Event $event)
+    {
+        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
+        $packageDir = $vendorDir . '/xaraya/properties';
+        $propertiesDir = dirname(__DIR__, 2) . '/properties';
+        foreach (static::listProperties($packageDir) as $property) {
+            if (!is_link($propertiesDir . '/' . $property)) {
+                echo "Property $property is already unlinked\n";
+                continue;
+            }
+            if (readlink($propertiesDir . '/' . $property) !== $packageDir . '/' . $property) {
+                echo "Property $property is not linked to $packageDir/$property\n";
+                continue;
+            }
+            echo "Removing symbolic link for property $property\n";
+            unlink($propertiesDir . '/' . $property);
+        }
+    }
+
+    /**
+     * Summary of showProperties
+     * @param Composer\Script\Event $event
+     * @return void
+     */
+    public static function showProperties(Event $event)
+    {
+        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
+        $packageDir = $vendorDir . '/xaraya/properties';
+        print_r(static::listProperties($packageDir));
+    }
+
+    /**
+     * Summary of listProperties
+     * @param string $packageDir
+     * @return mixed
+     */
+    public static function listProperties($packageDir)
+    {
+        $properties = [];
+        if (!is_dir($packageDir)) {
+            return $properties;
+        }
+        $dir = new FilesystemIterator($packageDir);
+        foreach ($dir as $file) {
+            if ($file->isDir() && $file->getFilename() !== '.git') {
+                $properties[] = $file->getFilename();
+            }
+        }
+        return $properties;
     }
 }

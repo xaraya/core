@@ -3,10 +3,10 @@
     "description": "Xaraya Core web development framework",
     "type": "project",
     "require-dev": {
-        "middlewares/utils": "dev-master",
+        "middlewares/utils": "^3.3",
         "nikic/fast-route": "dev-master",
-        "nyholm/psr7": "dev-master",
-        "nyholm/psr7-server": "^1.0.2",
+        "nyholm/psr7": "^1.8",
+        "nyholm/psr7-server": "^1.1",
         "phpdocumentor/reflection": "5.x-dev",
         "webonyx/graphql-php": "dev-master",
         "xaraya/modules": "^2.4@dev"
@@ -14,11 +14,12 @@
     "suggest": {
         "phpstan/phpstan": "PHP Static Analysis Tool - discover bugs in your code without running it",
         "phpunit/phpunit": "The PHP Unit Testing framework",
-        "doctrine/cache": "To use supported Doctrine CacheProviders for caching",
-        "doctrine/dbal": "To experiment with JSON data types",
+        "doctrine/cache": "Use supported Doctrine CacheProviders for caching",
+        "doctrine/dbal": "Experiment with external database (Doctrine DBAL)",
+        "mongodb/mongodb": "Experiment with external database (MongoDB)",
         "phpdocumentor/reflection": "Required to use bermuda_cleanup.php in developer/tools",
-        "xaraya/modules": "To experiment with adding modules via composer cli",
-        "xaraya/properties": "To experiment with adding properties via composer cli"
+        "xaraya/modules": "Experiment with adding modules via composer cli",
+        "xaraya/properties": "Experiment with adding properties via composer cli"
     },
     "license": "GPL-2.0-or-later",
     "config": {
@@ -47,19 +48,27 @@
         ]
     },
     "scripts": {
-        "xar-install-modules": "xarInstallComposer::createModuleSymLinks",
-        "xar-list-modules": "xarInstallComposer::showModules",
+        "xar-modules-install": "xarInstallComposer::createModuleSymLinks",
+        "xar-modules-list": "xarInstallComposer::showModules",
+        "xar-modules-uninstall": "xarInstallComposer::removeModuleSymLinks",
+        "xar-properties-install": "xarInstallComposer::createPropertySymLinks",
+        "xar-properties-list": "xarInstallComposer::showProperties",
+        "xar-properties-uninstall": "xarInstallComposer::removePropertySymLinks",
+        "xar-properties-update": "cd vendor/xaraya/properties; git submodule update --init; echo 'done'",
         "xar-start-server": [
             "Composer\\Config::disableProcessTimeout",
             "php -S 0.0.0.0:8080 -t html"
-        ],
-        "xar-uninstall-modules": "xarInstallComposer::removeModuleSymLinks"
+        ]
     },
     "scripts-descriptions": {
-        "xar-install-modules": "Create symlinks to Xaraya modules via composer",
-        "xar-list-modules": "List Xaraya modules installed via composer",
-        "xar-start-server": "Start local PHP server to browse Xaraya site",
-        "xar-uninstall-modules": "Remove symlinks to Xaraya modules via composer"
+        "xar-modules-install": "Create symlinks to Xaraya modules via composer",
+        "xar-modules-list": "List Xaraya modules available via composer",
+        "xar-modules-uninstall": "Remove symlinks to Xaraya modules via composer",
+        "xar-properties-install": "Create symlinks to Xaraya properties via composer",
+        "xar-properties-list": "List Xaraya properties available via composer",
+        "xar-properties-uninstall": "Remove symlinks to Xaraya properties via composer",
+        "xar-properties-update": "Update Xaraya properties from git submodules",
+        "xar-start-server": "Start local PHP server to browse Xaraya site"
     },
     "extra": {
         "installer-paths": {
