@@ -10,6 +10,7 @@
  */
 
 sys::import('modules.dynamicdata.class.objects.descriptor');
+sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('modules.dynamicdata.class.utilapi');
 use Xaraya\DataObject\UtilApi;
 
@@ -237,7 +238,190 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
     }
 }
 
-class VirtualObjectFactory extends DataObjectFactory
+//class VirtualObjectFactory extends DataObjectFactory
+class VirtualObjectFactory extends xarObject
 {
+    /** @var array<string, mixed> */
+    protected static array $definitions = [];
+    protected static bool $offline = false;
 
+    /**
+     * Class method to retrieve a particular object definition, with sub-classing
+     *
+     * @param array<string, mixed> $args
+     * with
+     *     $args['name'] name of the object you're looking for
+     * @return DataObject|null the requested object definition
+     */
+    public static function getObject(array $args = [])
+    {
+        if (static::isObject($args)) {
+            $filepath = static::$definitions[$args['name']];
+            $args = include $filepath;
+            $descriptor = static::getObjectDescriptor($args, static::$offline);
+            return static::createObject($descriptor);
+        }
+        return DataObjectFactory::getObject($args);
+    }
+
+    /**
+     * Class method to retrieve a particular object list definition, with sub-classing
+     *
+     * @param array<string, mixed> $args
+     * with
+     *     $args['name'] name of the object you're looking for
+     * @return DataObjectList|null the requested object definition
+     */
+    public static function getObjectList(array $args = [])
+    {
+        if (static::isObject($args)) {
+            $filepath = static::$definitions[$args['name']];
+            $args = include $filepath;
+            $descriptor = static::getObjectDescriptor($args, static::$offline);
+            return static::createObjectList($descriptor);
+        }
+        return DataObjectFactory::getObjectList($args);
+    }
+
+    /**
+     * Summary of isObject
+     * @param array<string, mixed> $args
+     * @return bool
+     */
+    public static function isObject(array $args)
+    {
+        if (!empty($args) && !empty($args['name']) && array_key_exists($args['name'], static::$definitions)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Create a particular object definition, with sub-classing
+     *
+     * @param VirtualObjectDescriptor $descriptor
+     * @return DataObject|null the requested object definition
+     */
+    public static function createObject($descriptor)
+    {
+        // Make sure the class for this object is loaded
+        if ($descriptor->exists('filepath') && ($descriptor->get('filepath') != 'auto')) {
+            include_once(sys::code() . $descriptor->get('filepath'));
+        }
+        // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
+        $class = 'DataObject';
+        if ($descriptor->exists('class') && class_exists($descriptor->get('class'))) {
+            $class = $descriptor->get('class');
+        }
+        $object = new $class($descriptor);
+
+        return $object;
+    }
+
+    /**
+     * Create a particular object list definition, with sub-classing
+     *
+     * @param VirtualObjectDescriptor $descriptor
+     * @return DataObjectList|null the requested object definition
+     */
+    public static function createObjectList($descriptor)
+    {
+        // Make sure the class for this object is loaded
+        if ($descriptor->exists('filepath') && ($descriptor->get('filepath') != 'auto')) {
+            include_once(sys::code() . $descriptor->get('filepath'));
+        }
+        // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
+        $class = 'DataObjectList';
+        if ($descriptor->exists('class')) {
+            if (class_exists($descriptor->get('class') . 'List')) {
+                // this is a specific classname for the list
+                $class = $descriptor->get('class') . 'List';
+            } elseif (class_exists($descriptor->get('class')) && method_exists($descriptor->get('class'), 'getItems')) {
+                // this is a generic classname for the object, list and interface
+                $class = $descriptor->get('class');
+            }
+        }
+        $object = new $class($descriptor);
+
+        return $object;
+    }
+
+    /**
+     * Summary of isOffline
+     * @param bool $offline
+     * @return void
+     */
+    public static function isOffline($offline = false)
+    {
+        static::$offline = $offline;
+    }
+
+    /**
+     * Summary of getObjectDescriptor
+     * @param array<string, mixed> $args
+     * @param bool $offline
+     * @return VirtualObjectDescriptor
+     */
+    public static function getObjectDescriptor($args, $offline = false)
+    {
+        $args = static::prepareDescriptorArgs($args);
+        $descriptor = new VirtualObjectDescriptor($args, $offline);
+        return $descriptor;
+    }
+
+    /**
+     * Summary of prepareDescriptorArgs
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     */
+    public static function prepareDescriptorArgs($args)
+    {
+        $arrayArgs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
+        foreach ($arrayArgs as $name) {
+            if (isset($args[$name]) && is_array($args[$name])) {
+                $args[$name] = serialize($args[$name]);
+            }
+        }
+        $args['propertyargs'] ??= [];
+        foreach ($args['propertyargs'] as $idx => $propertyArg) {
+            if (isset($propertyArg['configuration']) && is_array($propertyArg['configuration'])) {
+                $args['propertyargs'][$idx]['configuration'] = serialize($propertyArg['configuration']);
+            }
+        }
+        return $args;
+    }
+
+    /**
+     * Register DD object definition with -def.php file
+     * @param string $name
+     * @param string $filepath
+     * @return void
+     */
+    public static function registerDefinition($name, $filepath)
+    {
+        static::$definitions[$name] = $filepath;
+    }
+
+    /**
+     * Get DD object definitions from -def.php files in directory
+     * @param string $dirpath
+     * @return int
+     */
+    public static function loadDefinitions($dirpath)
+    {
+        $count = 0;
+        if (!is_dir($dirpath)) {
+            return $count;
+        }
+        $dir = new FilesystemIterator($dirpath, FilesystemIterator::CURRENT_AS_FILEINFO);
+        foreach ($dir as $file) {
+            /** @var SplFileInfo $file */
+            if ($file->isFile() && str_ends_with($file->getFilename(), '-def.php')) {
+                $name = str_replace('-def.php', '', $file->getFilename());
+                static::registerDefinition($name, $file->getRealPath());
+                $count++;
+            }
+        }
+        return $count;
+    }
 }

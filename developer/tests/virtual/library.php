@@ -31,8 +31,13 @@ if (!$offline) {
     xarDatabase::init();
 }
 
+$dirpath = dirname(__DIR__, 3).'/html/code/modules/library/xardata/';
+$count = VirtualObjectFactory::loadDefinitions($dirpath);
+echo "Found $count object definitions\n";
+VirtualObjectFactory::isOffline($offline);
+
 $table = 'books';
-$descriptor = get_descriptor($table, $offline);
+//$descriptor = get_descriptor($table, $offline);
 
 // set current database before we get to dbConnArgs - this uses xarSession (not initialized) = $_SESSION
 UserApi::setCurrentDatabase('test');
@@ -43,7 +48,8 @@ if ($offline or true) {
     UserApi::addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath, 'external' => 'dbal'], false);
 }
 
-$booklist = new LibraryObjectList($descriptor);
+//$booklist = new LibraryObjectList($descriptor);
+$booklist = VirtualObjectFactory::getObjectList(['name' => 'lb_' . $table]);
 
 //$args = $booklist->descriptor->getArgs();
 //echo var_export($args, true);
@@ -57,7 +63,8 @@ echo var_export($items, true) . "\n";
 //echo "Database: $dbName\n";
 echo "Datastore: " . get_class($booklist->datastore) . "\n";
 
-$bookitem = new LibraryObject($descriptor);
+//$bookitem = new LibraryObject($descriptor);
+$bookitem = VirtualObjectFactory::getObject(['name' => 'lb_' . $table]);
 
 //$args = $bookitem->descriptor->getArgs();
 //echo var_export($args, true);
@@ -67,9 +74,6 @@ echo var_export($itemid, true) . "\n";
 echo "Datastore: " . get_class($bookitem->datastore) . "\n";
 $values = $bookitem->getFieldValues();
 echo var_export($values, true) . "\n";
-// @todo fix data object loader to retrieve linked object from external too!?
-//if ($offline) {
-//    xarDatabase::init();
-//}
-//$data = $bookitem->properties['authors']->getDeferredData();
-//echo var_export($data['value'], true) . "\n";
+// fix data object loader to retrieve linked object from external too!?
+$data = $bookitem->properties['tags']->getDeferredData();
+echo var_export($data['value'], true) . "\n";

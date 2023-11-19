@@ -14,6 +14,7 @@
 namespace Xaraya\DataObject\Import;
 
 use VirtualObjectDescriptor;
+use VirtualObjectFactory;
 use BadParameterException;
 use sys;
 
@@ -88,6 +89,6 @@ class PhpImporter extends JsonImporter
     public static function importDefinition($filepath, $offline = false)
     {
         $args = include $filepath;
-        return static::getObjectDescriptor($args, $offline);
+        return VirtualObjectFactory::getObjectDescriptor($args, $offline);
     }
 }

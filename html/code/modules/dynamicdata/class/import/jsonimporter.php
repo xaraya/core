@@ -14,6 +14,7 @@
 namespace Xaraya\DataObject\Import;
 
 use VirtualObjectDescriptor;
+use VirtualObjectFactory;
 use BadParameterException;
 use sys;
 
@@ -89,41 +90,6 @@ class JsonImporter extends DataObjectImporter
     public static function importDefinition($content, $offline = false)
     {
         $args = json_decode($content, true);
-        return static::getObjectDescriptor($args, $offline);
-    }
-
-    /**
-     * Summary of getObjectDescriptor
-     * @param array<string, mixed> $args
-     * @param bool $offline
-     * @return VirtualObjectDescriptor
-     */
-    public static function getObjectDescriptor($args, $offline = false)
-    {
-        $args = static::prepareDescriptorArgs($args);
-        $descriptor = new VirtualObjectDescriptor($args, $offline);
-        return $descriptor;
-    }
-
-    /**
-     * Summary of prepareDescriptorArgs
-     * @param array<string, mixed> $args
-     * @return array<string, mixed>
-     */
-    public static function prepareDescriptorArgs($args)
-    {
-        $arrayArgs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
-        foreach ($arrayArgs as $name) {
-            if (isset($args[$name]) && is_array($args[$name])) {
-                $args[$name] = serialize($args[$name]);
-            }
-        }
-        $args['propertyargs'] ??= [];
-        foreach ($args['propertyargs'] as $idx => $propertyArg) {
-            if (isset($propertyArg['configuration']) && is_array($propertyArg['configuration'])) {
-                $args['propertyargs'][$idx]['configuration'] = serialize($propertyArg['configuration']);
-            }
-        }
-        return $args;
+        return VirtualObjectFactory::getObjectDescriptor($args, $offline);
     }
 }
