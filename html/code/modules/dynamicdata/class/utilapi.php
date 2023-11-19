@@ -40,6 +40,12 @@ class UtilApi implements DatabaseInterface
     /** @var array<string, int> */
     protected static array $propTypeIds = [];
 
+    /**
+     * Summary of getObjectConfig
+     * @param string $objectname
+     * @param ?array<string, mixed> $item
+     * @return array<string, mixed>
+     */
     public static function getObjectConfig($objectname, $item = null)
     {
         $item ??= DataObjectFactory::getObjectInfo(['name' => $objectname]);
@@ -85,7 +91,7 @@ class UtilApi implements DatabaseInterface
 
         if (empty($table)) {
             $table = '';
-        } elseif (isset($propertybag[$table])) {
+        } elseif (empty($dbConnIndex) && empty($dbConnArgs['external']) && isset($propertybag[$table])) {
             return [$table => $propertybag[$table]];
         }
 
@@ -232,10 +238,14 @@ class UtilApi implements DatabaseInterface
      */
     public static function getExternalMeta($table, $dbConnIndex = '')
     {
+        /** @var array<string, array<string, array<string, mixed>>> */
+        static $propertybag = [];
+
         if (empty($dbConnIndex) || is_numeric($dbConnIndex)) {
             // we're in the wrong part of town
             return [];
         }
+        $propertybag[$dbConnIndex] ??= [];
 
         $metadata = [];
         if (empty($table)) {
@@ -244,6 +254,8 @@ class UtilApi implements DatabaseInterface
                 $metadata[$name] = [];
             }
             return $metadata;
+        } elseif (!empty($propertybag[$dbConnIndex]) && isset($propertybag[$dbConnIndex][$table])) {
+            return [$table => $propertybag[$dbConnIndex][$table]];
         }
 
         $metadata[$table] = [];
@@ -274,6 +286,7 @@ class UtilApi implements DatabaseInterface
             $primary = 'id';
             $metadata[$table]['id']['type'] = 21;
         }
+        $propertybag[$dbConnIndex][$table] = $metadata[$table];
         return $metadata;
     }
 
@@ -315,12 +328,14 @@ class UtilApi implements DatabaseInterface
             case 'char':
             case 'varchar':
             case 'string':
+            case 'var_string':
                 $proptype = $proptypeid['textbox']; // Text Box
                 if (!empty($size) && $size > 0) {
                     $configuration = "0:" . strval($size);
                 }
                 break;
             case 'tinyint':
+            case 'tiny':
                 if ($size == 1) {
                     $proptype = $proptypeid['checkbox']; // Checkbox
                     //$configuration = '';
@@ -332,6 +347,7 @@ class UtilApi implements DatabaseInterface
             case 'integer':
             case 'smallint':
             case 'mediumint':
+            case 'long':
                 $proptype = $proptypeid['integerbox']; // Number Box
                 if (!empty($size) && $size > 6) {
                     $configuration = '';

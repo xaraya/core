@@ -66,10 +66,23 @@ function get_descriptor($external = null)
     return $descriptor;
 }
 
-function test_create_item($external = null)
+function get_objectitem($external = null)
 {
     $descriptor = get_descriptor($external);
     $objectitem = new DataObject($descriptor);
+    return $objectitem;
+}
+
+function get_objectlist($external = null)
+{
+    $descriptor = get_descriptor($external);
+    $objectlist = new DataObjectList($descriptor);
+    return $objectlist;
+}
+
+function test_create_item($external = null)
+{
+    $objectitem = get_objectitem($external);
     echo "Datastore: " . get_class($objectitem->datastore) . "\n";
     $data = [
         'type' => 'test',
@@ -88,12 +101,13 @@ function test_create_item($external = null)
 
 function test_update_item($external = null, $itemid)
 {
-    $descriptor = get_descriptor($external);
-    $objectitem = new DataObject($descriptor);
+    $objectitem = get_objectitem($external);
     echo "Datastore: " . get_class($objectitem->datastore) . "\n";
     $itemid = $objectitem->getItem(['itemid' => $itemid]);
     $data = [
         'data' => 'goodbye',
+        // converted to true/false, which messes up Doctrine DBAL when stored as tinyint
+        'cache_check' => 0,
     ];
     $itemid = $objectitem->updateItem($data);
     echo "Itemid $itemid\n";
@@ -102,8 +116,7 @@ function test_update_item($external = null, $itemid)
 
 function test_delete_item($external = null, $itemid)
 {
-    $descriptor = get_descriptor($external);
-    $objectitem = new DataObject($descriptor);
+    $objectitem = get_objectitem($external);
     echo "Datastore: " . get_class($objectitem->datastore) . "\n";
     // @checkme avoid last stand protection in deleteItem()
     $objectitem->objectid = time();
@@ -114,8 +127,7 @@ function test_delete_item($external = null, $itemid)
 
 function test_get_item($external = null, $itemid)
 {
-    $descriptor = get_descriptor($external);
-    $objectitem = new DataObject($descriptor);
+    $objectitem = get_objectitem($external);
     echo "Datastore: " . get_class($objectitem->datastore) . "\n";
     $itemid = $objectitem->getItem(['itemid' => $itemid]);
     $item = $objectitem->getFieldValues();
@@ -124,8 +136,7 @@ function test_get_item($external = null, $itemid)
 
 function test_get_items($external = null)
 {
-    $descriptor = get_descriptor($external);
-    $objectlist = new DataObjectList($descriptor);
+    $objectlist = get_objectlist($external);
     echo "Datastore: " . get_class($objectlist->datastore) . "\n";
     //$items = $objectlist->getItems(['where' => ['type eq "test"'], 'fieldlist' => ['type', 'cache_key', 'time', 'data']]);
     $items = $objectlist->getItems(['where' => ["type = 'test'"], 'fieldlist' => ['type', 'cache_key', 'time', 'data']]);
@@ -137,13 +148,18 @@ function test_get_items($external = null)
 
 function test_count_items($external = null)
 {
-    $descriptor = get_descriptor($external);
-    $objectlist = new DataObjectList($descriptor);
+    $objectlist = get_objectlist($external);
     echo "Datastore: " . get_class($objectlist->datastore) . "\n";
     //$items = $objectlist->getItems(['where' => ['type eq "test"'], 'fieldlist' => ['type', 'cache_key', 'time', 'data']]);
     $numitems = $objectlist->countItems(['where' => ["type = 'test'"]]);
     echo "Count: $numitems\n";
     return $numitems;
+}
+
+function test_descriptor($external = null)
+{
+    $descriptor = get_descriptor($external);
+    echo var_export($descriptor->get('propertyargs'), true);
 }
 
 $drivers = ['', 'dbal', 'pdo', 'mongodb'];

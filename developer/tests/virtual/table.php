@@ -18,8 +18,9 @@ xarDatabase::init();
 
 function test_get_items()
 {
-    $descriptor = new TableObjectDescriptor(['table' => 'xar_module_vars']);
-    $objectlist = new DataObjectList($descriptor);
+    //$descriptor = new TableObjectDescriptor(['table' => 'xar_module_vars']);
+    //$objectlist = new DataObjectList($descriptor);
+    $objectlist = VirtualObjectFactory::getObjectList(['table' => 'xar_module_vars']);
     $items = $objectlist->getItems(['where' => ['module_id = NULL'], 'fieldlist' => ['name', 'value']]);
     foreach ($items as $itemid => $item) {
         echo "$itemid: " . var_export($item, true) . "\n";
@@ -32,9 +33,11 @@ function test_show_view()
     xarUser::init();
     // for showView
     xarTpl::init();
-    $descriptor = new TableObjectDescriptor(['table' => 'xar_module_vars']);
-    $objectlist = new DataObjectList($descriptor);
+    //$descriptor = new TableObjectDescriptor(['table' => 'xar_module_vars']);
+    //$objectlist = new DataObjectList($descriptor);
+    $objectlist = VirtualObjectFactory::getObjectList(['table' => 'xar_module_vars']);
     $items = $objectlist->getItems(['where' => ['module_id = NULL'], 'fieldlist' => ['name', 'value']]);
+    //$objectlist->properties['value']->setDisplayStatus(DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE);
     $output = $objectlist->showView();
     // force utf-8 encoding
     $doc = new DOMDocument();
@@ -48,8 +51,9 @@ function test_show_view()
 
 function test_generate_class()
 {
-    $descriptor = new TableObjectDescriptor(['table' => 'xar_cache_data']);
-    $objectitem = new DataObject($descriptor);
+    //$descriptor = new TableObjectDescriptor(['table' => 'xar_cache_data']);
+    //$objectitem = new DataObject($descriptor);
+    $objectitem = VirtualObjectFactory::getObject(['table' => 'xar_cache_data']);
     $exporter = new PhpExporter(0);
     $info = $exporter->addObjectDef('', $objectitem);
     echo $info;
