@@ -16,7 +16,7 @@ use Xaraya\Database\ExternalDatabase;
 // initialize bootstrap
 sys::init();
 
-require_once __DIR__ . '/dbal_config.php';
+require_once __DIR__ . '/db_config.php';
 
 /**
  * Create JSON table in MySQL database

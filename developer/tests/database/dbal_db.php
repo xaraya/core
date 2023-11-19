@@ -19,7 +19,7 @@ require_once dirname(__DIR__, 3).'/vendor/autoload.php';
 // initialize bootstrap
 sys::init();
 
-require_once __DIR__ . '/dbal_config.php';
+require_once __DIR__ . '/db_config.php';
 
 function check_schema($conn)
 {

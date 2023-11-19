@@ -1,6 +1,6 @@
 <?php
 /**
- * Doctrine DBAL Configuration for other test scripts
+ * Database Configuration for other test scripts
  */
 require_once dirname(__DIR__, 3).'/vendor/autoload.php';
 
@@ -70,6 +70,16 @@ function get_xaraya_conn($config = null)
     $connectionParams = get_xaraya_params($config);
     $conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams);
     return $conn;
+}
+
+function get_sqlite_config($filepath = null)
+{
+    $filepath ??= dirname(__DIR__, 3).'/html/code/modules/library/xardata/metadata.db';
+    return [
+        'databaseType' => 'sqlite3',  // 'pdo_sqlite',
+        //'databaseName' => sys::varpath() . '/sqlite/xaraya.sqlite',
+        'databaseName' => $filepath,
+    ];
 }
 
 function get_sqlite_params($filepath = null)

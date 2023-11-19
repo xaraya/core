@@ -85,7 +85,8 @@ class DbalDriver
     public static function getDriverType($dbconn)
     {
         /** @var \Doctrine\DBAL\Connection $dbconn */
-        return 'DBAL TODO';
+        //return 'DBAL TODO';
+        return get_class($dbconn->getDriver());
     }
 
     /**
