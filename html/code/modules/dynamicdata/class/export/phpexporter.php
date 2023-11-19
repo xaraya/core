@@ -191,6 +191,11 @@ class ' . $classname . ' extends GeneratedClass
         return $filepath;
     }
 
+    /**
+     * Summary of tryUnserialize
+     * @param mixed $serialized
+     * @return mixed
+     */
     public static function tryUnserialize($serialized)
     {
         try {

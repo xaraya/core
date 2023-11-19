@@ -80,7 +80,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         //$args = self::getObjectID($args);
         ObjectDescriptor::__construct($args);
         if ($offline) {
-            static::loadCoreCache();
+            VirtualObjectFactory::loadCoreCache();
         }
     }
 
@@ -121,29 +121,6 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         $var = get_called_class();
         $c = new $var($args['args']);
         return $c;
-    }
-
-    /**
-     * Load core cache with property types and configurations
-     * @return void
-     */
-    public static function loadCoreCache()
-    {
-        static $loaded = false;
-        if ($loaded) {
-            return;
-        }
-        if (!xarCoreCache::loadCached('DynamicData', 'PropertyTypes')) {
-            throw new Exception('No property types cached yet - you need to export at least 1 object to php');
-        }
-        if (!xarCoreCache::loadCached('DynamicData', 'Configurations')) {
-            throw new Exception('No configurations cached yet - you need to export at least 1 object to php');
-        }
-        // @todo adapt xarModVars::preload to allow preloading from cache?
-        //if (!xarCoreCache::loadCached('Mod.Variables.dynamicdata')) {  // 'databases'
-        //    throw new Exception('No module variables cached yet - you need to export at least 1 object to php');
-        //}
-        $loaded = true;
     }
 }
 
@@ -244,6 +221,7 @@ class VirtualObjectFactory extends xarObject
     /** @var array<string, mixed> */
     protected static array $definitions = [];
     protected static bool $offline = false;
+    protected static bool $loaded = false;
 
     /**
      * Class method to retrieve a particular object definition, with sub-classing
@@ -259,7 +237,11 @@ class VirtualObjectFactory extends xarObject
             $filepath = static::$definitions[$args['name']];
             $args = include $filepath;
             $descriptor = static::getObjectDescriptor($args, static::$offline);
-            return static::createObject($descriptor);
+            return static::makeObject($descriptor);
+        }
+        if (static::isTable($args)) {
+            $descriptor = new TableObjectDescriptor($args, static::$offline);
+            return new DataObject($descriptor);
         }
         return DataObjectFactory::getObject($args);
     }
@@ -278,7 +260,11 @@ class VirtualObjectFactory extends xarObject
             $filepath = static::$definitions[$args['name']];
             $args = include $filepath;
             $descriptor = static::getObjectDescriptor($args, static::$offline);
-            return static::createObjectList($descriptor);
+            return static::makeObjectList($descriptor);
+        }
+        if (static::isTable($args)) {
+            $descriptor = new TableObjectDescriptor($args, static::$offline);
+            return new DataObjectList($descriptor);
         }
         return DataObjectFactory::getObjectList($args);
     }
@@ -297,12 +283,25 @@ class VirtualObjectFactory extends xarObject
     }
 
     /**
-     * Create a particular object definition, with sub-classing
+     * Summary of isTable
+     * @param array<string, mixed> $args
+     * @return bool
+     */
+    public static function isTable(array $args)
+    {
+        if (!empty($args) && !empty($args['table']) && empty($args['objectid']) && empty($args['name'])) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Make a particular object definition, with sub-classing
      *
-     * @param VirtualObjectDescriptor $descriptor
+     * @param DataObjectDescriptor $descriptor
      * @return DataObject|null the requested object definition
      */
-    public static function createObject($descriptor)
+    public static function makeObject($descriptor)
     {
         // Make sure the class for this object is loaded
         if ($descriptor->exists('filepath') && ($descriptor->get('filepath') != 'auto')) {
@@ -319,12 +318,12 @@ class VirtualObjectFactory extends xarObject
     }
 
     /**
-     * Create a particular object list definition, with sub-classing
+     * Make a particular object list definition, with sub-classing
      *
-     * @param VirtualObjectDescriptor $descriptor
+     * @param DataObjectDescriptor $descriptor
      * @return DataObjectList|null the requested object definition
      */
-    public static function createObjectList($descriptor)
+    public static function makeObjectList($descriptor)
     {
         // Make sure the class for this object is loaded
         if ($descriptor->exists('filepath') && ($descriptor->get('filepath') != 'auto')) {
@@ -423,5 +422,27 @@ class VirtualObjectFactory extends xarObject
             }
         }
         return $count;
+    }
+
+    /**
+     * Load core cache with property types and configurations
+     * @return void
+     */
+    public static function loadCoreCache()
+    {
+        if (static::$loaded) {
+            return;
+        }
+        if (!xarCoreCache::loadCached('DynamicData', 'PropertyTypes')) {
+            throw new Exception('No property types cached yet - you need to export at least 1 object to php');
+        }
+        if (!xarCoreCache::loadCached('DynamicData', 'Configurations')) {
+            throw new Exception('No configurations cached yet - you need to export at least 1 object to php');
+        }
+        // @todo adapt xarModVars::preload to allow preloading from cache?
+        //if (!xarCoreCache::loadCached('Mod.Variables.dynamicdata')) {  // 'databases'
+        //    throw new Exception('No module variables cached yet - you need to export at least 1 object to php');
+        //}
+        static::$loaded = true;
     }
 }

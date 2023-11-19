@@ -5,9 +5,8 @@ namespace Xaraya\DataObject\Generated;
 use DataContainer;
 use DataObjectDescriptor;
 use DataObject;
-use DataObjectList;
 use Exception;
-use VirtualObjectDescriptor;
+use VirtualObjectFactory;
 use ArrayObject;
 use sys;
 
@@ -267,14 +266,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
      */
     public static function list(int $startnum = 1, int $numitems = 0)
     {
-        $clazz = static::getObjectClass();
-        if (class_exists($clazz . 'List')) {
-            $clazz .= 'List';
-        } elseif (!method_exists($clazz, 'getItems')) {
-            throw new Exception('Invalid class ' . $clazz . ' List');
-        }
-        /** @var DataObjectList $objectlist */
-        $objectlist = new $clazz(static::getDescriptor());
+        $objectlist = VirtualObjectFactory::makeObjectList(static::getDescriptor());
         if ($numitems > 0) {
             $items = $objectlist->getItems(['startnum' => $startnum, 'numitems' => $numitems]);
         } else {
@@ -296,29 +288,13 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
     }
 
     /**
-     * Get the class for the data object
-     * @return string
-     */
-    public static function getObjectClass()
-    {
-        $args = static::getDescriptorArgs();
-        $clazz = $args['class'] ?? 'DataObject';
-        $filepath = $args['filepath'] ?? 'auto';
-        if(!empty($filepath) && ($filepath != 'auto')) {
-            include_once(sys::code() . $filepath);
-        }
-        return $clazz;
-    }
-
-    /**
      * Get the data object
      * @return DataObject
      */
     public static function getObject()
     {
         if (!isset(static::$_object)) {
-            $clazz = static::getObjectClass();
-            static::$_object = new $clazz(static::getDescriptor());
+            static::$_object = VirtualObjectFactory::makeObject(static::getDescriptor());
         }
         return static::$_object;
     }
@@ -332,7 +308,7 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
         if (!isset(static::$_descriptor)) {
             // support *virtual* DataObject classes (= not defined in database) too
             $offline = true;
-            static::$_descriptor = new VirtualObjectDescriptor(static::getDescriptorArgs(), $offline);
+            static::$_descriptor = VirtualObjectFactory::getObjectDescriptor(static::getDescriptorArgs(), $offline);
         }
         return static::$_descriptor;
     }
@@ -349,18 +325,8 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
                 throw new Exception('No descriptor cached yet - you need to export this object to php first');
             }
             $args = require $filepath;
-            $arrayArgs = ['access', 'config', 'sources', 'relations', 'objects', 'category'];
-            foreach ($arrayArgs as $name) {
-                if (isset($args[$name]) && is_array($args[$name])) {
-                    $args[$name] = serialize($args[$name]);
-                }
-            }
+            //$args = VirtualObjectFactory::prepareDescriptorArgs($args);
             $args['propertyargs'] ??= [];
-            foreach ($args['propertyargs'] as $idx => $propertyArg) {
-                if (isset($propertyArg['configuration']) && is_array($propertyArg['configuration'])) {
-                    $args['propertyargs'][$idx]['configuration'] = serialize($propertyArg['configuration']);
-                }
-            }
             static::$_descriptorArgs = $args;
         }
         return static::$_descriptorArgs;
