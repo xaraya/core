@@ -82,6 +82,8 @@ function dynamicdata_admin_modifyconfig()
             xarConfigVars::set(null, 'Site.BL.ShowQueries', $show_queries);
             xarModVars::set('dynamicdata', 'suppress_updates', $suppress_updates);
             xarModVars::set('dynamicdata', 'caching', $caching);
+            // save to cache if enabled
+            xarModVars::cache('dynamicdata');
             break;
     }
     return $data;

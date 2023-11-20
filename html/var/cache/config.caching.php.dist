@@ -145,4 +145,7 @@ $cachingConfiguration['Variable.SizeLimit'] = 2097152;
 $cachingConfiguration['CoreCache.Preload'] = [
     //'Config.Variables' => 1,
     //'Mod.Variables.dynamicdata' => 1,
+    //'DynamicData:PropertyTypes' => 1,
+    //'DynamicData:Configurations' => 1,
+    //'DynamicData:Databases' => 1,
 ];

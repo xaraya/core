@@ -12,15 +12,14 @@
  *
  * @author Marcel van der Boom <mrb@hsdev.com>
  */
- 
-/**
- * ConfigVars class
- *
- * @todo if core was module 0 this could be a whole lot simpler by derivation (or if all config variables were moved to a module)
- */
 
 sys::import('xaraya.variables');
 
+/**
+ * Class to handle configuration variables
+ *
+ * @todo if core was module 0 this could be a whole lot simpler by derivation (or if all config variables were moved to a module)
+ */
 class xarConfigVars extends xarVars implements IxarVars
 {
     private static $KEY = 'Config.Variables'; // const cannot be private :-(
@@ -29,7 +28,6 @@ class xarConfigVars extends xarVars implements IxarVars
     /**
      * Sets a configuration variable.
      *
-     * 
      * @param string|null $scope not used
      * @param  string $name the name of the variable
      * @param  mixed  $value (array,integer or string) the value of the variable
@@ -164,18 +162,15 @@ class xarConfigVars extends xarVars implements IxarVars
     /**
      * Pre-load site configuration variables
      *
-     * 
      * @return boolean true on success, or void on database error
      * @todo We need some way to delete configuration (useless without a certain module) variables from the table!!!
      * @todo look into removing the serialisation, creole does this when needed, automatically (well, almost)
      */
     private static function preload()
     {
-        if (xarCoreCache::isCached('CoreCache.Preload', self::$KEY)) {
-            if (xarCoreCache::loadCached(self::$KEY)) {
-                self::$preloaded = true;
-                return true;
-            }
+        if (xarCoreCache::hasPreload(self::$KEY) && xarCoreCache::loadCached(self::$KEY)) {
+            self::$preloaded = true;
+            return true;
         }
 
         try {
@@ -200,11 +195,23 @@ class xarConfigVars extends xarVars implements IxarVars
         }
         $result->close();
 
-        if (xarCoreCache::isCached('CoreCache.Preload', self::$KEY)) {
+        if (xarCoreCache::hasPreload(self::$KEY)) {
             xarCoreCache::saveCached(self::$KEY);
         }
 
         self::$preloaded = true;
         return true;
+    }
+
+    /**
+     * Cache all site configuration variables (if CoreCache.Preload is enabled for it)
+     * @param string|null $scope not used
+     * @return void
+     */
+    public static function cache($scope = null)
+    {
+        if (xarCoreCache::hasPreload(self::$KEY)) {
+            xarCoreCache::saveCached(self::$KEY);
+        }
     }
 }

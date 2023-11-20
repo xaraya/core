@@ -1,5 +1,7 @@
 <?php
 /**
+ * Module variable handling
+ *
  * @package core\variables
  * @subpackage variables
  * @category Xaraya Web Applications Framework
@@ -8,11 +10,12 @@
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
  * @link http://www.xaraya.info
  */
+
+sys::import('xaraya.variables');
+
 /**
  * Build upon IxarVars to define interface for ModVars
- *
  */
-sys::import('xaraya.variables');
 interface IxarModVars extends IxarVars
 {
     static function getID     ($scope, $name);
@@ -20,15 +23,7 @@ interface IxarModVars extends IxarVars
 }
 
 /**
- * Class to model interface to module variables
- *
- * @package core\variables
- * @subpackage variables
- * @category Xaraya Web Applications Framework
- * @version 2.4.0
- * @copyright see the html/credits.html file in this release
- * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://www.xaraya.info
+ * Class to handle module variables
  */
 class xarModVars extends xarVars implements IxarModVars
 {
@@ -37,7 +32,6 @@ class xarModVars extends xarVars implements IxarModVars
     /**
      * Get a module variable
      *
-     * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @param  mixed  $value If a default value should be returned, it can be passed in.
@@ -90,23 +84,19 @@ class xarModVars extends xarVars implements IxarModVars
     /**
      * PreLoad all module variables for a particular module
      *
-     * @author Michel Dalle
-     * 
      * @param  string $scope Module name
      * @return boolean|void true on success
      * @throws EmptyParameterException
-     * @todo  This has some duplication with xarVar.php
+     * @todo  This has some duplication with config.php
      */
     static function preload($scope)
     {
         if (empty($scope)) throw new EmptyParameterException('modName');
 
         $cacheScope = 'Mod.Variables.' . $scope;
-        if (xarCoreCache::isCached('CoreCache.Preload', $cacheScope)) {
-            if (xarCoreCache::loadCached($cacheScope)) {
-                self::$preloaded[$scope] = true;
-                return true;
-            }
+        if (xarCoreCache::hasPreload($cacheScope) && xarCoreCache::loadCached($cacheScope)) {
+            self::$preloaded[$scope] = true;
+            return true;
         }
 
         $modBaseInfo = xarMod::getBaseInfo($scope);
@@ -126,7 +116,7 @@ class xarModVars extends xarVars implements IxarModVars
         }
         $result->close();
 
-        if (xarCoreCache::isCached('CoreCache.Preload', $cacheScope)) {
+        if (xarCoreCache::hasPreload($cacheScope)) {
             xarCoreCache::saveCached($cacheScope);
         }
 
@@ -135,9 +125,21 @@ class xarModVars extends xarVars implements IxarModVars
     }
 
     /**
+     * Cache all module variables for a particular module (if CoreCache.Preload is enabled for it)
+     * @param  string $scope Module name
+     * @return void
+     */
+    public static function cache($scope)
+    {
+        $cacheScope = 'Mod.Variables.' . $scope;
+        if (xarCoreCache::hasPreload($cacheScope)) {
+            xarCoreCache::saveCached($cacheScope);
+        }
+    }
+
+    /**
      * Set a module variable
      *
-     * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @param  mixed  $value The value of the variable
@@ -183,7 +185,6 @@ class xarModVars extends xarVars implements IxarModVars
     /**
      * Delete a module variable
      *
-     * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @return boolean true on success
@@ -224,7 +225,6 @@ class xarModVars extends xarVars implements IxarModVars
     /**
      * Delete all module variables
      *
-     * 
      * @param  string $scope The name of the module
      * @return boolean true on success
      * @throws EmptyParameterException, SQLException
@@ -288,7 +288,6 @@ class xarModVars extends xarVars implements IxarModVars
      * private function which delivers a module user variable
      * id based on the module name and the variable name
      *
-     * 
      * @param  string $scope The name of the module
      * @param  string $name  The name of the variable
      * @return integer|void identifier for the variable

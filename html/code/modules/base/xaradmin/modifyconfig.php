@@ -321,6 +321,8 @@ function base_admin_modifyconfig()
                     xarController::redirect(xarController::URL('base', 'admin', 'modifyconfig', array('tab' => 'other')));
                     break;
             }
+            // save to cache if enabled
+            xarConfigVars::cache();
 
             // Call updateconfig hooks
             xarModHooks::call('module','updateconfig','base', array('module' => 'base'));

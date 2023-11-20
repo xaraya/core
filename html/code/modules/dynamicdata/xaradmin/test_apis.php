@@ -135,6 +135,8 @@ function dynamicdata_admin_test_apis(array $args = [])
         xarModVars::set('dynamicdata', 'graphql_cache_plan', !empty($cachePlan) ? true : false);
         xarModVars::set('dynamicdata', 'graphql_cache_data', !empty($cacheData) ? true : false);
         xarModVars::set('dynamicdata', 'graphql_cache_operation', !empty($cacheOperation) ? true : false);
+        // save to cache if enabled
+        xarModVars::cache('dynamicdata');
     } else {
         $restapiserial = xarModVars::get('dynamicdata', 'restapi_object_list');
         if (!empty($restapiserial)) {

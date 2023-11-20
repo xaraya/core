@@ -22,6 +22,7 @@ class xarCache extends xarObject
     public static bool $variableCacheIsEnabled  = false;
     //public static bool $queryCacheIsEnabled     = false;
     public static string $cacheDir                = '';
+    protected static bool $initialized = false;
 
     /**
      * Initialise the caching options
@@ -31,6 +32,9 @@ class xarCache extends xarObject
      */
     public static function init($cacheDir = null)
     {
+        if (empty($cacheDir) && self::$initialized) {
+            return;
+        }
         if (empty($cacheDir) || !is_dir($cacheDir)) {
             $cacheDir = sys::varpath() . '/cache';
         }
@@ -63,6 +67,7 @@ class xarCache extends xarObject
             sys::import('xaraya.caching.variable');
             self::$variableCacheIsEnabled = xarVariableCache::init($config);
         }
+        self::$initialized = true;
     }
 
     /**
