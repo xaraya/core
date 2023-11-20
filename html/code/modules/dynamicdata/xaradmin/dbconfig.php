@@ -133,15 +133,10 @@ function dynamicdata_admin_dbconfig(array $args = [])
     $data['dbconfigs'] = [];
 
     // find any modules with module variable 'databases'
-    $all_modules = xarMod::apiFunc('modules', 'admin', 'getitems');
-    foreach ($all_modules as $item) {
-        $databases = xarModVars::get($item['name'], 'databases');
-        if (empty($databases)) {
-            continue;
-        }
-        $databases = unserialize($databases);
-        $data['dbconfigs'][$item['name']] ??= ['objects' => [], 'databases' => []];
-        $data['dbconfigs'][$item['name']]['databases'] = $databases;
+    $all_databases = UtilApi::getAllDatabases();
+    foreach ($all_databases as $modname => $databases) {
+        $data['dbconfigs'][$modname] ??= ['objects' => [], 'databases' => []];
+        $data['dbconfigs'][$modname]['databases'] = $databases;
     }
     // find any objects with config containing dbConnIndex and/or dbConnArgs
     $objectlist = DataObjectFactory::getObjectList(['name' => 'objects', 'fieldlist' => ['name', 'label', 'module_id', 'datastore', 'config']]);

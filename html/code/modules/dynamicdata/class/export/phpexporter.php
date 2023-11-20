@@ -17,9 +17,9 @@ use DataObject;
 use DataObjectDescriptor;
 use DataObjectList;
 use DataObjectFactory;
+use VirtualObjectFactory;
 use BadParameterException;
 use Throwable;
-use xarCoreCache;
 use sys;
 
 sys::import('modules.dynamicdata.class.objects.virtual');
@@ -46,7 +46,7 @@ class PhpExporter extends JsonExporter
         if ($this->tofile) {
             $filepath = dirname(__DIR__) . '/generated/' . ucwords($objectdef->name, '_') . '.php';
             file_put_contents($filepath, $info);
-            $this->saveCoreCache();
+            VirtualObjectFactory::saveCoreCache();
         }
         return $info;
     }
@@ -206,17 +206,6 @@ class ' . $classname . ' extends GeneratedClass
         } catch (Throwable $e) {
         }
         return $serialized;
-    }
-
-    /**
-     * Summary of saveCoreCache - used in VirtualObjectDescriptor::loadCoreCache()
-     * @return void
-     */
-    public static function saveCoreCache()
-    {
-        xarCoreCache::saveCached('DynamicData', 'PropertyTypes');
-        xarCoreCache::saveCached('DynamicData', 'Configurations');
-        //xarCoreCache::saveCached('Mod.Variables.dynamicdata');  // 'databases'
     }
 
     /**

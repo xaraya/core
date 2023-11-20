@@ -187,7 +187,6 @@ class TableObjectDescriptor extends VirtualObjectDescriptor
     public function addTable(string $table, array $fields = [], int|string $dbConnIndex = 0, array $dbConnArgs = [])
     {
         if (empty($fields)) {
-            //$fields = xarMod::apiFunc('dynamicdata', 'util', 'getstatic', ['module' => 'dynamicdata', 'module_id' => 182, 'table' => $table, 'dbConnIndex' => $dbConnIndex]);
             /** @var array<string, array<string, array<string, mixed>>> $meta */
             $meta = UtilApi::getMeta($table, null, $dbConnIndex, $dbConnArgs);
             if (empty($meta[$table])) {
@@ -439,10 +438,26 @@ class VirtualObjectFactory extends xarObject
         if (!xarCoreCache::loadCached('DynamicData', 'Configurations')) {
             throw new Exception('No configurations cached yet - you need to export at least 1 object to php');
         }
+        if (!xarCoreCache::loadCached('DynamicData', 'Databases')) {
+            throw new Exception('No databases cached yet - you need to visit DD > Utilities > DB Connections once');
+        }
         // @todo adapt xarModVars::preload to allow preloading from cache?
         //if (!xarCoreCache::loadCached('Mod.Variables.dynamicdata')) {  // 'databases'
         //    throw new Exception('No module variables cached yet - you need to export at least 1 object to php');
         //}
         static::$loaded = true;
+    }
+
+    /**
+     * Save core cache with property types and configurations
+     * @return void
+     */
+    public static function saveCoreCache()
+    {
+        xarCoreCache::saveCached('DynamicData', 'PropertyTypes');
+        xarCoreCache::saveCached('DynamicData', 'Configurations');
+        // Saved in DD > Utilities > DB Connections = xaradmin/dbconfig.php for all modules - UtilApi::getAllDatabases()
+        //xarCoreCache::saveCached('DynamicData', 'Databases');
+        //xarCoreCache::saveCached('Mod.Variables.dynamicdata');  // 'databases'
     }
 }

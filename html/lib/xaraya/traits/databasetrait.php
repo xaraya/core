@@ -47,6 +47,7 @@ namespace Xaraya\Core\Traits;
 
 use Xaraya\Database\ExternalDatabase;
 use Connection;
+use xarCoreCache;
 use xarDB;
 use xarModVars;
 use xarModUserVars;
@@ -191,9 +192,19 @@ trait DatabaseTrait
             static::setModuleName($moduleName);
         }
         if (empty(static::$_databases)) {
-            static::$_databases = unserialize(xarModVars::get(static::$moduleName, 'databases'));
-            if (empty(static::$_databases)) {
-                static::$_databases = [];
+            $allDatabases = [];
+            if (xarCoreCache::isCached('DynamicData', 'Databases')) {
+                $allDatabases = xarCoreCache::getCached('DynamicData', 'Databases');
+            }
+            if (!empty($allDatabases[static::$moduleName])) {
+                static::$_databases = $allDatabases[static::$moduleName];
+            } else {
+                static::$_databases = unserialize(xarModVars::get(static::$moduleName, 'databases'));
+                if (empty(static::$_databases)) {
+                    static::$_databases = [];
+                }
+                $allDatabases[static::$moduleName] = static::$_databases;
+                xarCoreCache::setCached('DynamicData', 'Databases', $allDatabases);
             }
         }
         return static::$_databases;
@@ -233,6 +244,14 @@ trait DatabaseTrait
         $databases ??= static::$_databases;
         $moduleName ??= static::$moduleName;
         xarModVars::set($moduleName, 'databases', serialize($databases));
+        $allDatabases = [];
+        if (xarCoreCache::isCached('DynamicData', 'Databases')) {
+            $allDatabases = xarCoreCache::getCached('DynamicData', 'Databases');
+        }
+        $allDatabases[$moduleName] = $databases;
+        xarCoreCache::setCached('DynamicData', 'Databases', $allDatabases);
+        // Saved in DD > Utilities > DB Connections = xaradmin/dbconfig.php for all modules - UtilApi::getAllDatabases()
+        //xarCoreCache::saveCached('DynamicData', 'Databases');
     }
 
     /**
@@ -299,6 +318,9 @@ trait DatabaseTrait
      */
     public static function getCurrentDatabase()
     {
+        if (count(static::getDatabases()) === 1) {
+            return array_key_first(static::$_databases);
+        }
         if (xarUser::isLoggedIn()) {
             $name = xarModUserVars::get(static::$moduleName, 'dbName');
         } else {

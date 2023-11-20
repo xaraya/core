@@ -22,7 +22,10 @@ use DataPropertyMaster;
 use TableObjectDescriptor;
 use BadParameterException;
 use Exception;
+use xarCoreCache;
 use xarDB;
+use xarMod;
+use xarModVars;
 use sys;
 
 sys::import('xaraya.traits.databasetrait');
@@ -73,6 +76,35 @@ class UtilApi implements DatabaseInterface
         }
         $configuration = array_merge($configuration, $item);
         return $configuration;
+    }
+
+    /**
+     * Summary of getObjectConfig
+     * @return array<string, mixed>
+     */
+    public static function getAllDatabases()
+    {
+        // find any modules with module variable 'databases'
+        $all_modules = xarMod::apiFunc('modules', 'admin', 'getitems');
+        $all_databases = [];
+        foreach ($all_modules as $item) {
+            $databases = xarModVars::get($item['name'], 'databases');
+            if (empty($databases)) {
+                continue;
+            }
+            $databases = unserialize($databases);
+            $all_databases[$item['name']] = $databases;
+        }
+        // save databases in core cache if needed
+        $old_databases = [];
+        if (xarCoreCache::isCached('DynamicData', 'Databases')) {
+            $old_databases = xarCoreCache::getCached('DynamicData', 'Databases');
+        }
+        if (json_encode($old_databases) != json_encode($all_databases)) {
+            xarCoreCache::setCached('DynamicData', 'Databases', $all_databases);
+            xarCoreCache::saveCached('DynamicData', 'Databases');
+        }
+        return $all_databases;
     }
 
     /**
