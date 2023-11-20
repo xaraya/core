@@ -171,6 +171,13 @@ class xarConfigVars extends xarVars implements IxarVars
      */
     private static function preload()
     {
+        if (xarCoreCache::isCached('CoreCache.Preload', self::$KEY)) {
+            if (xarCoreCache::loadCached(self::$KEY)) {
+                self::$preloaded = true;
+                return true;
+            }
+        }
+
         try {
           $dbconn = xarDB::getConn();
           $tables = xarDB::getTables();
@@ -192,6 +199,10 @@ class xarConfigVars extends xarVars implements IxarVars
             xarCoreCache::setCached(self::$KEY, $result->getString('name'), $newval);
         }
         $result->close();
+
+        if (xarCoreCache::isCached('CoreCache.Preload', self::$KEY)) {
+            xarCoreCache::saveCached(self::$KEY);
+        }
 
         self::$preloaded = true;
         return true;

@@ -101,6 +101,14 @@ class xarModVars extends xarVars implements IxarModVars
     {
         if (empty($scope)) throw new EmptyParameterException('modName');
 
+        $cacheCollection = 'Mod.Variables.' . $scope;
+        if (xarCoreCache::isCached('CoreCache.Preload', $cacheCollection)) {
+            if (xarCoreCache::loadCached($cacheCollection)) {
+                self::$preloaded[$scope] = true;
+                return true;
+            }
+        }
+
         $modBaseInfo = xarMod::getBaseInfo($scope);
         if (!isset($modBaseInfo)) return;
 
@@ -114,9 +122,13 @@ class xarModVars extends xarVars implements IxarModVars
         $result = $stmt->executeQuery(array($modBaseInfo['systemid']),xarDB::FETCHMODE_ASSOC);
 
         while ($result->next()) {
-            xarCoreCache::setCached('Mod.Variables.' . $scope, $result->getString('name'), $result->get('value'));
+            xarCoreCache::setCached($cacheCollection, $result->getString('name'), $result->get('value'));
         }
         $result->close();
+
+        if (xarCoreCache::isCached('CoreCache.Preload', $cacheCollection)) {
+            xarCoreCache::saveCached($cacheCollection);
+        }
 
         self::$preloaded[$scope] = true;
         return true;

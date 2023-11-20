@@ -141,3 +141,8 @@ $cachingConfiguration['Variable.LogFile'] = '';
 // Size in bytes to limit the variable cache to
 $cachingConfiguration['Variable.SizeLimit'] = 2097152;
 
+// Configure core cache (optional)
+$cachingConfiguration['CoreCache.Preload'] = [
+    //'Config.Variables' => 1,
+    //'Mod.Variables.dynamicdata' => 1,
+];

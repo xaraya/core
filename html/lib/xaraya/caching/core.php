@@ -33,6 +33,14 @@ class xarCoreCache extends xarObject
     **/
     public static function init(array $config = [])
     {
+        $scopes = ['CoreCache.Preload'];
+        // initialize core cache with some values from caching configuration
+        foreach ($scopes as $scope) {
+            if (!empty($config[$scope])) {
+                self::$cacheCollection[$scope] = $config[$scope];
+            }
+        }
+
         return true;
     }
 
