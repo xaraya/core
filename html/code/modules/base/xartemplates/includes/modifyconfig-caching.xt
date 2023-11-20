@@ -91,6 +91,55 @@
                 </div>
             </div>
         </fieldset>
+        <fieldset>
+            <legend>Core Cache Preload</legend>
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">Enable core cache preload from .php files (opcache)</xar:var>
+                    <label for="shorturl" title="#$label#" class="xar-form-label">
+                        Enable Core Cache Preload
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:set name="value">!empty($cache_settings['CoreCache.Preload'])</xar:set>
+                    <xar:data-output type="checkbox" name="corecache_isenabled" value="$value"/>
+                </div>
+            </div>
+            <xar:if condition="!empty($cache_settings['CoreCache.Preload'])">
+            <div class="xar-row">
+                <div class="xar-col">
+                    <xar:var name="label">Preloading core cache values for a particular scope and name</xar:var>
+                    <label for="shorturl" title="#$label#" class="xar-form-label">
+                        Preloading Scope and Name
+                    </label>
+                </div>
+                <div class="xar-col">
+                    <xar:foreach in="$cache_settings['CoreCache.Preload']" key="$scope" value="$value">
+                        <xar:if condition="str_contains($scope, ':')">
+                            <xar:set name="pieces">explode(':', $scope)</xar:set>
+                            <xar:set name="filepath">sys::varpath() . '/cache/core/' . $pieces[0] . '.' . $pieces[1] . '.php'</xar:set>
+                            <xar:if condition="!isset($value)">
+                                Scope: #$pieces[0]# - Name: #$pieces[1]# (disabled)<br/>
+                            <xar:elseif condition="file_exists($filepath)"/>
+                                Scope: #$pieces[0]# - Name: #$pieces[1]# (#filesize($filepath)# bytes)<br/>
+                            <xar:else/>
+                                Scope: #$pieces[0]# - Name: #$pieces[1]# (not cached)<br/>
+                            </xar:if>
+                        <xar:else/>
+                            <xar:set name="filepath">sys::varpath() . '/cache/core/' . $scope . '.php'</xar:set>
+                            <xar:if condition="!isset($value)">
+                                Scope: #$scope# (disabled)<br/>
+                            <xar:elseif condition="file_exists($filepath)"/>
+                                Scope: #$scope# (#filesize($filepath)# bytes)<br/>
+                            <xar:else/>
+                                Scope: #$scope# (not cached)<br/>
+                            </xar:if>
+                        </xar:if>
+                    </xar:foreach>
+                </div>
+            </div>
+            </xar:if>
+        </fieldset>
     <xar:else/>
         <div style="padding: 5px">
             The file var/cache/config.caching.php does not exist. Please copy it from var/cache/config.caching.php.dist
