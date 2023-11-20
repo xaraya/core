@@ -48,6 +48,7 @@ class DeferredItemProperty extends DataProperty
     public $fieldlist  = null;
     public $displaylink = null;
     public $singlevalue = false;
+    public $olddefault  = null;
     public static $deferred = [];  // array of $name with deferred data object item loader
 
     public function __construct(ObjectDescriptor $descriptor)
@@ -106,9 +107,23 @@ class DeferredItemProperty extends DataProperty
             // sorry, you'll have to deal with it directly in the template
             $this->displaylink = null;
         }
+        // save the old default value in case of unserialize()
+        $this->olddefault = $this->defaultvalue;
         // reset default value and current value after config parsing
         $this->defaultvalue = '';
         $this->value = '';
+    }
+
+    /**
+     * Parse config value again based on the old default value after unserialize()
+     * @return void
+     */
+    public function __wakeup()
+    {
+        if (empty($this->defaultvalue) && !empty($this->olddefault)) {
+            $this->defaultvalue = $this->olddefault;
+        }
+        $this->parseConfigValue($this->defaultvalue);
     }
 
     /**

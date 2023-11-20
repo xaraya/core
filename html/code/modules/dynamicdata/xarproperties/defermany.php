@@ -129,6 +129,8 @@ class DeferredManyProperty extends DeferredItemProperty
             //$this->setInputStatus(DataPropertyMaster::DD_INPUTSTATE_NOINPUT);
             $this->setInputStatus(DataPropertyMaster::DD_INPUTSTATE_IGNORED);
         }
+        // save the old default value in case of unserialize()
+        $this->olddefault = $this->defaultvalue;
         // reset default value and current value after config parsing
         $this->defaultvalue = '';
         $this->value = '';
