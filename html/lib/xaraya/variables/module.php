@@ -54,11 +54,11 @@ class xarModVars extends xarVars implements IxarModVars
             self::preload($scope);
 
         // Lets first check to see if any of our type vars are already set in the cache.
-        $cacheCollection = 'Mod.Variables.' . $scope;
+        $cacheScope = 'Mod.Variables.' . $scope;
 
         // Try to get it from the cache
-        if (xarCoreCache::isCached($cacheCollection, $name)) {
-            $value = xarCoreCache::getCached($cacheCollection, $name);
+        if (xarCoreCache::isCached($cacheScope, $name)) {
+            $value = xarCoreCache::getCached($cacheScope, $name);
             return $value;
         }
 
@@ -81,7 +81,7 @@ class xarModVars extends xarVars implements IxarModVars
         {
             // Found
             $value = $result->get(2);
-            xarCoreCache::setCached($cacheCollection, $result->getString(1), $value);
+            xarCoreCache::setCached($cacheScope, $result->getString(1), $value);
         }
         $result->close();
         return $value;
@@ -101,9 +101,9 @@ class xarModVars extends xarVars implements IxarModVars
     {
         if (empty($scope)) throw new EmptyParameterException('modName');
 
-        $cacheCollection = 'Mod.Variables.' . $scope;
-        if (xarCoreCache::isCached('CoreCache.Preload', $cacheCollection)) {
-            if (xarCoreCache::loadCached($cacheCollection)) {
+        $cacheScope = 'Mod.Variables.' . $scope;
+        if (xarCoreCache::isCached('CoreCache.Preload', $cacheScope)) {
+            if (xarCoreCache::loadCached($cacheScope)) {
                 self::$preloaded[$scope] = true;
                 return true;
             }
@@ -122,12 +122,12 @@ class xarModVars extends xarVars implements IxarModVars
         $result = $stmt->executeQuery(array($modBaseInfo['systemid']),xarDB::FETCHMODE_ASSOC);
 
         while ($result->next()) {
-            xarCoreCache::setCached($cacheCollection, $result->getString('name'), $result->get('value'));
+            xarCoreCache::setCached($cacheScope, $result->getString('name'), $result->get('value'));
         }
         $result->close();
 
-        if (xarCoreCache::isCached('CoreCache.Preload', $cacheCollection)) {
-            xarCoreCache::saveCached($cacheCollection);
+        if (xarCoreCache::isCached('CoreCache.Preload', $cacheScope)) {
+            xarCoreCache::saveCached($cacheScope);
         }
 
         self::$preloaded[$scope] = true;
