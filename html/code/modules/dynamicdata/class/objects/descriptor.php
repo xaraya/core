@@ -64,10 +64,10 @@ class DataObjectDescriptor extends ObjectDescriptor
         // @todo remove overlap between DataObjectFactory::*getObjectInfo() and DataObjectDescripter::getObjectID()
         $cacheKey = 'DynamicData.getObjectID';
         if(isset($args['objectid']) && xarCoreCache::isCached($cacheKey, $args['objectid'])) {
-            return xarCoreCache::getCached($cacheKey, $args['objectid']);
+            return array_merge($args, xarCoreCache::getCached($cacheKey, $args['objectid']));
         }
         if(isset($args['name']) && xarCoreCache::isCached($cacheKey, $args['name'])) {
-            return xarCoreCache::getCached($cacheKey, $args['name']);
+            return array_merge($args, xarCoreCache::getCached($cacheKey, $args['name']));
         }
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
         $xartable = & xarDB::getTables();
@@ -123,11 +123,14 @@ class DataObjectDescriptor extends ObjectDescriptor
         if (empty($args['template'])) {
             $args['template'] = $args['name'];
         }
+        // clean up unwanted args from cache
+        $cache = $args;
+        unset($cache['itemid']);
         if (isset($args['objectid'])) {
-            xarCoreCache::setCached($cacheKey, $args['objectid'], $args);
+            xarCoreCache::setCached($cacheKey, $args['objectid'], $cache);
         }
         if (isset($args['name'])) {
-            xarCoreCache::setCached($cacheKey, $args['name'], $args);
+            xarCoreCache::setCached($cacheKey, $args['name'], $cache);
         }
         return $args;
     }

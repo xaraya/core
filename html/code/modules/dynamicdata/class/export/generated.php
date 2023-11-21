@@ -72,9 +72,9 @@ class GeneratedClass extends DataContainer implements iGeneratedClass
     /** @var string */
     protected static $_objectName = 'OVERRIDE';
     /** @var ?DataObject */
-    protected static $_object;
+    public static $_object;
     /** @var ?DataObjectDescriptor */
-    protected static $_descriptor;
+    public static $_descriptor;
     /** @var array<string, mixed> */
     protected static $_descriptorArgs = [];
     /** @var list<array<string, mixed>> */

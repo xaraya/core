@@ -2,7 +2,7 @@
 /**
  * Entrypoint for experimenting with virtual objects
  */
-require_once dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\Generated\Sample;
 
@@ -20,6 +20,43 @@ xarDatabase::init();
 
 const TEST_COUNT = 5000;
 
+class LocalProfiler
+{
+    public static float $total = 0.0;
+    public static int $count = 0;
+    public static float $now = 0.0;
+
+    public static function clear(): void
+    {
+        static::$total = 0.0;
+        static::$count = 0;
+    }
+
+    public static function start(): void
+    {
+        static::$now = microtime(true);
+    }
+
+    public static function stop(): void
+    {
+        $elapsed = microtime(true) - static::$now;
+        static::$total += $elapsed;
+        static::$count += 1;
+    }
+
+    public static function result(): string
+    {
+        $result = "Total: " . sprintf('%.3f', static::$total) . " sec - Count: " . sprintf('%d', static::$count);
+        if (static::$count > 0) {
+            $result .= " - Average: " . sprintf('%.3f', (static::$total * 1000.0 / static::$count)) . " msec\n";
+        } else {
+            $result .= " - Average: N/A msec\n";
+        }
+        static::clear();
+        return $result;
+    }
+}
+
 function mini_profile($profile, $callable, $itemid = null)
 {
     echo "Profile: $profile\n";
@@ -31,12 +68,17 @@ function mini_profile($profile, $callable, $itemid = null)
     $stop = microtime(true);
     $elapsed = sprintf('%.3f', $stop - $start);
     $memory = sprintf('%.1f', (memory_get_usage(true) - $used) / 1024 / 1024);
-    echo "Elapsed: $elapsed sec - Memory: $memory MB - Count: $count\n\n";
+    $average = 'N/A';
+    if ($count > 0) {
+        $average = round(($stop - $start) * 1000.0 / $count, 3);
+    }
+    echo "Elapsed: $elapsed sec - Memory: $memory MB - Count: $count - Average: $average msec\n\n";
 }
 
 function test_normal_baseline($itemid = null)
 {
     $coll = new ArrayObject();
+    LocalProfiler::clear();
     for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = DataObjectFactory::getObject(['name' => 'sample']);
@@ -46,6 +88,7 @@ function test_normal_baseline($itemid = null)
         $sample->setFieldValues($args);
         $coll[] = $sample;
     }
+    echo LocalProfiler::result();
     $values = $coll[25]->getFieldValues();
     echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
     return count($coll);
@@ -79,11 +122,15 @@ function test_normal_clone($itemid = null)
 function test_generated_baseline($itemid = null)
 {
     $coll = new ArrayObject();
+    LocalProfiler::clear();
     for ($i = 0; $i < TEST_COUNT; $i++) {
+        Sample::$_object = null;
+        Sample::$_descriptor = null;
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = new Sample($itemid, $args);
         $coll[] = $sample;
     }
+    echo LocalProfiler::result();
     $values = $coll[25]->toArray();
     echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
     return count($coll);

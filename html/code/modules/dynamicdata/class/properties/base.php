@@ -950,6 +950,7 @@ class DataProperty extends xarObject implements iDataProperty
                 return [];
             }
         }
+        //LocalProfiler::start();
         if (!empty($fields) && is_array($fields)) {
             foreach ($this->configurationtypes as $configtype) {
                 $properties = $this->getConfigProperties($configtype, 1);
@@ -964,6 +965,7 @@ class DataProperty extends xarObject implements iDataProperty
                 }
             }
         }
+        //LocalProfiler::stop();
         // Return the exploded fields
         return $fields;
     }
@@ -1188,15 +1190,14 @@ class DataProperty extends xarObject implements iDataProperty
                 continue;
             }
             // Ignore properties that are not of the config $type passed
-            $pos = strpos($name, "_");
-            if (!$pos || (substr($name, 0, $pos) != $type)) {
+            if (!str_starts_with($name, $type . '_')) {
                 continue;
             }
             // This one is good. Make an entry for it
-            $key = $fullname ? $name : substr($name, $pos + 1);
+            $key = $fullname ? $name : substr($name, strlen($type) + 2);
             $configproperties[$name] = $allconfigproperties[$name];
             $configproperties[$key]['value'] = $arg;
-            $configproperties[$key]['shortname'] = substr($name, $pos + 1);
+            $configproperties[$key]['shortname'] = substr($name, strlen($type) + 2);
             $configproperties[$key]['fullname'] = $name;
         }
         return $configproperties;
