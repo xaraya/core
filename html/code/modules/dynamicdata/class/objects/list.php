@@ -828,14 +828,14 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
         $is_user = 1;
 
         // Work with specific access rules for this object (= valid for all itemids)
-        if (!empty($this->access)) {
+        if (!empty($this->access_rules)) {
             // initialize the access options
             if (empty($this->cached_allow)) {
                 $this->cached_allow = [];
-                $this->cached_allow['display'] = $this->checkAccess('display');
-                $this->cached_allow['update'] = $this->checkAccess('update');
-                $this->cached_allow['create'] = $this->checkAccess('create');
                 $this->cached_allow['delete'] = $this->checkAccess('delete');
+                $this->cached_allow['create'] = $this->checkAccess('create');
+                $this->cached_allow['update'] = $this->checkAccess('update');
+                $this->cached_allow['display'] = $this->checkAccess('display');
             }
             // get the access options
             $allow_delete = $this->cached_allow['delete'];
@@ -843,7 +843,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $allow_edit = $this->cached_allow['update'];
             $allow_read = $this->cached_allow['display'];
 
-            // Assume normal rules for access control, i.e. Delete > Edit > Read
+        // Assume normal rules for access control, i.e. Delete > Create > Update > Display
         } elseif ($is_user && $this->checkAccess('delete', $itemid)) {
             $allow_delete = 1;
             $allow_add = 1;

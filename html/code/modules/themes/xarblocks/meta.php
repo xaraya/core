@@ -156,13 +156,13 @@ class Themes_MetaBlock extends BasicBlock
                     array('rel' => 'copyright', 'href' => !empty($data['copyrightpage']) ? $data['copyrightpage'] : '', 'title' => '', 'type' => 'text/html'),
                     array('rel' => 'help', 'href' => !empty($data['helppage']) ? $data['helppage'] : '' , 'title' => '', 'type' => 'text/html'),
                     array('rel' => 'glossary', 'href' => !empty($data['glossary']) ? $data['glossary'] : '', 'title' => '', 'type' => 'text/html'),                                                    
-                    array('rel' => 'pingback', 'href' => '[baseurl]ws.php', 'title' => '', 'type' => ''),
+                    //array('rel' => 'pingback', 'href' => '[baseurl]ws.php', 'title' => '', 'type' => ''),
                     array('rel' => 'Top', 'href' => '[baseurl]', 'title' => '', 'type' => 'text/html'),
                     array('rel' => 'parent', 'href' => '[baseurl]', 'title' => '', 'type' => 'text/html'),            
-                    array('rel' => 'contents', 'href' => '[articles:user:viewmap]', 'title' => '', 'type' => 'text/html'),
-                    array('rel' => 'search', 'href' => '[search:user:main]', 'title' => '', 'type' => 'text/html'),
+                    //array('rel' => 'contents', 'href' => '[articles:user:viewmap]', 'title' => '', 'type' => 'text/html'),
+                    //array('rel' => 'search', 'href' => '[search:user:main]', 'title' => '', 'type' => 'text/html'),
                     array('rel' => 'alternate', 'href' => '[currenturl]theme=rss', 'title' => 'RSS-feed', 'type' => 'application/rss+xml'),
-                    array('rel' => 'service.feed', 'href' => '[currenturl]theme=atom', 'title' => 'Atom-feed', 'type' => 'application/atom+xml'),
+                    //array('rel' => 'service.feed', 'href' => '[currenturl]theme=atom', 'title' => 'Atom-feed', 'type' => 'application/atom+xml'),
                     array('rel' => 'alternate', 'href' => '[currenturl]theme=print', 'title' => 'Print', 'type' => 'text/html'),
                 );
                 // remove deprecated property values
@@ -192,9 +192,11 @@ class Themes_MetaBlock extends BasicBlock
     {
         $linktags = array();
         if (!empty($this->linktags)) {
+            $deprecated = ['[baseurl]ws.php', '[articles:user:viewmap]', '[search:user:main]', '[currenturl]theme=atom'];
             foreach ($this->linktags as $tag) {
                 // skip tags with empty rel or href attributes
                 if (empty($tag['rel']) || empty($tag['href'])) continue;
+                if (in_array($tag['href'], $deprecated)) continue;
                 if (!$tag['url'] = $this->_decodeURL($tag['href'])) continue;
                 $linktags[] = $tag;
             }
@@ -342,13 +344,13 @@ class Themes_MetaBlock extends BasicBlock
             array('rel' => 'copyright', 'href' => '', 'title' => '', 'type' => 'text/html'),
             array('rel' => 'help', 'href' => '' , 'title' => '', 'type' => 'text/html'),
             array('rel' => 'glossary', 'href' => '', 'title' => '', 'type' => 'text/html'),                            
-            array('rel' => 'pingback', 'href' => '[baseurl]ws.php', 'title' => '', 'type' => ''),
+            //array('rel' => 'pingback', 'href' => '[baseurl]ws.php', 'title' => '', 'type' => ''),
             array('rel' => 'Top', 'href' => '[baseurl]', 'title' => '', 'type' => 'text/html'),
             array('rel' => 'parent', 'href' => '[baseurl]', 'title' => '', 'type' => 'text/html'),            
-            array('rel' => 'contents', 'href' => '[articles:user:viewmap]', 'title' => '', 'type' => 'text/html'),
-            array('rel' => 'search', 'href' => '[search:user:main]', 'title' => '', 'type' => 'text/html'),
+            //array('rel' => 'contents', 'href' => '[articles:user:viewmap]', 'title' => '', 'type' => 'text/html'),
+            //array('rel' => 'search', 'href' => '[search:user:main]', 'title' => '', 'type' => 'text/html'),
             array('rel' => 'alternate', 'href' => '[currenturl]theme=rss', 'title' => 'RSS-feed', 'type' => 'application/rss+xml'),
-            array('rel' => 'service.feed', 'href' => '[currenturl]theme=atom', 'title' => 'Atom-feed', 'type' => 'application/atom+xml'),
+            //array('rel' => 'service.feed', 'href' => '[currenturl]theme=atom', 'title' => 'Atom-feed', 'type' => 'application/atom+xml'),
             array('rel' => 'alternate', 'href' => '[currenturl]theme=print', 'title' => 'Print', 'type' => 'text/html'),
         );
         return $linktags;   

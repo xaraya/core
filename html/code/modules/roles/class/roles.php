@@ -327,20 +327,28 @@ class xarRoles extends xarObject
      */
     private static function _lookuprole($field,$value,$itemtype=self::ROLES_USERTYPE,$state=self::ROLES_STATE_ALL)
     {
-        // retrieve the object's data from the repository
-        // set up and execute the query
-        self::initialize();
-        $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = " . self::$dbconn->qstr($value) ;
-        if ($state == self::ROLES_STATE_CURRENT) {
-            $query .= " AND state != " . self::ROLES_STATE_DELETED;
-        } elseif ($state != self::ROLES_STATE_ALL) {
-            $query .= " AND state = " . $state;
+        // get rid of 30 repeating queries for base homepage due to security checks
+        $cacheScope = 'Roles.ByLookup';
+        $cacheName = "$field:$value:$itemtype:$state";
+        if (xarCoreCache::isCached($cacheScope, $cacheName)) {
+            $row = xarCoreCache::getCached($cacheScope, $cacheName);
+        } else {
+            // retrieve the object's data from the repository
+            // set up and execute the query
+            self::initialize();
+            $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = " . self::$dbconn->qstr($value) ;
+            if ($state == self::ROLES_STATE_CURRENT) {
+                $query .= " AND state != " . self::ROLES_STATE_DELETED;
+            } elseif ($state != self::ROLES_STATE_ALL) {
+                $query .= " AND state = " . $state;
+            }
+            $stmt = self::$dbconn->prepareStatement($query);
+            $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_ASSOC);
+            if(!$result) return;            
+            if($result->next()) $row = $result->fields;
+            if (empty($row)) return;
+            xarCoreCache::setCached($cacheScope, $cacheName, $row);
         }
-        $stmt = self::$dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_ASSOC);
-        if(!$result) return;            
-        if($result->next()) $row = $result->fields;
-        if (empty($row)) return;
 
         // create and return the role object
         if ($row['itemtype'] == self::ROLES_USERTYPE) $name = 'roles_users';
