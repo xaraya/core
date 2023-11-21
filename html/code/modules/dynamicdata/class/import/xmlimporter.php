@@ -79,7 +79,7 @@ class XmlImporter extends DataObjectImporter
 
         if (!empty($file)) {
             $xml = file_get_contents($file);
-            xarLog::message(xarML('DD: Importing file #(1)', $file), xarLog::LEVEL_INFO);
+            xarLog::message('DD: Importing file ' . $file, xarLog::LEVEL_INFO);
             if (empty($xml)) {
                 return null;
             }

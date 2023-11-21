@@ -211,6 +211,7 @@ class xarEvents extends xarObject implements ixarEvents
             $response = false;
         }
         
+        $info['event'] ??= $event;
         $info['caller'] = static::class;
         $info['args'] = $args;
         if (!empty(static::$callbackFunctions) && !empty(static::$callbackFunctions[$event])) {

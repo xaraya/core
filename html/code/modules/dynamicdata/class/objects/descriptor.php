@@ -61,6 +61,14 @@ class DataObjectDescriptor extends ObjectDescriptor
      */
     public static function getObjectID(array $args = [])
     {
+        // @todo remove overlap between DataObjectFactory::*getObjectInfo() and DataObjectDescripter::getObjectID()
+        $cacheKey = 'DynamicData.getObjectID';
+        if(isset($args['objectid']) && xarCoreCache::isCached($cacheKey, $args['objectid'])) {
+            return xarCoreCache::getCached($cacheKey, $args['objectid']);
+        }
+        if(isset($args['name']) && xarCoreCache::isCached($cacheKey, $args['name'])) {
+            return xarCoreCache::getCached($cacheKey, $args['name']);
+        }
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
         $xartable = & xarDB::getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
@@ -114,6 +122,12 @@ class DataObjectDescriptor extends ObjectDescriptor
         }
         if (empty($args['template'])) {
             $args['template'] = $args['name'];
+        }
+        if (isset($args['objectid'])) {
+            xarCoreCache::setCached($cacheKey, $args['objectid'], $args);
+        }
+        if (isset($args['name'])) {
+            xarCoreCache::setCached($cacheKey, $args['name'], $args);
         }
         return $args;
     }
