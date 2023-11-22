@@ -170,6 +170,7 @@ class CallableProperty extends DataProperty
 
     /**
      * Call 'setter' function and set value to callable 'getter' function for later
+     * @todo see also defermany where $itemid actually matters and $value does not, except in setValue() for preview
      * @param mixed $itemid
      * @param mixed $value
      * @return mixed

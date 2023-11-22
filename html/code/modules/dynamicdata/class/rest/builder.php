@@ -1472,6 +1472,7 @@ class DataObjectRESTBuilder extends xarObject
                 // @todo customize later
                 $datatype = ['type' => 'string'];
                 break;
+            case 'mapper':
             case 'queued':
             case 'callable':
             case 'deferitem':

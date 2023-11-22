@@ -92,6 +92,19 @@ class QueuedProperty extends CallableProperty
         }
     }
 
+    public function setter($itemid, $value, $debug = false)
+    {
+        // keep track of which values have been set before we get them (batch)
+        $this->addQueueValue($itemid, $value);
+        parent::setter($itemid, $value, $debug);
+    }
+
+    public function getter($itemid, $value, $debug = false)
+    {
+        $value = $this->getQueueValue($itemid, $value);
+        return parent::getter($itemid, $value, $debug);
+    }
+
     /**
      * Example of callable 'batch' method = set everything from queue in cache :-)
      * Configuration: [$this,"batch"]
@@ -122,7 +135,7 @@ class QueuedProperty extends CallableProperty
      * @param mixed $value
      * @return mixed
      */
-    protected function callFunctions($itemid, $value)
+    protected function callFunctions_Unused($itemid, $value)
     {
         // keep track of which values have been set before we get them (batch)
         $this->addQueueValue($itemid, $value);
