@@ -514,6 +514,16 @@ class CallableProperty extends DataProperty
         return $configproperties;
     }
 
+    public function listConfigProperties()
+    {
+        $confignames = [];
+        $proplist = ['getter', 'setter', 'options', 'input', 'output', 'debug', 'trace'];
+        foreach ($proplist as $prop) {
+            $confignames[] = 'callable_' . $prop;
+        }
+        return $confignames;
+    }
+
     /**
      * Summary of encodeCallableValue
      * @param mixed $value

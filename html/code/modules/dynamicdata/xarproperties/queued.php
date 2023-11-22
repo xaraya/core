@@ -316,6 +316,16 @@ class QueuedProperty extends CallableProperty
         }
         return $configproperties;
     }
+
+    public function listConfigProperties()
+    {
+        $confignames = parent::listConfigProperties();
+        $proplist = ['batch', 'queue'];
+        foreach ($proplist as $prop) {
+            $confignames[] = 'callable_' . $prop;
+        }
+        return $confignames;
+    }
 }
 
 /**

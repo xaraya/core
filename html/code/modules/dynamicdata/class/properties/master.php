@@ -50,7 +50,7 @@ class DataPropertyMaster extends xarObject
 
         $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable = & xarDB::getTables();
+        $xartable = &xarDB::getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 
@@ -152,21 +152,21 @@ class DataPropertyMaster extends xarObject
         $args['objectref'] = $objectref;
 
         // Get a new property
-        $property = & self::getProperty($args);
+        $property = &self::getProperty($args);
 
         if(method_exists($objectref, 'getItems')) {
             // for dynamic object lists, put a reference to the $items array in the property
-            $property->_items = & $objectref->items;
+            $property->_items = &$objectref->items;
         } elseif(method_exists($objectref, 'getItem')) {
             // for dynamic objects, put a reference to the $itemid value in the property
-            $property->_itemid = & $objectref->itemid;
+            $property->_itemid = &$objectref->itemid;
         }
 
         // add it to the list of properties
-        $objectref->properties[$property->name] = & $property;
+        $objectref->properties[$property->name] = &$property;
 
         // Expose the object configuration to the property
-        $objectref->properties[$property->name]->objectconfiguration = & $objectref->configuration;
+        $objectref->properties[$property->name]->objectconfiguration = &$objectref->configuration;
 
         // if the property involves upload, tell its object
         if(isset($property->upload)) {
@@ -311,6 +311,7 @@ class DataPropertyMaster extends xarObject
 
     /**
      * Class method listing all defined property types
+     * @return array<int, mixed>
      */
     public static function getPropertyTypes()
     {
@@ -318,6 +319,43 @@ class DataPropertyMaster extends xarObject
             sys::import('modules.dynamicdata.class.properties.registration');
         }
         return PropertyRegistration::Retrieve();
+    }
+
+    /**
+     * Class method listing all configuration properties
+     * @return array<string, mixed>
+     */
+    public static function getAllConfigProperties()
+    {
+        // cache configuration for all properties
+        if (xarCoreCache::isCached('DynamicData', 'Configurations')) {
+            return xarCoreCache::getCached('DynamicData', 'Configurations');
+        }
+        // Can't use DD methods here as we go into a recursion loop
+        $xartable = &xarDB::getTables();
+        $configurations = $xartable['dynamic_configurations'];
+
+        $bindvars = [];
+        $query = "SELECT id,
+                            name,
+                            description,
+                            property_id,
+                            label,
+                            ignore_empty,
+                            configuration
+                    FROM $configurations ";
+
+        $dbconn = xarDB::getConn();
+        $stmt = $dbconn->prepareStatement($query);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
+
+        $allconfigproperties = [];
+        while ($result->next()) {
+            $item = $result->fields;
+            $allconfigproperties[$item['name']] = $item;
+        }
+        xarCoreCache::setCached('DynamicData', 'Configurations', $allconfigproperties);
+        return $allconfigproperties;
     }
 
     /**

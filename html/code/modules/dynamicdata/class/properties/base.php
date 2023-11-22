@@ -935,13 +935,13 @@ class DataProperty extends xarObject implements iDataProperty
         } elseif (empty($configuration)) {
             return [];
 
-            // fall back to the old N:M validation for text boxes et al. (cfr. utilapi_getstatic/getmeta)
+        // fall back to the old N:M validation for text boxes et al. (cfr. utilapi_getstatic/getmeta)
         } elseif (preg_match('/^(\d+):(\d+)$/', $configuration, $matches)) {
             $fields = ['validation_min_length' => $matches[1],
                             'validation_max_length' => $matches[2],
                             'display_maxlength'     => $matches[2]];
 
-            // try normal serialized configuration
+        // try normal serialized configuration
         } else {
             try {
                 $fields = unserialize($configuration);
@@ -950,22 +950,18 @@ class DataProperty extends xarObject implements iDataProperty
                 return [];
             }
         }
-        //LocalProfiler::start();
         if (!empty($fields) && is_array($fields)) {
-            foreach ($this->configurationtypes as $configtype) {
-                $properties = $this->getConfigProperties($configtype, 1);
-                foreach ($properties as $name => $configarg) {
-                    if (isset($fields[$name])) {
-                        $this->$name = $fields[$name];
-                    }
-                    $msgname = $name . '_invalid';
-                    if (isset($fields[$msgname])) {
-                        $this->$msgname = $fields[$msgname];
-                    }
+            $confignames = $this->listConfigProperties();
+            foreach ($confignames as $name) {
+                if (isset($fields[$name])) {
+                    $this->$name = $fields[$name];
+                }
+                $msgname = $name . '_invalid';
+                if (isset($fields[$msgname])) {
+                    $this->$msgname = $fields[$msgname];
                 }
             }
         }
-        //LocalProfiler::stop();
         // Return the exploded fields
         return $fields;
     }
@@ -1146,35 +1142,7 @@ class DataProperty extends xarObject implements iDataProperty
      */
     public function getConfigProperties($type = "", $fullname = 0)
     {
-        // cache configuration for all properties
-        if (xarCoreCache::isCached('DynamicData', 'Configurations')) {
-            $allconfigproperties = xarCoreCache::getCached('DynamicData', 'Configurations');
-        } else {
-            $xartable = & xarDB::getTables();
-            $configurations = $xartable['dynamic_configurations'];
-
-            $bindvars = [];
-            $query = "SELECT id,
-                             name,
-                             description,
-                             property_id,
-                             label,
-                             ignore_empty,
-                             configuration
-                      FROM $configurations ";
-
-            $dbconn = xarDB::getConn();
-            $stmt = $dbconn->prepareStatement($query);
-            $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
-
-            $allconfigproperties = [];
-            while ($result->next()) {
-                $item = $result->fields;
-                $allconfigproperties[$item['name']] = $item;
-            }
-            xarCoreCache::setCached('DynamicData', 'Configurations', $allconfigproperties);
-            // Can't use DD methods here as we go into a recursion loop
-        }
+        $allconfigproperties = DataPropertyMaster::getAllConfigProperties();
         // if no items found, bail
         if (empty($allconfigproperties)) {
             return $allconfigproperties;
@@ -1194,13 +1162,50 @@ class DataProperty extends xarObject implements iDataProperty
                 continue;
             }
             // This one is good. Make an entry for it
-            $key = $fullname ? $name : substr($name, strlen($type) + 2);
+            $key = $fullname ? $name : substr($name, strlen($type) + 1);
             $configproperties[$name] = $allconfigproperties[$name];
             $configproperties[$key]['value'] = $arg;
-            $configproperties[$key]['shortname'] = substr($name, strlen($type) + 2);
+            $configproperties[$key]['shortname'] = substr($name, strlen($type) + 1);
             $configproperties[$key]['fullname'] = $name;
         }
         return $configproperties;
+    }
+
+    /**
+     * List the names of configuration options for this property
+     *
+     * @return list<string> names of configuration options
+     */
+    public function listConfigProperties()
+    {
+        $allconfigproperties = DataPropertyMaster::getAllConfigProperties();
+        // if no items found, bail
+        if (empty($allconfigproperties)) {
+            return $allconfigproperties;
+        }
+        $confignames = [];
+        $properties = $this->getPublicProperties();
+        foreach (array_keys($properties) as $name) {
+            // Ignore properties that are not defined as configs in the configurations table
+            // and also those that are flagged as not to be active for this property object
+            $flagname = $name . "_ignore";
+            if (!isset($allconfigproperties[$name]) || !empty($this->$flagname)) {
+                continue;
+            }
+            // Ignore properties that are not of the config $type passed
+            $found = false;
+            foreach ($this->configurationtypes as $type) {
+                if (str_starts_with($name, $type . '_')) {
+                    $found = true;
+                    break;
+                }
+            }
+            // This one is good. Make an entry for it
+            if ($found) {
+                $confignames[] = $name;
+            }
+        }
+        return $confignames;
     }
 
     /**
