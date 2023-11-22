@@ -171,7 +171,7 @@ class DataObjectMaster extends xarObject
 
         // Set the configuration parameters
         // CHECKME: is this needed?
-        if ($descriptor->exists('config')) {
+        if ($descriptor->exists('config') && !empty($descriptor->get('config'))) {
             try {
                 $configargs = unserialize($descriptor->get('config'));
                 foreach ($configargs as $key => $value) {
