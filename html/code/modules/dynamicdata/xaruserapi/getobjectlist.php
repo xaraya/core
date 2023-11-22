@@ -15,9 +15,11 @@
  *
  * @author the DynamicData module development team
  * @param array<string, mixed> $args array of optional parameters<br/>
- *        integer  $args['objectid'] id of the object you're looking for, or<br/>
- *        integer  $args['moduleid'] module id of the item field to get<br/>
- *        string   $args['itemtype'] item type of the item field to get
+ * with
+ *        integer  $args['objectid'] id of the objectlist you're looking for, or<br/>
+ *        string   $args['name'] name of the objectlist you're looking for, or<br/>
+ *        integer  $args['moduleid'] module id of the objectlist to get +<br/>
+ *        string   $args['itemtype'] item type of the objectlist to get
  * @return object a particular DataObjectList
  */
 function dynamicdata_userapi_getobjectlist(array $args = [])

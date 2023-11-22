@@ -45,7 +45,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
         $item = null;
         if($position >  $this->tail) return $item;
         if($position == $this->head) $position = 0;
-        $params = array('modid'     => $this->seqInfo['moduleid'],
+        $params = array('moduleid'  => $this->seqInfo['moduleid'],
                         'itemtype'  => $this->seqInfo['itemtype'],
                         'fieldlist' => array('data'),
                         'where'    => 'id = '.$this->items[$position]['id']);
@@ -141,7 +141,7 @@ class DynamicDataSequence extends ArraySequence implements iSequence, iSequenceA
     /* Update an item to have a new successor in the sequence */
     private function setNextId($itemid, $nextid)
     {
-        $params = array('modid'     => $this->seqInfo['moduleid'],
+        $params = array('moduleid'  => $this->seqInfo['moduleid'],
                         'itemtype'  => $this->seqInfo['itemtype'],
                         'itemid'    => $itemid,
                         'fields'    => array(array('name'=>'nextid','value'=>$nextid)));

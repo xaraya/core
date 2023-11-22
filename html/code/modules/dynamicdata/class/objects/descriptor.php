@@ -61,16 +61,58 @@ class DataObjectDescriptor extends ObjectDescriptor
      */
     public static function getObjectID(array $args = [])
     {
-        // @todo remove overlap between DataObjectFactory::*getObjectInfo() and DataObjectDescripter::getObjectID()
-        $cacheKey = 'DynamicData.getObjectID';
-        if(isset($args['objectid']) && xarCoreCache::isCached($cacheKey, $args['objectid'])) {
-            return array_merge($args, xarCoreCache::getCached($cacheKey, $args['objectid']));
+        // @todo remove overlap with DataObjectFactory::*getObjectInfo()
+        $row = static::findObject($args);
+
+        if (empty($row) || count($row) < 1) {
+            $args['moduleid'] = isset($args['moduleid']) ? (int)$args['moduleid'] : null;
+            $args['itemtype'] = isset($args['itemtype']) ? (int)$args['itemtype'] : null;
+            $args['objectid'] = isset($args['objectid']) ? (int)$args['objectid'] : null;
+            $args['name'] ??= null;
+        } else {
+            $args['moduleid'] = (int)$row['module_id'];
+            $args['itemtype'] = (int)$row['itemtype'];
+            $args['objectid'] = (int)$row['id'];
+            $args['name'] = $row['name'];
         }
-        if(isset($args['name']) && xarCoreCache::isCached($cacheKey, $args['name'])) {
-            return array_merge($args, xarCoreCache::getCached($cacheKey, $args['name']));
+        // object property is called module_id now instead of moduleid for whatever reason !?
+        $args['module_id'] = $args['moduleid'];
+        if (xarCore::isLoaded(xarCore::SYSTEM_TEMPLATES) && empty($args['tplmodule'])) {
+            $args['tplmodule'] = xarMod::getName($args['moduleid']);
+        }
+        if (empty($args['template'])) {
+            $args['template'] = $args['name'];
+        }
+        return $args;
+    }
+
+    /**
+     * Find object based on objectid, name or moduleid + itemtype
+     * @todo remove overlap with DataObjectFactory::*getObjectInfo()
+     *
+     * @param array<string, mixed> $args
+     * with
+     *     $args['objectid'] the object id of the object, or
+     *     $args['name'] the name of the object, or
+     *     $args['moduleid'] the module id of the object +
+     *     $args['itemtype'] the itemtype of the object, or
+     *     some other module + itemtype variation supported by getModID()
+     * @return array<mixed> minimal information about object or empty array
+     */
+    public static function findObject(array $args = [])
+    {
+        $cacheKey = 'DynamicData.FindObject';
+        if (!empty($args['objectid']) && xarCoreCache::isCached($cacheKey, $args['objectid'])) {
+            return xarCoreCache::getCached($cacheKey, $args['objectid']);
+        }
+        if (!empty($args['name']) && xarCoreCache::isCached($cacheKey, $args['name'])) {
+            return xarCoreCache::getCached($cacheKey, $args['name']);
+        }
+        if (!empty($args['moduleid']) && isset($args['itemtype']) && xarCoreCache::isCached($cacheKey, $args['moduleid'].':'.$args['itemtype'])) {
+            return xarCoreCache::getCached($cacheKey, $args['moduleid'].':'.$args['itemtype']);
         }
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable = & xarDB::getTables();
+        $xartable = &xarDB::getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $query = "SELECT id,
@@ -104,34 +146,21 @@ class DataObjectDescriptor extends ObjectDescriptor
         }
         $result->close();
 
-        if (empty($row) || count($row) < 1) {
-            $args['moduleid'] = isset($args['moduleid']) ? (int)$args['moduleid'] : null;
-            $args['itemtype'] = isset($args['itemtype']) ? (int)$args['itemtype'] : null;
-            $args['objectid'] = isset($args['objectid']) ? (int)$args['objectid'] : null;
-            $args['name'] ??= null;
-        } else {
-            $args['moduleid'] = (int)$row['module_id'];
-            $args['itemtype'] = (int)$row['itemtype'];
-            $args['objectid'] = (int)$row['id'];
+        if (!empty($row) && count($row) > 0) {
+            $args['moduleid'] = $row['module_id'];
+            $args['itemtype'] = $row['itemtype'];
+            $args['objectid'] = $row['id'];
             $args['name'] = $row['name'];
         }
-        // object property is called module_id now instead of moduleid for whatever reason !?
-        $args['module_id'] = $args['moduleid'];
-        if (xarCore::isLoaded(xarCore::SYSTEM_TEMPLATES) && empty($args['tplmodule'])) {
-            $args['tplmodule'] = xarMod::getName($args['moduleid']);
+        if (!empty($args['objectid'])) {
+            xarCoreCache::setCached($cacheKey, $args['objectid'], $row);
         }
-        if (empty($args['template'])) {
-            $args['template'] = $args['name'];
+        if (!empty($args['name'])) {
+            xarCoreCache::setCached($cacheKey, $args['name'], $row);
         }
-        // clean up unwanted args from cache
-        $cache = $args;
-        unset($cache['itemid']);
-        if (isset($args['objectid'])) {
-            xarCoreCache::setCached($cacheKey, $args['objectid'], $cache);
+        if (!empty($args['moduleid']) && isset($args['itemtype'])) {
+            xarCoreCache::setCached($cacheKey, $args['moduleid'].':'.$args['itemtype'], $row);
         }
-        if (isset($args['name'])) {
-            xarCoreCache::setCached($cacheKey, $args['name'], $cache);
-        }
-        return $args;
+        return $row;
     }
 }

@@ -16,8 +16,11 @@
  *
  * @author the DynamicData module development team
  * @param array<string, mixed> $args array of optional parameters<br/>
+ * with
  *        integer  $args['itemid'] item id of the original item<br/>
- *        integer  $args['module_id'] module id for the original item<br/>
+ *        integer  $args['objectid'] object id of the original item, or<br/>
+ *        string   $args['name'] object name of the original item, or<br/>
+ *        integer  $args['moduleid'] module id for the original item +<br/>
  *        string   $args['itemtype'] item type of the original item
  * @return boolean|void true on success, false on failure
  * @throws BadParameterException

@@ -16,6 +16,11 @@
  *
  * @author the DynamicData module development team
  * @param array<string, mixed> $args array of optional parameters<br/>
+ * with
+ *        integer  $args['objectid'] id of the objectlist you're looking for, or<br/>
+ *        string   $args['name'] name of the objectlist you're looking for, or<br/>
+ *        integer  $args['moduleid'] module id of the objectlist to get +<br/>
+ *        string   $args['itemtype'] item type of the objectlist to get
  * @return integer|void number of items held by this module
  */
 function dynamicdata_userapi_countitems(array $args = [])

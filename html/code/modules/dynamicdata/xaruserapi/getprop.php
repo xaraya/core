@@ -15,10 +15,12 @@
  *
  * @author the DynamicData module development team
  * @param array<string, mixed> $args array of optional parameters<br/>
- *        integer  $args['objectid'] object id of the properties to get<br/>
- *        string   $args['module'] module name of the item fields, or<br/>
- *        integer  $args['module_id'] module id of the item field to get<br/>
- *        string   $args['itemtype'] item type of the item field to get<br/>
+ * with
+ *        integer  $args['objectid'] object id of the properties to get, or<br/>
+ *        integer  $args['name'] object name of the properties to get, or<br/>
+ *        string   $args['module'] module name of the properties, or<br/>
+ *        integer  $args['moduleid'] module id of the properties to get +<br/>
+ *        string   $args['itemtype'] item type of the properties to get<br/>
  *        array    $args['fieldlist'] array of field labels to retrieve (default is all)<br/>
  *        integer  $args['status'] limit to property fields of a certain status (e.g. active)<br/>
  *        integer  $args['allprops'] skip disabled properties by default<br/>

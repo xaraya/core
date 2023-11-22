@@ -84,7 +84,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
         }
 
         sys::import('modules.dynamicdata.class.objects.factory');
-        $args = DataObjectDescriptor::getObjectID(['module'  => $module_id,
+        $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
                                            'itemtype'  => $itemtype]);
 
         $fields = xarMod::apiFunc(
