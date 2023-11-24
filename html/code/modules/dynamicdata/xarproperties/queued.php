@@ -65,9 +65,9 @@ class QueuedProperty extends CallableProperty
     protected $callable_batch;
     /** @var string|null */
     protected $queue_name = null;
-    /** @var array<string, array<int, mixed>> */
+    /** @var array<string, list<mixed>> */
     protected static $_queued = [];
-    /** @var array<string, array<mixed>> */
+    /** @var array<string, array<string, mixed>> */
     protected static $_cached = [];
 
     public function __construct(ObjectDescriptor $descriptor)
@@ -92,6 +92,17 @@ class QueuedProperty extends CallableProperty
         }
     }
 
+    /**
+     * Re-initialize queue and cache if needed
+     * @return void
+     */
+    public function __wakeup()
+    {
+        $queue = $this->getQueueName();
+        static::$_queued[$queue] = [];
+        static::$_cached[$queue] = [];
+    }
+
     public function setter($itemid, $value, $debug = false)
     {
         // keep track of which values have been set before we get them (batch)
@@ -108,8 +119,8 @@ class QueuedProperty extends CallableProperty
     /**
      * Example of callable 'batch' method = set everything from queue in cache :-)
      * Configuration: [$this,"batch"]
-     * @param array<int, mixed> $values list of values to be resolved (current queue by reference)
-     * @param array<mixed> $result assoc array of result by value (current cache by reference)
+     * @param list<int|string> $values list of values to be resolved (current queue by reference)
+     * @param array<string, mixed> $result assoc array of result by value (current cache by reference)
      * @param bool $debug show some debug messages or not
      * @return int
      */
@@ -121,7 +132,7 @@ class QueuedProperty extends CallableProperty
         // basic 'batch' operation = set everything from queue in cache :-)
         foreach ($values as $value) {
             // set result for value = value here
-            $result[$value] ??= $value;
+            $result[$this->getCacheKey($value)] ??= $value;
         }
         // clear queue
         $values = [];
@@ -163,7 +174,7 @@ class QueuedProperty extends CallableProperty
         // keep track of which values have been set before we get them (batch)
         $queue = $this->getQueueName();
         if (!empty($value) && !in_array($value, static::$_queued[$queue])) {
-            if (!$this->hasCacheValue($itemid, $value)) {
+            if (empty(static::$_cached[$queue]) || !$this->hasCacheValue($itemid, $value)) {
                 return false;
             }
         }
@@ -184,11 +195,21 @@ class QueuedProperty extends CallableProperty
         } else {
             $queue = $this->callable_queue;
         }
+        $this->setQueueName($queue);
+        return $queue;
+    }
+
+    /**
+     * Summary of setQueueName
+     * @param string $queue
+     * @return void
+     */
+    public function setQueueName($queue)
+    {
+        $this->queue_name = $queue;
         // initialize queue if needed
         static::$_queued[$queue] ??= [];
         static::$_cached[$queue] ??= [];
-        $this->queue_name = $queue;
-        return $queue;
     }
 
     /**
@@ -246,6 +267,17 @@ class QueuedProperty extends CallableProperty
     }
 
     /**
+     * Summary of getCacheKey
+     * @param mixed $value
+     * @return string
+     */
+    public function getCacheKey($value)
+    {
+        return "'$value'";
+        //return (string) $value;
+    }
+
+    /**
      * Summary of hasCacheValue
      * @param mixed $itemid
      * @param mixed $value
@@ -254,7 +286,7 @@ class QueuedProperty extends CallableProperty
     public function hasCacheValue($itemid, $value)
     {
         $queue = $this->getQueueName();
-        if (!array_key_exists($value, static::$_cached[$queue])) {
+        if (!array_key_exists($this->getCacheKey($value), static::$_cached[$queue])) {
             return false;
         }
         return true;
@@ -269,7 +301,7 @@ class QueuedProperty extends CallableProperty
     public function getCacheValue($itemid, $value)
     {
         $queue = $this->getQueueName();
-        return static::$_cached[$queue][$value];
+        return static::$_cached[$queue][$this->getCacheKey($value)];
     }
 
     /**
@@ -344,8 +376,8 @@ class QueuedProperty extends CallableProperty
 /**
  * Example of callable 'batch' function = set everything from queue in cache :-)
  * Configuration: dynamicdata_callable_batch or \Xaraya\DataObject\Properties\dynamicdata_callable_batch
- * @param array<int, mixed> $values list of values to be resolved (current queue by reference)
- * @param array<mixed> $result assoc array of result by value (current cache by reference)
+ * @param list<int|string> $values list of values to be resolved (current queue by reference)
+ * @param array<string, mixed> $result assoc array of result by value (current cache by reference)
  * @param bool $debug show some debug messages or not
  * @return int
  */
@@ -357,7 +389,8 @@ function dynamicdata_callable_batch(&$values, &$result, $debug = false)
     // basic 'batch' operation = set everything from queue in cache :-)
     foreach ($values as $value) {
         // set result for value = value here
-        $result[$value] ??= $value;
+        $key = "'$value'";
+        $result[$key] ??= $value;
     }
     // clear queue
     $values = [];

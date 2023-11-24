@@ -148,9 +148,28 @@ class CallableProperty extends DataProperty
             $options[] = ['id' => 0, 'name' => 'callable method'];
         }
         if (!empty($value)) {
-            $options[] = ['id' => $value, 'name' => $value];
+            if (is_array($value)) {
+                $options[] = ['id' => $value['id'], 'name' => json_encode($value, JSON_NUMERIC_CHECK)];
+            } else {
+                $options[] = ['id' => $value, 'name' => $value];
+            }
         }
         return $options;
+    }
+
+    /**
+     * Example of callable 'input' method
+     * Configuration: [$this,"input"]
+     * @param array<string, mixed> $data
+     * @param bool $debug
+     * @return array<string, mixed>
+     */
+    public function input($data, $debug = false)
+    {
+        if ($debug) {
+            echo 'Input method for data';
+        }
+        return $data;
     }
 
     /**
@@ -285,6 +304,9 @@ class CallableProperty extends DataProperty
         //$data = $this->getDeferredData($data);
         //$this->log_trace();
         //if(!isset($data['value']))       $data['value']    = $this->value;
+        if (!empty($data['value']) && $this->checkCallable('input')) {
+            $data = call_user_func($this->callable_input, $data, $this->callable_debug);
+        }
         return parent::showInput($data);
     }
 
@@ -320,6 +342,8 @@ class CallableProperty extends DataProperty
         if (!empty($data['value']) && $this->checkCallable('output')) {
             $data = call_user_func($this->callable_output, $data, $this->callable_debug);
         }
+        // if $data['value'] is null, DataProperty::showOutput() checks $this->value which is still callable from the last setItemValue()
+        // -> Exception in showoutput-callable.xt template
         return parent::showOutput($data);
     }
 
