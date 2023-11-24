@@ -332,6 +332,11 @@ class VariableTableDataStore extends SQLDataStore
 
         // @todo start filtering properties again at some point :-)
         $fieldlist = $this->object->getFieldList();
+        // Make sure we include the primary key, even if it won't be displayed
+        $fieldname = $this->object->primary;
+        if (!in_array($fieldname, $fieldlist)) {
+            array_unshift($fieldlist, $fieldname);
+        }
         $wherelist = [];
         if (property_exists($this->object, 'ddwhere') && is_array($this->object->ddwhere)) {
             foreach ($this->object->ddwhere as $whereitem) {
@@ -344,11 +349,12 @@ class VariableTableDataStore extends SQLDataStore
                 $sortlist[] = $sortitem['field'];
             }
         }
+        $fieldlist = array_unique(array_merge($fieldlist, $wherelist, $sortlist));
         $propids = [];
         $propnames = array_keys($this->object->properties);
         $properties = [];
         foreach ($this->object->properties as $property) {
-            //if ((!empty($fieldlist) && !in_array($property->name, $fieldlist)) && $property->name !== $this->object->primary && !in_array($property->id, $wherelist) && !in_array($property->id, $sortlist)) {
+            //if (!empty($fieldlist) && !in_array($property->name, $fieldlist)) {
             //    continue;
             //}
             $propids[] = $property->id;

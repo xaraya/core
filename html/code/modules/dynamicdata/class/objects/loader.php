@@ -33,24 +33,45 @@ sys::import('modules.dynamicdata.class.objects.virtual');
 
 class DataObjectLoader
 {
+    /** @var string */
     public $objectname = '';
+    /** @var list<string> */
     public $fieldlist = [];
+    /** @var list<int|string> */
     public $todo = [];
+    /** @var array<string, mixed> */
     public $cache = [];
+    /** @var callable|null */
     public $resolver = null;
+    /** @var callable|null */
     public $preLoader = null;
+    /** @var callable|null */
     public $postLoader = null;
+    /** @var bool */
     public $checkFieldlist = true;
+    /** @var string */
     public $order = '';
+    /** @var int|null */
     public $limit = null;
+    /** @var int */
     public $offset = 0;
+    /** @var array<mixed> */
     public $filter = [];
+    /** @var int|bool */
     public $count = false;
+    /** @var string|null */
     public $access = null;
     // public $expand = null;
+    /** @var DataObjectList|null */
     public $objectlist = null;
+    /** @var array<string, DataObjectLoader> */
     public static $loaders = [];
 
+    /**
+     * Summary of getItemLoader
+     * @param list<string> $fieldlist
+     * @return DataObjectLoader
+     */
     public static function getItemLoader(string $objectname = 'sample', array $fieldlist = ['id', 'name'])
     {
         // we don't have an itemloader for this object yet, so we make a new one and keep it
@@ -67,6 +88,10 @@ class DataObjectLoader
         return new DataObjectItemLoader($objectname, $fieldlist);
     }
 
+    /**
+     * Summary of __construct
+     * @param list<string> $fieldlist
+     */
     public function __construct(string $objectname = 'sample', array $fieldlist = ['id', 'name'], ?callable $resolver = null)
     {
         $this->objectname = $objectname;
@@ -79,31 +104,60 @@ class DataObjectLoader
         $this->checkFieldlist = true;
     }
 
-    // https://stackoverflow.com/questions/36079651/silence-declaration-should-be-compatible-warnings-in-php-7/36196748
+    /**
+     * Re-initialize todo and cache if needed
+     * @return void
+     */
+    public function __wakeup()
+    {
+        $this->todo = [];
+        $this->cache = [];
+    }
+
+    /**
+     * Summary of add
+     * https://stackoverflow.com/questions/36079651/silence-declaration-should-be-compatible-warnings-in-php-7/36196748
+     * @param int|string|list<int|string> $value
+     * @return void
+     */
     public function add($value)
     {
         if (is_array($value)) {
             $this->addList($value);
         } else {
-            $this->addItem((int)$value);
+            $this->addItem($value);
         }
     }
 
-    public function addItem(int $value)
+    /**
+     * Summary of addItem
+     * @return void
+     */
+    public function addItem(int|string $value)
     {
         if (!$this->hasItem($value)) {
             $this->todo[] = $value;
         }
     }
 
+    /**
+     * Summary of addList
+     * @param list<int|string> $values
+     * @return void
+     */
     public function addList(array $values)
     {
         foreach ($values as $value) {
-            $this->addItem((int)$value);
+            $this->addItem($value);
         }
     }
 
-    // https://stackoverflow.com/questions/36079651/silence-declaration-should-be-compatible-warnings-in-php-7/36196748
+    /**
+     * Summary of get
+     * https://stackoverflow.com/questions/36079651/silence-declaration-should-be-compatible-warnings-in-php-7/36196748
+     * @param int|string|list<int|string> $value
+     * @return mixed|array<string, mixed>
+     */
     public function get($value)
     {
         if (!empty($this->todo)) {
@@ -112,39 +166,71 @@ class DataObjectLoader
         if (is_array($value)) {
             return $this->getList($value);
         } else {
-            return $this->getItem((int)$value);
+            return $this->getItem($value);
         }
     }
 
-    public function getItem(int $value)
+    /**
+     * Summary of getCacheKey
+     * @return string
+     */
+    public function getCacheKey(int|string $value)
     {
-        if (!empty($value) &&
-            array_key_exists("$value", $this->cache)) {
-            return $this->cache["$value"];
-        }
+        // @todo adapt deferitem etc. to deal with quoted itemid - see mapper property
+        //return "'$value'";
+        return (string) $value;
     }
 
+    /**
+     * Summary of getItem
+     * @return mixed
+     */
+    public function getItem(int|string $value)
+    {
+        if (empty($value)) {
+            return null;
+        }
+        $key = $this->getCacheKey($value);
+        if (array_key_exists($key, $this->cache)) {
+            return $this->cache[$key];
+        }
+        return null;
+    }
+
+    /**
+     * Summary of getList
+     * @param list<int|string> $values
+     * @return array<string, mixed>
+     */
     public function getList(array $values)
     {
         $items = [];
         foreach ($values as $value) {
-            $key = (string) $value;
-            $items[$key] = $this->getItem((int)$value);
+            $key = $this->getCacheKey($value);
+            $items[$key] = $this->getItem($value);
         }
         return $items;
     }
 
-    public function hasItem(int $value)
+    /**
+     * Summary of hasItem
+     * @return bool
+     */
+    public function hasItem(int|string $value)
     {
         if (empty($value)) {
             return false;
         } elseif (!in_array($value, $this->todo) &&
-            !array_key_exists("$value", $this->cache)) {
+            !array_key_exists($this->getCacheKey($value), $this->cache)) {
             return false;
         }
         return true;
     }
 
+    /**
+     * Summary of load
+     * @return void
+     */
     public function load()
     {
         if (empty($this->todo)) {
@@ -166,6 +252,10 @@ class DataObjectLoader
         $this->todo = [];
     }
 
+    /**
+     * Summary of preLoad
+     * @return void
+     */
     public function preLoad()
     {
         if (!empty($this->preLoader) && is_callable($this->preLoader)) {
@@ -173,6 +263,10 @@ class DataObjectLoader
         }
     }
 
+    /**
+     * Summary of postLoad
+     * @return void
+     */
     public function postLoad()
     {
         if (!empty($this->postLoader) && is_callable($this->postLoader)) {
@@ -180,6 +274,11 @@ class DataObjectLoader
         }
     }
 
+    /**
+     * Summary of getValues
+     * @param list<int|string> $itemids
+     * @return array<string, mixed>
+     */
     public function getValues(array $itemids)
     {
         // Note: itemids may be empty here, e.g. when called from getOptions() in deferitem property
@@ -216,7 +315,8 @@ class DataObjectLoader
             //if ($addPrimary) {
             //    $props[$this->objectlist->primary] = $itemid;
             //}
-            $key = (string) $itemid;
+            $key = $this->getCacheKey($itemid);
+            //$props['id'] ??= $itemid;
             $values[$key] = array_intersect_key($props, $allowed);
         }
         xarLog::message("DataObjectLoader::getValues: got " . count($values) . " values from " . $this->objectname, xarLog::LEVEL_INFO);
@@ -224,6 +324,11 @@ class DataObjectLoader
         return $values;
     }
 
+    /**
+     * Summary of getObjectList
+     * @param array<string, mixed> $params
+     * @return DataObjectList
+     */
     public function getObjectList(array $params = [])
     {
         if (empty($params)) {
@@ -246,11 +351,21 @@ class DataObjectLoader
         return $this->objectlist;
     }
 
+    /**
+     * Summary of setFieldlist
+     * @param list<string> $fieldlist
+     * @return void
+     */
     public function setFieldlist(array $fieldlist)
     {
         $this->fieldlist = $fieldlist;
     }
 
+    /**
+     * Summary of mergeFieldlist
+     * @param list<string> $fieldlist
+     * @return void
+     */
     public function mergeFieldlist(array $fieldlist)
     {
         if (!empty($fieldlist) && $this->checkFieldlist) {
@@ -259,31 +374,58 @@ class DataObjectLoader
         }
     }
 
+    /**
+     * Summary of setOrder
+     * @return void
+     */
     public function setOrder(string $order)
     {
         $this->order = $order;
     }
 
+    /**
+     * Summary of setLimit
+     * @return void
+     */
     public function setLimit(int $limit)
     {
         $this->limit = $limit;
     }
 
+    /**
+     * Summary of setOffset
+     * @return void
+     */
     public function setOffset(int $offset)
     {
         $this->offset = $offset;
     }
 
+    /**
+     * Summary of setFilter
+     * @param array<mixed> $filter
+     * @return void
+     */
     public function setFilter(array $filter)
     {
         $this->filter = $filter;
     }
 
+    /**
+     * Summary of addFilter
+     * @param array<mixed> $filter
+     * @return void
+     */
     public function addFilter(array $filter)
     {
         array_push($this->filter, $filter);
     }
 
+    /**
+     * Summary of query
+     * @param array<string, mixed> $args
+     * @return array<string, mixed>
+     */
     public function query(array $args)
     {
         $this->parseQueryArgs($args);
@@ -295,13 +437,19 @@ class DataObjectLoader
         $allowed = array_flip($this->fieldlist);
         $allowed['id'] = true;
         foreach ($result as $itemid => $props) {
-            $key = (string) $itemid;
+            $key = $this->getCacheKey($itemid);
+            //$props['id'] ??= $itemid;
             $values[$key] = array_intersect_key($props, $allowed);
         }
         //return $result;
         return $values;
     }
 
+    /**
+     * Summary of setOrder
+     * @param array<string, mixed> $args
+     * @return int|bool
+     */
     public function count(array $args)
     {
         if (empty($args['count'])) {
@@ -312,6 +460,11 @@ class DataObjectLoader
         return $this->count;
     }
 
+    /**
+     * Summary of parseQueryArgs
+     * @param array<string, mixed> $args
+     * @return void
+     */
     public function parseQueryArgs(array $args)
     {
         $allowed = array_flip(['order', 'offset', 'limit', 'filter', 'count', 'access']);
@@ -401,6 +554,11 @@ class DataObjectLoader
         }
     }
 
+    /**
+     * Summary of getCount
+     * @param DataObjectList $objectlist
+     * @return int|bool
+     */
     public function getCount($objectlist)
     {
         if (!empty($this->count) && !is_integer($this->count)) {
@@ -409,6 +567,11 @@ class DataObjectLoader
         return $this->count;
     }
 
+    /**
+     * Summary of addPagingParams
+     * @param array<string, mixed> $params
+     * @return array<string, mixed>
+     */
     public function addPagingParams(array $params = [])
     {
         if (!empty($this->order)) {
@@ -435,6 +598,10 @@ class DataObjectLoader
         return $params;
     }
 
+    /**
+     * Summary of getResolver
+     * @return callable
+     */
     public function getResolver()
     {
         // @checkme use automatic binding of $this here
@@ -444,16 +611,28 @@ class DataObjectLoader
         return $resolver;
     }
 
+    /**
+     * Summary of setResolver
+     * @return void
+     */
     public function setResolver(callable $resolver)
     {
         $this->resolver = $resolver;
     }
 
+    /**
+     * Summary of setPreLoader
+     * @return void
+     */
     public function setPreLoader(callable $preLoader)
     {
         $this->preLoader = $preLoader;
     }
 
+    /**
+     * Summary of setPostLoader
+     * @return void
+     */
     public function setPostLoader(callable $postLoader)
     {
         $this->postLoader = $postLoader;
@@ -465,7 +644,7 @@ class DataObjectItemLoader extends DataObjectLoader
     public function add($value)
     {
         //assert(is_int($value));
-        $this->addItem((int)$value);
+        $this->addItem($value);
     }
 
     public function get($value)
@@ -475,7 +654,7 @@ class DataObjectItemLoader extends DataObjectLoader
             $this->load();
         }
         // @checkme don't slice array based on limit and offset here?
-        return $this->getItem((int)$value);
+        return $this->getItem($value);
     }
 }
 
@@ -509,6 +688,11 @@ class DataObjectDummyLoader extends DataObjectLoader
         return $values;
     }
 
+    public function getItem(int|string $value)
+    {
+        return $value;
+    }
+
     public function getValues(array $itemids)
     {
         return [];
@@ -517,9 +701,13 @@ class DataObjectDummyLoader extends DataObjectLoader
 
 class LinkObjectItemLoader extends DataObjectItemLoader
 {
+    /** @var string */
     public $linkname = '';
+    /** @var string */
     public $caller_id = '';
+    /** @var string */
     public $called_id = '';
+    /** @var DataObjectLoader|null */
     public $targetLoader = null;
 
     public function __construct(string $linkname = 'sample', string $caller_id = '', string $called_id = '', ?callable $resolver = null)
@@ -531,6 +719,11 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         parent::__construct($linkname, [$caller_id, $called_id], $resolver);
     }
 
+    /**
+     * Summary of setTarget
+     * @param list<string> $fieldlist
+     * @return void
+     */
     public function setTarget(string $objectname = 'sample', array $fieldlist = ['id', 'name'])
     {
         // @todo if objectname is the same as linkname here, we could retrieve all fields at once below
@@ -540,6 +733,10 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         $this->targetLoader = DataObjectLoader::getItemLoader($objectname, $fieldlist);
     }
 
+    /**
+     * Summary of getTarget
+     * @return DataObjectLoader|null
+     */
     public function getTarget()
     {
         return $this->targetLoader;
@@ -567,7 +764,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         // return array("$caller_id" => list of $called_ids)
         $values = [];
         foreach ($result as $itemid => $props) {
-            $key = (string) $props[$this->caller_id];
+            $key = $this->getCacheKey($props[$this->caller_id]);
             if (!array_key_exists($key, $values)) {
                 $values[$key] = [];
             }
@@ -621,20 +818,23 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             $distinct = array_unique(array_merge($distinct, $values));
         }
         if (empty($distinct)) {
-            return true;
+            return;
         }
         $this->targetLoader->addList($distinct);
         $this->targetLoader->load();
         parent::postLoad();
     }
 
-    public function getItem(int $value)
+    public function getItem(int|string $value)
     {
-        if (!empty($value) &&
-            array_key_exists("$value", $this->cache)) {
-            //return $this->cache["$value"];
+        if (empty($value)) {
+            return null;
+        }
+        $key = $this->getCacheKey($value);
+        if (array_key_exists($key, $this->cache)) {
+            //return $this->cache[$key];
             // @checkme slice array based on limit and offset here?
-            $oldvalues = $this->cache["$value"];
+            $oldvalues = $this->cache[$key];
             if (!empty($this->limit) || !empty($this->offset)) {
                 $oldvalues = array_slice($oldvalues, $this->offset, $this->limit);
             }
@@ -643,31 +843,38 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             }
             $newvalues = [];
             foreach ($oldvalues as $itemid) {
-                $id = (string) $itemid;
+                $id = $this->getCacheKey($itemid);
                 $newvalues[$id] = $this->targetLoader->get($itemid);
             }
             return $newvalues;
         }
+        return null;
     }
 
     /**
      * Allow setting the cache values for showInput() in preview mode
+     * @param list<int|string> $values
+     * @return void
      */
-    public function set(int $itemid, array $values)
+    public function set(int|string $itemid, array $values)
     {
-        if (!empty($itemid)) {
-            $this->cache["$itemid"] = $values;
-            if (!empty($values) && !empty($this->targetLoader)) {
-                $this->targetLoader->addList($values);
-                $this->targetLoader->load();
-            }
+        if (empty($itemid)) {
+            return;
+        }
+        $key = $this->getCacheKey($itemid);
+        $this->cache[$key] = $values;
+        if (!empty($values) && !empty($this->targetLoader)) {
+            $this->targetLoader->addList($values);
+            $this->targetLoader->load();
         }
     }
 
     /**
      * Save the new values in the Link Object for updateValue()
+     * @param list<int|string> $values
+     * @return void
      */
-    public function save(int $itemid, array $values)
+    public function save(int|string $itemid, array $values)
     {
         if (empty($itemid)) {
             return;
@@ -677,6 +884,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         }
         $params = ['name' => $this->linkname];
         $objectlist = VirtualObjectFactory::getObjectList($params);
+        // @todo add quotes if itemid is string
         $objectlist->addWhere($this->caller_id, '= ' . $itemid);
         if (is_object($objectlist->datastore) && $objectlist->datastore->getClassName() === 'RelationalDataStore') {
             $wherestring = $this->caller_id . ' = ' . $itemid;
@@ -687,6 +895,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         }
         $result = $objectlist->getItems();
         $oldlinks = [];
+        // @todo check if itemid is string
         foreach ($result as $linkid => $props) {
             $oldlinks[intval($props[$this->called_id])] = $linkid;
         }
