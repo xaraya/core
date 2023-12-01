@@ -14,7 +14,7 @@
  * to avoid Reflection error finding the file for that function, when updating core files
  *
  */
-require_once dirname(dirname(__DIR__)).'/vendor/autoload.php';
+require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
 //use PhpParser\PrettyPrinter\Standard as PrettyPrinter;
 
 
@@ -116,7 +116,7 @@ class XarayaCodeAnalyzer
         $this->log($this->to_json($this->totals));
     }
 
-    public function parse_file($file, $totals=true)
+    public function parse_file($file, $totals = true)
     {
         if ($totals) {
             $this->totals['files'] += 1;

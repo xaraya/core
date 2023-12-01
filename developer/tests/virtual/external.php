@@ -2,7 +2,7 @@
 /**
  * Entrypoint for experimenting with virtual objects
  */
-require_once dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 // initialize bootstrap
 sys::init();
@@ -40,10 +40,10 @@ function get_xaraya_config()
     $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
     $host_parts = explode(':', $host);
     $host = $host_parts[0];
-    $port = isset($host_parts[1]) ? $host_parts[1] : '';
+    $port = $host_parts[1] ?? '';
 
     // Optionals dealt with, do the rest inline
-    $systemArgs = array('userName'        => $userName,
+    $systemArgs = ['userName'        => $userName,
                         'password'        => $password,
                         'databaseHost'    => $host,
                         'databasePort'    => $port,
@@ -51,7 +51,7 @@ function get_xaraya_config()
                         'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
                         'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
                         'persistent'      => $persistent,
-                        'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
+                        'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix')];
     return $systemArgs;
 }
 

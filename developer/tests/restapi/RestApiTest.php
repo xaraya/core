@@ -97,16 +97,12 @@ class RestAPITest extends TestCase
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
-    {
-    }
+    public function tearDown(): void {}
 
     /**
      * Clean up after running all test cases
      */
-    public static function tearDownAfterClass(): void
-    {
-    }
+    public static function tearDownAfterClass(): void {}
 
     /**
      * Data provider for testRequestFiles
@@ -191,7 +187,7 @@ class RestAPITest extends TestCase
         $request = [
             'method' => strtoupper($operation['method']),
             'uri' => $operation['path'],
-            'options' => ['headers' => $headers, 'query' => $params, 'body' => $httpBody]
+            'options' => ['headers' => $headers, 'query' => $params, 'body' => $httpBody],
         ];
         file_put_contents($requestFile, json_encode($request, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK));
         return $request;

@@ -14,7 +14,7 @@
  *
  * https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/index.html
  */
-require_once dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\Database\ExternalDatabase;
 use Xaraya\DataObject\DataStores\DbalDataStore;
@@ -96,7 +96,7 @@ function check_mongodb_types($dbName = null, $collName = null)
         $todo[$key] = ['$type' => "$$key"];
     }
     $result = $collection->aggregate([
-        ['$project' => $todo]
+        ['$project' => $todo],
     ]);
     // @todo count types per field in aggregate
     $count = [];

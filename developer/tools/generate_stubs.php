@@ -3,7 +3,7 @@
  * Generate stubs of Xaraya core files for phpstan etc.
  */
 $ROOT_DIR = dirname(dirname(__DIR__));
-require_once $ROOT_DIR.'/vendor/autoload.php';
+require_once $ROOT_DIR . '/vendor/autoload.php';
 sys::init();
 
 /**
@@ -129,14 +129,14 @@ $finder = Finder::create()
               ->files()
               ->name('*.php')
               ->ignoreVCS(true)
-              ->in($ROOT_DIR.'/html/lib/xaraya/')
+              ->in($ROOT_DIR . '/html/lib/xaraya/')
               ->exclude('legacy');
 $todo = [];
 foreach ($finder as $file) {
     $absoluteFilePath = $file->getRealPath();
     $stubFilePath = str_replace(
-        [$ROOT_DIR.'/html/lib/xaraya/', '.php'],
-        [__DIR__.'/stubs/', '.stub'],
+        [$ROOT_DIR . '/html/lib/xaraya/', '.php'],
+        [__DIR__ . '/stubs/', '.stub'],
         $absoluteFilePath
     );
     echo $stubFilePath . "\n";
@@ -145,7 +145,7 @@ foreach ($finder as $file) {
         $ast = $parser->parse($code);
         $contents = $prettyPrinter->prettyPrintFile($ast);
         if (!is_dir(dirname($stubFilePath))) {
-            mkdir(dirname($stubFilePath), 0777, true);
+            mkdir(dirname($stubFilePath), 0o777, true);
         }
         file_put_contents($stubFilePath, $contents);
         $todo[] = $stubFilePath;
@@ -154,15 +154,15 @@ foreach ($finder as $file) {
     }
 }
 
-$stubFilePath = __DIR__.'/stubs/bootstrap.stub';
+$stubFilePath = __DIR__ . '/stubs/bootstrap.stub';
 echo $stubFilePath . "\n";
-$code = file_get_contents($ROOT_DIR.'/html/bootstrap.php');
+$code = file_get_contents($ROOT_DIR . '/html/bootstrap.php');
 $ast = $parser->parse($code);
 $contents = $prettyPrinter->prettyPrintFile($ast);
 file_put_contents($stubFilePath, $contents);
 $todo[] = $stubFilePath;
 
-$stubFilePath = __DIR__.'/stubs.neon';
+$stubFilePath = __DIR__ . '/stubs.neon';
 $contents = '
 parameters:
     stubFiles:

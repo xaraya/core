@@ -27,9 +27,9 @@
 
 namespace OpenAPI\Client;
 
-use \OpenAPI\Client\Configuration;
-use \OpenAPI\Client\ApiException;
-use \OpenAPI\Client\ObjectSerializer;
+use OpenAPI\Client\Configuration;
+use OpenAPI\Client\ApiException;
+use OpenAPI\Client\ObjectSerializer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -42,34 +42,25 @@ use PHPUnit\Framework\TestCase;
  */
 class OpenApiTest extends TestCase
 {
-
     /**
      * Setup before running any test cases
      */
-    public static function setUpBeforeClass(): void
-    {
-    }
+    public static function setUpBeforeClass(): void {}
 
     /**
      * Setup before running each test case
      */
-    public function setUp(): void
-    {
-    }
+    public function setUp(): void {}
 
     /**
      * Clean up after running each test case
      */
-    public function tearDown(): void
-    {
-    }
+    public function tearDown(): void {}
 
     /**
      * Clean up after running all test cases
      */
-    public static function tearDownAfterClass(): void
-    {
-    }
+    public static function tearDownAfterClass(): void {}
 
     /**
      * Test case for createSample
@@ -140,7 +131,7 @@ class OpenApiTest extends TestCase
              'filter' => [],
              'count' => count($items),
              'items' => $items,
-	];
+    ];
         $expected = new \OpenAPI\Client\Model\ViewSample($data);
         $result = true;
         $apiInstance = new \OpenAPI\Client\Api\SampleApi(
@@ -150,9 +141,9 @@ class OpenApiTest extends TestCase
         );
         $limit = 100; // int | Number of items to return
         $offset = 0; // int | Offset to start items from
-        $order = array('order_example'); // string[] | Property to sort on and optional -direction (comma separated)
-        $filter = array('filter_example'); // string[] | Filters to be applied. Each filter consists of a property, an operator and a value (comma separated)
-        
+        $order = ['order_example']; // string[] | Property to sort on and optional -direction (comma separated)
+        $filter = ['filter_example']; // string[] | Filters to be applied. Each filter consists of a property, an operator and a value (comma separated)
+
         try {
             //$result = $apiInstance->viewSample($limit, $offset, $order, $filter);
             $result = $apiInstance->viewSample();

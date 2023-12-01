@@ -25,7 +25,7 @@ final class VariableTest extends TestCase
 
         $categories = null;
         //$this->assertTrue(xarVar::fetch('testing["categories"]', 'array', $categories, array(), xarVar::NOT_REQUIRED));
-        $this->assertTrue(xarVar::fetch('testing[categories]', 'array', $categories, array(), xarVar::NOT_REQUIRED));
+        $this->assertTrue(xarVar::fetch('testing[categories]', 'array', $categories, [], xarVar::NOT_REQUIRED));
         $expected = $_POST['testing']['categories'];
         $this->assertEquals($expected, $categories);
 

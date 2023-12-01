@@ -20,65 +20,108 @@ xarDatabase::init();
 
 const TEST_COUNT = 5000;
 
-class LocalProfiler
+/**
+ * Local time spent in code loops
+ */
+class XarayaTimer
 {
-    public static float $total = 0.0;
-    public static int $count = 0;
-    public static float $now = 0.0;
+    public float $total = 0.0;
+    public int $count = 0;
+    public float $now = 0.0;
 
-    public static function clear(): void
+    public function __construct(public string $label) {}
+
+    public function start(): void
     {
-        static::$total = 0.0;
-        static::$count = 0;
+        $this->now = microtime(true);
     }
 
-    public static function start(): void
+    public function stop(): void
     {
-        static::$now = microtime(true);
+        $elapsed = microtime(true) - $this->now;
+        $this->total += $elapsed;
+        $this->count += 1;
     }
 
-    public static function stop(): void
+    public function result(): string
     {
-        $elapsed = microtime(true) - static::$now;
-        static::$total += $elapsed;
-        static::$count += 1;
-    }
-
-    public static function result(): string
-    {
-        $result = "Total: " . sprintf('%.3f', static::$total) . " sec - Count: " . sprintf('%d', static::$count);
-        if (static::$count > 0) {
-            $result .= " - Average: " . sprintf('%.3f', (static::$total * 1000.0 / static::$count)) . " msec\n";
+        $result = "Total " . $this->label . ": " . sprintf('%.3f', $this->total) . " sec - Count: " . sprintf('%d', $this->count);
+        if ($this->count > 0) {
+            $result .= " - Average: " . sprintf('%.3f', ($this->total * 1000.0 / $this->count)) . " msec\n";
         } else {
             $result .= " - Average: N/A msec\n";
         }
-        static::clear();
         return $result;
+    }
+}
+
+/**
+ * Xaraya Profiler for local time spent in code loops
+ */
+class XarayaProfiler
+{
+    public const DEFAULT = 'default';
+    /** @var array<string, XarayaTimer> */
+    public static array $timers;
+
+    public static function clear(string $label = self::DEFAULT): void
+    {
+        unset(static::$timers[$label]);
+    }
+
+    public static function start(string $label = self::DEFAULT): void
+    {
+        static::getTimer($label)->start();
+    }
+
+    public static function stop(string $label = self::DEFAULT): void
+    {
+        static::getTimer($label)->stop();
+    }
+
+    public static function result(string $label = self::DEFAULT): string
+    {
+        $result = static::getTimer($label)->result();
+        static::clear($label);
+        return $result;
+    }
+
+    protected static function getTimer(string $label = self::DEFAULT): XarayaTimer
+    {
+        if (!isset(static::$timers[$label])) {
+            static::$timers[$label] = new XarayaTimer($label);
+        }
+        return static::$timers[$label];
+    }
+
+    public static function profile($profile, $callable, $args)
+    {
+        echo "Profile: $profile\n";
+        $used = memory_get_usage(true);
+        $start = microtime(true);
+
+        $count = call_user_func_array($callable, $args);
+
+        $stop = microtime(true);
+        $elapsed = sprintf('%.3f', $stop - $start);
+        $memory = sprintf('%.1f', (memory_get_usage(true) - $used) / 1024 / 1024);
+        $average = 'N/A';
+        if ($count > 0) {
+            $average = round(($stop - $start) * 1000.0 / $count, 3);
+        }
+        echo "Elapsed: $elapsed sec - Memory: $memory MB - Count: $count - Average: $average msec\n\n";
     }
 }
 
 function mini_profile($profile, $callable, $itemid = null)
 {
-    echo "Profile: $profile\n";
-    $used = memory_get_usage(true);
-    $start = microtime(true);
-
-    $count = call_user_func($callable, $itemid);
-
-    $stop = microtime(true);
-    $elapsed = sprintf('%.3f', $stop - $start);
-    $memory = sprintf('%.1f', (memory_get_usage(true) - $used) / 1024 / 1024);
-    $average = 'N/A';
-    if ($count > 0) {
-        $average = round(($stop - $start) * 1000.0 / $count, 3);
-    }
-    echo "Elapsed: $elapsed sec - Memory: $memory MB - Count: $count - Average: $average msec\n\n";
+    XarayaProfiler::profile($profile, $callable, [$itemid]);
 }
 
 function test_normal_baseline($itemid = null)
 {
     $coll = new ArrayObject();
-    LocalProfiler::clear();
+    XarayaProfiler::clear();
     for ($i = 0; $i < TEST_COUNT; $i++) {
         $args = ['name' => "Mike $i", 'age' => 20 + $i];
         $sample = DataObjectFactory::getObject(['name' => 'sample']);
@@ -88,7 +131,7 @@ function test_normal_baseline($itemid = null)
         $sample->setFieldValues($args);
         $coll[] = $sample;
     }
-    echo LocalProfiler::result();
+    echo XarayaProfiler::result();
     $values = $coll[25]->getFieldValues();
     echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
     return count($coll);
@@ -122,7 +165,7 @@ function test_normal_clone($itemid = null)
 function test_generated_baseline($itemid = null)
 {
     $coll = new ArrayObject();
-    LocalProfiler::clear();
+    XarayaProfiler::clear();
     for ($i = 0; $i < TEST_COUNT; $i++) {
         Sample::$_object = null;
         Sample::$_descriptor = null;
@@ -130,7 +173,7 @@ function test_generated_baseline($itemid = null)
         $sample = new Sample($itemid, $args);
         $coll[] = $sample;
     }
-    echo LocalProfiler::result();
+    echo XarayaProfiler::result();
     $values = $coll[25]->toArray();
     echo "Check: " . $values['name'] . " " . $values['age'] . "\n";
     return count($coll);
@@ -249,8 +292,8 @@ function test_properties()
 
 $itemid = null;
 //$itemid = 1;
-//run_profile($itemid);
+run_profile($itemid);
 
 //test_crud();
 //test_list();
-test_properties();
+//test_properties();

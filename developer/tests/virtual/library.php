@@ -2,7 +2,7 @@
 /**
  * Entrypoint for experimenting with library objects (without Xaraya DB)
  */
-require_once dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\Modules\Library\LibraryObject;
 use Xaraya\Modules\Library\LibraryObjectList;
@@ -18,7 +18,7 @@ xarCache::init();
 
 function get_descriptor($table, $offline)
 {
-    $filepath = dirname(__DIR__, 3).'/html/code/modules/library/xardata/lb_' . $table . '-def.php';
+    $filepath = dirname(__DIR__, 3) . '/html/code/modules/library/xardata/lb_' . $table . '-def.php';
     $args = include $filepath;
     $descriptor = VirtualObjectFactory::getObjectDescriptor($args, $offline);
     return $descriptor;
@@ -31,7 +31,7 @@ if (!$offline) {
     xarDatabase::init();
 }
 
-$dirpath = dirname(__DIR__, 3).'/html/code/modules/library/xardata/';
+$dirpath = dirname(__DIR__, 3) . '/html/code/modules/library/xardata/';
 $count = VirtualObjectFactory::loadDefinitions($dirpath);
 echo "Found $count object definitions\n";
 VirtualObjectFactory::isOffline($offline);
@@ -43,7 +43,7 @@ $table = 'books';
 UserApi::setCurrentDatabase('test');
 if ($offline or true) {
     // add database before we get to dbConnArgs - this avoids using xarModVars (not initialized)
-    $filepath = dirname(__DIR__, 3).'/html/code/modules/library/xardata/metadata.db';
+    $filepath = dirname(__DIR__, 3) . '/html/code/modules/library/xardata/metadata.db';
     //UserApi::addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath], false);
     UserApi::addDatabase('test', ['databaseType' => 'sqlite3', 'databaseName' => $filepath, 'external' => 'dbal'], false);
 }

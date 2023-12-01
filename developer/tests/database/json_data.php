@@ -9,7 +9,7 @@
  * Support for JSON data type in Doctrine DBAL isn't as transparent as I'd hoped yet,
  * but using an external MongoDB seems like an interesting option - to be continued
  */
-require_once dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\Database\ExternalDatabase;
 
@@ -36,12 +36,12 @@ function create_json_table($conn, $name = 'xar_dynamic_json')
     } catch (\Doctrine\DBAL\Schema\Exception\TableDoesNotExist $e) {
         $schema = new \Doctrine\DBAL\Schema\Schema();
         $myTable = $schema->createTable($name);
-        $myTable->addColumn("id", "integer", array("unsigned" => true, "autoincrement" => true));
-        $myTable->addColumn("object_id", "integer", array("unsigned" => true));
-        $myTable->addColumn("item_id", "integer", array("unsigned" => true));
+        $myTable->addColumn("id", "integer", ["unsigned" => true, "autoincrement" => true]);
+        $myTable->addColumn("object_id", "integer", ["unsigned" => true]);
+        $myTable->addColumn("item_id", "integer", ["unsigned" => true]);
         $myTable->addColumn("data", "json");
-        $myTable->setPrimaryKey(array("id"));
-        $myTable->addUniqueIndex(array("object_id", "item_id"), 'i_' . $name . '_item');
+        $myTable->setPrimaryKey(["id"]);
+        $myTable->addUniqueIndex(["object_id", "item_id"], 'i_' . $name . '_item');
         $sql = $platform->getCreateTableSQL($myTable);
         print_r($sql);
         $sm->createTable($myTable);
@@ -61,7 +61,7 @@ function add_json_index($conn, $name = 'xar_dynamic_json')
     $toSchema = clone $fromSchema;
     $table = $toSchema->getTable($name);
     $table->dropIndex('i_' . $name . '_item');
-    $table->addUniqueIndex(array("object_id", "item_id"), 'i_' . $name . '_item');
+    $table->addUniqueIndex(["object_id", "item_id"], 'i_' . $name . '_item');
 
     $platform = $conn->getDatabasePlatform();
     $sql = $fromSchema->getMigrateToSql($toSchema, $platform);
@@ -139,8 +139,8 @@ function copy_dynamicdata_objects($dbName, $dbConnIndex, $client, $drop = false)
         $resultSet2 = $stmt2->executeQuery();
         $properties = $resultSet2->fetchAllAssociative();
         //print_r($properties);
-        $prop_names = array();
-        $prop_types = array();
+        $prop_names = [];
+        $prop_types = [];
         foreach ($properties as $property) {
             $prop_names[$property["id"]] = $property["name"];
             $prop_types[$property["id"]] = $property["type"];
@@ -149,13 +149,13 @@ function copy_dynamicdata_objects($dbName, $dbConnIndex, $client, $drop = false)
         //$stmt3->bindValue(1, $prop_ids, \Doctrine\DBAL\Connection::PARAM_INT_ARRAY);
         //$stmt3->execute();
         //The parameter list support only works with Doctrine\DBAL\Connection::executeQuery() and Doctrine\DBAL\Connection::executeStatement(), NOT with the binding methods of a prepared statement.
-        $resultSet3 = $conn->executeQuery($sql3, array($prop_ids), array(\Doctrine\DBAL\ArrayParameterType::INTEGER));
+        $resultSet3 = $conn->executeQuery($sql3, [$prop_ids], [\Doctrine\DBAL\ArrayParameterType::INTEGER]);
         $data = $resultSet3->fetchAllAssociative();
         //print_r($data);
-        $items = array();
+        $items = [];
         foreach ($data as $field) {
             if (!array_key_exists($field["item_id"], $items)) {
-                $items[$field["item_id"]] = array();
+                $items[$field["item_id"]] = [];
                 $items[$field["item_id"]]["_id"] = (int) $field["item_id"];
             }
             if (in_array($prop_types[$field["property_id"]], [21, 15, 18281])) {

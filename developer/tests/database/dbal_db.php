@@ -14,7 +14,7 @@
  *
  * https://www.doctrine-project.org/projects/doctrine-dbal/en/latest/index.html
  */
-require_once dirname(__DIR__, 3).'/vendor/autoload.php';
+require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 // initialize bootstrap
 sys::init();
