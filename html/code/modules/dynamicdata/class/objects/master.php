@@ -80,8 +80,9 @@ class DataObjectMaster extends xarObject
     public $layout = 'default';         // optional layout inside the templates
     public $template = '';              // optional sub-template, e.g. user-objectview-[template].xt (defaults to the object name)
     public $tplmodule = 'dynamicdata';  // optional module where the object templates reside (defaults to 'dynamicdata')
-    public $linktype = 'user';          // optional link type for use in getActionURL() (defaults to 'user' for module URLs, 'object' for object URLs)
-    public $linkfunc = 'display';       // optional link function for use in getActionURL() (defaults to 'display', unused for object URLs)
+    public $linktype = 'user';          // optional link type for use in getActionURL() (defaults to 'user' for module URLs, 'object' for object URLs, 'other' for middleware)
+    /** @var string|callable */
+    public $linkfunc = 'display';       // optional link function for use in getActionURL() (defaults to 'display', unused for object URLs, callable for middleware)
     private $cached_urls  = [];    // cached URLs for use in getActionURL()
 
     public $primary = null;             // primary key is item id (or objectid in the case of the objects object)

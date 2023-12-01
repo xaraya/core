@@ -42,7 +42,8 @@ class DefaultHandler extends xarObject
     // main type of function handling all object method calls (= 'object' or 'user' [+ 'admin'] GUI)
     public string $linktype = 'object';
     // main function handling all object method calls (= if we're not using object URLs)
-    public string $linkfunc = 'main';
+    /** @var string|callable */
+    public $linkfunc = 'main';
     // default next method to redirect to after create/update/delete/yourstuff/etc. (defaults to 'view')
     public string $nextmethod = 'view';
     // title shown in the main templates
