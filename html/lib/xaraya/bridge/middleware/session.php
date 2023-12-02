@@ -234,12 +234,12 @@ class SessionMiddleware implements MiddlewareInterface
     public function registerCallbackEvents(ServerRequestInterface &$request): void
     {
         $login = function ($info) use (&$request) {
-            echo "Event: " . $info['event'] . "\n";
+            echo "Event: " . $info['event'] . " for request " . $request->getUri()->getPath() . "\n";
             $request = $request->withAttribute('userId', $info['args']);
         };
         xarEvents::registerCallback('UserLogin', $login);
         $logout = function ($info) use (&$request) {
-            echo "Event: " . $info['event'] . "\n";
+            echo "Event: " . $info['event'] . " for request " . $request->getUri()->getPath() . "\n";
             $request = $request->withAttribute('userId', 0);
         };
         xarEvents::registerCallback('UserLogout', $logout);

@@ -644,7 +644,7 @@ abstract class PreparedStatementCommon
 
     /**
      * @param int $paramIndex
-     * @param string $value
+     * @param string|object $value
      * @return void
      */
     public function setTimestamp($paramIndex, $value)

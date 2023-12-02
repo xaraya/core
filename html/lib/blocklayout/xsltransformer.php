@@ -206,7 +206,7 @@ class BlockLayoutXSLTProcessor extends xarObject
         xarDebug::setExceptionHandler(array('ExceptionHandlers','defaulthandler'));
         // What should we initialize $result to?
         try {
-            $this->postXml = $this->transformToXML($this->xmlDoc);
+            $this->postXml = $this->transformToXML($this->xmlDoc) ?? '';
         } catch (Exception $e) {
             xarLog::message("XSL: rolling", xarLog::LEVEL_WARNING);
         }
