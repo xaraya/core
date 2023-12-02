@@ -142,8 +142,9 @@ class DataProperty extends xarObject implements iDataProperty
             // Expression stolen from http://php.net/functions
             if(!empty($this->defaultvalue) && preg_match('/[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*\(.*\)/', $this->defaultvalue)) {
                 try {
-                    eval('$value = ' . $this->defaultvalue .';');
                     /** @var mixed|null $value */
+                    $value = null;
+                    eval('$value = ' . $this->defaultvalue .';');
                     if(isset($value)) {
                         $this->defaultvalue = $value;
                     } else {

@@ -1,21 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Call to function unset\\(\\) contains undefined variable \\$items\\.$#"
-			count: 1
-			path: html/code/modules/base/xarproperties/dropdown.php
-
-		-
-			message: "#^Undefined variable\\: \\$items$#"
-			count: 2
-			path: html/code/modules/base/xarproperties/dropdown.php
-
-		-
-			message: "#^Undefined variable\\: \\$temp$#"
-			count: 1
-			path: html/code/modules/base/xarproperties/filepicker.php
-
-		-
 			message: "#^Undefined variable\\: \\$block_groups$#"
 			count: 1
 			path: html/code/modules/blocks/xaradmin/new_instance.php
@@ -61,14 +46,19 @@ parameters:
 			path: html/code/modules/dynamicdata/class/objects/master.php
 
 		-
-			message: "#^Undefined variable\\: \\$value$#"
+			message: "#^Undefined variable\\: \\$maxlength$#"
 			count: 1
-			path: html/code/modules/dynamicdata/class/properties/base.php
+			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
 
 		-
-			message: "#^Undefined variable\\: \\$items$#"
-			count: 2
-			path: html/code/modules/dynamicdata/xarproperties/itemtype.php
+			message: "#^Undefined variable\\: \\$size$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
+
+		-
+			message: "#^Undefined variable\\: \\$tabindex$#"
+			count: 1
+			path: html/code/modules/dynamicdata/xaradmin/showpropval.php
 
 		-
 			message: "#^Parameter \\$event of method xarInstallComposer\\:\\:createModuleSymLinks\\(\\) has invalid type Composer\\\\Script\\\\Event\\.$#"
@@ -136,11 +126,6 @@ parameters:
 			path: html/code/modules/mail/class/phpmailer.php
 
 		-
-			message: "#^Result of function var_dump \\(void\\) is used\\.$#"
-			count: 1
-			path: html/code/modules/mail/xaradminapi/_sendmail.php
-
-		-
 			message: "#^Undefined variable\\: \\$show$#"
 			count: 1
 			path: html/code/modules/privileges/xaradmin/modifyprivilege.php
@@ -156,9 +141,9 @@ parameters:
 			path: html/code/modules/roles/xaruserapi/usermenu.php
 
 		-
-			message: "#^Function xarThemeDelVar not found\\.$#"
+			message: "#^Undefined variable\\: \\$value$#"
 			count: 1
-			path: html/code/modules/themes/xaradmin/update.php
+			path: html/code/properties/date/main.php
 
 		-
 			message: "#^Instantiated class React\\\\Http\\\\HttpServer not found\\.$#"

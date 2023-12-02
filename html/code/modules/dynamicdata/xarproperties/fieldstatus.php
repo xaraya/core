@@ -64,7 +64,7 @@ class FieldStatusProperty extends SelectProperty
         if(!isset($data['onchange'])) {
             $data['onchange'] = null;
         } // let tpl decide what to do
-        $data['extraparams'] = !empty($extraparams) ? $extraparams : "";
+        $data['extraparams'] ??= "";
         return parent::showInput($data);
     }
 

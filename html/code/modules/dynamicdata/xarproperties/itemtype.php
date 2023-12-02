@@ -136,8 +136,9 @@ class ItemTypeProperty extends ComboProperty
             // @todo re-align with initialization_function in combobox
             // we have some specific function to retrieve the items here
             try {
+                /** @var array<mixed>|null $items */
+                $items = null;
                 eval('$items = ' . $this->func .';');
-                /** @var array<mixed> $items */
                 if (isset($items) && count($items) > 0) {
                     foreach ($items as $id => $name) {
                         // skip empty items from e.g. dropdownlist() API

@@ -174,8 +174,9 @@ class SelectProperty extends DataProperty
 
         $options = array();
         if (!empty($this->initialization_function)) {
-            @eval('$items = ' . $this->initialization_function .';');
-            /** @var array<mixed> $items */
+            /** @var array<mixed>|null $items */
+            $items = null;
+            eval('$items = ' . $this->initialization_function .';');
             if (!isset($items) || !is_array($items)) $items = array();
             if (is_array(reset($items))) {
                 foreach($items as $id => $name) {
@@ -238,10 +239,11 @@ class SelectProperty extends DataProperty
                 }
             }
         } elseif (!empty($this->initialization_collection)) {
+            sys::import('xaraya.structures.sets.collection');
+            /** @var Collection|null $items */
+            $items = null;
             eval('$items = ' . $this->initialization_collection .';');
-            /** @var array<mixed> $items */
             if (isset($items) && is_object($items)){
-                sys::import('xaraya.structures.sets.collection');
                 $iter = $items->getIterator();
                 while($iter->valid()) {
                     $obj = $iter->current();
@@ -469,7 +471,7 @@ class SelectProperty extends DataProperty
         // optionally add hidden previous_value field 
         if (!isset($data['previousvalue'])) $data['previousvalue'] = false;
         if(!isset($data['onchange'])) $data['onchange'] = null; // let tpl decide what to do
-        $data['extraparams'] =!empty($extraparams) ? $extraparams : "";
+        $data['extraparams'] ??= "";
         if(isset($data['rows'])) $this->display_rows = $data['rows'];
         
         return $data;

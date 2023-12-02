@@ -51,8 +51,9 @@ class FilePickerProperty extends SelectProperty
         } else {
             // Cater to common Xaraya calls
             if ((strpos($this->initialization_basedirectory,'sys') === 0) || (strpos($this->initialization_basedirectory,'xar') === 0)) {
-                eval('$temp='.$this->initialization_basedirectory.";");
                 /** @var string $temp */
+                $temp = '';
+                eval('$temp='.$this->initialization_basedirectory.";");
                 $this->initialization_basedirectory = $temp;
             }
         }

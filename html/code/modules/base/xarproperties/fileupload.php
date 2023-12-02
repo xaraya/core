@@ -363,6 +363,7 @@ class FileUploadProperty extends DataProperty
 //        if (!isset($value)) {
 //            $value = $this->value;
 //        }
+        $data['value'] ??= $this->value;
         
         // Allow overriding by specific parameters
             if (isset($data['size']))   $this->display_size = $data['size'];
@@ -376,8 +377,8 @@ class FileUploadProperty extends DataProperty
         if ($this->UploadsModule_isHooked == TRUE) {
             // user must have hooked the uploads module after uploading files directly
             // CHECKME: remove any left over values - or migrate entries to uploads table ?
-            if (!empty($value) && !is_numeric($value) && !stristr($value, ';')) {
-                $value = '';
+            if (!empty($data['value']) && !is_numeric($data['value']) && !stristr($data['value'], ';')) {
+                $data['value'] = '';
             }
             // set override for the upload/import paths if necessary
             if (!empty($this->initialization_basedirectory) || !empty($this->initialization_importdirectory)) {
@@ -394,7 +395,7 @@ class FileUploadProperty extends DataProperty
             // @todo try to get rid of this
             return xarMod::apiFunc('uploads','admin','showinput',
                                  array('id' => $data['name'], // not $this->id
-                                       'value' => $value,
+                                       'value' => $data['value'],
                                        'multiple' => $this->initialization_multiple,
                                        'format' => 'fileupload',
                                        'methods' => $this->methods,
