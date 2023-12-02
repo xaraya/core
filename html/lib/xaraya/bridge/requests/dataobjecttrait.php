@@ -41,9 +41,9 @@ interface DataObjectBridgeInterface extends CommonRequestInterface
     /**
      * Summary of runDataObjectGuiRequest
      * @param array<string, mixed> $params
-     * @return string
+     * @return string|null
      */
-    public static function runDataObjectGuiRequest($params): string;
+    public static function runDataObjectGuiRequest($params): ?string;
 
     /**
      * Summary of runDataObjectApiRequest
@@ -129,9 +129,9 @@ trait DataObjectBridgeTrait
      * Summary of runDataObjectGuiRequest
      * @param array<string, mixed> $params
      * @throws \Exception
-     * @return string
+     * @return string|null
      */
-    public static function runDataObjectGuiRequest($params): string
+    public static function runDataObjectGuiRequest($params): ?string
     {
         if (empty($params['object'])) {
             throw new Exception("Missing object parameter");

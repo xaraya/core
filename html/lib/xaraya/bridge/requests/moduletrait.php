@@ -37,9 +37,9 @@ interface ModuleBridgeInterface extends CommonRequestInterface
      * Summary of runModuleGuiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
-     * @return string
+     * @return string|null
      */
-    public static function runModuleGuiRequest($vars, $query): string;
+    public static function runModuleGuiRequest($vars, $query): ?string;
 
     /**
      * Summary of runModuleApiRequest
@@ -132,9 +132,9 @@ trait ModuleBridgeTrait
      * Summary of runModuleGuiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
-     * @return string
+     * @return string|null
      */
-    public static function runModuleGuiRequest($vars, $query): string
+    public static function runModuleGuiRequest($vars, $query): ?string
     {
         return xarMod::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query);
     }

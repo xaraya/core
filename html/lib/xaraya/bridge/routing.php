@@ -62,12 +62,13 @@ use function FastRoute\simpleDispatcher;
  */
 class TrackRouteCollector extends RouteCollector
 {
+    /** @var array<mixed> */
     public static array $trackRoutes = [];
     public static string $groupStarted = 'GROUP STARTED';
     public static string $groupStopped = 'GROUP STOPPED';
     //protected string $currentGroupPrefix = '';
 
-    public function addRoute($httpMethod, string $route, $handler): void
+    public function addRoute($httpMethod, string $route, mixed $handler): void
     {
         static::$trackRoutes[] = [$this->currentGroupPrefix . $route, $httpMethod, $handler];
         //$route = $this->currentGroupPrefix . $route;
@@ -82,6 +83,9 @@ class TrackRouteCollector extends RouteCollector
         static::$trackRoutes[] = [$this->currentGroupPrefix . $prefix, static::$groupStopped, null];
     }
 
+    /**
+     * @return array<mixed>
+     */
     public static function getRoutes(): array
     {
         return static::$trackRoutes;
@@ -309,7 +313,7 @@ class FastRouteBridge implements CommonBridgeInterface
      * Summary of handleObjectRequest
      * @param array<string, mixed> $vars
      * @param mixed $request
-     * @return string
+     * @return string|null
      */
     public static function handleObjectRequest($vars, &$request = null)
     {
@@ -359,7 +363,7 @@ class FastRouteBridge implements CommonBridgeInterface
     /**
      * Summary of runObjectRequest
      * @param array<string, mixed> $params
-     * @return string
+     * @return string|null
      */
     public static function runObjectRequest($params)
     {
@@ -370,7 +374,7 @@ class FastRouteBridge implements CommonBridgeInterface
      * Summary of handleModuleRequest
      * @param array<string, mixed> $vars
      * @param mixed $request
-     * @return string
+     * @return string|null
      */
     public static function handleModuleRequest($vars, &$request = null)
     {
@@ -409,7 +413,7 @@ class FastRouteBridge implements CommonBridgeInterface
      * Summary of runModuleRequest
      * @param array<string, mixed> $vars
      * @param mixed $query
-     * @return string
+     * @return string|null
      */
     public static function runModuleRequest($vars, $query)
     {
@@ -448,6 +452,9 @@ class FastRouteBridge implements CommonBridgeInterface
 
     /**
      * Show available routes
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return string
      */
     public static function handleRoutesRequest($vars, &$request = null)
     {
@@ -711,6 +718,7 @@ class FastRouteBuildTest
 
     /**
      * Get available routes, optionally by handler method and/or handler class
+     * @return array<mixed>
      */
     public static function getRoutes(?string $handlerMethod = null, ?string $handlerClass = null)
     {
