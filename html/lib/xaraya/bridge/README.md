@@ -202,15 +202,21 @@ $psr17Factory = new Psr17Factory();
 $requestCreator = new ServerRequestCreator($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
 $request = $requestCreator->fromGlobals();
 
-// the Xaraya PSR-15 middleware here
-$objects = new DataObjectMiddleware($psr17Factory);
-$modules = new ModuleMiddleware($psr17Factory);
+// the Xaraya PSR-15 middleware here (with option to wrap output in page)
+$objects = new DataObjectMiddleware($psr17Factory, false);
+$modules = new ModuleMiddleware($psr17Factory, false);
 
 // some other middleware before or after...
 $filter = function ($request, $next) {
     // @checkme strip baseUri from request path and set 'baseUri' request attribute here?
     $request = DefaultMiddleware::stripBaseUri($request);
     $response = $next->handle($request);
+    return $response;
+};
+// page wrapper for object/module requests in response (if not specified above)
+$wrapper = function ($request, $next) use ($psr17Factory) {
+    $response = $next->handle($request);
+    $response = DefaultMiddleware::wrapResponse($response, $psr17Factory);
     return $response;
 };
 // ...
@@ -223,6 +229,7 @@ $notfound = function ($request, $next) {
 
 $stack = [
     $filter,
+    //$wrapper,
     $objects,
     // Warning: we never get here if there's an object to be handled
     $modules,
@@ -251,7 +258,6 @@ Usage:
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
-use Xaraya\Bridge\Middleware\DefaultMiddleware;
 use Xaraya\Bridge\Middleware\FastRouteHandler;
 
 // get server request from somewhere
@@ -266,7 +272,7 @@ $fastrouted = new FastRouteHandler($psr17Factory);
 $response = $fastrouted->handle($request);
 
 // emit the respone
-DefaultMiddleware::emitResponse($response);
+FastRouteHandler::emitResponse($response);
 ```
 
 ## Non-blocking HTTP Server (ReactPHP)
