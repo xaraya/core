@@ -305,6 +305,9 @@ class xarPDO extends PDO implements ConnectionInterface
         return true;
     }
 
+    /**
+     * @return xarPDOStatement
+     */
     public function prepareStatement($string = '')
     {
         $this->queryString = $string;

@@ -16,7 +16,8 @@ sys::init();
 xarCache::init();
 xarCore::xarInit(xarCore::SYSTEM_USER);
 // @checkme we need to set at least the $basurl here
-xarServer::setBaseURL('https://owncloud.mikespub.net/test/');
+//xarServer::setBaseURL('https://owncloud.mikespub.net/test/');
+xarServer::setBaseURL('http://localhost:8080/');
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
