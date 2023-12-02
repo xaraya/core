@@ -47,6 +47,10 @@ $static = function (ServerRequestInterface $request, callable $next) use ($files
 
 $onesession = new SingleSessionMiddleware();
 
+$wrapper = function (ServerRequestInterface $request, callable $next) use ($psr17Factory): ResponseInterface {
+    return FastRouteHandler::wrapResponse($next($request), $psr17Factory);
+};
+
 // See https://github.com/php-pm/php-pm/blob/master/src/ProcessSlave.php to set server environment
 $handler = function (ServerRequestInterface $request) use ($fastrouted) {
     // setting this makes xarServer::getCurrentURL() work again, but we need to set PATH_INFO too for getBaseURI()
@@ -60,6 +64,7 @@ $http = new React\Http\HttpServer(
     $logger,
     $static,
     $onesession,
+    $wrapper,
     $handler
 );
 

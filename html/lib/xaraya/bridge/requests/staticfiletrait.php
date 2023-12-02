@@ -173,6 +173,9 @@ trait StaticFileBridgeTrait
         if (!empty($params['module'])) {
             return static::getModuleFileRequest($params);
         } elseif (!empty($params['theme'])) {
+            if ($params['theme'] === 'none') {
+                return static::getOtherFileRequest($params);
+            }
             return static::getThemeFileRequest($params);
         }
         throw new Exception("Missing module or theme parameter");
@@ -224,6 +227,25 @@ trait StaticFileBridgeTrait
         $theme = realpath(sys::web() . 'themes/' . $params['theme'] . '/');
         if (empty($theme) || strpos($real, $theme) !== 0) {
             throw new Exception("Invalid file path");
+        }
+        return $real;
+    }
+
+    /**
+     * Summary of getOtherFileRequest
+     * @param array<string, mixed> $params
+     * @throws \Exception
+     * @return string
+     */
+    public static function getOtherFileRequest($params): string
+    {
+        if ($params['folder'] !== 'web') {
+            throw new Exception("Invalid file path");
+        }
+        $path = sys::web() . $params['file'];
+        $real = realpath($path);
+        if (empty($real)) {
+            throw new Exception("Invalid file");
         }
         return $real;
     }

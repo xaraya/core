@@ -108,6 +108,13 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
         // @checkme keep track of the current base uri if filtered in router
         static::setBaseUri($request);
 
+        if ($request->getUri()->getPath() === '/favicon.ico') {
+            $request = $request->withAttribute('theme', 'none');
+            $request = $request->withAttribute('folder', 'web');
+            $request = $request->withAttribute('file', 'favicon.ico');
+            return $request;
+        }
+
         foreach (static::$locations as $type => $prefix) {
             // parse request uri for path + query params
             $params = static::parseUri($request, $prefix, $type);

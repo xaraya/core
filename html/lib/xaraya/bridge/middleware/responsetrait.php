@@ -28,6 +28,10 @@ interface DefaultResponseInterface
     public function createRedirectResponse(string $redirectURL, int $status = 302): ResponseInterface;
     public function createExceptionResponse(Throwable $e, mixed $result = null): ResponseInterface;
     public function createFileResponse(string $path, ?string $mediaType = null): ResponseInterface;
+    public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory, ?callable $cleaner = null): ResponseInterface;
+    public static function wrapResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface;
+    public static function wrapOutputInPage(string $body): string;
+    public static function emitResponse(ResponseInterface $response): void;
 }
 
 trait DefaultResponseTrait
@@ -151,5 +155,70 @@ trait DefaultResponseTrait
         $response = $response->withBody($this->getStreamFactory()->createStreamFromFile($path));
         //$response = $response->withBody($this->getStreamFactory()->createStream(file_get_contents($path)));
         return $response;
+    }
+
+    /**
+     * Basic route cleaner for object/module requests in response e.g. in router middleware
+     */
+    public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory, ?callable $cleaner = null): ResponseInterface
+    {
+        if (empty($cleaner) || !is_callable($cleaner)) {
+            return $response;
+        }
+        if ($response->getStatusCode() !== 200 || !str_contains($response->getHeaderLine('Content-Type'), 'text/html')) {
+            return $response;
+        }
+        $content = (string) $response->getBody();
+        $content = call_user_func($cleaner, $content);
+        // @todo replace object/module request links and return response with updated body
+        if ($factory instanceof StreamFactoryInterface) {
+            $body = $factory->createStream($content);
+        } else {
+            $temp = $factory->createResponse();
+            $temp->getBody()->write($content);
+            $body = $temp->getBody();
+        }
+        $body->rewind();
+        return $response->withBody($body);
+    }
+
+    /**
+     * Basic page wrapper for object/module requests in response e.g. in router middleware
+     */
+    public static function wrapResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface
+    {
+        // Render page with the output - see index.php
+        return static::cleanResponse($response, $factory, [static::class, 'wrapOutputInPage']);
+    }
+
+    public static function wrapOutputInPage(string $body): string
+    {
+        // Render page with the output - see index.php
+        return \xarTpl::renderPage($body);
+    }
+
+    /**
+     * Basic emitter utility to send back response once request has been handled
+     */
+    public static function emitResponse(ResponseInterface $response): void
+    {
+        $status = $response->getStatusCode();
+        if ($status !== 200) {
+            $reason = $response->getReasonPhrase();
+            if (!empty($reason) && !headers_sent()) {
+                header("HTTP/1.1 $status $reason");
+            } else {
+                http_response_code($status);
+            }
+        }
+        if (!headers_sent()) {
+            foreach ($response->getHeaders() as $name => $values) {
+                //header(sprintf('%s: %s', $name, implode(', ', $value)), false);
+                foreach ($values as $value) {
+                    header(sprintf('%s: %s', $name, $value), false);
+                }
+            }
+        }
+        echo $response->getBody();
     }
 }

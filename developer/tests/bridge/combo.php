@@ -10,7 +10,6 @@ require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
-use Xaraya\Bridge\Middleware\DefaultMiddleware;
 use Xaraya\Bridge\Middleware\FastRouteHandler;
 use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
@@ -57,7 +56,7 @@ $fastrouted = new FastRouteHandler($psr17Factory);
 // handle the request directly, or use as middleware
 $response = $fastrouted->handle($request);
 LocalTimer::setTimer('run');
-DefaultMiddleware::emitResponse($response);
+FastRouteHandler::emitResponse($response);
 LocalTimer::setTimer('emit');
 
 if (php_sapi_name() === 'cli') {

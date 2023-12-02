@@ -13,7 +13,6 @@
  * use Nyholm\Psr7\Factory\Psr17Factory;
  * use Nyholm\Psr7Server\ServerRequestCreator;
  * // use Xaraya PSR-15 compatible request handler + middleware
- * use Xaraya\Bridge\Middleware\DefaultMiddleware;
  * use Xaraya\Bridge\Middleware\FastRouteHandler;
  *
  * // get server request from somewhere
@@ -28,7 +27,7 @@
  * $response = $fastrouted->handle($request);
  *
  * //echo $response->getBody();
- * DefaultMiddleware::emitResponse($response);
+ * FastRouteHandler::emitResponse($response);
  */
 
 namespace Xaraya\Bridge\Middleware;
@@ -59,26 +58,35 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, 
 {
     use DefaultResponseTrait;
 
+    /** @var FastRouter */
     protected $router;
 
     /**
-     * Initialize the middleware with response factory (or container, ...)
+     * Initialize the middleware with response factory (or container, ...) and options
+     * @param array<string, mixed> $options
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, ?FastRouter $router = null, array $options = [])
     {
         $this->setResponseFactory($responseFactory);
         $this->options = $options;
         if (empty($router)) {
-            $router = simpleDispatcher(function (RouteCollector $r) {
-                $r->addGroup('/api', function (RouteCollector $r) {
-                    FastRouteApiBridge::addRouteCollection($r);
-                });
-                FastRouteBridge::addRouteCollection($r);
-            }, [
-                'routeCollector' => TrackRouteCollector::class,
-            ]);
+            $router = $this->getRouter();
         }
         $this->setRouter($router);
+    }
+
+    public function getRouter(): FastRouter
+    {
+        // override standard routeCollector here
+        $router = simpleDispatcher(function (RouteCollector $r) {
+            $r->addGroup('/api', function (RouteCollector $r) {
+                FastRouteApiBridge::addRouteCollection($r);
+            });
+            FastRouteBridge::addRouteCollection($r);
+        }, [
+            'routeCollector' => TrackRouteCollector::class,
+        ]);
+        return $router;
     }
 
     public function setRouter(FastRouter $router): void
@@ -102,7 +110,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, 
         return $this->execute($request, $next);
     }
 
-    public function prepareRequestCallback(ServerRequestInterface &$request)
+    public function prepareRequestCallback(ServerRequestInterface &$request): void
     {
         // @checkme we need to somehow update $request here to do any good!?
         $callback = function (string $redirectURL, int $status = 302) use (&$request) {

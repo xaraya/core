@@ -48,17 +48,19 @@ function getRequest($psr17Factory)
     return $request;
 }
 
-function getStack($psr17Factory, $api = false)
+function getStack($psr17Factory, $api = false, $wrapPage = false)
 {
+    // the Xaraya PSR-15 middleware here (with option to wrap output in page)
     if ($api) {
         $objects = new DataObjectApiMiddleware($psr17Factory);
         $modules = new ModuleApiMiddleware($psr17Factory);
     } else {
-        $objects = new DataObjectMiddleware($psr17Factory);
-        $modules = new ModuleMiddleware($psr17Factory);
+        $objects = new DataObjectMiddleware($psr17Factory, $wrapPage);
+        $modules = new ModuleMiddleware($psr17Factory, $wrapPage);
     }
     LocalTimer::setTimer('middleware');
 
+    // some other middleware before or after...
     $filter = function ($request, $next) {
         LocalTimer::setTimer('filter_in');
         // @checkme strip baseUrl from request path here?
@@ -68,15 +70,16 @@ function getStack($psr17Factory, $api = false)
         LocalTimer::setTimer('filter_handled');
         return $response->withHeader('X-Response-Before', 'Bar');
     };
+    // page wrapper for object requests in response output (if not specified above)
     $wrapper = function ($request, $next) use ($psr17Factory) {
         LocalTimer::setTimer('wrapper_in');
         $response = $next->handle($request->withAddedHeader('X-Middleware-Seen', 'Wrapper'));
         LocalTimer::setTimer('wrapper_handled');
-        // page wrapper for object requests in response output
         $response = DefaultMiddleware::wrapResponse($response, $psr17Factory);
         LocalTimer::setTimer('wrapper_wrapped');
         return $response->withAddedHeader('X-Middleware-Seen', 'Wrapper');
     };
+    // ...
     $notfound = function ($request, $next) {
         LocalTimer::setTimer('notfound_in');
         $response = $next->handle($request->withHeader('X-Request-After', 'Baz'));
@@ -88,15 +91,17 @@ function getStack($psr17Factory, $api = false)
         return $response->withHeader('X-Response-After', 'Baz');
     };
 
-    $stack = [
-        $filter,
-        $wrapper,
-        $objects,
-        $modules,
-        //$fastroute,
-        // Warning: we never get here if there's an object to be handled
-        $notfound,
-    ];
+    $stack = [];
+    $stack[] = $filter;
+    if (!$wrapPage) {
+        $stack[] = $wrapper;
+    }
+    $stack[] = $objects;
+    // Warning: we never get here if there's an object to be handled
+    $stack[] = $modules;
+    // Warning: we never get here if there's a module to be handled
+    //$stack[] = $fastroute;
+    $stack[] = $notfound;
     LocalTimer::setTimer('stack');
     return $stack;
 }
@@ -120,7 +125,9 @@ $middleware = new class () implements Psr\Http\Server\MiddlewareInterface {
 };
  */
 
-$stack = getStack($psr17Factory);
+$api = false;
+$wrapPage = false;
+$stack = getStack($psr17Factory, $api, $wrapPage);
 
 $response = Dispatcher::run($stack, $request);
 //$response = $fastroute->handle($request);

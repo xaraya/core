@@ -23,9 +23,9 @@
  * $requestCreator = new ServerRequestCreator($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory);
  * $request = $requestCreator->fromGlobals();
  *
- * // the Xaraya PSR-15 middleware here
- * $objects = new DataObjectMiddleware($psr17Factory);
- * $modules = new ModuleMiddleware($psr17Factory);
+ * // the Xaraya PSR-15 middleware here (with option to wrap output in page)
+ * $objects = new DataObjectMiddleware($psr17Factory, false);
+ * $modules = new ModuleMiddleware($psr17Factory, false);
  *
  * // some other middleware before or after...
  * $filter = function ($request, $next) {
@@ -34,9 +34,9 @@
  *     $response = $next->handle($request);
  *     return $response;
  * };
+ * // page wrapper for object/module requests in response (if not specified above)
  * $wrapper = function ($request, $next) use ($psr17Factory) {
  *     $response = $next->handle($request);
- *     // page wrapper for object/module requests in response
  *     $response = DefaultMiddleware::wrapResponse($response, $psr17Factory);
  *     return $response;
  * };
@@ -50,7 +50,7 @@
  *
  * $stack = [
  *     $filter,
- *     //$cleaner,
+ *     //$wrapper,
  *     $objects,
  *     // Warning: we never get here if there's an object to be handled
  *     $modules,
@@ -82,7 +82,7 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
     protected array $options = [];
 
     /**
-     * Initialize the middleware with response factory (or container, ...)
+     * Initialize the middleware with response factory (or container, ...) and options
      * @param array<string, mixed> $options
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])

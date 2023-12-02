@@ -30,13 +30,15 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
     /** @var array<string> */
     protected array $attributes = ['object', 'method', 'itemid'];
     protected ResponseFactoryInterface $responseFactory;
+    protected bool $wrapPage = false;
 
     /**
-     * Initialize the middleware with response factory (or container, ...)
+     * Initialize the middleware with response factory (or container, ...) and options
      */
-    public function __construct(?ResponseFactoryInterface $responseFactory = null)
+    public function __construct(?ResponseFactoryInterface $responseFactory = null, bool $wrapPage = false)
     {
         $this->setResponseFactory($responseFactory);
+        $this->wrapPage = $wrapPage;
     }
 
     /**
@@ -97,6 +99,9 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
             $result = static::runDataObjectGuiRequest($params);
         } catch (Exception $e) {
             return $this->createExceptionResponse($e);
+        }
+        if ($this->wrapPage) {
+            $result = static::wrapOutputInPage($result);
         }
         return $this->createResponse($result);
     }
