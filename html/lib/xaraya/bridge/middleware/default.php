@@ -34,10 +34,10 @@
  *     $response = $next->handle($request);
  *     return $response;
  * };
- * $cleaner = function ($request, $next) use ($psr17Factory) {
+ * $wrapper = function ($request, $next) use ($psr17Factory) {
  *     $response = $next->handle($request);
- *     // clean up routes for object/module requests in response
- *     $response = DefaultMiddleware::cleanResponse($response, $psr17Factory);
+ *     // page wrapper for object/module requests in response
+ *     $response = DefaultMiddleware::wrapResponse($response, $psr17Factory);
  *     return $response;
  * };
  * // ...

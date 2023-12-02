@@ -38,7 +38,8 @@ interface DefaultRouterInterface
 
     public static function stripBaseUri(ServerRequestInterface $request): ServerRequestInterface;
     public static function setBaseUri(string|ServerRequestInterface $request): void;
-    public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface;
+    public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory, ?callable $cleaner = null): ResponseInterface;
+    public static function wrapResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface;
     public static function emitResponse(ResponseInterface $response): void;
 }
 
@@ -113,9 +114,16 @@ abstract class DefaultRouter implements DefaultRouterInterface, CommonBridgeInte
     /**
      * Basic route cleaner for object/module requests in response e.g. in router middleware
      */
-    public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface
+    public static function cleanResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory, ?callable $cleaner = null): ResponseInterface
     {
+        if (empty($cleaner) || !is_callable($cleaner)) {
+            return $response;
+        }
+        if ($response->getStatusCode() !== 200 || !str_contains($response->getHeaderLine('Content-Type'), 'text/html')) {
+            return $response;
+        }
         $content = (string) $response->getBody();
+        $content = call_user_func($cleaner, $content);
         // @todo replace object/module request links and return response with updated body
         if ($factory instanceof StreamFactoryInterface) {
             $body = $factory->createStream($content);
@@ -126,6 +134,15 @@ abstract class DefaultRouter implements DefaultRouterInterface, CommonBridgeInte
         }
         $body->rewind();
         return $response->withBody($body);
+    }
+
+    /**
+     * Basic page wrapper for object/module requests in response e.g. in router middleware
+     */
+    public static function wrapResponse(ResponseInterface $response, StreamFactoryInterface|ResponseFactoryInterface $factory): ResponseInterface
+    {
+        // Render page with the output - see index.php
+        return static::cleanResponse($response, $factory, ['xarTpl', 'renderPage']);
     }
 
     /**
