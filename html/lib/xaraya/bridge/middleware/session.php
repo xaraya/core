@@ -218,6 +218,8 @@ class SessionMiddleware implements MiddlewareInterface
     private array $config;
     /** @var SessionStorageInterface */
     private $storage;
+    /** @var array<int, ServerRequestInterface> */
+    private $pending = [];
 
     public function __construct()
     {
@@ -226,23 +228,59 @@ class SessionMiddleware implements MiddlewareInterface
         $this->config = xarSession::getConfig();
         //$this->storage = new SessionDatabaseStorage($this->config);
         $this->storage = new SessionCacheStorage($this->config);
+        // register callback functions for UserLogin and UserLogout events - to update userId in request
+        $this->registerCallbackEvents();
     }
 
     /**
      * Register callback functions for UserLogin and UserLogout events - to update userId in request
      */
-    public function registerCallbackEvents(ServerRequestInterface &$request): void
+    public function registerCallbackEvents(): void
     {
-        $login = function ($info) use (&$request) {
-            echo "Event: " . $info['event'] . " for request " . $request->getUri()->getPath() . "\n";
-            $request = $request->withAttribute('userId', $info['args']);
-        };
-        xarEvents::registerCallback('UserLogin', $login);
-        $logout = function ($info) use (&$request) {
-            echo "Event: " . $info['event'] . " for request " . $request->getUri()->getPath() . "\n";
-            $request = $request->withAttribute('userId', 0);
-        };
-        xarEvents::registerCallback('UserLogout', $logout);
+        xarEvents::registerCallback('UserLogin', [$this, 'callbackUserLogin']);
+        xarEvents::registerCallback('UserLogout', [$this, 'callbackUserLogout']);
+    }
+
+    /**
+     * Add request for callback in UserLogin and UserLogout events - to update userId in request
+     */
+    public function addCallbackRequest(ServerRequestInterface &$request): void
+    {
+        $this->pending[spl_object_id($request)] = &$request;
+    }
+
+    /**
+     * Remove request for callback in UserLogin and UserLogout events - to update userId in request
+     */
+    public function removeCallbackRequest(int $requestId): void
+    {
+        unset($this->pending[$requestId]);
+    }
+
+    /**
+     * Callback function for UserLogin events - to update userId in pending request(s)
+     * @param array<string, mixed> $info
+     */
+    public function callbackUserLogin($info): void
+    {
+        // @todo all pending requests will be logged in at the same time!
+        foreach ($this->pending as $id => $request) {
+            echo "Event: " . $info['event'] . " for request ($id) " . $request->getUri()->getPath() . "\n";
+            $this->pending[$id] = $request->withAttribute('userId', $info['args']);
+        }
+    }
+
+    /**
+     * Callback function for UserLogout events - to update userId in pending request(s)
+     * @param array<string, mixed> $info
+     */
+    public function callbackUserLogout($info): void
+    {
+        // @todo all pending requests will be logged out at the same time!
+        foreach ($this->pending as $id => $request) {
+            echo "Event: " . $info['event'] . " for request ($id) " . $request->getUri()->getPath() . "\n";
+            $this->pending[$id] = $request->withAttribute('userId', 0);
+        }
     }
 
     /**
@@ -285,8 +323,11 @@ class SessionMiddleware implements MiddlewareInterface
             $isLogin = true;
         }
         $isAuthSystem = false;
+        $requestId = null;
         if (strpos($request->getRequestTarget(), '/authsystem/') !== false) {
-            $this->registerCallbackEvents($request);
+            $requestId = spl_object_id($request);
+            echo "Adding callback request ($requestId) " . $request->getRequestTarget() . "\n";
+            $this->addCallbackRequest($request);
             $isAuthSystem = true;
         }
         $isAuthToken = false;
@@ -308,6 +349,11 @@ class SessionMiddleware implements MiddlewareInterface
             $response = $next->handle($request);
         } else {
             $response = $next($request);
+        }
+        if ($isAuthSystem && !empty($requestId)) {
+            // request has changed due to redirect in the meantime, so spl_object_id($request) will not match
+            echo "Removing callback request ($requestId) " . $request->getRequestTarget() . "\n";
+            $this->removeCallbackRequest($requestId);
         }
         $sendCookie = false;
         if ($isAuthSystem && $request->getAttribute('userId') !== null) {
