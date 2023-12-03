@@ -303,7 +303,7 @@ class xarSecurity extends xarObject
         if (($rolename == '') || ($rolename == xarUser::getVar('uname'))) {
             // We are checking the privileges of the current user
             // See if we have something cached
-            if (!xarVar::isCached('Security.Variables','privilegeset')) {
+            if (!xarVar::isCached('Security.Variables','privilegeset.' . $userID)) {
 
             // CHECKME: why not cache this as module user variable instead of session ?
             //          That would save a lot of space for anonymous sessions...
@@ -326,11 +326,11 @@ class xarSecurity extends xarObject
                 }
 
                 // Save them to the cache
-                xarVar::setCached('Security.Variables','privilegeset',$privileges);
+                xarVar::setCached('Security.Variables','privilegeset.' . $userID,$privileges);
 
             } else {
                 // get the irreducible set of privileges for the current user from cache
-                $privileges = xarVar::getCached('Security.Variables','privilegeset');
+                $privileges = xarVar::getCached('Security.Variables','privilegeset.' . $userID);
             }
         } else {
             // This is a different user, force recalculation
