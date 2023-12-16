@@ -101,7 +101,7 @@ class EventObserverBridge implements ObserverBridgeInterface
         static::register();
     }
 
-    public static function callbackEvent($info): void
+    public static function callbackEvent($info, $context = null): void
     {
         if (empty(static::$dispatcher)) {
             return;

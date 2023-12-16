@@ -35,9 +35,10 @@ function init_offline_cache()
      */
 }
 
-function hooks_callback($info)
+function hooks_callback($info, $context = null)
 {
     echo "Hook Event: " . var_export($info, true) . "\n";
+    echo "Context: " . var_export($context, true) . "\n";
 }
 
 function hooks_register()

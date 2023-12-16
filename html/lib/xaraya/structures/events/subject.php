@@ -18,6 +18,8 @@ interface ixarEventSubject
     public function getSubject();
     public function getArgs();
     public function setArgs($args);
+    public function getContext();
+    public function setContext($context);
 }
 
 /** 
@@ -31,6 +33,7 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
     protected $args;                // args passed from caller when event is raised
     protected $observers = array(); // xarEvents::notify is responsible for populating this array
     protected $subject = 'Event';   // name of this event subject
+    protected $context = null;
 
     /**
      * Constructor
@@ -127,4 +130,13 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
         }
     }
 
+    public function getContext()
+    {
+        return $this->context;
+    }
+
+    public function setContext($context)
+    {
+        $this->context = $context;
+    }
 }

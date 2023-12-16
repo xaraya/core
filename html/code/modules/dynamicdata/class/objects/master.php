@@ -983,8 +983,9 @@ class DataObjectMaster extends xarObject
      * Call $action hooks for this object (= notify observers in observer pattern)
      *
      * @param string $action the hook action ('create', 'display', ...)
+     * @param ?\Xaraya\Structures\Context $context optional context for the hook call (default = none)
      */
-    public function callHooks($action = '')
+    public function callHooks($action = '', $context = null)
     {
         // if we have no action
         if (empty($action)) {
@@ -1063,9 +1064,9 @@ class DataObjectMaster extends xarObject
 
         // Use the standard method to call hooks
         if ($this instanceof DataObject) {
-            $hooks = xarModHooks::call('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype);
+            $hooks = xarModHooks::call('item', $action, $this->itemid ?? null, $this->hookvalues, $modname, $this->itemtype, $context);
         } else {
-            $hooks = xarModHooks::call('item', $action, null, $this->hookvalues, $modname, $this->itemtype);
+            $hooks = xarModHooks::call('item', $action, null, $this->hookvalues, $modname, $this->itemtype, $context);
         }
         // FIXME: we don't need two distinct properties to store gui and api hook responses
         // A response is a response, it's up to the caller to decide if it's appropriate

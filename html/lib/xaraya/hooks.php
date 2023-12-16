@@ -496,10 +496,11 @@ class xarModHooks extends xarObject
      *        Note : better pass the caller module via $extraInfo['module'] if necessary, so that hook functions receive it too
      * @param $callerItemType string optional item type for the calling module (default = none)
      *        Note : better pass the item type via $extraInfo['itemtype'] if necessary, so that hook functions receive it too
+     * @param $context mixed optional context for the hook call (default = none)
      * @return mixed output from hooks, or null if there are no hooks
      * @throws BadParameterException
      */
-    public static function call($hookScope, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '')
+    public static function call($hookScope, $hookAction, $hookId, $extraInfo = NULL, $callerModName = NULL, $callerItemType = '', $context = null)
     {
         // scope and action are concatenated to form the name of the hook event
         $event = ucfirst($hookScope) . ucfirst($hookAction);
@@ -516,7 +517,7 @@ class xarModHooks extends xarObject
             'extrainfo' => $extraInfo,
         );
         // Notify the hook subject (event) observers
-        return xarHooks::notify($event, $args);
+        return xarHooks::notify($event, $args, $context);
     }
 
     /**

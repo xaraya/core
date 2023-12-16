@@ -260,8 +260,9 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * Callback function for UserLogin events - to update userId in pending request(s)
      * @param array<string, mixed> $info
+     * @param \Xaraya\Structures\Context $context
      */
-    public function callbackUserLogin($info): void
+    public function callbackUserLogin($info, $context = null): void
     {
         // @todo all pending requests will be logged in at the same time!
         foreach ($this->pending as $id => $request) {
@@ -273,8 +274,9 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * Callback function for UserLogout events - to update userId in pending request(s)
      * @param array<string, mixed> $info
+     * @param \Xaraya\Structures\Context $context
      */
-    public function callbackUserLogout($info): void
+    public function callbackUserLogout($info, $context = null): void
     {
         // @todo all pending requests will be logged out at the same time!
         foreach ($this->pending as $id => $request) {

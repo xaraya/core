@@ -26,6 +26,7 @@
 **/
 
 sys::import("xaraya.structures.events.subject");
+sys::import("xaraya.structures.context");
 
 /**
  * Exception raised by the events subsystem
@@ -81,7 +82,7 @@ interface ixarEvents
     public static function registerObserver($event,$module,$classnameOrArea,$type,$func);
     public static function unregisterSubject($event,$module);
     public static function unregisterObserver($event,$module);
-    public static function notify($event, $args);
+    public static function notify($event, $args = [], $context = null);
     public static function getSubject($event);
     public static function getSubjects();
     public static function fileLoad($info);
@@ -134,9 +135,10 @@ class xarEvents extends xarObject implements ixarEvents
      *
      * @param string $event name of event subject, required
      * @param mixed $args argument(s) to pass to subject, optional, default empty array
+     * @param ?\Xaraya\Structures\Context $context
      * @return mixed response from subject notify method
     **/
-    public static function notify($event, $args=array())
+    public static function notify($event, $args = [], $context = null)
     {
         $info = array();
         // Attempt to load subject 
@@ -191,6 +193,7 @@ class xarEvents extends xarObject implements ixarEvents
                             }
                         }
                     }
+                    $subject->setContext($context);
                     $method = !empty($info['func']) ? $info['func'] : 'notify';
                     // always notify the subject, even if there are no observers
                     $response = $subject->$method();
@@ -217,7 +220,7 @@ class xarEvents extends xarObject implements ixarEvents
         if (!empty(static::$callbackFunctions) && !empty(static::$callbackFunctions[$event])) {
             foreach (static::$callbackFunctions[$event] as $callback) {
                 try {
-                    call_user_func($callback, $info);
+                    call_user_func($callback, $info, $context);
                 } catch (Exception $e) {
                     xarLog::message("xarEvents::notify: callback $event error " . $e->getMessage(), xarLog::LEVEL_INFO);
                 }
@@ -228,7 +231,7 @@ class xarEvents extends xarObject implements ixarEvents
         // (these are generic listeners that observe every event raised)
         // We only do this if this isn't the generic Event itself...
         if ($event != 'Event') 
-            xarEvents::notify('Event', $info);
+            xarEvents::notify('Event', $info, $context);
 
         // return the response
         return $response;
