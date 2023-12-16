@@ -244,9 +244,9 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * Add request for callback in UserLogin and UserLogout events - to update userId in request
      */
-    public function addCallbackRequest(ServerRequestInterface &$request): void
+    public function addCallbackRequest(ServerRequestInterface &$request, int $requestId): void
     {
-        $this->pending[spl_object_id($request)] = &$request;
+        $this->pending[$requestId] = &$request;
     }
 
     /**
@@ -328,8 +328,9 @@ class SessionMiddleware implements MiddlewareInterface
         $requestId = null;
         if (strpos($request->getRequestTarget(), '/authsystem/') !== false) {
             $requestId = spl_object_id($request);
+            $request = $request->withAttribute('requestId', $requestId);
             echo "Adding callback request ($requestId) " . $request->getRequestTarget() . "\n";
-            $this->addCallbackRequest($request);
+            $this->addCallbackRequest($request, $requestId);
             $isAuthSystem = true;
         }
         $isAuthToken = false;

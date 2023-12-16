@@ -43,7 +43,7 @@ namespace Xaraya\Bridge\Routing;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 // use some Xaraya classes
-use xarMod;
+use Xaraya\Structures\Context;
 use xarServer;
 use sys;
 use JsonException;
@@ -363,11 +363,12 @@ class FastRouteBridge implements CommonBridgeInterface
     /**
      * Summary of runObjectRequest
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runObjectRequest($params)
+    public static function runObjectRequest($params, $context = null)
     {
-        return static::runDataObjectGuiRequest($params);
+        return static::runDataObjectGuiRequest($params, $context);
     }
 
     /**
@@ -413,11 +414,12 @@ class FastRouteBridge implements CommonBridgeInterface
      * Summary of runModuleRequest
      * @param array<string, mixed> $vars
      * @param mixed $query
+     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runModuleRequest($vars, $query)
+    public static function runModuleRequest($vars, $query, $context = null)
     {
-        return static::runModuleGuiRequest($vars, $query);
+        return static::runModuleGuiRequest($vars, $query, $context);
     }
 
     /**
@@ -443,11 +445,12 @@ class FastRouteBridge implements CommonBridgeInterface
      * Summary of runBlockRequest
      * @param array<string, mixed> $vars
      * @param mixed $query
+     * @param ?Context<string, mixed> $context
      * @return string
      */
-    public static function runBlockRequest($vars, $query = null)
+    public static function runBlockRequest($vars, $query = null, $context = null)
     {
-        return static::runBlockGuiRequest($vars, $query);
+        return static::runBlockGuiRequest($vars, $query, $context);
     }
 
     /**
@@ -511,33 +514,36 @@ class FastRouteApiBridge extends FastRouteBridge
     /**
      * Summary of runObjectRequest
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runObjectRequest($params)
+    public static function runObjectRequest($params, $context = null)
     {
-        return static::runDataObjectApiRequest($params);
+        return static::runDataObjectApiRequest($params, $context);
     }
 
     /**
      * Summary of runModuleRequest
      * @param array<string, mixed> $vars
      * @param mixed $query
+     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runModuleRequest($vars, $query)
+    public static function runModuleRequest($vars, $query, $context = null)
     {
-        return static::runModuleApiRequest($vars, $query);
+        return static::runModuleApiRequest($vars, $query, $context);
     }
 
     /**
      * Summary of runBlockRequest
      * @param array<string, mixed> $vars
      * @param mixed $query
+     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runBlockRequest($vars, $query = null)
+    public static function runBlockRequest($vars, $query = null, $context = null)
     {
-        return static::runBlockApiRequest($vars, $query);
+        return static::runBlockApiRequest($vars, $query, $context);
     }
 }
 

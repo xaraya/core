@@ -6,6 +6,7 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
+use Xaraya\Structures\Context;
 use Exception;
 use sys;
 
@@ -41,16 +42,18 @@ interface DataObjectBridgeInterface extends CommonRequestInterface
     /**
      * Summary of runDataObjectGuiRequest
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runDataObjectGuiRequest($params): ?string;
+    public static function runDataObjectGuiRequest($params, $context = null): ?string;
 
     /**
      * Summary of runDataObjectApiRequest
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runDataObjectApiRequest($params): mixed;
+    public static function runDataObjectApiRequest($params, $context = null): mixed;
 }
 
 trait DataObjectBridgeTrait
@@ -128,10 +131,11 @@ trait DataObjectBridgeTrait
     /**
      * Summary of runDataObjectGuiRequest
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @throws \Exception
      * @return string|null
      */
-    public static function runDataObjectGuiRequest($params): ?string
+    public static function runDataObjectGuiRequest($params, $context = null): ?string
     {
         if (empty($params['object'])) {
             throw new Exception("Missing object parameter");
@@ -145,10 +149,11 @@ trait DataObjectBridgeTrait
     /**
      * Summary of runDataObjectApiRequest
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @throws \Exception
      * @return mixed
      */
-    public static function runDataObjectApiRequest($params): mixed
+    public static function runDataObjectApiRequest($params, $context = null): mixed
     {
         if (empty($params['object'])) {
             throw new Exception("Missing object parameter");

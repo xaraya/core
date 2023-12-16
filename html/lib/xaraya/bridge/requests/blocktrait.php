@@ -6,6 +6,7 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
+use Xaraya\Structures\Context;
 use Exception;
 use xarBlock;
 use xarMod;
@@ -39,17 +40,19 @@ interface BlockBridgeInterface extends CommonRequestInterface
      * Summary of runBlockGuiRequest
      * @param array<string, mixed> $vars
      * @param ?array<string, mixed> $query
+     * @param ?Context<string, mixed> $context
      * @return string
      */
-    public static function runBlockGuiRequest($vars, $query = null): string;
+    public static function runBlockGuiRequest($vars, $query = null, $context = null): string;
 
     /**
      * Summary of runBlockApiRequest
      * @param array<string, mixed> $vars
      * @param ?array<string, mixed> $query
+     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runBlockApiRequest($vars, $query = null): mixed;
+    public static function runBlockApiRequest($vars, $query = null, $context = null): mixed;
 }
 
 trait BlockBridgeTrait
@@ -87,10 +90,11 @@ trait BlockBridgeTrait
      * Summary of runBlockGuiRequest
      * @param array<string, mixed> $vars
      * @param ?array<string, mixed> $query
+     * @param ?Context<string, mixed> $context
      * @throws \Exception
      * @return string
      */
-    public static function runBlockGuiRequest($vars, $query = null): string
+    public static function runBlockGuiRequest($vars, $query = null, $context = null): string
     {
         if (empty($vars['instance'])) {
             throw new Exception("Missing object parameter");
@@ -103,10 +107,11 @@ trait BlockBridgeTrait
      * Summary of runBlockApiRequest
      * @param array<string, mixed> $vars
      * @param ?array<string, mixed> $query
+     * @param ?Context<string, mixed> $context
      * @throws \Exception
      * @return mixed
      */
-    public static function runBlockApiRequest($vars, $query = null): mixed
+    public static function runBlockApiRequest($vars, $query = null, $context = null): mixed
     {
         if (empty($vars['instance'])) {
             throw new Exception("Missing object parameter");

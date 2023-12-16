@@ -6,6 +6,7 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
+use Xaraya\Structures\Context;
 use xarMod;
 
 /**
@@ -37,17 +38,19 @@ interface ModuleBridgeInterface extends CommonRequestInterface
      * Summary of runModuleGuiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
+     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runModuleGuiRequest($vars, $query): ?string;
+    public static function runModuleGuiRequest($vars, $query, $context = null): ?string;
 
     /**
      * Summary of runModuleApiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
+     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runModuleApiRequest($vars, $query): mixed;
+    public static function runModuleApiRequest($vars, $query, $context = null): mixed;
 }
 
 trait ModuleBridgeTrait
@@ -132,9 +135,10 @@ trait ModuleBridgeTrait
      * Summary of runModuleGuiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
+     * @param ?Context<string, mixed> $context
      * @return string|null
      */
-    public static function runModuleGuiRequest($vars, $query): ?string
+    public static function runModuleGuiRequest($vars, $query, $context = null): ?string
     {
         return xarMod::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query);
     }
@@ -143,9 +147,10 @@ trait ModuleBridgeTrait
      * Summary of runModuleApiRequest
      * @param array<string, mixed> $vars
      * @param array<string, mixed> $query
+     * @param ?Context<string, mixed> $context
      * @return mixed
      */
-    public static function runModuleApiRequest($vars, $query): mixed
+    public static function runModuleApiRequest($vars, $query, $context = null): mixed
     {
         return xarMod::apiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'getitemtypes', $query);
     }
