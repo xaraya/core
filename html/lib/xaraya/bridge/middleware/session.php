@@ -224,7 +224,7 @@ class SessionMiddleware implements MiddlewareInterface
     public function __construct()
     {
         $this->cookieName = xarSession::COOKIE;
-        $this->anonId = (int) xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
+        $this->anonId = intval(xarConfigVars::get(null, 'Site.User.AnonymousUID', 5));
         $this->config = xarSession::getConfig();
         //$this->storage = new SessionDatabaseStorage($this->config);
         $this->storage = new SessionCacheStorage($this->config);
@@ -264,11 +264,18 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function callbackUserLogin($info, $context = null): void
     {
-        // @todo all pending requests will be logged in at the same time!
-        foreach ($this->pending as $id => $request) {
-            echo "Event: " . $info['event'] . " for request ($id) " . $request->getUri()->getPath() . "\n";
-            $this->pending[$id] = $request->withAttribute('userId', $info['args']);
+        if (empty($context)) {
+            echo "No context given for login\n";
+            return;
         }
+        $requestId = intval($context['requestId']);
+        if (empty($requestId) || empty($this->pending[$requestId])) {
+            echo "Invalid requestId given for login\n";
+            return;
+        }
+        $request = $this->pending[$requestId];
+        echo "Event: " . $info['event'] . " for request ($requestId) " . $request->getUri()->getPath() . "\n";
+        $this->pending[$requestId] = $request->withAttribute('userId', $info['args']);
     }
 
     /**
@@ -278,11 +285,18 @@ class SessionMiddleware implements MiddlewareInterface
      */
     public function callbackUserLogout($info, $context = null): void
     {
-        // @todo all pending requests will be logged out at the same time!
-        foreach ($this->pending as $id => $request) {
-            echo "Event: " . $info['event'] . " for request ($id) " . $request->getUri()->getPath() . "\n";
-            $this->pending[$id] = $request->withAttribute('userId', 0);
+        if (empty($context)) {
+            echo "No context given for logout\n";
+            return;
         }
+        $requestId = intval($context['requestId']);
+        if (empty($requestId) || empty($this->pending[$requestId])) {
+            echo "Invalid requestId given for logout\n";
+            return;
+        }
+        $request = $this->pending[$requestId];
+        echo "Event: " . $info['event'] . " for request ($requestId) " . $request->getUri()->getPath() . "\n";
+        $this->pending[$requestId] = $request->withAttribute('userId', 0);
     }
 
     /**
