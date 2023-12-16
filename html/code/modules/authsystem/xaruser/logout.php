@@ -18,7 +18,7 @@
  * @return boolean|void Returns true if the user has been logged out successfullly.
  * @throws ForbiddenOperationException Thrown if the user could not be logged out.
  */
-function authsystem_user_logout()
+function authsystem_user_logout(array $args = [], $context = null)
 {
     $redirect=xarServer::getBaseURL();
 
@@ -35,7 +35,7 @@ function authsystem_user_logout()
     }
 
     // Log user out
-    if (!xarUser::logOut()) {
+    if (!xarUser::logOut($context)) {
         throw new ForbiddenOperationException(array('authsystem', 'logout'),xarML('Problem Logging Out.  Module #(1) Function #(2)'));
     }
     xarController::redirect($redirecturl);

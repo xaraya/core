@@ -24,7 +24,7 @@
  *         string    $args['rememberme'] Remember this user (optional)
  * @return boolean Returns true on success, false upon failure
  */
-function authsystem_userapi_login(Array $args=array())
+function authsystem_userapi_login(array $args=[], $context = null)
 {
     extract($args);
 
@@ -44,5 +44,5 @@ function authsystem_userapi_login(Array $args=array())
         throw new BadParameterException(null,xarML('Wrong arguments to authsystem_userapi_login.'));
     }
 
-    return xarUser::logIn($uname, $pass, $rememberme);
+    return xarUser::logIn($uname, $pass, $rememberme, $context);
 }

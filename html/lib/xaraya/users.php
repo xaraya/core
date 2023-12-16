@@ -122,7 +122,7 @@ class xarUser extends xarObject
      * @throws EmptyParameterException, SQLException
      * @todo <marco> #1 here we could also set a last_logon timestamp
      */
-    static public function logIn($userName, $password, $rememberMe = 0)
+    static public function logIn($userName, $password, $rememberMe = 0, $context = null)
     {
         if (self::isLoggedIn()) return true;
     
@@ -152,7 +152,7 @@ class xarUser extends xarObject
     
             // CHECKME: Does this raise an exception??? If so:
             // TODO: test with multiple auth modules and wrap in try/catch clause
-            $userId = xarMod::apiFunc($authModName, 'user', 'authenticate_user', $args);
+            $userId = xarMod::apiFunc($authModName, 'user', 'authenticate_user', $args, $context);
             if (!isset($userId)) {
                 return; // throw back
             } elseif ($userId != self::AUTH_FAILED) {
@@ -215,7 +215,7 @@ class xarUser extends xarObject
     
         // User logged in successfully, trigger the proper event with the new userid
         //xarEvents::trigger('UserLogin',$userId);
-        xarEvents::notify('UserLogin', $userId);
+        xarEvents::notify('UserLogin', $userId, $context);
         xarSession::delVar('privilegeset');
         return true;
     }
@@ -226,7 +226,7 @@ class xarUser extends xarObject
      * 
      * @return boolean|void true if the user successfully logged out
      */
-    static public function logOut()
+    static public function logOut($context = null)
     {
         if (!self::isLoggedIn()) {
             return true;
@@ -244,7 +244,7 @@ class xarUser extends xarObject
     
         // User logged out successfully, trigger the proper event with the old userid
         //xarEvents::trigger('UserLogout',$userId);
-        xarEvents::notify('UserLogout',$userId);
+        xarEvents::notify('UserLogout', $userId, $context);
         
         xarSession::delVar('privilegeset');
         return true;
