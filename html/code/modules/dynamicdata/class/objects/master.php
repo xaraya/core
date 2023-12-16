@@ -20,13 +20,17 @@
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.datastores.factory');
-sys::import("xaraya.structures.context");
+sys::import('xaraya.traits.contexttrait');
 use Xaraya\DataObject\DataStores\DataStoreFactory;
 use Xaraya\DataObject\DataStores\IBasicDataStore;
+use Xaraya\Core\Traits\ContextInterface;
+use Xaraya\Core\Traits\ContextTrait;
 use Xaraya\Structures\Context;
 
-class DataObjectMaster extends xarObject
+class DataObjectMaster extends xarObject implements ContextInterface
 {
+    use ContextTrait;
+
     /**
      * These constants are added for convenience. They are currently not being used
      * TODO: Remove the ones we don't need. Probably the last 3 at least
@@ -1000,6 +1004,8 @@ class DataObjectMaster extends xarObject
         } elseif (xarCoreCache::isCached('DynamicData', 'HookAction')) {
             return;
         }
+        // set context if available in dataobject
+        $context ??= $this->getContext();
 
         if ($this->moduleid === 182) {
             $modname = 'dynamicdata';

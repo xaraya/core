@@ -9,6 +9,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xaraya\Bridge\Events\EventObserverBridge;
 use Xaraya\Bridge\Events\HookObserverBridge;
 use Xaraya\Bridge\Events\TestObserverBridgeSubscriber;
+use Xaraya\Structures\Context;
 
 // initialize bootstrap
 sys::init();
@@ -30,10 +31,14 @@ function test_crud()
     //$args = [];
     $args = ['name' => 'Mike', 'age' => 20];
     $sample = new Sample($itemid, $args);
+    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
+    $sample->setContext($context);
     $itemid = $sample->save();
     echo "Create $itemid\n";
 
     $sample = new Sample($itemid);
+    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
+    $sample->setContext($context);
     $values = $sample->toArray();
     echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
     $sample->set('age', $sample->get('age') + 1);
@@ -41,11 +46,15 @@ function test_crud()
     echo "Update $itemid\n";
 
     $sample = new Sample($itemid);
+    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
+    $sample->setContext($context);
     $values = $sample->toArray();
     echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
     $sample->delete();
     echo "Delete $itemid\n";
     $sample = new Sample($itemid);
+    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
+    $sample->setContext($context);
     $values = $sample->toArray();
     echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
 }
@@ -85,6 +94,8 @@ function test_crud_virtual()
 {
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
+    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
+    $something->setContext($context);
 
     $itemid = $something->createItem(['id' => 2, 'key' => 'no', 'val' => 'Not OK']);
     echo "Create Item $itemid\n";

@@ -165,6 +165,9 @@ class StatsHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
+
         $title = xarMLS::translate('Statistics for #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
         /**
@@ -375,6 +378,9 @@ class StatsHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
+
         $title = xarMLS::translate('Report for #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 

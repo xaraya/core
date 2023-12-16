@@ -17,14 +17,14 @@
  * @return array<mixed> containing a reference to the properties and a reference to the items
  * @TODO: move this to some common place in Xaraya (base module ?)
  */
-function dynamicdata_userapi_getitemsforview(array $args = [])
+function dynamicdata_userapi_getitemsforview(array $args = [], $context = null)
 {
     if (empty($args['fieldlist']) && empty($args['status'])) {
         // get the Active properties only (not those for Display Only)
         $args['status'] = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     }
     $args['getobject'] = 1;
-    $object =  xarMod::apiFunc('dynamicdata', 'user', 'getitems', $args);
+    $object =  xarMod::apiFunc('dynamicdata', 'user', 'getitems', $args, $context);
     if (!isset($object)) {
         return [[], []];
     }

@@ -18,7 +18,7 @@
  * @param array<string, mixed> $args
  * @return string|void output display string
  */
-function dynamicdata_user_view(array $args = [])
+function dynamicdata_user_view(array $args = [], $context = null)
 {
     // Old-style arguments
     if(!xarVar::fetch('objectid', 'int', $objectid, null, xarVar::DONT_SET)) {
@@ -102,6 +102,8 @@ function dynamicdata_user_view(array $args = [])
     if (!$object->checkAccess('view')) {
         return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
     }
+    // set context if available in function
+    $object->setContext($context);
 
     // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();

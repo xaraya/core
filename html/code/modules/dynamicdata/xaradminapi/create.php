@@ -25,7 +25,7 @@
  * @return integer|void item id on success, null on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_create(array $args = [])
+function dynamicdata_adminapi_create(array $args = [], $context = null)
 {
     $args = DataObjectDescriptor::getObjectID($args);
     extract($args);
@@ -63,6 +63,8 @@ function dynamicdata_adminapi_create(array $args = [])
     if (!$myobject->checkAccess('create')) {
         return;
     }
+    // set context if available in function
+    $myobject->setContext($context);
 
     if (count($values) == 0) {
         foreach ($fields as $field) {

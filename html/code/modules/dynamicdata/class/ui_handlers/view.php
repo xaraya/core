@@ -95,6 +95,9 @@ class ViewHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
+
         $title = xarMLS::translate('View #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 

@@ -27,5 +27,6 @@ function dynamicdata_object_main($args = [], $context = null)
 
     $interface = new DataObjectUserInterface($args);
 
+    // pass context to handler if available in function
     return $interface->handle($args, $context);
 }

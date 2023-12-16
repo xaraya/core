@@ -16,7 +16,7 @@
  * @param array<string, mixed> $args array of optional parameters containing the item or fields to show
  * @return string|void output display string
  */
-function dynamicdata_adminapi_showform(array $args = [])
+function dynamicdata_adminapi_showform(array $args = [], $context = null)
 {
     extract($args);
 
@@ -81,6 +81,8 @@ function dynamicdata_adminapi_showform(array $args = [])
             return xarML('Update #(1) is forbidden', $object->label);
         }
     }
+    // set context if available in function
+    $object->setContext($context);
 
     if (!empty($itemid)) {
         $object->getItem();

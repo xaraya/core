@@ -27,7 +27,7 @@
  *     string join
  *     string table
  */
-function dynamicdata_admin_update(array $args = [])
+function dynamicdata_admin_update(array $args = [], $context = null)
 {
     extract($args);
     $data ??= [];
@@ -71,6 +71,9 @@ function dynamicdata_admin_update(array $args = [])
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid]);
+    // set context if available in function
+    $myobject->setContext($context);
+
     $itemid = $myobject->getItem();
 
     switch ($data['tab']) {

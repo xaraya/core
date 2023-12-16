@@ -13,12 +13,14 @@ sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.traits.timertrait');
 sys::import('xaraya.traits.cachetrait');
 sys::import('xaraya.bridge.requests.requesttrait');
+sys::import('xaraya.structures.context');
 use Xaraya\Core\Traits\CacheInterface;
 use Xaraya\Core\Traits\CacheTrait;
 use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
+use Xaraya\Structures\Context;
 
 /**
  * Class to handle DataObject REST API calls
@@ -1251,6 +1253,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         } catch (JsonException $e) {
             return ["JSON Input Exception" => $e->getMessage()];
         }
+        // @todo decide what to move from $params to $context - see GraphQL
         $params['server'] = static::getServerParams($request);
         $params['cookie'] = static::getCookieParams($request);
         // self::setTimer('parse');
@@ -1350,11 +1353,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         self::setTimer('handle');
         // don't use call_user_func here anymore because $request is passed by reference
         self::$mediaType = '';
+        // @todo decide what to move from $params to $context - see GraphQL
+        $context = new Context();
         if (!empty($request)) {
             $params['request'] = &$request;
+            $context['requestId'] = $request->getAttribute('requestId');
         }
         try {
-            $result = call_user_func($handler, $params);
+            $result = call_user_func($handler, $params, $context);
         } catch (UnauthorizedOperationException $e) {
             self::setTimer('unauthorized');
             throw new UnauthorizedOperationException();

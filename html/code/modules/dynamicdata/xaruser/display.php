@@ -19,7 +19,7 @@
  * @param array<string, mixed> $args an array of arguments (if called by other modules)
  * @return string|void output display string
  */
-function dynamicdata_user_display(array $args = [])
+function dynamicdata_user_display(array $args = [], $context = null)
 {
     extract($args);
 
@@ -52,6 +52,8 @@ function dynamicdata_user_display(array $args = [])
     if (!$myobject->checkAccess('display')) {
         return xarResponse::Forbidden(xarML('Display #(1) is forbidden', $myobject->label));
     }
+    // set context if available in function
+    $myobject->setContext($context);
 
     $args = $myobject->toArray();
     $myobject->getItem();

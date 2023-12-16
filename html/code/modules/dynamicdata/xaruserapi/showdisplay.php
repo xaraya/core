@@ -18,7 +18,7 @@
  * @param $args array containing the item or fields to show
  * @return string output display string
  */
-function dynamicdata_userapi_showdisplay(array $args = [])
+function dynamicdata_userapi_showdisplay(array $args = [], $context = null)
 {
     extract($args);
 
@@ -57,6 +57,9 @@ function dynamicdata_userapi_showdisplay(array $args = [])
     if (!$object->checkAccess('display')) {
         return xarML('Display #(1) is forbidden', $object->label);
     }
+    // set context if available in function
+    $object->setContext($context);
+
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {
         $object->getItem();

@@ -22,7 +22,7 @@
  *        string   $args['itemtype'] item type of the object to get
  * @return object a particular DataObject
  */
-function dynamicdata_userapi_getobject(array $args = [])
+function dynamicdata_userapi_getobject(array $args = [], $context = null)
 {
     if (empty($args['objectid']) && empty($args['name'])) {
         sys::import('modules.dynamicdata.class.objects.descriptor');
@@ -30,5 +30,7 @@ function dynamicdata_userapi_getobject(array $args = [])
     }
     sys::import('modules.dynamicdata.class.objects.factory');
     $object = DataObjectFactory::getObject($args);
+    // set context if available in function
+    $object->setContext($context);
     return $object;
 }

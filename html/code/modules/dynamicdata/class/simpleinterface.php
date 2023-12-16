@@ -68,6 +68,8 @@ class SimpleObjectInterface extends DefaultHandler
         if (empty($this->object)) {
             return;
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
 
         return $this->object->{$this->args['method']}($this->args);
     }

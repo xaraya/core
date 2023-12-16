@@ -25,7 +25,7 @@
  *     string table
  * @return string|void output display string
  */
-function dynamicdata_admin_modify(array $args = [])
+function dynamicdata_admin_modify(array $args = [], $context = null)
 {
     extract($args);
 
@@ -91,6 +91,8 @@ function dynamicdata_admin_modify(array $args = [])
     if (!$object->checkAccess('update')) {
         return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
     }
+    // set context if available in function
+    $object->setContext($context);
 
     $args = $object->toArray();
 

@@ -147,6 +147,9 @@ class SearchHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
+
         $title = xarMLS::translate('Search #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
@@ -188,6 +191,8 @@ class SearchHandler extends DefaultHandler
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
+            // set context if available in handler
+            $result->setContext($this->getContext());
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
             if (!empty($result->where)) {
@@ -284,6 +289,9 @@ class SearchHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
+
         $title = xarMLS::translate('Query #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
@@ -338,6 +346,8 @@ class SearchHandler extends DefaultHandler
             if (empty($result) || (!empty($this->args['object']) && $this->args['object'] != $result->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
+            // set context if available in handler
+            $result->setContext($this->getContext());
             // add the where clauses directly here to avoid quoting issues
             $wherestring = '';
             if (!empty($result->where)) {

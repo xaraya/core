@@ -30,7 +30,7 @@
  * @return array<mixed>|DataObject|null of (name => value), or false on failure
  * @throws BadParameterException
  */
-function &dynamicdata_userapi_getitem(array $args = [])
+function &dynamicdata_userapi_getitem(array $args = [], $context = null)
 {
     extract($args);
 
@@ -110,6 +110,8 @@ function &dynamicdata_userapi_getitem(array $args = [])
     if (!$object->checkAccess('display')) {
         return $nullreturn;
     }
+    // set context if available in function
+    $object->setContext($context);
 
     // Get the item
     if (!empty($itemid)) {

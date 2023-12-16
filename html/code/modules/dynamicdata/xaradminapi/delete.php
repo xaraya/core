@@ -25,7 +25,7 @@
  * @return boolean|void true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_delete(array $args = [])
+function dynamicdata_adminapi_delete(array $args = [], $context = null)
 {
     $args = DataObjectDescriptor::getObjectID($args);
     extract($args);
@@ -58,6 +58,8 @@ function dynamicdata_adminapi_delete(array $args = [])
     if (!$myobject->checkAccess('delete')) {
         return;
     }
+    // set context if available in function
+    $myobject->setContext($context);
 
     $myobject->getItem();
     $itemid = $myobject->deleteItem();

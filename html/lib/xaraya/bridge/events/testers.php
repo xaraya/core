@@ -61,12 +61,16 @@ class TestObserverBridgeSubscriber implements EventSubscriberInterface
     {
         $subject = $event->getSubject();
         echo "Dispatched Event $eventName: " . var_export($subject, true) . "\n";
+        $context = $event->getContext();
+        echo "Dispatched Context: " . var_export($context, true) . "\n";
     }
 
     public static function onDispatchedHook($event, string $eventName = '')
     {
         $subject = $event->getSubject();
         echo "Dispatched Hook $eventName: " . var_export($subject, true) . "\n";
+        $context = $event->getContext();
+        echo "Dispatched Context: " . var_export($context, true) . "\n";
     }
 
     public static function addEventList(array $eventList = [])

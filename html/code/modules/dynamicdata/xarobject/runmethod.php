@@ -17,8 +17,11 @@
  */
 sys::import('modules.dynamicdata.class.simpleinterface');
 
-function dynamicdata_object_runmethod(array $args = [])
+function dynamicdata_object_runmethod(array $args = [], $context = null)
 {
     $interface = new SimpleObjectInterface($args);
+    // set context if available in function
+    $interface->setContext($context);
+
     return $interface->handle($args);
 }

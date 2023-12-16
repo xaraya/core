@@ -205,6 +205,8 @@ class DefaultHandler extends xarObject implements ContextInterface
                 $this->tplmodule = $modname;
             }
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
 
         if (!method_exists($this->object, $this->method)) {
             return xarMLS::translate('Unknown method #(1) for #(2)', xarVar::prepForDisplay($this->method), $this->object->label);

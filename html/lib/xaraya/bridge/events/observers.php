@@ -113,6 +113,8 @@ class EventObserverBridge implements ObserverBridgeInterface
         }
         // observers obtain arguments from the subject
         $tosend = new DefaultEvent($info);
+        // set context if available in callback
+        $tosend->setContext($context);
         // observers may, or may not return a response, but EventDispatcher doesn't anyway
         (static::$dispatcher)->dispatch($tosend, static::$observedEvents[$event]);
     }

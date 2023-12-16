@@ -17,7 +17,7 @@
  * wishes to create a new module item
  * @return string|void output display string
  */
-function dynamicdata_admin_new(array $args = [])
+function dynamicdata_admin_new(array $args = [], $context = null)
 {
     extract($args);
 
@@ -74,6 +74,8 @@ function dynamicdata_admin_new(array $args = [])
     if (!$myobject->checkAccess('create')) {
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
     }
+    // set context if available in function
+    $myobject->setContext($context);
 
     $args = $myobject->toArray();
     $data['object'] = & $myobject;

@@ -18,7 +18,7 @@
  *     'itemid' the id of the item to be deleted
  *     'confirm' confirm that this item can be deleted
  */
-function dynamicdata_admin_delete(array $args = [])
+function dynamicdata_admin_delete(array $args = [], $context = null)
 {
     extract($args);
 
@@ -71,6 +71,8 @@ function dynamicdata_admin_delete(array $args = [])
     if (!$myobject->checkAccess('delete')) {
         return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $myobject->label));
     }
+    // set context if available in function
+    $myobject->setContext($context);
 
     $data = $myobject->toArray();
 

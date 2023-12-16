@@ -87,6 +87,8 @@ class UpdateHandler extends DefaultHandler
         if (!$this->object->checkAccess('update')) {
             return xarResponse::Forbidden(xarMLS::translate('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
 
         $itemid = $this->object->getItem();
         if (empty($itemid) || $itemid != $this->object->itemid) {

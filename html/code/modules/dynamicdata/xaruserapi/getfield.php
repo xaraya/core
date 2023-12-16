@@ -24,7 +24,7 @@
  * @return mixed value of the field, or false on failure
  * @throws BadParameterException
  */
-function dynamicdata_userapi_getfield(array $args = [])
+function dynamicdata_userapi_getfield(array $args = [], $context = null)
 {
     extract($args);
 
@@ -68,6 +68,9 @@ function dynamicdata_userapi_getfield(array $args = [])
     if (!isset($object) || empty($object->objectid)) {
         return;
     }
+    // set context if available in function
+    $object->setContext($context);
+
     $object->getItem();
 
     if (!isset($object->properties[$name])) {

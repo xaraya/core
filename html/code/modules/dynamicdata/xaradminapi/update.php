@@ -26,7 +26,7 @@
  * @return mixed item id on success, null on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_update(array $args = [])
+function dynamicdata_adminapi_update(array $args = [], $context = null)
 {
     $args = DataObjectDescriptor::getObjectID($args);
     extract($args);
@@ -72,6 +72,8 @@ function dynamicdata_adminapi_update(array $args = [])
     if (!$myobject->checkAccess('update')) {
         return;
     }
+    // set context if available in function
+    $myobject->setContext($context);
 
     $myobject->getItem();
 
