@@ -120,6 +120,8 @@ class xarGraphQLDummyType extends ObjectType
                     if (empty($userId)) {
                         return;
                     }
+                    xarMod::init();
+                    xarUser::init();
                     $role = xarRoles::getRole($userId);
                     $fields = $role->getFieldValues();
                     return ['id' => $fields['id'], 'name' => $fields['name']];

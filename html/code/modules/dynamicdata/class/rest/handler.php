@@ -692,12 +692,16 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Return the current user or exit with 401 status code
      * @param array<string, mixed> $args
+     * @uses xarMod::init()
+     * @uses xarUser::init()
      * @return array<string, mixed>
      */
     public static function whoami($args)
     {
         $userId = self::checkUser($args);
         //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
+        xarMod::init();
+        xarUser::init();
         $role = xarRoles::getRole($userId);
         $user = $role->getFieldValues();
         return ['id' => $user['id'], 'name' => $user['name']];

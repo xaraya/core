@@ -790,7 +790,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         if (!empty($variables) && is_string($variables)) {
             $variables = json_decode($variables, true);
         }
-        $context = [];
+        $context = new \Xaraya\Structures\Context();
         $context['server'] = static::getServerParams($request);
         $context['cookie'] = static::getCookieParams($request);
         if (!empty($request)) {
@@ -809,7 +809,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
 
     /**
      * Summary of checkUser
-     * @param array<string, mixed> $context
+     * @param \Xaraya\Structures\Context<string, mixed> $context
      * @return int
      */
     public static function checkUser($context)
@@ -823,7 +823,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
 
     /**
      * Summary of checkToken
-     * @param array<string, mixed> $context
+     * @param \Xaraya\Structures\Context<string, mixed> $context
      * @return mixed|void
      */
     public static function checkToken($context)
@@ -893,7 +893,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
 
     /**
      * Summary of deleteToken
-     * @param array<string, mixed> $context
+     * @param \Xaraya\Structures\Context<string, mixed> $context
      * @return void
      */
     public static function deleteToken($context)
