@@ -12,7 +12,9 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
+sys::import("xaraya.structures.context");
 use Xaraya\DataObject\Handlers\DefaultHandler;
+use Xaraya\Structures\Context;
 
 /**
  * Dynamic Object User Interface (work in progress)
@@ -214,9 +216,10 @@ class DataObjectUserInterface extends xarObject
      *     $args['method'] the ui method we are handling here
      *     $args['itemid'] item id of the object to call the method for, if the method needs it
      *     $args any other arguments we want to pass to DataObjectFactory::getObject() or ::getObjectList() later on
+     * @param ?Context<string, mixed> $context optional context for the handler call (default = none)
      * @return string|void output of the handler->run() method
      */
-    public function handle(array $args = [])
+    public function handle(array $args = [], ?Context $context = null)
     {
         if (!xarVar::fetch('method', 'isset', $args['method'], null, xarVar::DONT_SET)) {
             return;
@@ -276,6 +279,8 @@ class DataObjectUserInterface extends xarObject
             // create the new handler with the initial arguments
             $this->handler = new $handlerclazz($this->args);
         }
+        // set the context for this handler call
+        $this->handler->setContext($context);
 
         // run the handler with any additional arguments and return the output
         return $this->handler->$handlerfunc($args);

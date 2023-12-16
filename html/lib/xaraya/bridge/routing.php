@@ -353,11 +353,15 @@ class FastRouteBridge implements CommonBridgeInterface
             $params['fieldlist'] = ['id', 'name', 'uname', 'state'];
         }
 
+        $context = new Context();
+        if (!empty($request)) {
+            $context['requestId'] = $request->getAttribute('requestId');
+        }
         static::$baseUri = static::getBaseUri($request);
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController('object', static::$baseUri . '/object');
 
-        return static::runObjectRequest($params);
+        return static::runObjectRequest($params, $context);
     }
 
     /**
@@ -403,11 +407,15 @@ class FastRouteBridge implements CommonBridgeInterface
             $params = array_merge($params, $input);
         }
 
+        $context = new Context();
+        if (!empty($request)) {
+            $context['requestId'] = $request->getAttribute('requestId');
+        }
         static::$baseUri = static::getBaseUri($request);
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'], static::$baseUri);
 
-        return static::runModuleRequest($vars, $params);
+        return static::runModuleRequest($vars, $params, $context);
     }
 
     /**
@@ -434,11 +442,15 @@ class FastRouteBridge implements CommonBridgeInterface
         // dispatcher doesn't provide query params by default
         $query = static::getQueryParams($request);
 
+        $context = new Context();
+        if (!empty($request)) {
+            $context['requestId'] = $request->getAttribute('requestId');
+        }
         static::$baseUri = static::getBaseUri($request);
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'] ?? 'base', static::$baseUri);
 
-        return static::runBlockRequest($vars, $query);
+        return static::runBlockRequest($vars, $query, $context);
     }
 
     /**

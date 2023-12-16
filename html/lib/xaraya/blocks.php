@@ -12,6 +12,10 @@
  * @author Paul Rosania
  * @author Chris Powis
  */
+
+sys::import("xaraya.structures.context");
+use Xaraya\Structures\Context;
+
 interface ixarBlock
 {
     const TYPE_STATE_ACTIVE = 1; 
@@ -24,7 +28,7 @@ interface ixarBlock
     const BLOCK_STATE_VISIBLE = 2;
 
     public static function render(Array $data=array());
-    public static function renderBlock(Array $args=array());
+    public static function renderBlock(array $args=[], $context = null);
     public static function renderGroup($groupname, $template=null);
     public static function hasMethod(iBlock $block, $method, $strict=false);
     public static function guiMethod(iBlock $block, $method);
@@ -394,10 +398,11 @@ class xarBlock extends xarObject implements ixarBlock
  *     string args[instance] id or name of block instance to render
  *     string args[module] module that owns the block
  *     string args[type] module that owns the block
+ * @param ?Context<string, mixed> $context optional context for the block call (default = none)
  * @return string
  * @todo   this function calls a module function, keep an eye on it.
  */
-    public static function renderBlock(Array $args=array())
+    public static function renderBlock(array $args=[], $context = null)
     {
         // All the hard work is done in this function.
         // It keeps the core code lighter when standalone blocks are not used.
@@ -428,6 +433,7 @@ class xarBlock extends xarObject implements ixarBlock
  * @author Paul Rosania
  * @author Marco Canini <marco@xaraya.com>
  * 
+ * @todo support context in templates? See xar:blockgroup tag
  * @param string $groupname the name of the block group
  * @param string $template optional template to apply to all blocks in the group
  * @return string

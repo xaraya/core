@@ -21,6 +21,9 @@
  * @todo the double headed theme/module stuff needs to go, a theme is not a module
  */
 
+sys::import("xaraya.structures.context");
+use Xaraya\Structures\Context;
+
 /**
  * Exception raised by the modules subsystem
  *
@@ -727,9 +730,10 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
      * @param array<string, mixed> $args arguments to pass to the function
+     * @param ?Context<string, mixed> $context optional context for the function call (default = none)
      * @return mixed The output of the function, or raise an exception
      */
-    static function guiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
+    static function guiFunc($modName, $modType = 'user', $funcName = 'main', $args = [], $context = null)
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
 
@@ -741,7 +745,7 @@ class xarMod extends xarObject implements IxarMod
             // Return the cached module function output
             return xarModuleCache::getCached($cacheKey);
         }
-        $tplData = self::callFunc($modName,$modType,$funcName,$args);
+        $tplData = self::callFunc($modName, $modType, $funcName, $args, '', $context);
         // If we have a string of data, we assume someone else did xarTpl* for us
         if (!is_array($tplData)) {
             // Set the output of the module function in cache
@@ -779,19 +783,20 @@ class xarMod extends xarObject implements IxarMod
      * @param string $modType type of function to run
      * @param string $funcName specific function to run
      * @param array<string, mixed> $args arguments to pass to the function
+     * @param ?Context<string, mixed> $context optional context for the function call (default = none)
      * @return mixed The output of the function, or false on failure
      */
-    static function apiFunc($modName, $modType = 'user', $funcName = 'main', $args = array())
+    static function apiFunc($modName, $modType = 'user', $funcName = 'main', $args = [], $context = null)
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
-        return self::callfunc($modName, $modType, $funcName, $args,'api');
+        return self::callfunc($modName, $modType, $funcName, $args, 'api', $context);
     }
 
     /**
      * Work horse method for the lazy calling of module functions
-     *
+     * @param ?Context<string, mixed> $context optional context for the function call (default = none)
      */
-    private static function callFunc($modName,$modType,$funcName,$args,$funcType = '')
+    private static function callFunc($modName, $modType, $funcName, $args, $funcType = '', $context = null)
     {
         assert(($funcType == "api" or $funcType==""));
 
@@ -860,7 +865,7 @@ class xarMod extends xarObject implements IxarMod
 
         if (!$found) return xarResponse::NotFound();
 
-        $funcResult = $modFunc($args);
+        $funcResult = $modFunc($args, $context);
         return $funcResult;
     }
 

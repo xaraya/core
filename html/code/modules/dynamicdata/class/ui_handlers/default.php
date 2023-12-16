@@ -14,6 +14,8 @@
 
 namespace Xaraya\DataObject\Handlers;
 
+use Xaraya\Core\Traits\ContextInterface;
+use Xaraya\Core\Traits\ContextTrait;
 use xarObject;
 use xarVar;
 use xarMLS;
@@ -28,13 +30,16 @@ use DataObject;
 use sys;
 
 sys::import('xaraya.objects');
+sys::import('xaraya.traits.contexttrait');
 
 /**
  * Dynamic Object User Interface Handler
  *
  */
-class DefaultHandler extends xarObject
+class DefaultHandler extends xarObject implements ContextInterface
 {
+    use ContextTrait;
+
     public string $method = 'overridden in child classes';
 
     // module where the main templates for the GUI reside (defaults to the object module)

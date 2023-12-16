@@ -20,8 +20,10 @@
 sys::import('modules.dynamicdata.class.objects.descriptor');
 sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.datastores.factory');
+sys::import("xaraya.structures.context");
 use Xaraya\DataObject\DataStores\DataStoreFactory;
 use Xaraya\DataObject\DataStores\IBasicDataStore;
+use Xaraya\Structures\Context;
 
 class DataObjectMaster extends xarObject
 {
@@ -983,7 +985,8 @@ class DataObjectMaster extends xarObject
      * Call $action hooks for this object (= notify observers in observer pattern)
      *
      * @param string $action the hook action ('create', 'display', ...)
-     * @param ?\Xaraya\Structures\Context $context optional context for the hook call (default = none)
+     * @param ?Context<string, mixed> $context optional context for the hook call (default = none)
+     * @return void
      */
     public function callHooks($action = '', $context = null)
     {

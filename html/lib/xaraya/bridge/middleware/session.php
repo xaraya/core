@@ -12,12 +12,12 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Xaraya\Structures\Context;
 use xarSession;
 use xarConfigVars;
 use xarServer;
 use xarDB;
 use xarEvents;
-use ResultSet;
 
 class VirtualSession
 {
@@ -260,7 +260,7 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * Callback function for UserLogin events - to update userId in pending request(s)
      * @param array<string, mixed> $info
-     * @param \Xaraya\Structures\Context $context
+     * @param ?Context<string, mixed> $context
      */
     public function callbackUserLogin($info, $context = null): void
     {
@@ -274,7 +274,7 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * Callback function for UserLogout events - to update userId in pending request(s)
      * @param array<string, mixed> $info
-     * @param \Xaraya\Structures\Context $context
+     * @param ?Context<string, mixed> $context
      */
     public function callbackUserLogout($info, $context = null): void
     {

@@ -141,7 +141,7 @@ trait DataObjectBridgeTrait
             throw new Exception("Missing object parameter");
         }
         $interface = new DataObjectUserInterface($params);
-        return $interface->handle($params);
+        return $interface->handle($params, $context);
         // From DataObjectUserInterface:
         //...
     }

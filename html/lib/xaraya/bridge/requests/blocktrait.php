@@ -99,7 +99,7 @@ trait BlockBridgeTrait
         if (empty($vars['instance'])) {
             throw new Exception("Missing object parameter");
         }
-        return xarBlock::renderBlock($vars);
+        return xarBlock::renderBlock($vars, $context);
     }
 
     // @checkme limited to getinfo() for now
@@ -116,6 +116,6 @@ trait BlockBridgeTrait
         if (empty($vars['instance'])) {
             throw new Exception("Missing object parameter");
         }
-        return xarMod::apiFunc('blocks', 'blocks', 'getinfo', $vars);
+        return xarMod::apiFunc('blocks', 'blocks', 'getinfo', $vars, $context);
     }
 }

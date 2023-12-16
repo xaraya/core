@@ -40,6 +40,7 @@ use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
+use Xaraya\Structures\Context;
 
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
@@ -790,7 +791,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         if (!empty($variables) && is_string($variables)) {
             $variables = json_decode($variables, true);
         }
-        $context = new \Xaraya\Structures\Context();
+        $context = new Context();
         $context['server'] = static::getServerParams($request);
         $context['cookie'] = static::getCookieParams($request);
         if (!empty($request)) {
@@ -809,7 +810,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
 
     /**
      * Summary of checkUser
-     * @param \Xaraya\Structures\Context<string, mixed> $context
+     * @param Context<string, mixed> $context
      * @return int
      */
     public static function checkUser($context)
@@ -823,7 +824,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
 
     /**
      * Summary of checkToken
-     * @param \Xaraya\Structures\Context<string, mixed> $context
+     * @param Context<string, mixed> $context
      * @return mixed|void
      */
     public static function checkToken($context)
@@ -893,7 +894,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
 
     /**
      * Summary of deleteToken
-     * @param \Xaraya\Structures\Context<string, mixed> $context
+     * @param Context<string, mixed> $context
      * @return void
      */
     public static function deleteToken($context)

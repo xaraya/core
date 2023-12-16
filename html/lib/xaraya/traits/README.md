@@ -5,6 +5,7 @@ This contains core utility traits that can be used in your PHP classes:
 - [Cache Trait](#cache-trait)
 - [Timer Trait](#timer-trait)
 - [Database Trait](#database-trait)
+- [Context Trait](#context-trait)
 
 ## Cache Trait
 
@@ -138,6 +139,30 @@ class UserApi implements DatabaseInterface
 {
     use DatabaseTrait;
     protected static string $moduleName = 'library';
+}
+```
+
+## Context Trait
+
+Trait to add context in other classes
+
+Usage:
+```
+use Xaraya\Core\Traits\ContextInterface;
+use Xaraya\Core\Traits\ContextTrait;
+
+class myFancyClass implements ContextInterface
+{
+    use ContextTrait;
+
+    public function doSomething()
+    {
+        // ... get current context ...
+        $context = $this->getContext();
+
+        // ... update current context ...
+        $this->setContext($context);
+    }
 }
 ```
 

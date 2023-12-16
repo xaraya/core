@@ -13,6 +13,9 @@
  * @author Michel Dalle <mikespub@xaraya.com>
  */
 
+sys::import("xaraya.structures.context");
+use Xaraya\Structures\Context;
+
 /**
  * Interface declaration for xarDDObject
  *
@@ -47,10 +50,11 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param string $objectName registered name of object
      * @param string $methodName specific method to run
      * @param array<string, mixed> $args arguments to pass to the method
+     * @param ?Context<string, mixed> $context optional context for the method call (default = none)
      * @return mixed The output of the method, or raise an exception
      * @throws EmptyParameterException
      */
-    static function guiMethod($objectName, $methodName = 'view', $args = array())
+    static function guiMethod($objectName, $methodName = 'view', $args = [], $context = null)
     {
         if (empty($objectName)) throw new EmptyParameterException('objectName');
 
@@ -61,7 +65,7 @@ class xarDDObject extends xarObject implements IxarDDObject
         sys::import('modules.dynamicdata.class.userinterface');
 
         $interface = new DataObjectUserInterface($args);
-        return $interface->handle($args);
+        return $interface->handle($args, $context);
     }
 
     /**

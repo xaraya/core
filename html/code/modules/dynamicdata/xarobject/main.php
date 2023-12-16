@@ -20,12 +20,12 @@
  */
 sys::import('modules.dynamicdata.class.userinterface');
 
-function dynamicdata_object_main($args = [])
+function dynamicdata_object_main($args = [], $context = null)
 {
     // we'll use the 'object' GUI link type here, instead of the default 'user' (+ 'admin')
     $args['linktype'] = 'object';
 
     $interface = new DataObjectUserInterface($args);
 
-    return $interface->handle($args);
+    return $interface->handle($args, $context);
 }

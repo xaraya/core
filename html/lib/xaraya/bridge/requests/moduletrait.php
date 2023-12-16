@@ -140,7 +140,7 @@ trait ModuleBridgeTrait
      */
     public static function runModuleGuiRequest($vars, $query, $context = null): ?string
     {
-        return xarMod::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query);
+        return xarMod::guiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'main', $query, $context);
     }
 
     /**
@@ -152,6 +152,6 @@ trait ModuleBridgeTrait
      */
     public static function runModuleApiRequest($vars, $query, $context = null): mixed
     {
-        return xarMod::apiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'getitemtypes', $query);
+        return xarMod::apiFunc($vars['module'], $vars['type'] ?? 'user', $vars['func'] ?? 'getitemtypes', $query, $context);
     }
 }

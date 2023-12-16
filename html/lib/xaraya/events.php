@@ -27,6 +27,7 @@
 
 sys::import("xaraya.structures.events.subject");
 sys::import("xaraya.structures.context");
+use Xaraya\Structures\Context;
 
 /**
  * Exception raised by the events subsystem
@@ -135,7 +136,7 @@ class xarEvents extends xarObject implements ixarEvents
      *
      * @param string $event name of event subject, required
      * @param mixed $args argument(s) to pass to subject, optional, default empty array
-     * @param ?\Xaraya\Structures\Context $context
+     * @param ?Context<string, mixed> $context
      * @return mixed response from subject notify method
     **/
     public static function notify($event, $args = [], $context = null)

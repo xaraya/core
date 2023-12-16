@@ -10,6 +10,11 @@
  * @link http://www.xaraya.info
  **/
 
+
+sys::import('xaraya.traits.contexttrait');
+use Xaraya\Core\Traits\ContextInterface;
+use Xaraya\Core\Traits\ContextTrait;
+ 
 interface ixarEventSubject
 {
     public function notify();
@@ -18,8 +23,6 @@ interface ixarEventSubject
     public function getSubject();
     public function getArgs();
     public function setArgs($args);
-    public function getContext();
-    public function setContext($context);
 }
 
 /** 
@@ -28,12 +31,13 @@ interface ixarEventSubject
  * This serves as the template from which all other event subjects should inherit
  * All subjects must implement ixarEventSubject interface
 **/
-abstract class EventSubject extends xarObject implements ixarEventSubject
+abstract class EventSubject extends xarObject implements ixarEventSubject, ContextInterface
 {
+    use ContextTrait;
+
     protected $args;                // args passed from caller when event is raised
     protected $observers = array(); // xarEvents::notify is responsible for populating this array
     protected $subject = 'Event';   // name of this event subject
-    protected $context = null;
 
     /**
      * Constructor
@@ -128,15 +132,5 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
             foreach ($args as $k => $v) 
                 if (isset($v)) $this->args[$k] = $v;
         }
-    }
-
-    public function getContext()
-    {
-        return $this->context;
-    }
-
-    public function setContext($context)
-    {
-        $this->context = $context;
     }
 }
