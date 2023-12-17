@@ -22,7 +22,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     use DefaultResponseTrait;
 
     /** @var array<string> */
-    protected array $attributes = ['module', 'theme', 'folder', 'file'];
+    protected array $attributes = ['static', 'source', 'folder', 'file'];
     /** @var array<mixed> */
     protected array $options = [];
     public static string $baseUri = '';
@@ -30,6 +30,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     public static array $locations = [
         'theme' => '/themes',
         'module' => '/code/modules',
+        'var' => '/var',
     ];
 
     /**
@@ -55,7 +56,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
         $attribs = array_intersect_key($request->getAttributes(), $allowed);
 
         // pass the request along to the next handler and return its response
-        if ((empty($attribs['theme']) && empty($attribs['module'])) || empty($attribs['folder']) || empty($attribs['file'])) {
+        if (empty($attribs['static']) || empty($attribs['source']) || empty($attribs['folder']) || empty($attribs['file'])) {
             // @checkme signature mismatch for process() with ReactPHP
             if ($next instanceof RequestHandlerInterface) {
                 $response = $next->handle($request);
@@ -109,7 +110,8 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
         static::setBaseUri($request);
 
         if ($request->getUri()->getPath() === '/favicon.ico') {
-            $request = $request->withAttribute('theme', 'none');
+            $request = $request->withAttribute('static', 'other');
+            $request = $request->withAttribute('source', 'none');
             $request = $request->withAttribute('folder', 'web');
             $request = $request->withAttribute('file', 'favicon.ico');
             return $request;
@@ -120,8 +122,9 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
             $params = static::parseUri($request, $prefix, $type);
 
             // identify static file requests and set request attributes
-            if (!empty($params[$type]) && !empty($params['folder']) && !empty($params['file'])) {
-                $request = $request->withAttribute($type, $params[$type]);
+            if ((!empty($params['static']) && $params['static'] == $type) && !empty($params['source']) && !empty($params['folder']) && !empty($params['file'])) {
+                $request = $request->withAttribute('static', $params['static']);
+                $request = $request->withAttribute('source', $params['source']);
                 $request = $request->withAttribute('folder', $params['folder']);
                 $request = $request->withAttribute('file', $params['file']);
                 return $request;

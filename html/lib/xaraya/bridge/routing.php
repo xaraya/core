@@ -581,10 +581,12 @@ class FastRouteStaticBridge extends FastRouteBridge
             $r->addGroup($staticFiles, function (RouteCollector $r) {
                 static::addModuleFileRoutes($r);
                 static::addThemeFileRoutes($r);
+                static::addVarFileRoutes($r);
             });
         } else {
             static::addModuleFileRoutes($r);
             static::addThemeFileRoutes($r);
+            static::addVarFileRoutes($r);
         }
         parent::addRouteCollection($r);
     }
@@ -597,7 +599,7 @@ class FastRouteStaticBridge extends FastRouteBridge
     public static function addThemeFileRoutes(RouteCollector $r)
     {
         $r->addGroup('/themes', function (RouteCollector $r) {
-            $r->addRoute('GET', '/{theme}/{folder}/{file:.+}', [static::class, 'handleThemeFileRequest']);
+            $r->addRoute('GET', '/{source}/{folder}/{file:.+}', [static::class, 'handleThemeFileRequest']);
         });
     }
 
@@ -609,7 +611,19 @@ class FastRouteStaticBridge extends FastRouteBridge
     public static function addModuleFileRoutes(RouteCollector $r)
     {
         $r->addGroup('/code/modules', function (RouteCollector $r) {
-            $r->addRoute('GET', '/{module}/{folder}/{file:.+}', [static::class, 'handleModuleFileRequest']);
+            $r->addRoute('GET', '/{source}/{folder}/{file:.+}', [static::class, 'handleModuleFileRequest']);
+        });
+    }
+
+    /**
+     * Summary of addVarFileRoutes
+     * @param RouteCollector $r
+     * @return void
+     */
+    public static function addVarFileRoutes(RouteCollector $r)
+    {
+        $r->addGroup('/var', function (RouteCollector $r) {
+            $r->addRoute('GET', '/{source}/{folder}/{file:.+}', [static::class, 'handleVarFileRequest']);
         });
     }
 
@@ -621,9 +635,10 @@ class FastRouteStaticBridge extends FastRouteBridge
      */
     public static function handleThemeFileRequest($vars, &$request = null)
     {
-        // path = /themes/{theme}/{folder}/{file:.+}
+        // path = /themes/{source}/{folder}/{file:.+}
         $path = static::getThemeFileRequest($vars);
         $vars['path'] = $path;
+        $vars['static'] = 'theme';
         //if (!empty($request)) {
         //    $request = $request->withAttribute('mediaType', '...');
         //}
@@ -639,9 +654,29 @@ class FastRouteStaticBridge extends FastRouteBridge
      */
     public static function handleModuleFileRequest($vars, &$request = null)
     {
-        // path = /code/modules/{module}/{folder}/{file:.+}
+        // path = /code/modules/{source}/{folder}/{file:.+}
         $path = static::getModuleFileRequest($vars);
         $vars['path'] = $path;
+        $vars['static'] = 'module';
+        //if (!empty($request)) {
+        //    $request = $request->withAttribute('mediaType', '...');
+        //}
+        // @todo where do we handle NotModified response based on request header If-None-Match etc.?
+        return var_export($vars, true);
+    }
+
+    /**
+     * Summary of handleVarFileRequest
+     * @param array<string, mixed> $vars
+     * @param mixed $request
+     * @return string
+     */
+    public static function handleVarFileRequest($vars, &$request = null)
+    {
+        // path = /var/{source}/{folder}/{file:.+}
+        $path = static::getVarFileRequest($vars);
+        $vars['path'] = $path;
+        $vars['static'] = 'var';
         //if (!empty($request)) {
         //    $request = $request->withAttribute('mediaType', '...');
         //}

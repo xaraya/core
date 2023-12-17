@@ -66,9 +66,11 @@ trait StaticFileBridgeTrait
             if (count($pieces) < 3) {
                 return [];
             }
-            // {prefix}/{module}/{folder}/{file} = file /code/modules/{dynamicdata}/{xartemplates}/{style/dd.css}
-            // {prefix}/{theme}/{folder}/{file} = file /themes/{default}/...
-            $params[$type] = $pieces[0];
+            // $type = module: {prefix}/{source}/{folder}/{file} = file /code/modules/{dynamicdata}/{xartemplates}/{style/dd.css}
+            // $type = theme: {prefix}/{source}/{folder}/{file} = file /themes/{default}/...
+            // $type = var: {prefix}/{source}/{folder}/{file} = file /var/{cache}/{api}/...
+            $params['static'] = $type;
+            $params['source'] = $pieces[0];
             $params['folder'] = $pieces[1];
             $params['file'] = $pieces[2];
         }
@@ -104,6 +106,19 @@ trait StaticFileBridgeTrait
     }
 
     /**
+     * Summary of parseVarFilePath
+     * @param string $path
+     * @param array<string, mixed> $query
+     * @param string $prefix
+     * @param string $type
+     * @return array<string, mixed>
+     */
+    public static function parseVarFilePath(string $path = '/', array $query = [], string $prefix = '/var', string $type = 'var'): array
+    {
+        return static::parseStaticFilePath($path, $query, $prefix, $type);
+    }
+
+    /**
      * Summary of buildStaticFilePath
      * @param string $source
      * @param string $folder
@@ -119,7 +134,9 @@ trait StaticFileBridgeTrait
         if (!empty($prefix) && strstr($uri, $prefix) !== $prefix) {
             $uri .= $prefix;
         }
-        // {prefix}/{source}/{folder}/{file} = file /code/modules/{dynamicdata}/{xartemplates}/{style/dd.css} or /themes/{default}/...
+        // {prefix}/{source}/{folder}/{file} = file /code/modules/{dynamicdata}/{xartemplates}/{style/dd.css}
+        // {prefix}/{source}/{folder}/{file} = file /themes/{default}/...
+        // {prefix}/{source}/{folder}/{file} = file /var/{cache}/{api}/...
         $uri .= '/' . $source . '/' . $folder . '/' . $file;
         //if (!empty($extra)) {
         //    $uri .= '?' . http_build_query($extra);
@@ -129,30 +146,44 @@ trait StaticFileBridgeTrait
 
     /**
      * Summary of buildModuleFilePath
-     * @param string $module
+     * @param string $source
      * @param string $folder
      * @param string $file
      * @param array<string, mixed> $extra
      * @param string $prefix
      * @return string
      */
-    public static function buildModuleFilePath(string $module = 'base', string $folder = null, string $file = null, array $extra = [], string $prefix = '/code/modules'): string
+    public static function buildModuleFilePath(string $source = 'base', string $folder = null, string $file = null, array $extra = [], string $prefix = '/code/modules'): string
     {
-        return static::buildStaticFilePath($module, $folder, $file, $extra, $prefix);
+        return static::buildStaticFilePath($source, $folder, $file, $extra, $prefix);
     }
 
     /**
      * Summary of buildThemeFilePath
-     * @param string $theme
+     * @param string $source
      * @param string $folder
      * @param string $file
      * @param array<string, mixed> $extra
      * @param string $prefix
      * @return string
      */
-    public static function buildThemeFilePath(string $theme = 'default', string $folder = null, string $file = null, array $extra = [], string $prefix = '/themes'): string
+    public static function buildThemeFilePath(string $source = 'default', string $folder = null, string $file = null, array $extra = [], string $prefix = '/themes'): string
     {
-        return static::buildStaticFilePath($theme, $folder, $file, $extra, $prefix);
+        return static::buildStaticFilePath($source, $folder, $file, $extra, $prefix);
+    }
+
+    /**
+     * Summary of buildVarFilePath
+     * @param string $source
+     * @param string $folder
+     * @param string $file
+     * @param array<string, mixed> $extra
+     * @param string $prefix
+     * @return string
+     */
+    public static function buildVarFilePath(string $source = 'cache', string $folder = null, string $file = null, array $extra = [], string $prefix = '/var'): string
+    {
+        return static::buildStaticFilePath($source, $folder, $file, $extra, $prefix);
     }
 
     /**
@@ -163,6 +194,12 @@ trait StaticFileBridgeTrait
      */
     public static function getStaticFileRequest($params): string
     {
+        if (empty($params['static'])) {
+            throw new Exception("Missing static parameter");
+        }
+        if (empty($params['source'])) {
+            throw new Exception("Missing source parameter");
+        }
         if (empty($params['folder'])) {
             throw new Exception("Missing folder parameter");
         }
@@ -170,15 +207,18 @@ trait StaticFileBridgeTrait
             throw new Exception("Missing file parameter");
         }
         // return filepath, stream, ... ?
-        if (!empty($params['module'])) {
-            return static::getModuleFileRequest($params);
-        } elseif (!empty($params['theme'])) {
-            if ($params['theme'] === 'none') {
+        switch ($params['static']) {
+            case 'module':
+                return static::getModuleFileRequest($params);
+            case 'theme':
+                return static::getThemeFileRequest($params);
+            case 'var':
+                return static::getVarFileRequest($params);
+            case 'other':
                 return static::getOtherFileRequest($params);
-            }
-            return static::getThemeFileRequest($params);
+            default:
+                throw new Exception("Invalid static parameter");
         }
-        throw new Exception("Missing module or theme parameter");
     }
 
     /**
@@ -189,7 +229,7 @@ trait StaticFileBridgeTrait
      */
     public static function getModuleFileRequest($params): string
     {
-        $path = sys::code() . 'modules/' . $params['module'] . '/' . $params['folder'] . '/' . $params['file'];
+        $path = sys::code() . 'modules/' . $params['source'] . '/' . $params['folder'] . '/' . $params['file'];
         $real = realpath($path);
         if (empty($real)) {
             throw new Exception("Invalid file");
@@ -199,7 +239,7 @@ trait StaticFileBridgeTrait
         if (!in_array($ext, static::$extensions)) {
             throw new Exception("Invalid file extension");
         }
-        $module = realpath(sys::code() . 'modules/' . $params['module'] . '/');
+        $module = realpath(sys::code() . 'modules/' . $params['source'] . '/');
         if (empty($module) || strpos($real, $module) !== 0) {
             throw new Exception("Invalid file path");
         }
@@ -214,7 +254,7 @@ trait StaticFileBridgeTrait
      */
     public static function getThemeFileRequest($params): string
     {
-        $path = sys::web() . 'themes/' . $params['theme'] . '/' . $params['folder'] . '/' . $params['file'];
+        $path = sys::web() . 'themes/' . $params['source'] . '/' . $params['folder'] . '/' . $params['file'];
         $real = realpath($path);
         if (empty($real)) {
             throw new Exception("Invalid file");
@@ -224,7 +264,32 @@ trait StaticFileBridgeTrait
         if (!in_array($ext, static::$extensions)) {
             throw new Exception("Invalid file extension");
         }
-        $theme = realpath(sys::web() . 'themes/' . $params['theme'] . '/');
+        $theme = realpath(sys::web() . 'themes/' . $params['source'] . '/');
+        if (empty($theme) || strpos($real, $theme) !== 0) {
+            throw new Exception("Invalid file path");
+        }
+        return $real;
+    }
+
+    /**
+     * Summary of getVarFileRequest
+     * @param array<string, mixed> $params
+     * @throws \Exception
+     * @return string
+     */
+    public static function getVarFileRequest($params): string
+    {
+        $path = sys::varpath() . '/' . $params['source'] . '/' . $params['folder'] . '/' . $params['file'];
+        $real = realpath($path);
+        if (empty($real)) {
+            throw new Exception("Invalid file");
+        }
+        $pieces = explode('.', $real);
+        $ext = array_pop($pieces);
+        if (!in_array($ext, static::$extensions)) {
+            throw new Exception("Invalid file extension");
+        }
+        $theme = realpath(sys::varpath() . '/' . $params['source'] . '/');
         if (empty($theme) || strpos($real, $theme) !== 0) {
             throw new Exception("Invalid file path");
         }
