@@ -34,7 +34,7 @@ class ItemModify extends DataObjectHookObserver
      *     $args['extrainfo'] extra information
      * @return string|void output display string
      */
-    public static function run(array $args = [])
+    public static function run(array $args = [], $context = null)
     {
         // Security
         if (!xarSecurity::check('EditDynamicData')) {
@@ -62,6 +62,9 @@ class ItemModify extends DataObjectHookObserver
         if (!isset($object) || empty($object->objectid)) {
             return;
         }
+        // set context if available in hook call
+        $object->setContext($context);
+
         $object->getItem(['itemid' => $itemid]);
 
         // if we are in preview mode, we need to check for any preview values

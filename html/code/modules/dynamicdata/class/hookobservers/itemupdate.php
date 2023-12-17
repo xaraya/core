@@ -33,7 +33,7 @@ class ItemUpdate extends DataObjectHookObserver
      * @return array<mixed> true on success, false on failure
      * @throws BadParameterException
      */
-    public static function run(array $args = [])
+    public static function run(array $args = [], $context = null)
     {
         $verbose = false;
 
@@ -77,6 +77,8 @@ class ItemUpdate extends DataObjectHookObserver
         if (!isset($myobject) || empty($myobject->objectid)) {
             return $extrainfo;
         }
+        // set context if available in hook call
+        $myobject->setContext($context);
 
         $myobject->getItem();
 

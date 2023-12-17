@@ -40,7 +40,7 @@ class ModuleModifyconfig extends DataObjectHookObserver
      * @throws EmptyParameterException
      * @throws BadParameterException
      */
-    public static function run(array $args = [])
+    public static function run(array $args = [], $context = null)
     {
         // Security
         if(!xarSecurity::check('AdminDynamicData')) {
@@ -123,6 +123,8 @@ class ModuleModifyconfig extends DataObjectHookObserver
         $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(['type' => 'fieldtype']);
 
         $object = DataObjectFactory::getObject(['name' => $args['name']]);
+        // set context if available in hook call
+        $object->setContext($context);
 
         if (!empty($object)) {
             if (!empty($object->template)) {

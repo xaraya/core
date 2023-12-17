@@ -29,6 +29,6 @@ class ApiEventObserver extends EventObserver
         // function was already imported in events fileLoad, but that doesn't mean the module was loaded
         xarMod::apiLoad($this->module, $this->type);
         // note, no try / catch here, subject notify method should handle exceptions
-        return xarMod::apiFunc($this->module, $this->type, $this->func, $subject->getArgs());            
+        return xarMod::apiFunc($this->module, $this->type, $this->func, $subject->getArgs(), $subject->getContext());
     }
 }

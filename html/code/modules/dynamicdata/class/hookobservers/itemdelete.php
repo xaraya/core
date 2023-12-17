@@ -30,7 +30,7 @@ class ItemDelete extends DataObjectHookObserver
      * @return array<mixed> true on success, false on failure
      * @throws BadParameterException
      */
-    public static function run(array $args = [])
+    public static function run(array $args = [], $context = null)
     {
         extract($args);
         $extrainfo ??= [];
@@ -58,7 +58,8 @@ class ItemDelete extends DataObjectHookObserver
             'delete',
             ['module_id'    => $module_id,
             'itemtype' => $itemtype,
-            'itemid'   => $itemid]
+            'itemid'   => $itemid],
+            $context
         )) {
             return $extrainfo;
         }

@@ -28,10 +28,10 @@ class ItemCreate extends DataObjectHookObserver
      *        string   $args['extrainfo'] extra information
      * @return array<mixed> true on success, false on failure
      */
-    public static function run(array $args = [])
+    public static function run(array $args = [], $context = null)
     {
         // we rely on the updatehook to do the real work here
         $args['dd_function'] = 'createhook';
-        return ItemUpdate::run($args);
+        return ItemUpdate::run($args, $context);
     }
 }

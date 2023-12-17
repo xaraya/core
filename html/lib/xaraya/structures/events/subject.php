@@ -15,7 +15,7 @@ sys::import('xaraya.traits.contexttrait');
 use Xaraya\Core\Traits\ContextInterface;
 use Xaraya\Core\Traits\ContextTrait;
  
-interface ixarEventSubject
+interface ixarEventSubject extends ContextInterface
 {
     public function notify();
     public function attach(ixarEventObserver $obs);
@@ -31,7 +31,7 @@ interface ixarEventSubject
  * This serves as the template from which all other event subjects should inherit
  * All subjects must implement ixarEventSubject interface
 **/
-abstract class EventSubject extends xarObject implements ixarEventSubject, ContextInterface
+abstract class EventSubject extends xarObject implements ixarEventSubject
 {
     use ContextTrait;
 

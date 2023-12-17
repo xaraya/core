@@ -34,7 +34,7 @@ class ModuleRemove extends DataObjectHookObserver
      * @return array<mixed> true on success, false on failure
      * @throws BadParameterException
      */
-    public static function run(array $args = [])
+    public static function run(array $args = [], $context = null)
     {
         extract($args);
 

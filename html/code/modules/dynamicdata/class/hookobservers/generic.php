@@ -34,7 +34,7 @@ class DataObjectHookObserver extends HookObserver
      */
     public function notify(ixarEventSubject $subject)
     {
-        return static::run($subject->getArgs());
+        return static::run($subject->getArgs(), $subject->getContext());
     }
 
     /**
@@ -43,7 +43,7 @@ class DataObjectHookObserver extends HookObserver
      *        string   $args['extrainfo'] extra information
      * @return array<mixed>|string|void API returns extrainfo array, GUI returns string or void
      */
-    public static function run(array $args = [])
+    public static function run(array $args = [], $context = null)
     {
         return $args['extrainfo'] ?? [];
     }

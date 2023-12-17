@@ -30,7 +30,7 @@ class ItemDisplay extends DataObjectHookObserver
      *     $args['extrainfo'] extra information
      * @return string|void output display string
      */
-    public static function run(array $args = [])
+    public static function run(array $args = [], $context = null)
     {
         extract($args);
         $extrainfo ??= [];
@@ -51,6 +51,8 @@ class ItemDisplay extends DataObjectHookObserver
         if (!$object->checkAccess('display')) {
             return xarML('Display #(1) is forbidden', $object->label);
         }
+        // set context if available in hook call
+        $object->setContext($context);
 
         $object->getItem();
 
