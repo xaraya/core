@@ -21,6 +21,7 @@ use Xaraya\Core\Traits\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
 use Xaraya\Structures\Context;
+use Xaraya\Authentication\AuthToken;
 
 /**
  * Class to handle DataObject REST API calls
@@ -40,9 +41,6 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     public static $config = [];
     /** @var array<string, mixed> */
     public static $modules = [];
-    public static int $tokenExpires = 12 * 60 * 60;  // 12 hours
-    public static string $storageType = 'apcu';  // database or apcu
-    public static ixarCache_Storage $tokenStorage;
     public static string $mediaType;
 
     /**
@@ -121,10 +119,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Summary of getObjectList
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @throws \ForbiddenOperationException
      * @return array<string, mixed>
      */
-    public static function getObjectList($args)
+    public static function getObjectList($args, $context)
     {
         $object = $args['path']['object'];
         $method = 'view';
@@ -134,7 +133,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = self::checkUser($args);
+            $userId = self::checkUser($context);
             //$args['access'] = 'view';
         }
         if (self::$enableCache && !self::hasCaching($object, $method)) {
@@ -153,6 +152,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view', 0, $userId)) {
             throw new ForbiddenOperationException();
         }
+        // set context if available in handler
+        $objectlist->setContext($context);
         $params = $loader->addPagingParams();
         $items = $objectlist->getItems($params);
         //$items = $loader->query($args);
@@ -205,11 +206,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Summary of getObjectItem
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @throws \Exception
      * @throws \ForbiddenOperationException
      * @return array<string, mixed>
      */
-    public static function getObjectItem($args)
+    public static function getObjectItem($args, $context)
     {
         $object = $args['path']['object'];
         $itemid = self::checkItemId($object, $args['path']['itemid']);
@@ -223,7 +225,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $userId = 0;
         if (self::hasSecurity($object, $method)) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = self::checkUser($args);
+            $userId = self::checkUser($context);
             //$args['access'] = 'display';
         }
         if (self::$enableCache && !self::hasCaching($object, $method)) {
@@ -239,6 +241,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
+        // set context if available in handler
+        $objectitem->setContext($context);
         $itemid = $objectitem->getItem();
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown itemid for ' . $object);
@@ -293,11 +297,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Summary of createObjectItem
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @throws \Exception
      * @throws \ForbiddenOperationException
      * @return array<mixed>|int|mixed
      */
-    public static function createObjectItem($args)
+    public static function createObjectItem($args, $context)
     {
         $object = $args['path']['object'];
         $method = 'create';
@@ -305,7 +310,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             return ['method' => 'createObjectItem', 'args' => $args, 'error' => 'Unknown operation'];
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = self::checkUser($args);
+        $userId = self::checkUser($context);
         $fieldlist = self::getCreateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -319,6 +324,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (empty($objectitem) || !$objectitem->checkAccess('create', 0, $userId)) {
             throw new ForbiddenOperationException();
         }
+        // set context if available in handler
+        $objectitem->setContext($context);
         $itemid = $objectitem->createItem($args['input']);
         if (empty($itemid)) {
             throw new Exception('Unknown item ' . $object);
@@ -330,11 +337,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Summary of updateObjectItem
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @throws \Exception
      * @throws \ForbiddenOperationException
      * @return array<string, mixed>|int|mixed
      */
-    public static function updateObjectItem($args)
+    public static function updateObjectItem($args, $context)
     {
         $object = $args['path']['object'];
         $itemid = self::checkItemId($object, $args['path']['itemid']);
@@ -346,7 +354,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = self::checkUser($args);
+        $userId = self::checkUser($context);
         $fieldlist = self::getUpdateProperties($object);
         // @todo sanity check on input based on properties
         if (empty($args['input'])) {
@@ -360,6 +368,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (empty($objectitem) || !$objectitem->checkAccess('update', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
+        // set context if available in handler
+        $objectitem->setContext($context);
         $itemid = $objectitem->updateItem($args['input']);
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown item ' . $object);
@@ -371,11 +381,12 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Summary of deleteObjectItem
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @throws \Exception
      * @throws \ForbiddenOperationException
      * @return array<string, mixed>|int|mixed
      */
-    public static function deleteObjectItem($args)
+    public static function deleteObjectItem($args, $context)
     {
         $object = $args['path']['object'];
         $itemid = self::checkItemId($object, $args['path']['itemid']);
@@ -387,12 +398,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             throw new Exception('Unknown id ' . $object);
         }
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = self::checkUser($args);
+        $userId = self::checkUser($context);
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectFactory::getObject($params);
         if (empty($objectitem) || !$objectitem->checkAccess('delete', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
+        // set context if available in handler
+        $objectitem->setContext($context);
         $itemid = $objectitem->deleteItem();
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown item ' . $object);
@@ -416,12 +429,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             $contents = file_get_contents($configFile);
             self::$config = json_decode($contents, true);
         }
+        /**
         if (!empty(self::$config['storage'])) {
-            self::$storageType = self::$config['storage'];
+            AuthToken::$storageType = self::$config['storage'];
         }
         if (!empty(self::$config['expires'])) {
-            self::$tokenExpires = intval(self::$config['expires']);
+            AuthToken::$tokenExpires = intval(self::$config['expires']);
         }
+         */
         // use xarTimerTrait
         if (isset(self::$config['timer'])) {
             self::$enableTimer = !empty(self::$config['timer']) ? true : false;
@@ -694,13 +709,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Return the current user or exit with 401 status code
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @uses xarMod::init()
      * @uses xarUser::init()
      * @return array<string, mixed>
      */
-    public static function whoami($args)
+    public static function whoami($args, $context)
     {
-        $userId = self::checkUser($args);
+        $userId = self::checkUser($context);
         //return array('id' => xarUser::getVar('id'), 'name' => xarUser::getVar('name'));
         xarMod::init();
         xarUser::init();
@@ -710,80 +726,44 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     }
 
     /**
-     * Verify that the cookie corresponds to an authorized user (with minimal core load) or exit with 401 status code
-     * @param array<string, mixed> $context
+     * Verify that the token or cookie corresponds to an authorized user (with minimal core load) or exit with 401 status code
+     * @param Context<string, mixed> $context
      * @throws \UnauthorizedOperationException
      * @return int
      */
     private static function checkUser($context)
     {
-        $userInfo = self::checkToken($context);
-        if (!empty($userInfo)) {
-            $userInfo = @json_decode($userInfo, true);
-            if (empty($userInfo['userId']) || empty($userInfo['created']) || ($userInfo['created'] < (time() - self::$tokenExpires))) {
-                if (!headers_sent()) {
-                    //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
-                    header('WWW-Authenticate: Token realm="Xaraya Site Login", created=');
-                }
-                throw new UnauthorizedOperationException();
-            }
-            return $userInfo['userId'];
+        $userId = $context->getUserId();
+        // return the userId if we have one
+        if (!empty($userId)) {
+            return $userId;
         }
-        $userId = self::checkCookie($context['cookie']);
-        if (empty($userId)) {
-            if (!headers_sent()) {
-                header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
-            }
+        // check if we can still send headers
+        if (headers_sent()) {
             throw new UnauthorizedOperationException();
         }
-        return $userId;
-    }
-
-    /**
-     * Verify that the cookie corresponds to an authorized user (with minimal core load) using xarSession
-     * @param array<string, mixed> $cookieVars
-     * @uses xarSession::init()
-     * @uses xarUser::isLoggedIn()
-     * @return mixed|void
-     */
-    private static function checkCookie($cookieVars)
-    {
-        if (empty($cookieVars) || empty($cookieVars['XARAYASID'])) {
-            return;
+        // check if we had an auth token before
+        $token = AuthToken::getAuthToken($context);
+        if (!empty($token)) {
+            //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
+            header('WWW-Authenticate: Token realm="Xaraya Site Login", created=');
+        } else {
+            header('WWW-Authenticate: Cookie realm="Xaraya Site Login", cookie-name=XARAYASID');
         }
-        // @checkme see graphql whoami query in dummytype.php
-        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            xarSession::init();
-        }
-        //xarUser::init();
-        if (!xarUser::isLoggedIn()) {
-            return;
-        }
-        return xarSession::getVar('role_id');
-    }
-
-    /**
-     * Verify that the token corresponds to an authorized user (with minimal core load) using xarCache_Storage
-     * @param array<string, mixed> $context
-     * @return mixed|void
-     */
-    private static function checkToken($context)
-    {
-        $context['request'] ??= null;
-        $token = static::getAuthToken($context['request']);
-        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
-            return;
-        }
-        return self::getTokenStorage()->getCached($token);
+        throw new UnauthorizedOperationException();
     }
 
     /**
      * Summary of postToken
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
+     * @uses xarMod::init()
+     * @uses xarUser::init()
+     * @uses xarMod::apiFunc()
      * @throws \UnauthorizedOperationException
      * @return array<string, mixed>
      */
-    public static function postToken($args)
+    public static function postToken($args, $context)
     {
         // this contains any POSTed args from rst.php
         if (empty($args['input'])) {
@@ -811,7 +791,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         xarUser::init();
         // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
         // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
-        $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args['input']);
+        $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args['input'], $context);
         if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
             if (!headers_sent()) {
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login"');
@@ -819,56 +799,33 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             }
             throw new UnauthorizedOperationException();
         }
-        if (function_exists('random_bytes')) {
-            $token = bin2hex(random_bytes(32));
-        } elseif (function_exists('openssl_random_pseudo_bytes')) {
-            $token = bin2hex(openssl_random_pseudo_bytes(32));
-        } else {
+        $userInfo = ['userId' => $userId, 'access' => $access, 'created' => time()];
+        $token = AuthToken::createToken($userInfo);
+        if (empty($token)) {
             return ['method' => 'postToken', 'error' => 'no decent token generator'];
         }
-        // @checkme clean up cachestorage occasionally based on size
-        self::getTokenStorage()->sizeLimitReached();
-        self::getTokenStorage()->setCached($token, json_encode(['userId' => $userId, 'access' => $access, 'created' => time()]));
-        $expiration = date('c', time() + self::$tokenExpires);
+        $expiration = date('c', time() + AuthToken::$tokenExpires);
         return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
     }
 
     /**
      * Summary of deleteToken
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @return bool
      */
-    public static function deleteToken($args)
+    public static function deleteToken($args, $context)
     {
         $args['request'] ??= null;
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-        $userId = self::checkUser($args);
-        $token = static::getAuthToken($args['request']);
-        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
+        $userId = self::checkUser($context);
+        // check if we had an auth token before
+        $token = AuthToken::getAuthToken($context);
+        if (empty($token)) {
             return false;
         }
-        self::getTokenStorage()->delCached($token);
+        AuthToken::deleteToken($token);
         return true;
-    }
-
-    /**
-     * Summary of getTokenStorage
-     * @uses xarCache::getStorage()
-     * @return ixarCache_Storage
-     */
-    public static function getTokenStorage()
-    {
-        if (!isset(self::$tokenStorage)) {
-            self::loadConfig();
-            // @checkme access cachestorage directly here
-            self::$tokenStorage = xarCache::getStorage([
-                'storage' => self::$storageType,
-                'type' => 'token',
-                'expire' => self::$tokenExpires,
-                'sizelimit' => 2000000,
-            ]);
-        }
-        return self::$tokenStorage;
     }
 
     /**
@@ -934,13 +891,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Summary of getModuleCall
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @uses xarMod::init()
      * @uses xarUser::init()
      * @uses xarMod::apiFunc()
      * @throws \ForbiddenOperationException
      * @return mixed
      */
-    public static function getModuleCall($args)
+    public static function getModuleCall($args, $context)
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
@@ -952,13 +910,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = self::checkUser($args);
+            $userId = self::checkUser($context);
             // @checkme assume we have a security mask here
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
                 $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
-                // @todo verify access for user based on what?
+            // @todo verify access for user based on what?
             } else {
                 $pass = true;
             }
@@ -974,8 +932,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         // @checkme how to save this in case of caching?
         if (!empty($func['mediatype'])) {
             self::$mediaType = $func['mediatype'];
-            if (!empty($args['request'])) {
-                $args['request'] = ($args['request'])->withAttribute('mediaType', $func['mediatype']);
+            if (!empty($context['request'])) {
+                $context['request'] = ($context['request'])->withAttribute('mediaType', $func['mediatype']);
             }
         }
         xarMod::init();
@@ -991,19 +949,20 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 $params = array_merge($func['args'], $params);
             }
         }
-        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params);
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params, $context);
     }
 
     /**
      * Summary of postModuleCall
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @uses xarMod::init()
      * @uses xarUser::init()
      * @uses xarMod::apiFunc()
      * @throws \ForbiddenOperationException
      * @return mixed
      */
-    public static function postModuleCall($args)
+    public static function postModuleCall($args, $context)
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
@@ -1019,13 +978,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
-            $userId = self::checkUser($args);
+            $userId = self::checkUser($context);
             // @checkme assume we have a security mask here
             if (is_string($func['security'])) {
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
                 $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
-                // @todo verify access for user based on what?
+            // @todo verify access for user based on what?
             } else {
                 $pass = true;
             }
@@ -1048,16 +1007,17 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (!empty($more) && !empty($func['args'])) {
             $params = array_merge($params, $func['args']);
         }
-        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params);
+        return xarMod::apiFunc($func['module'], $func['type'], $func['name'], $params, $context);
     }
 
     /**
      * Summary of putModuleCall
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @throws \Exception
      * @return mixed
      */
-    public static function putModuleCall($args)
+    public static function putModuleCall($args, $context)
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
@@ -1073,10 +1033,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Summary of deleteModuleCall
      * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
      * @throws \Exception
      * @return mixed
      */
-    public static function deleteModuleCall($args)
+    public static function deleteModuleCall($args, $context)
     {
         $module = $args['path']['module'];
         $path = $args['path']['path'];
@@ -1253,9 +1214,6 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         } catch (JsonException $e) {
             return ["JSON Input Exception" => $e->getMessage()];
         }
-        // @todo decide what to move from $params to $context - see GraphQL
-        $params['server'] = static::getServerParams($request);
-        $params['cookie'] = static::getCookieParams($request);
         // self::setTimer('parse');
         $result = self::getResult($handler, $params, $request);
         /**
@@ -1292,9 +1250,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 }
             }
         }
-        unset($vars['server']);
         // @checkme do we want to make this user-dependent?
-        unset($vars['cookie']);
         $queryId .= '-' . md5(json_encode($vars));
         return $queryId;
     }
@@ -1353,11 +1309,15 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         self::setTimer('handle');
         // don't use call_user_func here anymore because $request is passed by reference
         self::$mediaType = '';
-        // @todo decide what to move from $params to $context - see GraphQL
+        // define context of the request - see GraphQL
         $context = new Context();
+        $context['server'] = static::getServerParams($request);
+        $context['cookie'] = static::getCookieParams($request);
         if (!empty($request)) {
-            $params['request'] = &$request;
+            $context['request'] = &$request;
             $context['requestId'] = $request->getAttribute('requestId');
+        } else {
+            $context['request'] = null;
         }
         try {
             $result = call_user_func($handler, $params, $context);
