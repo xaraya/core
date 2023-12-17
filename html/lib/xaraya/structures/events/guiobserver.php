@@ -13,8 +13,11 @@ sys::import('xaraya.structures.events.observer');
 
 class GuiEventObserver extends EventObserver
 {
+    /** @var string */
     public $module;
+    /** @var ?string */
     public $type;
+    /** @var ?string */
     public $func;
             
     public function __construct(array $args = [])

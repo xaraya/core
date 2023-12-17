@@ -12,6 +12,7 @@ sys::import('xaraya.structures.events.subject');
 
 interface ixarHookSubject extends ixarEventSubject
 {
+    /** @return array<string, mixed> */
     public function getExtrainfo();
 }
 
@@ -28,13 +29,14 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
 {
     // protected $args; // from EventSubject
     protected $subject = 'Hook'; // change this to the name of your hook subject    
+    /** @var array<string, mixed> */
     protected $extrainfo = array();
 
     /**
      * constructor
      * This is common to all hook subjects
      * 
-     * @param array<string, mixed> $args, array containing hook caller item params and values
+     * @param array<string, mixed> $args array containing hook caller item params and values
      * @return void
      * @throws BadParameterException
     **/    
@@ -107,10 +109,14 @@ abstract class HookSubject extends EventSubject implements ixarHookSubject
         parent::__construct($args);
     }
     
+    /**
+     * @return array<string, mixed>
+     */
     public function getExtrainfo()
     {
         $args = $this->getArgs();
         if (isset($args['extrainfo'])) 
             return $args['extrainfo'];
+        return [];
     }
 }

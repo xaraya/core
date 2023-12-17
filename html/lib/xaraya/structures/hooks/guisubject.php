@@ -24,6 +24,7 @@ sys::import('xaraya.structures.hooks.subject');
 abstract class GuiHookSubject extends HookSubject
 {
     protected $subject = 'GuiHook';  // change this to the name of your event subject
+    /** @var array<string, mixed> */
     protected $hookoutput = array(); // property to store array of hooked module responses 
     /**
      * Notify hooked observers

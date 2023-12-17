@@ -17,11 +17,30 @@ use Xaraya\Core\Traits\ContextTrait;
  
 interface ixarEventSubject extends ContextInterface
 {
+    /**
+     * @return void
+     */
     public function notify();
+    /**
+     * @return void
+     */
     public function attach(ixarEventObserver $obs);
+    /**
+     * @return void
+     */
     public function detach(ixarEventObserver $obs);
+    /**
+     * @return mixed
+     */
     public function getSubject();
+    /**
+     * @return mixed
+     */
     public function getArgs();
+    /**
+     * @param mixed $args
+     * @return void
+     */
     public function setArgs($args);
 }
 
@@ -35,15 +54,18 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
 {
     use ContextTrait;
 
+    /** @var mixed */
     protected $args;                // args passed from caller when event is raised
+    /** @var EventObserver[] */
     protected $observers = array(); // xarEvents::notify is responsible for populating this array
+    /** @var string */
     protected $subject = 'Event';   // name of this event subject
 
     /**
      * Constructor
      * overloading is optional
      *
-     * @param mixed $args, determined by the subject, default null
+     * @param mixed $args determined by the subject, default null
      * 
      * $args are passed to EMS notify() method by caller, eg, as, notify('Event', $args)
      * and from notify method to this object in the constructor
@@ -111,7 +133,7 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
      * This function is required by the EMS system,
      * and cannot be overloaded
      *
-     * @return string, name of subject
+     * @return string name of subject
      * @access public
     **/    
     final public function getSubject()
@@ -119,11 +141,18 @@ abstract class EventSubject extends xarObject implements ixarEventSubject
         return $this->subject;
     }
     
+    /**
+     * @return mixed
+     */
     public function getArgs()
     {
         return $this->args;
     }
     
+    /**
+     * @param mixed $args
+     * @return void
+     */
     public function setArgs($args)
     {
         if (empty($this->args) || !is_array($args)) {

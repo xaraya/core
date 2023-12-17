@@ -113,9 +113,6 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
     public static $object_type = [];
     public static int $queryComplexity = 0;
     public static int $queryDepth = 0;
-    public static int $tokenExpires = 12 * 60 * 60;  // 12 hours
-    public static string $storageType = 'apcu';  // database or apcu
-    public static ixarCache_Storage $tokenStorage;
     /** @var array<string, mixed> */
     public static $objectSecurity = [];
     /** @var array<string, mixed> */
@@ -815,116 +812,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
      */
     public static function checkUser($context)
     {
-        $userId = self::checkToken($context);
-        if (!empty($userId)) {
-            return $userId;
-        }
-        return self::checkCookie($context['cookie']);
-    }
-
-    /**
-     * Summary of checkToken
-     * @param Context<string, mixed> $context
-     * @return mixed|void
-     */
-    public static function checkToken($context)
-    {
-        $context['request'] ??= null;
-        $token = static::getAuthToken($context['request']);
-        if (self::$trace_path) {
-            self::$paths[] = "checkToken";
-        }
-        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
-            return;
-        }
-        $userInfo = self::getTokenStorage()->getCached($token);
-        if (!empty($userInfo)) {
-            $userInfo = @json_decode($userInfo, true);
-            if (!empty($userInfo['userId']) && ($userInfo['created'] > (time() - self::$tokenExpires))) {
-                return $userInfo['userId'];
-            }
-        }
-    }
-
-    /**
-     * Summary of checkCookie
-     * @param array<string, mixed> $cookieVars
-     * @uses xarSession::init()
-     * @uses xarUser::isLoggedIn()
-     * @return mixed|void
-     */
-    public static function checkCookie($cookieVars)
-    {
-        if (empty($cookieVars) || empty($cookieVars['XARAYASID'])) {
-            return;
-        }
-        if (self::$trace_path) {
-            self::$paths[] = "checkCookie";
-        }
-        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            xarSession::init();
-        }
-        //xarMLS::init();
-        //xarUser::init();
-        if (!xarUser::isLoggedIn()) {
-            return;
-        }
-        return xarSession::getVar('role_id');
-    }
-
-    /**
-     * Summary of createToken
-     * @param array<string, mixed> $userInfo
-     * @return string|void
-     */
-    public static function createToken($userInfo)
-    {
-        if (function_exists('random_bytes')) {
-            $token = bin2hex(random_bytes(32));
-        } elseif (function_exists('openssl_random_pseudo_bytes')) {
-            $token = bin2hex(openssl_random_pseudo_bytes(32));
-        } else {
-            return;
-        }
-        // @checkme clean up cachestorage occasionally based on size
-        self::getTokenStorage()->sizeLimitReached();
-        self::getTokenStorage()->setCached($token, json_encode($userInfo));
-        return $token;
-    }
-
-    /**
-     * Summary of deleteToken
-     * @param Context<string, mixed> $context
-     * @return void
-     */
-    public static function deleteToken($context)
-    {
-        $context['request'] ??= null;
-        $token = static::getAuthToken($context['request']);
-        if (empty($token) || !(self::getTokenStorage()->isCached($token))) {
-            return;
-        }
-        self::getTokenStorage()->delCached($token);
-    }
-
-    /**
-     * Summary of getTokenStorage
-     * @uses xarCache::getStorage()
-     * @return ixarCache_Storage
-     */
-    public static function getTokenStorage()
-    {
-        if (!isset(self::$tokenStorage)) {
-            //self::loadConfig();
-            // @checkme access cachestorage directly here
-            self::$tokenStorage = xarCache::getStorage([
-                'storage' => self::$storageType,
-                'type' => 'token',
-                'expire' => self::$tokenExpires,
-                'sizelimit' => 2000000,
-            ]);
-        }
-        return self::$tokenStorage;
+        return $context->getUserId();
     }
 
     /**
@@ -962,12 +850,14 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         if (!empty(self::$config['queryDepth'])) {
             self::$queryDepth = self::$config['queryDepth'];
         }
+        /**
         if (!empty(self::$config['tokenExpires'])) {
-            self::$tokenExpires = self::$config['tokenExpires'];
+            AuthToken::$tokenExpires = self::$config['tokenExpires'];
         }
         if (!empty(self::$config['storageType'])) {
-            self::$storageType = self::$config['storageType'];
+            AuthToken::$storageType = self::$config['storageType'];
         }
+         */
         // use xarTimerTrait
         if (!empty(self::$config['enableTimer'])) {
             self::$enableTimer = true;

@@ -28,7 +28,11 @@ interface ixarHookObserver extends ixarEventObserver
 class HookObserver extends EventObserver implements ixarHookObserver
 {
     public $module = "modules";
-    
+
+    /**
+     * @param array<string, mixed>|mixed $extrainfo
+     * @return array<string, mixed>|bool
+     */
     function validate($extrainfo = array())
     {
         // Check whether a valid array was passed

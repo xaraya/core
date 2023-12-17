@@ -11,7 +11,11 @@
 
 namespace Xaraya\Structures;
 
+use Xaraya\Authentication\Usercontext;
 use ArrayObject;
+use sys;
+
+sys::import('modules.authsystem.class.usercontext');
 
 /**
  * Context object for request etc.
@@ -28,5 +32,19 @@ class Context extends ArrayObject
     public function getRequest()
     {
         return $this->offsetGet('request');
+    }
+
+    /**
+     * Get current userId
+     * @return mixed
+     */
+    public function getUserId()
+    {
+        if (!$this->offsetExists('userId')) {
+            $userContext = new UserContext($this);
+            $userId = $userContext->getUserId();
+            $this->offsetSet('userId', $userId);
+        }
+        return $this->offsetGet('userId');
     }
 }

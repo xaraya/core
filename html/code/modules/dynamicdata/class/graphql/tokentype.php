@@ -12,6 +12,7 @@
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\ResolveInfo;
+use Xaraya\Authentication\AuthToken;
 
 /**
  * Token GraphQL ObjectType to get an access token
@@ -116,8 +117,8 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
                     throw new Exception('Invalid username or password');
                 }
                 $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];
-                $token = xarGraphQL::createToken($userInfo);
-                $expiration = date('c', time() + xarGraphQL::$tokenExpires);
+                $token = AuthToken::createToken($userInfo);
+                $expiration = date('c', time() + AuthToken::$tokenExpires);
                 return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
             },
              */
@@ -154,8 +155,8 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
                 throw new Exception('Invalid username or password');
             }
             $userInfo = ['userId' => $userId, 'access' => $args['access'], 'created' => time()];
-            $token = xarGraphQL::createToken($userInfo);
-            $expiration = date('c', time() + xarGraphQL::$tokenExpires);
+            $token = AuthToken::createToken($userInfo);
+            $expiration = date('c', time() + AuthToken::$tokenExpires);
             return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
         };
         return $resolver;
@@ -185,11 +186,11 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
                     return false;
                 }
                 // see dummytype whoami and graphql checkUser
-                $userId = xarGraphQL::checkToken($context);
-                if (empty($userId)) {
+                $token = AuthToken::getAuthToken($context);
+                if (empty($token)) {
                     return true;
                 }
-                xarGraphQL::deleteToken($context);
+                AuthToken::deleteToken($token);
                 return true;
             },
              */
@@ -214,11 +215,11 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
                 return false;
             }
             // see dummytype whoami and graphql checkUser
-            $userId = xarGraphQL::checkToken($context);
-            if (empty($userId)) {
+            $token = AuthToken::getAuthToken($context);
+            if (empty($token)) {
                 return true;
             }
-            xarGraphQL::deleteToken($context);
+            AuthToken::deleteToken($token);
             return true;
         };
         return $resolver;

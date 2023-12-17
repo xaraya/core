@@ -17,6 +17,9 @@
 **/
 interface ixarEventObserver
 {
+    /**
+     * @return mixed|void
+     */
     public function notify(ixarEventSubject $subject);
 }
 
@@ -28,8 +31,12 @@ interface ixarEventObserver
 **/
 class EventObserver extends xarObject implements ixarEventObserver
 {
+    /** @var string */
     public $module;
 
+    /**
+     * @param array<string, mixed> $args
+     */
     public function __construct(array $args = [])
     {
         // native 'class' event and hook subclasses can do whatever they want with $args = $obs array from events.php
