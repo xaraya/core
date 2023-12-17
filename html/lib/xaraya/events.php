@@ -157,6 +157,8 @@ class xarEvents extends xarObject implements ixarEvents
                     $classname = $info['classname'] ?: ucfirst($module) . $info['event'] . "Subject";
                     // create subject instance, passing $args from caller
                     $subject = new $classname($args);
+                    // set context if available in notify call
+                    $subject->setContext($context);
                     // get observer info from subject
                     $obsinfo = static::getObservers($subject);
                     if (!empty($obsinfo)) {
@@ -194,13 +196,12 @@ class xarEvents extends xarObject implements ixarEvents
                             }
                         }
                     }
-                    $subject->setContext($context);
                     $method = !empty($info['func']) ? $info['func'] : 'notify';
                     // always notify the subject, even if there are no observers
                     $response = $subject->$method();
                 break;
                 case 'api':
-                    $response = xarMod::apiFunc($module, $info['type'], $info['func'], $args);
+                    $response = xarMod::apiFunc($module, $info['type'], $info['func'], $args, $context);
                 break;
                 case 'gui':
                     // not allowed in event subjects

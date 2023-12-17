@@ -60,7 +60,7 @@ interface ObserverBridgeInterface
 {
     public static function setDispatcher(EventDispatcherInterface $dispatcher): void;
     public static function setEventList(array $eventList = []): void;
-    public static function callbackEvent($info): void;
+    public static function callbackEvent($info, $context = null): void;
     public static function register(): void;
     public static function unregister(): void;
     public static function getEventList(): array;

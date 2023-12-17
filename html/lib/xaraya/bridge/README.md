@@ -49,6 +49,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 //use Xaraya\Bridge\Events\EventSubscriber;
 use Xaraya\Bridge\Events\HookSubscriber;
 use Xaraya\Bridge\Events\DefaultEvent;
+use Xaraya\Structures\Context;
 
 // subscriber bridge for events and/or hooks in your app
 //$subscriber = new EventSubscriber();
@@ -58,9 +59,15 @@ $subscriber = new HookSubscriber();
 $dispatcher = new EventDispatcher();
 $dispatcher->addSubscriber($subscriber);
 
+// current context
+$context = new Context(['requestId' => 'something']);
+
 // create an event with $subject corresponding to the $args in xarEvents::notify()
 $subject = ['module' => 'dynamicdata', 'itemtype' => 3, 'itemid' => 123];
 $event = new DefaultEvent($subject);
+// set context if available
+$event->setContext($context);
+
 // this will call xarHooks::notify('ItemCreate', $subject) and save any response in the subscriber
 $dispatcher->dispatch($event, 'xarHooks.item.ItemCreate');
 $responses = $subscriber->getResponses();

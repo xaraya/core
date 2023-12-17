@@ -22,6 +22,7 @@
  * //use Xaraya\Bridge\Events\EventSubscriber;
  * use Xaraya\Bridge\Events\HookSubscriber;
  * use Xaraya\Bridge\Events\DefaultEvent;
+ * use Xaraya\Structures\Context;
  *
  * // subscriber bridge for events and/or hooks in your app
  * //$subscriber = new EventSubscriber();
@@ -31,9 +32,13 @@
  * $dispatcher = new EventDispatcher();
  * $dispatcher->addSubscriber($subscriber);
  *
+ * // current context
+ * $context = new Context(['requestId' => 'something']);
  * // create an event with $subject corresponding to the $args in xarEvents::notify()
  * $subject = ['module' => 'dynamicdata', 'itemtype' => 3, 'itemid' => 123];
  * $event = new DefaultEvent($subject);
+ * // set context if available
+ * $event->setContext($context);
  * // this will call xarHooks::notify('ItemCreate', $subject) and save any response in the subscriber
  * $dispatcher->dispatch($event, 'xarHooks.item.ItemCreate');
  * $responses = $subscriber->getResponses();
@@ -67,14 +72,15 @@ class EventSubscriber implements EventSubscriberInterface
         //echo static::class . " onScopeEvent got $eventName = " . var_export($event, true) . "\n";
         $subject = $event->getSubject();
         [$prefix, $scope, $type] = explode('.', $eventName);
-        $response = $this->notify($type, $subject);
+        $context = $event->getContext();
+        $response = $this->notify($type, $subject, $context);
         //echo "Response: " . var_export($response, true);
         $this->responses[$eventName] = $response;
     }
 
-    public function notify($type, $subject)
+    public function notify($type, $subject, $context = null)
     {
-        $response = xarEvents::notify($type, $subject);
+        $response = xarEvents::notify($type, $subject, $context);
         return $response;
     }
 
@@ -131,9 +137,9 @@ class HookSubscriber extends EventSubscriber implements EventSubscriberInterface
         ],
     ];
 
-    public function notify($type, $subject)
+    public function notify($type, $subject, $context = null)
     {
-        $response = xarHooks::notify($type, $subject);
+        $response = xarHooks::notify($type, $subject, $context);
         return $response;
     }
 
@@ -175,8 +181,9 @@ class EventCallbackSubscriber extends EventSubscriber implements EventSubscriber
     public function onScopeEvent($event, string $eventName = '')
     {
         //echo static::class . " onScopeEvent got $eventName = " . var_export($event, true) . "\n";
-        $subject = $event->getSubject();
-        [$prefix, $scope, $type] = explode('.', $eventName);
+        //$subject = $event->getSubject();
+        //[$prefix, $scope, $type] = explode('.', $eventName);
+        //$context = $event->getContext();
         $this->callBack($event, $eventName);
     }
 
@@ -221,9 +228,9 @@ class HookCallbackSubscriber extends EventCallbackSubscriber implements EventSub
     protected static $callbackFunctions = [];
     public static $moduleName;
 
-    public function notify($type, $subject)
+    public function notify($type, $subject, $context = null)
     {
-        xarHooks::notify($type, $subject);
+        xarHooks::notify($type, $subject, $context);
     }
 
     public static function getEventList()
