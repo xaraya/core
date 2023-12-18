@@ -37,6 +37,10 @@ sys::init();
 // initialize users
 //xarUser::init();
 
+/**
+ * Summary of try_builder
+ * @return void
+ */
 function try_builder()
 {
     DataObjectRESTBuilder::init();
@@ -46,30 +50,47 @@ function try_builder()
     echo json_encode($objects, JSON_PRETTY_PRINT);
 }
 
-function send_openapi()
+/**
+ * Summary of send_openapi
+ * @param mixed $restHandler
+ * @return void
+ */
+function send_openapi($restHandler)
 {
-    $result = DataObjectRESTHandler::getOpenAPI();
-    DataObjectRESTHandler::output($result);
+    // @todo move away from static methods for context
+    $result = $restHandler::getOpenAPI();
+    $restHandler::output($result);
 }
 
-function get_dispatcher()
+/**
+ * Summary of get_dispatcher
+ * @param mixed $restHandler
+ * @return FastRoute\Dispatcher
+ */
+function get_dispatcher($restHandler)
 {
-    $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
-        $r->addGroup('/v1', function (FastRoute\RouteCollector $r) {
-            DataObjectRESTHandler::registerRoutes($r);
+    // @todo move away from static methods for context
+    $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) use ($restHandler) {
+        $r->addGroup('/v1', function (FastRoute\RouteCollector $r) use ($restHandler) {
+            $restHandler::registerRoutes($r, $restHandler);
         });
     });
     return $dispatcher;
 }
 
-function dispatch_request($method, $path)
+/**
+ * Summary of dispatch_request
+ * @param string $method
+ * @param string $path
+ * @param FastRoute\Dispatcher $dispatcher
+ * @param mixed $restHandler
+ * @return void
+ */
+function dispatch_request($method, $path, $dispatcher, $restHandler)
 {
-    // DataObjectRESTHandler::$enableTimer = true;
-    // DataObjectRESTHandler::setTimer('start');
-    $dispatcher = get_dispatcher();
-    // DataObjectRESTHandler::setTimer('register');
+    // $restHandler::setTimer('register');
     $routeInfo = $dispatcher->dispatch($method, $path);
-    // DataObjectRESTHandler::setTimer('dispatch');
+    // $restHandler::setTimer('dispatch');
     switch ($routeInfo[0]) {
         case FastRoute\Dispatcher::NOT_FOUND:
             // ... 404 Not Found
@@ -86,32 +107,42 @@ function dispatch_request($method, $path)
             $vars = $routeInfo[2];
             // ... call $handler with $vars
             try {
-                $result = DataObjectRESTHandler::callHandler($handler, $vars);
-                DataObjectRESTHandler::output($result);
+                [$result, $context] = $restHandler::callHandler($handler, $vars);
+                $restHandler::output($result, 200, $context);
             } catch (UnauthorizedOperationException $e) {
-                DataObjectRESTHandler::output('This operation is unauthorized, please authenticate.', 401);
+                $restHandler::output('This operation is unauthorized, please authenticate.', 401);
             } catch (ForbiddenOperationException $e) {
-                DataObjectRESTHandler::output('This operation is forbidden.', 403);
+                $restHandler::output('This operation is forbidden.', 403);
             } catch (Throwable $e) {
                 $result = "Exception: " . $e->getMessage();
                 if ($e->getPrevious() !== null) {
                     $result .= "\nPrevious: " . $e->getPrevious()->getMessage();
                 }
                 $result .= "\nTrace:\n" . $e->getTraceAsString();
-                DataObjectRESTHandler::output($result, 422);
+                $restHandler::output($result, 422);
             }
             break;
     }
 }
 
-function try_handler()
+/**
+ * Summary of try_handler
+ * @param mixed $restHandler
+ * @return void
+ */
+function try_handler($restHandler)
 {
     if (empty($_SERVER['PATH_INFO'])) {
-        send_openapi();
+        send_openapi($restHandler);
     } else {
-        dispatch_request($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO']);
+        // $restHandler::$enableTimer = true;
+        // $restHandler::setTimer('start');
+        $dispatcher = get_dispatcher($restHandler);
+        dispatch_request($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'], $dispatcher, $restHandler);
     }
 }
 
 //try_builder();
-try_handler();
+// @todo move away from static methods for context
+$restHandler = DataObjectRESTHandler::class;
+try_handler($restHandler);

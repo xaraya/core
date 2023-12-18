@@ -632,9 +632,10 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
     /**
      * Utility function to send the data to the browser or app
      * @param mixed $data
+     * @param mixed $context
      * @return void
      */
-    public static function output($data)
+    public static function output($data, $context = null)
     {
         if (is_string($data)) {
             //header('Access-Control-Allow-Origin: *');
@@ -788,7 +789,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         if (!empty($variables) && is_string($variables)) {
             $variables = json_decode($variables, true);
         }
-        $context = new Context();
+        $context = new Context(['source' => __METHOD__]);
         $context['server'] = static::getServerParams($request);
         $context['cookie'] = static::getCookieParams($request);
         if (!empty($request)) {
@@ -797,13 +798,15 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         } else {
             $context['request'] = null;
         }
+        $context['mediatype'] = '';
         $result = self::get_data($query, $variables, $operationName, [], null, $context);
         if ($query == '{schema}') {
+            $context['mediatype'] = 'text/plain';
             if (!empty($request)) {
                 $request = $request->withAttribute('mediaType', 'text/plain');
             }
         }
-        return $result;
+        return [$result, $context];
     }
 
     /**

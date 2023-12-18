@@ -13,6 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Xaraya\Structures\Context;
 use Exception;
 use sys;
 
@@ -60,11 +61,20 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         }
 
         // handle the object request here and return our response
-
+        $context = new Context(['source' => __METHOD__]);
+        if (!empty($request)) {
+            $context['request'] = &$request;
+            $context['requestId'] = $request->getAttribute('requestId');
+        } else {
+            $context['request'] = null;
+        }
+        $context['mediatype'] = '';
         // @checkme keep track of the current base uri if filtered in router
         static::setBaseUri($request);
+        $context['baseuri'] = static::$baseUri;
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName() in DD list
         static::prepareController('object', static::$baseUri);
+        $context['module'] = 'object';
 
         // add remaining query params to request attributes
         $params = array_merge($attribs, $request->getQueryParams());
@@ -80,7 +90,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         $params['linktype'] = 'other';
         $params['linkfunc'] = [static::class, 'buildUri'];
 
-        $response = $this->run($params);
+        $response = $this->run($params, $context);
 
         // clean up routes for object requests in response output
         //$response = static::cleanResponse($response, $this->getResponseFactory());
@@ -91,17 +101,21 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
     /**
      * Summary of run
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @return ResponseInterface
      */
-    public function run($params)
+    public function run($params, $context = null)
     {
         try {
-            $result = static::runDataObjectGuiRequest($params);
+            $result = static::runDataObjectGuiRequest($params, $context);
         } catch (Exception $e) {
             return $this->createExceptionResponse($e);
         }
         if ($this->wrapPage) {
             $result = static::wrapOutputInPage($result);
+        }
+        if (!empty($context) && !empty($context['mediatype'])) {
+            return $this->createResponse($result, $context['mediatype']);
         }
         return $this->createResponse($result);
     }
@@ -114,12 +128,13 @@ class DataObjectApiMiddleware extends DataObjectMiddleware
     /**
      * Summary of run
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @return ResponseInterface
      */
-    public function run($params)
+    public function run($params, $context = null)
     {
         try {
-            $result = static::runDataObjectApiRequest($params);
+            $result = static::runDataObjectApiRequest($params, $context);
         } catch (Exception $e) {
             return $this->createExceptionResponse($e);
         }

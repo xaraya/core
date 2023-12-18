@@ -99,7 +99,7 @@ function test_create_items()
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
     echo get_class($something->datastore) . "\n";
-    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
+    $context = new Context(['source' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
     $something->setContext($context);
 
     if ($something->datastore instanceof MongoDBDataStore) {
@@ -122,7 +122,7 @@ function test_update_item($lastid = 2)
 {
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
-    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
+    $context = new Context(['source' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
     $something->setContext($context);
 
     $itemid = $something->getItem(['itemid' => $lastid]);
@@ -135,7 +135,7 @@ function test_get_items()
 {
     $descriptor = get_descriptor();
     $something = new DataObjectList($descriptor);
-    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
+    $context = new Context(['source' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
     $something->setContext($context);
 
     if ($something->datastore instanceof CachingDataStore) {
@@ -151,7 +151,7 @@ function test_delete_item($lastid = 2)
 {
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
-    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
+    $context = new Context(['source' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
     $something->setContext($context);
 
     // @checkme avoid last stand protection in deleteItem()

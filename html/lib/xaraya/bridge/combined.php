@@ -160,19 +160,20 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, 
                 //return $next->handle($request);
                 // ... call $handler with $vars
                 $numeric = true;
+                $context = null;
                 try {
                     // @checkme we need to somehow update $request here to do any good!?
                     $this->prepareRequestCallback($request);
                     // don't use call_user_func here anymore because $request is passed by reference
                     if (strpos($path, '/restapi/') === 0) {
                         // different processing for REST API - see rst.php
-                        $result = DataObjectRESTHandler::callHandler($handler, $vars, $request);
+                        [$result, $context] = DataObjectRESTHandler::callHandler($handler, $vars, $request);
                     } elseif (strpos($path, '/graphql') === 0) {
                         // different processing for GraphQL API - see gql.php
-                        $result = $handler($vars, $request);
+                        [$result, $context] = $handler($vars, $request);
                         $numeric = false;
                     } else {
-                        $result = $handler($vars, $request);
+                        [$result, $context] = $handler($vars, $request);
                     }
                     $redirectURL = $request->getAttribute('redirectURL');
                     if (!empty($redirectURL)) {
@@ -192,6 +193,9 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, 
                     return $this->createForbiddenResponse();
                 } catch (Throwable $e) {
                     return $this->createExceptionResponse($e);
+                }
+                if (!empty($context) && !empty($context['mediatype'])) {
+                    return $this->createResponse($result, $context['mediatype']);
                 }
                 if (is_string($result)) {
                     $mediaType = $request->getAttribute('mediaType', 'text/html');

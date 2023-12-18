@@ -143,8 +143,8 @@ use Xaraya\Bridge\Routing\FastRouteBridge;
 // $routeInfo = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
 
 // or let the route dispatcher handle the request itself and return the result
-$result = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/', '/mysite');
-FastRouteBridge::output($result);
+[$result, $context] = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/', '/mysite');
+FastRouteBridge::output($result, $context);
 
 // or let it really do all the work here...
 // FastRouteBridge::run('/mysite');

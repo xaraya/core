@@ -72,5 +72,5 @@ $data = xarGraphQL::get_data($query, $variables, $operationName);
 //$data = xarGraphQL::get_data($query, $variables, $operationName, $extraTypes, $schemaFile);
  */
 
-$data = xarGraphQL::handleRequest();
-xarGraphQL::output($data);
+[$data, $context] = xarGraphQL::handleRequest();
+xarGraphQL::output($data, $context);

@@ -43,14 +43,14 @@ if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
  */
 
 // or direct use of simple route dispatcher
-//$result = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
+//[$result, $context] = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
 //echo $result;
 //echo xarTpl::renderPage($result);
 //FastRouteBridge::run();
 
 // or direct use of simple route dispatcher
-$result = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['PATH_INFO'] ?? '/');
-FastRouteBridge::output($result);
+[$result, $context] = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['PATH_INFO'] ?? '/');
+FastRouteBridge::output($result, $context);
 
 /**
 $dispatcher = FastRouteBridge::getSimpleDispatcher();

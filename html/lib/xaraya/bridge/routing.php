@@ -30,8 +30,8 @@
  * // $routeInfo = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
  *
  * // or let the route dispatcher handle the request itself and return the result
- * $result = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/', '/mysite');
- * FastRouteBridge::output($result);
+ * [$result, $context] = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/', '/mysite');
+ * FastRouteBridge::output($result, $context);
  *
  * // or let it really do all the work here...
  * // FastRouteBridge::run('/mysite');
@@ -46,6 +46,7 @@ use FastRoute\RouteCollector;
 use Xaraya\Structures\Context;
 use xarServer;
 use sys;
+use Exception;
 use JsonException;
 
 sys::import('xaraya.bridge.requests.commontrait');
@@ -104,11 +105,6 @@ class FastRouteBridge implements CommonBridgeInterface
      * @var string
      */
     public static string $baseUri = '';
-    /**
-     * Summary of mediaType
-     * @var string
-     */
-    public static string $mediaType = '';
 
     /**
      * Summary of addRouteCollection
@@ -117,6 +113,8 @@ class FastRouteBridge implements CommonBridgeInterface
      */
     public static function addRouteCollection(RouteCollector $r)
     {
+        // @todo move away from static methods for context
+        $restHandler = DataObjectRESTHandler::class;
         $r->addGroup('/object', function (RouteCollector $r) {
             $r->addRoute(['GET', 'POST'], '/{object}', [static::class, 'handleObjectRequest']);
             $r->addRoute(['GET', 'POST'], '/{object}/{itemid:\d+}[/{method}]', [static::class, 'handleObjectRequest']);
@@ -126,8 +124,8 @@ class FastRouteBridge implements CommonBridgeInterface
         $r->addGroup('/block', function (RouteCollector $r) {
             $r->addRoute('GET', '/{instance}', [static::class, 'handleBlockRequest']);
         });
-        $r->addGroup('/restapi', function (RouteCollector $r) {
-            DataObjectRESTHandler::registerRoutes($r);
+        $r->addGroup('/restapi', function (RouteCollector $r) use ($restHandler) {
+            DataObjectRESTHandler::registerRoutes($r, $restHandler);
             $r->addRoute('GET', '/', [DataObjectRESTHandler::class, 'getOpenAPI']);
         });
         $r->addRoute(['GET', 'POST'], '/graphql', [xarGraphQL::class, 'handleRequest']);
@@ -170,7 +168,7 @@ class FastRouteBridge implements CommonBridgeInterface
      * @param string $method
      * @param string $path
      * @param string $group
-     * @return mixed
+     * @return array<mixed>
      */
     public static function dispatchRequest(string $method, string $path, string $group = '')
     {
@@ -181,36 +179,38 @@ class FastRouteBridge implements CommonBridgeInterface
                 // ... 404 Not Found
                 http_response_code(404);
                 if (!empty($group)) {
-                    return 'Nothing to see here at ' . htmlspecialchars($path) . ' with prefix ' . htmlspecialchars($group);
+                    $result = 'Nothing to see here at ' . htmlspecialchars($path) . ' with prefix ' . htmlspecialchars($group);
+                    return [$result, null];
                 }
-                return 'Nothing to see here at ' . htmlspecialchars($path);
+                $result = 'Nothing to see here at ' . htmlspecialchars($path);
+                return [$result, null];
 
             case Dispatcher::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
                 header('Allow: ' . implode(', ', $allowedMethods));
                 http_response_code(405);
-                return 'Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path);
+                $result = 'Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path);
+                return [$result, null];
 
             case Dispatcher::FOUND:
                 $handler = $routeInfo[1];
                 $vars = $routeInfo[2];
+                $context = null;
                 // ... call $handler with $vars
                 if (strpos($path, $group . '/restapi/') === 0) {
                     // different processing for REST API - see rst.php
                     DataObjectRESTHandler::$endpoint = static::getBaseUri() . $group . '/restapi';
-                    $result = static::callRestApiHandler($handler, $vars);
+                    [$result, $context] = static::callRestApiHandler($handler, $vars);
                 } elseif (strpos($path, $group . '/graphql') === 0) {
                     // different processing for GraphQL API - see gql.php
-                    $result = static::callHandler($handler, $vars);
-                    if (is_string($result)) {
-                        static::$mediaType = 'text/plain';
-                    }
+                    [$result, $context] = static::callHandler($handler, $vars);
                 } else {
-                    $result = static::callHandler($handler, $vars);
+                    [$result, $context] = static::callHandler($handler, $vars);
                 }
-                return $result;
+                return [$result, $context];
         }
+        throw new Exception('Invalid routeInfo[0] after dispatch');
     }
 
     /**
@@ -222,31 +222,32 @@ class FastRouteBridge implements CommonBridgeInterface
     {
         $method = static::getMethod();
         $path = static::getPathInfo();
-        $result = static::dispatchRequest($method, $path, $group);
+        [$result, $context] = static::dispatchRequest($method, $path, $group);
         if (strpos($path, $group . '/restapi/') === 0) {
             // different processing for REST API - see rst.php
-            DataObjectRESTHandler::output($result);
+            DataObjectRESTHandler::output($result, 200, $context);
         } elseif (strpos($path, $group . '/graphql') === 0) {
             // different processing for GraphQL API - see gql.php
-            xarGraphQL::output($result);
+            xarGraphQL::output($result, $context);
         } else {
-            static::output($result);
+            static::output($result, $context);
         }
     }
 
     /**
      * Summary of output
      * @param mixed $result
+     * @param mixed $context
      * @return void
      */
-    public static function output($result)
+    public static function output($result, $context = null)
     {
         if (http_response_code() !== 200 && php_sapi_name() !== 'cli') {
             return;
         }
         if (is_string($result)) {
-            if (!empty(self::$mediaType)) {
-                header('Content-Type: ' . self::$mediaType . '; charset=utf-8');
+            if (!empty($context) && !empty($context['mediatype'])) {
+                header('Content-Type: ' . $context['mediatype'] . '; charset=utf-8');
             } elseif (substr($result, 0, 5) === '<?xml') {
                 header('Content-Type: application/xml; charset=utf-8');
             } else {
@@ -299,21 +300,21 @@ class FastRouteBridge implements CommonBridgeInterface
         if (empty($vars)) {
             $vars = [];
         }
-        $result = DataObjectRESTHandler::callHandler($handler, $vars, $request);
+        [$result, $context] = DataObjectRESTHandler::callHandler($handler, $vars, $request);
         if ($handler[1] === 'getOpenAPI') {
             header('Access-Control-Allow-Origin: *');
             // @checkme set server url to current path here
             //$result['servers'][0]['url'] = DataObjectRESTHandler::getBaseURL();
             $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
         }
-        return $result;
+        return [$result, $context];
     }
 
     /**
      * Summary of handleObjectRequest
      * @param array<string, mixed> $vars
      * @param mixed $request
-     * @return string|null
+     * @return array<mixed>
      */
     public static function handleObjectRequest($vars, &$request = null)
     {
@@ -353,15 +354,22 @@ class FastRouteBridge implements CommonBridgeInterface
             $params['fieldlist'] = ['id', 'name', 'uname', 'state'];
         }
 
-        $context = new Context();
+        $context = new Context(['source' => __METHOD__]);
         if (!empty($request)) {
+            $context['request'] = &$request;
             $context['requestId'] = $request->getAttribute('requestId');
+        } else {
+            $context['request'] = null;
         }
+        $context['mediatype'] = '';
         static::$baseUri = static::getBaseUri($request);
+        $context['baseuri'] = static::$baseUri;
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController('object', static::$baseUri . '/object');
+        $context['module'] = 'object';
 
-        return static::runObjectRequest($params, $context);
+        $result = static::runObjectRequest($params, $context);
+        return [$result, $context];
     }
 
     /**
@@ -379,7 +387,7 @@ class FastRouteBridge implements CommonBridgeInterface
      * Summary of handleModuleRequest
      * @param array<string, mixed> $vars
      * @param mixed $request
-     * @return string|null
+     * @return array<mixed>
      */
     public static function handleModuleRequest($vars, &$request = null)
     {
@@ -407,15 +415,22 @@ class FastRouteBridge implements CommonBridgeInterface
             $params = array_merge($params, $input);
         }
 
-        $context = new Context();
+        $context = new Context(['source' => __METHOD__]);
         if (!empty($request)) {
+            $context['request'] = &$request;
             $context['requestId'] = $request->getAttribute('requestId');
+        } else {
+            $context['request'] = null;
         }
+        $context['mediatype'] = '';
         static::$baseUri = static::getBaseUri($request);
+        $context['baseuri'] = static::$baseUri;
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'], static::$baseUri);
+        $context['module'] = $vars['module'];
 
-        return static::runModuleRequest($vars, $params, $context);
+        $result = static::runModuleRequest($vars, $params, $context);
+        return [$result, $context];
     }
 
     /**
@@ -434,7 +449,7 @@ class FastRouteBridge implements CommonBridgeInterface
      * Summary of handleBlockRequest
      * @param array<string, mixed> $vars
      * @param mixed $request
-     * @return string
+     * @return array<mixed>
      */
     public static function handleBlockRequest($vars, &$request = null)
     {
@@ -442,15 +457,22 @@ class FastRouteBridge implements CommonBridgeInterface
         // dispatcher doesn't provide query params by default
         $query = static::getQueryParams($request);
 
-        $context = new Context();
+        $context = new Context(['source' => __METHOD__]);
         if (!empty($request)) {
+            $context['request'] = &$request;
             $context['requestId'] = $request->getAttribute('requestId');
+        } else {
+            $context['request'] = null;
         }
+        $context['mediatype'] = '';
         static::$baseUri = static::getBaseUri($request);
+        $context['baseuri'] = static::$baseUri;
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($vars['module'] ?? 'base', static::$baseUri);
+        $context['module'] = $vars['module'] ?? 'base';
 
-        return static::runBlockRequest($vars, $query, $context);
+        $result = static::runBlockRequest($vars, $query, $context);
+        return [$result, $context];
     }
 
     /**
@@ -469,7 +491,7 @@ class FastRouteBridge implements CommonBridgeInterface
      * Show available routes
      * @param array<string, mixed> $vars
      * @param mixed $request
-     * @return string
+     * @return array<mixed>
      */
     public static function handleRoutesRequest($vars, &$request = null)
     {
@@ -491,7 +513,7 @@ class FastRouteBridge implements CommonBridgeInterface
             }
         }
         $result .= "</ul>";
-        return $result;
+        return [$result, null];
     }
 }
 
@@ -631,7 +653,7 @@ class FastRouteStaticBridge extends FastRouteBridge
      * Summary of handleThemeFileRequest
      * @param array<string, mixed> $vars
      * @param mixed $request
-     * @return string
+     * @return array<mixed>
      */
     public static function handleThemeFileRequest($vars, &$request = null)
     {
@@ -643,14 +665,14 @@ class FastRouteStaticBridge extends FastRouteBridge
         //    $request = $request->withAttribute('mediaType', '...');
         //}
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
-        return var_export($vars, true);
+        return [var_export($vars, true), null];
     }
 
     /**
      * Summary of handleModuleFileRequest
      * @param array<string, mixed> $vars
      * @param mixed $request
-     * @return string
+     * @return array<mixed>
      */
     public static function handleModuleFileRequest($vars, &$request = null)
     {
@@ -662,14 +684,14 @@ class FastRouteStaticBridge extends FastRouteBridge
         //    $request = $request->withAttribute('mediaType', '...');
         //}
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
-        return var_export($vars, true);
+        return [var_export($vars, true), null];
     }
 
     /**
      * Summary of handleVarFileRequest
      * @param array<string, mixed> $vars
      * @param mixed $request
-     * @return string
+     * @return array<mixed>
      */
     public static function handleVarFileRequest($vars, &$request = null)
     {
@@ -681,7 +703,7 @@ class FastRouteStaticBridge extends FastRouteBridge
         //    $request = $request->withAttribute('mediaType', '...');
         //}
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
-        return var_export($vars, true);
+        return [var_export($vars, true), null];
     }
 }
 

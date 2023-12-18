@@ -41,15 +41,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     public static $config = [];
     /** @var array<string, mixed> */
     public static $modules = [];
-    public static string $mediaType;
 
     /**
      * Summary of getOpenAPI
      * @param array<string, mixed> $vars
-     * @param mixed $request
+     * @param mixed $context
      * @return mixed
      */
-    public static function getOpenAPI($vars = [], &$request = null)
+    public static function getOpenAPI($vars = [], $context = null)
     {
         $openapi = sys::varpath() . '/cache/api/openapi.json';
         if (!file_exists($openapi)) {
@@ -908,6 +907,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (empty($func)) {
             return ['method' => 'getModuleCall', 'args' => $args, 'error' => 'Unknown module api'];
         }
+        xarMod::init();
+        xarUser::init();
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = self::checkUser($context);
@@ -931,13 +932,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         // @checkme how to save this in case of caching?
         if (!empty($func['mediatype'])) {
-            self::$mediaType = $func['mediatype'];
+            $context['mediatype'] = $func['mediatype'];
             if (!empty($context['request'])) {
                 $context['request'] = ($context['request'])->withAttribute('mediaType', $func['mediatype']);
             }
         }
-        xarMod::init();
-        xarUser::init();
         // @checkme pass all query args from handler here?
         $params = $args['query'] ?? [];
         if (!empty($func['args'])) {
@@ -976,6 +975,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (empty($args['input'])) {
             $args['input'] = [];
         }
+        xarMod::init();
+        xarUser::init();
         if (!empty($func['security'])) {
             // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
             $userId = self::checkUser($context);
@@ -995,13 +996,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             //$_SESSION[xarSession::PREFIX . 'role_id'] = $userId;
         }
         if (!empty($func['mediatype'])) {
-            self::$mediaType = $func['mediatype'];
-            if (!empty($args['request'])) {
-                $args['request'] = ($args['request'])->withAttribute('mediaType', $func['mediatype']);
+            $context['mediatype'] = $func['mediatype'];
+            if (!empty($context['request'])) {
+                $context['request'] = ($context['request'])->withAttribute('mediaType', $func['mediatype']);
             }
         }
-        xarMod::init();
-        xarUser::init();
         // @checkme handle POSTed args by passing $args['input'] only in handler?
         $params = $args['input'] ?? [];
         if (!empty($more) && !empty($func['args'])) {
@@ -1156,27 +1155,30 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Register REST API routes (in FastRoute format)
      * @param FastRoute\RouteCollector $r
+     * @param mixed $restHandler
      * @return void
      */
-    public static function registerRoutes($r)
+    public static function registerRoutes($r, $restHandler = null)
     {
-        $r->get('/objects', [static::class, 'getObjects']);
-        $r->get('/objects/{object}', [static::class, 'getObjectList']);
-        $r->get('/objects/{object}/{itemid}', [static::class, 'getObjectItem']);
-        $r->post('/objects/{object}', [static::class, 'createObjectItem']);
-        $r->put('/objects/{object}/{itemid}', [static::class, 'updateObjectItem']);
-        $r->delete('/objects/{object}/{itemid}', [static::class, 'deleteObjectItem']);
-        //$r->patch('/objects/{object}', [static::class, 'patchObjectDefinition']);
-        $r->get('/whoami', [static::class, 'whoami']);
-        $r->post('/token', [static::class, 'postToken']);
-        $r->delete('/token', [static::class, 'deleteToken']);
-        $r->get('/modules', [static::class, 'getModules']);
-        $r->get('/modules/{module}', [static::class, 'getModuleApis']);
+        // @todo move away from static methods for context
+        $restHandler ??= static::class;
+        $r->get('/objects', [$restHandler, 'getObjects']);
+        $r->get('/objects/{object}', [$restHandler, 'getObjectList']);
+        $r->get('/objects/{object}/{itemid}', [$restHandler, 'getObjectItem']);
+        $r->post('/objects/{object}', [$restHandler, 'createObjectItem']);
+        $r->put('/objects/{object}/{itemid}', [$restHandler, 'updateObjectItem']);
+        $r->delete('/objects/{object}/{itemid}', [$restHandler, 'deleteObjectItem']);
+        //$r->patch('/objects/{object}', [$restHandler, 'patchObjectDefinition']);
+        $r->get('/whoami', [$restHandler, 'whoami']);
+        $r->post('/token', [$restHandler, 'postToken']);
+        $r->delete('/token', [$restHandler, 'deleteToken']);
+        $r->get('/modules', [$restHandler, 'getModules']);
+        $r->get('/modules/{module}', [$restHandler, 'getModuleApis']);
         // @checkme support optional part(s) after path, either with {path}[/{more}] or with {path:.+}
-        $r->get('/modules/{module}/{path}[/{more:.+}]', [static::class, 'getModuleCall']);
-        $r->post('/modules/{module}/{path}[/{more:.+}]', [static::class, 'postModuleCall']);
-        $r->put('/modules/{module}/{path}[/{more:.+}]', [static::class, 'putModuleCall']);
-        $r->delete('/modules/{module}/{path}[/{more:.+}]', [static::class, 'deleteModuleCall']);
+        $r->get('/modules/{module}/{path}[/{more:.+}]', [$restHandler, 'getModuleCall']);
+        $r->post('/modules/{module}/{path}[/{more:.+}]', [$restHandler, 'postModuleCall']);
+        $r->put('/modules/{module}/{path}[/{more:.+}]', [$restHandler, 'putModuleCall']);
+        $r->delete('/modules/{module}/{path}[/{more:.+}]', [$restHandler, 'deleteModuleCall']);
     }
 
     /**
@@ -1212,10 +1214,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         try {
             $params['input'] = static::getJsonBody($request);
         } catch (JsonException $e) {
-            return ["JSON Input Exception" => $e->getMessage()];
+            $result = ["JSON Input Exception" => $e->getMessage()];
+            return [$result, null];
         }
         // self::setTimer('parse');
-        $result = self::getResult($handler, $params, $request);
+        [$result, $context] = self::getResult($handler, $params, $request);
         /**
         if ($handler[1] === 'getOpenAPI') {
             header('Access-Control-Allow-Origin: *');
@@ -1224,7 +1227,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             $result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . self::$endpoint;
         }
          */
-        return $result;
+        return [$result, $context];
     }
 
     /**
@@ -1272,7 +1275,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         xarCache::init();
         self::loadConfig();
         $tryCachedResult = false;
-        if (is_array($handler) && $handler[0] === "DataObjectRESTHandler" && substr($handler[1], 0, 3) === "get") {
+        if (is_array($handler) && is_string($handler[0]) && $handler[0] === "DataObjectRESTHandler" && substr($handler[1], 0, 3) === "get") {
             $tryCachedResult = true;
         }
         if ($tryCachedResult && self::$enableCache) {
@@ -1307,10 +1310,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         // initialize users
         //xarUser::init();
         self::setTimer('handle');
-        // don't use call_user_func here anymore because $request is passed by reference
-        self::$mediaType = '';
         // define context of the request - see GraphQL
-        $context = new Context();
+        $context = new Context(['source' => __METHOD__]);
         $context['server'] = static::getServerParams($request);
         $context['cookie'] = static::getCookieParams($request);
         if (!empty($request)) {
@@ -1318,6 +1319,15 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             $context['requestId'] = $request->getAttribute('requestId');
         } else {
             $context['request'] = null;
+        }
+        $context['mediatype'] = '';
+        // @todo do we need to clone here and set the context in the call handler instance?
+        if (is_object($handler[0])) {
+            $routeInstance = $handler[0];
+            $routeMethod = $handler[1];
+            $callInstance = clone $routeInstance;
+            $callInstance->setContext($context);
+            $handler = [$callInstance, $routeMethod];
         }
         try {
             $result = call_user_func($handler, $params, $context);
@@ -1344,16 +1354,17 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             self::setCached($cacheKey, $result);
         }
         self::setTimer('result');
-        return $result;
+        return [$result, $context];
     }
 
     /**
      * Send Content-Type and JSON result to the browser
      * @param mixed $result
      * @param mixed $status
+     * @param mixed $context
      * @return void
      */
-    public static function output($result, $status = 200)
+    public static function output($result, $status = 200, $context = null)
     {
         if (!isset($result) && php_sapi_name() !== 'cli') {
             return;
@@ -1368,8 +1379,8 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             header('Access-Control-Allow-Origin: *');
         }
         if (is_string($result)) {
-            if (!empty(self::$mediaType)) {
-                header('Content-Type: ' . self::$mediaType . '; charset=utf-8');
+            if (!empty($context) && !empty($context['mediatype'])) {
+                header('Content-Type: ' . $context['mediatype'] . '; charset=utf-8');
             } elseif (substr($result, 0, 5) === '<?xml') {
                 header('Content-Type: application/xml; charset=utf-8');
             } else {
@@ -1390,10 +1401,10 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     /**
      * Send CORS options to the browser in preflight checks
      * @param mixed $vars
-     * @param mixed $request
+     * @param mixed $context
      * @return void
      */
-    public static function sendCORSOptions($vars = [], &$request = null)
+    public static function sendCORSOptions($vars = [], $context = null)
     {
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
         http_response_code(204);

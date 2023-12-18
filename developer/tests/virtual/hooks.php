@@ -31,13 +31,13 @@ function test_crud()
     //$args = [];
     $args = ['name' => 'Mike', 'age' => 20];
     $sample = new Sample($itemid, $args);
-    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
+    $context = new Context(['source' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
     $sample->setContext($context);
     $itemid = $sample->save();
     echo "Create $itemid\n";
 
     $sample = new Sample($itemid);
-    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
+    $context = new Context(['source' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
     $sample->setContext($context);
     $values = $sample->toArray();
     echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
@@ -46,14 +46,14 @@ function test_crud()
     echo "Update $itemid\n";
 
     $sample = new Sample($itemid);
-    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
+    $context = new Context(['source' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
     $sample->setContext($context);
     $values = $sample->toArray();
     echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
     $sample->delete();
     echo "Delete $itemid\n";
     $sample = new Sample($itemid);
-    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
+    $context = new Context(['source' => __FUNCTION__, 'requestId' => spl_object_id($sample)]);
     $sample->setContext($context);
     $values = $sample->toArray();
     echo "Read " . $values['id'] . ": " . $values['name'] . " " . $values['age'] . "\n";
@@ -94,7 +94,7 @@ function test_crud_virtual()
 {
     $descriptor = get_descriptor();
     $something = new DataObject($descriptor);
-    $context = new Context(['function' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
+    $context = new Context(['source' => __FUNCTION__, 'requestId' => spl_object_id($something)]);
     $something->setContext($context);
 
     $itemid = $something->createItem(['id' => 2, 'key' => 'no', 'val' => 'Not OK']);

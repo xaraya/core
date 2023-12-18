@@ -13,6 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Xaraya\Structures\Context;
 use Exception;
 use sys;
 
@@ -59,11 +60,20 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         }
 
         // handle the module request here and return our response
-
+        $context = new Context(['source' => __METHOD__]);
+        if (!empty($request)) {
+            $context['request'] = &$request;
+            $context['requestId'] = $request->getAttribute('requestId');
+        } else {
+            $context['request'] = null;
+        }
+        $context['mediatype'] = '';
         // @checkme keep track of the current base uri if filtered in router
         static::setBaseUri($request);
+        $context['baseuri'] = static::$baseUri;
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($attribs['module'], static::$baseUri);
+        $context['module'] = $attribs['module'];
 
         // filter out request attributes from remaining query params here
         $params = array_diff_key($request->getQueryParams(), $attribs);
@@ -75,7 +85,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
             }
         }
 
-        $response = $this->run($attribs, $params);
+        $response = $this->run($attribs, $params, $context);
 
         // clean up routes for module requests in response output
         //$response = static::cleanResponse($response, $this->getResponseFactory());
@@ -87,17 +97,21 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
      * Summary of run
      * @param array<string, mixed> $attribs
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @return ResponseInterface
      */
-    public function run($attribs, $params)
+    public function run($attribs, $params, $context = null)
     {
         try {
-            $result = static::runModuleGuiRequest($attribs, $params);
+            $result = static::runModuleGuiRequest($attribs, $params, $context);
         } catch (Exception $e) {
             return $this->createExceptionResponse($e);
         }
         if ($this->wrapPage) {
             $result = static::wrapOutputInPage($result);
+        }
+        if (!empty($context) && !empty($context['mediatype'])) {
+            return $this->createResponse($result, $context['mediatype']);
         }
         return $this->createResponse($result);
     }
@@ -111,12 +125,13 @@ class ModuleApiMiddleware extends ModuleMiddleware
      * Summary of run
      * @param array<string, mixed> $attribs
      * @param array<string, mixed> $params
+     * @param ?Context<string, mixed> $context
      * @return ResponseInterface
      */
-    public function run($attribs, $params)
+    public function run($attribs, $params, $context = null)
     {
         try {
-            $result = static::runModuleApiRequest($attribs, $params);
+            $result = static::runModuleApiRequest($attribs, $params, $context);
         } catch (Exception $e) {
             return $this->createExceptionResponse($e);
         }

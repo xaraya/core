@@ -193,7 +193,7 @@ trait DefaultResponseTrait
 
     public static function wrapOutputInPage(string $body): string
     {
-        // Render page with the output - see index.php
+        // Render page with the output - see index.php - @todo use context?
         return \xarTpl::renderPage($body);
     }
 
