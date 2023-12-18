@@ -3,7 +3,7 @@
     "description": "Xaraya Core web development framework",
     "type": "project",
     "require-dev": {
-        "middlewares/utils": "^3.3",
+        "middlewares/utils": "^4.0",
         "nikic/fast-route": "dev-master",
         "nyholm/psr7": "^1.8",
         "nyholm/psr7-server": "^1.1",
