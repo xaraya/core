@@ -79,10 +79,11 @@ class xarBlock extends xarObject implements ixarBlock
  * @author Chris Powis 
  * 
  * @param array<string, mixed> $blockinfo block information parameters
+ * @param ?Context<string, mixed> $context optional context for the block call (default = none)
  * @return string output the block to show
  * @todo   this function calls a module function, keep an eye on it.
  */
-    public static function render(Array $blockinfo=array())
+    public static function render(array $blockinfo = [], $context = null)
     {
         // Get a cache key for this block if it's suitable for block caching
         $cacheKey = xarCache::getBlockKey($blockinfo);
@@ -96,6 +97,8 @@ class xarBlock extends xarObject implements ixarBlock
         try {
             // get the block instance
             $block = self::getObject($blockinfo, 'display');
+            // set context if available in block render
+            $block->setContext($context);
 
             // check if block expired already
             $now = time();
@@ -411,8 +414,8 @@ class xarBlock extends xarObject implements ixarBlock
         $args['type_state'] = array(xarBlock::TYPE_STATE_ACTIVE); // valid block type states
         // get block info
         try {
-            $blockinfo = xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args);
-            return self::render($blockinfo);
+            $blockinfo = xarMod::apiFunc('blocks', 'blocks', 'getinfo', $args, $context);
+            return self::render($blockinfo, $context);
         } catch (Exception $e) {
             if ((bool) xarModVars::get('blocks', 'noexceptions') || 
                 !in_array(xarUser::getVar('id'),xarConfigVars::get(null,'Site.User.DebugAdmins'))) {
@@ -435,14 +438,15 @@ class xarBlock extends xarObject implements ixarBlock
  * 
  * @todo support context in templates? See xar:blockgroup tag
  * @param string $groupname the name of the block group
- * @param string $template optional template to apply to all blocks in the group
+ * @param ?string $template optional template to apply to all blocks in the group
+ * @param ?Context<string, mixed> $context optional context for the block call (default = none)
  * @return string
  * @throws EmptyParameterException
  */
-    public static function renderGroup($groupname, $template=null)
+    public static function renderGroup($groupname, $template = null, $context = null)
     {
         if (empty($groupname)) throw new EmptyParameterException('groupname');
-        return self::renderBlock(array('instance' => $groupname, 'box_template' => $template));
+        return self::renderBlock(array('instance' => $groupname, 'box_template' => $template), $context);
     }
 
     /**

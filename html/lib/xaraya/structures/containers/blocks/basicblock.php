@@ -17,7 +17,11 @@
  *
 **/
 sys::import('xaraya.structures.containers.blocks.blocktype');
-interface iBlock extends iBlockType
+sys::import('xaraya.traits.contexttrait');
+use Xaraya\Core\Traits\ContextInterface;
+use Xaraya\Core\Traits\ContextTrait;
+
+interface iBlock extends iBlockType, ContextInterface
 {
     public function getInfo();
     public function getInit();
@@ -48,6 +52,8 @@ interface iBlockDelete extends iBlock
 }
 abstract class BasicBlock extends BlockType implements iBlock
 {
+    use ContextTrait;
+
     // File Information, supplied by developer, never changes during a versions lifetime, required
     protected $type = 'basicblock';
     protected $module = ''; // module block type belongs to, if any
@@ -135,6 +141,7 @@ abstract class BasicBlock extends BlockType implements iBlock
     // deprecate once all blocks are using $this->getContent() instead
     public function getInfo()
     {
+        /** @var array<string, mixed> $info */
         $info = $this->getTypeInfo();
         $info += $this->getInstanceInfo();
         $info += $this->getConfiguration();
