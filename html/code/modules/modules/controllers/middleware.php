@@ -60,13 +60,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         }
 
         // handle the module request here and return our response
-        $context = new Context(['source' => __METHOD__]);
-        if (!empty($request)) {
-            $context['request'] = &$request;
-            $context['requestId'] = $request->getAttribute('requestId');
-        } else {
-            $context['request'] = null;
-        }
+        $context = Context::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         // @checkme keep track of the current base uri if filtered in router
         static::setBaseUri($request);

@@ -219,8 +219,20 @@ class xarEvents extends xarObject implements ixarEvents
         $info['event'] ??= $event;
         $info['caller'] = static::class;
         $info['args'] = $args;
+        // allow others to define callback functions without registering observers e.g. for event bridge (= not saved in database)
         if (!empty(static::$callbackFunctions) && !empty(static::$callbackFunctions[$event])) {
             foreach (static::$callbackFunctions[$event] as $callback) {
+                try {
+                    call_user_func($callback, $info, $context);
+                } catch (Exception $e) {
+                    xarLog::message("xarEvents::notify: callback $event error " . $e->getMessage(), xarLog::LEVEL_INFO);
+                }
+            }
+        }
+        // allow others to add callback functions by request and pass them via the context e.g. session middleware for reactphp.php
+        if (!empty($context) && !empty($context['EventCallback']) && !empty($context['EventCallback'][$event])) {
+            $callbackList = $context['EventCallback'][$event];
+            foreach ($callbackList as $callback) {
                 try {
                     call_user_func($callback, $info, $context);
                 } catch (Exception $e) {

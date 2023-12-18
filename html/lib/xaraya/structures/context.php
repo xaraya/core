@@ -47,4 +47,31 @@ class Context extends ArrayObject
         }
         return $this->offsetGet('userId');
     }
+
+    /**
+     * Create new context from request
+     * @param mixed $request PSR-7 server request if available
+     * @param mixed $source source where the context is created
+     * @return Context<string, mixed>
+     */
+    public static function fromRequest(&$request = null, $source = null)
+    {
+        $context = new self();
+        if (!empty($request)) {
+            // @todo don't save request in the context for now, unless we really need it later...
+            //$context['request'] = &$request;
+            $context['requestId'] = $request->getAttribute('requestId');
+            // allow others to add callback functions by request and pass them via the context e.g. session middleware for reactphp.php
+            $callbackList = $request->getAttribute('EventCallback');
+            if (!empty($callbackList)) {
+                $context['EventCallback'] = $callbackList;
+            }
+        } else {
+            $context['requestId'] = null;
+        }
+        if (!empty($source)) {
+            $context['source'] = $source;
+        }
+        return $context;
+    }
 }

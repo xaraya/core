@@ -354,13 +354,7 @@ class FastRouteBridge implements CommonBridgeInterface
             $params['fieldlist'] = ['id', 'name', 'uname', 'state'];
         }
 
-        $context = new Context(['source' => __METHOD__]);
-        if (!empty($request)) {
-            $context['request'] = &$request;
-            $context['requestId'] = $request->getAttribute('requestId');
-        } else {
-            $context['request'] = null;
-        }
+        $context = Context::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         static::$baseUri = static::getBaseUri($request);
         $context['baseuri'] = static::$baseUri;
@@ -415,13 +409,7 @@ class FastRouteBridge implements CommonBridgeInterface
             $params = array_merge($params, $input);
         }
 
-        $context = new Context(['source' => __METHOD__]);
-        if (!empty($request)) {
-            $context['request'] = &$request;
-            $context['requestId'] = $request->getAttribute('requestId');
-        } else {
-            $context['request'] = null;
-        }
+        $context = Context::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         static::$baseUri = static::getBaseUri($request);
         $context['baseuri'] = static::$baseUri;
@@ -457,13 +445,7 @@ class FastRouteBridge implements CommonBridgeInterface
         // dispatcher doesn't provide query params by default
         $query = static::getQueryParams($request);
 
-        $context = new Context(['source' => __METHOD__]);
-        if (!empty($request)) {
-            $context['request'] = &$request;
-            $context['requestId'] = $request->getAttribute('requestId');
-        } else {
-            $context['request'] = null;
-        }
+        $context = Context::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         static::$baseUri = static::getBaseUri($request);
         $context['baseuri'] = static::$baseUri;

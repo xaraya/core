@@ -11,13 +11,20 @@
  * Caution: this does not support sessions or authentication, and is not meant for production (at all)
  */
 
-require_once dirname(dirname(__DIR__)).'/vendor/autoload.php';
+if (php_sapi_name() !== 'cli') {
+    echo "This example can only be launched via command line\n";
+    exit;
+}
+
+require_once dirname(__DIR__, 4).'/vendor/autoload.php';
 sys::init();
 xarCache::init();
 xarCore::xarInit(xarCore::SYSTEM_USER);
 // @checkme we need to set at least the $basurl here
 //xarServer::setBaseURL('https://owncloud.mikespub.net/test/');
 xarServer::setBaseURL('http://localhost:8080/');
+// switch to web directory to find library database relative to code()
+chdir(sys::web());
 
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;

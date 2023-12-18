@@ -789,15 +789,9 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         if (!empty($variables) && is_string($variables)) {
             $variables = json_decode($variables, true);
         }
-        $context = new Context(['source' => __METHOD__]);
+        $context = Context::fromRequest($request, __METHOD__);
         $context['server'] = static::getServerParams($request);
         $context['cookie'] = static::getCookieParams($request);
-        if (!empty($request)) {
-            $context['request'] = &$request;
-            $context['requestId'] = $request->getAttribute('requestId');
-        } else {
-            $context['request'] = null;
-        }
         $context['mediatype'] = '';
         $result = self::get_data($query, $variables, $operationName, [], null, $context);
         if ($query == '{schema}') {
