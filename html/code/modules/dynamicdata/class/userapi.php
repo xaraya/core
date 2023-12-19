@@ -23,7 +23,7 @@ use sys;
 sys::import('modules.dynamicdata.class.traits.userapi');
 
 /**
- * Class to handle the dynamicdata user API
+ * Class to handle the dynamicdata user API (static for now)
  */
 class UserApi implements UserApiInterface  //, DatabaseInterface
 {

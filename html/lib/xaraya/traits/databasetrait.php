@@ -120,16 +120,18 @@ interface DatabaseInterface
 
     /**
      * Summary of getCurrentDatabase
+     * @param mixed $context
      * @return string|null
      */
-    public static function getCurrentDatabase();
+    public static function getCurrentDatabase($context = null);
 
     /**
      * Summary of setCurrentDatabase
      * @param string $name
+     * @param mixed $context
      * @return void
      */
-    public static function setCurrentDatabase($name = '');
+    public static function setCurrentDatabase($name = '', $context = null);
 
     /**
      * Summary of getDatabaseTables
@@ -283,7 +285,12 @@ trait DatabaseTrait
      */
     public static function getDbConnArgs($object = null)
     {
-        $name = static::getCurrentDatabase();
+        // @todo use context to get current database
+        $context = null;
+        if (is_object($object) && method_exists($object, 'getContext')) {
+            $context = $object->getContext();
+        }
+        $name = static::getCurrentDatabase($context);
         if (!isset($name)) {
             $name = 'memory';
         }
@@ -314,13 +321,15 @@ trait DatabaseTrait
 
     /**
      * Summary of getCurrentDatabase
+     * @param mixed $context
      * @return string|null
      */
-    public static function getCurrentDatabase()
+    public static function getCurrentDatabase($context = null)
     {
         if (count(static::getDatabases()) === 1) {
             return array_key_first(static::$_databases);
         }
+        // @todo use context to get current database
         if (xarUser::isLoggedIn()) {
             $name = xarModUserVars::get(static::$moduleName, 'dbName');
         } else {
@@ -335,10 +344,12 @@ trait DatabaseTrait
     /**
      * Summary of setCurrentDatabase
      * @param string $name
+     * @param mixed $context
      * @return void
      */
-    public static function setCurrentDatabase($name = '')
+    public static function setCurrentDatabase($name = '', $context = null)
     {
+        // @todo use context to set current database
         if (xarUser::isLoggedIn()) {
             xarModUserVars::set(static::$moduleName, 'dbName', $name);
         } else {
