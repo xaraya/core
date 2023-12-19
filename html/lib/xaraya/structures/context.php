@@ -59,6 +59,9 @@ class Context extends ArrayObject implements ContextInterface
      */
     public function getRequestId()
     {
+        if (!$this->offsetExists('requestId')) {
+            return null;
+        }
         return $this->offsetGet('requestId');
     }
 
@@ -68,6 +71,9 @@ class Context extends ArrayObject implements ContextInterface
      */
     public function getSession()
     {
+        if (!$this->offsetExists('session')) {
+            return null;
+        }
         return $this->offsetGet('session');
     }
 

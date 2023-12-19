@@ -663,12 +663,44 @@ class xarSession
     }
 
     /**
+     * Get the session id if the session is initialized
+     */
+    static function getId($id = null)
+    {
+        if (!isset(self::$instance)) {
+            return $id;
+        }
+        return self::$instance::getId($id);
+    }
+
+    /**
+     * Get some default variables without session
+     */
+    static function getDefaultVar($name)
+    {
+        // no session means anonymous user by default
+        if ($name == 'role_id') {
+            return self::$anonId;
+        }
+        // ignore templates and security try to get stuff in session
+        if ($name == 'navigationLocale') {
+            return xarConfigVars::get(null, 'Site.MLS.DefaultLocale');
+        } elseif ($name == 'privilegeset') {
+            return null;
+        }
+        throw new SessionException('Session was not initialized to get ' . $name);
+    }
+
+    /**
      * Get a session variable
      *
      * @param string $name name of the session variable to get
      */
     static function getVar($name)
     {
+        if (!isset(self::$instance)) {
+            return self::getDefaultVar($name);
+        }
         return self::$instance->getVar($name);
     }
 
@@ -683,6 +715,13 @@ class xarSession
         // security checks : do not allow to set the id or mess with the session serialization
         if ($name == 'role_id' || strpos($name,'|') !== false) return false;
 
+        if (!isset(self::$instance)) {
+            // ignore templates and security try to save stuff in session
+            if ($name == 'navigationLocale' || $name == 'privilegeset') {
+                return;
+            }
+            throw new SessionException('Session was not initialized to set ' . $name);
+        }
         return self::$instance->setVar($name, $value);
     }
 
