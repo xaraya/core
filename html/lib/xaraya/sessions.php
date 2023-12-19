@@ -50,21 +50,11 @@ interface IsessionHandler
  *
  * @package core\sessions
  */
-class xarSession extends xarObject implements IsessionHandler
+class xarSessionHandler extends xarObject implements IsessionHandler
 {
     const  PREFIX='XARSV';     // Reserved by us for our session vars
     const  COOKIE='XARAYASID'; // Our cookiename
-    /** @var ?int */
-    public static $anonId = null;     // Replacement for _XAR_ID_UNREGISTERED
-    private static $securityLevel;
-    private static $duration;
-    private static $inactivityTimeout;
-    //private static $cookieName;
-    //private static $cookiePath;
-    //private static $cookieDomain;
-    //private static $refererCheck;
-    private static $instance;
-    private static $lastSaved;
+    /** @var ?Connection */
     private $db;               // We store sessioninfo in the database
     private $tbl;              // Container for the session info
     private $isNew = true;     // Flag signalling if we're dealing with a new session
@@ -86,7 +76,7 @@ class xarSession extends xarObject implements IsessionHandler
         $this->tbl = $tbls['session_info'];
 
         // Put a reference to this instance into a static property
-        self::$instance = $this;
+        xarSession::setInstance($this);
         
         // Set up the environment
         $this->setup($args);
@@ -270,7 +260,7 @@ class xarSession extends xarObject implements IsessionHandler
             $this->db->begin();
             $query = "INSERT INTO $this->tbl (id, ip_addr, role_id, first_use, last_use)
                       VALUES (?,?,?,?,?)";
-            $bindvars = array($this->sessionId, $ipAddress, self::$anonId, time(), time());
+            $bindvars = array($this->sessionId, $ipAddress, xarSession::$anonId, time(), time());
             $stmt = $this->db->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
             $this->db->commit();
@@ -332,20 +322,20 @@ class xarSession extends xarObject implements IsessionHandler
             $this->isNew = false;
             list($XARSVid, $this->ipAddress, $lastused, $vars) = $result->getRow();
             // in case garbage collection didn't have the opportunity to do its job
-            if (!empty(self::$securityLevel) &&
-                self::$securityLevel == 'High') {
-                $timeoutSetting = time() - (self::$inactivityTimeout * 60);
+            if (!empty(xarSession::getSecurityLevel()) &&
+                xarSession::getSecurityLevel() == 'High') {
+                $timeoutSetting = xarSession::getTimeoutSetting();
                 if ($lastused < $timeoutSetting) {
                     // force a reset of the userid (but use the same sessionid)
-                    $this->setUserInfo(self::$anonId, 0);
+                    $this->setUserInfo(xarSession::$anonId, 0);
                     $this->ipAddress = '';
                     $vars = '';
                 }
             }
             // Keep track of when this session was last saved
-            self::saveTime($lastused);
+            xarSession::saveTime($lastused);
         } else {
-            $_SESSION[self::PREFIX.'role_id'] = self::$anonId;
+            $_SESSION[self::PREFIX.'role_id'] = xarSession::$anonId;
 
             $this->ipAddress = '';
             $vars = '';
@@ -412,9 +402,9 @@ class xarSession extends xarObject implements IsessionHandler
      */
     function gc($maxlifetime)
     {
-        $timeoutSetting = time() - (self::$inactivityTimeout * 60);
+        $timeoutSetting = xarSession::getTimeoutSetting();
         $bindvars = array();
-        switch (self::$securityLevel) {
+        switch (xarSession::getSecurityLevel()) {
         case 'Low':
             // Low security - delete session info if user decided not to
             //                remember themself
@@ -429,7 +419,7 @@ class xarSession extends xarObject implements IsessionHandler
             $where = "(remember = ? AND last_use <  ?) OR first_use < ?";
             $bindvars[] = false;
             $bindvars[] = $timeoutSetting;
-            $bindvars[] = (time()- (self::$duration * 86400));
+            $bindvars[] = (time()- (xarSession::getDuration() * 86400));
             break;
         case 'High':
         default:
@@ -452,6 +442,142 @@ class xarSession extends xarObject implements IsessionHandler
     }
 
     /**
+     * Get a session variable
+     *
+     * @param string $name name of the session variable to get
+     */
+    public function getVar($name)
+    {
+        $var = self::PREFIX . $name;
+
+        if (isset($_SESSION[$var])) {
+            return $_SESSION[$var];
+        } elseif ($name == 'role_id') {
+            // mrb: why is this again?
+            $_SESSION[$var] = xarSession::$anonId;
+            return $_SESSION[$var];
+        }
+    }
+
+    /**
+     * Set a session variable
+     * @param string $name name of the session variable to set
+     * @param mixed $value value to set the named session variable
+     */
+    public function setVar($name, $value)
+    {
+        assert(!is_null($value));
+        // security checks : do not allow to set the id or mess with the session serialization
+        if ($name == 'role_id' || strpos($name,'|') !== false) return false;
+
+        $var = self::PREFIX . $name;
+        $_SESSION[$var] = $value;
+        return true;
+    }
+
+    /**
+     * Delete a session variable
+     * @param string $name name of the session variable to delete
+     */
+    public function delVar($name)
+    {
+        if ($name == 'role_id') return false;
+
+        $var = self::PREFIX . $name;
+
+        if (!isset($_SESSION[$var])) {
+            return false;
+        }
+        unset($_SESSION[$var]);
+        // no longer needed here
+        //if (ini_get('register_globals')) {
+        //    session_unregister($var);
+        //}
+        return true;
+    }
+
+    /**
+     * Set user info
+     *
+     * @throws SQLException
+     * @todo this seems a strange duck (only used in roles by the looks of it)
+     */
+    public function setUserInfo($userId, $rememberSession)
+    {
+        $dbconn   = xarDB::getConn();
+        $xartable = xarDB::getTables();
+
+        $sessioninfoTable = $xartable['session_info'];
+        try {
+            $dbconn->begin();
+            $query = "UPDATE $sessioninfoTable
+                      SET role_id = ? ,remember = ?
+                      WHERE id = ?";
+            $bindvars = array($userId, $rememberSession, self::getId());
+            $stmt = $dbconn->prepareStatement($query);
+            $stmt->executeUpdate($bindvars);
+            $dbconn->commit();
+        } catch (SQLException $e) {
+            $dbconn->rollback();
+            throw $e;
+        }
+
+        $_SESSION[self::PREFIX.'role_id'] = $userId;
+        return true;
+    }
+
+    /**
+     * Clear all the sessions in the sessions table
+     *
+     * @param array<mixed> $spared a list of roles IDs whose sessions are left untouched
+     */
+    public function clear($spared=[])
+    {
+        if (!is_array($spared)) {
+			$msg = xarML('Not an array: \'$spared\'');
+			throw new BadParameterException($msg);
+        }
+        	
+        $no_spared = empty($spared);
+        try {
+            $this->db->begin();
+            $tbl = $this->tbl;
+			if ($no_spared) {
+				$query = "DELETE FROM $tbl";
+	            $this->db->execute($query);
+			} else {
+				$query = "DELETE FROM $tbl WHERE role_id NOT IN (";
+				$spared_fill = array_fill(0, count($spared), '?');
+				$spared_fill = implode(',', $spared_fill);
+				$query .= $spared_fill;
+				$query .= ")";
+	            $this->db->execute($query,$spared);
+			}
+            $this->db->commit();
+        } catch (SQLException $e) {
+            $this->db->rollback();
+            throw $e;
+        }
+        return true;
+    }
+}
+
+class xarSession
+{
+    /** @var ?int */
+    public static $anonId = null;     // Replacement for _XAR_ID_UNREGISTERED
+    private static $securityLevel;
+    private static $duration;
+    private static $inactivityTimeout;
+    //private static $cookieName;
+    //private static $cookiePath;
+    //private static $cookieDomain;
+    //private static $refererCheck;
+    private static $instance;
+    private static $lastSaved;
+    private static $handlerClass = xarSessionHandler::class;
+
+    /**
      * Initialise the Session Support
      *
      * @return boolean true
@@ -468,8 +594,9 @@ class xarSession extends xarObject implements IsessionHandler
         //self::$cookiePath = $args['cookiePath'];
         //self::$cookieDomain = $args['cookieDomain'];
         //self::$refererCheck = $args['refererCheck'));
+        //self::$handlerClass = $args['$handlerClass'] ?? xarSessionHandler::class;
 
-	self::$anonId = (int) xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
+        self::$anonId = (int) xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
         if (!defined('_XAR_ID_UNREGISTERED')) {
             define('_XAR_ID_UNREGISTERED', self::$anonId);
         }
@@ -483,7 +610,7 @@ class xarSession extends xarObject implements IsessionHandler
         xarDB::importTables($tables);
 
         // Set up the session object
-        $session = new xarSession($args);
+        $session = new self::$handlerClass($args);
 
         // Start the session, this will call xarSession:read, and
         // it will tell us if we need to start a new session or just
@@ -526,7 +653,13 @@ class xarSession extends xarObject implements IsessionHandler
             'cookiePath'        => xarConfigVars::get(null, 'Site.Session.CookiePath'),
             'cookieDomain'      => xarConfigVars::get(null, 'Site.Session.CookieDomain'),
             'refererCheck'      => xarConfigVars::get(null, 'Site.Session.RefererCheck'));
+            //'handlerClass'      => xarConfigVars::get(null, 'Site.Session.HandlerClass'));
         return $systemArgs;
+    }
+
+    static function setInstance($instance)
+    {
+        self::$instance = $instance;
     }
 
     /**
@@ -536,15 +669,7 @@ class xarSession extends xarObject implements IsessionHandler
      */
     static function getVar($name)
     {
-        $var = self::PREFIX . $name;
-
-        if (isset($_SESSION[$var])) {
-            return $_SESSION[$var];
-        } elseif ($name == 'role_id') {
-            // mrb: why is this again?
-            $_SESSION[$var] = self::$anonId;
-            return $_SESSION[$var];
-        }
+        return self::$instance->getVar($name);
     }
 
     /**
@@ -558,9 +683,7 @@ class xarSession extends xarObject implements IsessionHandler
         // security checks : do not allow to set the id or mess with the session serialization
         if ($name == 'role_id' || strpos($name,'|') !== false) return false;
 
-        $var = self::PREFIX . $name;
-        $_SESSION[$var] = $value;
-        return true;
+        return self::$instance->setVar($name, $value);
     }
 
     /**
@@ -571,17 +694,7 @@ class xarSession extends xarObject implements IsessionHandler
     {
         if ($name == 'role_id') return false;
 
-        $var = self::PREFIX . $name;
-
-        if (!isset($_SESSION[$var])) {
-            return false;
-        }
-        unset($_SESSION[$var]);
-        // no longer needed here
-        //if (ini_get('register_globals')) {
-        //    session_unregister($var);
-        //}
-        return true;
+        return self::$instance->delVar($name);
     }
 
     /**
@@ -592,26 +705,7 @@ class xarSession extends xarObject implements IsessionHandler
      */
     static function setUserInfo($userId, $rememberSession)
     {
-        $dbconn   = xarDB::getConn();
-        $xartable = xarDB::getTables();
-
-        $sessioninfoTable = $xartable['session_info'];
-        try {
-            $dbconn->begin();
-            $query = "UPDATE $sessioninfoTable
-                      SET role_id = ? ,remember = ?
-                      WHERE id = ?";
-            $bindvars = array($userId, $rememberSession, self::getId());
-            $stmt = $dbconn->prepareStatement($query);
-            $stmt->executeUpdate($bindvars);
-            $dbconn->commit();
-        } catch (SQLException $e) {
-            $dbconn->rollback();
-            throw $e;
-        }
-
-        $_SESSION[self::PREFIX.'role_id'] = $userId;
-        return true;
+        return self::$instance->setUserInfo($userId, $rememberSession);
     }
 
     /**
@@ -646,37 +740,29 @@ class xarSession extends xarObject implements IsessionHandler
     }
 
     /**
+     * Get Timeout Setting
+     */
+    public static function getTimeoutSetting()
+    {
+        $timeoutSetting = time() - (self::$inactivityTimeout * 60);
+        return $timeoutSetting;
+    }
+
+    /**
+     * Get Session Duration (In Days)
+     */
+    public static function getDuration()
+    {
+        return self::$duration;
+    }
+
+    /**
      * Clear all the sessions in the sessions table
      *
      * @param array<mixed> $spared a list of roles IDs whose sessions are left untouched
      */
     public static function clear($spared=[])
     {
-        if (!is_array($spared)) {
-			$msg = xarML('Not an array: \'$spared\'');
-			throw new BadParameterException($msg);
-        }
-        	
-        $no_spared = empty($spared);
-        try {
-            self::$instance->db->begin();
-            $tbl = self::$instance->tbl;
-			if ($no_spared) {
-				$query = "DELETE FROM $tbl";
-	            self::$instance->db->execute($query);
-			} else {
-				$query = "DELETE FROM $tbl WHERE role_id NOT IN (";
-				$spared_fill = array_fill(0, count($spared), '?');
-				$spared_fill = implode(',', $spared_fill);
-				$query .= $spared_fill;
-				$query .= ")";
-	            self::$instance->db->execute($query,$spared);
-			}
-            self::$instance->db->commit();
-        } catch (SQLException $e) {
-            self::$instance->db->rollback();
-            throw $e;
-        }
-        return true;
+        return self::$instance->clear();
     }
 }
