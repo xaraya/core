@@ -229,12 +229,12 @@ class SessionMiddleware implements MiddlewareInterface
         //$this->storage = new SessionDatabaseStorage($this->config);
         $this->storage = new SessionCacheStorage($this->config);
         // register callback functions for UserLogin and UserLogout events - to update userId in request
-        //$this->registerCallbackEvents();
+        $this->registerCallbackEvents();
     }
 
     /**
      * Register callback functions for UserLogin and UserLogout events - to update userId in request
-     * Note: no longer needed as we specify an 'EventCallback' in the $request which is passed to $context
+     * Note: as alternative we can specify an 'EventCallback' in the $request which is passed to $context
      */
     public function registerCallbackEvents(): void
     {
@@ -243,11 +243,10 @@ class SessionMiddleware implements MiddlewareInterface
     }
 
     /**
-     * Add request for callback in UserLogin and UserLogout events - to update userId in request
+     * Specify an 'EventCallback' in the $request which is passed to $context
      */
-    public function addCallbackRequest(ServerRequestInterface &$request, int $requestId): void
+    public function addEventCallbackToRequest(ServerRequestInterface &$request)
     {
-        // specify an 'EventCallback' in the $request which is passed to $context
         $callbackList = $request->getAttribute('EventCallback');
         $callbackList ??= [];
         $callbackList['UserLogin'] ??= [];
@@ -255,6 +254,14 @@ class SessionMiddleware implements MiddlewareInterface
         array_push($callbackList['UserLogin'], [$this, 'callbackUserLogin']);
         array_push($callbackList['UserLogout'], [$this, 'callbackUserLogout']);
         $request = $request->withAttribute('EventCallback', $callbackList);
+    }
+
+    /**
+     * Add request for callback in UserLogin and UserLogout events - to update userId in request
+     */
+    public function addCallbackRequest(ServerRequestInterface &$request, int $requestId): void
+    {
+        //$this->addEventCallbackToRequest($request);
         $this->pending[$requestId] = &$request;
     }
 
