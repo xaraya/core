@@ -12,6 +12,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Xaraya\Structures\ContextFactory;
 use Xaraya\Structures\Context;
 use xarSession;
 use xarConfigVars;
@@ -218,7 +219,7 @@ class SessionMiddleware implements MiddlewareInterface
     private array $config;
     /** @var SessionStorageInterface */
     private $storage;
-    /** @var array<int, ServerRequestInterface> */
+    /** @var array<string, ServerRequestInterface> */
     private $pending = [];
 
     public function __construct()
@@ -244,6 +245,7 @@ class SessionMiddleware implements MiddlewareInterface
 
     /**
      * Specify an 'EventCallback' in the $request which is passed to $context
+     * @return void
      */
     public function addEventCallbackToRequest(ServerRequestInterface &$request)
     {
@@ -259,7 +261,7 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * Add request for callback in UserLogin and UserLogout events - to update userId in request
      */
-    public function addCallbackRequest(ServerRequestInterface &$request, int $requestId): void
+    public function addCallbackRequest(ServerRequestInterface &$request, string $requestId): void
     {
         //$this->addEventCallbackToRequest($request);
         $this->pending[$requestId] = &$request;
@@ -268,7 +270,7 @@ class SessionMiddleware implements MiddlewareInterface
     /**
      * Remove request for callback in UserLogin and UserLogout events - to update userId in request
      */
-    public function removeCallbackRequest(int $requestId): void
+    public function removeCallbackRequest(string $requestId): void
     {
         unset($this->pending[$requestId]);
     }
@@ -284,7 +286,7 @@ class SessionMiddleware implements MiddlewareInterface
             echo "No context given for login\n";
             return;
         }
-        $requestId = intval($context['requestId']);
+        $requestId = $context['requestId'] ?? '';
         if (empty($requestId) || empty($this->pending[$requestId])) {
             echo "Invalid requestId given for login\n";
             return;
@@ -292,6 +294,7 @@ class SessionMiddleware implements MiddlewareInterface
         $request = $this->pending[$requestId];
         echo "Event: " . $info['event'] . " for request ($requestId) " . $request->getUri()->getPath() . "\n";
         $this->pending[$requestId] = $request->withAttribute('userId', $info['args']);
+        echo "Context: " . var_export($context, true) . "\n";
     }
 
     /**
@@ -305,7 +308,7 @@ class SessionMiddleware implements MiddlewareInterface
             echo "No context given for logout\n";
             return;
         }
-        $requestId = intval($context['requestId']);
+        $requestId = $context['requestId'] ?? '';
         if (empty($requestId) || empty($this->pending[$requestId])) {
             echo "Invalid requestId given for logout\n";
             return;
@@ -333,6 +336,7 @@ class SessionMiddleware implements MiddlewareInterface
             $session = $this->getSession($sessionId);
             $_SESSION[xarSession::PREFIX . 'role_id'] = $session->getUserId();
             $request = $request->withAttribute('userId', $session->getUserId());
+            $request = $request->withAttribute('session', $session);
             echo "Token: " . var_export($session, true) . "\n";
         } elseif (array_key_exists($this->cookieName, $cookies)) {
             $sessionId = $cookies[$this->cookieName];
@@ -345,6 +349,7 @@ class SessionMiddleware implements MiddlewareInterface
                 }
             }
             $request = $request->withAttribute('userId', $session->getUserId());
+            $request = $request->withAttribute('session', $session);
             echo "Session: " . var_export($session, true) . "\n";
         } else {
             $request = $request->withAttribute('userId', 0);
@@ -357,8 +362,7 @@ class SessionMiddleware implements MiddlewareInterface
         $isAuthSystem = false;
         $requestId = null;
         if (strpos($request->getRequestTarget(), '/authsystem/') !== false) {
-            $requestId = spl_object_id($request);
-            $request = $request->withAttribute('requestId', $requestId);
+            $requestId = ContextFactory::makeRequestId($request);
             echo "Adding callback request ($requestId) " . $request->getRequestTarget() . "\n";
             $this->addCallbackRequest($request, $requestId);
             $isAuthSystem = true;
@@ -368,13 +372,17 @@ class SessionMiddleware implements MiddlewareInterface
             $isAuthToken = true;
         }
         $isAuthKey = false;
-        if (!empty($sessionId) && $request->getMethod() == 'POST') {
-            $input = $request->getParsedBody();
-            if (!empty($input['authid']) && empty($input['preview'])) {
-                //$key = 'rand';
-                //$_SESSION[xarSession::PREFIX . $key] = $session->vars[$key];
-                $_POST['authid'] = $input['authid'];
-                $isAuthKey = true;
+        if (!empty($sessionId)) {
+            $request = $request->withAttribute('sessionId', $sessionId);
+            if ($request->getMethod() == 'POST') {
+                $input = $request->getParsedBody();
+                if (!empty($input['authid']) && empty($input['preview'])) {
+                    $request = $request->withAttribute('authId', $input['authid']);
+                    //$key = 'rand';
+                    //$_SESSION[xarSession::PREFIX . $key] = $session->vars[$key];
+                    $_POST['authid'] = $input['authid'];
+                    $isAuthKey = true;
+                }
             }
         }
         // @checkme signature mismatch for process() with ReactPHP
@@ -383,7 +391,7 @@ class SessionMiddleware implements MiddlewareInterface
         } else {
             $response = $next($request);
         }
-        if ($isAuthSystem && !empty($requestId)) {
+        if (!empty($requestId)) {
             // request has changed due to redirect in the meantime, so spl_object_id($request) will not match
             echo "Removing callback request ($requestId) " . $request->getRequestTarget() . "\n";
             $this->removeCallbackRequest($requestId);
@@ -416,7 +424,7 @@ class SessionMiddleware implements MiddlewareInterface
             $this->storage->update($session);
         }
         if (session_status() === PHP_SESSION_ACTIVE) {
-            echo "Session: " . var_export($_SESSION, true) . "\n";
+            echo "\$_SESSION: " . var_export($_SESSION, true) . "\n";
             session_write_close();
             $userId = 0;
             foreach (array_keys($_SESSION) as $key) {

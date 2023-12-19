@@ -43,6 +43,12 @@ class Usercontext
      */
     public function getUserId()
     {
+        // if we already have a session, get the userId from there - see session middleware
+        $session = $this->context->getSession();
+        if (!empty($session)) {
+            return $session->getUserId();
+        }
+        // if not, check if we have an auth token or cookie - see rest handler and graphql
         $userId = $this->checkToken();
         if (!empty($userId)) {
             return $userId;

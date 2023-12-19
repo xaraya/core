@@ -213,6 +213,9 @@ class xarUser extends xarObject
         // FIXME: <marco> here we could also set a last_logon timestamp
         //<jojodee> currently set in individual authsystem when success on login returned to it
     
+        if (!empty($context)) {
+            $context->setUserId($userId);
+        }
         // User logged in successfully, trigger the proper event with the new userid
         //xarEvents::trigger('UserLogin',$userId);
         xarEvents::notify('UserLogin', $userId, $context);
@@ -242,6 +245,9 @@ class xarUser extends xarObject
     
         xarSession::delVar('authenticationModule');
     
+        if (!empty($context)) {
+            $context->setUserId(xarSession::getAnonId());
+        }
         // User logged out successfully, trigger the proper event with the old userid
         //xarEvents::trigger('UserLogout',$userId);
         xarEvents::notify('UserLogout', $userId, $context);

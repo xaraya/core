@@ -13,6 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Xaraya\Structures\ContextFactory;
 use Xaraya\Structures\Context;
 use Exception;
 use sys;
@@ -61,7 +62,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         }
 
         // handle the object request here and return our response
-        $context = Context::fromRequest($request, __METHOD__);
+        $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         // @checkme keep track of the current base uri if filtered in router
         static::setBaseUri($request);

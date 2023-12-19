@@ -40,6 +40,7 @@ use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
+use Xaraya\Structures\ContextFactory;
 use Xaraya\Structures\Context;
 
 use GraphQL\GraphQL;
@@ -789,7 +790,7 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
         if (!empty($variables) && is_string($variables)) {
             $variables = json_decode($variables, true);
         }
-        $context = Context::fromRequest($request, __METHOD__);
+        $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['server'] = static::getServerParams($request);
         $context['cookie'] = static::getCookieParams($request);
         $context['mediatype'] = '';

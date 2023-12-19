@@ -20,6 +20,7 @@ use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
+use Xaraya\Structures\ContextFactory;
 use Xaraya\Structures\Context;
 use Xaraya\Authentication\AuthToken;
 
@@ -1311,7 +1312,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         //xarUser::init();
         self::setTimer('handle');
         // define context of the request - see GraphQL
-        $context = Context::fromRequest($request, __METHOD__);
+        $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['server'] = static::getServerParams($request);
         $context['cookie'] = static::getCookieParams($request);
         $context['mediatype'] = '';

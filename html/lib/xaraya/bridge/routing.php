@@ -43,6 +43,7 @@ namespace Xaraya\Bridge\Routing;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 // use some Xaraya classes
+use Xaraya\Structures\ContextFactory;
 use Xaraya\Structures\Context;
 use xarServer;
 use sys;
@@ -354,7 +355,7 @@ class FastRouteBridge implements CommonBridgeInterface
             $params['fieldlist'] = ['id', 'name', 'uname', 'state'];
         }
 
-        $context = Context::fromRequest($request, __METHOD__);
+        $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         static::$baseUri = static::getBaseUri($request);
         $context['baseuri'] = static::$baseUri;
@@ -409,7 +410,7 @@ class FastRouteBridge implements CommonBridgeInterface
             $params = array_merge($params, $input);
         }
 
-        $context = Context::fromRequest($request, __METHOD__);
+        $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         static::$baseUri = static::getBaseUri($request);
         $context['baseuri'] = static::$baseUri;
@@ -445,7 +446,7 @@ class FastRouteBridge implements CommonBridgeInterface
         // dispatcher doesn't provide query params by default
         $query = static::getQueryParams($request);
 
-        $context = Context::fromRequest($request, __METHOD__);
+        $context = ContextFactory::fromRequest($request, __METHOD__);
         $context['mediatype'] = '';
         static::$baseUri = static::getBaseUri($request);
         $context['baseuri'] = static::$baseUri;
