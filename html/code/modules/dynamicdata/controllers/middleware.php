@@ -13,8 +13,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Xaraya\Structures\ContextFactory;
-use Xaraya\Structures\Context;
+use Xaraya\Context\ContextFactory;
+use Xaraya\Context\Context;
 use Exception;
 use sys;
 

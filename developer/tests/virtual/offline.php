@@ -8,7 +8,7 @@
 require_once dirname(__DIR__, 3) . '/vendor/autoload.php';
 
 use Xaraya\DataObject\DataStores\MongoDBDataStore;
-use Xaraya\Structures\Context;
+use Xaraya\Context\Context;
 
 // initialize bootstrap
 sys::init();

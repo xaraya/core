@@ -22,7 +22,7 @@
  * //use Xaraya\Bridge\Events\EventSubscriber;
  * use Xaraya\Bridge\Events\HookSubscriber;
  * use Xaraya\Bridge\Events\DefaultEvent;
- * use Xaraya\Structures\Context;
+ * use Xaraya\Context\Context;
  *
  * // subscriber bridge for events and/or hooks in your app
  * //$subscriber = new EventSubscriber();

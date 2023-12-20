@@ -40,8 +40,8 @@ use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
-use Xaraya\Structures\ContextFactory;
-use Xaraya\Structures\Context;
+use Xaraya\Context\ContextFactory;
+use Xaraya\Context\Context;
 
 use GraphQL\GraphQL;
 use GraphQL\Type\Schema;

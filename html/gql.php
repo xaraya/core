@@ -52,7 +52,7 @@ if (!empty($rawInput)) {
 if (!empty($variables) && is_string($variables)) {
     $variables = json_decode($variables, true);
 }
-$context = new \Xaraya\Structures\Context(['request' => $_REQUEST, 'server' => $_SERVER]);
+$context = new \Xaraya\Context\Context(['request' => $_REQUEST, 'server' => $_SERVER]);
 
 //$query = '{hello}';
 //$query = 'query { echo(message: "Hello World") }';

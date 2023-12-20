@@ -13,8 +13,8 @@
  * @author Chris Powis
  */
 
-sys::import("xaraya.structures.context");
-use Xaraya\Structures\Context;
+sys::import("xaraya.context.context");
+use Xaraya\Context\Context;
 
 interface ixarBlock
 {

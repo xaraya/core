@@ -13,15 +13,15 @@ sys::import('modules.dynamicdata.class.objects.factory');
 sys::import('xaraya.traits.timertrait');
 sys::import('xaraya.traits.cachetrait');
 sys::import('xaraya.bridge.requests.requesttrait');
-sys::import('xaraya.structures.context');
+sys::import('xaraya.context.context');
 use Xaraya\Core\Traits\CacheInterface;
 use Xaraya\Core\Traits\CacheTrait;
 use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
 use Xaraya\Bridge\Requests\CommonRequestInterface;
 use Xaraya\Bridge\Requests\CommonRequestTrait;
-use Xaraya\Structures\ContextFactory;
-use Xaraya\Structures\Context;
+use Xaraya\Context\ContextFactory;
+use Xaraya\Context\Context;
 use Xaraya\Authentication\AuthToken;
 
 /**

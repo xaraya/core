@@ -26,8 +26,8 @@
 **/
 
 sys::import("xaraya.structures.events.subject");
-sys::import("xaraya.structures.context");
-use Xaraya\Structures\Context;
+sys::import("xaraya.context.context");
+use Xaraya\Context\Context;
 
 /**
  * Exception raised by the events subsystem

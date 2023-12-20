@@ -12,8 +12,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Xaraya\Structures\ContextFactory;
-use Xaraya\Structures\Context;
+use Xaraya\Context\ContextFactory;
+use Xaraya\Context\Context;
 use xarSessionHandler;
 use xarSession;
 use xarConfigVars;
@@ -50,6 +50,25 @@ class VirtualSession
             $vars = ['rand' => rand()];
         }
         $this->vars = $vars;
+    }
+
+    /**
+     * Summary of getSessionId
+     * @return string
+     */
+    public function getSessionId()
+    {
+        return $this->sessionId;
+    }
+
+    /**
+     * Summary of setSessionId
+     * @param string $sessionId
+     * @return void
+     */
+    public function setSessionId($sessionId)
+    {
+        $this->sessionId = $sessionId;
     }
 
     /**
@@ -155,8 +174,18 @@ class SessionDatabaseStorage implements SessionStorageInterface
     public function __construct(private array $config)
     {
         $this->db = xarDB::getConn();
+        $this->table = $this->getTable();
+    }
+
+    private function getTable()
+    {
         $tables = xarDB::getTables();
-        $this->table = $tables['session_info'];
+        if (!isset($tables['session_info'])) {
+            // Register tables this subsystem uses
+            $tables = ['session_info' => xarDB::getPrefix() . '_session_info'];
+            xarDB::importTables($tables);
+        }
+        return $tables['session_info'];
     }
 
     public function lookup(string $sessionId, string $ipAddress = ''): ?VirtualSession

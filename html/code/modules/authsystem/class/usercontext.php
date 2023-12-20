@@ -14,7 +14,7 @@
 
 namespace Xaraya\Authentication;
 
-use Xaraya\Structures\Context;
+use Xaraya\Context\Context;
 use xarSession;
 use xarUser;
 use sys;

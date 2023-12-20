@@ -21,8 +21,8 @@
  * @todo the double headed theme/module stuff needs to go, a theme is not a module
  */
 
-sys::import("xaraya.structures.context");
-use Xaraya\Structures\Context;
+sys::import("xaraya.context.context");
+use Xaraya\Context\Context;
 
 /**
  * Exception raised by the modules subsystem

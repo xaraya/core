@@ -35,10 +35,10 @@
 
 namespace Xaraya\Core\Traits;
 
-use Xaraya\Structures\Context;
+use Xaraya\Context\Context;
 use sys;
 
-sys::import("xaraya.structures.context");
+sys::import("xaraya.context.context");
 
 /**
  * For documentation purposes only - available via ContextTrait

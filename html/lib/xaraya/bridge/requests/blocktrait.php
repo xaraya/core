@@ -6,7 +6,7 @@
 namespace Xaraya\Bridge\Requests;
 
 // use some Xaraya classes
-use Xaraya\Structures\Context;
+use Xaraya\Context\Context;
 use Exception;
 use xarBlock;
 use xarMod;

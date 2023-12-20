@@ -9,7 +9,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xaraya\Bridge\Events\EventObserverBridge;
 use Xaraya\Bridge\Events\HookObserverBridge;
 use Xaraya\Bridge\Events\TestObserverBridgeSubscriber;
-use Xaraya\Structures\Context;
+use Xaraya\Context\Context;
 
 // initialize bootstrap
 sys::init();

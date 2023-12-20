@@ -12,9 +12,9 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 
-sys::import("xaraya.structures.context");
+sys::import("xaraya.context.context");
 use Xaraya\DataObject\Handlers\DefaultHandler;
-use Xaraya\Structures\Context;
+use Xaraya\Context\Context;
 
 /**
  * Dynamic Object User Interface (work in progress)

@@ -13,8 +13,8 @@
  * @author Michel Dalle <mikespub@xaraya.com>
  */
 
-sys::import("xaraya.structures.context");
-use Xaraya\Structures\Context;
+sys::import("xaraya.context.context");
+use Xaraya\Context\Context;
 
 /**
  * Interface declaration for xarDDObject

@@ -54,6 +54,14 @@ interface iSessionHandler extends SessionHandlerInterface
 interface iSessionInterface
 {
     /**
+     * Constructor for the session handler
+     * @param array<string, mixed> $args not by reference anymore
+     * @uses xarSession::setInstance()
+     * @return void
+     **/
+    public function __construct($args);
+
+    /**
      * Initialize the session after setup
      * @return bool
      */
@@ -92,7 +100,6 @@ interface iSessionInterface
      * Set user info
      * @param int $userId
      * @param int $rememberSession
-     * @throws SQLException
      * @todo this seems a strange duck (only used in roles by the looks of it)
      * @return bool
      */
@@ -125,11 +132,12 @@ class xarSessionHandler extends xarObject implements iSessionHandler, iSessionIn
     /**
      * Constructor for the session handler
      *
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $args not by reference anymore
+     * @uses xarSession::setInstance()
      * @return void
      * @throws SessionException
      **/
-    function __construct(&$args)
+    public function __construct($args)
     {
         // Register tables this subsystem uses
         $tables = array('session_info' => xarDB::getPrefix() . '_session_info');
@@ -170,7 +178,7 @@ class xarSessionHandler extends xarObject implements iSessionHandler, iSessionIn
      *
      * @return void
      **/
-    function __destruct()
+    public function __destruct()
     {
         // Make sure we write dirty data before we lose this object
         session_write_close();
@@ -179,14 +187,14 @@ class xarSessionHandler extends xarObject implements iSessionHandler, iSessionIn
     /**
      * Set all PHP options for Xaraya session handling
      *
-     * @param array<string, mixed> $args
+     * @param array<string, mixed> $args not by reference anymore
      * with:
      *     $args['securityLevel'] the current security level
      *     $args['duration'] duration of the session
      *     $args['inactivityTimeout']
      * @return boolean
      */
-    private function setup(&$args)
+    private function setup($args)
     {
         //All in here is based on the possibility of changing
         //PHP's session related configuration
@@ -664,6 +672,15 @@ class xarSessionHandler extends xarObject implements iSessionHandler, iSessionIn
             throw $e;
         }
         return true;
+    }
+
+    /**
+     * @param mixed $context
+     * @return void
+     */
+    public function setContext($context)
+    {
+        // not used in default session handler
     }
 }
 

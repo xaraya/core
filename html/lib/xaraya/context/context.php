@@ -1,7 +1,7 @@
 <?php
 /**
- * @package core\structures
- * @subpackage structures
+ * @package core\context
+ * @subpackage context
  * @category Xaraya Web Applications Framework
  * @version 2.4.2
  * @copyright see the html/credits.html file in this release
@@ -9,7 +9,7 @@
  * @link http://www.xaraya.info
  */
 
-namespace Xaraya\Structures;
+namespace Xaraya\Context;
 
 use Xaraya\Authentication\Usercontext;
 use ArrayObject;

@@ -43,8 +43,8 @@ namespace Xaraya\Bridge\Routing;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 // use some Xaraya classes
-use Xaraya\Structures\ContextFactory;
-use Xaraya\Structures\Context;
+use Xaraya\Context\ContextFactory;
+use Xaraya\Context\Context;
 use xarServer;
 use sys;
 use Exception;

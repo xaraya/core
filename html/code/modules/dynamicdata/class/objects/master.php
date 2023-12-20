@@ -25,7 +25,7 @@ use Xaraya\DataObject\DataStores\DataStoreFactory;
 use Xaraya\DataObject\DataStores\IBasicDataStore;
 use Xaraya\Core\Traits\ContextInterface;
 use Xaraya\Core\Traits\ContextTrait;
-use Xaraya\Structures\Context;
+use Xaraya\Context\Context;
 
 class DataObjectMaster extends xarObject implements ContextInterface
 {

@@ -14,7 +14,7 @@
 
 namespace Xaraya\Authentication;
 
-use Xaraya\Structures\Context;
+use Xaraya\Context\Context;
 use ixarCache_Storage;
 use xarCache;
 
