@@ -59,6 +59,7 @@ class xarController extends xarObject
             self::$allowShortURLs = $args['enableShortURLsSupport'];
         }
 
+        // @todo update xarController::$endpoint based on actual SCRIPT_NAME?
         // The following allows you to modify the BaseModURL from the config file
         // it can be used to configure Xaraya for mod_rewrite by
         // setting BaseModURL = '' in config.system.php

@@ -368,6 +368,7 @@ class xarServer extends xarObject
         }
         self::$allowShortURLs = $args['enableShortURLsSupport'];
         self::$generateXMLURLs = $args['generateXMLURLs'];
+        self::$baseurl = null;
 
         // Set up the request object
         $request = new self::$requestClass($args);
