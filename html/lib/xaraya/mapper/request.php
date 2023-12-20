@@ -44,7 +44,12 @@ class xarRequest extends xarObject
 
     /** @var ?bool */
     private $isAjax   = null;
+    /** @var ?iRequestInterface */
+    private $requestContext = null;
 
+    /**
+     * @param ?string $url
+     */
     public function __construct($url = null)
     {
         // Make this load lazily
@@ -52,8 +57,17 @@ class xarRequest extends xarObject
         //$this->setType(xarModVars::get('modules', 'defaultmoduletype'));
         //$this->setFunction(xarModVars::get('modules', 'defaultmodulefunction'));
 
+        $this->requestContext = xarServer::getInstance();
         $this->entryPoint = xarController::$entryPoint;
         $this->setURL($url);
+    }
+
+    /**
+     * @return ?iRequestInterface
+     */
+    public function getContext()
+    {
+        return $this->requestContext;
     }
 
     /**
@@ -112,7 +126,7 @@ class xarRequest extends xarObject
             // Try and get it from the current request path
             // Note: we don't generate an XML compatible URL here
             $url = xarServer::getCurrentURL(array(), false);
-            $params = $_GET;
+            $params = $this->requestContext?->getQueryParams();
 
             // We now have a URL. Set it.
             $this->url = $url;

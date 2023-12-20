@@ -126,4 +126,53 @@ class RequestContext implements ContextInterface, iRequestInterface
         $cookieVars = $this->getContext()->offsetGet('cookie');
         return $cookieVars[$name] ?? null;
     }
+
+    /**
+     * Gets all server variables
+     * @return array<string, mixed>
+     */
+    public function getServerParams()
+    {
+        if (!$this->getContext()->offsetExists('server')) {
+            return [];
+        }
+        return $this->getContext()->offsetGet('server');
+    }
+
+    /**
+     * Gets all query variables
+     * @return array<string, mixed>
+     */
+    public function getQueryParams()
+    {
+        if (!$this->getContext()->offsetExists('query')) {
+            return [];
+        }
+        return $this->getContext()->offsetGet('query');
+    }
+
+    /**
+     * Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVar::fetch
+     * @param array<string, mixed> $args
+     * @return void
+     */
+    public function withQueryParams($args)
+    {
+        if (!$this->getContext()->offsetExists('query')) {
+            $this->context['query'] = [];
+        }
+        $this->context['query'] = $this->context['query'] + $args;
+    }
+
+    /**
+     * Gets all body variables
+     * @return array<string, mixed>
+     */
+    public function getParsedBody()
+    {
+        if (!$this->getContext()->offsetExists('body')) {
+            return [];
+        }
+        return $this->getContext()->offsetGet('body');
+    }
 }

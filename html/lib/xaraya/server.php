@@ -183,6 +183,31 @@ interface iRequestInterface
      * @return mixed value of the variable
      */
     public function getCookieVar($name);
+
+    /**
+     * Gets all server variables
+     * @return array<string, mixed>
+     */
+    public function getServerParams();
+
+    /**
+     * Gets all query variables
+     * @return array<string, mixed>
+     */
+    public function getQueryParams();
+
+    /**
+     * Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVar::fetch
+     * @param array<string, mixed> $args
+     * @return void
+     */
+    public function withQueryParams($args);
+
+    /**
+     * Gets all body variables
+     * @return array<string, mixed>
+     */
+    public function getParsedBody();
 }
 
 /**
@@ -275,6 +300,43 @@ class xarRequestHandler implements iRequestInterface
     public function getCookieVar($name)
     {
         return $_COOKIE[$name] ?? null;
+    }
+
+    /**
+     * Gets all server variables
+     * @return array<string, mixed>
+     */
+    public function getServerParams()
+    {
+        return $_SERVER;
+    }
+
+    /**
+     * Gets all query variables
+     * @return array<string, mixed>
+     */
+    public function getQueryParams()
+    {
+        return $_GET;
+    }
+
+    /**
+     * Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVar::fetch
+     * @param array<string, mixed> $args
+     * @return void
+     */
+    public function withQueryParams($args)
+    {
+        $_GET = $_GET + $args;
+    }
+
+    /**
+     * Gets all body variables
+     * @return array<string, mixed>
+     */
+    public function getParsedBody()
+    {
+        return $_POST;
     }
 }
 
@@ -482,7 +544,7 @@ class xarServer extends xarObject
                     if (preg_match('/^http:/', self::getVar('REQUEST_URI') ?? '')) {
                         return self::PROTOCOL_HTTP;
                     }
-                    $serverport = $_SERVER['SERVER_PORT'];
+                    $serverport = self::getVar('SERVER_PORT');
                     $protocol = ($serverport == xarConfigVars::get(null, 'Site.Core.SecureServerPort')) ? self::PROTOCOL_HTTPS : self::PROTOCOL_HTTP;
                     return $protocol;
                 }

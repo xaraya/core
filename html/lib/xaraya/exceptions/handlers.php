@@ -200,9 +200,9 @@ class ExceptionHandlers extends xarObject implements IExceptionHandlers
             $module = '';
             if (xarController::$allowShortURLs && isset(xarController::$shortURLVariables['module'])) {
                 $module = xarController::$shortURLVariables['module'];
-            } elseif (isset($_GET['module'])) {
+            } else {
                 // Then check in $_GET
-                $module = $_GET['module'];
+                $module = xarServer::getInstance()?->getQueryVar('module');
             }
 
             // @todo consider removing this, it doesnt add much and causes quite a maintenance task

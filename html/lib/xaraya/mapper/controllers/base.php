@@ -40,7 +40,7 @@ class BaseActionController extends xarObject
         // Allocate those params we can to module/type/function and store the rest as FunctionArgs in the request
         $this->chargeRequest($request, $args);
         // Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVar::fetch
-        $_GET = $_GET + $args;
+        $request->getContext()?->withQueryParams($args);
         // Now get the output
         if ($request->getModule() == 'object') {
             sys::import('xaraya.objects');

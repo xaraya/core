@@ -42,6 +42,8 @@ class xarController extends xarObject
     public static $buildUri;     // callable for building URIs when using non-standard entrypoints
     /** @var ?callable */
     public static $redirectTo;   // callable for redirecting to when using non-standard entrypoints
+    /** @var ?iRequestInterface */
+    private static $requestContext = null;
 
     /**
      * Initialize
@@ -65,6 +67,8 @@ class xarController extends xarObject
         } catch(Exception $e) {
             self::$entryPoint = 'index.php';
         }
+        // xarController::init() comes after xarServer::init()
+        self::$requestContext = xarServer::getInstance();
     }
 
     /**
@@ -122,11 +126,12 @@ class xarController extends xarObject
      */
     public static function getVar($name, $allowOnlyMethod = null)
     {
+        // First check in $_POST
         if (strpos($name, '[') === false) {
-            $value = $_POST[$name] ?? null;
+            $value = self::$requestContext?->getBodyVar($name) ?? null;
             $isset = isset($value);
         } else {
-            $value = self::getArrayVar($_POST, $name);
+            $value = self::getArrayVar(self::$requestContext?->getParsedBody(), $name);
             $isset = isset($value);
         }
 
@@ -134,12 +139,13 @@ class xarController extends xarObject
             // Short URLs variables override GET variables
             if (self::$allowShortURLs && isset(self::$shortURLVariables[$name])) {
                 $value = self::$shortURLVariables[$name];
-            } elseif (isset($_GET[$name])) {
-                // Then check in $_GET
-                $value = $_GET[$name];
             } else {
-                // Nothing found, return void
-                return;
+                // Then check in $_GET
+                $value = self::$requestContext?->getQueryVar($name);
+                if (!isset($value)) {
+                    // Nothing found, return null
+                    return null;
+                }
             }
             $method = $allowOnlyMethod;
         } elseif ($allowOnlyMethod == 'POST') {
@@ -147,8 +153,8 @@ class xarController extends xarObject
                 // First check in $_POST
                 // see $value above
             } else {
-                // Nothing found, return void
-                return;
+                // Nothing found, return null
+                return null;
             }
             $method = $allowOnlyMethod;
         } else {
@@ -160,13 +166,14 @@ class xarController extends xarObject
                 // Then check in $_POST
                 // see $value above
                 $method = 'POST';
-            } elseif (isset($_GET[$name])) {
-                // Then check in $_GET
-                $value = $_GET[$name];
-                $method = 'GET';
             } else {
-                // Nothing found, return void
-                return;
+                // Then check in $_GET
+                $value = self::$requestContext?->getQueryVar($name);
+                if (!isset($value)) {
+                    // Nothing found, return null
+                    return null;
+                }
+                $method = 'GET';
             }
         }
 
