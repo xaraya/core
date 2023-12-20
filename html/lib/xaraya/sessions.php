@@ -29,20 +29,81 @@ class SessionException extends Exception
  *
  * @todo this is a temp, since the obvious plan is to have a factory here
  */
-interface IsessionHandler
+interface iSessionHandler extends SessionHandlerInterface
 {
-    public function register($ipAddress);
-    public function start();
-    public function id($id = null);
-    public function isNew();
-    public function current();
-
+    public function register(string $ipAddress): bool;
+    public function start(): void;
+    public function id(?string $id = null): string|bool;
+    public function isNew(): bool;
+    public function current(): bool;
+    /**
     public function open($path, $name);
     public function close();
     public function read($sessionId);
     public function write($sessionId, $vars);
     public function destroy($sessionId);
     public function gc($maxlifetime);
+     */
+}
+
+/**
+ * Interface between xarSession (static) and xarSessionHandler (instance)
+ * Note: if you want to replace xarSessionHandler with a custom class, use
+ * xarSession::setSessionClass(MyCustomSession::class);
+ */
+interface iSessionInterface
+{
+    /**
+     * Initialize the session after setup
+     * @return bool
+     */
+    public function initialize();
+
+    /**
+     * Get (or set) the session id
+     * @param ?string $id
+     * @return string|bool
+     */
+    public function getId($id = null);
+
+    /**
+     * Get a session variable
+     * @param string $name name of the session variable to get
+     * @return mixed
+     */
+    public function getVar($name);
+
+    /**
+     * Set a session variable
+     * @param string $name name of the session variable to set
+     * @param mixed $value value to set the named session variable
+     * @return bool
+     */
+    public function setVar($name, $value);
+
+    /**
+     * Delete a session variable
+     * @param string $name name of the session variable to delete
+     * @return bool
+     */
+    public function delVar($name);
+
+    /**
+     * Set user info
+     * @param int $userId
+     * @param int $rememberSession
+     * @throws SQLException
+     * @todo this seems a strange duck (only used in roles by the looks of it)
+     * @return bool
+     */
+    public function setUserInfo($userId, $rememberSession);
+
+    /**
+     * Clear all the sessions in the sessions table
+     * @param array<mixed> $spared a list of roles IDs whose sessions are left untouched
+     * @return bool
+     */
+    public function clear($spared=[]);
 }
 
 /**
@@ -50,26 +111,30 @@ interface IsessionHandler
  *
  * @package core\sessions
  */
-class xarSessionHandler extends xarObject implements IsessionHandler
+class xarSessionHandler extends xarObject implements iSessionHandler, iSessionInterface
 {
-    const  PREFIX='XARSV';     // Reserved by us for our session vars
-    const  COOKIE='XARAYASID'; // Our cookiename
-    /** @var ?Connection */
-    private $db;               // We store sessioninfo in the database
-    private $tbl;              // Container for the session info
-    private $isNew = true;     // Flag signalling if we're dealing with a new session
+    public const  PREFIX='XARSV';     // Reserved by us for our session vars
+    public const  COOKIE='XARAYASID'; // Our cookiename
+    private ?Connection $db;               // We store sessioninfo in the database
+    private string $tbl;              // Container for the session info
+    private bool $isNew = true;     // Flag signalling if we're dealing with a new session
 
-    private $sessionId = null; // The id assigned to us.
-    private $ipAddress = '';   // IP-address belonging to this session.
+    private ?string $sessionId = null; // The id assigned to us.
+    private string $ipAddress = '';   // IP-address belonging to this session.
 
     /**
      * Constructor for the session handler
      *
+     * @param array<string, mixed> $args
      * @return void
      * @throws SessionException
      **/
     function __construct(&$args)
     {
+        // Register tables this subsystem uses
+        $tables = array('session_info' => xarDB::getPrefix() . '_session_info');
+        xarDB::importTables($tables);
+
         // Set up our container.
         $this->db = xarDB::getConn();
         $tbls     = xarDB::getTables();
@@ -114,9 +179,11 @@ class xarSessionHandler extends xarObject implements IsessionHandler
     /**
      * Set all PHP options for Xaraya session handling
      *
-     * @param $args['securityLevel'] the current security level
-     * @param $args['duration'] duration of the session
-     * @param $args['inactivityTimeout']
+     * @param array<string, mixed> $args
+     * with:
+     *     $args['securityLevel'] the current security level
+     *     $args['duration'] duration of the session
+     *     $args['inactivityTimeout']
      * @return boolean
      */
     private function setup(&$args)
@@ -210,13 +277,50 @@ class xarSessionHandler extends xarObject implements IsessionHandler
     }
 
     /**
+     * Initialize the session after setup
+     * @return bool
+     */
+    public function initialize()
+    {
+        // Start the session, this will call xarSession:read, and
+        // it will tell us if we need to start a new session or just
+        // to continue the current session
+        $this->start();
+        $sessionId = $this->id();
+
+        // Get  client IP addr, so we can register or continue a session
+        $forwarded = xarServer::getVar('HTTP_X_FORWARDED_FOR');
+        if (!empty($forwarded)) {
+            $ipAddress = preg_replace('/,.*/', '', $forwarded);
+        } else {
+            $ipAddress = xarServer::getVar('REMOTE_ADDR') ?? '-';
+        }
+
+        // If it's new, register it, otherwise use the existing.
+        if ($this->isNew()) {
+            if($this->register($ipAddress)) {
+                // Congratulations. We have created a new session
+                //xarEvents::trigger('SessionCreate');
+                xarEvents::notify('SessionCreate');
+            } else {
+                // Registering failed, now what?
+            }
+        } else {
+            // Not all ISPs have a fixed IP or a reliable X_FORWARDED_FOR
+            // so we don't test for the IP-address session var
+            $this->current();
+        }
+        return true;
+    }
+
+    /**
      * Start the session
      *
      * This will call the handler, and it will tell us if
      * we need a new session or just continue the old one
      *
      */
-    function start()
+    function start(): void
     {
         session_start();
     }
@@ -226,13 +330,16 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      *
      * @todo the static vs runtime method sucks, do we really need that?
      */
-    function id($id= null)
+    function id(?string $id= null): string|bool
     {
-        $this->sessionId = $this->getId($id);
+        $this->sessionId = (string) $this->getId($id);
         return $this->sessionId;
     }
 
-    static function getId($id = null)
+    /**
+     * Get (or set) the session id
+     */
+    public function getId($id = null): string|bool
     {
         if(isset($id))
             return session_id($id);
@@ -244,7 +351,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      * Getter for new isNew
      *
      */
-    function isNew()
+    function isNew(): bool
     {
         return $this->isNew;
     }
@@ -254,7 +361,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      *
      * @throws SQLException
      */
-    function register($ipAddress)
+    function register(string $ipAddress): bool
     {
         try {
             $this->db->begin();
@@ -273,7 +380,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
         }
         // Generate a random number, used for
         // some authentication
-        srand((double) microtime(true) * 1000000.0);
+        srand((int) (microtime(true) * 1000000.0));
         $this->setVar('rand', rand());
 
         $this->ipAddress = $ipAddress;
@@ -284,7 +391,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      * Continue an existing session
      *
      */
-    function current()
+    function current(): bool
     {  return true;
     }
 
@@ -293,7 +400,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      * PHP function to open the session
      * 
      */
-    function open($path, $name)
+    function open($path, $name): bool
     {   // Nothing to do - database opened elsewhere
         return true;
     }
@@ -302,7 +409,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      * PHP function to close the session
      * 
      */
-    function close()
+    function close(): bool
     {   // Nothing to do - database closed elsewhere
         return true;
     }
@@ -311,7 +418,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      * PHP function to read a set of session variables
      * 
      */
-    function read($sessionId)
+    function read($sessionId): string|false
     {
         $query = "SELECT role_id, ip_addr, last_use, vars FROM $this->tbl WHERE id = ?";
         $stmt = $this->db->prepareStatement($query);
@@ -352,7 +459,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      * @todo don't bother saving when nothing has been updated? See saveTime() below
      * @throws Exception
      */
-    function write($sessionId, $vars)
+    function write($sessionId, $vars): bool
     {
         try {
             $this->db->begin();
@@ -380,7 +487,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      * 
      * @throws SQLException
      */
-    function destroy($sessionId)
+    function destroy($sessionId): bool
     {
         try {
             $this->db->begin();
@@ -400,7 +507,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
      * 
      * @throws SQLException
      */
-    function gc($maxlifetime)
+    function gc($maxlifetime): int|false
     {
         $timeoutSetting = xarSession::getTimeoutSetting();
         $bindvars = array();
@@ -438,12 +545,11 @@ class xarSessionHandler extends xarObject implements IsessionHandler
             $this->db->rollback();
             throw $e;
         }
-        return true;
+        return 1;
     }
 
     /**
      * Get a session variable
-     *
      * @param string $name name of the session variable to get
      */
     public function getVar($name)
@@ -498,7 +604,6 @@ class xarSessionHandler extends xarObject implements IsessionHandler
 
     /**
      * Set user info
-     *
      * @throws SQLException
      * @todo this seems a strange duck (only used in roles by the looks of it)
      */
@@ -513,7 +618,7 @@ class xarSessionHandler extends xarObject implements IsessionHandler
             $query = "UPDATE $sessioninfoTable
                       SET role_id = ? ,remember = ?
                       WHERE id = ?";
-            $bindvars = array($userId, $rememberSession, self::getId());
+            $bindvars = array($userId, $rememberSession, $this->getId());
             $stmt = $dbconn->prepareStatement($query);
             $stmt->executeUpdate($bindvars);
             $dbconn->commit();
@@ -566,23 +671,29 @@ class xarSession
 {
     /** @var ?int */
     public static $anonId = null;     // Replacement for _XAR_ID_UNREGISTERED
+    /** @var string */
     private static $securityLevel;
+    /** @var int */
     private static $duration;
+    /** @var int */
     private static $inactivityTimeout;
     //private static $cookieName;
     //private static $cookiePath;
     //private static $cookieDomain;
     //private static $refererCheck;
+    /** @var ?iSessionInterface */
     private static $instance;
+    /** @var ?int */
     private static $lastSaved;
-    private static $handlerClass = xarSessionHandler::class;
+    /** @var class-string */
+    private static $sessionClass = xarSessionHandler::class;
 
     /**
      * Initialise the Session Support
-     *
+     * @param array<string, mixed> $args
      * @return boolean true
      */
-    public static function init(array $args = array())
+    public static function init(array $args = [])
     {
         if (empty($args)) {
             $args = self::getConfig();
@@ -594,7 +705,7 @@ class xarSession
         //self::$cookiePath = $args['cookiePath'];
         //self::$cookieDomain = $args['cookieDomain'];
         //self::$refererCheck = $args['refererCheck'));
-        //self::$handlerClass = $args['$handlerClass'] ?? xarSessionHandler::class;
+        //self::sessionClass = $args['sessionClass'] ?? xarSessionHandler::class;
 
         self::$anonId = (int) xarConfigVars::get(null, 'Site.User.AnonymousUID', 5);
         if (!defined('_XAR_ID_UNREGISTERED')) {
@@ -605,44 +716,18 @@ class xarSession
         // this is now registered during modules module init
         // xarEvents::register('SessionCreate');
 
-        // Register tables this subsystem uses
-        $tables = array('session_info' => xarDB::getPrefix() . '_session_info');
-        xarDB::importTables($tables);
-
         // Set up the session object
-        $session = new self::$handlerClass($args);
+        $session = new self::$sessionClass($args);
 
-        // Start the session, this will call xarSession:read, and
-        // it will tell us if we need to start a new session or just
-        // to continue the current session
-        $session->start();
-        $sessionId = $session->id();
-
-        // Get  client IP addr, so we can register or continue a session
-        $forwarded = xarServer::getVar('HTTP_X_FORWARDED_FOR');
-        if (!empty($forwarded)) {
-            $ipAddress = preg_replace('/,.*/', '', $forwarded);
-        } else {
-            $ipAddress = xarServer::getVar('REMOTE_ADDR') || '-';
-        }
-
-        // If it's new, register it, otherwise use the existing.
-        if ($session->isNew()) {
-            if($session->register($ipAddress)) {
-                // Congratulations. We have created a new session
-                //xarEvents::trigger('SessionCreate');
-                xarEvents::notify('SessionCreate');
-            } else {
-                // Registering failed, now what?
-            }
-        } else {
-            // Not all ISPs have a fixed IP or a reliable X_FORWARDED_FOR
-            // so we don't test for the IP-address session var
-            $session->current();
-        }
+        // Initialize the session
+        $session->initialize();
         return true;
     }
 
+    /**
+     * Get session configuration
+     * @return array<string, mixed>
+     */
     static function getConfig()
     {
         $systemArgs = array(
@@ -653,10 +738,34 @@ class xarSession
             'cookiePath'        => xarConfigVars::get(null, 'Site.Session.CookiePath'),
             'cookieDomain'      => xarConfigVars::get(null, 'Site.Session.CookieDomain'),
             'refererCheck'      => xarConfigVars::get(null, 'Site.Session.RefererCheck'));
-            //'handlerClass'      => xarConfigVars::get(null, 'Site.Session.HandlerClass'));
+            //'sessionClass'      => xarConfigVars::get(null, 'Site.Session.HandlerClass'));
         return $systemArgs;
     }
 
+    /**
+     * Set the session class to use (instead of xarSessionHandler)
+     * @param class-string $className
+     * @return void
+     */
+    static function setSessionClass($className)
+    {
+        self::$sessionClass = $className;
+    }
+
+    /**
+     * Get the session class instance
+     * @return iSessionInterface
+     */
+    static function getInstance()
+    {
+        return self::$instance;
+    }
+
+    /**
+     * Set the session class instance
+     * @param iSessionInterface $instance
+     * @return void
+     */
     static function setInstance($instance)
     {
         self::$instance = $instance;
@@ -664,17 +773,21 @@ class xarSession
 
     /**
      * Get the session id if the session is initialized
+     * @param ?string $id
+     * @return string|bool|null
      */
     static function getId($id = null)
     {
         if (!isset(self::$instance)) {
             return $id;
         }
-        return self::$instance::getId($id);
+        return self::$instance->getId($id);
     }
 
     /**
      * Get some default variables without session
+     * @param string $name
+     * @return mixed
      */
     static function getDefaultVar($name)
     {
@@ -695,6 +808,7 @@ class xarSession
      * Get a session variable
      *
      * @param string $name name of the session variable to get
+     * @return mixed
      */
     static function getVar($name)
     {
@@ -708,6 +822,7 @@ class xarSession
      * Set a session variable
      * @param string $name name of the session variable to set
      * @param mixed $value value to set the named session variable
+     * @return bool
      */
     static function setVar($name, $value)
     {
@@ -718,7 +833,7 @@ class xarSession
         if (!isset(self::$instance)) {
             // ignore templates and security try to save stuff in session
             if ($name == 'navigationLocale' || $name == 'privilegeset') {
-                return;
+                return false;
             }
             throw new SessionException('Session was not initialized to set ' . $name);
         }
@@ -728,6 +843,7 @@ class xarSession
     /**
      * Delete a session variable
      * @param string $name name of the session variable to delete
+     * @return bool
      */
     static function delVar($name)
     {
@@ -738,9 +854,11 @@ class xarSession
 
     /**
      * Set user info
-     *
+     * @param int $userId
+     * @param int $rememberSession
      * @throws SQLException
      * @todo this seems a strange duck (only used in roles by the looks of it)
+     * @return bool
      */
     static function setUserInfo($userId, $rememberSession)
     {
@@ -749,6 +867,8 @@ class xarSession
 
     /**
      * When was this session last saved ?
+     * @param int $lastused
+     * @return ?int
      */
     static function saveTime($lastused = 0)
     {
@@ -770,8 +890,7 @@ class xarSession
 
     /**
      * Get the configured security level
-     *
-     * @todo Is this used anywhere outside the session class itself?
+     * @return string
      */
     public static function getSecurityLevel()
     {
@@ -780,6 +899,7 @@ class xarSession
 
     /**
      * Get Timeout Setting
+     * @return int
      */
     public static function getTimeoutSetting()
     {
@@ -789,6 +909,7 @@ class xarSession
 
     /**
      * Get Session Duration (In Days)
+     * @return int
      */
     public static function getDuration()
     {
@@ -797,8 +918,8 @@ class xarSession
 
     /**
      * Clear all the sessions in the sessions table
-     *
      * @param array<mixed> $spared a list of roles IDs whose sessions are left untouched
+     * @return bool
      */
     public static function clear($spared=[])
     {

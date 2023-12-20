@@ -173,10 +173,10 @@ class xarServer extends xarObject
     {
         assert(version_compare("7.2",phpversion()) <= 0);
         if (isset($_SERVER[$name])) return $_SERVER[$name];
-        if($name == 'PATH_INFO')    return;
+        if($name == 'PATH_INFO')    return null;
         if (isset($_ENV[$name]))    return $_ENV[$name];
         if ($val = getenv($name))   return $val;
-        return; // we found nothing here
+        return null; // we found nothing here
     }
 
     /**
