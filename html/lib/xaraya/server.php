@@ -126,35 +126,92 @@ class xarURL extends xarObject
     }
 }
 
-class xarServer extends xarObject
+/**
+ * Interface between xarServer (static) and xarRequestHandler (instance)
+ * Note: if you want to replace xarRequestHandler with a custom class, use
+ * xarServer::setRequestClass(MyCustomRequest::class);
+ * @todo make use of this with requestcontext?
+ */
+interface iRequestInterface
 {
-    const PROTOCOL_HTTP  = 'http';
-    const PROTOCOL_HTTPS = 'https';
-
-    public static $baseurl;
-    public static $allowShortURLs = true;
-    public static $generateXMLURLs = true;
+    /**
+     * Constructor for the request handler
+     * @param array<string, mixed> $args not by reference anymore
+     * @uses xarServer::setInstance()
+     * @return void
+     **/
+    public function __construct($args);
 
     /**
-     * Initialize
-     *
+     * Initialize the request after setup
+     * @return bool
      */
-    static function init(array $args = array())
+    public function initialize();
+
+    /**
+     * Gets a server variable
+     * @param string $name the name of the variable
+     * @return mixed value of the variable
+     */
+    public function getServerVar($name);
+
+    /**
+     * Allow setting server variable if needed
+     * @param string $name the name of the variable
+     * @param mixed $value value of the variable
+     * @return void
+     */
+    public function setServerVar($name, $value);
+
+    /**
+     * Gets a query variable
+     * @param string $name the name of the variable
+     * @return mixed value of the variable
+     */
+    public function getQueryVar($name);
+
+    /**
+     * Gets a body variable
+     * @param string $name the name of the variable
+     * @return mixed value of the variable
+     */
+    public function getBodyVar($name);
+
+    /**
+     * Gets a cookie variable
+     * @param string $name the name of the variable
+     * @return mixed value of the variable
+     */
+    public function getCookieVar($name);
+}
+
+/**
+ * Request handler based on $_SERVER etc.
+ */
+class xarRequestHandler implements iRequestInterface
+{
+    /** @var array<string, mixed> */
+    private array $args = [];
+
+    /**
+     * Constructor for the request handler
+     * @param array<string, mixed> $args not by reference anymore
+     * @uses xarServer::setInstance()
+     * @return void
+     **/
+    public function __construct($args)
     {
-        if (empty($args)) {
-            $args = self::getConfig();
-        }
-        self::$allowShortURLs = $args['enableShortURLsSupport'];
-        self::$generateXMLURLs = $args['generateXMLURLs'];
-        // This event is now registered during base module init        
-        //xarEvents::register('ServerRequest');
+        $this->args = $args;
+        xarServer::setInstance($this);
     }
 
-    static function getConfig()
+    /**
+     * Initialize the request after setup
+     * @return bool
+     */
+    public function initialize()
     {
-        $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
-                            'generateXMLURLs' => true);
-        return $systemArgs;
+        return true;
     }
 
     /**
@@ -163,7 +220,148 @@ class xarServer extends xarObject
      * Returns the value of $name server variable.
      * Accepted values for $name are exactly the ones described by the
      * {@link http://www.php.net/manual/en/reserved.variables.server.php PHP manual}.
-     * If the server variable doesn't exist void is returned.
+     * If the server variable doesn't exist null is returned.
+     *
+     * 
+     * @param string $name the name of the variable
+     * @return mixed value of the variable
+     */
+    public function getServerVar($name)
+    {
+        assert(version_compare("7.2",phpversion()) <= 0);
+        if (isset($_SERVER[$name])) return $_SERVER[$name];
+        if($name == 'PATH_INFO')    return null;
+        if (isset($_ENV[$name]))    return $_ENV[$name];
+        if ($val = getenv($name))   return $val;
+        return null; // we found nothing here
+    }
+
+    /**
+     * Allow setting server variable if needed
+     * @param string $name the name of the variable
+     * @param mixed $value value of the variable
+     * @return void
+     */
+    public function setServerVar($name, $value)
+    {
+        $_SERVER[$name] = $value;
+    }
+
+    /**
+     * Gets a query variable
+     * @param string $name the name of the variable
+     * @return mixed value of the variable
+     */
+    public function getQueryVar($name)
+    {
+        return $_GET[$name] ?? null;
+    }
+
+    /**
+     * Gets a body variable
+     * @param string $name the name of the variable
+     * @return mixed value of the variable
+     */
+    public function getBodyVar($name)
+    {
+        return $_POST[$name] ?? null;
+    }
+
+    /**
+     * Gets a cookie variable
+     * @param string $name the name of the variable
+     * @return mixed value of the variable
+     */
+    public function getCookieVar($name)
+    {
+        return $_COOKIE[$name] ?? null;
+    }
+}
+
+class xarServer extends xarObject
+{
+    const PROTOCOL_HTTP  = 'http';
+    const PROTOCOL_HTTPS = 'https';
+
+    /** @var ?string */
+    public static $baseurl;
+    /** @var bool */
+    public static $allowShortURLs = true;
+    /** @var bool */
+    public static $generateXMLURLs = true;
+    /** @var ?iRequestInterface */
+    private static $instance;
+    /** @var class-string */
+    private static $requestClass = xarRequestHandler::class;
+
+    /**
+     * Initialize
+     * @param array<string, mixed> $args
+     * @return void
+     */
+    static function init(array $args = array())
+    {
+        if (empty($args)) {
+            $args = self::getConfig();
+        }
+        self::$allowShortURLs = $args['enableShortURLsSupport'];
+        self::$generateXMLURLs = $args['generateXMLURLs'];
+
+        // Set up the request object
+        $request = new self::$requestClass($args);
+        // Initialize the request
+        $request->initialize();
+        // This event is now registered during base module init        
+        //xarEvents::register('ServerRequest');
+    }
+
+    /**
+     * Get server configuration
+     * @return array<string, mixed>
+     */
+    static function getConfig()
+    {
+        $systemArgs = array('enableShortURLsSupport' => xarConfigVars::get(null, 'Site.Core.EnableShortURLsSupport'),
+                            'generateXMLURLs' => true);
+        return $systemArgs;
+    }
+
+    /**
+     * Set the request class to use (instead of xarRequestHandler)
+     * @param class-string $className
+     * @return void
+     */
+    static function setRequestClass($className)
+    {
+        self::$requestClass = $className;
+    }
+
+    /**
+     * Get the request class instance
+     * @return iRequestInterface
+     */
+    static function getInstance()
+    {
+        return self::$instance;
+    }
+
+    /**
+     * Set the request class instance
+     * @param iRequestInterface $instance
+     * @return void
+     */
+    static function setInstance($instance)
+    {
+        self::$instance = $instance;
+    }
+
+    /**
+     * Gets a server variable
+     *
+     * Returns the value of $name server variable.
+     * Accepted values for $name are exactly the ones described by the
+     * {@link http://www.php.net/manual/en/reserved.variables.server.php PHP manual}.
+     * If the server variable doesn't exist null is returned.
      *
      * 
      * @param string $name the name of the variable
@@ -181,6 +379,9 @@ class xarServer extends xarObject
 
     /**
      * Allow setting server variable if needed
+     * @param string $name the name of the variable
+     * @param mixed $value value of the variable
+     * @return void
      */
     static function setVar($name, $value)
     {
@@ -224,6 +425,7 @@ class xarServer extends xarObject
                 $path = self::getVar('PATH_INFO');
             }
         }
+        /** @var string $path */
 
         $path = preg_replace('/[#\?].*/', '', $path);
 
@@ -310,6 +512,8 @@ class xarServer extends xarObject
 
     /**
      * Allow setting baseurl if needed
+     * @param string $baseurl
+     * @return void
      */
     static function setBaseURL($baseurl)
     {
@@ -360,6 +564,14 @@ class xarServer extends xarObject
         return $baseurl . $request;
     }
 
+    /**
+     * Get current query string (and optionally add/replace some parameters)
+     *
+     * @param array<string, mixed> $args additional parameters to be added to/replaced in the URL (e.g. theme, ...)
+     * @param bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
+     * @param string $target add a 'target' component to the URL
+     * @return string current query string
+     */
     static function getCurrentRequestString($args = array(), $generateXMLURL = NULL, $target = NULL)
     {
         // get current URI
@@ -435,6 +647,14 @@ class xarServer extends xarObject
      * Generates an URL that reference to a module function.
      *
      * Cfr. xarMod URL() in modules
+     * @param ?string $modName registered name of module
+     * @param string $modType type of function
+     * @param string $funcName module function
+     * @param array<string, mixed> $args additional parameters to be added to/replaced in the URL (e.g. theme, ...)
+     * @param ?bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
+     * @param ?string $fragment document fragment target (e.g. somesite.com/index.php?foo=bar#target)
+     * @param string|array<string, mixed> $entrypoint array of arguments for different entrypoint than index.php
+     * @return mixed absolute URL for call, or false on failure
      */
     static function getModuleURL($modName = NULL, $modType = 'user', $funcName = 'main', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
     {
@@ -444,6 +664,13 @@ class xarServer extends xarObject
 
     /**
      * Generates a URL that reference to an object user interface method.
+     * @param ?string $objectName
+     * @param string $methodName
+     * @param array<string, mixed> $args additional parameters to be added to/replaced in the URL (e.g. theme, ...)
+     * @param ?bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
+     * @param ?string $fragment document fragment target (e.g. somesite.com/index.php?foo=bar#target)
+     * @param string|array<string, mixed> $entrypoint array of arguments for different entrypoint than index.php
+     * @return mixed absolute URL for call, or false on failure
      */
     static function getObjectURL($objectName = NULL, $methodName = 'view', $args = array(), $generateXMLURL = NULL, $fragment = NULL, $entrypoint = array())
     {

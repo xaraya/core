@@ -1,20 +1,17 @@
 <?php
 /**
- * Authsystem Module
- *
- * @package modules\authsystem
+ * @package core\context
+ * @subpackage context
  * @category Xaraya Web Applications Framework
- * @version 2.4.1
+ * @version 2.4.2
  * @copyright see the html/credits.html file in this release
  * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
- * @link http://xaraya.info/index.php/release/42.html
- *
- * @author mikespub <mikespub@xaraya.com>
+ * @link http://www.xaraya.info
  */
 
-namespace Xaraya\Authentication;
+namespace Xaraya\Context;
 
-use Xaraya\Context\Context;
+use Xaraya\Authentication\AuthToken;
 use xarSession;
 use xarUser;
 use sys;
