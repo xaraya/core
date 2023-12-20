@@ -23,6 +23,7 @@ class xarSessionLessCache extends xarObject
      */
     public static function checkCachingRules()
     {
+        // Note: still using $_SERVER here since xarServer is not initialized
         if (
             // we have no session id in a cookie or URL parameter
             empty($_REQUEST[xarOutputCache::$cacheCookie]) &&
@@ -54,6 +55,7 @@ class xarSessionLessCache extends xarObject
             return;
         }
 
+        // Note: still using $_SERVER here since xarServer is not initialized
         if (empty($sessionLessList) || !is_array($sessionLessList)) {
             $sessionLessList = [];
         }

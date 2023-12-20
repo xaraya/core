@@ -9,6 +9,7 @@
  *
  * // use some routing bridge
  * use Xaraya\Bridge\Routing\FastRouteBridge;
+ * use xarServer;
  *
  * // add route collection to your own dispatcher
  * // $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
@@ -18,7 +19,7 @@
  * //         FastRouteBridge::addRouteCollection($r);
  * //     });
  * // });
- * // $routeInfo = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
+ * // $routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
  * // if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
  * //     $handler = $routeInfo[1];
  * //     $vars = $routeInfo[2];
@@ -27,10 +28,10 @@
  *
  * // or get a route dispatcher to work with yourself, possibly in a group
  * // $dispatcher = FastRouteBridge::getSimpleDispatcher('/mysite');
- * // $routeInfo = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
+ * // $routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
  *
  * // or let the route dispatcher handle the request itself and return the result
- * [$result, $context] = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/', '/mysite');
+ * [$result, $context] = FastRouteBridge::dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/', '/mysite');
  * FastRouteBridge::output($result, $context);
  *
  * // or let it really do all the work here...
@@ -256,7 +257,7 @@ class FastRouteBridge implements CommonBridgeInterface
             }
             echo $result;
         } else {
-            if (!empty($_SERVER['HTTP_ORIGIN'])) {
+            if (!empty(xarServer::getVar('HTTP_ORIGIN'))) {
                 header('Access-Control-Allow-Origin: *');
             }
             header('Content-Type: application/json; charset=utf-8');

@@ -37,7 +37,7 @@ LocalTimer::setTimer('core');
 // Concatenate and parse string into $_GET: php psr.php object=sample ...
 if (php_sapi_name() === 'cli') {
     parse_str(implode('&', array_slice($argv, 1)), $_GET);
-    $_SERVER['REQUEST_URI'] = $argv[0];
+    xarServer::setVar('REQUEST_URI', $argv[0]);
 }
 
 function getRequest($psr17Factory)

@@ -104,8 +104,8 @@ function roles_userapi_parseuserhome(Array $args=array())
                 $allowexternalurl = (bool)xarModVars::get('roles','allowexternalurl');
                 $url_parts = parse_url($url);
                 if (isset($url_parts['host'])) { //if not we don't have to worry
-                    if (($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
-                        ($url_parts['host'] != $_SERVER["HTTP_HOST"]) &&
+                    if (($url_parts['host'] != xarServer::getVar("SERVER_NAME")) &&
+                        ($url_parts['host'] != xarServer::getVar("HTTP_HOST")) &&
                         ($url_parts['host'] != 'localhost')) {
                         $externalurl=true;
                     }

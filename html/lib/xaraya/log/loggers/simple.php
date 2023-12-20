@@ -137,7 +137,8 @@ class xarLogger_simple extends xarLogger
      **/
     public function start()
     {
-         $this->buffer = $this->header;
+        // Note: still using $_SERVER here since xarServer is not initialized
+        $this->buffer = $this->header;
          
         // Write the request details.
         if (isset($_SERVER['REQUEST_URI'])) {

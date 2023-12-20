@@ -132,13 +132,13 @@ function dispatch_request($method, $path, $dispatcher, $restHandler)
  */
 function try_handler($restHandler)
 {
-    if (empty($_SERVER['PATH_INFO'])) {
+    if (empty(xarServer::getVar('PATH_INFO'))) {
         send_openapi($restHandler);
     } else {
         // $restHandler::$enableTimer = true;
         // $restHandler::setTimer('start');
         $dispatcher = get_dispatcher($restHandler);
-        dispatch_request($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'], $dispatcher, $restHandler);
+        dispatch_request(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO'), $dispatcher, $restHandler);
     }
 }
 

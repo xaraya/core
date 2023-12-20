@@ -65,6 +65,7 @@ class xarLogger_html extends xarLogger_simple
      **/
     public function start()
     {
+        // Note: still using $_SERVER here since xarServer is not initialized
 		$this->buffer = $this->header;
          
         // Write the request details.

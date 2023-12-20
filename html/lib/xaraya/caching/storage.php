@@ -485,15 +485,15 @@ class xarCache_Storage extends xarObject
      */
     public function logStatus($status = 'MISS', $key = '')
     {
-        if (empty($this->logfile) || empty($_SERVER['HTTP_HOST']) ||
-            empty($_SERVER['REQUEST_URI']) || empty($_SERVER['REMOTE_ADDR'])) {
+        if (empty($this->logfile) || empty(xarServer::getVar('HTTP_HOST')) ||
+            empty(xarServer::getVar('REQUEST_URI')) || empty(xarServer::getVar('REMOTE_ADDR'))) {
             return;
         }
 
         $time = time();
-        $addr = !empty($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '-';
-        $url = 'http://'.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-        //$ref = !empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '-';
+        $addr = !empty(xarServer::getVar('REMOTE_ADDR')) ? xarServer::getVar('REMOTE_ADDR') : '-';
+        $url = 'http://'.xarServer::getVar('HTTP_HOST').xarServer::getVar('REQUEST_URI');
+        //$ref = !empty(xarServer::getVar('HTTP_REFERER')) ? xarServer::getVar('HTTP_REFERER') : '-';
         $type = $this->type;
         $code = $this->code;
 

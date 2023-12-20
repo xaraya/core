@@ -1370,7 +1370,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         if (!headers_sent() && $status !== 200) {
             http_response_code($status);
         }
-        if (!empty($_SERVER['HTTP_ORIGIN'])) {
+        if (!empty(xarServer::getVar('HTTP_ORIGIN'))) {
             header('Access-Control-Allow-Origin: *');
         }
         if (is_string($result)) {

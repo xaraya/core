@@ -11,11 +11,11 @@ final class EndpointTest extends TestCase
 {
     public function testGqlGet(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        xarServer::setVar('REQUEST_METHOD', 'GET');
         ob_start();
         include sys::web() . 'gql.php';
         $output = ob_get_clean();
-        unset($_SERVER['REQUEST_METHOD']);
+        xarServer::setVar('REQUEST_METHOD', null);
 
         $expected = 'Get GraphQL Schema Definition';
         $this->assertStringContainsString($expected, $output);
@@ -23,13 +23,13 @@ final class EndpointTest extends TestCase
 
     public function testGqlGetObjects(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['QUERY_STRING'] = 'query={objects{objectid,name}}';
+        xarServer::setVar('REQUEST_METHOD', 'GET');
+        xarServer::setVar('QUERY_STRING', 'query={objects{objectid,name}}');
         ob_start();
         include sys::web() . 'gql.php';
         $output = ob_get_clean();
-        unset($_SERVER['REQUEST_METHOD']);
-        unset($_SERVER['QUERY_STRING']);
+        xarServer::setVar('REQUEST_METHOD', null);
+        xarServer::setVar('QUERY_STRING', null);
 
         $expected = null;
         $result = json_decode($output, true);
@@ -41,13 +41,13 @@ final class EndpointTest extends TestCase
 
     public function testGqlGetSamples(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['QUERY_STRING'] = 'query={samples{id,name}}';
+        xarServer::setVar('REQUEST_METHOD', 'GET');
+        xarServer::setVar('QUERY_STRING', 'query={samples{id,name}}');
         ob_start();
         include sys::web() . 'gql.php';
         $output = ob_get_clean();
-        unset($_SERVER['REQUEST_METHOD']);
-        unset($_SERVER['QUERY_STRING']);
+        xarServer::setVar('REQUEST_METHOD', null);
+        xarServer::setVar('QUERY_STRING', null);
 
         $expected = 3;
         $result = json_decode($output, true);
@@ -59,11 +59,11 @@ final class EndpointTest extends TestCase
 
     public function testGqlOptions(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
+        xarServer::setVar('REQUEST_METHOD', 'OPTIONS');
         ob_start();
         include sys::web() . 'gql.php';
         $output = ob_get_clean();
-        unset($_SERVER['REQUEST_METHOD']);
+        xarServer::setVar('REQUEST_METHOD', null);
 
         $expected = '';
         // @todo this doesn't actually capture the headers
@@ -113,11 +113,11 @@ final class EndpointTest extends TestCase
 
     public function testRstGet(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
+        xarServer::setVar('REQUEST_METHOD', 'GET');
         ob_start();
         include sys::web() . 'rst.php';
         $output = ob_get_clean();
-        unset($_SERVER['REQUEST_METHOD']);
+        xarServer::setVar('REQUEST_METHOD', null);
 
         $expected = 'DynamicData REST API';
         $result = json_decode($output, true);
@@ -126,13 +126,13 @@ final class EndpointTest extends TestCase
 
     public function testRstGetObjects(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['PATH_INFO'] = '/v1/objects';
+        xarServer::setVar('REQUEST_METHOD', 'GET');
+        xarServer::setVar('PATH_INFO', '/v1/objects');
         ob_start();
         include sys::web() . 'rst.php';
         $output = ob_get_clean();
-        unset($_SERVER['REQUEST_METHOD']);
-        unset($_SERVER['PATH_INFO']);
+        xarServer::setVar('REQUEST_METHOD', null);
+        xarServer::setVar('PATH_INFO', null);
 
         $expected = 1;
         $result = json_decode($output, true);
@@ -143,13 +143,13 @@ final class EndpointTest extends TestCase
 
     public function testRstGetSamples(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['PATH_INFO'] = '/v1/objects/sample';
+        xarServer::setVar('REQUEST_METHOD', 'GET');
+        xarServer::setVar('PATH_INFO', '/v1/objects/sample');
         ob_start();
         include sys::web() . 'rst.php';
         $output = ob_get_clean();
-        unset($_SERVER['REQUEST_METHOD']);
-        unset($_SERVER['PATH_INFO']);
+        xarServer::setVar('REQUEST_METHOD', null);
+        xarServer::setVar('PATH_INFO', null);
 
         $expected = 3;
         $result = json_decode($output, true);
@@ -160,11 +160,11 @@ final class EndpointTest extends TestCase
 
     public function testRstOptions(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'OPTIONS';
+        xarServer::setVar('REQUEST_METHOD', 'OPTIONS');
         ob_start();
         include sys::web() . 'rst.php';
         $output = ob_get_clean();
-        unset($_SERVER['REQUEST_METHOD']);
+        xarServer::setVar('REQUEST_METHOD', null);
 
         $expected = '';
         // @todo this doesn't actually capture the headers

@@ -37,8 +37,8 @@ function base_admin_composer()
         $root = sys::root();
         // flat install supporting symlinks
         if (empty($root)) {
-            $root = realpath(dirname(realpath($_SERVER['SCRIPT_FILENAME'])) . '/../');
-            //$vendor = realpath(dirname(realpath($_SERVER['SCRIPT_FILENAME'])) . '/../vendor');
+            $root = realpath(dirname(realpath(xarServer::getVar('SCRIPT_FILENAME'))) . '/../');
+            //$vendor = realpath(dirname(realpath(xarServer::getVar('SCRIPT_FILENAME'))) . '/../vendor');
         } else {
             $root = realpath($root);
             //$vendor = realpath($root . 'vendor');

@@ -121,8 +121,8 @@ function roles_userapi_usermenu(Array $args=array())
                     $url_parts = parse_url($home);
                     if (!$allowexternalurl) {
                         if ((preg_match("%^http://%", $home, $matches)) &&
-                        ($url_parts['host'] != $_SERVER["SERVER_NAME"]) &&
-                        ($url_parts['host'] != $_SERVER["HTTP_HOST"])) {
+                        ($url_parts['host'] != xarServer::getVar("SERVER_NAME")) &&
+                        ($url_parts['host'] != xarServer::getVar("HTTP_HOST"))) {
                             $msg  = xarML('<span class="xar-alert">&#160;External URLs such as #(1) are not permitted as your home page.</span>', $home);
                             $object->properties['userhome']->invalid .= $msg;
                             $isvalid = false;

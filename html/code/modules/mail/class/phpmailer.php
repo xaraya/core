@@ -1531,6 +1531,7 @@ class PHPMailer extends xarObject
      */
     function ServerVar($varName)
     {
+        // @todo clean this up
         global $HTTP_SERVER_VARS;
         global $HTTP_ENV_VARS;
 

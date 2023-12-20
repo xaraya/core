@@ -404,6 +404,12 @@ class xarServer extends xarObject
      */
     static function getInstance()
     {
+        if (!isset(self::$instance)) {
+            // Set up the request object
+            $request = new self::$requestClass([]);
+            // Initialize the request
+            $request->initialize();
+        }
         return self::$instance;
     }
 
@@ -432,11 +438,7 @@ class xarServer extends xarObject
     static function getVar($name)
     {
         assert(version_compare("7.2",phpversion()) <= 0);
-        if (isset($_SERVER[$name])) return $_SERVER[$name];
-        if($name == 'PATH_INFO')    return null;
-        if (isset($_ENV[$name]))    return $_ENV[$name];
-        if ($val = getenv($name))   return $val;
-        return null; // we found nothing here
+        return self::getInstance()->getServerVar($name);
     }
 
     /**
@@ -447,7 +449,7 @@ class xarServer extends xarObject
      */
     static function setVar($name, $value)
     {
-        $_SERVER[$name] = $value;
+        self::getInstance()->setServerVar($name, $value);
     }
 
     /**

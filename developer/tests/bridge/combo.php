@@ -33,8 +33,8 @@ LocalTimer::setTimer('core');
 if (php_sapi_name() === 'cli') {
     //parse_str(implode('&', array_slice($argv, 1)), $_GET);
     if ($argc > 1 && str_contains($argv[1], '/')) {
-        $_SERVER['PATH_INFO'] = $argv[1];
-        $_SERVER['REQUEST_URI'] = $argv[0] . $argv[1];
+        xarServer::setVar('PATH_INFO', $argv[1]);
+        xarServer::setVar('REQUEST_URI', $argv[0] . $argv[1]);
     }
 }
 

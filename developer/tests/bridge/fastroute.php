@@ -19,8 +19,8 @@ xarCore::xarInit(xarCore::SYSTEM_USER);
 if (php_sapi_name() === 'cli') {
     //parse_str(implode('&', array_slice($argv, 1)), $_GET);
     if ($argc > 1 && str_contains($argv[1], '/')) {
-        $_SERVER['PATH_INFO'] = $argv[1];
-        //$_SERVER['REQUEST_URI'] = $argv[0] . $argv[1];
+        xarServer::setVar('PATH_INFO', $argv[1]);
+        //xarServer::setVar('REQUEST_URI', $argv[0] . $argv[1]);
     }
 }
 
@@ -33,7 +33,7 @@ $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) 
         FastRouteBridge::addRouteCollection($r);
     });
 });
-$routeInfo = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
+$routeInfo = $dispatcher->dispatch(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
 if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
     $handler = $routeInfo[1];
     $vars = $routeInfo[2];
@@ -43,13 +43,13 @@ if ($routeInfo[0] == FastRoute\Dispatcher::FOUND) {
  */
 
 // or direct use of simple route dispatcher
-//[$result, $context] = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'], $_SERVER['PATH_INFO'] ?? '/');
+//[$result, $context] = FastRouteBridge::dispatchRequest(xarServer::getVar('REQUEST_METHOD'), xarServer::getVar('PATH_INFO') ?? '/');
 //echo $result;
 //echo xarTpl::renderPage($result);
 //FastRouteBridge::run();
 
 // or direct use of simple route dispatcher
-[$result, $context] = FastRouteBridge::dispatchRequest($_SERVER['REQUEST_METHOD'] ?? 'GET', $_SERVER['PATH_INFO'] ?? '/');
+[$result, $context] = FastRouteBridge::dispatchRequest(xarServer::getVar('REQUEST_METHOD') ?? 'GET', xarServer::getVar('PATH_INFO') ?? '/');
 FastRouteBridge::output($result, $context);
 
 /**

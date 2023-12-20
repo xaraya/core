@@ -24,6 +24,7 @@ class xarAutoSessionCache extends xarObject
      */
     public static function logStatus($status = 'MISS', $autoCachePeriod = 0)
     {
+        // Note: still using $_SERVER here since xarServer is not initialized
         if (!empty($_SERVER['REQUEST_METHOD']) &&
             ($_SERVER['REQUEST_METHOD'] == 'GET' || $_SERVER['REQUEST_METHOD'] == 'HEAD') &&
         // the URL is one of the candidates for session-less caching

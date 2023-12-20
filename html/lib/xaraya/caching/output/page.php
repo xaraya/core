@@ -198,6 +198,7 @@ class xarPageCache extends xarObject
      */
     public static function sendHeaders($modtime = 0)
     {
+        // Note: still using $_SERVER here since xarServer is not initialized
         if (empty($modtime)) {
             // CHECKME: this means 304 will never apply then - is that what we want here ?
             // default to current time
@@ -277,6 +278,7 @@ class xarPageCache extends xarObject
             return false;
         }
 
+        // Note: still using $_SERVER here since xarServer is not initialized
         if (// the cache entry exists and hasn't expired yet...
             (self::$cacheStorage->isCached($cacheKey))) {
             // create another copy for session-less page caching if necessary
@@ -355,6 +357,7 @@ class xarPageCache extends xarObject
             }
         }
 
+        // Note: still using $_SERVER here since xarServer is not initialized
         if (// the cache entry doesn't exist or has expired (no log here) AND
             // CHECKME: do we really want to check this again, or do we ignore it ?
             !(self::$cacheStorage->isCached($cacheKey, 0, 0)) &&
