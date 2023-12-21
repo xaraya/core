@@ -102,6 +102,7 @@ class ViewHandler extends DefaultHandler
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
+            $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
         }
 

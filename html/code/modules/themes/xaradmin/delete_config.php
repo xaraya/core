@@ -35,7 +35,7 @@ function themes_admin_delete_config()
         $item = $data['object']->deleteItem();
             
         // Jump to the next page
-        xarResponse::redirect(xarController::URL('themes','admin','view_configs'));
+        xarController::redirect(xarController::URL('themes','admin','view_configs'));
         return true;
     }
     return $data;

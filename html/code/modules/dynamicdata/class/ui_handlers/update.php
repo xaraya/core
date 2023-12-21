@@ -85,6 +85,7 @@ class UpdateHandler extends DefaultHandler
             }
         }
         if (!$this->object->checkAccess('update')) {
+            $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
         }
         // set context if available in handler
@@ -120,7 +121,7 @@ class UpdateHandler extends DefaultHandler
                     $args['return_url'] = $this->getReturnURL();
                 }
 
-                xarController::redirect($args['return_url']);
+                xarController::redirect($args['return_url'], null, $this->getContext());
                 // Return
                 return true;
             }

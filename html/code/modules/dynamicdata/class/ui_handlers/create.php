@@ -77,6 +77,7 @@ class CreateHandler extends DefaultHandler
             }
         }
         if (!$this->object->checkAccess('create')) {
+            $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('Create #(1) is forbidden', $this->object->label));
         }
         // set context if available in handler
@@ -110,7 +111,7 @@ class CreateHandler extends DefaultHandler
                     $args['return_url'] = $this->getReturnURL();
                 }
 
-                xarController::redirect($args['return_url']);
+                xarController::redirect($args['return_url'], null, $this->getContext());
                 // Return
                 return true;
             }

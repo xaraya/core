@@ -113,7 +113,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
     public function prepareRequestCallback(ServerRequestInterface &$request): void
     {
         // @checkme we need to somehow update $request here to do any good!?
-        $callback = function (string $redirectURL, int $status = 302) use (&$request) {
+        $callback = function (string $redirectURL, int $status = 302, mixed $context = null) use (&$request) {
             $request = $request->withAttribute('redirectURL', $redirectURL);
             $request = $request->withAttribute('status', $status);
         };

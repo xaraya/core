@@ -50,6 +50,9 @@ function dynamicdata_user_display(array $args = [], $context = null)
         return;
     }
     if (!$myobject->checkAccess('display')) {
+        if (!empty($context)) {
+            $context->setStatus(403);
+        }
         return xarResponse::Forbidden(xarML('Display #(1) is forbidden', $myobject->label));
     }
     // set context if available in function

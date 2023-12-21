@@ -364,6 +364,7 @@ class xarSecurity extends xarObject
                 // Redirect to the privileges error page
                 $redirectURL = xarController::URL('privileges','user','errors',array('layout' => 'no_privileges', 'redirecturl'=> $requrl),false);
             }
+            // @todo have context available here!?
             xarController::redirect($redirectURL);
             return $pass;
         }

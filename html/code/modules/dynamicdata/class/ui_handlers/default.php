@@ -215,12 +215,14 @@ class DefaultHandler extends xarObject implements ContextInterface
         // Pre-fetch item(s) for some standard dataobject methods
         if (empty($args['itemid']) && $this->method == 'showview') {
             if (!$this->object->checkAccess('view')) {
+                $this->getContext()?->setStatus(403);
                 return xarResponse::Forbidden(xarMLS::translate('View #(1) is forbidden', $this->object->label));
             }
 
             $this->object->getItems();
         } elseif (!empty($args['itemid']) && ($this->method == 'showdisplay' || $this->method == 'showform')) {
             if (!$this->object->checkAccess('display')) {
+                $this->getContext()?->setStatus(403);
                 return xarResponse::Forbidden(xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
             }
 

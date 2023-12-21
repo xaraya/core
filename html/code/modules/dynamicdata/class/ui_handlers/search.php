@@ -154,6 +154,7 @@ class SearchHandler extends DefaultHandler
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
+            $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('Search #(1) is forbidden', $this->object->label));
         }
 
@@ -296,6 +297,7 @@ class SearchHandler extends DefaultHandler
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
         if (!$this->object->checkAccess('view')) {
+            $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('Query #(1) is forbidden', $this->object->label));
         }
 

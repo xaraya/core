@@ -78,11 +78,12 @@ class DeleteHandler extends DefaultHandler
                 $args['return_url'] = $this->getReturnURL();
             }
 
-            xarController::redirect($args['return_url']);
+            xarController::redirect($args['return_url'], null, $this->getContext());
             // Return
             return true;
         }
         if (!$this->object->checkAccess('delete')) {
+            $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
         }
         // set context if available in handler
@@ -108,7 +109,7 @@ class DeleteHandler extends DefaultHandler
                 $args['return_url'] = $this->getReturnURL();
             }
 
-            xarController::redirect($args['return_url']);
+            xarController::redirect($args['return_url'], null, $this->getContext());
             // Return
             return true;
         }

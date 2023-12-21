@@ -265,9 +265,9 @@ function authsystem_user_login(array $args = [], $context = null)
                    $data['title'] = xarML('Home Page');
                    return xarTpl::module('roles','user','homedisplay', $data);
                  */
-                 xarController::redirect($redirecturl);
+                 xarController::redirect($redirecturl, null, $context);
             } else {
-                xarController::redirect($redirecturl);
+                xarController::redirect($redirecturl, null, $context);
             }
 
             return true;

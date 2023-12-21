@@ -80,4 +80,14 @@ class Context extends ArrayObject implements ContextInterface
         //    $session->setUserId($userId);
         //}
     }
+
+    /**
+     * Set current status
+     * @param mixed $status
+     * @return void
+     */
+    public function setStatus($status)
+    {
+        $this->offsetSet('status', $status);
+    }
 }

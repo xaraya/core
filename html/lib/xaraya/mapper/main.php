@@ -294,9 +294,10 @@ class xarController extends xarObject
      *
      * @param string $url the URL to redirect to
      * @param mixed $httpResponse
+     * @param mixed $context
      * @return bool|never
      */
-    public static function redirect($url, $httpResponse = null)
+    public static function redirect($url, $httpResponse = null, $context = null)
     {
         xarCache::noCache();
         $redirectURL = urldecode($url); // this is safe if called multiple times.
@@ -321,8 +322,12 @@ class xarController extends xarObject
 
         // Pass along redirectURL and bail out if we already sent headers
         if (headers_sent() == true) {
+            if (!empty($context)) {
+                $context['redirectURL'] = $redirectURL;
+                $context['status'] = $httpResponse;
+            }
             if (!empty(self::$redirectTo) && is_callable(self::$redirectTo)) {
-                call_user_func(self::$redirectTo, $redirectURL, $httpResponse);
+                call_user_func(self::$redirectTo, $redirectURL, $httpResponse, $context);
             }
             return false;
         }

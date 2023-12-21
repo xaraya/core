@@ -91,6 +91,7 @@ class DisplayHandler extends DefaultHandler
 
         if (!empty($this->args['itemid'])) {
             if (!$this->object->checkAccess('display')) {
+                $this->getContext()?->setStatus(403);
                 return xarResponse::Forbidden(xarMLS::translate('Display Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
             }
 
@@ -104,6 +105,7 @@ class DisplayHandler extends DefaultHandler
             $this->object->callHooks('display');
         } elseif (!empty($this->args['values'])) {
             if (!$this->object->checkAccess('display')) {
+                $this->getContext()?->setStatus(403);
                 return xarResponse::Forbidden(xarMLS::translate('Display #(1) is forbidden', $this->object->label));
             }
 
