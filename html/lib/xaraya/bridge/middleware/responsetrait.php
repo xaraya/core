@@ -47,6 +47,7 @@ trait DefaultResponseTrait
 {
     protected ResponseFactoryInterface $responseFactory;
     protected StreamFactoryInterface $streamFactory;
+    /** @var array<mixed> */
     protected array $options = [];
 
     public function getResponseFactory(): ResponseFactoryInterface

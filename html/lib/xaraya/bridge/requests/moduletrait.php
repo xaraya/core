@@ -80,7 +80,7 @@ trait ModuleBridgeTrait
             $params['module'] = $pieces[0];
             if ($params['module'] == 'object') {
                 // see DataObjectBridgeTrait with prefix /object
-                return static::parseDataObjectPath($path, $query, $prefix . '/object');
+                return DataObjectRequest::parseDataObjectPath($path, $query, $prefix . '/object');
             }
             if (count($pieces) == 2) {
                 // {prefix}/{module}/{func} = user view, display, ...
@@ -112,13 +112,10 @@ trait ModuleBridgeTrait
             $itemid = $extra['itemid'] ?? null;
             unset($extra['itemid']);
             // see DataObjectBridgeTrait with prefix /object
-            return static::buildDataObjectPath($type, $func, $itemid, $extra, '/object');
+            return DataObjectRequest::buildDataObjectPath($type, $func, $itemid, $extra, '/object');
         }
         // see xarServer::getModuleURL()
-        $uri = static::$baseUri;
-        if (!empty($prefix) && strstr($uri, $prefix) !== $prefix) {
-            $uri .= $prefix;
-        }
+        $uri = $prefix;
         // {prefix}/{module} = user main
         $uri .= '/' . $module;
         if (empty($type) || $type == 'user') {

@@ -14,9 +14,8 @@ namespace Xaraya\Bridge\Middleware;
 use Psr\Http\Message\ServerRequestInterface;
 use sys;
 
-sys::import('xaraya.bridge.requests.commontrait');
-use Xaraya\Bridge\Requests\CommonBridgeInterface;
-use Xaraya\Bridge\Requests\CommonBridgeTrait;
+sys::import('xaraya.bridge.requests.bridge');
+use Xaraya\Bridge\Requests\BasicBridge;
 
 /**
  * Default router interface for PSR-7 and PSR-15 compatible middleware controllers
@@ -49,10 +48,8 @@ interface DefaultRouterInterface
 /**
  * Middleware should be built by creating a customized router and then adding the processsing - extend this to create your router
  */
-abstract class DefaultRouter implements DefaultRouterInterface, CommonBridgeInterface
+abstract class DefaultRouter extends BasicBridge implements DefaultRouterInterface
 {
-    use CommonBridgeTrait;
-
     public static string $baseUri = '';
     public static string $prefix = '';
 

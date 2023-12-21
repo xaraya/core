@@ -19,32 +19,4 @@ namespace Xaraya\Bridge\Requests;
 class ModuleRequest extends BasicRequest implements ModuleBridgeInterface
 {
     use ModuleBridgeTrait;
-
-    /**
-     * Summary of parseDataObjectPath
-     * @param string $path
-     * @param array<string, mixed> $query
-     * @param string $prefix
-     * @return array<string, mixed>
-     */
-    public static function parseDataObjectPath(string $path = '/', array $query = [], string $prefix = '/object'): array
-    {
-        //DataObjectRequest::$baseUri = static::$baseUri;
-        return DataObjectRequest::parseDataObjectPath($path, $query, $prefix);
-    }
-
-    /**
-     * Summary of buildDataObjectPath
-     * @param string $object
-     * @param ?string $method
-     * @param string|int|null $itemid
-     * @param array<string, mixed> $extra
-     * @param string $prefix
-     * @return string
-     */
-    public static function buildDataObjectPath(string $object = 'sample', ?string $method = null, string|int|null $itemid = null, array $extra = [], string $prefix = '/object'): string
-    {
-        //DataObjectRequest::$baseUri = static::$baseUri;
-        return DataObjectRequest::buildDataObjectPath($object, $method, $itemid, $extra, $prefix);
-    }
 }

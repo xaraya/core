@@ -15,8 +15,8 @@ namespace Xaraya\Bridge\Requests;
  * Handle common requests via PSR-7 and PSR-15 compatible middleware controllers or routing bridges
  * Accepts PSR-7 compatible server requests, xarRequest (partial use) or nothing (using $_SERVER)
  */
-class CommonRequest implements CommonBridgeInterface
+class CommonBridge extends BasicBridge implements CommonBridgeInterface
 {
     use CommonBridgeTrait;
-    public static string $baseUri = '';
+    //public static string $baseUri = '';
 }

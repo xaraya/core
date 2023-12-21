@@ -396,6 +396,7 @@ class xarController extends xarObject
     {
         // Allow overriding building URL if needed
         if (!empty(self::$buildUri) && is_callable(self::$buildUri)) {
+            // @todo do we need to add baseUri as prefix here?
             return call_user_func(self::$buildUri, $modName, $modType, $funcName, $args);
         }
         // (Re)initialize the controller

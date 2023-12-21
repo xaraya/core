@@ -16,6 +16,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use sys;
 
 sys::import('xaraya.bridge.middleware.router');
+sys::import('xaraya.bridge.requests.module');
+use Xaraya\Bridge\Requests\ModuleRequest;
 
 class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
 {
@@ -61,7 +63,7 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
             $prefix = static::$baseUri . static::$prefix;
         }
         $path = $request->getUri()->getPath();
-        $params = static::parseModulePath($path, $request->getQueryParams(), $prefix);
+        $params = ModuleRequest::parseModulePath($path, $request->getQueryParams(), $prefix);
         return $params;
     }
 
@@ -75,6 +77,7 @@ class ModuleRouter extends DefaultRouter implements DefaultRouterInterface
      */
     public static function buildUri(?string $module = null, ?string $type = null, string|int|null $func = null, array $extra = []): string
     {
-        return static::buildModulePath($module, $type, $func, $extra);
+        $prefix = static::$baseUri;
+        return ModuleRequest::buildModulePath($module, $type, $func, $extra, $prefix);
     }
 }

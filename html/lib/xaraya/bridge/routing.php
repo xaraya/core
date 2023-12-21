@@ -51,10 +51,16 @@ use sys;
 use Exception;
 use JsonException;
 
-sys::import('xaraya.bridge.requests.commontrait');
-use Xaraya\Bridge\Requests\CommonBridgeInterface;
-use Xaraya\Bridge\Requests\CommonBridgeTrait;
-use Xaraya\Bridge\Requests\StaticFileBridgeTrait;
+sys::import('xaraya.bridge.requests.bridge');
+sys::import('xaraya.bridge.requests.dataobject');
+sys::import('xaraya.bridge.requests.module');
+sys::import('xaraya.bridge.requests.block');
+sys::import('xaraya.bridge.requests.staticfile');
+use Xaraya\Bridge\Requests\BasicBridge;
+use Xaraya\Bridge\Requests\DataObjectRequest;
+use Xaraya\Bridge\Requests\ModuleRequest;
+use Xaraya\Bridge\Requests\BlockRequest;
+use Xaraya\Bridge\Requests\StaticFileRequest;
 use DataObjectRESTHandler;
 use xarGraphQL;
 
@@ -98,10 +104,8 @@ class TrackRouteCollector extends RouteCollector
 /**
  * FastRoute bridge to handle Xaraya object, module and block GUI calls + REST API and GraphQL API requests
  */
-class FastRouteBridge implements CommonBridgeInterface
+class FastRouteBridge extends BasicBridge
 {
-    use CommonBridgeTrait;
-
     /**
      * Summary of baseUri
      * @var string
@@ -376,7 +380,7 @@ class FastRouteBridge implements CommonBridgeInterface
      */
     public static function runObjectRequest($params, $context = null)
     {
-        return static::runDataObjectGuiRequest($params, $context);
+        return DataObjectRequest::runDataObjectGuiRequest($params, $context);
     }
 
     /**
@@ -432,7 +436,7 @@ class FastRouteBridge implements CommonBridgeInterface
      */
     public static function runModuleRequest($vars, $query, $context = null)
     {
-        return static::runModuleGuiRequest($vars, $query, $context);
+        return ModuleRequest::runModuleGuiRequest($vars, $query, $context);
     }
 
     /**
@@ -468,7 +472,7 @@ class FastRouteBridge implements CommonBridgeInterface
      */
     public static function runBlockRequest($vars, $query = null, $context = null)
     {
-        return static::runBlockGuiRequest($vars, $query, $context);
+        return BlockRequest::runBlockGuiRequest($vars, $query, $context);
     }
 
     /**
@@ -537,7 +541,7 @@ class FastRouteApiBridge extends FastRouteBridge
      */
     public static function runObjectRequest($params, $context = null)
     {
-        return static::runDataObjectApiRequest($params, $context);
+        return DataObjectRequest::runDataObjectApiRequest($params, $context);
     }
 
     /**
@@ -549,7 +553,7 @@ class FastRouteApiBridge extends FastRouteBridge
      */
     public static function runModuleRequest($vars, $query, $context = null)
     {
-        return static::runModuleApiRequest($vars, $query, $context);
+        return ModuleRequest::runModuleApiRequest($vars, $query, $context);
     }
 
     /**
@@ -561,7 +565,7 @@ class FastRouteApiBridge extends FastRouteBridge
      */
     public static function runBlockRequest($vars, $query = null, $context = null)
     {
-        return static::runBlockApiRequest($vars, $query, $context);
+        return BlockRequest::runBlockApiRequest($vars, $query, $context);
     }
 }
 
@@ -572,8 +576,6 @@ class FastRouteApiBridge extends FastRouteBridge
  */
 class FastRouteStaticBridge extends FastRouteBridge
 {
-    use StaticFileBridgeTrait;
-
     /**
      * Summary of addRouteCollection
      * @param RouteCollector $r
@@ -642,7 +644,7 @@ class FastRouteStaticBridge extends FastRouteBridge
     public static function handleThemeFileRequest($vars, &$request = null)
     {
         // path = /themes/{source}/{folder}/{file:.+}
-        $path = static::getThemeFileRequest($vars);
+        $path = StaticFileRequest::getThemeFileRequest($vars);
         $vars['path'] = $path;
         $vars['static'] = 'theme';
         //if (!empty($request)) {
@@ -661,7 +663,7 @@ class FastRouteStaticBridge extends FastRouteBridge
     public static function handleModuleFileRequest($vars, &$request = null)
     {
         // path = /code/modules/{source}/{folder}/{file:.+}
-        $path = static::getModuleFileRequest($vars);
+        $path = StaticFileRequest::getModuleFileRequest($vars);
         $vars['path'] = $path;
         $vars['static'] = 'module';
         //if (!empty($request)) {
@@ -680,7 +682,7 @@ class FastRouteStaticBridge extends FastRouteBridge
     public static function handleVarFileRequest($vars, &$request = null)
     {
         // path = /var/{source}/{folder}/{file:.+}
-        $path = static::getVarFileRequest($vars);
+        $path = StaticFileRequest::getVarFileRequest($vars);
         $vars['path'] = $path;
         $vars['static'] = 'var';
         //if (!empty($request)) {

@@ -19,16 +19,14 @@ use Psr\Http\Server\RequestHandlerInterface;
 use Exception;
 use sys;
 
-sys::import('xaraya.bridge.requests.staticfiletrait');
-use Xaraya\Bridge\Requests\StaticFileBridgeTrait;
+sys::import('xaraya.bridge.requests.staticfile');
+use Xaraya\Bridge\Requests\StaticFileRequest;
 
 /**
  * Static file middleware for PSR-7 and PSR-15 compatible middleware controllers
  */
 class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface
 {
-    use StaticFileBridgeTrait;
-
     /** @var array<string> */
     protected array $attributes = ['static', 'source', 'folder', 'file'];
     protected ResponseUtil $responseUtil;
@@ -93,7 +91,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
     public function run($attribs, $params)
     {
         try {
-            $result = static::getStaticFileRequest($attribs);
+            $result = StaticFileRequest::getStaticFileRequest($attribs);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }
@@ -153,7 +151,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
             $prefix = static::$baseUri . $prefix;
         }
         $path = $request->getUri()->getPath();
-        $params = static::parseStaticFilePath($path, $request->getQueryParams(), $prefix, $type);
+        $params = StaticFileRequest::parseStaticFilePath($path, $request->getQueryParams(), $prefix, $type);
         return $params;
     }
 
@@ -163,6 +161,10 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
      */
     public static function buildUri(?string $source = null, ?string $folder = null, string|int|null $file = null, array $extra = [], string $prefix = ''): string
     {
-        return static::buildStaticFilePath($source, $folder, $file, $extra, $prefix);
+        $uri = static::$baseUri;
+        if (!empty($prefix) && strstr($uri, $prefix) !== $prefix) {
+            $uri .= $prefix;
+        }
+        return StaticFileRequest::buildStaticFilePath($source, $folder, $file, $extra, $uri);
     }
 }

@@ -18,6 +18,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use sys;
 
 sys::import('xaraya.bridge.middleware.router');
+sys::import('xaraya.bridge.requests.dataobject');
+use Xaraya\Bridge\Requests\DataObjectRequest;
 
 class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
 {
@@ -63,7 +65,7 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
             $prefix = static::$baseUri . static::$prefix;
         }
         $path = $request->getUri()->getPath();
-        $params = static::parseDataObjectPath($path, $request->getQueryParams(), $prefix);
+        $params = DataObjectRequest::parseDataObjectPath($path, $request->getQueryParams(), $prefix);
         return $params;
     }
 
@@ -77,6 +79,7 @@ class DataObjectRouter extends DefaultRouter implements DefaultRouterInterface
      */
     public static function buildUri(?string $object = null, ?string $method = null, string|int|null $itemid = null, array $extra = []): string
     {
-        return static::buildDataObjectPath($object, $method, $itemid, $extra);
+        $prefix = static::$baseUri;
+        return DataObjectRequest::buildDataObjectPath($object, $method, $itemid, $extra, $prefix);
     }
 }

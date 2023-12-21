@@ -21,6 +21,8 @@ use sys;
 sys::import('xaraya.bridge.middleware.router');
 sys::import('modules.dynamicdata.controllers.router');
 sys::import('modules.dynamicdata.class.userinterface');
+sys::import('xaraya.bridge.requests.dataobject');
+use Xaraya\Bridge\Requests\DataObjectRequest;
 
 /**
  * PSR-15 compatible middleware for DataObject UI methods (view, display, search, ...)
@@ -100,7 +102,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
     public function run($params, $context = null)
     {
         try {
-            $result = static::runDataObjectGuiRequest($params, $context);
+            $result = DataObjectRequest::runDataObjectGuiRequest($params, $context);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }
@@ -127,7 +129,7 @@ class DataObjectApiMiddleware extends DataObjectMiddleware
     public function run($params, $context = null)
     {
         try {
-            $result = static::runDataObjectApiRequest($params, $context);
+            $result = DataObjectRequest::runDataObjectApiRequest($params, $context);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }

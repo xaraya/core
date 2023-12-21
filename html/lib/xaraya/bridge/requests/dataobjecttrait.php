@@ -112,10 +112,7 @@ trait DataObjectBridgeTrait
     public static function buildDataObjectPath(string $object = 'sample', ?string $method = null, string|int|null $itemid = null, array $extra = [], string $prefix = '/object'): string
     {
         // see xarDDObject::getObjectURL() and xarServer::getObjectURL()
-        $uri = static::$baseUri;
-        if (!empty($prefix) && strstr($uri, $prefix) !== $prefix) {
-            $uri .= $prefix;
-        }
+        $uri = $prefix;
         // {prefix}/{object} = view
         $uri .= '/' . $object;
         if (empty($itemid)) {

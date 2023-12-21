@@ -20,6 +20,8 @@ use sys;
 
 sys::import('xaraya.bridge.middleware.router');
 sys::import('modules.modules.controllers.router');
+sys::import('xaraya.bridge.requests.module');
+use Xaraya\Bridge\Requests\ModuleRequest;
 
 /**
  * PSR-15 compatible middleware for module GUI functions (user main, admin modifyconfig, ...)
@@ -96,7 +98,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
     public function run($attribs, $params, $context = null)
     {
         try {
-            $result = static::runModuleGuiRequest($attribs, $params, $context);
+            $result = ModuleRequest::runModuleGuiRequest($attribs, $params, $context);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }
@@ -124,7 +126,7 @@ class ModuleApiMiddleware extends ModuleMiddleware
     public function run($attribs, $params, $context = null)
     {
         try {
-            $result = static::runModuleApiRequest($attribs, $params, $context);
+            $result = ModuleRequest::runModuleApiRequest($attribs, $params, $context);
         } catch (Exception $e) {
             return $this->responseUtil->createExceptionResponse($e);
         }
