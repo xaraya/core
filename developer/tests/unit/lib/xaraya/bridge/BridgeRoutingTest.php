@@ -10,6 +10,7 @@ final class BridgeRoutingTest extends TestCase
     {
         xarCache::init();
         xarSession::setSessionClass(SessionContext::class);
+        xarServer::setRequestClass(xarRequestHandler::class);
         xarCore::xarInit(xarCore::SYSTEM_USER);
     }
 
@@ -35,7 +36,7 @@ final class BridgeRoutingTest extends TestCase
         $_GET = $query;
         [$result, $context] = FastRouteBridge::dispatchRequest($method, $path);
         $this->assertStringContainsString($expected, $result);
-        var_dump($context);
+        //var_dump($context);
         $_GET = [];
     }
 }

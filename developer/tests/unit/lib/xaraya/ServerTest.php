@@ -11,6 +11,12 @@ final class ServerTest extends TestCase
         xarCache::init();
     }
 
+    public function tearDown(): void
+    {
+        $_SERVER = [];
+        xarServer::setRequestClass(xarRequestHandler::class);
+    }
+
     public function testStandardInit(): void
     {
         $expected = xarRequestHandler::class;
@@ -28,7 +34,6 @@ final class ServerTest extends TestCase
 
         $instance = xarServer::getInstance();
         $this->assertEquals($expected, $instance::class);
-        xarServer::setRequestClass(xarRequestHandler::class);
     }
 
     protected function getServerVars()
@@ -54,7 +59,6 @@ final class ServerTest extends TestCase
         $this->assertEquals('http://:/xaraya/index.php', xarServer::getModuleURL());
         $this->assertEquals('http://:/xaraya/index.php?module=base&amp;type=user&amp;func=main', xarServer::getModuleURL('base'));
         $this->assertEquals('http://:/xaraya/index.php?object=sample&amp;method=view', xarServer::getObjectURL('sample'));
-        $_SERVER = [];
     }
 
     public function testContextGetVar(): void
@@ -84,7 +88,5 @@ final class ServerTest extends TestCase
         $this->assertEquals('http://:/home/index.php', xarServer::getModuleURL());
         $this->assertEquals('http://:/home/index.php?module=base&amp;type=user&amp;func=main', xarServer::getModuleURL('base'));
         $this->assertEquals('http://:/home/index.php?object=sample&amp;method=view', xarServer::getObjectURL('sample'));
-        $_SERVER = [];
-        xarServer::setRequestClass(xarRequestHandler::class);
     }
 }
