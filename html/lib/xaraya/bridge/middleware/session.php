@@ -4,6 +4,14 @@
  *
  * In general, single-user sessions, authentication and authkey confirmation are ok,
  * but multi-user sessions clash with use of superglobals in several core classes...
+ *
+ * @package core\bridge
+ * @subpackage middleware
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.2
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  */
 
 namespace Xaraya\Bridge\Middleware;
@@ -21,6 +29,9 @@ use xarServer;
 use xarDB;
 use xarEvents;
 
+/**
+ * Virtual session aligned with database fields used in xarSessionHandler
+ */
 class VirtualSession
 {
     public string $sessionId;
@@ -104,6 +115,9 @@ class VirtualSession
     }
 }
 
+/**
+ * Session storage interface for virtual sessions
+ */
 interface SessionStorageInterface
 {
     public function lookup(string $sessionId, string $ipAddress = ''): ?VirtualSession;
@@ -112,6 +126,9 @@ interface SessionStorageInterface
     public function delete(VirtualSession $session): void;
 }
 
+/**
+ * Session storage in cache for virtual sessions
+ */
 class SessionCacheStorage implements SessionStorageInterface
 {
     /** @var array<string, VirtualSession> */
@@ -162,6 +179,9 @@ class SessionCacheStorage implements SessionStorageInterface
     }
 }
 
+/**
+ * Session storage in database for virtual sessions
+ */
 class SessionDatabaseStorage implements SessionStorageInterface
 {
     /** @var \Connection|\xarPDO */
@@ -240,6 +260,12 @@ class SessionDatabaseStorage implements SessionStorageInterface
     }
 }
 
+/**
+ * Sessions for PSR-7 and PSR-15 compatible middleware controllers (not functional)
+ *
+ * In general, single-user sessions, authentication and authkey confirmation are ok,
+ * but multi-user sessions clash with use of superglobals in several core classes...
+ */
 class SessionMiddleware implements MiddlewareInterface
 {
     private string $cookieName;
@@ -526,6 +552,12 @@ class SessionMiddleware implements MiddlewareInterface
     }
 }
 
+/**
+ * Sessions for PSR-7 and PSR-15 compatible middleware controllers (not functional)
+ *
+ * In general, single-user sessions, authentication and authkey confirmation are ok,
+ * but multi-user sessions clash with use of superglobals in several core classes...
+ */
 class SingleSessionMiddleware extends SessionMiddleware
 {
     // clarify we only support a single session here

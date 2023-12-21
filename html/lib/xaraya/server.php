@@ -338,6 +338,15 @@ class xarRequestHandler implements iRequestInterface
     {
         return $_POST;
     }
+
+    /**
+     * @param mixed $context
+     * @return void
+     */
+    public function setContext($context)
+    {
+        // not used in default request handler
+    }
 }
 
 class xarServer extends xarObject

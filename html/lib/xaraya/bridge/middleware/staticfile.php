@@ -1,6 +1,12 @@
 <?php
 /**
- * Static file middleware for PSR-7 and PSR-15 compatible middleware controllers
+ * @package core\bridge
+ * @subpackage middleware
+ * @category Xaraya Web Applications Framework
+ * @version 2.4.2
+ * @copyright see the html/credits.html file in this release
+ * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
+ * @link http://www.xaraya.info
  */
 
 namespace Xaraya\Bridge\Middleware;
@@ -16,13 +22,15 @@ use sys;
 sys::import('xaraya.bridge.requests.staticfiletrait');
 use Xaraya\Bridge\Requests\StaticFileBridgeTrait;
 
+/**
+ * Static file middleware for PSR-7 and PSR-15 compatible middleware controllers
+ */
 class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface
 {
     use StaticFileBridgeTrait;
 
     /** @var array<string> */
     protected array $attributes = ['static', 'source', 'folder', 'file'];
-    /** @var array<mixed> */
     protected ResponseUtil $responseUtil;
     public static string $baseUri = '';
     /** @var array<string, string> */
