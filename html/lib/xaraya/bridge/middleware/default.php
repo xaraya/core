@@ -17,6 +17,7 @@
  * use Xaraya\Bridge\Middleware\DefaultMiddleware;
  * use Xaraya\Bridge\Middleware\DataObjectMiddleware;
  * use Xaraya\Bridge\Middleware\ModuleMiddleware;
+ * use Xaraya\Bridge\Middleware\ResponseUtil;
  *
  * // get server request from somewhere
  * $psr17Factory = new Psr17Factory();
@@ -37,7 +38,7 @@
  * // page wrapper for object/module requests in response (if not specified above)
  * $wrapper = function ($request, $next) use ($psr17Factory) {
  *     $response = $next->handle($request);
- *     $response = DefaultMiddleware::wrapResponse($response, $psr17Factory);
+ *     $response = ResponseUtil::wrapResponse($response, $psr17Factory);
  *     return $response;
  * };
  * // ...
@@ -60,7 +61,7 @@
  *
  * $response = Dispatcher::run($stack, $request);
  * //echo $response->getBody();
- * DefaultMiddleware::emitResponse($response);
+ * ResponseUtil::emitResponse($response);
  */
 
 namespace Xaraya\Bridge\Middleware;
@@ -74,12 +75,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 /**
  * Middleware should be built by creating a customized router and then adding the processsing - do *not* extend this directly
  */
-class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface, DefaultResponseInterface
+class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface
 {
-    use DefaultResponseTrait;
-
-    /** @var array<string, mixed> */
-    protected array $options = [];
+    protected ResponseUtil $responseUtil;
 
     /**
      * Initialize the middleware with response factory (or container, ...) and options
@@ -87,8 +85,7 @@ class DefaultMiddleware extends DefaultRouter implements DefaultRouterInterface,
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
     {
-        $this->setResponseFactory($responseFactory);
-        $this->options = $options;
+        $this->responseUtil = new ResponseUtil($responseFactory, $options);
     }
 
     /**

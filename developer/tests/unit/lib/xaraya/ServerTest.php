@@ -67,8 +67,10 @@ final class ServerTest extends TestCase
         $this->assertEquals(null, xarServer::getVar('REQUEST_URI'));
 
         // set current context for the request
-        $expected['REQUEST_URI'] = '/home/site.php?hello=world';
+        $expected['REQUEST_URI'] = '/home/site.php/more?hello=world';
         $expected['SCRIPT_NAME'] = '/home/site.php';
+        //$expected['PATH_INFO'] = '/more';
+        //$expected['QUERY_STRING'] = 'hello=world';
         $context = new Context([
             'server' => $expected,
         ]);

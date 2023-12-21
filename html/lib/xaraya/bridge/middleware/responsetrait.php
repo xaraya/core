@@ -34,6 +34,9 @@ interface DefaultResponseInterface
     public static function emitResponse(ResponseInterface $response): void;
 }
 
+/**
+ * Response trait for PSR-7 and PSR-15 compatible middleware controllers
+ */
 trait DefaultResponseTrait
 {
     protected ResponseFactoryInterface $responseFactory;

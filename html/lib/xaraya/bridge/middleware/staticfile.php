@@ -16,15 +16,14 @@ use sys;
 sys::import('xaraya.bridge.requests.staticfiletrait');
 use Xaraya\Bridge\Requests\StaticFileBridgeTrait;
 
-class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface, DefaultResponseInterface
+class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterface, MiddlewareInterface
 {
     use StaticFileBridgeTrait;
-    use DefaultResponseTrait;
 
     /** @var array<string> */
     protected array $attributes = ['static', 'source', 'folder', 'file'];
     /** @var array<mixed> */
-    protected array $options = [];
+    protected ResponseUtil $responseUtil;
     public static string $baseUri = '';
     /** @var array<string, string> */
     public static array $locations = [
@@ -39,8 +38,7 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, array $options = [])
     {
-        $this->setResponseFactory($responseFactory);
-        $this->options = $options;
+        $this->responseUtil = new ResponseUtil($responseFactory, $options);
     }
 
     /**
@@ -89,10 +87,10 @@ class StaticFileMiddleware extends DefaultRouter implements DefaultRouterInterfa
         try {
             $result = static::getStaticFileRequest($attribs);
         } catch (Exception $e) {
-            return $this->createExceptionResponse($e);
+            return $this->responseUtil->createExceptionResponse($e);
         }
         // @todo where do we handle NotModified response based on request header If-None-Match etc.?
-        return $this->createFileResponse($result);
+        return $this->responseUtil->createFileResponse($result);
     }
 
     // @checkme signature mismatch for process() with ReactPHP

@@ -492,7 +492,7 @@ class xarServer extends xarObject
         }
         /** @var string $path */
 
-        $path = preg_replace('/[#\?].*/', '', $path);
+        $path = preg_replace('/[#\?].*/', '', (string) $path);
 
         $path = preg_replace('/\.php\/.*$/', '', $path);
         if (substr($path, -1, 1) == '/') {

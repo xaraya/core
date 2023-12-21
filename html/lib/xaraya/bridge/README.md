@@ -204,6 +204,7 @@ use Middlewares\Utils\Dispatcher;
 use Xaraya\Bridge\Middleware\DefaultMiddleware;
 use Xaraya\Bridge\Middleware\DataObjectMiddleware;
 use Xaraya\Bridge\Middleware\ModuleMiddleware;
+use Xaraya\Bridge\Middleware\ResponseUtil;
 
 // get server request from somewhere
 $psr17Factory = new Psr17Factory();
@@ -224,7 +225,7 @@ $filter = function ($request, $next) {
 // page wrapper for object/module requests in response (if not specified above)
 $wrapper = function ($request, $next) use ($psr17Factory) {
     $response = $next->handle($request);
-    $response = DefaultMiddleware::wrapResponse($response, $psr17Factory);
+    $response = ResponseUtil::wrapResponse($response, $psr17Factory);
     return $response;
 };
 // ...
@@ -248,7 +249,7 @@ $stack = [
 // dispatch the request
 $response = Dispatcher::run($stack, $request);
 // emit the respone
-DefaultMiddleware::emitResponse($response);
+ResponseUtil::emitResponse($response);
 ```
 
 ## Middleware and Routing Combined
@@ -267,6 +268,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
 use Xaraya\Bridge\Middleware\FastRouteHandler;
+use Xaraya\Bridge\Middleware\ResponseUtil;
 
 // get server request from somewhere
 $psr17Factory = new Psr17Factory();
@@ -280,7 +282,7 @@ $fastrouted = new FastRouteHandler($psr17Factory);
 $response = $fastrouted->handle($request);
 
 // emit the respone
-FastRouteHandler::emitResponse($response);
+ResponseUtil::emitResponse($response);
 ```
 
 ## Non-blocking HTTP Server (ReactPHP)

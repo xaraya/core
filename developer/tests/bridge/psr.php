@@ -16,6 +16,7 @@ use Xaraya\Bridge\Middleware\DataObjectMiddleware;
 use Xaraya\Bridge\Middleware\DataObjectApiMiddleware;
 use Xaraya\Bridge\Middleware\ModuleMiddleware;
 use Xaraya\Bridge\Middleware\ModuleApiMiddleware;
+use Xaraya\Bridge\Middleware\ResponseUtil;
 use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
 
@@ -75,7 +76,7 @@ function getStack($psr17Factory, $api = false, $wrapPage = false)
         LocalTimer::setTimer('wrapper_in');
         $response = $next->handle($request->withAddedHeader('X-Middleware-Seen', 'Wrapper'));
         LocalTimer::setTimer('wrapper_handled');
-        $response = DefaultMiddleware::wrapResponse($response, $psr17Factory);
+        $response = ResponseUtil::wrapResponse($response, $psr17Factory);
         LocalTimer::setTimer('wrapper_wrapped');
         return $response->withAddedHeader('X-Middleware-Seen', 'Wrapper');
     };
@@ -132,7 +133,7 @@ $stack = getStack($psr17Factory, $api, $wrapPage);
 $response = Dispatcher::run($stack, $request);
 //$response = $fastroute->handle($request);
 LocalTimer::setTimer('run');
-DefaultMiddleware::emitResponse($response);
+ResponseUtil::emitResponse($response);
 LocalTimer::setTimer('emit');
 
 if (php_sapi_name() === 'cli') {

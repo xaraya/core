@@ -24,13 +24,11 @@ sys::import('modules.modules.controllers.router');
 /**
  * PSR-15 compatible middleware for module GUI functions (user main, admin modifyconfig, ...)
  */
-class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, MiddlewareInterface, DefaultResponseInterface
+class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, MiddlewareInterface
 {
-    use DefaultResponseTrait;
-
     /** @var array<string> */
     protected array $attributes = ['module', 'type', 'func'];
-    protected ResponseFactoryInterface $responseFactory;
+    protected ResponseUtil $responseUtil;
     protected bool $wrapPage = false;
 
     /**
@@ -38,7 +36,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, bool $wrapPage = false)
     {
-        $this->setResponseFactory($responseFactory);
+        $this->responseUtil = new ResponseUtil($responseFactory);
         $this->wrapPage = $wrapPage;
     }
 
@@ -83,7 +81,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         $response = $this->run($attribs, $params, $context);
 
         // clean up routes for module requests in response output
-        //$response = static::cleanResponse($response, $this->getResponseFactory());
+        //$response = ResponseUtil::cleanResponse($response, $this->getResponseFactory());
 
         return $response;
     }
@@ -100,15 +98,15 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         try {
             $result = static::runModuleGuiRequest($attribs, $params, $context);
         } catch (Exception $e) {
-            return $this->createExceptionResponse($e);
+            return $this->responseUtil->createExceptionResponse($e);
         }
         if ($this->wrapPage) {
-            $result = static::wrapOutputInPage($result);
+            $result = $this->responseUtil->wrapOutputInPage($result);
         }
         if (!empty($context) && !empty($context['mediatype'])) {
-            return $this->createResponse($result, $context['mediatype']);
+            return $this->responseUtil->createResponse($result, $context['mediatype']);
         }
-        return $this->createResponse($result);
+        return $this->responseUtil->createResponse($result);
     }
 }
 
@@ -128,9 +126,9 @@ class ModuleApiMiddleware extends ModuleMiddleware
         try {
             $result = static::runModuleApiRequest($attribs, $params, $context);
         } catch (Exception $e) {
-            return $this->createExceptionResponse($e);
+            return $this->responseUtil->createExceptionResponse($e);
         }
         // @todo adapt response based on chosen $format
-        return $this->createJsonResponse($result);
+        return $this->responseUtil->createJsonResponse($result);
     }
 }

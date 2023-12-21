@@ -11,6 +11,7 @@ use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
 // use Xaraya PSR-15 compatible request handler + middleware
 use Xaraya\Bridge\Middleware\FastRouteHandler;
+use Xaraya\Bridge\Middleware\ResponseUtil;
 use Xaraya\Core\Traits\TimerInterface;
 use Xaraya\Core\Traits\TimerTrait;
 
@@ -56,7 +57,7 @@ $fastrouted = new FastRouteHandler($psr17Factory);
 // handle the request directly, or use as middleware
 $response = $fastrouted->handle($request);
 LocalTimer::setTimer('run');
-FastRouteHandler::emitResponse($response);
+ResponseUtil::emitResponse($response);
 LocalTimer::setTimer('emit');
 
 if (php_sapi_name() === 'cli') {

@@ -14,6 +14,7 @@
  * use Nyholm\Psr7Server\ServerRequestCreator;
  * // use Xaraya PSR-15 compatible request handler + middleware
  * use Xaraya\Bridge\Middleware\FastRouteHandler;
+ * use Xaraya\Bridge\Middleware\ResponseUtil;
  *
  * // get server request from somewhere
  * $psr17Factory = new Psr17Factory();
@@ -27,7 +28,7 @@
  * $response = $fastrouted->handle($request);
  *
  * //echo $response->getBody();
- * FastRouteHandler::emitResponse($response);
+ * ResponseUtil::emitResponse($response);
  */
 
 namespace Xaraya\Bridge\Middleware;
@@ -54,10 +55,10 @@ use FastRoute\RouteCollector;
 
 use function FastRoute\simpleDispatcher;
 
-class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, DefaultResponseInterface
+class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface
 {
-    use DefaultResponseTrait;
-
+    /** @var ResponseUtil */
+    protected $responseUtil;
     /** @var FastRouter */
     protected $router;
 
@@ -67,8 +68,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, 
      */
     public function __construct(?ResponseFactoryInterface $responseFactory = null, ?FastRouter $router = null, array $options = [])
     {
-        $this->setResponseFactory($responseFactory);
-        $this->options = $options;
+        $this->responseUtil = new ResponseUtil($responseFactory, $options);
         if (empty($router)) {
             $router = $this->getRouter();
         }
@@ -140,12 +140,12 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, 
                 if (!empty($next)) {
                     return $next->handle($request);
                 }
-                return $this->createNotFoundResponse($path);
+                return $this->responseUtil->createNotFoundResponse($path);
 
             case FastRouter::METHOD_NOT_ALLOWED:
                 $allowedMethods = $routeInfo[1];
                 // ... 405 Method Not Allowed
-                $response = $this->getResponseFactory()->createResponse();
+                $response = $this->responseUtil->getResponseFactory()->createResponse();
                 $response = $response->withStatus(405)->withHeader('Allow', implode(', ', $allowedMethods));
                 $response->getBody()->write('Method ' . htmlspecialchars($method) . ' is not allowed for ' . htmlspecialchars($path));
                 return $response;
@@ -178,7 +178,7 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, 
                     $redirectURL = $request->getAttribute('redirectURL');
                     if (!empty($redirectURL)) {
                         echo "Location: " . $redirectURL . "\n";
-                        return $this->createRedirectResponse($redirectURL, $request->getAttribute('status', 302));
+                        return $this->responseUtil->createRedirectResponse($redirectURL, $request->getAttribute('status', 302));
                     }
                     // @checkme can't really handle REST API differently here yet
                     if ($handler[1] === 'getOpenAPI') {
@@ -188,24 +188,24 @@ class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface, 
                         //$result['servers'][0]['url'] = xarServer::getProtocol() . '://' . xarServer::getHost() . DataObjectRESTHandler::$endpoint;
                     }
                 } catch (UnauthorizedOperationException $e) {
-                    return $this->createUnauthorizedResponse();
+                    return $this->responseUtil->createUnauthorizedResponse();
                 } catch (ForbiddenOperationException $e) {
-                    return $this->createForbiddenResponse();
+                    return $this->responseUtil->createForbiddenResponse();
                 } catch (Throwable $e) {
-                    return $this->createExceptionResponse($e);
+                    return $this->responseUtil->createExceptionResponse($e);
                 }
                 if (!empty($context) && !empty($context['mediatype'])) {
-                    return $this->createResponse($result, $context['mediatype']);
+                    return $this->responseUtil->createResponse($result, $context['mediatype']);
                 }
                 if (is_string($result)) {
                     $mediaType = $request->getAttribute('mediaType', 'text/html');
-                    return $this->createResponse($result, $mediaType);
+                    return $this->responseUtil->createResponse($result, $mediaType);
                 }
-                return $this->createJsonResponse($result, 'application/json', $numeric);
+                return $this->responseUtil->createJsonResponse($result, 'application/json', $numeric);
 
             default:
                 $result = "Unknown result from FastRoute Dispatcher: " . var_export($routeInfo, true);
-                return $this->createResponse($result);
+                return $this->responseUtil->createResponse($result);
         }
     }
 }
