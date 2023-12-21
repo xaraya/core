@@ -1,9 +1,9 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use Xaraya\Bridge\Requests\BasicRequest;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
+use Xaraya\Bridge\Requests\BasicRequest;
 use Xaraya\Bridge\Requests\DataObjectRequest;
 
 final class BridgeRequestsTest extends TestCase
@@ -175,7 +175,7 @@ final class BridgeRequestsTest extends TestCase
 
     protected function getFixtureFile($name)
     {
-        return dirname(__DIR__, 2) . '/code/modules/dynamicdata/fixtures/' . $name;
+        return dirname(__DIR__, 3) . '/code/modules/dynamicdata/fixtures/' . $name;
     }
 
     /**
