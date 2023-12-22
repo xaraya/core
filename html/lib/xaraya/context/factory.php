@@ -50,6 +50,10 @@ class ContextFactory
         // @todo see RequestContext
         $context['query'] = $request->getQueryParams();
         $context['body'] = $request->getParsedBody();
+        if (empty($context['body'])) {
+            $context['input'] = (string) $request->getBody();
+        }
+        //$context['files'] = $request->getUploadedFiles();
         return $context;
     }
 
@@ -68,6 +72,10 @@ class ContextFactory
         // @todo see RequestContext
         $context['query'] = $_GET;
         $context['body'] = $_POST;
+        if (empty($context['body'])) {
+            $context['input'] = file_get_contents('php://input');
+        }
+        //$context['files'] = $_FILES;
         if (!empty($source)) {
             $context['source'] = $source;
         }
@@ -112,7 +120,7 @@ class ContextFactory
             return $request;
         }
         $headers = static::$requestCreator::getHeadersFromServer($context['server'] ?? []);
-        $request = static::$requestCreator->fromArrays($context['server'] ?? [], $headers, $context['cookie'] ?? [], $context['query'] ?? [], $context['body'] ?? []);
+        $request = static::$requestCreator->fromArrays($context['server'] ?? [], $headers, $context['cookie'] ?? [], $context['query'] ?? [], $context['body'] ?? null, $context['files'] ?? [], $context['input'] ?? null);
         return $request;
     }
 }

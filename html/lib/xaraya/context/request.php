@@ -114,6 +114,23 @@ class RequestContext implements ContextInterface, iRequestInterface
     }
 
     /**
+     * Gets input body as JSON object or array
+     * @return mixed
+     */
+    public function getJsonBody()
+    {
+        if (!$this->getContext()->offsetExists('input')) {
+            return null;
+        }
+        $rawInput = $this->getContext()->offsetGet('input');
+        $input = null;
+        if (!empty($rawInput)) {
+            $input = json_decode($rawInput, true, 512, JSON_THROW_ON_ERROR);
+        }
+        return $input;
+    }
+
+    /**
      * Gets a cookie variable
      * @param string $name the name of the variable
      * @return mixed value of the variable

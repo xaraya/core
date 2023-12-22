@@ -93,10 +93,15 @@ class SessionContext implements ContextInterface, iSessionInterface
     {
         $session = $this->getContext()?->getSession();
         if (empty($session)) {
-            return null;
+            // some default variables without session
+            return xarSession::getDefaultVar($name);
         }
         if (array_key_exists($name, $session->vars)) {
             return $session->vars[$name];
+        }
+        if ($name == 'role_id') {
+            // @todo look up userId or return xarSession::getAnonId()
+            return $session->getUserId();
         }
         return null;
     }

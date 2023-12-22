@@ -775,10 +775,14 @@ class xarSession
 
     /**
      * Get the session class instance
-     * @return iSessionInterface
+     * @return ?iSessionInterface
      */
     static function getInstance()
     {
+        if (!isset(self::$instance)) {
+            // do not initialize session here
+            //self::init();
+        }
         return self::$instance;
     }
 

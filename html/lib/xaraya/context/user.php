@@ -83,9 +83,7 @@ class UserContext
             return null;
         }
         // @todo replace with something that doesn't depend on PHP sessions
-        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            xarSession::init();
-        }
+        xarSession::init();
         //xarMLS::init();
         //xarUser::init();
         if (!xarUser::isLoggedIn()) {
