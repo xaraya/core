@@ -628,7 +628,7 @@ abstract class ExternalDataStore extends SQLDataStore
             return;
         }
         // @todo use ExternalDatabase::checkDbConnection() here too?
-        $key = 'ext_' . md5(serialize($this->dbConnArgs));
+        $key = ExternalDatabase::INDEX_PREFIX . md5(serialize($this->dbConnArgs));
         if (isset(static::$argsToIndex[$key])) {
             $dbConnIndex = static::$argsToIndex[$key];
             $this->db = ExternalDatabase::getConn($dbConnIndex);

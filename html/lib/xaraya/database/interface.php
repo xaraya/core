@@ -80,6 +80,12 @@ interface DatabaseInterface
      */
     public static function getConnIndex();
     /**
+     * Summary of isIndexExternal
+     * @param mixed $index
+     * @return bool
+     */
+    public static function isIndexExternal($index = 0);
+    /**
      * Summary of getConnection
      * @param mixed $dsn
      * @param mixed $flags

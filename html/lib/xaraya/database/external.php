@@ -30,6 +30,7 @@ use sys;
  */
 class ExternalDatabase implements DatabaseInterface
 {
+    public const INDEX_PREFIX = 'ext_';
     public const ERROR_MSG = 'Not available as static method for ExternalDatabase - use the native methods of the database connection or $datastore->getDatabaseInfo() to get this';
     public static string $latest = '';
     public static string $prefix = "";
@@ -215,6 +216,14 @@ class ExternalDatabase implements DatabaseInterface
         return self::$latest;
     }
 
+    public static function isIndexExternal($index = '')
+    {
+        if (!is_numeric($index) && str_starts_with($index, static::INDEX_PREFIX)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Summary of getConnection
      * @param mixed $dsn
@@ -247,7 +256,7 @@ class ExternalDatabase implements DatabaseInterface
                 break;
         }
         // avoid false positives when checking is_numeric($dbConnIndex)
-        $index = 'ext_' . md5(serialize($dsn));
+        $index = static::INDEX_PREFIX . md5(serialize($dsn));
         static::$connections[$index] = & $conn;
         static::$latest = $index;
         return $conn;

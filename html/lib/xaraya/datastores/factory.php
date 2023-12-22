@@ -253,7 +253,7 @@ class DataStoreFactory extends xarObject
         sys::import('xaraya.database.external');
         $object->dbConnIndex = ExternalDatabase::checkDbConnection($object->dbConnIndex, $object->dbConnArgs);
         // use external database connection
-        if (!is_numeric($object->dbConnIndex) && str_starts_with($object->dbConnIndex, 'ext_')) {
+        if (ExternalDatabase::isIndexExternal($object->dbConnIndex)) {
             return static::getExternalDataSources($object->datasources, $object->dbConnIndex);
         }
 

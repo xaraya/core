@@ -200,6 +200,11 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
         return self::$count - 1;
     }
 
+    public static function isIndexExternal($index = 0)
+    {
+        return false;
+    }
+
     public static function getConnection($dsn, $flags = array())
     {
         $dsn['phptype'] ??= 'mysql';

@@ -191,6 +191,11 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
         return self::$count - 1;
     }
 
+    public static function isIndexExternal($index = 0)
+    {
+        return false;
+    }
+
     // Overridden
     public static function getConnection($dsn, $flags = 0)
     {
