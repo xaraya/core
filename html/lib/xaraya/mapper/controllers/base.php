@@ -40,13 +40,15 @@ class BaseActionController extends xarObject
         // Allocate those params we can to module/type/function and store the rest as FunctionArgs in the request
         $this->chargeRequest($request, $args);
         // Add all the params we have to the GET array in case they needed to be called in a standard way. e.g. xarVar::fetch
-        $request->getContext()?->withQueryParams($args);
+        $request->getServerContext()?->withQueryParams($args);
+        // Get context of the request if available
+        $context = $request->getServerContext()?->getContext();
         // Now get the output
         if ($request->getModule() == 'object') {
             sys::import('xaraya.objects');
-            $response->output = xarDDObject::guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs());
+            $response->output = xarDDObject::guiMethod($request->getType(), $request->getFunction(), $request->getFunctionArgs(), $context);
         } else {
-            $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getFunctionArgs());
+            $response->output = xarMod::guiFunc($request->getModule(), $request->getType(), $request->getFunction(), $request->getFunctionArgs(), $context);
         }
     }
 

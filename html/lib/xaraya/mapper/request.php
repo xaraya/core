@@ -65,7 +65,7 @@ class xarRequest extends xarObject
     /**
      * @return ?iRequestInterface
      */
-    public function getContext()
+    public function getServerContext()
     {
         return $this->requestContext;
     }

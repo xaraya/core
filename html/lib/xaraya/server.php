@@ -129,8 +129,7 @@ class xarURL extends xarObject
 /**
  * Interface between xarServer (static) and xarRequestHandler (instance)
  * Note: if you want to replace xarRequestHandler with a custom class, use
- * xarServer::setRequestClass(MyCustomRequest::class);
- * @todo make use of this with requestcontext?
+ * xarServer::setRequestClass(RequestContext::class);
  */
 interface iRequestInterface
 {
@@ -337,6 +336,15 @@ class xarRequestHandler implements iRequestInterface
     public function getParsedBody()
     {
         return $_POST;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getContext()
+    {
+        // not used in default request handler
+        return null;
     }
 
     /**
