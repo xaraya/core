@@ -49,7 +49,7 @@ interface iSessionHandler extends SessionHandlerInterface
 /**
  * Interface between xarSession (static) and xarSessionHandler (instance)
  * Note: if you want to replace xarSessionHandler with a custom class, use
- * xarSession::setSessionClass(MyCustomSession::class);
+ * xarSession::setSessionClass(SessionContext::class);
  */
 interface iSessionInterface
 {
@@ -707,11 +707,15 @@ class xarSession
 
     /**
      * Initialise the Session Support
+     * This can only be called once for PHP session handler - use setInstance() if needed
      * @param array<string, mixed> $args
      * @return boolean true
      */
     public static function init(array $args = [])
     {
+        if (!empty(self::$instance)) {
+            return true;
+        }
         if (empty($args)) {
             $args = self::getConfig();
         }

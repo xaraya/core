@@ -175,4 +175,16 @@ class RequestContext implements ContextInterface, iRequestInterface
         }
         return $this->getContext()->offsetGet('body');
     }
+
+    /**
+     * Gets all cookie variables
+     * @return array<string, mixed>
+     */
+    public function getCookieParams()
+    {
+        if (!$this->getContext()->offsetExists('cookie')) {
+            return [];
+        }
+        return $this->getContext()->offsetGet('cookie');
+    }
 }

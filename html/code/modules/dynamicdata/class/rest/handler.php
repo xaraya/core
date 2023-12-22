@@ -1313,8 +1313,6 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         self::setTimer('handle');
         // define context of the request - see GraphQL
         $context = ContextFactory::fromRequest($request, __METHOD__);
-        $context['server'] = static::getServerParams($request);
-        $context['cookie'] = static::getCookieParams($request);
         $context['mediatype'] = '';
         // @todo do we need to clone here and set the context in the call handler instance?
         if (is_object($handler[0])) {

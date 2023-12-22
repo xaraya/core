@@ -791,8 +791,6 @@ class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInter
             $variables = json_decode($variables, true);
         }
         $context = ContextFactory::fromRequest($request, __METHOD__);
-        $context['server'] = static::getServerParams($request);
-        $context['cookie'] = static::getCookieParams($request);
         $context['mediatype'] = '';
         $result = self::get_data($query, $variables, $operationName, [], null, $context);
         if ($query == '{schema}') {

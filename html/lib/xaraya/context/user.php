@@ -21,7 +21,7 @@ sys::import('modules.authsystem.class.authtoken');
 /**
  * Get userId from user context with token or cookie
  */
-class Usercontext
+class UserContext
 {
     /** @var Context<string, mixed> */
     protected Context $context;

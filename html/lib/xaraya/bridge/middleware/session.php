@@ -342,7 +342,7 @@ class SessionMiddleware implements MiddlewareInterface
             echo "No context given for login\n";
             return;
         }
-        $requestId = $context['requestId'] ?? '';
+        $requestId = $context->getRequestId() ?? '';
         if (empty($requestId) || empty($this->pending[$requestId])) {
             echo "Invalid requestId given for login\n";
             return;
@@ -364,7 +364,7 @@ class SessionMiddleware implements MiddlewareInterface
             echo "No context given for logout\n";
             return;
         }
-        $requestId = $context['requestId'] ?? '';
+        $requestId = $context->getRequestId() ?? '';
         if (empty($requestId) || empty($this->pending[$requestId])) {
             echo "Invalid requestId given for logout\n";
             return;
