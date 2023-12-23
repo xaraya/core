@@ -36,18 +36,20 @@ interface ItemLinksInterface
     /**
      * Utility function to retrieve the list of itemtypes of this module (if any).
      * @param array<string, mixed> $args array of optional parameters
+     * @param mixed $context
      * @return array<mixed> the itemtypes of this module and their description
      */
-    public static function getItemTypes(array $args = []): array;
+    public static function getItemTypes(array $args = [], $context = null): array;
 
     /**
      * Utility function to pass individual item links to whoever
      * @param array<string, mixed> $args array of optional parameters
      *        string   $args['itemtype'] item type (optional)
      *        array    $args['itemids'] array of item ids to get
+     * @param mixed $context
      * @return array<mixed> containing the itemlink(s) for the item(s).
      */
-    public static function getItemLinks(array $args = []): array;
+    public static function getItemLinks(array $args = [], $context = null): array;
 }
 
 /**
@@ -90,6 +92,7 @@ trait ItemLinksTrait
     /**
      * Utility function to retrieve the list of itemtypes of this module (if any).
      * @param array<string, mixed> $args array of optional parameters
+     * @param mixed $context
      * @return array<mixed> the itemtypes of this module and their description
      */
     public static function getItemTypes(array $args = [], $context = null): array
@@ -111,6 +114,7 @@ trait ItemLinksTrait
      * @param array<string, mixed> $args array of optional parameters
      *        string   $args['itemtype'] item type (optional)
      *        array    $args['itemids'] array of item ids to get
+     * @param mixed $context
      * @return array<mixed> containing the itemlink(s) for the item(s).
      */
     public static function getItemLinks(array $args = [], $context = null): array

@@ -17,7 +17,7 @@
  * @param array<string, mixed> $args array of optional parameters<br/>
  * @return array<mixed> the itemtypes of this module and their description *
  */
-function dynamicdata_userapi_getitemtypes(array $args = [])
+function dynamicdata_userapi_getitemtypes(array $args = [], $context = null)
 {
     $itemtypes = [];
 
