@@ -72,6 +72,8 @@ function dynamicdata_adminapi_showform(array $args = [], $context = null)
     }
 
     $object = DataObjectFactory::getObject($args);
+    // set context if available in function
+    $object->setContext($context);
     if (empty($itemid)) {
         if (!$object->checkAccess('create')) {
             return xarML('Create #(1) is forbidden', $object->label);
@@ -81,8 +83,6 @@ function dynamicdata_adminapi_showform(array $args = [], $context = null)
             return xarML('Update #(1) is forbidden', $object->label);
         }
     }
-    // set context if available in function
-    $object->setContext($context);
 
     if (!empty($itemid)) {
         $object->getItem();

@@ -60,11 +60,11 @@ function dynamicdata_adminapi_create(array $args = [], $context = null)
     if (empty($myobject)) {
         return;
     }
+    // set context if available in function
+    $myobject->setContext($context);
     if (!$myobject->checkAccess('create')) {
         return;
     }
-    // set context if available in function
-    $myobject->setContext($context);
 
     if (count($values) == 0) {
         foreach ($fields as $field) {

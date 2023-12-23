@@ -164,6 +164,8 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             $loader = new DataObjectLoader($object, $fieldlist);
             $loader->parseQueryArgs($args);
             $objectlist = $loader->getObjectList();
+            // set context if available in resolver
+            $objectlist->setContext($context);
             if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
                 throw new Exception('Invalid user access');
             }
@@ -240,6 +242,8 @@ class xarGraphQLObjectType extends xarGraphQLBaseType
             }
             $params = ['name' => $object, 'itemid' => $args['id']];
             $objectref = DataObjectFactory::getObject($params);
+            // set context if available in resolver
+            $objectref->setContext($context);
             if (xarGraphQL::hasSecurity($object) && !$objectref->checkAccess('display', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
             }

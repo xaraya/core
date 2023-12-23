@@ -22,7 +22,7 @@
  *        int $args['numitems'] The number of items to get
  * @return array<mixed>|void output of the items found
  */
-function dynamicdata_user_search(array $args = [])
+function dynamicdata_user_search(array $args = [], $context = null)
 {
     // Security Check
     if(!xarSecurity::check('ViewDynamicData')) {
@@ -167,6 +167,8 @@ function dynamicdata_user_search(array $args = [])
                                           'layout' => 'list',
                                           'status' => $status]
             );
+            // set context if available in function
+            $object->setContext($context);
             if (!$object->checkAccess('view')) {
                 continue;
             }

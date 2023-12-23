@@ -92,7 +92,7 @@ trait ItemLinksTrait
      * @param array<string, mixed> $args array of optional parameters
      * @return array<mixed> the itemtypes of this module and their description
      */
-    public static function getItemTypes(array $args = []): array
+    public static function getItemTypes(array $args = [], $context = null): array
     {
         $objects = static::getItemLinkObjects();
         $itemtypes = [];
@@ -113,7 +113,7 @@ trait ItemLinksTrait
      *        array    $args['itemids'] array of item ids to get
      * @return array<mixed> containing the itemlink(s) for the item(s).
      */
-    public static function getItemLinks(array $args = []): array
+    public static function getItemLinks(array $args = [], $context = null): array
     {
         extract($args);
 
@@ -138,6 +138,8 @@ trait ItemLinksTrait
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
             return $itemlinks;
         }
+        // set context if available in method
+        $object->setContext($context);
         if (!$object->checkAccess('view')) {
             return $itemlinks;
         }

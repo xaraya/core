@@ -54,11 +54,11 @@ function dynamicdata_userapi_showdisplay(array $args = [], $context = null)
     }
 
     $object = DataObjectFactory::getObject($args);
+    // set context if available in function
+    $object->setContext($context);
     if (!$object->checkAccess('display')) {
         return xarML('Display #(1) is forbidden', $object->label);
     }
-    // set context if available in function
-    $object->setContext($context);
 
     // we're dealing with a real item, so retrieve the property values
     if (!empty($itemid)) {

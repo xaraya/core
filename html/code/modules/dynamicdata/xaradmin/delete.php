@@ -67,12 +67,12 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
         return;
     }
 
+    // set context if available in function
+    $myobject->setContext($context);
     // Security
     if (!$myobject->checkAccess('delete')) {
         return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $myobject->label));
     }
-    // set context if available in function
-    $myobject->setContext($context);
 
     $data = $myobject->toArray();
 
@@ -115,6 +115,8 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
         if ($myobject->objectid == 1) {
             // check security of the parent object
             $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->itemid]);
+            // set context if available in function
+            $tmpobject->setContext($context);
             if (!$tmpobject->checkAccess('config')) {
                 return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
             }
@@ -131,6 +133,8 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
         } elseif ($myobject->objectid == 2) {
             // check security of the parent object
             $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->properties['objectid']->value]);
+            // set context if available in function
+            $tmpobject->setContext($context);
             if (!$tmpobject->checkAccess('config')) {
                 return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
             }

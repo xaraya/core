@@ -19,7 +19,7 @@
  *        array    $args['itemids'] array of item ids to get
  * @return array<mixed> containing the itemlink(s) for the item(s).
  */
-function dynamicdata_userapi_getitemlinks(array $args = [])
+function dynamicdata_userapi_getitemlinks(array $args = [], $context = null)
 {
     extract($args);
 
@@ -44,6 +44,8 @@ function dynamicdata_userapi_getitemlinks(array $args = [])
     if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
         return $itemlinks;
     }
+    // set context if available in function
+    $object->setContext($context);
     if (!$object->checkAccess('view')) {
         return $itemlinks;
     }

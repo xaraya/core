@@ -125,6 +125,8 @@ trait xarGraphQLQueryPageTrait
             $loader = new DataObjectLoader($object, $fieldlist);
             $loader->parseQueryArgs($args);
             $objectlist = $loader->getObjectList();
+            // set context if available in resolver
+            $objectlist->setContext($context);
             if (xarGraphQL::hasSecurity($object) && !$objectlist->checkAccess('view', 0, $userId)) {
                 throw new Exception('Invalid user access');
             }

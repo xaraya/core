@@ -336,6 +336,8 @@ class DataObjectLoader
             //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         }
         $this->objectlist = VirtualObjectFactory::getObjectList($params);
+        // set context if available (from where?) - @todo this doesn't belong here
+        //$this->objectlist->setContext($context);
         if (!empty($this->access) && !$this->objectlist->checkAccess($this->access)) {
             //http_response_code(403);
             throw new Exception('No access to object ' . $this->objectname);

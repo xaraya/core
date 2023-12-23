@@ -122,11 +122,11 @@ function dynamicdata_userapi_showview(array $args = [], $context = null)
     if (!isset($object) || empty($object->label)) {
         return;
     }
+    // set context if available in function
+    $object->setContext($context);
     if (!$object->checkAccess('view')) {
         return xarML('View #(1) is forbidden', $object->label);
     }
-    // set context if available in function
-    $object->setContext($context);
 
     // We need to get the total count before adding numitems!
     if ($args['count']) {

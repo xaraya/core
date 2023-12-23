@@ -15,7 +15,7 @@
  */
 sys::import('modules.dynamicdata.class.objects.factory');
 
-function dynamicdata_admin_export(array $args = [])
+function dynamicdata_admin_export(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminDynamicData')) {
@@ -62,6 +62,8 @@ function dynamicdata_admin_export(array $args = [])
         $data['xml'] = '';
         return $data;
     }
+    // set context if available in function
+    $myobject->setContext($context);
     // check security of the object
     if (!$myobject->checkAccess('config')) {
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $myobject->label));

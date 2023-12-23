@@ -15,7 +15,7 @@
  * Show configuration of some property
  * @return array<mixed>|string|bool|void data for the template display
  */
-function dynamicdata_admin_showpropval(array $args = [])
+function dynamicdata_admin_showpropval(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -54,6 +54,8 @@ function dynamicdata_admin_showpropval(array $args = [])
     if (empty($myobject)) {
         return;
     }
+    // set context if available in function
+    $myobject->setContext($context);
 
     $newid = $myobject->getItem();
 
@@ -70,6 +72,8 @@ function dynamicdata_admin_showpropval(array $args = [])
     if (empty($parentobject)) {
         return;
     }
+    // set context if available in function
+    $parentobject->setContext($context);
     if (!$parentobject->checkAccess('config')) {
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $parentobject->label));
     }

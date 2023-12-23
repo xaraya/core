@@ -27,7 +27,7 @@ use Xaraya\DataObject\DataStores\DataStoreFactory;
  *     string layout (optional)
  * @return array<mixed>|string|void data for the template display
  */
-function dynamicdata_admin_modifyprop(array $args = [])
+function dynamicdata_admin_modifyprop(array $args = [], $context = null)
 {
     extract($args);
     $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
@@ -69,6 +69,8 @@ function dynamicdata_admin_modifyprop(array $args = [])
         $label =  $objectinfo['label'];
         // check security of the parent object
         $tmpobject = DataObjectFactory::getObject($objectinfo);
+        // set context if available in function
+        $tmpobject->setContext($context);
         if (!$tmpobject->checkAccess('config')) {
             return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
         }

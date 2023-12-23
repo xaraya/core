@@ -1372,6 +1372,10 @@ class DataObjectMaster extends xarObject implements ContextInterface
         } catch (Exception $e) {
             $access_rules = [];
         }
+        // use context to get roleid if needed
+        if (empty($roleid) && !empty($this->context)) {
+            $roleid = $this->getContext()->getUserId();
+        }
 
         // DD specific access scheme
         // check if we have specific access rules for this level

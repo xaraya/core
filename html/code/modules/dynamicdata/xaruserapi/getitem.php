@@ -107,11 +107,11 @@ function &dynamicdata_userapi_getitem(array $args = [], $context = null)
     if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
         return $nullreturn;
     }
+    // set context if available in function
+    $object->setContext($context);
     if (!$object->checkAccess('display')) {
         return $nullreturn;
     }
-    // set context if available in function
-    $object->setContext($context);
 
     // Get the item
     if (!empty($itemid)) {

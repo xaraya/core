@@ -55,11 +55,11 @@ function dynamicdata_adminapi_delete(array $args = [], $context = null)
     if (empty($myobject)) {
         return;
     }
+    // set context if available in function
+    $myobject->setContext($context);
     if (!$myobject->checkAccess('delete')) {
         return;
     }
-    // set context if available in function
-    $myobject->setContext($context);
 
     $myobject->getItem();
     $itemid = $myobject->deleteItem();

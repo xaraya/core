@@ -14,7 +14,7 @@
 /**
  * Return relationship information (test only)
  */
-function dynamicdata_admin_relations(array $args = [])
+function dynamicdata_admin_relations(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminDynamicData')) {
@@ -130,6 +130,8 @@ function dynamicdata_admin_relations(array $args = [])
             'getobject',
             ['objectid' => $objectid]
         );
+        // set context if available in function
+        $object->setContext($context);
         if (!$object->checkAccess('config')) {
             return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
         }
@@ -361,6 +363,8 @@ function dynamicdata_admin_relations(array $args = [])
             'getobject',
             ['table' => $table]
         );
+        // set context if available in function
+        $object->setContext($context);
         if (!$object->checkAccess('config')) {
             return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
         }

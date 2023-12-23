@@ -88,11 +88,11 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
     if (empty($itemid)) {
         return xarResponse::NotFound();
     }
+    // set context if available in function
+    $object->setContext($context);
     if (!$object->checkAccess('update')) {
         return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
     }
-    // set context if available in function
-    $object->setContext($context);
 
     $args = $object->toArray();
 
@@ -115,6 +115,8 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
                 if (empty($tmpobject)) {
                     return xarResponse::NotFound();
                 }
+                // set context if available in function
+                $tmpobject->setContext($context);
                 if (!$tmpobject->checkAccess('config')) {
                     return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
                 }
@@ -131,6 +133,8 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
             } elseif ($object->objectid == 2) {
                 // check security of the parent object
                 $tmpobject = DataObjectFactory::getObject(['objectid' => $object->properties['objectid']->value]);
+                // set context if available in function
+                $tmpobject->setContext($context);
                 if (!$tmpobject->checkAccess('config')) {
                     return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
                 }

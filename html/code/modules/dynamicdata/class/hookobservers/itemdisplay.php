@@ -48,11 +48,11 @@ class ItemDisplay extends DataObjectHookObserver
         if (!isset($object) || empty($object->objectid)) {
             return;
         }
+        // set context if available in hook call
+        $object->setContext($context);
         if (!$object->checkAccess('display')) {
             return xarML('Display #(1) is forbidden', $object->label);
         }
-        // set context if available in hook call
-        $object->setContext($context);
 
         $object->getItem();
 

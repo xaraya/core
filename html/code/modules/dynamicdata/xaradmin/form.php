@@ -16,7 +16,7 @@
  * wishes to create a new module item
  * @return string|void output display string
  */
-function dynamicdata_admin_form(array $args = [])
+function dynamicdata_admin_form(array $args = [], $context = null)
 {
     extract($args);
 
@@ -61,6 +61,8 @@ function dynamicdata_admin_form(array $args = [])
                                          'table'    => $table,
                                          'itemid'   => $itemid]);
 
+    // set context if available in function
+    $myobject->setContext($context);
     // Security
     if (!$myobject->checkAccess('create')) {
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));

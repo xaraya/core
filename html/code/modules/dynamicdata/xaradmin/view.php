@@ -15,7 +15,7 @@
  * View items
  * @return string|void output display string
  */
-function dynamicdata_admin_view(array $args = [])
+function dynamicdata_admin_view(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditDynamicData')) {
@@ -76,6 +76,8 @@ function dynamicdata_admin_view(array $args = [])
         return;
     }
 
+    // set context if available in function
+    $object->setContext($context);
     if (!$object->checkAccess('view')) {
         return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
     }

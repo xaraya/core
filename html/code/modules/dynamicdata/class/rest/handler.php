@@ -149,11 +149,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $loader = new DataObjectLoader($object, $fieldlist);
         $loader->parseQueryArgs($args);
         $objectlist = $loader->getObjectList();
+        // set context if available in handler
+        $objectlist->setContext($context);
         if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view', 0, $userId)) {
             throw new ForbiddenOperationException();
         }
-        // set context if available in handler
-        $objectlist->setContext($context);
         $params = $loader->addPagingParams();
         $items = $objectlist->getItems($params);
         //$items = $loader->query($args);
@@ -236,13 +236,13 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
         $objectitem = DataObjectFactory::getObject($params);
         if (empty($objectitem)) {
-            throw new Exception('Unknown item ' . $object);
-        }
-        if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
-            throw new ForbiddenOperationException();
+            throw new BadParameterException('object');
         }
         // set context if available in handler
         $objectitem->setContext($context);
+        if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
+            throw new ForbiddenOperationException();
+        }
         $itemid = $objectitem->getItem();
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown itemid for ' . $object);
@@ -321,11 +321,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         $params = ['name' => $object];
         $objectitem = DataObjectFactory::getObject($params);
-        if (empty($objectitem) || !$objectitem->checkAccess('create', 0, $userId)) {
-            throw new ForbiddenOperationException();
+        if (empty($objectitem)) {
+            throw new BadParameterException('object');
         }
         // set context if available in handler
         $objectitem->setContext($context);
+        if (!$objectitem->checkAccess('create', 0, $userId)) {
+            throw new ForbiddenOperationException();
+        }
         $itemid = $objectitem->createItem($args['input']);
         if (empty($itemid)) {
             throw new Exception('Unknown item ' . $object);
@@ -365,11 +368,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectFactory::getObject($params);
-        if (empty($objectitem) || !$objectitem->checkAccess('update', $itemid, $userId)) {
-            throw new ForbiddenOperationException();
+        if (empty($objectitem)) {
+            throw new BadParameterException('object');
         }
         // set context if available in handler
         $objectitem->setContext($context);
+        if (!$objectitem->checkAccess('update', $itemid, $userId)) {
+            throw new ForbiddenOperationException();
+        }
         $itemid = $objectitem->updateItem($args['input']);
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown item ' . $object);
@@ -401,11 +407,14 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $userId = self::checkUser($context);
         $params = ['name' => $object, 'itemid' => $itemid];
         $objectitem = DataObjectFactory::getObject($params);
-        if (empty($objectitem) || !$objectitem->checkAccess('delete', $itemid, $userId)) {
-            throw new ForbiddenOperationException();
+        if (empty($objectitem)) {
+            throw new BadParameterException('object');
         }
         // set context if available in handler
         $objectitem->setContext($context);
+        if (!$objectitem->checkAccess('delete', $itemid, $userId)) {
+            throw new ForbiddenOperationException();
+        }
         $itemid = $objectitem->deleteItem();
         if ($itemid != $params['itemid']) {
             throw new Exception('Unknown item ' . $object);

@@ -76,12 +76,12 @@ class CreateHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
         if (!$this->object->checkAccess('create')) {
             $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('Create #(1) is forbidden', $this->object->label));
         }
-        // set context if available in handler
-        $this->object->setContext($this->getContext());
 
         // there's no item to get here yet
         //$this->object->getItem();

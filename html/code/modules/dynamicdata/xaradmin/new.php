@@ -71,11 +71,11 @@ function dynamicdata_admin_new(array $args = [], $context = null)
     if (empty($myobject)) {
         return xarResponse::NotFound();
     }
+    // set context if available in function
+    $myobject->setContext($context);
     if (!$myobject->checkAccess('create')) {
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
     }
-    // set context if available in function
-    $myobject->setContext($context);
 
     $args = $myobject->toArray();
     $data['object'] = & $myobject;

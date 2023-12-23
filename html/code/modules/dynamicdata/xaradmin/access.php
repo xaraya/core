@@ -19,7 +19,7 @@
  * @param array<string, mixed> $args itemid the id of the object to be modified
  * @return string|true|void output display string
  */
-function dynamicdata_admin_access(array $args = [])
+function dynamicdata_admin_access(array $args = [], $context = null)
 {
     extract($args);
 
@@ -63,6 +63,8 @@ function dynamicdata_admin_access(array $args = [])
     // check security of the parent object ... or DD Admin as fail-safe here
     $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid]);
 
+    // set context if available in function
+    $tmpobject->setContext($context);
     // Security
     if (!$tmpobject->checkAccess('config') && !xarSecurity::check('AdminDynamicData', 0)) {
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));

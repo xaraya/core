@@ -84,12 +84,12 @@ class UpdateHandler extends DefaultHandler
                 $this->tplmodule = $modname;
             }
         }
+        // set context if available in handler
+        $this->object->setContext($this->getContext());
         if (!$this->object->checkAccess('update')) {
             $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('Update Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));
         }
-        // set context if available in handler
-        $this->object->setContext($this->getContext());
 
         $itemid = $this->object->getItem();
         if (empty($itemid) || $itemid != $this->object->itemid) {

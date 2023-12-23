@@ -67,12 +67,12 @@ function dynamicdata_admin_create(array $args = [], $context = null)
                                          'table'    => $table,
                                          'itemid'   => $itemid]);
 
+    // set context if available in function
+    $myobject->setContext($context);
     // Security (Bug:
     if (!$myobject->checkAccess('create')) {
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
     }
-    // set context if available in function
-    $myobject->setContext($context);
 
     $isvalid = $myobject->checkInput();
 

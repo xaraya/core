@@ -99,14 +99,14 @@ function dynamicdata_user_view(array $args = [], $context = null)
                                   ]
     );
 
+    // set context if available in function
+    $object->setContext($context);
     if (!$object->checkAccess('view')) {
         if (!empty($context)) {
             $context->setStatus(403);
         }
         return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
     }
-    // set context if available in function
-    $object->setContext($context);
 
     // Pass back the relevant variables to the template if necessary
     $data = $object->toArray();
