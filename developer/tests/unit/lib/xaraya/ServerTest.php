@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Xaraya\Context\RequestContext;
 use Xaraya\Context\Context;
+use Xaraya\Requests\RequestHandler;
 
 final class ServerTest extends TestCase
 {
@@ -14,12 +15,12 @@ final class ServerTest extends TestCase
     public function tearDown(): void
     {
         $_SERVER = [];
-        xarServer::setRequestClass(xarRequestHandler::class);
+        xarServer::setRequestClass(RequestHandler::class);
     }
 
     public function testStandardInit(): void
     {
-        $expected = xarRequestHandler::class;
+        $expected = RequestHandler::class;
         xarServer::init();
 
         $instance = xarServer::getInstance();

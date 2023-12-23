@@ -13,7 +13,7 @@ namespace Xaraya\Context;
 
 use Xaraya\Core\Traits\ContextInterface;
 use Xaraya\Core\Traits\ContextTrait;
-use iRequestInterface;
+use Xaraya\Requests\RequestInterface;
 use xarServer;
 use sys;
 
@@ -23,13 +23,12 @@ sys::import('xaraya.traits.contexttrait');
 /**
  * Request instance with context for use with xarServer::setInstance() etc.
  */
-class RequestContext implements ContextInterface, iRequestInterface
+class RequestContext implements ContextInterface, RequestInterface
 {
     use ContextTrait;
 
     /** @var array<string, mixed> */
     private array $args = [];
-    private ?string $requestId = null;
 
     /**
      * Constructor for the request handler
@@ -54,6 +53,15 @@ class RequestContext implements ContextInterface, iRequestInterface
             //$requestId = bin2hex(random_bytes($this->length));
         }
         return true;
+    }
+
+    /**
+     * Get current requestId from context
+     * @return string|null
+     */
+    public function getRequestId()
+    {
+        return $this->getContext()->getRequestId();
     }
 
     /**

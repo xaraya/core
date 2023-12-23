@@ -35,7 +35,7 @@ class UserContext
     }
 
     /**
-     * Summary of getUserId
+     * Summary of getUserId - entrypoint for session in rest handler and graphql
      * @return int|null
      */
     public function getUserId()
@@ -82,6 +82,7 @@ class UserContext
         if (empty($cookieVars) || empty($cookieVars['XARAYASID'])) {
             return null;
         }
+        $sessionId = $cookieVars['XARAYASID'];
         // @todo replace with something that doesn't depend on PHP sessions
         xarSession::init();
         //xarMLS::init();

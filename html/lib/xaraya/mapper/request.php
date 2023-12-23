@@ -13,6 +13,8 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
+use Xaraya\Requests\RequestInterface;
+
 class xarRequest extends xarObject
 {
     protected string $url          = '';
@@ -44,7 +46,7 @@ class xarRequest extends xarObject
 
     /** @var ?bool */
     private $isAjax   = null;
-    /** @var ?iRequestInterface */
+    /** @var ?RequestInterface */
     private $requestContext = null;
 
     /**
@@ -63,7 +65,7 @@ class xarRequest extends xarObject
     }
 
     /**
-     * @return ?iRequestInterface
+     * @return ?RequestInterface
      */
     public function getServerContext()
     {

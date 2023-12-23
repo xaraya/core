@@ -13,17 +13,17 @@ namespace Xaraya\Context;
 
 use Xaraya\Core\Traits\ContextInterface;
 use Xaraya\Core\Traits\ContextTrait;
-use iSessionInterface;
+use Xaraya\Sessions\SessionInterface;
 use xarSession;
 use sys;
 
-sys::import('xaraya.sessions');
+sys::import('xaraya.sessions.interface');
 sys::import('xaraya.traits.contexttrait');
 
 /**
  * Session instance with context for use with xarSession::setInstance()
  */
-class SessionContext implements ContextInterface, iSessionInterface
+class SessionContext implements ContextInterface, SessionInterface
 {
     use ContextTrait;
 
@@ -60,6 +60,40 @@ class SessionContext implements ContextInterface, iSessionInterface
     }
 
     /**
+     * Get current sessionId from context
+     * @return string|null
+     */
+    public function getSessionId()
+    {
+        if (!isset($this->sessionId)) {
+            $session = $this->getContext()?->getSession();
+            if (empty($session)) {
+                return null;
+            }
+            $this->sessionId = $session->getSessionId();
+        }
+        return $this->sessionId;
+    }
+
+    /**
+     * Actions to take before handling request
+     * @return void
+     */
+    public function before()
+    {
+        // actions to take before handling request
+    }
+
+    /**
+     * Actions to take after handling request
+     * @return void
+     */
+    public function after()
+    {
+        // actions to take after handling request
+    }
+
+    /**
      * Get (or set) the session id
      * @param ?string $id
      * @return string|bool
@@ -74,14 +108,7 @@ class SessionContext implements ContextInterface, iSessionInterface
                 $session->setSessionId($id);
             }
         }
-        if (!isset($this->sessionId)) {
-            $session = $this->getContext()?->getSession();
-            if (empty($session)) {
-                return false;
-            }
-            $this->sessionId = $session->getSessionId();
-        }
-        return $this->sessionId;
+        return $this->getSessionId() ?? false;
     }
 
     /**
@@ -168,6 +195,7 @@ class SessionContext implements ContextInterface, iSessionInterface
         if (empty($session)) {
             return false;
         }
+        // @todo what do we want to do here?
         return true;
     }
 }

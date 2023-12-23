@@ -16,8 +16,8 @@ use sys;
 
 sys::import('xaraya.context.interface');
 sys::import('xaraya.context.factory');
-sys::import('xaraya.context.request');
-sys::import('xaraya.context.session');
+sys::import('xaraya.requests.context');
+sys::import('xaraya.sessions.context');
 sys::import('xaraya.context.user');
 
 /**
@@ -30,7 +30,7 @@ class Context extends ArrayObject implements ContextInterface
 {
     /**
      * Get current requestId
-     * @return mixed
+     * @return string|null
      */
     public function getRequestId()
     {
@@ -53,8 +53,8 @@ class Context extends ArrayObject implements ContextInterface
     }
 
     /**
-     * Get current userId
-     * @return mixed
+     * Get current userId - entrypoint for session in rest handler and graphql
+     * @return int|null
      */
     public function getUserId()
     {
@@ -68,7 +68,7 @@ class Context extends ArrayObject implements ContextInterface
 
     /**
      * Set current userId
-     * @param mixed $userId
+     * @param int $userId
      * @return void
      */
     public function setUserId($userId)
@@ -82,8 +82,20 @@ class Context extends ArrayObject implements ContextInterface
     }
 
     /**
+     * Get current status (if any)
+     * @return int|null
+     */
+    public function getStatus()
+    {
+        if (!$this->offsetExists('status')) {
+            return null;
+        }
+        return $this->offsetGet('status');
+    }
+
+    /**
      * Set current status
-     * @param mixed $status
+     * @param int $status
      * @return void
      */
     public function setStatus($status)

@@ -13,6 +13,8 @@
  * @author Marc Lutolf <mfl@netspan.ch>
 **/
 
+use Xaraya\Requests\RequestInterface;
+
 class xarController extends xarObject
 {
     public static bool $allowShortURLs = true;
@@ -42,7 +44,7 @@ class xarController extends xarObject
     public static $buildUri;     // callable for building URIs when using non-standard entrypoints
     /** @var ?callable */
     public static $redirectTo;   // callable for redirecting to when using non-standard entrypoints
-    /** @var ?iRequestInterface */
+    /** @var ?RequestInterface */
     private static $requestContext = null;
 
     /**

@@ -15,6 +15,8 @@
 
 sys::import('xaraya.mapper.controllers.base');
 sys::import('xaraya.mapper.controllers.interfaces');
+sys::import('xaraya.requests.url');
+use Xaraya\Requests\RequestURL;
 
 class DefaultActionController extends BaseActionController implements iController
 {
@@ -57,7 +59,7 @@ class DefaultActionController extends BaseActionController implements iControlle
             $pathargs[$request->getFunctionKey()] = $request->getFunction();
         }
         $pathargs = $pathargs + $request->getFunctionArgs();
-        $path = xarURL::addParametersToPath($pathargs, '', xarController::$delimiter, $this->separator);
+        $path = RequestURL::addParametersToPath($pathargs, '', xarController::$delimiter, $this->separator);
         return $path;
     }
 

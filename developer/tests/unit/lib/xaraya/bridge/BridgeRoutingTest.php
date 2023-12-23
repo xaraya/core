@@ -3,6 +3,7 @@
 use PHPUnit\Framework\TestCase;
 use Xaraya\Bridge\Routing\FastRouteBridge;
 use Xaraya\Context\SessionContext;
+use Xaraya\Requests\RequestHandler;
 
 final class BridgeRoutingTest extends TestCase
 {
@@ -10,7 +11,7 @@ final class BridgeRoutingTest extends TestCase
     {
         xarCache::init();
         xarSession::setSessionClass(SessionContext::class);
-        xarServer::setRequestClass(xarRequestHandler::class);
+        xarServer::setRequestClass(RequestHandler::class);
         xarCore::xarInit(xarCore::SYSTEM_USER);
     }
 

@@ -62,8 +62,11 @@ define('XARTHEME_STATE_MISSING_FROM_UPGRADED', 9);
 /*
     Bring in the module variables to maintain interface compatibility for now
 */
+sys::import('xaraya.requests.url');
 sys::import('xaraya.variables.module');
 sys::import('xaraya.variables.moduser');
+use Xaraya\Requests\RequestURL;
+
 /**
  * Wrapper functions to support Xaraya 1 API for modvars and moduservars
  * @deprecated
@@ -84,32 +87,32 @@ function xarModDelUserVar($modName, $name, $id=NULL) {   return xarModUserVars::
 
 /**
  * Legacy call
- * @uses xarURL::encode()
+ * @uses RequestURL::encode()
  * @deprecated
  */
 function xarMod__URLencode($data, $type = 'getname')
 {
-    return xarURL::encode($data, $type);
+    return RequestURL::encode($data, $type);
 }
 
 /**
  * Legacy call
- * @uses xarURL::nested()
+ * @uses RequestURL::nested()
  * @deprecated
  */
 function xarMod__URLnested($args, $prefix)
 {
-    return xarURL::nested($args, $prefix);
+    return RequestURL::nested($args, $prefix);
 }
 
 /**
  * Legacy call
- * @uses xarURL::addParametersToPath()
+ * @uses RequestURL::addParametersToPath()
  * @deprecated
  */
 function xarMod__URLaddParametersToPath($args, $path, $pini, $psep)
 {
-    return xarURL::addParametersToPath($args, $path, $pini, $psep);
+    return RequestURL::addParametersToPath($args, $path, $pini, $psep);
 }
 
 /**
