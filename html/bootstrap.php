@@ -303,15 +303,21 @@ final class sys extends xarObject
         if (self::$autoload) {
             return;
         }
-        // test compatibility with composer autoload by disabling sys::import
-        if (empty(self::$root)) {
-            require_once dirname(__DIR__).'/vendor/autoload.php';
-        } elseif (self::$root == self::$web && is_dir(self::$root . '../vendor')) {
-            require_once self::$root . '../vendor/autoload.php';
-        } else {
-            require_once self::$root . 'vendor/autoload.php';
+        // Test compatibility with composer autoload by disabling sys::import
+        try {
+			// Look for a composer autoload file. If it exists it will be in the vendor folder at the top level, depending on how Xaraya is configured in layout.system.php.
+			if (empty(self::$root)) {
+				require_once dirname(__DIR__).'/vendor/autoload.php';
+			} elseif (self::$root == self::$web && is_dir(self::$root . '../vendor')) {
+				require_once self::$root . '../vendor/autoload.php';
+			} else {
+				require_once self::$root . 'vendor/autoload.php';
+			}
+			// If we got here then we found the file. Set self::$autoload = true
+        	self::$autoload = true;
+        } catch (Exception $e) {
+        	// Could not find a composer autoload.php: leave self::$autoload = false
         }
-        self::$autoload = true;
     }
 
     /**
