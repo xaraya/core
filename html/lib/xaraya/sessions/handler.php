@@ -58,12 +58,14 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
 {
     public const  PREFIX = 'XARSV';     // Reserved by us for our session vars
     public const  COOKIE = 'XARAYASID'; // Our cookiename
-    private ?Connection $db;               // We store sessioninfo in the database
-    private string $tbl;              // Container for the session info
-    private bool $isNew = true;     // Flag signalling if we're dealing with a new session
+// TODO: the following line presently causes PDO to break
+//    private ?Connection $db;               // We store sessioninfo in the database
+    private $db;                        // We store sessioninfo in the database
+    private string $tbl;                // Container for the session info
+    private bool $isNew = true;         // Flag signalling if we're dealing with a new session
 
-    private ?string $sessionId = null; // The id assigned to us.
-    private string $ipAddress = '';   // IP-address belonging to this session.
+    private ?string $sessionId = null;  // The id assigned to us.
+    private string $ipAddress = '';     // IP-address belonging to this session.
 
     /**
      * Constructor for the session handler
