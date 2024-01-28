@@ -112,7 +112,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             return xarCoreCache::getCached($cacheKey, $args['moduleid'].':'.$args['itemtype']);
         }
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable = &xarDB::getTables();
+        $xartable = xarDB::getTables();
         $dynamicobjects = $xartable['dynamic_objects'];
 
         $query = "SELECT id,

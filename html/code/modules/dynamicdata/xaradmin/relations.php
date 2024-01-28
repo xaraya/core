@@ -77,7 +77,7 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
     }
 
     // filter out invalid tables
-    $xartables = & xarDB::getTables();
+    $xartables =  xarDB::getTables();
     if (!empty($table)) {
         if ($table == 'dummy' || substr($table, 0, 15) == 'module variable') {
             $table = null;

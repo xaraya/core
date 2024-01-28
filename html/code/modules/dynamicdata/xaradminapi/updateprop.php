@@ -57,7 +57,7 @@ function dynamicdata_adminapi_updateprop(array $args = [])
     // For xarDB::getConn() we want to keep the entire
     // tables array together for easy reference later on
     $dbconn = xarDB::getConn();
-    $xartable = & xarDB::getTables();
+    $xartable =  xarDB::getTables();
 
     // It's good practice to name the table and column definitions you
     // are getting - $table and $column don't cut it in more complex

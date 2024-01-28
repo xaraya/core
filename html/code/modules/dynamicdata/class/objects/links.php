@@ -565,7 +565,7 @@ class DataObjectLinks extends xarObject
     {
         // load tables for 'dynamic_data'
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartables = & xarDB::getTables();
+        $xartables =  xarDB::getTables();
 
         $mapping = [];
         $properties = xarMod::apiFunc(

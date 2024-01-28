@@ -22,7 +22,7 @@ function privileges_admin_deleterealm()
     if (!xarVar::fetch('confirmed', 'isset', $confirmed, NULL, xarVar::DONT_SET)) return;
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
 
     $bindvars = array();
     $tbl = $xartable['security_realms'];

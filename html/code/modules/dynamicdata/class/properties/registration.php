@@ -54,7 +54,7 @@ class PropertyRegistration extends DataContainer
     {
         $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $tables = & xarDB::getTables();
+        $tables =  xarDB::getTables();
         $sql = "DELETE FROM $tables[dynamic_properties_def]";
         $res = $dbconn->ExecuteUpdate($sql);
         return $res;
@@ -94,7 +94,7 @@ class PropertyRegistration extends DataContainer
         */
         $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $tables = & xarDB::getTables();
+        $tables =  xarDB::getTables();
         $propdefTable = $tables['dynamic_properties_def'];
 
         // Make sure the db is the same as in the old days
@@ -171,7 +171,7 @@ class PropertyRegistration extends DataContainer
         if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
             xarMod::loadDbInfo('modules', 'modules');
         }
-        $tables = & xarDB::getTables();
+        $tables =  xarDB::getTables();
         // Sort by required module(s) and then by name
         $query = "SELECT  p.id, p.name, p.label,
                           p.filepath, p.class,
@@ -250,7 +250,7 @@ class PropertyRegistration extends DataContainer
             } else {
                 if (!xarVar::getCached('installer', 'installing')) {
                     // Repopulate the configurations table
-                    $tables = & xarDB::getTables();
+                    $tables =  xarDB::getTables();
                     $sql = "DELETE FROM $tables[dynamic_configurations]";
                     $res = $dbconn->ExecuteUpdate($sql);
 

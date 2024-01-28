@@ -36,7 +36,7 @@ function modules_adminapi_standarddeinstall(Array $args=array())
 # Remove database tables
 #
     $dbconn = xarDB::getConn();
-    $xartables =& xarDB::getTables();
+    $xartables = xarDB::getTables();
 
     xarMod::apiLoad($module);
     $tablenameprefix = xarDB::getPrefix() . '_' . $module;

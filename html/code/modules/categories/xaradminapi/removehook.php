@@ -49,7 +49,7 @@ function categories_adminapi_removehook($args)
 
     // Get database setup
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
     $categorieslinkagetable = $xartable['categories_linkage'];
 
     // Delete the link

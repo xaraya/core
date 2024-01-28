@@ -31,7 +31,7 @@ function authsystem_userapi_authenticate_user(Array $args=array())
     assert(!empty($uname) && isset($pass));
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
 
     // Get user information
     $rolestable = $xartable['roles'];

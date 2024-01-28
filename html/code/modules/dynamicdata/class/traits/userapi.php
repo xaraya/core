@@ -101,7 +101,7 @@ trait UserApiTrait
         if ($extensions) {
             // Get all the objects at once
             xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-            $xartable = & xarDB::getTables();
+            $xartable =  xarDB::getTables();
 
             $dynamicobjects = $xartable['dynamic_objects'];
 

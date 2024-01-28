@@ -34,7 +34,7 @@ function categories_userapi_getorphanlinks($args)
     }
 
     sys::import('xaraya.structures.query');
-    $tables =& xarDB::getTables();
+    $tables = xarDB::getTables();
     $q = new Query();
     $q->addtable($tables['categories'], 'c');
     $q->addtable($tables['categories_linkage'], 'cl');
@@ -76,7 +76,7 @@ function categories_userapi_getorphanlinks($args)
     $dbconn = xarDB::getConn();
 
     // Table definition
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
     $categoriestable = $xartable['categories'];
     $categorieslinkagetable = $xartable['categories_linkage'];
 

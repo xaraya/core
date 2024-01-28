@@ -26,7 +26,7 @@ class Categories extends xarObject
     public static function get(int $id)
     {
         $dbconn = xarDB::getConn();
-        $xartable =& xarDB::getTables();
+        $xartable = xarDB::getTables();
 
         $SQLquery = "SELECT id,
                             name,
@@ -90,7 +90,7 @@ class CategoryTreeNode extends TreeNode
     function getChildren()
     {
         $dbconn = xarDB::getConn();
-        $xartable =& xarDB::getTables();
+        $xartable = xarDB::getTables();
 
         $SQLquery = "SELECT id,
                             name,
@@ -137,7 +137,7 @@ class CategoryTreeNode extends TreeNode
     function getChildCount()
     {
         $dbconn = xarDB::getConn();
-        $xartable =& xarDB::getTables();
+        $xartable = xarDB::getTables();
 
         $SQLquery = "SELECT COUNT(*) FROM " . $xartable['categories'] . " WHERE parent_id = ? ORDER BY left_id";
         $bindvars = array($this->id);
@@ -158,7 +158,7 @@ class CategoryTreeNode extends TreeNode
     function isDescendant(CategoryTreeNode $n)
     {
         $dbconn = xarDB::getConn();
-        $xartable =& xarDB::getTables();
+        $xartable = xarDB::getTables();
 
         $query = '
             SELECT  P1.id

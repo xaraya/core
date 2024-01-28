@@ -26,7 +26,7 @@ function roles_adminapi_recall(Array $args=array())
 
     // Get database setup
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
     $rolestable = $xartable['roles'];
 
     $deleted = '[' . xarML('deleted') . ']';

@@ -42,7 +42,7 @@ function modules_adminapi_setstate(Array $args=array())
 
     //Set up database object
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
 
     $oldState = $modInfo['state'];
     $state = (int)$state;

@@ -103,7 +103,7 @@ class GroupListProperty extends SelectProperty
      */
     public function createValue($itemid=0)
     {
-        $xartable =& xarDB::getTables();
+        $xartable = xarDB::getTables();
         $rolemembers = $xartable['rolemembers'];
         
         if ($this->initialization_update_behavior == 'replace' && $this->previous_groupid) {
@@ -173,7 +173,7 @@ class GroupListProperty extends SelectProperty
         $basegroup = xarRoles::get($this->initialization_basegroup);
         if (!empty($basegroup)) {
             xarMod::load('roles');
-            $xartables =& xarDB::getTables();
+            $xartables = xarDB::getTables();
             $rolemembers = $xartables['rolemembers'];
             $bindvars = array();
             $query = "SELECT parent_id FROM $rolemembers WHERE role_id = ?";

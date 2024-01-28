@@ -32,7 +32,7 @@ function modules_init()
     }
     
     // Get database information
-    $tables =& xarDB::getTables();
+    $tables = xarDB::getTables();
     try {
         $dbconn->begin();
         // Manually Insert the Base and Modules module into modules table
@@ -113,7 +113,7 @@ function modules_upgrade($oldversion)
     switch ($oldversion) {
         case '2.0.0':
             $dbconn = xarDB::getConn();
-            $xartable =& xarDB::getTables();
+            $xartable = xarDB::getTables();
             //Load Table Maintainance API
             sys::import('xaraya.tableddl');
             $hookstable = $xartable['hooks'];
@@ -126,7 +126,7 @@ function modules_upgrade($oldversion)
             $dbconn = xarDB::getConn();
             $tables = array('eventsystem' => xarDB::getPrefix() . '_eventsystem');
             xarDB::importTables($tables);
-            $tables =& xarDB::getTables();
+            $tables = xarDB::getTables();
             $prefix = xarDB::getPrefix();
             // Creating the first part inside a transaction
             try {

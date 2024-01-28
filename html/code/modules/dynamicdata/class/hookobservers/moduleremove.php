@@ -76,7 +76,7 @@ class ModuleRemove extends DataObjectHookObserver
 
         // Get database setup
         $dbconn = xarDB::getConn();
-        $xartable = & xarDB::getTables();
+        $xartable =  xarDB::getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 

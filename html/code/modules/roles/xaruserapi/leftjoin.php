@@ -49,7 +49,7 @@ function roles_userapi_leftjoin(Array $args=array())
     }
 
     // Table definition
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
     $rolestable = $xartable['roles'];
 
     $leftjoin = array();

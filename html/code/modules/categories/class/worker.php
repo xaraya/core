@@ -33,7 +33,7 @@ class CategoryWorker extends xarObject
         sys::import('xaraya.structures.query');
         sys::import('modules.categories.xartables');
         xarDB::importTables(categories_xartables());
-        $tables =& xarDB::getTables();
+        $tables = xarDB::getTables();
         $this->table     = $tables['categories'];
         $this->cattable  = $tables['categories'];
         $this->basetable = $tables['categories_basecategories'];
@@ -325,7 +325,7 @@ class CategoryWorker extends xarObject
             return $bases;
         } else {
             // We are getting the base categories of a module
-            $xartable =& xarDB::getTables();
+            $xartable = xarDB::getTables();
     
             sys::import('xaraya.structures.query');
             $q = new Query('SELECT');

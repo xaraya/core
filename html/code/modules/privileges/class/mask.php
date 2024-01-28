@@ -53,7 +53,7 @@ class xarMask extends xarObject
     {
         extract($pargs);
 
-        $xartable =& xarDB::getTables();
+        $xartable = xarDB::getTables();
         $this->privilegestable = $xartable['privileges'];
         $this->privmemberstable = $xartable['privmembers'];
         $this->rolestable = $xartable['roles'];

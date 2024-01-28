@@ -38,7 +38,7 @@ function categories_adminapi_unlinkcids($args)
     }
 
     // Set up the DELETE query and run
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
     sys::import('xaraya.structures.query');
     $q = new Query('DELETE', $xartable['categories_linkage']);
     $q->eq('module_id', (int)$modid);

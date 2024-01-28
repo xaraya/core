@@ -40,7 +40,7 @@ function roles_userapi_get(Array $args=array())
     }
     
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
     $rolestable = $xartable['roles'];
 
     // Get user

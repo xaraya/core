@@ -91,7 +91,7 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
             case 'categories':
                 // load table definitions et al.
                 xarMod::apiLoad('categories', 'user');
-                $xartable = & xarDB::getTables();
+                $xartable =  xarDB::getTables();
                 if (empty($xartable['categories_linkage'])) {
                     break;
                 }
@@ -108,7 +108,7 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
             case 'xlink':
                 // load table definitions et al.
                 xarMod::apiLoad($tohook, 'user');
-                $xartable = & xarDB::getTables();
+                $xartable =  xarDB::getTables();
                 if (empty($xartable[$tohook])) {
                     break;
                 }
@@ -121,7 +121,7 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
             case 'comments':
                 // load table definitions et al.
                 xarMod::apiLoad('comments', 'user');
-                $xartable = & xarDB::getTables();
+                $xartable =  xarDB::getTables();
                 if (empty($xartable['comments'])) {
                     break;
                 }
@@ -138,7 +138,7 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
             case 'polls':
                 // load table definitions et al.
                 xarMod::apiLoad('polls', 'user');
-                $xartable = & xarDB::getTables();
+                $xartable =  xarDB::getTables();
                 if (empty($xartable['polls'])) {
                     break;
                 }
@@ -157,7 +157,7 @@ function dynamicdata_utilapi_updatehooks(array $args = [])
             case 'uploads':
                 // load table definitions et al.
                 xarMod::apiLoad('uploads', 'user');
-                $xartable = & xarDB::getTables();
+                $xartable =  xarDB::getTables();
                 if (empty($xartable['file_associations'])) {
                     break;
                 }

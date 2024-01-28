@@ -33,7 +33,7 @@ function categories_userapi_countcats($args)
 
     // Database information
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
     $categoriestable = $xartable['categories'];
     $bindvars = array();
 

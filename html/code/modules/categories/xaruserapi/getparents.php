@@ -36,7 +36,7 @@ function categories_userapi_getparents($args)
     }
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
 
     $categoriestable = $xartable['categories'];
 

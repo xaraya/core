@@ -50,7 +50,7 @@ class DataPropertyMaster extends xarObject
 
         $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable = &xarDB::getTables();
+        $xartable = xarDB::getTables();
 
         $dynamicprop = $xartable['dynamic_properties'];
 
@@ -332,7 +332,7 @@ class DataPropertyMaster extends xarObject
             return xarCoreCache::getCached('DynamicData', 'Configurations');
         }
         // Can't use DD methods here as we go into a recursion loop
-        $xartable = &xarDB::getTables();
+        $xartable = xarDB::getTables();
         $configurations = $xartable['dynamic_configurations'];
 
         $bindvars = [];

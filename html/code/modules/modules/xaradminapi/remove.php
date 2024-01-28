@@ -48,7 +48,7 @@ function modules_adminapi_remove(Array $args=array())
         // Remove the module itself
         try {
             $dbconn = xarDB::getConn();
-            $tables =& xarDB::getTables();
+            $tables = xarDB::getTables();
             $dbconn->begin();
                 $query = "DELETE FROM $tables[modules] WHERE regid = ?";
                 $dbconn->Execute($query,array($modinfo['regid']));

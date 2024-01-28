@@ -17,7 +17,7 @@ function modules_adminapi_countitems(Array $args=array())
     if (!isset($include_core)) $include_core = true;
         
     // Determine the tables we are going to use
-    $tables =& xarDB::getTables();
+    $tables = xarDB::getTables();
     $q = new Query('SELECT', $tables['modules']);
     
     if (!empty($regid)) $q->eq('regid', $regid);

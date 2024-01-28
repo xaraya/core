@@ -85,7 +85,7 @@ function blocks_typesapi_createitem(Array $args=array())
     unset($blocktype);
 
     $dbconn = xarDB::getConn();
-    $tables =& xarDB::getTables();
+    $tables = xarDB::getTables();
     $types_table = $tables['block_types'];
     
     // we need to save the actual $classname and $filepath for getitems() - requires UPGRADE due to table change

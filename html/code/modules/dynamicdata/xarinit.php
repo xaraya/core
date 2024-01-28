@@ -31,7 +31,7 @@ function dynamicdata_init()
         throw $e;
     }
 
-    $xartable = & xarDB::getTables();
+    $xartable =  xarDB::getTables();
     $prefix = xarDB::getPrefix();
 
     $dynamic_objects = $xartable['dynamic_objects'];

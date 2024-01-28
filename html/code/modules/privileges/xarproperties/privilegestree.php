@@ -76,7 +76,7 @@ class PrivilegesTree extends Tree
     {
         //FIXME this is too unwieldy and largely duplicating a similar query in xarPrivileges
         $dbconn = xarDB::getConn();
-        $xartable =& xarDB::getTables();
+        $xartable = xarDB::getTables();
         $q = new Query('SELECT');
         // Add fields
         $q->addfields("p.id AS id, p.name AS name, p.component AS component, p.instance AS instance, p.level AS level, p. description AS description");

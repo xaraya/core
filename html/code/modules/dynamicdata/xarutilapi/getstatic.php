@@ -66,7 +66,7 @@ function dynamicdata_utilapi_getstatic(array $args = [])
     }
 
     $dbconn = xarDB::getConn($dbConnIndex);
-    $xartable = & xarDB::getTables();
+    $xartable =  xarDB::getTables();
 
     $dbInfo = $dbconn->getDatabaseInfo();
     $dbTables = [];
@@ -79,7 +79,7 @@ function dynamicdata_utilapi_getstatic(array $args = [])
         // load the database info for this module
         xarMod::loadDbInfo($modinfo['name'], $modinfo['directory']);
         // try to find any table that approximately matches the module
-        $tables = & xarDB::getTables();
+        $tables =  xarDB::getTables();
         foreach ($tables as $curname => $curtable) {
             // name starts with the modulename, and table is a string (cfr. _column definitions in articles)
             if (preg_match('/^'.$modinfo['name'].'/', $curname) && is_string($curtable)) {

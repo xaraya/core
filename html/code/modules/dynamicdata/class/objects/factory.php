@@ -25,7 +25,7 @@ class DataObjectFactory extends xarObject
         extract($args);
         $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable = & xarDB::getTables();
+        $xartable =  xarDB::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -102,7 +102,7 @@ class DataObjectFactory extends xarObject
 
         $dbconn = xarDB::getConn();
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
-        $xartable = & xarDB::getTables();
+        $xartable =  xarDB::getTables();
 
         $dynamicobjects = $xartable['dynamic_objects'];
 
@@ -186,7 +186,7 @@ class DataObjectFactory extends xarObject
 
         sys::import('modules.dynamicdata.xartables');
         xarDB::importTables(dynamicdata_xartables());
-        $xartable = & xarDB::getTables();
+        $xartable =  xarDB::getTables();
         sys::import('xaraya.structures.query');
         $q = new Query();
 
@@ -620,7 +620,7 @@ class DataObjectFactory extends xarObject
 
         // Do direct queries here, for speed
         xarMod::load('dynamicdata');
-        $tables = & xarDB::getTables();
+        $tables =  xarDB::getTables();
 
         sys::import('xaraya.structures.query');
         // TODO: delete all the (dynamic ?) data for this object
