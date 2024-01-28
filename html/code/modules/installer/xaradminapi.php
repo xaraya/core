@@ -11,48 +11,6 @@
  */
 
 /**
- * Modify the system configuration file
- *
- * @author Johnny Robeson
- * @param array<string, mixed> $args array of optional parameters<br/>
- *        string   $args['dbHost']<br/>
- *        string   $args['dbName']<br/>
- *        string   $args['dbUname']<br/>
- *        string   $args['dbPass']<br/>
- *        string   $args['prefix']<br/>
- *        string   $args['dbType']
- * @return boolean
- */
-function installer_adminapi_modifyconfig(Array $args=array())
-{
-    extract($args);
-
-    // fixes instances where passwords contains --> '
-    $dbPass = addslashes($dbPass);
-
-    $systemConfigFile = sys::varpath() . '/config.system.php';
-    $config_php = join('', file($systemConfigFile));
-
-    //$dbUname = base64_encode($dbUname);
-    //$dbPass = base64_encode($dbPass);
-
-    $config_php = preg_replace('/\[\'DB.Type\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Type'] = '$dbType';", $config_php);
-    $config_php = preg_replace('/\[\'DB.Host\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Host'] = '$dbHost';", $config_php);
-    $config_php = preg_replace('/\[\'DB.UserName\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.UserName'] = '$dbUname';", $config_php);
-    $config_php = preg_replace('/\[\'DB.Password\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Password'] = '$dbPass';", $config_php);
-    $config_php = preg_replace('/\[\'DB.Name\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Name'] = '$dbName';", $config_php);
-    $config_php = preg_replace('/\[\'DB.TablePrefix\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.TablePrefix'] = '$dbPrefix';", $config_php);
-    $config_php = preg_replace('/\[\'DB.Charset\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Charset'] = '$dbCharset';", $config_php);
-    //$config_php = preg_replace('/\[\'DB.Encoded\'\]\s*=\s*(\'|\")(.*)\\1;/', "['DB.Encoded'] = '1';", $config_php);
-
-    $fp = fopen ($systemConfigFile, 'wb');
-    fwrite ($fp, $config_php);
-    fclose ($fp);
-
-    return true;
-}
-
-/**
  * Modify one or more variables in a configuration file
  *
  * @author Marc Lutolf
