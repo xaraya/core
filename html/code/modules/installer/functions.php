@@ -50,8 +50,7 @@ function xarInstallFunc($funcName = 'main', $args = array())
         return $tplData;
     }
 
-    // <mrb> Why is this here?
-    $templateName = NULL;
+    $templateName = '';
     if (isset($tplData['_bl_template'])) {
         $templateName = $tplData['_bl_template'];
     }
