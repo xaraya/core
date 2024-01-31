@@ -1,158 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <link rel='icon' href="favicon.ico"/>
-    <xar:set name="active_step">4</xar:set>
-    <div id="main_right">
-        <xar:template file="status"/>
-    </div>
-    <div id="main_left">
-        <h1>Database Settings Collection</h1>
-        <form action="install.php" method="post">
-            <input type="hidden" name="install_language" id="install_language"
-            value="#$language#"/>
-            <p>Enter your database settings. You can connect to databases on non-standard ports
-            using 'hostname:port' in the Host field. (e.g. 'localhost:12345')</p>
-            <p>Note the following: 
-                <ul>
-                    <li>
-                        If you do not have root access to your database (due to virtual hosting etc), you will need to have a pre-existing database installed and configured before you proceed.
-                    </li>
-                    <li>
-                        If you plan to use SQLite or SQLite3 your database will be automatically created if it does not yet exist, and will be stored under the var/sqlite directory.
-                    </li>
-                    <li>
-                        If you plan to use a PostgreSQL database please ensure your database already exists before your proceed.
-                    </li>
-                    <!--
-                    <li>If you plan on 
-                    <strong>upgrading</strong>an existing Xaraya then please run the 
-                    <strong>upgrade.php</strong>script, not this install script.</li>
-                    <li>If you plan to convert from another Weblog/CMS to Xaraya, first install Xaraya
-                    as normal and then run the appropriate import script to import your prior
-                    Weblog/CMS data.</li>
-                    -->
-                    <li>
-                        Make sure you only use valid characters in the username and password for the database (eg no spaces, '$' or others which not supported by your database type.
-                    </li>
-                </ul>
-            </p>
-            <h2>Database Information</h2>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <label class="xar-form-label" for="install_database_type">
-                        Database Type
-                    </label>
-                </div>
-                <div class="xar-col">
-                    <select name="install_database_type" id="install_database_type">
-                        <xar:foreach in="$database_types" key="$dbdriver" value="$info">
-                            <xar:if condition="!$info.available">
-                                <option value="#$dbdriver#" disabled="disabled">#$info.name# [not
-                                available]</option>
-                            <xar:else/>
-                                <xar:if condition="$database_type == $dbdriver">
-                                    <option selected="selected" value="#$dbdriver#">
-                                    #$info.name#</option>
-                                <xar:else/>
-                                    <option value="#$dbdriver#">#$info.name#</option>
-                                </xar:if>
-                            </xar:if>
-                        </xar:foreach>
-                    </select>
-                </div>
-            </div>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <label class="xar-form-label" for="install_database_host">
-                        Host
-                    </label>
-                </div>
-                <div class="xar-col">
-                    <input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#"/>
-                </div>
-            </div>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <label class="xar-form-label" for="install_database_username">
-                        Username
-                    </label>
-                </div>
-                <div class="xar-col">
-                    <input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#"/>
-                </div>
-            </div>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <label class="xar-form-label" for="install_database_password">
-                        Password
-                    </label>
-                </div>
-                <div class="xar-col">
-                    <input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#"/>
-                    &#160;(Only valid characters)
-                </div>
-            </div>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <label class="xar-form-label" for="install_database_name">
-                        Database Name
-                    </label>
-                </div>
-                <div class="xar-col">
-                    <input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#"/>
-                </div>
-            </div>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <label class="xar-form-label" for="install_database_prefix">
-                        Table Prefix
-                    </label>
-                </div>
-                <div class="xar-col">
-                    <input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#"/>
-                    &#160;(for Table Sharing)
-                </div>
-            </div>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <label class="xar-form-label" for="install_database_charset">
-                        Character Set
-                    </label>
-                </div>
-                <div class="xar-col">
-                    <input type="text" name="install_database_charset" id="install_database_charset" maxlength="10" value="#$database_charset#"/>
-                </div>
-            </div>
-            <div class="xar-row">
-                <div class="xar-col">
-                    <label class="xar-form-label" for="install_create_database">
-                        Create the database
-                    </label>
-                </div>
-                <div class="xar-col">
-                    <input type="checkbox" name="install_create_database" id="install_create_database" value="1"/>
-                    &#160;(MySQL only)
-                </div>
-            </div>
-            <p>
-            If checked, this Create the Database option allows the install
-            process to create an empty database for you rather than just populating an existing
-            one. If you cannot create databases through phpMyAdmin because of virtual hosting or
-            MySQL security settings, the installer will 
-            <strong>not</strong> be able to create the database for you. It will be able to populate
-            an already existing database.
-            </p>
-            <div class="xar-form-actions">
-                <div class="xar-row">
-                    <div class="xar-col"></div>
-                    <div class="xar-col">
-                        <input type="hidden" name="install_phase" id="install_phase" value="5"/>
-                        <xar:var name="label">Continue</xar:var>
-                        <xar:button type="submit" label="$label"/>
-                    </div>
-                </div>
-            </div>
-        </form>
+    <div class="xar-mod-body">
+		<link rel='icon' href="favicon.ico"/>
+		<xar:set name="active_step">4</xar:set>
+		<div id="main_right">
+			<xar:template file="status"/>
+		</div>
+		<div id="main_left">
+			<h1>Database Settings Collection</h1>
+			<p>Enter your database settings. You can connect to databases on non-standard ports
+			using 'hostname:port' in the Host field. (e.g. 'localhost:12345')</p>
+			<p>Note the following: 
+				<ul>
+					<li>
+						If you do not have root access to your database (due to virtual hosting etc), you will need to have a pre-existing database installed and configured before you proceed.
+					</li>
+					<li>
+						If you plan to use SQLite or SQLite3 your database will be automatically created if it does not yet exist, and will be stored under the var/sqlite directory.
+					</li>
+					<li>
+						If you plan to use a PostgreSQL database please ensure your database already exists before your proceed.
+					</li>
+					<!--
+					<li>If you plan on 
+					<strong>upgrading</strong>an existing Xaraya then please run the 
+					<strong>upgrade.php</strong>script, not this install script.</li>
+					<li>If you plan to convert from another Weblog/CMS to Xaraya, first install Xaraya
+					as normal and then run the appropriate import script to import your prior
+					Weblog/CMS data.</li>
+					-->
+					<li>
+						Make sure you only use valid characters in the username and password for the database (eg no spaces, '$' or others which not supported by your database type.
+					</li>
+				</ul>
+			</p>
+			<h2>Database Information</h2>
+			<form action="install.php" method="post">
+				<input type="hidden" name="install_phase" id="install_phase" value="4"/>
+				<div class="xar-row">
+					<div class="xar-col">
+						<label class="xar-form-label" for="install_database_middleware">
+							Middleware
+						</label>
+					</div>
+					<div class="xar-col">
+						<select name="install_database_middleware" id="install_database_middleware" onchange="javascript:submit()">
+							<xar:foreach in="$database_middleware_packages" key="$dbmiddleware" value="$info">
+								<xar:if condition="!$info.available">
+									<option value="#$dbmiddleware#" disabled="disabled">#$info.name# [not
+									available]</option>
+								<xar:else/>
+									<xar:if condition="$database_middleware == $dbmiddleware">
+										<option selected="selected" value="#$dbmiddleware#">
+										#$info.name#</option>
+									<xar:else/>
+										<option value="#$dbmiddleware#">#$info.name#</option>
+									</xar:if>
+								</xar:if>
+							</xar:foreach>
+						</select>
+					</div>
+				</div>
+				<div class="xar-row">
+					<div class="xar-col">
+						<label class="xar-form-label" for="install_database_type">
+							Database Type
+						</label>
+					</div>
+					<div class="xar-col">
+						<select name="install_database_type" id="install_database_type">
+							<xar:foreach in="$database_types" key="$dbdriver" value="$info">
+								<xar:if condition="!$info.available">
+									<option value="#$dbdriver#" disabled="disabled">#$info.name# [not
+									available]</option>
+								<xar:else/>
+									<xar:if condition="$database_type == $dbdriver">
+										<option selected="selected" value="#$dbdriver#">
+										#$info.name#</option>
+									<xar:else/>
+										<option value="#$dbdriver#">#$info.name#</option>
+									</xar:if>
+								</xar:if>
+							</xar:foreach>
+						</select>
+					</div>
+				</div>
+				<div class="xar-row">
+					<div class="xar-col">
+						<label class="xar-form-label" for="install_database_host">
+							Host
+						</label>
+					</div>
+					<div class="xar-col">
+						<input type="text" name="install_database_host" id="install_database_host" maxlength="80" value="#$database_host#"/>
+					</div>
+				</div>
+				<div class="xar-row">
+					<div class="xar-col">
+						<label class="xar-form-label" for="install_database_username">
+							Username
+						</label>
+					</div>
+					<div class="xar-col">
+						<input type="text" name="install_database_username" id="install_database_username" maxlength="80" value="#$database_username#"/>
+					</div>
+				</div>
+				<div class="xar-row">
+					<div class="xar-col">
+						<label class="xar-form-label" for="install_database_password">
+							Password
+						</label>
+					</div>
+					<div class="xar-col">
+						<input type="password" name="install_database_password" id="install_database_password" maxlength="80" value="#$database_password#"/>
+						&#160;(Only valid characters)
+					</div>
+				</div>
+				<div class="xar-row">
+					<div class="xar-col">
+						<label class="xar-form-label" for="install_database_name">
+							Database Name
+						</label>
+					</div>
+					<div class="xar-col">
+						<input type="text" name="install_database_name" id="install_database_name" maxlength="80" value="#$database_name#"/>
+					</div>
+				</div>
+				<div class="xar-row">
+					<div class="xar-col">
+						<label class="xar-form-label" for="install_database_prefix">
+							Table Prefix
+						</label>
+					</div>
+					<div class="xar-col">
+						<input type="text" name="install_database_prefix" id="install_database_prefix" maxlength="10" value="#$database_prefix#"/>
+						&#160;(for Table Sharing)
+					</div>
+				</div>
+				<div class="xar-row">
+					<div class="xar-col">
+						<label class="xar-form-label" for="install_database_charset">
+							Character Set
+						</label>
+					</div>
+					<div class="xar-col">
+						<input type="text" name="install_database_charset" id="install_database_charset" maxlength="10" value="#$database_charset#"/>
+					</div>
+				</div>
+<!--
+				<div class="xar-row">
+					<div class="xar-col">
+						<label class="xar-form-label" for="install_create_database">
+							Overwrite any existing database
+						</label>
+					</div>
+					<div class="xar-col">
+						<input type="checkbox" name="install_create_database" id="install_create_database" value="1"/>
+						&#160;Are you sure? <strong>Any tables with the prefix above in the existing database will be lost!</strong>
+					</div>
+				</div>
+				<p>
+				If checked, this Overwrite option allows the install
+				process to create an empty database for you rather than just populating an existing
+				one. If you cannot create databases through phpMyAdmin because of virtual hosting or
+				MySQL security settings, the installer will 
+				<strong>not</strong> be able to create the database for you. It will be able to populate
+				an already existing database.
+				</p>
+-->
+				<div class="xar-form-actions">
+					<div class="xar-row">
+						<div class="xar-col"></div>
+						<div class="xar-col">
+							<p>
+								<input type="hidden" name="install_phase" id="install_phase" value="4"/>
+								<input type="hidden" name="install_language" id="install_language" value="#$language#"/>
+								<xar:var name="label">Back</xar:var>
+								<xar:button type="cancel" label="$label"/>
+								&#160;
+								<xar:var name="label">Continue</xar:var>
+								<xar:button type="submit" name="continue" label="$label"/>
+							</p>
+						</div>
+					</div>
+				</div>
+			</form>
+    	</div>
     </div>
 </xar:template>
