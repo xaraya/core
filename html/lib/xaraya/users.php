@@ -577,7 +577,7 @@ class xarUser extends xarObject
     {
         // TODO: consider moving to something stronger like sha1
         $md5pass = md5($givenPassword);
-        if (strcmp($md5pass, $realPassword) == 0)
+        if (strcmp($md5pass, $realPassword ?? '') == 0)
             // Huh? shouldn't this be true instead of the md5 ?
             return true;
     
