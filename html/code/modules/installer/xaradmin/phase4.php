@@ -47,7 +47,7 @@ function installer_admin_phase4()
     switch ($data['database_middleware']) {
     	case 'Creole':
 			$data['database_types']  = array('mysqli'      => array('name' => 'MySQL'   , 'available' => extension_loaded('mysqli')),
-											 'postgres'    => array('name' => 'Postgres (limited support in this version)', 'available' => extension_loaded('pgsql')),
+											 'pgsql'       => array('name' => 'Postgres (limited support in this version)', 'available' => extension_loaded('pgsql')),
 											 'sqlite3'     => array('name' => 'SQLite (not supported in this version)'  , 'available' => false),
 											 // use portable version of OCI8 driver to support ? bind variables
 											 'oci8po'      => array('name' => 'Oracle 9+ (not supported)'  , 'available' => extension_loaded('oci8')),
@@ -57,7 +57,7 @@ function installer_admin_phase4()
     	case 'PDO':
     	default:
 			$data['database_types']  = array('pdomysqli'   => array('name' => 'MySQL'   , 'available' => extension_loaded('pdo_mysql')),
-											 'pdopostgres' => array('name' => 'Postgres (limited support in this version)', 'available' => extension_loaded('pdo_pgsql')),
+											 'pdopgsql'    => array('name' => 'Postgres (limited support in this version)', 'available' => extension_loaded('pdo_pgsql')),
 											 'pdosqlite'   => array('name' => 'PDO SQLite (not supported in this version)'  , 'available' => false),
 											);
 			break;

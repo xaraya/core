@@ -53,22 +53,53 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
     public static function newConn(array $args = null)
     {
         // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
-        if ($args['databaseType'] == 'sqlite3') {
-            $args['databaseName'] ??= ':memory:';
-            $args['databaseHost'] ??= '';
-            $args['databasePort'] ??= '';
-            $args['userName'] ??= '';
-            $args['password'] ??= '';
-            $args['databaseCharset'] ??= 'utf8';
+        switch ($args['databaseType']) {
+        	case 'sqlite3':
+        	case 'pdosqlite':
+				$args['databaseName'] ??= ':memory:';
+				$args['databaseHost'] ??= '';
+				$args['databasePort'] ??= '';
+				$args['userName'] ??= '';
+				$args['password'] ??= '';
+				$args['databaseCharset'] ??= '';
+				$dsn = $args;
+			break;
+			case 'mysqli':
+			case 'pdomysqli':
+				// Hive off the port if there is one added as part of the host
+				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+				$host_parts = explode(':', $host);
+				$host = $host_parts[0];
+				$port = isset($host_parts[1]) ? $host_parts[1] : '';
+		
+				// Get database parameters
+				$dsn = array('phptype'   => $args['databaseType'],
+							 'hostspec'  => $host,
+							 'port'      => $port,
+							 'username'  => $args['userName'],
+							 'password'  => $args['password'],
+							 'database'  => $args['databaseName'],
+							 'encoding'  => $args['databaseCharset']);
+			break;
+			case 'pgsql':
+			case 'pdopgsql':
+				// Hive off the port if there is one added as part of the host
+				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+				$host_parts = explode(':', $host);
+				$host = $host_parts[0];
+				$port = isset($host_parts[1]) ? $host_parts[1] : '';
+		
+				// Get database parameters
+				$dsn = array('phptype'   => $args['databaseType'],
+							 'hostspec'  => $host,
+							 'port'      => $port,
+							 'username'  => $args['userName'],
+							 'password'  => $args['password'],
+							 'database'  => $args['databaseName'],
+							 'encoding'  => $args['databaseCharset']);
+			default:
+			break;
         }
-        // Get database parameters
-        $dsn = array('phptype'   => $args['databaseType'],
-                     'hostspec'  => $args['databaseHost'],
-                     'port'      => $args['databasePort'],
-                     'username'  => $args['userName'],
-                     'password'  => $args['password'],
-                     'database'  => $args['databaseName'],
-                     'encoding'  => $args['databaseCharset']);
         // Set flags
         $flags = array();
         $persistent = !empty($args['persistent']) ? true : false;
