@@ -147,7 +147,7 @@ function installer_adminapi_CheckForField(Array $args=array())
     }
 
     $dbconn = xarDB::getConn();
-    $xartable =& xarDB::getTables();
+    $xartable = xarDB::getTables();
 
     // CHECKME: Is this portable? In any case, use the meta classes
     $query = "desc $table_name";
