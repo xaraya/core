@@ -24,7 +24,8 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <xar:data-input property="$properties['name']"/>
+                    <input type="text" name="dd_#$properties['name']->id#" id="dd_#$properties['name']->id#" value="#$properties['name']->value#"/>
+    				&#160;<span style="color: red">#$properties['name']->invalid#</span>
                 </div>
             </div>
             <div class="xar-row">
@@ -34,7 +35,8 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <xar:data-input property="$properties['uname']"/>                    
+                    <input type="text" name="dd_#$properties['uname']->id#" id="dd_#$properties['uname']->id#" value="#$properties['uname']->value#"/>
+    				&#160;<span style="color: red">#$properties['uname']->invalid#</span>
                 </div>
             </div>
             <div class="xar-row">
@@ -44,7 +46,8 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <xar:data-input property="$properties['password']"/>
+                    <input type="text" name="dd_#$properties['password']->id#" id="dd_#$properties['password']->id#" value="#$properties['password']->value#"/>
+    				&#160;<span style="color: red">#$properties['password']->invalid#</span>
                 </div>
             </div>
             <div class="xar-row">
@@ -54,7 +57,8 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <xar:data-input property="$properties['email']"/>
+                    <input type="text" name="dd_#$properties['email']->id#" id="dd_#$properties['email']->id#" value="#$properties['email']->value#"/>
+    				&#160;<span style="color: red">#$properties['email']->invalid#</span>
                 </div>
             </div>
 
@@ -71,12 +75,12 @@
                         <xar:var name="label">Continue</xar:var>
                         <xar:button type="submit" label="$label" name="create" id="create"/>
                         <input type="hidden" name="install_language" id="install_language" value="#$language#"/>
-                        <xar:data-input property="$properties['id']" hidden="hidden"/>
-                        <xar:data-input property="$properties['role_type']" hidden="hidden"/>
-                        <xar:data-input property="$properties['regdate']" hidden="hidden"/>
-                        <xar:data-input property="$properties['valcode']" hidden="hidden"/>
-                        <xar:data-input property="$properties['state']" hidden="hidden"/>
-                        <xar:data-input property="$properties['authmodule']" hidden="hidden"/>
+						<input type="hidden" name="dd_#$properties['id']->id#" id="dd_#$properties['id']->id#" value="#$properties['id']->value#"/>
+						<input type="hidden" name="dd_#$properties['role_type']->id#_tb" id="dd_#$properties['role_type']->id#" value="#$properties['role_type']->value#"/>
+						<input type="hidden" name="dd_#$properties['regdate']->id#" id="dd_#$properties['regdate']->id#" value="#$properties['regdate']->value#"/>
+						<input type="hidden" name="dd_#$properties['valcode']->id#" id="dd_#$properties['valcode']->id#" value="#$properties['valcode']->value#"/>
+						<input type="hidden" name="dd_#$properties['state']->id#" id="dd_#$properties['state']->id#" value="#$properties['state']->value#"/>
+						<input type="hidden" name="dd_#$properties['authmodule']->id#" id="dd_#$properties['authmodule']->id#" value="#$properties['authmodule']->value#"/>
                     </div>
                 </div>
             </div>

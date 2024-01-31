@@ -52,41 +52,47 @@ function installer_admin_create_administrator()
     $data['admin']->properties['uname']->validation_min_length_invalid = xarML('The user name must be at least 4 characters long');
     $data['admin']->properties['password']->validation_min_length = 4;
     $data['admin']->properties['password']->validation_min_length_invalid = xarML('The password must be at least 4 characters long');
-    $data['admin']->properties['password']->validation_password_confirm = 1;
+    $data['admin']->properties['password']->validation_password_confirm = 0;
     $data['admin']->properties['email']->validation_min_length = 1;
     $data['admin']->properties['email']->validation_min_length_invalid = xarML('An email address must be entered');
+    $data['admin']->properties['role_type']->display_combo_mode = 2;
 
     $data['properties'] = $data['admin']->getProperties();
 
     if (!xarVar::fetch('create', 'isset', $create, FALSE, xarVar::NOT_REQUIRED)) return;
+    // Not creating yet. Just (re)display the page
     if (!$create) {
         return $data;
     }
 
+    // We will save the page. Get the data from the template and check it.
     $isvalid = $data['admin']->checkInput();
     if (!$isvalid) {
+    	// Reset the password property
+    	$data['properties']['password']->value = '';
+    	// Something's not right. Redisplay the page
         return xarTpl::module('installer','admin','create_administrator',$data);
     }
 
-    xarModVars::set('mail', 'adminname', $data['admin']->properties['name']->getValue());
-    xarModVars::set('mail', 'adminmail', $data['admin']->properties['email']->getValue());
+    // Good to go. Save the data
+    xarModVars::set('mail',   'adminname',     $data['admin']->properties['name']->getValue());
+    xarModVars::set('mail',   'adminmail',     $data['admin']->properties['email']->getValue());
     xarModVars::set('themes', 'SiteCopyRight', '&copy; Copyright ' . date("Y") . ' ' . $data['admin']->properties['name']->getValue());
-    xarModVars::set('roles', 'lastuser', $data['admin']->properties['uname']->getValue());
-    xarModVars::set('roles', 'adminpass', $data['admin']->properties['password']->password);
-
-// CHECKME: misc. undefined module variables
-    xarModVars::set('themes', 'variable_dump', false);
-    xarModVars::set('base', 'releasenumber', 10);
-    xarModVars::set('base', 'AlternatePageTemplateName', '');
-    xarModVars::set('base', 'UseAlternatePageTemplate', false);
-    xarModVars::set('base', 'editor', 'none');
-    xarModVars::set('base', 'proxyhost', '');
-    xarModVars::set('base', 'proxyport', 0);
+    xarModVars::set('roles',  'lastuser',      $data['admin']->properties['uname']->getValue());
+    xarModVars::set('roles',  'adminpass',     $data['admin']->properties['password']->password);
 
     //Try to update the role to the repository and bail if an error was thrown
     $itemid = $data['admin']->updateItem();
     if (!$itemid) {return;}
-
+    
+// CHECKME: misc. undefined module variables
+    xarModVars::set('themes', 'variable_dump', false);
+    xarModVars::set('base',   'releasenumber', 10);
+    xarModVars::set('base',   'AlternatePageTemplateName', '');
+    xarModVars::set('base',   'UseAlternatePageTemplate', false);
+    xarModVars::set('base',   'editor', 'none');
+    xarModVars::set('base',   'proxyhost', '');
+    xarModVars::set('base',   'proxyport', 0);
 
     /*********************************************************************
     * Enter some default privileges
