@@ -57,12 +57,20 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
     /**
      * Index result set by field name.
      */
-    public const FETCHMODE_ASSOC = 1;
+    /* XARAYA MODIFICATION */
+    // Align with the corresponding PDO value
+    //  public const FETCHMODE_ASSOC = 1;
+    public const FETCHMODE_ASSOC = 2;
+    /* END XARAYA MODIFICATION */
 
     /**
      * Index result set numerically.
      */
-    public const FETCHMODE_NUM = 2;
+    /* XARAYA MODIFICATION */
+    // Align with the corresponding PDO value
+    //  public const FETCHMODE_NUM = 2;
+    public const FETCHMODE_NUM = 3;
+    /* END XARAYA MODIFICATION */
 
     /**
      * Get the PHP native resource for the result.

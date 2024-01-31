@@ -54,7 +54,11 @@ class MySQLResultSet extends ResultSetCommon implements ResultSet
      */
     public function next()
     {
-        $this->fields = mysql_fetch_array($this->result, $this->fetchmode);
+    /* XARAYA MODIFICATION */
+    // mysqli fetchmode is 1 less than PDO fetchmode
+    // $this->fields = mysqli_fetch_array($this->result, $this->fetchmode);
+        $this->fields = mysqli_fetch_array($this->result, $this->fetchmode-1);
+    /* END XARAYA MODIFICATION */
 
         if (!$this->fields) {
             $errno = mysql_errno($this->conn->getResource());
