@@ -37,191 +37,148 @@ function installer_admin_phase5()
     xarVar::fetch('install_language','str::',$install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
     xarVar::setCached('installer','installing', true);
 
-    // Get arguments
-    if (!xarVar::fetch('install_database_host','pre:trim:passthru:str',$dbHost)) return;
-    if (!xarVar::fetch('install_database_name','pre:trim:passthru:str',$dbName,'',xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('install_database_username','pre:trim:passthru:str',$dbUname,'',xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('install_database_password','pre:trim:passthru:str',$dbPass,'',xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('install_database_prefix','pre:trim:passthru:str',$dbPrefix,'xar',xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('install_database_charset','pre:trim:passthru:str',$dbCharset,'utf8',xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('install_database_type','str:1:',$dbType)) return;
-    if (!xarVar::fetch('install_create_database','checkbox',$createDB,false,xarVar::NOT_REQUIRED)) return;
-    if (!xarVar::fetch('confirmDB','bool',$confirmDB,false,xarVar::NOT_REQUIRED)) return;
+    // Get the database connection configuration from the configuration file
+    sys::import('xaraya.database');
+    $init_args = xarDatabase::getConfig();
+    
+//    if (!xarVar::fetch('install_create_database',     'checkbox',$createDB,false,xarVar::NOT_REQUIRED)) return;
+//    if (!xarVar::fetch('confirmDB','bool',$confirmDB,false,xarVar::NOT_REQUIRED)) return;
 
-    if ($dbName == '') {
+//---------------------------------------------------------------------------
+    // Some sanity checks
+    // We need a database name
+    if ($init_args['databaseName'] == '') {
         return xarTpl::module('installer','admin','errors',array('layout' => 'no_database'));
     }
 
-    // allow only a-z 0-9 and _ in table prefix
-    if (!preg_match('/^\w*$/',$dbPrefix)) {
+    // Allow only a-z 0-9 and _ in the table prefix
+    if (!preg_match('/^\w*$/',$init_args['prefix'])) {
         return xarTpl::module('installer','admin','errors',array('layout' => 'bad_character'));
     }
-    
-    // Check versions
-    $version_ok = false;
-    
+//---------------------------------------------------------------------------
     // Cater to SQLite before trying to connect
-    $dbPathName = $dbName;
-    if (in_array($dbType, array('sqlite', 'sqlite3'))) {
-        switch ($dbType) {
-            case 'sqlite':
-                $version_ok = version_compare(PHP_VERSION,'5.4.0','lt');
-            break;
-            case 'sqlite3':
-                $version_ok = version_compare(PHP_VERSION,'5.4.0','ge');
-            break;
-        }
-        if ($version_ok) {
-            // Create the database in the directory we want, otherwise it will be created below
-            if (!is_dir(sys::varpath() . '/sqlite')) {
-                mkdir(sys::varpath() . '/sqlite', 0755);
-            }
-            try {
-                $dbpath = sys::varpath() . '/sqlite/';
-                $db = new SQLite3($dbpath . $dbName);
-                $dbPathName = $dbpath . $dbName;
-            } catch(Exception $e){
-                 echo $e->getMessage(); 
-                 exit;
-            }
-        } else {
-            $data['layout'] = 'bad_version';
-            return xarTpl::module('installer','admin','check_database',$data);
-        }
+    // Create the database if it doesn't exist
+    if (in_array($init_args['databaseType'], array('sqlite3', 'pdosqlite'))) {
+		// Make sure we have a directory var/sqlite
+		if (!is_dir(sys::varpath() . '/sqlite')) {
+			mkdir(sys::varpath() . '/sqlite', 0755);
+		}
+		
+		$dbpath = sys::varpath() . '/sqlite/' . $init_args['databaseName'];
+		if (file_exists($dbpath)) {
+			// We already have a database with this name
+        	return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $dbpath));
+		} else {
+			try {
+				$db = new SQLite3($dbpath);
+				// For SQLite the database name is the path to the database
+				$init_args['databaseName'] = $dbpath;
+			} catch(Exception $e){
+				 echo $e->getMessage(); 
+				 exit;
+			}
+		}
     }   
 
-    // Save config data
-    $config_args = array('dbHost'    => $dbHost,
-                         'dbName'    => $dbPathName,
-                         'dbUname'   => $dbUname,
-                         'dbPass'    => $dbPass,
-                         'dbPrefix'  => $dbPrefix,
-                         'dbType'    => $dbType,
-                         'dbCharset' => $dbCharset);
-    //  Write the config
-    xarInstallAPIFunc('modifyconfig', $config_args);
-    $dbPort = '';
+//---------------------------------------------------------------------------
+    // Initialise xarDatabase and xarDB
+    // We are not yet trying to connect.
+    $init_args['doConnect'] = false;
 
-    $init_args =  array('userName'           => $dbUname,
-                        'password'           => $dbPass,
-                        'databaseHost'       => $dbHost,
-                        'databasePort'       => $dbPort,
-                        'databaseType'       => $dbType,
-                        'databaseName'       => $dbPathName,
-                        'databaseCharset'    => $dbCharset,
-                        'prefix'             => $dbPrefix,
-                        'doConnect'          => false);
-
-    sys::import('xaraya.database');
     xarDatabase::init($init_args);
 
-    // Not all Database Servers support selecting the specific db *after* connecting
-    // so let's try connecting with the dbname first, and then without if that fails
+//---------------------------------------------------------------------------
+    // Not all Database Servers support selecting the specific database *after* connecting
+    // so let's try connecting with the database name first, and then without if that fails
     $dbExists = false;
     try {
+      $init_args['doConnect'] = true;
       $dbconn = xarDB::newConn($init_args);
       $dbExists = true;
     } catch(Exception $e) {
       // Couldn't connect to the specified dbName
       // Let's try without db name
       try {
+    	$name = $init_args['databaseName'];
         $init_args['databaseName'] ='';
         $dbconn = xarDB::newConn($init_args);
+        $init_args['databaseName'] =$name;
       } catch(Exception $e) {
         // It failed without dbname too
         return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
       }
     }
 
+	if ($dbExists) {
+		// We already have a database with this name
+        return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $init_args['databaseName']));
+	}
+
+//---------------------------------------------------------------------------
     // Check versions
-    // Check other database types
-    switch ($dbType) {
-        case 'mysql':
-            // @fixme no longer available
-            $tokens = explode('.',mysql_get_server_info());
-            $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
-            $data['required_version'] = MYSQL_REQUIRED_VERSION;
-            $version_ok = version_compare($data['version'],$data['required_version'],'ge');
-        break;
+    // We already made sure that there is a database in the case of sqlite3 above. Check other database types
+    // CHECKME: we already did this in phase 4, no?
+    switch ($init_args['databaseType']) {
         case 'mysqli':
+        case 'pdomysqli':
             $source = $dbconn->getResource();
             // @checkme does resource have this property?
             $tokens = explode('.', $source->server_info);
             $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
-            $data['required_version'] = MYSQL_REQUIRED_VERSION;
+            $data['required_version'] = xarInst::MYSQL_REQUIRED_VERSION;
             $version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        default:
+        	// Other dbs are OK by definition
+        	// SQLite3, for instance
+        	$version_ok = true;
         break;
     }
     
     if (!$version_ok) {
-        $data['layout'] = 'bad_version';
-        return xarTpl::module('installer','admin','check_database',$data);
-    }
-        
-    if (!$createDB && !$dbExists) {
-        $data['dbName'] = $dbName;
-        $data['layout'] = 'not_found';
-        return xarTpl::module('installer','admin','check_database',$data);
+        return xarTpl::module('installer','admin','errors',array('layout' => 'bad version'));
     }
 
-    $data['confirmDB']  = $confirmDB;
-    if ($dbExists && !$confirmDB) {
-        $data['dbHost']     = $dbHost;
-        $data['dbName']     = $dbName;
-        $data['dbUname']    = $dbUname;
-        $data['dbPass']     = $dbPass;
-        $data['dbPrefix']   = $dbPrefix;
-        $data['dbType']     = $dbType;
-        $data['dbCharset']  = $dbCharset;
-        $data['install_create_database']      = $createDB;
-        $data['language']    = $install_language;
-        // Gots to ask confirmation
-        return $data;
-    }
-
+//---------------------------------------------------------------------------
+	// Try creating the database if it doesn't exist
+	// We already did SQLite3
     sys::import('xaraya.tableddl');
-    // Create the database if necessary
-    if ($createDB) {
-        $data['confirmDB']  = true;
-        //Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
-        //Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
-        //Probably there is already a core function that can make that for us...
-        //the config.system.php is lazy loaded in xarSystemVars::get(sys::CONFIG, $name), which means we cant reload the values
+    // Try and create the database
+    if (!$dbExists) {
+    
+//		Hold on to this for now
+//        $data['confirmDB']  = true;
+        // Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
+        // Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
+        // Probably there is already a core function that can make that for us...
+        // the config.system.php is lazy loaded in xarSystemVars::get(sys::CONFIG, $name), which means we cant reload the values
         // in this phase... Not a big deal 'though.
-        if ($dbExists) {
-            if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;
-        }
-        if(!$dbconn->Execute(xarTableDDL::createDatabase($dbName,$dbType,$dbCharset))) {
+//        if ($dbExists) {
+//            if (!$dbconn->Execute('DROP DATABASE ' . $dbName)) return;
+//        }
+
+        if(!$dbconn->Execute(xarTableDDL::createDatabase($init_args['databaseName'],
+        												 $init_args['databaseType'],
+        												 $init_args['databaseCharset']))) {
           //if (!xarInstallAPIFunc('createdb', $config_args)) {
-          $msg = xarML('Could not create database (#(1)). Check if you already have a database by that name and remove it.', $dbName);
-          throw new Exception($msg);
+        	return xarTpl::module('installer','admin','errors',array('layout' => 'cannot_create', 'database_name' => $init_args['databaseName']));
         }
-        
-        // Re-init with the new values and connect
-        $systemArgs = array('userName'           => $dbUname,
-                            'password'           => $dbPass,
-                            'databaseHost'       => $dbHost,
-                            'databaseType'       => $dbType,
-                            'databaseName'       => $dbName,
-                            'databaseCharset'    => $dbCharset,
-                            'prefix'             => $dbPrefix,
-                            'doConnect'          => true);
-        // Connect to database
-        xarDatabase::init($systemArgs);
-        
-        // CHECKME: Need to solve this at the level ofg connections, not run a query
-        $q = "use $dbName";
+
+        // CHECKME: Need to solve this at the level of connections, not run a query
+        $q = "use " . $init_args['databaseName'];
         $dbconn->execute($q);
+      
+		// We just created an empty database. There are no tables yet.
+        $removetables = false;
     } else {
         $removetables = true;
-    }
+	}
 
-    // Drop all the tables that have this prefix
+    // If this is not a new database we need to
+    // drop all the tables that have the prefix we are working with
     // TODO: in the future need to replace this with a check further down the road
     // for which modules are already installed
 
-    if (isset($removetables) && $removetables) {
-        $dbconn = xarDB::getConn();
+    if ($removetables) {
         $dbinfo = $dbconn->getDatabaseInfo();
         try {
             $dbconn->begin();
@@ -249,8 +206,8 @@ function installer_admin_phase5()
             throw $e;
         }
     }
-
-    // install the security stuff here, but disable the registerMask and
+    
+    // Install the security stuff here, but disable the registerMask and
     // and xarSecurity::check functions until we've finished the installation process
     sys::import('xaraya.security');
     sys::import('xaraya.modules');
@@ -263,7 +220,11 @@ function installer_admin_phase5()
     $modules = array('base','modules');
     foreach ($modules as $module) {
         // @todo it's over for sqlite here because we're missing a specific .xsl transform in tableddl
-        if (!xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'))) return;
+        try {
+        	xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'));
+        } catch (Exception $e) {
+        	return xarTpl::module('installer','admin','errors',array('layout' => 'general_exception', 'message' => $e->getMessage()));        	
+        }
     }
 
     // 2. Create some variables we'll need in installing modules 
@@ -279,7 +240,7 @@ function installer_admin_phase5()
     // 3. Load the definitions of all the modules in the modules table
     $prefix = xarDB::getPrefix();
     $modulesTable = $prefix .'_modules';
-    $tables =& xarDB::getTables();
+    $tables = xarDB::getTables();
 
     $newModSql   = "INSERT INTO $modulesTable
                     (name, regid, directory,

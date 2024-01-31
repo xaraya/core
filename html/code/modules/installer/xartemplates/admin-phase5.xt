@@ -3,7 +3,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <link rel='icon' href="favicon.ico"/>
     <xar:set name="active_step">5</xar:set>
-    <xar:if condition="$confirmDB">
+    <xar:if condition="1">
         <meta http-equiv="refresh" content="1;URL=#xarController::URL('installer','admin','bootstrap',array('install_language'=>$language,))#"/>
         <div id="main_right">
             <xar:template file="status"/>
