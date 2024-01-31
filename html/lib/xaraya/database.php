@@ -13,155 +13,110 @@
  *
  * @author Marco Canini
 **/
-
-$middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
-
-// @todo get rid of this conditional class extension - use a common proxy or decorator instead?
-if ($middleware == 'Creole') {
-
-    // Import our db abstraction layer
-    // Theoretically any adodb like layer could come in here.
-    sys::import('xaraya.database.creole');
-    class xarDB extends xarDB_Creole
-    {
-        /**
-         * Index result set by field name.
-         */
-        public const FETCHMODE_ASSOC = 1;
-
-        /**
-         * Index result set numerically.
-         */
-        public const FETCHMODE_NUM = 2;
-    }
-    // ResultSet is an interface with Creole constants here
-
-    /**
-     * Initializes the database connection.
-     *
-     * This function loads up the db abstraction layer  and starts the database
-     * connection using the required parameters then it sets
-     * the table prefixes and xartables up and returns true
-     *
-     * @param array<string, mixed> $args
-     * with
-     *     string args[databaseType] database type to use
-     *     string args[databaseHost] database hostname
-     *     string args[databasePort] database port
-     *     string args[databaseName] database name
-     *     string args[userName] database username
-     *     string args[password] database password
-     *     bool args[persistent] flag to say we want persistent connections (optional)
-     *     string args[systemTablePrefix] system table prefix
-     *     string args[siteTablePrefix] site table prefix
-     *     bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
-     * @return boolean true
-    **/
-    function xarDB_init(array &$args)
-    {
-        xarDB::setPrefix($args['prefix']);
-
-        // Register postgres driver, since Creole uses a slightly different alias
-        // We do this here so we can remove customisation from creole lib.
-        // @deprecated 2.4.0 postgres hasn't been supported for a long time now
-        //Creole::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
-
-        if(!isset($args['doConnect']) or $args['doConnect']) {
-            try {
-                xarDB::newConn($args);
-            } catch (Exception $e) {
-                throw $e;
-            }
-        }
-        return true;
-    }
     
-} elseif ($middleware == 'PDO') {
-    /**
-     * PDO Database Abstraction Layer API Helper
-     *
-     * @package core
-     * @subpackage database
-     * @category Xaraya Web Applications Framework
-     * @version 2.4.0
-     * @copyright see the html/credits.html file in this release
-     * @license GPL {@link http://www.gnu.org/licenses/gpl.html}
-     * @link http://www.xaraya.info
-     *
-     * @author Marc Lutolf
-    **/
+class xarDB
+{
+	private static $mw;   				// We store the applicable middleware class here
+	
+	public const FETCHMODE_ASSOC = 2;   // Index result set by field name.
+	public const FETCHMODE_NUM   = 3;   // Index result set numerically.
 
-    // Import our db abstraction layer
-    // Theoretically any adodb like layer could come in here.
-    sys::import('xaraya.database.pdo');
-    class xarDB     extends xarDB_PDO
-    {
-        public const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
-        public const FETCHMODE_NUM   = PDO::FETCH_NUM;
-    }
-    // ResultSet is a class with different PDO constants here!?
-    //class ResultSet extends PDOResultSet {}
-    // @todo see if we ever use this for anything other than the 2 constants
-    // @todo and get rid of it to finally fix composer autoload conflict
-    interface ResultSet
-    {
-        const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
-        const FETCHMODE_NUM   = PDO::FETCH_NUM;
-    }
+	public static function getInstance()
+	{
+		$middleware_name = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
+		sys::import('xaraya.database.' . strtolower($middleware_name));
+		$class = 'xarDB_' . $middleware_name;
+		$middleware_class = new $class();
+		self::$mw = $middleware_class;
+	}
 
-    /**
-     * Initializes the database connection.
-     *
-     * This function loads up the db abstraction layer  and starts the database
-     * connection using the required parameters then it sets
-     * the table prefixes and xartables up and returns true
-     *
-     * @param array<string, mixed> $args
-     * with
-     *     string args[databaseType] database type to use
-     *     string args[databaseHost] database hostname
-     *     string args[databasePort] database port
-     *     string args[databaseName] database name
-     *     string args[userName] database username
-     *     string args[password] database password
-     *     bool args[persistent] flag to say we want persistent connections (optional)
-     *     string args[systemTablePrefix] system table prefix
-     *     string args[siteTablePrefix] site table prefix
-     *     bool   args[doConnect] on inialisation, also connect, defaults to true if not specified
-     * @return boolean true
-    **/
-    function xarDB_init(array &$args)
-    {
-        xarDB::setPrefix($args['prefix']);
+	public static function getHost() 		  { return self::$mw::getHost(); }
+	public static function getType() 		  { return self::$mw::getType(); }
+	public static function getName() 		  { return self::$mw::getName(); }
+	public static function getPrefix() 		  { return self::$mw::getPrefix(); }
+	public static function setPrefix($prefix) { self::$mw::setPrefix($prefix); }
 
-        // Register postgres driver, since Creole uses a slightly different alias
-        // We do this here so we can remove customisation from creole lib.
-    //    xarDB::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
+	/**
+	 * Get an array of database tables
+	 *
+	 * @return array<mixed> array of database tables
+	 * @todo we should figure something out so we dont have to do the getTables stuff, it should be transparent
+	 */
+	public static function getTables()        { return self::$mw::getTables(); }
 
-        if(!isset($args['doConnect']) or $args['doConnect']) {
-            try {
-                xarDB::newConn($args);
-            } catch (Exception $e) {
-                throw $e;
-            }
-        }
-        return true;
-    }
-} else {
-    die("Invalid middleware definition: " . $middleware); 
+	/**
+	 * Import an array of database tables into the array of loaded tables Xaraya knows about
+	 *
+	 * @return void
+	 */
+	public static function importTables(array $tables=array()) { return self::$mw::importTables($tables); }
+
+	public static function configure($dsn, $flags = array(PDO::CASE_LOWER)) { return self::$mw::configure($dsn, $flag); }
+	
+	/**
+	 * Get a database connection
+	 *
+	 * @return Connection database connection object
+	 */
+	public static function getConn($index = 0) 		   { return self::$mw::getConn($index); }
+
+	/**
+	 * Initialise a new db connection
+	 *
+	 * Create a new connection based on the supplied parameters
+	 *
+	 * @return Connection
+	 */
+	public static function newConn(array $args = null) { return self::$mw::newConn($args); }
+	public static function hasConn($index = 0) 		   { return self::$mw::hasConn($index); }
+	public static function getConnIndex() 		       { return self::$mw::getConnIndex(); }
+	public static function isIndexExternal($index = 0) { return self::$mw::isIndexExternal($index); }
+	
+	public static function getConnection($dsn, $flags) { return self::$mw::getConnection($dsn, $flag); }
+	
+	/**
+	 * Get the middleware -> ddl type map
+	 *
+	 * @return array<mixed>
+	 */
+	public static function getTypeMap() { return self::$mw::getTypeMap(); }
 }
 
+xarDB::getInstance();
+
+function xarDB_init(array &$args)
+{
+	xarDB::setPrefix($args['prefix']);
+
+	// Register postgres driver, since Creole uses a slightly different alias
+	// We do this here so we can remove customisation from creole lib.
+	// @deprecated 2.4.0 postgres hasn't been supported for a long time now
+	//Creole::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
+
+	// If doConnect is null we connect. Not very intuitive
+	$args['doConnect'] = $args['doConnect'] ?? true;
+	if($args['doConnect']) {
+		try {
+			xarDB::newConn($args);
+		} catch (Exception $e) {
+			throw $e;
+		}
+	}
+	return true;
+}
+    
 class xarDatabase extends xarObject
 {
     public static function init(array $args = array())
     {
         if (empty($args)) {
+            // If no $args were passed then get then from the configuration file.
             $args = self::getConfig();
         }
         return self::connect($args);
     }
 
-    protected static function getConfig()
+    public static function getConfig()
     {
         // Decode encoded DB parameters
         // These need to be there
@@ -189,15 +144,15 @@ class xarDatabase extends xarObject
         $port = isset($host_parts[1]) ? $host_parts[1] : '';
 
         // Optionals dealt with, do the rest inline
-        $systemArgs = array('userName'        => $userName,
-                            'password'        => $password,
-                            'databaseHost'    => $host,
+        $systemArgs = array('databaseHost'    => $host,
                             'databasePort'    => $port,
                             'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
                             'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
+        					'userName'        => $userName,
+                            'password'        => $password,
+                            'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'),
                             'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
-                            'persistent'      => $persistent,
-                            'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'));
+                            'persistent'      => $persistent);
         return $systemArgs;
     }
 
@@ -213,11 +168,11 @@ class xarDatabase extends xarObject
                 $systemArgs['databaseHost'] = $local;
                 try {
                     return xarDB_init($systemArgs);
-                    //$connected = true;
                 } catch (Exception $e) {}
                 if ($connected) break;
             }
             if (!$connected) {
+            var_dump($e->getMessage());
                 throw new Exception("Connection error: a database connection could not be established");
             }
         } else {
