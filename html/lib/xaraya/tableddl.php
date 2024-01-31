@@ -52,8 +52,8 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
     }
 
     switch($databaseType) {
-        case 'mysql':
         case 'mysqli':
+        case 'pdomysqli':
         case 'oci8':
         case 'oci8po':
             $sql = 'CREATE DATABASE '. $databaseName . ' DEFAULT CHARACTER SET ' . $databaseCharset;
@@ -61,7 +61,7 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
         case 'postgres':
             $sql = 'CREATE DATABASE "'.$databaseName .'" ENCODING "' . $databaseCharset . '"';
             break;
-        case 'sqlite':
+        case 'sqlite3':
         case 'pdosqlite':
             // No such thing, its created automatically when it doesnt exist
             $sql ='';
@@ -109,8 +109,8 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
 
     // Select the correct database type
     switch($databaseType) {
-        case 'mysql':
         case 'mysqli':
+        case 'pdomysqli':
             sys::import('xaraya.tableddl.mysql');
             $sql = xarDB__mysqlCreateTable($tableName, $fields, $charset);
             break;
@@ -123,7 +123,6 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
             sys::import('xaraya.tableddl.oracle');
             $sql = xarDB__oracleCreateTable($tableName, $fields, $charset);
             break;
-        case 'sqlite':
         case 'sqlite3':
         case 'pdosqlite':
             sys::import('xaraya.tableddl.sqlite');
@@ -182,8 +181,8 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
 
     // Select the correct database type
     switch($databaseType) {
-        case 'mysql':
         case 'mysqli':
+        case 'pdomysqli':
             sys::import('xaraya.tableddl.mysql');
             $sql = xarDB__mysqlAlterTable($tableName, $args);
             break;
@@ -196,7 +195,6 @@ function xarDBAlterTable($tableName, $args, $databaseType = NULL)
             sys::import('xaraya.tableddl.oracle');
             $sql = xarDB__oracleAlterTable($tableName, $args);
             break;
-        case 'sqlite':
         case 'sqlite3':
         case 'pdosqlite':
             sys::import('xaraya.tableddl.sqlite');
@@ -229,21 +227,15 @@ function xarDBDropTable($tableName, $databaseType = NULL)
         $databaseType = xarDB::getType();
     }
     // set Dbtype to pdosqlite
-/*
-    $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
-    if ($middleware == 'PDO') {
-        $databaseType = 'pdosqlite';
-    }
-*/
+
     switch($databaseType) {
-        case 'postgres':
-        case 'mysql':
         case 'mysqli':
+        case 'pdomysqli':
+        case 'postgres':
             $sql = 'DROP TABLE IF EXISTS '.$tableName;
             break;
         case 'oci8':
         case 'oci8po':
-        case 'sqlite':
         case 'sqlite3':
         case 'pdosqlite':
             $sql = 'DROP TABLE '.$tableName;
@@ -272,7 +264,6 @@ function xarDBDropTable($tableName, $databaseType = NULL)
  */
 function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 {
-
     // perform validations on input arguments
     if (empty($tableName)) throw new EmptyParameterException('tableName');
     if (!is_array($index) || !is_array($index['fields']) || empty($index['name'])) {
@@ -294,8 +285,8 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
 
     // Select the correct database type
     switch($databaseType) {
-        case 'mysql':
         case 'mysqli':
+        case 'pdomysqli':
             if ($index['unique'] == true) {
                 $sql = 'ALTER TABLE '.$tableName.' ADD UNIQUE '.$index['name'];
             } else {
@@ -306,7 +297,6 @@ function xarDBCreateIndex($tableName, $index, $databaseType = NULL)
         case 'postgres':
         case 'oci8':
         case 'oci8po':
-        case 'sqlite':
         case 'sqlite3':
         case 'pdosqlite':
             if ($index['unique'] == true) {
@@ -356,8 +346,8 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
     }
     // Select the correct database type
     switch($databaseType) {
-        case 'mysql':
         case 'mysqli':
+        case 'pdomysqli':
             $sql = 'ALTER TABLE '.$tableName.' DROP INDEX '.$index['name'];
             break;
         case 'postgres':
@@ -416,16 +406,17 @@ class xarXMLInstaller extends xarObject
     
     // No constructor yet. maybe later
     
-    static private function transform($xmlFile, $xslAction='display', $dbName='mysql', $xslFile=null)
+    static private function transform($xmlFile, $xslAction='display', $dbType='mysqli', $xslFile=null)
     {
         // Park this here for now
         $tableprefix = xarDB::getPrefix();
         
         if (!isset($xmlFile))
             throw new BadParameterException(xarML('No file to transform!'));
+
         // @todo we would need an sqlite version of the .xsl here to get transform working for sqlite here...
         if (!isset($xslFile))
-            $xslFile = sys::lib() . '/xaraya/tableddl/xml2ddl-'. $dbName . '.xsl';
+            $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-'. $dbType . '.xsl';
         if (!file_exists($xslFile)) {
             $msg = xarML('The file #(1) was not found', $xslFile);
             throw new BadParameterException($msg);
