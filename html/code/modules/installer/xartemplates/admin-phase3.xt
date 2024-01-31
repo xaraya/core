@@ -1,261 +1,309 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
-    <link rel='icon' href="favicon.ico"/>
-    <style>
-        ul li.success {
-            list-style-image:  url(themes/common/images/icons/activate.png) !important;
-        }
-        ul li.failure {
-            list-style-image:  url(themes/common/images/icons/dialog-error.png) !important;
-        }
-        ul li.warning {
-            list-style-image:  url(themes/common/images/icons/dialog-warning.png) !important;
-        }
-    </style>
-    <xar:set name="active_step">3</xar:set>
-    <xar:set name="successtitle">'SUCCESS'</xar:set>
-    <xar:set name="failuretitle">'FAILURE'</xar:set>
-    <xar:set name="warningtitle">'CAUTION'</xar:set>
-    <div id="main_right">
-        <xar:template file="status"/>
-    </div>
-    <div id="main_left">
-        <h1>Capabilities inventory</h1>
-        <p>Xaraya requires a number of settings and extentions to be present and have a certain
-        value. We have checked these and the results are listed below. Each check is marked as
-        either: 
-            <ul>
-            <li class="failure">
-            <em>ERROR</em>&#160;Please rectify the error to continue installation</li>
-            <li class="warning">
-            <em>WARNING</em>&#160;Ensure you understand the warning consequences</li>
-            <li class="success">
-                <em>SUCCESS</em>
-            </li>
-        </ul></p>
-        <h2>PHP Settings Check</h2>
-            <input type="hidden" name="install_language" value="#$language#"/>
-            <p>Xaraya has recommended settings for PHP. If your PHP settings do not meet
-            requirements you may have difficulties in running install to completion.</p>
-            <ul>
-                <xar:if condition="$metRequiredPHPVersion">
-                    <li class="success">PHP Version is greater than or equal that the required version #PHP_REQUIRED_VERSION#. Your PHP
-                    Version is #$phpVersion#</li>
-                <xar:else />
-                    <li class="failure">PHP Version is less than #PHP_REQUIRED_VERSION#. Your PHP Version is
-                    #$phpVersion# please upgrade PHP.</li>
-                </xar:if>
-                <xar:if condition="$metMinMemRequirement and !$memory_warning">
-                    <li class="success">SUCCESS: Xaraya needs a MINIMUM of 8 Megabyte of PHP
-                    memory (16M or higher STRONGLY recommended). The current memory limit is
-                    #$memory_limit# If you are planning to install modules during the install
-                    phase, a lot of memory is required. If in doubt, 
-                    <strong>do a core only install</strong> and install modules manually
-                    later.</li>
-                <xar:elseif condition="$memory_warning"/>
-                    <li class="warning">WARNING: Xaraya needs a MINIMUM of 8 Megabyte of PHP
-                    memory (16M or higher STRONGLY recommended). The current memory limit is 
-                    <strong>#$memory_limit#</strong>. Please check your PHP memory limit.
-                    Installation requires a lot of memory especially if you are planning to
-                    install modules during this phase. If in doubt about your PHP memory limit,
-
-                    <strong>do a core only install</strong> and install modules manually
-                    later.</li>
-                <xar:else />
-                    <li class="failure">ERROR: Xaraya needs a MINIMUM of 8 Megabyte of PHP
-                    memory (16M or higher STRONGLY recommended). The current memory limit is
-                    #$memory_limit#. If you are planning to install modules during the install
-                    phase, a lot of memory is required. If in doubt, do a core only install and
-                    install modules manually later.</li>
-                </xar:if>
-                <xar:if condition="$maxexectimepass">
-                    <li class="warning">WARNING: Your max_execution_time for a php script is
-                    set to #$maxexectime# seconds. 30 seconds is usually sufficient but you may
-                    want to increase it for a full distribution install. How much time you need
-                    will depend on your system and number of modules you choose during this
-                    installation. If in doubt about your maximum (script) execution time, 
-                    <strong>do a core only install</strong> and install modules manually
-                    later.</li>
-                <xar:else />
-                    <li class="success">SUCCESS: Your max_execution_time for a php script is
-                    set to #$maxexectime# seconds. 30 seconds is usually sufficient but you may
-                    want to increase it for a full distribution install. How much time you need
-                    will depend on your system and number of modules you choose during this
-                    installation. If in doubt about your maximum (script) execution time, 
-                    <strong>do a core only install</strong> and install modules manually
-                    later.</li>
-                </xar:if>
-            </ul>
-
-            <h2>File Settings Check</h2>
-            <p>For Xaraya to function properly, the installer must write your database
-            information to the configuration file #$systemConfigFile#. If your settings are not
-            correct, this script will not be able to do so.</p>
-            <ul>
-                <xar:if condition="$systemConfigDistIsReadable">
-                    <li class="success">SUCCESS: The installer can read the default configuration
-                    file included in the distribution.</li>
-                 <xar:else />
-                    <li class="failure">ERROR: The installer cannot read the default distribution configuration
-                    file or the file is missing. Please verify that your webserver has read
-                    access to the file #$systemConfigDistFile# and that it exists.</li>
-                </xar:if>
-                <xar:if condition="$systemConfigIsWritable">
-                    <li class="success">SUCCESS: The installer can write to your configuration
-                    file.</li>
-                 <xar:else /> 
-                    <li class="failure">ERROR: The installer cannot write to the configuration
-                    file or the file is missing, or could not be created. Please verify that your webserver has write
-                    access to the file #$systemConfigFile# if you placed it manually, or else that the webserver has write access to the var directory your default configuration file is in (#$systemConfigDistFile#), and read access to the file itself.</li>
-                </xar:if>
-                <xar:if condition="$cacheIsWritable">
-                    <li class="success">SUCCESS: The installer can write to the directory
-                    #$cacheDir#</li>
-                <xar:else />
-                    <li class="failure">ERROR: The installer cannot write to the directory
-                    #$cacheDir#. Please verify that your webserver has write access to the
-                    directory #$cacheDir#</li>
-                </xar:if>
-                <xar:if condition="$cacheTemplatesIsWritable">
-                    <li class="success">SUCCESS: The installer can write to the directory
-                    #$cacheTemplatesDir#</li>
-                <xar:else />
-                    <li class="failure">ERROR: The installer cannot write to the directory
-                    #$cacheTemplatesDir#. Please verify that your webserver has write access to
-                    the directory #$cacheTemplatesDir#.</li>
-                </xar:if>
-                <xar:if condition="$rssTemplatesIsWritable">
-                    <li class="success">SUCCESS: The installer can write to the directory
-                    #$rssTemplatesDir#</li>
-                <xar:else />
-                    <li class="failure">ERROR: The installer cannot write to the
-                    #$rssTemplatesDir#. Please verify that your webserver has write access to
-                    the directory #$rssTemplatesDir#</li>
-                </xar:if>
-            </ul>
-
-            <h2>Locales Settings Check</h2>
-            <p>For translation to function properly, Xaraya must have write access to files in
-            the locales directory</p>
-            <ul>
-                <xar:if condition="$phpLanguageFilesIsWritable">
-                    <li class="success">SUCCESS: Xaraya can write to the directory
-                    #$phpLanguageDir# and all its files and subdirectories.</li>
-                <xar:else />
-                    <li class="warning">WARNING: Xaraya cannot write to the directory
-                    #$phpLanguageDir# and all its files and subdirectories. Please verify that
-                    your webserver has write access to the files under the directory:
-                    #$phpLanguageDir# Write access is required to cache language text for
-                    locales other than en. If you're not sure, ignore this warning.</li>
-                </xar:if>
-                <xar:if condition="$xmlLanguageFilesIsWritable">
-                    <li class="success">SUCCESS: Xaraya can write to the directory
-                    #$xmlLanguageDir# and all its files and subdirectories.</li>
-                <xar:else />
-                    <li class="warning">WARNING: Xaraya cannot write to the directory
-                    #$xmlLanguageDir# and all its files and subdirectories. Please verify that
-                    your webserver has write access to the files under the directory:
-                    #$xmlLanguageDir# This write access is only needed if you intend on using
-                    translations module at your site actively.</li>
-                </xar:if>
-            </ul>
-            
-            <h2>Information on Loaded PHP Extensions</h2>
-            <p>These extensions are required for Xaraya to work correctly. If they are not present they
-            need to be added to your PHP installation. Refer to 
-            <a href="http://www.php.net">PHP.net</a> for further information on these
-            extensions.</p>
-            <ul>
-                <xar:if condition="$xmlextension">
-                    <li class="success">SUCCESS: The XML Extension is loaded.</li>
-                <xar:else />
-                    <li class="failure">ERROR: The XML Extension is not loaded. You will
-                    require this extension if you plan to use the Xaraya Translations
-                    module.</li>
-                </xar:if>
-                <xar:if condition="$xslextension">
-                    <li class="success">SUCCESS: The XSL Extension is loaded.</li>
-                <xar:else />
-                    <li class="failure">ERROR: The XSL Extension is not loaded. You will
-                    require this extension for the BlockLayout templating system.</li>
-                </xar:if>
-            </ul>
-            
-            <h2>You will need at least one available database type</h2>
-            <ul>
-                <xar:if condition="$mysqlextension OR $pgsqlextension OR $sqliteextension">
-                    <li class="success">SUCCESS: You have at least one database type available.</li>
-                <xar:else />
-                    <li class="warning">WARNING: You do not have a supported database type available.</li>
-                </xar:if>
-                <xar:if condition="$mysqlextension">
-                    <li class="success">SUCCESS: The MySQL Extension is loaded.</li>
-                <xar:else />
-                    <li class="warning">WARNING: MySQL as database will not be available</li>
-                </xar:if>
-                <xar:if condition="$mysqliextension">
-                    <li class="success">SUCCESS: The MySQLi Extension is loaded.</li>
-                <xar:else />
-                    <li class="warning">WARNING: MySQLi as database will not be available</li>
-                </xar:if>
-                <xar:if condition="$pgsqlextension">
-                    <li class="success">SUCCESS: The PGSQL Extension is loaded.</li>
-                <xar:else />
-                    <li class="warning">WARNING: PostgreSQL as database will not be
-                    available</li>
-                </xar:if>
-                <xar:if condition="$sqliteextension">
-                    <li class="success">SUCCESS: The SQLite Extension is loaded.</li>
-                <xar:else />
-                    <li class="warning">WARNING: SQLite as database will not be available</li>
-                </xar:if>
-                <xar:if condition="$sqlite3extension">
-                    <li class="success">SUCCESS: The SQLite3 Extension is loaded.</li>
-                <xar:else />
-                    <li class="warning">WARNING: SQLite3 as database will not be available</li>
-                </xar:if>
-                <xar:if condition="$pdosqliteextension">
-                    <li class="success">
-                        SUCCESS: The PDO SQLite Extension is loaded.
-                    </li>
-                <xar:else />
-                   <li class="warning">
-                       WARNING: PDO SQLite as database will not be available
-                   </li>
-                </xar:if>
-            </ul>
-        <form action="install.php" method="post">
-            <div class="xar-form-actions">
-                <div class="xar-row">
-                    <div class="xar-col"></div>
-                    <div class="xar-col" style="width: 500px">
-                        <xar:if condition="$systemConfigDistIsReadable 
-                                           AND $systemConfigIsWritable 
-                                           AND $cacheTemplatesIsWritable 
-                                           AND $cacheIsWritable 
-                                           AND $rssTemplatesIsWritable 
-                                           AND $metMinMemRequirement
-                                           AND $xmlextension
-                                           AND $xslextension
-                                           AND $metRequiredPHPVersion
-                                           ">
-                            <input type="hidden" name="install_phase" id="install_phase" value="4"/>
-                            <xar:var name="label">Continue</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        <xar:else />
-                            <input type="hidden" name="install_phase" id="install_phase" value="3"/>
-                            <input type="hidden" name="agree" id="agree" value="agree"/>
-                            <p class="warning">
-                                Some requirements for installation were not met.<br/>
-                                Please check the list above and make the appropriate adjustments.
-                            </p>
-                            <xar:var name="label">Check Again</xar:var>
-                            <xar:button type="submit" label="$label"/>
-                        </xar:if>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+    <div class="xar-mod-body">
+		<link rel='icon' href="favicon.ico"/>
+		<style>
+			ul li.success {
+				list-style-image:  url(themes/common/images/icons/activate.png) !important;
+			}
+			ul li.failure {
+				list-style-image:  url(themes/common/images/icons/dialog-error.png) !important;
+			}
+			ul li.warning {
+				list-style-image:  url(themes/common/images/icons/dialog-warning.png) !important;
+			}
+		</style>
+		<xar:set name="active_step">3</xar:set>
+		<xar:set name="successtitle">'SUCCESS'</xar:set>
+		<xar:set name="failuretitle">'FAILURE'</xar:set>
+		<xar:set name="warningtitle">'CAUTION'</xar:set>
+		<div id="main_right">
+			<xar:template file="status"/>
+		</div>
+		<div id="main_left">
+			<h1>Capabilities inventory</h1>
+			<p>
+				Xaraya requires a number of settings and extentions to be present and have a certain value. We have checked these and the results are listed below. Each check is marked as either: 
+			</p>
+				<ul>
+				<li class="failure">
+				<em>ERROR</em>&#160;Please rectify the error to continue installation</li>
+				<li class="warning">
+				<em>WARNING</em>&#160;Ensure you understand the warning consequences</li>
+				<li class="success">
+					<em>SUCCESS</em>
+				</li>
+			</ul>
+			<h2>PHP Settings Check</h2>
+				<input type="hidden" name="install_language" value="#$language#"/>
+				<p>
+					Xaraya has recommended settings for PHP. If your PHP settings do not meet requirements you may have difficulties in running install to completion.
+				</p>
+				<ul>
+					<xar:if condition="$metRequiredPHPVersion">
+						<li class="success">PHP Version is greater than or equal that the required version #xarInst::PHP_REQUIRED_VERSION#. Your PHP
+						Version is #$phpVersion#</li>
+					<xar:else />
+						<li class="failure">PHP Version is less than #xarInst::PHP_REQUIRED_VERSION#. Your PHP Version is
+						#$phpVersion# please upgrade PHP.</li>
+					</xar:if>
+					<xar:if condition="$metMinMemRequirement and !$memory_warning">
+						<li class="success">SUCCESS: Xaraya needs a MINIMUM of 8 Megabyte of PHP
+						memory (16M or higher STRONGLY recommended). The current memory limit is
+						<strong>#$memory_limit#</strong>. If you are planning to install modules during the install
+						phase, a lot of memory is required. If in doubt, 
+						<strong>do a core only install</strong> and install modules manually
+						later.</li>
+					<xar:elseif condition="$memory_warning"/>
+						<li class="warning">WARNING: Xaraya needs a MINIMUM of 8 Megabyte of PHP
+						memory (16M or higher STRONGLY recommended). The current memory limit is 
+						<strong>#$memory_limit#</strong>. Please check your PHP memory limit.
+						Installation requires a lot of memory especially if you are planning to
+						install modules during this phase. If in doubt about your PHP memory limit,
+	
+						<strong>do a core only install</strong> and install modules manually
+						later.</li>
+					<xar:else />
+						<li class="failure">ERROR: Xaraya needs a MINIMUM of 8 Megabyte of PHP
+						memory (16M or higher STRONGLY recommended). The current memory limit is
+						<strong>#$memory_limit#</strong>. If you are planning to install modules during the install
+						phase, a lot of memory is required. If in doubt, do a core only install and
+						install modules manually later.</li>
+					</xar:if>
+					<xar:if condition="$maxexectimepass">
+						<li class="warning">WARNING: Your max_execution_time for a php script is
+						set to <strong>#$maxexectime# seconds</strong>. 30 seconds is usually sufficient but you may
+						want to increase it for a full distribution install. How much time you need
+						will depend on your system and number of modules you choose during this
+						installation. If in doubt about your maximum (script) execution time, 
+						<strong>do a core only install</strong> and install modules manually
+						later.</li>
+					<xar:else />
+						<li class="success">SUCCESS: Your max_execution_time for a php script is
+						set to #$maxexectime# seconds. 30 seconds is usually sufficient but you may
+						want to increase it for a full distribution install. How much time you need
+						will depend on your system and number of modules you choose during this
+						installation. If in doubt about your maximum (script) execution time, 
+						<strong>do a core only install</strong> and install modules manually
+						later.</li>
+					</xar:if>
+				</ul>
+	
+				<h2>File Settings Check</h2>
+				<p>
+					For Xaraya to function properly, the installer must write your database information to the configuration file #$systemConfigFile#. If your settings are not correct, this script will not be able to do so.
+				</p>
+				<ul>
+					<xar:if condition="$systemConfigDistIsReadable">
+						<li class="success">SUCCESS: The installer can read the default configuration
+						file included in the distribution.</li>
+					 <xar:else />
+						<li class="failure">ERROR: The installer cannot read the default distribution configuration
+						file or the file is missing. Please verify that your webserver has read
+						access to the file #$systemConfigDistFile# and that it exists.</li>
+					</xar:if>
+					<xar:if condition="$systemConfigIsWritable">
+						<li class="success">SUCCESS: The installer can write to your configuration
+						file.</li>
+					 <xar:else /> 
+						<li class="failure">ERROR: The installer cannot write to the configuration
+						file or the file is missing, or could not be created. Please verify that your webserver has write
+						access to the file #$systemConfigFile# if you placed it manually, or else that the webserver has write access to the var directory your default configuration file is in (#$systemConfigDistFile#), and read access to the file itself.</li>
+					</xar:if>
+					<xar:if condition="$cacheIsWritable">
+						<li class="success">SUCCESS: The installer can write to the directory
+						#$cacheDir#</li>
+					<xar:else />
+						<li class="failure">ERROR: The installer cannot write to the directory
+						#$cacheDir#. Please verify that your webserver has write access to the
+						directory #$cacheDir#</li>
+					</xar:if>
+					<xar:if condition="$cacheTemplatesIsWritable">
+						<li class="success">SUCCESS: The installer can write to the directory
+						#$cacheTemplatesDir#</li>
+					<xar:else />
+						<li class="failure">ERROR: The installer cannot write to the directory
+						#$cacheTemplatesDir#. Please verify that your webserver has write access to
+						the directory #$cacheTemplatesDir#.</li>
+					</xar:if>
+					<xar:if condition="$rssTemplatesIsWritable">
+						<li class="success">SUCCESS: The installer can write to the directory
+						#$rssTemplatesDir#</li>
+					<xar:else />
+						<li class="failure">ERROR: The installer cannot write to the
+						#$rssTemplatesDir#. Please verify that your webserver has write access to
+						the directory #$rssTemplatesDir#</li>
+					</xar:if>
+				</ul>
+	
+				<h2>Locales Settings Check</h2>
+				<p>
+					For translation to function properly, Xaraya must have write access to files in the locales directory.
+				</p>
+				<ul>
+					<xar:if condition="$phpLanguageFilesIsWritable">
+						<li class="success">SUCCESS: Xaraya can write to the directory
+						#$phpLanguageDir# and all its files and subdirectories.</li>
+					<xar:else />
+						<li class="warning">WARNING: Xaraya cannot write to the directory
+						#$phpLanguageDir# and all its files and subdirectories. Please verify that
+						your webserver has write access to the files under the directory:
+						#$phpLanguageDir# Write access is required to cache language text for
+						locales other than en. If you're not sure, ignore this warning.</li>
+					</xar:if>
+					<xar:if condition="$xmlLanguageFilesIsWritable">
+						<li class="success">SUCCESS: Xaraya can write to the directory
+						#$xmlLanguageDir# and all its files and subdirectories.</li>
+					<xar:else />
+						<li class="warning">WARNING: Xaraya cannot write to the directory
+						#$xmlLanguageDir# and all its files and subdirectories. Please verify that
+						your webserver has write access to the files under the directory:
+						#$xmlLanguageDir# This write access is only needed if you intend on using
+						translations module at your site actively.</li>
+					</xar:if>
+				</ul>
+				
+				<h2>Required PHP Extensions Check</h2>
+				<p>
+					These extensions are required for Xaraya to work correctly. If they are not present they need to be added to your PHP installation. Refer to <a href="http://www.php.net">PHP.net</a> for further information on these extensions.
+				</p>
+				<ul>
+					<xar:if condition="$xmlextension">
+						<li class="success">SUCCESS: The XML Extension is loaded.</li>
+					<xar:else />
+						<li class="failure">ERROR: The XML Extension is not loaded. You will
+						require this extension if you plan to use the Xaraya Translations
+						module.</li>
+					</xar:if>
+					<xar:if condition="$xslextension">
+						<li class="success">SUCCESS: The XSL Extension is loaded.</li>
+					<xar:else />
+						<li class="failure">ERROR: The XSL Extension is not loaded. You will
+						require this extension for the BlockLayout templating system.</li>
+					</xar:if>
+				</ul>
+				
+				<h2>Databases Check</h2>
+				<p>
+					Xaraya communicates with databases through the legacy Creole package or PHP's PDO extension. Creole ships with Xaraya, while PDO needs to be installed.
+				</p>
+				<ul>
+					<xar:if condition="$pdoextension">
+						<li class="success">SUCCESS: The PDO extension is loaded.</li>
+					<xar:else />
+						<li class="warning">WARNING: The PDO extension is not installed.</li>
+					</xar:if>
+					<xar:if condition="$mysqliextension OR $pgsqlextension OR $sqliteextension">
+						<li class="success">SUCCESS: You have at least one database type available.</li>
+					<xar:else />
+						<li class="warning">WARNING: You do not have a supported database type available.</li>
+					</xar:if>
+				</ul>
+					
+				<!-- MySQL -->
+				<ul>
+					<xar:if condition="$mysqliextension OR $pdomysqlextension">
+						<li class="success">MySQL extensions are loaded:
+							<xar:if condition="$mysqliextension AND $mysqli_version_ok">
+								<li>MySQL is available through the MySQLi extension and Creole.</li>
+							<xar:else/>
+								<li>FAIL: The current version of the MySQLi extension (#$mysqli_version#) does not meet the minimum required version (#xarInst::MYSQL_REQUIRED_VERSION#).</li>
+							</xar:if>
+							<xar:if condition="$pdomysqlextension AND $pdo_mysql_version_ok">
+								<li>MySQL is available through the PDO MySQL extension.</li>
+							<xar:else/>
+								<li>FAIL: The current version of the PDO MySQL extension (#$pdo_mysql_version#) does not meet the minimum required version (#xarInst::MYSQL_REQUIRED_VERSION#).</li>
+							</xar:if>
+						</li>
+					<xar:else/>
+						<li class="warning">WARNING: MySQL is not available.</li>
+					</xar:if>
+				</ul>
+					
+				<!-- PostgreSQL -->
+				<ul>
+					<xar:if condition="$pgsqlextension OR $pdopgsqlextension">
+						<li class="success">PostgreSQL extensions are loaded:
+							<xar:if condition="$pgsqlextension AND $pgsql_version_ok">
+								<li>PostgreSQL is available through the PostgreSQL extension and Creole.</li>
+							<xar:else/>
+								<li>FAIL: The current version of the PostgreSQL extension (#$pgsql_version#) does not meet the minimum required version (#xarInst::PGSQL_REQUIRED_VERSION#).</li>
+							</xar:if>
+							<xar:if condition="$pdopgsqlextension AND $pdo_pgsql_version_ok">
+								<li>PostgreSQL is available through the PDO PostgreSQL extension.</li>
+							<xar:else/>
+								<li>FAIL:The current version of the PDO PostgreSQL extension (#$pdo_pgsql_version#) does not meet the minimum required version (#xarInst::PGSQL_REQUIRED_VERSION#).</li>
+							</xar:if>
+						</li>
+						<li class="warning">WARNING: PostgreSQL support is limited to the Xaraya core and core modules</li>
+					<xar:else/>
+						<li class="warning">WARNING: PostgreSQL is not available.</li>
+					</xar:if>
+				</ul>
+					
+				<!-- SQLite -->
+				<ul>
+					<xar:if condition="$sqlite3extension OR $pdosqliteextension">
+						<li class="success">SQLite extensions are loaded:
+							<xar:if condition="$sqlite3extension AND $sqlite3_version_ok">
+								<li>SQLite is available through the SQLite extension and Creole.</li>
+							<xar:else/>
+								<li>FAIL: The current version of the SQLite extension (#$sqlite3_version#) does not meet the minimum required version (#xarInst::SQLITE_REQUIRED_VERSION#).</li>
+							</xar:if>
+							<xar:if condition="$pdosqliteextension AND $pdo_sqlite_version_ok">
+								<li>SQLite is available through the PDO SQLite extension.</li>
+							<xar:else/>
+								<li>FAIL: The current version of the PDO SQLite extension (#$pdo_sqlite_version#) does not meet the minimum required version (#xarInst::SQLITE_REQUIRED_VERSION#).</li>
+							</xar:if>
+						</li>
+						<li class="warning">WARNING: SQLite is currently not supported.</li>
+					<xar:else/>
+						<li class="warning">WARNING: SQLite is not available.</li>
+					</xar:if>
+	
+				</ul>
+				<p>
+					Note that having on or more of the databases above available does not guarantee that Xaraya can use its version. That will be checked on the next page.
+				</p>
+			<form action="install.php" method="post">
+				<div class="xar-form-actions">
+					<div class="xar-row">
+						<div class="xar-col"></div>
+						<div class="xar-col" style="width: 500px">
+							<xar:if condition="$systemConfigDistIsReadable 
+											   AND $systemConfigIsWritable 
+											   AND $cacheTemplatesIsWritable 
+											   AND $cacheIsWritable 
+											   AND $rssTemplatesIsWritable 
+											   AND $metMinMemRequirement
+											   AND $xmlextension
+											   AND $xslextension
+											   AND $metRequiredPHPVersion
+											   ">
+								<input type="hidden" name="install_phase" id="install_phase" value="4"/>
+								<xar:var name="label">Back</xar:var>
+								<xar:button type="cancel" label="$label"/>
+								&#160;
+								<xar:var name="label">Continue</xar:var>
+								<xar:button type="submit" label="$label"/>
+							<xar:else />
+								<input type="hidden" name="install_phase" id="install_phase" value="3"/>
+								<input type="hidden" name="agree" id="agree" value="agree"/>
+								<p class="warning">
+									Some requirements for installation were not met.<br/>
+									Please check the list above and make the appropriate adjustments.
+								</p>
+								<xar:var name="label">Back</xar:var>
+								<xar:button type="cancel" label="$label"/>
+								&#160;
+								<xar:var name="label">Check Again</xar:var>
+								<xar:button type="submit" label="$label"/>
+							</xar:if>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
 </xar:template>

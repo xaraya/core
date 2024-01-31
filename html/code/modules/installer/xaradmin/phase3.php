@@ -54,7 +54,7 @@ function installer_admin_phase3()
     $xmlLanguageDir           = $systemVarDir . '/locales/' . $install_language . '/xml';
 
     if (function_exists('version_compare')) {
-        if (version_compare(PHP_VERSION,PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
+        if (version_compare(PHP_VERSION, xarInst::PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
     }
 
     // If there is no system.config file, attempt to create it
@@ -84,11 +84,13 @@ function installer_admin_phase3()
     // Extension Check
     $data['xmlextension']             = extension_loaded('xml');
     $data['xslextension']             = extension_loaded('xsl');
-    $data['mysqlextension']           = extension_loaded('mysql');
+    $data['pdoextension']             = extension_loaded('pdo');
     $data['mysqliextension']          = extension_loaded('mysqli');
+    $data['mysqlndextension']         = extension_loaded('mysqlnd');
     $data['pgsqlextension']           = extension_loaded('pgsql');
-    $data['sqliteextension']          = extension_loaded('sqlite');
     $data['sqlite3extension']         = extension_loaded('sqlite3');
+    $data['pdomysqlextension']        = extension_loaded('pdo_mysql');
+    $data['pdopgsqlextension']        = extension_loaded('pdo_pgsql');
     $data['pdosqliteextension']       = extension_loaded('pdo_sqlite');
 
     $data['metRequiredPHPVersion']      = $metRequiredPHPVersion;
@@ -116,18 +118,31 @@ function installer_admin_phase3()
     $data['language']    = $install_language;
     $data['phase']       = 3;
     $data['phase_label'] = xarML('Step Three');
-
-    // We only check this extension if MySQL is loaded
-    if ($data['mysqlextension']) {
-        $data['mysql_required_version']     = MYSQL_REQUIRED_VERSION;
-        ob_start();
-        phpinfo(INFO_MODULES);
-        $info = ob_get_contents();
-        ob_end_clean();
-        $info = stristr($info, 'Client API version');
-        preg_match('/[1-9].[0-9].[1-9][0-9]/', $info, $match);
-        $data['mysql_version_ok'] = version_compare($match[0],MYSQL_REQUIRED_VERSION,'ge');
-        $data['mysql_version']          = $match[0];
+    
+    // Check the loaded database extensions
+    if ($data['mysqliextension']) {
+        $data['mysqli_version'] = phpversion("mysqli");
+        $data['mysqli_version_ok'] = version_compare($data['mysqli_version'], xarInst::MYSQL_REQUIRED_VERSION,'ge');
+    } 
+    if ($data['pgsqlextension']) {
+        $data['pgsql_version'] = phpversion("pgsql");
+        $data['pgsql_version_ok'] = version_compare($data['pgsql_version'], xarInst::PGSQL_REQUIRED_VERSION,'ge');
+    }
+    if ($data['sqlite3extension']) {
+        $data['sqlite3_version'] = phpversion("sqlite3");
+        $data['sqlite3_version_ok'] = version_compare($data['sqlite3_version'], xarInst::SQLITE_REQUIRED_VERSION,'ge');
+    }
+    if ($data['pdomysqlextension']) {
+        $data['pdo_mysql_version'] = phpversion("pdo_mysql");
+        $data['pdo_mysql_version_ok'] = version_compare($data['pdo_mysql_version'], xarInst::MYSQL_REQUIRED_VERSION,'ge');
+    }
+    if ($data['pdopgsqlextension']) {
+        $data['pdo_pgsql_version'] = phpversion("pdo_pgsql");
+        $data['pdo_pgsql_version_ok'] = version_compare($data['pdo_pgsql_version'], xarInst::PGSQL_REQUIRED_VERSION,'ge');
+    }
+    if ($data['pdosqliteextension']) {
+        $data['pdo_sqlite_version'] = phpversion("pdo_sqlite");
+        $data['pdo_sqlite_version_ok'] = version_compare($data['pdo_sqlite_version'], xarInst::SQLITE_REQUIRED_VERSION,'ge');
     }
 
     return $data;
