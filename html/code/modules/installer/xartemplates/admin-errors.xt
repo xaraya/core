@@ -45,6 +45,10 @@
 								<li>Password</li>
 							</ul>
 						</p>
+						<h2>Error Specifics</h2>
+						<p>
+							 The error message returned was: "#$message#"
+						</p>
 					</div>
 				</div>
 			<xar:elseif condition="$layout eq 'database_exists'"/>
