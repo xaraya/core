@@ -17,15 +17,33 @@
 					<xar:var name="label">Back</xar:var>
 					<xar:button type="cancel" label="$label"/>
 				</div>
-			<xar:elseif condition="$layout eq 'no database'"/>
+			<xar:elseif condition="$layout eq 'no_database'"/>
 				<div id="main_left">
-					<h1>Database Not Found</h1>
+					<h1>Empty Database Name</h1>
 					<div>
 						<p>
-							The database #$dbName#.doesn't exist and it wasn't selected to be created.
+							The database name field cannot be empty.
 						</p>
+<!--
 						<p>
 							Please go back and either check the checkbox to create the database or choose a database that already exists.
+						</p>
+-->					</div>
+				</div>
+			<xar:elseif condition="$layout eq 'no_connection'"/>
+				<div id="main_left">
+					<h1>Cannot Connect</h1>
+					<div>
+						<p>
+							Database connection failed. The information supplied was erroneous, such as a bad or missing password or wrong username.
+						</p>
+						<p>
+							Please check the values you entered for:
+							<ul>
+								<li>Host (may need to include a port number)</li>
+								<li>Username</li>
+								<li>Password</li>
+							</ul>
 						</p>
 					</div>
 				</div>
@@ -89,7 +107,7 @@
             <xar:elseif condition="$layout eq 'invalid_character'"/>
                 <div style="margin-top: 20px">Invalid character in the table prefix. Use only a-z, a single _ (underscore), and/or 0-9 in the prefix.</div>
             <xar:elseif condition="$layout eq 'no_connection'"/>
-                <div style="margin-top: 20px">Database connection failed. The information supplied was erroneous, such as a bad or missing password or wrong username.                          
+                <div style="margin-top: 20px">                          
                 <br />The message was: <pre style="color: red">#$message#</pre></div>
             <xar:else />
                 <div style="margin-top: 20px">No error message is available. 
