@@ -46,61 +46,18 @@
  * --- finish.php
 */
 
-/**
- * Check PHP and MySQL versions
- *
- */
- 
-/**
- * @package modules\installer
- * @subpackage installer
- */
-define('MYSQL_REQUIRED_VERSION', '5.0.0');
-/**
- * @package modules\installer
- * @subpackage installer
- */
-define('PHP_REQUIRED_VERSION', '5.3.0');
-
-/**
- * Defines for the phases
- *
- */
-/**
- * @package modules\installer
- * @subpackage installer
- */
-define ('XARINSTALL_PHASE_WELCOME',             '1');
-
-/**
- * @package modules\installer
- * @subpackage installer
- */
-define ('XARINSTALL_PHASE_LANGUAGE_SELECT',     '2');
-
-/**
- * @package modules\installer
- * @subpackage installer
- */
-define ('XARINSTALL_PHASE_LICENSE_AGREEMENT',   '3');
-
-/**
- * @package modules\installer
- * @subpackage installer
- */
-define ('XARINSTALL_PHASE_SYSTEM_CHECK',        '4');
-
-/**
- * @package modules\installer
- * @subpackage installer
- */
-define ('XARINSTALL_PHASE_SETTINGS_COLLECTION', '5');
-
-/**
- * @package modules\installer
- * @subpackage installer
- */
-define ('XARINSTALL_PHASE_BOOTSTRAP',           '6');
+class xarInst
+{
+    /**
+     * Installation constants we work with
+     *
+    **/
+    const MYSQL_REQUIRED_VERSION               = '5.7.0';
+    const PGSQL_REQUIRED_VERSION               = '8.0.0';
+    const SQLITE_REQUIRED_VERSION              = '3.37.0';
+    const PHP_REQUIRED_VERSION                 = '8.2.0';
+    
+}
 
 /**
  * Loads the files required for running an installation
@@ -122,7 +79,7 @@ function xarInstallLoader()
     $mbsextension = extension_loaded('mbstring');
 
     if (function_exists('version_compare')) {
-        if (version_compare(PHP_VERSION,PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
+        if (version_compare(PHP_VERSION, xarInst::PHP_REQUIRED_VERSION,'>=')) $metRequiredPHPVersion = true;
     } else {
         $metRequiredPHPVersion = false;
     }
@@ -206,7 +163,6 @@ function xarInstallLoader()
                         'generateXMLURLs'        => false);
     xarServer::init($systemArgs);
     xarController::init($systemArgs);
-    //xarResponse::init($systemArgs);
 
     // Start BlockLayout Template Engine
     // This is probably the trickiest part, but we want the installer
