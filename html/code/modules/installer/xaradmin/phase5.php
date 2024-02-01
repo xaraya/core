@@ -90,24 +90,38 @@ function installer_admin_phase5()
 //---------------------------------------------------------------------------
     // Not all Database Servers support selecting the specific database *after* connecting
     // so let's try connecting with the database name first, and then without if that fails
-    $dbExists = false;
-    try {
-      $init_args['doConnect'] = true;
-      $dbconn = xarDB::newConn($init_args);
-      $dbExists = true;
-    } catch(Exception $e) {
-      // Couldn't connect to the specified dbName
-      // Let's try without db name
-      try {
-    	$name = $init_args['databaseName'];
-        $init_args['databaseName'] ='';
-        $dbconn = xarDB::newConn($init_args);
-        $init_args['databaseName'] =$name;
-      } catch(Exception $e) {
-        // It failed without dbname too
-        return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
-      }
-    }
+	$dbExists = false;
+    switch ($init_args['databaseType']) {
+        case 'sqlite3':
+        case 'pdosqlite':
+			// Ignore sqlite. We already did that above
+			// But we do want to get a connection to use below
+			$dbconn = xarDB::newConn($init_args);
+		break;
+        case 'mysqli':
+        case 'pdomysqli':
+		case 'pgsql':
+		case 'pdopgsql':
+			try {
+			  $init_args['doConnect'] = true;
+			  $dbconn = xarDB::newConn($init_args);
+			  $dbExists = true;
+			} catch(Exception $e) {
+			  // Couldn't connect to the specified dbName
+			  // Let's try without db name
+			  try {
+				$name = $init_args['databaseName'];
+				$init_args['databaseName'] ='';
+				$dbconn = xarDB::newConn($init_args);
+				$init_args['databaseName'] =$name;
+			  } catch(Exception $e) {
+				// It failed without dbname too
+				return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
+			  }
+			}
+        default:
+		throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
+	}
 
 	if ($dbExists) {
 		// We already have a database with this name
