@@ -58,7 +58,8 @@ function xarDBCreateDatabase($databaseName, $databaseType=NULL, $databaseCharset
         case 'oci8po':
             $sql = 'CREATE DATABASE '. $databaseName . ' DEFAULT CHARACTER SET ' . $databaseCharset;
             break;
-        case 'postgres':
+        case 'pgsql':
+        case 'pdopgsql':
             $sql = 'CREATE DATABASE "'.$databaseName .'" ENCODING "' . $databaseCharset . '"';
             break;
         case 'sqlite3':
