@@ -52,16 +52,17 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
      */
     public static function newConn(array $args = null)
     {
-        // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
         switch ($args['databaseType']) {
         	case 'sqlite3':
         	case 'pdosqlite':
-				$args['databaseName'] ??= ':memory:';
-				$args['databaseHost'] ??= '';
-				$args['databasePort'] ??= '';
-				$args['userName'] ??= '';
+        	// Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
+				$args['phptype']        = $args['databaseType'];
+				$args['database']     ??= ':memory:';
+//				$args['databaseHost'] ??= '';
+//				$args['databasePort'] ??= '';
+				$args['username'] ??= '';
 				$args['password'] ??= '';
-				$args['databaseCharset'] ??= '';
+//				$args['databaseCharset'] ??= '';
 				$dsn = $args;
 			break;
 			case 'mysqli':
@@ -98,7 +99,7 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
 							 'database'  => $args['databaseName'],
 							 'encoding'  => $args['databaseCharset']);
 			default:
-			break;
+			throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
         }
         // Set flags
         $flags = array();
@@ -239,6 +240,9 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
     public static function getConnection($dsn, $flags = array())
     {
         switch ($dsn['phptype']) {
+        	case 'pdosqlite':
+	            $dsnstring  = 'sqlite' . ':' . $dsn['database'];
+        	break;
         	case 'pdomysqli':
 				$dsnstring  = 'mysql' . ':host=' . $dsn['hostspec'] . ';';
 				if (!empty($dsn['port'])) {
@@ -253,9 +257,6 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
 					$dsnstring .= 'port=' . $dsn['port'] . ";";
 				}
 				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
-        	break;
-        	case 'pdosqlite':
-	            $dsnstring  = $dsn['phptype'] . ':' . $dsn['database'];
         	break;
         	default:
 			throw new Exception(xarML("Unknown database type: '#(1)'", $dsn['phptype']));

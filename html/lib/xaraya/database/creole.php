@@ -52,6 +52,17 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
     {
         // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
         switch ($args['databaseType']) {
+        	case 'sqlite3':
+        	case 'pdosqlite':
+				$args['phptype']           = $args['databaseType'];
+				$args['databaseName']    ??= ':memory:';
+				$args['databaseHost']    ??= '';
+				$args['databasePort']    ??= '';
+				$args['userName']        ??= '';
+				$args['password']        ??= '';
+				$args['databaseCharset'] ??= '';
+				$dsn = $args;
+			break;
 			case 'mysqli':
 			case 'pdomysql':
 				// Hive off the port if there is one added as part of the host
@@ -85,16 +96,6 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
 							 'password'  => $args['password'],
 							 'database'  => $args['databaseName'],
 							 'encoding'  => $args['databaseCharset']);
-        	case 'sqlite3':
-        	case 'pdosqlite':
-				$args['databaseName'] ??= ':memory:';
-				$args['databaseHost'] ??= '';
-				$args['databasePort'] ??= '';
-				$args['userName'] ??= '';
-				$args['password'] ??= '';
-				$args['databaseCharset'] ??= '';
-				$dsn = $args;
-			break;
 			default:
 			throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
         }
