@@ -52,19 +52,8 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
     {
         // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
         switch ($args['databaseType']) {
-        	case 'sqlite3':
-        	case 'pdosqlite':
-				$args['databaseName'] ??= ':memory:';
-				$args['databaseHost'] ??= '';
-				$args['databasePort'] ??= '';
-				$args['userName'] ??= '';
-				$args['password'] ??= '';
-				$args['databaseCharset'] ??= '';
-				$dsn = $args;
-			break;
 			case 'mysqli':
 			case 'pdomysql':
-			default:
 				// Hive off the port if there is one added as part of the host
 				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
 				$host_parts = explode(':', $host);
@@ -80,6 +69,34 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
 							 'database'  => $args['databaseName'],
 							 'encoding'  => $args['databaseCharset']);
 			break;
+			case 'pgsql':
+			case 'pdopgsql':
+				// Hive off the port if there is one added as part of the host
+				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+				$host_parts = explode(':', $host);
+				$host = $host_parts[0];
+				$port = isset($host_parts[1]) ? $host_parts[1] : '';
+		
+				// Get database parameters
+				$dsn = array('phptype'   => $args['databaseType'],
+							 'hostspec'  => $host,
+							 'port'      => $port,
+							 'username'  => $args['userName'],
+							 'password'  => $args['password'],
+							 'database'  => $args['databaseName'],
+							 'encoding'  => $args['databaseCharset']);
+        	case 'sqlite3':
+        	case 'pdosqlite':
+				$args['databaseName'] ??= ':memory:';
+				$args['databaseHost'] ??= '';
+				$args['databasePort'] ??= '';
+				$args['userName'] ??= '';
+				$args['password'] ??= '';
+				$args['databaseCharset'] ??= '';
+				$dsn = $args;
+			break;
+			default:
+			throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
         }
 
         // Set flags

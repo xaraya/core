@@ -238,19 +238,27 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
 
     public static function getConnection($dsn, $flags = array())
     {
-        $dsn['phptype'] ??= 'mysql';
-        if ($dsn['phptype'] == 'sqlite3') {
-            $dsn['phptype'] = 'sqlite';
-            $dsnstring  = $dsn['phptype'] . ':' . $dsn['database'];
-        } else {
-            $dsn['phptype'] = 'mysql';
-            // CHECKME: What about ports?
-            $dsnstring  = $dsn['phptype'] . ':host=' . $dsn['hostspec'] . ';';
-            if (!empty($dsn['port'])) {
-                $dsnstring .= 'port=' . $dsn['port'] . ";";
-            }
-            $dsnstring .= 'dbname=' . $dsn['database'] . ";";
-            $dsnstring .= 'charset=' . $dsn['encoding'] . ";";
+        switch ($dsn['phptype']) {
+        	case 'pdomysqli':
+				$dsnstring  = 'mysql' . ':host=' . $dsn['hostspec'] . ';';
+				if (!empty($dsn['port'])) {
+					$dsnstring .= 'port=' . $dsn['port'] . ";";
+				}
+				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
+				$dsnstring .= 'charset=' . $dsn['encoding'] . ";";
+        	break;
+        	case 'pdopgsql':
+				$dsnstring  = 'pgsql' . ':host=' . $dsn['hostspec'] . ';';
+				if (!empty($dsn['port'])) {
+					$dsnstring .= 'port=' . $dsn['port'] . ";";
+				}
+				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
+        	break;
+        	case 'pdosqlite':
+	            $dsnstring  = $dsn['phptype'] . ':' . $dsn['database'];
+        	break;
+        	default:
+			throw new Exception(xarML("Unknown database type: '#(1)'", $dsn['phptype']));
         }
 
         try {
