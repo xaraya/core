@@ -13,6 +13,9 @@ sys::import('xaraya.structures.sequences.interfaces');
 sys::import('xaraya.structures.sequences.adapters.sequence_adapter');
 
 // A deque can be manipulated at both ends
+// pop() and push() methods need a parameter $whichEnd, which can be:
+// head: items get added or removed from the end of the array (last in, first out)
+// tail: items get added or removed from the beginning of the array (first in, first out)
 
 /**
  * Implementation of the Deque datastructure
@@ -27,21 +30,23 @@ class Deque extends SequenceAdapter implements iDeque
         // So we temporarily increase the size of the array to make the difference noticeable
         // Since this is an issue specific to the deque, we cannot fix it at the level of the parent. We have do do something here,
         // because the parent only understands position and knows nothing of head and tail
-        $this->__get('size');
-        if ($this->size == 1) {
+        $added_dummy = false;
+        if ($this->__get('size') == 1) {
         	parent::insert('void',1);
+        	$added_dummy = true;
+        	$dummy_position = 2;
         }
         
+        // Add the "real" item
         $position = $this->__get($whichEnd);
-        $pushed = parent::insert($item,$position);
+       	$pushed = parent::insert($item,$position);
         
         // Remove the item we added
-        $this->__get('size');
-        if ($this->size == 2) {
-        	$position = ($whichEnd == 'tail') ? 1 : 2;
-        	parent::delete($position);
-        }
-        return $pushed;
+		if ($added_dummy) {
+			$position = ($whichEnd == 'tail') ? 2 : 1;echo $position;
+			parent::delete($position);
+		}
+       return $pushed;
     }
 
     // Peek at an item at the head or tail of the Deque
