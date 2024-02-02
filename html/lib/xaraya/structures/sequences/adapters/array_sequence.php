@@ -19,7 +19,7 @@ sys::import('xaraya.structures.sequences.interfaces');
 class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
 {
     // An array holds our sequence items
-    protected $items = array();
+    public $items = array();
 
     // iSequence implementation
     // Get the item at the specified position
@@ -32,12 +32,12 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
     // Insert an item on the specified position
     public function insert($item, $position)
     {
-        if($position > $this->head) return false;
+        if($position > $this->__get('head')) return false;
         switch($position) {
-        case $this->head:
+        case $this->__get('head'):
             array_push($this->items, $item);
             break;
-        case $this->tail:
+        case $this->__get('tail'):
             array_unshift($this->items,$item);
             break;
         default:
@@ -51,19 +51,17 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
     // Delete an item from the specified position
     public function delete($position)
     {
-        if($position > $this->head or $this->empty) return false;
+        if(($position > $this->__get('head')) || $this->__get('empty')) return false;
         switch($position) {
-        case $this->tail:
+        case $this->__get('tail'):
         case 0:
             $item = array_shift($this->items);
             break;
-        case $this->head:
+        case $this->__get('head'):
             $item = array_pop($this->items);
             break;
         default:
-            $first = array_slice($this->items,0,$position-1);
-            $last = array_slice($this->items,$position+1);
-            $this->items = array_merge($first,$last);
+            unset($this->items[$position]);
         }
         return true;
     }
@@ -98,7 +96,7 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
         case 'tail':
             return empty($this->items)?-1:0;
         case 'head':
-            return count($this->items)-1;
+            return count($this->items);
         default:
             throw new Exception("Property $name does not exist");
         }
