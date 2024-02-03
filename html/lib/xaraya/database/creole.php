@@ -23,8 +23,6 @@ use Xaraya\Database\DatabaseInterface;
 // why did we extend Creole here again? None of it except a few const and getConnection() were used...
 class xarDB_Creole extends xarObject implements DatabaseInterface
 {
-    public static $count = 0;
-
     // Instead of the globals, we save our db info here.
     private static $firstDSN    = null;
     private static $firstFlags  = null;
@@ -118,7 +116,8 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
         } catch (Exception $e) {
             throw $e;
         }
-        xarLog::message("New connection created, now serving " . self::$count . " connections", xarLog::LEVEL_NOTICE);
+		$count = count(self::$connections);
+        xarLog::message("New connection created, now serving " . $count . " connections", xarLog::LEVEL_NOTICE);
         return $conn;
     }
     /**
@@ -164,26 +163,24 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
 
     private static function setFirstDSN($dsn = null)
     {
-        if(!isset(self::$firstDSN)) {
-            if (isset($dsn)) {
-                self::$firstDSN = $dsn;
-                return;
-            }
-            $conn = self::$connections[0];
-            self::$firstDSN = $conn->getDSN();
-        }
+		if (isset($dsn)) {
+			self::$firstDSN = $dsn;
+			return;
+		}
+		// No dsn passed: revert to the latest connection we have
+		$conn = end(self::$connections);
+		self::$firstDSN = $conn->getDSN();
     }
 
     private static function setFirstFlags($flags = null)
     {
-        if(!isset(self::$firstFlags)) {
-            if (isset($flags)) {
-                self::$firstFlags = $flags;
-                return;
-            }
-            $conn = self::$connections[0];
-            self::$firstFlags = $conn->getFlags();
-        }
+		if (isset($flags)) {
+			self::$firstFlags = $flags;
+			return;
+		}
+		// No dsn passed: revert to the latest connection we have
+		$conn = end(self::$connections);
+		self::$firstFlags = $conn->getFlags();
     }
 
     /**
@@ -191,22 +188,34 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
      *
      * @return Connection database connection object
      */
-    public static function &getConn($index = 0)
+    public static function &getConn($index = -1)
     {
-        // get connection on demand
-        if (count(self::$connections) <= $index && isset(self::$firstDSN) && isset(self::$firstFlags)) {
-            self::getConnection(self::$firstDSN, self::$firstFlags);
+        // Get connection on demand
+        // By default we get the latest connection created, 
+        // that is the one that the current value of self::$firstDSN gives us
+        if (($index < 0) && isset(self::$firstDSN) && isset(self::$firstFlags)) {
+            $conn =  self::getConnection(self::$firstDSN, self::$firstFlags);
+        	return $conn;
         }
-        // CHECKME:
-        // We need to force throwing an exception here
-        // Without this the next line halts execution with an error message
-        // This happens while installing, before the DB connection has been defined
-        if (!isset(self::$connections[$index])) {
-            throw new Exception();
+        
+        // An index value was passed. Go for that connection instead and reset dsn and flags.
+        if (count(self::$connections) <= $index && isset(self::$connections[$index])) {
+        	$conn = self::$connections[$index];
+			self::$firstDSN = $conn->getDSN();
+			self::$firstFlags = $conn->getFlags();
+        	return $conn;
         }
 
-        $conn = self::$connections[$index];
-        return $conn;
+        // No luck so far. Just get the latest connection and reset dsn and flags.
+        if (!empty(self::$connections)) {
+			$conn = end(self::$connections);
+			self::$firstDSN = $conn->getDSN();
+			self::$firstFlags = $conn->getFlags();
+			return $conn;
+		}
+		
+        // No luck. This happens e.g. early in the installation before we have a database to connect to
+        throw new Exception(xarML('No connection available'));
     }
 
     public static function hasConn($index = 0)
@@ -221,7 +230,8 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
     public static function getConnIndex()
     {
         // index of the latest connection
-        return self::$count - 1;
+		$count = count(self::$connections) - 1;
+		return $count;
     }
 
     public static function isIndexExternal($index = 0)
@@ -243,7 +253,7 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
         self::setFirstDSN($conn->getDSN());
         self::setFirstFlags($conn->getFlags());
         self::$connections[] = & $conn;
-        self::$count++;
+
         return $conn;
     }
 

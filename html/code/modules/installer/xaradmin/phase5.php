@@ -119,8 +119,9 @@ function installer_admin_phase5()
 				return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
 			  }
 			}
+        break;
         default:
-		throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
+		throw new Exception(xarML("Unknown database type: '#(1)'", $init_args['databaseType']));
 	}
 
 	if ($dbExists) {
@@ -141,6 +142,7 @@ function installer_admin_phase5()
             $data['version'] = $tokens[0] ."." . $tokens[1] . ".0";
             $data['required_version'] = xarInst::MYSQL_REQUIRED_VERSION;
             $version_ok = version_compare($data['version'],$data['required_version'],'ge');
+        break;
         default:
         	// Other dbs are OK by definition
         	// SQLite3, for instance
@@ -161,6 +163,7 @@ function installer_admin_phase5()
     
 //		Hold on to this for now
 //        $data['confirmDB']  = true;
+
         // Let's pass all input variables thru the function argument or none, as all are stored in the system.config.php
         // Now we are passing all, let's see if we gain consistency by loading config.php already in this phase?
         // Probably there is already a core function that can make that for us...
@@ -177,9 +180,9 @@ function installer_admin_phase5()
         	return xarTpl::module('installer','admin','errors',array('layout' => 'cannot_create', 'database_name' => $init_args['databaseName']));
         }
 
-        // CHECKME: Need to solve this at the level of connections, not run a query
-        $q = "use " . $init_args['databaseName'];
-        $dbconn->execute($q);
+		// Open a new connection where the new database is referenced
+		// TODO: We should close the old one, but we have no good close method defined
+		$dbconn = xarDB::newConn($init_args);
       
 		// We just created an empty database. There are no tables yet.
         $removetables = false;
