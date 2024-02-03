@@ -53,6 +53,7 @@ class Deque extends SequenceAdapter implements iDeque
     public function &peek($whichEnd)
     {
         $position = $this->__get($whichEnd);
+		$position += ($whichEnd == 'tail') ? 0 : 1;
         if ($position < 0) {
             $item = null;
         } else {
@@ -67,6 +68,7 @@ class Deque extends SequenceAdapter implements iDeque
         $item = $this->peek($whichEnd);
         if ($item == null) return $item;
         $position = $this->__get($whichEnd);
+		$position += ($whichEnd == 'tail') ? -1 : 0;
         parent::delete($position);
         return $item;
     }
