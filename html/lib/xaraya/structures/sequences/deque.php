@@ -32,18 +32,18 @@ class Deque extends SequenceAdapter implements iDeque
         // because the parent only understands position and knows nothing of head and tail
         $added_dummy = false;
         if ($this->__get('size') == 1) {
-        	parent::insert('void',1);
+        	parent::insert('void',0);
         	$added_dummy = true;
         	$dummy_position = 2;
         }
-        
+
         // Add the "real" item
         $position = $this->__get($whichEnd);
        	$pushed = parent::insert($item,$position);
         
         // Remove the item we added
 		if ($added_dummy) {
-			$position = ($whichEnd == 'tail') ? 2 : 1;echo $position;
+			$position = ($whichEnd == 'tail') ? 2 : 1;
 			parent::delete($position);
 		}
        return $pushed;

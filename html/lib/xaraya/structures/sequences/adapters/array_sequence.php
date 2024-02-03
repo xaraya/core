@@ -96,7 +96,7 @@ class ArraySequence extends xarObject implements iSequence, iSequenceAdapter
         case 'tail':
             return empty($this->items)?-1:0;
         case 'head':
-            return count($this->items);
+            return count($this->items)-1;
         default:
             throw new Exception("Property $name does not exist");
         }
