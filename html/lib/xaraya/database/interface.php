@@ -109,8 +109,8 @@ interface ConnectionInterface
     //public function connect($dsn, $flags = false);
     /** @return resource|object */
     public function getResource();
-    //public function getFlags();
-    //public function getDSN();
+    public function getFlags();
+    public function getDSN();
     /** @return \DatabaseInfo|\PDODatabaseInfo|object */
     public function getDatabaseInfo();
     //public function getIdGenerator();
