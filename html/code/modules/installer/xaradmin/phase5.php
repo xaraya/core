@@ -103,21 +103,21 @@ function installer_admin_phase5()
 		case 'pgsql':
 		case 'pdopgsql':
 			try {
-			  $init_args['doConnect'] = true;
-			  $dbconn = xarDB::newConn($init_args);
-			  $dbExists = true;
-			} catch(Exception $e) {
-			  // Couldn't connect to the specified dbName
-			  // Let's try without db name
-			  try {
-				$name = $init_args['databaseName'];
-				$init_args['databaseName'] ='';
+				$init_args['doConnect'] = true;
 				$dbconn = xarDB::newConn($init_args);
-				$init_args['databaseName'] =$name;
-			  } catch(Exception $e) {
-				// It failed without dbname too
-				return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
-			  }
+				$dbExists = true;
+			} catch(Exception $e) {
+				// Couldn't connect to the specified dbName
+				// Let's try without db name
+				try {
+					$name = $init_args['databaseName'];
+					$init_args['databaseName'] ='';
+					$dbconn = xarDB::newConn($init_args);
+					$init_args['databaseName'] = $name;
+				} catch(Exception $e) {
+					// It failed without dbname too
+					return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
+				}
 			}
         break;
         default:
@@ -160,7 +160,8 @@ function installer_admin_phase5()
     sys::import('xaraya.tableddl');
     // Try and create the database
     if (!$dbExists) {
-    
+
+
 //		Hold on to this for now
 //        $data['confirmDB']  = true;
 
