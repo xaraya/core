@@ -24,125 +24,9 @@ use Xaraya\Database\ConnectionInterface;
 use Xaraya\Database\StatementInterface;
 use Xaraya\Database\ResultSetInterface;
 
-/**
- * A minimal class modeling a database connection
- *
- * Creole has this, but PDO doesn't, at least not in a Creole compaible way
- * 
- */
-
-class PDO_Connection extends xarObject implements ConnectionInterface
-{
-    private $pdo    = null;
-    private $dsn    = null;
-    private $flags  = null;
-    
-    public function __construct($dsn, $flags = array())
-    {
-        try {
-            $dsnstring = $this->getDSNString($dsn, $flags);
-            // Create the PDO object and save t in this connection
-            $this->pdo = new xarPDO($dsnstring, $dsn['username'], $dsn['password'], $flags);
-        } catch (PDOException $e) {
-            throw $e;
-        }
-        return $this;
-    }
-    public function getDSN()
-    {
-        return $this->dsn;
-    }
-
-    public function getFlags()
-    {
-        return $this->flags;
-    }
-    public function prepareStatement($sql)
-    {
-        return $this->pdo->prepareStatement($sql);
-    }
-    public function getResource()
-    {
-        return $this->pdo->getResource();
-    }
-    public function getDatabaseInfo()
-    {
-        return $this->pdo->getDatabaseInfo();
-    }
-    public function executeQuery($string = '', $flag = 0)
-    {
-        return $this->pdo->executeQuery($string, $flag);
-    }
-    public function Execute($string, $bindvars = array(), $flag = 0)
-    {
-        return $this->pdo->Execute($string, $bindvars, $flag);
-    }
-    public function executeUpdate($string = '')
-    {
-        return $this->pdo->executeUpdate($string);
-    }
-    public function begin()
-    {
-        return $this->pdo->begin();
-    }
-    public function commit()
-    {
-        return $this->pdo->commit();
-    }
-    public function rollback()
-    {
-        return $this->pdo->rollback();
-    }
-    public function qstr($string)
-    {
-        return $this->pdo->qstr($string);
-    }
-    /**
-     * Helper function for assembling a string from the dsn array
-     *
-     * A string is what PDO needs. Creole works with the dsn array
-     *
-     */
-    public function getDSNString($dsn, $flags)
-    {
-        switch ($dsn['phptype']) {
-        	case 'pdosqlite':
-	            $dsnstring  = 'sqlite' . ':' . $dsn['database'];
-        	break;
-        	case 'pdomysqli':
-				$dsnstring  = 'mysql' . ':host=' . $dsn['hostspec'] . ';';
-				if (!empty($dsn['port'])) {
-					$dsnstring .= 'port=' . $dsn['port'] . ";";
-				}
-				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
-				$dsnstring .= 'charset=' . $dsn['encoding'] . ";";
-        	break;
-        	case 'pdopgsql':
-				$dsnstring  = 'pgsql' . ':host=' . $dsn['hostspec'] . ';';
-				if (!empty($dsn['port'])) {
-					$dsnstring .= 'port=' . $dsn['port'] . ";";
-				}
-				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
-        	break;
-        	default:
-			throw new Exception(xarML("Unknown database type: '#(1)'", $dsn['phptype']));
-        }
-		return $dsnstring;
-    }
-    public function getLastId($table = null)
-    {
-        return $this->pdo->getLastId($table);
-    }
-    public function getUpdateCount()
-    {
-        return $this->pdo->getLastId();
-    }
-}
 
 class xarDB_PDO extends xarObject implements DatabaseInterface
 {
-//    public static $count = 0;
-
     // Instead of the globals, we save our db info here.
     private static $firstDSN    = null;
     private static $firstFlags  = null;
@@ -307,6 +191,10 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
      *
      * @return object database connection object
      */
+     
+     // TODO: PDO doesn't yet have a connection map like in Creole.php
+     // It drops to the third option below
+     
     public static function &getConn($index = 0)
     {
         // Get connection on demand
@@ -351,7 +239,6 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
         // index of the latest connection
 		$count = count(self::$connections) - 1;
 		return $count;
-//        return self::$count - 1;
     }
 
     public static function isIndexExternal($index = 0)
@@ -362,7 +249,7 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
     public static function getConnection($dsn, $flags = array())
     {
         try {
-            $conn = new PDO_Connection($dsn, $flags);
+            $conn = new PDOConnection($dsn, $flags);
         } catch (Exception $e) {
             throw $e;
         }
@@ -372,42 +259,6 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
         self::$connections[] = & $conn;
 
         return $conn;
-//---------------------------------------------------------------------------
-/*
-        switch ($dsn['phptype']) {
-        	case 'pdosqlite':
-	            $dsnstring  = 'sqlite' . ':' . $dsn['database'];
-        	break;
-        	case 'pdomysqli':
-				$dsnstring  = 'mysql' . ':host=' . $dsn['hostspec'] . ';';
-				if (!empty($dsn['port'])) {
-					$dsnstring .= 'port=' . $dsn['port'] . ";";
-				}
-				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
-				$dsnstring .= 'charset=' . $dsn['encoding'] . ";";
-        	break;
-        	case 'pdopgsql':
-				$dsnstring  = 'pgsql' . ':host=' . $dsn['hostspec'] . ';';
-				if (!empty($dsn['port'])) {
-					$dsnstring .= 'port=' . $dsn['port'] . ";";
-				}
-				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
-        	break;
-        	default:
-			throw new Exception(xarML("Unknown database type: '#(1)'", $dsn['phptype']));
-        }
-
-        try {
-            $conn = new xarPDO($dsnstring, $dsn['username'], $dsn['password'], $flags);
-        } catch (PDOException $e) {
-            throw $e;
-        }
-
-        self::setFirstDSN($dsn);
-        self::setFirstFlags($flags);
-        self::$connections[] = & $conn;
-        return $conn;
-    */
     }
 
     /**
@@ -427,10 +278,22 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
     }
 }
 
-class xarPDO extends PDO implements ConnectionInterface
+//---------------------------------------------------------------------------
+/**
+ * A class modeling a database connection
+ *
+ * Creole has this, but PDO doesn't, at least not in a Creole compaible way
+ * 
+ */
+
+class PDOConnection extends PDO implements ConnectionInterface
 {
     private $databaseInfo;
 
+    private $pdo    = null;
+    private $dsn    = null;
+    private $flags  = null;
+    
     public $databaseType  = "PDO";
     public $queryString   = '';
     public $row_count     = 0;
@@ -438,11 +301,12 @@ class xarPDO extends PDO implements ConnectionInterface
     public $dblink        = null;
     public $driverName    = "mysql";
 
-    public function __construct($dsn, $username, $password, $options)
+    public function __construct($dsn, $flags = array())
     {
         try {
-            parent::__construct($dsn, $username, $password, $options);
-        } catch (Exception $e) {
+            $dsnstring = $this->getDSNString($dsn, $flags);
+            $this->pdo = parent::__construct($dsnstring, $dsn['username'], $dsn['password'], $flags);
+        } catch (PDOException $e) {
             throw $e;
         }
         $this->driverName = $this->getAttribute(PDO::ATTR_DRIVER_NAME);
@@ -452,6 +316,18 @@ class xarPDO extends PDO implements ConnectionInterface
         $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
         // Show errors
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        return $this;
+    }
+
+    public function getDSN()
+    {
+        return $this->dsn;
+    }
+
+    public function getFlags()
+    {
+        return $this->flags;
     }
 
     // New function defined to get the Mysql version
@@ -477,7 +353,7 @@ class xarPDO extends PDO implements ConnectionInterface
     // Note that commit() and rollback() are the same as in Creole
     public function begin()
     {
-        xarLog::message("xarPDO::begin: starting transaction", xarLog::LEVEL_DEBUG);
+        xarLog::message("PDOConnection::begin: starting transaction", xarLog::LEVEL_DEBUG);
         // Only start a transaction of we need to
         if (!PDO::inTransaction()) {
             parent::beginTransaction();
@@ -509,7 +385,7 @@ class xarPDO extends PDO implements ConnectionInterface
      */
     public function executeUpdate($string = '')
     {
-        xarLog::message("xarPDO::executeUpdate: Executing $string", xarLog::LEVEL_DEBUG);
+        xarLog::message("PDOConnection::executeUpdate: Executing $string", xarLog::LEVEL_DEBUG);
         try {
             $affected_rows = $this->exec($string);
         } catch (Exception $e) {
@@ -537,7 +413,7 @@ class xarPDO extends PDO implements ConnectionInterface
      */
     public function Execute($string, $bindvars = array(), $flag = 0)
     {
-        xarLog::message("xarPDO::Execute: Executing $string", xarLog::LEVEL_DEBUG);
+        xarLog::message("PDOConnection::Execute: Executing $string", xarLog::LEVEL_DEBUG);
         try {
             if (empty($flag)) {
                 $flag = PDO::FETCH_NUM;
@@ -580,7 +456,7 @@ class xarPDO extends PDO implements ConnectionInterface
      */
     public function executeQuery($string = '', $flag = 0)
     {
-        xarLog::message("xarPDO::executeQuery: Executing $string", xarLog::LEVEL_DEBUG);
+        xarLog::message("PDOConnection::executeQuery: Executing $string", xarLog::LEVEL_DEBUG);
         try {
             if (empty($flag)) {
                 $flag = PDO::FETCH_NUM;
@@ -619,7 +495,7 @@ class xarPDO extends PDO implements ConnectionInterface
                 $bindvars[] = $offset;
             }
         }
-        xarLog::message("xarPDO::SelectLimit: Executing $string", xarLog::LEVEL_DEBUG);
+        xarLog::message("PDOConnection::SelectLimit: Executing $string", xarLog::LEVEL_DEBUG);
         if (empty($bindvars)) {
             try {
                 $stmt = $this->query($string, $flag);
@@ -674,7 +550,7 @@ class xarPDO extends PDO implements ConnectionInterface
     #[\ReturnTypeWillChange]
     public function commit()
     {
-        xarLog::message("xarPDO::commit: commit transaction", xarLog::LEVEL_DEBUG);
+        xarLog::message("PDOConnection::commit: commit transaction", xarLog::LEVEL_DEBUG);
         if (PDO::inTransaction()) {
             parent::commit();
         }
@@ -683,13 +559,48 @@ class xarPDO extends PDO implements ConnectionInterface
     #[\ReturnTypeWillChange]
     public function rollback()
     {
-        xarLog::message("xarPDO::rollback: roll back transaction", xarLog::LEVEL_DEBUG);
+        xarLog::message("PDOConnection::rollback: roll back transaction", xarLog::LEVEL_DEBUG);
         if (PDO::inTransaction()) {
             parent::rollBack();
         }
         return true;
     }
+
+    /**
+     * Helper function for assembling a string from the dsn array
+     *
+     * A string is what PDO needs. Creole works with the dsn array
+     *
+     */
+    private function getDSNString($dsn, $flags)
+    {
+        switch ($dsn['phptype']) {
+        	case 'pdosqlite':
+	            $dsnstring  = 'sqlite' . ':' . $dsn['database'];
+        	break;
+        	case 'pdomysqli':
+				$dsnstring  = 'mysql' . ':host=' . $dsn['hostspec'] . ';';
+				if (!empty($dsn['port'])) {
+					$dsnstring .= 'port=' . $dsn['port'] . ";";
+				}
+				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
+				$dsnstring .= 'charset=' . $dsn['encoding'] . ";";
+        	break;
+        	case 'pdopgsql':
+				$dsnstring  = 'pgsql' . ':host=' . $dsn['hostspec'] . ';';
+				if (!empty($dsn['port'])) {
+					$dsnstring .= 'port=' . $dsn['port'] . ";";
+				}
+				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
+        	break;
+        	default:
+			throw new Exception(xarML("Unknown database type: '#(1)'", $dsn['phptype']));
+        }
+		return $dsnstring;
+    }
 }
+
+//---------------------------------------------------------------------------
 
 class xarPDOStatement extends xarObject implements StatementInterface
 {
@@ -869,6 +780,7 @@ class xarPDOStatement extends xarObject implements StatementInterface
     }
 }
 
+//---------------------------------------------------------------------------
 /**
  * DatabaseInfo class: holds the metainformation of the database
  *
@@ -965,6 +877,7 @@ class PDODatabaseInfo extends xarObject
 
 }
 
+//---------------------------------------------------------------------------
 /**
  * PDOTable class: holds the metainformation of a database table
  *
@@ -1055,6 +968,7 @@ class PDOTable extends xarObject
     }
 }
 
+//---------------------------------------------------------------------------
 /**
  * PDOTable class: holds the metainformation of a database table
  *
@@ -1148,6 +1062,7 @@ class PDOColumn extends xarObject
     }
 }
 
+//---------------------------------------------------------------------------
 /**
  * ResultSet class: holds the result of a query
  *
