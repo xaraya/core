@@ -24,9 +24,124 @@ use Xaraya\Database\ConnectionInterface;
 use Xaraya\Database\StatementInterface;
 use Xaraya\Database\ResultSetInterface;
 
+/**
+ * A minimal class modeling a database connection
+ *
+ * Creole has this, but PDO doesn't, at least not in a Creole compaible way
+ * 
+ */
+
+class PDO_Connection extends xarObject implements ConnectionInterface
+{
+    private $pdo    = null;
+    private $dsn    = null;
+    private $flags  = null;
+    
+    public function __construct($dsn, $flags = array())
+    {
+        try {
+            $dsnstring = $this->getDSNString($dsn, $flags);
+            // Create the PDO object and save t in this connection
+            $this->pdo = new xarPDO($dsnstring, $dsn['username'], $dsn['password'], $flags);
+        } catch (PDOException $e) {
+            throw $e;
+        }
+        return $this;
+    }
+    public function getDSN()
+    {
+        return $this->dsn;
+    }
+
+    public function getFlags()
+    {
+        return $this->flags;
+    }
+    public function prepareStatement($sql)
+    {
+        return $this->pdo->prepareStatement($sql);
+    }
+    public function getResource()
+    {
+        return $this->pdo->getResource();
+    }
+    public function getDatabaseInfo()
+    {
+        return $this->pdo->getDatabaseInfo();
+    }
+    public function executeQuery($string = '', $flag = 0)
+    {
+        return $this->pdo->executeQuery($string, $flag);
+    }
+    public function Execute($string, $bindvars = array(), $flag = 0)
+    {
+        return $this->pdo->Execute($string, $bindvars, $flag);
+    }
+    public function executeUpdate($string = '')
+    {
+        return $this->pdo->executeUpdate($string);
+    }
+    public function begin()
+    {
+        return $this->pdo->begin();
+    }
+    public function commit()
+    {
+        return $this->pdo->commit();
+    }
+    public function rollback()
+    {
+        return $this->pdo->rollback();
+    }
+    public function qstr($string)
+    {
+        return $this->pdo->qstr($string);
+    }
+    /**
+     * Helper function for assembling a string from the dsn array
+     *
+     * A string is what PDO needs. Creole works with the dsn array
+     *
+     */
+    public function getDSNString($dsn, $flags)
+    {
+        switch ($dsn['phptype']) {
+        	case 'pdosqlite':
+	            $dsnstring  = 'sqlite' . ':' . $dsn['database'];
+        	break;
+        	case 'pdomysqli':
+				$dsnstring  = 'mysql' . ':host=' . $dsn['hostspec'] . ';';
+				if (!empty($dsn['port'])) {
+					$dsnstring .= 'port=' . $dsn['port'] . ";";
+				}
+				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
+				$dsnstring .= 'charset=' . $dsn['encoding'] . ";";
+        	break;
+        	case 'pdopgsql':
+				$dsnstring  = 'pgsql' . ':host=' . $dsn['hostspec'] . ';';
+				if (!empty($dsn['port'])) {
+					$dsnstring .= 'port=' . $dsn['port'] . ";";
+				}
+				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
+        	break;
+        	default:
+			throw new Exception(xarML("Unknown database type: '#(1)'", $dsn['phptype']));
+        }
+		return $dsnstring;
+    }
+    public function getLastId($table = null)
+    {
+        return $this->pdo->getLastId($table);
+    }
+    public function getUpdateCount()
+    {
+        return $this->pdo->getLastId();
+    }
+}
+
 class xarDB_PDO extends xarObject implements DatabaseInterface
 {
-    public static $count = 0;
+//    public static $count = 0;
 
     // Instead of the globals, we save our db info here.
     private static $firstDSN    = null;
@@ -35,6 +150,7 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
     private static $tables      = array();
     private static $prefix      = '';
 
+    
     public static function getPrefix()
     {
         return self::$prefix;
@@ -119,7 +235,8 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
         } catch (Exception $e) {
             throw $e;
         }
-        xarLog::message("New connection created, now serving " . self::$count . " connections", xarLog::LEVEL_NOTICE);
+		$count = count(self::$connections) - 1;
+        xarLog::message("New connection created, now serving " . $count . " connections", xarLog::LEVEL_NOTICE);
         return $conn;
     }
     /**
@@ -165,28 +282,24 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
 
     private static function setFirstDSN($dsn = null)
     {
-        if(!isset(self::$firstDSN)) {
-            if (isset($dsn)) {
-                self::$firstDSN = $dsn;
-                return;
-            }
-            // connection is not set yet, but we always have $dsn here
-            //$conn = self::$connections[0];
-            //self::$firstDSN = $conn->getDSN();
-        }
+		if (isset($dsn)) {
+			self::$firstDSN = $dsn;
+			return;
+		}
+		// No dsn passed: revert to the latest connection we have
+		$conn = end(self::$connections);
+		self::$firstDSN = $conn->getDSN();
     }
 
     private static function setFirstFlags($flags = null)
     {
-        if(!isset(self::$firstFlags)) {
-            if (isset($flags)) {
-                self::$firstFlags = $flags;
-                return;
-            }
-            // connection is not set yet, but we always have $flags here
-            //$conn = self::$connections[0];
-            //self::$firstFlags = $conn->getFlags();
-        }
+		if (isset($flags)) {
+			self::$firstFlags = $flags;
+			return;
+		}
+		// No dsn passed: revert to the latest connection we have
+		$conn = end(self::$connections);
+		self::$firstFlags = $conn->getFlags();
     }
 
     /**
@@ -196,25 +309,32 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
      */
     public static function &getConn($index = 0)
     {
-        // get connection on demand
-        if (count(self::$connections) <= $index && isset(self::$firstDSN) && isset(self::$firstFlags)) {
-            self::getConnection(self::$firstDSN, self::$firstFlags);
+        // Get connection on demand
+        // By default we get the latest connection created, 
+        // that is the one that the current value of self::$firstDSN gives us
+        if (($index < 0) && isset(self::$firstDSN) && isset(self::$firstFlags)) {
+            $conn =  self::getConnection(self::$firstDSN, self::$firstFlags);
+        	return $conn;
         }
-        // CHECKME:
-        // We need to force throwing an exception here
-        // Without this the next line halts execution with an error message
-        // This happens while installing, before the DB connection has been defined
-        if (!isset(self::$connections[$index])) {
-            throw new Exception();
+        
+        // An index value was passed. Go for that connection instead and reset dsn and flags.
+        if (count(self::$connections) <= $index && isset(self::$connections[$index])) {
+        	$conn = self::$connections[$index];
+			self::$firstDSN = $conn->getDSN();
+			self::$firstFlags = $conn->getFlags();
+        	return $conn;
         }
 
-        // CHECKME: I've spent almost a day debuggin this when not assigning
-        //          it first to a temporary variable before returning.
-        // The observed effect was that an exception did not occur when $index
-        // whas 0 (the default case) in $connections and it didn't exist.
-        // I believe this to be a PHP bug
-        $conn = self::$connections[$index];
-        return $conn;
+        // No luck so far. Just get the latest connection and reset dsn and flags.
+        if (!empty(self::$connections)) {
+			$conn = end(self::$connections);
+			self::$firstDSN = $conn->getDSN();
+			self::$firstFlags = $conn->getFlags();
+			return $conn;
+		}
+		
+        // No luck. This happens e.g. early in the installation before we have a database to connect to
+        throw new Exception(xarML('No connection available'));
     }
 
     public static function hasConn($index = 0)
@@ -229,7 +349,9 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
     public static function getConnIndex()
     {
         // index of the latest connection
-        return self::$count - 1;
+		$count = count(self::$connections) - 1;
+		return $count;
+//        return self::$count - 1;
     }
 
     public static function isIndexExternal($index = 0)
@@ -239,6 +361,19 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
 
     public static function getConnection($dsn, $flags = array())
     {
+        try {
+            $conn = new PDO_Connection($dsn, $flags);
+        } catch (Exception $e) {
+            throw $e;
+        }
+
+        self::setFirstDSN($dsn);
+        self::setFirstFlags($flags);
+        self::$connections[] = & $conn;
+
+        return $conn;
+//---------------------------------------------------------------------------
+/*
         switch ($dsn['phptype']) {
         	case 'pdosqlite':
 	            $dsnstring  = 'sqlite' . ':' . $dsn['database'];
@@ -271,8 +406,8 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
         self::setFirstDSN($dsn);
         self::setFirstFlags($flags);
         self::$connections[] = & $conn;
-        self::$count++;
         return $conn;
+    */
     }
 
     /**
