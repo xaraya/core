@@ -98,6 +98,7 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
 							 'password'  => $args['password'],
 							 'database'  => $args['databaseName'],
 							 'encoding'  => $args['databaseCharset']);
+			break;
 			default:
 			throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
         }
