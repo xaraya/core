@@ -49,10 +49,9 @@ class SQLiteConnection extends ConnectionCommon implements Connection
         if (!extension_loaded('sqlite3')) {
             throw new SQLException('sqlite extension not loaded');
         }
-
         // XARAYA MODIFICATION
-        // Use the hostspec for the directory part, makes more sense
-        $file = $dsninfo['hostspec'] .'/'. $dsninfo['database'];
+        // TODO: perhaps not a good idea to hard code this
+        $file = sys::varpath() . '/sqlite' .'/'. $dsninfo['databaseName'];
         // END XARAYA MODIFICATION
 
         $this->dsn = $dsninfo;
@@ -98,11 +97,15 @@ class SQLiteConnection extends ConnectionCommon implements Connection
             }
         }
 
-        $connect_function = $persistent ? 'sqlite_popen' : 'sqlite_open';
-        $errmsg = '';
-        if (!($conn = @$connect_function($file, $mode, $errmsg))) {
-            throw new SQLException("Unable to connect to SQLite database", $errmsg);
+        // XARAYA MODIFICATION
+        // Use the SQLite3 class
+        try {
+        	// TODO: add flags here
+        	$conn = new SQLite3($file);
+        } catch (Exception $e) {
+            throw new SQLException("Unable to connect to SQLite database");
         }
+        // END XARAYA MODIFICATION
 
         $this->dblink = $conn;
     }
