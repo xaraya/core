@@ -76,6 +76,11 @@ abstract class ConnectionCommon
     /* END XARAYA MODIFICATION */
 
     /**
+     *  A reference to the last query performed
+     */
+    protected $lastQuery;
+    
+    /**
      * This "magic" method is invoked upon serialize() and works in tandem with the __wakeup()
      * method to ensure that your database connection is serializable.
      *
