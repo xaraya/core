@@ -95,7 +95,7 @@ class Creole
                                         'odbc'       => 'creole.drivers.odbc.ODBCConnection',
                                         'pdosqlite'  => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
                                         'pdosqlite2' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
-                                        'sqlite3'    => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+                                        'sqlite3'    => 'creole.drivers.sqlite.SQLiteConnection',
                                        );
 
     /**

@@ -46,7 +46,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection
      */
     public function connect($dsninfo, $flags = 0)
     {
-        if (!extension_loaded('sqlite')) {
+        if (!extension_loaded('sqlite3')) {
             throw new SQLException('sqlite extension not loaded');
         }
 
