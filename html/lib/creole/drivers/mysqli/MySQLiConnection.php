@@ -34,11 +34,6 @@ include_once 'creole/drivers/mysqli/MySQLiResultSet.php';
 class MySQLiConnection extends ConnectionCommon implements Connection
 {
     /**
-     * PHP 8 fix
-     */
-    private $lastQuery;
-
-    /**
      * Connect to a database and log in as the specified user.
      *
      * @param $dsn the data source name (see DB::parseDSN for syntax)
