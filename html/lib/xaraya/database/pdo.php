@@ -100,7 +100,7 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
 							 'encoding'  => $args['databaseCharset']);
 			break;
 			default:
-			throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
+			throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $args['databaseType']));
         }
         // Set flags
         $flags = array();
@@ -223,7 +223,7 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
 		}
 		
         // No luck. This happens e.g. early in the installation before we have a database to connect to
-        throw new Exception(xarML('No connection available'));
+        throw new Exception(xarMLS::translate('No connection available'));
     }
 
     public static function hasConn($index = 0)
@@ -595,7 +595,7 @@ class PDOConnection extends PDO implements ConnectionInterface
 				$dsnstring .= 'dbname=' . $dsn['database'] . ";";
         	break;
         	default:
-			throw new Exception(xarML("Unknown database type: '#(1)'", $dsn['phptype']));
+			throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $dsn['phptype']));
         }
 		return $dsnstring;
     }
@@ -955,7 +955,7 @@ class PDOTable extends xarObject
         try {
             $pdostatement = $this->pdo->query($sql);
         } catch (PDOException $e) {
-            throw new PDOException(xarML('Could not initialize table columns with: #(1)', $sql));
+            throw new PDOException(xarMLS::translate('Could not initialize table columns with: #(1)', $sql));
         }
         $columnarray = array();
         for ($i = 0; $i < $pdostatement->columnCount(); $i++) {
@@ -1051,7 +1051,7 @@ class PDOColumn extends xarObject
             } catch (PDOException $e) {
                 // No default value. Return a descriptive string for now
                 return 'No value';
-                //throw new PDOException(xarML('Could not get default value for column #(1) with #(2)', $this->getName(), $sql));
+                //throw new PDOException(xarMLS::translate('Could not get default value for column #(1) with #(2)', $this->getName(), $sql));
             }
             $value = null;
             while ($row = $pdostatement->fetch()) {

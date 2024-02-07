@@ -91,7 +91,7 @@ function xarDB_init(array &$args)
 	// Register postgres driver, since Creole uses a slightly different alias
 	// We do this here so we can remove customisation from creole lib.
 	// @deprecated 2.4.0 postgres hasn't been supported for a long time now
-	//Creole::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
+	// Creole::registerDriver('postgres','creole.drivers.pgsql.PgSQLConnection');
 
 	// If doConnect is null we connect. Not very intuitive
 	$args['doConnect'] = $args['doConnect'] ?? true;
