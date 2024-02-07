@@ -57,7 +57,9 @@ function installer_admin_phase5()
     }
 //---------------------------------------------------------------------------
     // Cater to SQLite before trying to connect
-    // Create the database if it doesn't exist
+    // Create the database if it doesn't exist for pdosqlite
+    // For sqlite3 Creole could create the database via the newConn method,
+    // but it's easier just to do it here
     if (in_array($init_args['databaseType'], array('sqlite3', 'pdosqlite'))) {
 		// Make sure we have a directory var/sqlite
 		if (!is_dir(sys::varpath() . '/sqlite')) {
@@ -88,20 +90,27 @@ function installer_admin_phase5()
     xarDatabase::init($init_args);
 
 //---------------------------------------------------------------------------
-    // Not all Database Servers support selecting the specific database *after* connecting
-    // so let's try connecting with the database name first, and then without if that fails
+	// Create a connection and check if a database already exists
 	$dbExists = false;
     switch ($init_args['databaseType']) {
-        case 'sqlite3':
         case 'pdosqlite':
-			// Ignore sqlite. We already did that above
+			// We already created the db above
+			$dbExists = true;
 			// But we do want to get a connection to use below
 			$dbconn = xarDB::newConn($init_args);
 		break;
-        case 'mysqli':
+        case 'sqlite3':
+        	// We need a connection as with pdosqlite
+        	// In addition, newConn creates the database
+			$dbconn = xarDB::newConn($init_args);
+			$dbExists = true;
+		break;
+	    case 'mysqli':
         case 'pdomysqli':
 		case 'pgsql':
 		case 'pdopgsql':
+			// Not all Database Servers support selecting the specific database *after* connecting
+			// so let's try connecting with the database name first, and then without if that fails
 			try {
 				$init_args['doConnect'] = true;
 				$dbconn = xarDB::newConn($init_args);
@@ -119,14 +128,13 @@ function installer_admin_phase5()
 					return xarTpl::module('installer','admin','errors',array('layout' => 'no_connection', 'message' => $e->getMessage()));
 				}
 			}
+			if ($dbExists) {
+				// We already have a database with this name
+				return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $init_args['databaseName']));
+			}
         break;
         default:
 		throw new Exception(xarML("Unknown database type: '#(1)'", $init_args['databaseType']));
-	}
-
-	if ($dbExists) {
-		// We already have a database with this name
-        return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $init_args['databaseName']));
 	}
 
 //---------------------------------------------------------------------------
