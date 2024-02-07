@@ -50,8 +50,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection
             throw new SQLException('sqlite extension not loaded');
         }
         // XARAYA MODIFICATION
-        // TODO: perhaps not a good idea to hard code this
-        $file = sys::varpath() . '/sqlite' .'/'. $dsninfo['databaseName'];
+        $file = $dsninfo['databaseName'];
         // END XARAYA MODIFICATION
 
         $this->dsn = $dsninfo;
@@ -102,6 +101,8 @@ class SQLiteConnection extends ConnectionCommon implements Connection
         try {
         	// TODO: add flags here
         	$conn = new SQLite3($file);
+        	// Have SQLite throw exceptions, rather than errors
+        	$conn->enableExceptions(true);
         } catch (Exception $e) {
             throw new SQLException("Unable to connect to SQLite database");
         }
@@ -183,11 +184,17 @@ class SQLiteConnection extends ConnectionCommon implements Connection
     {
         ini_set('sqlite.assoc_case', $this->sqliteAssocCase);
         $this->lastQuery = $sql;
-        $result = @sqlite_query($this->dblink, $this->lastQuery);
+        // XARAYA MODIFICATION
+        try {
+	        $result = $this->dblink->query($this->lastQuery);
+        } catch (Exception $e) {
+        	throw $e;
+        }
         if (!$result) {
-            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not execute query', $nativeError, $this->lastQuery);
         }
+        // END XARAYA MODIFICATION
         require_once 'creole/drivers/sqlite/SQLiteResultSet.php';
         return new SQLiteResultSet($this, $result, $fetchmode);
     }
@@ -198,11 +205,13 @@ class SQLiteConnection extends ConnectionCommon implements Connection
     public function executeUpdate($sql)
     {
         $this->lastQuery = $sql;
-        $result = @sqlite_query($this->dblink, $this->lastQuery);
+        // XARAYA MODIFICATION
+        $result = $this->dblink->query($this->lastQuery);
         if (!$result) {
-            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not execute update', $nativeError, $this->lastQuery);
         }
+        // END XARAYA MODIFICATION
         return (int) @sqlite_changes($this->dblink);
     }
 
@@ -256,7 +265,9 @@ class SQLiteConnection extends ConnectionCommon implements Connection
      */
     public function getUpdateCount()
     {
-        return (int) @sqlite_changes($this->dblink);
+        // XARAYA MODIFICATION
+        $result = $this->dblink->changes($this->dblink);
+        // END XARAYA MODIFICATION
     }
 
 }
