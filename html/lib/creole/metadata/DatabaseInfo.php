@@ -65,7 +65,9 @@ abstract class DatabaseInfo
         $this->conn = $conn;
         $this->dblink = $conn->getResource();
         $dsn = $conn->getDSN();
-        $this->dbname = $dsn['database'];
+        // XARAYA MODIFICATION
+        $this->dbname = $dsn['databaseName'];
+        // END XARAYA MODIFICATION
         $this->vendorSpecificInfo = $vendorInfo;
     }
 
