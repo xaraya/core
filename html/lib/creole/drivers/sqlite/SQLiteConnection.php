@@ -222,9 +222,9 @@ class SQLiteConnection extends ConnectionCommon implements Connection
      */
     protected function beginTrans()
     {
-        $result = @sqlite_query($this->dblink, 'BEGIN');
+        $result = $this->dblink->query('BEGIN');
         if (!$result) {
-            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not begin transaction', $nativeError);
         }
     }
@@ -236,9 +236,9 @@ class SQLiteConnection extends ConnectionCommon implements Connection
      */
     protected function commitTrans()
     {
-        $result = @sqlite_query($this->dblink, 'COMMIT');
+        $result = $this->dblink->query('COMMIT');
         if (!$result) {
-            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Can not commit transaction', $nativeError);
         }
     }
@@ -250,9 +250,9 @@ class SQLiteConnection extends ConnectionCommon implements Connection
      */
     protected function rollbackTrans()
     {
-        $result = @sqlite_query($this->dblink, 'ROLLBACK');
+        $result = $this->dblink->query('ROLLBACK');
         if (!$result) {
-            $nativeError = sqlite_error_string(sqlite_last_error($this->dblink));
+            $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not rollback transaction', $nativeError);
         }
     }
