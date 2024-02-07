@@ -114,7 +114,7 @@ class xarConfigVars extends xarVars implements IxarVars
 	    $tables = xarDB::getTables();
 	    $varstable = $tables['config_vars'] ?? null;
 	    // No tables, probably installing
-	    if($value == null) throw new VariableNotFoundException($name, "Variable #(1) not found (no tables found, in fact)");
+	    if($varstable == null) throw new VariableNotFoundException($name, "Variable #(1) not found (no tables found, in fact)");
 
         $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
 
