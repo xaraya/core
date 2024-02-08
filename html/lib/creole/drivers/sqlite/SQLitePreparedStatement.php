@@ -37,7 +37,7 @@ class SQLitePreparedStatement extends PreparedStatementCommon implements Prepare
      */
     protected function escape($str)
     {
-        return sqlite_escape_string($str);
+        return SQLite3::escapeString($str);
     }
 
     /**
