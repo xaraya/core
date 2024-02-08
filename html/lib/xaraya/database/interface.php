@@ -20,45 +20,45 @@ interface DatabaseInterface
      * Summary of getPrefix
      * @return string
      */
-    public static function getPrefix();
+//    public static function getPrefix();
     /**
      * Summary of setPrefix
      * @param string $prefix
      * @return void
      */
-    public static function setPrefix($prefix);
+//    public static function setPrefix($prefix);
     /**
      * Summary of newConn
      * @param ?array<string, mixed> $args
      * @return \Connection|\xarPDO|object
      */
-    public static function newConn(array $args = null);
+//    public static function newConn(array $args = null);
     /**
      * Summary of getTables
      * @return array<string, string>
      */
-    public static function &getTables();
+//    public static function &getTables();
     /**
      * Summary of importTables
      * @param array<string, string> $tables
      * @return void
      */
-    public static function importTables(array $tables = array());
+//    public static function importTables(array $tables = array());
     /**
      * Summary of getHost
      * @return string
      */
-    public static function getHost();
+//    public static function getHost();
     /**
      * Summary of getType
      * @return string
      */
-    public static function getType();
+//    public static function getType();
     /**
      * Summary of getName
      * @return string
      */
-    public static function getName();
+//    public static function getName();
     //public static function configure($dsn, $flags = -1, $prefix = 'xar');
     //private static function setFirstDSN($dsn = null);
     //private static function setFirstFlags($flags = null);
@@ -67,18 +67,18 @@ interface DatabaseInterface
      * @param mixed $index
      * @return \Connection|\xarPDO|object
      */
-    public static function &getConn($index = 0);
+//    public static function &getConn($index = 0);
     /**
      * Summary of hasConn
      * @param mixed $index
      * @return bool
      */
-    public static function hasConn($index = 0);
+//    public static function hasConn($index = 0);
     /**
      * Summary of getConnIndex
      * @return mixed
      */
-    public static function getConnIndex();
+//    public static function getConnIndex();
     /**
      * Summary of isIndexExternal
      * @param mixed $index
@@ -91,12 +91,24 @@ interface DatabaseInterface
      * @param mixed $flags
      * @return \Connection|\xarPDO|object
      */
-    public static function getConnection($dsn, $flags = 0);
+    public static function getConnection(Array $dsn, $flags);
     /**
      * Summary of getTypeMap
      * @return array<mixed>
      */
     public static function getTypeMap();
+    /**
+     * Summary of getFlags
+     * @param mixed $args
+     * @return mixed $flags
+     */
+    public static function getFlags(Array $args=array());
+    /**
+     * Summary of getDrivers
+     * 
+     * @return array $flags
+     */
+    public static function getDrivers();
 }
 
 // align with Creole Connection - without the Xaraya modifications in ConnectionCommon except Execute()

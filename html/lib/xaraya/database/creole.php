@@ -20,134 +20,27 @@ sys::import('xaraya.database.interface');
 sys::import('creole.Creole');
 use Xaraya\Database\DatabaseInterface;
 
-// why did we extend Creole here again? None of it except a few const and getConnection() were used...
 class xarDB_Creole extends xarObject implements DatabaseInterface
 {
-    // Instead of the globals, we save our db info here.
-    private static $firstDSN    = null;
-    private static $firstFlags  = null;
-    private static $connections = array();
-    private static $tables      = array();
-    private static $prefix      = '';
-
-    public static function getPrefix()
-    {
-        return self::$prefix;
-    }
-    public static function setPrefix($prefix)
-    {
-        self::$prefix =  $prefix;
-    }
-
     /**
-     * Initialise a new db connection
-     *
-     * Create a new connection based on the supplied parameters
-     *
-     * @return Connection
+     * Map of built-in drivers.
+     * @var array Hash mapping phptype => driver class (in dot-path notation, e.g. 'mysql' => 'creole.drivers.mysql.MySQLConnection').
      */
-    public static function newConn(array $args = null)
-    {
-        // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
-        switch ($args['databaseType']) {
-        	case 'sqlite3':
-        	case 'pdosqlite':
-				$args['phptype']           = $args['databaseType'];
-				$args['databaseName']    ??= ':memory:';
-				$args['databaseHost']    ??= '';
-				$args['databasePort']    ??= '';
-				$args['userName']        ??= '';
-				$args['password']        ??= '';
-				$args['databaseCharset'] ??= '';
-				$dsn = $args;
-			break;
-			case 'mysqli':
-			case 'pdomysql':
-				// Hive off the port if there is one added as part of the host
-				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
-				$host_parts = explode(':', $host);
-				$host = $host_parts[0];
-				$port = isset($host_parts[1]) ? $host_parts[1] : '';
-		
-				// Get database parameters
-				$dsn = array('phptype'   => $args['databaseType'],
-							 'hostspec'  => $host,
-							 'port'      => $port,
-							 'username'  => $args['userName'],
-							 'password'  => $args['password'],
-							 'database'  => $args['databaseName'],
-							 'encoding'  => $args['databaseCharset']);
-			break;
-			case 'pgsql':
-			case 'pdopgsql':
-				// Hive off the port if there is one added as part of the host
-				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
-				$host_parts = explode(':', $host);
-				$host = $host_parts[0];
-				$port = isset($host_parts[1]) ? $host_parts[1] : '';
-		
-				// Get database parameters
-				$dsn = array('phptype'   => $args['databaseType'],
-							 'hostspec'  => $host,
-							 'port'      => $port,
-							 'username'  => $args['userName'],
-							 'password'  => $args['password'],
-							 'database'  => $args['databaseName'],
-							 'encoding'  => $args['databaseCharset']);
-			break;
-			default:
-			throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
-        }
+    private static $driverMap = array(  'mysql'      => 'creole.drivers.mysql.MySQLConnection',
+                                        'mysqli'     => 'creole.drivers.mysqli.MySQLiConnection',
+                                        'pgsql'      => 'creole.drivers.pgsql.PgSQLConnection',
+                                        'sqlite'     => 'creole.drivers.sqlite.SQLiteConnection',
+                                        'oracle'     => 'creole.drivers.oracle.OCI8Connection',
+                                        'mssql'      => 'creole.drivers.mssql.MSSQLConnection',
+                                        'odbc'       => 'creole.drivers.odbc.ODBCConnection',
+                                        'pdosqlite'  => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+                                        'pdosqlite2' => 'creole.drivers.pdosqlite.PdoSQLiteConnection',
+                                        'sqlite3'    => 'creole.drivers.sqlite.SQLiteConnection',
+                                       );
 
-        // Set flags
-        $flags = 0;
-        $persistent = !empty($args['persistent']) ? true : false;
-        if($persistent) {
-            $flags |= Creole::PERSISTENT;
-        }
-        // if code uses assoc fetching and makes a mess of column names, correct
-        // this by forcing returns to be lowercase
-        // <mrb> : this is not for nothing a COMPAT flag. the problem still lies
-        //         in creating the database schema case sensitive in the first
-        //         place. Unfortunately, that is just not portable.
-        $flags |= Creole::COMPAT_ASSOC_LOWER;
-
-        try {
-            $conn = self::getConnection($dsn, $flags); // cached on dsn hash, so no worries
-        } catch (Exception $e) {
-            throw $e;
-        }
-		$count = count(self::$connections);
-        xarLog::message("New connection created, now serving " . $count . " connections", xarLog::LEVEL_NOTICE);
-        return $conn;
-    }
-    /**
-     * Get an array of database tables
-     *
-     * @return array<mixed> array of database tables
-     * @todo we should figure something out so we dont have to do the getTables stuff, it should be transparent
-     */
-    public static function &getTables()
+    public static function getDrivers()
     {
-        return self::$tables;
-    }
-
-    public static function importTables(array $tables = array())
-    {
-        self::$tables = array_merge(self::$tables, $tables);
-    }
-
-    public static function getHost()
-    {
-        return self::$firstDSN['hostspec'];
-    }
-    public static function getType()
-    {
-        return self::$firstDSN['phptype'];
-    }
-    public static function getName()
-    {
-        return self::$firstDSN['database'];
+    	return self::$driverMap;
     }
 
     public static function configure($dsn, $flags = Creole::COMPAT_ASSOC_LOWER, $prefix = 'xar')
@@ -162,100 +55,107 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
         self::setPrefix($prefix);
     }
 
-    private static function setFirstDSN($dsn = null)
-    {
-		if (isset($dsn)) {
-			self::$firstDSN = $dsn;
-			return;
-		}
-		// No dsn passed: revert to the latest connection we have
-		$conn = end(self::$connections);
-		self::$firstDSN = $conn->getDSN();
-    }
-
-    private static function setFirstFlags($flags = null)
-    {
-		if (isset($flags)) {
-			self::$firstFlags = $flags;
-			return;
-		}
-		// No dsn passed: revert to the latest connection we have
-		$conn = end(self::$connections);
-		self::$firstFlags = $conn->getFlags();
-    }
-
-    /**
-     * Get a database connection
-     *
-     * @return Connection database connection object
-     */
-    public static function &getConn($index = -1)
-    {
-        // Get connection on demand
-        // By default we get the latest connection created, 
-        // that is the one that the current value of self::$firstDSN gives us
-        if (($index < 0) && isset(self::$firstDSN) && isset(self::$firstFlags)) {
-            $conn =  self::getConnection(self::$firstDSN, self::$firstFlags);
-        	return $conn;
-        }
-        
-        // An index value was passed. Go for that connection instead and reset dsn and flags.
-        if (count(self::$connections) <= $index && isset(self::$connections[$index])) {
-        	$conn = self::$connections[$index];
-			self::$firstDSN = $conn->getDSN();
-			self::$firstFlags = $conn->getFlags();
-        	return $conn;
-        }
-
-        // No luck so far. Just get the latest connection and reset dsn and flags.
-        if (!empty(self::$connections)) {
-			$conn = end(self::$connections);
-			self::$firstDSN = $conn->getDSN();
-			self::$firstFlags = $conn->getFlags();
-			return $conn;
-		}
-		
-        // No luck. This happens e.g. early in the installation before we have a database to connect to
-        throw new Exception(xarML('No connection available'));
-    }
-
-    public static function hasConn($index = 0)
-    {
-        // getConn() above automatically creates another connection to the first DSN on demand
-        if (isset(self::$connections[$index])) {
-            return true;
-        }
-        return false;
-    }
-
-    public static function getConnIndex()
-    {
-        // index of the latest connection
-		$count = count(self::$connections) - 1;
-		return $count;
-    }
-
     public static function isIndexExternal($index = 0)
     {
         return false;
     }
 
-    // Overridden
-    public static function getConnection($dsn, $flags = 0)
-    {
-        try {
-            $conn = Creole::getConnection($dsn, $flags);
-        } catch (Exception $e) {
-            throw $e;
+    /**
+     * Get the flags in a proper form for this middleware
+     */
+    public static function getFlags(Array $args=array())
+     {
+        $flags = 0;
+        if (isset($args['persistent']) && ! empty($args['persistent'])) {
+            $flags |= Creole::PERSISTENT;
         }
-//        if (!isset($conn)) {
-//            return;
-//        }
-        self::setFirstDSN($conn->getDSN());
-        self::setFirstFlags($conn->getFlags());
-        self::$connections[] = & $conn;
+/*
+        if (isset($args['compat_assoc_lower']) && ! empty($args['compat_assoc_lower'])) {
+            $flags |= Creole::COMPAT_ASSOC_LOWER;
+        }
+*/
+        if (isset($args['compat_rtrim_string']) && ! empty($args['compat_rtrim_string'])) {
+            $flags |= Creole::COMPAT_RTRIM_STRING;
+        }
+        if (isset($args['compat_all']) && ! empty($args['compat_all'])) {
+            $flags |= Creole::COMPAT_ALL;
+        }
+        // if code uses assoc fetching and makes a mess of column names, correct
+        // this by forcing returns to be lowercase
+        // <mrb> : this is not for nothing a COMPAT flag. the problem still lies
+        //         in creating the database schema case sensitive in the first
+        //         place. Unfortunately, that is just not portable.
+        $flags |= Creole::COMPAT_ASSOC_LOWER;
+        
+        return $flags;
+     }
+     
+    /**
+     * Get the middleware's connection based on dsn and flags
+     */
 
-        return $conn;
+    public static function getConnection(Array $dsn, $flags = 0)
+    {
+        // support "catchall" drivers which will themselves handle the details of connecting
+        // using the proper RDBMS driver.
+        $drivers = self::getDrivers();
+        if (isset($drivers['*'])) {
+            $type = '*';
+        } else {
+            $type = $dsn['phptype'];
+            if (!isset($drivers[$type])) {
+                throw new SQLException("No driver has been registered to handle connection type: $type");
+            }
+        }
+
+        // may need to make this more complex if we add support
+        // for 'dbsyntax'
+        $clazz = self::import($drivers[$type]);
+        $connection = new $clazz();
+
+        if (!($connection instanceof Connection)) {
+            throw new SQLException("Class does not implement creole.Connection interface: $clazz");
+        }
+
+        try {
+            $connection->connect($dsn, $flags);
+        } catch(SQLException $sqle) {
+            $sqle->setUserInfo($dsn);
+            throw $sqle;
+        }
+        return $connection;
+    }
+    
+    /**
+     * Include once a file specified in DOT notation.
+     * Package notation is expected to be relative to a location
+     * on the PHP include_path.
+     * @param string $class
+     * @return string unqualified classname
+     * @throws SQLException - if class does not exist and cannot load file
+     *                      - if after loading file class still does not exist
+     */
+    public static function import($class)
+    {
+        $pos = strrpos($class, '.');
+        // get just classname ('path.to.ClassName' -> 'ClassName')
+        if ($pos !== false) {
+            $classname = substr($class, $pos + 1);
+        } else {
+            $classname = $class;
+        }
+
+        if (!class_exists($classname, false)) {
+            $path = strtr($class, '.', DIRECTORY_SEPARATOR) . '.php';
+            $ret = @include_once($path);
+            if ($ret === false) {
+                throw new SQLException("Unable to load driver class: " . $class);
+            }
+            if (!class_exists($classname)) {
+                throw new SQLException("Unable to find loaded class: $classname (Hint: make sure classname matches filename)");
+            }
+        }
+        return $classname;
     }
 
     /**

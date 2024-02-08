@@ -27,130 +27,16 @@ use Xaraya\Database\ResultSetInterface;
 
 class xarDB_PDO extends xarObject implements DatabaseInterface
 {
-    // Instead of the globals, we save our db info here.
-    private static $firstDSN    = null;
-    private static $firstFlags  = null;
-    private static $connections = array();
-    private static $tables      = array();
-    private static $prefix      = '';
-
-    
-    public static function getPrefix()
-    {
-        return self::$prefix;
-    }
-    public static function setPrefix($prefix)
-    {
-        self::$prefix =  $prefix;
-    }
-
     /**
-     * Initialise a new db connection
-     *
-     * Create a new connection based on the supplied parameters
-     *
+     * Map of built-in drivers.
+     * Don't think PDO needs this
      */
-    public static function newConn(array $args = null)
+    private static $driverMap = array(  
+                                       );
+    // This function is in the interface, so...
+    public static function getDrivers()
     {
-        switch ($args['databaseType']) {
-        	case 'sqlite3':
-        	case 'pdosqlite':
-        	// Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
-				$args['phptype']        = $args['databaseType'];
-				$args['database']     ??= ':memory:';
-//				$args['databaseHost'] ??= '';
-//				$args['databasePort'] ??= '';
-				$args['username'] ??= '';
-				$args['password'] ??= '';
-//				$args['databaseCharset'] ??= '';
-				$dsn = $args;
-			break;
-			case 'mysqli':
-			case 'pdomysqli':
-				// Hive off the port if there is one added as part of the host
-				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
-				$host_parts = explode(':', $host);
-				$host = $host_parts[0];
-				$port = isset($host_parts[1]) ? $host_parts[1] : '';
-		
-				// Get database parameters
-				$dsn = array('phptype'   => $args['databaseType'],
-							 'hostspec'  => $host,
-							 'port'      => $port,
-							 'username'  => $args['userName'],
-							 'password'  => $args['password'],
-							 'database'  => $args['databaseName'],
-							 'encoding'  => $args['databaseCharset']);
-			break;
-			case 'pgsql':
-			case 'pdopgsql':
-				// Hive off the port if there is one added as part of the host
-				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
-				$host_parts = explode(':', $host);
-				$host = $host_parts[0];
-				$port = isset($host_parts[1]) ? $host_parts[1] : '';
-		
-				// Get database parameters
-				$dsn = array('phptype'   => $args['databaseType'],
-							 'hostspec'  => $host,
-							 'port'      => $port,
-							 'username'  => $args['userName'],
-							 'password'  => $args['password'],
-							 'database'  => $args['databaseName'],
-							 'encoding'  => $args['databaseCharset']);
-			break;
-			default:
-			throw new Exception(xarMLS::translate("Unknown database type: '#(1)'", $args['databaseType']));
-        }
-        // Set flags
-        $flags = array();
-        $persistent = !empty($args['persistent']) ? true : false;
-        if($persistent) {
-            $flags[] = PDO::ATTR_PERSISTENT;
-        }
-        // if code uses assoc fetching and makes a mess of column names, correct
-        // this by forcing returns to be lowercase
-        // <mrb> : this is not for nothing a COMPAT flag. the problem still lies
-        //         in creating the database schema case sensitive in the first
-        //         place. Unfortunately, that is just not portable.
-        $flags[] = PDO::CASE_LOWER;
-
-        try {
-            $conn = self::getConnection($dsn, $flags); // cached on dsn hash, so no worries
-        } catch (Exception $e) {
-            throw $e;
-        }
-		$count = count(self::$connections) - 1;
-        xarLog::message("New connection created, now serving " . $count . " connections", xarLog::LEVEL_NOTICE);
-        return $conn;
-    }
-    /**
-     * Get an array of database tables
-     *
-     * @return array<mixed> array of database tables
-     * @todo we should figure something out so we dont have to do the getTables stuff, it should be transparent
-     */
-    public static function &getTables()
-    {
-        return self::$tables;
-    }
-
-    public static function importTables(array $tables = array())
-    {
-        self::$tables = array_merge(self::$tables, $tables);
-    }
-
-    public static function getHost()
-    {
-        return self::$firstDSN['hostspec'];
-    }
-    public static function getType()
-    {
-        return self::$firstDSN['phptype'];
-    }
-    public static function getName()
-    {
-        return self::$firstDSN['database'];
+    	return self::$driverMap;
     }
 
     public static function configure($dsn, $flags = array(PDO::CASE_LOWER), $prefix = 'xar')
@@ -165,103 +51,39 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
         self::setPrefix($prefix);
     }
 
-    private static function setFirstDSN($dsn = null)
-    {
-		if (isset($dsn)) {
-			self::$firstDSN = $dsn;
-			return;
-		}
-		// No dsn passed: revert to the latest connection we have
-		$conn = end(self::$connections);
-		self::$firstDSN = $conn->getDSN();
-    }
-
-    private static function setFirstFlags($flags = null)
-    {
-		if (isset($flags)) {
-			self::$firstFlags = $flags;
-			return;
-		}
-		// No dsn passed: revert to the latest connection we have
-		$conn = end(self::$connections);
-		self::$firstFlags = $conn->getFlags();
-    }
-
-    /**
-     * Get a database connection
-     *
-     * @return object database connection object
-     */
-     
-     // TODO: PDO doesn't yet have a connection map like in Creole.php
-     // It drops to the third option below
-     
-    public static function &getConn($index = 0)
-    {
-        // Get connection on demand
-        // By default we get the latest connection created, 
-        // that is the one that the current value of self::$firstDSN gives us
-        if (($index < 0) && isset(self::$firstDSN) && isset(self::$firstFlags)) {
-            $conn =  self::getConnection(self::$firstDSN, self::$firstFlags);
-        	return $conn;
-        }
-        
-        // An index value was passed. Go for that connection instead and reset dsn and flags.
-        if (count(self::$connections) <= $index && isset(self::$connections[$index])) {
-        	$conn = self::$connections[$index];
-			self::$firstDSN = $conn->getDSN();
-			self::$firstFlags = $conn->getFlags();
-        	return $conn;
-        }
-
-        // No luck so far. Just get the latest connection and reset dsn and flags.
-        if (!empty(self::$connections)) {
-			$conn = end(self::$connections);
-			self::$firstDSN = $conn->getDSN();
-			self::$firstFlags = $conn->getFlags();
-			return $conn;
-		}
-		
-        // No luck. This happens e.g. early in the installation before we have a database to connect to
-        throw new Exception(xarMLS::translate('No connection available'));
-    }
-
-    public static function hasConn($index = 0)
-    {
-        // getConn() above automatically creates another connection to the first DSN on demand
-        if (isset(self::$connections[$index])) {
-            return true;
-        }
-        return false;
-    }
-
-    public static function getConnIndex()
-    {
-        // index of the latest connection
-		$count = count(self::$connections) - 1;
-		return $count;
-    }
-
     public static function isIndexExternal($index = 0)
     {
         return false;
     }
 
-    public static function getConnection($dsn, $flags = array())
+    /**
+     * Get the flags in a proper form for this middleware
+     */
+    public static function getFlags(Array $args=array())
+     {
+        $flags = array();
+        if (isset($args['persistent']) && ! empty($args['persistent'])) {
+            $flags[] = PDO::ATTR_PERSISTENT;
+        }
+        // TODO: add more flags here
+		return $flags;
+     }
+
+    /**
+     * Get the middleware's connection based on dsn and flags
+     */
+
+    public static function getConnection(Array $dsn, $flags)
     {
         try {
-            $conn = new PDOConnection($dsn, $flags);
-        } catch (Exception $e) {
-            throw $e;
+            $connection = new PDOConnection($dsn, $flags);
+        } catch(SQLException $sqle) {
+            $sqle->setUserInfo($dsn);
+            throw $sqle;
         }
-
-        self::setFirstDSN($dsn);
-        self::setFirstFlags($flags);
-        self::$connections[] = & $conn;
-
-        return $conn;
+        return $connection;
     }
-
+    
     /**
      * Get the PDO -> ddl type map
      *
@@ -571,7 +393,6 @@ class PDOConnection extends PDO implements ConnectionInterface
      * Helper function for assembling a string from the dsn array
      *
      * A string is what PDO needs. Creole works with the dsn array
-     *
      */
     private function getDSNString($dsn, $flags)
     {
