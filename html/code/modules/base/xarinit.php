@@ -21,7 +21,6 @@
  */
 function base_init()
 {
-    
     $dbconn = xarDB::getConn();
     try {
         $dbconn->begin();
