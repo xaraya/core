@@ -211,8 +211,8 @@ class SQLiteConnection extends ConnectionCommon implements Connection
             $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not execute update', $nativeError, $this->lastQuery);
         }
+        return (int) $this->dblink->changes();
         // END XARAYA MODIFICATION
-        return (int) @sqlite_changes($this->dblink);
     }
 
     /**
@@ -266,7 +266,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection
     public function getUpdateCount()
     {
         // XARAYA MODIFICATION
-        $result = $this->dblink->changes($this->dblink);
+        return (int) $this->dblink->changes();
         // END XARAYA MODIFICATION
     }
 
