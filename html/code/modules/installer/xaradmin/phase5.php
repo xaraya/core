@@ -164,9 +164,9 @@ function installer_admin_phase5()
 
 //---------------------------------------------------------------------------
 	// Try creating the database if it doesn't exist
-	// We already did SQLite3
+	// We already did sqlite3 and pdosqlite
     sys::import('xaraya.tableddl');
-    // Try and create the database
+
     if (!$dbExists) {
 
 
@@ -199,6 +199,10 @@ function installer_admin_phase5()
         $removetables = true;
 	}
 
+    // Since for now we don't allow overwriting, just set the following line to false
+    // TODO: review later
+        $removetables = false;
+    
     // If this is not a new database we need to
     // drop all the tables that have the prefix we are working with
     // TODO: in the future need to replace this with a check further down the road
@@ -206,6 +210,7 @@ function installer_admin_phase5()
 
     if ($removetables) {
         $dbinfo = $dbconn->getDatabaseInfo();
+
         try {
             $dbconn->begin();
             if (!empty($dbinfo->getTables())) {

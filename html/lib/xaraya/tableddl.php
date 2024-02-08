@@ -407,7 +407,7 @@ class xarXMLInstaller extends xarObject
     
     // No constructor yet. maybe later
     
-    static private function transform($xmlFile, $xslAction='display', $dbType='mysqli', $xslFile=null)
+    static private function transform($xmlFile, $xslAction='display', $xslFile=null)
     {
         // Park this here for now
         $tableprefix = xarDB::getPrefix();
@@ -415,13 +415,30 @@ class xarXMLInstaller extends xarObject
         if (!isset($xmlFile))
             throw new BadParameterException(xarML('No file to transform!'));
 
-        // @todo we would need an sqlite version of the .xsl here to get transform working for sqlite here...
+        // Get the database type from the connection
+		switch (xarDB::getType()) {
+			case 'pdosqlite':
+			case 'sqlite3':
+				$dbType = 'sqlite3';
+			break;
+			case 'mysqli':
+			case 'pdomysqli':
+				$dbType = 'mysqli';
+			case 'pgsql':
+			case 'pdopgsql':
+				$dbType = 'pgsql';
+			break;
+			default:
+			throw new Exception(xarML("Unknown database type: '#(1)'", $dbType));
+		}
+        
         if (!isset($xslFile))
             $xslFile = sys::lib() . 'xaraya/tableddl/xml2ddl-'. $dbType . '.xsl';
         if (!file_exists($xslFile)) {
             $msg = xarML('The file #(1) was not found', $xslFile);
             throw new BadParameterException($msg);
         }
+//            var_dump($xslFile);exit;
         sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
@@ -444,6 +461,8 @@ class xarXMLInstaller extends xarObject
         $sqlCode = self::transform($xmlfile, 'create');
         $queries = explode(';',$sqlCode);
         array_pop($queries);
+        echo "<pre>";
+        var_dump($queries);
         $dbconn = xarDB::getConn();
         foreach ($queries as $q) {
             xarLog::message('Executing SQL: ' . $q, xarLog::LEVEL_INFO);
