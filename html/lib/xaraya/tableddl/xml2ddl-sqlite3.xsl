@@ -73,7 +73,7 @@
     <xsl:text>;</xsl:text>
     <xsl:value-of select="$CR"/>
     <!-- @todo ignore primary key here here until we handle auto increment seperately (ALTER TABLE?) -->
-    <xsl:apply-templates select="constraints/index | constraints/unique | constraints/primary"/>
+    <!-- <xsl:apply-templates select="constraints/index | constraints/unique | constraints/primary"/> -->
     <xsl:value-of select="$CR"/>
   </xsl:template>
 
@@ -87,70 +87,59 @@
     <xsl:value-of select="$CR"/>
   </xsl:template>
 
+  <xsl:template name="columnconstraints">
+    <xsl:choose>
+      <xsl:when test="concat(/schema/table/@name, '.', @name) = /schema/table/constraints/primary/column/@ref">
+        <xsl:text> PRIMARY KEY</xsl:text>
+      </xsl:when>
+      <xsl:when test="concat(/schema/table/@name, '.', @name) = /schema/table/constraints/index/column/@ref">
+        <xsl:text> UNIQUE</xsl:text>
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+  
   <xsl:template name="columnattributes">
     <xsl:param name="ignoreauto" value="false"/>
     <!-- @todo move the specific types into their own templates -->
     <xsl:choose>
       <xsl:when test="number">
-        <xsl:choose>
-          <xsl:when test="*[@size != '']">
-            <xsl:choose>
-              <xsl:when test="*[@size > 3]">
-                <xsl:text>INTEGER</xsl:text>
-              </xsl:when>
-              <xsl:otherwise>
-                <xsl:text>TINYINT</xsl:text>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>INTEGER</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:text>INTEGER</xsl:text>
       </xsl:when>
       <xsl:when test="text">
-        <xsl:choose>
-          <xsl:when test="*[@size != '']">
-              <xsl:text>VARCHAR</xsl:text>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:text>TEXT</xsl:text>
-          </xsl:otherwise>
-        </xsl:choose>
+        <xsl:text>TEXT</xsl:text>
       </xsl:when>
       <xsl:when test="long">
-        <xsl:text>LONGTEXT</xsl:text>
+        <xsl:text>TEXT</xsl:text>
       </xsl:when>
       <xsl:when test="medium">
-        <xsl:text>MEDIUMTEXT</xsl:text>
+        <xsl:text>TEXT</xsl:text>
       </xsl:when>
       <xsl:when test="binary">
         <xsl:text>BLOB</xsl:text>
       </xsl:when>
       <xsl:when test="binarylong">
-        <xsl:text>LONGBLOB</xsl:text>
+        <xsl:text>BLOB</xsl:text>
       </xsl:when>
       <xsl:when test="boolean">
-        <xsl:text>BOOLEAN</xsl:text>
+        <xsl:text>INTEGER</xsl:text>
       </xsl:when>
       <xsl:when test="decimal">
-        <xsl:text>DECIMAL</xsl:text>
+        <xsl:text>REAL</xsl:text>
       </xsl:when>
       <xsl:when test="float">
-        <xsl:text>FLOAT</xsl:text>
+        <xsl:text>REAL</xsl:text>
       </xsl:when>
-      <!-- @todo add support for time --> 
       <xsl:otherwise>
       </xsl:otherwise>
     </xsl:choose>
-    <xsl:if test="*[@size != '']">(<xsl:value-of select="*/@size"/>)</xsl:if>
+
+    <xsl:call-template name="columnconstraints"/>
+    
+<!--
     <xsl:if test="*[@unsigned = 'true']">
         <xsl:text> UNSIGNED</xsl:text>
     </xsl:if>
-    <xsl:if test="*[@charset]">
-        <xsl:text> CHARACTER SET </xsl:text>
-        <xsl:value-of select="*/@charset"/>
-    </xsl:if>
+-->
     <xsl:if test="@required = 'true'"> NOT NULL</xsl:if>
     <!--  @todo this won't work with  the current exported ddl -->
     <xsl:if test="*[@default]">
