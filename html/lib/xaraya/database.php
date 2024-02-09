@@ -201,10 +201,26 @@ class xarDB
         throw new Exception(xarMLS::translate('No connection available'));
     }
 
-    public static function hasConn($index = 0) 		   { return self::$mw::hasConn($index); }
-	public static function getConnIndex() 		       { return self::$mw::getConnIndex(); }
+    // CHECKME: what is this used for?
 	public static function isIndexExternal($index = 0) { return self::$mw::isIndexExternal($index); }
 	
+    // CHECKME: what is this used for?
+    public static function hasConn($index = 0)
+    {
+        // Does the connection at $index exist
+        if (isset(self::$connectionsMap[$index])) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function getConnIndex()
+    {
+        // The number of connections in the connectionMap
+		$count = count(self::$connectionsMap) - 1;
+		return $count;
+    }
+
 	/**
 	 * Get the middleware -> ddl type map
 	 *
