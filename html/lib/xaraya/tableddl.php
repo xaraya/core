@@ -424,6 +424,7 @@ class xarXMLInstaller extends xarObject
 			case 'mysqli':
 			case 'pdomysqli':
 				$dbType = 'mysqli';
+			break;
 			case 'pgsql':
 			case 'pdopgsql':
 				$dbType = 'pgsql';
@@ -438,7 +439,6 @@ class xarXMLInstaller extends xarObject
             $msg = xarML('The file #(1) was not found', $xslFile);
             throw new BadParameterException($msg);
         }
-//            var_dump($xslFile);exit;
         sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
@@ -461,8 +461,6 @@ class xarXMLInstaller extends xarObject
         $sqlCode = self::transform($xmlfile, 'create');
         $queries = explode(';',$sqlCode);
         array_pop($queries);
-        echo "<pre>";
-        var_dump($queries);
         $dbconn = xarDB::getConn();
         foreach ($queries as $q) {
             xarLog::message('Executing SQL: ' . $q, xarLog::LEVEL_INFO);
