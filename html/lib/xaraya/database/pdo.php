@@ -31,14 +31,9 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
      * Map of built-in drivers.
      * Don't think PDO needs this
      */
-    private static $driverMap = array(  
-                                       );
-    // This function is in the interface, so...
-    public static function getDrivers()
-    {
-    	return self::$driverMap;
-    }
+    private static $driverMap = array();
 
+    // CHECKME: Do we need this?
     public static function configure($dsn, $flags = array(PDO::CASE_LOWER), $prefix = 'xar')
     {
         $persistent = !empty($dsn['persistent']) ? true : false;

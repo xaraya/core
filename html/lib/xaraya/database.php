@@ -40,6 +40,12 @@ class xarDB
 		self::$mw = $middleware_class;
 	}
 
+    // Not all database types have more than one driver
+    public static function getDrivers()
+    {
+        $map = self::mw::$DriverMap ?? array();
+        return $map;
+    }
     public static function getPrefix()
     {
         return self::$prefix;

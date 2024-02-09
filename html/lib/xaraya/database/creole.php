@@ -26,7 +26,7 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
      * Map of built-in drivers.
      * @var array Hash mapping phptype => driver class (in dot-path notation, e.g. 'mysql' => 'creole.drivers.mysql.MySQLConnection').
      */
-    private static $driverMap = array(  'mysql'      => 'creole.drivers.mysql.MySQLConnection',
+    public static $driverMap = array(   'mysql'      => 'creole.drivers.mysql.MySQLConnection',
                                         'mysqli'     => 'creole.drivers.mysqli.MySQLiConnection',
                                         'pgsql'      => 'creole.drivers.pgsql.PgSQLConnection',
                                         'sqlite'     => 'creole.drivers.sqlite.SQLiteConnection',
@@ -43,6 +43,7 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
     	return self::$driverMap;
     }
 
+    // CHECKME: Do we need this?
     public static function configure($dsn, $flags = Creole::COMPAT_ASSOC_LOWER, $prefix = 'xar')
     {
         $persistent = !empty($dsn['persistent']) ? true : false;

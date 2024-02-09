@@ -102,13 +102,8 @@ interface DatabaseInterface
      * @param mixed $args
      * @return mixed $flags
      */
-    public static function getFlags(Array $args=array());
-    /**
-     * Summary of getDrivers
-     * 
-     * @return array $flags
-     */
-    public static function getDrivers();
+     // CHECKME: should this be in the interface?
+    // public static function getFlags(Array $args=array());
 }
 
 // align with Creole Connection - without the Xaraya modifications in ConnectionCommon except Execute()
