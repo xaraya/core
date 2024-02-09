@@ -43,6 +43,15 @@ include_once 'creole/Connection.php';
  * @version   $Revision: 1.14 $
  * @package   creole
  */
+
+/**
+ * This class is no longer being used, except for its constants.
+ *
+ * The methods have mostly been moved to xarDB and xarDB_Creole.
+ * Registering and deregistering drivers is no longer supported.
+ *
+ */
+
 class Creole
 {
     /**
