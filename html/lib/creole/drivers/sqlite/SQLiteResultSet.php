@@ -64,15 +64,26 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
      */
     public function next()
     {
-        $this->fields = sqlite_fetch_array($this->result, $this->fetchmode); // (ResultSet::FETCHMODE_NUM = SQLITE_NUM, etc.)
+        // XARAYA MODIFICATION
+        $this->fields = $this->result->fetchArray($this->fetchmode); // (ResultSet::FETCHMODE_NUM = SQLITE_NUM, etc.)
+         // END XARAYA MODIFICATION
         if (!$this->fields) {
-            $errno = sqlite_last_error($this->conn->getResource());
-            if (!$errno) {
+        	// XARAYA MODIFICATION
+            $errno = $this->conn->getResource()->lastErrorCode();
+        	// END XARAYA MODIFICATION
+        	
+        	// XARAYA MODIFICATION
+        	// Check for both SQLITE_OK and SQLITE_DONE
+            if (($errno == 0) || ($errno == 101)) {
+        	// END XARAYA MODIFICATION
+
                 // We've advanced beyond end of recordset.
                 $this->afterLast();
                 return false;
             } else {
-                throw new SQLException("Error fetching result", sqlite_error_string($errno));
+        		// XARAYA MODIFICATION
+                throw new SQLException("Error fetching result", $this->conn->getResource()->lastErrorMsg());
+        		// END XARAYA MODIFICATION
             }
         }
 
@@ -97,10 +108,18 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
      */
     public function getRecordCount()
     {
-        $rows = @sqlite_num_rows($this->result);
+        // XARAYA MODIFICATION
+		$this->result->reset();
+		$result = $this->result->fetchArray();
+		$rows = is_array($result) ? $result['count'] : null;
+        // END XARAYA MODIFICATION
+var_dump($this->result);
+exit;
         if ($rows === null) {
-            throw new SQLException("Error fetching num rows", sqlite_error_string(sqlite_last_error($this->conn->getResource())));
-        }
+        	// XARAYA MODIFICATION
+            throw new SQLException("Error fetching num rows", $this->conn->getResource()->lastErrorMsg());
+        	// END XARAYA MODIFICATION
+		}
         return (int) $rows;
     }
 
