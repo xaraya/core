@@ -49,7 +49,9 @@ class PdoSQLiteResultSetIterator implements Iterator
      */
     public function rewind(): void
     {
-        sqlite_rewind($this->result);
+        // XARAYA MODIFICATION
+        $this->result->reset();
+        // END XARAYA MODIFICATION
     }
 
     public function valid(): bool
@@ -74,7 +76,9 @@ class PdoSQLiteResultSetIterator implements Iterator
      */
     public function current(): mixed
     {
-        return sqlite_fetch_array($this->result, $this->fetchmode);
+        // XARAYA MODIFICATION
+        $this->result->fetchArray($this->fetchmode);
+        // END XARAYA MODIFICATION
     }
 
     /**
