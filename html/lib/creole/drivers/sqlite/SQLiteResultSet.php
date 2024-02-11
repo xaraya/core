@@ -66,7 +66,7 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
     {
         // XARAYA MODIFICATION
         $this->fields = $this->result->fetchArray($this->fetchmode); // (ResultSet::FETCHMODE_NUM = SQLITE_NUM, etc.)
-         // END XARAYA MODIFICATION
+        // END XARAYA MODIFICATION
         if (!$this->fields) {
         	// XARAYA MODIFICATION
             $errno = $this->conn->getResource()->lastErrorCode();
@@ -111,10 +111,9 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
         // XARAYA MODIFICATION
 		$this->result->reset();
 		$result = $this->result->fetchArray();
-		$rows = is_array($result) ? $result['count'] : null;
+		$rows = is_array($result) ? $result['count'] : 0;
         // END XARAYA MODIFICATION
-var_dump($this->result);
-exit;
+
         if ($rows === null) {
         	// XARAYA MODIFICATION
             throw new SQLException("Error fetching num rows", $this->conn->getResource()->lastErrorMsg());

@@ -188,9 +188,6 @@ class SQLiteConnection extends ConnectionCommon implements Connection
         try {
 	        $result = $this->dblink->query($this->lastQuery);
         } catch (Exception $e) {
-        	throw $e;
-        }
-        if (!$result) {
             $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not execute query', $nativeError, $this->lastQuery);
         }
@@ -206,8 +203,9 @@ class SQLiteConnection extends ConnectionCommon implements Connection
     {
         $this->lastQuery = $sql;
         // XARAYA MODIFICATION
-        $result = $this->dblink->query($this->lastQuery);
-        if (!$result) {
+        try {
+	        $result = $this->dblink->query($this->lastQuery);
+        } catch (Exception $e) {
             $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not execute update', $nativeError, $this->lastQuery);
         }
