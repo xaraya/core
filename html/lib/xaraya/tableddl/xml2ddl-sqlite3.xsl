@@ -72,8 +72,7 @@
 
     <xsl:text>;</xsl:text>
     <xsl:value-of select="$CR"/>
-    <!-- @todo ignore primary key here here until we handle auto increment seperately (ALTER TABLE?) -->
-    <!-- <xsl:apply-templates select="constraints/index | constraints/unique | constraints/primary"/> -->
+    <xsl:apply-templates select="constraints/index | constraints/unique | constraints/primary"/>
     <xsl:value-of select="$CR"/>
   </xsl:template>
 
@@ -87,14 +86,16 @@
     <xsl:value-of select="$CR"/>
   </xsl:template>
 
-  <xsl:template name="columnconstraints">
+  <xsl:template name="primarydefinition">
     <xsl:choose>
       <xsl:when test="concat(/schema/table/@name, '.', @name) = /schema/table/constraints/primary/column/@ref">
         <xsl:text> PRIMARY KEY</xsl:text>
       </xsl:when>
-      <xsl:when test="concat(/schema/table/@name, '.', @name) = /schema/table/constraints/index/column/@ref">
+    <!--
+      <xsl:when test="concat(/schema/table/@name, '.', @name) = constraints/index/column/@ref">
         <xsl:text> UNIQUE</xsl:text>
       </xsl:when>
+    -->
     </xsl:choose>
   </xsl:template>
   
@@ -133,15 +134,15 @@
       </xsl:otherwise>
     </xsl:choose>
 
-    <xsl:call-template name="columnconstraints"/>
+    <xsl:call-template name="primarydefinition"/>
     
 <!--
     <xsl:if test="*[@unsigned = 'true']">
         <xsl:text> UNSIGNED</xsl:text>
     </xsl:if>
--->
     <xsl:if test="@required = 'true'"> NOT NULL</xsl:if>
-    <!--  @todo this won't work with  the current exported ddl -->
+-->
+    <!--  @todo this won't work with the current exported ddl -->
     <xsl:if test="*[@default]">
         <xsl:text> DEFAULT</xsl:text>
         <xsl:choose>
@@ -159,4 +160,28 @@
       <xsl:if test="@auto ='true'"> AUTO_INCREMENT</xsl:if>
     </xsl:if>
   </xsl:template>
+  
+    <!-- Primary key constraint creation -->
+  <xsl:template match="table/constraints/primary">
+    <xsl:text>CREATE UNIQUE INDEX </xsl:text>
+    <xsl:if test="$tableprefix != ''">
+      <xsl:value-of select="$tableprefix"/>
+      <xsl:text>_</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="../../@name"/>
+    <xsl:text>_</xsl:text>
+    <xsl:value-of select="@name"/>
+
+    <xsl:text> ON </xsl:text>
+    <xsl:if test="$tableprefix != ''">
+      <xsl:value-of select="$tableprefix"/>
+      <xsl:text>_</xsl:text>
+    </xsl:if>
+    <xsl:value-of select="../../@name"/>
+    <xsl:text> (</xsl:text>
+    <xsl:call-template name="columnrefscsv"/>
+    <xsl:text>);</xsl:text>
+  </xsl:template>
+
+
 </xsl:stylesheet>
