@@ -184,14 +184,13 @@ class SQLiteConnection extends ConnectionCommon implements Connection
     {
         ini_set('sqlite.assoc_case', $this->sqliteAssocCase);
         $this->lastQuery = $sql;
-        // XARAYA MODIFICATION
-        try {
-	        $result = $this->dblink->query($this->lastQuery);
-        } catch (Exception $e) {
+        
+	    $result = $this->dblink->query($this->lastQuery);var_dump($this->dblink);
+		if (!$result) {
             $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not execute query', $nativeError, $this->lastQuery);
         }
-        // END XARAYA MODIFICATION
+
         require_once 'creole/drivers/sqlite/SQLiteResultSet.php';
         return new SQLiteResultSet($this, $result, $fetchmode);
     }

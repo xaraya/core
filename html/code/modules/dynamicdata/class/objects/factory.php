@@ -46,7 +46,7 @@ class DataObjectFactory extends xarObject
             $bindvars[] = $moduleid;
         }
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery($bindvars);
+        $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_NUM);
 
         $objects = [];
         while ($result->next()) {
