@@ -14,21 +14,35 @@
  * @author Marco Canini
 **/
     
+switch (xarSystemVars::get(sys::CONFIG, 'DB.Middleware')){
+	case 'Creole':
+		define('FETCHMODE_ASSOC', 1);
+		define('FETCHMODE_NUM',   2);
+	break;
+	case 'PDO':
+		define('FETCHMODE_ASSOC', 2);
+		define('FETCHMODE_NUM',   3);
+	break;
+	default:
+	break;
+}
+
 class xarDB
 {
 	private static $mw;   				// We store the applicable middleware class here
 	
-	public const FETCHMODE_ASSOC = 2;   // Index result set by field name.
-	public const FETCHMODE_NUM   = 3;   // Index result set numerically.
+	// Get fetch modes associaiated with the middleware
+	public const FETCHMODE_ASSOC = FETCHMODE_ASSOC;   // Index result set by field name.
+	public const FETCHMODE_NUM   = FETCHMODE_NUM;     // Index result set numerically.
 
     // Instead of the globals, we save our db info here.
-    private static $firstDSN    = null;
-    private static $firstFlags  = null;
+    private static $firstDSN      = null;
+    private static $firstFlags    = null;
     private static $connectionMap = array();
-    private static $dsnMap = array();
-    private static $flagMap = array();
-    private static $tables      = array();
-    private static $prefix      = '';
+    private static $dsnMap        = array();
+    private static $flagMap       = array();
+    private static $tables        = array();
+    private static $prefix        = '';
 
 
 	public static function getInstance()
@@ -104,7 +118,7 @@ class xarDB
         	case 'sqlite3':
         	case 'pdosqlite':
 				$args['phptype']       = $args['databaseType'];
-				$args['database']    ??= ':memory:';
+				$args['database']    ??= xarSystemVars::get(sys::CONFIG, 'DB.Host');
 				$args['hostspec']    ??= '';
 				$args['port']        ??= '';
 				$args['username']    ??= '';
