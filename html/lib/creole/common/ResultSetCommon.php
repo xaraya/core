@@ -113,10 +113,7 @@ abstract class ResultSetCommon
         if ($fetchmode !== null) {
             $this->fetchmode = $fetchmode;
         } else {
-            // XARAYA MODIFICATION
-            //$this->fetchmode = ResultSet::FETCHMODE_ASSOC; // default
-            $this->fetchmode = ResultSet::FETCHMODE_NUM; // default
-            // END XARAYA MODIFICATION
+            $this->fetchmode = ResultSet::FETCHMODE_ASSOC;
         }
         $this->fieldsInResultSet = null;
         $this->lowerAssocCase = (($conn->getFlags() & Creole::COMPAT_ASSOC_LOWER) === Creole::COMPAT_ASSOC_LOWER);
