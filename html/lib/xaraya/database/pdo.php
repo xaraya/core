@@ -27,11 +27,11 @@ use Xaraya\Database\ResultSetInterface;
 
 class xarDB_PDO extends xarObject implements DatabaseInterface
 {
-    /**
+   /**
      * Map of built-in drivers.
      * Don't think PDO needs this
      */
-    private static $driverMap = array();
+    public static $driverMap = array();
 
     // CHECKME: Do we need this?
     public static function configure($dsn, $flags = array(PDO::CASE_LOWER), $prefix = 'xar')
