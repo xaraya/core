@@ -185,7 +185,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection
         ini_set('sqlite.assoc_case', $this->sqliteAssocCase);
         $this->lastQuery = $sql;
         
-	    $result = $this->dblink->query($this->lastQuery);var_dump($this->dblink);
+	    $result = $this->dblink->query($this->lastQuery);
 		if (!$result) {
             $nativeError = $this->dblink->lastErrorMsg();
             throw new SQLException('Could not execute query', $nativeError, $this->lastQuery);
