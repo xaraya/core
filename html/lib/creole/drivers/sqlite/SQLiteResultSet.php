@@ -111,7 +111,11 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
         // XARAYA MODIFICATION
 		$this->result->reset();
 		$result = $this->result->fetchArray();
-		$rows = is_array($result) ? $result['count'] : 0;
+		if (is_array($result) && isset($result['count'])) {
+			$rows = $result['count'];
+		} else {
+			$rows = 0;
+		}
         // END XARAYA MODIFICATION
 
         if ($rows === null) {
