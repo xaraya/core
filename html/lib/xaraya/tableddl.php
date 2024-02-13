@@ -409,9 +409,6 @@ class xarXMLInstaller extends xarObject
     
     static private function transform($xmlFile, $xslAction='display', $xslFile=null)
     {
-        // Park this here for now
-        $tableprefix = xarDB::getPrefix();
-        
         if (!isset($xmlFile))
             throw new BadParameterException(xarML('No file to transform!'));
 
@@ -442,7 +439,7 @@ class xarXMLInstaller extends xarObject
         sys::import('xaraya.tableddl.xslprocessor');
         $xslProc = new XarayaXSLProcessor($xslFile);
         $xslProc->setParameter('', 'action', $xslAction);
-        $xslProc->setParameter('', 'tableprefix', $tableprefix);
+        $xslProc->setParameter('', 'tableprefix', xarDB::getPrefix());
         return $xslProc->transform($xmlFile);
     }
     
@@ -463,6 +460,7 @@ class xarXMLInstaller extends xarObject
         array_pop($queries);
         $dbconn = xarDB::getConn();
         foreach ($queries as $q) {
+        var_dump($q);
             xarLog::message('Executing SQL: ' . $q, xarLog::LEVEL_INFO);
             $dbconn->Execute($q);
         }
