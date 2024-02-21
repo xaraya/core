@@ -152,7 +152,7 @@ interface StatementInterface
 interface ResultSetInterface
 {
     //public function getResource();
-    public function setFetchmode($mode);
+    public function setFetchmode(int $mode);
     //public function getFetchmode();
     //public function isLowerAssocCase();
     public function next();
