@@ -304,7 +304,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getRow()
      */
-    public function getRow()
+	// XARAYA MODIFICATION
+    public function getRow(?int $fetchflag=null)
+	// END XARAYA MODIFICATION
     {
         return $this->fields;
     }
@@ -554,6 +556,8 @@ abstract class ResultSetCommon
             case 'FieldCount':
                 $count = count($this->fields);
                 return $count;
+            case 'rewind':
+                return $this->first();
             default:
                 // We leave this in so any api migration error show up in a nice way
                 throw new Exception("Unknown method call $method for connection");
