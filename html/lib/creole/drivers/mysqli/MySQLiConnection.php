@@ -168,11 +168,11 @@ class MySQLiConnection extends ConnectionCommon implements Connection
     {
         $this->lastQuery = $sql;
 
-        $result = @mysqli_query($this->dblink, $sql);
-
-        if (!$result) {
+        try{
+        	$result = mysqli_query($this->dblink, $sql);
+		} catch (Exception $e) {
             throw new SQLException('Could not execute query', mysqli_error($this->dblink), $sql);
-        }
+		}
 
         return new MySQLiResultSet($this, $result, $fetchmode);
     }
@@ -184,9 +184,9 @@ class MySQLiConnection extends ConnectionCommon implements Connection
     {
         $this->lastQuery = $sql;
 
-        $result = @mysqli_query($this->dblink, $sql);
-
-        if (!$result) {
+        try{
+        	$result = mysqli_query($this->dblink, $sql);
+		} catch (Exception $e) {
             throw new SQLException('Could not execute update', mysqli_error($this->dblink), $sql);
         }
 
