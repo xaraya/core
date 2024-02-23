@@ -239,7 +239,9 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * Gets current fields (assoc array).
      * @return array<mixed>
      */
-    public function getRow();
+	// XARAYA MODIFICATION
+    public function getRow(?int $fetchmode=null);
+	// END XARAYA MODIFICATION
 
     /**
      * Get the number of rows in a result set.

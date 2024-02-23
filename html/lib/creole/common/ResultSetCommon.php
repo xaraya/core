@@ -305,7 +305,7 @@ abstract class ResultSetCommon
      * @see ResultSet::getRow()
      */
 	// XARAYA MODIFICATION
-    public function getRow(?int $fetchflag=null)
+    public function getRow(?int $fetchmode=null)
 	// END XARAYA MODIFICATION
     {
         return $this->fields;
