@@ -16,12 +16,15 @@
     
 switch (xarSystemVars::get(sys::CONFIG, 'DB.Middleware')){
 	case 'Creole':
+		// As per creole.ResultSet.php
 		define('FETCHMODE_ASSOC', 1);
 		define('FETCHMODE_NUM',   2);
+//		define('FETCHMODE_BOTH',  3);
 	break;
 	case 'PDO':
-		define('FETCHMODE_ASSOC', 2);
-		define('FETCHMODE_NUM',   3);
+		define('FETCHMODE_ASSOC', PDO::FETCH_ASSOC);
+		define('FETCHMODE_NUM',   PDO::FETCH_NUM);
+//		define('FETCHMODE_BOTH',  PDO::FETCH_BOTH);
 	break;
 	default:
 	break;
