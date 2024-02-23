@@ -557,7 +557,10 @@ abstract class ResultSetCommon
                 $count = count($this->fields);
                 return $count;
             case 'rewind':
-                return $this->first();
+				if($this->cursorPos !== 0) {
+					$this->seek(0);
+				}
+                return true;
             default:
                 // We leave this in so any api migration error show up in a nice way
                 throw new Exception("Unknown method call $method for connection");
