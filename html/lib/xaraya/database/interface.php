@@ -111,7 +111,7 @@ interface ConnectionInterface
 {
     // from Xaraya modifications in ConnectionCommon
     /** @return \ResultSet|\PDOResultSet|object */
-    public function Execute($sql, $bindvars = array(), $fetchmode = null);
+    public function Execute($sql, $bindvars = array(), ?int $fetchmode = null);
     //public function SelectLimit($sql, $limit = 0, $offset = 0, $bindvars = array(), $fetchmode = null);
     //public function connect($dsn, $flags = false);
     /** @return resource|object */
@@ -126,7 +126,7 @@ interface ConnectionInterface
     //public function createStatement();
     //public function applyLimit(&$sql, $offset, $limit);
     /** @return \ResultSet|\PDOResultSet|object */
-    public function executeQuery($sql, $fetchmode = null);
+    public function executeQuery($sql, ?int $fetchmode = null);
     public function executeUpdate($sql);
     //public function prepareCall($sql);
     //public function close();
@@ -144,7 +144,7 @@ interface StatementInterface
 {
     public function setLimit($v);
     public function setOffset($v);
-    public function executeQuery($p1 = null, $fetchmode = null);
+    public function executeQuery($p1 = null, ?int $fetchmode = null);
     public function executeUpdate($params = null);
 }
 
@@ -167,7 +167,7 @@ interface ResultSetInterface
     public function isAfterLast();
     //public function isBeforeFirst();
     //public function getCursorPos();
-    public function getRow();
+    public function getRow( ?int $fetchmode = null);
     public function getRecordCount();
     public function close();
     public function get($column);
