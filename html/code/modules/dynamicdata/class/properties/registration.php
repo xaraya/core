@@ -176,11 +176,12 @@ class PropertyRegistration extends DataContainer
         $query = "SELECT  p.id, p.name, p.label,
                           p.filepath, p.class,
                           p.format, p.configuration, p.source,
-                          p.reqfiles, m.name, p.args,
+                          p.reqfiles, m.name as modname, p.args,
                           p.aliases
                   FROM    $tables[dynamic_properties_def] p LEFT JOIN $tables[modules] m
                   ON      p.modid = m.id
                   ORDER BY m.name, p.name";
+
         $result = $dbconn->executeQuery($query);
         $proptypes = [];
         if($result->RecordCount() == 0) {
@@ -195,14 +196,14 @@ class PropertyRegistration extends DataContainer
                 $property['id']             = $id;
                 $property['name']           = $name;
                 $property['label']          = $label;
-                $property['format']         = $format;
                 $property['filepath']       = $filepath;
+                $property['class']          = $class;
+                $property['format']         = $format;
                 $property['configuration']  = $configuration;
                 $property['source']         = $source;
                 $property['dependancies']   = unserialize($reqfiles);
                 $property['requiresmodule'] = $modname;
                 $property['args']           = $args;
-                $property['class']          = $class;
                 // TODO: this returns a serialized array of objects, does that hurt?
                 try {
                     $property['aliases']        = unserialize($aliases);
