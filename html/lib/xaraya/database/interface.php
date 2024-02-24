@@ -170,15 +170,15 @@ interface ResultSetInterface
     public function getRow( ?int $fetchmode = null);
     public function getRecordCount();
     public function close();
-    public function get($column);
-    public function getArray($column);
-    public function getBoolean($column);
+    public function get($column=null);
+    public function getArray($column=null);
+    public function getBoolean($column=null);
     //public function getBlob($column);
     //public function getClob($column);
     //public function getDate($column, $format = '%x');
-    public function getFloat($column);
-    public function getInt($column);
-    public function getString($column);
+    public function getFloat($column=null);
+    public function getInt($column=null);
+    public function getString($column=null);
     //public function getTime($column, $format = '%X');
     //public function getTimestamp($column, $format = 'Y-m-d H:i:s');
     // Extra ResultSetIterator methods are *not* supported in MySQLiResultSet
