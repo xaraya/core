@@ -410,7 +410,6 @@ class xarDatabase extends xarObject
                 if ($connected) break;
             }
             if (!$connected) {
-            var_dump($e->getMessage());
                 throw new Exception("Connection error: a database connection could not be established");
             }
         } else {
