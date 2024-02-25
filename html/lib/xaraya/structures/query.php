@@ -243,12 +243,12 @@ class Query
                             $i++;
                         }
                         $this->output[] = $line;
-                        $result->MoveNext();
+                        $result->next();
                     }
                 } else {
                     while (!$result->EOF) {
                         $this->output[] = $result->fields;
-                        $result->MoveNext();
+                        $result->next();
                     }
                 }
             }
