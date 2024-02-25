@@ -242,7 +242,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::first()
      */
-    public function first()
+	// XARAYA MODIFICATION
+    public function first(?int $fetchmode = null)
+	// END XARAYA MODIFICATION
     {
         if($this->cursorPos !== 0) {
             $this->seek(0);
@@ -253,7 +255,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::last()
      */
-    public function last()
+	// XARAYA MODIFICATION
+    public function last(?int $fetchmode = null)
+	// END XARAYA MODIFICATION
     {
         if($this->cursorPos !==  ($last = $this->getRecordCount() - 1)) {
             $this->seek($last);
@@ -314,7 +318,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::get()
      */
-    public function get($column)
+	// XARAYA MODIFICATION
+    public function get($column=null)
+	// END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -326,7 +332,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getArray()
      */
-    public function getArray($column)
+	// XARAYA MODIFICATION
+    public function getArray($column=null)
+	// END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -341,7 +349,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getBoolean()
      */
-    public function getBoolean($column)
+	// XARAYA MODIFICATION
+    public function getBoolean($column=null)
+	// END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -418,7 +428,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getFloat()
      */
-    public function getFloat($column)
+	// XARAYA MODIFICATION
+    public function getFloat($column=null)
+	// END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -433,7 +445,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getInt()
      */
-    public function getInt($column)
+	// XARAYA MODIFICATION
+    public function getInt($column=null)
+	// END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {
@@ -448,7 +462,9 @@ abstract class ResultSetCommon
     /**
      * @see ResultSet::getString()
      */
-    public function getString($column)
+	// XARAYA MODIFICATION
+    public function getString($column=null)
+	// END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
         if (!array_key_exists($idx, $this->fields)) {

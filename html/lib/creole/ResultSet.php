@@ -184,7 +184,9 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @throws SQLException - if unable to move to first position
      *                      - if not at first pos & ResultSet doesn't support reverse scrolling
      */
-    public function first();
+	// XARAYA MODIFICATION
+    public function first(?int $fetchmode = null);
+	// END XARAYA MODIFICATION
 
     /**
      * Move cursor to end of recordset.
@@ -192,7 +194,9 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @throws SQLException - if unable to move to last position
      *                      - if unable to get num rows
      */
-    public function last();
+	// XARAYA MODIFICATION
+    public function last(?int $fetchmode = null);
+	// END XARAYA MODIFICATION
 
     /**
      * Sets cursort to before first record. This does not actually seek(), but
@@ -266,7 +270,9 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @return mixed Usually expect a string.
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
-    public function get($column);
+	// XARAYA MODIFICATION
+    public function get($column=null);
+	// END XARAYA MODIFICATION
 
     /**
      * Reads a column as an array.
@@ -276,7 +282,9 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @return array<mixed> value or null if database returned null.
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
-    public function getArray($column);
+	// XARAYA MODIFICATION
+    public function getArray($column=null);
+	// END XARAYA MODIFICATION
 
     /**
      * Returns value translated to boolean.
@@ -285,7 +293,9 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @return boolean value or null if database returned null.
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
-    public function getBoolean($column);
+	// XARAYA MODIFICATION
+    public function getBoolean($column=null);
+	// END XARAYA MODIFICATION
 
     /**
      * Returns Blob with contents of column value.
@@ -327,7 +337,9 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @return float value or null if database returned null
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
-    public function getFloat($column);
+	// XARAYA MODIFICATION
+    public function getFloat($column=null);
+	// END XARAYA MODIFICATION
 
     /**
      * Returns value cast as integer.
@@ -337,7 +349,9 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @see getInteger()
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
-    public function getInt($column);
+	// XARAYA MODIFICATION
+    public function getInt($column=null);
+	// END XARAYA MODIFICATION
 
     /**
      * Returns value cast as string.
@@ -347,7 +361,9 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @see get()
      * @throws SQLException - If the column specified is not a valid key in current field array.
      */
-    public function getString($column);
+	// XARAYA MODIFICATION
+    public function getString($column=null);
+	// END XARAYA MODIFICATION
 
     /**
      * Return a formatted time.

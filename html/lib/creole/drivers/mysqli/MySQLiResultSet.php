@@ -115,7 +115,9 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
      * No rtrim() necessary for MySQL, as this happens natively.
      * @see ResultSet::getString()
      */
-    public function getString($column)
+	// XARAYA MODIFICATION
+    public function getString($column=null)
+	// END XARAYA MODIFICATION
     {
         $idx = (is_int($column) ? $column - 1 : $column);
 
