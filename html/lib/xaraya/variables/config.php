@@ -88,6 +88,8 @@ class xarConfigVars extends xarVars implements IxarVars
         {
             case 'Site.DB.TablePrefix':
                 return xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
+//            case 'Site.Core.LoadLegacy':
+//                return xarSystemVars::get(sys::CONFIG, 'Site.LoadLegacy');
             case 'System.Core.Generation':
                 return xarCore::GENERATION;
             case 'System.Core.VersionNumber':
@@ -117,10 +119,8 @@ class xarConfigVars extends xarVars implements IxarVars
 	    if($varstable == null) throw new VariableNotFoundException($name, "Variable #(1) not found (no tables found, in fact)");
 
         $query = "SELECT name, value FROM $varstable WHERE module_id is null AND name = ?";
-
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array($name),xarDB::FETCHMODE_NUM);
-
         if($result->next()) {
             // Found it, retrieve and cache it
             $value = $result->get(2);
@@ -129,8 +129,9 @@ class xarConfigVars extends xarVars implements IxarVars
             $result->close();
             return $value;
         }
+
         // @todo: We found nothing, return the default if we had one
-        if($value !== null) return $value;        
+        if($value !== null) return $value;
         throw new VariableNotFoundException($name, "Variable #(1) not found");
     }
 
@@ -180,10 +181,12 @@ class xarConfigVars extends xarVars implements IxarVars
         $query = "SELECT name, value FROM $varstable WHERE module_id is null";
         $stmt = $dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_ASSOC);
-
         while ($result->next())
         {
             $newval = unserialize($result->getString('value'));
+
+            $val = $result->getString('value') ?? 's:0:""';
+            $newval = unserialize($val);
             xarCoreCache::setCached(self::$KEY, $result->getString('name'), $newval);
         }
         $result->close();
