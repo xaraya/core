@@ -160,14 +160,14 @@ interface ResultSetInterface
     //public function relative($offset);
     //public function absolute($pos);
     //public function seek($rownum);
-    public function first();
+    public function first(?int $fetchmode=null);
     //public function last();
     //public function beforeFirst();
     //public function afterLast();
     public function isAfterLast();
     //public function isBeforeFirst();
     //public function getCursorPos();
-    public function getRow( ?int $fetchmode = null);
+    public function getRow(?int $fetchmode = null);
     public function getRecordCount();
     public function close();
     public function get($column=null);
