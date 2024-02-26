@@ -380,15 +380,15 @@ abstract class ExternalResultSet implements ResultSetInterface
     abstract public function setFetchmode($mode);
     abstract public function next();
     abstract public function previous();
-    abstract public function first();
+    abstract public function first(?int $fetchmode = null);
     abstract public function isAfterLast();
-    abstract public function getRow();
+    abstract public function getRow(?int $fetchmode = null);
     abstract public function getRecordCount();
     abstract public function close();
-    abstract public function get($column);
-    abstract public function getArray($column);
-    abstract public function getBoolean($column);
-    abstract public function getFloat($column);
-    abstract public function getInt($column);
-    abstract public function getString($column);
+    abstract public function get($column=null);
+    abstract public function getArray($column=null);
+    abstract public function getBoolean($column=null);
+    abstract public function getFloat($column=null);
+    abstract public function getInt($column=null);
+    abstract public function getString($column=null);
 }
