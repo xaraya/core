@@ -133,20 +133,20 @@ function blocks_instancesapi_getitems(Array $args=array())
     $groupby = array();
     $bindvars = array();
 
-    $select['block_id'] = 'blocks.id';
-    $select['name'] = 'blocks.name';    
-    $select['title'] = 'blocks.title';
-    $select['state'] = 'blocks.state';
-    $select['content'] = 'blocks.content';
-    $select['type_id'] = 'types.id';
-    $select['type'] = 'types.type';
-    $select['type_info'] = 'types.info';
-    $select['type_state'] = 'types.state';
-    $select['type_category'] = 'types.category';
+    $select['block_id'] = 'blocks.id AS block_id';
+    $select['name'] = 'blocks.name AS name';    
+    $select['title'] = 'blocks.title AS title';
+    $select['state'] = 'blocks.state AS state';
+    $select['content'] = 'blocks.content AS content';
+    $select['type_id'] = 'types.id AS type_id';
+    $select['type'] = 'types.type AS type';
+    $select['type_info'] = 'types.info AS type_info';
+    $select['type_state'] = 'types.state AS type_state';
+    $select['type_category'] = 'types.category AS type_category';
     // we need to get the actual $classname and $filepath for getinfo() - requires UPGRADE due to table change
-    $select['classname'] = 'types.class';
-    $select['filepath'] = 'types.filepath';
-    $select['module'] = 'mods.name';
+    $select['classname'] = 'types.class AS classname';
+    $select['filepath'] = 'types.filepath AS filepath';
+    $select['module'] = 'mods.name AS module';
 
     $from[] = "$blocks_table blocks";
     $from[] = "$types_table types";
@@ -222,28 +222,25 @@ function blocks_instancesapi_getitems(Array $args=array())
             $startnum = 1;
         $stmt->setOffset($startnum - 1);
     }
-
-    $result = $stmt->executeQuery($bindvars);
+    $result = $stmt->executeQuery($bindvars, xarDB::FETCHMODE_ASSOC);
     if (!$result) return;
-
     $items = array();
     while ($result->next()) {
         $item = array();
-        foreach (array_keys($select) as $field) {
-            $val = array_shift($result->fields);
-            switch ($field) {
+        foreach ($result->fields as $key => $value) {
+            switch ($key) {
                 case 'content':
                 case 'type_info':
-                    $val = @unserialize($val);                                      
-                    $item[$field] = $val;
+                    $value = @unserialize($value);                                      
+                    $item[$key] = $value;
                 break;
                 case 'classname':
                 case 'filepath':
                 case 'module':
-                    $item[$field] = !empty($val) ? $val : '';
+                    $item[$key] = !empty($value) ? $value : '';
                 break;
                 default:
-                    $item[$field] = $val;
+                    $item[$key] = $value;
                 break;
             }
         }
