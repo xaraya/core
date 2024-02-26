@@ -224,7 +224,7 @@ class xarPrivileges extends xarMasks
             if ($args['module'] == strtolower('All')) $where .= " AND p.module_id = " . 0;
             else $where .= " AND p.module_id = " . xarMod::getID($args['module']);
         }
-        $query = "SELECT p.id, p.name, r.id,r.itemtype,r.name,
+        $query = "SELECT p.id, p.name, r.id AS role_id,r.itemtype,r.name AS role_name,
                          p.module_id, p.component, p.instance,
                          p.level,  p.description
                   FROM " . parent::$privilegestable . " p INNER JOIN ". parent::$acltable . " a ON p.id = a.privilege_id
@@ -232,8 +232,7 @@ class xarPrivileges extends xarMasks
                   $where .
                   " ORDER BY p.name";
         $stmt = parent::$dbconn->prepareStatement($query);
-        // The fetchmode *needed* to be here, dunno why. Exception otherwise
-        $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array());
         $allprivileges = array();
         while($result->next()) {
             list($id, $name, $role_id, $role_type, $role_name, $module, $component, $instance, $level,
@@ -276,16 +275,15 @@ class xarPrivileges extends xarMasks
             else $where .= " AND p.module_id = " . xarMod::getID($args['module']);
         }
         if (!empty($args['component'])) $where .= ' AND m.component = ' . $args['component'];
-        $query = "SELECT p.id, p.name, r.name,
-                         m.name, p.component, p.instance,
+        $query = "SELECT p.id, p.name, r.name AS realm,
+                         m.name AS module, p.component, p.instance,
                          p.level,  p.description
                   FROM " . parent::$privilegestable . " p LEFT JOIN ". parent::$realmstable . " r ON p.realm_id = r.id
                   LEFT JOIN ". parent::$modulestable . " m ON p.module_id = m.id " .
                   $where .
                   " ORDER BY p.name";
         $stmt = parent::$dbconn->prepareStatement($query);
-        // The fetchmode *needed* to be here, dunno why. Exception otherwise
-        $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_NUM);
+        $result = $stmt->executeQuery(array());
         $allprivileges = array();
         while($result->next()) {
             list($id, $name, $realm, $module, $component, $instance, $level,
@@ -322,7 +320,7 @@ class xarPrivileges extends xarMasks
     {
         parent::initialize();
         // Base query
-        $query = "SELECT DISTINCT p.id, p.name,  r.name,
+        $query = "SELECT DISTINCT p.id, p.name,  r.name AS realm,
                          p.module_id,  p.component, p.instance,
                          p.level, p.description, pm.parent_id
                   FROM " . parent::$privilegestable . " p LEFT JOIN " .

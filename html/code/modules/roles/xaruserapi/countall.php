@@ -66,6 +66,7 @@ function roles_userapi_countall(Array $args=array())
         $result = $dbconn->Execute($query, $bindvars);
     }
     // Obtain the number of users
+    $result->first();
     list($numroles) = $result->fields;
 
     $result->Close();

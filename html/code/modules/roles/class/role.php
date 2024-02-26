@@ -397,7 +397,7 @@ class Role extends DataObject
         xarLog::message("ROLE: getting privileges for id: " . $this->properties['id']->value, xarLog::LEVEL_INFO);
         // TODO: propagate the use of 'All'=null for realms through the API instead of the flip-flopping
         $xartable = xarDB::getTables();
-        $query = "SELECT  p.id, p.name, r.name, p.module_id, m.name,
+        $query = "SELECT  p.id, p.name, r.name AS realm, p.module_id, m.name AS module,
                           component, instance, level, description
                   FROM    $this->acltable acl,
                           $this->privilegestable p

@@ -48,7 +48,8 @@ function themes_adminapi_countitems(Array $args=array())
     if (!empty($where))
         $query .= ' WHERE ' . join(' AND ', $where);    
     $result = $dbconn->Execute($query,$bindvars);
-    if (!$result) return;    
+    if (!$result) return;
+    $result->first();
     list($count) = $result->fields;
 
     $result->Close();

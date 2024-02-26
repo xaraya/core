@@ -55,12 +55,6 @@ function categories_userapi_countcats($args)
                     <= P1.right_id
                    AND P1.id = ?";
         $bindvars[] = $cid;
-/* this is terribly slow, at least for MySQL 3.23.49-nt
-               BETWEEN P1.left_id AND
-                       P1.right_id
-                   AND P1.id
-                        = ".xar Var Prep For Store($cid); // making my greps happy <mrb>
-*/
     } else {
         $sql = "SELECT COUNT(id) AS childnum
                   FROM $categoriestable";
@@ -68,8 +62,8 @@ function categories_userapi_countcats($args)
 
     $result = $dbconn->Execute($sql,$bindvars);
     if (!$result) return;
-
-    $num = $result->fields[0];
+    $result->first();
+    list($num) = $result->fields;
 
     $result->Close();
 

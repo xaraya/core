@@ -229,24 +229,22 @@ class PDOConnection extends PDO implements ConnectionInterface
      * - if no bindvars are passed but this is a SELECT, we run PDO's query method and return a PDO statement
      * - Otherwise (no bindvars and not a SELECT, we run PDO's exec method and generate an empty resultset
      */
-    public function Execute($string, $bindvars = array(), $flag = 0)
+    public function Execute($string, $bindvars = array(), ?int $fetchmode = null)
     {
         xarLog::message("PDOConnection::Execute: Executing $string", xarLog::LEVEL_DEBUG);
         try {
-            if (empty($flag)) {
-                $flag = PDO::FETCH_NUM;
-            }
+        	$fetchmode = $fetchmode ?? PDO::FETCH_NUM;
 
             if (is_array($bindvars) && !empty($bindvars)) {
                 // Prepare a SQL statement
                 $this->queryString = $string;
                 $stmt = new xarPDOStatement($this);
-                $result = $stmt->executeQuery($bindvars, $flag);
+                $result = $stmt->executeQuery($bindvars, $fetchmode);
                 return $result;
             } elseif (substr(strtoupper($string), 0, 6) == "SELECT") {
-                $stmt = $this->query($string, $flag);
+                $stmt = $this->query($string, $fetchmode);
                 $this->row_count = $stmt->rowCount();
-                $result = new PDOResultSet($stmt, $flag);
+                $result = new PDOResultSet($stmt, $fetchmode);
                 return $result;
             } else {
                 $rows_affected = $this->exec($string);
@@ -268,34 +266,31 @@ class PDOConnection extends PDO implements ConnectionInterface
      * Should be a SELECT, but we are supporting updates and inserts, too
      *
      * @param string $string The query string
-     * @param int $flag indicates the fetch mode for the results
+     * @param int $fetchmode indicates the fetch mode for the results
      *
      * @return object $resultset an object containing the results of the operation
      */
-    public function executeQuery($string = '', $flag = 0)
+    public function executeQuery($string = '', ?int $fetchmode = null)
     {
         xarLog::message("PDOConnection::executeQuery: Executing $string", xarLog::LEVEL_DEBUG);
         try {
-            if (empty($flag)) {
-                $flag = PDO::FETCH_NUM;
-            }
+            $fetchmode = $fetchmode ?? PDO::FETCH_NUM;
 
             $stmt = $this->query($string);
             if (substr(strtoupper($string), 0, 6) == "INSERT") {
                 $this->last_id = $this->lastInsertId();
             }
             $this->row_count = $stmt->rowCount();
-            return new PDOResultSet($stmt, $flag);
+            return new PDOResultSet($stmt, $fetchmode);
         } catch (Exception $e) {
             throw $e;
         }
     }
 
-    public function SelectLimit($string = '', $limit = 0, $offset = 0, $bindvars = array(), $flag = 0)
+    public function SelectLimit($string = '', $limit = 0, $offset = 0, $bindvars = array(), ?int $fetchmode = null)
     {
-        if (empty($flag)) {
-            $flag = PDO::FETCH_NUM;
-        }
+        $fetchmode = $fetchmode ?? PDO::FETCH_NUM;
+        
         $limit = empty($limit) ? 1000000 : $limit;
 
         // TODO: better type testing?
@@ -316,11 +311,11 @@ class PDOConnection extends PDO implements ConnectionInterface
         xarLog::message("PDOConnection::SelectLimit: Executing $string", xarLog::LEVEL_DEBUG);
         if (empty($bindvars)) {
             try {
-                $stmt = $this->query($string, $flag);
+                $stmt = $this->query($string, $fetchmode);
             } catch (Exception $e) {
                 throw $e;
             }
-            $result = new PDOResultSet($stmt, $flag);
+            $result = new PDOResultSet($stmt, $fetchmode);
         } else {
             // Prepare a SQL statement
             $this->queryString = $string;
@@ -331,7 +326,7 @@ class PDOConnection extends PDO implements ConnectionInterface
 
             // Execute the SQL statment and create a result set
             try {
-                $result = $stmt->executeQuery($bindvars, $flag);
+                $result = $stmt->executeQuery($bindvars, $fetchmode);
             } catch (Exception $e) {
                 throw $e;
             }
@@ -427,6 +422,7 @@ class xarPDOStatement extends xarObject implements StatementInterface
     private $offset    = 0;
     private $haslimits = false;
     private $bindvars;
+    private $fetchmode = PDO::FETCH_NUM;	// The default for getting database rows for all middlewares
 
     public function __construct($pdo)
     {
@@ -457,12 +453,11 @@ class xarPDOStatement extends xarObject implements StatementInterface
         return $this->pdostmt;
     }
 
-    public function executeQuery($bindvars = array(), $flag = 0)
+    public function executeQuery($bindvars = array(), ?int $fetchmode = null)
     {
         xarLog::message("xarPDOStatement::executeQuery: Preparing " . $this->pdo->queryString, xarLog::LEVEL_DEBUG);
-        if (empty($flag)) {
-            $flag = PDO::FETCH_NUM;
-        }
+
+		$fetchmode = $fetchmode ?? $this->fetchmode;
 
         // We need to check whether we still have to add limit and offset
         // This only works for MySQL !!
@@ -485,40 +480,40 @@ class xarPDOStatement extends xarObject implements StatementInterface
 
         // Run the query
         xarLog::message("xarPDOStatement::executeQuery: Executing " . $this->pdo->queryString, xarLog::LEVEL_DEBUG);
-        try {
-            $success = $this->pdostmt->execute();
-        } catch (Exception $e) {
-            throw $e;
-        }
 
-        // If this is a SELECT, create a result set for the results
-        if (substr(strtoupper($this->pdo->queryString), 0, 6) == "SELECT") {
-            $result = new PDOResultSet($this, $flag);
-            // Save the bindvars
-            $this->bindvars = $bindvars;
-            return $result;
-        }
+		$success = $this->pdostmt->execute();
+		if (!$success) {
+			throw new SQLException("PDO: SELECT query " . $this->pdo->queryString . " failed to execute");
+		}
 
-        // If this is an INSERT, get the last inserted ID and return
-        if (substr(strtoupper($this->pdo->queryString), 0, 6) == "INSERT") {
-            $this->pdo->last_id = $this->pdo->lastInsertId();
-            return true;
+        switch (substr(strtoupper($this->pdo->queryString), 0, 6) == "SELECT") {
+        	case 'SELECT':
+				// If this is a SELECT, create a result set for the results
+				$result = new PDOResultSet($this, $fetchmode);
+				// Save the bindvars
+				$this->bindvars = $bindvars;
+			break;
+			case 'INSERT':
+        		// If this is an INSERT, get the last inserted ID and return
+	            $this->pdo->last_id = $this->pdo->lastInsertId();
+	            $result = true;
+			break;
+			default:
+		        // Anything else: just return for now
+	            $result = true;
         }
-
-        // Anything else: just return for now
-        return true;
+        return $result;
     }
 
     /**
      * Prepares and executes a SQL update (INSERT, UPDATE, or DELETE) and resturns the rows affected
      *
      * @param array<mixed> $bindvars the parameters to be inserted into the query
-     * @param int $flag indicates the fetch mode for the results
      *
      * @return int $affected_rows the rows inserted, changed, dropped
      */
     /* Be insistent and enforce types here */
-    public function executeUpdate($bindvars = array(), $flag = 0)
+    public function executeUpdate($bindvars = array())
     {
         xarLog::message("xarPDOStatement::executeUpdate: Preparing " . $this->pdo->queryString, xarLog::LEVEL_DEBUG);
 
@@ -536,11 +531,11 @@ class xarPDOStatement extends xarObject implements StatementInterface
         }
 
         xarLog::message("xarPDOStatement::executeUpdate: Executing " . $this->pdo->queryString, xarLog::LEVEL_DEBUG);
-        try {
-            $success = $this->pdostmt->execute();
-        } catch (Exception $e) {
-            throw $e;
-        }
+
+		$success = $this->pdostmt->execute();
+		if (!$success) {
+			throw new SQLException("PDO: SELECT query " . $this->pdo->queryString . " failed to execute");
+		}
 
         if (substr(strtoupper($this->pdo->queryString), 0, 6) == "INSERT") {
             $this->pdo->last_id = $this->pdo->lastInsertId();
@@ -558,30 +553,34 @@ class xarPDOStatement extends xarObject implements StatementInterface
     }
 
     // Wrappers for the PDOStatement methods
-    public function fetchAll($flags)
+    public function fetchAll(?int $fetchmode = null)
     {
-        if ($this->pdostmt == null) {
+        if (null === $this->pdostmt) {
             throw new PDOException('No PDOStatement object');
         }
-        return $this->pdostmt->fetchAll($flags);
+        if (null ===  $fetchmode) $fetchmode = $this->fetchmode;
+        return $this->pdostmt->fetchAll($fetchmode);
     }
-    public function fetch($flags)
+    public function fetch(?int $fetchmode = null)
     {
-        if ($this->pdostmt == null) {
+        if (null === $this->pdostmt) {
             throw new PDOException('No PDOStatement object');
         }
-        return $this->pdostmt->fetch($flags);
+        $fetchmode = $fetchmode ?? $this->fetchmode;
+
+		 $result = $this->pdostmt->fetch($fetchmode);
+		return $result;
     }
     public function rowCount()
     {
-        if ($this->pdostmt == null) {
+        if (null === $this->pdostmt) {
             throw new PDOException('No PDOStatement object');
         }
         return $this->pdostmt->rowCount();
     }
     public function columnCount()
     {
-        if ($this->pdostmt == null) {
+        if (null === $this->pdostmt) {
             throw new PDOException('No PDOStatement object');
         }
         return $this->pdostmt->columnCount();
@@ -883,104 +882,198 @@ class PDOColumn extends xarObject
 /**
  * ResultSet class: holds the result of a query
  *
- * PDO does not have result sets, so we have to roll our own here
+ * PDO does not have result sets, so we have to roll our own here.
+ * Ideally this would be done in PHP's PDOStatement class, which has an iterator.
+ * Some of the methods don't seem to work however and the documentation is nil.
+ * So for now we create our own array of the resultset data and work with that.
  *
  */
 class PDOResultSet extends xarObject implements ResultSetInterface
 {
-    public const FETCHMODE_ASSOC = PDO::FETCH_ASSOC;
-    public const FETCHMODE_NUM   = PDO::FETCH_NUM;
-    private $EOF           = 0;
-
     private $pdostatement;
-    private $fetchflag;
     private $valid  = true;
-    private $array  = array();
+    private $array  = array();				// Holds an array of the resultset's data
+    private $cursor  = 0;					// A pointer for our current position in the resultset array. 
+    private $fetchmode = PDO::FETCH_NUM;	// The default for getting database rows for all middlewares
 
     protected $rtrimString = false;
 
-    public $cursor  = -1;
-    public $fields  = array();
+    public $fields  = array();				// Holds an array of the resultset's fields (column names)
 
-    public function __construct($pdostatement = null, $flag = 0)
+    public function __construct($pdostatement = null, ?int $fetchmode = null)
     {
-        // We may not have a PDOSTatment
-        if ($pdostatement == null) {
+        // We may not have a PDOStatement
+        if (null === $pdostatement) {
             return;
         }
 
-        // @todo why don't we re-map the flags here, instead of re-defining ResultSet constants for everyone?
-        $this->fetchflag = empty($flag) ? self::FETCHMODE_NUM : $flag;
         $this->pdostatement = $pdostatement;
-        $this->array = $this->pdostatement->fetchAll($this->fetchflag);
-        $this->EOF = count($this->array) === 0;
-        // Q: This is an odd Creole legacy. Remove instances of calling $result->fields without next() first
-        // A: Actually this dates back from the ADODB time, see https://www.xaraya.hu/rfcs/rfc0035.html#rfc.section.9.3
+        if (null != $fetchmode) {
+			$this->fetchmode = $fetchmode;
+        }
+        
+        // We need an associative array here so that we can support changing $fetchmode downstream.
+        // This is done in the refreshkeys method.
+        // This choice has downstream consequences, since there are occasionally multi-table queries in the codebase that 
+        // give wrong results when forced to associative fetchmode, i.e. some fields from different tables have the same name. 
+        // The problem can be resolved by adding aliases to said queries.
+        // Queries using the $query abstraction don't have this issue.
+        $this->array = $this->pdostatement->fetchAll(PDO::FETCH_ASSOC);
+
+        // Put the first row into the fields array and set the cursor to zero
         if (!empty($this->array)) {
-            $this->fields = reset($this->array);
+            $this->cursor = 0;
+			$this->fields = reset($this->array);
         }
     }
 
-    public function close()
+    public function getFetchMode()
     {
-        $this->pdostatement = null;
+        return $this->fetchmode;
     }
 
-    public function current()
+    public function setFetchMode($fetchmode)
     {
-        return $this->array[$this->cursor];
+        $this->fetchmode = $fetchmode;
+		$this->refresh_keys(0, $fetchmode);
+        return true;
     }
 
-    public function isAfterLast()
-    {
-        return ($this->cursor === $this->RecordCount() + 1);
-    }
+//---------------------------------------------------------------------------
+/**
+ * Movement methods
+ * These methods move the cursor and return true/false
+ * These methods take their fields values for refreshing fetchmode from the results array
+ */
 
-    public function previous()
+    public function seek(?int $rownum=null)
     {
-        // Go back 2 spaces so that we can then advance 1 space.
-        $this->cursor = $this->cursor - 2;
-        if ($this->cursor > 0) {
-            $this->cursor = 0;
+        if (!$this->inBounds()) {
             return false;
         }
-        return $this->next();
+        $this->cursor = $rownum;
+		$this->refresh_keys(1, $this->fetchmode);
+        return true;
+    }
+    
+    public function previous()
+    {
+        if (!$this->inBounds()) {
+            return false;
+        }
+
+		// Adjust the field keys to the fetchmode
+		$this->refresh_keys(1, $this->fetchmode);
+        // Advance the cursor
+        $this->cursor--;
+        return true;
     }
 
     public function next()
     {
-        $this->cursor++;
-        $next = $this->getRow();
-        $valid = ($next === false) ? false : true;
-        if ($this->isAfterLast()) {
-            $this->EOF = true;
+        if (!$this->inBounds()) {
+            return false;
         }
-        return $valid;
+
+		// Adjust the field keys to the fetchmode
+		$this->refresh_keys(1, $this->fetchmode);
+        // Advance the cursor
+        $this->cursor++;
+        return true;
     }
     // @todo Remove this in the code
     public function MoveNext()
     {
         return $this->next();
     }
-
-    public function getRow()
+    
+    public function rewind()
     {
-        if (empty($this->array[$this->cursor])) {
-            return false;
-            /**
-            $row = $this->pdostatement->fetch($this->fetchflag);
-            if (empty ($row)) {
-                return false;
-            } else {
-                $this->array[$this->cursor] = $row;
-                $this->fields = $row;
-                return $this->fields;
-            }
-             */
-        } else {
-            $this->fields = $this->array[$this->cursor];
-            return $this->fields;
+        $this->seek(0);
+//        $this->refresh_keys(1, $this->fetchmode);
+        return true;
+    }
+
+//---------------------------------------------------------------------------
+/**
+ * Retrieval methods
+ * These methods return rows 
+ * These methods take their fields values for refreshing fetchmode from the fields array
+ */
+    public function getRow(?int $fetchmode=null)
+    {
+		$fetchmode = $fetchmode ?? $this->fetchmode;
+
+		$this->refresh_keys(0, $fetchmode);
+		return $this->fields;
+    }
+    
+    // TODO: remove this from the code
+    public function fetchRow(?int $fetchmode=null)
+    {
+        return $this->getRow($fetchmode);
+    }
+
+    public function first(?int $fetchmode=null)
+    {
+		$fetchmode = $fetchmode ?? $this->fetchmode;
+
+        if($this->cursor !== 0) {
+            $this->seek(0);
         }
+		$this->refresh_keys(0, $fetchmode);
+		return $this->fields;
+    }
+    
+    public function current(?int $fetchmode=null)
+    {
+		$fetchmode = $fetchmode ?? $this->fetchmode;
+
+        $this->refresh_keys(0, $fetchmode);
+        return $this->fields;
+    }
+
+    public function last(?int $fetchmode=null)
+    {
+		$fetchmode = $fetchmode ?? $this->fetchmode;
+
+        if($this->cursor !==  ($last = $this->getRecordCount() - 1)) {
+            $this->seek($last);
+        }
+        $this->refresh_keys(0, $this->fetchmode);
+		return $this->fields;
+    }
+
+    public function getall()
+    {
+        return $this->array;
+    }
+
+//---------------------------------------------------------------------------
+    public function close()
+    {
+        $this->pdostatement = null;
+    }
+
+    public function inBounds(?int $rownum=null)
+    {
+        $rownum = $rownum ?? $this->cursor;
+
+        // We need a valid key value and a non empty rresults array 
+        $bounds = array_key_exists($rownum, $this->array) && ($this->getRecordCount() !== 0);
+        return $bounds;
+    }
+
+    public function isBeforeFirst()
+    {
+        $outofbounds = ($this->cursor === 0) || ($this->getRecordCount() === 0);
+        return $outofbounds;
+    }
+
+    public function isAfterLast()
+    {
+        $outofbounds = ($this->cursor === $this->getRecordCount() + 1) || ($this->getRecordCount() === 0);
+        return $outofbounds;
     }
 
     public function key()
@@ -990,19 +1083,6 @@ class PDOResultSet extends xarObject implements ResultSetInterface
     public function valid()
     {
         return $this->valid;
-    }
-    public function rewind()
-    {
-        $this->cursor = 0;
-    }
-    public function first()
-    {
-        $this->rewind();
-        return $this->getRow();
-    }
-    public function getall()
-    {
-        return $this->array;
     }
 
     // Two of these functions is one too many
@@ -1015,83 +1095,122 @@ class PDOResultSet extends xarObject implements ResultSetInterface
         return count($this->array);
     }
 
-    public function setFetchMode($flag)
-    {
-        // @todo why don't we re-map the flags here, instead of re-defining ResultSet constants for everyone?
-        if ($this->fetchflag == $flag) {
-            return true;
-        }
-        $this->fetchflag = $flag;
-        $this->pdostatement->closeCursor();
-        $this->pdostatement->execute();
-        $this->array = $this->pdostatement->fetchAll($this->fetchflag);
-        $this->EOF = count($this->array);
-        return true;
-    }
-
-    public function get($column)
-    {
-        $col = (is_int($column) ? $column - 1 : $column);
-        return $this->array[$this->cursor][$col];
-    }
-    public function getArray($column)
-    {
-        $col = (is_int($column) ? $column - 1 : $column);
-        if (!array_key_exists($col, $this->fields)) {
-            throw new Exception("Invalid resultset column: " . $column);
-        }
-        if ($this->fields[$col] === null) {
-            return null;
-        }
-        return (array) unserialize($this->fields[$col]);
-    }
-    public function getBoolean($column)
-    {
-        $col = (is_int($column) ? $column - 1 : $column);
-        if (!array_key_exists($col, $this->fields)) {
-            throw new Exception("Invalid resultset column: " . $column);
-        }
-        if ($this->fields[$col] === null) {
-            return null;
-        }
-        return (bool) $this->fields[$col];
-    }
-    public function getFloat($column)
-    {
-        $col = (is_int($column) ? $column - 1 : $column);
-        if (!array_key_exists($col, $this->fields)) {
-            throw new Exception("Invalid resultset column: " . $column);
-        }
-        if ($this->fields[$col] === null) {
-            return null;
-        }
-        return (float) $this->fields[$col];
-    }
-    public function getInt($column)
-    {
-        $col = (is_int($column) ? $column - 1 : $column);
-        if (!array_key_exists($col, $this->fields)) {
-            throw new Exception("Invalid resultset column: " . $column);
-        }
-        if ($this->fields[$col] === null) {
-            return null;
-        }
-        return (int) $this->fields[$col];
-    }
-    public function getString($column)
-    {
-        $col = (is_int($column) ? $column - 1 : $column);
-        if (!array_key_exists($col, $this->fields)) {
-            throw new Exception("Invalid resultset column: " . $column);
-        }
-        if ($this->fields[$col] === null) {
-            return null;
-        }
-        return ($this->rtrimString ? rtrim($this->fields[$col]) : (string) $this->fields[$col]);
-    }
-
     public function getStatement()
     {
         return $this->pdostatement;
     }
+
+//---------------------------------------------------------------------------
+/**
+ * Column retrieval methods
+ * These methods return raw and type cast column values
+ * The column numbers here begin with 1, not 0!!
+ */
+    public function get($column=null)
+    {
+        $col = (is_int($column) ? $column - 1 : $column);
+        if ((null === $col) || !isset($this->fields[$col])) {
+        	return false;
+        }
+        return $this->fields[$col];
+    }
+    
+    public function getArray($column=null)
+    {
+        if (null === $col = $this->checkColGet($column)) {
+        	return null;
+        }
+        return (array) unserialize($this->fields[$col]);
+    }
+    public function getBoolean($column=null)
+    {
+        if (null === $col = $this->checkColGet($column)) {
+        	return null;
+        }
+        return (bool) $this->fields[$col];
+    }
+    public function getFloat($column=null)
+    {
+        if (null === $col = $this->checkColGet($column)) {
+        	return null;
+        }
+        return (float) $this->fields[$col];
+    }
+    public function getInt($column=null)
+    {
+        if (null === $col = $this->checkColGet($column)) {
+        	return null;
+        }
+        return (int) $this->fields[$col];
+    }
+    public function getString($column=null)
+    {
+        if (null === $col = $this->checkColGet($column)) {
+        	return null;
+        }
+        return ($this->rtrimString ? rtrim($this->fields[$col]) : (string) $this->fields[$col]);
+    }
+
+    /**
+     * Check if a given column in the current row exists
+     * 
+     */
+    private function checkColGet($column=null)
+    {
+        $col = (is_int($column) ? $column - 1 : $column);
+/*
+        if (!array_key_exists($col, $this->fields)) {
+            throw new Exception("Invalid resultset column: " . $col);
+        }
+*/        if (!array_key_exists($col, $this->fields)) {
+            return null;
+        }
+        return $col;
+    }
+
+//---------------------------------------------------------------------------
+    /**
+     * Gets a row from the results array and adjusts the keys of the row's fields as required by $fetchmode
+     * The row can come from 
+     * 0: the $fields array or from 
+     * 1: a row of the results array
+     * The refreshed row is saved to the $fields array
+     */
+    private function refresh_keys(int $source, ?int $fetchmode=null)
+    {
+		$fetchmode = $fetchmode ?? $this->fetchmode;
+
+		// Bail if for some reason we have an empty resultset
+		if (empty($this->array)) return false;
+		
+		if ($source == 0) {
+			// Get the row from the fields array
+			$row = $this->fields;
+		} else {
+			// Make sure the cursor is pointing to a valid row in the results array
+			if (!array_key_exists($this->cursor, $this->array)) {
+				return false;
+			}		
+			// Get the row from the results array
+			$row = $this->array[$this->cursor];
+		}
+		
+		// Get the first row, for the keys
+		$firstrow = reset($this->array);
+		$keys = array_keys($firstrow);
+		
+		if ($fetchmode == PDO::FETCH_NUM) {
+			// Flip the keys array to get numeric values
+			$keys = array_flip($keys);
+		} elseif ($fetchmode == PDO::FETCH_ASSOC) {
+			// Nothing to do: the results array already has associative keys
+		} else {
+			// We don't support FETCH_BOTH for now
+		}
+		$row = array_combine($keys, $row);
+
+		$this->fields = $row;
+		return true;
+    }
+
 }
