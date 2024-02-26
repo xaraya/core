@@ -80,13 +80,12 @@ function installer_admin_phase5()
 				 exit;
 			}
 		}
-    }   
+    }
 
 //---------------------------------------------------------------------------
     // Initialise xarDatabase and xarDB
     // We are not yet trying to connect.
     $init_args['doConnect'] = false;
-
     xarDatabase::init($init_args);
 
 //---------------------------------------------------------------------------
@@ -237,7 +236,7 @@ function installer_admin_phase5()
             throw $e;
         }
     }
-    
+
     // Install the security stuff here, but disable the registerMask and
     // and xarSecurity::check functions until we've finished the installation process
     sys::import('xaraya.security');
@@ -252,7 +251,7 @@ function installer_admin_phase5()
     foreach ($modules as $module) {
         // @todo it's over for sqlite here because we're missing a specific .xsl transform in tableddl
         try {
-        	xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'));
+       		xarInstallAPIFunc('initialise', array('directory' => $module,'initfunc'  => 'init'));
         } catch (Exception $e) {
         	return xarTpl::module('installer','admin','errors',array('layout' => 'general_exception', 'message' => $e->getMessage()));        	
         }
