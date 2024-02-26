@@ -898,7 +898,8 @@ class PDOResultSet extends xarObject implements ResultSetInterface
 
     protected $rtrimString = false;
 
-    public $fields  = array();				// Holds an array of the resultset's fields (column names)
+    public $fields = array();				// Holds an array of the resultset's fields (column names)
+    public $EOF = true;						// A flag we need to get rid off, but alas
 
     public function __construct($pdostatement = null, ?int $fetchmode = null)
     {
@@ -972,6 +973,7 @@ class PDOResultSet extends xarObject implements ResultSetInterface
     public function next()
     {
         if (!$this->inBounds()) {
+        	$this->EOF = true;
             return false;
         }
 
@@ -1044,9 +1046,21 @@ class PDOResultSet extends xarObject implements ResultSetInterface
 		return $this->fields;
     }
 
-    public function getall()
+    public function getall(?int $fetchmode=null)
     {
-        return $this->array;
+		$fetchmode = $fetchmode ?? $this->fetchmode;
+		
+		// By definition $this->array is associative, so if we have FETCH_NUM
+		// we need to remove the associative keys
+		if ($fetchmode == PDO::FETCH_NUM) {
+			$results_array = array();
+			foreach ($this->array as $values) {
+				$results_array[] = array_values($values);
+			}
+		} else {
+			return $this->array;
+		}
+        return $results_array;
     }
 
 //---------------------------------------------------------------------------
@@ -1183,6 +1197,7 @@ class PDOResultSet extends xarObject implements ResultSetInterface
 		// Bail if for some reason we have an empty resultset
 		if (empty($this->array)) return false;
 		
+		// Where is our fields data coming from?
 		if ($source == 0) {
 			// Get the row from the fields array
 			$row = $this->fields;
