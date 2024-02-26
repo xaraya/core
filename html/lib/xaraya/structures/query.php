@@ -1640,7 +1640,7 @@ class Query
                 else $this->addfield('COUNT(*)');
                 $this->setstatement();
                 $result = $this->dbconn->Execute($this->statement);
-                list($this->rows) = $result->fields;
+                list($this->rows) = array_values($result->fields);
                 $this->fields = $temp1;
                 $this->sorts = $temp2;
                 $this->usebinding = $temp3;
