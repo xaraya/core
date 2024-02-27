@@ -336,7 +336,7 @@ class xarRoles extends xarObject
             // retrieve the object's data from the repository
             // set up and execute the query
             self::initialize();
-            $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = " . self::$dbconn->qstr($value) ;
+            $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = " . (int)self::$dbconn->qstr($value) ;
             if ($state == self::ROLES_STATE_CURRENT) {
                 $query .= " AND state != " . self::ROLES_STATE_DELETED;
             } elseif ($state != self::ROLES_STATE_ALL) {
@@ -344,7 +344,7 @@ class xarRoles extends xarObject
             }
             $stmt = self::$dbconn->prepareStatement($query);
             $result = $stmt->executeQuery(array(), xarDB::FETCHMODE_ASSOC);
-            if(!$result) return;            
+            if(!$result) return;
             if($result->next()) $row = $result->fields;
             if (empty($row)) return;
             xarCoreCache::setCached($cacheScope, $cacheName, $row);

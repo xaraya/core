@@ -1689,6 +1689,7 @@ class Query
         $field = isset($parts[1]) ? $parts[1] : $parts[0];
         $table = isset($parts[1]) ? $parts[0] : $table;
         $result = $this->dbconn->Execute("SELECT MAX($field) FROM $table");
+        $result->first();
         list($id) = $result->fields;
         return (int)$id;
     }

@@ -606,6 +606,7 @@ class CelkoPositionProperty extends DataProperty
         $dbconn = xarDB::getConn();
         $result = $dbconn->Execute($sql);
         if (!$result) return;
+        $result->first();
         $num = $result->fields[0];
         $result->Close();
         return $num;
