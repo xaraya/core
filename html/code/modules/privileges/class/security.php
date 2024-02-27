@@ -359,7 +359,7 @@ class xarSecurity extends xarObject
             if (self::$exceptionredirect && !xarUser::isLoggedIn()) {
                 // The current authentication module will handle the authentication
                 //Redirect to login for anon users, and take their current url as well for redirect after login
-                $redirectURL = xarController::URL(xarModVars::get('roles','defaultauthmodule'),'user','showloginform',array('redirecturl'=> $requrl),false);
+                $redirectURL = xarController::URL(xarMod::getName(xarModVars::get('roles','defaultauthmodule')),'user','showloginform',array('redirecturl'=> $requrl),false);
             } else {
                 // Redirect to the privileges error page
                 $redirectURL = xarController::URL('privileges','user','errors',array('layout' => 'no_privileges', 'redirecturl'=> $requrl),false);
