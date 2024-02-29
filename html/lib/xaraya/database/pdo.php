@@ -1073,7 +1073,7 @@ class PDOResultSet extends xarObject implements ResultSetInterface
     {
         $rownum = $rownum ?? $this->cursor;
 
-        // We need a valid key value and a non empty rresults array 
+        // We need a valid key value and a non empty results array 
         $bounds = array_key_exists($rownum, $this->array) && ($this->getRecordCount() !== 0);
         return $bounds;
     }
