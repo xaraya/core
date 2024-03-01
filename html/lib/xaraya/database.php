@@ -112,6 +112,9 @@ class xarDB
      * Initialise a new db connection
      * Create a new connection based on the supplied parameters
      *
+     * @todo agree whether dbConnIndex is the latest count of connectionMap or
+     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     *
      * @return Connection
      */
     public static function newConn(array $args = null)
@@ -188,6 +191,9 @@ class xarDB
     /**
      * Get a database connection
      *
+     * @todo agree whether dbConnIndex is the latest count of connectionMap or
+     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     *
      * @return object database connection object
      */
      
@@ -249,7 +255,7 @@ class xarDB
     public static function hasConn($index = 0)
     {
         // Does the connection at $index exist
-        if (isset(self::$connectionsMap[$index])) {
+        if (isset(self::$connectionMap[$index])) {
             return true;
         }
         return false;
@@ -258,11 +264,15 @@ class xarDB
     /**
      * @todo restore this - we need it for the database connections above (predefined, on demand or external)
      * See https://github.com/xaraya/core/wiki/DD-Objects-%E2%80%90-Recent-Features#database-connections
+     *
+     * @todo agree whether dbConnIndex is the latest count of connectionMap or
+     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     *
      */
     public static function getConnIndex()
     {
         // The number of connections in the connectionMap
-		$count = count(self::$connectionsMap) - 1;
+		$count = count(self::$connectionMap) - 1;
 		return $count;
     }
 
@@ -276,6 +286,9 @@ class xarDB
 	/**
 	 * Get a connection from the connectionMap or create a new one from the middleware
 	 *
+     * @todo agree whether dbConnIndex is the latest count of connectionMap or
+     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     *
 	 * @return connection object
 	 */
     public static function getConnection(Array $dsn, $flags)
