@@ -411,7 +411,8 @@ class xarUser extends xarObject
                 // First get the field names
                 $fields = array();
                 $result->setFetchMode(xarDB::FETCHMODE_ASSOC);
-                $result->next(); $result->previous();
+//                $result->next(); $result->previous();
+                $result->first();
                 $numfields = count($result->fields);
                 for ($i=0;$i< $numfields;$i++) {
                     $tmp = array_slice($result->fields,$i,1);
@@ -419,7 +420,8 @@ class xarUser extends xarObject
                     $fields[$namefield]['name'] = strtolower($namefield);
                 }
                 $result->setFetchMode(xarDB::FETCHMODE_NUM);
-                $result->next(); $result->previous();
+                $result->first();
+//                $result->next(); $result->previous();
                 
                 // Now get the values
                 $i=0; $line=array();
