@@ -336,12 +336,9 @@ class xarRoles extends xarObject
             // retrieve the object's data from the repository
             // set up and execute the query
             self::initialize();
-<<<<<<< HEAD
-            $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = " . self::$dbconn->qstr($value) ;
-=======
             $query = "SELECT * FROM " . self::$rolestable . " WHERE $field = ?";
             $params = [$value];
->>>>>>> f7062d2b50a7e824002f7df2df42d43a1dfece33
+
             if ($state == self::ROLES_STATE_CURRENT) {
                 $query .= " AND state != ?";
                 $params[] = self::ROLES_STATE_DELETED;
