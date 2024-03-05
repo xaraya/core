@@ -281,7 +281,11 @@ class AccessProperty extends DataProperty
 
 			if (isset($data['group'])) {
 				if (is_string($data['group'])) {
-					$groups = unserialize($data['group']);
+					try {
+						$groups = unserialize($data['group']);
+					} catch (Exception $e) {
+						$groups = $data['group'];
+					}
 				} else {
 					$groups = $data['group'];
 				}
