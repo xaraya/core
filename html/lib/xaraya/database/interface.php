@@ -159,8 +159,8 @@ interface ResultSetInterface
     public function previous();
     //public function relative($offset);
     //public function absolute($pos);
-    //public function seek($rownum);
-    public function first(?int $fetchmode=null);
+    public function seek($rownum);
+    public function first();
     //public function last();
     //public function beforeFirst();
     //public function afterLast();

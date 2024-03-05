@@ -243,20 +243,23 @@ abstract class ResultSetCommon
      * @see ResultSet::first()
      */
 	// XARAYA MODIFICATION
-    public function first(?int $fetchmode = null)
+    public function first()
 	// END XARAYA MODIFICATION
     {
         if($this->cursorPos !== 0) {
             $this->seek(0);
         }
-        return $this->next();
+	// XARAYA MODIFICATION
+        return true;
+//        $this->seek(0);
+	// END XARAYA MODIFICATION
     }
 
     /**
      * @see ResultSet::last()
      */
 	// XARAYA MODIFICATION
-    public function last(?int $fetchmode = null)
+    public function last()
 	// END XARAYA MODIFICATION
     {
         if($this->cursorPos !==  ($last = $this->getRecordCount() - 1)) {
@@ -286,7 +289,7 @@ abstract class ResultSetCommon
      */
     public function isAfterLast()
     {
-        return ($this->cursorPos === $this->getRecordCount() + 1);
+        return ($this->cursorPos === $this->getRecordCount());
     }
 
     /**
@@ -531,13 +534,12 @@ abstract class ResultSetCommon
         }
     }
 
-    // XARAYA MODIFICATION
     public function __get($propname)
     {
         switch($propname) {
             case 'EOF':
                 // Used all over the place, probably needs to stay for a while
-                return $this->isAfterLast();
+				return ($this->isAfterLast());
             default:
                 // We leave this in so any api migration error show up in a nice way
                 throw new Exception("Unknown property accessed for connection");

@@ -184,9 +184,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @throws SQLException - if unable to move to first position
      *                      - if not at first pos & ResultSet doesn't support reverse scrolling
      */
-	// XARAYA MODIFICATION
-    public function first(?int $fetchmode = null);
-	// END XARAYA MODIFICATION
+    public function first();
 
     /**
      * Move cursor to end of recordset.
@@ -194,9 +192,7 @@ interface ResultSet extends IteratorAggregate, ResultSetInterface
      * @throws SQLException - if unable to move to last position
      *                      - if unable to get num rows
      */
-	// XARAYA MODIFICATION
-    public function last(?int $fetchmode = null);
-	// END XARAYA MODIFICATION
+    public function last();
 
     /**
      * Sets cursort to before first record. This does not actually seek(), but
