@@ -60,7 +60,7 @@ class xarDB
     // Not all database types have more than one driver
     public static function getDrivers()
     {
-        $map = self::mw::$DriverMap ?? array();
+        $map = self::$mw::$DriverMap ?? array();
         return $map;
     }
     public static function getPrefix()
@@ -111,6 +111,9 @@ class xarDB
     /**
      * Initialise a new db connection
      * Create a new connection based on the supplied parameters
+     *
+     * @todo agree whether dbConnIndex is the latest count of connectionMap or
+     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
      *
      * @return Connection
      */
@@ -188,6 +191,9 @@ class xarDB
     /**
      * Get a database connection
      *
+     * @todo agree whether dbConnIndex is the latest count of connectionMap or
+     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     *
      * @return object database connection object
      */
      
@@ -224,23 +230,49 @@ class xarDB
         throw new Exception(xarMLS::translate('No connection available'));
     }
 
-    // CHECKME: what is this used for?
+    /**
+     * Is this an external database connection?
+     *
+     * For Xaraya connections (via Creole or PDO) the answer is false
+     * For external database connections (MongoDB, Doctrine DBAL, native PDO, ...) the answer is true
+     * See https://github.com/xaraya/core/wiki/DD-Objects-%E2%80%90-Recent-Features#external-database-connections
+     *
+     * This was added so that xarDB and ExternalDatabase would use the same DatabaseInterface,
+     * where xarDB would extend either xarDB_Creole or xarDB_PDO depending on the chosen middleware.
+     * But obviously with all the refactoring you added later, xarDB no longer extends xarDB_Creole
+     * or xarDB_PDO, so you don't really need to refer to self::$mw here anymore - just return false...
+     *
+     * Note: external database connection indexes are strings starting with "ext_" - see ExternalDatabase::isIndexExternal()
+     */
 	public static function isIndexExternal($index = 0) { return self::$mw::isIndexExternal($index); }
 	
-    // CHECKME: what is this used for?
+    /**
+     * Do we already have this database connection?
+     *
+     * This is to allow DD objects to have their own database connection, either pre-defined or on demand
+     * See https://github.com/xaraya/core/wiki/DD-Objects-%E2%80%90-Recent-Features#database-connections
+     */
     public static function hasConn($index = 0)
     {
         // Does the connection at $index exist
-        if (isset(self::$connectionsMap[$index])) {
+        if (isset(self::$connectionMap[$index])) {
             return true;
         }
         return false;
     }
 
+    /**
+     * @todo restore this - we need it for the database connections above (predefined, on demand or external)
+     * See https://github.com/xaraya/core/wiki/DD-Objects-%E2%80%90-Recent-Features#database-connections
+     *
+     * @todo agree whether dbConnIndex is the latest count of connectionMap or
+     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     *
+     */
     public static function getConnIndex()
     {
         // The number of connections in the connectionMap
-		$count = count(self::$connectionsMap) - 1;
+		$count = count(self::$connectionMap) - 1;
 		return $count;
     }
 
@@ -254,6 +286,9 @@ class xarDB
 	/**
 	 * Get a connection from the connectionMap or create a new one from the middleware
 	 *
+     * @todo agree whether dbConnIndex is the latest count of connectionMap or
+     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     *
 	 * @return connection object
 	 */
     public static function getConnection(Array $dsn, $flags)
