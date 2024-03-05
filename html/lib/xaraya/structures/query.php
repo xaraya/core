@@ -222,17 +222,18 @@ class Query
                 if (!$this->israwstatement) {
                     if ($this->fields == array() && $numfields > 0) {
                         $result->setFetchMode(xarDB::FETCHMODE_ASSOC);
-                        $result->next(); $result->previous();
+                        $result->first();
                         for ($i=0;$i< $numfields;$i++) {
                             $tmp = array_slice($result->fields,$i,1);
                             $namefield  = key($tmp);
                             $this->fields[$namefield]['name'] = strtolower($namefield ?? '');
                         }
-                        $result->setFetchMode(xarDB::FETCHMODE_NUM);
-                        $result->next(); $result->previous();
                     }
-                    while (!$result->EOF) {
+					$result->setFetchMode(xarDB::FETCHMODE_NUM);
+                    $result->first();
+                    while ($result->next()) {
                         $i=0; $line=array();
+
                         foreach ($this->fields as $key => $value ) {
                             if(!empty($value['alias']))
                                 $line[$value['alias']] = $result->fields[$i];
@@ -243,12 +244,10 @@ class Query
                             $i++;
                         }
                         $this->output[] = $line;
-                        $result->next();
                     }
                 } else {
-                    while (!$result->EOF) {
+                    while ($result->next()) {
                         $this->output[] = $result->fields;
-                        $result->next();
                     }
                 }
             }
