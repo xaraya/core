@@ -40,6 +40,10 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
      */
     public function seek($rownum)
     {
+		// XARAYA MODIFICATION
+		if (($rownum < 0) || ($rownum > $this->getRecordCount())) {
+			return false;
+		}
         // MySQL rows start w/ 0, but this works, because we are
         // looking to move the position _before_ the next desired position
         if (!@mysqli_data_seek($this->result, $rownum)) {
@@ -47,7 +51,20 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
         }
 
         $this->cursorPos = $rownum;
+		// END XARAYA MODIFICATION
 
+        return true;
+    }
+    
+    public function first()
+    {
+		// XARAYA MODIFICATION
+        $this->seek(0);
+    	$this->fields = mysqli_fetch_array($this->result, $this->fetchmode);
+// CHECKME: replace null by empty array everywhere?
+//    	$this->fields = $fields ?? array();
+        $this->seek(0);
+		// END XARAYA MODIFICATION
         return true;
     }
 
@@ -57,9 +74,11 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
     public function next()
     {
     	$this->fields = mysqli_fetch_array($this->result, $this->fetchmode);
-        $resource = $this->conn->getResource();
 
         if (!$this->fields) {
+			// XARAYA MODIFICATION
+	        $resource = $this->conn->getResource();
+			// END XARAYA MODIFICATION
             $errno = mysqli_errno($resource);
 
             if (!$errno) {
