@@ -25,7 +25,7 @@ class Query
     public $primary;
     public $conditions          = array();      // Normalized array of conditions used in the statement
     public $conjunctions        = array();      // Normalized array of conjunctions used with conditions used in the statement
-    public $sorts               = array();      // Aarray of fields used in the sort clause of the statement
+    public $sorts               = array();      // Array of fields used in the sort clause of the statement
     public $groups              = array();      // Normalized array of fields used in the group clause of the statement
     public $having              = array();      // Normalized array of fields used in the having clause of the statement
     public $result              = array();      // Holds the result object of a query
@@ -38,18 +38,18 @@ class Query
     public $affected            = 0;            
     public $output              = array();      // Holds multiple rows of results
     public $row                 = array();      // Holds a single row of results
-    public $dbconn;                             // Holds the conection object to the database
+    public $dbconn;                             // Holds the connection object to the database
     public $statement;                          // Holds the statement being processed/executed
-    public $israwstatement = 0;                 // Flag that indicates whether the statement to be processed was entered as a string
+    public $israwstatement      = 0;            // Flag that indicates whether the statement to be processed was entered as a string
     public $bindstring;
     public $limits              = true;         // Flag that indicates whether the (SELECT) query uses limits
     public $optimize            = true;         // Flag that indicates whether the query will be optimized
-    public $distinctselect = false;
-    public $distinctarray = array();
-    public $distinctname = null;
-    public $bindings = null;
-    public $pagerows = null;
-    public $cstring = null;
+    public $distinctselect      = false;
+    public $distinctarray       = array();
+    public $distinctname        = null;
+    public $bindings            = null;
+    public $pagerows            = null;
+    public $cstring             = null;
 
     private $starttime;
     private $key = 0;                           // Unique key for this statement (used in nested conditions)
