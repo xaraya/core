@@ -448,7 +448,7 @@ class xarCore extends xarCoreCache
         if ($whatToLoad & self::SYSTEM_BLOCKS)
         {
             sys::import('xaraya.blocks');
-            // Start Blocks Support Sytem
+            // Start Blocks Support System
             xarBlock::init();
             $whatToLoad ^= self::BIT_BLOCKS;
             // We're about done here - everything else requires templates !?
