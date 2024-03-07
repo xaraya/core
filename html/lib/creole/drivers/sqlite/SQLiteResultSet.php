@@ -36,6 +36,20 @@ require_once 'creole/common/ResultSetCommon.php';
 class SQLiteResultSet extends ResultSetCommon implements ResultSet
 {
     /**
+     * Holds the number of records in our resultset
+     */
+    private $recordcount = null;
+    
+	// Add a constructor to deal with quirks
+	// XARAYA MODIFICATION
+    public function _construct()
+    {
+    	$this->recordcount = $this->getRecordCount();
+    	return true;
+    }
+	// END XARAYA MODIFICATION
+
+    /**
      * Gets optimized SQLiteResultSetIterator.
      * @return SQLiteResultSetIterator
      */
@@ -47,16 +61,39 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
 
     /**
      * @see ResultSet::seek()
+     *
+     * SQLite3 does not support a seek method/function.
+     * This means either we remove instances of seek[x] where x != 0 from the codebase or
+     * We import the resultset into a PHP array and work with that. However, at that point I'm not
+     * sure there is still a difference between PDO and Creole SQLite.
+     * For now let's try the first option.
      */
     public function seek($rownum)
     {
-        // MySQL rows start w/ 0, but this works, because we are
-        // looking to move the position _before_ the next desired position
-        if (!@sqlite_seek($this->result, $rownum)) {
-            return false;
+        // XARAYA MODIFICATION
+        // We *can* reset to the beginning
+        if ($rownum === 0) {
+        	$this->result->reset();
+	        // Get the fields and reposition
+	        $result = $this->result->fetcharray($this->fetchmode);
+        	$this->result->reset();
+        	if ($result === false) {
+        		// No result, return false
+        		return $result;
+        	} elseif (is_array($result)) {
+        		// Good result put the fetched fields where they need to be, adjust the cursor posiition and return true.
+		        $this->fields = $result;
+		        $this->cursorPos = $rownum;
+        		return true;
+        	} else {
+        		// Not supposed to happen
+				echo xarML('seek() returned an unknown result');
+				exit;
+        	}
+        } else {
+			throw new SQLException("SQLite3 does not support a seek method");
         }
-        $this->cursorPos = $rownum;
-        return true;
+        // END XARAYA MODIFICATION
     }
 
     /**
@@ -109,21 +146,16 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
     public function getRecordCount()
     {
         // XARAYA MODIFICATION
-		$this->result->reset();
-		$result = $this->result->fetchArray();
-		if (is_array($result) && isset($result['count'])) {
-			$rows = $result['count'];
-		} else {
-			$rows = 0;
-		}
+		if (null === $this->recordcount) {
+			$this->result->reset();
+			$records = 0;
+			while ($this->result->fetchArray()) {
+    			$records++;
+			}
+			$this->result->reset();
+			return $records;
+		} 
         // END XARAYA MODIFICATION
-
-        if ($rows === null) {
-        	// XARAYA MODIFICATION
-            throw new SQLException("Error fetching num rows", $this->conn->getResource()->lastErrorMsg());
-        	// END XARAYA MODIFICATION
-		}
-        return (int) $rows;
     }
 
     /**

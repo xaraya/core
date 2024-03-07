@@ -60,12 +60,25 @@ class MySQLiResultSet extends ResultSetCommon implements ResultSet
     {
 		// XARAYA MODIFICATION
         $this->seek(0);
-    	$this->fields = mysqli_fetch_array($this->result, $this->fetchmode);
-// CHECKME: replace null by empty array everywhere?
-//    	$this->fields = $fields ?? array();
+    	$result = mysqli_fetch_array($this->result, $this->fetchmode);
         $this->seek(0);
+		if ($result === false) {
+			// No result, return false
+			return $result;
+		} elseif (is_array($result)) {
+			// Good result put the fetched fields where they need to be, adjust the cursor posiition and return true.
+			$this->fields = $result;
+			$this->cursorPos = 0;
+			return true;
+		} elseif (null === $result) {
+			// Indicates a successful call, but no rows fetched; return false for now
+			return false;
+		} else {
+			// Not supposed to happen
+			echo xarML('seek() returned an unknown result');
+			exit;
+		}
 		// END XARAYA MODIFICATION
-        return true;
     }
 
     /**

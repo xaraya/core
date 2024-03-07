@@ -244,16 +244,10 @@ abstract class ResultSetCommon
      */
 	// XARAYA MODIFICATION
     public function first()
-	// END XARAYA MODIFICATION
     {
-        if($this->cursorPos !== 0) {
-            $this->seek(0);
-        }
-	// XARAYA MODIFICATION
-        return true;
-//        $this->seek(0);
-	// END XARAYA MODIFICATION
+        return $this->seek(0);
     }
+	// END XARAYA MODIFICATION
 
     /**
      * @see ResultSet::last()
