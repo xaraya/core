@@ -460,7 +460,6 @@ class xarXMLInstaller extends xarObject
         array_pop($queries);
         $dbconn = xarDB::getConn();
         foreach ($queries as $q) {
-        var_dump($q);
             xarLog::message('Executing SQL: ' . $q, xarLog::LEVEL_INFO);
             $dbconn->Execute($q);
         }
