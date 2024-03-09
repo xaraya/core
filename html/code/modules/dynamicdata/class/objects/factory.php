@@ -9,6 +9,9 @@
  * @link http://xaraya.info/index.php/release/182.html
  */
 
+// this is used in most methods below, so we import it here
+sys::import('modules.dynamicdata.class.objects.descriptor');
+
 /**
  * Move static methods from DataObjectMaster to DataObjectFactory
  */
@@ -614,7 +617,7 @@ class DataObjectFactory extends xarObject
 
         // Last stand against wild hooks and other excesses
         if($args['objectid'] < 5) {
-            $msg = 'You cannot delete the DynamicDat classes';
+            $msg = 'You cannot delete the DynamicData classes';
             throw new BadParameterException(null, $msg);
         }
 
