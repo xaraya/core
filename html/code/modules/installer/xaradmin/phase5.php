@@ -308,11 +308,11 @@ function installer_admin_phase5()
     // 4. Initialize all the modules we haven't yet
     $modules = array('privileges','roles','blocks','authsystem','themes','dynamicdata','mail','categories');
     foreach ($modules as $module) {
-        try {
-            sys::import('modules.' . $module . '.xartables');
+        if (file_exists("code/modules/$module/xartables.php")) {
+        	include_once("code/modules/$module/xartables.php");
             $tablefunc = $module . '_xartables';
             if (function_exists($tablefunc)) xarDB::importTables($tablefunc());
-        } catch (Exception $e) {}
+        }
         if (!xarInstallAPIFunc('initialise', array('directory' => $module, 'initfunc'  => 'init'))) return;
     }
 
