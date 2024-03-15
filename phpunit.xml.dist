@@ -1,31 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.6/phpunit.xsd"
-         bootstrap="phpstan-bootstrap.php"
-         verbose="true">
-    <testsuites>
-        <testsuite name="default">
-            <directory>developer/tests/unit</directory>
-        </testsuite>
-    </testsuites>
-
-    <coverage processUncoveredFiles="false">
-        <include>
-            <directory suffix=".php">html</directory>
-        </include>
-        <exclude>
-            <directory suffix=".php">html/themes</directory>
-            <directory suffix=".php">html/var</directory>
-        </exclude>
-        <!--
-        <report>
-            <html outputDirectory="developer/tests/coverage"/>
-            <text outputFile="php://stdout" showOnlySummary="true"/>
-        </report>
-         -->
-    </coverage>
-
-    <php>
-        <env name="XDEBUG_MODE" value="off"/>
-    </php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" bootstrap="phpstan-bootstrap.php" cacheDirectory=".phpunit.cache">
+  <testsuites>
+    <testsuite name="default">
+      <directory>developer/tests/unit</directory>
+    </testsuite>
+  </testsuites>
+  <coverage>
+    <!--
+    <report>
+      <html outputDirectory="developer/tests/coverage"/>
+      <text outputFile="php://stdout" showOnlySummary="true"/>
+    </report>
+    -->
+  </coverage>
+  <php>
+    <env name="XDEBUG_MODE" value="off"/>
+  </php>
+  <source>
+    <include>
+      <directory suffix=".php">html</directory>
+    </include>
+    <exclude>
+      <directory suffix=".php">html/themes</directory>
+      <directory suffix=".php">html/var</directory>
+    </exclude>
+  </source>
 </phpunit>

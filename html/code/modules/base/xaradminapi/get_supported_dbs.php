@@ -12,7 +12,8 @@
 /**
  * Function return the database types give a middleware
  * 
- * @param string $args['middleware'] Name of the chosen middleware
+ * @param array<string, mixed> $args
+ * with $args['database_middleware'] Name of the chosen middleware
  * 
  * @return array Returns a dropdown array of the databases supported by the middleware
  */

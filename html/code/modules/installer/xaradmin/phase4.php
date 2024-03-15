@@ -21,7 +21,7 @@
  * Phase 4: Database Settings Page
  *
  * @access private
- * @return array<mixed> data for the template display
+ * @return array<mixed>|bool data for the template display
  */
 function installer_admin_phase4()
 {
@@ -29,6 +29,7 @@ function installer_admin_phase4()
     xarVar::fetch('install_language',            'str::', $install_language, 'en_US.utf-8', xarVar::NOT_REQUIRED);
     xarVar::fetch('continue',            'isset', $continue, NULL, xarVar::NOT_REQUIRED);
     
+    $data = [];
     xarVar::fetch('install_database_host',       'str::', $data['database_host'],       xarSystemVars::get(sys::CONFIG, 'DB.Host'), xarVar::NOT_REQUIRED);
     xarVar::fetch('install_database_middleware', 'str::', $data['database_middleware'], xarSystemVars::get(sys::CONFIG, 'DB.Middleware'), xarVar::NOT_REQUIRED);
     xarVar::fetch('install_database_type',       'str::', $data['database_type'],       xarSystemVars::get(sys::CONFIG, 'DB.Type'), xarVar::NOT_REQUIRED);

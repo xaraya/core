@@ -710,7 +710,7 @@ abstract class ExternalDataStore extends SQLDataStore
 
     /**
      * Summary of getConnection
-     * @return \Connection|object|\xarPDO
+     * @return \Connection|object|\PDOConnection
      */
     public function getConnection()
     {
