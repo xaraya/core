@@ -16,12 +16,12 @@ use xarEvents;
 use xarObject;
 use xarServer;
 use xarSession;
-use Connection;
 use SessionHandlerInterface;
 use Exception;
 use BadParameterException;
 use SQLException;
 use sys;
+use Xaraya\Database\ConnectionInterface;
 
 sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.exception');
@@ -58,8 +58,7 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
 {
     public const  PREFIX = 'XARSV';     // Reserved by us for our session vars
     public const  COOKIE = 'XARAYASID'; // Our cookiename
-// TODO: the following line presently causes PDO to break
-//    private ?Connection $db;               // We store sessioninfo in the database
+    /** @var ConnectionInterface|null */
     private $db;                        // We store sessioninfo in the database
     private string $tbl;                // Container for the session info
     private bool $isNew = true;         // Flag signalling if we're dealing with a new session

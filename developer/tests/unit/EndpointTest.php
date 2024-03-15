@@ -73,6 +73,7 @@ final class EndpointTest extends TestCase
 
     public function testIndex(): void
     {
+        xarServer::setVar('REQUEST_URI', '/xaraya/index.php');
         ob_start();
         include sys::web() . 'index.php';
         $output = ob_get_clean();

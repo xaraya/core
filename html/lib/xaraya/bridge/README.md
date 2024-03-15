@@ -127,6 +127,7 @@ use Xaraya\Bridge\Routing\FastRouteBridge;
 use xarServer;
 
 // add route collection to your own dispatcher
+// @todo use FastRoute::recommendedSettings() in v2.x
 // $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
 //     $r->addGroup('/mysite', function (FastRoute\RouteCollector $r) {
 //         FastRouteBridge::addRouteCollection($r);

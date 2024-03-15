@@ -53,6 +53,7 @@ use DataObjectRESTHandler;
 use FastRoute\Dispatcher as FastRouter;
 use FastRoute\RouteCollector;
 
+// @todo use FastRoute::recommendedSettings() in v2.x
 use function FastRoute\simpleDispatcher;
 
 class FastRouteHandler implements MiddlewareInterface, RequestHandlerInterface

@@ -64,10 +64,12 @@ use Xaraya\Bridge\Requests\StaticFileRequest;
 use DataObjectRESTHandler;
 use xarGraphQL;
 
+// @todo use FastRoute::recommendedSettings() in v2.x
 use function FastRoute\simpleDispatcher;
 
 /**
  * Keep track of collected routes - see https://github.com/nikic/FastRoute/blob/master/src/RouteCollector.php
+ * @todo RouteCollector will become @final in v2.x - call processedRoutes() instead?
  */
 class TrackRouteCollector extends RouteCollector
 {
@@ -82,7 +84,7 @@ class TrackRouteCollector extends RouteCollector
         static::$trackRoutes[] = [$this->currentGroupPrefix . $route, $httpMethod, $handler];
         //$route = $this->currentGroupPrefix . $route;
         //$routeDatas = $this->routeParser->parse($route);
-        parent::addRoute($httpMethod, $route, $handler);
+        parent::addRoute($httpMethod, $route, $handler, $extraParameters);
     }
 
     public function addGroup(string $prefix, callable $callback): void
@@ -145,6 +147,7 @@ class FastRouteBridge extends BasicBridge
 
     /**
      * Summary of getSimpleDispatcher
+     * @todo use FastRoute::recommendedSettings() in v2.x
      * @param string $group
      * @return Dispatcher
      */
