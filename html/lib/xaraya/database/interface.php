@@ -13,6 +13,8 @@ namespace Xaraya\Database;
 
 /**
  * Aligned with xarDB_Creole and xarDB_PDO
+ * @todo review DatabaseInterface, as it was common between xarDB and ExternalDatabase,
+ * but xarDB extended xarDB_Creole or xarDB_PDO before the DB refactoring by @xaraya
  */
 interface DatabaseInterface
 {
@@ -30,7 +32,7 @@ interface DatabaseInterface
     /**
      * Summary of newConn
      * @param ?array<string, mixed> $args
-     * @return \Connection|\xarPDO|object
+     * @return \Connection|\PDOConnection|object
      */
 //    public static function newConn(array $args = null);
     /**
@@ -65,7 +67,7 @@ interface DatabaseInterface
     /**
      * Summary of getConn
      * @param mixed $index
-     * @return \Connection|\xarPDO|object
+     * @return \Connection|\PDOConnection|object
      */
 //    public static function &getConn($index = 0);
     /**
@@ -89,7 +91,7 @@ interface DatabaseInterface
      * Summary of getConnection
      * @param mixed $dsn
      * @param mixed $flags
-     * @return \Connection|\xarPDO|object
+     * @return \Connection|\PDOConnection|object
      */
     public static function getConnection(Array $dsn, $flags);
     /**

@@ -77,7 +77,7 @@ class TrackRouteCollector extends RouteCollector
     public static string $groupStopped = 'GROUP STOPPED';
     //protected string $currentGroupPrefix = '';
 
-    public function addRoute($httpMethod, string $route, mixed $handler): void
+    public function addRoute($httpMethod, string $route, mixed $handler, array $extraParameters = []): void
     {
         static::$trackRoutes[] = [$this->currentGroupPrefix . $route, $httpMethod, $handler];
         //$route = $this->currentGroupPrefix . $route;

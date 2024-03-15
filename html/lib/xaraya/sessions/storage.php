@@ -83,7 +83,7 @@ class SessionCacheStorage implements SessionStorageInterface
  */
 class SessionDatabaseStorage implements SessionStorageInterface
 {
-    /** @var \Connection|\xarPDO */
+    /** @var \Connection|\PDOConnection */
     private $db;
     private string $table;
 

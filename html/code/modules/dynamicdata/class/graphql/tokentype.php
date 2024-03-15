@@ -133,7 +133,7 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
     public static function _xar_create_mutation_resolver($typename, $object = null): callable
     {
         //$resolver = function ($rootValue, $args, $context, ResolveInfo $info) use ($typename, $object) {
-        $resolver = function ($rootValue, $args) {
+        $resolver = function ($rootValue, $args, $context) {
             // disable caching for mutations
             xarGraphQL::$enableCache = false;
             if (xarGraphQL::$trace_path) {
@@ -145,12 +145,13 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
             if (empty($args['access']) || !in_array($args['access'], ['display', 'update', 'create', 'delete', 'admin'])) {
                 throw new Exception('Invalid access');
             }
+            // @todo use $context
             //xarSession::init();
             xarMod::init();
             xarUser::init();
             // @checkme unset xarSession role_id if needed, otherwise xarUser::logIn will hit xarUser::isLoggedIn first!?
             // @checkme or call authsystem directly if we don't want/need to support any other authentication modules
-            $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args);
+            $userId = xarMod::apiFunc('authsystem', 'user', 'authenticate_user', $args, $context);
             if (empty($userId) || $userId == xarUser::AUTH_FAILED) {
                 throw new Exception('Invalid username or password');
             }

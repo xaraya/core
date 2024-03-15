@@ -34,7 +34,7 @@ class ExternalDatabase implements DatabaseInterface
     public const ERROR_MSG = 'Not available as static method for ExternalDatabase - use the native methods of the database connection or $datastore->getDatabaseInfo() to get this';
     public static string $latest = '';
     public static string $prefix = "";
-    /** @var array<string, \Connection|\xarPDO|object> */
+    /** @var array<string, \Connection|\PDOConnection|object> */
     public static array $connections = [];
     // if we want to extend this class per DB extension someday + override $connectionClass
     public static string $connectionClass = "ExternalConnection";

@@ -1368,7 +1368,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
 
         // unserialize access levels if necessary
         try {
-            $access_rules = unserialize($this->access_rules['access']);
+            $access_rules = unserialize($this->access_rules['access'] ?? '');
         } catch (Exception $e) {
             $access_rules = [];
         }

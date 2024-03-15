@@ -25,14 +25,22 @@ final class DatabaseTest extends TestCase
 
     protected static function useMiddleware($middleware = 'Creole'): void
     {
+        $search = [];
+        $replace = [];
         if ($middleware == 'Creole') {
-            $search = 'PDO';
+            $search[] = "\$systemConfiguration['DB.Middleware'] = 'PDO';";
+            $replace[] = "\$systemConfiguration['DB.Middleware'] = 'Creole';";
+            $search[] = "\$systemConfiguration['DB.Type'] = 'pdomysqli';";
+            $replace[] = "\$systemConfiguration['DB.Type'] = 'mysqli';";
         } else {
-            $search = 'Creole';
+            $search[] = "\$systemConfiguration['DB.Middleware'] = 'Creole';";
+            $replace[] = "\$systemConfiguration['DB.Middleware'] = 'PDO';";
+            $search[] = "\$systemConfiguration['DB.Type'] = 'mysqli';";
+            $replace[] = "\$systemConfiguration['DB.Type'] = 'pdomysqli';";
         }
         $fileName = sys::varpath() . '/' . sys::CONFIG;
         $content = file_get_contents($fileName);
-        $content = str_replace("\$systemConfiguration['DB.Middleware'] = '" . $search . "';", "\$systemConfiguration['DB.Middleware'] = '" . $middleware . "';", $content);
+        $content = str_replace($search, $replace, $content);
         file_put_contents($fileName, $content);
     }
 
@@ -45,7 +53,7 @@ final class DatabaseTest extends TestCase
         $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
         $this->assertEquals($expected, $middleware);
         xarDatabase::init();
-        $this->assertTrue(is_subclass_of('xarDB', 'xarDB_Creole'));
+        //$this->assertTrue(is_subclass_of('xarDB', 'xarDB_Creole'));
         $conn = xarDB::getConn();
         $this->assertTrue($conn instanceof \Connection);
         // @todo align FETCHMODE constants between Creole & PDO interfaces
@@ -101,9 +109,9 @@ final class DatabaseTest extends TestCase
         $middleware = xarSystemVars::get(sys::CONFIG, 'DB.Middleware');
         $this->assertEquals($expected, $middleware);
         xarDatabase::init();
-        $this->assertTrue(is_subclass_of('xarDB', 'xarDB_PDO'));
+        //$this->assertTrue(is_subclass_of('xarDB', 'xarDB_PDO'));
         $conn = xarDB::getConn();
-        $this->assertTrue($conn instanceof \xarPDO);
+        $this->assertTrue($conn instanceof \PDOConnection);
         // @todo align FETCHMODE constants between Creole & PDO interfaces
         $expected = 2;
         $this->assertEquals($expected, xarDB::FETCHMODE_ASSOC);
@@ -125,7 +133,7 @@ final class DatabaseTest extends TestCase
         $conn = xarDB::getConn(1);
         $expected = 1;
         $this->assertEquals($expected, xarDB::getConnIndex());
-        $this->assertTrue($conn instanceof \xarPDO);
+        $this->assertTrue($conn instanceof \PDOConnection);
         $this->assertTrue(xarDB::hasConn(1));
 
         // check new connection to other database
@@ -137,7 +145,7 @@ final class DatabaseTest extends TestCase
         $dbConnIndex = xarDB::getConnIndex();
         $expected = 2;
         $this->assertEquals($expected, $dbConnIndex);
-        $this->assertTrue($conn instanceof \xarPDO);
+        $this->assertTrue($conn instanceof \PDOConnection);
         $this->assertTrue(xarDB::hasConn($dbConnIndex));
 
         // use connection to other database

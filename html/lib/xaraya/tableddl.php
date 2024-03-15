@@ -427,6 +427,7 @@ class xarXMLInstaller extends xarObject
 				$dbType = 'pgsql';
 			break;
 			default:
+            $dbType = xarDB::getType();
 			throw new Exception(xarML("Unknown database type: '#(1)'", $dbType));
 		}
         

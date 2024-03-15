@@ -215,10 +215,10 @@ function installer_admin_phase5()
             if (!empty($dbinfo->getTables())) {
                 foreach ($dbinfo->getTables() as $tbl) {
                     $table = $tbl->getName();
-                    if (strpos($table, '_') && (substr($table, 0, strpos($table, '_')) == $dbPrefix)) {
+                    if (strpos($table, '_') && (substr($table, 0, strpos($table, '_')) == $init_args['prefix'])) {
                         // we have the same prefix.
                         try {
-                            $sql = xarTableDDL::dropTable($table, $dbType);
+                            $sql = xarTableDDL::dropTable($table, $init_args['databaseType']);
                             $dbconn->Execute($sql);
                         } catch (SQLException $dropfail) {
                             // retry with drop view

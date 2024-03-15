@@ -108,7 +108,6 @@ class PDOConnection extends PDO implements ConnectionInterface
 {
     private $databaseInfo;
 
-    private $pdo    = null;
     private $dsn    = null;
     private $flags  = null;
     
@@ -123,7 +122,7 @@ class PDOConnection extends PDO implements ConnectionInterface
     {
         try {
             $dsnstring = $this->getDSNString($dsn, $flags);
-            $this->pdo = parent::__construct($dsnstring, $dsn['username'], $dsn['password'], $flags);
+            parent::__construct($dsnstring, $dsn['username'], $dsn['password'], $flags);
         } catch (PDOException $e) {
             throw $e;
         }
@@ -134,8 +133,6 @@ class PDOConnection extends PDO implements ConnectionInterface
         $this->setAttribute(PDO::ATTR_EMULATE_PREPARES, true);
         // Show errors
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        
-        return $this;
     }
 
     public function getDSN()
@@ -947,7 +944,10 @@ class PDOResultSet extends xarObject implements ResultSetInterface
  * These methods take their fields values for refreshing fetchmode from the results array
  */
 
-    public function seek(?int $rownum=null)
+    /**
+     * @param int $rownum
+     */
+    public function seek($rownum = 0)
     {
         if (!$this->inBounds()) {
             return false;

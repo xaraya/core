@@ -106,7 +106,7 @@ class xarDB
         self::$tables = array_merge(self::$tables, $tables);
     }
 
-	public static function configure($dsn, $flags = array(PDO::CASE_LOWER)) { return self::$mw::configure($dsn, $flag); }
+	public static function configure($dsn, $flags = array(PDO::CASE_LOWER)) { return self::$mw::configure($dsn, $flags); }
 	
     /**
      * Initialise a new db connection
@@ -244,7 +244,7 @@ class xarDB
      *
      * Note: external database connection indexes are strings starting with "ext_" - see ExternalDatabase::isIndexExternal()
      */
-	public static function isIndexExternal($index = 0) { return self::$mw::isIndexExternal($index); }
+	public static function isIndexExternal($index = 0) { return false; }
 	
     /**
      * Do we already have this database connection?
@@ -308,6 +308,11 @@ class xarDB
 
         // see if we already have a connection with these parameters cached
         if(isset(self::$connectionMap[$connectionMapKey])) {
+            // @todo let the middleware worry about how they store/cache their connections internally,
+            // and only focus on what we expect to get back here, i.e. a connection
+            $connection = self::$connectionMap[$connectionMapKey];
+
+            /**
             // persistent connections will be used if a non-persistent one was requested and is available
             // but a persistent connection will be created if a non-persistent one is present
 
@@ -327,6 +332,7 @@ class xarDB
 
             // if we're here, a non-persistent connection was already there, but
             // the user wants a persistent one, so it will be created
+             */
 
             if ($connection->isConnected()) {
                 return $connection;
