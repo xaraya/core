@@ -70,6 +70,7 @@ function send_openapi($restHandler)
 function get_dispatcher($restHandler)
 {
     // @todo move away from static methods for context
+    // @todo use FastRoute::recommendedSettings() in v2.x
     $dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) use ($restHandler) {
         $r->addGroup('/v1', function (FastRoute\RouteCollector $r) use ($restHandler) {
             $restHandler::registerRoutes($r, $restHandler);
