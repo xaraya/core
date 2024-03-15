@@ -10,6 +10,11 @@ final class DataObjectTest extends TestCase
         xarDatabase::init();
     }
 
+    public static function tearDownAfterClass(): void
+    {
+        xarSystemVars::set(sys::LAYOUT, 'BaseURI', null);
+    }
+
     protected function getFixtureFile($name)
     {
         return __DIR__ . '/fixtures/' . $name;

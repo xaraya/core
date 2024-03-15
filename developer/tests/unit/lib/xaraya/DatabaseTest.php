@@ -85,13 +85,15 @@ final class DatabaseTest extends TestCase
         ];
         $conn = xarDB::newConn($dbConnArgs);
         $dbConnIndex = xarDB::getConnIndex();
-        $expected = 4125574640;
+        $expected = 3090158701;
         $this->assertEquals($expected, $dbConnIndex);
         $this->assertTrue($conn instanceof \Connection);
         $this->assertTrue(xarDB::hasConn($dbConnIndex));
 
         // use connection to other database
         $conn = xarDB::getConn($dbConnIndex);
+        $expected = 'PdoSQLiteConnection';
+        $this->assertEquals($expected, get_class($conn));
         $dbInfo = $conn->getDatabaseInfo();
         $tables = $dbInfo->getTables();
         $expected = 0;
@@ -139,13 +141,15 @@ final class DatabaseTest extends TestCase
         ];
         $conn = xarDB::newConn($dbConnArgs);
         $dbConnIndex = xarDB::getConnIndex();
-        $expected = 2157930189;
+        $expected = 241983077;
         $this->assertEquals($expected, $dbConnIndex);
         $this->assertTrue($conn instanceof \PDOConnection);
         $this->assertTrue(xarDB::hasConn($dbConnIndex));
 
         // use connection to other database
         $conn = xarDB::getConn($dbConnIndex);
+        $expected = 'sqlite';
+        $this->assertEquals($expected, $conn->driverName);
         $dbInfo = $conn->getDatabaseInfo();
         $tables = $dbInfo->getTables();
         $expected = 0;
