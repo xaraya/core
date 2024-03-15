@@ -43,7 +43,7 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
     	return self::$driverMap;
     }
 
-    // CHECKME: Do we need this?
+    // CHECKME: Do we need this? I don't think so...
     public static function configure($dsn, $flags = Creole::COMPAT_ASSOC_LOWER, $prefix = 'xar')
     {
         $persistent = !empty($dsn['persistent']) ? true : false;
@@ -51,9 +51,9 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
             $flags |= Creole::PERSISTENT;
         }
 
-        self::setFirstDSN($dsn);
-        self::setFirstFlags($flags);
-        self::setPrefix($prefix);
+        //self::setFirstDSN($dsn);
+        //self::setFirstFlags($flags);
+        //self::setPrefix($prefix);
     }
 
     public static function isIndexExternal($index = 0)
@@ -172,16 +172,12 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
             CreoleTypes::getCreoleCode('VARCHAR')       => 'text',
             CreoleTypes::getCreoleCode('LONGVARCHAR')   => 'text',
             CreoleTypes::getCreoleCode('CHAR')          => 'text',
-            CreoleTypes::getCreoleCode('VARCHAR')       => 'text',
             CreoleTypes::getCreoleCode('TEXT')          => 'text',
             CreoleTypes::getCreoleCode('CLOB')          => 'text',
-            CreoleTypes::getCreoleCode('LONGVARCHAR')   => 'text',
             CreoleTypes::getCreoleCode('INTEGER')       => 'number',
             CreoleTypes::getCreoleCode('TINYINT')       => 'number',
             CreoleTypes::getCreoleCode('BIGINT')        => 'number',
             CreoleTypes::getCreoleCode('SMALLINT')      => 'number',
-            CreoleTypes::getCreoleCode('TINYINT')       => 'number',
-            CreoleTypes::getCreoleCode('INTEGER')       => 'number',
             CreoleTypes::getCreoleCode('FLOAT')         => 'number',
             CreoleTypes::getCreoleCode('NUMERIC')       => 'number',
             CreoleTypes::getCreoleCode('DECIMAL')       => 'number',
@@ -191,7 +187,6 @@ class xarDB_Creole extends xarObject implements DatabaseInterface
             CreoleTypes::getCreoleCode('DATE')          => 'time',
             CreoleTypes::getCreoleCode('TIME')          => 'time',
             CreoleTypes::getCreoleCode('TIMESTAMP')     => 'time',
-            CreoleTypes::getCreoleCode('VARBINARY')     => 'binary',
             CreoleTypes::getCreoleCode('VARBINARY')     => 'binary',
             CreoleTypes::getCreoleCode('BLOB')          => 'binary',
             CreoleTypes::getCreoleCode('BINARY')        => 'binary',

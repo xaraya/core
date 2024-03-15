@@ -41,11 +41,13 @@ class xarDB
     // Instead of the globals, we save our db info here.
     private static $firstDSN      = null;
     private static $firstFlags    = null;
+    /** @var array<int, Connection|PDOConnection> */
     private static $connectionMap = array();
     private static $dsnMap        = array();
     private static $flagMap       = array();
     private static $tables        = array();
     private static $prefix        = '';
+    private static $latest        = null;
 
 
 	public static function getInstance()
@@ -112,8 +114,7 @@ class xarDB
      * Initialise a new db connection
      * Create a new connection based on the supplied parameters
      *
-     * @todo agree whether dbConnIndex is the latest count of connectionMap or
-     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     * This will also set the dbConnIndex to the latest connectionMapKey (crc32)
      *
      * @return Connection
      */
@@ -191,38 +192,37 @@ class xarDB
     /**
      * Get a database connection
      *
-     * @todo agree whether dbConnIndex is the latest count of connectionMap or
-     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     * With optional dbConnIndex set to the requested connectionMapKey (crc32)
+     * $index = 0 (default) - get the first connection created - @todo check install process
+     * $index = (crc32) - get the connection corresponding to the connectionMapKey (crc32)
+     * $index < 0 - auto connect to the same database as the first one
      *
      * @return object database connection object
      */
-     
-     // Curently it always drops to the third option below
-     
     public static function &getConn($index = 0)
     {
-        // Get connection on demand
-        // By default we get the latest connection created, 
+        // Get new connection on demand ($index < 0)
+        // By default we get the first connection created (= typically by Xaraya core), 
         // that is the one that the current value of self::$firstDSN gives us
         if (($index < 0) && isset(self::$firstDSN) && isset(self::$firstFlags)) {
             $conn =  self::getConnection(self::$firstDSN, self::$firstFlags);
         	return $conn;
         }
 
-        // An index value was passed. Go for that connection instead and reset dsn and flags.
-        if (count(self::$connectionMap) <= $index && isset(self::$connectionMap[$index])) {
+        // An index value was passed. Go for that connection instead, but don't reset dsn and flags.
+        if (($index > 0) && count(self::$connectionMap) > 0 && isset(self::$connectionMap[$index])) {
         	$conn = self::$connectionMap[$index];
-			self::$firstDSN = $conn->getDSN();
-			self::$firstFlags = $conn->getFlags();
+			//self::$firstDSN = $conn->getDSN();
+			//self::$firstFlags = $conn->getFlags();
         	return $conn;
         }
 
-        // No luck so far. Just get the latest connection and reset dsn and flags.
+        // No luck so far. Just get the first connection and reset dsn and flags.
         if (!empty(self::$connectionMap)) {
-			$conn = end(self::$connectionMap);
+			$conn = reset(self::$connectionMap);
 
-			self::$firstDSN = end(self::$dsnMap);
-			self::$firstFlags = end(self::$flagMap);
+			self::$firstDSN = reset(self::$dsnMap);
+			self::$firstFlags = reset(self::$flagMap);
 			return $conn;
 		}
 		
@@ -262,18 +262,21 @@ class xarDB
     }
 
     /**
-     * @todo restore this - we need it for the database connections above (predefined, on demand or external)
+     * Get latest connection index - we need it for the database connections above (predefined, on demand or external)
      * See https://github.com/xaraya/core/wiki/DD-Objects-%E2%80%90-Recent-Features#database-connections
      *
-     * @todo agree whether dbConnIndex is the latest count of connectionMap or
-     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
-     *
+     * Typical flow for multi-database setup:
+     * ```
+     * // create new database connection
+     * $conn = xarDB::newConn($args);
+     * // get the latest connection index
+     * $dbConnIndex = xarDB::getConnIndex();
+     * ```
      */
     public static function getConnIndex()
     {
-        // The number of connections in the connectionMap
-		$count = count(self::$connectionMap) - 1;
-		return $count;
+        // index of the latest connection
+        return self::$latest;
     }
 
 	/**
@@ -286,8 +289,7 @@ class xarDB
 	/**
 	 * Get a connection from the connectionMap or create a new one from the middleware
 	 *
-     * @todo agree whether dbConnIndex is the latest count of connectionMap or
-     * whether it is the connectionMapKey (crc32) - now we're mixing up both here
+     * This will also set the dbConnIndex to the latest connectionMapKey (crc32)
      *
 	 * @return connection object
 	 */
@@ -313,6 +315,8 @@ class xarDB
             $connection = self::$connectionMap[$connectionMapKey];
 
             /**
+            // Note: this was a major concern 20 years ago on shared servers - not so much anymore today
+
             // persistent connections will be used if a non-persistent one was requested and is available
             // but a persistent connection will be created if a non-persistent one is present
 
@@ -343,19 +347,17 @@ class xarDB
 		// Lets let the middleware create it 
 		$connection = self::$mw::getConnection($dsn, $flags);
 
-// CHECKME        self::$connectionMap[$connectionMapKey][(int)$persistent] = $connection;
-// Creole makes the entry to the connection map an array by adding whether persistent or not
-        
         // Add this new connection to the connection map
         self::$connectionMap[$connectionMapKey] = $connection;
         // Add dsn and flags to their respective maps
         self::$dsnMap[] = $dsn;
         self::$flagMap[] = $dsn;
-        // Set the values for the latest dsn and flags
+        // Set the values for the first dsn and flags
 //        self::setFirstDSN($dsn);
 //        self::setFirstFlags($flags);
-		self::$firstDSN = $dsn;
-		self::$firstFlags = $flags;
+		self::$firstDSN ??= $dsn;
+		self::$firstFlags ??= $flags;
+        self::$latest = $connectionMapKey;
 
         return $connection;
     }

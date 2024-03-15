@@ -33,7 +33,7 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
      */
     public static $driverMap = array();
 
-    // CHECKME: Do we need this?
+    // CHECKME: Do we need this? I don't think so...
     public static function configure($dsn, $flags = array(PDO::CASE_LOWER), $prefix = 'xar')
     {
         $persistent = !empty($dsn['persistent']) ? true : false;
@@ -41,9 +41,9 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
             $flags[] = PDO::ATTR_PERSISTENT;
         }
 
-        self::setFirstDSN($dsn);
-        self::setFirstFlags($flags);
-        self::setPrefix($prefix);
+        //self::setFirstDSN($dsn);
+        //self::setFirstFlags($flags);
+        //self::setPrefix($prefix);
     }
 
     public static function isIndexExternal($index = 0)

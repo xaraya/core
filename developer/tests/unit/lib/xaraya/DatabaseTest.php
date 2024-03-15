@@ -57,12 +57,10 @@ final class DatabaseTest extends TestCase
         $conn = xarDB::getConn();
         $this->assertTrue($conn instanceof \Connection);
         // @todo align FETCHMODE constants between Creole & PDO interfaces
-        $expected = 1;
+        $expected = ResultSet::FETCHMODE_ASSOC;
         $this->assertEquals($expected, xarDB::FETCHMODE_ASSOC);
-        $this->assertEquals($expected, ResultSet::FETCHMODE_ASSOC);
-        $expected = 2;
+        $expected = ResultSet::FETCHMODE_NUM;
         $this->assertEquals($expected, xarDB::FETCHMODE_NUM);
-        $this->assertEquals($expected, ResultSet::FETCHMODE_NUM);
 
         // check database connection works
         $expected = 'xar_eventsystem';
@@ -71,23 +69,23 @@ final class DatabaseTest extends TestCase
         $this->assertEquals($expected, $table->getName());
 
         // check getConn vs. hasConn due to auto-connect
-        $expected = 0;
+        $expected = 2146023659;
         $this->assertEquals($expected, xarDB::getConnIndex());
         $this->assertFalse(xarDB::hasConn(1));
         $conn = xarDB::getConn(1);
-        $expected = 1;
+        $expected = 2146023659;
         $this->assertEquals($expected, xarDB::getConnIndex());
         $this->assertTrue($conn instanceof \Connection);
-        $this->assertTrue(xarDB::hasConn(1));
+        $this->assertTrue(xarDB::hasConn($expected));
 
         // check new connection to other database
         $dbConnArgs = [
-            'databaseType' => 'sqlite3',
+            'databaseType' => 'pdosqlite',
             'databaseName' => sys::varpath() . '/sqlite/metadata.db',
         ];
         $conn = xarDB::newConn($dbConnArgs);
         $dbConnIndex = xarDB::getConnIndex();
-        $expected = 2;
+        $expected = 4125574640;
         $this->assertEquals($expected, $dbConnIndex);
         $this->assertTrue($conn instanceof \Connection);
         $this->assertTrue(xarDB::hasConn($dbConnIndex));
@@ -113,12 +111,10 @@ final class DatabaseTest extends TestCase
         $conn = xarDB::getConn();
         $this->assertTrue($conn instanceof \PDOConnection);
         // @todo align FETCHMODE constants between Creole & PDO interfaces
-        $expected = 2;
+        $expected = PDO::FETCH_ASSOC;
         $this->assertEquals($expected, xarDB::FETCHMODE_ASSOC);
-        $this->assertEquals($expected, ResultSet::FETCHMODE_ASSOC);
-        $expected = 3;
+        $expected = PDO::FETCH_NUM;
         $this->assertEquals($expected, xarDB::FETCHMODE_NUM);
-        $this->assertEquals($expected, ResultSet::FETCHMODE_NUM);
 
         // check database connection works
         $expected = 'xar_eventsystem';
@@ -127,23 +123,23 @@ final class DatabaseTest extends TestCase
         $this->assertEquals($expected, $table->getName());
 
         // check getConn vs. hasConn due to auto-connect
-        $expected = 0;
+        $expected = 2989598190;
         $this->assertEquals($expected, xarDB::getConnIndex());
         $this->assertFalse(xarDB::hasConn(1));
         $conn = xarDB::getConn(1);
-        $expected = 1;
+        $expected = 2989598190;
         $this->assertEquals($expected, xarDB::getConnIndex());
         $this->assertTrue($conn instanceof \PDOConnection);
-        $this->assertTrue(xarDB::hasConn(1));
+        $this->assertTrue(xarDB::hasConn($expected));
 
         // check new connection to other database
         $dbConnArgs = [
-            'databaseType' => 'sqlite3',
+            'databaseType' => 'pdosqlite',
             'databaseName' => sys::varpath() . '/sqlite/metadata.db',
         ];
         $conn = xarDB::newConn($dbConnArgs);
         $dbConnIndex = xarDB::getConnIndex();
-        $expected = 2;
+        $expected = 2157930189;
         $this->assertEquals($expected, $dbConnIndex);
         $this->assertTrue($conn instanceof \PDOConnection);
         $this->assertTrue(xarDB::hasConn($dbConnIndex));
