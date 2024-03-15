@@ -326,6 +326,8 @@ class ExternalDatabase implements DatabaseInterface
  *
  * If you do want to return a compatible connection, you'll need to extend the
  * ExternalConnection class and override/implement the abstract methods below...
+ *
+ * @ignore Not meant to be used - for future reference only
  */
 abstract class ExternalConnection implements ConnectionInterface
 {
@@ -363,6 +365,8 @@ abstract class ExternalConnection implements ConnectionInterface
 
 /**
  * Aligned with Creole Statement + PreparedStatement - most not used or implemented
+ *
+ * @ignore Not meant to be used - for future reference only
  */
 abstract class ExternalStatement implements StatementInterface
 {
@@ -374,6 +378,8 @@ abstract class ExternalStatement implements StatementInterface
 
 /**
  * Aligned with Creole ResultSet - without the Xaraya modifications in ResultSetCommon
+ *
+ * @ignore Not meant to be used - for future reference only
  */
 abstract class ExternalResultSet implements ResultSetInterface
 {

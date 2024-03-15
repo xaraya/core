@@ -291,7 +291,7 @@ class xarDB
 	 *
      * This will also set the dbConnIndex to the latest connectionMapKey (crc32)
      *
-	 * @return connection object
+	 * @return Connection|PDOConnection object
 	 */
     public static function getConnection(Array $dsn, $flags)
     {
