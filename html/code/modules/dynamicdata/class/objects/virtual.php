@@ -228,21 +228,25 @@ class VirtualObjectFactory extends xarObject
      * @param array<string, mixed> $args
      * with
      *     $args['name'] name of the object you're looking for
+     * @param mixed $context optional context for the DataObject (default = none)
      * @return DataObject|null the requested object definition
      */
-    public static function getObject(array $args = [])
+    public static function getObject(array $args = [], $context = null)
     {
         if (static::isObject($args)) {
             $filepath = static::$definitions[$args['name']];
             $args = include $filepath;
             $descriptor = static::getObjectDescriptor($args, static::$offline);
-            return static::makeObject($descriptor);
+            return static::makeObject($descriptor, $context);
         }
         if (static::isTable($args)) {
             $descriptor = new TableObjectDescriptor($args, static::$offline);
+            if (!empty($context)) {
+                $descriptor->setArgs(['context' => $context]);
+            }
             return new DataObject($descriptor);
         }
-        return DataObjectFactory::getObject($args);
+        return DataObjectFactory::getObject($args, $context);
     }
 
     /**
@@ -251,21 +255,25 @@ class VirtualObjectFactory extends xarObject
      * @param array<string, mixed> $args
      * with
      *     $args['name'] name of the object you're looking for
+     * @param mixed $context optional context for the DataObjectList (default = none)
      * @return DataObjectList|null the requested object definition
      */
-    public static function getObjectList(array $args = [])
+    public static function getObjectList(array $args = [], $context = null)
     {
         if (static::isObject($args)) {
             $filepath = static::$definitions[$args['name']];
             $args = include $filepath;
             $descriptor = static::getObjectDescriptor($args, static::$offline);
-            return static::makeObjectList($descriptor);
+            return static::makeObjectList($descriptor, $context);
         }
         if (static::isTable($args)) {
             $descriptor = new TableObjectDescriptor($args, static::$offline);
+            if (!empty($context)) {
+                $descriptor->setArgs(['context' => $context]);
+            }
             return new DataObjectList($descriptor);
         }
-        return DataObjectFactory::getObjectList($args);
+        return DataObjectFactory::getObjectList($args, $context);
     }
 
     /**
@@ -298,9 +306,10 @@ class VirtualObjectFactory extends xarObject
      * Make a particular object definition, with sub-classing
      *
      * @param DataObjectDescriptor $descriptor
+     * @param mixed $context optional context for the DataObject (default = none)
      * @return DataObject|null the requested object definition
      */
-    public static function makeObject($descriptor)
+    public static function makeObject($descriptor, $context = null)
     {
         // Make sure the class for this object is loaded
         if ($descriptor->exists('filepath') && ($descriptor->get('filepath') != 'auto')) {
@@ -311,6 +320,9 @@ class VirtualObjectFactory extends xarObject
         if ($descriptor->exists('class') && class_exists($descriptor->get('class'))) {
             $class = $descriptor->get('class');
         }
+        if (!empty($context)) {
+            $descriptor->setArgs(['context' => $context]);
+        }
         $object = new $class($descriptor);
 
         return $object;
@@ -320,9 +332,10 @@ class VirtualObjectFactory extends xarObject
      * Make a particular object list definition, with sub-classing
      *
      * @param DataObjectDescriptor $descriptor
+     * @param mixed $context optional context for the DataObjectList (default = none)
      * @return DataObjectList|null the requested object definition
      */
-    public static function makeObjectList($descriptor)
+    public static function makeObjectList($descriptor, $context = null)
     {
         // Make sure the class for this object is loaded
         if ($descriptor->exists('filepath') && ($descriptor->get('filepath') != 'auto')) {
@@ -338,6 +351,9 @@ class VirtualObjectFactory extends xarObject
                 // this is a generic classname for the object, list and interface
                 $class = $descriptor->get('class');
             }
+        }
+        if (!empty($context)) {
+            $descriptor->setArgs(['context' => $context]);
         }
         $object = new $class($descriptor);
 

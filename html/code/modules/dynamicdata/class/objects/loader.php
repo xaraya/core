@@ -30,9 +30,14 @@
  **/
 
 sys::import('modules.dynamicdata.class.objects.virtual');
+sys::import('xaraya.traits.contexttrait');
+use Xaraya\Core\Traits\ContextInterface;
+use Xaraya\Core\Traits\ContextTrait;
 
-class DataObjectLoader
+class DataObjectLoader implements ContextInterface
 {
+    use ContextTrait;
+
     /** @var string */
     public $objectname = '';
     /** @var list<string> */
@@ -288,7 +293,7 @@ class DataObjectLoader
         xarLog::message("DataObjectLoader::getValues: get " . count($itemids) . " items from " . $this->objectname, xarLog::LEVEL_INFO);
         $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
         //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
-        $this->objectlist = VirtualObjectFactory::getObjectList($params);
+        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
         //echo "Datastore: " . get_class($this->objectlist->datastore) . "\n";
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         $this->objectlist->setFieldList($this->fieldlist);
@@ -335,9 +340,7 @@ class DataObjectLoader
             $params = ['name' => $this->objectname, 'fieldlist' => $this->fieldlist];
             //$params = array('name' => $this->objectname, 'fieldlist' => $this->fieldlist, 'itemids' => $itemids);
         }
-        $this->objectlist = VirtualObjectFactory::getObjectList($params);
-        // set context if available (from where?) - @todo this doesn't belong here
-        //$this->objectlist->setContext($context);
+        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
         if (!empty($this->access) && !$this->objectlist->checkAccess($this->access)) {
             //http_response_code(403);
             throw new Exception('No access to object ' . $this->objectname);
@@ -733,6 +736,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         //$this->targetLoader = new DataObjectListLoader($objectname, $fieldlist, $resolver);
         //$this->targetLoader = new DataObjectItemLoader($objectname, $fieldlist);
         $this->targetLoader = DataObjectLoader::getItemLoader($objectname, $fieldlist);
+        $this->targetLoader->setContext($this->getContext());
     }
 
     /**
@@ -744,13 +748,21 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         return $this->targetLoader;
     }
 
+    public function setContext($context)
+    {
+        if (isset($this->targetLoader)) {
+            $this->targetLoader->setContext($context);
+        }
+        parent::setContext($context);
+    }
+
     public function getValues(array $itemids)
     {
         xarLog::message("LinkObjectItemLoader::getValues: get links for " . count($itemids) . " items from " . $this->linkname, xarLog::LEVEL_INFO);
         $fieldlist = [$this->caller_id, $this->called_id];
         $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
         //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
-        $this->objectlist = VirtualObjectFactory::getObjectList($params);
+        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         // @todo make this query work for relational datastores: select where caller_id in $values
         //$params = array('where' => [$caller_id . ' in ' . implode(',', $values)]);
@@ -783,7 +795,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             $params = ['name' => $this->linkname, 'fieldlist' => $fieldlist];
             //$params = array('name' => $object, 'fieldlist' => $fieldlist, 'itemids' => $values);
         }
-        $this->objectlist = VirtualObjectFactory::getObjectList($params);
+        $this->objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
         // @checkme relational objects filter fieldlist param based on status in objectlist constructor?
         return $this->objectlist;
     }
@@ -885,7 +897,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
             throw new Exception('No saving links to complete child object ' . $this->linkname);
         }
         $params = ['name' => $this->linkname];
-        $objectlist = VirtualObjectFactory::getObjectList($params);
+        $objectlist = VirtualObjectFactory::getObjectList($params, $this->getContext());
         // @todo add quotes if itemid is string
         $objectlist->addWhere($this->caller_id, '= ' . $itemid);
         if (is_object($objectlist->datastore) && $objectlist->datastore->getClassName() === 'RelationalDataStore') {
@@ -909,7 +921,7 @@ class LinkObjectItemLoader extends DataObjectItemLoader
         // xarLog::message("LinkObjectItemLoader::save: old links " . implode(', ', $oldlinks), xarLog::LEVEL_INFO);
         // xarLog::message("LinkObjectItemLoader::save: new values " . implode(', ', $newvalues), xarLog::LEVEL_INFO);
         // xarLog::message("LinkObjectItemLoader::save: del values " . implode(', ', $delvalues), xarLog::LEVEL_INFO);
-        $objectref = VirtualObjectFactory::getObject($params);
+        $objectref = VirtualObjectFactory::getObject($params, $this->getContext());
         foreach ($delvalues as $called_id) {
             $objectref->deleteItem(['itemid' => $oldlinks[$called_id]]);
         }

@@ -149,6 +149,12 @@ class DataObjectMaster extends xarObject implements ContextInterface
 
     public function loader(DataObjectDescriptor $descriptor)
     {
+        // Set the context before parsing dbConnArgs (if any)
+        // This would be better before calling loader(), but we don't want to change the signature of __construct()
+        if ($descriptor->exists('context')) {
+            $this->setContext($descriptor->get('context'));
+        }
+
         $this->descriptor = $descriptor;
         $descriptor->refresh($this);
 
@@ -260,6 +266,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                 return $object->properties[$parts[1]]->source;
             }
         } else {
+            // @todo do we need to pass along $this->getContext() here?
             $foreignobject = DataObjectFactory::getObject(['name' => $parts[0]]);
             $foreignstore = $foreignobject->properties[$parts[1]]->source;
             $foreignparts = explode('.', $foreignstore);
