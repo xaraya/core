@@ -10,13 +10,18 @@
 
 namespace Xaraya\Requests;
 
+use Xaraya\Context\ContextFactory;
 use xarServer;
+use sys;
+
+sys::import('xaraya.context.factory');
 
 /**
  * Request handler based on $_SERVER etc.
  */
 class RequestHandler implements RequestInterface
 {
+    protected mixed $context = null;
     /** @var array<string, mixed> */
     private array $args = [];
 
@@ -155,7 +160,10 @@ class RequestHandler implements RequestInterface
     public function getContext()
     {
         // not used in default request handler
-        return null;
+        if (!isset($this->context)) {
+            $this->context = ContextFactory::fromGlobals(__CLASS__);
+        }
+        return $this->context;
     }
 
     /**
@@ -165,5 +173,6 @@ class RequestHandler implements RequestInterface
     public function setContext($context)
     {
         // not used in default request handler
+        $this->context = $context;
     }
 }
