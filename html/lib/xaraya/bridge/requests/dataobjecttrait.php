@@ -173,7 +173,7 @@ trait DataObjectBridgeTrait
             return $params;
         }
         if (!empty($params['itemid'])) {
-            $objectitem = DataObjectFactory::getObject($params);
+            $objectitem = DataObjectFactory::getObject($params, $context);
             if (!empty($params['method']) && method_exists($objectitem, $params['method'])) {
                 return "Running method $params[method]() on object '$params[name]' is not advised here - please use REST API or GraphQL API instead";
             }
@@ -181,7 +181,7 @@ trait DataObjectBridgeTrait
             $item = $objectitem->getFieldValues();
             return $item;
         }
-        $objectlist = DataObjectFactory::getObjectList($params);
+        $objectlist = DataObjectFactory::getObjectList($params, $context);
         if (!empty($params['method']) && method_exists($objectlist, $params['method'])) {
             return "Running method $params[method]() on object '$params[name]' is not advised here - please use REST API or GraphQL API instead";
         }

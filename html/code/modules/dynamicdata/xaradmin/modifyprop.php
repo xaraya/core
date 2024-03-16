@@ -68,9 +68,8 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
         $itemtype = $objectinfo['itemtype'];
         $label =  $objectinfo['label'];
         // check security of the parent object
-        $tmpobject = DataObjectFactory::getObject($objectinfo);
         // set context if available in function
-        $tmpobject->setContext($context);
+        $tmpobject = DataObjectFactory::getObject($objectinfo, $context);
         if (!$tmpobject->checkAccess('config')) {
             return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
         }

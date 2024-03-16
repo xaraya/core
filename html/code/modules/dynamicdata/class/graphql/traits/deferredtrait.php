@@ -112,7 +112,8 @@ trait xarGraphQLDeferredTrait
             // }
             // @checkme are we sure we'll always have this available?
             if (empty(xarGraphQL::$object_ref[$object])) {
-                xarGraphQL::$object_ref[$object] = DataObjectFactory::getObjectList(['name' => $object]);
+                // set context if available in resolver
+                xarGraphQL::$object_ref[$object] = DataObjectFactory::getObjectList(['name' => $object], $context);
             }
             $property = (xarGraphQL::$object_ref[$object])->properties[$fieldname];
             if (get_class($property) === 'DeferredManyProperty') {
@@ -142,6 +143,8 @@ trait xarGraphQLDeferredTrait
                 xarGraphQL::$paths[] = ["add deferred $typename $fieldname " . $values['id'], ($values[$fieldname] ?? null), implode(',', $fieldlist)];
             }
             $loader = $property->getDeferredLoader();
+            // set context if available in resolver
+            $loader->setContext($context);
             // @checkme limit the # of children per itemid when we use data loader?
             // @checkme preserve fieldlist to optimize loading afterwards too
             if ($loader->checkFieldlist && !empty($fieldlist)) {
@@ -214,6 +217,8 @@ trait xarGraphQLDeferredTrait
             //    return array('id' => $values[$fieldname]);
             //}
             $loader = static::$_xar_deferred[$typename];
+            // set context if available in resolver
+            $loader->setContext($context);
             // @checkme limit the # of children per itemid when we use data loader?
             // @checkme preserve fieldlist to optimize loading afterwards too
             if ($loader->checkFieldlist && !empty($fieldlist)) {

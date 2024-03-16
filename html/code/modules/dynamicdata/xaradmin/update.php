@@ -67,12 +67,12 @@ function dynamicdata_admin_update(array $args = [], $context = null)
         return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
     }
 
+    // set context if available in function
     $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $itemid]);
-    // set context if available in function
-    $myobject->setContext($context);
+                                         'itemid'   => $itemid],
+                                        $context);
 
     $itemid = $myobject->getItem();
 

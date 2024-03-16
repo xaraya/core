@@ -49,6 +49,7 @@ class DeferredItemProperty extends DataProperty
     public $displaylink = null;
     public $singlevalue = false;
     public $olddefault  = null;
+    protected $setContext = true;
     public static $deferred = [];  // array of $name with deferred data object item loader
 
     public function __construct(ObjectDescriptor $descriptor)
@@ -303,6 +304,10 @@ class DeferredItemProperty extends DataProperty
         if (!isset($data['link']) && !empty($this->displaylink)) {
             $data['link'] = str_replace('[itemid]', (string) $value, $this->displaylink);
             $data['source'] = $value;
+        }
+        if ($this->setContext) {
+            $this->getDeferredLoader()->setContext($this->objectref?->getContext());
+            $this->setContext = false;
         }
         $data['value'] = $this->getDeferredLoader()->get($value);
         if ($this->singlevalue && is_array($data['value']) && array_key_exists($this->fieldlist[0], $data['value'])) {

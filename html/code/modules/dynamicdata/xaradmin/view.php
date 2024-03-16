@@ -59,25 +59,25 @@ function dynamicdata_admin_view(array $args = [], $context = null)
     }
 
     // Note: we need to pass all relevant arguments ourselves here
+    // set context if available in function
     $object = DataObjectFactory::getObjectList(
         ['objectid'  => $itemid,
-                                  'name'      => $name,
-                                  'startnum'  => $startnum,
-                                  'numitems'  => $numitems,
-                                  'sort'      => $sort,
-                                  'catid'     => $catid,
-                                  'layout'    => $layout,
-                                  'tplmodule' => $tplmodule,
-                                  'template'  => $template,
-                                  ]
+        'name'      => $name,
+        'startnum'  => $startnum,
+        'numitems'  => $numitems,
+        'sort'      => $sort,
+        'catid'     => $catid,
+        'layout'    => $layout,
+        'tplmodule' => $tplmodule,
+        'template'  => $template,
+        ],
+        $context
     );
 
     if (!isset($object) || empty($object->objectid)) {
         return;
     }
 
-    // set context if available in function
-    $object->setContext($context);
     if (!$object->checkAccess('view')) {
         return xarResponse::Forbidden(xarML('View #(1) is forbidden', $object->label));
     }

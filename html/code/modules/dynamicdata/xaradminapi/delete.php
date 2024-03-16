@@ -50,13 +50,13 @@ function dynamicdata_adminapi_delete(array $args = [], $context = null)
         $itemtype = 0;
     }
 
+    // set context if available in function
     $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'itemid'   => $itemid]);
+                                         'itemid'   => $itemid],
+                                        $context);
     if (empty($myobject)) {
         return;
     }
-    // set context if available in function
-    $myobject->setContext($context);
     if (!$myobject->checkAccess('delete')) {
         return;
     }

@@ -136,14 +136,14 @@ trait ItemLinksTrait
             return $itemlinks;
         }
         $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
+        // set context if available in method
         $object = DataObjectFactory::getObjectList(['objectid'  => $args['objectid'],
                                             'itemids' => $itemids,
-                                            'status' => $status]);
+                                            'status' => $status],
+                                            $context);
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
             return $itemlinks;
         }
-        // set context if available in method
-        $object->setContext($context);
         if (!$object->checkAccess('view')) {
             return $itemlinks;
         }

@@ -57,6 +57,7 @@ function dynamicdata_admin_new(array $args = [], $context = null)
 
     $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
 
+    // set context if available in function
     $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'name'      => $name,
                                          'moduleid'  => $module_id,
@@ -66,13 +67,12 @@ function dynamicdata_admin_new(array $args = [], $context = null)
                                          'itemid'    => $itemid,
                                          'tplmodule' => $tplmodule,
                                          'template'  => $template,
-                                         ]);
+                                         ],
+                                        $context);
     // Security
     if (empty($myobject)) {
         return xarResponse::NotFound();
     }
-    // set context if available in function
-    $myobject->setContext($context);
     if (!$myobject->checkAccess('create')) {
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
     }

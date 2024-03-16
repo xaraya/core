@@ -43,13 +43,13 @@ class ItemDisplay extends DataObjectHookObserver
 
         $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
                                         'itemtype'  => $itemtype]);
+        // set context if available in hook call
         $object = DataObjectFactory::getObject(['name' => $descriptorargs['name'],
-                                        'itemid'   => $itemid]);
+                                        'itemid'   => $itemid],
+                                        $context);
         if (!isset($object) || empty($object->objectid)) {
             return;
         }
-        // set context if available in hook call
-        $object->setContext($context);
         if (!$object->checkAccess('display')) {
             return xarML('Display #(1) is forbidden', $object->label);
         }

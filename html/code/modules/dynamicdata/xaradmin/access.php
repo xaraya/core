@@ -61,10 +61,9 @@ function dynamicdata_admin_access(array $args = [], $context = null)
     xarTpl::setPageTitle(xarML('Manage Access Rules for #(1)', $data['label']));
 
     // check security of the parent object ... or DD Admin as fail-safe here
-    $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid]);
-
     // set context if available in function
-    $tmpobject->setContext($context);
+    $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid], $context);
+
     // Security
     if (!$tmpobject->checkAccess('config') && !xarSecurity::check('AdminDynamicData', 0)) {
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));

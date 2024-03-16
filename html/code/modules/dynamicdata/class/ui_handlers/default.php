@@ -191,10 +191,11 @@ class DefaultHandler extends xarObject implements ContextInterface
         $this->method = $this->args['method'];
 
         if (!isset($this->object)) {
+            // set context if available in handler
             if (!empty($this->args['itemid'])) {
-                $this->object = DataObjectFactory::getObject($this->args);
+                $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
             } else {
-                $this->object = DataObjectFactory::getObjectList($this->args);
+                $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
             }
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
@@ -204,9 +205,10 @@ class DefaultHandler extends xarObject implements ContextInterface
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
+        } else {
+            // set context if available in handler
+            $this->object->setContext($this->getContext());
         }
-        // set context if available in handler
-        $this->object->setContext($this->getContext());
 
         if (!method_exists($this->object, $this->method)) {
             return xarMLS::translate('Unknown method #(1) for #(2)', xarVar::prepForDisplay($this->method), $this->object->label);

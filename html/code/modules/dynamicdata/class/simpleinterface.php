@@ -58,18 +58,17 @@ class SimpleObjectInterface extends DefaultHandler
         if (!empty($args) && is_array($args) && count($args) > 0) {
             $this->args = array_merge($this->args, $args);
         }
-        $this->object = DataObjectFactory::getObjectList($this->args);
+        // set context if available in handler
+        $this->object = DataObjectFactory::getObjectList($this->args, $this->getContext());
         if (method_exists($this->object, $this->args['method'])) {
             $this->object->getItems();
         } else {
-            $this->object = DataObjectFactory::getObject($this->args);
+            $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
         }
 
         if (empty($this->object)) {
             return;
         }
-        // set context if available in handler
-        $this->object->setContext($this->getContext());
 
         return $this->object->{$this->args['method']}($this->args);
     }

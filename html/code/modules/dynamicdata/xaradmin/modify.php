@@ -72,6 +72,7 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
     if (empty($objectid) && empty($name)) {
         $objectid = 1;
     }
+    // set context if available in function
     $object = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'name' => $name,
                                          'moduleid' => $module_id,
@@ -79,7 +80,8 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
                                          'join'     => $join,
                                          'table'    => $table,
                                          'itemid'   => $itemid,
-                                         'tplmodule' => $tplmodule]);
+                                         'tplmodule' => $tplmodule],
+                                        $context);
 
     // Security
     if (empty($object)) {
@@ -88,8 +90,6 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
     if (empty($itemid)) {
         return xarResponse::NotFound();
     }
-    // set context if available in function
-    $object->setContext($context);
     if (!$object->checkAccess('update')) {
         return xarResponse::Forbidden(xarML('Update #(1) is forbidden', $object->label));
     }
@@ -111,12 +111,11 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
             // handle special cases
             if ($object->objectid == 1) {
                 // check security of the parent object
-                $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid]);
+                // set context if available in function
+                $tmpobject = DataObjectFactory::getObject(['objectid' => $object->itemid], $context);
                 if (empty($tmpobject)) {
                     return xarResponse::NotFound();
                 }
-                // set context if available in function
-                $tmpobject->setContext($context);
                 if (!$tmpobject->checkAccess('config')) {
                     return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
                 }
@@ -132,9 +131,8 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
 
             } elseif ($object->objectid == 2) {
                 // check security of the parent object
-                $tmpobject = DataObjectFactory::getObject(['objectid' => $object->properties['objectid']->value]);
                 // set context if available in function
-                $tmpobject->setContext($context);
+                $tmpobject = DataObjectFactory::getObject(['objectid' => $object->properties['objectid']->value], $context);
                 if (!$tmpobject->checkAccess('config')) {
                     return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
                 }

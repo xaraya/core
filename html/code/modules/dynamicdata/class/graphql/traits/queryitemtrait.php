@@ -99,9 +99,8 @@ trait xarGraphQLQueryItemTrait
                 }
             }
             $params = ['name' => $object, 'itemid' => $args['id']];
-            $objectitem = DataObjectFactory::getObject($params);
             // set context if available in resolver
-            $objectitem->setContext($context);
+            $objectitem = DataObjectFactory::getObject($params, $context);
             if (xarGraphQL::hasSecurity($object) && !$objectitem->checkAccess('display', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
             }

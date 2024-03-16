@@ -108,6 +108,7 @@ function dynamicdata_userapi_showview(array $args = [], $context = null)
         $catid = '';
     }
 
+    // set context if available in function
     $object = DataObjectFactory::getObjectList(['objectid'  => $args ['objectid'],
                                            'itemids' => $itemids,
                                            'sort' => $sort,
@@ -118,12 +119,11 @@ function dynamicdata_userapi_showview(array $args = [], $context = null)
                                            'fieldlist' => $myfieldlist,
                                            'catid' => $catid,
                                            'groupby' => $groupby,
-                                           'status' => $status]);
+                                           'status' => $status],
+                                            $context);
     if (!isset($object) || empty($object->label)) {
         return;
     }
-    // set context if available in function
-    $object->setContext($context);
     if (!$object->checkAccess('view')) {
         return xarML('View #(1) is forbidden', $object->label);
     }

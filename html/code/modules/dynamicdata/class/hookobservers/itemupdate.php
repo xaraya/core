@@ -70,15 +70,15 @@ class ItemUpdate extends DataObjectHookObserver
 
         $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
                                            'itemtype'  => $itemtype]);
+        // set context if available in hook call
         $myobject = DataObjectFactory::getObject(['name' => $descriptorargs['name'],
-                                             'itemid'   => $itemid]);
+                                                'itemid'   => $itemid],
+                                                $context);
 
         // If no object returned, bail and pass the extrainfo to the next hook
         if (!isset($myobject) || empty($myobject->objectid)) {
             return $extrainfo;
         }
-        // set context if available in hook call
-        $myobject->setContext($context);
 
         $myobject->getItem();
 

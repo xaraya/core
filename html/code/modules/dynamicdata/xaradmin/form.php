@@ -54,15 +54,15 @@ function dynamicdata_admin_form(array $args = [], $context = null)
 
     $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
 
+    // set context if available in function
     $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'moduleid' => $module_id,
                                          'itemtype' => $itemtype,
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $itemid]);
+                                         'itemid'   => $itemid],
+                                        $context);
 
-    // set context if available in function
-    $myobject->setContext($context);
     // Security
     if (!$myobject->checkAccess('create')) {
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));

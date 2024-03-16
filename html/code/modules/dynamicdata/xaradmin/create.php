@@ -62,13 +62,13 @@ function dynamicdata_admin_create(array $args = [], $context = null)
         return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
     }
 
+    // set context if available in function
     $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
                                          'join'     => $join,
                                          'table'    => $table,
-                                         'itemid'   => $itemid]);
+                                         'itemid'   => $itemid],
+                                        $context);
 
-    // set context if available in function
-    $myobject->setContext($context);
     // Security (Bug:
     if (!$myobject->checkAccess('create')) {
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
