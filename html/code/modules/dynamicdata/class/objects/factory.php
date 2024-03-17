@@ -87,7 +87,7 @@ class DataObjectFactory extends xarObject
         if (!empty($args['name'])) {
             $infoid = $args['name'];
         } elseif (!empty($args['objectid'])) {
-            $infoid = (int)$args['objectid'];
+            $infoid = (int) $args['objectid'];
         } else {
             if (empty($args['moduleid'])) {
                 // try to get the current module from elsewhere
@@ -97,7 +97,7 @@ class DataObjectFactory extends xarObject
                 // set default itemtype
                 $args['itemtype'] = 0;
             }
-            $infoid = $args['moduleid'].':'.$args['itemtype'];
+            $infoid = $args['moduleid'] . ':' . $args['itemtype'];
         }
         if(xarCoreCache::isCached($cacheKey, $infoid)) {
             return xarCoreCache::getCached($cacheKey, $infoid);
@@ -343,14 +343,18 @@ class DataObjectFactory extends xarObject
      *     $args['objectid'] id of the object you're looking for, or
      *     $args['name'] name of the object you're looking for
      *     $args['class'] optional classname (e.g. <module>_DataObject)
+     * @param mixed $context optional context for the DataObject (default = none)
      * @return DataObject|null the requested object definition
     **/
-    public static function getObject(array $args = [])
+    public static function getObject(array $args = [], $context = null)
     {
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
         if (!empty($args['table']) && empty($args['objectid']) && empty($args['name'])) {
             sys::import('modules.dynamicdata.class.objects.virtual');
             $descriptor = new TableObjectDescriptor($args);
+            if (!empty($context)) {
+                $descriptor->setArgs(['context' => $context]);
+            }
             return new DataObject($descriptor);
         }
         $info = static::_getObjectInfo($args);
@@ -392,6 +396,8 @@ class DataObjectFactory extends xarObject
                 if (!empty($args['itemid'])) {
                     $object->itemid = $args['itemid'];
                 }
+                // @todo handle reconnect of different database e.g. for library
+                $object->setContext($context);
                 return $object;
             }
         }
@@ -403,6 +409,9 @@ class DataObjectFactory extends xarObject
 
         // When using namespaces, 'class' must contain the fully qualified class name: __NAMESPACE__.'\MyClass'
         $descriptor = new DataObjectDescriptor($data);
+        if (!empty($context)) {
+            $descriptor->setArgs(['context' => $context]);
+        }
         $object = new $data['class']($descriptor);
 
         /* with autoload and variable caching activated */
@@ -422,16 +431,20 @@ class DataObjectFactory extends xarObject
      *     $args['objectid'] id of the object you're looking for, or
      *     $args['name'] name of the object you're looking for
      *     $args['class'] optional classname (e.g. <module>_DataObject[_List])
+     * @param mixed $context optional context for the DataObjectList (default = none)
      * @return DataObjectList|null the requested object definition
      * @todo   get rid of the classname munging, use typing
     **/
-    public static function getObjectList(array $args = [])
+    public static function getObjectList(array $args = [], $context = null)
     {
         // Once autoload is enabled this block can be moved beyond the cache retrieval code
         // Complete the info if this is a known object
         if (!empty($args['table']) && empty($args['objectid']) && empty($args['name'])) {
             sys::import('modules.dynamicdata.class.objects.virtual');
             $descriptor = new TableObjectDescriptor($args);
+            if (!empty($context)) {
+                $descriptor->setArgs(['context' => $context]);
+            }
             return new DataObjectList($descriptor);
         }
         $info = static::_getObjectInfo($args);
@@ -476,6 +489,8 @@ class DataObjectFactory extends xarObject
             if (!empty($cacheKey) && xarVariableCache::isCached($cacheKey)) {
                 // Return the cached variable
                 $object = xarVariableCache::getCached($cacheKey);
+                // @todo handle reconnect of different database e.g. for library
+                $object->setContext($context);
                 return $object;
             }
         }
@@ -493,6 +508,9 @@ class DataObjectFactory extends xarObject
             }
         }
         $descriptor = new DataObjectDescriptor($data);
+        if (!empty($context)) {
+            $descriptor->setArgs(['context' => $context]);
+        }
 
         // here we can use our own classes to retrieve this
         $object = new $class($descriptor);

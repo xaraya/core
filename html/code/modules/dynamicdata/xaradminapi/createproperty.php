@@ -28,7 +28,7 @@
  *        string   $args['configuration'] configuration of the property to create
  * @return integer property ID on success, null on failure
  */
-function dynamicdata_adminapi_createproperty(array $args = [])
+function dynamicdata_adminapi_createproperty(array $args = [], $context = null)
 {
     extract($args);
 

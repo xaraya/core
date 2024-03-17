@@ -19,7 +19,7 @@ sys::import('modules.dynamicdata.class.properties.master');
  * @param array<string, mixed> $args
  * @return array<mixed>|bool|void
  */
-function dynamicdata_user_filtertag(array $args = [])
+function dynamicdata_user_filtertag(array $args = [], $context = null)
 {
     if (!xarVar::fetch('filter_submitted', 'int:0', $filter_submitted, 0, xarVar::NOT_REQUIRED)) {
         return;
@@ -46,7 +46,7 @@ function dynamicdata_user_filtertag(array $args = [])
         }
 
         // Get an instance of the dataobject so that we can get at the dataproperties' checkInput() method
-        $object = DataObjectFactory::getObject(['name' => $objectname]);
+        $object = DataObjectFactory::getObject(['name' => $objectname], $context);
 
         sys::import('xaraya.structures.query');
         $q = new Query();
@@ -98,14 +98,14 @@ function dynamicdata_user_filtertag(array $args = [])
         xarSession::setVar('DynamicData.Filter.' . $filtername, serialize($q));
 
         // Redirect to the next page
-        xarController::redirect($return_url);
+        xarController::redirect($return_url, 302, $context);
         return true;
 
     } else {
         // Make sure we have a dataobject
         if (!isset($args['object'])) {
             if (isset($args['objectname'])) {
-                $args['object'] = DataObjectFactory::getObject(['name' => $args['objectname']]);
+                $args['object'] = DataObjectFactory::getObject(['name' => $args['objectname']], $context);
             } else {
                 throw new Exception('Missing $object for filter tag');
             }

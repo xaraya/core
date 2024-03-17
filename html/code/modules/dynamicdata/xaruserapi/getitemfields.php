@@ -24,12 +24,12 @@
  *        string   $args['itemtype'] item type of the item fields to get<br/>
  * @return array<mixed> containing the item field definitions
  */
-function dynamicdata_userapi_getitemfields(array $args = [])
+function dynamicdata_userapi_getitemfields(array $args = [], $context = null)
 {
     if (empty($args['objectid']) && empty($args['name'])) {
         $args = DataObjectDescriptor::getObjectID($args);
     }
-    $object = DataObjectFactory::getObject($args);
+    $object = DataObjectFactory::getObject($args, $context);
     if (!is_object($object)) {
         return [];
     }

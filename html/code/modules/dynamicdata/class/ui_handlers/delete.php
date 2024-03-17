@@ -57,22 +57,6 @@ class DeleteHandler extends DefaultHandler
         if (!xarVar::fetch('return_url', 'isset', $args['return_url'], null, xarVar::DONT_SET)) {
             return;
         }
-
-        if (!empty($args) && is_array($args) && count($args) > 0) {
-            $this->args = array_merge($this->args, $args);
-        }
-
-        if (!isset($this->object)) {
-            $this->object = DataObjectFactory::getObject($this->args);
-            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
-                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
-            }
-
-            if (empty($this->tplmodule)) {
-                $modname = xarMod::getName($this->object->moduleid);
-                $this->tplmodule = $modname;
-            }
-        }
         if (!empty($args['cancel'])) {
             if (empty($args['return_url'])) {
                 $args['return_url'] = $this->getReturnURL();
@@ -82,8 +66,26 @@ class DeleteHandler extends DefaultHandler
             // Return
             return true;
         }
-        // set context if available in handler
-        $this->object->setContext($this->getContext());
+
+        if (!empty($args) && is_array($args) && count($args) > 0) {
+            $this->args = array_merge($this->args, $args);
+        }
+
+        if (!isset($this->object)) {
+            // set context if available in handler
+            $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
+            if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
+                return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
+            }
+
+            if (empty($this->tplmodule)) {
+                $modname = xarMod::getName($this->object->moduleid);
+                $this->tplmodule = $modname;
+            }
+        } else {
+            // set context if available in handler
+            $this->object->setContext($this->getContext());
+        }
         if (!$this->object->checkAccess('delete')) {
             $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('Delete Itemid #(1) of #(2) is forbidden', $this->args['itemid'], $this->object->label));

@@ -26,7 +26,7 @@
  * @return boolean
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_updateprop(array $args = [])
+function dynamicdata_adminapi_updateprop(array $args = [], $context = null)
 {
     extract($args);
 

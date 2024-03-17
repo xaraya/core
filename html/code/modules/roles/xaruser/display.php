@@ -14,7 +14,7 @@
  * Display user
  *
  * @author  Marc Lutolf <marcinmilan@xaraya.com>
- * @param int id
+ * @param array<string, mixed> $args with $args['id']
  * @return string|void output display string
  */
 function roles_user_display(Array $args=array())

@@ -6,7 +6,7 @@ use Xaraya\DataObject\HookObservers\ItemDisplay;
 /**
  * @deprecated 2.4.1 replaced with hookobserver classes
  */
-function dynamicdata_user_displayhook(array $args = [])
+function dynamicdata_user_displayhook(array $args = [], $context = null)
 {
-    return ItemDisplay::run($args);
+    return ItemDisplay::run($args, $context);
 }

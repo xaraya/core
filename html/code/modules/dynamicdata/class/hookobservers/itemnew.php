@@ -58,12 +58,11 @@ class ItemNew extends DataObjectHookObserver
         $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
                                            'itemtype'  => $itemtype]);
         sys::import('modules.dynamicdata.class.objects.factory');
-        $object = DataObjectFactory::getObject(['name' => $descriptorargs['name']]);
+        // set context if available in hook call
+        $object = DataObjectFactory::getObject(['name' => $descriptorargs['name']], $context);
         if (!isset($object) || empty($object->objectid)) {
             return;
         }
-        // set context if available in hook call
-        $object->setContext($context);
 
         // if we are in preview mode, we need to check for any preview values
         if (!xarVar::fetch('preview', 'isset', $preview, null, xarVar::DONT_SET)) {

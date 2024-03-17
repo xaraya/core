@@ -42,15 +42,17 @@ function dynamicdata_user_display(array $args = [], $context = null)
         return;
     }
 
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'name' => $name,
-                                         'itemid'   => $itemid,
-                                         'tplmodule' => $tplmodule]);
+    // set context if available in function
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'name' => $name,
+        'itemid'   => $itemid,
+        'tplmodule' => $tplmodule],
+        $context
+    );
     if (!isset($myobject)) {
         return;
     }
-    // set context if available in function
-    $myobject->setContext($context);
     if (!$myobject->checkAccess('display')) {
         if (!empty($context)) {
             $context->setStatus(403);

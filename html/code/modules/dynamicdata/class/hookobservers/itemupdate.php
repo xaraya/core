@@ -70,15 +70,17 @@ class ItemUpdate extends DataObjectHookObserver
 
         $descriptorargs = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
                                            'itemtype'  => $itemtype]);
-        $myobject = DataObjectFactory::getObject(['name' => $descriptorargs['name'],
-                                             'itemid'   => $itemid]);
+        // set context if available in hook call
+        $myobject = DataObjectFactory::getObject(
+            ['name' => $descriptorargs['name'],
+            'itemid'   => $itemid],
+            $context
+        );
 
         // If no object returned, bail and pass the extrainfo to the next hook
         if (!isset($myobject) || empty($myobject->objectid)) {
             return $extrainfo;
         }
-        // set context if available in hook call
-        $myobject->setContext($context);
 
         $myobject->getItem();
 
@@ -94,7 +96,7 @@ class ItemUpdate extends DataObjectHookObserver
                 $i = 5;
                 foreach ($myobject->properties as $property) {
                     if (!empty($property->invalid)) {
-                        $msg .= "#(".$i++.") = invalid #(".$i++.") - ";
+                        $msg .= "#(" . $i++ . ") = invalid #(" . $i++ . ") - ";
                         $vars[] = $property->label;
                         $vars[] = $property->invalid;
                     }

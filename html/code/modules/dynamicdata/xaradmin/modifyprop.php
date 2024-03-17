@@ -68,9 +68,8 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
         $itemtype = $objectinfo['itemtype'];
         $label =  $objectinfo['label'];
         // check security of the parent object
-        $tmpobject = DataObjectFactory::getObject($objectinfo);
         // set context if available in function
-        $tmpobject->setContext($context);
+        $tmpobject = DataObjectFactory::getObject($objectinfo, $context);
         if (!$tmpobject->checkAccess('config')) {
             return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
         }
@@ -120,9 +119,9 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
         'user',
         'getprop',
         ['objectid' => $objectid,
-                                         'moduleid' => $module_id,
-                                         'itemtype' => $itemtype,
-                                         'allprops' => true]
+        'moduleid' => $module_id,
+        'itemtype' => $itemtype,
+        'allprops' => true]
     );
     if (!isset($data['fields']) || $data['fields'] == false) {
         $data['fields'] = [];
@@ -153,7 +152,7 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
             'modifyconfig',
             $modinfo['name'],
             ['module' => $modinfo['name'],
-                                       'itemtype' => $itemtype]
+            'itemtype' => $itemtype]
         );
     }
     $data['hooks'] = $hooks;
@@ -176,7 +175,7 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
                 'admin',
                 'modifyprop',
                 ['itemid' => $objectid,
-                                                   'details' => 1]
+                'details' => 1]
             );
         } else {
             $data['detailslink'] = xarController::URL(
@@ -184,8 +183,8 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
                 'admin',
                 'modifyprop',
                 ['module_id' => $module_id,
-                                                   'itemtype' => empty($itemtype) ? null : $itemtype,
-                                                   'details' => 1]
+                'itemtype' => empty($itemtype) ? null : $itemtype,
+                'details' => 1]
             );
         }
         return $data;
@@ -201,7 +200,7 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
         'util',
         'getstatic',
         ['module_id' => $module_id,
-                                         'itemtype' => $itemtype]
+        'itemtype' => $itemtype]
     );
     if (!isset($data['static']) || $data['static'] == false) {
         $data['static'] = [];
@@ -225,7 +224,7 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
         'util',
         'getrelations',
         ['module_id' => $module_id,
-                                             'itemtype' => $itemtype]
+        'itemtype' => $itemtype]
     );
     if (!isset($data['relations']) || $data['relations'] == false) {
         $data['relations'] = [];
@@ -250,7 +249,7 @@ function dynamicdata_admin_modifyprop(array $args = [], $context = null)
             'admin',
             'modifyprop',
             ['module_id' => $module_id,
-                                               'itemtype' => empty($itemtype) ? null : $itemtype]
+            'itemtype' => empty($itemtype) ? null : $itemtype]
         );
     }
 

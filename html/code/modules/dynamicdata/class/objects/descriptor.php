@@ -65,14 +65,14 @@ class DataObjectDescriptor extends ObjectDescriptor
         $row = static::findObject($args);
 
         if (empty($row) || count($row) < 1) {
-            $args['moduleid'] = isset($args['moduleid']) ? (int)$args['moduleid'] : null;
-            $args['itemtype'] = isset($args['itemtype']) ? (int)$args['itemtype'] : null;
-            $args['objectid'] = isset($args['objectid']) ? (int)$args['objectid'] : null;
+            $args['moduleid'] = isset($args['moduleid']) ? (int) $args['moduleid'] : null;
+            $args['itemtype'] = isset($args['itemtype']) ? (int) $args['itemtype'] : null;
+            $args['objectid'] = isset($args['objectid']) ? (int) $args['objectid'] : null;
             $args['name'] ??= null;
         } else {
-            $args['moduleid'] = (int)$row['module_id'];
-            $args['itemtype'] = (int)$row['itemtype'];
-            $args['objectid'] = (int)$row['id'];
+            $args['moduleid'] = (int) $row['module_id'];
+            $args['itemtype'] = (int) $row['itemtype'];
+            $args['objectid'] = (int) $row['id'];
             $args['name'] = $row['name'];
         }
         // object property is called module_id now instead of moduleid for whatever reason !?
@@ -108,8 +108,8 @@ class DataObjectDescriptor extends ObjectDescriptor
         if (!empty($args['name']) && xarCoreCache::isCached($cacheKey, $args['name'])) {
             return xarCoreCache::getCached($cacheKey, $args['name']);
         }
-        if (!empty($args['moduleid']) && isset($args['itemtype']) && xarCoreCache::isCached($cacheKey, $args['moduleid'].':'.$args['itemtype'])) {
-            return xarCoreCache::getCached($cacheKey, $args['moduleid'].':'.$args['itemtype']);
+        if (!empty($args['moduleid']) && isset($args['itemtype']) && xarCoreCache::isCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype'])) {
+            return xarCoreCache::getCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype']);
         }
         xarMod::loadDbInfo('dynamicdata', 'dynamicdata');
         $xartable = xarDB::getTables();
@@ -159,7 +159,7 @@ class DataObjectDescriptor extends ObjectDescriptor
             xarCoreCache::setCached($cacheKey, $args['name'], $row);
         }
         if (!empty($args['moduleid']) && isset($args['itemtype'])) {
-            xarCoreCache::setCached($cacheKey, $args['moduleid'].':'.$args['itemtype'], $row);
+            xarCoreCache::setCached($cacheKey, $args['moduleid'] . ':' . $args['itemtype'], $row);
         }
         return $row;
     }

@@ -147,10 +147,10 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         $fieldlist = self::getViewProperties($object, $args);
         $loader = new DataObjectLoader($object, $fieldlist);
+        // set context if available in handler
+        $loader->setContext($context);
         $loader->parseQueryArgs($args);
         $objectlist = $loader->getObjectList();
-        // set context if available in handler
-        $objectlist->setContext($context);
         if (self::hasSecurity($object, $method) && !$objectlist->checkAccess('view', 0, $userId)) {
             throw new ForbiddenOperationException();
         }
@@ -234,12 +234,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $args = $args['query'] ?? [];
         $fieldlist = self::getDisplayProperties($object, $args);
         $params = ['name' => $object, 'itemid' => $itemid, 'fieldlist' => $fieldlist];
-        $objectitem = DataObjectFactory::getObject($params);
+        // set context if available in handler
+        $objectitem = DataObjectFactory::getObject($params, $context);
         if (empty($objectitem)) {
             throw new BadParameterException('object');
         }
-        // set context if available in handler
-        $objectitem->setContext($context);
         if (self::hasSecurity($object, $method) && !$objectitem->checkAccess('display', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
@@ -320,12 +319,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             unset($args['input']['id']);
         }
         $params = ['name' => $object];
-        $objectitem = DataObjectFactory::getObject($params);
+        // set context if available in handler
+        $objectitem = DataObjectFactory::getObject($params, $context);
         if (empty($objectitem)) {
             throw new BadParameterException('object');
         }
-        // set context if available in handler
-        $objectitem->setContext($context);
         if (!$objectitem->checkAccess('create', 0, $userId)) {
             throw new ForbiddenOperationException();
         }
@@ -367,12 +365,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             throw new Exception('Unknown id ' . $object);
         }
         $params = ['name' => $object, 'itemid' => $itemid];
-        $objectitem = DataObjectFactory::getObject($params);
+        // set context if available in handler
+        $objectitem = DataObjectFactory::getObject($params, $context);
         if (empty($objectitem)) {
             throw new BadParameterException('object');
         }
-        // set context if available in handler
-        $objectitem->setContext($context);
         if (!$objectitem->checkAccess('update', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
@@ -406,12 +403,11 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         // verify that the cookie corresponds to an authorized user (with minimal core load) or exit - see whoami
         $userId = self::checkUser($context);
         $params = ['name' => $object, 'itemid' => $itemid];
-        $objectitem = DataObjectFactory::getObject($params);
+        // set context if available in handler
+        $objectitem = DataObjectFactory::getObject($params, $context);
         if (empty($objectitem)) {
             throw new BadParameterException('object');
         }
-        // set context if available in handler
-        $objectitem->setContext($context);
         if (!$objectitem->checkAccess('delete', $itemid, $userId)) {
             throw new ForbiddenOperationException();
         }
@@ -927,7 +923,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
                 $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
-            // @todo verify access for user based on what?
+                // @todo verify access for user based on what?
             } else {
                 $pass = true;
             }
@@ -995,7 +991,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
                 $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
-            // @todo verify access for user based on what?
+                // @todo verify access for user based on what?
             } else {
                 $pass = true;
             }

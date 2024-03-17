@@ -6,7 +6,7 @@ use Xaraya\DataObject\HookObservers\ModuleModifyconfig;
 /**
  * @deprecated 2.4.1 replaced with hookobserver classes
  */
-function dynamicdata_admin_modifyconfighook(array $args = [])
+function dynamicdata_admin_modifyconfighook(array $args = [], $context = null)
 {
-    return ModuleModifyconfig::run($args);
+    return ModuleModifyconfig::run($args, $context);
 }

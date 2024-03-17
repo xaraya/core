@@ -29,8 +29,7 @@ function dynamicdata_userapi_getobject(array $args = [], $context = null)
         $args = DataObjectDescriptor::getObjectID($args);
     }
     sys::import('modules.dynamicdata.class.objects.factory');
-    $object = DataObjectFactory::getObject($args);
     // set context if available in function
-    $object->setContext($context);
+    $object = DataObjectFactory::getObject($args, $context);
     return $object;
 }

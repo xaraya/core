@@ -42,15 +42,15 @@ function dynamicdata_admin_view_propertydefs()
     $data['fieldtypeprop'] = new FieldTypeProperty($descriptor);
 
     $data['labels'] = [
-                            'id' => xarML('ID'),
-                            'name' => xarML('Name'),
-                            'label' => xarML('Description'),
-                            'informat' => xarML('Input Format'),
-                            'outformat' => xarML('Display Format'),
-                            'configuration' => xarML('Configuration'),
-                        // etc.
-                            'new' => xarML('New'),
-                      ];
+        'id' => xarML('ID'),
+        'name' => xarML('Name'),
+        'label' => xarML('Description'),
+        'informat' => xarML('Input Format'),
+        'outformat' => xarML('Display Format'),
+        'configuration' => xarML('Configuration'),
+        // etc.
+        'new' => xarML('New'),
+    ];
 
     return $data;
 }

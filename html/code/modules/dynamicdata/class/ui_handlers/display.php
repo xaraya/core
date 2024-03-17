@@ -73,7 +73,8 @@ class DisplayHandler extends DefaultHandler
         $this->checkFieldList();
 
         if (!isset($this->object)) {
-            $this->object = DataObjectFactory::getObject($this->args);
+            // set context if available in handler
+            $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
@@ -82,9 +83,10 @@ class DisplayHandler extends DefaultHandler
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
+        } else {
+            // set context if available in handler
+            $this->object->setContext($this->getContext());
         }
-        // set context if available in handler
-        $this->object->setContext($this->getContext());
 
         $title = xarMLS::translate('Display #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));

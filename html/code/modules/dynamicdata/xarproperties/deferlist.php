@@ -231,6 +231,10 @@ class DeferredListProperty extends DeferredItemProperty
         if (!isset($data['link']) && !empty($this->displaylink)) {
             $data['link'] = $this->displaylink;
         }
+        if ($this->setContext) {
+            $this->getDeferredLoader()->setContext($this->objectref?->getContext());
+            $this->setContext = false;
+        }
         $data['value'] = $this->getDeferredLoader()->get($values);
         if ($this->singlevalue && is_array($data['value'])) {
             // pick the first non-empty assoc array value in the result

@@ -52,18 +52,20 @@ function dynamicdata_admin_export(array $args = [], $context = null)
     $data = [];
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'name'     => $name,
-                                         'itemid'   => $itemid,
-                                         'allprops' => true]);
+    // set context if available in function
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'name'     => $name,
+        'itemid'   => $itemid,
+        'allprops' => true],
+        $context
+    );
 
     if (!isset($myobject) || empty($myobject->label)) {
         $data['label'] = xarML('Unknown Object');
         $data['xml'] = '';
         return $data;
     }
-    // set context if available in function
-    $myobject->setContext($context);
     // check security of the object
     if (!$myobject->checkAccess('config')) {
         return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $myobject->label));

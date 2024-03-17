@@ -58,18 +58,20 @@ function dynamicdata_userapi_getfield(array $args = [], $context = null)
     }
 
     $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype]);
+                                               'itemtype'  => $itemtype]);
     if (empty($args['objectid'])) {
         return;
     }
-    $object = DataObjectFactory::getObject(['objectid'  => $args['objectid'],
-                                       'itemid'    => $itemid,
-                                       'fieldlist' => [$name]]);
+    // set context if available in function
+    $object = DataObjectFactory::getObject(
+        ['objectid'  => $args['objectid'],
+        'itemid'    => $itemid,
+        'fieldlist' => [$name]],
+        $context
+    );
     if (!isset($object) || empty($object->objectid)) {
         return;
     }
-    // set context if available in function
-    $object->setContext($context);
 
     $object->getItem();
 

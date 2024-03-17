@@ -144,7 +144,7 @@ class DataProperty extends xarObject implements iDataProperty
                 try {
                     /** @var mixed|null $value */
                     $value = null;
-                    eval('$value = ' . $this->defaultvalue .';');
+                    eval('$value = ' . $this->defaultvalue . ';');
                     if(isset($value)) {
                         $this->defaultvalue = $value;
                     } else {
@@ -936,13 +936,13 @@ class DataProperty extends xarObject implements iDataProperty
         } elseif (empty($configuration)) {
             return [];
 
-        // fall back to the old N:M validation for text boxes et al. (cfr. utilapi_getstatic/getmeta)
+            // fall back to the old N:M validation for text boxes et al. (cfr. utilapi_getstatic/getmeta)
         } elseif (preg_match('/^(\d+):(\d+)$/', $configuration, $matches)) {
             $fields = ['validation_min_length' => $matches[1],
                             'validation_max_length' => $matches[2],
                             'display_maxlength'     => $matches[2]];
 
-        // try normal serialized configuration
+            // try normal serialized configuration
         } else {
             try {
                 $fields = unserialize($configuration);
@@ -1319,7 +1319,7 @@ class DataProperty extends xarObject implements iDataProperty
      */
     public function castType($value = null)
     {
-        return (string)$value;
+        return (string) $value;
     }
 
     /**
@@ -1329,7 +1329,7 @@ class DataProperty extends xarObject implements iDataProperty
      */
     public function importValue(SimpleXMLElement $element)
     {
-        return $this->castType((string)$element->{$this->name});
+        return $this->castType((string) $element->{$this->name});
     }
 
     /**

@@ -89,9 +89,8 @@ trait xarGraphQLMutationUpdateTrait
                 throw new Exception('Invalid user');
             }
             $params = ['name' => $object, 'itemid' => $args['input']['id']];
-            $objectitem = DataObjectFactory::getObject($params);
             // set context if available in resolver
-            $objectitem->setContext($context);
+            $objectitem = DataObjectFactory::getObject($params, $context);
             if (!$objectitem->checkAccess('update', $params['itemid'], $userId)) {
                 throw new Exception('Invalid user access');
             }

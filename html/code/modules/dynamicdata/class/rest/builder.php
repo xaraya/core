@@ -1177,7 +1177,7 @@ class DataObjectRESTBuilder extends xarObject
                 } else {
                     // @checkme use style = form + explode = true here
                     $parameters[] = [
-                        'name' => $key.'[]',
+                        'name' => $key . '[]',
                         'in' => 'query',
                         'schema' => [
                             'type' => 'array',
@@ -1204,7 +1204,7 @@ class DataObjectRESTBuilder extends xarObject
             } elseif ($name === "array") {
                 // @checkme use style = form + explode = true here
                 $parameters[] = [
-                    'name' => $key.'[]',
+                    'name' => $key . '[]',
                     'in' => 'query',
                     'schema' => [
                         'type' => 'array',

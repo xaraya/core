@@ -40,6 +40,7 @@ use xarEvents;
 class SessionMiddleware implements MiddlewareInterface
 {
     private string $cookieName;
+    private string $prefix;
     private int $anonId;
     private int $length = 32;
     /** @var array<string, mixed> */
@@ -49,11 +50,15 @@ class SessionMiddleware implements MiddlewareInterface
     /** @var array<string, ServerRequestInterface> */
     private $pending = [];
 
-    public function __construct()
+    /**
+     * @param array<string, mixed> $config
+     */
+    public function __construct(array $config = [])
     {
-        $this->cookieName = SessionHandler::COOKIE;
+        $this->config = array_replace(xarSession::getConfig(), $config);
+        $this->cookieName = $this->config['cookieName'] ?? SessionHandler::COOKIE;
+        $this->prefix = SessionHandler::PREFIX;
         $this->anonId = intval(xarConfigVars::get(null, 'Site.User.AnonymousUID', 5));
-        $this->config = xarSession::getConfig();
         //$this->storage = new SessionDatabaseStorage($this->config);
         $this->storage = new SessionCacheStorage($this->config);
         // register callback functions for UserLogin and UserLogout events - to update userId in request
@@ -161,18 +166,20 @@ class SessionMiddleware implements MiddlewareInterface
         if (!empty($token)) {
             $sessionId = $token;
             $session = $this->getSession($sessionId);
-            $_SESSION[SessionHandler::PREFIX . 'role_id'] = $session->getUserId();
+            // @todo remove once sessions are no longer global
+            $_SESSION[$this->prefix . 'role_id'] = $session->getUserId();
             $request = $request->withAttribute('userId', $session->getUserId());
             $request = $request->withAttribute('session', $session);
             echo "Token: " . var_export($session, true) . "\n";
         } elseif (array_key_exists($this->cookieName, $cookies)) {
             $sessionId = $cookies[$this->cookieName];
             $session = $this->getSession($sessionId);
-            $_SESSION[SessionHandler::PREFIX . 'role_id'] = $session->getUserId();
+            // @todo remove once sessions are no longer global
+            $_SESSION[$this->prefix . 'role_id'] = $session->getUserId();
             if (!empty($session->vars)) {
                 // @checkme - see isAuthKey below
                 foreach ($session->vars as $key => $value) {
-                    $_SESSION[SessionHandler::PREFIX . $key] = $value;
+                    $_SESSION[$this->prefix . $key] = $value;
                 }
             }
             $request = $request->withAttribute('userId', $session->getUserId());
@@ -206,7 +213,8 @@ class SessionMiddleware implements MiddlewareInterface
                 if (!empty($input['authid']) && empty($input['preview'])) {
                     $request = $request->withAttribute('authId', $input['authid']);
                     //$key = 'rand';
-                    //$_SESSION[SessionHandler::PREFIX . $key] = $session->vars[$key];
+                    // @todo remove once authid is no longer global
+                    //$_SESSION[$this->prefix . $key] = $session->vars[$key];
                     $_POST['authid'] = $input['authid'];
                     $isAuthKey = true;
                 }
@@ -255,10 +263,10 @@ class SessionMiddleware implements MiddlewareInterface
             session_write_close();
             $userId = 0;
             foreach (array_keys($_SESSION) as $key) {
-                if (strpos($key, SessionHandler::PREFIX) === 0) {
+                if (strpos($key, $this->prefix) === 0) {
                     //$session->vars[$key] = $_SESSION[$key];
                     // @checkme successful login without a previous sessionId?
-                    //if ($isLogin && $key === SessionHandler::PREFIX . 'role_id') {
+                    //if ($isLogin && $key === $this->prefix . 'role_id') {
                     //    $userId = $_SESSION[$key];
                     //}
                     unset($_SESSION[$key]);
@@ -274,8 +282,8 @@ class SessionMiddleware implements MiddlewareInterface
                 $this->storage->update($session);
                 $sendCookie = true;
             }
-        } elseif (isset($_SESSION[SessionHandler::PREFIX . 'role_id'])) {
-            unset($_SESSION[SessionHandler::PREFIX . 'role_id']);
+        } elseif (isset($_SESSION[$this->prefix . 'role_id'])) {
+            unset($_SESSION[$this->prefix . 'role_id']);
         }
         if ($sendCookie && !empty($sessionId)) {
             $cookieString = $this->cookieName . '=' . $sessionId;

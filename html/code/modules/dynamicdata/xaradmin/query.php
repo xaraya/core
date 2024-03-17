@@ -14,7 +14,7 @@
  * query items
  * @return array<mixed>|void data for the template display
  */
-function dynamicdata_admin_query(array $args = [])
+function dynamicdata_admin_query(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -156,7 +156,7 @@ function dynamicdata_admin_query(array $args = [])
     }
 
     if (!empty($query) && $query == $newquery) {
-        $queryinfo = xarModVars::get('dynamicdata', 'query.'.$query);
+        $queryinfo = xarModVars::get('dynamicdata', 'query.' . $query);
         if (!empty($queryinfo)) {
             $queryvars = unserialize($queryinfo);
             if ($reset) {
@@ -198,8 +198,11 @@ function dynamicdata_admin_query(array $args = [])
     $data['jointables'] = '';
 
     if (!empty($itemid)) {
-        $data['object'] = DataObjectFactory::getObjectList(['objectid' => $itemid,
-                                                        'join' => $join]);
+        $data['object'] = DataObjectFactory::getObjectList(
+            ['objectid' => $itemid,
+            'join' => $join],
+            $context
+        );
         if (isset($data['object']) && !empty($data['object']->objectid)) {
             $data['itemid'] = $data['object']->objectid;
             $data['label'] = $data['object']->label;
@@ -211,7 +214,7 @@ function dynamicdata_admin_query(array $args = [])
                     'util',
                     'getstatic',
                     ['module_id' => $data['object']->moduleid,
-                                              'itemtype' => $data['object']->itemtype]
+                    'itemtype' => $data['object']->itemtype]
                 );
                 $data['jointables'] = [];
                 if (!empty($static)) {
@@ -229,7 +232,10 @@ function dynamicdata_admin_query(array $args = [])
             return;
         }
     } elseif (!empty($table)) {
-        $data['object'] = DataObjectFactory::getObjectList(['table' => $table]);
+        $data['object'] = DataObjectFactory::getObjectList(
+            ['table' => $table],
+            $context
+        );
         if (!isset($data['object'])) {
             return;
         }
@@ -351,7 +357,7 @@ function dynamicdata_admin_query(array $args = [])
                     $newlist = [];
                     foreach ($list as $part) {
                         // try to get around problem of leading 0's
-                        if (is_numeric($part) && strlen($part) == strlen(strval((float)$part))) {
+                        if (is_numeric($part) && strlen($part) == strlen(strval((float) $part))) {
                             $newlist[] = $part;
                         } else {
                             $part = preg_replace('/^\'/', '', $part);
@@ -364,7 +370,7 @@ function dynamicdata_admin_query(array $args = [])
                     break;
                 default:
                     // try to get around problem of leading 0's
-                    if (is_numeric($value[$name]) && strlen($value[$name]) == strlen(strval((float)$value[$name]))) {
+                    if (is_numeric($value[$name]) && strlen($value[$name]) == strlen(strval((float) $value[$name]))) {
                         $whereclause .=  " $what " . $value[$name];
                     } else {
                         $whereclause .=  " $what " . $dbconn->qstr($value[$name]);
@@ -409,13 +415,15 @@ function dynamicdata_admin_query(array $args = [])
     if (!empty($fieldlist) && count($fieldlist) > 0 &&
          ((!empty($itemid) && $itemid == $olditemid) ||
          (!empty($table) && $table == $oldtable))) {
-        $data['object']->getItems(['fieldlist' => $fieldlist,
-                                        'where' => $whereclause,
-                                        'groupby' => $grouplist,
-                                        'sort' => $sortlist,
-                                        'cache' => $cache,
-                                        'numitems' => $numitems,
-                                        'startnum' => $startnum]);
+        $data['object']->getItems([
+            'fieldlist' => $fieldlist,
+            'where' => $whereclause,
+            'groupby' => $grouplist,
+            'sort' => $sortlist,
+            'cache' => $cache,
+            'numitems' => $numitems,
+            'startnum' => $startnum,
+        ]);
         $data['mylist'] = & $data['object'];
         if (empty($newquery)) {
             $newquery = xarML('Last Query');
@@ -481,11 +489,11 @@ function dynamicdata_admin_query(array $args = [])
         if (count($data['queries']) >= 20) {
             $dropquery = array_pop($data['queries']);
             if (!empty($dropquery)) {
-                xarModVars::delete('dynamicdata', 'query.'.$dropquery);
+                xarModVars::delete('dynamicdata', 'query.' . $dropquery);
             }
             xarModVars::set('dynamicdata', 'querylist', serialize($data['queries']));
         }
-        xarModVars::set('dynamicdata', 'query.'.$newquery, serialize($queryvars));
+        xarModVars::set('dynamicdata', 'query.' . $newquery, serialize($queryvars));
         if (count($data['queries']) == 0 || !in_array($newquery, $data['queries'])) {
             array_unshift($data['queries'], $newquery);
             xarModVars::set('dynamicdata', 'querylist', serialize($data['queries']));
@@ -509,7 +517,7 @@ function dynamicdata_admin_query(array $args = [])
             'admin',
             'view',
             ['itemid' => $itemid,
-                                            'join' => $join]
+            'join' => $join]
         );
     } elseif (!empty($itemid)) {
         $data['viewlink'] = xarController::URL(
@@ -527,33 +535,33 @@ function dynamicdata_admin_query(array $args = [])
         $data['label'] = xarML('Dynamic Objects');
     }
     $data['whereoptions'] = [
-                                  ['id' => 'eq', 'name' => xarML('equal to')],
-                                  ['id' => 'gt', 'name' => xarML('greater than')],
-                                  ['id' => 'lt', 'name' => xarML('less than')],
-                                  ['id' => 'ne', 'name' => xarML('not equal to')],
-                                  ['id' => 'start', 'name' => xarML('starts with')],
-                                  ['id' => 'end', 'name' => xarML('ends with')],
-                                  ['id' => 'like', 'name' => xarML('contains')],
-                                  ['id' => 'in', 'name' => xarML('in (...)')],
-                                 ];
+        ['id' => 'eq', 'name' => xarML('equal to')],
+        ['id' => 'gt', 'name' => xarML('greater than')],
+        ['id' => 'lt', 'name' => xarML('less than')],
+        ['id' => 'ne', 'name' => xarML('not equal to')],
+        ['id' => 'start', 'name' => xarML('starts with')],
+        ['id' => 'end', 'name' => xarML('ends with')],
+        ['id' => 'like', 'name' => xarML('contains')],
+        ['id' => 'in', 'name' => xarML('in (...)')],
+    ];
     $data['sortoptions'] = [
-                                 ['id' => '1', 'name' => xarML('sort #(1) - up', 1)],
-                                 ['id' => '-1', 'name' => xarML('sort #(1) - down', 1)],
-                                 ['id' => '2', 'name' => xarML('sort #(1) - up', 2)],
-                                 ['id' => '-2', 'name' => xarML('sort #(1) - down', 2)],
-                                 ['id' => '3', 'name' => xarML('sort #(1) - up', 3)],
-                                 ['id' => '-3', 'name' => xarML('sort #(1) - down', 3)],
-                                ];
+        ['id' => '1', 'name' => xarML('sort #(1) - up', 1)],
+        ['id' => '-1', 'name' => xarML('sort #(1) - down', 1)],
+        ['id' => '2', 'name' => xarML('sort #(1) - up', 2)],
+        ['id' => '-2', 'name' => xarML('sort #(1) - down', 2)],
+        ['id' => '3', 'name' => xarML('sort #(1) - up', 3)],
+        ['id' => '-3', 'name' => xarML('sort #(1) - down', 3)],
+    ];
     $data['operationoptions'] = [
-                                 ['id' => '1', 'name' => xarML('group by #(1)', 1)],
-                                 ['id' => '2', 'name' => xarML('group by #(1)', 2)],
-                                 ['id' => '3', 'name' => xarML('group by #(1)', 3)],
-                                 ['id' => 'count', 'name' => xarML('count')],
-                                 ['id' => 'min', 'name' => xarML('minimum')],
-                                 ['id' => 'max', 'name' => xarML('maximum')],
-                                 ['id' => 'avg', 'name' => xarML('average')],
-                                 ['id' => 'sum', 'name' => xarML('sum')],
-                                ];
+        ['id' => '1', 'name' => xarML('group by #(1)', 1)],
+        ['id' => '2', 'name' => xarML('group by #(1)', 2)],
+        ['id' => '3', 'name' => xarML('group by #(1)', 3)],
+        ['id' => 'count', 'name' => xarML('count')],
+        ['id' => 'min', 'name' => xarML('minimum')],
+        ['id' => 'max', 'name' => xarML('maximum')],
+        ['id' => 'avg', 'name' => xarML('average')],
+        ['id' => 'sum', 'name' => xarML('sum')],
+    ];
     $data['submit'] = xarML('Update Query');
 
     // Return the template variables defined in this function

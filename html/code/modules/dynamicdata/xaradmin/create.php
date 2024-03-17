@@ -62,13 +62,15 @@ function dynamicdata_admin_create(array $args = [], $context = null)
         return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
     }
 
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'join'     => $join,
-                                         'table'    => $table,
-                                         'itemid'   => $itemid]);
-
     // set context if available in function
-    $myobject->setContext($context);
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'join'     => $join,
+        'table'    => $table,
+        'itemid'   => $itemid],
+        $context
+    );
+
     // Security (Bug:
     if (!$myobject->checkAccess('create')) {
         return xarResponse::Forbidden(xarML('Create #(1) is forbidden', $myobject->label));
@@ -126,10 +128,8 @@ function dynamicdata_admin_create(array $args = [], $context = null)
             'dynamicdata',
             'admin',
             'view',
-            [
-                                      'itemid' => $objectid,
-                                      'tplmodule' => $tplmodule,
-                                      ]
+            ['itemid' => $objectid,
+            'tplmodule' => $tplmodule],
         ));
     }
     return true;

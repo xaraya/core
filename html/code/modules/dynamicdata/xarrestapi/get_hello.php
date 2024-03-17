@@ -16,7 +16,7 @@
  * @param array<string, mixed> $args
  * @return string of info
  */
-function dynamicdata_restapi_get_hello($args = [])
+function dynamicdata_restapi_get_hello($args = [], $context = null)
 {
     // @checkme pass all args from handler here?
     //extract($args);

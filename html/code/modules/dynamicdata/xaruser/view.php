@@ -86,21 +86,21 @@ function dynamicdata_user_view(array $args = [], $context = null)
     }
 
     // Note: we need to pass all relevant arguments ourselves here
+    // set context if available in function
     $object = DataObjectFactory::getObjectList(
         ['objectid'  => $itemid,
-                                  'name'      => $name,
-                                  'startnum'  => $startnum,
-                                  'numitems'  => $numitems,
-                                  'sort'      => $sort,
-                                  'catid'     => $catid,
-                                  'layout'    => $layout,
-                                  'tplmodule' => $tplmodule,
-                                  'template'  => $template,
-                                  ]
+        'name'      => $name,
+        'startnum'  => $startnum,
+        'numitems'  => $numitems,
+        'sort'      => $sort,
+        'catid'     => $catid,
+        'layout'    => $layout,
+        'tplmodule' => $tplmodule,
+        'template'  => $template,
+        ],
+        $context
     );
 
-    // set context if available in function
-    $object->setContext($context);
     if (!$object->checkAccess('view')) {
         if (!empty($context)) {
             $context->setStatus(403);

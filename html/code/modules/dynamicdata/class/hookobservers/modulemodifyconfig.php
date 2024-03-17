@@ -122,9 +122,8 @@ class ModuleModifyconfig extends DataObjectHookObserver
         $data['fields'] = $fields;
         $data['fieldtypeprop'] = & DataPropertyMaster::getProperty(['type' => 'fieldtype']);
 
-        $object = DataObjectFactory::getObject(['name' => $args['name']]);
         // set context if available in hook call
-        $object->setContext($context);
+        $object = DataObjectFactory::getObject(['name' => $args['name']], $context);
 
         if (!empty($object)) {
             if (!empty($object->template)) {

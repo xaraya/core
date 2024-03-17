@@ -174,9 +174,9 @@ class AccessProperty extends DataProperty
 	
 	/**
 	 * Get the dropdown groups and options
-	 * 
-	 * @return string    return the array key, value pairs.
-	 */	
+	 *
+	 * @return array<mixed>    return the array key, value pairs.
+	 */
     function getgroupoptions()
     {
         $anonID = xarConfigVars::get(null,'Site.User.AnonymousUID');
@@ -207,9 +207,9 @@ class AccessProperty extends DataProperty
 	
 	/**
 	 * Get the dropdown options that are failed
-	 * 
-	 * @return string    Returns the options that show failure and exception
-	 */	
+	 *
+	 * @return array<mixed>    Returns the options that show failure and exception
+	 */
     function getfailureoptions()
     {
         $options = array(

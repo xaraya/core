@@ -56,19 +56,21 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
         return;
     }
 
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'name'       => $name,
-                                         'join'       => $join,
-                                         'table'      => $table,
-                                         'itemid'     => $itemid,
-                                         'tplmodule'  => $tplmodule,
-                                         'template'   => $template]);
+    // set context if available in function
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'name'       => $name,
+        'join'       => $join,
+        'table'      => $table,
+        'itemid'     => $itemid,
+        'tplmodule'  => $tplmodule,
+        'template'   => $template],
+        $context
+    );
     if (empty($myobject)) {
         return;
     }
 
-    // set context if available in function
-    $myobject->setContext($context);
     // Security
     if (!$myobject->checkAccess('delete')) {
         return xarResponse::Forbidden(xarML('Delete #(1) is forbidden', $myobject->label));
@@ -89,20 +91,16 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
                 'dynamicdata',
                 'admin',
                 'view',
-                [
-                                            'table'     => $table,
-                                            'tplmodule' => $data['tplmodule'],
-                                          ]
+                ['table'     => $table,
+                'tplmodule' => $data['tplmodule']]
             ));
         } else {
             xarController::redirect(xarController::URL(
                 'dynamicdata',
                 'admin',
                 'view',
-                [
-                                            'itemid'    => $data['objectid'],
-                                            'tplmodule' => $data['tplmodule'],
-                                          ]
+                ['itemid'    => $data['objectid'],
+                'tplmodule' => $data['tplmodule']]
             ));
         }
         return true;
@@ -114,9 +112,8 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
         // handle special cases
         if ($myobject->objectid == 1) {
             // check security of the parent object
-            $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->itemid]);
             // set context if available in function
-            $tmpobject->setContext($context);
+            $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->itemid], $context);
             if (!$tmpobject->checkAccess('config')) {
                 return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
             }
@@ -132,9 +129,8 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
 
         } elseif ($myobject->objectid == 2) {
             // check security of the parent object
-            $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->properties['objectid']->value]);
             // set context if available in function
-            $tmpobject->setContext($context);
+            $tmpobject = DataObjectFactory::getObject(['objectid' => $myobject->properties['objectid']->value], $context);
             if (!$tmpobject->checkAccess('config')) {
                 return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $tmpobject->label));
             }
@@ -186,20 +182,16 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
             'dynamicdata',
             'admin',
             'view',
-            [
-                                      'table'     => $table,
-                                      'tplmodule' => $tplmodule,
-                                      ]
+            ['table'     => $table,
+            'tplmodule' => $tplmodule]
         ));
     } else {
         xarController::redirect(xarController::URL(
             'dynamicdata',
             'admin',
             'view',
-            [
-                                      'name' => $myobject->name,
-                                      'tplmodule' => $tplmodule,
-                                      ]
+            ['name' => $myobject->name,
+            'tplmodule' => $tplmodule]
         ));
     }
 

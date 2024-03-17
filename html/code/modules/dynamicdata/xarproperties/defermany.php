@@ -344,6 +344,10 @@ class DeferredManyProperty extends DeferredItemProperty
             //$data['link'] = str_replace('[itemid]', (string) $data['value'], $this->displaylink);
             $data['link'] = $this->displaylink;
         }
+        if ($this->setContext) {
+            $this->getDeferredLoader()->setContext($this->objectref?->getContext());
+            $this->setContext = false;
+        }
         $data['value'] = $this->getDeferredLoader()->get($itemid);
         if ($this->singlevalue && is_array($data['value'])) {
             // pick the first non-empty assoc array value in the result

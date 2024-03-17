@@ -27,6 +27,9 @@ class RequestContext implements ContextInterface, RequestInterface
 {
     use ContextTrait;
 
+    public static string $cookieName = 'XARAYASID';
+    public static string $authToken = 'HTTP_X_AUTH_TOKEN';
+
     /** @var array<string, mixed> */
     private array $args = [];
 
@@ -211,5 +214,33 @@ class RequestContext implements ContextInterface, RequestInterface
             return [];
         }
         return $this->getContext()->offsetGet('cookie');
+    }
+
+    /**
+     * Summary of getAuthToken
+     * @param Context<string, mixed> $context
+     * @return string
+     */
+    public static function getAuthToken($context): string
+    {
+        $serverVars = $context['server'] ?? null;
+        if (empty($serverVars) || empty($serverVars[static::$authToken])) {
+            return '';
+        }
+        return $serverVars[static::$authToken];
+    }
+
+    /**
+     * Summary of getSessionCookie
+     * @param Context<string, mixed> $context
+     * @return string
+     */
+    public static function getSessionCookie($context)
+    {
+        $cookieVars = $context['cookie'] ?? null;
+        if (empty($cookieVars) || empty($cookieVars[static::$cookieName])) {
+            return '';
+        }
+        return $cookieVars[static::$cookieName];
     }
 }

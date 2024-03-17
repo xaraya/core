@@ -13,7 +13,7 @@
 /**
  * Import an object definition or an object item from XML
  */
-function dynamicdata_admin_import(array $args = [])
+function dynamicdata_admin_import(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -60,7 +60,7 @@ function dynamicdata_admin_import(array $args = [])
         'admin',
         'browse',
         ['basedir' => $basedir,
-                                 'filetype' => $filetype]
+        'filetype' => $filetype]
     );
     if (!isset($files) || count($files) < 1) {
         $data['warning'] = xarML('There are currently no XML files available for import in "#(1)"', $basedir);
@@ -93,10 +93,9 @@ function dynamicdata_admin_import(array $args = [])
                     'util',
                     'import',
                     ['file' => $basedir . '/' . $file,
-                                            'keepitemid' => $keepitemid,
-                                            'overwrite' =>  $overwrite,
-                                            'prefix' => $data['prefix'],
-                                            ]
+                    'keepitemid' => $keepitemid,
+                    'overwrite' =>  $overwrite,
+                    'prefix' => $data['prefix']]
                 );
             } catch (DuplicateException $e) {
                 return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $e->getMessage()]);
@@ -110,10 +109,9 @@ function dynamicdata_admin_import(array $args = [])
                     'util',
                     'import',
                     ['xml' => $xml,
-                                            'keepitemid' => $keepitemid,
-                                            'overwrite' =>  $overwrite,
-                                            'prefix' => $data['prefix'],
-                                            ]
+                    'keepitemid' => $keepitemid,
+                    'overwrite' =>  $overwrite,
+                    'prefix' => $data['prefix']]
                 );
             } catch (DuplicateException $e) {
                 return xarTpl::module('dynamicdata', 'user', 'errors', ['layout' => 'duplicate_name', 'name' => $e->getMessage()]);
@@ -137,8 +135,10 @@ function dynamicdata_admin_import(array $args = [])
     natsort($files);
     array_unshift($files, '');
     foreach ($files as $file) {
-        $data['options'][] = ['id' => $file,
-                                   'name' => $file];
+        $data['options'][] = [
+            'id' => $file,
+            'name' => $file,
+        ];
     }
 
     xarTpl::setPageTemplateName('admin');

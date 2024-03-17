@@ -66,7 +66,8 @@ class CreateHandler extends DefaultHandler
         }
 
         if (!isset($this->object)) {
-            $this->object = DataObjectFactory::getObject($this->args);
+            // set context if available in handler
+            $this->object = DataObjectFactory::getObject($this->args, $this->getContext());
             if (empty($this->object) || (!empty($this->args['object']) && $this->args['object'] != $this->object->name)) {
                 return xarResponse::NotFound(xarMLS::translate('Object #(1) seems to be unknown', $this->args['object']));
             }
@@ -75,9 +76,10 @@ class CreateHandler extends DefaultHandler
                 $modname = xarMod::getName($this->object->moduleid);
                 $this->tplmodule = $modname;
             }
+        } else {
+            // set context if available in handler
+            $this->object->setContext($this->getContext());
         }
-        // set context if available in handler
-        $this->object->setContext($this->getContext());
         if (!$this->object->checkAccess('create')) {
             $this->getContext()?->setStatus(403);
             return xarResponse::Forbidden(xarMLS::translate('Create #(1) is forbidden', $this->object->label));

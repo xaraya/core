@@ -14,7 +14,7 @@
 /**
  * Return static table information
  */
-function dynamicdata_admin_view_static(array $args = [])
+function dynamicdata_admin_view_static(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -59,9 +59,9 @@ function dynamicdata_admin_view_static(array $args = [])
         'util',
         'getstatic',
         ['module'   => $module,
-                                  'module_id'    => $module_id,
-                                  'itemtype' => $itemtype,
-                                  'table'    => $table]
+        'module_id'    => $module_id,
+        'itemtype' => $itemtype,
+        'table'    => $table]
     );
 
     $metas = xarMod::apiFunc('dynamicdata', 'util', 'getmeta');

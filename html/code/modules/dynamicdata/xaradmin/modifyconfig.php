@@ -56,7 +56,7 @@ function dynamicdata_admin_modifyconfig()
             if (!xarVar::fetch('suppress_updates', 'checkbox', $suppress_updates, false, xarVar::NOT_REQUIRED)) {
                 return;
             }
-            //            if (!xarVar::fetch('administrators', 'str', $administrators, '', xarVar::NOT_REQUIRED)) return;
+            // if (!xarVar::fetch('administrators', 'str', $administrators, '', xarVar::NOT_REQUIRED)) return;
             if (!xarVar::fetch('caching', 'checkbox', $caching, xarModVars::get('dynamicdata', 'caching'), xarVar::NOT_REQUIRED)) {
                 return;
             }
@@ -69,14 +69,14 @@ function dynamicdata_admin_modifyconfig()
             }
 
             /*
-                        $admins = explode(',',$administrators);
-                        $validadmins = array();
-                        foreach ($admins as $admin) {
-                            if (empty($admin)) continue;
-                            $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($admin)));
-                            if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
-                        }
-                        xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
+            $admins = explode(',',$administrators);
+            $validadmins = array();
+            foreach ($admins as $admin) {
+                if (empty($admin)) continue;
+                $user = xarMod::apiFunc('roles','user','get',array('uname' => trim($admin)));
+                if(!empty($user)) $validadmins[$user['uname']] = $user['uname'];
+            }
+            xarModVars::set('dynamicdata', 'administrators', serialize($validadmins));
             */
             xarModVars::set('dynamicdata', 'debugmode', $debugmode);
             xarConfigVars::set(null, 'Site.BL.ShowQueries', $show_queries);

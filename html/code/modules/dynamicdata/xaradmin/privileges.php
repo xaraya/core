@@ -16,7 +16,7 @@
  * Manage definition of instances for privileges (unfinished)
  * @return array<mixed>|bool|void data for the template display
  */
-function dynamicdata_admin_privileges(array $args = [])
+function dynamicdata_admin_privileges(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminDynamicData')) {
@@ -167,8 +167,8 @@ function dynamicdata_admin_privileges(array $args = [])
                 'user',
                 'countitems',
                 ['objectid' => $objectid,
-                                            'moduleid' => $moduleid,
-                                            'itemtype' => $itemtype]
+                'moduleid' => $moduleid,
+                'itemtype' => $itemtype]
             );
             if (empty($numitems)) {
                 $numitems = 0;
@@ -184,21 +184,21 @@ function dynamicdata_admin_privileges(array $args = [])
     }
 
     $data = [
-                  'objectid'     => $objectid,
-                  'moduleid'     => $moduleid,
-                  'itemtype'     => $itemtype,
-                  'itemid'       => $itemid,
-                  'objectlist'   => $objects,
-                  'modlist'      => $modlist,
-                  'numitems'     => $numitems,
-                  'extpid'       => $extpid,
-                  'extname'      => $extname,
-                  'extrealm'     => $extrealm,
-                  'extmodule'    => $extmodule,
-                  'extcomponent' => $extcomponent,
-                  'extlevel'     => $extlevel,
-                  'extinstance'  => xarVar::prepForDisplay(join(':', $newinstance)),
-                 ];
+        'objectid'     => $objectid,
+        'moduleid'     => $moduleid,
+        'itemtype'     => $itemtype,
+        'itemid'       => $itemid,
+        'objectlist'   => $objects,
+        'modlist'      => $modlist,
+        'numitems'     => $numitems,
+        'extpid'       => $extpid,
+        'extname'      => $extname,
+        'extrealm'     => $extrealm,
+        'extmodule'    => $extmodule,
+        'extcomponent' => $extcomponent,
+        'extlevel'     => $extlevel,
+        'extinstance'  => xarVar::prepForDisplay(join(':', $newinstance)),
+    ];
 
     $data['refreshlabel'] = xarML('Refresh');
     $data['applylabel'] = xarML('Finish and Apply to Privilege');

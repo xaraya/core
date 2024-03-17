@@ -51,9 +51,9 @@ function dynamicdata_admin_importprops()
         'util',
         'importproperties',
         ['module_id' => $module_id,
-                             'itemtype' => $itemtype,
-                             'table' => $table,
-                             'objectid' => $objectid]
+        'itemtype' => $itemtype,
+        'table' => $table,
+        'objectid' => $objectid]
     )) {
         return;
     }
@@ -63,6 +63,6 @@ function dynamicdata_admin_importprops()
         'admin',
         'modifyprop',
         ['module_id' => $module_id,
-                                        'itemtype' => $itemtype]
+        'itemtype' => $itemtype]
     ));
 }

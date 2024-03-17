@@ -628,7 +628,7 @@ class DataObject extends DataObjectMaster implements iDataObject
 
         $query = "SELECT MAX(itemtype) FROM $dynamicobjects  WHERE module_id = ?";
         $stmt = $dbconn->prepareStatement($query);
-        $result = $stmt->executeQuery([(int)$args['moduleid']]);
+        $result = $stmt->executeQuery([(int) $args['moduleid']]);
         if(!$result->first()) {
             return;
         } // shouldnt we raise?

@@ -22,7 +22,7 @@ sys::import('modules.dynamicdata.class.userapi');
  * @return int of object definitions
  * @todo combine this with DataObject::getNextItemType()?
  */
-function dynamicdata_adminapi_getnextitemtype($args = [])
+function dynamicdata_adminapi_getnextitemtype($args = [], $context = null)
 {
     extract($args);
     if (empty($module_id)) {

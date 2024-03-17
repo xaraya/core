@@ -40,7 +40,7 @@ function dynamicdata_admin_delete_static()
         // Check for a valid confirmation key
         //            if(!xarSec::confirmAuthKey()) return;
 
-        $query = 'ALTER TABLE ' .$data['table'] . ' DROP COLUMN ' . $data['field'];
+        $query = 'ALTER TABLE ' . $data['table'] . ' DROP COLUMN ' . $data['field'];
         $dbconn = xarDB::getConn();
         $dbconn->Execute($query);
 

@@ -16,7 +16,7 @@
  * @deprecated 2.0.0 use getfield instead
  * @return mixed value of the field, or false on failure
 */
-function dynamicdata_userapi_get(array $args = [])
+function dynamicdata_userapi_get(array $args = [], $context = null)
 {
-    return xarMod::apiFunc('dynamicdata', 'user', 'getfield', $args);
+    return xarMod::apiFunc('dynamicdata', 'user', 'getfield', $args, $context);
 }

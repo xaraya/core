@@ -119,28 +119,30 @@ function &dynamicdata_userapi_getitems(array $args = [], $context = null)
     }
 
     $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype]);
+                                               'itemtype'  => $itemtype]);
     $emptyarray = [];
     if (empty($args['objectid'])) {
         return $emptyarray;
     }
-    $object = DataObjectFactory::getObjectList(['objectid'  => $args['objectid'],
-                                           'itemids' => $itemids,
-                                           'sort' => $sort,
-                                           'numitems' => $numitems,
-                                           'startnum' => $startnum,
-                                           'where' => $where,
-                                           'fieldlist' => $fieldlist,
-                                           'join' => $join,
-                                           'table' => $table,
-                                           'catid' => $catid,
-                                           'groupby' => $groupby,
-                                           'status' => $status]);
+    // set context if available in function
+    $object = DataObjectFactory::getObjectList(
+        ['objectid'  => $args['objectid'],
+        'itemids' => $itemids,
+        'sort' => $sort,
+        'numitems' => $numitems,
+        'startnum' => $startnum,
+        'where' => $where,
+        'fieldlist' => $fieldlist,
+        'join' => $join,
+        'table' => $table,
+        'catid' => $catid,
+        'groupby' => $groupby,
+        'status' => $status],
+        $context
+    );
     if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
         return $nullreturn;
     }
-    // set context if available in function
-    $object->setContext($context);
     if (!$object->checkAccess('view')) {
         return $nullreturn;
     }

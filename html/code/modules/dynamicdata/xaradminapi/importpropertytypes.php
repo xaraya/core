@@ -19,7 +19,7 @@
  *        array    $args[dirs]
  * @return array<mixed> an array of the property types currently available
  */
-function dynamicdata_adminapi_importpropertytypes(array $args = [])
+function dynamicdata_adminapi_importpropertytypes(array $args = [], $context = null)
 {
     sys::import('modules.dynamicdata.class.properties.registration');
     extract($args);

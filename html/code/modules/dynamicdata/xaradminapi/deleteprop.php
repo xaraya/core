@@ -28,7 +28,7 @@
  * @return boolean true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_adminapi_deleteprop(array $args = [])
+function dynamicdata_adminapi_deleteprop(array $args = [], $context = null)
 {
     extract($args);
 

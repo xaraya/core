@@ -149,6 +149,12 @@ class DataObjectMaster extends xarObject implements ContextInterface
 
     public function loader(DataObjectDescriptor $descriptor)
     {
+        // Set the context before parsing dbConnArgs (if any)
+        // This would be better before calling loader(), but we don't want to change the signature of __construct()
+        if ($descriptor->exists('context')) {
+            $this->setContext($descriptor->get('context'));
+        }
+
         $this->descriptor = $descriptor;
         $descriptor->refresh($this);
 
@@ -260,6 +266,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
                 return $object->properties[$parts[1]]->source;
             }
         } else {
+            // @todo do we need to pass along $this->getContext() here?
             $foreignobject = DataObjectFactory::getObject(['name' => $parts[0]]);
             $foreignstore = $foreignobject->properties[$parts[1]]->source;
             $foreignparts = explode('.', $foreignstore);
@@ -547,11 +554,11 @@ class DataObjectMaster extends xarObject implements ContextInterface
                     throw new Exception(xarML('Did not find a first property for module variable datastore'));
                 }
                 break;
-            /**
-            case 'hook':
-                $this->addDataStore($this->name, 'hook');
-                break;
-             */
+                /**
+                case 'hook':
+                    $this->addDataStore($this->name, 'hook');
+                    break;
+                 */
             case 'none':
                 $this->addDataStore($this->name, 'none');
                 break;
@@ -970,7 +977,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
     {
         // if we have a cached URL already, use that
         if (!empty($itemid) && empty($extra) && !empty($this->cached_urls[$action])) {
-            $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
+            $url = str_replace('=<itemid>', '=' . $itemid, $this->cached_urls[$action]);
             return $url;
         }
 
@@ -1416,9 +1423,9 @@ class DataObjectMaster extends xarObject implements ContextInterface
         if (!empty($roleid)) {
             $role = xarRoles::get($roleid);
             $rolename = $role->getName();
-            return xarSecurity::check($mask, 0, 'Item', $this->moduleid.':'.$this->itemtype.':'.$itemid, '', $rolename);
+            return xarSecurity::check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid, '', $rolename);
         } else {
-            return xarSecurity::check($mask, 0, 'Item', $this->moduleid.':'.$this->itemtype.':'.$itemid);
+            return xarSecurity::check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid);
         }
     }
 

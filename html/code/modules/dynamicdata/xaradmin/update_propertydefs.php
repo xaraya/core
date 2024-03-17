@@ -18,7 +18,7 @@
  *
  * @return boolean|string|void and redirect to view_propertydefs
  */
-function dynamicdata_admin_update_propertydefs(array $args = [])
+function dynamicdata_admin_update_propertydefs(array $args = [], $context = null)
 {
     extract($args);
 

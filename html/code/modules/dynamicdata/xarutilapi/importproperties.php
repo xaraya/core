@@ -23,7 +23,7 @@
  * @return boolean|void true on success, false on failure
  * @throws BadParameterException
  */
-function dynamicdata_utilapi_importproperties(array $args = [])
+function dynamicdata_utilapi_importproperties(array $args = [], $context = null)
 {
     extract($args);
 
@@ -52,7 +52,7 @@ function dynamicdata_utilapi_importproperties(array $args = [])
     if (empty($objectid)) {
         $object = DataObjectFactory::getObjectInfo(
             ['module_id' => $module_id,
-                                      'itemtype' => $itemtype]
+            'itemtype' => $itemtype]
         );
         if (!isset($object)) {
             $modinfo = xarMod::getInfo($module_id);
@@ -63,9 +63,9 @@ function dynamicdata_utilapi_importproperties(array $args = [])
             sys::import('modules.dynamicdata.class.objects.factory');
             $objectid = DataObjectFactory::createObject(
                 ['moduleid' => $module_id,
-                                            'itemtype' => $itemtype,
-                                            'name' => $name,
-                                            'label' => ucfirst($name)]
+                'itemtype' => $itemtype,
+                'name' => $name,
+                'label' => ucfirst($name)]
             );
             if (empty($objectid)) {
                 return;
@@ -80,8 +80,9 @@ function dynamicdata_utilapi_importproperties(array $args = [])
         'util',
         'getstatic',
         ['module_id' => $module_id,
-                                  'itemtype' => $itemtype,
-                                  'table' => $table]
+        'itemtype' => $itemtype,
+        'table' => $table],
+        $context
     );
     if (!isset($fields) || !is_array($fields)) {
         return;
@@ -94,16 +95,17 @@ function dynamicdata_utilapi_importproperties(array $args = [])
             'admin',
             'createproperty',
             ['name'       => $name,
-                                      'label'      => $field['label'],
-                                      'objectid'   => $objectid,
-                                      'moduleid'   => $module_id,
-                                      'itemtype'   => $itemtype,
-                                      'type'       => $field['type'],
-                                      'defaultvalue' => $field['default'],
-                                      'source'     => $field['source'],
-                                      'status'     => $field['status'],
-                                      'seq'      => $field['seq'],
-                                      'configuration' => $field['configuration']]
+            'label'      => $field['label'],
+            'objectid'   => $objectid,
+            'moduleid'   => $module_id,
+            'itemtype'   => $itemtype,
+            'type'       => $field['type'],
+            'defaultvalue' => $field['default'],
+            'source'     => $field['source'],
+            'status'     => $field['status'],
+            'seq'      => $field['seq'],
+            'configuration' => $field['configuration']],
+            $context
         );
         if (empty($id)) {
             return;

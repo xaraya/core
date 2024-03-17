@@ -31,7 +31,7 @@
  * @return array<mixed>|void of (itemid => fieldvalue), or false on failure
  * @throws EmptyParameterException
  */
-function dynamicdata_userapi_dropdownlist(array $args = [])
+function dynamicdata_userapi_dropdownlist(array $args = [], $context = null)
 {
     if (empty($args['field'])) {
         throw new EmptyParameterException('field');
@@ -45,7 +45,7 @@ function dynamicdata_userapi_dropdownlist(array $args = [])
     $args['getobject'] = 1;
 
     /** @var DataObjectList|null $object */
-    $object = xarMod::apiFunc('dynamicdata', 'user', 'getitems', $args);
+    $object = xarMod::apiFunc('dynamicdata', 'user', 'getitems', $args, $context);
     if (!isset($object)) {
         return;
     }

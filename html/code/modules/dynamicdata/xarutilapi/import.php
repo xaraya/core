@@ -28,7 +28,7 @@ use Xaraya\DataObject\Import\DataObjectImporter;
  *     $args['entry'] optional array of external references. (deprecated)
  * @return mixed|void object id on success, null on failure
  */
-function dynamicdata_utilapi_import(array $args = [])
+function dynamicdata_utilapi_import(array $args = [], $context = null)
 {
     $args['file'] ??= null;
     $args['xml'] ??= null;

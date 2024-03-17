@@ -26,7 +26,7 @@
  * @todo split off the common parts which are also in getmeta
  * @todo mapping of sqlite types to creole types is not correct - use getmeta() for sqlite instead
  */
-function dynamicdata_utilapi_getstatic(array $args = [])
+function dynamicdata_utilapi_getstatic(array $args = [], $context = null)
 {
     static $propertybag = [];
 
@@ -82,7 +82,7 @@ function dynamicdata_utilapi_getstatic(array $args = [])
         $tables =  xarDB::getTables();
         foreach ($tables as $curname => $curtable) {
             // name starts with the modulename, and table is a string (cfr. _column definitions in articles)
-            if (preg_match('/^'.$modinfo['name'].'/', $curname) && is_string($curtable)) {
+            if (preg_match('/^' . $modinfo['name'] . '/', $curname) && is_string($curtable)) {
                 $dbTables[] = $dbInfo->getTable($curtable);
             }
         }
@@ -209,15 +209,17 @@ function dynamicdata_utilapi_getstatic(array $args = [])
                 $configuration = '';
             }
 
-            $static[$name] = ['name' => $name,
-                                   'label' => $label,
-                                   'type' => $proptype,
-                                   'id' => $id,
-                                   'defaultvalue' => $default,
-                                   'source' => $table . '.' . $name,
-                                   'status' => $status,
-                                   'seq' => $order,
-                                   'configuration' => $configuration];
+            $static[$name] = [
+                'name' => $name,
+                'label' => $label,
+                'type' => $proptype,
+                'id' => $id,
+                'defaultvalue' => $default,
+                'source' => $table . '.' . $name,
+                'status' => $status,
+                'seq' => $order,
+                'configuration' => $configuration,
+            ];
             $order++;
         } // next column
     } // next table

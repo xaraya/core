@@ -588,6 +588,19 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     }
 
     /**
+     * Unset current session variables
+     * @return void
+     */
+    public function unsetVars()
+    {
+        foreach (array_keys($_SESSION) as $key) {
+            if (str_starts_with($key, self::PREFIX)) {
+                unset($_SESSION[$key]);
+            }
+        }
+    }
+
+    /**
      * Clear all the sessions in the sessions table
      *
      * @param array<mixed> $spared a list of roles IDs whose sessions are left untouched

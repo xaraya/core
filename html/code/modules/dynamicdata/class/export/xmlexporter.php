@@ -40,7 +40,7 @@ class XmlExporter extends DataObjectExporter
         // get the list of properties for a Dynamic Object
         $object_properties = DataPropertyMaster::getProperties(['objectid' => 1]);
 
-        $xml .= '<object name="'.$objectdef->properties['name']->value.'">'."\n";
+        $xml .= '<object name="' . $objectdef->properties['name']->value . '">' . "\n";
         foreach (array_keys($object_properties) as $name) {
             if ($name == 'name' || !isset($objectdef->properties[$name]->value)) {
                 continue;
@@ -76,7 +76,7 @@ class XmlExporter extends DataObjectExporter
 
         $xml .= "  <properties>\n";
         foreach (array_keys($properties) as $name) {
-            $xml .= '    <property name="'.$name.'">' . "\n";
+            $xml .= '    <property name="' . $name . '">' . "\n";
             foreach (array_keys($property_properties) as $key) {
                 if ($key == 'name' || !isset($properties[$name][$key])) {
                     continue;
@@ -84,16 +84,16 @@ class XmlExporter extends DataObjectExporter
                 $val = $properties[$name][$key];
                 if ($key == 'type') {
                     // replace numeric property type with text version
-                    $xml .= "      <$key>".xarVar::prepForDisplay($this->proptypes[$val]['name'])."</$key>\n";
+                    $xml .= "      <$key>" . xarVar::prepForDisplay($this->proptypes[$val]['name']) . "</$key>\n";
                 } elseif ($key == 'source') {
                     // replace local table prefix with default xar_* one
                     $val = preg_replace("/^{$this->prefix}/", 'xar_', $val);
-                    $xml .= "      <$key>".xarVar::prepForDisplay($val)."</$key>\n";
+                    $xml .= "      <$key>" . xarVar::prepForDisplay($val) . "</$key>\n";
                 } elseif ($key == 'configuration') {
                     // don't replace anything in the serialized value
                     $xml .= "      <$key>" . $val . "</$key>\n";
                 } else {
-                    $xml .= "      <$key>".xarVar::prepForDisplay($val)."</$key>\n";
+                    $xml .= "      <$key>" . xarVar::prepForDisplay($val) . "</$key>\n";
                 }
             }
             $xml .= "    </property>\n";
@@ -140,7 +140,7 @@ class XmlExporter extends DataObjectExporter
         $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
         $xml .= "<items>\n";
         foreach ($objectlist->items as $itemid => $item) {
-            $xml .= '  <'.$objectlist->name.' itemid="'.$itemid.'">'."\n";
+            $xml .= '  <' . $objectlist->name . ' itemid="' . $itemid . '">' . "\n";
             foreach ($objectlist->properties as $name => $property) {
                 if (isset($item[$name]) || in_array($name, $this->deferred)) {
                     $xml .= "    <$name>";
@@ -150,7 +150,7 @@ class XmlExporter extends DataObjectExporter
                 }
                 $xml .= "</$name>\n";
             }
-            $xml .= '  </'.$objectlist->name.">\n";
+            $xml .= '  </' . $objectlist->name . ">\n";
         }
         $xml .= "</items>\n";
 
@@ -164,7 +164,7 @@ class XmlExporter extends DataObjectExporter
         $item = $objectitem->getFieldValues();
 
         $xml = '<?xml version="1.0" encoding="utf-8"?>' . "\n";
-        $xml .= '<'.$objectitem->name.' itemid="'.$itemid.'">'."\n";
+        $xml .= '<' . $objectitem->name . ' itemid="' . $itemid . '">' . "\n";
         foreach ($objectitem->properties as $name => $property) {
             if ($property instanceof DeferredItemProperty) {
                 $property->setDataToDefer($itemid, $item[$name]);
@@ -177,7 +177,7 @@ class XmlExporter extends DataObjectExporter
                 $xml .= "  <$name>" . $property->exportValue($itemid, $item) . "</$name>\n";
             }
         }
-        $xml .= '</'.$objectitem->name.">\n";
+        $xml .= '</' . $objectitem->name . ">\n";
 
         $filename = $objectitem->name . '-dat.' . $itemid . '.xml';
         return $this->format($xml, $filename);

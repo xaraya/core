@@ -165,10 +165,10 @@ function dynamicdata_init()
         $dbconn->rollback();
         throw $e;
     }
-# --------------------------------------------------------
-#
-# Set up modvars
-#
+    # --------------------------------------------------------
+    #
+    # Set up modvars
+    #
     xarModVars::set('dynamicdata', 'items_per_page', 20);
     xarModVars::set('dynamicdata', 'use_module_alias', 0);
     xarModVars::set('dynamicdata', 'module_alias_name', 'Query');
@@ -225,7 +225,6 @@ function dynamicdata_upgrade($oldversion)
     switch ($oldversion) {
         case '2.0.0':
             // fall through to next upgrade
-            // no break
         case '2.4.1':
             // @todo remove xaModHooks::unregister() calls at next upgrade
             // when a new module item is being specified

@@ -33,7 +33,7 @@ function dynamicdata_admin_delete_static_table()
 
     if ($data['confirm']) {
 
-        $query = 'DROP TABLE ' .$data['table'];
+        $query = 'DROP TABLE ' . $data['table'];
         $dbconn = xarDB::getConn();
         $dbconn->Execute($query);
 
