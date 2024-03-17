@@ -281,10 +281,10 @@ class AccessProperty extends DataProperty
 
 			if (isset($data['group'])) {
 				if (is_string($data['group'])) {
-					try {
-						$groups = unserialize($data['group']);
-					} catch (Exception $e) {
+					if (is_numeric($data['group'])) {
 						$groups = $data['group'];
+					} else {
+						$groups = unserialize($data['group']);
 					}
 				} else {
 					$groups = $data['group'];
