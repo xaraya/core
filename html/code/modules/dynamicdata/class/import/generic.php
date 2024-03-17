@@ -81,8 +81,8 @@ class DataObjectImporter
         $prefix .= '_';
 
         $importer = match ($format) {
-            'php' => new PhpImporter($prefix, $overwrite, $keepitemid),
-            'json' => new JsonImporter($prefix, $overwrite, $keepitemid),
+            'php'   => new PhpImporter($prefix, $overwrite, $keepitemid),
+            'json'  => new JsonImporter($prefix, $overwrite, $keepitemid),
             default => new XmlImporter($prefix, $overwrite, $keepitemid),
         };
 
