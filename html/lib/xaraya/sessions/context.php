@@ -185,6 +185,20 @@ class SessionContext implements ContextInterface, SessionInterface
     }
 
     /**
+     * Unset current session variables
+     * @return void
+     */
+    public function unsetVars()
+    {
+        $session = $this->getContext()?->getSession();
+        if (empty($session)) {
+            return;
+        }
+        $session->setUserId(0);
+        $session->vars = [];
+    }
+
+    /**
      * Clear all the sessions in the sessions table
      * @param array<mixed> $spared a list of roles IDs whose sessions are left untouched
      * @return bool
