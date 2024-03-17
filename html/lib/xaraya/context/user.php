@@ -59,7 +59,7 @@ class UserContext
      */
     protected function checkToken()
     {
-        $token = AuthToken::getAuthToken($this->context);
+        $token = RequestContext::getAuthToken($this->context);
         if (empty($token)) {
             return null;
         }
@@ -78,11 +78,10 @@ class UserContext
      */
     protected function checkCookie()
     {
-        $cookieVars = $this->context['cookie'] ?? null;
-        if (empty($cookieVars) || empty($cookieVars['XARAYASID'])) {
+        $sessionId = RequestContext::getSessionCookie($this->context);
+        if (empty($sessionId)) {
             return null;
         }
-        $sessionId = $cookieVars['XARAYASID'];
         // @todo replace with something that doesn't depend on PHP sessions
         xarSession::init();
         //xarMLS::init();

@@ -15,6 +15,7 @@
 namespace Xaraya\Authentication;
 
 use Xaraya\Context\Context;
+use Xaraya\Context\RequestContext;
 use ixarCache_Storage;
 use xarCache;
 
@@ -44,19 +45,7 @@ class AuthToken
      */
     public static function getAuthToken($context): string
     {
-        $request = $context['request'] ?? null;
-        // for PSR-7 compatible requests
-        if (is_object($request) && method_exists($request, 'hasHeader')) {
-            if ($request->hasHeader('X-Auth-Token')) {
-                return $request->getHeaderLine('X-Auth-Token');
-            }
-        }
-        // for PSR-7 compatible server requests and everyone else
-        $serverVars = $context['server'] ?? null;
-        if (empty($serverVars) || empty($serverVars['HTTP_X_AUTH_TOKEN'])) {
-            return '';
-        }
-        return $serverVars['HTTP_X_AUTH_TOKEN'];
+        return RequestContext::getAuthToken($context);
     }
 
     /**
