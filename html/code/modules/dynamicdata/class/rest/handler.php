@@ -923,7 +923,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
                 $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
-            // @todo verify access for user based on what?
+                // @todo verify access for user based on what?
             } else {
                 $pass = true;
             }
@@ -991,7 +991,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
                 $role = xarRoles::getRole($userId);
                 $rolename = $role->getName();
                 $pass = xarSecurity::check($func['security'], 0, 'All', 'All', $func['module'], $rolename);
-            // @todo verify access for user based on what?
+                // @todo verify access for user based on what?
             } else {
                 $pass = true;
             }

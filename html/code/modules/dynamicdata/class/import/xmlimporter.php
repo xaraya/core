@@ -127,7 +127,7 @@ class XmlImporter extends DataObjectImporter
         //FIXME: this unconditionally CLEARS the incoming parameter!!
         $args = [];
         // Get the object's name
-        $args['name'] = (string)($xmlobject->attributes()->name);
+        $args['name'] = (string) ($xmlobject->attributes()->name);
         xarLog::message('DD: importing ' . $args['name'], xarLog::LEVEL_INFO);
 
         // check if the object exists
@@ -143,7 +143,7 @@ class XmlImporter extends DataObjectImporter
         $objectproperties = array_keys($object->properties);
         foreach($objectproperties as $property) {
             if (isset($xmlobject->{$property}[0])) {
-                $value = (string)$xmlobject->{$property}[0];
+                $value = (string) $xmlobject->{$property}[0];
                 try {
                     $this->boolean->validate($value, []);
                 } catch (Exception $e) {
@@ -218,11 +218,11 @@ class XmlImporter extends DataObjectImporter
         $propertieshead = $xmlobject->properties;
         foreach($propertieshead->children() as $property) {
             $propertyargs = [];
-            $propertyname = (string)($property->attributes()->name);
+            $propertyname = (string) ($property->attributes()->name);
             $propertyargs['name'] = $propertyname;
             foreach($propertyproperties as $prop) {
                 if (isset($property->{$prop}[0])) {
-                    $value = (string)$property->{$prop}[0];
+                    $value = (string) $property->{$prop}[0];
                     try {
                         $this->boolean->validate($value, []);
                     } catch (Exception $e) {
@@ -237,13 +237,13 @@ class XmlImporter extends DataObjectImporter
 
             // Backwards Compatibility with old definitions
             if (!isset($propertyargs['defaultvalue']) && isset($property->{'default'}[0])) {
-                $propertyargs['defaultvalue'] = (string)$property->{'default'}[0];
+                $propertyargs['defaultvalue'] = (string) $property->{'default'}[0];
             }
             if (!isset($propertyargs['seq']) && isset($property->{'order'}[0])) {
-                $propertyargs['seq'] = (int)$property->{'order'}[0];
+                $propertyargs['seq'] = (int) $property->{'order'}[0];
             }
             if (!isset($propertyargs['configuration']) && isset($property->{'validation'}[0])) {
-                $propertyargs['configuration'] = (string)$property->{'validation'}[0];
+                $propertyargs['configuration'] = (string) $property->{'validation'}[0];
             }
 
             // Add some args needed to define the property
@@ -294,7 +294,7 @@ class XmlImporter extends DataObjectImporter
                         unset($info);
                         break;
                     }
-                    $info[$prop] = (string)$link->{$prop}[0];
+                    $info[$prop] = (string) $link->{$prop}[0];
                 }
                 if (!empty($info)) {
                     // add this link and its reverse if it doesn't exist yet
@@ -342,7 +342,7 @@ class XmlImporter extends DataObjectImporter
             $index += 1;
 
             $thisname = $child->getName();
-            $args['itemid'] = (!empty($this->keepitemid)) ? (string)$child->attributes()->itemid : 0;
+            $args['itemid'] = (!empty($this->keepitemid)) ? (string) $child->attributes()->itemid : 0;
 
             // set up the object the first time around in this loop
             if ($thisname != $currentobject) {

@@ -137,10 +137,12 @@ trait ItemLinksTrait
         }
         $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
         // set context if available in method
-        $object = DataObjectFactory::getObjectList(['objectid'  => $args['objectid'],
-                                            'itemids' => $itemids,
-                                            'status' => $status],
-                                            $context);
+        $object = DataObjectFactory::getObjectList(
+            ['objectid'  => $args['objectid'],
+            'itemids' => $itemids,
+            'status' => $status],
+            $context
+        );
         if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
             return $itemlinks;
         }
@@ -178,9 +180,11 @@ trait ItemLinksTrait
                 $label = xarML('Item #(1)', $itemid);
             }
             // $object->getActionURL('display', $itemid)
-            $itemlinks[$itemid] = ['url'   => xarServer::getObjectURL($object->name, 'display', ['itemid' => $itemid]),
-                                   'title' => xarML('Display Item'),
-                                   'label' => $label];
+            $itemlinks[$itemid] = [
+                'url'   => xarServer::getObjectURL($object->name, 'display', ['itemid' => $itemid]),
+                'title' => xarML('Display Item'),
+                'label' => $label,
+            ];
         }
         return $itemlinks;
     }

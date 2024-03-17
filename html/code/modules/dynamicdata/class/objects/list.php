@@ -156,7 +156,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
 
         // Clean the itemids found
         foreach ($data['id'] as $k => $v) {
-            $data['id'][$k] = (int)$v;
+            $data['id'][$k] = (int) $v;
         }
 
         // Get the data from the form
@@ -445,7 +445,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
                 if ($filter != 'in' && !is_numeric($filter[2])) {
                     // escape single quotes
                     $filter[2] = str_replace("'", "\\'", $filter[2]);
-                    $filter[2] = "'"  . $filter[2] . "'";
+                    $filter[2] = "'" . $filter[2] . "'";
                 }
                 switch ($filter[1]) {
                     case 'in':
@@ -844,7 +844,7 @@ class DataObjectList extends DataObjectMaster implements iDataObjectList
             $allow_edit = $this->cached_allow['update'];
             $allow_read = $this->cached_allow['display'];
 
-        // Assume normal rules for access control, i.e. Delete > Create > Update > Display
+            // Assume normal rules for access control, i.e. Delete > Create > Update > Display
         } elseif ($is_user && $this->checkAccess('delete', $itemid)) {
             $allow_delete = 1;
             $allow_add = 1;

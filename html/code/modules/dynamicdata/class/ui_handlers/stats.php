@@ -212,9 +212,9 @@ class StatsHandler extends DefaultHandler
                     }
                     break;
                 case 'calendar':
-                    $stats['grouplist'][$name.':year']  = $property->label . ' Year';
-                    $stats['grouplist'][$name.':month'] = $property->label . ' Month';
-                    $stats['grouplist'][$name.':day']   = $property->label . ' Day';
+                    $stats['grouplist'][$name . ':year']  = $property->label . ' Year';
+                    $stats['grouplist'][$name . ':month'] = $property->label . ' Month';
+                    $stats['grouplist'][$name . ':day']   = $property->label . ' Day';
                     break;
                 default:
                     $stats['grouplist'][$name] = $property->label;
@@ -468,7 +468,7 @@ class StatsHandler extends DefaultHandler
      */
     public function getReportList()
     {
-        $serialreports = xarModVars::get('dynamicdata', 'reportlist.'.$this->object->name);
+        $serialreports = xarModVars::get('dynamicdata', 'reportlist.' . $this->object->name);
         if (!empty($serialreports)) {
             $reportlist = unserialize($serialreports);
         } else {
@@ -484,7 +484,7 @@ class StatsHandler extends DefaultHandler
      */
     public function getReport($report)
     {
-        $key = 'report.'.$this->object->name.'.'.$report;
+        $key = 'report.' . $this->object->name . '.' . $report;
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
@@ -515,11 +515,11 @@ class StatsHandler extends DefaultHandler
             }
             // add the new report at the front of the list
             array_unshift($reportlist, $report);
-            xarModVars::set('dynamicdata', 'reportlist.'.$this->object->name, serialize($reportlist));
+            xarModVars::set('dynamicdata', 'reportlist.' . $this->object->name, serialize($reportlist));
         }
         // add stats to info so we can edit it afterwards
         $info['stats'] = $stats;
-        $key = 'report.'.$this->object->name.'.'.$report;
+        $key = 'report.' . $this->object->name . '.' . $report;
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }
@@ -533,7 +533,7 @@ class StatsHandler extends DefaultHandler
      */
     public function deleteReport($report)
     {
-        $key = 'report.'.$this->object->name.'.'.$report;
+        $key = 'report.' . $this->object->name . '.' . $report;
         if (strlen($key) > 64) {
             $key = 'report.' . md5($key);
         }

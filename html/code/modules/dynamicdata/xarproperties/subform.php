@@ -152,7 +152,7 @@ class SubFormProperty extends DataProperty
                 preg_match("/Item_[0-9]+_/", $key, $matches);
                 if (isset($matches[0])) {
                     $str = explode("_", $matches[0]);
-                    $items[$str[1]] = (int)$str[1];
+                    $items[$str[1]] = (int) $str[1];
                 }
             }
 
@@ -264,7 +264,7 @@ class SubFormProperty extends DataProperty
                 $propertyname = $property->name;
                 $propertyid = $property->id;
                 // check user input for the object item - using the current name as field prefix
-                $propertyid = $name .'_dd_'.$propertyid;
+                $propertyid = $name . '_dd_' . $propertyid;
                 unset($propertyvaluearray);
                 xarVar::fetch($propertyid, 'array', $propertyvaluearray, null, xarVar::NOT_REQUIRED);
                 if (!empty($propertyvaluearray)) {
@@ -362,7 +362,7 @@ class SubFormProperty extends DataProperty
                 $propertyname = $property->name;
                 $propertyid = $property->id;
                 // check user input for the object item - using the current name as field prefix
-                $propertyid = $name .'_dd_'.$propertyid;
+                $propertyid = $name . '_dd_' . $propertyid;
                 unset($propertyvaluearray);
                 xarVar::fetch($propertyid, 'array', $propertyvaluearray, null, xarVar::NOT_REQUIRED);
                 if (!empty($propertyvaluearray)) {
@@ -480,7 +480,7 @@ class SubFormProperty extends DataProperty
             $value = $this->value;
         }
         if (!isset($name)) {
-            $name = 'dd_'.$this->id;
+            $name = 'dd_' . $this->id;
         }
 
         foreach ($this->arguments as $item) {
@@ -793,8 +793,8 @@ class SubFormProperty extends DataProperty
     {
         extract($args);
         $data = [];
-        $data['name']       = !empty($name) ? $name : 'dd_'.$this->id;
-        $data['id']         = !empty($id) ? $id : 'dd_'.$this->id;
+        $data['name']       = !empty($name) ? $name : 'dd_' . $this->id;
+        $data['id']         = !empty($id) ? $id : 'dd_' . $this->id;
         $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
         $data['size']       = !empty($size) ? $size : 50;
         $data['invalid']    = !empty($this->invalid) ? xarML('Invalid #(1)', $this->invalid) : '';
@@ -851,7 +851,7 @@ class SubFormProperty extends DataProperty
         extract($args);
 
         // in case we need to process additional input fields based on the name
-        $name = empty($name) ? 'dd_'.$this->id : $name;
+        $name = empty($name) ? 'dd_' . $this->id : $name;
 
         // do something with the configuration and save it in $this->configuration
         if (isset($configuration)) {

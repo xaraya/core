@@ -554,11 +554,11 @@ class DataObjectMaster extends xarObject implements ContextInterface
                     throw new Exception(xarML('Did not find a first property for module variable datastore'));
                 }
                 break;
-            /**
-            case 'hook':
-                $this->addDataStore($this->name, 'hook');
-                break;
-             */
+                /**
+                case 'hook':
+                    $this->addDataStore($this->name, 'hook');
+                    break;
+                 */
             case 'none':
                 $this->addDataStore($this->name, 'none');
                 break;
@@ -977,7 +977,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
     {
         // if we have a cached URL already, use that
         if (!empty($itemid) && empty($extra) && !empty($this->cached_urls[$action])) {
-            $url = str_replace('=<itemid>', '='.$itemid, $this->cached_urls[$action]);
+            $url = str_replace('=<itemid>', '=' . $itemid, $this->cached_urls[$action]);
             return $url;
         }
 
@@ -1423,9 +1423,9 @@ class DataObjectMaster extends xarObject implements ContextInterface
         if (!empty($roleid)) {
             $role = xarRoles::get($roleid);
             $rolename = $role->getName();
-            return xarSecurity::check($mask, 0, 'Item', $this->moduleid.':'.$this->itemtype.':'.$itemid, '', $rolename);
+            return xarSecurity::check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid, '', $rolename);
         } else {
-            return xarSecurity::check($mask, 0, 'Item', $this->moduleid.':'.$this->itemtype.':'.$itemid);
+            return xarSecurity::check($mask, 0, 'Item', $this->moduleid . ':' . $this->itemtype . ':' . $itemid);
         }
     }
 

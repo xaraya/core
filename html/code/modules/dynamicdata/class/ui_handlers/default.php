@@ -267,7 +267,7 @@ class DefaultHandler extends xarObject implements ContextInterface
             }
             $cleanfields = [];
             foreach($this->args['fieldlist'] as $field) {
-                if (str_contains($field,'.')) {
+                if (str_contains($field, '.')) {
                     [$field, $subset] = explode('.', $field, 2);
                     $fieldsubset[$field] ??= [];
                     $fieldsubset[$field][] = $subset;

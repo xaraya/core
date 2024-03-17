@@ -81,8 +81,8 @@ class FieldStatusProperty extends SelectProperty
             $inputname = 'input_' . $this->propertyprefix . $this->id;
             $displayname = 'display_' . $this->propertyprefix . $this->id;
         } else {
-            $inputname = 'input_'.$name;
-            $displayname = 'display_'.$name;
+            $inputname = 'input_' . $name;
+            $displayname = 'display_' . $name;
         }
         // store the fieldname for configurations who need them (e.g. file uploads)
         $this->fieldname = $name;

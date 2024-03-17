@@ -84,7 +84,7 @@ class DataObjectFactory extends xarObject
         if (!empty($args['name'])) {
             $infoid = $args['name'];
         } elseif (!empty($args['objectid'])) {
-            $infoid = (int)$args['objectid'];
+            $infoid = (int) $args['objectid'];
         } else {
             if (empty($args['moduleid'])) {
                 // try to get the current module from elsewhere
@@ -94,7 +94,7 @@ class DataObjectFactory extends xarObject
                 // set default itemtype
                 $args['itemtype'] = 0;
             }
-            $infoid = $args['moduleid'].':'.$args['itemtype'];
+            $infoid = $args['moduleid'] . ':' . $args['itemtype'];
         }
         if(xarCoreCache::isCached($cacheKey, $infoid)) {
             return xarCoreCache::getCached($cacheKey, $infoid);

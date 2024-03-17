@@ -168,10 +168,10 @@ class ObjectRefProperty extends SelectProperty
         // Make sure the display and store fields are valid properties of this object
         $fields = $object->getFieldList();
         if (!in_array($this->initialization_display_prop, $fields)) {
-            throw new EmptyParameterException('display_prop: ' . $object->name . '.' .$this->initialization_display_prop);
+            throw new EmptyParameterException('display_prop: ' . $object->name . '.' . $this->initialization_display_prop);
         }
         if (!in_array($this->initialization_store_prop, $fields)) {
-            throw new EmptyParameterException('store_prop: ' . $object->name . '.' .$this->initialization_store_prop);
+            throw new EmptyParameterException('store_prop: ' . $object->name . '.' . $this->initialization_store_prop);
         }
 
         // Check if the store_prop is the itemid
@@ -210,12 +210,12 @@ class ObjectRefProperty extends SelectProperty
 
         if (!empty($data['initialization']['initialization_store_prop']['configuration'])) {
             $temp = unserialize($data['initialization']['initialization_store_prop']['configuration']);
-            $temp = str_replace('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
+            $temp = str_replace('#(1)', "'" . $this->initialization_refobject . "'", $temp);
             $data['initialization']['initialization_store_prop']['configuration'] = serialize($temp);
         }
         if (!empty($data['initialization']['initialization_display_prop']['configuration'])) {
             $temp = unserialize($data['initialization']['initialization_display_prop']['configuration']);
-            $temp = str_replace('#(1)', "'" . $this->initialization_refobject  . "'", $temp);
+            $temp = str_replace('#(1)', "'" . $this->initialization_refobject . "'", $temp);
             $data['initialization']['initialization_display_prop']['configuration'] = serialize($temp);
         }
         return parent::showConfiguration($data);
