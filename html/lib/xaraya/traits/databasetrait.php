@@ -285,7 +285,6 @@ trait DatabaseTrait
      */
     public static function getDbConnArgs($object = null)
     {
-        // @todo use context to get current database
         $context = null;
         if (is_object($object) && method_exists($object, 'getContext')) {
             $context = $object->getContext();
@@ -326,11 +325,20 @@ trait DatabaseTrait
      */
     public static function getCurrentDatabase($context = null)
     {
+        // if we only have one database, return its name
         if (count(static::getDatabases()) === 1) {
             return array_key_first(static::$_databases);
         }
-        // @todo use context to get current database
-        if (xarUser::isLoggedIn()) {
+        if (!empty($context)) {
+            $userId = $context->getUserId();
+            if (!empty($userId)) {
+                // @todo use user context?
+                $name = xarModUserVars::get(static::$moduleName, 'dbName', $userId);
+            } else {
+                // @todo use session context?
+                $name = xarSession::getVar(static::$moduleName . ':dbName');
+            }
+        } elseif (xarUser::isLoggedIn()) {
             $name = xarModUserVars::get(static::$moduleName, 'dbName');
         } else {
             $name = xarSession::getVar(static::$moduleName . ':dbName');
@@ -349,8 +357,16 @@ trait DatabaseTrait
      */
     public static function setCurrentDatabase($name = '', $context = null)
     {
-        // @todo use context to set current database
-        if (xarUser::isLoggedIn()) {
+        if (!empty($context)) {
+            $userId = $context->getUserId();
+            if (!empty($userId)) {
+                // @todo use user context?
+                xarModUserVars::set(static::$moduleName, 'dbName', $name, $userId);
+            } else {
+                // @todo use session context?
+                xarSession::setVar(static::$moduleName . ':dbName', $name);
+            }
+        } elseif (xarUser::isLoggedIn()) {
             xarModUserVars::set(static::$moduleName, 'dbName', $name);
         } else {
             xarSession::setVar(static::$moduleName . ':dbName', $name);
