@@ -14,7 +14,7 @@
  * @param array<string, mixed> $args
  * @return string|bool|void
  */
-function dynamicdata_user_property(array $args = [])
+function dynamicdata_user_property(array $args = [], $context = null)
 {
     if (!xarVar::fetch('prop', 'str', $property, '', xarVar::NOT_REQUIRED)) {
         return;

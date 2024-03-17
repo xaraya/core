@@ -68,11 +68,13 @@ function dynamicdata_admin_update(array $args = [], $context = null)
     }
 
     // set context if available in function
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'join'     => $join,
-                                         'table'    => $table,
-                                         'itemid'   => $itemid],
-                                        $context);
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'join'     => $join,
+        'table'    => $table,
+        'itemid'   => $itemid],
+        $context
+    );
 
     $itemid = $myobject->getItem();
 
@@ -238,10 +240,8 @@ function dynamicdata_admin_update(array $args = [], $context = null)
             'dynamicdata',
             'admin',
             'view',
-            [
-                                      'itemid' => $objectid,
-                                      'tplmodule' => $tplmodule,
-                                      ]
+            ['itemid' => $objectid,
+            'tplmodule' => $tplmodule]
         ));
     }
     return true;

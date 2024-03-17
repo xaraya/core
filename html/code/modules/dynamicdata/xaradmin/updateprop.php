@@ -17,10 +17,10 @@
  */
 function dynamicdata_admin_updateprop()
 {
-    /** @var int $objectid */
     if(!xarVar::fetch('objectid', 'isset', $objectid, 1, xarVar::DONT_SET)) {
         return;
     }
+    /** @var int $objectid */
     if(!xarVar::fetch('module_id', 'isset', $module_id, null, xarVar::DONT_SET)) {
         return;
     }
@@ -71,11 +71,9 @@ function dynamicdata_admin_updateprop()
     }
 
     $objectinfo = DataObjectFactory::getObjectInfo(
-        [
-                                    'objectid' => $objectid,
-                                    'moduleid' => $module_id,
-                                    'itemtype' => $itemtype,
-                                    ]
+        ['objectid' => $objectid,
+        'moduleid' => $module_id,
+        'itemtype' => $itemtype]
     );
     if (isset($objectinfo)) {
         $objectid = $objectinfo['objectid'];
@@ -90,9 +88,9 @@ function dynamicdata_admin_updateprop()
             }
             $objectid = DataObjectFactory::createObject(
                 ['moduleid' => $module_id,
-                                            'itemtype' => $itemtype,
-                                            'name' => $name,
-                                            'label' => ucfirst($name)]
+                'itemtype' => $itemtype,
+                'name' => $name,
+                'label' => ucfirst($name)]
             );
             if (!isset($objectid)) {
                 return;
@@ -111,9 +109,9 @@ function dynamicdata_admin_updateprop()
         'user',
         'getprop',
         ['objectid' => $objectid,
-                                 'moduleid' => $module_id,
-                                 'itemtype' => $itemtype,
-                                 'allprops' => true]
+        'moduleid' => $module_id,
+        'itemtype' => $itemtype,
+        'allprops' => true]
     );
 
     $isprimary = 0;
@@ -162,15 +160,15 @@ function dynamicdata_admin_updateprop()
                 'admin',
                 'updateprop',
                 ['id'            => $id,
-                                    'name'          => $dd_name[$id],
-                                    'label'         => $dd_label[$id],
-                                    'type'          => $dd_type[$id],
-                                    'defaultvalue'  => $dd_defaultvalue[$id],
-                                    'seq'           => $dd_seq[$id],
-                                    'translatable'  => $dd_translatable[$id],
-                                    'source'        => $dd_source[$id],
-                                    'status'        => $dd_status[$id],
-                                    'configuration' => $dd_configuration[$id]]
+                'name'          => $dd_name[$id],
+                'label'         => $dd_label[$id],
+                'type'          => $dd_type[$id],
+                'defaultvalue'  => $dd_defaultvalue[$id],
+                'seq'           => $dd_seq[$id],
+                'translatable'  => $dd_translatable[$id],
+                'source'        => $dd_source[$id],
+                'status'        => $dd_status[$id],
+                'configuration' => $dd_configuration[$id]]
             )) {
                 return;
             }
@@ -206,15 +204,15 @@ function dynamicdata_admin_updateprop()
             'admin',
             'createproperty',
             ['name' => $name,
-                                      'label' => $dd_label[0],
-                                      'objectid' => $objectid,
-                                     // 'moduleid' => $module_id,
-                                     // 'itemtype' => $itemtype,
-                                      'type' => $dd_type[0],
-                                      'defaultvalue' => $dd_defaultvalue[0],
-                                      'source' => $dd_source[0],
-                                      'status' => $dd_status[0],
-                                      'seq' => $i]
+            'label' => $dd_label[0],
+            'objectid' => $objectid,
+            // 'moduleid' => $module_id,
+            // 'itemtype' => $itemtype,
+            'type' => $dd_type[0],
+            'defaultvalue' => $dd_defaultvalue[0],
+            'source' => $dd_source[0],
+            'status' => $dd_status[0],
+            'seq' => $i]
         );
         if (empty($id)) {
             return;
@@ -237,7 +235,7 @@ function dynamicdata_admin_updateprop()
             'updateconfig',
             $modinfo['name'],
             ['module' => $modinfo['name'],
-                              'itemtype' => $itemtype]
+            'itemtype' => $itemtype]
         );
     }
 
@@ -246,7 +244,7 @@ function dynamicdata_admin_updateprop()
         'admin',
         'modifyprop',
         ['itemid'    => $objectid,
-                              'table'    => $table]
+        'table'    => $table]
     ));
     return true;
 }

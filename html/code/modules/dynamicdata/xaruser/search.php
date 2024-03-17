@@ -86,7 +86,7 @@ function dynamicdata_user_search(array $args = [], $context = null)
         $objects = [];
         $object = DataObjectFactory::getObjectInfo(
             ['moduleid' => $module_id,
-                                      'itemtype' => $itemtype]
+            'itemtype' => $itemtype]
         );
         if (!empty($object)) {
             $objects[$object['objectid']] = $object;
@@ -130,7 +130,7 @@ function dynamicdata_user_search(array $args = [], $context = null)
             'user',
             'getprop',
             ['module_id' => $module_id,
-                                      'itemtype' => $itemtype]
+            'itemtype' => $itemtype]
         );
         $wherelist = [];
         foreach ($fields as $name => $field) {
@@ -149,26 +149,26 @@ function dynamicdata_user_search(array $args = [], $context = null)
                 'user',
                 'search',
                 ['module_id' => ($module_id == $mymodid) ? null : $module_id,
-                                        'itemtype' => empty($itemtype) ? null : $itemtype,
-                                        'q' => $q,
-                                        'dd_check' => $dd_check]
+                'itemtype' => empty($itemtype) ? null : $itemtype,
+                'q' => $q,
+                'dd_check' => $dd_check]
             );
             // get the object
+            // set context if available in function
             $object = xarMod::apiFunc(
                 'dynamicdata',
                 'user',
                 'getobjectlist',
                 ['module_id' => $module_id,
-                                          'itemtype' => $itemtype,
-                                          //'where' => $where,
-                                          'startnum' => $startnum,
-                                          'numitems' => $numitems,
-                                          //'pagerurl' => $pagerurl,
-                                          'layout' => 'list',
-                                          'status' => $status]
+                'itemtype' => $itemtype,
+                //'where' => $where,
+                'startnum' => $startnum,
+                'numitems' => $numitems,
+                //'pagerurl' => $pagerurl,
+                'layout' => 'list',
+                'status' => $status],
+                $context
             );
-            // set context if available in function
-            $object->setContext($context);
             if (!$object->checkAccess('view')) {
                 continue;
             }
@@ -195,19 +195,19 @@ function dynamicdata_user_search(array $args = [], $context = null)
             $itemtype = null;
         }
         $data['items'][] = [
-                                 'link'     => xarController::URL(
-                                     'dynamicdata',
-                                     'user',
-                                     $myfunc,
-                                     ['module_id' => $module_id,
-                                                               'itemtype' => $itemtype]
-                                 ),
-                                 'label'    => $label,
-                                 'module_id'    => $module_id,
-                                 'itemtype' => $itemtype,
-                                 'fields'   => $fields,
-                                 'result'   => $result,
-                                ];
+            'link'     => xarController::URL(
+                'dynamicdata',
+                'user',
+                $myfunc,
+                ['module_id' => $module_id,
+                'itemtype' => $itemtype]
+            ),
+            'label'    => $label,
+            'module_id'    => $module_id,
+            'itemtype' => $itemtype,
+            'fields'   => $fields,
+            'result'   => $result,
+        ];
     }
 
     return $data;

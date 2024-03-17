@@ -24,7 +24,7 @@
  *     $args['itemtype'] item type of the item field to get
  * @return mixed value of the field, or false on failure
  */
-function dynamicdata_utilapi_getrelations(array $args = [])
+function dynamicdata_utilapi_getrelations(array $args = [], $context = null)
 {
     static $propertybag = [];
 
@@ -64,7 +64,8 @@ function dynamicdata_utilapi_getrelations(array $args = [])
         'util',
         'getstatic',
         ['module_id' => $module_id,
-                                  'itemtype' => $itemtype]
+        'itemtype' => $itemtype],
+        $context
     );
 
     // get the list of hook modules that are enabled for this module
@@ -97,7 +98,8 @@ function dynamicdata_utilapi_getrelations(array $args = [])
                 'dynamicdata',
                 'util',
                 'getstatic',
-                ['module_id' => xarMod::getRegID($mod)]
+                ['module_id' => xarMod::getRegID($mod)],
+                $context
             );
             // skip this for now
             //      'itemtype' => $itemtype));
@@ -132,9 +134,11 @@ function dynamicdata_utilapi_getrelations(array $args = [])
                     $links[] = ['from' => $field['source'], 'to' => $itemid, 'type' => 'itemid'];
                 }
             }
-            $relations[] = ['module' => $mod,
-                                 'fields' => $modstatic,
-                                 'links'  => $links];
+            $relations[] = [
+                'module' => $mod,
+                'fields' => $modstatic,
+                'links'  => $links,
+            ];
         }
     }
     return $relations;

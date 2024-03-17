@@ -14,7 +14,7 @@ sys::import('modules.dynamicdata.class.rest.builder');
 /**
  * Test APIs
  */
-function dynamicdata_admin_test_apis(array $args = [])
+function dynamicdata_admin_test_apis(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('EditDynamicData')) {
@@ -51,11 +51,11 @@ function dynamicdata_admin_test_apis(array $args = [])
             //return $contents;
             // see session-less page caching
             //sys::import('xaraya.caching.output.page');
-            $cacheCode = md5(xarServer::getVar('HTTP_HOST').xarServer::getVar('REQUEST_URI'));
+            $cacheCode = md5(xarServer::getVar('HTTP_HOST') . xarServer::getVar('REQUEST_URI'));
             //xarPageCache::$cacheCode = $cacheCode;
             $modtime = filemtime($apiFile);
             //xarPageCache::sendHeaders($modtime);
-            $etag = $cacheCode.$modtime;
+            $etag = $cacheCode . $modtime;
             $match = xarServer::getVar('HTTP_IF_NONE_MATCH') ?? null;
             if (!empty($match) && $match == $etag) {
                 header('HTTP/1.1 304 Not Modified');

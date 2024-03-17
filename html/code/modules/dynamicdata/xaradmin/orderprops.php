@@ -60,9 +60,7 @@ function dynamicdata_admin_orderprops()
     }
 
     $objectinfo = DataObjectFactory::getObjectInfo(
-        [
-                                    'objectid' => $objectid,
-                                    ]
+        ['objectid' => $objectid]
     );
 
     $objectid = $objectinfo['objectid'];
@@ -80,9 +78,9 @@ function dynamicdata_admin_orderprops()
         'user',
         'getprop',
         ['objectid' => $objectid,
-                                            'module_id' => $module_id,
-                                            'itemtype' => $itemtype,
-                                         'allprops' => true]
+        'module_id' => $module_id,
+        'itemtype' => $itemtype,
+        'allprops' => true]
     );
     $orders = [];
     $currentpos = null;
@@ -119,9 +117,9 @@ function dynamicdata_admin_orderprops()
             'admin',
             'updateprop',
             ['id' => $itemid,
-                                'label' => $fields[$move_prop]['label'],
-                                'type' => $fields[$move_prop]['type'],
-                                'seq' => $fields[$swapwith]['seq']]
+            'label' => $fields[$move_prop]['label'],
+            'type' => $fields[$move_prop]['type'],
+            'seq' => $fields[$swapwith]['seq']]
         )) {
             return;
         }
@@ -131,9 +129,9 @@ function dynamicdata_admin_orderprops()
             'admin',
             'updateprop',
             ['id' => $fields[$swapwith]['id'],
-                                'label' => $fields[$swapwith]['label'],
-                                'type' => $fields[$swapwith]['type'],
-                                'seq' => $fields[$move_prop]['seq']]
+            'label' => $fields[$swapwith]['label'],
+            'type' => $fields[$swapwith]['type'],
+            'seq' => $fields[$move_prop]['seq']]
         )) {
             return;
         }
@@ -144,8 +142,7 @@ function dynamicdata_admin_orderprops()
         'admin',
         'modifyprop',
         ['module_id'    => $module_id,
-                              'itemtype' => $itemtype,
-        ]
+        'itemtype' => $itemtype]
     ));
 
 

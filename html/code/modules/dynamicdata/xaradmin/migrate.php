@@ -14,7 +14,7 @@
 /**
  * migrate module items
  */
-function dynamicdata_admin_migrate(array $args = [])
+function dynamicdata_admin_migrate(array $args = [], $context = null)
 {
     // Security
     if (!xarSecurity::check('AdminDynamicData')) {
@@ -173,7 +173,7 @@ function dynamicdata_admin_migrate(array $args = [])
                         'user',
                         'getitemlinks',
                         ['itemtype' => $from['itemtype'],
-                                                 'itemids'  => null]
+                        'itemids'  => null]
                     );
                 } else {
                     $items = xarMod::apiFunc(
@@ -181,7 +181,7 @@ function dynamicdata_admin_migrate(array $args = [])
                         'user',
                         'getitemlinks',
                         ['itemtype' => $from['itemtype'],
-                                                 'itemids'  => $from['itemid']]
+                        'itemids'  => $from['itemid']]
                     );
                 }
                 if (!empty($items)) {
@@ -237,7 +237,7 @@ function dynamicdata_admin_migrate(array $args = [])
                         'user',
                         'getprop',
                         ['module_id'    => $data['from']['module'],
-                                                 'itemtype' => $data['from']['itemtype']]
+                        'itemtype' => $data['from']['itemtype']]
                     );
                     $proptypes = DataPropertyMaster::getPropertyTypes();
                     foreach ($props as $name => $info) {
@@ -251,9 +251,11 @@ function dynamicdata_admin_migrate(array $args = [])
                         }
                         // CHECKME: use dd_NN as field name here ?
                         $label = '(dd_' . $info['id'] . ') ' . $info['label'];
-                        $data['fromfieldlist'][$name] = ['name'  => $name,
-                                                              'label' => $label,
-                                                              'type'  => $type];
+                        $data['fromfieldlist'][$name] = [
+                            'name'  => $name,
+                            'label' => $label,
+                            'type'  => $type,
+                        ];
                     }
                 }
             }
@@ -338,7 +340,7 @@ function dynamicdata_admin_migrate(array $args = [])
                         'user',
                         'getprop',
                         ['module_id'    => $data['to']['module'],
-                                                 'itemtype' => $data['to']['itemtype']]
+                        'itemtype' => $data['to']['itemtype']]
                     );
                     $proptypes = DataPropertyMaster::getPropertyTypes();
                     foreach ($props as $name => $info) {
@@ -352,9 +354,11 @@ function dynamicdata_admin_migrate(array $args = [])
                         }
                         // CHECKME: use dd_NN as field name here ?
                         $label = '(dd_' . $info['id'] . ') ' . $info['label'];
-                        $data['tofieldlist'][$name] = ['name'  => $name,
-                                                            'label' => $label,
-                                                            'type'  => $type];
+                        $data['tofieldlist'][$name] = [
+                            'name'  => $name,
+                            'label' => $label,
+                            'type'  => $type,
+                        ];
                     }
                 }
             }
@@ -448,8 +452,12 @@ function dynamicdata_admin_migrate(array $args = [])
             $map = $newmap;
         }
         if (!empty($map)) {
-            $maps[$map] = ['from' => $data['from'], 'to' => $data['to'],
-                                'fieldmap' => $data['fieldmap'], 'hookmap' => $data['hookmap']];
+            $maps[$map] = [
+                'from' => $data['from'],
+                'to' => $data['to'],
+                'fieldmap' => $data['fieldmap'],
+                'hookmap' => $data['hookmap'],
+            ];
             xarModVars::set('dynamicdata', 'migratemaps', serialize($maps));
         }
     }

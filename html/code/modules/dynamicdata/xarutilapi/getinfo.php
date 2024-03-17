@@ -18,7 +18,7 @@
  *     $args['type'] the type of information you're looking for
  * @return array<mixed> of info
  */
-function dynamicdata_utilapi_getinfo($args = [])
+function dynamicdata_utilapi_getinfo(array $args = [], $context = null)
 {
     if (empty($args)) {
         $args['type'] = 'datastores';

@@ -58,17 +58,18 @@ function dynamicdata_admin_new(array $args = [], $context = null)
     $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
 
     // set context if available in function
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'name'      => $name,
-                                         'moduleid'  => $module_id,
-                                         'itemtype'  => $itemtype,
-                                         'join'      => $join,
-                                         'table'     => $table,
-                                         'itemid'    => $itemid,
-                                         'tplmodule' => $tplmodule,
-                                         'template'  => $template,
-                                         ],
-                                        $context);
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'name'      => $name,
+        'moduleid'  => $module_id,
+        'itemtype'  => $itemtype,
+        'join'      => $join,
+        'table'     => $table,
+        'itemid'    => $itemid,
+        'tplmodule' => $tplmodule,
+        'template'  => $template],
+        $context
+    );
     // Security
     if (empty($myobject)) {
         return xarResponse::NotFound();

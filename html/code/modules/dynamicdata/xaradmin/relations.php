@@ -87,19 +87,21 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
     }
 
     // prepare template variables
-    $data = ['module_id' => $module_id,
-                  'itemtype' => $itemtype,
-                  'objectid' => $objectid,
-                  'table' => $table,
-                  'field' => $field,
-                  'value' => $value,
-                  'relation' => $relation,
-                  'direction' => $direction,
-                  'withobjectid' => $withobjectid,
-                  'withtable' => $withtable,
-                  'withfield' => $withfield,
-                  'withvalue' => $withvalue,
-                  'extra' => $extra];
+    $data = [
+        'module_id' => $module_id,
+        'itemtype' => $itemtype,
+        'objectid' => $objectid,
+        'table' => $table,
+        'field' => $field,
+        'value' => $value,
+        'relation' => $relation,
+        'direction' => $direction,
+        'withobjectid' => $withobjectid,
+        'withtable' => $withtable,
+        'withfield' => $withfield,
+        'withvalue' => $withvalue,
+        'extra' => $extra,
+    ];
 
     // get objects
     $data['objects'] = xarMod::apiFunc('dynamicdata', 'user', 'getobjects');
@@ -128,7 +130,8 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
             'dynamicdata',
             'user',
             'getobject',
-            ['objectid' => $objectid]
+            ['objectid' => $objectid],
+            $context
         );
         // set context if available in function
         $object->setContext($context);
@@ -283,7 +286,8 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
                 'dynamicdata',
                 'user',
                 'getobject',
-                ['objectid' => $withobjectid]
+                ['objectid' => $withobjectid],
+                $context
             );
             $data['withobject'] = $withobject;
             $data['withfields'] = $withobject->properties;
@@ -293,12 +297,12 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
                 return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
             }
             /* no longer in use (for now ?)
-                        if (!empty($value)) {
-                            $field = $value;
-                        }
-                        if (!empty($withvalue)) {
-                            $withfield = $withvalue;
-                        }
+            if (!empty($value)) {
+                $field = $value;
+            }
+            if (!empty($withvalue)) {
+                $withfield = $withvalue;
+            }
             */
             if (empty($direction)) {
                 $direction = 'bi';
@@ -353,18 +357,18 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
             'user',
             'getproperty',
             ['type' => 'fieldtype',
-                                              'name' => 'dummy']
+            'name' => 'dummy']
         );
 
     } elseif (!empty($table)) {
+        // set context if available in function
         $object = xarMod::apiFunc(
             'dynamicdata',
             'user',
             'getobject',
-            ['table' => $table]
+            ['table' => $table],
+            $context
         );
-        // set context if available in function
-        $object->setContext($context);
         if (!$object->checkAccess('config')) {
             return xarResponse::Forbidden(xarML('Configure #(1) is forbidden', $object->label));
         }
@@ -390,7 +394,8 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
                 'dynamicdata',
                 'user',
                 'getobject',
-                ['table' => $withtable]
+                ['table' => $withtable],
+                $context
             );
             $data['withfields'] = $withobject->properties;
         }
@@ -399,12 +404,12 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
                 return xarTpl::module('privileges', 'user', 'errors', ['layout' => 'bad_author']);
             }
             /* no longer in use (for now ?)
-                        if (!empty($value)) {
-                            $field = $value;
-                        }
-                        if (!empty($withvalue)) {
-                            $withfield = $withvalue;
-                        }
+            if (!empty($value)) {
+                $field = $value;
+            }
+            if (!empty($withvalue)) {
+                $withfield = $withvalue;
+            }
             */
             if (empty($direction)) {
                 $direction = 'bi';
@@ -460,7 +465,7 @@ function dynamicdata_admin_relations(array $args = [], $context = null)
             'util',
             'getrelations',
             ['module_id' => $module_id,
-                                                 'itemtype' => $itemtype]
+            'itemtype' => $itemtype]
         );
     } else {
         xarTpl::setPageTitle(xarML('Links'));

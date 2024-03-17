@@ -23,12 +23,12 @@
  *        string   $args['itemtype'] item type of the objectlist to get
  * @return integer|void number of items held by this module
  */
-function dynamicdata_userapi_countitems(array $args = [])
+function dynamicdata_userapi_countitems(array $args = [], $context = null)
 {
     if (empty($args['objectid']) && empty($args['name'])) {
         $args = DataObjectDescriptor::getObjectID($args);
     }
-    $mylist = DataObjectFactory::getObjectList($args);
+    $mylist = DataObjectFactory::getObjectList($args, $context);
     if (!isset($mylist)) {
         return;
     }

@@ -32,7 +32,7 @@
  * @param array<string, mixed> $args
  * @return boolean|void true on succes
  */
-function dynamicdata_utilapi_maketable(array $args = [])
+function dynamicdata_utilapi_maketable(array $args = [], $context = null)
 {
     // restricted to DD Admins
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -59,11 +59,14 @@ function dynamicdata_utilapi_maketable(array $args = [])
             $itemid = null;
         }
 
-        $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                             'moduleid' => $module_id,
-                                             'itemtype' => $itemtype,
-                                             'itemid'   => $itemid,
-                                             'allprops' => true]);
+        $myobject = DataObjectFactory::getObject(
+            ['objectid' => $objectid,
+            'moduleid' => $module_id,
+            'itemtype' => $itemtype,
+            'itemid'   => $itemid,
+            'allprops' => true],
+            $context
+        );
     }
 
     if (!isset($myobject) || empty($myobject->label)) {
@@ -114,11 +117,13 @@ function dynamicdata_utilapi_maketable(array $args = [])
         $definition = [];
         switch ($type) {
             case 'itemid':
-                $definition = ['type'        => 'integer',
-                                    'null'        => false,
-                                    'default'     => '0',
-                                    'increment'   => true,
-                                    'primary_key' => true];
+                $definition = [
+                    'type'        => 'integer',
+                    'null'        => false,
+                    'default'     => '0',
+                    'increment'   => true,
+                    'primary_key' => true,
+                ];
                 $isprimary = true;
                 break;
 
@@ -133,36 +138,44 @@ function dynamicdata_utilapi_maketable(array $args = [])
                 } else {
                     $default = '';
                 }
-                $definition = ['type'        => 'varchar',
-                                    'size'        => $maxlength,
-                                    'null'        => false,
-                                    'default'     => $default];
+                $definition = [
+                    'type'        => 'varchar',
+                    'size'        => $maxlength,
+                    'null'        => false,
+                    'default'     => $default,
+                ];
                 break;
 
             case 'textarea':
             case 'textarea_small':
             case 'textarea_medium':
             case 'textarea_large':
-                $definition = ['type'        => 'text',
-                                    'size'        => 'medium',
-                                    'null'        => true];
+                $definition = [
+                    'type'        => 'text',
+                    'size'        => 'medium',
+                    'null'        => true,
+                ];
                 break;
 
             default:
-                $definition = ['type'        => 'varchar',
-                                    'size'        => 254,
-                                    'null'        => false,
-                                    'default'     => ''];
+                $definition = [
+                    'type'        => 'varchar',
+                    'size'        => 254,
+                    'null'        => false,
+                    'default'     => '',
+                ];
                 break;
         }
         $fields[$field] = $definition;
     }
     if (!$isprimary) {
-        $fields['itemid'] = ['type'      => 'integer',
-                                'null'        => false,
-                                'default'     => '0',
-                                'increment'   => false, // unique id depends on other object/table here
-                                'primary_key' => true];
+        $fields['itemid'] = [
+            'type'      => 'integer',
+            'null'        => false,
+            'default'     => '0',
+            'increment'   => false, // unique id depends on other object/table here
+            'primary_key' => true,
+        ];
     }
 
     // Create the Table - the function will return the SQL is successful or

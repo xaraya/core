@@ -46,7 +46,7 @@ function dynamicdata_adminapi_showfilterform(array $args = [], $context = null)
             'admin',
             'showfilterform',
             ['fields' => $fields,
-                                      'layout' => $layout],
+            'layout' => $layout],
             $template
         );
     }

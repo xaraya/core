@@ -22,7 +22,7 @@
  * @param array<string, mixed> $args
  * @return array<mixed> of info
  */
-function dynamicdata_restapi_getlist($args = [])
+function dynamicdata_restapi_getlist($args = [], $context = null)
 {
     $apilist = [];
     // $func name as used in xarMod::apiFunc($module, $type, $func, $args)

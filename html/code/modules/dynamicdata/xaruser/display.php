@@ -43,11 +43,13 @@ function dynamicdata_user_display(array $args = [], $context = null)
     }
 
     // set context if available in function
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'name' => $name,
-                                         'itemid'   => $itemid,
-                                         'tplmodule' => $tplmodule],
-                                        $context);
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'name' => $name,
+        'itemid'   => $itemid,
+        'tplmodule' => $tplmodule],
+        $context
+    );
     if (!isset($myobject)) {
         return;
     }

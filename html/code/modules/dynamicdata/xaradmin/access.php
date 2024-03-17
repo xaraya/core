@@ -82,18 +82,20 @@ function dynamicdata_admin_access(array $args = [], $context = null)
     }
 
     // Specify access levels
-    $data['levels'] = [//'view'   => array('label' => 'View',
-                            //                   'mask'  => 'ViewDynamicDataItems'),
-                            'display' => ['label' => 'Display',
-                                               'mask'  => 'ReadDynamicDataItem'],
-                            'update'  => ['label' => 'Modify',
-                                               'mask'  => 'EditDynamicDataItem'],
-                            'create'  => ['label' => 'Create',
-                                               'mask'  => 'AddDynamicDataItem'],
-                            'delete'  => ['label' => 'Delete',
-                                               'mask'  => 'DeleteDynamicDataItem'],
-                            'config'  => ['label' => 'Configure',
-                                               'mask'  => 'AdminDynamicDataItem']];
+    $data['levels'] = [
+        //'view'   => ['label' => 'View',
+        //            'mask'  => 'ViewDynamicDataItems'],
+        'display' => ['label' => 'Display',
+                    'mask'  => 'ReadDynamicDataItem'],
+        'update'  => ['label' => 'Modify',
+                    'mask'  => 'EditDynamicDataItem'],
+        'create'  => ['label' => 'Create',
+                    'mask'  => 'AddDynamicDataItem'],
+        'delete'  => ['label' => 'Delete',
+                    'mask'  => 'DeleteDynamicDataItem'],
+        'config'  => ['label' => 'Configure',
+                    'mask'  => 'AdminDynamicDataItem'],
+    ];
     // Get list of groups
     $data['grouplist'] = [];
     $anonid = xarConfigVars::get(null, 'Site.User.AnonymousUID');
@@ -187,7 +189,7 @@ function dynamicdata_admin_access(array $args = [], $context = null)
                 'admin',
                 'access',
                 ['itemid' => $itemid,
-                                                  'tplmodule' => $tplmodule]
+                'tplmodule' => $tplmodule]
             ));
         }
         return true;
@@ -208,7 +210,7 @@ function dynamicdata_admin_access(array $args = [], $context = null)
         $data['do_access'] = 0;
 
         // Preset the default access rights using privileges
-        $instance = $object->properties['module_id']->value.':'.$object->properties['itemtype']->value.':All';
+        $instance = $object->properties['module_id']->value . ':' . $object->properties['itemtype']->value . ':All';
         foreach ($data['levels'] as $level => $info) {
             $data['access'][$level] = [];
             foreach ($data['grouplist'] as $roleid => $rolename) {
@@ -237,30 +239,36 @@ function dynamicdata_admin_access(array $args = [], $context = null)
     $data['filters'] = [];
     foreach ($filterlist as $group => $filters) {
         foreach ($filters as $filter) {
-            array_push($data['filters'], ['group' => $group,
-                                               'prop'  => $filter[0],
-                                               'match' => $filter[1],
-                                               'value' => xarVar::prepForDisplay($filter[2]),
-                                               'level' => '']);
+            array_push($data['filters'], [
+                'group' => $group,
+                'prop'  => $filter[0],
+                'match' => $filter[1],
+                'value' => xarVar::prepForDisplay($filter[2]),
+                'level' => '',
+            ]);
         }
     }
     // add blank filter at the bottom
-    array_push($data['filters'], ['group' => '',
-                                       'prop'  => '',
-                                       'match' => '',
-                                       'value' => '',
-                                       'level' => '']);
+    array_push($data['filters'], [
+        'group' => '',
+        'prop'  => '',
+        'match' => '',
+        'value' => '',
+        'level' => '',
+    ]);
 
     // get the properties of the current object
     $data['properties'] = DataPropertyMaster::getProperties(['objectid' => $object->itemid]);
-    $data['conditions'] = ['eq'    => 'equals',
-                                //'start' => 'starts with',
-                                //'end'   => 'ends with',
-                                //'like'  => 'contains',
-                                //'in'    => 'in list a,b,c',
-                                'gt'    => 'greater than',
-                                'lt'    => 'less than',
-                                'ne'    => 'not equal to'];
+    $data['conditions'] = [
+        'eq'    => 'equals',
+        //'start' => 'starts with',
+        //'end'   => 'ends with',
+        //'like'  => 'contains',
+        //'in'    => 'in list a,b,c',
+        'gt'    => 'greater than',
+        'lt'    => 'less than',
+        'ne'    => 'not equal to',
+    ];
 
     $data['authid'] = xarSec::genAuthKey();
 

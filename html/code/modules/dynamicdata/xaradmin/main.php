@@ -22,16 +22,17 @@
  * @return mixed output display string or boolean true if redirected
  *
  */
-function dynamicdata_admin_main()
+function dynamicdata_admin_main(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('EditDynamicData')) {
         return;
     }
 
+    // @todo use $context here if available
     $samemodule = xarController::isRefererSameModule();
 
-    if (((bool)xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
+    if (((bool) xarModVars::get('modules', 'disableoverview') == false) || $samemodule) {
         return xarTpl::module('dynamicdata', 'admin', 'overview');
     } else {
         xarController::redirect(xarController::URL('dynamicdata', 'admin', 'view'));

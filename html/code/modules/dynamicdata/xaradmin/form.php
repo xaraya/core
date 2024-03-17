@@ -55,13 +55,15 @@ function dynamicdata_admin_form(array $args = [], $context = null)
     $data = xarMod::apiFunc('dynamicdata', 'admin', 'menu');
 
     // set context if available in function
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'moduleid' => $module_id,
-                                         'itemtype' => $itemtype,
-                                         'join'     => $join,
-                                         'table'    => $table,
-                                         'itemid'   => $itemid],
-                                        $context);
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'moduleid' => $module_id,
+        'itemtype' => $itemtype,
+        'join'     => $join,
+        'table'    => $table,
+        'itemid'   => $itemid],
+        $context
+    );
 
     // Security
     if (!$myobject->checkAccess('create')) {

@@ -73,15 +73,17 @@ function dynamicdata_admin_modify(array $args = [], $context = null)
         $objectid = 1;
     }
     // set context if available in function
-    $object = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'name' => $name,
-                                         'moduleid' => $module_id,
-                                         'itemtype' => $itemtype,
-                                         'join'     => $join,
-                                         'table'    => $table,
-                                         'itemid'   => $itemid,
-                                         'tplmodule' => $tplmodule],
-                                        $context);
+    $object = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'name' => $name,
+        'moduleid' => $module_id,
+        'itemtype' => $itemtype,
+        'join'     => $join,
+        'table'    => $table,
+        'itemid'   => $itemid,
+        'tplmodule' => $tplmodule],
+        $context
+    );
 
     // Security
     if (empty($object)) {

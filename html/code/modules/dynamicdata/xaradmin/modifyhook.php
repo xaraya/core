@@ -6,7 +6,7 @@ use Xaraya\DataObject\HookObservers\ItemModify;
 /**
  * @deprecated 2.4.1 replaced with hookobserver classes
  */
-function dynamicdata_admin_modifyhook(array $args = [])
+function dynamicdata_admin_modifyhook(array $args = [], $context = null)
 {
-    return ItemModify::run($args);
+    return ItemModify::run($args, $context);
 }

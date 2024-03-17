@@ -54,7 +54,7 @@ function dynamicdata_userapi_encode_shorturl(array $args = [])
     if (count($objectcache) == 0) {
         $objects = DataObjectFactory::getObjects();
         foreach ($objects as $object) {
-            $objectcache[$object['moduleid'].':'.$object['itemtype']] = $object['name'];
+            $objectcache[$object['moduleid'] . ':' . $object['itemtype']] = $object['name'];
         }
     }
 
@@ -63,8 +63,8 @@ function dynamicdata_userapi_encode_shorturl(array $args = [])
         // no short URLs for this one...
 
     } elseif ($func == 'view') {
-        if (!empty($objectcache[$module_id.':'.$itemtype])) {
-            $name = $objectcache[$module_id.':'.$itemtype];
+        if (!empty($objectcache[$module_id . ':' . $itemtype])) {
+            $name = $objectcache[$module_id . ':' . $itemtype];
             $alias = xarModAlias::resolve($name);
             if ($module == $alias) {
                 // OK, we can use a 'fake' module name here
@@ -79,8 +79,8 @@ function dynamicdata_userapi_encode_shorturl(array $args = [])
             // we don't know this one...
         }
     } elseif ($func == 'display' && isset($itemid)) {
-        if (!empty($objectcache[$module_id.':'.$itemtype])) {
-            $name = $objectcache[$module_id.':'.$itemtype];
+        if (!empty($objectcache[$module_id . ':' . $itemtype])) {
+            $name = $objectcache[$module_id . ':' . $itemtype];
             $alias = xarModAlias::resolve($name);
             if ($module == $alias) {
                 // OK, we can use a 'fake' module name here

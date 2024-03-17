@@ -63,11 +63,13 @@ function dynamicdata_admin_create(array $args = [], $context = null)
     }
 
     // set context if available in function
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'join'     => $join,
-                                         'table'    => $table,
-                                         'itemid'   => $itemid],
-                                        $context);
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'join'     => $join,
+        'table'    => $table,
+        'itemid'   => $itemid],
+        $context
+    );
 
     // Security (Bug:
     if (!$myobject->checkAccess('create')) {
@@ -126,10 +128,8 @@ function dynamicdata_admin_create(array $args = [], $context = null)
             'dynamicdata',
             'admin',
             'view',
-            [
-                                      'itemid' => $objectid,
-                                      'tplmodule' => $tplmodule,
-                                      ]
+            ['itemid' => $objectid,
+            'tplmodule' => $tplmodule],
         ));
     }
     return true;

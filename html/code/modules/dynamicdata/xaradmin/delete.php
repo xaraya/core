@@ -57,14 +57,16 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
     }
 
     // set context if available in function
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'name'       => $name,
-                                         'join'       => $join,
-                                         'table'      => $table,
-                                         'itemid'     => $itemid,
-                                         'tplmodule'  => $tplmodule,
-                                         'template'   => $template],
-                                        $context);
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'name'       => $name,
+        'join'       => $join,
+        'table'      => $table,
+        'itemid'     => $itemid,
+        'tplmodule'  => $tplmodule,
+        'template'   => $template],
+        $context
+    );
     if (empty($myobject)) {
         return;
     }
@@ -89,20 +91,16 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
                 'dynamicdata',
                 'admin',
                 'view',
-                [
-                                            'table'     => $table,
-                                            'tplmodule' => $data['tplmodule'],
-                                          ]
+                ['table'     => $table,
+                'tplmodule' => $data['tplmodule']]
             ));
         } else {
             xarController::redirect(xarController::URL(
                 'dynamicdata',
                 'admin',
                 'view',
-                [
-                                            'itemid'    => $data['objectid'],
-                                            'tplmodule' => $data['tplmodule'],
-                                          ]
+                ['itemid'    => $data['objectid'],
+                'tplmodule' => $data['tplmodule']]
             ));
         }
         return true;
@@ -184,20 +182,16 @@ function dynamicdata_admin_delete(array $args = [], $context = null)
             'dynamicdata',
             'admin',
             'view',
-            [
-                                      'table'     => $table,
-                                      'tplmodule' => $tplmodule,
-                                      ]
+            ['table'     => $table,
+            'tplmodule' => $tplmodule]
         ));
     } else {
         xarController::redirect(xarController::URL(
             'dynamicdata',
             'admin',
             'view',
-            [
-                                      'name' => $myobject->name,
-                                      'tplmodule' => $tplmodule,
-                                      ]
+            ['name' => $myobject->name,
+            'tplmodule' => $tplmodule]
         ));
     }
 

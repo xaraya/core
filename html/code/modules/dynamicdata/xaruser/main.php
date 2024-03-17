@@ -21,13 +21,20 @@
  * @param array<string, mixed> $args
  * @return array<mixed>|bool empty array of data for the template display
  */
-function dynamicdata_user_main(array $args = [])
+function dynamicdata_user_main(array $args = [], $context = null)
 {
     $redirect = xarModVars::get('dynamicdata', 'frontend_page');
     if (!empty($redirect)) {
         $truecurrenturl = xarServer::getCurrentURL([], false);
-        $urldata = xarMod::apiFunc('roles', 'user', 'parseuserhome', ['url' => $redirect,'truecurrenturl' => $truecurrenturl]);
-        xarController::redirect($urldata['redirecturl']);
+        $urldata = xarMod::apiFunc(
+            'roles',
+            'user',
+            'parseuserhome',
+            ['url' => $redirect,
+            'truecurrenturl' => $truecurrenturl],
+            $context
+        );
+        xarController::redirect($urldata['redirecturl'], 302, $context);
         return true;
     } else {
         return [];

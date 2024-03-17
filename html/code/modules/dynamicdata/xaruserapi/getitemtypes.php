@@ -34,10 +34,11 @@ function dynamicdata_userapi_getitemtypes(array $args = [], $context = null)
         if ($object['objectid'] < 3) {
             continue;
         }
-        $itemtypes[$object['itemtype']] = ['label' => xarVar::prepForDisplay($object['label']),
-                                                'title' => xarVar::prepForDisplay(xarML('View #(1)', $object['label'])),
-                                                'url'   => xarController::URL('dynamicdata', 'user', 'view', ['itemtype' => $object['itemtype']]),
-                                               ];
+        $itemtypes[$object['itemtype']] = [
+            'label' => xarVar::prepForDisplay($object['label']),
+            'title' => xarVar::prepForDisplay(xarML('View #(1)', $object['label'])),
+            'url'   => xarController::URL('dynamicdata', 'user', 'view', ['itemtype' => $object['itemtype']]),
+        ];
     }
     return $itemtypes;
 }

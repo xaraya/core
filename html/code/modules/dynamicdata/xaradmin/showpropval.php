@@ -50,9 +50,11 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
 
     // get the object corresponding to this dynamic property
     // set context if available in function
-    $myobject = DataObjectFactory::getObject(['name'   => 'properties',
-                                            'itemid' => $itemid],
-                                        $context);
+    $myobject = DataObjectFactory::getObject(
+        ['name'   => 'properties',
+        'itemid' => $itemid],
+        $context
+    );
     if (empty($myobject)) {
         return;
     }
@@ -93,7 +95,7 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
     $data['type'] = $myobject->properties['type']->value;
     $id = $myobject->properties['configuration']->id;
 
-    $data['name']       = 'dd_'.$id;
+    $data['name']       = 'dd_' . $id;
     // pass the actual id for the property here
     $data['id']         = $id;
     // pass the original invalid value here
@@ -165,7 +167,7 @@ function dynamicdata_admin_showpropval(array $args = [], $context = null)
     }
 
     // pass the id for the input field here
-    $data['id']         = 'dd_'.$id;
+    $data['id']         = 'dd_' . $id;
     $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
     $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
     $data['size']       = !empty($size) ? $size : 50;
@@ -245,7 +247,7 @@ function dynamicdata_config_propval($proptype)
     }
 
     // pass the id for the input field here
-    $data['id']         = 'dd_'.$proptype;
+    $data['id']         = 'dd_' . $proptype;
     $data['tabindex']   = !empty($tabindex) ? $tabindex : 0;
     $data['maxlength']  = !empty($maxlength) ? $maxlength : 254;
     $data['size']       = !empty($size) ? $size : 50;

@@ -25,7 +25,7 @@ use Xaraya\DataObject\Export\DataObjectExporter;
  *    bool $args['tofile'] save to file (optional)
  * @return string|void
  */
-function dynamicdata_utilapi_export_objectdef(array $args = [])
+function dynamicdata_utilapi_export_objectdef(array $args = [], $context = null)
 {
     extract($args);
 

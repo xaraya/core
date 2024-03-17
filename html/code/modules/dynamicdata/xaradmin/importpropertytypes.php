@@ -13,7 +13,7 @@
  * @author mikespub <mikespub@xaraya.com>
  * @return array<mixed>|void empty array for the template display
  */
-function dynamicdata_admin_importpropertytypes(array $args = [])
+function dynamicdata_admin_importpropertytypes(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -21,7 +21,7 @@ function dynamicdata_admin_importpropertytypes(array $args = [])
     }
 
     $args['flush'] = 'false';
-    $success = xarMod::apiFunc('dynamicdata', 'admin', 'importpropertytypes', $args);
+    $success = xarMod::apiFunc('dynamicdata', 'admin', 'importpropertytypes', $args, $context);
 
     return [];
 }

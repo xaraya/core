@@ -53,11 +53,13 @@ function dynamicdata_admin_export(array $args = [], $context = null)
     $data['menutitle'] = xarML('Dynamic Data Utilities');
 
     // set context if available in function
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'name'     => $name,
-                                         'itemid'   => $itemid,
-                                         'allprops' => true],
-                                        $context);
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'name'     => $name,
+        'itemid'   => $itemid,
+        'allprops' => true],
+        $context
+    );
 
     if (!isset($myobject) || empty($myobject->label)) {
         $data['label'] = xarML('Unknown Object');

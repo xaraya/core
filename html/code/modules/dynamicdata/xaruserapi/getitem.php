@@ -94,18 +94,20 @@ function &dynamicdata_userapi_getitem(array $args = [], $context = null)
     }
 
     $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype]);
+                                               'itemtype'  => $itemtype]);
     if (empty($args['objectid'])) {
         return $nullreturn;
     }
     // set context if available in function
-    $object = DataObjectFactory::getObject(['objectid'  => $args['objectid'],
-                                       'itemid'    => $itemid,
-                                       'fieldlist' => $fieldlist,
-                                       'join'      => $join,
-                                       'table'     => $table,
-                                       'status'    => $status],
-                                        $context);
+    $object = DataObjectFactory::getObject(
+        ['objectid'  => $args['objectid'],
+        'itemid'    => $itemid,
+        'fieldlist' => $fieldlist,
+        'join'      => $join,
+        'table'     => $table,
+        'status'    => $status],
+        $context
+    );
     if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
         return $nullreturn;
     }

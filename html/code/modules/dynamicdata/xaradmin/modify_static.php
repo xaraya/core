@@ -62,7 +62,7 @@ function dynamicdata_admin_modify_static()
 
             // Good data: create the field
             $options = xarMod::apiFunc('dynamicdata', 'data', 'getdatatypeoptions');
-            $query = 'ALTER TABLE ' .$data['table'] . ' CHANGE COLUMN `' . $data['oldname'] . '` `';
+            $query = 'ALTER TABLE ' . $data['table'] . ' CHANGE COLUMN `' . $data['oldname'] . '` `';
             $query .= $data['object']->properties['name']->value . '` ';
             $query .= $options['datatypes'][$data['object']->properties['type']->value] . ' ';
             if ((in_array($data['object']->properties['type']->value, [3,4,5]))) {

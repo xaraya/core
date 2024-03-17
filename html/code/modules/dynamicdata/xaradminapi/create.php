@@ -56,9 +56,11 @@ function dynamicdata_adminapi_create(array $args = [], $context = null)
 
     // TODO: test this
     // set context if available in function
-    $myobject = DataObjectFactory::getObject(['objectid' => $objectid,
-                                         'itemid'   => $itemid],
-                                        $context);
+    $myobject = DataObjectFactory::getObject(
+        ['objectid' => $objectid,
+        'itemid'   => $itemid],
+        $context
+    );
     if (empty($myobject)) {
         return;
     }

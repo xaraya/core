@@ -6,7 +6,7 @@ use Xaraya\DataObject\HookObservers\ItemCreate;
 /**
  * @deprecated 2.4.1 replaced with hookobserver classes
  */
-function dynamicdata_adminapi_createhook(array $args = [])
+function dynamicdata_adminapi_createhook(array $args = [], $context = null)
 {
-    return ItemCreate::run($args);
+    return ItemCreate::run($args, $context);
 }

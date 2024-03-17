@@ -33,16 +33,18 @@ function dynamicdata_userapi_getitemlinks(array $args = [], $context = null)
     // for items managed by DD itself only
     $module_id = xarMod::getRegID('dynamicdata');
     $args = DataObjectDescriptor::getObjectID(['moduleid'  => $module_id,
-                                       'itemtype'  => $itemtype]);
+                                               'itemtype'  => $itemtype]);
     if (empty($args['objectid'])) {
         return $itemlinks;
     }
     $status = DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE;
     // set context if available in function
-    $object = DataObjectFactory::getObjectList(['objectid'  => $args['objectid'],
-                                           'itemids' => $itemids,
-                                           'status' => $status],
-                                            $context);
+    $object = DataObjectFactory::getObjectList(
+        ['objectid'  => $args['objectid'],
+        'itemids' => $itemids,
+        'status' => $status],
+        $context
+    );
     if (!isset($object) || (empty($object->objectid) && empty($object->table))) {
         return $itemlinks;
     }
@@ -80,15 +82,17 @@ function dynamicdata_userapi_getitemlinks(array $args = [], $context = null)
             $label = xarML('Item #(1)', $itemid);
         }
         // $object->getActionURL('display', $itemid)
-        $itemlinks[$itemid] = ['url'   => xarController::URL(
-            'dynamicdata',
-            'user',
-            'display',
-            ['name' => $args['name'],
-                                                               'itemid' => $itemid]
-        ),
-                                    'title' => xarML('Display Item'),
-                                    'label' => $label];
+        $itemlinks[$itemid] = [
+            'url'   => xarController::URL(
+                'dynamicdata',
+                'user',
+                'display',
+                ['name' => $args['name'],
+                'itemid' => $itemid]
+            ),
+            'title' => xarML('Display Item'),
+            'label' => $label,
+        ];
     }
     return $itemlinks;
 }

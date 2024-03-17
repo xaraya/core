@@ -16,7 +16,7 @@ use Xaraya\DataObject\UtilApi;
 /**
  * Database configurations used by modules and objects
  */
-function dynamicdata_admin_dbconfig(array $args = [])
+function dynamicdata_admin_dbconfig(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -45,7 +45,7 @@ function dynamicdata_admin_dbconfig(array $args = [])
             return $data;
         }
         $config = null;
-        xarVar::fetch('config', 'array', $config, array(), xarVar::DONT_SET);
+        xarVar::fetch('config', 'array', $config, [], xarVar::DONT_SET);
         if (!empty($config) && is_array($config) && xarSec::confirmAuthKey('dynamicdata')) {
             $config = array_filter($config);
             if (!empty($config['name'])) {
@@ -104,7 +104,7 @@ function dynamicdata_admin_dbconfig(array $args = [])
             ];
         }
         $config = null;
-        xarVar::fetch('config', 'array', $config, array(), xarVar::DONT_SET);
+        xarVar::fetch('config', 'array', $config, [], xarVar::DONT_SET);
         if (!empty($config) && is_array($config) && xarSec::confirmAuthKey('dynamicdata')) {
             $config = array_filter($config);
             echo var_export($config, true);

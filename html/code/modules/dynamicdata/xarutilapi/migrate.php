@@ -24,7 +24,7 @@
  * @return mixed true or debug string on success, null on failure
  * @throws BadParameterException
  */
-function dynamicdata_utilapi_migrate(array $args = [])
+function dynamicdata_utilapi_migrate(array $args = [], $context = null)
 {
     extract($args);
 
@@ -104,8 +104,8 @@ function dynamicdata_utilapi_migrate(array $args = [])
                 'user',
                 'getall',
                 ['aids' => $itemids,
-                                            // get the categories and dynamicdata fields too
-                                            'extra' => ['cids','dynamicdata']]
+                // get the categories and dynamicdata fields too
+                'extra' => ['cids','dynamicdata']]
             );
             if (!isset($articles)) {
                 return;
@@ -123,8 +123,9 @@ function dynamicdata_utilapi_migrate(array $args = [])
                 'user',
                 'getitems',
                 ['module_id' => $from['module'],
-                                         'itemtype' => $from['itemtype'],
-                                         'itemids' => $itemids]
+                'itemtype' => $from['itemtype'],
+                'itemids' => $itemids],
+                $context
             );
             if (!isset($items)) {
                 return;
@@ -159,9 +160,9 @@ function dynamicdata_utilapi_migrate(array $args = [])
                 'user',
                 'getpages',
                 ['itemtype' => $from['itemtype'],
-                                         'pids'     => $itemids,
-                                         'key'      => 'pid',
-                                         'dd_flag'  => false]
+                'pids'     => $itemids,
+                'key'      => 'pid',
+                'dd_flag'  => false]
             );
             if (!isset($items)) {
                 return;
@@ -304,10 +305,11 @@ function dynamicdata_utilapi_migrate(array $args = [])
                         'admin',
                         'create',
                         ['module_id'    => $to['module'],
-                                                 'itemtype' => $to['itemtype'],
-                                                 // try to preset the itemid if necessary
-                                                 'itemid'   => !empty($to['itemid']) ? $itemid : 0,
-                                                 'values'   => $values]
+                        'itemtype' => $to['itemtype'],
+                        // try to preset the itemid if necessary
+                        'itemid'   => !empty($to['itemid']) ? $itemid : 0,
+                        'values'   => $values],
+                        $context
                     );
                 } else {
                     $newid = -$itemid; // simulate some new itemid :-)
@@ -503,10 +505,11 @@ function dynamicdata_utilapi_migrate(array $args = [])
         'util',
         'updatehooks',
         ['from'    => $from,
-                                  'to'      => $to,
-                                  'hookmap' => $hookmap,
-                                  'itemids' => $newitemids,
-                                  'debug'   => empty($debug) ? '' : $debug]
+        'to'      => $to,
+        'hookmap' => $hookmap,
+        'itemids' => $newitemids,
+        'debug'   => empty($debug) ? '' : $debug],
+        $context
     );
     if (!$result) {
         return;
@@ -537,7 +540,7 @@ function dynamicdata_utilapi_migrate(array $args = [])
                         'admin',
                         'delete',
                         ['ptid' => $from['itemtype'],
-                                             'aid'  => $itemid]
+                        'aid'  => $itemid]
                     )) {
                         return;
                     }
@@ -558,8 +561,8 @@ function dynamicdata_utilapi_migrate(array $args = [])
                         'admin',
                         'delete',
                         ['module_id'    => $from['module'],
-                                             'itemtype' => $from['itemtype'],
-                                             'itemid'   => $itemid]
+                        'itemtype' => $from['itemtype'],
+                        'itemid'   => $itemid]
                     )) {
                         return;
                     }

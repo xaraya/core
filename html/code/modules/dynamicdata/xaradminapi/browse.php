@@ -14,7 +14,7 @@
 /**
  * @param array<string, mixed> $args array of optional parameters<br/>
  */
-function dynamicdata_adminapi_browse(array $args = [])
+function dynamicdata_adminapi_browse(array $args = [], $context = null)
 {
     // Argument check - make sure that all required arguments are present
     // and in the right format, if not then set an appropriate error

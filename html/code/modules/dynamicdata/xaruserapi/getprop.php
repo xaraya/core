@@ -28,7 +28,7 @@
  * @return mixed value of the field, or false on failure
  * @throws BadParameterException
  */
-function dynamicdata_userapi_getprop(array $args = [])
+function dynamicdata_userapi_getprop(array $args = [], $context = null)
 {
     static $propertybag = [];
 
@@ -109,9 +109,9 @@ function dynamicdata_userapi_getprop(array $args = [])
     }
 
     $fields = DataPropertyMaster::getProperties(['objectid' => $objectid,
-                                                           'moduleid' => $module_id,
-                                                           'itemtype' => $itemtype,
-                                                           'allprops' => $allprops]);
+                                                'moduleid' => $module_id,
+                                                'itemtype' => $itemtype,
+                                                'allprops' => $allprops]);
     if (!empty($static)) {
         // get the list of static properties for this module
         $staticlist = xarMod::apiFunc(
@@ -119,7 +119,8 @@ function dynamicdata_userapi_getprop(array $args = [])
             'util',
             'getstatic',
             ['module_id' => $module_id,
-                  'itemtype' => $itemtype]
+            'itemtype' => $itemtype],
+            $context
         );
         // TODO: watch out for conflicting property ids ?
         $fields = array_merge($staticlist, $fields);

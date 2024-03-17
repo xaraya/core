@@ -26,7 +26,7 @@ use Xaraya\DataObject\UtilApi;
  * @return array<string, mixed>|void of field definitions, or null on failure
  * @todo split off the common parts which are also in getstatic.php
  */
-function dynamicdata_utilapi_getmeta(array $args = [])
+function dynamicdata_utilapi_getmeta(array $args = [], $context = null)
 {
     extract($args);
 

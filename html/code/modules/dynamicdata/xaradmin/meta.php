@@ -16,7 +16,7 @@ use Xaraya\DataObject\UtilApi;
 /**
  * Return meta data (test only)
  */
-function dynamicdata_admin_meta(array $args = [])
+function dynamicdata_admin_meta(array $args = [], $context = null)
 {
     // Security
     if(!xarSecurity::check('AdminDynamicData')) {
@@ -99,7 +99,10 @@ function dynamicdata_admin_meta(array $args = [])
         'dynamicdata',
         'util',
         'getmeta',
-        ['db' => $db, 'table' => $table, 'dbConnIndex' => $data['dbConnIndex']]
+        ['db' => $db,
+        'table' => $table,
+        'dbConnIndex' => $data['dbConnIndex']],
+        $context
     );
 
     $data['result'] = '';

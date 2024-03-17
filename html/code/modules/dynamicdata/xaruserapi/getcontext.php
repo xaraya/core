@@ -16,8 +16,9 @@
  *        string   $module  name of the module dynamicdata is working for
  * @return array<mixed> of data
  */
-function dynamicdata_userapi_getcontext($args = ['module' => 'dynamicdata'])
+function dynamicdata_userapi_getcontext($args = ['module' => 'dynamicdata'], $context = null)
 {
+    // @todo use incoming $context here too?
     extract($args);
     /** @var ?string $module */
     $module ??= 'dynamicdata';

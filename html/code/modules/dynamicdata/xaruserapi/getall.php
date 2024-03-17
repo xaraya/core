@@ -16,7 +16,7 @@
  * @return array<mixed>|DataObject|null of (name => value), or false on failure
 */
 
-function dynamicdata_userapi_getall(array $args = [])
+function dynamicdata_userapi_getall(array $args = [], $context = null)
 {
-    return xarMod::apiFunc('dynamicdata', 'user', 'getitem', $args);
+    return xarMod::apiFunc('dynamicdata', 'user', 'getitem', $args, $context);
 }

@@ -18,7 +18,7 @@
  *        integer  $args['objectid'] object id of the object to delete
  * @return integer object ID on success, null on failure
  */
-function dynamicdata_adminapi_deleteobject(array $args = [])
+function dynamicdata_adminapi_deleteobject(array $args = [], $context = null)
 {
     $objectid = DataObjectFactory::deleteObject($args);
     return $objectid;

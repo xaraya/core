@@ -24,7 +24,7 @@
  * @return mixed true or debug string on success, null on failure
  * @throws BadParameterException
  */
-function dynamicdata_utilapi_updatehooks(array $args = [])
+function dynamicdata_utilapi_updatehooks(array $args = [], $context = null)
 {
     extract($args);
 

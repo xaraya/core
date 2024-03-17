@@ -109,18 +109,20 @@ function dynamicdata_userapi_showview(array $args = [], $context = null)
     }
 
     // set context if available in function
-    $object = DataObjectFactory::getObjectList(['objectid'  => $args ['objectid'],
-                                           'itemids' => $itemids,
-                                           'sort' => $sort,
-                                           'numitems' => $numitems,
-                                           'startnum' => $startnum,
-                                           'table'      => $table,
-                                           'where' => $where,
-                                           'fieldlist' => $myfieldlist,
-                                           'catid' => $catid,
-                                           'groupby' => $groupby,
-                                           'status' => $status],
-                                            $context);
+    $object = DataObjectFactory::getObjectList(
+        ['objectid'  => $args ['objectid'],
+        'itemids' => $itemids,
+        'sort' => $sort,
+        'numitems' => $numitems,
+        'startnum' => $startnum,
+        'table'      => $table,
+        'where' => $where,
+        'fieldlist' => $myfieldlist,
+        'catid' => $catid,
+        'groupby' => $groupby,
+        'status' => $status],
+        $context
+    );
     if (!isset($object) || empty($object->label)) {
         return;
     }
@@ -168,12 +170,14 @@ function dynamicdata_userapi_showview(array $args = [], $context = null)
     if (empty($tplmodule)) {
         $tplmodule = 'dynamicdata';
     }
-    return $object->showView(['layout'    => $layout,
-                                   'tplmodule' => $tplmodule,
-                                   'template'  => $template,
-                                   'linklabel' => $linklabel,
-                                   'linkfunc'  => $linkfunc,
-                                   'param'     => $param,
-                                   'pagerurl'  => $pagerurl,
-                                   'linkfield' => $linkfield]);
+    return $object->showView([
+        'layout'    => $layout,
+        'tplmodule' => $tplmodule,
+        'template'  => $template,
+        'linklabel' => $linklabel,
+        'linkfunc'  => $linkfunc,
+        'param'     => $param,
+        'pagerurl'  => $pagerurl,
+        'linkfield' => $linkfield,
+    ]);
 }
