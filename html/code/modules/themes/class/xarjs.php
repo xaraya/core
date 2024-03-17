@@ -332,6 +332,7 @@ class xarJS extends xarObject
 
    public static function getFiles($path, $levels=0, $rel=false)
    {
+       // @todo $rel was meant to support recursive search - remove?
        $rel=false;
        $files = array();
        if ($rel === true) {

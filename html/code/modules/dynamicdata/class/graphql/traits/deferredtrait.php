@@ -115,6 +115,7 @@ trait xarGraphQLDeferredTrait
                 // set context if available in resolver
                 xarGraphQL::$object_ref[$object] = DataObjectFactory::getObjectList(['name' => $object], $context);
             }
+            /** @var DeferredItemProperty $property */
             $property = (xarGraphQL::$object_ref[$object])->properties[$fieldname];
             if (get_class($property) === 'DeferredManyProperty') {
                 // $fieldname = 'id';

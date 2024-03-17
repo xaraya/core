@@ -54,7 +54,7 @@ class xarGraphQLMixedType extends ScalarType
      *   get_hello(args: {name: "hi", more: {oops: "hmmm"}})
      * }
      */
-    public function parseLiteral($valueNode, array $variables = null)
+    public function parseLiteral($valueNode, ?array $variables = null)
     {
         if (xarGraphQL::$trace_path) {
             xarGraphQL::$paths[] = ["parse literal", $valueNode->kind, $variables];

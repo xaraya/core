@@ -51,7 +51,7 @@ class xarGraphQLSerialType extends ScalarType
         return $this->tryUnserialized($value);
     }
 
-    public function parseLiteral($valueNode, array $variables = null)
+    public function parseLiteral($valueNode, ?array $variables = null)
     {
         if (xarGraphQL::$trace_path) {
             xarGraphQL::$paths[] = ["parse literal", $valueNode->kind, $variables];
