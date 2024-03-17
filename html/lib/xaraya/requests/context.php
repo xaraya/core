@@ -227,6 +227,7 @@ class RequestContext implements ContextInterface, RequestInterface
         if (empty($serverVars) || empty($serverVars[static::$authToken])) {
             return '';
         }
+        $context['authMethod'] = str_replace(__NAMESPACE__ . '\\', '', __METHOD__);
         return $serverVars[static::$authToken];
     }
 
@@ -241,6 +242,7 @@ class RequestContext implements ContextInterface, RequestInterface
         if (empty($cookieVars) || empty($cookieVars[static::$cookieName])) {
             return '';
         }
+        $context['authMethod'] = str_replace(__NAMESPACE__ . '\\', '', __METHOD__);
         return $cookieVars[static::$cookieName];
     }
 }

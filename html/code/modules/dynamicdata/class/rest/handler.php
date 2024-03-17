@@ -731,6 +731,18 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     }
 
     /**
+     * Return the current context or exit with 401 status code
+     * @param array<string, mixed> $args
+     * @param Context<string, mixed> $context
+     * @return array<string, mixed>
+     */
+    public static function getContext($args, $context)
+    {
+        $userId = $context->getUserId();
+        return $context->getArrayCopy();
+    }
+
+    /**
      * Verify that the token or cookie corresponds to an authorized user (with minimal core load) or exit with 401 status code
      * @param Context<string, mixed> $context
      * @throws \UnauthorizedOperationException
@@ -1176,6 +1188,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         $r->delete('/objects/{object}/{itemid}', [$restHandler, 'deleteObjectItem']);
         //$r->patch('/objects/{object}', [$restHandler, 'patchObjectDefinition']);
         $r->get('/whoami', [$restHandler, 'whoami']);
+        $r->get('/context', [$restHandler, 'getContext']);
         $r->post('/token', [$restHandler, 'postToken']);
         $r->delete('/token', [$restHandler, 'deleteToken']);
         $r->get('/modules', [$restHandler, 'getModules']);

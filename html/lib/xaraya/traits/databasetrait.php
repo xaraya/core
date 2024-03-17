@@ -47,8 +47,10 @@ namespace Xaraya\Core\Traits;
 
 use Xaraya\Database\ExternalDatabase;
 use Connection;
+use xarCore;
 use xarCoreCache;
 use xarDB;
+use xarMod;
 use xarModVars;
 use xarModUserVars;
 use xarSession;
@@ -328,6 +330,10 @@ trait DatabaseTrait
         // if we only have one database, return its name
         if (count(static::getDatabases()) === 1) {
             return array_key_first(static::$_databases);
+        }
+        // we need 'module_itemvars' and/or 'module_vars' tables below
+        if (!xarCore::isLoaded(xarCore::SYSTEM_MODULES)) {
+            xarMod::loadDbInfo('modules', 'modules');
         }
         if (!empty($context)) {
             $userId = $context->getUserId();

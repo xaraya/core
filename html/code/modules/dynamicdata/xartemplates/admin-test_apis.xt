@@ -126,6 +126,11 @@
                         <td><input type="checkbox" id="restapi_whoami" checked="checked" disabled="disabled"/></td>
                         <td><input type="checkbox" id="graphql_whoami" checked="checked" disabled="disabled"/></td>
                     </tr>
+                    <tr>
+                        <td>Context</td>
+                        <td><input type="checkbox" id="restapi_context" checked="checked" disabled="disabled"/></td>
+                        <td><input type="checkbox" id="graphql_context" checked="checked" disabled="disabled"/></td>
+                    </tr>
                     <xar:foreach in="$modules" value="$item">
                         <xar:foreach in="$item['apilist']" key="$api" value="$info">
                         <tr>
