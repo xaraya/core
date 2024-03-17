@@ -247,6 +247,22 @@ class xarDB
 	public static function isIndexExternal($index = 0) { return false; }
 	
     /**
+     * Remove a connection from the connectionMap
+     *
+     */
+    public static function removeConn($index = null)
+    {
+        if (null === $index) {
+        	$index = self::getConnIndex();
+        }
+        if (isset(self::$connectionMap[$index])) {
+            unset(self::$connectionMap[$index]);
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Do we already have this database connection?
      *
      * This is to allow DD objects to have their own database connection, either pre-defined or on demand

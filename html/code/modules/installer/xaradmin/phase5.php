@@ -188,8 +188,10 @@ function installer_admin_phase5()
         	return xarTpl::module('installer','admin','errors',array('layout' => 'cannot_create', 'database_name' => $init_args['databaseName']));
         }
 
-		// Open a new connection where the new database is referenced
-		// TODO: We should close the old one, but we have no good close method defined
+		// Now that we have a database and a full set of $init_args, remove the connection we created above
+		// and replace it with a new proper one.
+		// From here on xarDB::getConn() will always get this new one
+		xarDB::removeConn();
 		$dbconn = xarDB::newConn($init_args);
       
 		// We just created an empty database. There are no tables yet.
