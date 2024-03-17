@@ -65,6 +65,7 @@ class UserContext
         }
         $userInfo = AuthToken::getUserInfo($token);
         if (!empty($userInfo) && !empty($userInfo['userId'])) {
+            //$this->context['userInfo'] = $userInfo;
             return intval($userInfo['userId']);
         }
         return null;

@@ -110,6 +110,7 @@ class DataObjectRESTBuilder extends xarObject
         self::init_openapi();
         self::add_objects($selectedList);
         self::add_whoami();
+        self::add_context();
         self::add_modules($selectedList);
         self::add_token();
         self::dump_openapi();
@@ -596,6 +597,7 @@ class DataObjectRESTBuilder extends xarObject
             self::init_openapi();
             self::add_objects();
             self::add_whoami();
+            self::add_context();
             self::add_modules();
             self::add_token();
         }
@@ -898,6 +900,31 @@ class DataObjectRESTBuilder extends xarObject
             'name' => [
                 'type' => 'string',
             ],
+        ];
+        self::add_operation_response($path, $method, $schema, $properties);
+        self::add_operation_security($path, $method);
+    }
+
+    /**
+     * Summary of add_context
+     * @return void
+     */
+    public static function add_context()
+    {
+        $path = '/context';
+        $method = 'get';
+        $schema = 'show-context';
+        $operationId = str_replace('-', '_', $schema);
+        $description = 'Show current context';
+        self::$paths[$path] = [
+            $method => [
+                'tags' => ['start'],
+                'operationId' => $operationId,
+                'description' => $description,
+            ],
+        ];
+        $properties = [
+            'type' => 'object',
         ];
         self::add_operation_response($path, $method, $schema, $properties);
         self::add_operation_security($path, $method);
