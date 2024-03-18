@@ -10,6 +10,9 @@
  * @author mikespub <mikespub@xaraya.com>
  */
 sys::import('modules.dynamicdata.class.objects.factory');
+sys::import('modules.authsystem.class.authtoken');
+use Xaraya\Authentication\AuthToken;
+
 /**
  * Class to build DataObject REST API
 **/
@@ -1414,7 +1417,7 @@ class DataObjectRESTBuilder extends xarObject
             'access' => [
                 'type' => 'string',
                 'default' => 'display',
-                'enum' => ['view', 'display', 'update', 'create', 'delete', 'config', 'admin'],
+                'enum' => AuthToken::ACCESS_LEVELS,
             ],
         ];
         self::add_operation_requestBody($path, $method, $schema, $properties);

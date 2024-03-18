@@ -104,7 +104,7 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
                 if (empty($args['uname']) || empty($args['pass'])) {
                     throw new Exception('Invalid username or password');
                 }
-                if (empty($args['access']) || !in_array($args['access'], ['display', 'update', 'create', 'delete', 'admin'])) {
+                if (empty($args['access']) || !in_array($args['access'], AuthToken::ACCESS_LEVELS)) {
                     throw new Exception('Invalid access');
                 }
                 //xarSession::init();
@@ -142,7 +142,7 @@ class xarGraphQLTokenType extends ObjectType implements xarGraphQLMutationCreate
             if (empty($args['uname']) || empty($args['pass'])) {
                 throw new Exception('Invalid username or password');
             }
-            if (empty($args['access']) || !in_array($args['access'], ['display', 'update', 'create', 'delete', 'admin'])) {
+            if (empty($args['access']) || !in_array($args['access'], AuthToken::ACCESS_LEVELS)) {
                 throw new Exception('Invalid access');
             }
             // @todo use $context
