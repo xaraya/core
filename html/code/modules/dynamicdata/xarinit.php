@@ -145,7 +145,7 @@ function dynamicdata_init()
             ['label','Label',$objectid[2],2,'','dynamic_properties.label',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,3,''],
             ['objectid','Object',$objectid[2],24,'','dynamic_properties.object_id',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,4,''],
             ['type','Property Type',$objectid[2],22,'','dynamic_properties.type',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,7,''],
-            ['defaultvalue','Default Value',$objectid[2],3,'','dynamic_properties.defaultvalue',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8,'varchar (254)'],
+            ['defaultvalue','Default Value',$objectid[2],3,'','dynamic_properties.defaultvalue',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,8,''],
             ['source','Source',$objectid[2],23,'dynamic_data','dynamic_properties.source',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE,9,''],
             ['status','Status',$objectid[2],25,'33','dynamic_properties.status',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,''],
             ['translatable','Translatable',$objectid[2],25,'0','dynamic_properties.translatable',DataPropertyMaster::DD_DISPLAYSTATE_ACTIVE | DataPropertyMaster::DD_INPUTSTATE_ADDMODIFY,10,''],
