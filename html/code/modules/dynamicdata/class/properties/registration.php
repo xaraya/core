@@ -19,7 +19,7 @@
  */
 class PropertyRegistration extends DataContainer
 {
-    private $stmt;                               // Prepared SqL statement for reuse
+    private $stmt;                               // Prepared SQL statement for reuse
 
     public $id         = 0;                      // id of the property, hardcoded to make things easier
     public $name       = 'propertyType';         // what type of property are we dealing with
@@ -28,12 +28,12 @@ class PropertyRegistration extends DataContainer
     public $type       = 1;
     public $parent     = '';                     // this type is derived from?
     public $class      = '';                     // what is the class?
-    public $configuration = '';                     // what is its default configuration?
+    public $configuration = '';                  // what is its default configuration?
     public $source     = 'dynamic_data';         // what source is default for this type?
-    public $reqfiles   = [];                // do we require some files to be present?
-    public $reqmodules = [];                // do we require some modules to be present?
-    public $args       = [];                // special args needed?
-    public $aliases    = [];                // aliases for this property
+    public $reqfiles   = [];                     // do we require some files to be present?
+    public $reqmodules = [];                     // do we require some modules to be present?
+    public $args       = [];                     // special args needed?
+    public $aliases    = [];                     // aliases for this property
     public $filepath   = '';                     // path to the directory where the property lives
     public $template   = '';                     // the template for this property
     public $format     = 0;                      // what format type do we have here?
@@ -296,7 +296,8 @@ class PropertyRegistration extends DataContainer
 
             # --------------------------------------------------------
             #
-            # Get the list of properties in the various properties directories
+            # Get the list of property types in the various properties directories
+            # Include each into the environment
             #
             static $loaded = [];
             $proptypes = [];
@@ -339,7 +340,8 @@ class PropertyRegistration extends DataContainer
 
             # --------------------------------------------------------
             #
-            # Now get the properties in the properties directory
+            # Now get the property types in the properties directory
+            # Include each into the environment
             #
             $propertiesdir = sys::code() . 'properties/';
             if (!file_exists($propertiesdir)) {
@@ -374,6 +376,9 @@ class PropertyRegistration extends DataContainer
                     $loaded[$file] = true;
                 }
             }
+            // We don't need the array of loaded files any more
+            unset($loaded);
+
             xarLog::message('DynamicData: Retrieved the list of standalone properties', xarLog::LEVEL_NOTICE);
 
             # --------------------------------------------------------
@@ -492,9 +497,15 @@ class PropertyRegistration extends DataContainer
                 }
                 unset($currentproptypes);
 
-                // Run the install function if it exists
-                self::installproperty($baseInfo->name);
-
+                // Configuring each property type
+    			if (xarVar::getCached('installer','installing') === true) {
+    				// We don't need this when installing Xaraya
+    				// This saves a lot of db calls
+    				continue;
+    			} else {
+	                // Run the install function if it exists
+					self::installproperty($baseInfo->name);
+    			}
             } // next property class in the same file
             $dbconn->commit();
         } catch(Exception $e) {
@@ -514,17 +525,24 @@ class PropertyRegistration extends DataContainer
 
     public static function installproperty($propertyname)
     {
+        $frommodule = !file_exists(sys::code() . 'properties/' . $propertyname . '/install.php');
         $class = UCFirst($propertyname) . 'PropertyInstall';
-        if (class_exists($class)) {
+        if ($frommodule) {
             // Assume this is a property in a module
-            $descriptor = new DataObjectDescriptor();
-            $installer = new $class($descriptor);
-            $installer->install();
-        } elseif (file_exists(sys::code() . 'properties/' . $propertyname . '/install.php')) {
-            // Assume this is a standalone property
-            sys::import('properties.' . $propertyname . '.install');
-            $descriptor = new DataObjectDescriptor();
-            $installer = new $class($descriptor);
+			if (class_exists($class)) {
+				$descriptor = new DataObjectDescriptor();
+				$installer = new $class($descriptor);
+				$installer->install();
+			}
+        } else {
+            // Assume this is a standalone property in the properies directory
+			if (!class_exists($class)) {
+				sys::import('properties.' . $propertyname . '.install');
+				$descriptor = new DataObjectDescriptor();
+				$installer = new $class($descriptor);
+			} else {
+            	$installer = new $class();
+			}
             $installer->install();
         }
     }
