@@ -14,6 +14,7 @@ sys::import('xaraya.traits.timertrait');
 sys::import('xaraya.traits.cachetrait');
 sys::import('xaraya.bridge.requests.requesttrait');
 sys::import('xaraya.context.context');
+sys::import('modules.authsystem.class.authtoken');
 use Xaraya\Core\Traits\CacheInterface;
 use Xaraya\Core\Traits\CacheTrait;
 use Xaraya\Core\Traits\TimerInterface;
@@ -796,7 +797,7 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
             throw new UnauthorizedOperationException();
         }
         $access = $args['input']['access'];
-        if (empty($access) || !in_array($access, ['display', 'update', 'create', 'delete', 'admin'])) {
+        if (empty($access) || !in_array($access, AuthToken::ACCESS_LEVELS)) {
             if (!headers_sent()) {
                 //header('WWW-Authenticate: Bearer realm="Xaraya Site Login", access=');
                 header('WWW-Authenticate: Token realm="Xaraya Site Login", access=');

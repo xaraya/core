@@ -24,6 +24,7 @@ use xarCache;
  */
 class AuthToken
 {
+    public const ACCESS_LEVELS = ['display', 'update', 'create', 'delete', 'config', 'admin'];
     public static int $tokenExpires = 12 * 60 * 60;  // 12 hours
     public static string $storageType = 'apcu';  // database or apcu
     public static ?ixarCache_Storage $tokenStorage = null;
