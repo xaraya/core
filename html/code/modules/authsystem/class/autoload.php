@@ -20,19 +20,19 @@ function authsystem_classes_autoload($class)
 {
     $class = strtolower($class);
 
-    $class_array = array(
+    $class_array = [
         // Events
         'authsystemuserloginsubject'    => 'modules.authsystem.class.eventsubjects.userlogin',
         'authsystemuserlogoutsubject'   => 'modules.authsystem.class.eventsubjects.userlogout',
         // Controllers
         'authsystemshortcontroller'     => 'modules.authsystem.controllers.short',
-    );
-    
+    ];
+
     if (isset($class_array[$class])) {
         sys::import($class_array[$class]);
         return true;
     }
-    
+
     return false;
 }
 

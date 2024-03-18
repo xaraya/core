@@ -28,6 +28,7 @@ class RequestContext implements ContextInterface, RequestInterface
     use ContextTrait;
 
     public static string $cookieName = 'XARAYASID';
+    public static string $remoteUser = 'REMOTE_USER';
     public static string $authToken = 'HTTP_X_AUTH_TOKEN';
 
     /** @var array<string, mixed> */
@@ -214,6 +215,21 @@ class RequestContext implements ContextInterface, RequestInterface
             return [];
         }
         return $this->getContext()->offsetGet('cookie');
+    }
+
+    /**
+     * Summary of getRemoteUser
+     * @param Context<string, mixed> $context
+     * @return string
+     */
+    public static function getRemoteUser($context): string
+    {
+        $serverVars = $context['server'] ?? null;
+        if (empty($serverVars) || empty($serverVars[static::$remoteUser])) {
+            return '';
+        }
+        $context['authMethod'] = str_replace(__NAMESPACE__ . '\\', '', __METHOD__);
+        return $serverVars[static::$remoteUser];
     }
 
     /**
