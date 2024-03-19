@@ -57,16 +57,15 @@ function installer_admin_phase5()
     }
 //---------------------------------------------------------------------------
     // Cater to SQLite before trying to connect
-    // Create the database if it doesn't exist for pdosqlite
-    // For sqlite3 Creole could create the database via the newConn method,
-    // but it's easier just to do it here
+    // Create the database if it doesn't exist
     if (in_array($init_args['databaseType'], array('sqlite3', 'pdosqlite'))) {
 		// Make sure we have a directory var/sqlite
-		if (!is_dir(sys::varpath() . '/sqlite')) {
-			mkdir(sys::varpath() . '/sqlite', 0755);
+		$location = xarSystemVars::get(sys::CONFIG, 'DB.Location');
+		if (!is_dir($location)) {
+			mkdir($location, 0755);
 		}
-		
-		$dbpath = sys::varpath() . '/sqlite/' . $init_args['databaseName'];
+
+		$dbpath = $init_args['databaseName'];
 		if (file_exists($dbpath)) {
 			// We already have a database with this name
         	return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $dbpath));
@@ -167,7 +166,6 @@ function installer_admin_phase5()
     sys::import('xaraya.tableddl');
 
     if (!$dbExists) {
-
 
 //		Hold on to this for now
 //        $data['confirmDB']  = true;
