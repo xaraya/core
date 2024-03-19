@@ -28,6 +28,7 @@ class RequestContext implements ContextInterface, RequestInterface
     use ContextTrait;
 
     public static string $cookieName = 'XARAYASID';
+    public static string $remoteUser = 'REMOTE_USER';
     public static string $authToken = 'HTTP_X_AUTH_TOKEN';
 
     /** @var array<string, mixed> */
@@ -217,12 +218,33 @@ class RequestContext implements ContextInterface, RequestInterface
     }
 
     /**
+     * Summary of getRemoteUser
+     * @param Context<string, mixed> $context
+     * @return string
+     */
+    public static function getRemoteUser($context): string
+    {
+        if (empty(static::$remoteUser)) {
+            return '';
+        }
+        $serverVars = $context['server'] ?? null;
+        if (empty($serverVars) || empty($serverVars[static::$remoteUser])) {
+            return '';
+        }
+        $context['authMethod'] = str_replace(__NAMESPACE__ . '\\', '', __METHOD__);
+        return $serverVars[static::$remoteUser];
+    }
+
+    /**
      * Summary of getAuthToken
      * @param Context<string, mixed> $context
      * @return string
      */
     public static function getAuthToken($context): string
     {
+        if (empty(static::$authToken)) {
+            return '';
+        }
         $serverVars = $context['server'] ?? null;
         if (empty($serverVars) || empty($serverVars[static::$authToken])) {
             return '';
@@ -238,6 +260,9 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public static function getSessionCookie($context)
     {
+        if (empty(static::$cookieName)) {
+            return '';
+        }
         $cookieVars = $context['cookie'] ?? null;
         if (empty($cookieVars) || empty($cookieVars[static::$cookieName])) {
             return '';

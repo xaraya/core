@@ -28,6 +28,7 @@ class AuthToken
     public static int $tokenExpires = 12 * 60 * 60;  // 12 hours
     public static string $storageType = 'apcu';  // database or apcu
     public static ?ixarCache_Storage $tokenStorage = null;
+    public static string $headerName = 'HTTP_X_AUTH_TOKEN';
 
     /**
      * Summary of init
@@ -36,7 +37,15 @@ class AuthToken
      */
     public static function init(array $config = [])
     {
-        // ...
+        // @todo Change the header name for the auth token if needed
+        // RequestContext::$authToken = 'HTTP_X_API_KEY';
+        /**
+        try {
+            RequestContext::$authToken = xarSystemVars::get(sys::CONFIG, 'Auth.AuthToken');
+        } catch (Exception) {
+            return;
+        }
+         */
     }
 
     /**
@@ -73,17 +82,11 @@ class AuthToken
     /**
      * Summary of createToken
      * @param array<string, mixed> $userInfo
-     * @return string|null
+     * @return string
      */
     public static function createToken($userInfo)
     {
-        if (function_exists('random_bytes')) {
-            $token = bin2hex(random_bytes(32));
-        } elseif (function_exists('openssl_random_pseudo_bytes')) {
-            $token = bin2hex(openssl_random_pseudo_bytes(32));
-        } else {
-            return null;
-        }
+        $token = bin2hex(random_bytes(32));
         $userInfo['created'] = time();
         $userInfo['updated'] = $userInfo['created'];
         // @checkme clean up cachestorage occasionally based on size

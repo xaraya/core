@@ -336,6 +336,7 @@ class DataObjectRESTBuilder extends xarObject
             'name' => 'X-AUTH-TOKEN',
             'in' => 'header',
         ];
+        // no way to document the use of REMOTE_USER as server variable in OpenAPI spec
     }
 
     /**

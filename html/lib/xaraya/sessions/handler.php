@@ -588,6 +588,32 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     }
 
     /**
+     * Get current userId from session (if any)
+     * @return int|null
+     */
+    public function getUserId()
+    {
+        return $this->getVar('role_id');
+    }
+
+    /**
+     * Get current session variables
+     * @return ?array<string, mixed>
+     */
+    public function getVars()
+    {
+        $vars = [];
+        $offset = strlen(self::PREFIX);
+        foreach (array_keys($_SESSION) as $key) {
+            if (str_starts_with($key, self::PREFIX)) {
+                $name = substr($key, $offset);
+                $vars[$name] = $_SESSION[$key];
+            }
+        }
+        return $vars;
+    }
+
+    /**
      * Unset current session variables
      * @return void
      */
@@ -642,5 +668,8 @@ class SessionHandler extends xarObject implements iSessionHandler, SessionInterf
     public function setContext($context)
     {
         // not used in default session handler
+        //$context['session'] = new VirtualSession($this->getId(), $this->getUserId(), $this->ipAddress, xarSession::saveTime(), ['rand' => $this->getVar('rand')]);
+        $context['session'] = new VirtualSession($this->getId(), $this->getUserId(), $this->ipAddress, xarSession::saveTime(), $this->getVars());
+        $context['session']->isNew = $this->isNew();
     }
 }

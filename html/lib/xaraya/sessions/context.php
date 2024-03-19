@@ -14,6 +14,9 @@ namespace Xaraya\Context;
 use Xaraya\Core\Traits\ContextInterface;
 use Xaraya\Core\Traits\ContextTrait;
 use Xaraya\Sessions\SessionInterface;
+use Xaraya\Sessions\VirtualSession;
+use Xaraya\Sessions\Storage\SessionCacheStorage;
+use Xaraya\Sessions\Storage\SessionStorageInterface;
 use xarSession;
 use sys;
 
@@ -22,15 +25,26 @@ sys::import('xaraya.traits.contexttrait');
 
 /**
  * Session instance with context for use with xarSession::setInstance()
+ *
+ * This uses a virtual session object from context, to replace $_SESSION
+ * and bypass the default (global) PHP session handling by SessionHandler()
+ *
+ * Sessions can be saved in persistent database storage by replacing the
+ * $storageClass with SessionDatabaseStorage instead of SessionCacheStorage
+ * @todo decide when to save the session in the request/response cycle
  */
 class SessionContext implements ContextInterface, SessionInterface
 {
     use ContextTrait;
 
+    /** @var class-string */
+    private static $storageClass = SessionCacheStorage::class;
+    /** @var ?SessionStorageInterface */
+    private static $storage = null;
     /** @var array<string, mixed> */
     private array $args = [];
     private ?string $sessionId = null;
-    private int $length = 32;
+    private bool $isUpdated = false;
 
     /**
      * Constructor for the session handler
@@ -52,10 +66,8 @@ class SessionContext implements ContextInterface, SessionInterface
     {
         if (!isset($this->context)) {
             $this->context = new Context();
-            //$sessionId = bin2hex(random_bytes($this->length));
-            //$session = new VirtualSession($sessionId, $userId);
-            //$this->context->offsetSet('session', $session);
         }
+        self::$storage ??= new self::$storageClass($this->args);
         return true;
     }
 
@@ -66,13 +78,22 @@ class SessionContext implements ContextInterface, SessionInterface
     public function getSessionId()
     {
         if (!isset($this->sessionId)) {
-            $session = $this->getContext()?->getSession();
+            $session = $this->getSession();
             if (empty($session)) {
                 return null;
             }
             $this->sessionId = $session->getSessionId();
         }
         return $this->sessionId;
+    }
+
+    /**
+     * Get virtual session object from context (if any)
+     * @return VirtualSession|null
+     */
+    public function getSession()
+    {
+        return $this->context?->getSession();
     }
 
     /**
@@ -103,7 +124,7 @@ class SessionContext implements ContextInterface, SessionInterface
         if (isset($id)) {
             $this->sessionId = $id;
             // @todo update sessionId in session here?
-            $session = $this->getContext()?->getSession();
+            $session = $this->getSession();
             if (!empty($session)) {
                 $session->setSessionId($id);
             }
@@ -118,7 +139,7 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function getVar($name)
     {
-        $session = $this->getContext()?->getSession();
+        $session = $this->getSession();
         if (empty($session)) {
             // some default variables without session
             return xarSession::getDefaultVar($name);
@@ -141,9 +162,12 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function setVar($name, $value)
     {
-        $session = $this->getContext()?->getSession();
+        $session = $this->getSession();
         if (empty($session)) {
             return false;
+        }
+        if (!array_key_exists($name, $session->vars) || $session->vars[$name] !== $value) {
+            $this->isUpdated = true;
         }
         $session->vars[$name] = $value;
         return true;
@@ -156,12 +180,13 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function delVar($name)
     {
-        $session = $this->getContext()?->getSession();
+        $session = $this->getSession();
         if (empty($session)) {
             return false;
         }
         if (array_key_exists($name, $session->vars)) {
             unset($session->vars[$name]);
+            $this->isUpdated = true;
         }
         return true;
     }
@@ -175,13 +200,36 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function setUserInfo($userId, $rememberSession)
     {
-        $session = $this->getContext()?->getSession();
+        $session = $this->getSession();
         if (empty($session)) {
             return false;
         }
         $session->setUserId($userId);
         $session->vars['remember'] = $rememberSession;
+        $this->isUpdated = true;
         return true;
+    }
+
+    /**
+     * Get current userId from session (if any)
+     * @return int|null
+     */
+    public function getUserId()
+    {
+        return $this->getVar('role_id');
+    }
+
+    /**
+     * Get current session variables
+     * @return ?array<string, mixed>
+     */
+    public function getVars()
+    {
+        $session = $this->getSession();
+        if (empty($session)) {
+            return null;
+        }
+        return $session->vars;
     }
 
     /**
@@ -190,12 +238,15 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function unsetVars()
     {
-        $session = $this->getContext()?->getSession();
+        $session = $this->getSession();
         if (empty($session)) {
             return;
         }
         $session->setUserId(0);
         $session->vars = [];
+        // @todo do we want to update or delete here?
+        //$this->isUpdated = true;
+        self::$storage->delete($session);
     }
 
     /**
@@ -205,11 +256,51 @@ class SessionContext implements ContextInterface, SessionInterface
      */
     public function clear($spared = [])
     {
-        $session = $this->getContext()?->getSession();
+        $session = $this->getSession();
         if (empty($session)) {
             return false;
         }
         // @todo what do we want to do here?
+        return true;
+    }
+
+    /**
+     * Start session with context, sessionId and userId
+     *
+     * @param Context<string, mixed> $context
+     * @return VirtualSession
+     */
+    public function startSession(Context $context, string $sessionId, int $userId = 0, string $ipAddress = '')
+    {
+        $session = self::$storage->lookup($sessionId, $ipAddress);
+        if (!isset($session)) {
+            $session = new VirtualSession($sessionId, $userId, $ipAddress, time(), []);
+            self::$storage->register($session);
+            $session->isNew = true;
+        } else {
+            $session->setUserId($userId);
+            $session->isNew = false;
+        }
+        $context['session'] = $session;
+        $this->setContext($context);
+
+        return $session;
+    }
+
+    /**
+     * Save session to storage if updated
+     * @return bool
+     */
+    public function save()
+    {
+        $session = $this->getSession();
+        if (empty($session)) {
+            return false;
+        }
+        if ($this->isUpdated) {
+            self::$storage->update($session);
+            $this->isUpdated = false;
+        }
         return true;
     }
 }

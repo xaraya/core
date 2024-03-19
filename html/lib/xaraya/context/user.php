@@ -12,11 +12,15 @@
 namespace Xaraya\Context;
 
 use Xaraya\Authentication\AuthToken;
+use Xaraya\Authentication\RemoteUser;
 use xarSession;
 use xarUser;
+use xarSystemVars;
+use Exception;
 use sys;
 
 sys::import('modules.authsystem.class.authtoken');
+sys::import('modules.authsystem.class.remoteuser');
 
 /**
  * Get userId from user context with token or cookie
@@ -46,6 +50,10 @@ class UserContext
             return $session->getUserId();
         }
         // if not, check if we have an auth token or cookie - see rest handler and graphql
+        $userId = $this->checkUser();
+        if (!empty($userId)) {
+            return $userId;
+        }
         $userId = $this->checkToken();
         if (!empty($userId)) {
             return $userId;
@@ -54,21 +62,53 @@ class UserContext
     }
 
     /**
+     * Summary of checkUser
+     * @return int|null
+     */
+    protected function checkUser()
+    {
+        try {
+            RequestContext::$remoteUser = xarSystemVars::get(sys::CONFIG, 'Auth.RemoteUser');
+        } catch (Exception) {
+            return null;
+        }
+        $uname = RequestContext::getRemoteUser($this->context);
+        if (empty($uname)) {
+            return null;
+        }
+        $userInfo = RemoteUser::getUserInfo($uname);
+        if (empty($userInfo) || empty($userInfo['id'])) {
+            return null;
+        }
+        $sessionId = 'RemoteUser:' . $uname;
+        $this->initSession($sessionId, $userInfo['id']);
+        //$this->context['userInfo'] = $userInfo;
+        return intval($userInfo['id']);
+    }
+
+    /**
      * Summary of checkToken
      * @return int|null
      */
     protected function checkToken()
     {
+        try {
+            RequestContext::$authToken = xarSystemVars::get(sys::CONFIG, 'Auth.AuthToken');
+        } catch (Exception) {
+            return null;
+        }
         $token = RequestContext::getAuthToken($this->context);
         if (empty($token)) {
             return null;
         }
         $userInfo = AuthToken::getUserInfo($token);
-        if (!empty($userInfo) && !empty($userInfo['userId'])) {
-            //$this->context['userInfo'] = $userInfo;
-            return intval($userInfo['userId']);
+        if (empty($userInfo) || empty($userInfo['userId'])) {
+            return null;
         }
-        return null;
+        $sessionId = 'AuthToken:' . $token;
+        $this->initSession($sessionId, $userInfo['userId']);
+        //$this->context['userInfo'] = $userInfo;
+        return intval($userInfo['userId']);
     }
 
     /**
@@ -90,6 +130,25 @@ class UserContext
         if (!xarUser::isLoggedIn()) {
             return null;
         }
+        xarSession::getInstance()->setContext($this->context);
         return xarSession::getVar('role_id');
+    }
+
+    /**
+     * Summary of initSession
+     * @param string $sessionId
+     * @param int $userId
+     * @return void
+     */
+    protected function initSession($sessionId, $userId)
+    {
+        if (!empty(xarSession::getInstance())) {
+            throw new Exception('Session was already initialized');
+        }
+        xarSession::setSessionClass(SessionContext::class);
+        xarSession::init();
+        $serverVars = $this->context['server'] ?? [];
+        $ipAddress = $serverVars['REMOTE_ADDR'] ?? '-';
+        xarSession::getInstance()->startSession($this->context, $sessionId, $userId, $ipAddress);
     }
 }

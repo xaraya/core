@@ -70,6 +70,18 @@ interface SessionInterface
     public function setUserInfo($userId, $rememberSession);
 
     /**
+     * Get current userId from session (if any)
+     * @return int|null
+     */
+    public function getUserId();
+
+    /**
+     * Get current session variables
+     * @return ?array<string, mixed>
+     */
+    public function getVars();
+
+    /**
      * Unset current session variables
      * @return void
      */

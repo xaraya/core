@@ -76,3 +76,11 @@ $systemConfiguration['Log.Filename'] = 'xarayalog.txt';
  * If set to 1 allows dynamic switching between databases
  */
  $systemConfiguration['DB.Switching'] = '0';
+
+/**
+ * Authentication methods supported for API calls:
+ * - via auth token sent with each API request, and/or
+ * - via remote user authenticated by auth proxy/gateway - make sure it's secure!
+ */
+$systemConfiguration['Auth.AuthToken'] = 'HTTP_X_AUTH_TOKEN';
+//$systemConfiguration['Auth.RemoteUser'] = 'REMOTE_USER';
