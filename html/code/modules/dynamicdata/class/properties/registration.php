@@ -184,7 +184,7 @@ class PropertyRegistration extends DataContainer
 
         $result = $dbconn->executeQuery($query);
         $proptypes = [];
-        if($result->RecordCount() == 0) {
+        if($result->RecordCount() === 0) {
             $proptypes = self::importPropertyTypes(false);
         } else {
             while($result->next()) {
@@ -460,7 +460,7 @@ class PropertyRegistration extends DataContainer
                     continue;
                 }
 
-                // Fill in the info we dont have in the registration class yet
+                // Fill in the info we don't have in the registration class yet
                 // TODO: see if we can have it in the registration class
                 $baseInfo->class = $propertyClass;
                 if ($property->filepath == 'auto') {
