@@ -63,6 +63,8 @@ class Query
     public $on_syntax = false;
 // Before each statement executed, echo the SQL statement
     public $debugflag = false;
+// Remove table aliases from queries on a single table
+    public $strip_aliases = true;
 // Operator syntax
     public $eqoperator = '=';
     public $neoperator = '!=';
@@ -264,7 +266,7 @@ class Query
 
     public function close()
     {
-        return $this->dbconn->close();
+        return $this->result->close();
     }
 
     public function open()
@@ -890,9 +892,14 @@ class Query
             case "INSERT" :
             case "UPDATE" :
             case "DELETE" :
-                $parts = explode('.',$condition['field1']);
-                $field = isset($parts[1]) ? $parts[1] : $parts[0];
-                $field = $condition['field1'];
+                $parts = explode('.', $condition['field1']);
+				if ($this->strip_aliases && count($this->tables) == 1) {
+					// Simplify single table queries by removing table aliases
+					$field = isset($parts[1]) ? $parts[1] : $parts[0];
+				} else {
+					$field = isset($parts[1]) ? $parts[1] : $parts[0];
+					$field = $condition['field1'];
+				}
                 break;
         }
         return $field . " " . $condition['op'] . " " . $sqlfield;
@@ -1059,25 +1066,48 @@ class Query
         if ($this->on_syntax && count($this->tables) > 1) {
             $t .= $this->assembledtablelinks();
         } else {
-            foreach ($this->tables as $table) {
-                if (is_array($table)) {
-                    switch ($this->type) {
-                        case "SELECT" :
-                            if (empty($table['alias'])) $t .= $table['name'] . ", ";
-                            else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
-                            break;
-                        case "INSERT" :
-                            $t .= $table['name'] . " ";
-                            break;
-                        case "UPDATE" :
-                        case "DELETE" :
-                            if (empty($table['alias'])) $t .= $table['name'] . ", ";
-                            else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
-                            break;
-                    }
-                } else {
-                    $t .= $table . ", ";
-                }
+            if ($this->strip_aliases && count($this->tables) == 1) {
+	        	// Simplify single table queries by removing table aliases
+				foreach ($this->tables as $table) {
+					if (is_array($table)) {
+						switch ($this->type) {
+							case "SELECT" :
+								if (empty($table['alias'])) $t .= $table['name'] . ", ";
+								else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
+								break;
+							case "INSERT" :
+								$t .= $table['name'] . " ";
+								break;
+							case "UPDATE" :
+							case "DELETE" :
+								$t .= $table['name'] . ", ";
+								break;
+						}
+					} else {
+						$t .= $table . ", ";
+					}
+				}
+            } else {
+				foreach ($this->tables as $table) {
+					if (is_array($table)) {
+						switch ($this->type) {
+							case "SELECT" :
+								if (empty($table['alias'])) $t .= $table['name'] . ", ";
+								else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
+								break;
+							case "INSERT" :
+								$t .= $table['name'] . " ";
+								break;
+							case "UPDATE" :
+							case "DELETE" :
+								if (empty($table['alias'])) $t .= $table['name'] . ", ";
+								else $t .= $table['name'] . " AS " . $table['alias'] . ", ";
+								break;
+						}
+					} else {
+						$t .= $table . ", ";
+					}
+				}
             }
         }
         if ($t != "") $t = trim($t," ,");
@@ -1464,12 +1494,31 @@ class Query
         return $fullfield;
     }
 
+    /**
+     * Get the string representation of a field
+     *
+     * A field will have:
+     * - name
+     * - alias
+     * - table name/alias
+     *
+     * This will return something like "foo.bar AS bar1"
+     *
+     * @param array representation of a field
+     * @return string representation of a field
+     */
     private function _reconstructfield($field)
     {
-        $bindstring = "";
-        if(!empty($field['table'])) $bindstring .= $field['table'] . ".";
-        $bindstring .= $field['name'];
-        if (!empty($field['alias'])) $bindstring .= " AS " . $field['alias'];
+		$bindstring = "";
+		if ($this->strip_aliases && count($this->tables) == 1) {
+			// Simplify single table queries by removing table aliases
+			// Do nothing here
+		} else {
+			// Add the table to the field for a fully qualified field name
+			if(!empty($field['table'])) $bindstring .= $field['table'] . ".";
+		}
+		$bindstring .= $field['name'];
+		if (!empty($field['alias'])) $bindstring .= " AS " . $field['alias'];
         return $bindstring;
     }
 
