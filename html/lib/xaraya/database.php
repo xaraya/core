@@ -124,27 +124,22 @@ class xarDB
         switch ($args['databaseType']) {
         	case 'sqlite3':
         	case 'pdosqlite':
+        		$location = xarSystemVars::get(sys::CONFIG, 'DB.Location');
 				$args['phptype']       = $args['databaseType'];
-				$args['database']      = $args['databaseName'] ?? ':memory:';
+				$args['database']      = $location . $args['databaseName'] ?? ':memory:';
 				$args['hostspec']    ??= '';
 				$args['port']        ??= '';
 				$args['username']    ??= '';
 				$args['password']    ??= '';
 				$args['encoding']    ??= '';
+				$args['location']    ??= '';
 				$dsn = $args;
 			break;
 			case 'mysqli':
 			case 'pdomysqli':
-				// Hive off the port if there is one added as part of the host
-				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
-				$host_parts = explode(':', $host);
-				$host = $host_parts[0];
-				$port = isset($host_parts[1]) ? $host_parts[1] : '';
-		
-				// Get database parameters
 				$dsn = array('phptype'   => $args['databaseType'],
-							 'hostspec'  => $host,
-							 'port'      => $port,
+							 'hostspec'  => $args['databaseHost'],
+							 'port'      => $args['databasePort'],
 							 'username'  => $args['userName'],
 							 'password'  => $args['password'],
 							 'database'  => $args['databaseName'],
@@ -152,16 +147,9 @@ class xarDB
 			break;
 			case 'pgsql':
 			case 'pdopgsql':
-				// Hive off the port if there is one added as part of the host
-				$host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
-				$host_parts = explode(':', $host);
-				$host = $host_parts[0];
-				$port = isset($host_parts[1]) ? $host_parts[1] : '';
-		
-				// Get database parameters
 				$dsn = array('phptype'   => $args['databaseType'],
-							 'hostspec'  => $host,
-							 'port'      => $port,
+							 'hostspec'  => $args['host'],
+							 'port'      => $args['port'],
 							 'username'  => $args['userName'],
 							 'password'  => $args['password'],
 							 'database'  => $args['databaseName'],
@@ -415,16 +403,25 @@ class xarDatabase extends xarObject
 
     public static function getConfig()
     {
-        // Decode encoded DB parameters
-        // These need to be there
+//---------------------------------------------------------------------------
+	// Assemble the args from the config file
+        // Host name 
+        // Hive off the port if there is one added as part of the host
+        $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
+        $host_parts = explode(':', $host);
+        $host = $host_parts[0];
+        $port = isset($host_parts[1]) ? $host_parts[1] : '';
+
+        // Database type, name and Location
+		$databaseType = xarSystemVars::get(sys::CONFIG, 'DB.Type');
+		$databaseName = xarSystemVars::get(sys::CONFIG, 'DB.Name');
+		$location = xarSystemVars::get(sys::CONFIG, 'DB.Location');
+         
+        // User and Password
         $userName = xarSystemVars::get(sys::CONFIG, 'DB.UserName');
         $password = xarSystemVars::get(sys::CONFIG, 'DB.Password');
-        $persistent = null;
-        try {
-            $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
-        } catch(VariableNotFoundException $e) {
-            $persistent = null;
-        }
+
+        // Encoded
         try {
             if (xarSystemVars::get(sys::CONFIG, 'DB.Encoded') == '1') {
                 $userName = base64_decode($userName);
@@ -434,22 +431,53 @@ class xarDatabase extends xarObject
             // doesnt matter, we assume not encoded
         }
 
-        // Hive off the port if there is one added as part of the host
-        $host = xarSystemVars::get(sys::CONFIG, 'DB.Host');
-        $host_parts = explode(':', $host);
-        $host = $host_parts[0];
-        $port = isset($host_parts[1]) ? $host_parts[1] : '';
+        // Prefix and character set
+		$prefix          = xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix');
+		$databaseCharset = xarSystemVars::get(sys::CONFIG, 'DB.Charset');
 
-        // Optionals dealt with, do the rest inline
+        // Persistence
+        $persistent = null;
+        try {
+            $persistent = xarSystemVars::get(sys::CONFIG, 'DB.Persistent');
+        } catch(VariableNotFoundException $e) {
+            $persistent = null;
+        }
+
+//---------------------------------------------------------------------------
+	// Create the systemargs from the args
+        switch ($databaseType) {
+	        // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
+        	case 'sqlite3':
+        	case 'pdosqlite':
+				if ($location == 'memory') {
+					$databaseName = $location;
+				} else {
+					$databaseName = $location . $databaseName;
+				}
+			break;
+			
+			case 'mysqli':
+			case 'pdomysqli':
+			break;
+			
+			case 'pgsql':
+			case 'pdopgsql':
+			break;
+			
+			default:
+			throw new Exception(xarML("Unknown database type: '#(1)'", $args['databaseType']));
+        }
         $systemArgs = array('databaseHost'    => $host,
                             'databasePort'    => $port,
-                            'databaseType'    => xarSystemVars::get(sys::CONFIG, 'DB.Type'),
-                            'databaseName'    => xarSystemVars::get(sys::CONFIG, 'DB.Name'),
+                            'databaseType'    => $databaseType,
+                            'databaseName'    => $databaseName,
         					'userName'        => $userName,
                             'password'        => $password,
-                            'prefix'          => xarSystemVars::get(sys::CONFIG, 'DB.TablePrefix'),
-                            'databaseCharset' => xarSystemVars::get(sys::CONFIG, 'DB.Charset'),
-                            'persistent'      => $persistent);
+                            'prefix'          => $prefix,
+                            'databaseCharset' => $databaseCharset,
+                            'persistent'      => $persistent,
+                            'location'        => $location,
+                            );
         return $systemArgs;
     }
 
