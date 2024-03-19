@@ -740,6 +740,10 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
     public static function getContext($args, $context)
     {
         $userId = $context->getUserId();
+        // return restricted version for non-site admin
+        if (empty($userId) || $userId != xarModVars::get('roles', 'admin')) {
+            return ['userId' => $userId, 'error' => 'Restricted to site admin'];
+        }
         return $context->getArrayCopy();
     }
 
@@ -819,9 +823,6 @@ class DataObjectRESTHandler extends xarObject implements CommonRequestInterface,
         }
         $userInfo = ['userId' => $userId, 'access' => $access, 'created' => time()];
         $token = AuthToken::createToken($userInfo);
-        if (empty($token)) {
-            return ['method' => 'postToken', 'error' => 'no decent token generator'];
-        }
         $expiration = date('c', time() + AuthToken::$tokenExpires);
         return ['access_token' => $token, 'expiration' => $expiration, 'role_id' => $userId];
     }

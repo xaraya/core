@@ -20,7 +20,7 @@ sys::import('xaraya.sessions.interface');
 class VirtualSession
 {
     public string $sessionId;
-    private int $userId;
+    public int $userId;
     public string $ipAddress;
     public int $firstUsed;
     public int $lastUsed;

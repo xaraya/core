@@ -96,7 +96,7 @@ class SessionDatabaseStorage implements SessionStorageInterface
         $this->table = $this->getTable();
     }
 
-    private function getTable()
+    private function getTable(): string
     {
         $tables = xarDB::getTables();
         if (!isset($tables['session_info'])) {

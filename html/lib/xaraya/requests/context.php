@@ -224,6 +224,9 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public static function getRemoteUser($context): string
     {
+        if (empty(static::$remoteUser)) {
+            return '';
+        }
         $serverVars = $context['server'] ?? null;
         if (empty($serverVars) || empty($serverVars[static::$remoteUser])) {
             return '';
@@ -239,6 +242,9 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public static function getAuthToken($context): string
     {
+        if (empty(static::$authToken)) {
+            return '';
+        }
         $serverVars = $context['server'] ?? null;
         if (empty($serverVars) || empty($serverVars[static::$authToken])) {
             return '';
@@ -254,6 +260,9 @@ class RequestContext implements ContextInterface, RequestInterface
      */
     public static function getSessionCookie($context)
     {
+        if (empty(static::$cookieName)) {
+            return '';
+        }
         $cookieVars = $context['cookie'] ?? null;
         if (empty($cookieVars) || empty($cookieVars[static::$cookieName])) {
             return '';

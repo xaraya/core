@@ -77,11 +77,13 @@ class UserContext
             return null;
         }
         $userInfo = RemoteUser::getUserInfo($uname);
-        if (!empty($userInfo) && !empty($userInfo['id'])) {
-            //$this->context['userInfo'] = $userInfo;
-            return intval($userInfo['id']);
+        if (empty($userInfo) || empty($userInfo['id'])) {
+            return null;
         }
-        return null;
+        $sessionId = 'RemoteUser:' . $uname;
+        $this->initSession($sessionId, $userInfo['id']);
+        //$this->context['userInfo'] = $userInfo;
+        return intval($userInfo['id']);
     }
 
     /**
@@ -100,11 +102,13 @@ class UserContext
             return null;
         }
         $userInfo = AuthToken::getUserInfo($token);
-        if (!empty($userInfo) && !empty($userInfo['userId'])) {
-            //$this->context['userInfo'] = $userInfo;
-            return intval($userInfo['userId']);
+        if (empty($userInfo) || empty($userInfo['userId'])) {
+            return null;
         }
-        return null;
+        $sessionId = 'AuthToken:' . $token;
+        $this->initSession($sessionId, $userInfo['userId']);
+        //$this->context['userInfo'] = $userInfo;
+        return intval($userInfo['userId']);
     }
 
     /**
@@ -126,6 +130,25 @@ class UserContext
         if (!xarUser::isLoggedIn()) {
             return null;
         }
+        xarSession::getInstance()->setContext($this->context);
         return xarSession::getVar('role_id');
+    }
+
+    /**
+     * Summary of initSession
+     * @param string $sessionId
+     * @param int $userId
+     * @return void
+     */
+    protected function initSession($sessionId, $userId)
+    {
+        if (!empty(xarSession::getInstance())) {
+            throw new Exception('Session was already initialized');
+        }
+        xarSession::setSessionClass(SessionContext::class);
+        xarSession::init();
+        $serverVars = $this->context['server'] ?? [];
+        $ipAddress = $serverVars['REMOTE_ADDR'] ?? '-';
+        xarSession::getInstance()->startSession($this->context, $sessionId, $userId, $ipAddress);
     }
 }
