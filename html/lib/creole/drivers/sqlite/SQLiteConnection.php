@@ -236,7 +236,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection
         $result = $this->dblink->query('COMMIT');
         if (!$result) {
             $nativeError = $this->dblink->lastErrorMsg();
-            throw new SQLException('Can not commit transaction', $nativeError);
+            throw new SQLException('Could not commit transaction', $nativeError);
         }
     }
 
