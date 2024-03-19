@@ -25,9 +25,8 @@ function base_adminapi_get_supported_dbs($args)
     	case 'Creole':
 			$data['database_types']  = array('mysqli'      => array('name' => 'MySQL'   , 'available' => extension_loaded('mysqli')),
 //											 'pgsql'       => array('name' => 'Postgres (limited support in this version)', 'available' => extension_loaded('pgsql')),
-//											 'sqlite3'     => array('name' => 'SQLite (not supported in this version)'  , 'available' => extension_loaded('sqlite3')),
+											 'sqlite3'     => array('name' => 'SQLite (limited support in this version)'  , 'available' => extension_loaded('sqlite3')),
 //											 'pgsql'       => array('name' => 'Postgres (limited support in this version)', 'available' => false),
-//											 'sqlite3'     => array('name' => 'SQLite (not supported in this version)'  , 'available' => false),
 											 // use portable version of OCI8 driver to support ? bind variables
 //											 'oci8po'      => array('name' => 'Oracle 9+ (not supported)'  , 'available' => extension_loaded('oci8')),
 //											 'mssql'       => array('name' => 'MS SQL Server (not supported)' , 'available' => extension_loaded('mssql')),
