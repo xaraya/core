@@ -51,6 +51,11 @@ class xarSystemVars extends xarVars implements IxarVars
             self::$systemVars[$scope][$name] = $value;
             return true;
         }
+        // Allow overriding system config for testing if needed - see UserContextTest
+        if (xarCoreCache::isCached('Testing:' . $scope, $name)) {
+            self::$systemVars[$scope][$name] = $value;
+            return true;
+        }
         // Not supported ?
         return false;
     }
