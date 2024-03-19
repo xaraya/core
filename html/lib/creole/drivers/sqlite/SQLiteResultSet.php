@@ -152,9 +152,10 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
 			while ($this->result->fetchArray()) {
     			$records++;
 			}
+			$this->recordcount = $records;
 			$this->result->reset();
-			return $records;
 		} 
+		return $this->recordcount;
         // END XARAYA MODIFICATION
     }
 
@@ -183,6 +184,7 @@ class SQLiteResultSet extends ResultSetCommon implements ResultSet
      */
     public function close()
     {
+    	// TODO: this is unsatisfactory, but working with the finalize() method seems to give strange results
         $this->fields = array();
         $this->result = null;
     }
