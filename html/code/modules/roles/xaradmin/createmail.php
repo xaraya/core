@@ -68,7 +68,8 @@ function roles_admin_createmail()
         // Get the current query or create a new one if need be
         if ($id == -1) {
             $q = new Query();
-            $q = unserialize(xarSession::getVar('rolesquery'));
+            $stored = xarSession::getVar('rolesquery') ?? 'a:0:{}';
+            $q = unserialize($stored);
         }
         if(empty($q->tables)) {
             $q = new Query('SELECT');
