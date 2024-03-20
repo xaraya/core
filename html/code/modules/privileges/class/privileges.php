@@ -523,24 +523,24 @@ class xarPrivileges extends xarMasks
     {
         parent::initialize();
 
-        // @fixme specify the columns we want
-        $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
+        $query = "SELECT p.id, p.name, p.realm_id, p.module_id, p.component, p.instance, 
+        		  p.level, p.description, p.itemtype, m.name AS module FROM " . parent::$privilegestable . " p
         LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.itemtype = ? AND p.name = ?";
         $stmt = parent::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, $name));
 
         if ($result->first()) {
             list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$itemtype,$module) = $result->fields;
-            $pargs = array('id'=>$id,
-                           'name'=>$name,
-                           'realm'=>$realm,
-                           'module'=>$module,
-                           'module_id'=>$module_id,
-                           'component'=>$component,
-                           'instance'=>$instance,
-                           'level'=>$level,
-                           'description'=>$description,
-                           'parentid'=>0);
+            $pargs = array('id'          => $id,
+                           'name'        => $name,
+                           'realm'       => $realm,
+                           'module'      => $module,
+                           'module_id'   => $module_id,
+                           'component'   => $component,
+                           'instance'    => $instance,
+                           'level'       => $level,
+                           'description' => $description,
+                           'parentid'    => 0);
             sys::import('modules.privileges.class.privilege');
             return new xarPrivilege($pargs);
         }
@@ -564,10 +564,10 @@ class xarPrivileges extends xarMasks
 
         parent::initialize();
         $privileges = array();
-        // @fixme specify the columns we want
-        $query = "SELECT p.*, m.name FROM " . parent::$privilegestable . " p
+        $query = "SELECT p.id, p.name, p.realm_id, p.module_id, p.component, p.instance, 
+        		  p.level, p.description, p.itemtype, m.name AS module FROM " . parent::$privilegestable . " p
         LEFT JOIN ". parent::$modulestable ." m ON p.module_id = m.id WHERE p.itemtype = ? AND p.module_id = ?";
-        //Execute the query, bail if an exception was thrown
+        // Execute the query, bail if an exception was thrown
         if(!isset($stmt)) $stmt = parent::$dbconn->prepareStatement($query);
         $result = $stmt->executeQuery(array(self::PRIVILEGES_PRIVILEGETYPE, xarMod::getID($module)));
         while ($result->next()) {
@@ -648,14 +648,14 @@ class xarPrivileges extends xarMasks
         $instance = !empty($instance) ? $instance : "All";
 
         if(empty($pid)) {
-            $pargs = array('name' => $name,
-                           'realm' => $realm,
-                           'module' => $module,
-                           'module_id'=>xarMod::getID($module),
+            $pargs = array('name'      => $name,
+                           'realm'     => $realm,
+                           'module'    => $module,
+                           'module_id' => xarMod::getID($module),
                            'component' => $component,
-                           'instance' => $instance,
-                           'level' => $level,
-                           'parentid' => 0
+                           'instance'  => $instance,
+                           'level'     => $level,
+                           'parentid'  => 0
                            );
             sys::import('modules.privileges.class.privilege');
             $priv = new xarPrivilege($pargs);
