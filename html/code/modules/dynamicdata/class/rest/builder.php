@@ -1496,6 +1496,7 @@ class DataObjectRESTBuilder extends xarObject
             case 'fieldstatus':
             case 'dropdown':
             case 'crontab':
+            case 'workflows':
                 //case 'string':
                 $datatype = ['type' => 'string'];
                 break;

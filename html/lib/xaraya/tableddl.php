@@ -112,7 +112,7 @@ function xarDBCreateTable($tableName, $fields, $databaseType="",$charset="")
     switch($databaseType) {
         case 'mysqli':
         case 'pdomysqli':
-            sys::import('xaraya.tableddl.mysql');
+            sys::import('xaraya.tableddl.mysqli');
             $sql = xarDB__mysqlCreateTable($tableName, $fields, $charset);
             break;
         case 'postgres':
