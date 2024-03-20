@@ -426,7 +426,7 @@ class xarPrivilege extends xarMask
         // create an array to hold the objects to be returned
         $children = array();
 
-        $query = "SELECT p.*, pm.parent_id, m.name
+        $query = "SELECT p.id, p.name, p.realm_id, p.module_id, p.component, p.instance, p.level, p.description, pm.parent_id, m.name AS module
                     FROM $this->privilegestable p INNER JOIN $this->privmemberstable pm ON p.id = pm.privilege_id
                     LEFT JOIN $this->modulestable m ON p.module_id = m.id
                     WHERE p.id = pm.privilege_id";
@@ -437,18 +437,18 @@ class xarPrivilege extends xarMask
         $result = $dbconn->executeQuery($query);
 
         while($result->next()) {
-            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$itemtype,$parentid, $module) = $result->fields;
+            list($id,$name,$realm,$module_id,$component,$instance,$level,$description,$parentid,$module) = $result->fields;
             if (!isset($children[$parentid])) $children[$parentid] = array();
-            $pargs = array('id'=>           $id,
-                            'name'=>        $name,
-                            'realm'=>       $realm,
-                            'module_id'=>   $module_id,
-                            'module'=>      $module,
-                            'component'=>   $component,
-                            'instance'=>    $instance,
-                            'level'=>       $level,
+            $pargs = array('id'          => $id,
+                            'name'       => $name,
+                            'realm'      => $realm,
+                            'module_id'  => $module_id,
+                            'module'     => $module,
+                            'component'  => $component,
+                            'instance'   => $instance,
+                            'level'      => $level,
                             'description'=> $description,
-                            'parentid' => $parentid);
+                            'parentid'   => $parentid);
             $children[$parentid][] = new xarPrivilege($pargs);
         }
         // done
