@@ -100,8 +100,6 @@ class xarDB_PDO extends xarObject implements DatabaseInterface
 /**
  * A class modeling a database connection
  *
- * Creole has this, but PDO doesn't, at least not in a Creole compaible way
- * 
  */
 
 class PDOConnection extends PDO implements ConnectionInterface
@@ -115,7 +113,6 @@ class PDOConnection extends PDO implements ConnectionInterface
     public $queryString   = '';
     public $row_count     = 0;
     public $last_id       = null;
-    public $dblink        = null;
     public $driverName    = "mysql";
 
     public function __construct($dsn, $flags = array())
@@ -207,7 +204,7 @@ class PDOConnection extends PDO implements ConnectionInterface
             throw $e;
         }
         if (substr(strtoupper($string), 0, 6) == "INSERT") {
-            $this->last_id = $this->lastInsertId();
+            $this->last_id = $this->pdo->lastInsertId();
         }
         return $affected_rows;
     }
@@ -247,7 +244,7 @@ class PDOConnection extends PDO implements ConnectionInterface
                 $rows_affected = $this->exec($string);
                 $this->row_count = $rows_affected;
                 if (substr(strtoupper($string), 0, 6) == "INSERT") {
-                    $this->last_id = $this->lastInsertId();
+                    $this->last_id = $this->pdo->lastInsertId();
                 }
                 // Create an empty result set
                 $result = new PDOResultSet();
@@ -275,7 +272,7 @@ class PDOConnection extends PDO implements ConnectionInterface
 
             $stmt = $this->query($string);
             if (substr(strtoupper($string), 0, 6) == "INSERT") {
-                $this->last_id = $this->lastInsertId();
+                $this->last_id = $this->pdo->lastInsertId();
             }
             $this->row_count = $stmt->rowCount();
             return new PDOResultSet($stmt, $fetchmode);
@@ -492,7 +489,7 @@ class xarPDOStatement extends xarObject implements StatementInterface
 			break;
 			case 'INSERT':
         		// If this is an INSERT, get the last inserted ID and return
-	            $this->pdo->last_id = $this->pdo->lastInsertId();
+	            $this->last_id = $this->pdo->lastInsertId();
 	            $result = true;
 			break;
 			default:
@@ -535,7 +532,7 @@ class xarPDOStatement extends xarObject implements StatementInterface
 		}
 
         if (substr(strtoupper($this->pdo->queryString), 0, 6) == "INSERT") {
-            $this->pdo->last_id = $this->pdo->lastInsertId();
+            $this->last_id = $this->pdo->lastInsertId();
         }
 
         // Save the bindvars
