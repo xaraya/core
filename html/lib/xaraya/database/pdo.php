@@ -531,7 +531,7 @@ class xarPDOStatement extends xarObject implements StatementInterface
 
 		$success = $this->pdostmt->execute();
 		if (!$success) {
-			throw new SQLException("PDO: SELECT query " . $this->pdo->queryString . " failed to execute");
+			throw new SQLException("PDO: UPDATE query " . $this->pdo->queryString . " failed to execute");
 		}
 
         if (substr(strtoupper($this->pdo->queryString), 0, 6) == "INSERT") {
@@ -944,6 +944,32 @@ class PDOResultSet extends xarObject implements ResultSetInterface
  * These methods take their fields values for refreshing fetchmode from the results array
  */
 
+    public function first()
+    {
+        if($this->cursor !== 0) {
+            $this->seek(0);
+        }
+		$this->refresh_keys(0, $this->fetchmode);
+		return !empty($this->fields);
+    }
+    
+    public function current()
+    {
+		$fetchmode = $fetchmode ?? $this->fetchmode;
+
+        $this->refresh_keys(0, $this->fetchmode);
+		return !empty($this->fields);
+    }
+
+    public function last()
+    {
+        if($this->cursor !==  ($last = $this->getRecordCount() - 1)) {
+            $this->seek($last);
+        }
+        $this->refresh_keys(0, $this->fetchmode);
+		return !empty($this->fields);
+    }
+
     /**
      * @param int $rownum
      */
@@ -1016,36 +1042,6 @@ class PDOResultSet extends xarObject implements ResultSetInterface
         return $this->getRow($fetchmode);
     }
 
-    public function first(?int $fetchmode=null)
-    {
-		$fetchmode = $fetchmode ?? $this->fetchmode;
-
-        if($this->cursor !== 0) {
-            $this->seek(0);
-        }
-		$this->refresh_keys(0, $fetchmode);
-		return $this->fields;
-    }
-    
-    public function current(?int $fetchmode=null)
-    {
-		$fetchmode = $fetchmode ?? $this->fetchmode;
-
-        $this->refresh_keys(0, $fetchmode);
-        return $this->fields;
-    }
-
-    public function last(?int $fetchmode=null)
-    {
-		$fetchmode = $fetchmode ?? $this->fetchmode;
-
-        if($this->cursor !==  ($last = $this->getRecordCount() - 1)) {
-            $this->seek($last);
-        }
-        $this->refresh_keys(0, $this->fetchmode);
-		return $this->fields;
-    }
-
     public function getall(?int $fetchmode=null)
     {
 		$fetchmode = $fetchmode ?? $this->fetchmode;
@@ -1080,7 +1076,7 @@ class PDOResultSet extends xarObject implements ResultSetInterface
 
     public function isBeforeFirst()
     {
-        $outofbounds = ($this->cursor === 0) || ($this->getRecordCount() === 0);
+        $outofbounds = ($this->cursor === -1) || ($this->getRecordCount() === 0);
         return $outofbounds;
     }
 
