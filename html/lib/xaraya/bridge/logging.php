@@ -23,7 +23,8 @@ use xarLog;
 
 class LoggerBridge extends AbstractLogger implements LoggerInterface
 {
-    private $mapping = [
+    /** @var array<string, int> */
+    private array $mapping = [
         LogLevel::EMERGENCY => xarLog::LEVEL_EMERGENCY,  // 'emergency'
         LogLevel::ALERT     => xarLog::LEVEL_ALERT,      // 'alert'
         LogLevel::CRITICAL  => xarLog::LEVEL_CRITICAL,   // 'critical'
@@ -33,6 +34,14 @@ class LoggerBridge extends AbstractLogger implements LoggerInterface
         LogLevel::INFO      => xarLog::LEVEL_INFO,       // 'info'
         LogLevel::DEBUG     => xarLog::LEVEL_DEBUG,      // 'debug'
     ];
+    private string $prefix = '';
+
+    public function __construct(string $prefix = '')
+    {
+        if (!empty($prefix)) {
+            $this->prefix = $prefix . ': ';
+        }
+    }
 
     /**
      * Logs with an arbitrary level.
@@ -53,6 +62,9 @@ class LoggerBridge extends AbstractLogger implements LoggerInterface
     /**
      * Interpolates context values into the message placeholders.
      * Source: https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-3-logger-interface.md
+     * @param string|\Stringable $message
+     * @param array<mixed> $context
+     * @return string
      */
     public function interpolate($message, array $context = [])
     {
@@ -66,6 +78,9 @@ class LoggerBridge extends AbstractLogger implements LoggerInterface
         }
 
         // interpolate replacement values into the message and return
+        if (!empty($this->prefix)) {
+            return $this->prefix . strtr($message, $replace);
+        }
         return strtr($message, $replace);
     }
 }
