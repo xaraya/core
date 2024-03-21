@@ -535,13 +535,14 @@ class PropertyRegistration extends DataContainer
 				$installer->install();
 			}
         } else {
-            // Assume this is a standalone property in the properies directory
+            // Assume this is a standalone property in the properties directory
 			if (!class_exists($class)) {
 				sys::import('properties.' . $propertyname . '.install');
 				$descriptor = new DataObjectDescriptor();
 				$installer = new $class($descriptor);
 			} else {
-            	$installer = new $class();
+				$descriptor = new DataObjectDescriptor();
+				$installer = new $class($descriptor);
 			}
             $installer->install();
         }
