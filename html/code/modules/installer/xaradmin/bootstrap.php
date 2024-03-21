@@ -79,6 +79,7 @@ function installer_admin_bootstrap()
                      );
 
     if(!xarMod::apiFunc('modules','admin','standardinstall',array('module' => 'privileges', 'objects' => $objects))) return;
+
 # --------------------------------------------------------
 # Set up the standard module variables for the core modules
 # Never use createItem with modvar storage. Instead, you update itemid == 0
