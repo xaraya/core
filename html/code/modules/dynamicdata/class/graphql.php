@@ -58,6 +58,7 @@ use GraphQL\Validator\DocumentValidator;
 
 /**
  * See xardocs/graphql.txt for class structure
+ * @uses \sys::autoload()
  */
 class xarGraphQL extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
 {

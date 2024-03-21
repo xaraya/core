@@ -27,6 +27,7 @@ use Xaraya\Authentication\AuthToken;
 
 /**
  * Class to handle DataObject REST API calls
+ * @uses \sys::autoload()
  */
 class DataObjectRESTHandler extends xarObject implements CommonRequestInterface, CacheInterface, TimerInterface
 {

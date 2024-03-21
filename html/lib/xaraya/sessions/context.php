@@ -21,6 +21,8 @@ use xarSession;
 use sys;
 
 sys::import('xaraya.sessions.interface');
+sys::import('xaraya.sessions.virtual');
+sys::import('xaraya.sessions.storage');
 sys::import('xaraya.traits.contexttrait');
 
 /**

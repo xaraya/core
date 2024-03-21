@@ -32,6 +32,7 @@ sys::import('xaraya.datastores.external');
  * ];
  * $config['dbConnArgs'] = json_encode($config['dbConnArgs']);
  * ```
+ * @uses \sys::autoload()
  */
 class PdoDataStore extends ExternalDataStore
 {

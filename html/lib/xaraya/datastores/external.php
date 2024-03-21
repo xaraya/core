@@ -29,6 +29,7 @@ sys::import('xaraya.database.external');
  * This can be extended for database access using PHP PDO, Doctrine DBAL, MongoDB, ...
  * as long as ExternalDatabase can provide the connection and you adapt the
  * do*() methods below to use the native methods for that connection type
+ * @uses \sys::autoload()
  */
 abstract class ExternalDataStore extends SQLDataStore
 {
@@ -723,6 +724,7 @@ abstract class ExternalDataStore extends SQLDataStore
      * @param string $name
      * @param int|string|null $dbConnIndex connection index of the database if different from Xaraya DB
      * @param ?array<string, mixed> $dbConnArgs connection params of the database if different from Xaraya DB
+     * @uses \sys::autoload()
      * @return IBasicDataStore
      */
     public static function getDataStore($name = 'external', $dbConnIndex = '', $dbConnArgs = [])
@@ -736,15 +738,12 @@ abstract class ExternalDataStore extends SQLDataStore
         }
         switch ($driver) {
             case 'dbal':
-                sys::import('xaraya.datastores.external.dbal');
                 $datastore = new DbalDataStore($name, $dbConnIndex, $dbConnArgs);
                 break;
             case 'mongodb':
-                sys::import('xaraya.datastores.external.mongodb');
                 $datastore = new MongoDBDataStore($name, $dbConnIndex, $dbConnArgs);
                 break;
             case 'pdo':
-                sys::import('xaraya.datastores.external.pdo');
                 $datastore = new PdoDataStore($name, $dbConnIndex, $dbConnArgs);
                 break;
             default:

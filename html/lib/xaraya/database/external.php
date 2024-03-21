@@ -159,6 +159,7 @@ class ExternalDatabase implements DatabaseInterface
     /**
      * Summary of getDriverClass
      * @param mixed $index
+     * @uses \sys::autoload()
      * @throws \BadMethodCallException
      * @return string
      */
@@ -228,6 +229,7 @@ class ExternalDatabase implements DatabaseInterface
      * Summary of getConnection
      * @param mixed $dsn
      * @param mixed $flags
+     * @uses \sys::autoload()
      * @return object
      */
     public static function getConnection($dsn, $flags = [])

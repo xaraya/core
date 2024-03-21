@@ -10,10 +10,6 @@
 
 namespace Xaraya\Sessions;
 
-use sys;
-
-sys::import('xaraya.sessions.interface');
-
 /**
  * Virtual session aligned with database fields used in SessionHandler
  */

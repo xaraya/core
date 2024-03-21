@@ -25,6 +25,7 @@ use Xaraya\Database\ConnectionInterface;
 
 sys::import('xaraya.sessions.interface');
 sys::import('xaraya.sessions.exception');
+sys::import('xaraya.sessions.virtual');
 
 /**
  * Class to model the default session handler

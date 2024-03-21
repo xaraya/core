@@ -10,6 +10,8 @@ This contains various bridges between Xaraya and other PHP packages or framework
 - [Middleware and Routing Combined](#middleware-and-routing-combined)
 - [Non-blocking HTTP Server (ReactPHP)](#non-blocking-http-server-reactphp)
 
+Note: all bridges assume you work with `sys::autoload()` or `require_once dirname(__DIR__).'/vendor/autoload.php'`
+
 ## Logging (PSR-3)
 
 External packages using a standard [PSR-3 Logger](https://www.php-fig.org/psr/psr-3/) can send messages to the xarLog loggers. Example: sending the audit trail of Symfony Workflow component to xarLog in the workflow module.
