@@ -80,6 +80,7 @@ class xarCache_Storage extends xarObject
                 break;
 
             case 'doctrine':
+                /** @uses \sys::autoload() */
                 if (class_exists('Doctrine\\Common\\Cache\\CacheProvider')) {
                     sys::import('xaraya.caching.storage.doctrine');
                     $classname = 'xarCache_Doctrine_Storage';

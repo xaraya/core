@@ -12,6 +12,7 @@
 /**
  * Cache data using an instantiated Doctrine CacheProvider
  * https://www.doctrine-project.org/projects/doctrine-cache/en/current/index.html
+ * @uses \sys::autoload()
  */
 class xarCache_Doctrine_Storage extends xarCache_Storage implements ixarCache_Storage
 {
