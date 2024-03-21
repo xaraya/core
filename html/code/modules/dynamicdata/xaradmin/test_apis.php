@@ -13,6 +13,7 @@
 sys::import('modules.dynamicdata.class.rest.builder');
 /**
  * Test APIs
+ * @uses \sys::autoload()
  */
 function dynamicdata_admin_test_apis(array $args = [], $context = null)
 {

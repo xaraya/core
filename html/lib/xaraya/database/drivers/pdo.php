@@ -17,6 +17,7 @@ use sys;
 
 /**
  * Provide an external database connection via PHP PDO
+ * @uses \sys::autoload()
  */
 class PdoDriver
 {

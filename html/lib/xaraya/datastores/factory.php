@@ -204,6 +204,7 @@ class DataStoreFactory extends xarObject
                 $datastore = new CachingDataStore($name, $storage);
                 break;
             case 'external':
+                /** @uses \sys::autoload() */
                 sys::import('xaraya.datastores.external');
                 $datastore = ExternalDataStore::getDataStore($name, $dbConnIndex, $dbConnArgs);
                 break;

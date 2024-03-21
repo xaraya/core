@@ -15,6 +15,7 @@ namespace Xaraya\Database\Drivers;
 
 /**
  * Provide an external database connection via MongoDB PHP Library
+ * @uses \sys::autoload()
  */
 class MongoDBDriver
 {
