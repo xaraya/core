@@ -132,6 +132,12 @@ class DataObjectImporter
     {
         static::$dataobject ??= DataObjectFactory::getObject(['name' => 'objects']);
         static::$dataproperty ??= DataObjectFactory::getObject(['name' => 'properties']);
+        $proptypes = DataPropertyMaster::getPropertyTypes();
+        $name2id = [];
+        foreach ($proptypes as $propid => $proptype) {
+            $name2id[$proptype['name']] = $propid;
+        }
+
         $info = $descriptor->getArgs();
         $propertyargs = $info['propertyargs'];
         unset($info['propertyargs']);
@@ -146,6 +152,15 @@ class DataObjectImporter
             unset($propertyarg['_objectid']);
             $propertyarg['seq'] ??= $sequence;
             $propertyarg['configuration'] ??= '';
+            // convert property type to numeric if necessary
+            $propertyarg['type'] ??= 1;
+            if (!is_numeric($propertyarg['type'])) {
+                if (isset($name2id[$propertyarg['type']])) {
+                    $propertyarg['type'] = $name2id[$propertyarg['type']];
+                } else {
+                    $propertyarg['type'] = 1;
+                }
+            }
             $propid = static::$dataproperty->createItem($propertyarg);
             $sequence += 1;
         }

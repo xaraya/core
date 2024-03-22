@@ -77,6 +77,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
     {
         $args['moduleid'] ??= 182;
         $args['module_id'] = $args['moduleid'];
+        $args['label'] ??= ucwords(str_replace('_', ' ', $args['name']));
         //$args = self::getObjectID($args);
         ObjectDescriptor::__construct($args);
         if ($offline) {
@@ -109,6 +110,7 @@ class VirtualObjectDescriptor extends DataObjectDescriptor
         if (!isset($args['id'])) {
             $args['id'] = count($this->args['propertyargs']) + 1;
         }
+        $args['label'] ??= ucwords(str_replace('_', ' ', $args['name']));
         $this->args['propertyargs'][] = $args;
     }
 
