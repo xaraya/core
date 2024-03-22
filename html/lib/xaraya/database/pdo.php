@@ -480,8 +480,9 @@ class xarPDOStatement extends xarObject implements StatementInterface
 			throw new SQLException("PDO: SELECT query " . $this->pdo->queryString . " failed to execute");
 		}
 
-        switch (substr(strtoupper($this->pdo->queryString), 0, 6) == "SELECT") {
+        switch (substr(strtoupper($this->pdo->queryString), 0, 6)) {
         	case 'SELECT':
+        		// CHECKME: execute() returns a bool
 				// If this is a SELECT, create a result set for the results
 				$result = new PDOResultSet($this, $fetchmode);
 				// Save the bindvars
@@ -490,11 +491,11 @@ class xarPDOStatement extends xarObject implements StatementInterface
 			case 'INSERT':
         		// If this is an INSERT, get the last inserted ID and return
 	            $this->pdo->last_id = $this->pdo->lastInsertId();
-	            $result = true;
+	            $result = $success;
 			break;
 			default:
 		        // Anything else: just return for now
-	            $result = true;
+	            $result = $success;
         }
         return $result;
     }

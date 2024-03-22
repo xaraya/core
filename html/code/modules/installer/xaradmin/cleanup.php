@@ -276,7 +276,6 @@ if (is_file("upgrade.php")) echo "<div>Please delete upgrade.php from your web r
         throw new Exception($msg);
     }
 
-
     xarModVars::delete('roles','adminpass');
 
     xarMod::apiFunc('dynamicdata','admin','importpropertytypes', array('flush' => true));
