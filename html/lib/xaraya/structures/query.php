@@ -1010,7 +1010,8 @@ class Query
             $st .= $this->assembledconditions();
             break;
         case "DELETE" :
-            $st .= $this->assembledaliases();
+            // @todo remove this altogether, or move it after assembledtables if assembledconditions uses aliases?
+            //$st .= $this->assembledaliases();
             $st .= " FROM ";
             $st .= $this->assembledtables();
             $st .= $this->assembledconditions();
