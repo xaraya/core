@@ -25,6 +25,7 @@
  * ...
  *
  * https://www.doctrine-project.org/projects/doctrine-cache/en/current/index.html
+ * @uses \sys::autoload()
  */
 /**
 function xarGetDoctrineCacheProvider()

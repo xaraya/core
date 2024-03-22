@@ -19,6 +19,7 @@
   <source>
     <include>
       <directory suffix=".php">html</directory>
+      <directory suffix=".php">vendor/xaraya</directory>
     </include>
     <exclude>
       <directory suffix=".php">html/themes</directory>
