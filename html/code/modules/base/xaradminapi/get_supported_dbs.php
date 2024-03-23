@@ -36,9 +36,8 @@ function base_adminapi_get_supported_dbs($args)
     	default:
 			$data['database_types']  = array('pdomysqli'   => array('name' => 'MySQL'   , 'available' => extension_loaded('pdo_mysql')),
 //											 'pdopgsql'    => array('name' => 'Postgres (limited support in this version)', 'available' => extension_loaded('pdo_pgsql')),
-//											 'pdosqlite'   => array('name' => 'SQLite (not supported in this version)'  , 'available' => extension_loaded('pdo_sqlite')),
+											 'pdosqlite'   => array('name' => 'SQLite (limited support in this version)'  , 'available' => extension_loaded('pdo_sqlite')),
 //											 'pdopgsql'    => array('name' => 'Postgres (limited support in this version)', 'available' => false),
-//											 'pdosqlite'   => array('name' => 'SQLite (not supported in this version)'  , 'available' => false),
 											);
 		break;
     	case 'DBAL':
