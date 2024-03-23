@@ -517,7 +517,7 @@ class DataObjectLoader implements ContextInterface
         // See code/modules/dynamicdata/class/ui_handlers/search.php
         $wherestring = '';
         $join = '';
-        $mapop = ['eq' => '=', 'ne' => '!=', 'gt' => '>', 'lt' => '<', 'le' => '>=', 'ge' => '<=', 'in' => 'IN'];
+        $mapop = ['eq' => '=', 'ne' => '!=', 'gt' => '>', 'lt' => '<', 'le' => '>=', 'ge' => '<=', 'in' => 'IN', 'like' => 'LIKE'];
         foreach ($this->filter as $where) {
             [$field, $op, $value] = explode(',', $where . ',,');
             if (empty($field) || empty($objectlist->properties[$field]) || empty($op) || empty($mapop[$op])) {
@@ -536,6 +536,12 @@ class DataObjectLoader implements ContextInterface
                         $clause = $mapop[$op] . " ('" . implode("', '", $value) . "')";
                     }
                 }
+            } elseif ($op === 'like') {
+                $value = str_replace("'", "\\'", $value);
+                // escape LIKE wildcards
+                $value = str_replace('%', '\%', $value);
+                $value = str_replace('_', '\_', $value);
+                $clause = $mapop[$op] . " '%" . $value . "%'";
             } elseif (is_numeric($value)) {
                 $clause = $mapop[$op] . " " . $value;
             } elseif (is_string($value)) {
@@ -547,6 +553,8 @@ class DataObjectLoader implements ContextInterface
                 // @checkme setWhere() in objects/master.php expects 'field in val1,val2' not 'field in (val1, val2)'
                 if ($op === 'in') {
                     $clause = str_replace([", ", "(", ")"], [","], $clause);
+                } elseif ($op === 'like') {
+                    // @todo do we need to change the clause here too?
                 }
                 $wherestring .= $join . ' ' . $field . ' ' . trim($clause);
                 $join = 'AND';
