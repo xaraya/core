@@ -50,7 +50,7 @@ class SQLiteConnection extends ConnectionCommon implements Connection
             throw new SQLException('sqlite extension not loaded');
         }
         // XARAYA MODIFICATION
-        $file = $dsninfo['databaseName'];
+        $file = $dsninfo['location'] . $dsninfo['databaseName'];
         // END XARAYA MODIFICATION
 
         $this->dsn = $dsninfo;

@@ -126,7 +126,7 @@ class xarDB
         	case 'pdosqlite':
         		$location = xarSystemVars::get(sys::CONFIG, 'DB.Location');
 				$args['phptype']       = $args['databaseType'];
-				$args['database']      = $location . $args['databaseName'] ?? ':memory:';
+				$args['database']      = $args['location'] . $args['databaseName'] ?? ':memory:';
 				$args['hostspec']    ??= '';
 				$args['port']        ??= '';
 				$args['username']    ??= '';
@@ -348,7 +348,7 @@ class xarDB
         }
 
 		// If we got here then we need a connection that is not in the connectionMap
-		// Lets let the middleware create it 
+		// Let's let the middleware create it 
 		$connection = self::$mw::getConnection($dsn, $flags);
 
         // Add this new connection to the connection map
@@ -449,10 +449,9 @@ class xarDatabase extends xarObject
 	        // Minimum for sqlite3 is ['databaseType' => 'sqlite3', 'databaseName' => $filepath] // or ':memory:'
         	case 'sqlite3':
         	case 'pdosqlite':
-				if ($location == 'memory') {
+				if ($location == ':memory:') {
 					$databaseName = $location;
-				} else {
-					$databaseName = $location . $databaseName;
+					$location = '';
 				}
 			break;
 			

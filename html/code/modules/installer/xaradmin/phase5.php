@@ -59,21 +59,28 @@ function installer_admin_phase5()
     // Cater to SQLite before trying to connect
     // Create the database if it doesn't exist
     if (in_array($init_args['databaseType'], array('sqlite3', 'pdosqlite'))) {
-		// Make sure we have a directory var/sqlite
-		$location = xarSystemVars::get(sys::CONFIG, 'DB.Location');
-		if (!is_dir($location)) {
-			mkdir($location, 0755);
+		
+		$location = $init_args['location'];
+		if ($location == ':memory:') {
+			// The database is stored in memory
+			$dbpath = $location;
+		} else {
+			// The database is stored in storage
+			// Make sure we have a directory, e.g. var/sqlite
+			if (!is_dir($location)) {
+				mkdir($location, 0755);
+			}
+			$dbpath = $location . $init_args['databaseName'];
 		}
-
-		$dbpath = $init_args['databaseName'];
+		
+		// Check whether the database already exists
 		if (file_exists($dbpath)) {
 			// We already have a database with this name
-        	return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $dbpath));
+			return xarTpl::module('installer','admin','errors',array('layout' => 'database_exists', 'database_name' => $dbpath));
 		} else {
+			// No prior database, so let's create it
 			try {
 				$db = new SQLite3($dbpath);
-				// For SQLite the database name is the path to the database
-				$init_args['databaseName'] = $dbpath;
 			} catch(Exception $e){
 				 echo $e->getMessage(); 
 				 exit;
@@ -91,15 +98,8 @@ function installer_admin_phase5()
 	// Create a connection and check if a database already exists
 	$dbExists = false;
     switch ($init_args['databaseType']) {
-        case 'pdosqlite':
-			// We already created the db above
-			$dbExists = true;
-			// But we do want to get a connection to use below
-			$dbconn = xarDB::newConn($init_args);
-		break;
         case 'sqlite3':
-        	// We need a connection as with pdosqlite
-        	// In addition, newConn creates the database
+        case 'pdosqlite':
 			$dbconn = xarDB::newConn($init_args);
 			$dbExists = true;
 		break;

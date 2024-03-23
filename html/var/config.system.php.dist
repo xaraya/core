@@ -39,6 +39,11 @@ $systemConfiguration['DB.Encoded'] = '0';
 // Persistent database connections - do NOT use this on shared servers, and
 // do NOT use it on your own servers unless your sysadmin + dba teams agree !
 $systemConfiguration['DB.Persistent'] = false;
+// Database Location: where the database file(s) are located
+// For now this is used by sqlite3. Options:
+// - ':memory:': database in memory
+// - 'var/.../': filepath relative to the Xaraya base location 
+$systemConfiguration['DB.Location'] = 'var/sqlite/';
 
 /* For Logging:
  * These options enable a simple logging system to a text file
