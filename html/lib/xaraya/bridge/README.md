@@ -9,6 +9,7 @@ This contains various bridges between Xaraya and other PHP packages or framework
 - [Middleware and Request Handler (PSR-15)](#middleware-and-request-handler-psr-15)
 - [Middleware and Routing Combined](#middleware-and-routing-combined)
 - [Non-blocking HTTP Server (ReactPHP)](#non-blocking-http-server-reactphp)
+- [Twig Template Engine](#twig-template-engine)
 
 Note: all bridges assume you work with `sys::autoload()` or `require_once dirname(__DIR__).'/vendor/autoload.php'`
 
@@ -17,17 +18,17 @@ Note: all bridges assume you work with `sys::autoload()` or `require_once dirnam
 External packages using a standard [PSR-3 Logger](https://www.php-fig.org/psr/psr-3/) can send messages to the xarLog loggers. Example: sending the audit trail of Symfony Workflow component to xarLog in the workflow module.
 
 Requirement: some package depending on [PSR-3 Logger Interface](https://packagist.org/packages/psr/log/dependents?order_by=downloads&requires=require)
-```
+```shell
 $ composer require psr/log
 ```
 
 Usage:
-```
- use Xaraya\Bridge\Logging\LoggerBridge;
- 
- $logger = new LoggerBridge();
- // some package class expecting a logger compatible with LoggerInterface
- $mypackage->setLogger($logger);
+```php
+use Xaraya\Bridge\Logging\LoggerBridge;
+
+$logger = new LoggerBridge();
+// some package class expecting a logger compatible with LoggerInterface
+$mypackage->setLogger($logger);
 ```
 
 For logging the other way around, i.e. from xarLog to PSR-3 logger, a new xarLogger class will need to be created.
@@ -37,7 +38,7 @@ For logging the other way around, i.e. from xarLog to PSR-3 logger, a new xarLog
 Interactions between Xaraya Event Management System (EMS) and [Symfony EventDispatcher](https://symfony.com/doc/current/components/event_dispatcher.html)
 
 Requirement:
-```
+```shell
 $ composer require symfony/event-dispatcher
 ```
 
@@ -46,7 +47,7 @@ $ composer require symfony/event-dispatcher
 Pass events from Symfony EventDispatcher via event subscriber to notify xarEvents or xarHooks and beyond
 
 Usage:
-```
+```php
 use Symfony\Component\EventDispatcher\EventDispatcher;
 //use Xaraya\Bridge\Events\EventSubscriber;
 use Xaraya\Bridge\Events\HookSubscriber;
@@ -80,7 +81,7 @@ $responses = $subscriber->getResponses();
 Pass events from Xaraya xarEvents or xarHooks via observer bridge to Symfony EventDispatcher and beyond
 
 Usage:
-```
+```php
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Xaraya\Bridge\Events\EventObserverBridge;
 use Xaraya\Bridge\Events\HookObserverBridge;
@@ -118,12 +119,12 @@ $ composer require psr/event-dispatcher
 Use a routing library like [nikic/FastRoute](https://github.com/nikic/FastRoute) as request mapper to Xaraya module GUI functions, data object UI methods, the REST API and GraphQL API.
 
 Requirement: (already required for Xaraya REST API)
-```
+```shell
 $ composer require nikic/fastroute
 ```
 
 Usage:
-```
+```php
 // use some routing bridge
 use Xaraya\Bridge\Routing\FastRouteBridge;
 use xarServer;
@@ -159,12 +160,12 @@ FastRouteBridge::output($result, $context);
 Re-usable traits for both [PSR-7 Server Requests](https://www.php-fig.org/psr/psr-7/) and standard PHP [Server API (SAPI)](https://www.php.net/manual/en/function.php-sapi-name.php) using superglobals ($_SERVER, $_GET etc.): parse or build URI paths, run GUI or API requests for modules, data objects, blocks, ...
 
 Requirement: when not using the standard Server API with superglobals, some package providing PSR-7 [psr/http-message-implementation](https://packagist.org/providers/psr/http-message-implementation) and PSR-17 [psr/http-factory-implementation](https://packagist.org/providers/psr/http-factory-implementation), for example nyholm/psr7 or guzzlehttp/psr7
-```
+```shell
 $ composer require nyholm/psr7 nyholm/psr7-server
 ```
 
 Usage:
-```
+```php
 use Xaraya\Bridge\Requests\CommonBridgeTrait;
 
 class MyRequestHandler
@@ -193,12 +194,12 @@ $ composer require nyholm/psr7 nyholm/psr7-server
 ```
 
 Requirement: some framework or package capable of dispatching PSR-7 server requests to [PSR-15 Middleware](https://packagist.org/packages/psr/http-server-middleware), for example [middlewares/utils](https://packagist.org/packages/middlewares/utils) for testing purposes
-```
+```shell
 $ composer require middlewares/utils
 ```
 
 Usage:
-```
+```php
 // use some PSR-7 factory and PSR-15 dispatcher
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
@@ -260,12 +261,12 @@ ResponseUtil::emitResponse($response);
 Integration of the routing library into a single PSR-15 middleware or request handler capable of handling all PSR-7 Module, DataObject, Block, REST API, GraphQL, Routes, ... server requests.
 
 Requirement: some package providing PSR-7 [psr/http-message-implementation](https://packagist.org/providers/psr/http-message-implementation) and PSR-17 [psr/http-factory-implementation](https://packagist.org/providers/psr/http-factory-implementation), for example [nyholm/psr7](https://packagist.org/packages/nyholm/psr7) or [guzzlehttp/psr7](https://packagist.org/packages/guzzlehttp/psr7)
-```
+```shell
 $ composer require nyholm/psr7 nyholm/psr7-server
 ```
 
 Usage:
-```
+```php
 // use some PSR-7 factory
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Nyholm\Psr7Server\ServerRequestCreator;
@@ -297,16 +298,85 @@ Xaraya hasn't been designed with this architecture in mind (in fact it didn't ex
 Please note that this is very much in the experimental stage, and that there are still many stateful variables and blocking calls left over in the normal request handling process.
 
 Requirement: with ReactPHP for example
-```
+```shell
 $ composer require react/http
 $ cp html/lib/xaraya/bridge/reactphp.php developer/bin/react.php
 ```
 
 Usage:
-```
+```shell
 $ php developer/bin/react.php
 Listening on http://0.0.0.0:8080
 ...
+```
+
+## Twig Template Engine
+
+Xaraya has been using Blocklayout for templates since the early days. This bridge allows you to use Twig-based templates to generate output in Xaraya if needed, with a number of Xaraya-specific extensions.
+
+Requirement:
+```shell
+$ composer require twig/twig
+```
+
+Usage:
+```php
+use Xaraya\Bridge\TemplateEngine\TwigBridge;
+
+// add paths for Twig filesystem loader (with namespace)
+// {{ include('@workflow/includes/trackeritem.html.twig') }}
+$paths = [
+    'code/modules/workflow/templates' => 'workflow',
+];
+// override default options for Twig environment
+$options = [
+    //'cache' => sys::varpath() . '/cache/templates',
+    //'debug' => false,
+];
+// get $context from GUI/API function call or DataObject
+
+$twigbridge = new TwigBridge($paths, $options, $context);
+$twig = $twigbridge->getEnvironment();
+
+$data = [];
+// render twig template with data
+$template = $twig->load('@workflow/test.html.twig');
+return $template->render($data);
+// or render individual block defined in the template
+//return $template->renderBlock('content', $data);
+```
+
+### New Twig Functions (Xaraya Extensions)
+
+```twig
+{% set info = xar_apifunc(modName, modType, funcName, params) %}
+{% set link = xar_moduleurl(modName, modType, funcName, params) %}
+{{ xar_objecturl(objectName, methodName, params) }}
+{{ xar_username(userId) }} or {% set email = xar_username(userId, 'email') %}
+{{ xar_uservar('id') }}
+{{ xar_translate(text) }} or {{ xar_translate(text, arg1, arg2, ...) }}
+{{ xar_localedate(timestamp) }}
+{% set info = xar_coremethod(className, methodName, args) %}
+{{- xar_image(...) -}}
+{{- xar_button(...) -}}
+```
+
+### Blocklayout Converter
+
+Experimental template converter from Blocklayout to Twig syntax
+
+Usage:
+```php
+use Xaraya\Bridge\TemplateEngine\BlocklayoutToTwigConverter;
+
+// convert all test_*.xt templates from includes directory
+$options = [
+    'namespace' => 'workflow/includes',
+];
+$converter = new BlocklayoutToTwigConverter($options);
+$sourcePath = dirname(__DIR__) . '/xartemplates/includes';
+$targetPath = dirname(__DIR__) . '/templates/includes';
+$converter->convertDir($sourcePath, $targetPath, '.xt', 'test_');
 ```
 
 Enjoy :-)
