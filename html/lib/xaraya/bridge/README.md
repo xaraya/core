@@ -352,11 +352,15 @@ return $template->render($data);
 {% set info = xar_apifunc(modName, modType, funcName, params) %}
 {% set link = xar_moduleurl(modName, modType, funcName, params) %}
 {{ xar_objecturl(objectName, methodName, params) }}
+{% set link = xar_imageurl(fileName, scope, package) %}
+{% set link = xar_fileurl(fileName, scope, package) %}
 {{ xar_username(userId) }} or {% set email = xar_username(userId, 'email') %}
 {{ xar_uservar('id') }}
 {{ xar_translate(text) }} or {{ xar_translate(text, arg1, arg2, ...) }}
 {{ xar_localedate(timestamp) }}
 {% set info = xar_coremethod(className, methodName, args) %}
+{% if xar_security_check('AdminBase') %} ... {% else %} ... {% endif %}
+{{ xar_style(...) }}
 {{- xar_image(...) -}}
 {{- xar_button(...) -}}
 ```

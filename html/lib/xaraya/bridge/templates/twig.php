@@ -44,9 +44,11 @@ use Twig\Loader\FilesystemLoader;
 use Xaraya\Core\Traits\ContextInterface;
 use Xaraya\Core\Traits\ContextTrait;
 use Xaraya\Context\Context;
+use xarConst;
 use xarLocale;
 use xarMLS;
 use xarMod;
+use xarSecurity;
 use xarServer;
 use xarTpl;
 use xarUser;
@@ -63,11 +65,15 @@ sys::import("xaraya.context.context");
  * {% set info = xar_apifunc(modName, modType, funcName, params) %}
  * {% set link = xar_moduleurl(modName, modType, funcName, params) %}
  * {{ xar_objecturl(objectName, methodName, params) }}
+ * {% set link = xar_imageurl(fileName, scope, package) %}
+ * {% set link = xar_fileurl(fileName, scope, package) %}
  * {{ xar_username(userId) }} or {% set email = xar_username(userId, 'email') %}
  * {{ xar_uservar('id') }}
  * {{ xar_translate(text) }} or {{ xar_translate(text, arg1, arg2, ...) }}
  * {{ xar_localedate(timestamp) }}
  * {% set info = xar_coremethod(className, methodName, args) %}
+ * {% if xar_security_check('AdminBase') %} ... {% else %} ... {% endif %}
+ * {{ xar_style(...) }}
  * {{- xar_image(...) -}}
  * {{- xar_button(...) -}}
  * ```
@@ -113,7 +119,7 @@ class TwigBridge implements ContextInterface
     public function setOptions(array $options)
     {
         $this->options = array_replace([
-            'cache' => sys::varpath() . '/cache/templates',
+            'cache' => sys::varpath() . xarConst::TPL_CACHEDIR,
         ], $options);
         return $this->options;
     }
@@ -184,10 +190,16 @@ class TwigBridge implements ContextInterface
 
         // we need to mark this as safe for html
         $imageURL = new TwigFunction('xar_imageurl', function ($fileName, $scope = null, $package = null) {
-            // @todo avoid double-encoding URLs
+            // avoid double-encoding URLs
             return xarTpl::getImage($fileName, $scope, $package);
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($imageURL);
+
+        $fileURL = new TwigFunction('xar_fileurl', function ($fileName, $scope = null, $package = null) {
+            // avoid double-encoding URLs
+            return xarTpl::getFile($fileName, $scope, $package);
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($fileURL);
 
         $userName = new TwigFunction('xar_username', function ($userId, $name = 'name') {
             return xarUser::getVar($name, $userId);
@@ -230,7 +242,16 @@ class TwigBridge implements ContextInterface
     {
         $context = $this->getContext();
 
+        // <xar:style scope="module" module="base" file="tabs"/>
+        // @todo replace array with fixed order of params
+        $style = new TwigFunction('xar_style', function ($args = []) use ($context) {
+            xarMod::apiFunc('themes', 'user', 'register', $args, $context);
+            return '';
+        });
+        $this->twig->addFunction($style);
+
         // <xar:img scope="theme" file="icons/info.png" class="xar-icon" alt="info"/>
+        // @todo replace array with fixed order of params?
         // we need to mark this as safe for html
         $image = new TwigFunction('xar_image', function ($args = []) use ($context) {
             $link = xarMod::apiFunc('themes', 'user', 'getimage', $args, $context);
@@ -250,12 +271,20 @@ class TwigBridge implements ContextInterface
         $this->twig->addFunction($image);
 
         // <xar:button type="link" name="$name" target="$runlink" label="$label"/>
+        // @todo replace array with fixed order of params?
         $button = new TwigFunction('xar_button', function ($args = []) use ($context) {
             return xarTpl::module('themes', 'user', 'buttontag', $args);
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($button);
 
+        // <xar:sec mask="..." catch="false">
+        $security = new TwigFunction('xar_security_check', function ($mask, $catch = 0) use ($context) {
+            return xarSecurity::check($mask, $catch);
+        });
+        $this->twig->addFunction($security);
+
         // <xar:workflow-actions name="actions" config="$config" item="$item" title="$item['marking']" template="$item['marking']"/>
+        // @todo replace array with fixed order of params
         $workflow = new TwigFunction('xar_workflow_actions', function ($args = []) use ($context) {
             return xarMod::apiFunc('workflow', 'user', 'showactions', $args, $context);
         }, ['is_safe' => ['html']]);
