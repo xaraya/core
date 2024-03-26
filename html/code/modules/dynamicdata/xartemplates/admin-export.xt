@@ -25,9 +25,9 @@
                     </div>
                     <div class="xar-col">
                         <xar:set name="formats">array(
-                            array('id' => 'xml', 'name' => 'XML'),
-                            array('id' => 'json', 'name' => 'JSON'),
-                            array('id' => 'php', 'name' => 'PHP'),
+                            ['id' => 'xml', 'name' => 'XML'],
+                            ['id' => 'json', 'name' => 'JSON'],
+                            ['id' => 'php', 'name' => 'PHP'],
                         )</xar:set>
                         <xar:data-input type="dropdown" name="format" id="format" options="$formats" value="$format"/>
                     </div>

@@ -4,7 +4,7 @@
     <xar:if condition="isset($value)">
         <xar:if condition="is_array($value)">
         <xar:if condition="!empty($object) and empty($singlevalue)">
-            <xar:set name="values">array($source => $value)</xar:set>
+            <xar:set name="values">[$source => $value]</xar:set>
             <xar:data-view object="$object" items="$values" fieldlist="$fieldlist" linktype="object" newlink=""/>
         <xar:else/>
         <div class="xar-form-container">

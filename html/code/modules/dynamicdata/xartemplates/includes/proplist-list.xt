@@ -65,7 +65,7 @@
                     <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
                         <xar:set name="title">xarML('Edit configuration for property \"#(1)\"',$field['name'])</xar:set>
                         <xar:set name="link">
-                            xarController::URL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
+                            xarController::URL('dynamicdata', 'admin', 'showpropval', ['itemid' => $field['id']])
                         </xar:set>
                         <xar:var name="label">Edit</xar:var>
                         <xar:set name="icon">
@@ -81,7 +81,7 @@
                         <xar:var name="label">Up</xar:var>
                         <xar:if condition="$index gt 1 and $numprops gt 1">
                             <xar:set name="link">
-                                xarController::URL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
+                                xarController::URL('dynamicdata', 'admin', 'orderprops', ['objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid])
                             </xar:set>
                             <xar:data-output type="urlicon" link="$link" icon="$icon" label="$label" title="$title"/>
                         <xar:else />
@@ -96,7 +96,7 @@
                         <xar:var name="label">Down</xar:var>
                         <xar:if condition="$index lt $numprops and $numprops ne 1">
                             <xar:set name="link">
-                                xarController::URL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
+                                xarController::URL('dynamicdata', 'admin', 'orderprops', ['objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid])
                             </xar:set>
                             <xar:data-output type="urlicon" link="$link" icon="$icon" label="$label" title="$title"/>
                         <xar:else />
@@ -105,14 +105,14 @@
                         &#160;
                     <xar:else />
                         <xar:set name="link">
-                            xarController::URL('dynamicdata', 'admin', 'showpropval', array('itemid' => $field['id']))
+                            xarController::URL('dynamicdata', 'admin', 'showpropval', ['itemid' => $field['id']])
                         </xar:set>
                         <a href="#$link#">
                             Edit Configuration
                         </a>
                         &#160;
                         <xar:set name="link">
-                            xarController::URL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid))
+                            xarController::URL('dynamicdata', 'admin', 'orderprops', ['objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'up', 'authid' => $authid])
                         </xar:set>
                         <xar:if condition="$index gt 1 and $numprops gt 1">
                             <a href="#$link#">
@@ -121,7 +121,7 @@
                             &#160;
                         </xar:if>
                         <xar:set name="link">
-                            xarController::URL('dynamicdata', 'admin', 'orderprops', array('objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid))
+                            xarController::URL('dynamicdata', 'admin', 'orderprops', ['objectid' => $objectid, 'itemid' => $field['id'], 'direction' => 'down', 'authid' => $authid])
                         </xar:set>
                         <xar:if condition="$index lt $numprops and $numprops ne 1">
                             <a href="#$link#">

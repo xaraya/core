@@ -47,7 +47,8 @@
                     The Dynamic Data module lets you create and manage custom objects ("dataobjects") on a Xaraya site. Dataobjects hold certain types of information and interact with Xaraya. You can use them to replace or extend objects Xaraya already has available (such as users, privileges, blocks etc.), or to create completely new objects for your site, representing e.g. customers, surveys, publications etc., according to your specific needs. The DynamicData module is a core module within Xaraya and cannot be removed.
                 </p>
                 <p>
-                    Detail information on this module can be found <a href="#xarController::URL('modules','admin','modinfo',array('id' => xarMod::getRegid('dynamicdata')))#">here</a>.
+                    <xar:set name="regid">xarMod::getRegid('dynamicdata')</xar:set>
+                    Detail information on this module can be found <a href="#xarController::URL('modules','admin','modinfo',['id' => $regid])#">here</a>.
                 </p>
     
                 <h3>Concepts</h3>
@@ -333,8 +334,8 @@
                         <td valign="middle">
                             <xar:set name="options">
                                 array(
-                                    array('id' => 'red', 'name' => 'Dark red'),
-                                    array('id' => 'green', 'name' => 'Light green'),
+                                    ['id' => 'red', 'name' => 'Dark red'],
+                                    ['id' => 'green', 'name' => 'Light green'],
                                 )
                             </xar:set>
                             <xar:data-input type="radio" options="$options" value="green" layout="vertical"/>
@@ -360,8 +361,8 @@
                         <td valign="middle">
                             <xar:set name="options">
                                 array(
-                                    array('id' => 'red', 'name' => 'Dark red'),
-                                    array('id' => 'green', 'name' => 'Light green'),
+                                    ['id' => 'red', 'name' => 'Dark red'],
+                                    ['id' => 'green', 'name' => 'Light green'],
                                 )
                             </xar:set>
                             <xar:data-input type="checkboxlist" options="$options" value="green" layout="vertical"/>

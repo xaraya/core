@@ -34,7 +34,7 @@
                 <xar:else/>
                     var/cache/api/openapi.json
                 </xar:if>
-                    &#8635; <a href="#xarController::URL('dynamicdata','admin','test_apis',array('create_rst'=>1))#">re-build</a>
+                    &#8635; <a href="#xarController::URL('dynamicdata','admin','test_apis',['create_rst'=>1])#">re-build</a>
                 </div>
                 <div class="xar-col">
                     The current openapi.json document for this API
@@ -76,7 +76,7 @@
                 <xar:else/>
                     var/cache/api/schema.graphql
                 </xar:if>
-                    &#8635; <a href="#xarController::URL('dynamicdata','admin','test_apis',array('create_gql'=>1))#">re-build</a>
+                    &#8635; <a href="#xarController::URL('dynamicdata','admin','test_apis',['create_gql'=>1])#">re-build</a>
                 </div>
                 <div class="xar-col">
                     The current schema.graphql document for this API

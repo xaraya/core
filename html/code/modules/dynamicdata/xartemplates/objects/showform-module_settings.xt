@@ -34,7 +34,7 @@
             <div class="xar-col">
                 <xar:data-input id="use_module_alias" property="$properties['use_module_alias']" onchange="toggle(\'aliaslink\',\'aliascheckbox\')"/>&#160;
                 <xar:set name="modname">xarMod::getName()</xar:set>
-                <a href="#xarController::URL('modules','admin','aliases',array('name' => $modname))#">Manage Aliases</a>
+                <a href="#xarController::URL('modules','admin','aliases',['name' => $modname])#">Manage Aliases</a>
             </div>
         </div>
     </xar:if>

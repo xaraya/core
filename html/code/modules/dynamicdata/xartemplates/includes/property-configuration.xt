@@ -12,7 +12,7 @@
             <fieldset>
                 <legend>Property summary</legend>
                 <xar:set name="fieldlist">
-                    array('name','label','objectid','type')
+                    ['name','label','objectid','type']
                 </xar:set>
                 <xar:data-display object="$object" fieldlist="$fieldlist"/>
             </fieldset>

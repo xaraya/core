@@ -48,7 +48,7 @@
         <p>[ 
             <xar:if condition="empty($details)">
                 <xar:if condition="!empty($objectid)">
-                    <a href="#xarController::URL('dynamicdata','admin','relations',array('objectid' => $objectid))#">Show Object Links</a>
+                    <a href="#xarController::URL('dynamicdata','admin','relations',['objectid' => $objectid])#">Show Object Links</a>
                 <xar:else />
                     <a href="#$detailslink#">Show Static Properties and Relations</a>
                 </xar:if>

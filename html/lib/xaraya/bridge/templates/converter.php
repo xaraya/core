@@ -293,7 +293,8 @@ class BlocklayoutToTwigConverter extends TwigConverter
     {
         $pattern = '~<xar:set name="([^"]+)">([^<]+)</xar:set>~i';
         $this->content = preg_replace_callback($pattern, function ($matches) {
-            return '{% set ' . $matches[1] . ' = ' . $this->replaceExpression($matches[2]) . ' %}';
+            $expression = trim($matches[2], '#');
+            return '{% set ' . $matches[1] . ' = ' . $this->replaceExpression($expression) . ' %}';
         }, $this->content);
 
         // @todo support scope="..."
@@ -412,14 +413,13 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
     public function parseAttributes($attributes)
     {
-        // @todo handle attributes with spaces
-        $pieces = explode(' ', $attributes);
         $attrib = [];
-        foreach ($pieces as $piece) {
-            [$name, $value] = explode('=', $piece);
-            $name = trim($name);
-            $value = trim($value);
-            $value = trim($value, '"');
+        $matches = [];
+        preg_match_all('~(\w+)\s*=\s*"([^"]+)"~', $attributes, $matches, PREG_SET_ORDER);
+        foreach ($matches as $match) {
+            $name = $match[1];
+            $value = $match[2];
+            $value = trim($value, '#');
             $attrib[$name] = $value;
         }
         return $attrib;
@@ -444,7 +444,8 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $condition = $this->replaceFunctions($condition);
         $condition = $this->replaceConstants($condition);
         $condition = $this->replaceVariable($condition);
-        return str_replace([' eq ', ' gt ', ' AND ', ' OR ', '!', '^'], [' == ', ' > ', ' and ', ' or ', 'not ', ':'], $condition);
+        $condition = str_replace(['!', '^'], ['not ', ':'], $condition);
+        return str_replace([' eq ', ' ne ', ' gt ', ' lt ', ' ge ', ' le ', ' AND ', ' OR '], [' == ', ' != ', ' > ', ' < ', ' >= ', ' <= ', ' and ', ' or '], $condition);
     }
 
     public function replaceExpression($expression)
@@ -459,20 +460,20 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
     public function replaceArrays($expression)
     {
-        if (!str_contains($expression, ' => ')) {
+        if (!str_contains($expression, '=>')) {
             return $expression;
         }
         // not matching correctly if last item is array
         $pattern = '~\[([^]]+)\]~i';
         $fixme = false;
         $expression = preg_replace_callback($pattern, function ($matches) use (&$fixme) {
-            if (!str_contains($matches[1], ' => ')) {
+            if (!str_contains($matches[1], '=>')) {
                 return $matches[0];
             }
             $pieces = explode(',', $matches[1]);
             $parts = [];
             foreach ($pieces as $piece) {
-                [$name, $value] = explode(' => ', $piece);
+                [$name, $value] = explode('=>', $piece);
                 $name = trim($name);
                 $value = trim($value);
                 // we get into trouble using : here if we call replaceVariable() later - use ^ as placeholder

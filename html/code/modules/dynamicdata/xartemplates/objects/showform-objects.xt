@@ -23,7 +23,7 @@
             Object Query
         </div>
         <div class="xar-form-input-wrapper">
-            <xar:set name="thisobject">DataObjectFactory::getObject(array('name' => $properties['name']->value))</xar:set>
+            <xar:set name="thisobject">DataObjectFactory::getObject(['name' => $properties['name']->value])</xar:set>
 	    <xar:if condition="!empty($thisobject)">
                 #$thisobject->dataquery->qecho()#
             </xar:if>

@@ -29,7 +29,8 @@
                         <xar:set name="dummy">$options[] = ['id' => '', 'name' => '']</xar:set>
                         <xar:foreach in="$values" key="$option" value="$dummy">
                             <xar:if condition="$proptype['name'] eq 'username'">
-                                <xar:set name="dummy">$options[] = ['id' => $option, 'name' => xarUser::getVar('uname', $option)]</xar:set>
+                                <xar:set name="option">xarUser::getVar('uname', $option)</xar:set>
+                                <xar:set name="dummy">$options[] = ['id' => $option, 'name' => $option]</xar:set>
                             <xar:else />
                                 <xar:set name="dummy">$options[] = ['id' => $option, 'name' => $option]</xar:set>
                             </xar:if>

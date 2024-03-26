@@ -49,7 +49,7 @@
             <div id="parents-page-#$tabid#" style="display: none">
                 <xar:if condition="!empty($link.list:itemids)">
                     <!-- you can specify the layout and linkfield here or in the object configuration -->
-                    <xar:set name="args">array('linktype' => 'object', 'newlink' => '')</xar:set>
+                    <xar:set name="args">['linktype' => 'object', 'newlink' => '']</xar:set>
                     #$link.list:showView($args)#
                 </xar:if>
             </div>
@@ -85,7 +85,7 @@
             <div id="linkedfrom-page-#$tabid#" style="display: none">
                 <xar:if condition="!empty($link.list:itemids)">
                     <!-- you can specify the layout and linkfield here or in the object configuration -->
-                    <xar:set name="args">array('linktype' => 'object', 'newlink' => '')</xar:set>
+                    <xar:set name="args">['linktype' => 'object', 'newlink' => '']</xar:set>
                     #$link.list:showView($args)#
                 </xar:if>
             </div>
@@ -132,7 +132,7 @@
             <div id="linkedto-page-#$tabid#" style="display: none">
                 <xar:if condition="!empty($link.list:itemids)">
                     <!-- you can specify the layout and linkfield here or in the object configuration -->
-                    <xar:set name="args">array('linktype' => 'object', 'newlink' => '')</xar:set>
+                    <xar:set name="args">['linktype' => 'object', 'newlink' => '']</xar:set>
                     #$link.list:showView($args)#
                 </xar:if>
             </div>
@@ -173,12 +173,12 @@
                 <xar:set name="fromvalue">#$object:properties.$fromprop:value#</xar:set>
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:if condition="!empty($fromvalue) and is_numeric($fromvalue)">
-                    <xar:set name="newlink">xarServer::getObjectURL($link['list']->name, 'create', array('values['.$toprop.']' => $fromvalue))</xar:set>
+                    <xar:set name="newlink">xarServer::getObjectURL($link['list']->name, 'create', ['values['.$toprop.']' => $fromvalue])</xar:set>
                 </xar:if>
                 -->
                 <xar:if condition="!empty($link.list:itemids)">
                     <!-- you can specify the layout and linkfield here or in the object configuration -->
-                    <xar:set name="args">array('linktype' => 'object', 'newlink' => $newlink)</xar:set>
+                    <xar:set name="args">['linktype' => 'object', 'newlink' => $newlink]</xar:set>
                     #$link.list:showView($args)#
                 <xar:elseif condition="!empty($newlink)"/>
                     <div style="text-align: right;">
