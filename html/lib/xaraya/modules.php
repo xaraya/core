@@ -745,6 +745,10 @@ class xarMod extends xarObject implements IxarMod
             // Return the cached module function output
             return xarModuleCache::getCached($cacheKey);
         }
+        if (!isset($context)) {
+            //$context = ContextFactory::fromGlobals(__METHOD__);
+            $context = new Context(['source' => __METHOD__]);
+        }
         $tplData = self::callFunc($modName, $modType, $funcName, $args, '', $context);
         // If we have a string of data, we assume someone else did xarTpl* for us
         if (!is_array($tplData)) {
@@ -789,6 +793,10 @@ class xarMod extends xarObject implements IxarMod
     static function apiFunc($modName, $modType = 'user', $funcName = 'main', $args = [], $context = null)
     {
         if (empty($modName)) throw new EmptyParameterException('modName');
+        if (!isset($context)) {
+            //$context = ContextFactory::fromGlobals(__METHOD__);
+            $context = new Context(['source' => __METHOD__]);
+        }
         return self::callfunc($modName, $modType, $funcName, $args, 'api', $context);
     }
 

@@ -67,7 +67,7 @@ class SessionContext implements ContextInterface, SessionInterface
     public function initialize()
     {
         if (!isset($this->context)) {
-            $this->context = new Context();
+            $this->context = new Context(['source' => __CLASS__]);
         }
         self::$storage ??= new self::$storageClass($this->args);
         return true;

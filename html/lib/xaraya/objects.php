@@ -15,6 +15,7 @@
 
 sys::import("xaraya.context.context");
 use Xaraya\Context\Context;
+//use Xaraya\Context\ContextFactory;
 
 /**
  * Interface declaration for xarDDObject
@@ -61,6 +62,18 @@ class xarDDObject extends xarObject implements IxarDDObject
         // Pass the object name and method to the userinterface class
         $args['object'] = $objectName;
         $args['method'] = $methodName;
+        if (!isset($context)) {
+            //$context = ContextFactory::fromGlobals(__METHOD__);
+            $context = new Context(['source' => __METHOD__]);
+        }
+
+        // @todo refine configuration elsewhere later
+        $twig_support = xarModVars::get('dynamicdata', 'twig_support');
+        if (!empty($twig_support)) {
+            if (empty($context['twig'])) {
+                $context['twig'] = true;
+            }
+        }
 
         sys::import('modules.dynamicdata.class.userinterface');
 
@@ -85,6 +98,10 @@ class xarDDObject extends xarObject implements IxarDDObject
 
         // Pass the object name to the object class
         $args['name'] = $objectName;
+        if (!isset($context)) {
+            //$context = ContextFactory::fromGlobals(__METHOD__);
+            $context = new Context(['source' => __METHOD__]);
+        }
 
         sys::import('modules.dynamicdata.class.objects.factory');
 
@@ -173,6 +190,10 @@ class xarDDObject extends xarObject implements IxarDDObject
         // Pass the object name and method to the simpleinterface class
         $args['name'] = $objectName;
         $args['method'] = $methodName;
+        if (!isset($context)) {
+            //$context = ContextFactory::fromGlobals(__METHOD__);
+            $context = new Context(['source' => __METHOD__]);
+        }
 
         sys::import('modules.dynamicdata.class.simpleinterface');
 

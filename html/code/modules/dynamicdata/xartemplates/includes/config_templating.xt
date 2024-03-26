@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <div class="xar-row">
+        <div class="xar-col" style="padding-bottom: 10px;">
+            <xar:var name="label">This lets you try out the Twig template engine for DD objects</xar:var>
+            <label for="caching" title="#$label#" class="xar-form-label">
+                Enable Twig template engine for DD objects <span style="color: red">(experimental)</span>
+            </label>
+        </div>
+        <div class="xar-col">
+            <xar:set name="value">xarModVars::get('dynamicdata', 'twig_support')</xar:set>
+            <xar:data-input type="checkbox" name="twig_support" value="$value"/>
+            <span style="color: red">This requires converting the DD object templates you want to use first, see <a href="https://github.com/xaraya/core/tree/com.xaraya.core.bermuda/html/lib/xaraya/bridge#blocklayout-converter">Blocklayout Converter</a></span>
+        </div>
+    </div>
+</xar:template>

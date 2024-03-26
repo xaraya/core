@@ -31,6 +31,12 @@
                         </legend>
                         <xar:template file="config_caching"/>
                     </fieldset>
+                    <fieldset>
+                        <legend>
+                            Templating
+                        </legend>
+                        <xar:template file="config_templating"/>
+                    </fieldset>
                     <!--
                     <fieldset>
                         <legend>                    
