@@ -338,6 +338,7 @@ class StatsHandler extends DefaultHandler
             $this->object->template,
             'ui_stats',
             ['object' => $this->object,
+             'context' => $this->getContext(),
              'stats'  => $stats,
              'result' => $result,
              'tpltitle' => $this->tpltitle]
@@ -416,6 +417,7 @@ class StatsHandler extends DefaultHandler
             $this->object->template,
             'ui_report',
             ['object' => $this->object,
+             'context' => $this->getContext(),
              'report' => $report,
              'result' => $result,
              'tpltitle' => $this->tpltitle]

@@ -244,6 +244,7 @@ class SearchHandler extends DefaultHandler
             $this->object->template,
             'ui_search',
             ['object' => $this->object,
+             'context' => $this->getContext(),
              'search' => $search,
              'result' => $result,
              'tpltitle' => $this->tpltitle]
@@ -411,6 +412,7 @@ class SearchHandler extends DefaultHandler
             $this->object->template,
             'ui_query',
             ['object' => $this->object,
+             'context' => $this->getContext(),
              'query'  => $query,
              'result' => $result,
              'tpltitle' => $this->tpltitle]

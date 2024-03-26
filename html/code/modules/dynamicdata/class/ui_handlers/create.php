@@ -131,6 +131,7 @@ class CreateHandler extends DefaultHandler
             $this->object->template,
             'ui_create',
             ['object'  => $this->object,
+             'context' => $this->getContext(),
              'preview' => $args['preview'],
              'authid'  => xarSec::genAuthKey(),
              'hooks'   => $this->object->hookoutput,

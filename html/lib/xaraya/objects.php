@@ -75,10 +75,11 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param string $methodName specific method to run
      * @param array<string, mixed> $args arguments to pass to the method
      * @param mixed $roleid override the current user or null
+     * @param ?Context<string, mixed> $context optional context for the method call (default = none)
      * @return mixed The output of the method, or false on failure
      * @throws EmptyParameterException
      */
-    static function classMethod($objectName, $methodName = 'showDisplay', $args = array(), $roleid = null)
+    static function classMethod($objectName, $methodName = 'showDisplay', $args = array(), $roleid = null, $context = null)
     {
         if (empty($objectName)) throw new EmptyParameterException('objectName');
 
@@ -90,14 +91,14 @@ class xarDDObject extends xarObject implements IxarDDObject
         switch (strtolower($methodName))
         {
             case 'countitems':
-                $objectlist = DataObjectFactory::getObjectList($args);
+                $objectlist = DataObjectFactory::getObjectList($args, $context);
                 if (!$objectlist->checkAccess('view', null, $roleid)) {
                     return;
                 }
                 return $objectlist->countItems($args);
 
             case 'getitems':
-                $objectlist = DataObjectFactory::getObjectList($args);
+                $objectlist = DataObjectFactory::getObjectList($args, $context);
                 if (!$objectlist->checkAccess('view', null, $roleid)) {
                     return;
                 }
@@ -105,7 +106,7 @@ class xarDDObject extends xarObject implements IxarDDObject
 
             case 'showview':
             case 'getviewvalues':
-                $objectlist = DataObjectFactory::getObjectList($args);
+                $objectlist = DataObjectFactory::getObjectList($args, $context);
                 if (!$objectlist->checkAccess('view', null, $roleid)) {
                     return;
                 }
@@ -115,7 +116,7 @@ class xarDDObject extends xarObject implements IxarDDObject
 
             // CHECKME: what do we want to return here ?
             case 'getitem':
-                $object = DataObjectFactory::getObject($args);
+                $object = DataObjectFactory::getObject($args, $context);
                 if (!$object->checkAccess('display', $args['itemid'], $roleid)) {
                     return;
                 }
@@ -129,7 +130,7 @@ class xarDDObject extends xarObject implements IxarDDObject
             case 'getdisplayvalues':
             case 'showform':
             case 'showdisplay':
-                $object = DataObjectFactory::getObject($args);
+                $object = DataObjectFactory::getObject($args, $context);
                 if (!$object->checkAccess('display', $args['itemid'], $roleid)) {
                     return;
                 }
@@ -143,7 +144,7 @@ class xarDDObject extends xarObject implements IxarDDObject
             case 'updateitem':
             case 'deleteitem':
             default:
-                $object = DataObjectFactory::getObject($args);
+                $object = DataObjectFactory::getObject($args, $context);
                 if (!$object->checkAccess('delete', $args['itemid'], $roleid)) {
                     return;
                 }
@@ -161,10 +162,11 @@ class xarDDObject extends xarObject implements IxarDDObject
      * @param string $objectName registered name of object
      * @param string $methodName specific method to run
      * @param array<string, mixed> $args arguments to pass to the method
+     * @param ?Context<string, mixed> $context optional context for the method call (default = none)
      * @return mixed The output of the method, or false on failure
      * @throws EmptyParameterException
      */
-    static function simpleMethod($objectName, $methodName = 'showDisplay', $args = array())
+    static function simpleMethod($objectName, $methodName = 'showDisplay', $args = array(), $context = null)
     {
         if (empty($objectName)) throw new EmptyParameterException('objectName');
 
@@ -176,7 +178,7 @@ class xarDDObject extends xarObject implements IxarDDObject
 
         $interface = new SimpleObjectInterface($args);
 
-        return $interface->handle($args);
+        return $interface->handle($args, $context);
     }
 
     /**

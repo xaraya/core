@@ -303,6 +303,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
+        $args['context'] = $this->getContext();
         return xarTpl::object($args['tplmodule'], $args['template'], 'showform', $args);
     }
 
@@ -366,6 +367,7 @@ class DataObject extends DataObjectMaster implements iDataObject
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
+        $args['context'] = $this->getContext();
         return xarTpl::object($args['tplmodule'], $args['template'], 'showdisplay', $args);
     }
 

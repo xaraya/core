@@ -155,6 +155,7 @@ class ViewHandler extends DefaultHandler
             $this->object->template,
             'ui_view',
             ['object'   => $this->object,
+             'context'  => $this->getContext(),
              'tpltitle' => $this->tpltitle]
         );
 
