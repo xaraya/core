@@ -354,7 +354,6 @@ function xarDBDropIndex($tableName, $index, $databaseType = NULL)
         case 'postgres':
         case 'oci8':
         case 'oci8po':
-        case 'sqlite':
         case 'sqlite3':
         case 'pdosqlite':
             $sql = 'DROP INDEX '.$index['name'];
@@ -417,14 +416,21 @@ class xarXMLInstaller extends xarObject
 			case 'pdosqlite':
 			case 'sqlite3':
 				$dbType = 'sqlite3';
+				// Data types are the same in sqlite3 and pdosqlite
+				sys::import('Creole.drivers.sqlite.SQLiteTypes');
+//				$typemap = SQLiteTypes::$typeMap;
 			break;
 			case 'mysqli':
 			case 'pdomysqli':
 				$dbType = 'mysqli';
+				sys::import('Creole.drivers.mysql.MySQLTypes');
+//				$typemap = MySQLTypes::$typeMap;
 			break;
 			case 'pgsql':
 			case 'pdopgsql':
 				$dbType = 'pgsql';
+				sys::import('Creole.drivers.pgsql.PgSQLTypes');
+//				$typemap = PgSQLTypes::$typeMap;
 			break;
 			default:
             $dbType = xarDB::getType();
@@ -444,6 +450,20 @@ class xarXMLInstaller extends xarObject
         return $xslProc->transform($xmlFile);
     }
     
+		// For now we'll use Creoles list of types
+        // TODO: Extend or change as more database types are added
+        // TODO: Move the code to tableddl or...?
+        // TODO: Do we still need to support both tabledll andf datadict?
+        //       I don't see an inherent advantage/disadvantage either way, and the decision
+        //       to use tabledll for the xsl stuff was one of convenience at the time.
+    public static function getNativeType($creoleType)
+    {
+        sys::import('creole.CreoleTypes');
+        $code = (int)CreoleTypes::getCreoleCode(strtoupper($creoleType));
+        if (null == $code) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
+        if (null == $type = CreoleTypes::$creoleTypeMap[$code]) die(xarML("Unknown Creole type: '#(1)'", $creoleType));
+        return $type;
+    }
     static public function createTable($tablefile, $module)
     {
         if (empty($module))
@@ -456,9 +476,12 @@ class xarXMLInstaller extends xarObject
             $msg = xarML('Could not find the file #(1) to create tables from', $xmlfile);
             throw new BadParameterException($msg);
         }
+//        $code = self::getNativeType('Integer');
+        
         $sqlCode = self::transform($xmlfile, 'create');
         $queries = explode(';',$sqlCode);
         array_pop($queries);
+
         $dbconn = xarDB::getConn();
         foreach ($queries as $q) {
             xarLog::message('Executing SQL: ' . $q, xarLog::LEVEL_INFO);
