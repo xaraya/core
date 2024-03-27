@@ -192,18 +192,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $this->removeHeader();
             $this->removeFooter();
         }
-        $this->replaceBlockTag();
-        $this->replaceModuleTag();
-        $this->replaceTemplateTag();
-        $this->replaceIfTag();
-        $this->replaceForEachTag();
-        $this->replaceStyleTag();
-        $this->replaceImageTag();
-        $this->replaceButtonTag();
-        $this->replaceSetTag();
-        $this->replaceVarTag();
-        $this->replaceCommentTag();
-        $this->replaceSecurityTag();
+        $this->replaceBlocklayoutTags();
         $this->replaceDynamicDataTags();
         $this->replaceWorkflowTags();
         if (! $this->isPageTemplate()) {
@@ -297,6 +286,26 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $pattern = '~</xar:blocklayout>\s*$~i';
         $replace = '';
         $this->content = preg_replace($pattern, $replace, $this->content);
+    }
+
+    public function replaceBlocklayoutTags()
+    {
+        $this->replaceBlockTag();
+        $this->replaceModuleTag();
+        $this->replaceTemplateTag();
+        $this->replaceIfTag();
+        $this->replaceForEachTag();
+        $this->replaceStyleTag();
+        $this->replaceImageTag();
+        $this->replaceButtonTag();
+        $this->replaceSetTag();
+        $this->replaceVarTag();
+        $this->replaceCommentTag();
+        $this->replaceSecurityTag();
+        $this->replaceMlTag();
+        $this->replaceLoopTag();
+        $this->replaceJavascriptTag();
+        $this->replacePagerTag();
     }
 
     public function replaceModuleTag()
@@ -461,6 +470,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
      * <xar:foreach in="$..." key="$..." value="$...">
      * <xar:foreach in="$..." key="$...">
      * <xar:continue/> - @todo there is no break or continue in Twig?
+     * <xar:break /> - @todo there is no break or continue in Twig?
      * </xar:foreach>
      */
     public function replaceForEachTag()
@@ -494,6 +504,25 @@ class BlocklayoutToTwigConverter extends TwigConverter
      */
     public function replaceSetTag()
     {
+        /**
+        <xar:set name="checked">
+            <xar:var scope="module" module="themes" name="var_dump"/>
+        </xar:set>
+         */
+
+        $pattern = '~<xar:var ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            $attrib = $this->parseAttributes($matches[1]);
+            if (empty($attrib['name'])) {
+                throw new Exception('Missing name for var tag: ' . $matches[0]);
+            }
+            // @todo not sure how this is supposed to work
+            if (empty($attrib['scope']) || $this->replaceVariable($attrib['scope']) == 'local') {
+                return '{{ ' . $this->replaceVariable($attrib['name']) . ' }}';
+            }
+            return '{{ xar_var(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
         $pattern = '~<xar:set name="([^"]+)">([^<]+)</xar:set>~i';
         $this->content = preg_replace_callback($pattern, function ($matches) {
             $expression = trim($matches[2], '#');
@@ -518,6 +547,8 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $this->content = preg_replace_callback($pattern, function ($matches) {
             return '{{ ' . $this->replaceVariable($matches[1]) . ' }}';
         }, $this->content);
+
+        // @todo <xar:var name="SiteSlogan" scope="module" module="themes"/> in set context?
 
         // avoid matching &#160; here
         $pattern = '~#([^\d][^#]+)#~i';
@@ -574,8 +605,8 @@ class BlocklayoutToTwigConverter extends TwigConverter
     public function replaceCommentTag()
     {
         // support multi-line comments too
-        $pattern = '~<xar:comment>(.+?)</xar:comment>~is';
-        $replace = '{# $1 #}';
+        $pattern = '~<xar:comment([^>]*)>(.+?)</xar:comment>~is';
+        $replace = '{# $1 $2 #}';
         $this->content = preg_replace($pattern, $replace, $this->content);
 
         $this->content = str_replace(['<!--', '-->'], ['{# <!--', '--> #}'], $this->content);
@@ -603,6 +634,59 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $this->content = preg_replace($pattern, $replace, $this->content);
     }
 
+    public function replaceMlTag()
+    {
+        // @todo <xar:ml></xar:ml>
+        /**
+         <xar:ml>
+            <xar:mlstring>
+                Your account has been locked for #(1) minutes.
+            </xar:mlstring>
+            <xar:mlvar>#$lockouttime#</xar:mlvar>
+        </xar:ml>
+         */
+    }
+
+    public function replaceLoopTag()
+    {
+        // @todo <xar:loop name="$errors" key="$ix">
+    }
+
+    public function replaceForTag()
+    {
+        // @todo <xar:for start="$j=0" test="$j lt count($column_titles)" iter="$j++">
+    }
+
+    public function replaceJavascriptTag()
+    {
+        // <xar:javascript scope="theme" filename="checkall.js" position="head"/>
+        $pattern = '~<xar:javascript ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_javascript(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        // <xar:place-javascript position="body"/>
+        $pattern = '~<xar:place-javascript([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_place_javascript(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        // <xar:place-css />
+        $pattern = '~<xar:place-css([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_place_css(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+    }
+
+    public function replacePagerTag()
+    {
+        // <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
+        $pattern = '~<xar:pager (.+?)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_pager(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+    }
+
     /**
      * Replace dynamicdata tags
      * <xar:data-view object="$object" newlink=""/>
@@ -623,14 +707,56 @@ class BlocklayoutToTwigConverter extends TwigConverter
             return '{{ xar_data_display(' . $this->replaceAttributes($matches[1]) . ') }}';
         }, $this->content);
 
-        $pattern = '~<xar:data-label ([^>]+)\s*/>~i';
+        $pattern = '~<xar:data-form ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_data_form(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        $pattern = '~<xar:data-filterform ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_data_filterform(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        // support multi-line data-label too
+        $pattern = '~<xar:data-label (.+?)\s*/>~is';
         $this->content = preg_replace_callback($pattern, function ($matches) {
             return '{{ xar_data_label(' . $this->replaceAttributes($matches[1]) . ') }}';
         }, $this->content);
 
-        $pattern = '~<xar:data-output ([^>]+)\s*/>~i';
+        // support multi-line data-output too
+        $pattern = '~<xar:data-output (.+?)\s*/>~is';
         $this->content = preg_replace_callback($pattern, function ($matches) {
             return '{{ xar_data_output(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        // support multi-line data-input too
+        $pattern = '~<xar:data-input (.+?)\s*/>~is';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_data_input(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        $pattern = '~<xar:data-filter ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_data_filter(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        $pattern = '~<xar:data-getitems ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            $attrib = $this->parseAttributes($matches[1]);
+            $properties = $this->replaceVariable($attrib['properties']);
+            $values = $this->replaceVariable($attrib['values']);
+            // @todo not sure this will help unless we change template too
+            return '{% set tmp_dd_getitems = xar_data_getitems(' . $this->buildTwigArray($attrib) . ') %}' .
+                '{% set ' . $properties . ' = tmp_dd_getitems.0 %}' .
+                '{% set ' . $values . ' = tmp_dd_getitems.1 %}';
+        }, $this->content);
+
+        $pattern = '~<xar:data-getitem ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            $attrib = $this->parseAttributes($matches[1]);
+            $properties = $this->replaceVariable($attrib['properties']);
+            // @todo not sure this will help unless we change template too
+            return '{% set ' . $properties . ' = xar_data_getitem(' . $this->buildTwigArray($attrib) . ') %}';
         }, $this->content);
     }
 
@@ -707,7 +833,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $pieces = explode(',', $matches[1]);
             $parts = [];
             foreach ($pieces as $piece) {
-                [$name, $value] = explode('=>', $piece);
+                [$name, $value] = explode('=>', $piece . '=>');
                 $name = trim($name);
                 $value = trim($value);
                 // we get into trouble using : here if we call replaceVariable() later - use ^ as placeholder

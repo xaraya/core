@@ -122,7 +122,7 @@
                 </label>
             </div>
             <div class="xar-col">
-            <xar:set name="value" catch="false" >xarConfigVars::get(null,'Site.Session.CookieTimeout')</xar:set>
+            <xar:set name="value" catch="false">xarConfigVars::get(null,'Site.Session.CookieTimeout')</xar:set>
                 <input type="text" id="cookietimeout" name="cookietimeout" value="#$value#" maxlength="40" class="xar-form-textmedium"/>
                 <span>
                 </span>

@@ -42,11 +42,10 @@ function twig_convert_module($module, $baseDir)
     $converter->validate($twig);
 }
 
-$module = 'dynamicdata';
-//$module = 'base';
-//$module = 'themes';
-//$module = 'workflow';
-twig_convert_module($module, $baseDir);
+$todo = ['dynamicdata', 'base', 'themes', 'workflow'];
+foreach ($todo as $module) {
+    twig_convert_module($module, $baseDir);
+}
 
 function twig_convert_theme($theme, $baseDir, $subDir = '')
 {
@@ -68,4 +67,4 @@ function twig_convert_theme($theme, $baseDir, $subDir = '')
 
 $theme = 'default';
 $subDir = '';  // 'pages';
-//twig_convert_theme($theme, $baseDir, $subDir);
+twig_convert_theme($theme, $baseDir, $subDir);

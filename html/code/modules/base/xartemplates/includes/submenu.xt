@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <xar:if condition="!empty($submenu)">
         <ul class="xar-menu-subitem">
-            <xar:foreach in="$submenu" value="$sublinks" key="$sublink">
+            <xar:foreach in="$submenu" key="$sublink" value="$sublinks">
                 <xar:if condition="$sublinks['funcactive']">
                     <li class="xar-menu-subitem-current">
                         <a name="activesubitem" title="#$sublinks['title']#">

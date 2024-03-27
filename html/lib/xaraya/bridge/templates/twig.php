@@ -49,12 +49,16 @@ use Xaraya\Context\Context;
 use DataObjectFactory;
 use DataPropertyMaster;
 use xarBlock;
+use xarConfigVars;
 use xarConst;
+use xarController;
 use xarLocale;
 use xarMLS;
 use xarMod;
+use xarModVars;
 use xarSecurity;
 use xarServer;
+use xarSession;
 use xarTpl;
 use xarUser;
 use xarVar;
@@ -301,6 +305,65 @@ class TwigBridge implements ContextInterface
         });
         $this->twig->addFunction($block);
 
+        /**
+        <xar:set name="checked">
+            <xar:var scope="module" module="themes" name="var_dump"/>
+        </xar:set>
+         */
+        // @todo use context where relevant
+        $var = new TwigFunction('xar_var', function ($args = []) use ($context) {
+            $args['scope'] ??= 'local';
+            switch ($args['scope']) {
+                case 'local':
+                    // @todo not sure how this is supposed to work
+                    $result = $args['name'];
+                    break;
+                case 'module':
+                    $result = xarModVars::get($args['module'], $args['name']);
+                    break;
+                case 'user':
+                    $result = xarUser::getVar($args['name'], $args['user'] ?? null);
+                    break;
+                case 'config':
+                    $result = xarConfigVars::get(null, $args['name']);
+                    break;
+                case 'session':
+                    $result = xarSession::getVar($args['name']);
+                    break;
+                case 'request':
+                    $result = xarController::getVar($args['name']);
+                    break;
+                default:
+                    $result = 'Unknown scope ' . $args['scope'];
+            }
+            if (!empty($args['prep'])) {
+                return xarVar::prepForDisplay($result);
+            }
+            return $result;
+        });
+        $this->twig->addFunction($var);
+
+        // <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
+        $pager = new TwigFunction('xar_pager', function ($args = []) use ($context) {
+            return xarMod::apiFunc('base', 'user', 'pager', $args, $context);
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($pager);
+
+        // <xar:javascript scope="theme" filename="checkall.js" position="head"/>
+        $javascript = new TwigFunction('xar_javascript', function ($args = []) use ($context) {
+            xarMod::apiFunc('themes', 'user', 'registerjs', $args, $context);
+            return '';
+        });
+        $this->twig->addFunction($javascript);
+
+        // <xar:place-javascript position="body"/>
+        $place_js = new TwigFunction('xar_place_javascript', function ($args = []) use ($context) {
+            $position = $args['position'];
+            $type = $args['type'] ?? '';
+            return trim(xarMod::apiFunc('themes', 'user', 'renderjs', ['position' => $position, 'type' => $type]), $context); 
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($place_js);
+
         // <xar:style scope="module" module="base" file="tabs"/>
         // @todo replace array with fixed order of params
         $style = new TwigFunction('xar_style', function ($args = []) use ($context) {
@@ -308,6 +371,12 @@ class TwigBridge implements ContextInterface
             return '';
         });
         $this->twig->addFunction($style);
+
+        // <xar:place-css />
+        $place_css = new TwigFunction('xar_place_css', function ($args = []) use ($context) {
+            return xarMod::apiFunc('themes', 'user', 'deliver', ['method' => 'render', 'base' => 'theme']);
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($place_css);
 
         // <xar:img scope="theme" file="icons/info.png" class="xar-icon" alt="info"/>
         // @todo replace array with fixed order of params?
@@ -400,6 +469,56 @@ class TwigBridge implements ContextInterface
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($datadisplay);
 
+        $dataform = new TwigFunction('xar_data_form', function ($args = []) use ($context) {
+            if (!empty($args['object'])) {
+                // Use the object attribute
+                $object = $args['object'];
+                unset($args['object']);
+                if (is_string($object)) {
+                    $objectName = $object;
+                    $object = DataObjectFactory::getObject(['name' => $objectName], $context);
+                } else {
+                    // @todo do we always overwrite the context or not?
+                    if (empty($object->getContext())) {
+                        $object->setContext($context);
+                    }
+                }
+                return $object->showForm($args);
+            }
+            // No object passed in
+            if (!empty($args['definition'])) {
+                return xarMod::apiFunc('dynamicdata', 'user', 'showform', $args['definition'], $context);
+            }
+            // No direct definition, use the attributes
+            return xarMod::apiFunc('dynamicdata', 'user', 'showform', $args, $context);
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($dataform);
+
+        $datafilterform = new TwigFunction('xar_data_filterform', function ($args = []) use ($context) {
+            if (!empty($args['object'])) {
+                // Use the object attribute
+                $object = $args['object'];
+                unset($args['object']);
+                if (is_string($object)) {
+                    $objectName = $object;
+                    $object = DataObjectFactory::getObject(['name' => $objectName], $context);
+                } else {
+                    // @todo do we always overwrite the context or not?
+                    if (empty($object->getContext())) {
+                        $object->setContext($context);
+                    }
+                }
+                return $object->showFilterForm($args);
+            }
+            // No object passed in
+            if (!empty($args['definition'])) {
+                return xarMod::apiFunc('dynamicdata', 'user', 'showfilterform', $args['definition'], $context);
+            }
+            // No direct definition, use the attributes
+            return xarMod::apiFunc('dynamicdata', 'user', 'showfilterform', $args, $context);
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($datafilterform);
+
         // <xar:data-label property="$properties[$name]"/>
         $datalabel = new TwigFunction('xar_data_label', function ($args = []) use ($context) {
             // If we have an object, throw out its label
@@ -456,6 +575,130 @@ class TwigBridge implements ContextInterface
             return '';
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($dataoutput);
+
+        $datainput = new TwigFunction('xar_data_input', function ($args = []) use ($context) {
+            try {
+                $params = $args;
+                unset($params['hidden']);
+                unset($params['preset']);
+                if (empty($args['property'])) {
+                    // No property, gotta make one
+                    $property = DataPropertyMaster::getProperty($params);
+                    $property->objectref = (object) ['context' => $context];
+                } else {
+                    // We do have a property in the attribute
+                    $property = $args['property'];
+                    unset($params['property']);
+                    if (empty($property->objectref)) {
+                        $property->objectref = (object) ['context' => $context];
+                    }
+                }
+                if (!empty($args['preset']) && !isset($args['value'])) {
+                    return $property->_showPreset($params);
+                }
+                if (!empty($args['hidden'])) {
+                    return $property->showHidden($params);
+                }
+                return $property->showInput($params);
+            } catch (Exception $e) {
+                if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                    return "<pre>".$e->getMessage()."</pre>";
+                }
+                return '';
+            }
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($datainput);
+
+        $datafilter = new TwigFunction('xar_data_filter', function ($args = []) use ($context) {
+            try {
+                $params = $args;
+                unset($params['hidden']);
+                unset($params['preset']);
+                if (empty($args['property'])) {
+                    // No property, gotta make one
+                    $property = DataPropertyMaster::getProperty($params);
+                    $property->objectref = (object) ['context' => $context];
+                } else {
+                    // We do have a property in the attribute
+                    $property = $args['property'];
+                    unset($params['property']);
+                    if (empty($property->objectref)) {
+                        $property->objectref = (object) ['context' => $context];
+                    }
+                }
+                if (!empty($args['hidden'])) {
+                    return $property->showHidden($params);
+                }
+                return $property->showFilter($params);
+            } catch (Exception $e) {
+                if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                    return "<pre>".$e->getMessage()."</pre>";
+                }
+                return '';
+            }
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($datafilter);
+
+        $datagetitems = new TwigFunction('xar_data_getitems', function ($args = []) use ($context) {
+            // take a copy of the arguments if we're passing variables we want to re-use!?
+            $properties = $args['properties'];
+            $values = $args['values'];
+            $params = $args;
+            unset($params['properties']);
+            unset($params['values']);
+            // Use the object attribute
+            if (!empty($args['object'])) {
+                $object = $args['object'];
+                unset($params['object']);
+                // @todo do we always overwrite the context or not?
+                if (empty($object->getContext())) {
+                    $object->setContext($context);
+                }
+                $values = $object->getItems($params);
+                $properties = $object->getProperties();
+                return [$properties, $values];
+            }
+            // This a string. we assume it's an object name
+            if (!empty($args['objectname'])) {
+                $objectName = $args['objectname'];
+                unset($params['objectname']);
+                $object = DataObjectFactory::getObjectList(['name' => $objectName], $context);
+                $values = $object->getItems($params);
+                $properties = $object->getProperties();
+                return [$properties, $values];
+            }
+            [$properties, $values] = xarMod::apiFunc('dynamicdata', 'user', 'getitemsforview', $params, $context);
+            return [$properties, $values];
+        });
+        $this->twig->addFunction($datagetitems);
+
+        $datagetitem = new TwigFunction('xar_data_getitem', function ($args = []) use ($context) {
+            // take a copy of the arguments if we're passing variables we want to re-use!?
+            $properties = $args['properties'];
+            $params = $args;
+            unset($params['properties']);
+            if (!empty($args['object'])) {
+                $object = $args['object'];
+                unset($params['object']);
+                if (is_string($object)) {
+                    $objectName = $object;
+                    $object = DataObjectFactory::getObject(['name' => $objectName], $context);
+                } else {
+                    // @todo do we always overwrite the context or not?
+                    if (empty($object->getContext())) {
+                        $object->setContext($context);
+                    }
+                }
+            } else {
+                $params = array_merge(['getobject' => 1], $params);
+                $object = xarMod::apiFunc('dynamicdata', 'user', 'getitem', $params, $context);
+            }
+            $object->getItem($params);
+            // @todo not sure this will help unless we change template too
+            $properties = $object->getProperties($params);
+            return $properties;
+        });
+        $this->twig->addFunction($datagetitem);
 
         return $this->twig;
     }
