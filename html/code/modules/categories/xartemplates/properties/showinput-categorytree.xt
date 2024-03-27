@@ -17,18 +17,9 @@
         <xar:foreach in="$trees" value="$categories">
             <xar:foreach in="$categories" value="$node">
                 <xar:set name="cid">$node->id</xar:set>
-                <xar:if condition="empty($cid)">
-                    <xar:continue/>
-                </xar:if>
-                
                 <xar:set name="displayindex">$displayindex + 1</xar:set>   
-                <xar:if condition="$displayindex lt $startnum">
-                    <xar:continue />
-                </xar:if>
-                <xar:if condition="$displayindex ge $startnum + $items_per_page">
-                    <xar:break />
-                </xar:if>
-
+                <xar:if condition="empty($cid) or $displayindex lt $startnum or $displayindex ge $startnum + $items_per_page">
+                <xar:else/>
                 <xar:set name="name">$node->name</xar:set>
                 <xar:set name="description">$node->description</xar:set>
                 <xar:set name="child_object">$node->child_object</xar:set>
@@ -92,6 +83,7 @@
                         </xar:if>
                     </td>
                 </tr>
+                </xar:if>
             </xar:foreach>
         </xar:foreach>
     </table>

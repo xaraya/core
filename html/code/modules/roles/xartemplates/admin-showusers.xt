@@ -192,8 +192,7 @@
                     </tr>
                     <xar:foreach in="$values" key="$itemid" value="$fields">
                         <xar:if condition="!isset($users[$itemid])">
-                            <xar:continue />
-                        </xar:if>
+                        <xar:else/>
                         <tr>
                             <xar:foreach in="$properties" key="$name">
                             <xar:if condition="xarController::getVar('order') eq $name">
@@ -260,6 +259,7 @@
                                 </xar:if>
                             </td>
                         </tr>
+                        </xar:if>
                     </xar:foreach>
                     <tfoot>
                     	<tr>

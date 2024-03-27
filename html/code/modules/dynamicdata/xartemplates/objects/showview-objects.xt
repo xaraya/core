@@ -62,8 +62,7 @@
             <xar:set name="item_no">0</xar:set>
             <xar:foreach in="$items" key="$itemid" value="$fields">
                 <xar:if condition="!$issuperadmin AND ($itemid le 3)">
-                    <xar:continue />
-                </xar:if>
+                <xar:else/>
                 <xar:set name="item_no">$item_no+1</xar:set>
                 <xar:set name="rowclass">'xar-norm'</xar:set>
                 <xar:if condition="$item_no % 2 eq 0">
@@ -87,11 +86,9 @@
                             <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
                                 <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
                                     <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
-                                    <xar:if condition="$otype eq 'display'">
-                                        <!-- skip display for dataobjects -->
-                                        <xar:continue/>
-                                    </xar:if>
-                                        <xar:if condition="!empty($option['olink'])">
+                                        <xar:if condition="$otype eq 'display'">
+                                            <!-- skip display for dataobjects -->
+                                        <xar:elseif condition="!empty($option['olink'])"/>
                                             <xar:if condition="!empty($option['oicon'])">
                                                 <xar:set name="imgfile">'icons/' . $option['oicon']</xar:set>
                                                 <a href="#$option['olink']#" title="#$option['otitle']#"><xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$otype"/></a>&#160;
@@ -119,6 +116,7 @@
                         </td>
                     </xar:if>
                 </tr>
+                </xar:if>
             </xar:foreach>
         </table>
 	</div><!--/xar-mod-page-body-->

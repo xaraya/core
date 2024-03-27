@@ -12,8 +12,7 @@
                 <xar:if condition="!empty($aliasesMap)">
                     <xar:foreach in="$aliasesMap" key="$key" value="$value">
                         <xar:if condition="$value ne $modname">
-                            <xar:continue/>
-                        </xar:if>
+                        <xar:else/>
                         <div class="xar-col dummy">
                             <a href="#xarController::URL('modules','admin','aliases',['name' => $value, 'remove' => $key])#">
                                 <xar:var name="imagealt">[remove]</xar:var>
@@ -22,6 +21,7 @@
                             </a>
                             &#160;#$key#
                         </div>
+                        </xar:if>
                     </xar:foreach>
                 <xar:else/>
                     <div class="xar-col dummy">

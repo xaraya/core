@@ -9,8 +9,7 @@
         <xar:foreach in="$properties" key="$name" value="$property">
             <xar:if condition="$property->getDisplayStatus() eq DataPropertyMaster::DD_DISPLAYSTATE_HIDDEN">
                 <xar:data-input property="$properties[$name]" hidden="hidden"/>
-                <xar:continue/>
-            </xar:if>
+            <xar:else/>
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:data-label property="$properties[$name]" for="id"/>
@@ -19,6 +18,7 @@
                     <xar:data-input property="$properties[$name]" style="width: 150px"/>
                 </div>
             </div>
+            </xar:if>
         </xar:foreach>
     <xar:else />
         <!-- You can also specify your own layout here or in a separate template, e.g. if you want to handle individual fields differently for a particular module / itemtype -->

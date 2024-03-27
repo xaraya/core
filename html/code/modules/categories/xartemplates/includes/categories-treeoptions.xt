@@ -4,6 +4,8 @@
     <xar:set name="current_id">0</xar:set>
     <xar:set name="lastindent">0</xar:set>
 
+    <!-- TODO: remove use of xar:continue tags -->
+
     <xar:set name="ismulti">0</xar:set>
     
     <xar:foreach in="$nodes" value="$node">

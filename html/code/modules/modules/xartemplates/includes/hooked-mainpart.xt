@@ -123,7 +123,8 @@
                         
                         <ul id="#$subject_id#_itemtypes">
                             <xar:foreach in="$modinfo['itemtypes']" key="$itemtype" value="$typeinfo">
-                                <xar:if condition="empty($itemtype)"><xar:continue/></xar:if>
+                                <xar:if condition="empty($itemtype)">
+                                <xar:else/>
                                 <xar:set name="type_id">"{$subject_id}_itemtypes_{$itemtype}"</xar:set>
                                 <xar:set name="type_name">"{$subject_name}[itemtypes][{$itemtype}]"</xar:set> 
                                 <li><h4>Itemtype #$itemtype#: #$typeinfo['label']#</h4>
@@ -195,6 +196,7 @@
                                     </xar:if>  
                                 </xar:if>
                                 </li>
+                                </xar:if>
                             </xar:foreach>
                         </ul>
                       

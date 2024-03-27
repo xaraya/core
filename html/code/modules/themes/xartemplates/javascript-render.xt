@@ -5,11 +5,15 @@
     <xar:set name="libs">[]</xar:set>
     <xar:if condition="!empty($javascript) and is_array($javascript)">
         <xar:foreach in="$javascript" value="$positions">
-            <xar:if condition="empty($positions)"><xar:continue/></xar:if>
+            <xar:if condition="empty($positions)">
+                <xar:set name="positions">[]</xar:set>
+            </xar:if>
             <xar:foreach in="$positions" value="$types">
                 <xar:if condition="empty($types)"><xar:contine/></xar:if>
                 <xar:foreach in="$types" value="$scopes">
-                    <xar:if condition="empty($scopes)"><xar:continue/></xar:if>
+                    <xar:if condition="empty($scopes)">
+                        <xar:set name="scopes">[]</xar:set>
+                    </xar:if>
                     <xar:foreach in="$scopes" value="$script">
                         <xar:if condition="$script['type'] eq 'lib'">
                             <script type="text/javascript" src="#$script['url']#"/>

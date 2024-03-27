@@ -71,9 +71,9 @@
                         <xar:foreach in="$object:properties" key="$name" value="$property">
                             <xar:set name="displaystatus">$property->getDisplayStatus()</xar:set>
                             <xar:if condition="!in_array($displaystatus, $filterstatus)">
-                                <xar:continue/>
-                            </xar:if>
+                            <xar:else/>
                             <xar:set name="dummy">array_push($show_props, $name)</xar:set>
+                            </xar:if>
                         </xar:foreach>
                         <!-- show properties in three columns to save screen space -->
                         <xar:set name="size">floor((count($show_props) - 0.5) / 3) + 1</xar:set>

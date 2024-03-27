@@ -51,10 +51,9 @@
                 <xar:if condition="!empty($aliasmap)">
                 	<xar:set name="modname">xarMod::getName()</xar:set>
                     <xar:foreach in="$aliasmap" key="$aliasname" value="$modulename">
-                        <xar:if condition="$modulename != $modname">
-                            <xar:continue/>
+                        <xar:if condition="$modulename eq $modname">
+                            <xar:set name="dummy">1;$options[$aliasname] = $aliasname</xar:set>
                         </xar:if>
-                        <xar:set name="dummy">1;$options[$aliasname] = $aliasname</xar:set>
                     </xar:foreach>
                 </xar:if>
                 <xar:if condition="!empty($options)">

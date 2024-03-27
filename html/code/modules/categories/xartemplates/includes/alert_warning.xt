@@ -4,11 +4,10 @@
         <div class="alert alert-warning" role="alert">
             <xar:if condition="is_array($message_warning)">
                 <xar:foreach in="$message_warning" value="$message">
-                    <xar:if condition="empty($message)">
-                        <xar:continue/>
+                    <xar:if condition="!empty($message)">
+                        #$message#
+                        <br/>
                     </xar:if>
-                    #$message#
-                    <br/>
                 </xar:foreach>
             <xar:else/>
                 #$message_warning#
