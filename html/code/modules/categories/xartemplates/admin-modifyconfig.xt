@@ -30,7 +30,7 @@
                 <legend>
                     Configure Categories Hooks
                 </legend>
-                <xar:set name="url">#xarController::URL('categories','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                <xar:set name="url">#xarController::URL('categories','admin','modifyconfig',['tab' => 'managehooks'])#</xar:set>
                 <xar:module main="false" module="modules" type="admin" func="hooks" curhook="categories" return_url="$url"/>
             </fieldset>
         </xar:if>

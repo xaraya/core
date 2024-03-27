@@ -3,9 +3,9 @@
     <xar:set name="firstline">xarML('Select Category')</xar:set>
     <xar:if condition="!empty($preview)">
         <!-- Note: we might get a single value here instead of an array, if there is only one tree -->
-        <xar:set name="dummy">xarVar::fetch('hookedcategories_categories', 'isset', $categories, array(), xarVar::NOT_REQUIRED)</xar:set>
+        <xar:set name="dummy">xarVar::fetch('hookedcategories_categories', 'isset', $categories, [], xarVar::NOT_REQUIRED)</xar:set>
         <xar:if condition="!is_array($categories)">
-            <xar:set name="categories">array($categories)</xar:set>
+            <xar:set name="categories">[$categories]</xar:set>
         </xar:if>
         <xar:data-input type="categories" name="hookedcategories" module="$module" itemtype="$itemtype" itemid="$itemid" firstline="$firstline" categories="$categories"/>
     <xar:else/>

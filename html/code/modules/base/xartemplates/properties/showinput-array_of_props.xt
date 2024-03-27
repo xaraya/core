@@ -9,7 +9,7 @@
                 <xar:foreach in="$value" key="$key" value="$val">
                     <div class="xar-row">
                         <div class="xar-col">                   
-                            <xar:if condition = "$associative_array eq 0">
+                            <xar:if condition="$associative_array eq 0">
                                 <xar:set name="keyvalue">$index+1</xar:set>                         
                                 <input type="hidden" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$keyvalue#" size="#$size#"/>                                   
                             <xar:else />
@@ -39,7 +39,7 @@
                 <xar:for start="$i = $index" test="$i lt $rows" iter="$i++">
                     <div class="xar-row">
                         <div class="xar-col">                    
-                            <xar:if condition = "$associative_array eq 0">
+                            <xar:if condition="$associative_array eq 0">
                                 <xar:set name="keyvalue">$i+1</xar:set>                         
                                 <input type="hidden" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="#$keyvalue#" size="#$size#"/>                     
                             <xar:else />
@@ -76,7 +76,7 @@
                     <xar:foreach in="$value" key="$key" value="$val">
                         <div class="xar-row">
                             <div class="xar-col" id="#$id#_#$index#">                        
-                                <xar:if condition = "$associative_array eq 0">
+                                <xar:if condition="$associative_array eq 0">
                                     <xar:set name="keyvalue">$index+1</xar:set>                         
                                     <input type="hidden" name="#$name#_key[#$index#]" id="#$id#_key_#$index#" value="#$keyvalue#" size="#$size#"/>
                                 <xar:else />
@@ -92,7 +92,7 @@
                             </div>
                             <div class="xar-col">
                                 <input class="xar-form-textlong" type="text" name="#$name#_value[#$index#]" id="#$id#_value_#$index#" value="#$val#" size="#$size#"/>
-                                <xar:if condition = "$rows le $index AND $allowinput eq 2">
+                                <xar:if condition="$rows le $index AND $allowinput eq 2">
                                     <xar:var name="label">Remove</xar:var>
                                     <input type="button" title="#$label#&#160;#$suffixlabel#" value="#$label#&#160;#$suffixlabel#" style="height: 23px; font-size: small;" onclick="javascript:#$id#_removeRow('#$id#','#$index#')"/>
                                 </xar:if>
@@ -106,7 +106,7 @@
                         <xar:set name="j">$i+1</xar:set>
                         <div class="xar-row">
                             <div class="xar-col" id="#$id#_#$i#">                        
-                                <xar:if condition = "$associative_array eq 0">
+                                <xar:if condition="$associative_array eq 0">
                                     <xar:set name="keyvalue">$i+1</xar:set>                         
                                     <input type="hidden" name="#$name#_key[#$i#]" id="#$id#_key_#$i#" value="#$keyvalue#" size="#$size#"/>
                                 <xar:else />
@@ -146,7 +146,7 @@
         </xar:if >
         <div class ="xar-displaynone">
             <div id="#$id#_rowtemplate">                
-                <xar:if condition = "$associative_array eq 0">                              
+                <xar:if condition="$associative_array eq 0">                              
                     <input type="hidden" name="dummyid_key[dummy]" id="dummyid_key_dummy" value="dummy" size="#$size#"/>
                 <xar:else />
                     <xar:if condition="!empty($keylabel)">

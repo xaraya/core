@@ -38,6 +38,7 @@
 
 namespace Xaraya\Bridge\TemplateEngine;
 
+use Exception;
 use Twig\Environment;
 use Twig\TwigFunction;
 use Twig\TwigTest;
@@ -47,6 +48,7 @@ use Xaraya\Core\Traits\ContextTrait;
 use Xaraya\Context\Context;
 use DataObjectFactory;
 use DataPropertyMaster;
+use xarBlock;
 use xarConst;
 use xarLocale;
 use xarMLS;
@@ -174,6 +176,12 @@ class TwigBridge implements ContextInterface
     {
         $context = $this->getContext();
 
+        $guiFunc = new TwigFunction('xar_guifunc', function ($modName, $modType = 'user', $funcName = 'main', $args = []) use ($context) {
+            // use current context
+            return xarMod::guiFunc($modName, $modType, $funcName, $args, $context);
+        });
+        $this->twig->addFunction($guiFunc);
+
         $apiFunc = new TwigFunction('xar_apifunc', function ($modName, $modType = 'user', $funcName = 'main', $args = []) use ($context) {
             // use current context
             return xarMod::apiFunc($modName, $modType, $funcName, $args, $context);
@@ -191,6 +199,13 @@ class TwigBridge implements ContextInterface
             return xarServer::getObjectURL($objectName, $methodName, $args, false);
         });
         $this->twig->addFunction($objectURL);
+
+        $currentURL = new TwigFunction('xar_currenturl', function ($args = [], $generateXMLURL = null, $target = null) {
+            // avoid double-encoding URLs
+            $generateXMLURL ??= false;
+            return xarServer::getCurrentURL($args, $generateXMLURL, $target);
+        });
+        $this->twig->addFunction($currentURL);
 
         // we need to mark this as safe for html
         $imageURL = new TwigFunction('xar_imageurl', function ($fileName, $scope = null, $package = null) {
@@ -234,7 +249,7 @@ class TwigBridge implements ContextInterface
 
         // {% set infolink = attribute('xarServer', 'getObjectURL', ['workflow_tracker', 'display', {'itemid': item['id']}]) %}
         // @todo placeholder until corresponding functions have been added
-        $function = new TwigFunction('xar_coremethod', function ($class, $method, $params) {
+        $function = new TwigFunction('xar_coremethod', function ($class, $method, $params = []) {
             return $class::$method(...$params);
         });
         $this->twig->addFunction($function);
@@ -244,6 +259,11 @@ class TwigBridge implements ContextInterface
             return is_numeric($value);
         });
         $this->twig->addTest($numeric);
+
+        $object = new TwigTest('object', function ($value) {
+            return is_object($value);
+        });
+        $this->twig->addTest($object);
 
         return $this->twig;
     }
@@ -261,6 +281,25 @@ class TwigBridge implements ContextInterface
     public function addBlocklayoutTags()
     {
         $context = $this->getContext();
+
+        $blockGroup = new TwigFunction('xar_blockgroup', function ($groupname, $template = null) use ($context) {
+            // use current context
+            return xarBlock::renderGroup($groupname, $template, $context);
+        });
+        $this->twig->addFunction($blockGroup);
+
+        $block = new TwigFunction('xar_block', function ($args = []) use ($context) {
+            $fixed = ['instance', 'module', 'type', 'name', 'title', 'template', 'state', 'tplmodule'];
+            $allowed = array_flip($fixed);
+            $params = array_intersect_key($args, $allowed);
+            $params['content'] = array_keys(array_diff_key($args, $allowed));
+            if (!empty($params['content'])) {
+                throw new Exception('Content in block tag: ' . var_export($params, true));
+            }
+            // use current context
+            return xarBlock::renderBlock($params, $context);
+        });
+        $this->twig->addFunction($block);
 
         // <xar:style scope="module" module="base" file="tabs"/>
         // @todo replace array with fixed order of params
@@ -354,7 +393,7 @@ class TwigBridge implements ContextInterface
             }
             // No object passed in
             if (!empty($args['definition'])) {
-                return xarMod::apiFunc('dynamicdata','user','showdisplay', $args['definition'], $context);
+                return xarMod::apiFunc('dynamicdata', 'user', 'showdisplay', $args['definition'], $context);
             }
             // No direct definition, use the attributes
             return xarMod::apiFunc('dynamicdata', 'user', 'showdisplay', $args, $context);

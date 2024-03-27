@@ -12,9 +12,9 @@
             <div class="xar-col">
                 <xar:set name="options">
                     array(
-                        array('id' => 'High', 'name' => xarML('High')),
-                        array('id' => 'Medium', 'name' => xarML('Medium')),
-                        array('id' => 'Low', 'name' => xarML('Low')),
+                        ['id' => 'High', 'name' => xarML('High')],
+                        ['id' => 'Medium', 'name' => xarML('Medium')],
+                        ['id' => 'Low', 'name' => xarML('Low')],
                     )
                 </xar:set>
                 <xar:set name="value">

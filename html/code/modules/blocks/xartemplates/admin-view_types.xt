@@ -54,7 +54,7 @@
                         </td>
                         <td>
                             <xar:if condition="$item['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
-                                <a href="#xarController::URL('blocks', 'admin', 'modify_type',array('type_id' => $item['type_id'], 'tab' => 'status'))#">#$type_states[$item['type_state']]['name']#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_type',['type_id' => $item['type_id'], 'tab' => 'status'])#">#$type_states[$item['type_state']]['name']#</a>
                             <xar:else/>
                                 #$type_states[$item['type_state']]['name']#
                             </xar:if>

@@ -102,13 +102,14 @@
                     value="$valSeperator"/>
                 </div>
                 <div class="selectContainer">
-                    <xar:set name="options">array( array('id' =&gt; 'default', 'name' =&gt;
-                    xarML('Site Name - Module Name - Page Name')), array('id' =&gt; 'sp', 'name'
-                    =&gt; xarML('Site Name - Page Name')), array('id' =&gt; 'mps', 'name' =&gt;
-                    xarML('Module Name - Page Name - Site Name')), array('id' =&gt; 'pms', 'name'
-                    =&gt; xarML('Page Name - Module Name - Site Name')), array('id' =&gt; 'to',
-                    'name' =&gt; xarML('Page Name')), array('id' =&gt; 'theme', 'name' =&gt;
-                    xarML('Theme Driven')), )</xar:set>
+                    <xar:set name="options">array(
+                        ['id' => 'default', 'name' => xarML('Site Name - Module Name - Page Name')],
+                        ['id' => 'sp', 'name' => xarML('Site Name - Page Name')],
+                        ['id' => 'mps', 'name' => xarML('Module Name - Page Name - Site Name')],
+                        ['id' => 'pms', 'name' => xarML('Page Name - Module Name - Site Name')],
+                        ['id' => 'to', 'name' => xarML('Page Name')],
+                        ['id' => 'theme', 'name' => xarML('Theme Driven')],
+                    )</xar:set>
                     <xar:set name="valPagetitle">
                         <xar:var scope="module" module="themes" name="SiteTitleOrder"/>
                     </xar:set>

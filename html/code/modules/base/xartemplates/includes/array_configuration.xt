@@ -43,7 +43,7 @@
                     </xar:for>
                     <xar:if condition="isset($value[$i][$j-1])">
                         <td>
-                            <a href="#xarController::URL('dynamicdata','admin','showpropval',array('proptype' => $value[$i][1]))#"><img src="#xarTpl::getImage('icons/document-properties.png', 'base')#"/></a>
+                            <a href="#xarController::URL('dynamicdata','admin','showpropval',['proptype' => $value[$i][1]])#"><img src="#xarTpl::getImage('icons/document-properties.png', 'base')#"/></a>
                         </td>
                     </xar:if>
                     <td class="xar-align-right">&#160;</td>
@@ -72,7 +72,7 @@
                     <xar:data-input type="$column_types[$k]" name="$propname" id="$propid" rows="2" cols="20"/>
                 </td>
                 <td>
-                    <a href="#xarController::URL('dynamicdata','admin','showpropval',array('proptype' => 2))#"><img src="#xarTpl::getImage('icons/document-properties.png', 'base')#"/></a>
+                    <a href="#xarController::URL('dynamicdata','admin','showpropval',['proptype' => 2])#"><img src="#xarTpl::getImage('icons/document-properties.png', 'base')#"/></a>
                 </td>
             </tr>                    
         </tbody>

@@ -18,7 +18,7 @@
         </p>
         <p>
             If the files were removed because you are no longer using this block type,
-            <a href="#xarController::URL('blocks', 'admin', 'delete_type', array('type_id' => $block['type_id']))#">click here to remove the type from the database</a>.
+            <a href="#xarController::URL('blocks', 'admin', 'delete_type', ['type_id' => $block['type_id']])#">click here to remove the type from the database</a>.
         </p>
         <xar:else/>
             <p>Please notify the site administrator</p>
@@ -62,7 +62,7 @@
         </p>
         <p>
             If the module was removed because you are no longer using it,
-            <a href="#xarController::URL('blocks', 'admin', 'delete_type', array('type_id' => $block['type_id']))#">click here to remove the type from the database</a>.
+            <a href="#xarController::URL('blocks', 'admin', 'delete_type', ['type_id' => $block['type_id']])#">click here to remove the type from the database</a>.
         </p>
         <xar:else/>
             <p>Please notify the site administrator</p>

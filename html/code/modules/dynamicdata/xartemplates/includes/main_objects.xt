@@ -7,13 +7,13 @@
     <xar:if condition="!empty($startserial)">
         <xar:set name="startlist">unserialize($startserial)</xar:set>
     <xar:else/>
-        <xar:set name="startlist">array()</xar:set>
+        <xar:set name="startlist">[]</xar:set>
     </xar:if>
 
     <!-- define the list of main objects -->
     <xar:set name="dummy">xarVar::fetch('update','isset',$update,NULL,xarVar::NOT_REQUIRED)</xar:set>
     <xar:if condition="(empty($startlist) or !empty($update)) and xarSecurity::check('AdminDynamicData', 0)">
-        <xar:set name="dummy">xarVar::fetch('starter','array',$starter,array(),xarVar::NOT_REQUIRED)</xar:set>
+        <xar:set name="dummy">xarVar::fetch('starter','array',$starter,[],xarVar::NOT_REQUIRED)</xar:set>
         <xar:if condition="is_array($starter) and xarSec::confirmAuthKey()">
             <xar:set name="startlist">array_keys($starter)</xar:set>
             <xar:set name="dummy">xarModVars::set('dynamicdata','starter_object_list',serialize($startlist))</xar:set>

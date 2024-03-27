@@ -82,9 +82,9 @@
                                     #xarLocale::getFormattedTime('medium',$when)#
                                 </td>
                                 <td>
-                                <a href="#xarController::URL('mail','admin','viewq',array('id'=&gt;$id,'action' =&gt; 'view','authid' =&gt; $authid))#">
+                                <a href="#xarController::URL('mail','admin','viewq',['id' => $id,'action' => 'view','authid' => $authid])#">
                                 View</a>| 
-                                <a href="#xarController::URL('mail','admin','viewq',array('id'=&gt;$id,'action' =&gt; 'delete','authid' =&gt; $authid))#">
+                                <a href="#xarController::URL('mail','admin','viewq',['id' => $id,'action' => 'delete','authid' => $authid])#">
                                 Delete</a></td>
                             </tr>
                         </xar:foreach>
@@ -99,7 +99,7 @@
                 </table>
             <xar:else />
                 <p>
-                    <xar:set name="hookmailurl">xarController::URL('modules','admin','hooks', array('hook' =&gt; 'mail'))</xar:set>
+                    <xar:set name="hookmailurl">xarController::URL('modules','admin','hooks', ['hook' => 'mail'])</xar:set>
                     <xar:var name="hookmailtitle">Hook mail to scheduler to activate queue processing</xar:var>
                     <xar:var name="hookmaillinktext">hook mail to scheduler</xar:var>
                     You can schedule mail for sending later by installing and using the Scheduler module. Install Sche option.

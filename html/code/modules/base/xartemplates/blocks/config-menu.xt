@@ -233,10 +233,10 @@
                 <tr>
                     <td colspan="7" class="xar-align-right">
                         <xar:set name="link_selects">array(
-                            array('id' => 'none', 'name' => '--- do nothing ---'),
-                            array('id' => 'show', 'name' => 'Make Visible'),
-                            array('id' => 'hide', 'name' => 'Make Invisible'),
-                            array('id' => 'delete', 'name' => 'Delete'),
+                            ['id' => 'none', 'name' => '--- do nothing ---'],
+                            ['id' => 'show', 'name' => 'Make Visible'],
+                            ['id' => 'hide', 'name' => 'Make Invisible'],
+                            ['id' => 'delete', 'name' => 'Delete'],
                         )</xar:set>
                         <label for="links_select">With selected links</label>:&#160;
                         <xar:data-input type="dropdown" name="links_select" id="links_select" options="$link_selects"/>
@@ -289,10 +289,10 @@
                         <xar:data-input type="dropdown" name="$new_relation_id" id="$new_relation_id" options="$userlinks"/>&#160;&#160;
                         <xar:set name="new_position_id">'links_new_position'</xar:set>
                         <xar:set name="positions">array(
-                            array('id' => 0, 'name' => 'Right before, in the same level'),
-                            array('id' => 1, 'name' => 'Right after, in the same level'),
-                            array('id' => 2, 'name' => 'The first child link'),
-                            array('id' => 3, 'name' => 'The last child link'),
+                            ['id' => 0, 'name' => 'Right before, in the same level'],
+                            ['id' => 1, 'name' => 'Right after, in the same level'],
+                            ['id' => 2, 'name' => 'The first child link'],
+                            ['id' => 3, 'name' => 'The last child link'],
                         )</xar:set>
                         <label for="#$new_position_id#">Position</label>&#160;
                         <xar:data-input type="dropdown" name="$new_position_id" id="$new_position_id" options="$positions"/>
@@ -333,7 +333,7 @@
                         <xar:set name="inputname">"modulelist[" . $module['name'] . "][alias_name]"</xar:set>
                         <xar:set name="inputid">"modulelist_" . $module['name'] . "_alias_name"</xar:set>
                         <xar:set name="inputval">!empty($modulelist[$module['name']]['alias_name']) ? $modulelist[$module['name']]['alias_name'] : $module['name']</xar:set>
-                        <xar:set name="inputfirst">array('id' => $module['name'], 'name' => $module['displayname'])</xar:set>
+                        <xar:set name="inputfirst">['id' => $module['name'], 'name' => $module['displayname']]</xar:set>
                         <xar:data-input type="dropdown" name="$inputname" id="$inputid" firstline="$inputfirst" options="$modulelist[$module['name']]['aliases']" value="$inputval"/>
                     <xar:else/>
                         [none]

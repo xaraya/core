@@ -15,7 +15,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
                                     #$parents[$i] ['parentname']#
                                 </a>
                             </li>
@@ -31,21 +31,21 @@
                 <xar:var name="label">Action</xar:var>
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <li class="xar-tab">
-                    <a href="#xarController::URL('roles','admin','display',array('id'=>$roleid))#" class="xar-norm xar-norm-outline">Display</a>
+                    <a href="#xarController::URL('roles','admin','display',['id'=>$roleid])#" class="xar-norm xar-norm-outline">Display</a>
                 </li>
                 <li class="xar-tab">
-                    <a href="#xarController::URL('roles','admin','modify',array('id'=>$roleid))#" class="xar-norm xar-norm-outline">Modify</a>
+                    <a href="#xarController::URL('roles','admin','modify',['id'=>$roleid])#" class="xar-norm xar-norm-outline">Modify</a>
                 </li>
                 <li class="xar-tab">
-                    <a href="#xarController::URL('roles','admin','delete',array('id'=>$roleid))#" class="xar-norm xar-norm-outline">Delete</a>
+                    <a href="#xarController::URL('roles','admin','delete',['id'=>$roleid])#" class="xar-norm xar-norm-outline">Delete</a>
                 </li>
                 <li class="xar-tab-active">
-                    <a href="#xarController::URL('roles','admin','showprivileges',array('id'=>$roleid))#" class="xar-accent xar-accent-outline">
+                    <a href="#xarController::URL('roles','admin','showprivileges',['id'=>$roleid])#" class="xar-accent xar-accent-outline">
                     Privileges</a>
                 </li>
                 <xar:if condition="$ptype eq xarRoles::ROLES_GROUPTYPE">
                     <li class="xar-tab">
-                        <a href="#xarController::URL('roles','admin','showusers',array('id'=>$roleid))#" class="xar-norm xar-norm-outline">Users</a>
+                        <a href="#xarController::URL('roles','admin','showusers',['id'=>$roleid])#" class="xar-norm xar-norm-outline">Users</a>
                     </li>
                 </xar:if>
             </ul>
@@ -65,7 +65,7 @@
                     <xar:button type="submit" label="$removelabel" tabindex="1"/>
                     <br />
                     <br />
-                    <a href="#xarController::URL('roles','admin','showprivileges',array('id'=>$roleid))#">Cancel
+                    <a href="#xarController::URL('roles','admin','showprivileges',['id'=>$roleid])#">Cancel
                     Removal</a>
                 </p>
             </div>

@@ -10,10 +10,10 @@
             <xar:set name="phpdata">''</xar:set>
         </xar:if>
         <xar:if condition="!isset($urlargs)">
-            <xar:set name="urlargs">array()</xar:set>
+            <xar:set name="urlargs">[]</xar:set>
         </xar:if>
         <!-- loadmenuarray function does all the hard work for us :) -->
-        <xar:set name="tabs">xarMod::apiFunc('base', 'admin', 'loadmenuarray', array('layout' => 'tabs', 'xmldata' => $xmldata, 'phpdata' => $phpdata, 'urlargs' => $urlargs))</xar:set>
+        <xar:set name="tabs">xarMod::apiFunc('base', 'admin', 'loadmenuarray', ['layout' => 'tabs', 'xmldata' => $xmldata, 'phpdata' => $phpdata, 'urlargs' => $urlargs])</xar:set>
         <!-- only display if we found some links -->
         <xar:if condition="!empty($tabs['menulinks'])">
             <ul class="xar-tabs xar-alt xar-norm-outline">

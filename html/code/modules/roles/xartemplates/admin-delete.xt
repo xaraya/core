@@ -12,7 +12,7 @@
         <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
         <xar:set name="activetab">#$request.2#</xar:set>
         <xar:set name="xmldata">'showusers'</xar:set>
-        <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>
+        <xar:set name="urlargs">['id' => $id, 'reload' => 'reload']</xar:set>
         <xar:template type="module" module="base" file="admin-menu-skel"/>
         <xar:if condition="count($parents) gt 0">
             <div>
@@ -25,7 +25,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
                                 #xarVar::prepForDisplay($parents[$i]['parentname'])#</a>
                             </li>
                         </xar:if>

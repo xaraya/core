@@ -19,7 +19,7 @@
                         Changing your email address will require you to revalidate your account.
                 </div>
             </xar:if>
-            <xar:set name="fields">array('name','uname','email','password','regdate')</xar:set>
+            <xar:set name="fields">['name','uname','email','password','regdate']</xar:set>
             <xar:foreach in="$fields" value="$name">
                 <xar:if condition="!isset($properties[$name])"><xar:continue /></xar:if>
                 <div class="xar-row">

@@ -6,7 +6,7 @@
         <ul>
             <xar:foreach in="$observers" key="$module" value="$modinfo">             
                 <li>
-                    <a href="#xarServer::getCurrentURL(array('hook' => $module))#">
+                    <a href="#xarServer::getCurrentURL(['hook' => $module])#">
                         #$modinfo['displayname']#
                     </a>
                      : #$modinfo['displaydescription']# 

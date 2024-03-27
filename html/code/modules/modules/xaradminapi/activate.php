@@ -23,7 +23,7 @@ function modules_adminapi_activate(Array $args=array())
     extract($args);
 
     // Argument check
-    if (isset($name)) $regid = xarMod::getRegid($name, 'module');
+    if (isset($name)) $regid = xarMod::getRegId($name, 'module');
     if (!isset($regid)) throw new EmptyParameterException('regid');
 
     $modInfo = xarMod::getInfo($regid);

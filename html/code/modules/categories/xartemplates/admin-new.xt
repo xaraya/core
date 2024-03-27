@@ -6,7 +6,7 @@
         <h2>
             Create New Category
         </h2>
-        <form action="#xarController::URL('categories','admin','create',array())#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('categories','admin','create')#" method="post" enctype="application/x-www-form-urlencoded">
             <input type="hidden" name="authid" id="authid" value="#$authid#"/>
             <xar:for iter="$i++" start="$i=1" test="$i le $repeat">
                 <fieldset class="xar-norm">

@@ -12,7 +12,7 @@
         <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
         <xar:set name="activetab">#$request.2#</xar:set>
         <xar:set name="xmldata">'showusers'</xar:set>
-        <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>
+        <xar:set name="urlargs">['id' => $id, 'reload' => 'reload']</xar:set>
         <xar:template type="module" module="base" file="admin-menu-skel"/>
         <xar:if condition="count($parents) ne 0">
             <div>
@@ -25,7 +25,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
                                     #$parents[$i]['parentname']#
                                 </a>
                             </li>
@@ -76,7 +76,7 @@
                     <xar:foreach in="$masks" value="$mask">
                         <tr>
                             <td>
-                                <a href="#xarController::URL('roles','admin','testprivileges',array('id'=>xarVar('id'),'name'=>$mask->getName(),'test'=>true))#">
+                                <a href="#xarController::URL('roles','admin','testprivileges',['id'=>xarVar('id'),'name'=>$mask->getName(),'test'=>true])#">
                                 #$mask:getName()#</a>
                             </td>
                             <xar:if condition="xarModVars::get('privileges','showrealms')">
@@ -150,7 +150,7 @@
             <fieldset>
                 <legend>Test Result</legend>
                 <h4>
-                    #$itemtypename# <a href="#xarController::URL('roles','admin','modify',array('id'=>$id))#">'#$pname#'</a>
+                    #$itemtypename# <a href="#xarController::URL('roles','admin','modify',['id'=>$id])#">'#$pname#'</a>
                     <xar:if condition="$testresult eq false">
                         Is Not Permitted 
                     <xar:else />

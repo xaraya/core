@@ -41,13 +41,13 @@
                 <xar:if condition="($optionSelected eq false) AND !empty($value)">
                     <xar:if condition="empty($firstline)">
                         <xar:var name="linetext">&lt;== Text Specified</xar:var>
-                        <xar:set name="firstline">array('id' => '','name' => $linetext)</xar:set>
+                        <xar:set name="firstline">['id' => '','name' => $linetext]</xar:set>
                     </xar:if>
                     <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline"/>
                 <xar:else />
                     <xar:if condition="empty($firstline)">
                         <xar:var name="linetext">&lt;== Choose or enter an item</xar:var>
-                        <xar:set name="firstline">array('id' => '','name' => $linetext)</xar:set>
+                        <xar:set name="firstline">['id' => '','name' => $linetext]</xar:set>
                     </xar:if>
                     <xar:data-input type="dropdown" name="$name" id="$dd_id" options="$options" value="$value" tabindex="$tabindex" onchange="$onchange" style="$style" firstline="$firstline"/>
                 </xar:if>

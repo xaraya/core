@@ -3,11 +3,11 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="stateoptions">
         array(
-            array('id' => xarRoles::ROLES_STATE_ALL, 'name' => xarML('All')),
-            array('id' => xarRoles::ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')),
-            array('id' => xarRoles::ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')),
-            array('id' => xarRoles::ROLES_STATE_ACTIVE, 'name' => xarML('Active')),
-            array('id' => xarRoles::ROLES_STATE_PENDING, 'name' => xarML('Pending')),
+            ['id' => xarRoles::ROLES_STATE_ALL, 'name' => xarML('All')],
+            ['id' => xarRoles::ROLES_STATE_INACTIVE, 'name' => xarML('Inactive')],
+            ['id' => xarRoles::ROLES_STATE_NOTVALIDATED, 'name' => xarML('Not Validated')],
+            ['id' => xarRoles::ROLES_STATE_ACTIVE, 'name' => xarML('Active')],
+            ['id' => xarRoles::ROLES_STATE_PENDING, 'name' => xarML('Pending')],
         )
     </xar:set>
     <xar:set name="modstatus">
@@ -162,23 +162,23 @@
                         <table class="xar-table xar-fullwidth">
                             <tr>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',array('state'=>$state,'order'=>'name'))#">
+                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'name'])#">
                                     Real name</a>
                                 </th>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',array('state'=>$state,'order'=>'uname'))#">
+                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'uname'])#">
                                     Login</a>
                                 </th>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',array('state'=>$state,'order'=>'email'))#">
+                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'email'])#">
                                     Email</a>
                                 </th>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',array('state'=>$state,'order'=>'date_reg'))#">
+                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'date_reg'])#">
                                     Date Registered</a>
                                 </th>
                                 <th>
-                                    <a href="#xarController::URL('roles','admin','createmail',array('state'=>$state,'order'=>'state'))#">
+                                    <a href="#xarController::URL('roles','admin','createmail',['state'=>$state,'order'=>'state'])#">
                                     State</a>
                                 </th>
                             </tr>
@@ -191,7 +191,7 @@
                                     <td>#$loop:item['uname']#</td>
                                     <td>
                                         <xar:var name="label">Email this user</xar:var>
-                                        <a href="#xarController::URL('roles','admin','createmail',array('id'=>$loop->item['id']))#" title="#$label#">
+                                        <a href="#xarController::URL('roles','admin','createmail',['id'=>$loop->item['id']])#" title="#$label#">
                                         #$loop:item['email']#</a>
                                     </td>
                                     <td class="xar-align-center">

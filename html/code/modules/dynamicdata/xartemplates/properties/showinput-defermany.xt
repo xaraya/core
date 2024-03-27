@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:if condition="empty($value)">
-        <xar:set name="value">array()</xar:set>
+        <xar:set name="value">[]</xar:set>
     <xar:elseif condition="!is_array($value)"/>
         <xar:set name="value">[$value]</xar:set>
     </xar:if>

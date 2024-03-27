@@ -7,9 +7,9 @@
         <span style="float: right; width: 78%; text-align: left;">
             <xar:set name="options">
                 array(
-                    array('id' => 1, 'name' => xarML('Tree (Side Block)')),
-                    array('id' => 2, 'name' => xarML('Crumbtrail (Top Block)')),
-                    array('id' => 3, 'name' => xarML('Prev/Next (Bottom Block)'))
+                    ['id' => 1, 'name' => xarML('Tree (Side Block]')),
+                    ['id' => 2, 'name' => xarML('Crumbtrail (Top Block]')),
+                    ['id' => 3, 'name' => xarML('Prev/Next (Bottom Block]'))
                 )
             </xar:set>
             <xar:set name="id">
@@ -79,9 +79,9 @@
         <span style="float: right; width: 78%; text-align: left;">
             <xar:set name="options">
                 array(
-                    array('id' => 0, 'name' => xarML('None')),
-                    array('id' => 1, 'name' => xarML('Simple count')),
-                    array('id' => 2, 'name' => xarML('Cascading count'))
+                    ['id' => 0, 'name' => xarML('None')],
+                    ['id' => 1, 'name' => xarML('Simple count')],
+                    ['id' => 2, 'name' => xarML('Cascading count')]
                 )
             </xar:set>
             <xar:set name="id1">
@@ -98,9 +98,9 @@
         <span style="float: right; width: 78%; text-align: left;">
             <xar:set name="options">
                 array(
-                    array('id' => 0, 'name' => xarML('None')),
-                    array('id' => 1, 'name' => xarML('Direct children only')),
-                    array('id' => 2, 'name' => xarML('All children')),
+                    ['id' => 0, 'name' => xarML('None')],
+                    ['id' => 1, 'name' => xarML('Direct children only')],
+                    ['id' => 2, 'name' => xarML('All children')],
                 )
             </xar:set>
             <xar:set name="id2">

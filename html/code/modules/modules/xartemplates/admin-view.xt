@@ -76,11 +76,11 @@
             </xar:if>
 
             <xar:if condition="$sort eq 'ASC'">
-                <xar:set name="sorturl">xarServer::getCurrentURL(array('sort' => 'DESC'))</xar:set>
+                <xar:set name="sorturl">xarServer::getCurrentURL(['sort' => 'DESC'])</xar:set>
                 <xar:set name="sortimg">xarTpl::getImage('arrow_down.gif', 'module', 'base')</xar:set>
                 <xar:var name="sortlbl">Sort by name descending</xar:var>
             <xar:else/>
-                <xar:set name="sorturl">xarServer::getCurrentURL(array('sort' => 'ASC'))</xar:set>
+                <xar:set name="sorturl">xarServer::getCurrentURL(['sort' => 'ASC'])</xar:set>
                 <xar:set name="sortimg">xarTpl::getImage('arrow_up.gif', 'module', 'base')</xar:set>
                 <xar:var name="sortlbl">Sort by name ascending</xar:var>
             </xar:if>

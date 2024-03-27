@@ -6,7 +6,7 @@
         <h2>
             Modify Category
         </h2>
-        <form action="#xarController::URL('categories','admin','update',array())#" method="post" enctype="application/x-www-form-urlencoded">
+        <form action="#xarController::URL('categories','admin','update')#" method="post" enctype="application/x-www-form-urlencoded">
             <input type="hidden" name="authid" id="authid" value="#xarSec::genAuthKey()#"/>
             <fieldset class="xar-norm">
                 <legend>

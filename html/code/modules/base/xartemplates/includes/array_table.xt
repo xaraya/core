@@ -66,9 +66,9 @@
                         <!-- property[row][column] -->
                         <!-- we need to instantiate the property this way so we can insert a default value -->
                         <xar:if condition="isset($column_defaults[$k])">
-                            <xar:set name="property">DataPropertyMaster::getProperty(array('type'=>$column_types[$k],'defaultvalue'=>$column_defaults[$k]))</xar:set>
+                            <xar:set name="property">DataPropertyMaster::getProperty(['type'=>$column_types[$k],'defaultvalue'=>$column_defaults[$k]])</xar:set>
                         <xar:else/>
-                            <xar:set name="property">DataPropertyMaster::getProperty(array('type'=>$column_types[$k]))</xar:set>
+                            <xar:set name="property">DataPropertyMaster::getProperty(['type'=>$column_types[$k]])</xar:set>
                         </xar:if>
                         <td>
                             <!-- row #$i# column #$k# -->

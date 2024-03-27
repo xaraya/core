@@ -286,8 +286,8 @@ class xarServer extends xarObject
      * Get current URL (and optionally add/replace some parameters)
      *
      * @param array<string, mixed> $args additional parameters to be added to/replaced in the URL (e.g. theme, ...)
-     * @param bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
-     * @param string $target add a 'target' component to the URL
+     * @param ?bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
+     * @param ?string $target add a 'target' component to the URL
      * @return string current URL
      * @todo cfr. BaseURI() for other possible ways, or try PHP_SELF
      */
@@ -310,8 +310,8 @@ class xarServer extends xarObject
      * Get current query string (and optionally add/replace some parameters)
      *
      * @param array<string, mixed> $args additional parameters to be added to/replaced in the URL (e.g. theme, ...)
-     * @param bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
-     * @param string $target add a 'target' component to the URL
+     * @param ?bool $generateXMLURL over-ride Server default setting for generating XML URLs (true/false/NULL)
+     * @param ?string $target add a 'target' component to the URL
      * @return string current query string
      */
     public static function getCurrentRequestString($args = [], $generateXMLURL = null, $target = null)

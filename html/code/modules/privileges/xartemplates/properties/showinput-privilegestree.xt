@@ -34,7 +34,7 @@
                         <div class="leaf-actions">
                             <xar:var name="label1">Delete</xar:var>
                             <xar:sec mask="DeletePrivilege" catch="false" component="Privileges" instance="#$name#">
-                                <xar:set name="dellink">xarController::URL('privileges','admin','deleteprivilege',array('id'=&gt; $id))</xar:set>
+                                <xar:set name="dellink">xarController::URL('privileges','admin','deleteprivilege',['id' => $id])</xar:set>
                                 <xar:var name="label">Delete this privilege</xar:var>
                                 <a href="#$dellink#" title="#$label#">
                                     <img src="#$deleteicon#" alt="#$label1#"/>
@@ -43,7 +43,7 @@
                                 <img src="#$blankicon#" alt="#$label1#"/>
                             </xar:sec>
                             &#160;
-                            <xar:set name="userslink">xarController::URL('privileges','admin','viewroles',array('id'=&gt; $id))</xar:set>
+                            <xar:set name="userslink">xarController::URL('privileges','admin','viewroles',['id' => $id])</xar:set>
                             <xar:var name="label">Show the Groups/Users this Privilege is assigned to</xar:var>
                             <a href="#$userslink#" title="#$label#">
                                 <xar:var name="label1">Groups</xar:var>
@@ -52,7 +52,7 @@
                             &#160;
                             <xar:var name="label1">Remove</xar:var>
                             <xar:if condition="$parentid ne 0">
-                                <xar:set name="removelink">xarController::URL('privileges','admin','removebranch',array('id'=&gt; $id))</xar:set>
+                                <xar:set name="removelink">xarController::URL('privileges','admin','removebranch',['id' => $id])</xar:set>
                                 <xar:var name="label">Remove this privilege from its parent</xar:var>
                                 <a href="#$removelink#" title="#$label#">
                                     <img src="#$removeicon#" alt="#$label1#"/>
@@ -63,7 +63,7 @@
                         </div>
                         <xar:set name="indent">$level * 1.5</xar:set>
                         <div class="leaf-body" style="padding-left: #$indent#em;">
-                            <xar:set name="modlink">xarController::URL('privileges','admin','modifyprivilege',array('id'=&gt; $id))</xar:set>
+                            <xar:set name="modlink">xarController::URL('privileges','admin','modifyprivilege',['id' => $id])</xar:set>
                             <a href="#$modlink#" title="#$description#">
                                 #$name#
                             </a>

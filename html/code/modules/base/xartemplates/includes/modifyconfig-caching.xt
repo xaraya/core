@@ -29,8 +29,8 @@
                 <div class="xar-col">
                     <xar:set name="options">
                         array( 
-                            array('id' => 'files', 'name' => 'File System'), 
-                            array('id' => 'database', 'name' => 'Database'), 
+                            ['id' => 'files', 'name' => 'File System'], 
+                            ['id' => 'database', 'name' => 'Database'], 
                         )
                     </xar:set>
                     <xar:set name="value">$cache_settings['Variable.CacheStorage']</xar:set>

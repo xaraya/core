@@ -7,7 +7,7 @@
         <ul>
             <xar:foreach in="$users" key="$id" value="$user">
                 <li>
-                    <a href="#xarController::URL('roles','user','display',array('id'=>$user['id']))#">
+                    <a href="#xarController::URL('roles','user','display',['id'=>$user['id']])#">
                         #xarVar::prepForDisplay($user['name'])#
                     </a>
                 </li>

@@ -2,6 +2,8 @@
 
 namespace Xaraya\Bridge\TemplateEngine;
 
+use Exception;
+
 /**
  * Experimental template converter from Blocklayout to Twig syntax
  *
@@ -29,10 +31,17 @@ class TwigConverter
     public string $suffix = '';
     public string $basePath = '';
     public string $filePath = '';
+    /** @var array<string, mixed> */
+    public array $files = [];
 
     public function __construct(array $options = [])
     {
         $this->options = $options;
+    }
+
+    public function getNamespace()
+    {
+        return $this->options['namespace'] ?? '';
     }
 
     public function convertDir(string $fromPath, string $toPath, string $suffix = '.xt', string $prefix = '', int $depth = 0)
@@ -42,7 +51,7 @@ class TwigConverter
         }
         if ($depth == 0) {
             $this->basePath = $toPath;
-            if (!is_dir($toPath . '/admin')) {
+            if (empty($prefix) && $fromPath != $toPath && !is_dir($toPath . '/admin')) {
                 mkdir($toPath . '/admin');
             }
         }
@@ -94,12 +103,81 @@ class TwigConverter
         $content = file_get_contents($fromPath);
         $content = $this->convert($content);
         file_put_contents($toPath, $content);
+        $this->files[] = $toPath;
     }
 
     public function convert(string $content)
     {
         $this->content = $content;
         return $this->content;
+    }
+
+    public function replaceVariable($variable)
+    {
+        return str_replace(['$', ':', '->'], ['', '.', '.'], $variable);
+    }
+
+    public function buildTwigParam($param)
+    {
+        if (!str_contains($param, '$')) {
+            return '"' . $param . '"';
+        }
+        [$pre, $post] = explode('$', $param);
+        if (empty($pre)) {
+            return $this->replaceVariable($param);
+        }
+        return '"' . $pre . '" ~ ' . $this->replaceVariable($post);
+    }
+
+    public function buildTwigArray($params)
+    {
+        $parts = [];
+        foreach ($params as $name => $value) {
+            if (str_contains($name, '$')) {
+                [$pre, $post] = explode('$', $name);
+                if (!empty($pre)) {
+                    throw new Exception('Composite array name not supported: ' . $name . ' in ' . var_export($params, true));
+                }
+                $name = '(' . $this->replaceVariable($name) . ')';
+            }
+            $parts[] = $name . ': ' . $this->buildTwigParam($value);
+        }
+        return '{' . implode(', ', $parts) . '}';
+    }
+
+    public function validate($twig)
+    {
+        $namespace = $this->getNamespace();
+        $issues = [];
+        echo "Issues by file:\n";
+        foreach ($this->files as $path) {
+            try {
+                $code = file_get_contents($path);
+                $name = substr($path, strlen($this->basePath) + 1);
+                if (!empty($namespace)) {
+                    $name = '@' . $namespace . '/' . $name;
+                }
+                $twig->parse($twig->tokenize(new \Twig\Source($code, $name, $path)));
+        
+                // the $code is valid
+            } catch (\Twig\Error\SyntaxError $e) {
+                // $code contains one or more syntax errors
+                $message = $e->getMessage();
+                $line = $e->getTemplateLine();
+                echo "Syntax error in $path:" . $line . "\n  " . $message . "\n";
+                $issues[$message] ??= [];
+                $issues[$message][] = $path . ':' . $line;
+            }
+        }
+        echo "Top issues by count:\n";
+        uasort($issues, function ($a, $b) {
+            return count($b) <=> count($a);
+        });
+        foreach ($issues as $message => $files) {
+            echo "Syntax error: $message (" . count($files) . "):\n  ";
+            echo implode("\n  ", $files);
+            echo "\n";
+        }
     }
 }
 
@@ -108,27 +186,35 @@ class BlocklayoutToTwigConverter extends TwigConverter
     public function convert(string $content)
     {
         $this->content = $content;
-        $this->removeHeader();
-        $this->removeFooter();
+        if ($this->isPageTemplate()) {
+            $this->handlePageTemplate();
+        } else {
+            $this->removeHeader();
+            $this->removeFooter();
+        }
+        $this->replaceBlockTag();
+        $this->replaceModuleTag();
         $this->replaceTemplateTag();
         $this->replaceIfTag();
         $this->replaceForEachTag();
-        $this->replaceSetTag();
-        $this->replaceVarTag();
         $this->replaceStyleTag();
         $this->replaceImageTag();
         $this->replaceButtonTag();
+        $this->replaceSetTag();
+        $this->replaceVarTag();
         $this->replaceCommentTag();
         $this->replaceSecurityTag();
         $this->replaceDynamicDataTags();
         $this->replaceWorkflowTags();
-        $this->addHeader();
+        if (! $this->isPageTemplate()) {
+            $this->addHeader();
+        }
         return $this->content;
     }
 
-    public function getNamespace()
+    public function isPageTemplate()
     {
-        return $this->options['namespace'] ?? '';
+        return !str_contains($this->basePath, '/templates') && str_contains($this->filePath, '/pages/');
     }
 
     /**
@@ -145,7 +231,12 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
     public function addHeader()
     {
+        // skip adding header if we're in the wrong place
         if (empty($this->basePath) || empty($this->filePath) || !str_starts_with($this->filePath, $this->basePath)) {
+            return;
+        }
+        // skip adding header for theme pages
+        if ($this->isPageTemplate()) {
             return;
         }
         $namespace = $this->getNamespace();
@@ -183,12 +274,99 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $this->content = preg_replace($pattern, $replace, $this->content);
     }
 
+    public function handlePageTemplate()
+    {
+        // remove other headers for theme pages
+        $pattern = '~^<\?xml version="1.0" encoding="utf-8"\?>\s*~i';
+        $replace = '';
+        $this->content = preg_replace($pattern, $replace, $this->content);
+
+        $pattern = '~<\?xar type="\w+"\s*\?>\s*~i';
+        $replace = '';
+        $this->content = preg_replace($pattern, $replace, $this->content);
+
+        $pattern = '~<xar:blocklayout [^>]+>\s*~i';
+        $replace = '';
+        $this->content = preg_replace($pattern, $replace, $this->content);
+
+        $pattern = '~<xar:module id="(\w+)"/>~i';
+        $replace = '{% block $1 %}{{ _bl_mainModuleOutput }}{% endblock %}';
+        $this->content = preg_replace($pattern, $replace, $this->content);
+
+        // remove other footers for theme pages
+        $pattern = '~</xar:blocklayout>\s*$~i';
+        $replace = '';
+        $this->content = preg_replace($pattern, $replace, $this->content);
+    }
+
+    public function replaceModuleTag()
+    {
+        // <xar:module main="false" module="dynamicdata" type="user" func="filtertag" object="$object" fieldlist="name"/>
+        $pattern = '~<xar:module ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            $attrib = $this->parseAttributes($matches[1]);
+            if (empty($attrib['module'])) {
+                throw new Exception('Missing module in xar:module tag: ' . $matches[0]);
+                //return $matches[0];
+            }
+            $attrib['type'] ??= 'user';
+            $attrib['func'] ??= 'main';
+            $params = $attrib;
+            unset($params['module']);
+            unset($params['type']);
+            unset($params['func']);
+            $module = $this->buildTwigParam($attrib['module']);
+            $type = $this->buildTwigParam($attrib['type']);
+            $func = $this->buildTwigParam($attrib['func']);
+            $string = '{{ xar_guifunc(' . $module . ', ' . $type . ', ' . $func;
+            if (!empty($params)) {
+                $string .= ', ' . $this->buildTwigArray($params);
+            }
+            $string .= ') }}';
+            return $string;
+        }, $this->content);
+    }
+
+    public function replaceBlockTag()
+    {
+        // <xar:blockgroup name="header" id="header"/>
+        $pattern = '~<xar:blockgroup ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            $attrib = $this->parseAttributes($matches[1]);
+            if (empty($attrib['name'])) {
+                throw new Exception('Missing name in xar:blockgroup tag: ' . $matches[0]);
+                //return $matches[0];
+            }
+            if (!empty($attrib['template'])) {
+                throw new Exception('Unused template in xar:blockgroup tag: ' . $matches[0]);
+                //return $matches[0];
+            }
+            $name = $this->buildTwigParam($attrib['name']);
+            $string = '{{ xar_blockgroup(' . $name . ') }}';
+            return $string;
+        }, $this->content);
+
+        // <xar:blockgroup name="header">...</xar:blockgroup>
+        $pattern = '~<xar:blockgroup ([^>]+)\s*>(.+?)</xar:blockgroup>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            throw new Exception('Child nodes not supported in xar:blockgroup tag: ' . $matches[0]);
+            //return $matches[0];
+        }, $this->content);
+
+        // <xar:block instance="$name"/>
+        $pattern = '~<xar:block ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_block(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+    }
+
     /**
      * Replace template file
      * <xar:template file="..."/>
      */
     public function replaceTemplateTag()
     {
+        // <xar:template file="objectlist-$layout"/>
         $pattern = '~<xar:template file="([^"]+)"\s*/>~i';
         $this->content = preg_replace_callback($pattern, function ($matches) {
             if (!empty($prefix) && str_starts_with($matches[1], $prefix)) {
@@ -200,20 +378,27 @@ class BlocklayoutToTwigConverter extends TwigConverter
             if (!str_ends_with($namespace, '/includes')) {
                 $namespace .= '/includes';
             }
+            if (str_contains($file, '$')) {
+                [$pre, $post] = explode('$', $file);
+                $file = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
+            }
             if (!empty($namespace)) {
                 return '{{ include(\'@' . $namespace . '/' . $file . '.html.twig\') }}';
             }
             return '{{ include(\'' . $file . '.html.twig\') }}';
         }, $this->content);
 
+        // <xar:template module="$tplmodule" file="display-$layout"/>
         $pattern = '~<xar:template ([^>]+)\s*/>~i';
         $this->content = preg_replace_callback($pattern, function ($matches) {
             $attrib = $this->parseAttributes($matches[1]);
             if (empty($attrib['file'])) {
-                return $matches[0];
+                throw new Exception('Missing file in xar:template tag: ' . $matches[0]);
+                //return $matches[0];
             }
             if (!empty($attrib['type']) && $attrib['type'] !== 'module') {
-                return $matches[0];
+                throw new Exception('Wrong type in xar:template tag: ' . $matches[0]);
+                //return $matches[0];
             }
             if (!empty($prefix) && str_starts_with($attrib['file'], $prefix)) {
                 $file = substr($attrib['file'], strlen($prefix));
@@ -280,12 +465,12 @@ class BlocklayoutToTwigConverter extends TwigConverter
      */
     public function replaceForEachTag()
     {
-        $pattern = '~<xar:foreach in="([^"]+)" value="([^"]+)">~i';
+        $pattern = '~<xar:foreach in="([^"]+)"\s+value="([^"]+)">~i';
         $this->content = preg_replace_callback($pattern, function ($matches) {
             return '{% for ' . $this->replaceVariable($matches[2]) . ' in ' . $this->replaceVariable($matches[1]) . ' %}';
         }, $this->content);
 
-        $pattern = '~<xar:foreach in="([^"]+)" key="([^"]+)" value="([^"]+)">~i';
+        $pattern = '~<xar:foreach in="([^"]+)"\s+key="([^"]+)"\s+value="([^"]+)">~i';
         $this->content = preg_replace_callback($pattern, function ($matches) {
             return '{% for ' . $this->replaceVariable($matches[2]) . ', ' . $this->replaceVariable($matches[3]) . ' in ' . $this->replaceVariable($matches[1]) . ' %}';
         }, $this->content);
@@ -330,8 +515,9 @@ class BlocklayoutToTwigConverter extends TwigConverter
     public function replaceVarTag()
     {
         $pattern = '~<xar:var name="([^"]+)"/>~i';
-        $replace = '{{ $1 }}';
-        $this->content = preg_replace($pattern, $replace, $this->content);
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ ' . $this->replaceVariable($matches[1]) . ' }}';
+        }, $this->content);
 
         // avoid matching &#160; here
         $pattern = '~#([^\d][^#]+)#~i';
@@ -387,7 +573,8 @@ class BlocklayoutToTwigConverter extends TwigConverter
      */
     public function replaceCommentTag()
     {
-        $pattern = '~<xar:comment>(.+?)</xar:comment>~i';
+        // support multi-line comments too
+        $pattern = '~<xar:comment>(.+?)</xar:comment>~is';
         $replace = '{# $1 #}';
         $this->content = preg_replace($pattern, $replace, $this->content);
 
@@ -477,15 +664,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
     public function replaceAttributes($attributes)
     {
         $attrib = $this->parseAttributes($attributes);
-        $parts = [];
-        foreach ($attrib as $name => $value) {
-            if (str_contains($value, '$')) {
-                $parts[] = $name . ': ' . $this->replaceVariable($value);
-            } else {
-                $parts[] = $name . ': "' . $value . '"';
-            }
-        }
-        return '{' . implode(', ', $parts) . '}';
+        return $this->buildTwigArray($attrib);
     }
 
     public function replaceCondition($condition)
@@ -499,6 +678,12 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
     public function replaceExpression($expression)
     {
+        // if we already have an expression inside, e.g.
+        // source <xar:set name="leftgroup"><xar:blockgroup name="left" id="left"/></xar:set>
+        // became <xar:set name="leftgroup">{{ xar_blockgroup("left") }}</xar:set>
+        if (str_starts_with($expression, '{{') and str_ends_with($expression, '}}')) {
+            return substr($expression, 3, strlen($expression) - 6);
+        }
         $expression = $this->replaceArrays($expression);
         $expression = $this->replaceFunctions($expression);
         $expression = $this->replaceConstants($expression);
@@ -512,7 +697,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
         if (!str_contains($expression, '=>')) {
             return $expression;
         }
-        // not matching correctly if last item is array
+        // @todo not matching correctly if last item is array
         $pattern = '~\[([^]]+)\]~i';
         $fixme = false;
         $expression = preg_replace_callback($pattern, function ($matches) use (&$fixme) {
@@ -553,12 +738,13 @@ class BlocklayoutToTwigConverter extends TwigConverter
             'xarServer::getModuleURL(' => 'xar_moduleurl(',
             'xarController::URL(' => 'xar_moduleurl(',
             'xarServer::getObjectURL(' => 'xar_objecturl(',
+            'xarServer::getCurrentURL(' => 'xar_currenturl(',
             'xarTpl::getImage(' => 'xar_imageurl(',
             'xarTpl::getFile(' => 'xar_fileurl(',
             'xarMLS::translate(' => 'xar_translate(',
             'xarML(' => 'xar_translate(',
         ];
-        $expression = str_replace(array_keys($mapping), array_values($mapping), $expression);
+        $expression = str_ireplace(array_keys($mapping), array_values($mapping), $expression);
 
         $pattern = '~xarUser::getVar\(([^)]*)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
@@ -592,15 +778,21 @@ class BlocklayoutToTwigConverter extends TwigConverter
                 $value = trim($value);
                 return 'xar_localedate(' . $this->replaceVariable($value) . ", '', " . $this->replaceVariable($format) . ')';
             }
+            if (empty($args)) {
+                return "xar_coremethod('{$className}', '{$methodName}')";
+            }
             return "xar_coremethod('{$className}', '{$methodName}', [" . $this->replaceVariable($args) . '])';
         }, $expression);
 
         // @todo placeholder until corresponding functions have been added
-        $pattern = '~(xar\w+)::(\w+)\(([^)]*)\)~';
+        $pattern = '~\b(sys|xar\w+)::(\w+)\(([^)]*)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
             $className = $matches[1];
             $methodName = $matches[2];
             $args = $matches[3];
+            if (empty($args)) {
+                return "xar_coremethod('{$className}', '{$methodName}')";
+            }
             return "xar_coremethod('{$className}', '{$methodName}', [" . $this->replaceVariable($args) . '])';
         }, $expression);
 
@@ -628,20 +820,40 @@ class BlocklayoutToTwigConverter extends TwigConverter
             return $this->replaceVariable($matches[2]) . ' is iterable';
         }, $expression);
 
+        $pattern = '~reset\(([^)]+)\)~';
+        $expression = preg_replace_callback($pattern, function ($matches) {
+            return $this->replaceVariable($matches[1]) . '|first';
+        }, $expression);
+
         $pattern = '~count\((\$[^)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
             return $this->replaceVariable($matches[1]) . '|length';
         }, $expression);
 
-        $pattern = '~trim\(([^)]+)\)~';
+        $pattern = '~strlen\(([^)]+)\)~';
+        $expression = preg_replace_callback($pattern, function ($matches) {
+            return $this->replaceVariable($matches[1]) . '|length';
+        }, $expression);
+
+        $pattern = '~trim\(([^,)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
             return $this->replaceVariable($matches[1]) . '|trim';
+        }, $expression);
+
+        $pattern = '~trim\(([^,)]+),([^)]+)\)~';
+        $expression = preg_replace_callback($pattern, function ($matches) {
+            return $this->replaceVariable($matches[1]) . '|trim(' . $this->replaceVariable($matches[1]) . ')';
         }, $expression);
 
         // @todo add some simple tests too
         $pattern = '~is_numeric\(([^)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
             return $this->replaceVariable($matches[1]) . ' is numeric';
+        }, $expression);
+
+        $pattern = '~is_object\(([^)]+)\)~';
+        $expression = preg_replace_callback($pattern, function ($matches) {
+            return $this->replaceVariable($matches[1]) . ' is object';
         }, $expression);
 
         $pattern = '~(!?)in_array\((\$[^)]+)\)~';
@@ -682,7 +894,27 @@ class BlocklayoutToTwigConverter extends TwigConverter
             [$sep, $value] = explode(',', $matches[1]);
             return trim($this->replaceVariable($value)) . '|split(' . trim($this->replaceExpression($sep)) . ')';
         }, $expression);
- 
+
+        $pattern = '~implode\((\'[^\']+\')\s*,([^)]+)\)~';
+        $expression = preg_replace_callback($pattern, function ($matches) {
+            return trim($this->replaceExpression($matches[2])) . '|join(' . trim($this->replaceExpression($matches[1])) . ')';
+        }, $expression);
+
+        $pattern = '~array_keys\(([^)]+)\)~';
+        $expression = preg_replace_callback($pattern, function ($matches) {
+            return trim($this->replaceVariable($matches[1])) . '|keys';
+        }, $expression);
+
+        $pattern = '~json_encode\(([^)]+)\)~';
+        $expression = preg_replace_callback($pattern, function ($matches) {
+            [$value, $flags] = explode(',', $matches[1]);
+            if ($flags) {
+                $flags = trim($flags);
+                return trim($this->replaceVariable($value)) . '|json_encode(constant(\'' . $flags . '\'))'; 
+            }
+            return trim($this->replaceVariable($value)) . '|json_encode()'; 
+        }, $expression);
+
         $pattern = '~ucwords\(str_replace\(([^)]+)\)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
             [$from, $to, $var] = explode(',', $matches[1]);
@@ -702,11 +934,5 @@ class BlocklayoutToTwigConverter extends TwigConverter
         }, $expression);
 
         return $expression;
-    }
-
-    public function replaceVariable($variable)
-    {
-        // we get into trouble using : here if we call replaceVariable() later - use ^ as placeholder
-        return str_replace(['$', ':', '->'], ['', '.', '.'], $variable);
     }
 }

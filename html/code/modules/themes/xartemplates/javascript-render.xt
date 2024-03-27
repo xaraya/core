@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--  Process only if there is JavaScript present -->
-    <xar:set name="libs">array()</xar:set>
+    <xar:set name="libs">[]</xar:set>
     <xar:if condition="!empty($javascript) and is_array($javascript)">
         <xar:foreach in="$javascript" value="$positions">
             <xar:if condition="empty($positions)"><xar:continue/></xar:if>

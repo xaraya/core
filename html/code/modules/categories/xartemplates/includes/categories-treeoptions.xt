@@ -53,8 +53,8 @@
             </option>
         </xar:if>
         <xar:if condition="!empty($childobject)"> 
-            <xar:set name="childlist">DataObjectFactory::getObjectList(array('name' => $childobject))</xar:set>
-            <xar:set name="childitems">$childlist->getItems(array('sort' => 'name'))</xar:set>
+            <xar:set name="childlist">DataObjectFactory::getObjectList(['name' => $childobject])</xar:set>
+            <xar:set name="childitems">$childlist->getItems(['sort' => 'name'])</xar:set>
             <xar:foreach in="$childitems" value="$childitem">
                 <xar:set name="fulllink">$nodeid . "." . $childitem['id']</xar:set>
                 <xar:if condition="in_array($fulllink,$value)">

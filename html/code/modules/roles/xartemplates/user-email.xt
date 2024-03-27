@@ -7,11 +7,11 @@
     <div class="xar-mod-body">
         <h2>
             <a href="#xarController::URL('roles','user','viewlist')#">Member List</a>&#160;&gt;&#160; 
-            <a href="#xarController::URL('roles','user','display',array('id'=>$id))#">
+            <a href="#xarController::URL('roles','user','display',['id'=>$id])#">
             #xarVar::prepForDisplay($name)#</a>&#160;&gt;&#160; Send an Email to
             &#160;#xarVar::prepForDisplay($name)#
         </h2>
-        <form method="post" action="#xarController::URL('roles','user','email',array('phase'=>'confirm'))#" enctype="application/x-www-form-urlencoded">
+        <form method="post" action="#xarController::URL('roles','user','email',['phase'=>'confirm'])#" enctype="application/x-www-form-urlencoded">
             <div>
                 <xar:if condition="!empty($error_message)">
                     <div class="xar-error">#xarVar::prepForDisplay($error_message)#</div>

@@ -297,7 +297,7 @@
                                     <xar:set name="id">'new_type'</xar:set>
                                     <xar:set name="options">
                                         array(
-                                            array('id' => 'lib', 'name' => 'Library'),
+                                            ['id' => 'lib', 'name' => 'Library'],
                                         )
                                     </xar:set>
                                     <xar:data-input name="$name" id="$id" type="dropdown" options="$options" style="width: 100px"/>

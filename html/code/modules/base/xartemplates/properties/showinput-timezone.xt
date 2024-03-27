@@ -15,8 +15,7 @@
                     <xar:set name="offset">($fields[0] * 60 + $fields[1]) * 60</xar:set>
                     <xar:set name="gmtime">gmdate('H:i',$now + $offset)</xar:set>
                 -->
-                    <xar:set name="label">$option['name'] . ' (GMT ' . $plus . (float)$option['offset']/3600 .
-                    ')'</xar:set>
+                    <xar:set name="label">$option['name'] . ' (GMT ' . $plus . $option['offset']/3600 . ')'</xar:set>
                 <xar:else />
                     <xar:set name="label">$option['name']</xar:set>
                 </xar:if>

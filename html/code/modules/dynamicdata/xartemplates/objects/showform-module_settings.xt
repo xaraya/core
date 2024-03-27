@@ -47,7 +47,7 @@
             </div>
             <div class="xar-col">
                 <xar:set name="aliasmap">xarConfigVars::get(null,'System.ModuleAliases')</xar:set>
-                <xar:set name="options">array()</xar:set>
+                <xar:set name="options">[]</xar:set>
                 <xar:if condition="!empty($aliasmap)">
                 	<xar:set name="modname">xarMod::getName()</xar:set>
                     <xar:foreach in="$aliasmap" key="$aliasname" value="$modulename">

@@ -16,7 +16,7 @@
         <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
         <xar:set name="activetab">#$request.2#</xar:set>
         <xar:set name="xmldata">'showusers'</xar:set>
-        <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>
+        <xar:set name="urlargs">['id' => $id, 'reload' => 'reload']</xar:set>
         <xar:template type="module" module="base" file="admin-menu-skel"/>
         <xar:if condition="count($parents) ne 0">
                 <ul class="xar-tabs xar-alt xar-norm-outline">
@@ -28,7 +28,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
                                     <xar:var name="parents[$i].parentname"/>
                                 </a>
                             </li>
@@ -65,7 +65,7 @@
                         <xar:loop name="$inherited">
                             <tr>
                                 <td>
-                                    <a href="#xarController::URL('privileges','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
+                                    <a href="#xarController::URL('privileges','admin','modifyprivilege',['id'=>$loop->item['privid']])#">
                                         <xar:var name="loop:item.name"/>
                                     </a>
                                 </td>
@@ -116,7 +116,7 @@
                     <xar:loop name="$privileges">
                         <tr>
                             <td>
-                                <a href="#xarController::URL('privileges','admin','modifyprivilege',array('id'=>$loop->item['privid']))#">
+                                <a href="#xarController::URL('privileges','admin','modifyprivilege',['id'=>$loop->item['privid']])#">
                                     <xar:var name="loop:item.name"/>
                                 </a>
                             </td>

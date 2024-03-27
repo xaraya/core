@@ -17,7 +17,7 @@
                         <xar:set name="linkclass">'xar-norm xar-norm-outline'</xar:set>
                     </xar:if>
                     <li class="#$tabclass#">
-                        <a href="#xarServer::getCurrentURL(array('activetab' => $tab['id']))#" class="#$linkclass#">
+                        <a href="#xarServer::getCurrentURL(['activetab' => $tab['id']])#" class="#$linkclass#">
                             #$tab['name']#
                         </a>
                     </li>
@@ -56,7 +56,7 @@
                         </xar:if>
                         <dd class="#$tabclass#">
                             <xar:set name="name">$currentcategory->name</xar:set>
-                            <xar:set name="url">isset($currentcategory->url) ? $currentcategory->url : xarServer::getCurrentURL(array('activetab' => $id))</xar:set>
+                            <xar:set name="url">isset($currentcategory->url) ? $currentcategory->url : xarServer::getCurrentURL(['activetab' => $id])</xar:set>
                             <a href="#$url#" class="#$linkclass#">
                                 #$name#
                             </a>

@@ -15,7 +15,7 @@
                             <xar:continue/>
                         </xar:if>
                         <div class="xar-col dummy">
-                            <a href="#xarController::URL('modules','admin','aliases',array('name' => $value, 'remove' => $key))#">
+                            <a href="#xarController::URL('modules','admin','aliases',['name' => $value, 'remove' => $key])#">
                                 <xar:var name="imagealt">[remove]</xar:var>
                                 <xar:set name="iconurl">xarTpl::getImage('icons/delete.png', 'theme')</xar:set>
                                 <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>

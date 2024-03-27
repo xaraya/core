@@ -69,7 +69,7 @@
 	                </label>
                 </div>
                 <div class="xar-col">
-	                <a href="#xarController::URL('modules','admin','aliases',array('name' => $modname))#">
+	                <a href="#xarController::URL('modules','admin','aliases',['name' => $modname])#">
 	                    <xar:var name="imagealt">[set aliases]</xar:var>
 	                    <xar:set name="iconurl">xarTpl::getImage('icons/modify.png', 'theme')</xar:set>
 	                    <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>
@@ -151,7 +151,7 @@
                 <div class="xar-col">
                     <label class="xar-form-label">
                         <xar:if condition="!empty($hookobservers)">
-                            <a href="#xarController::URL('modules','admin','hooks',array('hook' => $modname))#">Hook Observers</a>
+                            <a href="#xarController::URL('modules','admin','hooks',['hook' => $modname])#">Hook Observers</a>
                         <xar:else/>
                             Hook Observers
                         </xar:if>

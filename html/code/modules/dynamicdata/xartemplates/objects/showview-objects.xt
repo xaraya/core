@@ -54,9 +54,9 @@
             </tr>
             <xar:set name="adminlistserial">xarModVars::get('dynamicdata','administrators')</xar:set>
             <xar:if condition="!empty($adminlistserial)">
-                <xar:set name="adminlist">array_merge(unserialize($adminlistserial),array(xarUser::getVar('uname',xarModVars::get('roles','admin'))))</xar:set>
+                <xar:set name="adminlist">array_merge(unserialize($adminlistserial),[xarUser::getVar('uname',xarModVars::get('roles','admin'))])</xar:set>
             <xar:else/>
-                <xar:set name="adminlist">array(xarUser::getVar('uname',(int)xarModVars::get('roles','admin')))</xar:set>
+                <xar:set name="adminlist">[xarUser::getVar('uname',xarModVars::get('roles','admin'))]</xar:set>
             </xar:if>
             <xar:set name="issuperadmin">in_array(xarUser::getVar('uname'),$adminlist)</xar:set>
             <xar:set name="item_no">0</xar:set>

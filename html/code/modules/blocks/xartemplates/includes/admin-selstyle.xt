@@ -15,10 +15,10 @@
                 <div class="xar-col">
                     <xar:set name="options">
                         array(
-                            array('id' => 'plain',   'name' => xarML('Plain')),
-                            array('id' => 'compact', 'name' => xarML('Compact')),
-                            array('id' => 'bygroup', 'name' => xarML('By Group')),
-                            array('id' => 'bytype',  'name' => xarML('By Type')),
+                            ['id' => 'plain',   'name' => xarML('Plain')],
+                            ['id' => 'compact', 'name' => xarML('Compact')],
+                            ['id' => 'bygroup', 'name' => xarML('By Group')],
+                            ['id' => 'bytype',  'name' => xarML('By Type')],
                         )
                     </xar:set>
                     <xar:data-input type="dropdown" name="selstyle" options="$options" value="$selstyle"/>&#160;

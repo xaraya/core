@@ -88,7 +88,7 @@
                     <td>
                         <xar:if condition="!empty($item['groups'])">
                             <xar:loop name="$item['groups']">
-                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $loop:item.block_id])#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($item['groups'])">,&#160;</xar:if>
                             </xar:loop>
                         <xar:else/>
@@ -97,7 +97,7 @@
                     </td>
                     <td>
                         <xar:if condition="$item['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
-                            <a href="xarController::URL('blocks', 'admin', 'modify_instance', array('interface' => 'display', 'block_method' => 'state', 'block_id' => $block_id))#">Type #$type_states[$item['type_state']]['name']#</a>
+                            <a href="xarController::URL('blocks', 'admin', 'modify_instance', ['interface' => 'display', 'block_method' => 'state', 'block_id' => $block_id])#">Type #$type_states[$item['type_state']]['name']#</a>
                         <xar:else/>
                             #$instance_states[$item['state']]['name']#
                         </xar:if>

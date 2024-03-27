@@ -20,7 +20,7 @@
     <div class="xar-mod-page-head">
         <h2>#xarVar::prepForDisplay($title)#:
             <xar:var name="label">Modify role</xar:var>
-            <a href="#xarController::URL('roles','admin','modify',array('id'=>$groupid))#" title="#$label#">
+            <a href="#xarController::URL('roles','admin','modify',['id'=>$groupid])#" title="#$label#">
                 #xarVar::prepForDisplay($groupname)#
             </a>
             <xar:if condition="$search ne ''">&#160;matching
@@ -31,7 +31,7 @@
         <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
         <xar:set name="activetab">#$request.2#</xar:set>
         <xar:set name="xmldata">'showusers'</xar:set>
-        <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>
+        <xar:set name="urlargs">['id' => $id, 'reload' => 'reload']</xar:set>
         <xar:template type="module" module="base" file="admin-menu-skel"/>
         <xar:if condition="$selstyle eq '0'">
         <xar:elseif condition="$selstyle eq '1'"/>
@@ -48,13 +48,13 @@
                 <li class="xar-tabs-label" title="#$title#">#$label#</li>
                 <xar:if condition="$groupid eq 0">
                         <li class="xar-tab-active">
-                        <a href="#xarController::URL('roles','admin','showusers',array('id'=>0,'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" class="xar-accent xar-accent-outline">
+                        <a href="#xarController::URL('roles','admin','showusers',['id'=>0,'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'])#" class="xar-accent xar-accent-outline">
                             All Users (#$totalusers#)
                         </a>
                     </li>
                 <xar:else/>
                     <li class="xar-tab">
-                        <a href="#xarController::URL('roles','admin','showusers',array('id'=>0,'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" class="xar-norm xar-norm-outline">
+                        <a href="#xarController::URL('roles','admin','showusers',['id'=>0,'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'])#" class="xar-norm xar-norm-outline">
                             All Users (#$totalusers#)
                         </a>
                     </li>
@@ -65,14 +65,14 @@
                         <xar:if condition="$groupid eq $groups[$i]['id']">
                             <li class="xar-tab-active">
                                 <xar:var name="label">Display the users in this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#$label#" class="xar-accent xar-accent-outline">
+                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'])#" title="#$label#" class="xar-accent xar-accent-outline">
                                     #xarVar::prepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
                                 </a>
                             </li>
                         <xar:else/>
                             <li class="xar-tab">
                                 <xar:var name="label">Display the users in this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$groups[$i]['id'],'state'=>$state,'order'=>$order,'search'=>$search,'reload'=>'reload'])#" title="#$label#" class="xar-norm xar-norm-outline">
                                     #xarVar::prepForDisplay($groups[$i]['name'])# (#$groups[$i]['users']#)
                                 </a>
                             </li>
@@ -85,7 +85,7 @@
         </xar:if>
         </div><!--/xar-mod-page-head-->
         <div class="xar-mod-page-body">
-        <form method="post" action="#xarController::URL('roles','admin','showusers',array('reload'=>'reload'))#">
+        <form method="post" action="#xarController::URL('roles','admin','showusers',['reload'=>'reload'])#">
             <!-- User List Sort and Filter Controls table (taken from the modules module) @todo make this general -->
             <table class="xar-table xar-items-controls">
                 <tr>
@@ -149,7 +149,7 @@
                     </td>
                     <td>
                         <xar:set name="firstline">
-                            array('id' => xarRoles::ROLES_STATE_CURRENT, 'name' => 'All')
+                            ['id' => xarRoles::ROLES_STATE_CURRENT, 'name' => 'All']
                         </xar:set>
                         <xar:data-input type="dropdown" name="state" value="$state" options="$statelist" firstline="$firstline" onchange="this.form.submit()"/>
                     </td>
@@ -169,7 +169,7 @@
         <xar:else />
             <form method="post" action="#xarController::URL('roles','admin','updatestate')#" name="state">
                 <!-- @todo: add this to the filter GUI? -->
-                <xar:set name="fieldlist">array('id','uname','email','regdate','state')</xar:set>
+                <xar:set name="fieldlist">['id','uname','email','regdate','state']</xar:set>
                 <xar:data-getitems object="$object" values="$values" properties="$properties" sort="$order" fieldlist="$fieldlist"/>
                 <table class="xar-table xar-items">
                     <tr>
@@ -180,7 +180,7 @@
                             	<xar:set name="xar_status">''</xar:set>
                             </xar:if>
                             <th class="#$xar_status# #$name#">
-                                <a title="Sort by #$name#" href="#xarController::URL('roles','admin','showusers',array('id'=>$groupid,'state'=>$state,'order'=>$name,'search'=>$search,'reload'=>'reload'))#">
+                                <a title="Sort by #$name#" href="#xarController::URL('roles','admin','showusers',['id'=>$groupid,'state'=>$state,'order'=>$name,'search'=>$search,'reload'=>'reload'])#">
                                     <xar:data-label property="$properties[$name]"/>
                                 </a>
                             </th>
@@ -224,18 +224,18 @@
                                 <xar:if condition="!$users[$itemid]['frozen']">
                                     <xar:if condition="xarModVars::get('roles', 'askpasswordemail')">
                                         <xar:var name="label">Generate a new password for this User</xar:var>
-                                        <a href="#xarController::URL('roles','admin','createpassword',array('id'=>$fields['id'],'state'=>$state,'groupid'=>$groupid))#" title="#$label#">
+                                        <a href="#xarController::URL('roles','admin','createpassword',['id'=>$fields['id'],'state'=>$state,'groupid'=>$groupid])#" title="#$label#">
                                             <img src="#$icon_password#" class="xar-valign-middle"/>
                                         </a>
                                         &#160;
                                     </xar:if>
                                     <xar:var name="label">Modify this user</xar:var>
-                                    <a href="#xarController::URL('roles','admin','modify',array('id'=>$fields['id']))#" title="#$label#">
+                                    <a href="#xarController::URL('roles','admin','modify',['id'=>$fields['id']])#" title="#$label#">
                                         <img src="#$icon_modify#" class="xar-valign-middle"/>
                                     </a>
                                     &#160;
                                     <xar:var name="label">Delete this User</xar:var>
-                                    <a href="#xarController::URL('roles','admin','delete',array('id'=>$fields['id']))#" title="#$label#">
+                                    <a href="#xarController::URL('roles','admin','delete',['id'=>$fields['id']])#" title="#$label#">
                                         <img src="#$icon_delete#" class="xar-valign-middle"/>
                                     </a>
                                     &#160;
@@ -245,12 +245,12 @@
                                     <img src="#$icon_none#" class="xar-valign-middle"/>&#160;
                                 </xar:if>
                                 <xar:var name="label">Show the Privileges assigned to this User</xar:var>
-                                <a href="#xarController::URL('roles','admin','showprivileges',array('id'=>$fields['id']))#" title="#$label#">
+                                <a href="#xarController::URL('roles','admin','showprivileges',['id'=>$fields['id']])#" title="#$label#">
                                     <img src="#$icon_privileges#" class="xar-valign-middle"/>
                                 </a>
                                 &#160;
                                 <xar:var name="label">Test the Privileges of this User</xar:var>
-                                <a href="#xarController::URL('roles','admin','testprivileges',array('id'=>$fields['id']))#" title="#$label#">
+                                <a href="#xarController::URL('roles','admin','testprivileges',['id'=>$fields['id']])#" title="#$label#">
                                     <img src="#$icon_test#" class="xar-valign-middle"/>
                                 </a>
                             </td>
@@ -306,7 +306,7 @@
     	<xar:pager startnum="$startnum" itemsperpage="$itemsperpage" total="$totalselect" urltemplate="$urltemplate" urlitemmatch="$urlitemmatch"/>
     		<ul class="xar-mod-actions">
             <xar:var name="label">Add a new user</xar:var>
-            <li><a href="#xarController::URL('roles','admin','new',array('ptype'=>0,'pparentid'=>$groupid))#" title="#$label#">Add user to group</a></li>
+            <li><a href="#xarController::URL('roles','admin','new',['ptype'=>0,'pparentid'=>$groupid])#" title="#$label#">Add user to group</a></li>
             <li><a href="#xarController::URL('roles','admin','createmail')#">Email group</a></li>
         </ul>
     	</div>

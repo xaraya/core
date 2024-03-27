@@ -36,7 +36,7 @@ class xarTwigTpl extends xarTpl
             'code/modules/workflow/templates' => 'workflow',
             'code/modules/base/templates' => 'base',
             'code/modules/themes/templates' => 'themes',
-            'themes' => 'themes',
+            'themes' => '',  // no namespace for themes pages etc.
         ], $paths);
 
         // override default options for Twig environment
