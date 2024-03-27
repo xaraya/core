@@ -114,6 +114,8 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $this->replaceButtonTag();
         $this->replaceCommentTag();
         $this->replaceSecurityTag();
+        $this->replaceDynamicDataTags();
+        $this->replaceWorkflowTags();
         $this->addHeader();
         return $this->content;
     }
@@ -214,14 +216,18 @@ class BlocklayoutToTwigConverter extends TwigConverter
             }
             $namespace = $this->getNamespace();
             if (!empty($attrib['module']) && $attrib['module'] !== $namespace) {
-                if (str_contains($attrib['module'], '$')) {
-                    // @todo handle variable include
-                    return $matches[0];
-                }
                 $namespace = $attrib['module'];
+                if (str_contains($namespace, '$')) {
+                    [$pre, $post] = explode('$', $namespace);
+                    $namespace = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
+                }
             }
             if (!str_ends_with($namespace, '/includes')) {
                 $namespace .= '/includes';
+            }
+            if (str_contains($file, '$')) {
+                [$pre, $post] = explode('$', $file);
+                $file = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
             }
             if (!empty($namespace)) {
                 return '{{ include(\'@' . $namespace . '/' . $file . '.html.twig\') }}';
@@ -262,6 +268,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
      * Replace foreach control structure
      * <xar:foreach in="$..." value="$...">
      * <xar:foreach in="$..." key="$..." value="$...">
+     * <xar:foreach in="$..." key="$...">
      * <xar:continue/> - @todo there is no break or continue in Twig?
      * </xar:foreach>
      */
@@ -275,6 +282,11 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $pattern = '~<xar:foreach in="([^"]+)" key="([^"]+)" value="([^"]+)">~i';
         $this->content = preg_replace_callback($pattern, function ($matches) {
             return '{% for ' . $this->replaceVariable($matches[2]) . ', ' . $this->replaceVariable($matches[3]) . ' in ' . $this->replaceVariable($matches[1]) . ' %}';
+        }, $this->content);
+
+        $pattern = '~<xar:foreach in="([^"]+)" key="([^"]+)">~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{% for ' . $this->replaceVariable($matches[2]) . ' in ' . $this->replaceVariable($matches[1]) . '|keys %}';
         }, $this->content);
 
         // @todo handle <xar:continue/>
@@ -399,11 +411,42 @@ class BlocklayoutToTwigConverter extends TwigConverter
     }
 
     /**
-     * Replace workflow actions
+     * Replace dynamicdata tags
+     * <xar:data-view object="$object" newlink=""/>
+     * <xar:data-display object="$object"/>
+     * <xar:data-label property="$properties[$name]"/>
+     * <xar:data-output property="$properties[$name]" _itemid="$itemid" value="$fields[$name]"/>
+     * @todo replace array with fixed order of params?
+     */
+    public function replaceDynamicDataTags()
+    {
+        $pattern = '~<xar:data-view ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_data_view(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        $pattern = '~<xar:data-display ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_data_display(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        $pattern = '~<xar:data-label ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_data_label(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+
+        $pattern = '~<xar:data-output ([^>]+)\s*/>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            return '{{ xar_data_output(' . $this->replaceAttributes($matches[1]) . ') }}';
+        }, $this->content);
+    }
+
+    /**
+     * Replace workflow tags
      * <xar:workflow-actions name="actions" config="$config" item="$item" title="$item['marking']" template="$item['marking']"/>
      * @todo replace array with fixed order of params?
      */
-    public function replaceWorkflowActions()
+    public function replaceWorkflowTags()
     {
         $pattern = '~<xar:workflow-actions ([^>]+)\s*/>~i';
         $this->content = preg_replace_callback($pattern, function ($matches) {
