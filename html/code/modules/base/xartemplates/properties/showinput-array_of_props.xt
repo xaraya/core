@@ -29,8 +29,8 @@
                         </div>
                         <div class="xar-col">
                             <!-- we don't use an array here, because other property types may add their own suffix -->
-                            <xar:set name="propname">$name.'_value_'.$index</xar:set>
-                            <xar:set name="propid">$id.'_value_'.$index</xar:set>
+                            <xar:set name="propname">$name . '_value_' . $index</xar:set>
+                            <xar:set name="propid">$id . '_value_' . $index</xar:set>
                             <xar:data-input property="$property" name="$propname" id="$propid" value="$val" size="$size"/>
                         </div>
                     </div>
@@ -55,8 +55,8 @@
                         </div>
                         <div class="xar-col">
                             <!-- we don't use an array here, because other property types may add their own suffix -->
-                            <xar:set name="propname">$name.'_value_'.$i</xar:set>
-                            <xar:set name="propid">$id.'_value_'.$i</xar:set>
+                            <xar:set name="propname">$name . '_value_' . $i</xar:set>
+                            <xar:set name="propid">$id . '_value_' . $i</xar:set>
                             <xar:data-input property="$property" name="$propname" id="$propid" value="" size="$size"/>
                         </div>
                     </div>

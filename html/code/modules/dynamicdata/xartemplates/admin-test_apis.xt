@@ -138,15 +138,16 @@
                                 <xar:set name="dummy">$info['type'] = 'rest'</xar:set>
                             </xar:if>
                             <td>Module <a href="#xarServer::getModuleURL($item['module'])#">#$item['module']#</a> #$api# with #$info['type']# api #$info['name']#() <xar:if condition="!empty($info['caching'])"><span>*</span></xar:if></td>
-                            <xar:if condition="empty($restapilist) or in_array($item['module'].'.'.$api, $restapilist)">
-                                <td><input type="checkbox" name="restapi[#$item['module']#.#$api#]" id="restapi_#$item['module']#.#$api#" checked="checked"/></td>
+                            <xar:set name="moduleapi">$item['module'] . '.' . $api</xar:set>
+                            <xar:if condition="empty($restapilist) or in_array($moduleapi, $restapilist)">
+                                <td><input type="checkbox" name="restapi[#$moduleapi#]" id="restapi_#$moduleapi#" checked="checked"/></td>
                             <xar:else/>
-                                <td><input type="checkbox" name="restapi[#$item['module']#.#$api#]" id="restapi_#$item['module']#.#$api#"/></td>
+                                <td><input type="checkbox" name="restapi[#$moduleapi#]" id="restapi_#$moduleapi#"/></td>
                             </xar:if>
-                            <xar:if condition="empty($graphqllist) or in_array($item['module'].'.'.$api, $graphqllist)">
-                                <td><input type="checkbox" name="graphql[#$item['module']#.#$api#]" id="graphql_#$item['module']#.#$api#" checked="checked"/></td>
+                            <xar:if condition="empty($graphqllist) or in_array($moduleapi, $graphqllist)">
+                                <td><input type="checkbox" name="graphql[#$moduleapi#]" id="graphql_#$moduleapi#" checked="checked"/></td>
                             <xar:else/>
-                                <td><input type="checkbox" name="graphql[#$item['module']#.#$api#]" id="graphql_#$item['module']#.#$api#"/></td>
+                                <td><input type="checkbox" name="graphql[#$moduleapi#]" id="graphql_#$moduleapi#"/></td>
                             </xar:if>
                         </tr>
                         </xar:foreach>

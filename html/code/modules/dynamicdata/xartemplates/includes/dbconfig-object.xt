@@ -69,10 +69,11 @@
                         Name <select id="dbConnArgs" name="config[dbconfig]">
                             <option value=""></option>
                             <xar:foreach in="$databases" key="$dbname" value="$dbinfo">
-                                <xar:if condition="!empty($config['dbconfig']) and $module.'.'.$dbname eq $config['dbconfig']">
-                                    <option value="#$module#.#$dbname#" selected="selected">#$dbname#</option>
+                                <xar:set name="moduledbname">$module . '.' . $dbname</xar:set>
+                                <xar:if condition="!empty($config['dbconfig']) and $moduledbname eq $config['dbconfig']">
+                                    <option value="#$moduledbname#" selected="selected">#$dbname#</option>
                                 <xar:else/>
-                                    <option value="#$module#.#$dbname#">#$dbname#</option>
+                                    <option value="#$moduledbname#">#$dbname#</option>
                                 </xar:if>
                             </xar:foreach>
                         </select>

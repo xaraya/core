@@ -51,7 +51,7 @@
                                 <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
                                     <xar:if condition="!empty($option['olink'])">
                                         <xar:if condition="!empty($option['oicon'])">
-                                            <xar:set name="imgfile">'icons/'.$option['oicon']</xar:set>
+                                            <xar:set name="imgfile">'icons/' . $option['oicon']</xar:set>
                                             <a href="#$option['olink']#" title="#$option['otitle']#"><xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$otype"/></a>&#160;
                                         <xar:else/>
                                             #$option['ojoin']# 

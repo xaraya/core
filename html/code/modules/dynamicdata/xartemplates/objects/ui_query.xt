@@ -57,8 +57,8 @@
                             </xar:if>
     
                             <!-- initialize fieldname, fieldid and fieldvalue -->
-                            <xar:set name="fieldname">'field['.$name.']'</xar:set>
-                            <xar:set name="fieldid">'field_'.$name</xar:set>
+                            <xar:set name="fieldname">'field[' . $name . ']'</xar:set>
+                            <xar:set name="fieldid">'field_' . $name</xar:set>
                             <xar:if condition="isset($query['field'][$name])">
                                 <xar:set name="fieldvalue">#$query['field'][$name]#</xar:set>
                             <xar:else/>
@@ -90,9 +90,9 @@
                                 </select>
     
                             <xar:elseif condition="is_a($property, 'CalendarProperty')"/>
-                                <xar:set name="name2">$name.'2'</xar:set>
-                                <xar:set name="fieldname2">'field['.$name2.']'</xar:set>
-                                <xar:set name="fieldid2">'field_'.$name2</xar:set>
+                                <xar:set name="name2">$name . '2'</xar:set>
+                                <xar:set name="fieldname2">'field[' . $name2 . ']'</xar:set>
+                                <xar:set name="fieldid2">'field_' . $name2</xar:set>
                                 <xar:if condition="isset($query['field'][$name2])">
                                     <xar:set name="fieldvalue2">#$query['field'][$name2]#</xar:set>
                                 <xar:else/>
@@ -113,9 +113,9 @@
                                 </div>
     
                             <xar:elseif condition="is_a($property, 'NumberBoxProperty')"/>
-                                <xar:set name="name2">$name.'2'</xar:set>
-                                <xar:set name="fieldname2">'field['.$name2.']'</xar:set>
-                                <xar:set name="fieldid2">'field_'.$name2</xar:set>
+                                <xar:set name="name2">$name . '2'</xar:set>
+                                <xar:set name="fieldname2">'field[' . $name2 . ']'</xar:set>
+                                <xar:set name="fieldid2">'field_' . $name2</xar:set>
                                 <xar:if condition="isset($query['field'][$name2])">
                                     <xar:set name="fieldvalue2">#$query['field'][$name2]#</xar:set>
                                 <xar:else/>

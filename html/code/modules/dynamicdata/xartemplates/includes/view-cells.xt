@@ -31,7 +31,8 @@
             <tr>
                 <xar:foreach in="$properties" key="$name">
                     <td>
-                        <xar:data-input property="$properties[$name]" size="10" name="dd_'.$name.'[0]"/>
+                        <xar:set name="fieldname">'dd_' . $name . '[0]'</xar:set>
+                        <xar:data-input property="$properties[$name]" size="10" name="$fieldname"/>
                     </td>
                 </xar:foreach>
             </tr>

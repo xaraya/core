@@ -54,8 +54,8 @@
                     <input type="text" name="dd_label[#$field['id']#]" id="dd_label_#$field['id']#" value="#$field['label']#" class="xar-form-textmedium"/>
                 </td>
                 <td class="#$displayclass#">
-                    <xar:set name="name">'dd_type['.$field['id'].']'</xar:set>
-                    <xar:set name="id">'old_dd_type_'.$field['id']</xar:set>
+                    <xar:set name="name">'dd_type[' . $field['id'] . ']'</xar:set>
+                    <xar:set name="id">'old_dd_type_' . $field['id']</xar:set>
                     <xar:data-input property="$fieldtypeprop" name="$name" id="$id" value="$field['type']"/>
                 </td>
                 <td class="#$displayclass#">
@@ -148,8 +148,8 @@
                         <xar:data-input property="$dropdown" class="dd-norm" name="$name" id="$id" value="$field['source']" options="$sources" hidden="hidden"/>
                     </xar:if>
                     Status:&#160;
-                    <xar:set name="name">'dd_status['.$field['id'].']'</xar:set>
-                    <xar:set name="id">'dd_status_'.$field['id']</xar:set>
+                    <xar:set name="name">'dd_status[' . $field['id'] . ']'</xar:set>
+                    <xar:set name="id">'dd_status_' . $field['id']</xar:set>
                     <xar:data-input property="$fieldstatusprop" name="$name" id="$id" size="15" value="$field['status']"/>
                     &#160;&#160;Translatable:&#160;
                     <xar:set name="name">'dd_translatable[' . $field['id'] . ']'</xar:set>

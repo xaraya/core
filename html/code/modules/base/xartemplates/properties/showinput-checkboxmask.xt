@@ -6,7 +6,7 @@
             <xar:if condition="$key == 0">
                 <xar:set name="theID">$id</xar:set>
             <xar:else />
-                <xar:set name="theID">$id.'_'.$key</xar:set>
+                <xar:set name="theID">$id . '_' . $key</xar:set>
             </xar:if>
 
             <xar:if condition="in_array($option['id'],$value)">

@@ -4,7 +4,7 @@
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">
         <xar:set name="typename">$propertytype->name</xar:set>
-        <xar:if condition="file_exists(sys::code().'properties/'.$typename.'/xartemplates/includes/overview.xt')">
+        <xar:if condition="file_exists(sys::code() . 'properties/' . $typename . '/xartemplates/includes/overview.xt')">
             <![CDATA[
             <script type="text/javascript">
                 function showtab (selectedindex, items)

@@ -55,7 +55,8 @@
                                     <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
                                         <xar:if condition="!empty($option['olink'])">
                                             <xar:if condition="!empty($option['oicon'])">
-                                                <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTpl::getImage('icons/'.$option['oicon'], 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
+                                                <xar:set name="imgfile">'icons/' . $option['oicon']</xar:set>
+                                                <a href="#$option['olink']#" title="#$option['otitle']#"><img src="#xarTpl::getImage($imgfile, 'base')#" width="16" height="16" alt="#$otype#"/></a>&#160;
                                             <xar:else/>
                                                 #$option['ojoin']# 
                                                 <a href="#$option['olink']#">#$option['otitle']#</a>
@@ -83,7 +84,7 @@
             </xar:if>
             <xar:if condition="count($object:items) eq $object:numitems">
                 <div class="xar-halfwidth xar-floatright xar-align-right">
-                    <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
+                    <xar:set name="newtotal">$object->startnum + $object->numitems</xar:set>
                     <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
                 </div>
             </xar:if>

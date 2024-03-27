@@ -9,7 +9,7 @@
                         <xar:if condition="$key == 0">
                             <xar:set name="theID">$id</xar:set>
                         <xar:else />
-                            <xar:set name="theID">$id.'_'.$key</xar:set>
+                            <xar:set name="theID">$id . '_' . $key</xar:set>
                         </xar:if>
 
                         <xar:if condition="isset($default_value)">
@@ -37,7 +37,7 @@
                         <xar:if condition="$key == 0">
                             <xar:set name="theID">$id</xar:set>
                         <xar:else />
-                            <xar:set name="theID">$id.'_'.$key</xar:set>
+                            <xar:set name="theID">$id . '_' . $key</xar:set>
                         </xar:if>
 
                         <xar:if condition="isset($default_value)">
@@ -78,7 +78,7 @@
                                 <xar:if condition="$o == 0">
                                     <xar:set name="theID">$id</xar:set>
                                 <xar:else />
-                                    <xar:set name="theID">$id.'_'.$o</xar:set>
+                                    <xar:set name="theID">$id . '_' . $o</xar:set>
                                 </xar:if>
                                 <xar:if condition="isset($default_value)">
                                     <xar:if condition="$default_value eq 1">

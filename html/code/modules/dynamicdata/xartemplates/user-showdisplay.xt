@@ -9,7 +9,8 @@
                         <strong>#$field['label']# :</strong>
                     </td>
                     <td class="xar-align-left">
-                        <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']"/>
+                        <xar:set name="fieldname">'dd_' . $field['id']</xar:set>
+                        <xar:data-output type="$field['type']" name="$fieldname" value="$field['value']"/>
                     </td>
                 </tr>
             </xar:foreach>

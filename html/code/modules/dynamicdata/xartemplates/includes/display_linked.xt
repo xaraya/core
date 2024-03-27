@@ -34,9 +34,9 @@
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
                 <xar:if condition="$link.source eq $link.target">
-                    <xar:set name="relation">$tolabel.' =&gt; '.$fromlabel</xar:set>
+                    <xar:set name="relation">$tolabel . ' =&gt; ' . $fromlabel</xar:set>
                 <xar:else/>
-                    <xar:set name="relation">$link['list']->label.'.'.$tolabel.' =&gt; '.$fromlabel</xar:set>
+                    <xar:set name="relation">$link['list']->label . '.' . $tolabel . ' =&gt; ' . $fromlabel</xar:set>
                 </xar:if>
                 <li class="xar-tab" id="parents-tab-#$tabid#">
                     <a id="parents-href-#$tabid#" href="javascript:showtab_prefix(#$tabid#,#$numtabs#,'parents-')" title="#$relation#">
@@ -70,9 +70,9 @@
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
                 <xar:if condition="$link.source eq $link.target">
-                    <xar:set name="relation">$tolabel.' =&gt; '.$fromlabel</xar:set>
+                    <xar:set name="relation">$tolabel . ' =&gt; ' . $fromlabel</xar:set>
                 <xar:else/>
-                    <xar:set name="relation">$link['list']->label.'.'.$tolabel.' =&gt; '.$fromlabel</xar:set>
+                    <xar:set name="relation">$link['list']->label . '.' . $tolabel . ' =&gt; ' . $fromlabel</xar:set>
                 </xar:if>
                 <li class="xar-tab" id="linkedfrom-tab-#$tabid#">
                     <a id="linkedfrom-href-#$tabid#" href="javascript:showtab_prefix(#$tabid#,#$numtabs#,'linkedfrom-')" title="#$relation#">
@@ -117,9 +117,9 @@
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
                 <xar:if condition="$link.source eq $link.target">
-                    <xar:set name="relation">$fromlabel.' =&gt; '.$tolabel</xar:set>
+                    <xar:set name="relation">$fromlabel . ' =&gt; ' . $tolabel</xar:set>
                 <xar:else/>
-                    <xar:set name="relation">$fromlabel.' =&gt; '.$link['list']->label.'.'.$tolabel</xar:set>
+                    <xar:set name="relation">$fromlabel . ' =&gt; ' . $link['list']->label . '.' . $tolabel</xar:set>
                 </xar:if>
                 <li class="xar-tab" id="linkedto-tab-#$tabid#">
                     <a id="linkedto-href-#$tabid#" href="javascript:showtab_prefix(#$tabid#,#$numtabs#,'linkedto-')" title="#$relation#">
@@ -153,9 +153,9 @@
                 <xar:set name="toprop">#$link.to_prop#</xar:set>
                 <xar:set name="tolabel">#$link.list:properties.$toprop:label#</xar:set>
                 <xar:if condition="$link.source eq $link.target">
-                    <xar:set name="relation">$fromlabel.' =&gt; '.$tolabel</xar:set>
+                    <xar:set name="relation">$fromlabel . ' =&gt; ' . $tolabel</xar:set>
                 <xar:else/>
-                    <xar:set name="relation">$fromlabel.' =&gt; '.$link['list']->label.'.'.$tolabel</xar:set>
+                    <xar:set name="relation">$fromlabel . ' =&gt; ' . $link['list']->label . '.' . $tolabel</xar:set>
                 </xar:if>
                 <li class="xar-tab" id="children-tab-#$tabid#">
                     <a id="children-href-#$tabid#" href="javascript:showtab_prefix(#$tabid#,#$numtabs#,'children-')" title="#$relation#">

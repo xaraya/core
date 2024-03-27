@@ -11,7 +11,7 @@
             <xar:if condition="$key == 0">
                 <xar:set name="theID">$id</xar:set>
             <xar:else />
-                <xar:set name="theID">$id.'_'.$key</xar:set>
+                <xar:set name="theID">$id . '_' . $key</xar:set>
             </xar:if>
             <xar:if condition="$option['id'] eq $value">
                 <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked"/>
@@ -32,7 +32,7 @@
                     <xar:if condition="$key == 0">
                         <xar:set name="theID">$id</xar:set>
                     <xar:else />
-                        <xar:set name="theID">$id.'_'.$key</xar:set>
+                        <xar:set name="theID">$id . '_' . $key</xar:set>
                     </xar:if>
                     <td style="text-align: center">
                         <label for="#$theID#">#$option['name']#</label><br/>
@@ -56,7 +56,7 @@
                 <xar:if condition="$key == 0">
                     <xar:set name="theID">$id</xar:set>
                 <xar:else />
-                    <xar:set name="theID">$id.'_'.$key</xar:set>
+                    <xar:set name="theID">$id . '_' . $key</xar:set>
                 </xar:if>
                 <xar:if condition="$option['id'] eq $value">
                     <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked"/>

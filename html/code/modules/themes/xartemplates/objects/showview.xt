@@ -91,7 +91,7 @@
             </xar:if>
             <xar:if condition="count($object:items) eq $object:numitems">
                 <div class="xar-halfwidth xar-floatright xar-align-right">
-                    <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
+                    <xar:set name="newtotal">$object->startnum + $object->numitems</xar:set>
                     <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
                 </div>
             </xar:if>
