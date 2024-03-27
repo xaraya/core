@@ -40,6 +40,7 @@ namespace Xaraya\Bridge\TemplateEngine;
 
 use Twig\Environment;
 use Twig\TwigFunction;
+use Twig\TwigTest;
 use Twig\Loader\FilesystemLoader;
 use Xaraya\Core\Traits\ContextInterface;
 use Xaraya\Core\Traits\ContextTrait;
@@ -237,6 +238,12 @@ class TwigBridge implements ContextInterface
             return $class::$method(...$params);
         });
         $this->twig->addFunction($function);
+
+        // @todo add some simple tests too
+        $numeric = new TwigTest('numeric', function ($value) {
+            return is_numeric($value);
+        });
+        $this->twig->addTest($numeric);
 
         return $this->twig;
     }

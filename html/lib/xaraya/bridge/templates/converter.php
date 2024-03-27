@@ -37,8 +37,14 @@ class TwigConverter
 
     public function convertDir(string $fromPath, string $toPath, string $suffix = '.xt', string $prefix = '', int $depth = 0)
     {
+        if (!is_dir($toPath)) {
+            mkdir($toPath);
+        }
         if ($depth == 0) {
             $this->basePath = $toPath;
+            if (!is_dir($toPath . '/admin')) {
+                mkdir($toPath . '/admin');
+            }
         }
         $this->prefix = $prefix;
         $this->suffix = $suffix;
@@ -625,6 +631,17 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $pattern = '~count\((\$[^)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
             return $this->replaceVariable($matches[1]) . '|length';
+        }, $expression);
+
+        $pattern = '~trim\(([^)]+)\)~';
+        $expression = preg_replace_callback($pattern, function ($matches) {
+            return $this->replaceVariable($matches[1]) . '|trim';
+        }, $expression);
+
+        // @todo add some simple tests too
+        $pattern = '~is_numeric\(([^)]+)\)~';
+        $expression = preg_replace_callback($pattern, function ($matches) {
+            return $this->replaceVariable($matches[1]) . ' is numeric';
         }, $expression);
 
         $pattern = '~(!?)in_array\((\$[^)]+)\)~';

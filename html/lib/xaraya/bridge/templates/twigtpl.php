@@ -35,6 +35,7 @@ class xarTwigTpl extends xarTpl
             'code/modules/dynamicdata/templates' => 'dynamicdata',
             'code/modules/workflow/templates' => 'workflow',
             'code/modules/base/templates' => 'base',
+            'code/modules/themes/templates' => 'themes',
             'themes' => 'themes',
         ], $paths);
 
