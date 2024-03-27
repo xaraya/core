@@ -418,6 +418,10 @@ class xarTpl extends xarObject
  */
     public static function module($modName, $modType, $funcName, $tplData = array(), $templateName = NULL)
     {
+        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
+            sys::import('xaraya.bridge.templates.twigtpl');
+            return xarTwigTpl::module($modName, $modType, $funcName, $tplData, $templateName);
+        }
         // Basename of module template is apitype-functioname
         $tplBase        = "$modType-$funcName";
 
@@ -468,6 +472,10 @@ class xarTpl extends xarObject
  */
     public static function block($modName, $blockType, $tplData = array(), $tplName = NULL, $tplBase = NULL, $tplModule = NULL)
     {
+        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
+            sys::import('xaraya.bridge.templates.twigtpl');
+            return xarTwigTpl::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
+        }
         // use name of blocktype as base unless over-ridden
         $tplBase = empty($tplBase) ? $blockType : $tplBase;
         if (!empty($modName)) {
@@ -662,6 +670,10 @@ class xarTpl extends xarObject
  */
     public static function object($modName, $objectName, $tplType = 'showdisplay', $tplData = array(), $tplBase = NULL)
     {
+        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
+            sys::import('xaraya.bridge.templates.twigtpl');
+            return xarTwigTpl::object($modName, $objectName, $tplType, $tplData, $tplBase);
+        }
         $modName = xarVar::prepForOS($modName);
         $objectName = xarVar::prepForOS($objectName);
         $tplType = xarVar::prepForOS($tplType);
@@ -701,6 +713,13 @@ class xarTpl extends xarObject
  */
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = array(), $tplBase = NULL)
     {
+        if (!empty($tplData['context']) && !empty($tplData['context']['twig'])) {
+            // @todo only use for supported modules
+            if (in_array($modName, ['base', 'dynamicdata', 'workflow'])) {
+                sys::import('xaraya.bridge.templates.twigtpl');
+                return xarTwigTpl::property($modName, $propertyName, $tplType, $tplData, $tplBase);
+            }
+        }
         $modName = xarVar::prepForOS($modName);
         $propertyName = xarVar::prepForOS($propertyName);
         $tplType = xarVar::prepForOS($tplType);
