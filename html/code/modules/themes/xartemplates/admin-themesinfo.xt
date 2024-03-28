@@ -99,7 +99,7 @@
 		                <div class="xar-col">
 	                        <xar:if condition="$themestate == 3">
 	                            <select onchange="window.open(this.options[this.selectedIndex].value,'_blank')">
-	                                <option value="#">Choose a page to preview..</option>
+	                                <option value="?">Choose a page to preview..</option>
 	                                <option value="#xarController::URL()#?theme=#$themedir#">Default Front Page</option>
 	                                <option value="#xarController::URL('base','admin','main',['theme'=>$themedir])#">Base
 	                                (admin)</option>

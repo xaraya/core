@@ -1102,6 +1102,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             'xarServer::getCurrentURL(' => 'xar_currenturl(',
             'xarServer::getBaseURL(' => 'xar_baseurl(',
             'xarServer::getBaseURI(' => 'xar_baseuri(',
+            'xarSecurity::check(' => 'xar_security_check(',
             'xarTpl::getImage(' => 'xar_imageurl(',
             'xarTpl::getFile(' => 'xar_fileurl(',
             'xarMLS::translate(' => 'xar_translate(',
