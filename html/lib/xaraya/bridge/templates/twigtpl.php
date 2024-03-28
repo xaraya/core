@@ -8,6 +8,7 @@ sys::import('xaraya.bridge.templates.twig');
 sys::import('xaraya.context.context');
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
+use Twig\TemplateWrapper;
 use Xaraya\Bridge\TemplateEngine\TwigBridge;
 use Xaraya\Context\Context;
 
@@ -25,6 +26,13 @@ class xarTwigTpl extends xarTpl
         return false;
     }
 
+    /**
+     * Get a Twig environment with template paths, options and context
+     * @param array<string, string> $paths
+     * @param array<string, mixed> $options
+     * @param ?Context<string, mixed> $context
+     * @return Environment
+     */
     public static function getTwig(array $paths = [], array $options = [], ?Context $context = null)
     {
         sys::autoload();
@@ -57,7 +65,13 @@ class xarTwigTpl extends xarTpl
         return $twig;
     }
 
-    public static function findTwigTemplate($twig, $templates)
+    /**
+     * Find the first available template in the list or null
+     * @param Environment $twig
+     * @param list<string> $templates
+     * @return string|null
+     */
+    public static function findTwigTemplate(Environment $twig, array $templates)
     {
         /** @var LoaderInterface $loader */
         $loader = $twig->getLoader();
@@ -69,6 +83,14 @@ class xarTwigTpl extends xarTpl
         return null;
     }
 
+    /**
+     * Render Twig template with template data + add template name in comments
+     * @param TemplateWrapper $template
+     * @param array<string, mixed> $tplData
+     * @param string $templateName
+     * @param string $trace
+     * @return string
+     */
     public static function renderTemplate($template, $tplData, $templateName, $trace = '')
     {
         // don't use trace in page templates to avoid adding comments to page
@@ -81,12 +103,22 @@ class xarTwigTpl extends xarTpl
             '<!-- end: ' . $templateName . ' -->';
     }
 
+    /**
+     * @param string $mainModuleOutput
+     * @param string $pageTemplate
+     * @param ?Context<string, mixed> $context
+     * @return string
+     */
     public static function renderPage($mainModuleOutput, $pageTemplate = null, $context = null)
     {
+        if (!isset($context) || !isset($context['twig'])) {
+            throw new Exception('How did we end up here without twig context?');
+        }
         // xarTwigTpl::renderPage('...', 'theme', default, user, null, 'pages')
         if (is_bool($context['twig'])) {
             $context['twig'] = static::getTwig([], [], $context);
         }
+        if (empty($pageTemplate)) $pageTemplate = self::getPageTemplateName();
         $themeName = xarTpl::getThemeName();
         $trace = "xarTwigTpl::renderPage('...', 'theme', $themeName, $pageTemplate, null, 'pages')";
         // get page template source (current > common)
@@ -110,6 +142,14 @@ class xarTwigTpl extends xarTpl
         return static::renderTemplate($template, $tplData, $templateName, '');
     }
 
+    /**
+     * @param Environment $twig
+     * @param string $themeName
+     * @param string $tplType
+     * @param string $tplName
+     * @param ?string $pageName
+     * @return string|null
+     */
     public static function findThemeTemplate($twig, $themeName, $tplType, $tplName, $pageName = null)
     {
         $templates = [];
@@ -133,6 +173,14 @@ class xarTwigTpl extends xarTpl
         return static::findTwigTemplate($twig, $templates);
     }
 
+    /**
+     * @param string $modName
+     * @param string $modType
+     * @param string $funcName
+     * @param array<string, mixed> $tplData
+     * @param ?string $tplName
+     * @return string
+     */
     public static function module($modName, $modType, $funcName, $tplData = [], $tplName = null)
     {
         // xarTwigTpl::module(workflow, user, showactions, [...], updated)
@@ -151,29 +199,37 @@ class xarTwigTpl extends xarTpl
         return static::renderTemplate($template, $tplData, $templateName, $trace);
     }
 
-    public static function findModuleTemplate($twig, $modName, $modType, $funcName, $templateName)
+    /**
+     * @param Environment $twig
+     * @param string $modName
+     * @param string $modType
+     * @param string $funcName
+     * @param ?string $tplName
+     * @return string|null
+     */
+    public static function findModuleTemplate($twig, $modName, $modType, $funcName, $tplName)
     {
         $templates = [];
         // user templates are now in the top level directory and all others in subdirectories
         if ($modType == 'user') {
-            if (!empty($templateName)) {
-                $templates[] = '@' . $modName . '/' . $funcName . '-' . $templateName . '.html.twig';
+            if (!empty($tplName)) {
+                $templates[] = '@' . $modName . '/' . $funcName . '-' . $tplName . '.html.twig';
             }
             $templates[] = '@' . $modName . '/' . $funcName . '.html.twig';
             if ($modName !== 'dynamicdata') {
-                if (!empty($templateName)) {
-                    $templates[] = '@dynamicdata/' . $funcName . '-' . $templateName . '.html.twig';
+                if (!empty($tplName)) {
+                    $templates[] = '@dynamicdata/' . $funcName . '-' . $tplName . '.html.twig';
                 }
                 $templates[] = '@dynamicdata/' . $funcName . '.html.twig';
             }
         } else {
-            if (!empty($templateName)) {
-                $templates[] = '@' . $modName . '/' . $modType . '/' . $funcName . '-' . $templateName . '.html.twig';
+            if (!empty($tplName)) {
+                $templates[] = '@' . $modName . '/' . $modType . '/' . $funcName . '-' . $tplName . '.html.twig';
             }
             $templates[] = '@' . $modName . '/' . $modType . '/' . $funcName . '.html.twig';
             if ($modName !== 'dynamicdata') {
-                if (!empty($templateName)) {
-                    $templates[] = '@dynamicdata/' . $modType . '/' . $funcName . '-' . $templateName . '.html.twig';
+                if (!empty($tplName)) {
+                    $templates[] = '@dynamicdata/' . $modType . '/' . $funcName . '-' . $tplName . '.html.twig';
                 }
                 $templates[] = '@dynamicdata/' . $modType . '/' . $funcName . '.html.twig';
             }
@@ -181,17 +237,43 @@ class xarTwigTpl extends xarTpl
         return static::findTwigTemplate($twig, $templates);
     }
 
+    /**
+     * @param string $modName
+     * @param string $blockType
+     * @param array<string, mixed> $tplData
+     * @param ?string $tplName
+     * @param ?string $tplBase
+     * @param ?string $tplModule
+     * @return string
+     */
     public static function block($modName, $blockType, $tplData = [], $tplName = null, $tplBase = null, $tplModule = null)
     {
         //return parent::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
         return "xarTwigTpl::block($modName, $blockType, [...], $tplName, $tplBase, $tplModule)";
     }
 
+    /**
+     * @param Environment $twig
+     * @param string $modName
+     * @param string $blockType
+     * @param ?string $tplName
+     * @param ?string $tplBase
+     * @param ?string $tplModule
+     * @return string|null
+     */
     public static function findBlockTemplate($twig, $modName, $blockType, $tplName, $tplBase, $tplModule)
     {
         return null;
     }
 
+    /**
+     * @param string $modName
+     * @param string $objectName
+     * @param string $tplType
+     * @param array<string, mixed> $tplData
+     * @param ?string $tplBase
+     * @return string
+     */
     public static function object($modName, $objectName, $tplType = 'showdisplay', $tplData = [], $tplBase = null)
     {
         if (is_bool($tplData['context']['twig'])) {
@@ -200,7 +282,7 @@ class xarTwigTpl extends xarTpl
         $trace = "xarTwigTpl::object($modName, $objectName, $tplType, [...], $tplBase)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
-        $templateName = static::findObjectTemplate($twig, $modName, $tplType, $objectName, $tplBase);
+        $templateName = static::findObjectTemplate($twig, $modName, $objectName, $tplType, $tplBase);
         if (empty($templateName)) {
             //return parent::object($modName, $objectName, $tplType, $tplData, $tplBase);
             return $trace;
@@ -209,7 +291,15 @@ class xarTwigTpl extends xarTpl
         return static::renderTemplate($template, $tplData, $templateName, $trace);
     }
 
-    public static function findObjectTemplate($twig, $modName, $tplType, $objectName, $tplBase)
+    /**
+     * @param Environment $twig
+     * @param string $modName
+     * @param string $objectName
+     * @param string $tplType
+     * @param ?string $tplBase
+     * @return string|null
+     */
+    public static function findObjectTemplate($twig, $modName, $objectName, $tplType, $tplBase)
     {
         $templates = [];
         // @todo ui_* templates are typically not overridden by objectName, but they could be...
@@ -229,6 +319,14 @@ class xarTwigTpl extends xarTpl
         return static::findTwigTemplate($twig, $templates);
     }
 
+    /**
+     * @param string $modName
+     * @param string $propertyName
+     * @param string $tplType
+     * @param array<string, mixed> $tplData
+     * @param ?string $tplBase
+     * @return string
+     */
     public static function property($modName, $propertyName, $tplType = 'showoutput', $tplData = [], $tplBase = null)
     {
         // xarTwigTpl::property(base, dropdown, showoutput, [...], )
@@ -247,6 +345,14 @@ class xarTwigTpl extends xarTpl
         return static::renderTemplate($template, $tplData, $templateName, $trace);
     }
 
+    /**
+     * @param Environment $twig
+     * @param string $modName
+     * @param string $propertyName
+     * @param string $tplType
+     * @param ?string $tplBase
+     * @return string|null
+     */
     public static function findPropertyTemplate($twig, $modName, $propertyName, $tplType, $tplBase)
     {
         $templates = [];

@@ -43,6 +43,7 @@ use Twig\Environment;
 use Twig\TwigFunction;
 use Twig\TwigTest;
 use Twig\Loader\FilesystemLoader;
+use Twig\Loader\LoaderInterface;
 use Xaraya\Core\Traits\ContextInterface;
 use Xaraya\Core\Traits\ContextTrait;
 use Xaraya\Context\Context;
@@ -93,16 +94,17 @@ class TwigBridge implements ContextInterface
 {
     use ContextTrait;
 
-    /** @var array<string, mixed> */
+    /** @var array<string, string> */
     private array $paths = [];
     /** @var array<string, mixed> */
     private array $options = [];
-    private ?Environment $twig = null;
-    private ?FilesystemLoader $loader = null;
+    private Environment $twig;
+    private FilesystemLoader $loader;
 
     /**
-     * @param array<string, mixed> $paths
+     * @param array<string, string> $paths
      * @param array<string, mixed> $options
+     * @param ?Context<string, mixed> $context
      */
     public function __construct(array $paths = [], array $options = [], ?Context $context = null)
     {
@@ -111,21 +113,36 @@ class TwigBridge implements ContextInterface
         $this->setContext($context);
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getPaths()
     {
         return $this->paths;
     }
 
+    /**
+     * @param array<string, string> $paths
+     * @return array<string, string>
+     */
     public function setPaths(array $paths)
     {
         $this->paths = $paths;
+        return $this->paths;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     public function getOptions()
     {
         return $this->options;
     }
 
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
     public function setOptions(array $options)
     {
         $this->options = array_replace([
@@ -134,6 +151,9 @@ class TwigBridge implements ContextInterface
         return $this->options;
     }
 
+    /**
+     * @return LoaderInterface
+     */
     public function getLoader()
     {
         if (!isset($this->loader)) {
@@ -152,6 +172,7 @@ class TwigBridge implements ContextInterface
 
     /**
      * Get the Twig environment
+     * @return Environment
      */
     public function getEnvironment()
     {
@@ -165,6 +186,9 @@ class TwigBridge implements ContextInterface
         return $this->twig;
     }
 
+    /**
+     * @return self
+     */
     public function addXarayaExtensions()
     {
         // add context as global variable - @todo do we want this here?
@@ -173,9 +197,12 @@ class TwigBridge implements ContextInterface
         $this->addXarayaFunctions();
         $this->addXarayaTags();
 
-        return $this->twig;
+        return $this;
     }
 
+    /**
+     * @return self
+     */
     public function addXarayaFunctions()
     {
         $context = $this->getContext();
@@ -269,9 +296,12 @@ class TwigBridge implements ContextInterface
         });
         $this->twig->addTest($object);
 
-        return $this->twig;
+        return $this;
     }
 
+    /**
+     * @return self
+     */
     public function addXarayaTags()
     {
         // @todo make configurable by module
@@ -279,9 +309,12 @@ class TwigBridge implements ContextInterface
         $this->addDynamicDataTags();
         $this->addWorkflowTags();
 
-        return $this->twig;
+        return $this;
     }
 
+    /**
+     * @return self
+     */
     public function addBlocklayoutTags()
     {
         $context = $this->getContext();
@@ -412,9 +445,12 @@ class TwigBridge implements ContextInterface
         });
         $this->twig->addFunction($security);
 
-        return $this->twig;
+        return $this;
     }
 
+    /**
+     * @return self
+     */
     public function addDynamicDataTags()
     {
         $context = $this->getContext();
@@ -529,14 +565,11 @@ class TwigBridge implements ContextInterface
             // We have a property
             if (!empty($args['property'])) {
                 $property = $args['property'];
-                if (isset($property)) {
-                    unset($args['property']);
-                    if (empty($property->objectref)) {
-                        $property->objectref = (object) ['context' => $context];
-                    }
-                    return $property->showLabel($args);
+                unset($args['property']);
+                if (empty($property->objectref)) {
+                    $property->objectref = (object) ['context' => $context];
                 }
-                return '';
+                return $property->showLabel($args);
             }
             // Ok, we have nothin, but a label
             if (!empty($args['label'])) {
@@ -561,18 +594,15 @@ class TwigBridge implements ContextInterface
             }
             // We already had a property object, run its output method
             $property = $args['property'];
-            if (isset($property)) {
-                unset($args['property']);
-                if (empty($property->objectref)) {
-                    $property->objectref = (object) ['context' => $context];
-                }
-                // if we have a field attribute, use just that, otherwise use all attributes
-                if (!empty($args['field'])) {
-                    return $property->showOutput($args['field']);
-                }
-                return $property->showOutput($args);
+            unset($args['property']);
+            if (empty($property->objectref)) {
+                $property->objectref = (object) ['context' => $context];
             }
-            return '';
+            // if we have a field attribute, use just that, otherwise use all attributes
+            if (!empty($args['field'])) {
+                return $property->showOutput($args['field']);
+            }
+            return $property->showOutput($args);
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($dataoutput);
 
@@ -700,9 +730,12 @@ class TwigBridge implements ContextInterface
         });
         $this->twig->addFunction($datagetitem);
 
-        return $this->twig;
+        return $this;
     }
 
+    /**
+     * @return self
+     */
     public function addWorkflowTags()
     {
         $context = $this->getContext();
@@ -714,6 +747,6 @@ class TwigBridge implements ContextInterface
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($workflow);
 
-        return $this->twig;
+        return $this;
     }
 }
