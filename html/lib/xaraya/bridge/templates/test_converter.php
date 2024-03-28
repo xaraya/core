@@ -51,6 +51,10 @@ function twig_convert_theme($theme, $baseDir, $subDir = '')
 {
     // no namespace for themes pages etc.
     $options = [];
+    // use .xml.twig extension for rss theme
+    if ($theme == 'rss') {
+        $options['extension'] = '.xml.twig';
+    }
     $converter = new BlocklayoutToTwigConverter($options);
     $sourcePath = $baseDir . '/html/themes/' . $theme;
     $targetPath = $baseDir . '/html/themes/' . $theme;

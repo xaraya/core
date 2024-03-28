@@ -35,6 +35,7 @@ class TwigConverter
     public string $filePath = '';
     /** @var list<string> */
     public array $files = [];
+    public string $extension = '.html.twig';
 
     /**
      * @param array<string, mixed> $options
@@ -44,6 +45,9 @@ class TwigConverter
     public function __construct(array $options = [])
     {
         $this->options = $options;
+        if (!empty($this->options['extension'])) {
+            $this->extension = $this->options['extension'];
+        }
     }
 
     /**
@@ -53,6 +57,15 @@ class TwigConverter
     public function getNamespace()
     {
         return $this->options['namespace'] ?? '';
+    }
+
+    /**
+     * Get the current extension
+     * @return string current extension
+     */
+    public function getExtension()
+    {
+        return $this->extension;
     }
 
     /**
@@ -92,7 +105,7 @@ class TwigConverter
             if ($depth == 0) {
                 $fileName = $this->renameFile($fileName, $prefix);
             }
-            $fileName = substr($fileName, 0, strlen($fileName) - strlen($suffix)) . '.html.twig';
+            $fileName = substr($fileName, 0, strlen($fileName) - strlen($suffix)) . $this->extension;
             $target = $toPath . '/' . $fileName;
             echo "$source -> $target\n";
             $this->files[] = $this->convertFile($source, $target);
@@ -308,7 +321,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
      */
     public function removeHeader()
     {
-        $pattern = '~^<\?xml version="1.0" encoding="utf-8"\?>\s*<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">\s*~i';
+        $pattern = '~^<\?xml version="1.0" encoding="utf-8"\?>\s*<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout"[^>]*>\s*~i';
         $replace = '';
         $this->content = preg_replace($pattern, $replace, $this->content);
     }
@@ -330,12 +343,12 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $fileName = substr($this->filePath, strlen($this->basePath) + 1);
         if (!empty($namespace)) {
             $name = '@' . $namespace . '/' . $fileName;
-            $base = '@' . $namespace . '/base.html.twig';
+            $base = '@' . $namespace . '/base' . $this->extension;
         } else {
             $name = $fileName;
-            $base = 'base.html.twig';
+            $base = 'base' . $this->extension;
         }
-        $block = str_replace('-', '_', basename($fileName, '.html.twig'));
+        $block = str_replace('-', '_', basename($fileName, $this->extension));
         if (!str_contains($fileName, '/')) {
             $this->content = '{# ' . $name . ' #}' . "\n\n" .
                 '{% extends \'' . $base . '\' %}' . "\n\n" .
@@ -510,6 +523,11 @@ class BlocklayoutToTwigConverter extends TwigConverter
     /**
      * Replace template file
      * <xar:template file="..."/>
+     * <xar:template type="module" file="admin-menu"/>
+     * <xar:template module="$tplmodule" file="display-$layout"/>
+     * <xar:template type="theme" file="user-display-common"/> - @todo not supported
+     * <xar:template file="$country_template" module="$module" property="address"/> - @todo not supported
+     * <xar:template file="hint.xt" type="system"/> - @todo not supported
      * @return void
      */
     public function replaceTemplateTag()
@@ -525,15 +543,18 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $namespace = $this->getNamespace();
             if (!empty($namespace) && !str_ends_with($namespace, '/includes')) {
                 $namespace .= '/includes';
+            } elseif (empty($namespace) && str_contains($this->basePath, '/html/themes/')) {
+                $theme = basename($this->basePath);
+                $file = $theme . '/includes/' . $file;
             }
             if (str_contains($file, '$')) {
                 [$pre, $post] = explode('$', $file);
                 $file = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
             }
             if (!empty($namespace)) {
-                return '{{ include(\'@' . $namespace . '/' . $file . '.html.twig\') }}';
+                return '{{ include(\'@' . $namespace . '/' . $file . $this->extension . '\') }}';
             }
-            return '{{ include(\'' . $file . '.html.twig\') }}';
+            return '{{ include(\'' . $file . $this->extension . '\') }}';
         }, $this->content);
 
         // <xar:template module="$tplmodule" file="display-$layout"/>
@@ -544,7 +565,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
                 throw new Exception('Missing file in xar:template tag: ' . $matches[0]);
                 //return $matches[0];
             }
-            if (!empty($attrib['type']) && $attrib['type'] !== 'module') {
+            if (!empty($attrib['type']) && !in_array($attrib['type'], ['module', 'theme'])) {
                 throw new Exception('Wrong type in xar:template tag: ' . $matches[0]);
                 //return $matches[0];
             }
@@ -563,15 +584,24 @@ class BlocklayoutToTwigConverter extends TwigConverter
             }
             if (!empty($namespace) && !str_ends_with($namespace, '/includes')) {
                 $namespace .= '/includes';
+            } elseif (empty($namespace) && !empty($attrib['type']) && $attrib['type'] == 'theme') {
+                // set to current theme
+                if (empty($attrib['theme']) && str_contains($this->basePath, '/html/themes/')) {
+                    $attrib['theme'] = basename($this->basePath);
+                }
+                if (empty($attrib['theme'])) {
+                    throw new Exception('Unable to find current theme: ' . $matches[0]);
+                }
+                $file = $attrib['theme'] . '/includes/' . $file;
             }
             if (str_contains($file, '$')) {
                 [$pre, $post] = explode('$', $file);
                 $file = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
             }
             if (!empty($namespace)) {
-                return '{{ include(\'@' . $namespace . '/' . $file . '.html.twig\') }}';
+                return '{{ include(\'@' . $namespace . '/' . $file . $this->extension . '\') }}';
             }
-            return '{{ include(\'' . $file . '.html.twig\') }}';
+            return '{{ include(\'' . $file . $this->extension . '\') }}';
         }, $this->content);
     }
 
@@ -1070,10 +1100,15 @@ class BlocklayoutToTwigConverter extends TwigConverter
             'xarController::URL(' => 'xar_moduleurl(',
             'xarServer::getObjectURL(' => 'xar_objecturl(',
             'xarServer::getCurrentURL(' => 'xar_currenturl(',
+            'xarServer::getBaseURL(' => 'xar_baseurl(',
+            'xarServer::getBaseURI(' => 'xar_baseuri(',
             'xarTpl::getImage(' => 'xar_imageurl(',
             'xarTpl::getFile(' => 'xar_fileurl(',
             'xarMLS::translate(' => 'xar_translate(',
             'xarML(' => 'xar_translate(',
+            // @todo do we even want this with autoescape enabled?
+            'xarVar::prepForDisplay(' => 'xar_prep_display(',
+            'xarVar::prepHTMLDisplay(' => 'xar_prep_html(',
         ];
         $expression = str_ireplace(array_keys($mapping), array_values($mapping), $expression);
 

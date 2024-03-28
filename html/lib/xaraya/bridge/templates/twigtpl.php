@@ -152,23 +152,28 @@ class xarTwigTpl extends xarTpl
      */
     public static function findThemeTemplate($twig, $themeName, $tplType, $tplName, $pageName = null)
     {
+        // @todo define this in theme config
+        $extension = '.html.twig';
+        if ($themeName === 'rss') {
+            $extension = '.xml.twig';
+        }
         $templates = [];
         // @todo align better with current theme template lookup?
         if (!empty($pageName)) {
-            $templates[] = $themeName . '/' . $tplType . '/' . $tplName . '-' . $pageName . '.html.twig';
+            $templates[] = $themeName . '/' . $tplType . '/' . $tplName . '-' . $pageName . $extension;
         }
-        $templates[] = $themeName . '/' . $tplType . '/' . $tplName . '.html.twig';
+        $templates[] = $themeName . '/' . $tplType . '/' . $tplName . $extension;
         if ($themeName != 'default') {
             if (!empty($pageName)) {
-                $templates[] = 'default/' . $tplType . '/' . $tplName . '-' . $pageName . '.html.twig';
+                $templates[] = 'default/' . $tplType . '/' . $tplName . '-' . $pageName . $extension;
             }
-            $templates[] = 'default/' . $tplType . '/' . $tplName . '.html.twig';
+            $templates[] = 'default/' . $tplType . '/' . $tplName . $extension;
         }
         if ($themeName != 'common') {
             if (!empty($pageName)) {
-                $templates[] = 'common/' . $tplType . '/' . $tplName . '-' . $pageName . '.html.twig';
+                $templates[] = 'common/' . $tplType . '/' . $tplName . '-' . $pageName . $extension;
             }
-            $templates[] = 'common/' . $tplType . '/' . $tplName . '.html.twig';
+            $templates[] = 'common/' . $tplType . '/' . $tplName . $extension;
         }
         return static::findTwigTemplate($twig, $templates);
     }

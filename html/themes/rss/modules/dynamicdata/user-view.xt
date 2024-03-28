@@ -8,7 +8,7 @@
     <xar:elseif condition="!empty($modid)"/>
         <xar:set name="modinfo">xarMod::getInfo($modid)</xar:set>
         <xar:set name="dummy">
-            xarVar::setCached('XML','itemname',$modinfo['name'].'_'.$itemtype)
+            xarVar::setCached('XML','itemname',$modinfo['name'] . '_' . $itemtype)
         </xar:set>
         <xar:data-view module="$modid" itemtype="$itemtype" numitems="30" startnum="$startnum"/>
     </xar:if>

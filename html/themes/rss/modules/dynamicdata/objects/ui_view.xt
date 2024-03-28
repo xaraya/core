@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- FIXME: this does not generate valid RSS feeds -->
+    <xar:if condition="!empty($object)">
+        <xar:if condition="$object:name eq 'objects' and $object:linktype eq 'object'">
+            <label>#$object:label#</label>
+            <!-- show the list of main objects -->
+            <items>
+                <xar:template type="module" file="main_objects"/>
+            </items>
+        <xar:else/>
+            <label>#$object:label#</label>
+            <xar:set name="searchlink">$object->getActionURL('search')</xar:set>
+            <searchlink>#$searchlink#</searchlink>
+            <xar:if condition="!empty($object:primary) and $object:checkAccess('create')">
+                <xar:set name="newlink">$object->getActionURL('new')</xar:set>
+                <newlink>#$newlink#</newlink>
+            </xar:if>
+            <!-- don't show a newlink here -->
+            <items>
+                <xar:data-view object="$object" newlink=""/>
+            </items>
+        </xar:if>
+    <xar:else />
+        <error>Please select one of the available objects</error>
+        <configure>#xarController::URL('dynamicdata','object','main')#</configure>
+    </xar:if>
+</xar:template>

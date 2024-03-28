@@ -238,6 +238,18 @@ class TwigBridge implements ContextInterface
         });
         $this->twig->addFunction($currentURL);
 
+        $baseURL = new TwigFunction('xar_baseurl', function () {
+            // avoid double-encoding URLs
+            return xarServer::getBaseURL();
+        });
+        $this->twig->addFunction($baseURL);
+
+        $baseURI = new TwigFunction('xar_baseuri', function () {
+            // avoid double-encoding URLs
+            return xarServer::getBaseURI();
+        });
+        $this->twig->addFunction($baseURI);
+
         // we need to mark this as safe for html
         $imageURL = new TwigFunction('xar_imageurl', function ($fileName, $scope = null, $package = null) {
             // avoid double-encoding URLs
@@ -438,6 +450,18 @@ class TwigBridge implements ContextInterface
             return xarTpl::module('themes', 'user', 'buttontag', $args);
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($button);
+
+        // @todo do we even want this with autoescape enabled?
+        $prepdisplay = new TwigFunction('xar_prep_display', function (...$args) use ($context) {
+            return xarVar::prepForDisplay(...$args);
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($prepdisplay);
+
+        // @todo do we even want this with autoescape enabled?
+        $prephtml = new TwigFunction('xar_prep_html', function (...$args) use ($context) {
+            return xarVar::prepHTMLDisplay(...$args);
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($prephtml);
 
         // <xar:sec mask="..." catch="false">
         $security = new TwigFunction('xar_security_check', function ($mask, $catch = 0) use ($context) {
