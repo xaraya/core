@@ -114,7 +114,7 @@
                 </fieldset>
                 <fieldset>
                     <legend>Debugging</legend>
-                    If debug mode is active, exception messages are visible to the debug administrators, which are defined <a href="#xarController::URL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
+                    If debug mode is active, exception messages are visible to the debug administrators, which are defined <a href="#xarController::URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">here</a>.
                     <div class="xar-row">
                         <div class="xar-col">
                             <xar:var name="label">Debug mode</xar:var>
@@ -241,9 +241,9 @@
                             </xar:set>
                             <xar:set name="options">
                                 array(
-                                    array('id' => 1, 'name' => xarML('High')),
-                                    array('id' => 3, 'name' => xarML('Normal')),
-                                    array('id' => 5, 'name' => xarML('Low'))
+                                    ['id' => 1, 'name' => xarML('High')],
+                                    ['id' => 3, 'name' => xarML('Normal')],
+                                    ['id' => 5, 'name' => xarML('Low')]
                                 )
                             </xar:set>
                             <xar:data-input type="dropdown" name="priority" value="$priority" options="$options"/>
@@ -257,11 +257,11 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    array('id' => '7bit', 'name' => xarML('7-bit')),
-                                    array('id' => '8bit', 'name' => xarML('8-bit')),
-                                    array('id' => 'binary', 'name' => xarML('binary')),
-                                    array('id' => 'quoted-printable', 'name' => xarML('quoted-printable')),
-                                    array('id' => 'base64', 'name' => xarML('base64')),
+                                    ['id' => '7bit', 'name' => xarML('7-bit')],
+                                    ['id' => '8bit', 'name' => xarML('8-bit')],
+                                    ['id' => 'binary', 'name' => xarML('binary')],
+                                    ['id' => 'quoted-printable', 'name' => xarML('quoted-printable')],
+                                    ['id' => 'base64', 'name' => xarML('base64')],
                                 )
                             </xar:set>
                             <xar:data-input type="dropdown" value="$encoding" name="encoding" options="$options"/>
@@ -344,10 +344,10 @@
                             </xar:set>
                             <xar:set name="options">
                                 array(
-                                    array('id' => 'smtp', 'name' => xarML('SMTP-server')),
-                                    array('id' => 'qmail', 'name' => xarML('QMail')),
-                                    array('id' => 'mail', 'name' => xarML('Mail')),
-                                    array('id' => 'sendmail', 'name' => xarML('SendMail')),
+                                    ['id' => 'smtp', 'name' => xarML('SMTP-server')],
+                                    ['id' => 'qmail', 'name' => xarML('QMail')],
+                                    ['id' => 'mail', 'name' => xarML('Mail')],
+                                    ['id' => 'sendmail', 'name' => xarML('SendMail')],
                                 )
                             </xar:set>
                             <xar:data-input type="dropdown" name="server" value="$server" onchange="this.form.submit()" options="$options"/>
@@ -455,9 +455,9 @@
                                     </xar:set>
                                     <xar:set name="options">
                                         array(
-                                            array('id' => '',    'name' => xarML('None')),
-                                            array('id' => 'ssl', 'name' => xarML('ssl')),
-                                            array('id' => 'tls', 'name' => xarML('tls'))
+                                            ['id' => '',    'name' => xarML('None')],
+                                            ['id' => 'ssl', 'name' => xarML('ssl')],
+                                            ['id' => 'tls', 'name' => xarML('tls')]
                                         )
                                     </xar:set>
                                     <xar:data-input type="dropdown" name="smtpSecure" value="$smtpSecure" options="$options"/>
@@ -573,7 +573,7 @@
                     <legend>
                         Configure Mail Hooks
                     </legend>
-                    <xar:set name="url">#xarController::URL('mail','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                    <xar:set name="url">#xarController::URL('mail','admin','modifyconfig',['tab' => 'managehooks'])#</xar:set>
                     <xar:module main="false" module="modules" type="admin" func="hooks" curhook="mail" return_url="$url"/>
                 </fieldset>
             </xar:if>

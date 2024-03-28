@@ -16,7 +16,7 @@
             <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
             <xar:set name="activetab">#$request.2#</xar:set>
             <xar:set name="xmldata">'showusers'</xar:set>
-            <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>
+            <xar:set name="urlargs">['id' => $id, 'reload' => 'reload']</xar:set>
             <xar:template type="module" module="base" file="admin-menu-skel"/>
             <xar:if condition="count($parents) ne 0">
                     <ul class="xar-tabs">
@@ -28,7 +28,7 @@
                             <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                                 <li class="xar-tab">
                                     <xar:var name="label">Show this group</xar:var>
-                                    <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#" class="xar-norm xar-norm-outline">
+                                    <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#" class="xar-norm xar-norm-outline">
                                         #xarVar::prepForDisplay($parents[$i]['parentname'])#
                                     </a>
                                 </li>
@@ -84,8 +84,8 @@
                                     </xar:set>
                                         <xar:set name="options">
                                             array( 
-                                                array('id' => xarRoles::ROLES_USERTYPE, 'name' => 'User'),
-                                                array('id' => xarRoles::ROLES_GROUPTYPE, 'name' => 'Group'),
+                                                ['id' => xarRoles::ROLES_USERTYPE, 'name' => 'User'],
+                                                ['id' => xarRoles::ROLES_GROUPTYPE, 'name' => 'Group'],
                                             )
                                         </xar:set>
                                         <xar:data-output type="dropdown" name="itemtype" value="$itemtype" options="$options"/>
@@ -106,10 +106,10 @@
                                 </div>
                                 <div class="xar-col">
                                     <xar:set name="value">
-                                        xarMod::apiFunc('roles','user','getprimaryparent',array('itemid' => $id))
+                                        xarMod::apiFunc('roles','user','getprimaryparent',['itemid' => $id])
                                     </xar:set>
                                     <xar:set name="options">
-                                        xarMod::apiFunc('roles','user','getancestors',array('id' =&gt; $id, 'parents' =&gt; 1))
+                                        xarMod::apiFunc('roles','user','getancestors',['id' => $id, 'parents' => 1])
                                     </xar:set>
                                     <xar:data-input type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8"/>
                                 </div>
@@ -144,8 +144,8 @@
                                         </xar:set>
                                         <xar:set name="options">
                                             array( 
-                                                array('id' => 'text', 'name' => 'text'),
-                                                array('id' => 'html', 'name' => 'html'),
+                                                ['id' => 'text', 'name' => 'text'],
+                                                ['id' => 'html', 'name' => 'html'],
                                             )
                                         </xar:set>
                                         <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options"/>
@@ -243,7 +243,7 @@
                         <tr>
                             <td>
                                 <xar:if condition="$loop:item['parentid'] gt 4">
-                                    <a href="#xarController::URL('roles','admin','modify',array('id'=>$loop->item['parentid']))#">
+                                    <a href="#xarController::URL('roles','admin','modify',['id'=>$loop->item['parentid']])#">
                                         <xar:var name="loop:item.parentname"/>
                                     </a>
                                 <xar:else />
@@ -252,7 +252,7 @@
                             </td>
                             <td class="xar-align-center">
                                 <xar:if condition="count($parents) ne 1">
-                                    <a href="#xarController::URL('roles','admin','removemember',array('childid'=>$id,'parentid'=>$loop->item['parentid'],'authid'=>xarSec::genAuthKey()))#">
+                                    <a href="#xarController::URL('roles','admin','removemember',['childid'=>$id,'parentid'=>$loop->item['parentid'],'authid'=>xarSec::genAuthKey()])#">
                                 Remove</a>
                                 <xar:else />Cannot Remove</xar:if>
                             </td>

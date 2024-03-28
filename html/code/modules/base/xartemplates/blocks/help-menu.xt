@@ -36,25 +36,25 @@
     <ul>
         <li><strong>Label</strong> The label is optional, and if specified will be displayed in the menu.</li>
         <li><strong>Title</strong> The title is optional and will be displayed as a tooltip when a link is hovered.</li>
-        <li><strong>URL</strong> The URL is optional (see notes on <a href="#xarServer::getCurrentURL(array(), null, 'shortcutsyntax')#">shortcut syntax</a> below for an alternative way to specify links to modules). <br/>You can check your urls are valid by clicking the <img src="#$wwwicon#" alt="#xarML('Check URL')#" title="#$wwwcheck#" class="xar-icon"/> check url link.</li>
+        <li><strong>URL</strong> The URL is optional (see notes on <a href="#xarServer::getCurrentURL([], null, 'shortcutsyntax')#">shortcut syntax</a> below for an alternative way to specify links to modules). <br/>You can check your urls are valid by clicking the <img src="#$wwwicon#" alt="#xarML('Check URL')#" title="#$wwwcheck#" class="xar-icon"/> check url link.</li>
         <li><strong>State</strong> Shows the current state of the link, either visible or hidden. The states are as follows...
             <ul>
                 <li>
-                    <img src="#$visibleicon#" alt="#xarML('Visible')#" title="#$visibletitle" class="xar-icon"/>
+                    <img src="#$visibleicon#" alt="#xarML('Visible')#" title="#$visibletitle#" class="xar-icon"/>
                     Link is visible, the item will be displayed in the menu.
                 </li>
                 <li>
-                    <img src="#$visibleicon#" alt="#xarML('Visible')#" title="#$visibletitle" class="xar-icon-disabled"/>
+                    <img src="#$visibleicon#" alt="#xarML('Visible')#" title="#$visibletitle#" class="xar-icon-disabled"/>
                     Link is visible, but other settings are preventing it displaying in the menu, eg the parent link isn't visible.
                 </li>
                 <li>
-                    <img src="#$invisibleicon#" alt="#xarML('Not visible')#" title="#$invisibletitle" class="xar-icon-disabled"/>
+                    <img src="#$invisibleicon#" alt="#xarML('Not visible')#" title="#$invisibletitle#" class="xar-icon-disabled"/>
                     Link is not visible, the item will not be displayed in the menu.
                 </li>
             </ul>
             You can change the state of links at any time by selecting them with the checkbox and then selecting an action from the dropdown below the links.
         </li>
-        <li>Links can be re-ordered by clicking on the appropriate order link. Note, child links can only be re-ordered within their parent link. To make a child link a parent you will need to add it as a <a href="#xarServer::getCurrentURL(array(), null, 'newlinks')#">new menu link</a>.</li>
+        <li>Links can be re-ordered by clicking on the appropriate order link. Note, child links can only be re-ordered within their parent link. To make a child link a parent you will need to add it as a <a href="#xarServer::getCurrentURL([], null, 'newlinks')#">new menu link</a>.</li>
         <li>Links can be deleted by selecting them with the checkbox and selecting Delete from the dropdown below the links</li>
     </ul>
 
@@ -72,7 +72,7 @@
     <pre>
     [module:type:func]param1=value1&amp;param2=value2 etc..
     </pre>
-    <p>By passing just the module name without type, function or parameters, eg., <strong>[module]</strong>, you can include a <a href="#xarServer::getCurrentURL(array(), null, 'modulelinks')#">module link</a> in your menu and have it behave as if it was being displayed in the module menu.</p>
+    <p>By passing just the module name without type, function or parameters, eg., <strong>[module]</strong>, you can include a <a href="#xarServer::getCurrentURL([], null, 'modulelinks')#">module link</a> in your menu and have it behave as if it was being displayed in the module menu.</p>
     <p>Some Examples....</p>
     <ul>
         <li><strong>[roles]</strong> Will display a link to Roles User Main. Will display the menu links supplied by the roles module when active.
@@ -101,7 +101,7 @@
     </ul>
     <p><strong>NOTE:</strong> When you add a new module to the system, it will automatically be available to all users with the necessary privileges to view until you edit the block it appears in.</p>
     <div class="xar-align-center xar-margin-thickends xar-padding-thickends">
-        <a href="#xarServer::getCurrentURL(array(), null, 'menublockhelp')#">back to top</a>
+        <a href="#xarServer::getCurrentURL([], null, 'menublockhelp')#">back to top</a>
     </div>
 
 </xar:template>

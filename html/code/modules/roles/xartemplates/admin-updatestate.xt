@@ -15,7 +15,7 @@
                         <input type="hidden" name="state" id="state" value="#$state#"/>
                         <input type="hidden" name="status" id="status" value="#$status#"/>
                         <input type="hidden" name="ids" id="ids" value="#$ids#"/>
-                        <a href="#xarController::URL('roles','admin','showusers',array('phase'=>$state,'id'=>$groupid))#">
+                        <a href="#xarController::URL('roles','admin','showusers',['phase'=>$state,'id'=>$groupid])#">
                         Click here if you don't want to send any notification</a>
                     </td>
                 </tr>

@@ -60,6 +60,9 @@ function dynamicdata_admin_modifyconfig()
             if (!xarVar::fetch('caching', 'checkbox', $caching, xarModVars::get('dynamicdata', 'caching'), xarVar::NOT_REQUIRED)) {
                 return;
             }
+            if (!xarVar::fetch('twig_support', 'checkbox', $twig_support, false, xarVar::NOT_REQUIRED)) {
+                return;
+            }
 
             $isvalid = $data['module_settings']->checkInput();
             if (!$isvalid) {
@@ -82,6 +85,7 @@ function dynamicdata_admin_modifyconfig()
             xarConfigVars::set(null, 'Site.BL.ShowQueries', $show_queries);
             xarModVars::set('dynamicdata', 'suppress_updates', $suppress_updates);
             xarModVars::set('dynamicdata', 'caching', $caching);
+            xarModVars::set('dynamicdata', 'twig_support', $twig_support);
             // save to cache if enabled
             xarModVars::cache('dynamicdata');
             break;

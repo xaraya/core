@@ -9,7 +9,7 @@
         </xar:set>
 
         <xar:var name="firstline">Choose a state</xar:var>
-        <xar:set name="firstline">array('id'=>0,'name'=>$firstline)</xar:set>
+        <xar:set name="firstline">['id'=>0,'name'=>$firstline]</xar:set>
 
         <xar:data-input type="dropdown" options="$options" name="$name" value="$value" firstline="$firstline"/>
     -->

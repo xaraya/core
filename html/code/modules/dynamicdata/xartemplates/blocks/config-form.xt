@@ -6,7 +6,7 @@
             <label class="help xar-form-label" title="#$label#" for="objectid#$_bl_block_id#">DataObject</label>
         </div>
         <div class="xar-col">
-            <xar:set name="id">'objectid'.$_bl_block_id</xar:set>
+            <xar:set name="id">'objectid' . $_bl_block_id</xar:set>
             <xar:data-input type="object" name="objectid" id="$id" value="$objectid"/>
         </div>
     </div>

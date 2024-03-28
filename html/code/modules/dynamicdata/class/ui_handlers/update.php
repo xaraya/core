@@ -141,6 +141,7 @@ class UpdateHandler extends DefaultHandler
             $this->object->template,
             'ui_update',
             ['object'  => $this->object,
+             'context' => $this->getContext(),
              'preview' => $args['preview'],
              'authid'  => xarSec::genAuthKey(),
              'hooks'   => $this->object->hookoutput,

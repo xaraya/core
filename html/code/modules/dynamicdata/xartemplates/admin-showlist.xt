@@ -15,7 +15,8 @@
                  is typically not an input form -->
                     <xar:foreach in="$item['fields']" value="$field">
                         <td>
-                            <xar:data-output type="$field['type']" name="dd_'.$field['id'].'" value="$field['value']"/>
+                            <xar:set name="fieldname">'dd_' . $field['id']</xar:set>
+                            <xar:data-output type="$field['type']" name="$fieldname" value="$field['value']"/>
                         </td>
                     </xar:foreach>
                     <td>
@@ -57,7 +58,8 @@
                 <tr>
                     <xar:foreach in="$item['fields']" value="$field">
                         <td>
-                            <xar:data-input type="$field['type']" name="dd_'.$field['id'].'"
+                            <xar:set name="fieldname">'dd_' . $field['id']</xar:set>
+                            <xar:data-input type="$field['type']" name="$fieldname"
                             value="$field['value']" size="15"/>
                         </td>
                     </xar:foreach>

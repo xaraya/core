@@ -2,7 +2,7 @@
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     
     <xar:set name="count">count($items)</xar:set>
-    <xar:if condition="$count eq 1" >
+    <xar:if condition="$count eq 1">
         <xar:mlstring>
             [1 subitem]
         </xar:mlstring>

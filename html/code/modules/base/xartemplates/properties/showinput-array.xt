@@ -9,7 +9,7 @@
         <xar:else/>
             <!-- We are displaying an array property or one of its descendents -->
             <xar:template file="array_table"/>
-        </xar:if >
+        </xar:if>
         <br class="xar-clearall"/>
         <xar:template file="dataproperty_additions" module="base"/>        
     </div>

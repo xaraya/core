@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
+    <!-- FIXME: this does not generate valid RSS feeds -->
+    <xar:if condition="!empty($object)">
+        <xar:set name="viewlink">$object->getActionURL('view')</xar:set>
+        <xar:if condition="$object:checkAccess('update')">
+            <xar:set name="modifylink">$object->getActionURL('modify', $object->itemid)</xar:set>
+        </xar:if>
+        <label>#$object:label#</label>
+        <viewlink>#$viewlink#</viewlink>
+        <xar:if condition="!empty($modifylink)">
+            <modifylink>#$modifylink#</modifylink>
+        </xar:if>
+
+        <xar:set name="getlinked">xarModItemVars::get('dynamicdata','getlinkedobjects',$object->objectid)</xar:set>
+        <xar:if condition="!empty($getlinked)">
+
+            <!-- Display object with linked objects -->
+            <xar:template file="display_linked"/>
+
+        <xar:else/>
+
+            <!-- Display object - you can specify the layout here or in the object configuration -->
+            <item name="#$object->name#" itemid="#$object->itemid#">
+                <xar:data-display object="$object"/>
+            </item>
+            <!-- Display hook output -->
+            <xar:if condition="!empty($hooks)">
+                <hookoutput>
+                <xar:foreach in="$hooks" key="$module" value="$output">
+                    <module name="#$module#">
+                        #$output#
+                    </module>
+                </xar:foreach>
+                </hookoutput>
+            </xar:if>
+
+        </xar:if>
+    </xar:if>
+</xar:template>

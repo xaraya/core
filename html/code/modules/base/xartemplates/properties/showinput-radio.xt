@@ -7,11 +7,11 @@
         <xar:else/>
           <xar:set name="evt_change">'return true;'</xar:set>
         </xar:if>
-        <xar:foreach in="$options" value="$option" key="$key">
+        <xar:foreach in="$options" key="$key" value="$option">
             <xar:if condition="$key == 0">
                 <xar:set name="theID">$id</xar:set>
             <xar:else />
-                <xar:set name="theID">$id.'_'.$key</xar:set>
+                <xar:set name="theID">$id . '_' . $key</xar:set>
             </xar:if>
             <xar:if condition="$option['id'] eq $value">
                 <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked"/>
@@ -28,11 +28,11 @@
         </xar:if>
         <table>
             <tr>
-                <xar:foreach in="$options" value="$option" key="$key">
+                <xar:foreach in="$options" key="$key" value="$option">
                     <xar:if condition="$key == 0">
                         <xar:set name="theID">$id</xar:set>
                     <xar:else />
-                        <xar:set name="theID">$id.'_'.$key</xar:set>
+                        <xar:set name="theID">$id . '_' . $key</xar:set>
                     </xar:if>
                     <td style="text-align: center">
                         <label for="#$theID#">#$option['name']#</label><br/>
@@ -51,12 +51,12 @@
         <xar:else/>
           <xar:set name="evt_change">'return true;'</xar:set>
         </xar:if>
-        <xar:foreach in="$options" value="$option" key="$key">
+        <xar:foreach in="$options" key="$key" value="$option">
             <div>
                 <xar:if condition="$key == 0">
                     <xar:set name="theID">$id</xar:set>
                 <xar:else />
-                    <xar:set name="theID">$id.'_'.$key</xar:set>
+                    <xar:set name="theID">$id . '_' . $key</xar:set>
                 </xar:if>
                 <xar:if condition="$option['id'] eq $value">
                     <input type="radio" name="#$name#" id="#$theID#" value="#$option['id']#" onchange="#$evt_change#" checked="checked"/>

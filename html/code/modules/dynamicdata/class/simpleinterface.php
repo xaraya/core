@@ -12,7 +12,9 @@
  */
 
 sys::import('modules.dynamicdata.class.ui_handlers.default');
+sys::import("xaraya.context.context");
 use Xaraya\DataObject\Handlers\DefaultHandler;
+use Xaraya\Context\Context;
 
 /**
   * Simple Object Interface
@@ -34,9 +36,10 @@ class SimpleObjectInterface extends DefaultHandler
     /**
      * Summary of handle
      * @param array<string, mixed> $args
+     * @param ?Context<string, mixed> $context optional context for the handler call (default = none)
      * @return mixed
      */
-    public function handle(array $args = [])
+    public function handle(array $args = [], ?Context $context = null)
     {
         if (!xarVar::fetch('method', 'str', $args['method'], 'showDisplay', xarVar::NOT_REQUIRED)) {
             return;
@@ -51,6 +54,8 @@ class SimpleObjectInterface extends DefaultHandler
         if (!xarVar::fetch('qstring', 'str', $qstring, null, xarVar::DONT_SET)) {
             return;
         }
+        // set the context for this handler call
+        $this->setContext($context);
 
         if (!empty($qparam) && !empty($qstring)) {
             $args['where'] = "$qparam LIKE '$qstring%'";

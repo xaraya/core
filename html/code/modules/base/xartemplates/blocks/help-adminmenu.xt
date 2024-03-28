@@ -21,7 +21,7 @@
     </ul>
     <p><strong>NOTE:</strong> When you add a new module to the system, it will automatically be available to all administrators with the necessary privileges to view until you edit the block it appears in.</p>
     <div class="xar-align-center xar-margin-thickends xar-padding-thickends">
-        <a href="#xarServer::getCurrentURL(array(), null, 'menublockhelp')#">back to top</a>
+        <a href="#xarServer::getCurrentURL([], null, 'menublockhelp')#">back to top</a>
     </div>
 
 </xar:template>

@@ -12,9 +12,9 @@
             <div class="xar-col">
                 <xar:set name="options">
                     array(
-                        array('id' => 'High', 'name' => xarML('High')),
-                        array('id' => 'Medium', 'name' => xarML('Medium')),
-                        array('id' => 'Low', 'name' => xarML('Low')),
+                        ['id' => 'High', 'name' => xarML('High')],
+                        ['id' => 'Medium', 'name' => xarML('Medium')],
+                        ['id' => 'Low', 'name' => xarML('Low')],
                     )
                 </xar:set>
                 <xar:set name="value">
@@ -122,7 +122,7 @@
                 </label>
             </div>
             <div class="xar-col">
-            <xar:set name="value" catch="false" >xarConfigVars::get(null,'Site.Session.CookieTimeout')</xar:set>
+            <xar:set name="value" catch="false">xarConfigVars::get(null,'Site.Session.CookieTimeout')</xar:set>
                 <input type="text" id="cookietimeout" name="cookietimeout" value="#$value#" maxlength="40" class="xar-form-textmedium"/>
                 <span>
                 </span>

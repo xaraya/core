@@ -62,8 +62,8 @@
                                 </xar:set>
                                 <xar:set name="options">
                                     array( 
-                                        array('id' => 'text', 'name' => 'text'), 
-                                        array('id' => 'html', 'name' => 'html'), 
+                                        ['id' => 'text', 'name' => 'text'], 
+                                        ['id' => 'html', 'name' => 'html'], 
                                     )
                                 </xar:set>
                                 <xar:data-input type="dropdown" name="duvs[useremailformat]" id="duvs_useremailformat" value="$value" options="$options"/>

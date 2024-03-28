@@ -73,7 +73,7 @@
                 <xar:if condition="!empty($displayprint)">
                    <!-- pointless having the block get the url, just get it here if needed -->
                    <li class="xar-menu-item">
-                        <a title="#$printtitle#" href="#xarServer::getCurrentURL(array('theme' => 'print'))#">
+                        <a title="#$printtitle#" href="#xarServer::getCurrentURL(['theme' => 'print'])#">
                             #$printlabel#
                         </a>
                     </li>
@@ -82,7 +82,7 @@
                 <!-- FIXME deprecate this and remove the articles dependency -->
                 <xar:if condition="!empty($displayrss) and ($thismodname eq 'articles')">
                    <li class="xar-menu-item">
-                        <a title="#$rsstitle#" href="#xarServer::getCurrentURL(array('theme' => 'rss'))#">
+                        <a title="#$rsstitle#" href="#xarServer::getCurrentURL(['theme' => 'rss'])#">
                             #$rsslabel#
                         </a>
                     </li>

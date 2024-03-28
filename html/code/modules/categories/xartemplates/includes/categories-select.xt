@@ -11,6 +11,6 @@
                 <option value="0">No category</option>
             </xar:if>
         </xar:if>
-        <xar:template module="categories" file="categories-treeoptions" subdata="array('nodes' => $nodes, 'value' => $value, 'include_all_cats' => $include_all_cats, 'include_self' => $include_self)"/>
+        <xar:template module="categories" file="categories-treeoptions" subdata="['nodes' => $nodes, 'value' => $value, 'include_all_cats' => $include_all_cats, 'include_self' => $include_self]"/>
     </select>
 </xar:template>

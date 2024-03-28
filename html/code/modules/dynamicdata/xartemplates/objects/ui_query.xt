@@ -37,13 +37,12 @@
                 </xar:if>
                 <legend>Query Criteria</legend>
                 <!-- only show properties with status ACTIVE, DISPLAYONLY and VIEWONLY -->
-                <xar:set name="filterstatus">array(1, 2, 4)</xar:set>
-                <xar:set name="show_props">array()</xar:set>
+                <xar:set name="filterstatus">[1, 2, 4]</xar:set>
+                <xar:set name="show_props">[]</xar:set>
                 <xar:foreach in="$object:properties" key="$name" value="$property">
                     <xar:set name="displaystatus">$property->getDisplayStatus()</xar:set>
                     <xar:if condition="!in_array($displaystatus, $filterstatus)">
-                        <xar:continue/>
-                    </xar:if>
+                    <xar:else/>
                     <xar:set name="dummy">array_push($show_props, $name)</xar:set>
                     <div class="xar-row">
                         <div class="xar-col">
@@ -57,8 +56,8 @@
                             </xar:if>
     
                             <!-- initialize fieldname, fieldid and fieldvalue -->
-                            <xar:set name="fieldname">'field['.$name.']'</xar:set>
-                            <xar:set name="fieldid">'field_'.$name</xar:set>
+                            <xar:set name="fieldname">'field[' . $name . ']'</xar:set>
+                            <xar:set name="fieldid">'field_' . $name</xar:set>
                             <xar:if condition="isset($query['field'][$name])">
                                 <xar:set name="fieldvalue">#$query['field'][$name]#</xar:set>
                             <xar:else/>
@@ -79,9 +78,7 @@
                                     <xar:foreach in="$options" value="$option">
                                         <xar:if condition="!isset($option['id'])">
                                             <!-- field status has an array of arrays - skip for now -->
-                                            <xar:continue/>
-                                        </xar:if>
-                                        <xar:if condition="$fieldvalue eq $option['id']">
+                                        <xar:elseif condition="$fieldvalue eq $option['id']"/>
                                             <option value="#$option['id']#" selected="selected">#$option['name']#</option>
                                         <xar:else/>
                                             <option value="#$option['id']#">#$option['name']#</option>
@@ -90,9 +87,9 @@
                                 </select>
     
                             <xar:elseif condition="is_a($property, 'CalendarProperty')"/>
-                                <xar:set name="name2">$name.'2'</xar:set>
-                                <xar:set name="fieldname2">'field['.$name2.']'</xar:set>
-                                <xar:set name="fieldid2">'field_'.$name2</xar:set>
+                                <xar:set name="name2">$name . '2'</xar:set>
+                                <xar:set name="fieldname2">'field[' . $name2 . ']'</xar:set>
+                                <xar:set name="fieldid2">'field_' . $name2</xar:set>
                                 <xar:if condition="isset($query['field'][$name2])">
                                     <xar:set name="fieldvalue2">#$query['field'][$name2]#</xar:set>
                                 <xar:else/>
@@ -113,9 +110,9 @@
                                 </div>
     
                             <xar:elseif condition="is_a($property, 'NumberBoxProperty')"/>
-                                <xar:set name="name2">$name.'2'</xar:set>
-                                <xar:set name="fieldname2">'field['.$name2.']'</xar:set>
-                                <xar:set name="fieldid2">'field_'.$name2</xar:set>
+                                <xar:set name="name2">$name . '2'</xar:set>
+                                <xar:set name="fieldname2">'field[' . $name2 . ']'</xar:set>
+                                <xar:set name="fieldid2">'field_' . $name2</xar:set>
                                 <xar:if condition="isset($query['field'][$name2])">
                                     <xar:set name="fieldvalue2">#$query['field'][$name2]#</xar:set>
                                 <xar:else/>
@@ -160,6 +157,7 @@
                             </xar:if>
                         </div>
                     </div>
+                    </xar:if>
                 </xar:foreach>
                 <div class="xar-row">
                     <div class="xar-col">

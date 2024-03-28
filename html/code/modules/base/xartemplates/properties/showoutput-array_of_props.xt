@@ -7,7 +7,7 @@
             <xar:foreach in="$value" key="$key" value="$val">
                 <div class="xar-row">
                     <div class="xar-col">
-                    <xar:if condition = "$associative_array eq 1">
+                    <xar:if condition="$associative_array eq 1">
                         <label for="#$key#_value" title="" style="">#$key#:</label>&#160;
                     </xar:if>
                     <xar:if condition="empty($property)">

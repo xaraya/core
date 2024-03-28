@@ -17,32 +17,32 @@
                 <xar:set name="tabclass">empty($tab)?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">empty($tab)?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(array('tab' => null))#" title="#xarML('Overview')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentUrl(['tab' => null])#" title="#xarML('Overview')#" class="#$linkclass#">
                     Overview</a>
                 </li>
                 <!--
                 <xar:set name="tabclass">$tab=='functions'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='functions'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(array('tab' => 'functions'))#" title="#xarML('Functions')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentUrl(['tab' => 'functions'])#" title="#xarML('Functions')#" class="#$linkclass#">
                     Functions</a>
                 </li>
                 <xar:set name="tabclass">$tab=='subjects'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='subjects'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(array('tab' => 'subjects'))#" title="#xarML('Subjects')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentUrl(['tab' => 'subjects'])#" title="#xarML('Subjects')#" class="#$linkclass#">
                     Subjects</a>
                 </li>
                 <xar:set name="tabclass">$tab=='observers'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='observers'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(array('tab' => 'observers'))#" title="#xarML('Observers')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentUrl(['tab' => 'observers'])#" title="#xarML('Observers')#" class="#$linkclass#">
                     Observers</a>
                 </li>
                 <xar:set name="tabclass">$tab=='examples'?$activetab:$inactivetab</xar:set>
                 <xar:set name="linkclass">$tab=='examples'?$activelink:$inactivelink</xar:set>
                 <li class="#$tabclass#">
-                    <a href="#xarServer::getCurrentUrl(array('tab' => 'examples'))#" title="#xarML('Examples')#" class="#$linkclass#">
+                    <a href="#xarServer::getCurrentUrl(['tab' => 'examples'])#" title="#xarML('Examples')#" class="#$linkclass#">
                     Examples</a>
                 </li>
                 -->
@@ -283,11 +283,11 @@ xarEvents::registerObserver('MyGUIEvent', 'mymodule', 'gui', 'admin', 'alert');
 sys::import('xaraya.structures.descriptor');
 class EventSubject extends ObjectDescriptor implements ixarEventSubject
 {
-    // protected $args = array();      // from descriptor    
-    protected $observers = array(); // xarEvents::notify is responsible for populating this array 
+    // protected $args = [];      // from descriptor    
+    protected $observers = []; // xarEvents::notify is responsible for populating this array 
     protected $subject = 'Event';   // name of this event subject
      
-    public function __construct($args=array())
+    public function __construct($args=[])
     {
         parent::__construct($args); // $this->setArgs($args);                              
     }

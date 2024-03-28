@@ -50,20 +50,20 @@
     <xar:elseif condition="!empty($rows) AND !empty($cols)"/>
         <xar:set name="textareasource">
             'textarea#' . $id . ' {
-                width: '. $cols.'em;
-                height: '. ($rows * 1.6) .'em;
+                width: ' . $cols . 'em;
+                height: ' . ($rows * 1.6) . 'em;
             }'
         </xar:set>
     <xar:elseif condition="!empty($rows)"/>
         <xar:set name="textareasource">
             'textarea#' . $id . ' {
-                height: '. ($rows * 1.6) .'em;
+                height: '. ($rows * 1.6) . 'em;
             }'
         </xar:set>
     <xar:elseif condition="!empty($cols)"/>
         <xar:set name="textareasource">
             'textarea#' . $id . ' {
-                width: '. $cols.'em;
+                width: ' . $cols . 'em;
             }'
         </xar:set>
     <xar:else/>

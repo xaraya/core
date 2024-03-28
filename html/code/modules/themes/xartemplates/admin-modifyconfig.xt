@@ -41,25 +41,25 @@
                             </xar:set>
                             <xar:set name="options">
                                 array(
-                                    array('id' => 'html2', 'name' => 'html2'),
-                                    array('id' => 'html32', 'name' => 'html32'),
-                                    array('id' => 'html401-strict', 'name' => 'html401-strict'),
-                                    array('id' => 'html401-transitional', 'name' => 'html401-transitional'),
-                                    array('id' => 'html401-frameset', 'name' => 'html401-frameset'),
-                                    array('id' => 'xhtml1-strict', 'name' => 'xhtml1-strict'),
-                                    array('id' => 'xhtml1-transitional', 'name' => 'xhtml1-transitional'),
-                                    array('id' => 'xhtml1-frameset', 'name' => 'xhtml1-frameset'),
-                                    array('id' => 'xhtml11', 'name' => 'xhtml11'),
-                                    array('id' => 'mathml101', 'name' => 'mathml101'),
-                                    array('id' => 'mathml2', 'name' => 'mathml2'),
-                                    array('id' => 'svg10', 'name' => 'svg10'),
-                                    array('id' => 'svg11', 'name' => 'svg11'),
-                                    array('id' => 'svg11-basic', 'name' => 'svg11-basic'),
-                                    array('id' => 'svg11-tiny', 'name' => 'svg11-tiny'),
-                                    array('id' => 'xhtml-math-svg', 'name' => 'xhtml-math-svg'),
-                                    array('id' => 'svg-xhtml-math', 'name' => 'svg-xhtml-math'),
-                                    array('id' => 'rss', 'name' => 'rss'),
-                                    array('id' => 'html5', 'name' => 'html5'),
+                                    ['id' => 'html2', 'name' => 'html2'],
+                                    ['id' => 'html32', 'name' => 'html32'],
+                                    ['id' => 'html401-strict', 'name' => 'html401-strict'],
+                                    ['id' => 'html401-transitional', 'name' => 'html401-transitional'],
+                                    ['id' => 'html401-frameset', 'name' => 'html401-frameset'],
+                                    ['id' => 'xhtml1-strict', 'name' => 'xhtml1-strict'],
+                                    ['id' => 'xhtml1-transitional', 'name' => 'xhtml1-transitional'],
+                                    ['id' => 'xhtml1-frameset', 'name' => 'xhtml1-frameset'],
+                                    ['id' => 'xhtml11', 'name' => 'xhtml11'],
+                                    ['id' => 'mathml101', 'name' => 'mathml101'],
+                                    ['id' => 'mathml2', 'name' => 'mathml2'],
+                                    ['id' => 'svg10', 'name' => 'svg10'],
+                                    ['id' => 'svg11', 'name' => 'svg11'],
+                                    ['id' => 'svg11-basic', 'name' => 'svg11-basic'],
+                                    ['id' => 'svg11-tiny', 'name' => 'svg11-tiny'],
+                                    ['id' => 'xhtml-math-svg', 'name' => 'xhtml-math-svg'],
+                                    ['id' => 'svg-xhtml-math', 'name' => 'svg-xhtml-math'],
+                                    ['id' => 'rss', 'name' => 'rss'],
+                                    ['id' => 'html5', 'name' => 'html5'],
                                 )
                             </xar:set>
                             <xar:data-input type="dropdown" id="doctype" name="doctype" value="$value" options="$options" class="xar-form-textlong"/>
@@ -245,12 +245,12 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    array('id' => 'default', 'name' => xarML('Site Name - Module Name - Page Name')),
-                                    array('id' => 'sp', 'name' => xarML('Site Name - Page Name')),
-                                    array('id' => 'mps', 'name' => xarML('Module Name - Page Name - Site Name')),
-                                    array('id' => 'pms', 'name' => xarML('Page Name - Module Name - Site Name')),
-                                    array('id' => 'to', 'name' => xarML('Page Name')),
-                                    array('id' => 'theme', 'name' => xarML('Theme Driven')),
+                                    ['id' => 'default', 'name' => xarML('Site Name - Module Name - Page Name')],
+                                    ['id' => 'sp', 'name' => xarML('Site Name - Page Name')],
+                                    ['id' => 'mps', 'name' => xarML('Module Name - Page Name - Site Name')],
+                                    ['id' => 'pms', 'name' => xarML('Page Name - Module Name - Site Name')],
+                                    ['id' => 'to', 'name' => xarML('Page Name')],
+                                    ['id' => 'theme', 'name' => xarML('Theme Driven')],
                                 )
                             </xar:set>
                             <xar:set name="value">
@@ -354,8 +354,8 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    array('id' => 0, 'name' => xarML('No')),
-                                    array('id' => 1, 'name' => xarML('Yes')),
+                                    ['id' => 0, 'name' => xarML('No')],
+                                    ['id' => 1, 'name' => xarML('Yes')],
                                 )
                             </xar:set>
                             <xar:set name="checked"><xar:var scope="config" name="Site.BL.CompressWhitespace"/></xar:set>
@@ -365,7 +365,7 @@
                 </fieldset>
                 <fieldset>
                     <legend>Template Debugging options</legend>
-                    <p class="xar-note">The options activated below are visible to the debug administrators, <a href="#xarController::URL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">which are defined here</a>.</p>
+                    <p class="xar-note">The options activated below are visible to the debug administrators, <a href="#xarController::URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">which are defined here</a>.</p>
                     <xar:if condition="xarConfigVars::get(null,'Site.BL.CacheTemplates')">
                         <div class="xar-row">
                             <div class="xar-col">
@@ -432,11 +432,11 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    array('id' => 'templates', 'name' => xarML('Templates')),
-                                    array('id' => 'rss',       'name' => xarML('RSS')),
-                                    array('id' => 'database',  'name' => xarML('Database')),
-                                    array('id' => 'css',       'name' => xarML('CSS')),
-                                    // array('id' => 'output', 'name' => xarML('Output')),
+                                    ['id' => 'templates', 'name' => xarML('Templates')],
+                                    ['id' => 'rss',       'name' => xarML('RSS')],
+                                    ['id' => 'database',  'name' => xarML('Database')],
+                                    ['id' => 'css',       'name' => xarML('CSS')],
+                                    // ['id' => 'output', 'name' => xarML('Output')],
                                 )
                             </xar:set>
                             <xar:set name="value">xarModVars::get('themes','flushcaches')</xar:set>
@@ -454,7 +454,7 @@
                         <div class="xar-col">
                             <xar:set name="options">
                                 array(
-                                    array('id' => 'dynamicdata',  'name' => xarML('Dynamicdata')),
+                                    ['id' => 'dynamicdata',  'name' => xarML('Dynamicdata')],
                                 )
                             </xar:set>
                             <xar:set name="value">xarModVars::get('themes','flushdbcaches')</xar:set>

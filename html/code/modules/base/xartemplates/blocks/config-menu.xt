@@ -161,7 +161,7 @@
                     <xar:if condition="!empty($link['menulinks'])">
                         <xar:foreach in="$link['menulinks']" key="$sublinkid" value="$sublink">
                         <tr>
-                            <xar:set name="sub_id">$link_id .'_menulinks_' . $sublinkid</xar:set>
+                            <xar:set name="sub_id">$link_id . '_menulinks_' . $sublinkid</xar:set>
                             <xar:set name="sub_name">$link_name . '[menulinks][' . $sublinkid . ']'</xar:set>
                             <td>
                                 &#160;&#160;|-
@@ -233,10 +233,10 @@
                 <tr>
                     <td colspan="7" class="xar-align-right">
                         <xar:set name="link_selects">array(
-                            array('id' => 'none', 'name' => '--- do nothing ---'),
-                            array('id' => 'show', 'name' => 'Make Visible'),
-                            array('id' => 'hide', 'name' => 'Make Invisible'),
-                            array('id' => 'delete', 'name' => 'Delete'),
+                            ['id' => 'none', 'name' => '--- do nothing ---'],
+                            ['id' => 'show', 'name' => 'Make Visible'],
+                            ['id' => 'hide', 'name' => 'Make Invisible'],
+                            ['id' => 'delete', 'name' => 'Delete'],
                         )</xar:set>
                         <label for="links_select">With selected links</label>:&#160;
                         <xar:data-input type="dropdown" name="links_select" id="links_select" options="$link_selects"/>
@@ -289,10 +289,10 @@
                         <xar:data-input type="dropdown" name="$new_relation_id" id="$new_relation_id" options="$userlinks"/>&#160;&#160;
                         <xar:set name="new_position_id">'links_new_position'</xar:set>
                         <xar:set name="positions">array(
-                            array('id' => 0, 'name' => 'Right before, in the same level'),
-                            array('id' => 1, 'name' => 'Right after, in the same level'),
-                            array('id' => 2, 'name' => 'The first child link'),
-                            array('id' => 3, 'name' => 'The last child link'),
+                            ['id' => 0, 'name' => 'Right before, in the same level'],
+                            ['id' => 1, 'name' => 'Right after, in the same level'],
+                            ['id' => 2, 'name' => 'The first child link'],
+                            ['id' => 3, 'name' => 'The last child link'],
                         )</xar:set>
                         <label for="#$new_position_id#">Position</label>&#160;
                         <xar:data-input type="dropdown" name="$new_position_id" id="$new_position_id" options="$positions"/>
@@ -330,17 +330,17 @@
                 </td>
                 <td>
                     <xar:if condition="!empty($modulelist[$module['name']]['aliases'])">
-                        <xar:set name="inputname">"modulelist[".$module['name']."][alias_name]"</xar:set>
-                        <xar:set name="inputid">"modulelist_".$module['name']."_alias_name"</xar:set>
+                        <xar:set name="inputname">"modulelist[" . $module['name'] . "][alias_name]"</xar:set>
+                        <xar:set name="inputid">"modulelist_" . $module['name'] . "_alias_name"</xar:set>
                         <xar:set name="inputval">!empty($modulelist[$module['name']]['alias_name']) ? $modulelist[$module['name']]['alias_name'] : $module['name']</xar:set>
-                        <xar:set name="inputfirst">array('id' => $module['name'], 'name' => $module['displayname'])</xar:set>
+                        <xar:set name="inputfirst">['id' => $module['name'], 'name' => $module['displayname']]</xar:set>
                         <xar:data-input type="dropdown" name="$inputname" id="$inputid" firstline="$inputfirst" options="$modulelist[$module['name']]['aliases']" value="$inputval"/>
                     <xar:else/>
                         [none]
                     </xar:if>
                 </td>
                 <td>
-                    <xar:set name="inputid">"modulelist_".$module['name']."_view_access"</xar:set>
+                    <xar:set name="inputid">"modulelist_" . $module['name'] . "_view_access"</xar:set>
                     <xar:if condition="isset($modulelist[$module['name']]['view_access'])">
                         <xar:set name="inputval">$modulelist[$module['name']]['view_access']</xar:set>
                     <xar:else />
@@ -355,8 +355,8 @@
                     <xar:data-input type="access" name="$inputid" layout="horizontal" failure="1" value="$inputval" />
                 </td>
                 <td class="xar-align-center">
-                    <xar:set name="inputname">"modulelist[".$module['name']."][visible]"</xar:set>
-                    <xar:set name="inputid">"modulelist_".$module['name']."_visible"</xar:set>
+                    <xar:set name="inputname">"modulelist[" . $module['name'] . "][visible]"</xar:set>
+                    <xar:set name="inputid">"modulelist_" . $module['name'] . "_visible"</xar:set>
                     <xar:set name="inputval">!empty($modulelist[$module['name']]['visible'])</xar:set>
                     <xar:data-input type="checkbox" name="$inputname" id="$inputid" value="$inputval"/>
                 </td>

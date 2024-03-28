@@ -81,7 +81,7 @@
     <xar:if condition="isset($lastuser) AND $showlastuser">
          <p>
              Welcome to our latest member,
-             <a href="#xarController::URL('roles','user','display',array('id'=>$lastuser['id']))#">
+             <a href="#xarController::URL('roles','user','display',['id'=>$lastuser['id']])#">
                  #xarVar::prepForDisplay($lastuser['name'])#
              </a>
          </p>

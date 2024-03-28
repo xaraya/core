@@ -46,7 +46,7 @@
         </xar:if>
         -->
         <p>
-            The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the <a href="#xarController::URL('roles','admin','showusers',array('state'=>$state,'id'=>$groupid))#">members list</a>.
+            The changes have been made to the selected user(s), you can now send a notification by submitting the form or go back to the <a href="#xarController::URL('roles','admin','showusers',['state'=>$state,'id'=>$groupid])#">members list</a>.
         </p>
         <form action="#xarController::URL('roles','admin','asknotification')#" method="post" enctype="application/x-www-form-urlencoded">
             <div class="xar-row">

@@ -33,7 +33,7 @@
                 <div class="xar-col">Status:</div>
                 <div class="xar-col">
                     <xar:if condition="$block['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
-                        <a href="#xarServer::getCurrentURL(array('interface' => 'display', 'block_method' => 'status'))#">#$type_states[$block['type_state']]['name']#</a>
+                        <a href="#xarServer::getCurrentURL(['interface' => 'display', 'block_method' => 'status'])#">#$type_states[$block['type_state']]['name']#</a>
                     <xar:else/>
                         #$instance_states[$block['state']]['name']#
                     </xar:if>
@@ -45,7 +45,7 @@
                     <div class="xar-col">
                         <xar:if condition="!empty($instance_groups)">
                             <xar:loop name="$instance_groups">
-                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $loop:item.block_id])#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($instance_groups)">,&#160;</xar:if>
                             </xar:loop>
                         <xar:else/>
@@ -59,7 +59,7 @@
                     <div class="xar-col">
                         <xar:if condition="!empty($group_instances)">
                             <xar:loop name="$group_instances">
-                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $loop:item.block_id])#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($group_instances)">,&#160;</xar:if>
                             </xar:loop>
                         <xar:else/>

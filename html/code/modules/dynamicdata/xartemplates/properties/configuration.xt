@@ -33,8 +33,7 @@
                 
                     <!-- Ignore the invalid messages in the loop. We'll get them directly from the $validation array -->
                     <xar:if condition="(substr($key,strlen($key) - 8) eq '_invalid')">
-                        <xar:continue />
-                    </xar:if>
+                    <xar:else/>
 
                     <xar:set name="fieldname">$name . '[' . $key . ']'</xar:set>
                     <xar:set name="fieldid">$id . '_' . $key</xar:set>
@@ -67,6 +66,7 @@
                             <xar:data-input type="textarea" name="$invalidname" id="$invalidid" value="$invalidvalue"/>
                         </div>
                     </div>
+                    </xar:if>
                 </xar:foreach>
             <xar:else />
                 <div class="xar-row">

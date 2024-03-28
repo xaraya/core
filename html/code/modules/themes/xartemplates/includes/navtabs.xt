@@ -3,11 +3,11 @@
     <xar:set name="generalcss">'All'</xar:set>
     <xar:set name="generalcssurl">xarController::URL('themes','admin', 'cssconfig')</xar:set>
     <xar:set name="modulescss">'Modules'</xar:set>
-    <xar:set name="modulescssurl">xarController::URL('themes','admin','cssconfig',array('component'=&gt;'modules'))</xar:set>
+    <xar:set name="modulescssurl">xarController::URL('themes','admin','cssconfig',['component' => 'modules'])</xar:set>
     <xar:set name="themescss">'Themes'</xar:set>
-    <xar:set name="themescssurl">xarController::URL('themes','admin','cssconfig',array('component'=&gt;'themes'))</xar:set>
+    <xar:set name="themescssurl">xarController::URL('themes','admin','cssconfig',['component' => 'themes'])</xar:set>
     <xar:set name="corecss">'Core'</xar:set>
-    <xar:set name="corecssurl">xarController::URL('themes','admin','cssconfig',array('component'=&gt;'core'))</xar:set>
+    <xar:set name="corecssurl">xarController::URL('themes','admin','cssconfig',['component' => 'core'])</xar:set>
     <xar:set name="currentcssurl">xarServer::getCurrentURL()</xar:set>
     <!--
     <xar:if condition=" eq ">

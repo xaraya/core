@@ -248,6 +248,7 @@ class DefaultHandler extends xarObject implements ContextInterface
             $this->object->template,
             'ui_default',
             ['object'   => $this->object,
+             'context'  => $this->getContext(),
              'output'   => $output,
              'tpltitle' => $this->tpltitle]
         );

@@ -13,17 +13,17 @@
                 <xar:loop name="$realms">
                     <tr class="xar-norm-outline xar-padding-endsthick xar-align-left">
                         <td>
-                            <a href="#xarController::URL('privileges','admin','modifyrealm',array('id'=>$loop->item['id']))#">
+                            <a href="#xarController::URL('privileges','admin','modifyrealm',['id'=>$loop->item['id']])#">
                                 #xarVar::prepForDisplay($loop:item['name'])#
                             </a>
                         </td>
                         <td class="xar-align-center">
                             <xar:var name="label">Modify this realm</xar:var>
-                            <a class="xar-valign-middle" href="#xarController::URL('privileges','admin','modifyrealm',array('id'=>$loop->item['id']))#" alt="#$label#" title="#$label#">
+                            <a class="xar-valign-middle" href="#xarController::URL('privileges','admin','modifyrealm',['id'=>$loop->item['id']])#" alt="#$label#" title="#$label#">
                                 <xar:img scope="module" module="roles" file="infoicon.gif"/>
                             </a>&#160; 
                             <xar:var name="label">Delete this realm</xar:var>
-                            <a class="xar-valign-middle" href="#xarController::URL('privileges','admin','deleterealm',array('id'=>$loop->item['id']))#" alt="#$label#" title="#$label#">
+                            <a class="xar-valign-middle" href="#xarController::URL('privileges','admin','deleterealm',['id'=>$loop->item['id']])#" alt="#$label#" title="#$label#">
                                 <xar:img scope="module" module="roles" file="delete.png"/>
                             </a>
                         </td>
@@ -34,7 +34,7 @@
             <h2>Manage Realms</h2>
             <xar:var name="label">Enable the Realms options</xar:var>
             <p>
-                You can use Realms to 'slice' or divide your site into different areas. You can slice' in various ways, such as by theme or domain name. You must <a href="#xarController::URL('privileges','admin','modifyconfig',array('tab'=>'realms'))#" title="#$label#">enable Realms on your site</a> in the Privileges config options. The realms create and modify options will then display here.
+                You can use Realms to 'slice' or divide your site into different areas. You can slice' in various ways, such as by theme or domain name. You must <a href="#xarController::URL('privileges','admin','modifyconfig',['tab'=>'realms'])#" title="#$label#">enable Realms on your site</a> in the Privileges config options. The realms create and modify options will then display here.
             </p>
         </xar:if>
     </div>

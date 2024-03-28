@@ -28,7 +28,7 @@ function modules_adminapi_remove(Array $args=array())
     // Remove variables and module
 
     // Get module information
-    if (isset($name)) $regid = xarMod::getRegid($name, 'module');
+    if (isset($name)) $regid = xarMod::getRegId($name, 'module');
     $modinfo = xarMod::getInfo($regid);
 
     //TODO: Add check if there is any dependents

@@ -69,6 +69,8 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
         // set current module to 'module' for Xaraya controller - used e.g. in xarMod::getName()
         static::prepareController($attribs['module'], static::$baseUri);
         $context['module'] = $attribs['module'];
+        // @todo where do we decide to use Twig or not
+        //$context['twig'] = true;
 
         // filter out request attributes from remaining query params here
         $params = array_diff_key($request->getQueryParams(), $attribs);
@@ -103,7 +105,7 @@ class ModuleMiddleware extends ModuleRouter implements DefaultRouterInterface, M
             return $this->responseUtil->createExceptionResponse($e);
         }
         if ($this->wrapPage) {
-            $result = $this->responseUtil->wrapOutputInPage($result);
+            $result = $this->responseUtil->wrapOutputInPage($result, $context);
         }
         if (!empty($context) && !empty($context['mediatype'])) {
             return $this->responseUtil->createResponse($result, $context['mediatype']);

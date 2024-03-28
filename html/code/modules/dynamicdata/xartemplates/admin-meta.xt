@@ -9,9 +9,9 @@
         <xar:template type="module" file="utility-menu"/>
         <xar:if condition="!empty($table)">
             <xar:if condition="empty($dbtype)">
-                <xar:set name="tablelink">xarController::URL('dynamicdata','admin','meta',array('table'=>$table))</xar:set>
+                <xar:set name="tablelink">xarController::URL('dynamicdata','admin','meta',['table'=>$table])</xar:set>
             <xar:else />
-                <xar:set name="tablelink">xarController::URL('dynamicdata','admin','meta',array('dbtype'=>$dbtype,'db'=>$db,'table'=>$table))</xar:set>
+                <xar:set name="tablelink">xarController::URL('dynamicdata','admin','meta',['dbtype'=>$dbtype,'db'=>$db,'table'=>$table])</xar:set>
             </xar:if>
         </xar:if>
         <xar:if condition="empty($export)">
@@ -61,9 +61,9 @@
                             </xar:if>
                             <td>
                                 <xar:if condition="empty($dbtype)">
-                                    <xar:set name="curlink">xarController::URL('dynamicdata','admin','meta',array('table'=>$curtable))</xar:set>
+                                    <xar:set name="curlink">xarController::URL('dynamicdata','admin','meta',['table'=>$curtable])</xar:set>
                                 <xar:else />
-                                    <xar:set name="curlink">xarController::URL('dynamicdata','admin','meta',array('dbtype'=>$dbtype,'db'=>$db,'table'=>$curtable))</xar:set>
+                                    <xar:set name="curlink">xarController::URL('dynamicdata','admin','meta',['dbtype'=>$dbtype,'db'=>$db,'table'=>$curtable])</xar:set>
                                 </xar:if>
                                 <a href="#$curlink#">
                                 #$curtable#</a>
@@ -73,7 +73,7 @@
                             View</a>
                             </td>
                             <td class="xar-align-center">
-                                <a href="#xarController::URL('dynamicdata','admin','query',array('table'=>$curtable))#">
+                                <a href="#xarController::URL('dynamicdata','admin','query',['table'=>$curtable])#">
                             Query</a>
                             </td>
                             <td class="xar-align-center">
@@ -84,7 +84,7 @@
                                 <a href="#$curlink#&amp;export=ddl">
                             Export DDL</a>
                             <!--
-                                | <a href="#xarController::URL('dynamicdata','admin','relations',array('table'=>$curtable))#">
+                                | <a href="#xarController::URL('dynamicdata','admin','relations',['table'=>$curtable])#">
                             Add Relation</a>
                             -->
                            </td>
@@ -126,13 +126,13 @@
                 </h3>
                 <p>
                 <a href="#$tablelink#&amp;export=view">View</a>| 
-                <a href="#xarController::URL('dynamicdata','admin','query',array('table'=>$table))#">Query</a>| 
+                <a href="#xarController::URL('dynamicdata','admin','query',['table'=>$table])#">Query</a>|
                     <a href="#$tablelink#&amp;export=object">
                 Export Object</a>| 
                     <a href="#$tablelink#&amp;export=ddl">
                 Export DDL</a>
                 <!--
-                | <a href="#xarController::URL('dynamicdata','admin','relations',array('table'=>$table))#">Add
+                | <a href="#xarController::URL('dynamicdata','admin','relations',['table'=>$table])#">Add
                 Relation</a>
                 -->
                 </p>
@@ -164,11 +164,11 @@
                 </table>
             </xar:if>
             <p class="xar-align-center">
-            <a href="#xarController::URL('dynamicdata','admin','meta',array('export'=>'object'))#">Export all tables to
+            <a href="#xarController::URL('dynamicdata','admin','meta',['export'=>'object'])#">Export all tables to
             Objects</a>| 
-            <a href="#xarController::URL('dynamicdata','admin','meta',array('export'=>'ddl'))#">Export all tables to
+            <a href="#xarController::URL('dynamicdata','admin','meta',['export'=>'ddl'])#">Export all tables to
             DDL</a>| 
-            <a href="#xarController::URL('dynamicdata','admin','meta',array('showdb'=>1))#">Show other databases</a></p>
+            <a href="#xarController::URL('dynamicdata','admin','meta',['showdb'=>1])#">Show other databases</a></p>
         <xar:elseif condition="$export eq 'view'"/>
             <!-- example of using virtual object descriptor to show database table -->
             <xar:set name="dummy">sys::import('modules.dynamicdata.class.objects.virtual')</xar:set>

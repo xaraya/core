@@ -4,7 +4,7 @@
     <xar:template file="user-mod-head"/>
     <div class="xar-mod-body">
         <p>
-            This template <strong>modules/base/xartemplates/user-main<em>-test</em>.xt</strong> can be reached by adding <strong><a href="#xarServer::getModuleURL('base','user','main',array('page' => 'test'))#">page=<em>test</em></a></strong> to the base module URL.
+            This template <strong>modules/base/xartemplates/user-main<em>-test</em>.xt</strong> can be reached by adding <strong><a href="#xarServer::getModuleURL('base','user','main',['page' => 'test'])#">page=<em>test</em></a></strong> to the base module URL.
             You can experiment with various blocklayout features and template tags here if you want...
         </p>
 
@@ -14,14 +14,14 @@
 <pre>
 &lt;xar:set name="dummy">1;
     sys::import('modules.dynamicdata.class.objects.factory');
-    $roles = DataObjectFactory::getObjectList(array('name'=>'roles_users'));
+    $roles = DataObjectFactory::getObjectList(['name'=>'roles_users']);
 &lt;/xar:set>
 </pre>
 
         <!-- Here we create the object -->
         <xar:set name="dummy">1;
             sys::import('modules.dynamicdata.class.objects.factory');
-            $roles = DataObjectFactory::getObjectList(array('name'=>'roles_users'));
+            $roles = DataObjectFactory::getObjectList(['name'=>'roles_users']);
             $roles->dataquery->eq('uname','admin');
         </xar:set>
 
@@ -55,7 +55,7 @@
         <!-- Here we create the object -->
         <xar:set name="dummy">1;
             sys::import('modules.dynamicdata.class.objects.factory');
-            $roles = DataObjectFactory::getObjectList(array('name'=>'roles_users'));
+            $roles = DataObjectFactory::getObjectList(['name'=>'roles_users']);
         </xar:set>
         
         <!-- Here we create the object -->
@@ -90,7 +90,7 @@
                 &lt;xar:condition operator="ne" property="regid">27&lt;/xar:condition>
             &lt;/xar:orconditions>
         &lt;/xar:andconditions>
-        &lt;xar:condition operator="in" property="regid">array(2,3,4,5,6,7,8,9,10)&lt;/xar:condition>
+        &lt;xar:condition operator="in" property="regid">[2,3,4,5,6,7,8,9,10]&lt;/xar:condition>
         &lt;xar:condition operator="like" property="name">'themes'&lt;/xar:condition>
     &lt;/xar:orconditions>
 &lt;/xar:select>
@@ -111,7 +111,7 @@
                         <xar:condition operator="ne" property="regid">27</xar:condition>
                     </xar:orconditions>
                 </xar:andconditions>
-                <xar:condition operator="in" property="regid">array(2,3,4,5,6,7,8,9,10)</xar:condition>
+                <xar:condition operator="in" property="regid">[2,3,4,5,6,7,8,9,10]</xar:condition>
                 <xar:condition operator="like" property="name">'themes'</xar:condition>
             </xar:orconditions>
         </xar:select>

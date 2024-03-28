@@ -133,9 +133,9 @@ class xarHooks extends xarEvents
         // The common case is hooking DD to some itemtype that is already a dataobject:
         // We pass the itemid of the object through the hooks call, causing DD to display an object of the same itemid, which is of course the original object
         if (!empty($args['exclude_module'])) {
-            //$query .= " AND mo.regid NOT IN ('" . join("','", xarMod::getRegid($extraInfo['exclude_module'])) . "')"; 
+            //$query .= " AND mo.regid NOT IN ('" . join("','", xarMod::getRegId($extraInfo['exclude_module'])) . "')"; 
             foreach ($args['exclude_module'] as $excluded_module) {
-                $where[] = "mo.regid != " . xarMod::getRegid($excluded_module);
+                $where[] = "mo.regid != " . xarMod::getRegId($excluded_module);
             }
         }
         

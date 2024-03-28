@@ -53,7 +53,7 @@ class RequestContext implements ContextInterface, RequestInterface
     public function initialize()
     {
         if (!isset($this->context)) {
-            $this->context = new Context();
+            $this->context = new Context(['source' => __CLASS__]);
             //$requestId = bin2hex(random_bytes($this->length));
         }
         return true;

@@ -124,7 +124,7 @@ class xarDB
         switch ($args['databaseType']) {
         	case 'sqlite3':
         	case 'pdosqlite':
-        		$location = xarSystemVars::get(sys::CONFIG, 'DB.Location');
+				$args['location'] = xarSystemVars::get(sys::CONFIG, 'DB.Location');
 				$args['phptype']       = $args['databaseType'];
 				$args['database']      = $args['location'] . $args['databaseName'] ?? ':memory:';
 				$args['hostspec']    ??= '';

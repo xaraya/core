@@ -19,7 +19,7 @@
             <xar:set name="request">xarController::getRequest()->getInfo()</xar:set>
             <xar:set name="activetab">#$request.2#</xar:set>
             <xar:set name="xmldata">'showusers'</xar:set>
-            <xar:set name="urlargs">array('id' => $id, 'reload' => 'reload')</xar:set>
+            <xar:set name="urlargs">['id' => $id, 'reload' => 'reload']</xar:set>
             <xar:template type="module" module="base" file="admin-menu-skel"/>
             <xar:if condition="count($parents) ne 0">
                 <ul class="xar-tabs">
@@ -31,7 +31,7 @@
                         <xar:if condition="$prevgroup ne $parents[$i]['parentname']">
                             <li class="xar-tab">
                                 <xar:var name="label">Show this group</xar:var>
-                                <a href="#xarController::URL('roles','admin','showusers',array('id'=>$parents[$i]['parentid']))#" title="#$label#">#$parents[$i]['parentname']#</a>
+                                <a href="#xarController::URL('roles','admin','showusers',['id'=>$parents[$i]['parentid']])#" title="#$label#">#$parents[$i]['parentname']#</a>
                             </li>
                         </xar:if>
                         <xar:set name="prevgroup">#$parents[$i]['parentname']#</xar:set>
@@ -42,7 +42,7 @@
         <div class="xar-mod-page-body">
             <fieldset>
                 <legend>Role properties</legend>
-                <xar:set name="fields">array('id','name','uname','email','state','regdate')</xar:set>
+                <xar:set name="fields">['id','name','uname','email','state','regdate']</xar:set>
                 <xar:data-display object="$object" fieldlist="$fields"/>
                 <xar:if condition="$itemtype eq xarRoles::ROLES_USERTYPE">
                     <xar:set name="settings">
@@ -85,10 +85,10 @@
                             </div>
                             <div class="xar-col">
                                 <xar:set name="value">
-                                    xarMod::apiFunc('roles','user','getprimaryparent',array('itemid' =&gt; $id))
+                                    xarMod::apiFunc('roles','user','getprimaryparent',['itemid' => $id])
                                 </xar:set>
                                 <xar:set name="options">
-                                    xarMod::apiFunc('roles','user','getancestors',array('id' =&gt; $id, 'parents' =&gt; 1))
+                                    xarMod::apiFunc('roles','user','getancestors',['id' => $id, 'parents' => 1])
                                 </xar:set>
                                 <xar:data-output type="dropdown" name="duvs[primaryparent]" id="duvs_primaryparent" options="$options" value="$value" tabindex="8"/>
                             </div>

@@ -198,7 +198,7 @@
                         <legend>
                             Configure Roles Hooks
                         </legend>
-                        <xar:set name="url">#xarController::URL('roles','admin','modifyconfig',array('tab' => 'managehooks'))#</xar:set>
+                        <xar:set name="url">#xarController::URL('roles','admin','modifyconfig',['tab' => 'managehooks'])#</xar:set>
                         <xar:module main="false" module="modules" type="admin" func="hooks" curhook="roles" return_url="$url"/>
                     </fieldset>
                 <!--
@@ -213,7 +213,7 @@
                         your properties, see example below
                     -->
                     <!--
-                        <xar:set name="mylist">array('foo','bar')</xar:set>
+                        <xar:set name="mylist">['foo','bar']</xar:set>
                         <h4>More Settings</h4>
                         <xar:data-form object="$user_settings" tplmodule="roles" template="usermenu" layout="default" fieldlist="$mylist"/>
                     -->

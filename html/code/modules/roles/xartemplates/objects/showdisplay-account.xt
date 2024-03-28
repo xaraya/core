@@ -44,7 +44,7 @@
                     </label>
                 </div>
                 <div class="xar-col">
-                    <a href="#xarController::URL('roles','user','email',array('id'=>$userid))#">
+                    <a href="#xarController::URL('roles','user','email',['id'=>$userid])#">
                         Send an Email to #xarVar::prepForDisplay(xarUser::getVar('name', $userid))#
                     </a>
                 </div>
@@ -60,7 +60,7 @@
                 </div>
                 <div class="xar-col">
                     <xar:set name="url">
-                        xarMod::apiFunc('roles','user','parseuserhome',array('url'=>$homelink, 'truecurrenturl' => xarServer::getCurrentURL(array(), false)));
+                        xarMod::apiFunc('roles','user','parseuserhome',['url'=>$homelink, 'truecurrenturl' => xarServer::getCurrentURL([], false)]);
                     </xar:set>
                     <xar:var name="label">My Home Page</xar:var>
                     <a href="#$url['redirecturl']#" title="#$label#" target="_blank">#$label#</a>

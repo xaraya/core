@@ -12,16 +12,16 @@
                 <xar:if condition="!empty($aliasesMap)">
                     <xar:foreach in="$aliasesMap" key="$key" value="$value">
                         <xar:if condition="$value ne $modname">
-                            <xar:continue/>
-                        </xar:if>
+                        <xar:else/>
                         <div class="xar-col dummy">
-                            <a href="#xarController::URL('modules','admin','aliases',array('name' => $value, 'remove' => $key))#">
+                            <a href="#xarController::URL('modules','admin','aliases',['name' => $value, 'remove' => $key])#">
                                 <xar:var name="imagealt">[remove]</xar:var>
                                 <xar:set name="iconurl">xarTpl::getImage('icons/delete.png', 'theme')</xar:set>
                                 <xar:data-output type="image" value="$iconurl" imagetext="$imagealt"/>
                             </a>
                             &#160;#$key#
                         </div>
+                        </xar:if>
                     </xar:foreach>
                 <xar:else/>
                     <div class="xar-col dummy">

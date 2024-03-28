@@ -189,7 +189,7 @@
                                             <xar:foreach in="$block['groups']" key="$group_id" value="$group">
                                                 <tr>
                                                     <td>
-                                                        <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $group_id))#">#$group['name']#</a>
+                                                        <a href="#xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $group_id])#">#$group['name']#</a>
                                                     </td>
                                                     <td><input type="text" name="instance_groups[#$group_id#][box_template]" id="instance_groups_#$group_id#_box_template" value="#$group['box_template']#"/></td>
                                                     <td><input type="text" name="instance_groups[#$group_id#][block_template]" id="instance_groups_#$group_id#_block_template" value="#$group['block_template']#"/></td>

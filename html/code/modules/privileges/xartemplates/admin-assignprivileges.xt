@@ -2,7 +2,7 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <xar:set name="options">
-        xarPrivileges::getPrivileges(array('module' => $tab))
+        xarPrivileges::getPrivileges(['module' => $tab])
     </xar:set>
     <xar:template file="admin-mod-head"/>
     <div class="xar-mod-body">

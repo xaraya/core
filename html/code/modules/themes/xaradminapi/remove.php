@@ -31,7 +31,7 @@ function themes_adminapi_remove(Array $args=array())
     $tables = xarDB::getTables();
 
     // Get theme information
-    if (isset($name)) $regid = xarMod::getRegid($name, 'theme');
+    if (isset($name)) $regid = xarMod::getRegId($name, 'theme');
     $themeInfo = xarTheme::getInfo($regid);
     $defaultTheme = xarModVars::get('themes','default_theme');
 

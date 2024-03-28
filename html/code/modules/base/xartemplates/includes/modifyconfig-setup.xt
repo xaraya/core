@@ -77,8 +77,8 @@
             <div class="xar-col">
                 <xar:set name="options">
                     array( 
-                        array('id' => 'Creole', 'name' => 'Creole'), 
-                        array('id' => 'PDO', 'name' => 'PDO'), 
+                        ['id' => 'Creole', 'name' => 'Creole'], 
+                        ['id' => 'PDO', 'name' => 'PDO'], 
                     )
                 </xar:set>
                 <xar:set name="value">xarSystemVars::get(sys::CONFIG, 'DB.Middleware')</xar:set>

@@ -334,6 +334,7 @@ class DataObjectMaster extends xarObject implements ContextInterface
         $args['isprimary'] = !empty($this->primary);
         $args['catid'] = !empty($this->catid) ? $this->catid : null;
         $args['object'] = $this;
+        $args['context'] = $this->getContext();
         return xarTpl::object($args['tplmodule'], $args['template'], 'showfilterform', $args);
     }
 

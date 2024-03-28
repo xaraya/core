@@ -34,7 +34,7 @@
             <div class="xar-col">
                 <xar:data-input id="use_module_alias" property="$properties['use_module_alias']" onchange="toggle(\'aliaslink\',\'aliascheckbox\')"/>&#160;
                 <xar:set name="modname">xarMod::getName()</xar:set>
-                <a href="#xarController::URL('modules','admin','aliases',array('name' => $modname))#">Manage Aliases</a>
+                <a href="#xarController::URL('modules','admin','aliases',['name' => $modname])#">Manage Aliases</a>
             </div>
         </div>
     </xar:if>
@@ -47,14 +47,13 @@
             </div>
             <div class="xar-col">
                 <xar:set name="aliasmap">xarConfigVars::get(null,'System.ModuleAliases')</xar:set>
-                <xar:set name="options">array()</xar:set>
+                <xar:set name="options">[]</xar:set>
                 <xar:if condition="!empty($aliasmap)">
                 	<xar:set name="modname">xarMod::getName()</xar:set>
                     <xar:foreach in="$aliasmap" key="$aliasname" value="$modulename">
-                        <xar:if condition="$modulename != $modname">
-                            <xar:continue/>
+                        <xar:if condition="$modulename eq $modname">
+                            <xar:set name="dummy">1;$options[$aliasname] = $aliasname</xar:set>
                         </xar:if>
-                        <xar:set name="dummy">1;$options[$aliasname] = $aliasname</xar:set>
                     </xar:foreach>
                 </xar:if>
                 <xar:if condition="!empty($options)">

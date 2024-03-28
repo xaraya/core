@@ -17,7 +17,7 @@
                         &#160; 
                     <xar:elseif condition="in_array($proptype['name'], ['dropdown', 'object', 'objectref'])"/>
                         <xar:set name="dummy">$property->initialization_firstline = ['id' => '', 'name' => '']</xar:set>
-                        <xar:set name="ddname">'dd_' . (string) $property->id</xar:set>
+                        <xar:set name="ddname">'dd_' . $property->id</xar:set>
                         <xar:data-input property="$property" name="where[$name]" value="$curvalue"/>
                     <xar:elseif condition="in_array($proptype['name'], ['textbox', 'integerbox', 'username'])"/>
                         <xar:set name="values">[]</xar:set>
@@ -29,12 +29,13 @@
                         <xar:set name="dummy">$options[] = ['id' => '', 'name' => '']</xar:set>
                         <xar:foreach in="$values" key="$option" value="$dummy">
                             <xar:if condition="$proptype['name'] eq 'username'">
-                                <xar:set name="dummy">$options[] = ['id' => $option, 'name' => xarUser::getVar('uname', $option)]</xar:set>
+                                <xar:set name="option">xarUser::getVar('uname', $option)</xar:set>
+                                <xar:set name="dummy">$options[] = ['id' => $option, 'name' => $option]</xar:set>
                             <xar:else />
                                 <xar:set name="dummy">$options[] = ['id' => $option, 'name' => $option]</xar:set>
                             </xar:if>
                         </xar:foreach>
-                        <xar:set name="ddname">'dd_' . (string) $property->id</xar:set>
+                        <xar:set name="ddname">'dd_' . $property->id</xar:set>
                         <xar:if condition="$itemcount lt 10 or count($options) lt $itemcount / 2">
                             <xar:data-input type="dropdown" name="where[$name]" options="$options" value="$curvalue"/>
                         <xar:else />

@@ -52,7 +52,7 @@
                             <xar:set name="bgimg">$action['action'].'.gif'</xar:set>
                             <xar:set name="bckgrndimg"><xar:img scope="module" module="mail" file="$bgimg" render="false"/></xar:set>
                                 <li style="background-image: url($bckgrndimg)">
-                                    <a style="text-decoration: none; font-size: 0.85em;" href="#xarController::URL('mail','admin',$action['action'],array('name' =&gt; $qname, 'authid' =&gt; $authid))#">
+                                    <a style="text-decoration: none; font-size: 0.85em;" href="#xarController::URL('mail','admin',$action['action'],['name' => $qname, 'authid' => $authid])#">
                                     #$action.text#
                                 </a>
                             </li>

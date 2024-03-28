@@ -110,11 +110,11 @@
                                 <div class="xar-col">
                                     <xar:set name="realmoptions">
                                         array( 
-                                            array('id' => 'none', 'name' => xarML('No Value')), 
-                                            array('id' => 'domain', 'name' => xarML('Current Domain')), 
-                                            array('id' => 'theme', 'name' => xarML('Current Theme')), 
-                                            array('id' => 'group', 'name' => xarML('Primary Parent Group')), 
-                                            array('id' => 'string', 'name' => xarML('Text Value')) 
+                                            ['id' => 'none', 'name' => xarML('No Value')], 
+                                            ['id' => 'domain', 'name' => xarML('Current Domain')], 
+                                            ['id' => 'theme', 'name' => xarML('Current Theme')], 
+                                            ['id' => 'group', 'name' => xarML('Primary Parent Group')], 
+                                            ['id' => 'string', 'name' => xarML('Text Value')] 
                                         )
                                     </xar:set>
                                     <xar:data-input type="radio" name="realmvalue" options="$realmoptions" value="$realmvalue" layout="vertical"/>
@@ -142,8 +142,8 @@
                                 <div class="xar-col">
                                     <xar:set name="options">
                                         array( 
-                                            array('id' => 'exact', 'name' => 'Exact Match'), 
-                                            array('id' => 'contains', 'name' => 'Privilege Contains Mask Name'),
+                                            ['id' => 'exact', 'name' => 'Exact Match'], 
+                                            ['id' => 'contains', 'name' => 'Privilege Contains Mask Name'],
                                         )
                                     </xar:set>
                                     <xar:set name="realmcomparison">
@@ -231,7 +231,7 @@
                         This option is provided for Web Developer convenience. In general most Site Administrators should not need to access the Masks list provided below. Editing of the masks without an understanding of how they function can result in access problems to content on your site.
                     </p>
                     <xar:set name="where">'priv_type eq 3'</xar:set>
-                    <xar:set name="object">DataObjectFactory::getObjectList(array('name' => 'privileges_privileges', 'where' => $where))</xar:set>
+                    <xar:set name="object">DataObjectFactory::getObjectList(['name' => 'privileges_privileges', 'where' => $where])</xar:set>
                     <xar:data-view object="$object"/>
                 </fieldset>
                 <input type="hidden" name="tab" id="tab" value="#$tab#"/>
@@ -247,7 +247,7 @@
                     <fieldset>
                         <legend>Testing Settings</legend>
                         <p class="xar-note">
-                            The options activated below display messages visible to the debug administrators, which are defined <a href="#xarController::URL('roles','admin','modifyconfig',array('tab'=>'debugging'))#">here</a>.
+                            The options activated below display messages visible to the debug administrators, which are defined <a href="#xarController::URL('roles','admin','modifyconfig',['tab'=>'debugging'])#">here</a>.
                         </p>
                         <div class="xar-row">
                             <div class="xar-col">

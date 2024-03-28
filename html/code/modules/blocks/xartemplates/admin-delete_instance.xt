@@ -39,7 +39,7 @@
                         <div class="xar-col">
                             <p class="xar-note">This instance belongs to the following block groups</p>
                             <xar:loop name="$instance_groups">
-                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $loop:item.block_id])#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($instance_groups)">,&#160;</xar:if>
                             </xar:loop>
                         </div>
@@ -50,7 +50,7 @@
                         <div class="xar-col">
                             <p class="xar-note">The following instances belong to this block group</p>
                             <xar:loop name="$group_instances">
-                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', array('block_id' => $loop:item.block_id))#">#$loop:item.name#</a>
+                                <a href="#xarController::URL('blocks', 'admin', 'modify_instance', ['block_id' => $loop:item.block_id])#">#$loop:item.name#</a>
                                 <xar:if condition="$loop:index lt count($group_instances)">,&#160;</xar:if>
                             </xar:loop>
                         </div>

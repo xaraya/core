@@ -124,6 +124,7 @@ class DeleteHandler extends DefaultHandler
             $this->object->template,
             'ui_delete',
             ['object' => $this->object,
+             'context' => $this->getContext(),
              'authid' => xarSec::genAuthKey(),
              'tpltitle' => $this->tpltitle,
              'return_url' => $args['return_url']]

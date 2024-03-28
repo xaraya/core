@@ -25,7 +25,7 @@
                 </xar:if>
                 <xar:if condition="count($object:items) eq $object:numitems">
                     <div class="xar-halfwidth xar-floatright xar-align-right">
-                        <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
+                        <xar:set name="newtotal">$object->startnum + $object->numitems</xar:set>
                         <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
                     </div>
                 </xar:if>
@@ -54,16 +54,15 @@
             </tr>
             <xar:set name="adminlistserial">xarModVars::get('dynamicdata','administrators')</xar:set>
             <xar:if condition="!empty($adminlistserial)">
-                <xar:set name="adminlist">array_merge(unserialize($adminlistserial),array(xarUser::getVar('uname',xarModVars::get('roles','admin'))))</xar:set>
+                <xar:set name="adminlist">array_merge(unserialize($adminlistserial),[xarUser::getVar('uname',xarModVars::get('roles','admin'))])</xar:set>
             <xar:else/>
-                <xar:set name="adminlist">array(xarUser::getVar('uname',(int)xarModVars::get('roles','admin')))</xar:set>
+                <xar:set name="adminlist">[xarUser::getVar('uname',xarModVars::get('roles','admin'))]</xar:set>
             </xar:if>
             <xar:set name="issuperadmin">in_array(xarUser::getVar('uname'),$adminlist)</xar:set>
             <xar:set name="item_no">0</xar:set>
             <xar:foreach in="$items" key="$itemid" value="$fields">
                 <xar:if condition="!$issuperadmin AND ($itemid le 3)">
-                    <xar:continue />
-                </xar:if>
+                <xar:else/>
                 <xar:set name="item_no">$item_no+1</xar:set>
                 <xar:set name="rowclass">'xar-norm'</xar:set>
                 <xar:if condition="$item_no % 2 eq 0">
@@ -75,7 +74,7 @@
                         <td>
                             <xar:if condition="empty($fields[$name])">&#160;
                         <xar:elseif condition="!empty($linkfield) and $linkfield eq $name"/>
-                            <a href="#xarController::URL($urlmodule,$linktype,$linkfunc,array('itemtype' =&gt; $itemtype,$urlparam =&gt; $itemid))#">
+                            <a href="#xarController::URL($urlmodule,$linktype,$linkfunc,['itemtype' => $itemtype,$urlparam => $itemid])#">
                                 <xar:data-output property="$properties[$name]" value="$fields[$name]"/>
                             </a>
                         <xar:else />
@@ -87,13 +86,11 @@
                             <xar:if condition="!empty($links[$itemid]) and count($links[$itemid]) gt 0">
                                 <xar:if condition="xarModVars::get('dynamicdata','use_module_icons')">
                                     <xar:foreach in="$links[$itemid]" key="$otype" value="$option">
-                                    <xar:if condition="$otype eq 'display'">
-                                        <!-- skip display for dataobjects -->
-                                        <xar:continue/>
-                                    </xar:if>
-                                        <xar:if condition="!empty($option['olink'])">
+                                        <xar:if condition="$otype eq 'display'">
+                                            <!-- skip display for dataobjects -->
+                                        <xar:elseif condition="!empty($option['olink'])"/>
                                             <xar:if condition="!empty($option['oicon'])">
-                                                <xar:set name="imgfile">'icons/'.$option['oicon']</xar:set>
+                                                <xar:set name="imgfile">'icons/' . $option['oicon']</xar:set>
                                                 <a href="#$option['olink']#" title="#$option['otitle']#"><xar:img scope="theme" file="$imgfile" class="xar-icon" alt="$otype"/></a>&#160;
                                             <xar:else/>
                                                 #$option['ojoin']#
@@ -119,6 +116,7 @@
                         </td>
                     </xar:if>
                 </tr>
+                </xar:if>
             </xar:foreach>
         </table>
 	</div><!--/xar-mod-page-body-->
@@ -133,7 +131,7 @@
                 </xar:if>
                 <xar:if condition="count($object:items) eq $object:numitems">
                     <div class="xar-halfwidth xar-floatright xar-align-right">
-                        <xar:set name="newtotal">$object->startnum+$object->numitems</xar:set>
+                        <xar:set name="newtotal">$object->startnum + $object->numitems</xar:set>
                         <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$newtotal" urltemplate="$object->pagerurl" template="multipagenext"/>
                     </div>
                 </xar:if>

@@ -124,6 +124,7 @@ class DisplayHandler extends DefaultHandler
             $this->object->template,
             'ui_display',
             ['object' => $this->object,
+             'context' => $this->getContext(),
              'hooks'  => $this->object->hookoutput,
              'tpltitle' => $this->tpltitle]
         );

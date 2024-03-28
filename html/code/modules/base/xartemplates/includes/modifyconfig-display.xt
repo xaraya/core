@@ -15,9 +15,9 @@
             </div>
             <div class="xar-col">
                 <xar:if condition="xarModVars::get('modules', 'defaultmoduletype') == 'admin'">
-                    <xar:set name="filter">array('AdminCapable' =&gt; 1)</xar:set>
+                    <xar:set name="filter">['AdminCapable' => 1]</xar:set>
                 <xar:else />
-                    <xar:set name="filter">array('UserCapable' =&gt; 1)</xar:set>
+                    <xar:set name="filter">['UserCapable' => 1]</xar:set>
                 </xar:if>
                 <xar:set name="value">
                     <xar:var scope="module" module="modules" name="defaultmodule"/>
@@ -25,7 +25,7 @@
                 <xar:data-input type="module" name="defaultmodule" id="defaultmodule" filter="$filter" value="$value" store_prop="name"/>
             </div>
         </div>
-        <xar:if condition="(int)xarModVars::get('modules', 'defaultmodule') eq (int)xarMod::getID('base')">
+        <xar:if condition="xarModVars::get('modules', 'defaultmodule') eq xarMod::getID('base')">
             <div class="xar-row">
                 <div class="xar-col">
                     <xar:var name="label">Use an alternate default page template.</xar:var>
@@ -65,8 +65,8 @@
            <div class="xar-col">
                 <xar:set name="options">
                     array( 
-                        array('id' =&gt; 'admin', 'name' =&gt; 'admin'), 
-                        array('id' =&gt; 'user', 'name' =&gt; 'user'), 
+                        ['id' => 'admin', 'name' => 'admin'], 
+                        ['id' => 'user', 'name' => 'user'], 
                     )
                 </xar:set>
                 <xar:set name="value">
@@ -128,9 +128,9 @@
                 <xar:set name="firstline">"'',$firstline"</xar:set>
                 <xar:set name="options">
                     array(
-                        array('id' => '', 'name' => xarML('Automatic')),
-                        array('id' => 'default', 'name' => xarML('Xaraya URLs')),
-                        array('id' => 'short', 'name' => xarML('Short URLs')),
+                        ['id' => '', 'name' => xarML('Automatic')],
+                        ['id' => 'default', 'name' => xarML('Xaraya URLs')],
+                        ['id' => 'short', 'name' => xarML('Short URLs')],
                     )
                 </xar:set>
                 <xar:data-input type="dropdown" name="shorturl" id="shorturl" value="$value" options="$options"/>

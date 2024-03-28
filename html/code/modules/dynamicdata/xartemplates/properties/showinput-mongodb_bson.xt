@@ -14,8 +14,8 @@
             <fieldset>
                 <legend>BSON Document/Array</legend>
                 <xar:foreach in="$decoded" key="$key" value="$val">
-                <xar:set name="idkey">$id.'.'.$key</xar:set>
-                <xar:set name="namekey">$id.'['.$key.']'</xar:set>
+                <xar:set name="idkey">$id . '.' . $key</xar:set>
+                <xar:set name="namekey">$id . '[' . $key . ']'</xar:set>
                 <div class="xar-row">
                     <div class="xar-col">
                         <label for="#$idkey#">

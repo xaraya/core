@@ -41,7 +41,7 @@
                 <div class="xar-col">Status</div>
                 <div class="xar-col">
                     <xar:if condition="$type['type_state'] ne xarBlock::TYPE_STATE_ACTIVE">
-                        <a href="#xarServer::getCurrentURL(array('tab' => 'status'))#">#$type_states[$type['type_state']]['name']#</a>
+                        <a href="#xarServer::getCurrentURL(['tab' => 'status'])#">#$type_states[$type['type_state']]['name']#</a>
                     <xar:else/>
                         #$type_states[$type['type_state']]['name']#
                     </xar:if>
@@ -197,7 +197,7 @@
                 </p>
                 <p>
                     If the files were removed because you are no longer using this block type,
-                    <a href="#xarController::URL('blocks', 'admin', 'delete_type', array('type_id' => $type['type_id']))#">click here to remove the type from the database</a>.
+                    <a href="#xarController::URL('blocks', 'admin', 'delete_type', ['type_id' => $type['type_id']])#">click here to remove the type from the database</a>.
                 </p>
                 <xar:else/>
                     <p>Please notify the site administrator</p>
@@ -241,7 +241,7 @@
                 </p>
                 <p>
                     If the module was removed because you are no longer using it,
-                    <a href="#xarController::URL('blocks', 'admin', 'delete_type', array('type_id' => $type['type_id']))#">click here to remove the type from the database</a>.
+                    <a href="#xarController::URL('blocks', 'admin', 'delete_type', ['type_id' => $type['type_id']])#">click here to remove the type from the database</a>.
                 </p>
                 <xar:else/>
                     <p>Please notify the site administrator</p>
