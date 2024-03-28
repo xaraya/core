@@ -286,10 +286,23 @@ class TwigBridge implements ContextInterface
     {
         $context = $this->getContext();
 
+        // <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
+        $content = new TwigFunction('xar_twig_content', function ($contentType) use ($context) {
+            if (!headers_sent()) {
+                // @todo use current context
+                $locale = xarMLS::getCurrentLocale();
+                $charSet = xarMLS::getCharsetFromLocale($locale);
+                header("Content-Type: " . $contentType . "; charset=" . $charSet);
+            }
+            // Note: doctype is already converted once
+            return '';
+        });
+        $this->twig->addFunction($content);
+
         $blockGroup = new TwigFunction('xar_blockgroup', function ($groupname, $template = null) use ($context) {
             // use current context
             return xarBlock::renderGroup($groupname, $template, $context);
-        });
+        }, ['is_safe' => ['html']]);
         $this->twig->addFunction($blockGroup);
 
         $block = new TwigFunction('xar_block', function ($args = []) use ($context) {
@@ -302,7 +315,7 @@ class TwigBridge implements ContextInterface
             }
             // use current context
             return xarBlock::renderBlock($params, $context);
-        });
+        }, ['is_safe' => ['html']]);
         $this->twig->addFunction($block);
 
         /**
@@ -312,30 +325,17 @@ class TwigBridge implements ContextInterface
          */
         // @todo use context where relevant
         $var = new TwigFunction('xar_var', function ($args = []) use ($context) {
+            // @todo not sure how this is supposed to work
             $args['scope'] ??= 'local';
-            switch ($args['scope']) {
-                case 'local':
-                    // @todo not sure how this is supposed to work
-                    $result = $args['name'];
-                    break;
-                case 'module':
-                    $result = xarModVars::get($args['module'], $args['name']);
-                    break;
-                case 'user':
-                    $result = xarUser::getVar($args['name'], $args['user'] ?? null);
-                    break;
-                case 'config':
-                    $result = xarConfigVars::get(null, $args['name']);
-                    break;
-                case 'session':
-                    $result = xarSession::getVar($args['name']);
-                    break;
-                case 'request':
-                    $result = xarController::getVar($args['name']);
-                    break;
-                default:
-                    $result = 'Unknown scope ' . $args['scope'];
-            }
+            $result = match ($args['scope']) {
+                'local' => $args['name'],
+                'module' => xarModVars::get($args['module'], $args['name']),
+                'user' => xarUser::getVar($args['name'], $args['user'] ?? null),
+                'config' => xarConfigVars::get(null, $args['name']),
+                'session' => xarSession::getVar($args['name']),
+                'request' => xarController::getVar($args['name']),
+                default => 'Unknown scope ' . $args['scope'],
+            };
             if (!empty($args['prep'])) {
                 return xarVar::prepForDisplay($result);
             }
@@ -360,7 +360,7 @@ class TwigBridge implements ContextInterface
         $place_js = new TwigFunction('xar_place_javascript', function ($args = []) use ($context) {
             $position = $args['position'];
             $type = $args['type'] ?? '';
-            return trim(xarMod::apiFunc('themes', 'user', 'renderjs', ['position' => $position, 'type' => $type]), $context); 
+            return trim(xarMod::apiFunc('themes', 'user', 'renderjs', ['position' => $position, 'type' => $type], $context));
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($place_js);
 
@@ -601,8 +601,8 @@ class TwigBridge implements ContextInterface
                 }
                 return $property->showInput($params);
             } catch (Exception $e) {
-                if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-                    return "<pre>".$e->getMessage()."</pre>";
+                if (xarModVars::get('dynamicdata', 'debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                    return "<pre>" . $e->getMessage() . "</pre>";
                 }
                 return '';
             }
@@ -631,8 +631,8 @@ class TwigBridge implements ContextInterface
                 }
                 return $property->showFilter($params);
             } catch (Exception $e) {
-                if (xarModVars::get('dynamicdata','debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
-                    return "<pre>".$e->getMessage()."</pre>";
+                if (xarModVars::get('dynamicdata', 'debugmode') && in_array(xarUser::getVar('id'), xarConfigVars::get(null, 'Site.User.DebugAdmins'))) {
+                    return "<pre>" . $e->getMessage() . "</pre>";
                 }
                 return '';
             }

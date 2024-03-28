@@ -178,6 +178,7 @@ trait DefaultResponseTrait
         if ($response->getStatusCode() !== 200 || !str_contains($response->getHeaderLine('Content-Type'), 'text/html')) {
             return $response;
         }
+        // Render page with the output - see index.php - @todo get context from response here?
         $content = (string) $response->getBody();
         $content = call_user_func($cleaner, $content);
         // @todo replace object/module request links and return response with updated body
@@ -201,10 +202,10 @@ trait DefaultResponseTrait
         return static::cleanResponse($response, $factory, [static::class, 'wrapOutputInPage']);
     }
 
-    public static function wrapOutputInPage(string $body): string
+    public static function wrapOutputInPage(string $body, $context = null): string
     {
         // Render page with the output - see index.php - @todo use context?
-        return \xarTpl::renderPage($body);
+        return \xarTpl::renderPage($body, null, $context);
     }
 
     /**

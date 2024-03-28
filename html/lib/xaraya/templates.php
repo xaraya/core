@@ -1071,9 +1071,13 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  *
  * @todo Needs a rewrite, i.e. finalisation of tplOrder scenario 
  */
-    public static function renderPage($mainModuleOutput, $pageTemplate = NULL)
+    public static function renderPage($mainModuleOutput, $pageTemplate = null, $context = null)
     {
         if (empty($pageTemplate)) $pageTemplate = self::getPageTemplateName();
+        if (!empty($context) && !empty($context['twig'])) {
+            sys::import('xaraya.bridge.templates.twigtpl');
+            return xarTwigTpl::renderPage($mainModuleOutput, $pageTemplate, $context);
+        }
 
         // get page template source (current > common)
         $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $pageTemplate, null, 'pages');

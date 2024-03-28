@@ -71,10 +71,66 @@ class xarTwigTpl extends xarTpl
 
     public static function renderTemplate($template, $tplData, $templateName, $trace = '')
     {
+        // don't use trace in page templates to avoid adding comments to page
+        if (empty($trace) || !xarTpl::outputTemplateFilenames()) {
+            return $template->render($tplData);
+        }
         return '<!-- start: ' . $templateName . ' -->' .
-            '<!-- args: ' . $trace . ' -->' .
+            //'<!-- args: ' . $trace . ' -->' .
             $template->render($tplData) .
             '<!-- end: ' . $templateName . ' -->';
+    }
+
+    public static function renderPage($mainModuleOutput, $pageTemplate = null, $context = null)
+    {
+        // xarTwigTpl::renderPage('...', 'theme', default, user, null, 'pages')
+        if (is_bool($context['twig'])) {
+            $context['twig'] = static::getTwig([], [], $context);
+        }
+        $themeName = xarTpl::getThemeName();
+        $trace = "xarTwigTpl::renderPage('...', 'theme', $themeName, $pageTemplate, null, 'pages')";
+        // get page template source (current > common)
+        //$sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $pageTemplate, null, 'pages');
+        /** @var Environment $twig */
+        $twig = $context['twig'];
+        $templateName = static::findThemeTemplate($twig, $themeName, 'pages', $pageTemplate);
+        if (empty($templateName)) {
+            //return parent::renderPage($mainModuleOutput, $pageTemplate, $context);
+            return $trace;
+        }
+        // see xarTpl::renderPage
+        $tpl = (object) null; // Create an object to hold the 'specials'
+        $tpl->pageTitle = parent::getPageTitle();
+        $tplData = [
+            'tpl'                      => $tpl,
+            '_bl_mainModuleOutput'     => $mainModuleOutput,
+        ];
+        $template = $twig->load($templateName);
+        // don't use trace in page templates to avoid adding comments to page
+        return static::renderTemplate($template, $tplData, $templateName, '');
+    }
+
+    public static function findThemeTemplate($twig, $themeName, $tplType, $tplName, $pageName = null)
+    {
+        $templates = [];
+        // @todo align better with current theme template lookup?
+        if (!empty($pageName)) {
+            $templates[] = $themeName . '/' . $tplType . '/' . $tplName . '-' . $pageName . '.html.twig';
+        }
+        $templates[] = $themeName . '/' . $tplType . '/' . $tplName . '.html.twig';
+        if ($themeName != 'default') {
+            if (!empty($pageName)) {
+                $templates[] = 'default/' . $tplType . '/' . $tplName . '-' . $pageName . '.html.twig';
+            }
+            $templates[] = 'default/' . $tplType . '/' . $tplName . '.html.twig';
+        }
+        if ($themeName != 'common') {
+            if (!empty($pageName)) {
+                $templates[] = 'common/' . $tplType . '/' . $tplName . '-' . $pageName . '.html.twig';
+            }
+            $templates[] = 'common/' . $tplType . '/' . $tplName . '.html.twig';
+        }
+        return static::findTwigTemplate($twig, $templates);
     }
 
     public static function module($modName, $modType, $funcName, $tplData = [], $tplName = null)

@@ -2,6 +2,7 @@
 
 namespace Xaraya\Bridge\TemplateEngine;
 
+use xarTwigTpl;
 use Exception;
 
 /**
@@ -158,7 +159,7 @@ class TwigConverter
                     $name = '@' . $namespace . '/' . $name;
                 }
                 $twig->parse($twig->tokenize(new \Twig\Source($code, $name, $path)));
-        
+
                 // the $code is valid
             } catch (\Twig\Error\SyntaxError $e) {
                 // $code contains one or more syntax errors
@@ -178,6 +179,36 @@ class TwigConverter
             echo implode("\n  ", $files);
             echo "\n";
         }
+    }
+
+    /**
+     * From blocklayout.xsl
+     * @see http://www.w3.org/QA/2002/04/valid-dtd-list.html
+     */
+    public function getDocType($dtd)
+    {
+        return match ($dtd) {
+            'html2' => '<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">',
+            'html32' => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">',
+            'html401-strict' => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"  "http://www.w3.org/TR/html4/strict.dtd">',
+            'html401-transitional' => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  "http://www.w3.org/TR/html4/loose.dtd">',
+            'html401-frameset' => '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN"  "http://www.w3.org/TR/html4/frameset.dtd">',
+            'xhtml1-strict' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
+            'xhtml1-transitional' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
+            'xhtml1-frameset' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
+            'xhtml11' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">',
+            'mathml101' => '<!DOCTYPE math SYSTEM "http://www.w3.org/Math/DTD/mathml1/mathml.dtd">',
+            'mathml2' => '<!DOCTYPE math PUBLIC "-//W3C//DTD MathML 2.0//EN" "http://www.w3.org/TR/MathML2/dtd/mathml2.dtd">',
+            'svg10' => '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">',
+            'svg11' => '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">',
+            'svg11-basic' => '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Basic//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-basic.dtd">',
+            'svg11-tiny' => '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1 Tiny//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11-tiny.dtd">',
+            'xhtml-math-svg' => '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">',
+            'svg-xhtml-math' => '<!DOCTYPE svg:svg PUBLIC  "-//W3C//DTD XHTML 1.1 plus MathML 2.0 plus SVG 1.1//EN" "http://www.w3.org/2002/04/xhtml-math-svg/xhtml-math-svg.dtd">',
+            'rss' => '<!DOCTYPE rss PUBLIC "-//Netscape Communications//DTD RSS 0.91//EN"   "http://web.archive.org/web/20030601160443/http://my.netscape.com/publish/formats/rss-0.91.dtd">',
+            'html5' => '<!DOCTYPE html>',
+            default => '<!DOCTYPE html>',
+        };
     }
 }
 
@@ -266,18 +297,43 @@ class BlocklayoutToTwigConverter extends TwigConverter
     public function handlePageTemplate()
     {
         // remove other headers for theme pages
+        // <?xml version="1.0" encoding="utf-8"?\>
         $pattern = '~^<\?xml version="1.0" encoding="utf-8"\?>\s*~i';
         $replace = '';
         $this->content = preg_replace($pattern, $replace, $this->content);
 
+        // <?xar type="page" ?\>
         $pattern = '~<\?xar type="\w+"\s*\?>\s*~i';
         $replace = '';
         $this->content = preg_replace($pattern, $replace, $this->content);
 
-        $pattern = '~<xar:blocklayout [^>]+>\s*~i';
+        // default: <!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 2.0 Strict//EN" "http://xaraya.com/bl2/DTD/bl2-strict.dtd">
+        // rss theme: <!DOCTYPE blocklayout PUBLIC "-//XAR//DTD BL 1.0 Strict//EN" "http://xaraya.com/bl1/DTD/bl1-strict.dtd">
+        $pattern = '~<!DOCTYPE [^>]*>\s*~i';
         $replace = '';
         $this->content = preg_replace($pattern, $replace, $this->content);
 
+        // default: <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
+        // rss theme: <xar:blocklayout version="1.0" content="text/xml" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="rss">
+        $pattern = '~<xar:blocklayout ([^>]+)>~i';
+        $this->content = preg_replace_callback($pattern, function ($matches) {
+            $attrib = $this->parseAttributes($matches[1]);
+            if (empty($attrib['content'])) {
+                throw new Exception('Missing content in xar:blocklayout tag: ' . $matches[0]);
+                //return $matches[0];
+            }
+            // @checkme replace this once at conversion
+            if (empty($attrib['dtd'])) {
+                // see BlockLayoutXSLTProcessor::setSourceDocument()
+                $attrib['dtd'] = xarTwigTpl::getDoctype();
+            }
+            $doctype = $this->getDocType($attrib['dtd']);
+            $content = $this->buildTwigParam($attrib['content']);
+            // remove space after this for html tag
+            return $doctype . "\n" . '{{ xar_twig_content(' . $content . ') -}}';
+        }, $this->content);
+
+        // <xar:module id="modulespace"/>
         $pattern = '~<xar:module id="(\w+)"/>~i';
         $replace = '{% block $1 %}{{ _bl_mainModuleOutput }}{% endblock %}';
         $this->content = preg_replace($pattern, $replace, $this->content);
@@ -525,7 +581,8 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
         $pattern = '~<xar:set name="([^"]+)">([^<]+)</xar:set>~i';
         $this->content = preg_replace_callback($pattern, function ($matches) {
-            $expression = trim($matches[2], '#');
+            $expression = trim($matches[2]);
+            $expression = trim($expression, '#');
             return '{% set ' . $matches[1] . ' = ' . $this->replaceExpression($expression) . ' %}';
         }, $this->content);
 
@@ -1036,9 +1093,9 @@ class BlocklayoutToTwigConverter extends TwigConverter
             [$value, $flags] = explode(',', $matches[1]);
             if ($flags) {
                 $flags = trim($flags);
-                return trim($this->replaceVariable($value)) . '|json_encode(constant(\'' . $flags . '\'))'; 
+                return trim($this->replaceVariable($value)) . '|json_encode(constant(\'' . $flags . '\'))';
             }
-            return trim($this->replaceVariable($value)) . '|json_encode()'; 
+            return trim($this->replaceVariable($value)) . '|json_encode()';
         }, $expression);
 
         $pattern = '~ucwords\(str_replace\(([^)]+)\)\)~';

@@ -70,6 +70,8 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
         // set current module to 'object' for Xaraya controller - used e.g. in xarMod::getName() in DD list
         static::prepareController('object', static::$baseUri);
         $context['module'] = 'object';
+        // @todo where do we decide to use Twig or not
+        //$context['twig'] = true;
 
         // add remaining query params to request attributes
         $params = array_merge($attribs, $request->getQueryParams());
@@ -107,7 +109,7 @@ class DataObjectMiddleware extends DataObjectRouter implements DefaultRouterInte
             return $this->responseUtil->createExceptionResponse($e);
         }
         if ($this->wrapPage) {
-            $result = $this->responseUtil->wrapOutputInPage($result);
+            $result = $this->responseUtil->wrapOutputInPage($result, $context);
         }
         if (!empty($context) && !empty($context['mediatype'])) {
             return $this->responseUtil->createResponse($result, $context['mediatype']);
