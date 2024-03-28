@@ -314,7 +314,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
     }
 
     /**
-     * Remove header
+     * Remove header and license comment
      * <?xml version="1.0" encoding="utf-8"?>
      * <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
      * @return void
@@ -322,6 +322,10 @@ class BlocklayoutToTwigConverter extends TwigConverter
     public function removeHeader()
     {
         $pattern = '~^<\?xml version="1.0" encoding="utf-8"\?>\s*<xar:template xmlns:xar="http://xaraya.com/2004/blocklayout"[^>]*>\s*~i';
+        $replace = '';
+        $this->content = preg_replace($pattern, $replace, $this->content);
+
+        $pattern = '~<!--\s+License: GPL http://www.gnu.org/copyleft/gpl.html\s+-->\s*~i';
         $replace = '';
         $this->content = preg_replace($pattern, $replace, $this->content);
     }

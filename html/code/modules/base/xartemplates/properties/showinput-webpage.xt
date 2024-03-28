@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
-    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html-->
+    <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
     <!--
         Don't display the select box unless there are options to be displayed, as per xhtml
     -->

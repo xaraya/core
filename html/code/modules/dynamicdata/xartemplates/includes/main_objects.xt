@@ -2,23 +2,19 @@
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <!-- License: GPL http://www.gnu.org/copyleft/gpl.html -->
 
-    <!-- get the list of main objects -->
-    <xar:set name="startserial">xarModVars::get('dynamicdata','starter_object_list')</xar:set>
-    <xar:if condition="!empty($startserial)">
-        <xar:set name="startlist">unserialize($startserial)</xar:set>
-    <xar:else/>
-        <xar:set name="startlist">[]</xar:set>
-    </xar:if>
+    <!--
+        Template variables from user-main.xt passed to xarobject/main.php
+        $startlist = list of main objects to show
+        $update = flag to indicate we want to update
+
+        Template variables added by ui_view handler
+        $object = current object list
+        $context = current context
+        $tpltitle = generic template title
+    -->
 
     <!-- define the list of main objects -->
-    <xar:set name="dummy">xarVar::fetch('update','isset',$update,NULL,xarVar::NOT_REQUIRED)</xar:set>
     <xar:if condition="(empty($startlist) or !empty($update)) and xarSecurity::check('AdminDynamicData', 0)">
-        <xar:set name="dummy">xarVar::fetch('starter','array',$starter,[],xarVar::NOT_REQUIRED)</xar:set>
-        <xar:if condition="is_array($starter) and xarSec::confirmAuthKey()">
-            <xar:set name="startlist">array_keys($starter)</xar:set>
-            <xar:set name="dummy">xarModVars::set('dynamicdata','starter_object_list',serialize($startlist))</xar:set>
-            #xarController::redirect(xarServer::getCurrentURL(['update'=> null]))#
-        </xar:if>
         <form method="post">
             <p>Please specify which objects should be shown to your (not signed on) users here</p>
             <ul>
@@ -39,6 +35,7 @@
                     </xar:if>
                 </xar:foreach>
             </ul>
+            <input type="hidden" name="update" value="1"/>
             <input type="hidden" name="authid" value="#xarSec::genAuthKey()#"/>
             <xar:var name="label">Update List</xar:var>
             <xar:button type="submit" label="$label"/>

@@ -210,7 +210,7 @@ class TwigBridge implements ContextInterface
         $guiFunc = new TwigFunction('xar_guifunc', function ($modName, $modType = 'user', $funcName = 'main', $args = []) use ($context) {
             // use current context
             return xarMod::guiFunc($modName, $modType, $funcName, $args, $context);
-        });
+        }, ['is_safe' => ['html']]);
         $this->twig->addFunction($guiFunc);
 
         $apiFunc = new TwigFunction('xar_apifunc', function ($modName, $modType = 'user', $funcName = 'main', $args = []) use ($context) {

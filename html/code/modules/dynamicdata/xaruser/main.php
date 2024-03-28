@@ -36,7 +36,33 @@ function dynamicdata_user_main(array $args = [], $context = null)
         );
         xarController::redirect($urldata['redirecturl'], 302, $context);
         return true;
-    } else {
-        return [];
     }
+
+    // get the list of main objects
+    $startserial = xarModVars::get('dynamicdata','starter_object_list');
+    if (!empty($startserial)) {
+        $startlist = unserialize($startserial);
+    } else {
+        $startlist = [];
+    }
+
+    // define the list of main objects
+    xarVar::fetch('update', 'isset', $update, null, xarVar::NOT_REQUIRED);
+    if ((empty($startlist) || !empty($update)) &&
+        xarSecurity::check('AdminDynamicData', 0)) {
+        xarVar::fetch('starter', 'array', $starter, [], xarVar::NOT_REQUIRED);
+        if (is_array($starter) && xarSec::confirmAuthKey()) {
+            $startlist = array_keys($starter);
+            xarModVars::set('dynamicdata', 'starter_object_list', serialize($startlist));
+            xarController::redirect(xarServer::getCurrentURL(['update'=> null]));
+            return true;
+        }
+    }
+
+    $data = [
+        'startlist' => $startlist,
+        'update' => $update,
+        'context' => $context
+    ];
+    return $data;
 }
