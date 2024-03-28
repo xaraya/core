@@ -136,17 +136,22 @@ class UpdateHandler extends DefaultHandler
         // call item modify hooks for this item
         $this->object->callHooks('modify');
 
+        // add data to original method args
+        $data = array_replace($args, [
+            'object'  => $this->object,
+            'context' => $this->getContext(),
+            'preview' => $args['preview'],
+            'authid'  => xarSec::genAuthKey(),
+            'hooks'   => $this->object->hookoutput,
+            'tpltitle' => $this->tpltitle,
+            'return_url' => $args['return_url'],
+        ]);
+
         return xarTpl::object(
             $this->tplmodule,
             $this->object->template,
             'ui_update',
-            ['object'  => $this->object,
-             'context' => $this->getContext(),
-             'preview' => $args['preview'],
-             'authid'  => xarSec::genAuthKey(),
-             'hooks'   => $this->object->hookoutput,
-             'tpltitle' => $this->tpltitle,
-             'return_url' => $args['return_url']]
+            $data
         );
     }
 }

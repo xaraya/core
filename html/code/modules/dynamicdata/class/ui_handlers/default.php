@@ -243,14 +243,19 @@ class DefaultHandler extends xarObject implements ContextInterface
 
         // CHECKME: do we redirect to return_url or nextmethod in some cases here too ?
 
+        // add data to original method args
+        $data = array_replace($args, [
+            'object'   => $this->object,
+            'context'  => $this->getContext(),
+            'output'   => $output,
+            'tpltitle' => $this->tpltitle,
+        ]);
+
         return xarTpl::object(
             $this->tplmodule,
             $this->object->template,
             'ui_default',
-            ['object'   => $this->object,
-             'context'  => $this->getContext(),
-             'output'   => $output,
-             'tpltitle' => $this->tpltitle]
+            $data
         );
     }
 
