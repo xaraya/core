@@ -119,15 +119,20 @@ class DeleteHandler extends DefaultHandler
         $title = xarMLS::translate('Delete #(1)', $this->object->label);
         xarTpl::setPageTitle(xarVar::prepForDisplay($title));
 
+        // add data to original method args
+        $data = array_replace($args, [
+            'object' => $this->object,
+            'context' => $this->getContext(),
+            'authid' => xarSec::genAuthKey(),
+            'tpltitle' => $this->tpltitle,
+            'return_url' => $args['return_url'],
+        ]);
+
         return xarTpl::object(
             $this->tplmodule,
             $this->object->template,
             'ui_delete',
-            ['object' => $this->object,
-             'context' => $this->getContext(),
-             'authid' => xarSec::genAuthKey(),
-             'tpltitle' => $this->tpltitle,
-             'return_url' => $args['return_url']]
+            $data
         );
     }
 }

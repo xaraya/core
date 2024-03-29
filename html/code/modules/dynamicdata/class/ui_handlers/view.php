@@ -150,13 +150,18 @@ class ViewHandler extends DefaultHandler
 
         $this->object->callHooks('view');
 
+        // add data to original method args
+        $data = array_replace($args, [
+            'object'   => $this->object,
+            'context'  => $this->getContext(),
+            'tpltitle' => $this->tpltitle,
+        ]);
+
         $output = xarTpl::object(
             $this->tplmodule,
             $this->object->template,
             'ui_view',
-            ['object'   => $this->object,
-             'context'  => $this->getContext(),
-             'tpltitle' => $this->tpltitle]
+            $data
         );
 
         // Set the output of the object method in cache

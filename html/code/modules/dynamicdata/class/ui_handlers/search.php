@@ -92,9 +92,9 @@ class SearchHandler extends DefaultHandler
         }
 
         if ($this->args['method'] == 'query') {
-            $output = $this->query();
+            $output = $this->query($args);
         } else {
-            $output = $this->search();
+            $output = $this->search($args);
         }
 
         // Set the output of the object method in cache
@@ -106,9 +106,10 @@ class SearchHandler extends DefaultHandler
 
     /**
      * Summary of search
+     * @param array<string, mixed> $args
      * @return string
      */
-    public function search()
+    public function search(array $args = [])
     {
         // set search criteria
         $search = [];
@@ -239,23 +240,29 @@ class SearchHandler extends DefaultHandler
                               'lt'    => 'less than',
                               'ne'    => 'not equal to'];
 
+        // add data to original method args
+        $data = array_replace($args, [
+            'object' => $this->object,
+            'context' => $this->getContext(),
+            'search' => $search,
+            'result' => $result,
+            'tpltitle' => $this->tpltitle,
+        ]);
+
         return xarTpl::object(
             $this->tplmodule,
             $this->object->template,
             'ui_search',
-            ['object' => $this->object,
-             'context' => $this->getContext(),
-             'search' => $search,
-             'result' => $result,
-             'tpltitle' => $this->tpltitle]
+            $data
         );
     }
 
     /**
      * Summary of query
+     * @param array<string, mixed> $args
      * @return string
      */
-    public function query()
+    public function query(array $args = [])
     {
         // set query criteria
         $query = [];
@@ -407,15 +414,20 @@ class SearchHandler extends DefaultHandler
         // get the property types in case we want to do more than check the parent class
         $query['proptypes'] = DataPropertyMaster::getPropertyTypes();
 
+        // add data to original method args
+        $data = array_replace($args, [
+            'object' => $this->object,
+            'context' => $this->getContext(),
+            'query'  => $query,
+            'result' => $result,
+            'tpltitle' => $this->tpltitle,
+        ]);
+
         return xarTpl::object(
             $this->tplmodule,
             $this->object->template,
             'ui_query',
-            ['object' => $this->object,
-             'context' => $this->getContext(),
-             'query'  => $query,
-             'result' => $result,
-             'tpltitle' => $this->tpltitle]
+            $data
         );
     }
 

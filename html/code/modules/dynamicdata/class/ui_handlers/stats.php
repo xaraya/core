@@ -98,9 +98,9 @@ class StatsHandler extends DefaultHandler
         }
 
         if ($this->args['method'] == 'report') {
-            $output = $this->report();
+            $output = $this->report($args);
         } else {
-            $output = $this->stats();
+            $output = $this->stats($args);
         }
 
         // Set the output of the object method in cache
@@ -112,9 +112,10 @@ class StatsHandler extends DefaultHandler
 
     /**
      * Summary of stats
+     * @param array<string, mixed> $args
      * @return bool|string
      */
-    public function stats()
+    public function stats(array $args = [])
     {
         // set stats criteria
         $stats = [];
@@ -333,15 +334,20 @@ class StatsHandler extends DefaultHandler
                              'sum'      => 'Sum',
                              'avg'      => 'Average'];
 
+        // add data to original method args
+        $data = array_replace($args, [
+            'object' => $this->object,
+            'context' => $this->getContext(),
+            'stats'  => $stats,
+            'result' => $result,
+            'tpltitle' => $this->tpltitle,
+        ]);
+
         $output = xarTpl::object(
             $this->tplmodule,
             $this->object->template,
             'ui_stats',
-            ['object' => $this->object,
-             'context' => $this->getContext(),
-             'stats'  => $stats,
-             'result' => $result,
-             'tpltitle' => $this->tpltitle]
+            $data
         );
 
         return $output;
@@ -349,9 +355,10 @@ class StatsHandler extends DefaultHandler
 
     /**
      * Summary of report
+     * @param array<string, mixed> $args
      * @return string
      */
-    public function report()
+    public function report(array $args = [])
     {
         // set report criteria
         $report = [];
@@ -412,15 +419,20 @@ class StatsHandler extends DefaultHandler
             $result = 1;
         }
 
+        // add data to original method args
+        $data = array_replace($args, [
+            'object' => $this->object,
+            'context' => $this->getContext(),
+            'report' => $report,
+            'result' => $result,
+            'tpltitle' => $this->tpltitle,
+        ]);
+
         $output = xarTpl::object(
             $this->tplmodule,
             $this->object->template,
             'ui_report',
-            ['object' => $this->object,
-             'context' => $this->getContext(),
-             'report' => $report,
-             'result' => $result,
-             'tpltitle' => $this->tpltitle]
+            $data
         );
 
         return $output;

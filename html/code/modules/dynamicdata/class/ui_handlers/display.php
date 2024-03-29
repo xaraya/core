@@ -119,14 +119,19 @@ class DisplayHandler extends DefaultHandler
             // show a blank object
         }
 
+        // add data to original method args
+        $data = array_replace($args, [
+            'object' => $this->object,
+            'context' => $this->getContext(),
+            'hooks'  => $this->object->hookoutput,
+            'tpltitle' => $this->tpltitle,
+        ]);
+
         $output = xarTpl::object(
             $this->tplmodule,
             $this->object->template,
             'ui_display',
-            ['object' => $this->object,
-             'context' => $this->getContext(),
-             'hooks'  => $this->object->hookoutput,
-             'tpltitle' => $this->tpltitle]
+            $data
         );
 
         // Set the output of the object method in cache
