@@ -216,7 +216,7 @@ E: Next page;
 </pre>
             <h4>Results</h4>
             <pre>
-      E: [ongoing development version]compilertesten_US.utf-8&#x2707;
+      E: [ongoing development version]compilertesten_US.utf-8&#8226;
       R: 
 <xar:var scope="config" name="System.Core.VersionNumber"/>
       

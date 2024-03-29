@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xar:template xmlns:xar="http://xaraya.com/2004/blocklayout">
     <p>Hint: empty the Label field to delete a property for all items.</p>
-    <xar:set name="propertyfields">xarMod::apiFunc('dynamicdata','user','getprop',
-                                       array('objectid' => 2,
-                                             'allprops' => true))
+    <xar:set name="propertyfields">
+        xarMod::apiFunc('dynamicdata','user','getprop',['objectid' => 2, 'allprops' => true])
     </xar:set>
     <table class="xar-table xar-fullwidth">
         <tr>

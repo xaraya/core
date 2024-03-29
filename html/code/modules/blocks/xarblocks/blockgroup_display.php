@@ -65,7 +65,7 @@ class Blocks_BlockgroupBlockDisplay extends Blocks_BlockgroupBlock implements iB
             $block_info['content']['box_template'] = $box_template;            
             $block_info['content']['block_template'] = $block_template;
 
-            $output .= xarBlock::render($block_info);
+            $output .= xarBlock::render($block_info, $this->getContext());
         }
         if (empty($output)) return;
         $data['blocks'] = $output;

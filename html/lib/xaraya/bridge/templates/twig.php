@@ -273,6 +273,11 @@ class TwigBridge implements ContextInterface
         });
         $this->twig->addFunction($userVar);
 
+        $modVar = new TwigFunction('xar_modvar', function ($scope, $name) {
+            return xarModVars::get($scope, $name);
+        });
+        $this->twig->addFunction($modVar);
+
         $translate = new TwigFunction('xar_translate', function ($rawstring, ...$args) {
             return xarMLS::translate($rawstring, ...$args);
         });
@@ -332,17 +337,19 @@ class TwigBridge implements ContextInterface
         $context = $this->getContext();
 
         // <xar:blocklayout version="2.0" content="text/html" xmlns:xar="http://xaraya.com/2004/blocklayout" dtd="xhtml1-strict">
-        $content = new TwigFunction('xar_twig_content', function ($contentType) use ($context) {
+        $header = new TwigFunction('xar_twig_header', function ($contentType, $charSet = null) use ($context) {
             if (!headers_sent()) {
                 // @todo use current context
-                $locale = xarMLS::getCurrentLocale();
-                $charSet = xarMLS::getCharsetFromLocale($locale);
+                if (empty($charSet)) {
+                    $locale = xarMLS::getCurrentLocale();
+                    $charSet = xarMLS::getCharsetFromLocale($locale);
+                }
                 header("Content-Type: " . $contentType . "; charset=" . $charSet);
             }
             // Note: doctype is already converted once
             return '';
         });
-        $this->twig->addFunction($content);
+        $this->twig->addFunction($header);
 
         $blockGroup = new TwigFunction('xar_blockgroup', function ($groupname, $template = null) use ($context) {
             // use current context
@@ -390,12 +397,14 @@ class TwigBridge implements ContextInterface
 
         // <xar:pager startnum="$object->startnum" itemsperpage="$object->numitems" total="$object->startnum" urltemplate="$object->pagerurl" template="multipageprev"/>
         $pager = new TwigFunction('xar_pager', function ($args = []) use ($context) {
+            //$args['context'] ??= $context;
             return xarMod::apiFunc('base', 'user', 'pager', $args, $context);
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($pager);
 
         // <xar:javascript scope="theme" filename="checkall.js" position="head"/>
         $javascript = new TwigFunction('xar_javascript', function ($args = []) use ($context) {
+            //$args['context'] ??= $context;
             xarMod::apiFunc('themes', 'user', 'registerjs', $args, $context);
             return '';
         });
@@ -405,13 +414,16 @@ class TwigBridge implements ContextInterface
         $place_js = new TwigFunction('xar_place_javascript', function ($args = []) use ($context) {
             $position = $args['position'];
             $type = $args['type'] ?? '';
-            return trim(xarMod::apiFunc('themes', 'user', 'renderjs', ['position' => $position, 'type' => $type], $context));
+            $params = ['position' => $position, 'type' => $type];
+            $params['context'] ??= $context;
+            return trim(xarMod::apiFunc('themes', 'user', 'renderjs', $params, $context));
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($place_js);
 
         // <xar:style scope="module" module="base" file="tabs"/>
         // @todo replace array with fixed order of params
         $style = new TwigFunction('xar_style', function ($args = []) use ($context) {
+            //$args['context'] ??= $context;
             xarMod::apiFunc('themes', 'user', 'register', $args, $context);
             return '';
         });
@@ -419,9 +431,20 @@ class TwigBridge implements ContextInterface
 
         // <xar:place-css />
         $place_css = new TwigFunction('xar_place_css', function ($args = []) use ($context) {
-            return xarMod::apiFunc('themes', 'user', 'deliver', ['method' => 'render', 'base' => 'theme']);
+            $params = ['method' => 'render', 'base' => 'theme'];
+            $params['context'] = $context;
+            return xarMod::apiFunc('themes', 'user', 'deliver', $params);
         }, ['is_safe' => ['html']]);
         $this->twig->addFunction($place_css);
+
+        // @todo <xar:meta type="name" value="keywords" content="$keywords" lang="en" dir="ltr" append="1"/>
+
+        // <xar:place-meta/>
+        $place_meta = new TwigFunction('xar_place_meta', function ($args = []) use ($context) {
+            $args['context'] ??= $context;
+            return trim(xarMod::apiFunc('themes', 'user', 'rendermeta', $args, $context));
+        }, ['is_safe' => ['html']]);
+        $this->twig->addFunction($place_meta);
 
         // <xar:img scope="theme" file="icons/info.png" class="xar-icon" alt="info"/>
         // @todo replace array with fixed order of params?

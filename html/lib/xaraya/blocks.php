@@ -27,12 +27,12 @@ interface ixarBlock
     const BLOCK_STATE_INACTIVE = 1; // Inactive blocks don't execute, don't render
     const BLOCK_STATE_VISIBLE = 2;
 
-    public static function render(Array $data=array());
-    public static function renderBlock(array $args=[], $context = null);
-    public static function renderGroup($groupname, $template=null);
-    public static function hasMethod(iBlock $block, $method, $strict=false);
+    public static function render(array $data = [], $context = null);
+    public static function renderBlock(array $args = [], $context = null);
+    public static function renderGroup($groupname, $template = null, $context = null);
+    public static function hasMethod(iBlock $block, $method, $strict = false);
     public static function guiMethod(iBlock $block, $method);
-    public static function checkAccess(iBlock $block, $action, $roleid=null);
+    public static function checkAccess(iBlock $block, $action, $roleid = null);
 
 }
 
@@ -153,6 +153,7 @@ class xarBlock extends xarObject implements ixarBlock
                 // @todo: deprecate use of these 
                 $blockinfo['group'] = $block->group;
                 $blockinfo['group_id'] = $block->group_id;
+                $blockinfo['context'] = $block->getContext();
                 $boxOutput = xarTpl::renderBlockBox($blockinfo, $block->box_template);
             }                      
 
@@ -353,6 +354,7 @@ class xarBlock extends xarObject implements ixarBlock
                 $block->setTemplateBase($block_tpl);
                 $block->setBlockTemplate(null);
             }
+            $tplData['context'] ??= $block->getContext();
             return xarTpl::block(
                 $block->module, $block->type, $tplData, $block->block_template, $block->template_base, $block->tplmodule);
         } elseif (!empty($tplData) && is_string($tplData)) {
