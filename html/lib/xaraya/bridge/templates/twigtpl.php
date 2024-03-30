@@ -28,21 +28,29 @@ class xarTwigTpl extends xarTpl
 
     /**
      * Get a Twig environment with template paths, options and context
+     * @param ?Context<string, mixed> $context
      * @param array<string, string> $paths
      * @param array<string, mixed> $options
-     * @param ?Context<string, mixed> $context
      * @return Environment
      */
-    public static function getTwig(array $paths = [], array $options = [], ?Context $context = null)
+    public static function getTwigEnvironment(?Context $context = null, array $paths = [], array $options = [])
     {
         sys::autoload();
+
         $rootDir = sys::root();
-        if (empty($rootDir)) {
+        // fix common issues with rootDir
+        if (empty($rootDir) || $rootDir == sys::web()) {
             $rootDir = dirname(__DIR__, 5);
-        } else {
-            $rootDir = dirname($rootDir);
         }
+        if (str_ends_with($rootDir, '/')) {
+            $rootDir = rtrim($rootDir, '/');
+        }
+        // support vendor/xaraya/twig deployment for standard templates too
         $twigDir = $rootDir . '/templates/twig';
+        if (!is_dir($twigDir)) {
+            $twigDir = $rootDir . '/vendor/xaraya/twig/templates/twig';
+        }
+        // support local directory for custom templates only
         $customDir = $rootDir . '/templates/custom';
 
         $namespaces = static::getNamespaces();
@@ -55,7 +63,7 @@ class xarTwigTpl extends xarTpl
             }
             $basePaths[$twigDir . '/' . $path] = $namespace;
             if (!is_dir($twigDir . '/' . $path)) {
-                mkdir($twigDir . '/' . $path);
+                throw new Exception("Invalid path for Twig namespace '$namespace':\nPath $twigDir/$path");
             }
         }
 
@@ -96,8 +104,11 @@ class xarTwigTpl extends xarTpl
             'privileges' => 'code/modules/privileges',
             'roles' => 'code/modules/roles',
             'themes' => 'code/modules/themes',
-            'workflow' => 'code/modules/workflow',
             'properties' => 'code/properties',
+            'apischemas' => 'code/modules/apischemas',
+            'library' => 'code/modules/library',
+            'workflow' => 'code/modules/workflow',
+            'xarcachemanager' => 'code/modules/xarcachemanager',
             // no namespace for themes
             '' => 'themes',
         ];
@@ -155,7 +166,7 @@ class xarTwigTpl extends xarTpl
         }
         // xarTwigTpl::renderPage('...', 'theme', default, user, null, 'pages')
         if (is_bool($context['twig'])) {
-            $context['twig'] = static::getTwig([], [], $context);
+            $context['twig'] = static::getTwigEnvironment($context);
         }
         if (empty($pageTemplate)) {
             $pageTemplate = $context['page'] ?? self::getPageTemplateName();
@@ -237,7 +248,7 @@ class xarTwigTpl extends xarTpl
     {
         // xarTwigTpl::module(workflow, user, showactions, [...], updated)
         if (is_bool($blockInfo['context']['twig'])) {
-            $blockInfo['context']['twig'] = static::getTwig([], [], $blockInfo['context']);
+            $blockInfo['context']['twig'] = static::getTwigEnvironment($blockInfo['context']);
         }
         $themeName = $blockInfo['context']['theme'] ?? xarTpl::getThemeName();
         $trace = "[$themeName] xarTwigTpl::renderBlockBox([...], $tplName)";
@@ -307,7 +318,7 @@ class xarTwigTpl extends xarTpl
     {
         // xarTwigTpl::module(workflow, user, showactions, [...], updated)
         if (is_bool($tplData['context']['twig'])) {
-            $tplData['context']['twig'] = static::getTwig([], [], $tplData['context']);
+            $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
         $trace = "[$themeName] xarTwigTpl::module($modName, $modType, $funcName, [...], $tplName)";
@@ -479,7 +490,7 @@ class xarTwigTpl extends xarTpl
     public static function object($modName, $objectName, $tplType = 'showdisplay', $tplData = [], $tplBase = null)
     {
         if (is_bool($tplData['context']['twig'])) {
-            $tplData['context']['twig'] = static::getTwig([], [], $tplData['context']);
+            $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
         $trace = "[$themeName] xarTwigTpl::object($modName, $objectName, $tplType, [...], $tplBase)";
@@ -556,7 +567,7 @@ class xarTwigTpl extends xarTpl
     {
         // xarTwigTpl::property(base, dropdown, showoutput, [...], )
         if (is_bool($tplData['context']['twig'])) {
-            $tplData['context']['twig'] = static::getTwig([], [], $tplData['context']);
+            $tplData['context']['twig'] = static::getTwigEnvironment($tplData['context']);
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
         $trace = "[$themeName] xarTwigTpl::property($modName, $propertyName, $tplType, [...], $tplBase)";

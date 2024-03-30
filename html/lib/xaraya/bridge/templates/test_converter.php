@@ -25,8 +25,8 @@ $options = [
     'namespace' => 'workflow/includes',
 ];
 $converter = new BlocklayoutToTwigConverter($options);
-$sourcePath = dirname(__DIR__) . '/xartemplates/includes';
-$targetPath = dirname(__DIR__) . '/templates/includes';
+$sourcePath = sys::root() . '/html/code/modules/workflow/xartemplates/includes';
+$targetPath = sys::root() . '/templates/twig/workflow/includes';
 $converter->convertDir($sourcePath, $targetPath, '.xt', 'test_');
  */
 
@@ -59,19 +59,6 @@ class TestConverter
         $converter->convertDir($sourcePath, $targetPath, '.xt', $prefix);
     }
 
-    public function validateModule(string $module)
-    {
-        // convert all *.xt templates from $module
-        $options = [
-            'namespace' => $module,
-        ];
-        $converter = new BlocklayoutToTwigConverter($options);
-        $targetPath = $this->baseDir . '/templates/twig/code/modules/' . $module;
-
-        $twig = xarTwigTpl::getTwig();
-        $converter->validateDir($twig, $targetPath);
-    }
-
     public function convertTheme(string $theme, string $subDir = '', string $prefix = '')
     {
         // no namespace for themes pages etc.
@@ -89,21 +76,6 @@ class TestConverter
         }
         $converter->convertDir($sourcePath, $targetPath, '.xt');
     }
-
-    public function validateTheme(string $theme)
-    {
-        // no namespace for themes pages etc.
-        $options = [];
-        // use .xml.twig extension for rss theme
-        if ($theme == 'rss') {
-            $options['extension'] = '.xml.twig';
-        }
-        $converter = new BlocklayoutToTwigConverter($options);
-        $targetPath = $this->baseDir . '/templates/twig/themes/' . $theme;
-
-        $twig = xarTwigTpl::getTwig();
-        $converter->validateDir($twig, $targetPath);
-    }
 }
 
 $tester = new TestConverter($baseDir);
@@ -113,13 +85,11 @@ foreach ($namespaces as $module => $path) {
     if (!str_contains($path, 'code/modules/')) {
         continue;
     }
-    //$tester->convertModule($module);
-    $tester->validateModule($module);
+    $tester->convertModule($module);
 }
 
 $themes = ['common', 'default', 'rss', 'print', 'installer'];
 $subDir = '';  // 'pages';
 foreach ($themes as $theme) {
-    //$tester->convertTheme($theme, $subDir);
-    $tester->validateTheme($theme);
+    $tester->convertTheme($theme, $subDir);
 }

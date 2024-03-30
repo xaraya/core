@@ -36,11 +36,14 @@ class TwigConverter
     /** @var list<string> */
     public array $files = [];
     public string $extension = '.html.twig';
+    /** @var array<string, array<string, string>> */
+    public array $variables = [];
 
     /**
      * @param array<string, mixed> $options
      * with
      *     string $options['namespace'] the twig namespace to use when converting files
+     *     string $options['extension'] the template filename extension to use to rename
      */
     public function __construct(array $options = [])
     {
@@ -219,58 +222,6 @@ class TwigConverter
             $parts[] = $name . ': ' . $this->buildTwigParam($value);
         }
         return '{' . implode(', ', $parts) . '}';
-    }
-
-    public function validateDir(Environment $twig, string $targetPath)
-    {
-        $this->files = [];
-        echo "Directory $targetPath:\n";
-        $paths = glob($targetPath . '/*' . $this->extension);
-        $this->validate($twig, $paths);
-    }
-
-    /**
-     * Validate all twig templates loaded in files (by convertDir or other)
-     * @param ?list<string> $paths list of file paths to validate
-     * @return void
-     */
-    public function validate(Environment $twig, ?array $paths = null)
-    {
-        $paths ??= $this->files;
-        $namespace = $this->getNamespace();
-        $issues = [];
-        echo "Issues by file:\n";
-        foreach ($paths as $path) {
-            try {
-                $code = file_get_contents($path);
-                if ($code === false) {
-                    throw new Exception('Unable to get file ' . $path);
-                }
-                $name = substr($path, strlen($this->basePath) + 1);
-                if (!empty($namespace)) {
-                    $name = '@' . $namespace . '/' . $name;
-                }
-                $twig->parse($twig->tokenize(new \Twig\Source($code, $name, $path)));
-
-                // the $code is valid
-            } catch (\Twig\Error\SyntaxError $e) {
-                // $code contains one or more syntax errors
-                $message = $e->getMessage();
-                $line = $e->getTemplateLine();
-                echo "Syntax error in $path:" . $line . "\n  " . $message . "\n";
-                $issues[$message] ??= [];
-                $issues[$message][] = $path . ':' . $line;
-            }
-        }
-        echo "Top issues by count:\n";
-        uasort($issues, function ($a, $b) {
-            return count($b) <=> count($a);
-        });
-        foreach ($issues as $message => $files) {
-            echo "Syntax error: $message (" . count($files) . "):\n  ";
-            echo implode("\n  ", $files);
-            echo "\n";
-        }
     }
 
     /**
@@ -643,7 +594,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
                 $file = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
             }
             if (!empty($attrib['subdata'])) {
-                $subdata = $this->replaceVariable($attrib['subdata']);                
+                $subdata = $this->replaceVariable($attrib['subdata']);
                 if (!empty($namespace)) {
                     return '{{ include(\'@' . $namespace . '/' . $file . $this->extension . '\', ' . $subdata . ') }}';
                 }
