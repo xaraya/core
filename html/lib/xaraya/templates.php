@@ -1106,6 +1106,10 @@ public static function getFile($fileName, $scope=NULL, $package=NULL)
  */
     public static function renderBlockBox($blockInfo, $templateName = NULL)
     {
+        if (!empty($blockInfo['context']) && !empty($blockInfo['context']['twig'])) {
+            sys::import('xaraya.bridge.templates.twigtpl');
+            return xarTwigTpl::renderBlockBox($blockInfo, $templateName);
+        }
         // look for specific templateName.xt (current > common)
         if (!empty($templateName))
             $sourceFileName = self::getScopeFileName('theme', self::getThemeName(), $templateName, null, 'blocks');

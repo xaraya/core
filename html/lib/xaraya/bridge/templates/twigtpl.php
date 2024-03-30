@@ -36,16 +36,32 @@ class xarTwigTpl extends xarTpl
     public static function getTwig(array $paths = [], array $options = [], ?Context $context = null)
     {
         sys::autoload();
+        $rootDir = sys::root();
+        if (empty($rootDir)) {
+            $rootDir = dirname(__DIR__, 5);
+        } else {
+            $rootDir = dirname($rootDir);
+        }
+        $twigDir = $rootDir . '/templates/twig';
+        $customDir = $rootDir . '/templates/custom';
+
+        $namespaces = static::getNamespaces();
+
+        $basePaths = [];
+        foreach ($namespaces as $namespace => $path) {
+            // if the custom directory exists, add it to the paths
+            if (is_dir($customDir . '/' . $path)) {
+                $basePaths[$customDir . '/' . $path] = $namespace;
+            }
+            $basePaths[$twigDir . '/' . $path] = $namespace;
+            if (!is_dir($twigDir . '/' . $path)) {
+                mkdir($twigDir . '/' . $path);
+            }
+        }
 
         // add paths for Twig filesystem loader (with namespace)
         // {{ include('@workflow/includes/trackeritem.html.twig') }}
-        $paths = array_replace([
-            'code/modules/dynamicdata/templates' => 'dynamicdata',
-            'code/modules/workflow/templates' => 'workflow',
-            'code/modules/base/templates' => 'base',
-            'code/modules/themes/templates' => 'themes',
-            'themes' => '',  // no namespace for themes pages etc.
-        ], $paths);
+        $paths = array_replace($basePaths, $paths);
 
         // override default options for Twig environment
         $options = array_replace([
@@ -63,6 +79,29 @@ class xarTwigTpl extends xarTpl
         $twig = $twigbridge->getEnvironment();
 
         return $twig;
+    }
+
+    public static function getNamespaces()
+    {
+        $namespaces = [
+            //'blocks' => 'code/blocks',
+            'authsystem' => 'code/modules/authsystem',
+            'base' => 'code/modules/base',
+            'blocks' => 'code/modules/blocks',
+            'categories' => 'code/modules/categories',
+            'dynamicdata' => 'code/modules/dynamicdata',
+            'installer' => 'code/modules/installer',
+            'mail' => 'code/modules/mail',
+            'modules' => 'code/modules/modules',
+            'privileges' => 'code/modules/privileges',
+            'roles' => 'code/modules/roles',
+            'themes' => 'code/modules/themes',
+            'workflow' => 'code/modules/workflow',
+            'properties' => 'code/properties',
+            // no namespace for themes
+            '' => 'themes',
+        ];
+        return $namespaces;
     }
 
     /**
@@ -118,7 +157,9 @@ class xarTwigTpl extends xarTpl
         if (is_bool($context['twig'])) {
             $context['twig'] = static::getTwig([], [], $context);
         }
-        if (empty($pageTemplate)) $pageTemplate = $context['page'] ?? self::getPageTemplateName();
+        if (empty($pageTemplate)) {
+            $pageTemplate = $context['page'] ?? self::getPageTemplateName();
+        }
         $themeName = $context['theme'] ?? xarTpl::getThemeName();
         $trace = "xarTwigTpl::renderPage('...', 'theme', $themeName, $pageTemplate, null, 'pages')";
         // get page template source (current > common)
@@ -153,9 +194,10 @@ class xarTwigTpl extends xarTpl
     public static function findPageTemplate($twig, $themeName, $tplType, $tplName, $pageName)
     {
         $cachename = "page:$themeName:$tplType:$tplName:$pageName";
-        // cache frequently-used sourcefilenames 
-        if (xarCoreCache::isCached('Templates.Twig', $cachename))
+        // cache frequently-used sourcefilenames
+        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
             return xarCoreCache::getCached('Templates.Twig', $cachename);
+        }
 
         // @todo define this in theme config
         $extension = '.html.twig';
@@ -191,6 +233,68 @@ class xarTwigTpl extends xarTpl
         return $templateName;
     }
 
+    public static function renderBlockBox($blockInfo, $tplName = null)
+    {
+        // xarTwigTpl::module(workflow, user, showactions, [...], updated)
+        if (is_bool($blockInfo['context']['twig'])) {
+            $blockInfo['context']['twig'] = static::getTwig([], [], $blockInfo['context']);
+        }
+        $themeName = $blockInfo['context']['theme'] ?? xarTpl::getThemeName();
+        $trace = "[$themeName] xarTwigTpl::renderBlockBox([...], $tplName)";
+        /** @var Environment $twig */
+        $twig = $blockInfo['context']['twig'];
+        $templateName = static::findBoxTemplate($twig, $themeName, $tplName ?? '');
+        if (empty($templateName)) {
+            //return parent::renderPage($mainModuleOutput, $pageTemplate, $context);
+            return $trace;
+        }
+        //var_dump($blockInfo);
+        //return $templateName . ':' . $trace;
+        $template = $twig->load($templateName);
+        return static::renderTemplate($template, $blockInfo, $templateName, $trace);
+    }
+
+    /**
+     * @param Environment $twig
+     * @param string $themeName
+     * @param string $tplName - optional
+     * @return string|null
+     */
+    public static function findBoxTemplate($twig, $themeName, $tplName)
+    {
+        $cachename = "box:$themeName:$tplName";
+        // cache frequently-used sourcefilenames
+        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
+            return xarCoreCache::getCached('Templates.Twig', $cachename);
+        }
+
+        // @todo define this in theme config
+        $extension = '.html.twig';
+        if ($themeName === 'rss') {
+            $extension = '.xml.twig';
+        }
+        $templates = [];
+        // look for specific templateName.xt (current > common)
+        if (!empty($tplName)) {
+            $templates[] = $themeName . '/blocks/' . $tplName . $extension;
+            if ($themeName !== 'common') {
+                $templates[] = 'common/blocks/' . $tplName . $extension;
+            }
+        }
+        // no specific template, fallback to default.xt (current > common)
+        $templates[] = $themeName . '/blocks/default' . $extension;
+        if ($themeName !== 'common') {
+            $templates[] = 'common/blocks/default' . $extension;
+        }
+        // no default, fallback to blocks module block.xt (current > common > module)
+        $templates[] = '@blocks/blocks/block' . $extension;
+
+        $templateName = static::findTwigTemplate($twig, $templates);
+        xarCoreCache::setCached('Templates.Twig', $cachename, $templateName);
+
+        return $templateName;
+    }
+
     /**
      * @param string $modName
      * @param string $modType
@@ -206,7 +310,7 @@ class xarTwigTpl extends xarTpl
             $tplData['context']['twig'] = static::getTwig([], [], $tplData['context']);
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
-        $trace = "xarTwigTpl::module($modName, $modType, $funcName, [...], $tplName)";
+        $trace = "[$themeName] xarTwigTpl::module($modName, $modType, $funcName, [...], $tplName)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findModuleTemplate($twig, $themeName, $modName, $modType, $funcName, $tplName ?? '');
@@ -230,9 +334,10 @@ class xarTwigTpl extends xarTpl
     public static function findModuleTemplate($twig, $themeName, $modName, $modType, $funcName, $tplName)
     {
         $cachename = "module:$themeName:$modName:$modType:$funcName:$tplName";
-        // cache frequently-used sourcefilenames 
-        if (xarCoreCache::isCached('Templates.Twig', $cachename))
+        // cache frequently-used sourcefilenames
+        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
             return xarCoreCache::getCached('Templates.Twig', $cachename);
+        }
 
         // @todo define this in theme config
         $extension = '.html.twig';
@@ -302,7 +407,18 @@ class xarTwigTpl extends xarTpl
     {
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
         //return parent::block($modName, $blockType, $tplData, $tplName, $tplBase, $tplModule);
-        return "xarTwigTpl::block($modName, $blockType, [...], $tplName, $tplBase, $tplModule)";
+        $trace = "[$themeName] xarTwigTpl::block($modName, $blockType, [...], $tplName, $tplBase, $tplModule)";
+        /** @var Environment $twig */
+        $twig = $tplData['context']['twig'];
+        $templateName = static::findBlockTemplate($twig, $themeName, $modName, $blockType, $tplName ?? '', $tplBase ?? '', $tplModule ?? '');
+        if (empty($templateName)) {
+            //return parent::object($modName, $objectName, $tplType, $tplData, $tplBase);
+            return $trace;
+        }
+        //var_dump($tplData);
+        //return $templateName . ':' . $trace;
+        $template = $twig->load($templateName);
+        return static::renderTemplate($template, $tplData, $templateName, $trace);
     }
 
     /**
@@ -310,19 +426,46 @@ class xarTwigTpl extends xarTpl
      * @param string $themeName
      * @param string $modName
      * @param string $blockType
-     * @param ?string $tplName
-     * @param ?string $tplBase
-     * @param ?string $tplModule - for stand-alone blocks
+     * @param string $tplName
+     * @param string $tplBase
+     * @param string $tplModule - for stand-alone blocks
      * @return string|null
      */
     public static function findBlockTemplate($twig, $themeName, $modName, $blockType, $tplName, $tplBase, $tplModule)
     {
         $cachename = "block:$themeName:$modName:$blockType:$tplName:$tplBase:$tplModule";
-        // cache frequently-used sourcefilenames 
-        if (xarCoreCache::isCached('Templates.Twig', $cachename))
+        // cache frequently-used sourcefilenames
+        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
             return xarCoreCache::getCached('Templates.Twig', $cachename);
+        }
 
-        return null;
+        // use name of blocktype as base unless over-ridden
+        $tplBase = empty($tplBase) ? $blockType : $tplBase;
+
+        // [default] xarTwigTpl::block(base, adminmenu, [...], , verticallistbycats, )
+        // @todo define this in theme config
+        $extension = '.html.twig';
+        if ($themeName === 'rss') {
+            $extension = '.xml.twig';
+        }
+        $templates = [];
+        $templates[] = $themeName . '/modules/' . $modName . '/blocks/' . $tplBase . $extension;
+        $templates[] = '@' . $modName . '/blocks/' . $tplBase . $extension;
+
+        $templateName = static::findTwigTemplate($twig, $templates);
+        xarCoreCache::setCached('Templates.Twig', $cachename, $templateName);
+
+        return $templateName;
+        /**
+         * xarTwigTpl::block(default, blocks, blockgroup, [...], , , )
+        <!-- start: code/modules/blocks/xartemplates/blocks/blockgroup.xt -->
+        <!-- start: themes/common/blocks/header.xt -->
+        <!-- start: code/modules/themes/xartemplates/blocks/meta.xt -->
+        <!-- start: code/modules/themes/xartemplates/meta-render.xt -->
+        <meta http-equiv="content-type" ...><!-- end: code/modules/themes/xartemplates/blocks/meta.xt -->
+        <!-- end: themes/common/blocks/header.xt -->
+        <!-- end: code/modules/blocks/xartemplates/blocks/blockgroup.xt -->
+         */
     }
 
     /**
@@ -339,7 +482,7 @@ class xarTwigTpl extends xarTpl
             $tplData['context']['twig'] = static::getTwig([], [], $tplData['context']);
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
-        $trace = "xarTwigTpl::object($modName, $objectName, $tplType, [...], $tplBase)";
+        $trace = "[$themeName] xarTwigTpl::object($modName, $objectName, $tplType, [...], $tplBase)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findObjectTemplate($twig, $themeName, $modName, $objectName, $tplType, $tplBase ?? '');
@@ -363,9 +506,10 @@ class xarTwigTpl extends xarTpl
     public static function findObjectTemplate($twig, $themeName, $modName, $objectName, $tplType, $tplBase)
     {
         $cachename = "object:$themeName:$modName:$objectName:$tplType:$tplBase";
-        // cache frequently-used sourcefilenames 
-        if (xarCoreCache::isCached('Templates.Twig', $cachename))
+        // cache frequently-used sourcefilenames
+        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
             return xarCoreCache::getCached('Templates.Twig', $cachename);
+        }
 
         // @todo define this in theme config
         $extension = '.html.twig';
@@ -415,7 +559,7 @@ class xarTwigTpl extends xarTpl
             $tplData['context']['twig'] = static::getTwig([], [], $tplData['context']);
         }
         $themeName = $tplData['context']['theme'] ?? xarTpl::getThemeName();
-        $trace = "xarTwigTpl::property($modName, $propertyName, $tplType, [...], $tplBase)";
+        $trace = "[$themeName] xarTwigTpl::property($modName, $propertyName, $tplType, [...], $tplBase)";
         /** @var Environment $twig */
         $twig = $tplData['context']['twig'];
         $templateName = static::findPropertyTemplate($twig, $themeName, $modName, $propertyName, $tplType, $tplBase ?? '');
@@ -439,9 +583,10 @@ class xarTwigTpl extends xarTpl
     public static function findPropertyTemplate($twig, $themeName, $modName, $propertyName, $tplType, $tplBase)
     {
         $cachename = "property:$themeName:$modName:$propertyName:$tplType:$tplBase";
-        // cache frequently-used sourcefilenames 
-        if (xarCoreCache::isCached('Templates.Twig', $cachename))
+        // cache frequently-used sourcefilenames
+        if (xarCoreCache::isCached('Templates.Twig', $cachename)) {
             return xarCoreCache::getCached('Templates.Twig', $cachename);
+        }
 
         // @todo define this in theme config
         $extension = '.html.twig';

@@ -107,7 +107,6 @@ class TwigConverter
             }
             $fileName = substr($fileName, 0, strlen($fileName) - strlen($suffix)) . $this->extension;
             $target = $toPath . '/' . $fileName;
-            echo "$source -> $target\n";
             $this->files[] = $this->convertFile($source, $target);
         }
         return $this->files;
@@ -145,7 +144,12 @@ class TwigConverter
         if ($content === false) {
             throw new Exception('Unable to get file ' . $fromPath);
         }
-        $content = $this->convert($content);
+        try {
+            $content = $this->convert($content);
+        } catch (Exception $e) {
+            echo "$fromPath -> $toPath\n";
+            echo $e->getMessage();
+        }
         try {
             file_put_contents($toPath, $content);
         } catch (Exception $e) {
@@ -215,6 +219,14 @@ class TwigConverter
             $parts[] = $name . ': ' . $this->buildTwigParam($value);
         }
         return '{' . implode(', ', $parts) . '}';
+    }
+
+    public function validateDir(Environment $twig, string $targetPath)
+    {
+        $this->files = [];
+        echo "Directory $targetPath:\n";
+        $paths = glob($targetPath . '/*' . $this->extension);
+        $this->validate($twig, $paths);
     }
 
     /**
@@ -630,6 +642,13 @@ class BlocklayoutToTwigConverter extends TwigConverter
                 [$pre, $post] = explode('$', $file);
                 $file = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
             }
+            if (!empty($attrib['subdata'])) {
+                $subdata = $this->replaceVariable($attrib['subdata']);                
+                if (!empty($namespace)) {
+                    return '{{ include(\'@' . $namespace . '/' . $file . $this->extension . '\', ' . $subdata . ') }}';
+                }
+                return '{{ include(\'' . $file . $this->extension . '\', ' . $subdata . ') }}';
+            }
             if (!empty($namespace)) {
                 return '{{ include(\'@' . $namespace . '/' . $file . $this->extension . '\') }}';
             }
@@ -731,11 +750,22 @@ class BlocklayoutToTwigConverter extends TwigConverter
         $this->content = preg_replace_callback($pattern, function ($matches) {
             $expression = trim($matches[2]);
             $expression = trim($expression, '#');
+            // remove any PHP comments from xar:set
+            $expression = preg_replace('~ +// .+$~m', '', $expression);
             if (str_starts_with($expression, '[') && str_ends_with($expression, ']') && strlen($expression) > 2) {
                 $expression = $this->replaceArrays('>' . $expression . '<', '~>\[([^<]+)\]<~i');
                 return '{% set ' . $matches[1] . ' = ' . $expression . ' %}';
             }
-            return '{% set ' . $matches[1] . ' = ' . $this->replaceExpression($expression) . ' %}';
+            $expression = $this->replaceExpression($expression);
+            if (str_starts_with($expression, 'array(') and str_ends_with($expression, ')')) {
+                if (str_contains($expression, '{')) {
+                    $expression = '[' . substr($expression, strlen('array('), -1) . ']';
+                } else {
+                    $expression = '{' . substr($expression, strlen('array('), -1) . '}';
+                    $expression = str_replace(' =>', '~COLON~', $expression);
+                }
+            }
+            return '{% set ' . $matches[1] . ' = ' . $expression . ' %}';
         }, $this->content);
 
         // @todo support scope="..."
@@ -941,16 +971,16 @@ class BlocklayoutToTwigConverter extends TwigConverter
             if (!empty($attrib['id'])) {
                 $id = $this->replaceVariable($attrib['id']);
             }
-            $string = '{% for loop_key'.$idx.', loop_item'.$idx.' in ' . $variable . ' %}';
-            $string .= '{% set loop_index'.$idx.' = loop.index %}';
+            $string = '{% for loop_key' . $idx . ', loop_item' . $idx . ' in ' . $variable . ' %}';
+            $string .= '{% set loop_index' . $idx . ' = loop.index %}';
             $search = ['$loop:index', '$loop:item', '$loop:key', 'loop.index', 'loop.item', 'loop.key'];
-            $replace = ['loop_index'.$idx, 'loop_item'.$idx, 'loop_key'.$idx, 'loop_index'.$idx, 'loop_item'.$idx, 'loop_key'.$idx];
+            $replace = ['loop_index' . $idx, 'loop_item' . $idx, 'loop_key' . $idx, 'loop_index' . $idx, 'loop_item' . $idx, 'loop_key' . $idx];
             if (!empty($id)) {
-                $string .= '{% set loop_' . $id . '_index = loop_index'.$idx.' %}';
-                $string .= '{% set loop_' . $id . '_item = loop_item'.$idx.' %}';
-                $string .= '{% set loop_' . $id . '_key = loop_key'.$idx.' %}';
-                $search = ['$loop:'.$id.':index', '$loop:'.$id.':item', '$loop:'.$id.':key', 'loop.'.$id.'.index', 'loop.'.$id.'.item', 'loop.'.$id.'.key'];
-                $replace = ['loop_'.$id.'_index', 'loop_'.$id.'_item', 'loop_'.$id.'_key', 'loop_'.$id.'_index', 'loop_'.$id.'_item', 'loop_'.$id.'_key'];
+                $string .= '{% set loop_' . $id . '_index = loop_index' . $idx . ' %}';
+                $string .= '{% set loop_' . $id . '_item = loop_item' . $idx . ' %}';
+                $string .= '{% set loop_' . $id . '_key = loop_key' . $idx . ' %}';
+                $search = ['$loop:' . $id . ':index', '$loop:' . $id . ':item', '$loop:' . $id . ':key', 'loop.' . $id . '.index', 'loop.' . $id . '.item', 'loop.' . $id . '.key'];
+                $replace = ['loop_' . $id . '_index', 'loop_' . $id . '_item', 'loop_' . $id . '_key', 'loop_' . $id . '_index', 'loop_' . $id . '_item', 'loop_' . $id . '_key'];
             }
             $string .= str_replace($search, $replace, $content);
             $string .= '{% endfor %}';
@@ -1235,6 +1265,10 @@ class BlocklayoutToTwigConverter extends TwigConverter
                 $name = trim($name);
                 $value = trim($value);
                 if (empty($name)) {
+                    continue;
+                }
+                // some left-over PHP comment inside the array
+                if (str_starts_with($name, '//')) {
                     continue;
                 }
                 // we get into trouble using : here if we call replaceVariable() later - use ~COLON~ as placeholder
