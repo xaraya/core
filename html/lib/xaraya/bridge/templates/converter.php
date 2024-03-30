@@ -196,7 +196,7 @@ class TwigConverter
         if (!str_contains($param, '$')) {
             return '"' . $param . '"';
         }
-        [$pre, $post] = explode('$', $param);
+        [$pre, $post] = explode('$', $param, 2);
         if (empty($pre)) {
             return $this->replaceVariable($param);
         }
@@ -213,7 +213,7 @@ class TwigConverter
         $parts = [];
         foreach ($params as $name => $value) {
             if (str_contains($name, '$')) {
-                [$pre, $post] = explode('$', $name);
+                [$pre, $post] = explode('$', $name, 2);
                 if (!empty($pre)) {
                     throw new Exception('Composite array name not supported: ' . $name . ' in ' . var_export($params, true));
                 }
@@ -543,7 +543,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
                 $file = $theme . '/includes/' . $file;
             }
             if (str_contains($file, '$')) {
-                [$pre, $post] = explode('$', $file);
+                [$pre, $post] = explode('$', $file, 2);
                 $file = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
             }
             if (!empty($namespace)) {
@@ -573,7 +573,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             if (!empty($attrib['module']) && $attrib['module'] !== $namespace) {
                 $namespace = $attrib['module'];
                 if (str_contains($namespace, '$')) {
-                    [$pre, $post] = explode('$', $namespace);
+                    [$pre, $post] = explode('$', $namespace, 2);
                     $namespace = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
                 }
             }
@@ -590,7 +590,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
                 $file = $attrib['theme'] . '/includes/' . $file;
             }
             if (str_contains($file, '$')) {
-                [$pre, $post] = explode('$', $file);
+                [$pre, $post] = explode('$', $file, 2);
                 $file = $pre . '\' ~ ' . $this->replaceVariable($post) . ' ~ \'';
             }
             if (!empty($attrib['subdata'])) {
@@ -867,7 +867,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $message = trim(preg_replace('~<.+$~s', '', $content));
             // escape single quotes inside message
             if (str_contains($message, "'")) {
-                $message = str_replace("'", "\\\\'", $message);
+                $message = str_replace("'", "\\'", $message);
             }
             // we get into trouble keeping # here if we call replaceSet() later - use ~HASH~ as placeholder
             $message = str_replace('#', '~HASH~', $message);
@@ -880,7 +880,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $message = trim($matches[1]);
             // escape single quotes inside message
             if (str_contains($message, "'")) {
-                $message = str_replace("'", "\\\\'", $message);
+                $message = str_replace("'", "\\'", $message);
             }
             // we get into trouble keeping # here if we call replaceSet() later - use ~HASH~ as placeholder
             $message = str_replace('#', '~HASH~', $message);
@@ -958,19 +958,19 @@ class BlocklayoutToTwigConverter extends TwigConverter
             if (empty($attrib['start']) || empty($attrib['start']) || empty($attrib['start'])) {
                 throw new Exception('Missing attribute in for tag: ' . $matches[0]);
             }
-            [$var, $start] = explode('=', $this->replaceVariable($attrib['start']));
+            [$var, $start] = explode('=', $this->replaceVariable($attrib['start']), 2);
             $test = $this->replaceExpression($attrib['test']);
             $iter = $this->replaceVariable($attrib['iter']);
             $var = trim($var);
             $step = 1;
             if ($iter !== $var . '++') {
-                [$left, $op, $step] = explode(' ', $iter);
+                [$left, $op, $step] = explode(' ', $iter, 3);
                 if (empty($step) || $left != $var || $op != '+=') {
                     throw new Exception("Check iter '$iter' against var '$var' in for tag: " . $matches[0]);
                 }
             }
             $start = trim($start);
-            [$left, $op, $stop] = explode(' ', $test);
+            [$left, $op, $stop] = explode(' ', $test, 3);
             if (empty($stop) || $left != $var) {
                 throw new Exception("Check test '$test' in for tag: " . $matches[0]);
             }
@@ -1203,7 +1203,9 @@ class BlocklayoutToTwigConverter extends TwigConverter
             return $expression;
         }
         // @todo not matching correctly if last item is array
-        $pattern ??= '~\[([^]]+)\]~i';
+        // use greedy single-line version instead!?
+        //$pattern ??= '~\[([^]]+)\]~i';
+        $pattern ??= '~\[(.+)\]~i';
         $fixme = false;
         $expression = preg_replace_callback($pattern, function ($matches) use (&$fixme) {
             if (!str_contains($matches[1], '=>')) {
@@ -1212,7 +1214,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $pieces = explode(',', $matches[1]);
             $parts = [];
             foreach ($pieces as $piece) {
-                [$name, $value] = explode('=>', $piece . '=>');
+                [$name, $value] = explode('=>', $piece . '=>', 2);
                 $name = trim($name);
                 $value = trim($value);
                 if (empty($name)) {
@@ -1271,7 +1273,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             if (!str_contains($args, ',')) {
                 return 'xar_uservar(' . $this->replaceVariable($args) . ')';
             }
-            [$name, $userId] = explode(',', $args);
+            [$name, $userId] = explode(',', $args, 2);
             $name = trim($name);
             $userId = trim($userId);
             if ($name == "'name'") {
@@ -1286,7 +1288,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             if (!str_contains($args, ',')) {
                 throw new Exception('Invalid args for modvars: ' . $matches[0]);
             }
-            [$scope, $name] = explode(',', $args);
+            [$scope, $name] = explode(',', $args, 2);
             $scope = trim($scope);
             $name = trim($name);
             return 'xar_modvar(' . $this->replaceVariable($scope) . ', ' . $this->replaceVariable($name) . ')';
@@ -1298,7 +1300,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
             $methodName = $matches[1];
             $args = $matches[2];
             if ($methodName == 'getFormattedDate') {
-                [$format, $value] = explode(',', $args . ',');
+                [$format, $value] = explode(',', $args . ',', 2);
                 $format = trim($format);
                 $value = trim($value);
                 if (empty($value)) {
@@ -1307,7 +1309,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
                 return 'xar_localedate(' . $this->replaceVariable($value) . ', ' . $this->replaceVariable($format) . ", '')";
             }
             if ($methodName == 'getFormattedTime') {
-                [$format, $value] = explode(',', $args . ',');
+                [$format, $value] = explode(',', $args . ',', 2);
                 $format = trim($format);
                 $value = trim($value);
                 if (empty($value)) {
@@ -1405,7 +1407,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
         $pattern = '~(!?)in_array\(([^)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
-            [$needle, $haystack] = explode(',', $matches[2]);
+            [$needle, $haystack] = explode(',', $matches[2], 2);
             $needle = trim($needle);
             $haystack = trim($haystack);
             if ($matches[1]) {
@@ -1416,7 +1418,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
         $pattern = '~(!?)str_contains\(([^)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
-            [$haystack, $needle] = explode(',', $matches[2]);
+            [$haystack, $needle] = explode(',', $matches[2], 2);
             $haystack = trim($haystack);
             $needle = trim($needle);
             if ($matches[1]) {
@@ -1427,7 +1429,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
         $pattern = '~(!?)str_starts_with\(([^)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
-            [$haystack, $needle] = explode(',', $matches[2]);
+            [$haystack, $needle] = explode(',', $matches[2], 2);
             $haystack = trim($haystack);
             $needle = trim($needle);
             if ($matches[1]) {
@@ -1438,7 +1440,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
         $pattern = '~explode\(([^)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
-            [$sep, $value] = explode(',', $matches[1]);
+            [$sep, $value] = explode(',', $matches[1], 2);
             return trim($this->replaceVariable($value)) . '|split(' . trim($this->replaceExpression($sep)) . ')';
         }, $expression);
 
@@ -1454,7 +1456,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
         $pattern = '~json_encode\(([^)]+)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
-            [$value, $flags] = explode(',', $matches[1] . ',');
+            [$value, $flags] = explode(',', $matches[1] . ',', 2);
             if ($flags) {
                 $flags = trim($flags);
                 return trim($this->replaceVariable($value)) . '|json_encode(constant(\'' . $flags . '\'))';
@@ -1464,7 +1466,7 @@ class BlocklayoutToTwigConverter extends TwigConverter
 
         $pattern = '~ucwords\(str_replace\(([^)]+)\)\)~';
         $expression = preg_replace_callback($pattern, function ($matches) {
-            [$from, $to, $var] = explode(',', $matches[1]);
+            [$from, $to, $var] = explode(',', $matches[1], 3);
             return trim($this->replaceVariable($var)) . '|replace({' . trim($from) . '~COLON~' . trim($to) . '})|title';
         }, $expression);
 

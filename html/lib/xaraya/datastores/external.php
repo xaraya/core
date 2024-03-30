@@ -729,6 +729,8 @@ abstract class ExternalDataStore extends SQLDataStore
      */
     public static function getDataStore($name = 'external', $dbConnIndex = '', $dbConnArgs = [])
     {
+        // use autoload for external database connections
+        sys::autoload();
         // re-use external db connection
         if (!empty($dbConnIndex) && !is_numeric($dbConnIndex)) {
             $driver = ExternalDatabase::getDriverName($dbConnIndex);

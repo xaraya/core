@@ -86,6 +86,10 @@ class xarTwigTpl extends xarTpl
         $twigbridge = new TwigBridge($paths, $options, $context);
         $twig = $twigbridge->getEnvironment();
 
+        // @checkme set generate XML urls to false to avoid autoescape issues
+        xarServer::$generateXMLURLs = false;
+        xarMod::$genXmlUrls = false;
+
         return $twig;
     }
 
