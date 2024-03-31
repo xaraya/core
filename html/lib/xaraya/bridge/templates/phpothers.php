@@ -30,6 +30,9 @@ class PHPOtherExtension extends XarayaTwigExtension
             new TwigTest('object', function ($value) {
                 return is_object($value);
             }),
+            new TwigTest('string', function ($value) {
+                return is_string($value);
+            }),
         ];
     }
 
@@ -38,6 +41,8 @@ class PHPOtherExtension extends XarayaTwigExtension
         return [
             new TwigFunction('xar_set', [$this, 'xar_set']),
             new TwigFunction('xar_new', [$this, 'xar_new']),
+            new TwigFunction('xar_subclass', [$this, 'xar_subclass']),
+            new TwigFunction('xar_classname', [$this, 'xar_classname']),
             // @see https://github.com/umpirsky/twig-php-function/blob/master/src/Umpirsky/Twig/Extension/PhpFunctionExtension.php
             new TwigFunction('xar_ksort', [$this, 'xar_ksort']),
             new TwigFunction('xar_json_pretty', [$this, 'xar_json_pretty']),
@@ -54,6 +59,20 @@ class PHPOtherExtension extends XarayaTwigExtension
     public function xar_new($class, ...$args)
     {
         return new $class(...$args);
+    }
+
+    public function xar_subclass($object, $classname)
+    {
+        return is_a($object, $classname);
+    }
+
+    public function xar_classname($object, $fqcn = true)
+    {
+        if (!$fqcn) {
+            $matches = explode('\\', get_class($object));
+            return end($matches);
+        }
+        return get_class($object);
     }
 
     public function xar_ksort($hash)
