@@ -1,0 +1,179 @@
+<?php
+/**
+ * Twig bridge to use Twig template engine for output in Xaraya
+ *
+ * Requirement:
+ * ```shell
+ * $ composer require twig/twig
+ * ```
+ *
+ * Usage:
+ * ```php
+ * use Xaraya\Bridge\TemplateEngine\TwigBridge;
+ *
+ * // add paths for Twig filesystem loader (with namespace)
+ * // {{ include('@workflow/includes/trackeritem.html.twig') }}
+ * $paths = [
+ *     'code/modules/workflow/templates' => 'workflow',
+ * ];
+ * // override default options for Twig environment
+ * $options = [
+ *     //'cache' => sys::varpath() . '/cache/templates',
+ *     //'debug' => false,
+ * ];
+ * // get $context from GUI/API function call or DataObject
+ *
+ * $twigbridge = new TwigBridge($paths, $options, $context);
+ * $twig = $twigbridge->getEnvironment();
+ *
+ * $data = [];
+ * // render twig template with data
+ * $template = $twig->load('@workflow/test.html.twig');
+ * return $template->render($data);
+ * // or render individual block defined in the template
+ * //return $template->renderBlock('content', $data);
+ * ```
+ *
+ */
+
+namespace Xaraya\Bridge\TemplateEngine;
+
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+use Twig\Loader\LoaderInterface;
+use Xaraya\Core\Traits\ContextInterface;
+use Xaraya\Core\Traits\ContextTrait;
+use Xaraya\Context\Context;
+use xarConst;
+use sys;
+
+sys::import('xaraya.traits.contexttrait');
+sys::import("xaraya.context.context");
+
+/**
+ * Use Twig template engine to generate output in Xaraya
+ *
+ * Xaraya Extensions:
+ * 1. XarayaCoreExtension - see xaraya.php
+ * 2. BlocklayoutTagExtension - see blocklayout.php
+ * 3. DynamicDataTagExtension - see dynamicdata.php
+ * 4. ModuleTagExtension - see modules.php
+ * 5. PHPOtherExtension - see phpothers.php
+ *
+ * @uses \sys::autoload()
+ */
+class TwigBridge implements ContextInterface
+{
+    use ContextTrait;
+
+    /** @var array<string, string> */
+    private array $paths = [];
+    /** @var array<string, mixed> */
+    private array $options = [];
+    private Environment $twig;
+    private FilesystemLoader $loader;
+
+    /**
+     * @param array<string, string> $paths
+     * @param array<string, mixed> $options
+     * @param ?Context<string, mixed> $context
+     */
+    public function __construct(array $paths = [], array $options = [], ?Context $context = null)
+    {
+        $this->setPaths($paths);
+        $this->setOptions($options);
+        $this->setContext($context);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getPaths()
+    {
+        return $this->paths;
+    }
+
+    /**
+     * @param array<string, string> $paths
+     * @return array<string, string>
+     */
+    public function setPaths(array $paths)
+    {
+        $this->paths = $paths;
+        return $this->paths;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     * @return array<string, mixed>
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = array_replace([
+            'cache' => sys::varpath() . xarConst::TPL_CACHEDIR,
+        ], $options);
+        return $this->options;
+    }
+
+    /**
+     * @return LoaderInterface
+     */
+    public function getLoader()
+    {
+        if (!isset($this->loader)) {
+            $this->loader = new FilesystemLoader();
+            if (!empty($this->paths)) {
+                foreach ($this->paths as $path => $namespace) {
+                    if (empty($namespace)) {
+                        $namespace = FilesystemLoader::MAIN_NAMESPACE;
+                    }
+                    $this->loader->addPath($path, $namespace);
+                }
+            }
+        }
+        return $this->loader;
+    }
+
+    /**
+     * Get the Twig environment
+     * @return Environment
+     */
+    public function getEnvironment()
+    {
+        if (!isset($this->twig)) {
+            $this->twig = new Environment($this->getLoader(), $this->getOptions());
+            if (!empty($this->options['debug'])) {
+                $this->twig->addExtension(new \Twig\Extension\DebugExtension());
+            }
+            $this->addXarayaExtensions();
+        }
+        // @todo do we need to update the context in the extension?
+        // @see https://twig.symfony.com/doc/3.x/advanced.html#definition-vs-runtime
+        return $this->twig;
+    }
+
+    /**
+     * @return self
+     */
+    public function addXarayaExtensions()
+    {
+        // add context as global variable - @todo do we want this here?
+        $this->twig->addGlobal('context', $this->getContext());
+
+        $this->twig->addExtension(new XarayaCoreExtension($this->getContext()));
+        $this->twig->addExtension(new BlocklayoutTagExtension($this->getContext()));
+        $this->twig->addExtension(new DynamicDataTagExtension($this->getContext()));
+        $this->twig->addExtension(new ModuleTagExtension($this->getContext()));
+        $this->twig->addExtension(new PHPOtherExtension($this->getContext()));
+
+        return $this;
+    }
+}

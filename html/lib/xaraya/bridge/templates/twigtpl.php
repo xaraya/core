@@ -4,7 +4,7 @@
  * @todo implement methods :-)
  */
 sys::import('xaraya.templates');
-sys::import('xaraya.bridge.templates.twig');
+sys::import('xaraya.bridge.templates.twigbridge');
 sys::import('xaraya.context.context');
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
@@ -147,13 +147,21 @@ class xarTwigTpl extends xarTpl
      */
     public static function renderTemplate($template, $tplData, $templateName, $trace = '')
     {
+        $output = $template->render($tplData);
+        /**
+        try {
+            $output = $template->render($tplData);
+        } catch (Exception $e) {
+            $output = $e->getMessage();
+        }
+         */
         // don't use trace in page templates to avoid adding comments to page
         if (empty($trace) || !xarTpl::outputTemplateFilenames()) {
-            return $template->render($tplData);
+            return $output;
         }
         return '<!-- start: ' . $templateName . ' -->' .
             //'<!-- args: ' . $trace . ' -->' .
-            $template->render($tplData) .
+            $output .
             '<!-- end: ' . $templateName . ' -->';
     }
 

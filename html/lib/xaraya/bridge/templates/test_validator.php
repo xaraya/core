@@ -49,7 +49,7 @@ class TestValidator
         $validator = new TwigValidator($options);
         $targetPath = $this->baseDir . '/templates/twig/code/modules/' . $module;
 
-        $validator->validateDir($targetPath);
+        return $validator->validateDir($targetPath);
     }
 
     public function validateTheme(string $theme)
@@ -63,7 +63,7 @@ class TestValidator
         $validator = new TwigValidator($options);
         $targetPath = $this->baseDir . '/templates/twig/themes/' . $theme;
 
-        $validator->validateDir($targetPath);
+        return $validator->validateDir($targetPath);
     }
 }
 
@@ -74,11 +74,13 @@ foreach ($namespaces as $module => $path) {
     if (!str_contains($path, 'code/modules/')) {
         continue;
     }
-    $tester->validateModule($module);
+    $dependencies = $tester->validateModule($module);
+    //var_export($dependencies);
 }
 
 $themes = ['common', 'default', 'rss', 'print', 'installer'];
 $subDir = '';  // 'pages';
 foreach ($themes as $theme) {
-    $tester->validateTheme($theme);
+    $dependencies = $tester->validateTheme($theme);
+    //var_export($dependencies);
 }

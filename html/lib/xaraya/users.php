@@ -413,6 +413,9 @@ class xarUser extends xarObject
                 $result->setFetchMode(xarDB::FETCHMODE_ASSOC);
 //                $result->next(); $result->previous();
                 $result->first();
+                if (!isset($result->fields)) {
+                    $result->fields = [];
+                }
                 $numfields = count($result->fields);
                 for ($i=0;$i< $numfields;$i++) {
                     $tmp = array_slice($result->fields,$i,1);
